@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+<!-- Intrastat Type - Tree view for Users > Companies-->
+<record id="fr_intrastat_base_report_intrastat_type_tree" model="ir.ui.view">
+    <field name="name">fr.intrastat.base.report.intrastat.type.tree</field>
+    <field name="model">report.intrastat.type</field>
+    <field name="type">tree</field>
+    <field name="arch" type="xml">
+        <tree string="Intrastat Type">
+            <field name="name" />
+            <field name="type" />
+            <field name="intrastat_only" />
+        </tree>
+    </field>
+</record>
+
+<!-- Intrastat Type - Form view for Users > Companies-->
+<record id="fr_intrastat_base_report_intrastat_type_form" model="ir.ui.view">
+    <field name="name">fr.intrastat.base.report.intrastat.type.form</field>
+    <field name="model">report.intrastat.type</field>
+    <field name="type">form</field>
+    <field name="arch" type="xml">
+        <form string="Intrastat Type">
+            <field name="name" select="1" />
+            <field name="active" select="2" />
+            <field name="type" select="1" />
+            <field name="intrastat_only" select="2" />
+        </form>
+    </field>
+</record>
+
+<!-- Intrastat type - Tree view for Configuration -->
+<record id="fr_intrastat_base_report_intrastat_type_config_tree" model="ir.ui.view">
+    <field name="name">fr.intrastat.base.report.intrastat.type.config.tree</field>
+    <field name="model">report.intrastat.type</field>
+    <field name="type">tree</field>
+    <field name="arch" type="xml">
+        <tree string="Intrastat type">
+            <field name="company_id" />
+            <field name="name" />
+            <field name="type" />
+            <field name="intrastat_only" />
+        </tree>
+    </field>
+</record>
+
+<!-- Intrastat type - Form view for Configuration -->
+<record id="fr_intrastat_base_report_intrastat_type_config_form" model="ir.ui.view">
+    <field name="name">fr.intrastat.base.report.intrastat.type.config.form</field>
+    <field name="model">report.intrastat.type</field>
+    <field name="type">form</field>
+    <field name="arch" type="xml">
+        <form string="Intrastat type">
+            <field name="company_id" select="1" />
+            <field name="name" select="1" />
+            <field name="active" select="2" />
+            <field name="type" select="1" />
+            <field name="intrastat_only" select="2" />
+        </form>
+    </field>
+</record>
+
+
+<!-- Intrastat type - Action for Configuration -->
+<record id="act_fr_intrastat_base_report_intrastat_type_config" model="ir.actions.act_window">
+    <field name="name">Intrastat types</field>
+    <field name="res_model">report.intrastat.type</field>
+    <field name="view_type">form</field>
+</record>
+
+<record id="act_fr_intrastat_base_report_intrastat_type_config_tree" model="ir.actions.act_window.view">
+    <field eval="10" name="sequence" /> <!-- open tree view first -->
+    <field name="view_mode">tree</field>
+    <field name="view_id" ref="fr_intrastat_base_report_intrastat_type_config_tree" />
+    <field name="act_window_id" ref="act_fr_intrastat_base_report_intrastat_type_config" />
+</record>
+
+<record id="act_fr_intrastat_base_report_intrastat_type_config_form" model="ir.actions.act_window.view">
+    <field eval="20" name="sequence" />
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="fr_intrastat_base_report_intrastat_type_config_form" />
+    <field name="act_window_id" ref="act_fr_intrastat_base_report_intrastat_type_config" />
+</record>
+
+<!-- Menu entry for Intrastat -->
+<menuitem id="menu_fr_intrastat_base_root" name="Intrastat reporting" parent="account.menu_finance_legal_statement" />
+
+
+</data>
+</openerp>

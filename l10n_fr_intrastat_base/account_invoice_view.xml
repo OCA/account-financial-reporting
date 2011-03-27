@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<record model="ir.ui.view" id="view_report_intrastat_invoice_supplier_form">
+			<field name="name">report.intrastat.invoice.supplier</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id" ref="account.invoice_supplier_form" />
+			<field name="arch" type="xml">
+				<field name="check_total" position="after">
+					<field name="intrastat_type_id" on_change="intrastat_type_id_change(intrastat_type_id)" domain="[('company_id','=',company_id)]" required="1" />
+					<field name="intrastat_only" invisible="True" />
+				</field>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_report_intrastat_invoice_form">
+			<field name="name">report.intrastat.invoice</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id" ref="account.invoice_form" />
+			<field name="arch" type="xml">
+				<field name="payment_term" position="after">
+					<field name="intrastat_type_id" on_change="intrastat_type_id_change(intrastat_type_id)" domain="[('company_id','=',company_id)]" required="1" />
+					<field name="intrastat_only" invisible="True" />
+				</field>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_report_intrastat_invoice_supplier_form_2">
+			<field name="name">report.intrastat.invoice.supplier.buttons</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id" ref="account.invoice_supplier_form" />
+			<field name="arch" type="xml">
+				<button name="invoice_open" position="replace">
+					<group attrs="{'invisible':[('intrastat_only','=',True)]}">
+						<button name="invoice_open" states="draft,proforma2" string="Validate" icon="gtk-execute" />
+					</group>
+					<group attrs="{'invisible':[('intrastat_only','=',False)]}">
+						<button name="invoice_legal_intrastat" states="draft" string="Legal Intrastat" icon="gtk-execute" />
+					</group>
+				</button>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_report_intrastat_invoice_supplier_form_3">
+			<field name="name">report.intrastat.invoice.supplier.buttons</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id" ref="account.invoice_supplier_form" />
+			<field name="arch" type="xml">
+				<button name="invoice_cancel" position="replace">
+					<button name="invoice_cancel" states="draft,proforma2,sale,open,legal_intrastat" string="Cancel" icon="gtk-cancel" />
+				</button>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_report_intrastat_invoice_form_2">
+			<field name="name">report.intrastat.invoice.buttons</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id" ref="account.invoice_form" />
+			<field name="arch" type="xml">
+				<button name="invoice_open" position="replace">
+					<group attrs="{'invisible':[('intrastat_only','=',True)]}">
+						<button name="invoice_open" states="draft,proforma2" string="Create" icon="gtk-execute" />
+					</group>
+					<group attrs="{'invisible':[('intrastat_only','=',False)]}">
+						<button name="invoice_legal_intrastat" states="draft" string="Legal Intrastat" icon="gtk-execute" />
+					</group>
+				</button>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_report_intrastat_invoice_form_3">
+			<field name="name">report.intrastat.invoice.buttons</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id" ref="account.invoice_form" />
+			<field name="arch" type="xml">
+				<button name="invoice_cancel" position="replace">
+					<button name="invoice_cancel" states="draft,proforma2,sale,open,legal_intrastat" string="Cancel" icon="gtk-cancel" />
+				</button>
+			</field>
+		</record>
+
+		<record id="action_invoice_tree14" model="ir.actions.act_window">
+			<field name="name">Customer Intrastat Invoices</field>
+			<field name="res_model">account.invoice</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,calendar,graph</field>
+			<field name="domain">[('state','in',['legal_intrastat']),('type','=','out_invoice')]</field>
+			<field name="context">{'type':'out_invoice'}</field>
+		</record>
+		<record id="action_invoice_tree14_view1" model="ir.actions.act_window.view">
+			<field eval="1" name="sequence" />
+			<field name="view_mode">tree</field>
+			<field name="act_window_id" ref="action_invoice_tree14" />
+		</record>
+		<record id="action_invoice_tree14_view2" model="ir.actions.act_window.view">
+			<field eval="2" name="sequence" />
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="account.invoice_supplier_form" />
+			<field name="act_window_id" ref="action_invoice_tree14" />
+		</record>
+
+		<menuitem action="action_invoice_tree14" id="menu_action_invoice_tree14" parent="account.menu_action_invoice_tree1" />
+
+
+		<record id="action_invoice_tree15" model="ir.actions.act_window">
+			<field name="name">Supplier Intrastat Invoices</field>
+			<field name="res_model">account.invoice</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,calendar,graph</field>
+			<field name="domain">[('state','in',['legal_intrastat']),('type','=','in_invoice')]</field>
+			<field name="context">{'type':'out_invoice'}</field>
+		</record>
+		<record id="action_invoice_tree15_view1" model="ir.actions.act_window.view">
+			<field eval="1" name="sequence" />
+			<field name="view_mode">tree</field>
+			<field name="act_window_id" ref="action_invoice_tree15" />
+		</record>
+		<record id="action_invoice_tree15_view2" model="ir.actions.act_window.view">
+			<field eval="2" name="sequence" />
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="account.invoice_supplier_form" />
+			<field name="act_window_id" ref="action_invoice_tree15" />
+		</record>
+
+		<menuitem action="action_invoice_tree15" id="menu_action_invoice_tree15" parent="account.menu_action_invoice_tree2" />
+
+
+		<record id="action_invoice_tree16" model="ir.actions.act_window">
+			<field name="name">Customer Intrastat Refunds</field>
+			<field name="res_model">account.invoice</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,calendar,graph</field>
+			<field name="domain">[('state','in',['legal_intrastat']),('type','=','out_refund')]</field>
+			<field name="context">{'type':'out_refund'}</field>
+		</record>
+		<record id="action_invoice_tree16_view1" model="ir.actions.act_window.view">
+			<field eval="1" name="sequence" />
+			<field name="view_mode">tree</field>
+			<field name="act_window_id" ref="action_invoice_tree16" />
+		</record>
+		<record id="action_invoice_tree16_view2" model="ir.actions.act_window.view">
+			<field eval="2" name="sequence" />
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="account.invoice_supplier_form" />
+			<field name="act_window_id" ref="action_invoice_tree16" />
+		</record>
+
+		<menuitem action="action_invoice_tree16" id="menu_action_invoice_tree16" parent="account.menu_action_invoice_tree3" />
+
+		<record id="action_invoice_tree17" model="ir.actions.act_window">
+			<field name="name">Supplier Intrastat Refunds</field>
+			<field name="res_model">account.invoice</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,calendar,graph</field>
+			<field name="domain">[('state','in',['legal_intrastat']),('type','=','in_refund')]</field>
+			<field name="context">{'type':'in_refund'}</field>
+		</record>
+		<record id="action_invoice_tree17_view1" model="ir.actions.act_window.view">
+			<field eval="1" name="sequence" />
+			<field name="view_mode">tree</field>
+			<field name="act_window_id" ref="action_invoice_tree17" />
+		</record>
+		<record id="action_invoice_tree17_view2" model="ir.actions.act_window.view">
+			<field eval="2" name="sequence" />
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="account.invoice_supplier_form" />
+			<field name="act_window_id" ref="action_invoice_tree17" />
+		</record>
+
+		<menuitem action="action_invoice_tree17" id="menu_action_invoice_tree17" parent="account.menu_action_invoice_tree4" />
+
+	</data>
+</openerp>

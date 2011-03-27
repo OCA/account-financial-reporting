@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data noupdate="1">
+
+<record id="regular_export" model="report.intrastat.type">
+    <field name="name">Regular export</field>
+    <field name="company_id" ref="base.main_company"/>
+    <field name="type">export</field>
+</record>
+
+<record id="regular_import" model="report.intrastat.type">
+    <field name="name">Regular import</field>
+    <field name="company_id" ref="base.main_company"/>
+    <field name="type">import</field>
+</record>
+
+<record id="other" model="report.intrastat.type">
+     <field name="name">Exclude from intrastat (special)</field>
+     <field name="company_id" ref="base.main_company"/>
+     <field name="type">other</field>
+</record>
+
+</data>
+</openerp>
