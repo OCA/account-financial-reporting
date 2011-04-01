@@ -26,4 +26,5 @@ import product
 import account_invoice
 import partner_address
 import company
+import intrastat_common
 
