@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution
+#    Report intrastat base module for OpenERP
 #    Copyright (C) 2009-2011 Akretion (http://www.akretion.com/) All Rights Reserved
 #
 #    This program is free software: you can redistribute it and/or modify

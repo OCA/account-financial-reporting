@@ -1,9 +1,9 @@
 # -*- encoding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2009 Tiny SPRL (http://tiny.be). All Rights Reserved
+#    Report intrastat base module for OpenERP
 #    Copyright (C) 2011 Akretion (http://www.akretion.com). All Rights Reserved
+#    @author Alexis de Lattre <alexis.delattre@akretion.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -22,31 +22,33 @@
 
 
 {
-    'name': 'Base module for Intrastat reporting (DEB + DES) for France',
+    'name': 'Base module for Intrastat reporting (DEB & DES) for France',
     'version': '1.1',
     'category': 'Localisation/Report Intrastat',
     'license': 'AGPL-3',
     'description': """This module contains the common functions for 2 other modules :
 - l10n_fr_intrastat_service : the module for the "Déclaration Européenne des Services" (DES)
 - l10n_fr_intrastat_product : the module for the "Déclaration d'Echange de Biens" (DEB)
-This module is not usefull if it's not used together with one of the other 2 modules.
+This module is not usefull if it's not used together with one of those 2 modules.
 
 WARNING : this module conflicts with the module "report_intrastat" from the addons. If you have already installed the module "report_intrastat", you should uninstall it first before installing this module.
+
+Please contact Alexis de Lattre from Akretion <alexis.delattre@akretion.com> for any help or question about this module.
     """,
-    'author': 'Akretion and OpenERP S.A.',
+    'author': 'Akretion',
     'website': 'http://www.akretion.com',
     'depends': ['account'],
-    'init_xml': ['country_data.xml'],
+    'init_xml': ['country_data.xml', 'intrastat_type_data.xml'],
     'update_xml': [
         'security/ir.model.access.csv',
         'product_view.xml',
         'country_view.xml',
-        'report_intrastat_view.xml',
+        'intrastat_type_view.xml',
         'company_view.xml',
         'account_invoice_view.xml',
         'account_invoice_workflow.xml',
     ],
-    'demo_xml': ['intrastat_demo.xml'],
+    'demo_xml': [],
     'installable': True,
     'active': False,
 }
