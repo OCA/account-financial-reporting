@@ -10,30 +10,34 @@
 <data>
 
 <!-- Add field on product.product view -->
-<record id="fr_intrastat_base_product_normal_form" model="ir.ui.view">
-    <field name="name">fr.intrastat.base.product.normal.form</field>
+<record id="intrastat_base_product_normal_form" model="ir.ui.view">
+    <field name="name">intrastat.base.product.normal.form</field>
     <field name="model">product.product</field>
     <field name="inherit_id" ref="account.product_normal_form_view" />
     <field name="arch" type="xml">
         <data>
             <field name="property_account_expense" position="after">
                 <separator string="Intrastat properties" colspan="4"/>
-                <field name="exclude_from_intrastat" select="2" />
+                <group colspan="4">
+                    <field name="exclude_from_intrastat" select="2" />
+                </group>
             </field>
         </data>
     </field>
 </record>
 
 <!-- Same on product.template view -->
-<record id="fr_intrastat_base_product_template_form" model="ir.ui.view">
-    <field name="name">fr.intrastat.base.product.template.form</field>
+<record id="intrastat_base_product_template_form" model="ir.ui.view">
+    <field name="name">intrastat.base.product.template.form</field>
     <field name="model">product.template</field>
     <field name="inherit_id" ref="account.product_template_form_view"/>
     <field name="arch" type="xml">
         <data>
             <field name="property_account_expense" position="after">
                 <separator string="Intrastat properties" colspan="4"/>
-                <field name="exclude_from_intrastat" select="2" />
+                <group colspan="4">
+                    <field name="exclude_from_intrastat" select="2" />
+                </group>
             </field>
         </data>
     </field>

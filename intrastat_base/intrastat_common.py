@@ -30,7 +30,6 @@ class report_intrastat_common(osv.osv_memory):
     _description = "Common functions for intrastat reports for products and services"
 
     def _compute_numbers(self, cr, uid, ids, object, context=None):
-        print "COMMON START compute numbers ids=", ids
         result = {}
         for intrastat in object.browse(cr, uid, ids, context=context):
             total_amount = 0.0
@@ -39,18 +38,15 @@ class report_intrastat_common(osv.osv_memory):
                 total_amount += line.amount_company_currency
                 num_lines += 1
             result[intrastat.id] = {'num_lines': num_lines, 'total_amount': total_amount}
-        print "COMMON _compute_numbers res = ", result
         return result
 
 
     def _compute_end_date(self, cr, uid, ids, object, context=None):
-        print "COMMON _compute_end_date START ids=", ids
         result = {}
         for intrastat in object.browse(cr, uid, ids, context=context):
             start_date_datetime = datetime.strptime(intrastat.start_date, '%Y-%m-%d')
             end_date_str = datetime.strftime(start_date_datetime + relativedelta(day=31), '%Y-%m-%d')
             result[intrastat.id] = end_date_str
-        print "COMMON _compute_end_date res=", result
         return result
 
 
@@ -64,7 +60,6 @@ class report_intrastat_common(osv.osv_memory):
 
 
     def _check_generate_lines(self, cr, uid, ids, intrastat, context=None):
-        print "START _check_generate_lines ids=", ids
         if len(ids) != 1:
             raise osv.except_osv(_('Error :'), 'Hara kiri in generate_lines')
         if not intrastat.company_id.currency_id.code:
@@ -75,7 +70,6 @@ class report_intrastat_common(osv.osv_memory):
 
 
     def _check_generate_xml(self, cr, uid, ids, intrastat, context=None):
-        print "START _check_generate_xml ids=", ids
         if len(ids) != 1:
             raise osv.except_osv(_('Error :'), 'Hara kiri in generate_xml')
         if not intrastat.company_id.partner_id.vat:
@@ -108,7 +102,6 @@ class report_intrastat_common(osv.osv_memory):
         attach_obj = self.pool.get('ir.attachment')
         if not context:
             context = {}
-        print "object name = ", object._name
         context.update({'default_res_id' : ids[0], 'default_res_model': object._name})
         attach_id = attach_obj.create(cr, uid, {'name': attach_name, 'datas': base64.encodestring(xml_string), 'datas_fname': filename}, context=context)
         return None

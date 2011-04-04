@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Copyright (C) 2011 Akretion (http://www.akretion.com/)
+    The licence is in the file __terp__.py
+-->
+
+<openerp>
+<data>
+
+<!-- Menu entry for Intrastat -->
+<menuitem id="menu_intrastat_base_root" name="Intrastat reporting" parent="account.menu_finance_legal_statement" />
+
+
+</data>
+</openerp>

@@ -22,7 +22,7 @@
 
 
 {
-    'name': 'Base module for Intrastat reporting (DEB & DES) for France',
+    'name': 'Base module for Intrastat reporting',
     'version': '1.1',
     'category': 'Localisation/Report Intrastat',
     'license': 'AGPL-3',
@@ -31,6 +31,8 @@
 - l10n_fr_intrastat_product : the module for the "Déclaration d'Echange de Biens" (DEB)
 This module is not usefull if it's not used together with one of those 2 modules.
 
+This module doesn't have any France-specific stuff. So it can be used as a basis for other intrastat modules for other EU countries.
+
 WARNING : this module conflicts with the module "report_intrastat" from the addons. If you have already installed the module "report_intrastat", you should uninstall it first before installing this module.
 
 Please contact Alexis de Lattre from Akretion <alexis.delattre@akretion.com> for any help or question about this module.
@@ -38,17 +40,14 @@ Please contact Alexis de Lattre from Akretion <alexis.delattre@akretion.com> for
     'author': 'Akretion',
     'website': 'http://www.akretion.com',
     'depends': ['account'],
-    'init_xml': ['country_data.xml', 'intrastat_type_data.xml'],
+    'init_xml': ['country_data.xml'],
     'update_xml': [
         'security/ir.model.access.csv',
         'product_view.xml',
         'country_view.xml',
-        'intrastat_type_view.xml',
-        'company_view.xml',
-        'account_invoice_view.xml',
-        'account_invoice_workflow.xml',
+        'intrastat_menu.xml',
     ],
-    'demo_xml': [],
+    'demo_xml': ['product_demo.xml'],
     'installable': True,
     'active': False,
 }

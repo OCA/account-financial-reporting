@@ -2,7 +2,8 @@
 ##############################################################################
 #
 #    Report intrastat base module for OpenERP
-#    Copyright (C) 2009-2011 Akretion (http://www.akretion.com/) All Rights Reserved
+#    Copyright (C) 2011 Akretion (http://www.akretion.com). All Rights Reserved
+#    @author Alexis de Lattre <alexis.delattre@akretion.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,14 +20,8 @@
 #
 ##############################################################################
 
-from osv import osv, fields
-
-class res_company(osv.osv):
-    _name = "res.company"
-    _inherit = "res.company"
-    _columns = {
-        'intrastat_type_ids': fields.one2many('report.intrastat.type', 'company_id', 'Intrastat Type'),
-    }
-
-res_company()
+import country
+import product
+import partner_address
+import intrastat_common
 
