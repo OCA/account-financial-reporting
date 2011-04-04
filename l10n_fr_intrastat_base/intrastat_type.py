@@ -25,6 +25,7 @@ from osv import osv, fields
 class report_intrastat_type(osv.osv):
     _name = "report.intrastat.type"
     _description = "Intrastat type"
+    _order = "type, intrastat_only"
     _columns = {
         'name': fields.char('Name',size=64,help="Name which appear when you select the Intrastat type on the invoice."),
         'active' : fields.boolean('Active', help="The active field allows you to hide the Intrastat type without deleting it."),
