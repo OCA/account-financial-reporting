@@ -24,7 +24,7 @@ from osv import osv, fields
 class res_country(osv.osv):
     _inherit = 'res.country'
     _columns = {
-        'intrastat': fields.boolean('Intrastat member'),
+        'intrastat': fields.boolean('Intrastat member', help="Set as True for countries that must be selected in the intrastat reports, i.e. for all European Union countries other than your own country."),
     }
     _defaults = {
         'intrastat': lambda *a: False,

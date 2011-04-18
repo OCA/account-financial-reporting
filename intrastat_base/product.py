@@ -25,7 +25,7 @@ from osv import osv, fields
 class product_template(osv.osv):
     _inherit = "product.template"
     _columns = {
-        'exclude_from_intrastat': fields.boolean('Exclude from Intrastat reports', help="If true, the product or service will not taken into account for Intrastat Product or Service reports. So you should leave this field to false unless you have a good reason. Exemple of good reason : 'Shipping' is a service that should probably be excluded from the Intrastat Service report."),
+        'exclude_from_intrastat': fields.boolean('Exclude from Intrastat reports', help="If set to True, the product or service will not be taken into account for Intrastat Product or Service reports. So you should leave this field to False unless you have a good reason. Exemple of good reason : 'Shipping' is a service that should probably be excluded from the Intrastat Service report."),
     }
 
     _default = {

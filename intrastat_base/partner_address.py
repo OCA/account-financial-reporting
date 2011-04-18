@@ -22,11 +22,10 @@
 
 from osv import osv, fields
 
-# We want to have the country field of partner_address always set
+# We want to have the country field on res_partner_address always set
 # because the selection of invoices for intrastat reports is based
 # on the country of the invoice partner address !
 class res_partner_address(osv.osv):
-    _name = 'res.partner.address'
     _inherit = 'res.partner.address'
     _columns = {
        'country_id': fields.many2one('res.country', 'Country', required=True),

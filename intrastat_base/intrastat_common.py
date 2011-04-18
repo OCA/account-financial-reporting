@@ -51,7 +51,7 @@ class report_intrastat_common(osv.osv_memory):
 
 
     def _check_start_date(self, cr, uid, ids, object, context=None):
-        '''Check that the start date if the first day of the month'''
+        '''Check that the start date is the first day of the month'''
         for date_to_check in object.read(cr, uid, ids, ['start_date'], context=context):
             datetime_to_check = datetime.strptime(date_to_check['start_date'], '%Y-%m-%d')
             if datetime_to_check.day != 1:
@@ -59,41 +59,39 @@ class report_intrastat_common(osv.osv_memory):
         return True
 
 
-    def _check_generate_lines(self, cr, uid, ids, intrastat, context=None):
-        if len(ids) != 1:
-            raise osv.except_osv(_('Error :'), 'Hara kiri in generate_lines')
+    def _check_generate_lines(self, cr, uid, intrastat, context=None):
         if not intrastat.company_id.currency_id.code:
-            raise osv.except_osv(_('Error :'), _('The currency code is not set on the currency "%s".'%intrastat.company_id.currency_id.name))
+            raise osv.except_osv(_('Error :'), _("The currency code is not set on the currency '%s'.") %intrastat.company_id.currency_id.name)
         if not intrastat.currency_id.code == 'EUR':
-            raise osv.except_osv(_('Error :'), _('The company currency must be "EUR", but is currently "%s".'%intrastat.currency_id.code))
+            raise osv.except_osv(_('Error :'), _("The company currency must be 'EUR', but is currently '%s'.") %intrastat.currency_id.code)
         return None
 
 
-    def _check_generate_xml(self, cr, uid, ids, intrastat, context=None):
-        if len(ids) != 1:
-            raise osv.except_osv(_('Error :'), 'Hara kiri in generate_xml')
+    def _check_generate_xml(self, cr, uid, intrastat, context=None):
         if not intrastat.company_id.partner_id.vat:
-            raise osv.except_osv(_('Error :'), _('The VAT number is not set for the partner "%s".'%intrastat.company_id.partner_id.name))
+            raise osv.except_osv(_('Error :'), _("The VAT number is not set for the partner '%s'.") %intrastat.company_id.partner_id.name)
         if not intrastat.company_id.partner_id.vat[0:2] == 'FR':
-            raise osv.except_osv(_('Error :'), _("The company '%s' should have a VAT number starting with 'FR' on it's related partner. Its current VAT number is '%s'."%(intrastat.company_id.name, intrastat.company_id.partner_id.vat)))
+            raise osv.except_osv(_('Error :'), _("The company '%s' should have a VAT number starting with 'FR' on it's related partner. Its current VAT number is '%s'.") %(intrastat.company_id.name, intrastat.company_id.partner_id.vat))
         return None
 
 
     def _check_xml_schema(self, cr, uid, xml_root, xml_string, xsd, context=None):
+        '''Validate the XML file against the XSD'''
         from lxml import etree
         official_des_xml_schema = etree.XMLSchema(etree.fromstring(xsd))
         try: official_des_xml_schema.assertValid(xml_root)
         except Exception, e:   # if the validation of the XSD fails, we arrive here
             import netsvc
             logger = netsvc.Logger()
-            logger.notifyChannel('intrastat', netsvc.LOG_WARNING, "The XML file is invalid against the XSD")
+            logger.notifyChannel('intrastat', netsvc.LOG_WARNING, "The XML file is invalid against the XML Schema Definition")
             logger.notifyChannel('intrastat', netsvc.LOG_WARNING, xml_string)
             logger.notifyChannel('intrastat', netsvc.LOG_WARNING, e)
-            raise osv.except_osv(_('Error :'), _('The generated XML file is not valid against the official XML schema. The generated XML file and the full error have been written in the server logs. Here is the exact error, which may give you an idea of the cause of the problem : ' + str(e)))
+            raise osv.except_osv(_('Error :'), _('The generated XML file is not valid against the official XML Schema Definition. The generated XML file and the full error have been written in the server logs. Here is the error, which may give you an idea on the cause of the problem : %s.') % str(e))
         return None
 
+
     def _attach_xml_file(self, cr, uid, ids, object, xml_string, start_date_datetime, declaration_name, context=None):
-        '''Attach the XML file to the intrastat_xxx object'''
+        '''Attach the XML file to the report_intrastat_product/service object'''
         import base64
         if len(ids) != 1:
             raise osv.except_osv(_('Error :'), 'Hara kiri in attach_xml_file')
@@ -106,6 +104,14 @@ class report_intrastat_common(osv.osv_memory):
         attach_id = attach_obj.create(cr, uid, {'name': attach_name, 'datas': base64.encodestring(xml_string), 'datas_fname': filename}, context=context)
         return None
 
+
+    def partner_on_change(self, cr, uid, ids, partner_id=False):
+        result = {}
+        result['value'] = {}
+        if partner_id:
+            company = self.pool.get('res.partner').read(cr, uid, partner_id, ['vat'])
+            result['value'].update({'partner_vat': company['vat']})
+        return result
 
 report_intrastat_common()
 
