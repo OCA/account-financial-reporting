@@ -102,7 +102,23 @@ class report_intrastat_common(osv.osv_memory):
             context = {}
         context.update({'default_res_id' : ids[0], 'default_res_model': object._name})
         attach_id = attach_obj.create(cr, uid, {'name': attach_name, 'datas': base64.encodestring(xml_string), 'datas_fname': filename}, context=context)
-        return None
+        return attach_id
+
+
+    def _open_attach_view(self, cr, uid, attach_id, title='XML file', context=None):
+        '''Returns an action which opens the form view of the corresponding attachement'''
+        action = {
+            'name': title,
+            'view_type': 'form',
+            'view_mode': 'form,tree',
+            'view_id': False,
+            'res_model': 'ir.attachment',
+            'type': 'ir.actions.act_window',
+            'nodestroy': True,
+            'target': 'current',
+            'res_id': [attach_id],
+            }
+        return action
 
 
     def partner_on_change(self, cr, uid, ids, partner_id=False):
