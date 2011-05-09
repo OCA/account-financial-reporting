@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Copyright (C) 2011 Akretion (http://www.akretion.com/)
+    @author Alexis de Lattre <alexis.delattre@akretion.com>
+    The licence is in the file __terp__.py
+-->
+
+<openerp>
+<data>
+
+<!-- Add 'exclude_from_intrastat_if_present' on tax form view -->
+<record id="intrastat_base_tax" model="ir.ui.view">
+    <field name="name">intrastat.base.tax</field>
+    <field name="model">account.tax</field>
+    <field name="type">form</field>
+    <field name="inherit_id" ref="account.view_tax_form"/>
+    <field name="arch" type="xml">
+    <data>
+        <field name="type_tax_use" position="after">
+            <field name="exclude_from_intrastat_if_present" />
+        </field>
+    </data>
+    </field>
+</record>
+
+</data>
+</openerp>

@@ -45,6 +45,7 @@ Please contact Alexis de Lattre from Akretion <alexis.delattre@akretion.com> for
         'security/ir.model.access.csv',
         'product_view.xml',
         'country_view.xml',
+        'tax_view.xml',
         'intrastat_menu.xml',
     ],
     'demo_xml': ['intrastat_demo.xml'],

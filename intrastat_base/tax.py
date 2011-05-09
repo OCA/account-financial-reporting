@@ -20,9 +20,14 @@
 #
 ##############################################################################
 
-import country
-import product
-import tax
-import partner_address
-import intrastat_common
+from osv import osv, fields
+
+
+class account_tax(osv.osv):
+    _inherit = "account.tax"
+    _columns = {
+        'exclude_from_intrastat_if_present': fields.boolean('Exclude invoice line from intrastat if this tax is present', help="If this tax is present on an invoice line, this invoice line will be skipped when generating Intrastat Product or Service lines from invoices."),
+    }
+
+account_tax()
 
