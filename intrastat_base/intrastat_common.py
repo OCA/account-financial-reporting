@@ -64,15 +64,13 @@ class report_intrastat_common(osv.osv_memory):
             raise osv.except_osv(_('Error :'), _("The currency code is not set on the currency '%s'.") %intrastat.company_id.currency_id.name)
         if not intrastat.currency_id.code == 'EUR':
             raise osv.except_osv(_('Error :'), _("The company currency must be 'EUR', but is currently '%s'.") %intrastat.currency_id.code)
-        return None
+        return True
 
 
     def _check_generate_xml(self, cr, uid, intrastat, context=None):
         if not intrastat.company_id.partner_id.vat:
             raise osv.except_osv(_('Error :'), _("The VAT number is not set for the partner '%s'.") %intrastat.company_id.partner_id.name)
-        if not intrastat.company_id.partner_id.vat[0:2] == 'FR':
-            raise osv.except_osv(_('Error :'), _("The company '%s' should have a VAT number starting with 'FR' on it's related partner. Its current VAT number is '%s'.") %(intrastat.company_id.name, intrastat.company_id.partner_id.vat))
-        return None
+        return True
 
 
     def _check_xml_schema(self, cr, uid, xml_root, xml_string, xsd, context=None):
@@ -87,7 +85,7 @@ class report_intrastat_common(osv.osv_memory):
             logger.notifyChannel('intrastat', netsvc.LOG_WARNING, xml_string)
             logger.notifyChannel('intrastat', netsvc.LOG_WARNING, e)
             raise osv.except_osv(_('Error :'), _('The generated XML file is not valid against the official XML Schema Definition. The generated XML file and the full error have been written in the server logs. Here is the error, which may give you an idea on the cause of the problem : %s.') % str(e))
-        return None
+        return True
 
 
     def _attach_xml_file(self, cr, uid, ids, object, xml_string, start_date_datetime, declaration_name, context=None):
