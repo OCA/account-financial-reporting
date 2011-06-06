@@ -39,7 +39,7 @@ Please contact Alexis de Lattre from Akretion <alexis.delattre@akretion.com> for
     """,
     'author': 'Akretion',
     'website': 'http://www.akretion.com',
-    'depends': ['account'],
+    'depends': ['base_vat'],
     'init_xml': ['country_data.xml'],
     'update_xml': [
         'security/ir.model.access.csv',

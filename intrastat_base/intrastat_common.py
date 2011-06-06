@@ -105,6 +105,7 @@ class report_intrastat_common(osv.osv_memory):
 
     def _open_attach_view(self, cr, uid, attach_id, title='XML file', context=None):
         '''Returns an action which opens the form view of the corresponding attachement'''
+        # Only works in v6 -> not used in v5
         action = {
             'name': title,
             'view_type': 'form',
