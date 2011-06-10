@@ -21,7 +21,7 @@
 ##############################################################################
 
 from osv import osv, fields
-from datetime import datetime, timedelta
+from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from tools.translate import _
 

@@ -1,0 +1,153 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* intrastat_base
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 5.0.16\n"
+"Report-Msgid-Bugs-To: support@openerp.com\n"
+"POT-Creation-Date: 2011-06-09 17:56:57+0000\n"
+"PO-Revision-Date: 2011-06-09 17:56:57+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: intrastat_base
+#: help:product.template,exclude_from_intrastat:0
+msgid "If set to True, the product or service will not be taken into account for Intrastat Product or Service reports. So you should leave this field to False unless you have a good reason. Exemple of good reason : 'Shipping' is a service that should probably be excluded from the Intrastat Service report."
+msgstr "Si cette option est activée, le produit ou le service ne sera pas pris en compte pour les rapports de DEB et de DES. Sauf si vous avez une bonne raison, il faut donc laisser cette option désactivée. Exemple de bonne raison : 'Frais de port' est un service qui devrait a priori être exclu de la DES."
+
+#. module: intrastat_base
+#: constraint:ir.model:0
+msgid "The Object name must start with x_ and not contain any special character !"
+msgstr "Le nom de l'objet doit commencer avec x_ et ne pas contenir de charactères spéciaux !"
+
+#. module: intrastat_base
+#: model:ir.ui.menu,name:intrastat_base.menu_intrastat_base_root
+msgid "Intrastat reporting"
+msgstr "DEB et DES"
+
+#. module: intrastat_base
+#: constraint:product.template:0
+msgid "Error: The default UOM and the purchase UOM must be in the same category."
+msgstr "Erreur: l'UdM par défaut et l'UdM d'achat doivent appartenir à la même catégorie."
+
+#. module: intrastat_base
+#: field:account.tax,exclude_from_intrastat_if_present:0
+msgid "Exclude invoice line from intrastat if this tax is present"
+msgstr "Exclue la ligne de facture de la DEB/DES si cette taxe est présente"
+
+#. module: intrastat_base
+#: help:res.country,intrastat:0
+msgid "Set as True for countries that must be selected in the intrastat reports, i.e. for all European Union countries other than your own country."
+msgstr "Activer cette option pour les pays qui doivent être inclus dans la DEB et la DES, i.e. tous les pays de l'Union Européenne sauf votre propre pays."
+
+#. module: intrastat_base
+#: view:product.product:0
+#: view:product.template:0
+msgid "Intrastat properties"
+msgstr "Paramètres pour la DEB et la DES"
+
+#. module: intrastat_base
+#: model:ir.module.module,description:intrastat_base.module_meta_information
+msgid "This module contains the common functions for 2 other modules :\n"
+"- l10n_fr_intrastat_service : the module for the \"Déclaration Européenne des Services\" (DES)\n"
+"- l10n_fr_intrastat_product : the module for the \"Déclaration d'Echange de Biens\" (DEB)\n"
+"This module is not usefull if it's not used together with one of those 2 modules.\n"
+"\n"
+"This module doesn't have any France-specific stuff. So it can be used as a basis for other intrastat modules for other EU countries.\n"
+"\n"
+"WARNING : this module conflicts with the module \"report_intrastat\" from the addons. If you have already installed the module \"report_intrastat\", you should uninstall it first before installing this module.\n"
+"\n"
+"Please contact Alexis de Lattre from Akretion <alexis.delattre@akretion.com> for any help or question about this module.\n"
+"    "
+msgstr "This module contains the common functions for 2 other modules :\n"
+"- l10n_fr_intrastat_service : the module for the \"Déclaration Européenne des Services\" (DES)\n"
+"- l10n_fr_intrastat_product : the module for the \"Déclaration d'Echange de Biens\" (DEB)\n"
+"This module is not usefull if it's not used together with one of those 2 modules.\n"
+"\n"
+"This module doesn't have any France-specific stuff. So it can be used as a basis for other intrastat modules for other EU countries.\n"
+"\n"
+"WARNING : this module conflicts with the module \"report_intrastat\" from the addons. If you have already installed the module \"report_intrastat\", you should uninstall it first before installing this module.\n"
+"\n"
+"Please contact Alexis de Lattre from Akretion <alexis.delattre@akretion.com> for any help or question about this module.\n"
+"    "
+
+#. module: intrastat_base
+#: help:account.tax,exclude_from_intrastat_if_present:0
+msgid "If this tax is present on an invoice line, this invoice line will be skipped when generating Intrastat Product or Service lines from invoices."
+msgstr "Si cette taxe est présente sur une ligne de facture, cette ligne de facture ne sera pas prise en compte lors de la génération de la DEB et de la DES depuis les factures."
+
+#. module: intrastat_base
+#: field:res.country,intrastat:0
+msgid "Intrastat country"
+msgstr "Pays intrastat"
+
+#. module: intrastat_base
+#: model:ir.model,name:intrastat_base.model_report_intrastat_common
+msgid "Common functions for intrastat reports for products and services"
+msgstr "Common functions for intrastat reports for products and services"
+
+#. module: intrastat_base
+#: code:addons/intrastat_base/intrastat_common.py:0
+#, python-format
+msgid "The company currency must be 'EUR', but is currently '%s'."
+msgstr "La monnaie de la société doit être 'EUR', mais est actuellement '%s'."
+
+#. module: intrastat_base
+#: code:addons/intrastat_base/intrastat_common.py:0
+#, python-format
+msgid "The VAT number is not set for the partner '%s'."
+msgstr "Le numéro de TVA n'est pas renseigné pour le partenaire '%s'."
+
+#. module: intrastat_base
+#: constraint:ir.ui.view:0
+msgid "Invalid XML for View Architecture!"
+msgstr "XML non valide pour l'architecture de la vue"
+
+#. module: intrastat_base
+#: code:addons/intrastat_base/intrastat_common.py:0
+#, python-format
+msgid "The currency code is not set on the currency '%s'."
+msgstr "Il manque le code de monnaie sur la monnaie '%s'."
+
+#. module: intrastat_base
+#: constraint:product.template:0
+msgid "Error: UOS must be in a different category than the UOM"
+msgstr "Erreur : l'Unité Secondaire doit appartenir à une autre catégorie que l'Unité de Mesure."
+
+#. module: intrastat_base
+#: model:ir.module.module,shortdesc:intrastat_base.module_meta_information
+msgid "Base module for Intrastat reporting"
+msgstr "Module de base pour les rapports intrastat"
+
+#. module: intrastat_base
+#: field:product.template,exclude_from_intrastat:0
+msgid "Exclude from Intrastat reports"
+msgstr "Exclure de la DEB et de la DES"
+
+#. module: intrastat_base
+#: model:product.template,name:intrastat_base.shipping_costs_exclude_product_template
+msgid "Shipping costs"
+msgstr "Shipping costs"
+
+#. module: intrastat_base
+#: code:addons/intrastat_base/intrastat_common.py:0
+#, python-format
+msgid "The generated XML file is not valid against the official XML Schema Definition. The generated XML file and the full error have been written in the server logs. Here is the error, which may give you an idea on the cause of the problem : %s."
+msgstr "La validation du fichier XML avec le schéma XML officiel a échoué. Le fichier XML généré et le détail de l'erreur ont été écrits dans les logs du serveur. Voici le message d'erreur, qui peut vous donner une idée de la cause du problème : %s."
+
+#. module: intrastat_base
+#: constraint:product.product:0
+msgid "Error: Invalid ean code"
+msgstr "Erreur: code EAN invalide"
+
+#. module: intrastat_base
+#: code:addons/intrastat_base/intrastat_common.py:0
+#, python-format
+msgid "Error :"
+msgstr "Erreur :"
+
