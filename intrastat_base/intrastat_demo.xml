@@ -13,7 +13,7 @@
     <field name="vat">FR58441019213</field>
 </record>
 
-<record id="base.res_partner_8" model="res.partner">
+<record id="base.res_partner_6" model="res.partner">
     <field name="vat">BE0828696437</field>
     <field name="supplier">True</field>
 </record>
