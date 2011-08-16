@@ -17,8 +17,12 @@
     <field name="inherit_id" ref="account.view_tax_form"/>
     <field name="arch" type="xml">
     <data>
-        <field name="type_tax_use" position="after">
-            <field name="exclude_from_intrastat_if_present" />
+        <field name="active" position="after">
+            <!-- I put it in a group because this field has a very long label
+            and I want to avoid reducing the size of the other fields -->
+            <group colspan="6">
+                <field name="exclude_from_intrastat_if_present" />
+            </group>
         </field>
     </data>
     </field>

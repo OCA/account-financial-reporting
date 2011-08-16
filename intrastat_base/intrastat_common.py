@@ -60,10 +60,8 @@ class report_intrastat_common(osv.osv_memory):
 
 
     def _check_generate_lines(self, cr, uid, intrastat, context=None):
-        if not intrastat.company_id.currency_id.code:
-            raise osv.except_osv(_('Error :'), _("The currency code is not set on the currency '%s'.") %intrastat.company_id.currency_id.name)
-        if not intrastat.currency_id.code == 'EUR':
-            raise osv.except_osv(_('Error :'), _("The company currency must be 'EUR', but is currently '%s'.") %intrastat.currency_id.code)
+        if not intrastat.currency_id.name == 'EUR':
+            raise osv.except_osv(_('Error :'), _("The company currency must be 'EUR', but is currently '%s'.") %intrastat.currency_id.name)
         return True
 
 

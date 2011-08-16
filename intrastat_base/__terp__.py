@@ -42,7 +42,6 @@ Please contact Alexis de Lattre from Akretion <alexis.delattre@akretion.com> for
     'depends': ['base_vat'],
     'init_xml': ['country_data.xml'],
     'update_xml': [
-        'security/ir.model.access.csv',
         'product_view.xml',
         'country_view.xml',
         'tax_view.xml',
