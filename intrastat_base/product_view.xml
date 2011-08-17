@@ -19,7 +19,7 @@
             <field name="property_account_expense" position="after">
                 <separator string="Intrastat properties" colspan="4"/>
                 <group colspan="4">
-                    <field name="exclude_from_intrastat" select="2" />
+                    <field name="exclude_from_intrastat" />
                 </group>
             </field>
         </data>
@@ -36,7 +36,7 @@
             <field name="property_account_expense" position="after">
                 <separator string="Intrastat properties" colspan="4"/>
                 <group colspan="4">
-                    <field name="exclude_from_intrastat" select="2" />
+                    <field name="exclude_from_intrastat" />
                 </group>
             </field>
         </data>
