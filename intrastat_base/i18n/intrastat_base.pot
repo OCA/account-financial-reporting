@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 5.0.16\n"
+"Project-Id-Version: OpenERP Server 6.0.3\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2011-06-09 17:51:13+0000\n"
-"PO-Revision-Date: 2011-06-09 17:51:13+0000\n"
+"POT-Creation-Date: 2011-09-09 08:18+0000\n"
+"PO-Revision-Date: 2011-09-09 08:18+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,18 +21,32 @@ msgid "If set to True, the product or service will not be taken into account for
 msgstr ""
 
 #. module: intrastat_base
-#: constraint:ir.model:0
-msgid "The Object name must start with x_ and not contain any special character !"
-msgstr ""
-
-#. module: intrastat_base
 #: model:ir.ui.menu,name:intrastat_base.menu_intrastat_base_root
 msgid "Intrastat reporting"
 msgstr ""
 
 #. module: intrastat_base
+#: sql_constraint:res.country:0
+msgid "The code of the country must be unique !"
+msgstr ""
+
+#. module: intrastat_base
 #: constraint:product.template:0
 msgid "Error: The default UOM and the purchase UOM must be in the same category."
+msgstr ""
+
+#. module: intrastat_base
+#: code:addons/intrastat_base/intrastat_common.py:64
+#: code:addons/intrastat_base/intrastat_common.py:70
+#: code:addons/intrastat_base/intrastat_common.py:85
+#: code:addons/intrastat_base/intrastat_common.py:93
+#, python-format
+msgid "Error :"
+msgstr ""
+
+#. module: intrastat_base
+#: model:ir.model,name:intrastat_base.model_account_tax
+msgid "account.tax"
 msgstr ""
 
 #. module: intrastat_base
@@ -67,6 +81,11 @@ msgid "This module contains the common functions for 2 other modules :\n"
 msgstr ""
 
 #. module: intrastat_base
+#: sql_constraint:res.country:0
+msgid "The name of the country must be unique !"
+msgstr ""
+
+#. module: intrastat_base
 #: help:account.tax,exclude_from_intrastat_if_present:0
 msgid "If this tax is present on an invoice line, this invoice line will be skipped when generating Intrastat Product or Service lines from invoices."
 msgstr ""
@@ -82,31 +101,25 @@ msgid "Common functions for intrastat reports for products and services"
 msgstr ""
 
 #. module: intrastat_base
-#: code:addons/intrastat_base/intrastat_common.py:0
+#: code:addons/intrastat_base/intrastat_common.py:64
 #, python-format
 msgid "The company currency must be 'EUR', but is currently '%s'."
 msgstr ""
 
 #. module: intrastat_base
-#: code:addons/intrastat_base/intrastat_common.py:0
+#: code:addons/intrastat_base/intrastat_common.py:70
 #, python-format
 msgid "The VAT number is not set for the partner '%s'."
 msgstr ""
 
 #. module: intrastat_base
-#: constraint:ir.ui.view:0
-msgid "Invalid XML for View Architecture!"
+#: model:ir.model,name:intrastat_base.model_res_country
+msgid "Country"
 msgstr ""
 
 #. module: intrastat_base
-#: code:addons/intrastat_base/intrastat_common.py:0
-#, python-format
-msgid "The currency code is not set on the currency '%s'."
-msgstr ""
-
-#. module: intrastat_base
-#: constraint:product.template:0
-msgid "Error: UOS must be in a different category than the UOM"
+#: model:ir.model,name:intrastat_base.model_product_template
+msgid "Product Template"
 msgstr ""
 
 #. module: intrastat_base
@@ -125,19 +138,13 @@ msgid "Shipping costs"
 msgstr ""
 
 #. module: intrastat_base
-#: code:addons/intrastat_base/intrastat_common.py:0
+#: code:addons/intrastat_base/intrastat_common.py:85
 #, python-format
 msgid "The generated XML file is not valid against the official XML Schema Definition. The generated XML file and the full error have been written in the server logs. Here is the error, which may give you an idea on the cause of the problem : %s."
 msgstr ""
 
 #. module: intrastat_base
-#: constraint:product.product:0
-msgid "Error: Invalid ean code"
-msgstr ""
-
-#. module: intrastat_base
-#: code:addons/intrastat_base/intrastat_common.py:0
-#, python-format
-msgid "Error :"
+#: model:ir.model,name:intrastat_base.model_res_partner_address
+msgid "Partner Addresses"
 msgstr ""
 
