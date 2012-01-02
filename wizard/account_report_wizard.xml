@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="wizard_report_view" model="ir.ui.view">
+            <field name="name">Wizard Report Balance Four Columns</field>
+            <field name="model">wizard.report</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            <form string="General Account Balance [ Initial | Debit | Credit | Balance ]">
+                <group width='800' height='600'>
+                <field name="company_id"/>
+
+                <newline/>
+                <group colspan="4">
+                <separator string="Accounts to include" colspan="4"/>
+                    <field name="account_list" nolabel="1" colspan="4" domain="[('company_id','=',company_id)]"/>
+<!--
+                    <field name="account_list" nolabel="1" colspan="4"/>
+-->
+                    <field name="display_account" required="True"/>
+                    <field name="display_account_level" required="True" />
+                </group>
+                    <group colspan="4">
+                        <separator string="Period" colspan="4"/>
+                        <field name="fiscalyear"/>
+                        <newline/>
+                        <field name="state" required="True"/>
+                        <newline/>
+
+<!--
+                        <group colspan="4">
+                            <group colspan="4">
+                                <separator string="Date Filter" colspan="4"/>
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                            </group>
+                            <group colspan="4">
+                                <separator string="Filter on Periods" colspan="4"/>
+                                <field name="periods" colspan="4" nolabel="1" domain="[('fiscalyear_id','=',fiscalyear)]"/>
+                            </group>
+                        </group>
+-->
+
+                        <group attrs="{'invisible':[('state','=','none')]}" colspan="4">
+                            <group attrs="{'invisible':[('state','=','byperiod')]}" colspan="4">
+                                <separator string="Date Filter" colspan="4"/>
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                            </group>
+                            <group attrs="{'invisible':[('state','=','bydate')]}" colspan="4">
+                                <separator string="Filter on Periods" colspan="4"/>
+                                <field name="periods" colspan="4" nolabel="1" domain="[('fiscalyear_id','=',fiscalyear)]"/>
+                            </group>
+                        </group>
+                    </group>
+                    <group colspan="4">
+                        <separator string="Total" colspan="4"/>
+                        <field name="tot_check"/>
+                        <field name="lab_str"/>
+                        <field name="inf_type"/>
+                        <button name="print_report" string="Print" type="object"/>
+                    </group>
+                </group>
+            </form>
+
+            </field>
+        </record>
+        
+        <record id="action_wizard_report" model="ir.actions.act_window">
+            <field name="name">Reporte Balance Con Wizard</field>
+            <field name="res_model">wizard.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_report_view"/>
+            <field name="target">new</field>
+        </record>
+        
+        
+        <menuitem 
+            id="menu_wizard_report"
+            name="Reporte Balance 4 Columnas"
+            parent="account.final_accounting_reports"
+            sequence="99"
+            action="action_wizard_report"/>
+        
+        
+        <record id="wizard_report_view2" model="ir.ui.view">
+            <field name="name">Wizard Report Balance Two Columns</field>
+            <field name="model">wizard.report.account.balance.gene.2</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            <form string="General Account Balance [ Initial | Debit | Credit | Balance ]">
+                <group width='800' height='600'>
+                <field name="company_id"/>
+                <newline/>
+                <group colspan="4">
+                <separator string="Accounts to include" colspan="4"/>
+                    <field name="account_list" nolabel="1" colspan="4" domain="[('company_id','=',company_id)]"/>
+                    <field name="display_account" required="True"/>
+                    <field name="display_account_level" required="True" />
+                </group>
+                    <group colspan="4">
+                        <separator string="Period" colspan="4"/>
+                        <field name="fiscalyear"/>
+                        <newline/>
+                        <field name="state" required="True"/>
+                        <newline/>
+                        <group attrs="{'invisible':[('state','=','none')]}" colspan="4">
+                            <group attrs="{'invisible':[('state','=','byperiod')]}" colspan="4">
+                                <separator string="Date Filter" colspan="4"/>
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                            </group>
+                            <group attrs="{'invisible':[('state','=','bydate')]}" colspan="4">
+                                <separator string="Filter on Periods" colspan="4"/>
+                                <field name="periods" colspan="4" nolabel="1" domain="[('fiscalyear_id','=',fiscalyear)]"/>
+                            </group>
+                        </group>
+                    </group>
+                    <group colspan="4">
+                        <separator string="Total" colspan="4"/>
+                        <field name="tot_check"/>
+                        <field name="lab_str"/>
+                        <field name="inf_type"/>
+                        <button name="print_report" string="Print" type="object"/>
+                    </group>
+                </group>
+            </form>
+
+            </field>
+        </record>
+
+        <record id="action_wizard_report2" model="ir.actions.act_window">
+            <field name="name">Reporte Balance Dos Columnas Con Wizard</field>
+            <field name="res_model">wizard.report.account.balance.gene.2</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_report_view2"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem 
+            id="menu_wizard_report2"
+            name="Reporte Balance 2 Columnas"
+            parent="account.final_accounting_reports"
+            sequence="99"
+            action="action_wizard_report2"/>
+
+        <record id="wizard_report_view3" model="ir.ui.view">
+            <field name="name">Wizard Report Balance</field>
+            <field name="model">wizard.report.account.balance.gene</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            <form string="General Account Balance [ Initial | Debit | Credit | Balance ]">
+                <group width='800' height='600'>
+                <field name="company_id"/>
+                <newline/>
+                <group colspan="4">
+                <separator string="Accounts to include" colspan="4"/>
+                    <field name="account_list" nolabel="1" colspan="4" domain="[('company_id','=',company_id)]"/>
+                    <field name="display_account" required="True"/>
+                    <field name="display_account_level" required="True" />
+                </group>
+                    <group colspan="4">
+                        <separator string="Period" colspan="4"/>
+                        <field name="fiscalyear"/>
+                        <newline/>
+                        <field name="state" required="True"/>
+                        <newline/>
+                        <group attrs="{'invisible':[('state','=','none')]}" colspan="4">
+                            <group attrs="{'invisible':[('state','=','byperiod')]}" colspan="4">
+                                <separator string="Date Filter" colspan="4"/>
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                            </group>
+                            <group attrs="{'invisible':[('state','=','bydate')]}" colspan="4">
+                                <separator string="Filter on Periods" colspan="4"/>
+                                <field name="periods" colspan="4" nolabel="1" domain="[('fiscalyear_id','=',fiscalyear)]"/>
+                            </group>
+                        </group>
+                    </group>
+                    <group colspan="4">
+                        <separator string="Total" colspan="4"/>
+                        <field name="tot_check"/>
+                        <field name="lab_str"/>
+                        <field name="inf_type"/>
+                        <button name="print_report" string="Print" type="object"/>
+                    </group>
+                </group>
+            </form>
+
+            </field>
+        </record>
+        
+        <record id="action_wizard_report3" model="ir.actions.act_window">
+            <field name="name">Reporte Balance Dos Columnas Con Wizard</field>
+            <field name="res_model">wizard.report.account.balance.gene</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_report_view3"/>
+            <field name="target">new</field>
+        </record>
+        
+        
+        <menuitem 
+            id="menu_wizard_report3"
+            name="Reporte Balance "
+            parent="account.final_accounting_reports"
+            sequence="99"
+            action="action_wizard_report3"/>
+
+    </data>
+</openerp>
