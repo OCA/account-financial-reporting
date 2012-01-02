@@ -260,8 +260,18 @@ class account_balance(report_sxw.rml_parse):
 
                 if form['display_account'] == 'bal_mouvement' and account['parent_id']:
                     # Include accounts with movements
-                    result_acc.append(res)
-                result_acc.append(res)
+                    if abs(res['credit']-res['debit']) >= 0.5 * 10**-int(2) \
+                                or abs(res['credit']) >= 0.5 * 10**-int(2) \
+                                or abs(res['debit']) >= 0.5 * 10**-int(2):
+                        result_acc.append(res)
+                    elif form['display_account'] == 'bal_solde' and account['parent_id']:
+                        # Include accounts with balance
+                        if abs(res['credit']-res['debit']) >= 0.5 * 10**-int(2):
+                            result_acc.append(res)
+                    else:
+                        # Include all account
+                        result_acc.append(res)
+
                 if form['tot_check'] and res['type'] == 'view' and res['level'] == 1 and (res['id'] not in tot):
                     tot[res['id']] = True
                     tot_deb += res['debit']
