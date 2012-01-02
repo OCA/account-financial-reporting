@@ -75,15 +75,9 @@ class wizard_report(osv.osv_memory):
         if context is None:
             context = {}
         data = {}
-        print "Context %s"%context
-        print "Data %s"%data
-        print "Lista IDS:%s"%ids
         data['ids'] = context.get('active_ids', [])
         data['model'] = context.get('active_model', 'ir.ui.menu')
         data['form'] = self.read(cr, uid, ids[0])
-        print "Context Mod%s"%context
-        print "Data Mod%s"%data
-        print "Lista IDS Mod:%s"%ids
         return {'type': 'ir.actions.report.xml', 'report_name': 'wizard.report.reporte', 'datas': data}
 
 wizard_report()

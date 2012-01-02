@@ -39,7 +39,6 @@ class account_balance(report_sxw.rml_parse):
 
 
     def __init__(self, cr, uid, name, context):
-        print 'INICIO: ',datetime.datetime.now()
         super(account_balance, self).__init__(cr, uid, name, context)
         self.sum_debit = 0.00
         self.sum_credit = 0.00
@@ -92,7 +91,7 @@ class account_balance(report_sxw.rml_parse):
         fiscalyear_id = form['fiscalyear'] or fiscalyear_obj.find(self.cr, self.uid)
         period_ids = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear_id),('special','=',False)])
         if form['state'] in ['byperiod', 'all']:
-            period_ids = form['periods'][0][2]
+            period_ids = form['periods']
         periods_str = ', '.join([period.name or period.code for period in period_obj.browse(self.cr, self.uid, period_ids)])
 
         dates_str = None
@@ -174,10 +173,23 @@ class account_balance(report_sxw.rml_parse):
             ctx['date_to'] = form['date_to']
 
         accounts=[]
+        val = account_obj.browse(self.cr, self.uid, [aa_id[0] for aa_id in account_ids], ctx)
+        c = 0
         for aa_id in account_ids:
-                new_acc = account_obj.read(self.cr, self.uid, aa_id[0], ['type','code','name','debit','credit','parent_id','level'], ctx)
-                new_acc.update({'label':aa_id[1],'total':aa_id[2]})
-                accounts.append(new_acc)
+            new_acc = {
+                'id'        :val[c].id, 
+                'type'      :val[c].type,
+                'code'      :val[c].code,
+                'name'      :val[c].name,
+                'debit'     :val[c].debit,
+                'credit'    :val[c].credit,
+                'parent_id' :val[c].parent_id and val[c].parent_id.id,
+                'level'     :val[c].level,
+                'label'     :aa_id[1],
+                'total'     :aa_id[2],
+            }
+            c += 1
+            accounts.append(new_acc)
         
         def missing_period():
             ctx['fiscalyear'] = fiscalyear_obj.search(self.cr, self.uid, [('date_stop','<',fiscalyear.date_start)],order='date_stop') and \
@@ -248,10 +260,9 @@ class account_balance(report_sxw.rml_parse):
                     'total': True,
             }
             result_acc.append(res2)
-        print 'FIN: ',datetime.datetime.now()
         return result_acc
 report_sxw.report_sxw('report.account.account.balance.gene.2', 
                       'wizard.report.account.balance.gene.2', 
-                      'addons/l10n_co_account_financial_report/report/balance_full_2_cols.rml',
+                      'account_financial_report/report/balance_full_2_cols.rml',
                        parser=account_balance, 
                        header=False)

@@ -39,7 +39,6 @@ class account_balance(report_sxw.rml_parse):
 
 
     def __init__(self, cr, uid, name, context):
-        print 'INICIO: ',datetime.datetime.now()
         super(account_balance, self).__init__(cr, uid, name, context)
         self.sum_debit = 0.00
         self.sum_credit = 0.00
@@ -117,10 +116,7 @@ class account_balance(report_sxw.rml_parse):
             return []
         if not done:
             done = {}
-        print "Lista Form %s"%form
-        print "Tipo de Obj %s"%type(form)
 
-        print "form:%s"%form
         if form.has_key('account_list') and form['account_list']:
             account_ids = form['account_list']
             del form['account_list']
@@ -174,26 +170,16 @@ class account_balance(report_sxw.rml_parse):
         ctx = self.context.copy()
         ctx['state'] = form.get('state','all')
         ctx['fiscalyear'] = fiscalyear.id
-        print "Fiscal year %s"%ctx['fiscalyear']
         ctx['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('special','=',False)])
-        print "Periodos del Context: %s"%ctx['periods']
         if form['state'] in ['byperiod', 'all']:
-            print "PERIODOS ANTERIORES DEBIT / CREDIT: ",ctx['periods']
             ctx['periods'] = period_obj.search(self.cr, self.uid, [('id','in',form['periods'] or ctx['periods']),('special','=',False)])
-            print "PERIODOS DESPUES DEBIT / CREDIT: ",ctx['periods']
-            #~ ctx['periods'] = form['periods']
         if form['state'] in ['bydate', 'all']:
             ctx['date_from'] = form['date_from']
             ctx['date_to'] = form['date_to']
 
         accounts=[]
 
-        print 'INICIANDO CALCULO DEBIT/CREDIT: ',datetime.datetime.now()
         val = account_obj.browse(self.cr, self.uid, [aa_id[0] for aa_id in account_ids], ctx)
-        print "Valor de Account_ids en get_children: %s"%account_ids
-        print "Valor de context %s"%ctx
-        #~ val = account_obj.browse(self.cr, self.uid, account_ids, ctx)
-        print 'INTERMEDIO CALCULO DEBIT/CREDIT: ',datetime.datetime.now()
         c = 0
         for aa_id in account_ids:
             new_acc = {
@@ -209,9 +195,7 @@ class account_balance(report_sxw.rml_parse):
             'total'     :aa_id[2],
             }
             c += 1
-            print "Diccionario new_acc: %s"%new_acc
             accounts.append(new_acc)
-        print 'FINALIZANDO CALCULO DEBIT/CREDIT: ',datetime.datetime.now()
         
         def missing_period():
             ctx['fiscalyear'] = fiscalyear_obj.search(self.cr, self.uid, [('date_stop','<',fiscalyear.date_start)],order='date_stop') and \
@@ -230,10 +214,8 @@ class account_balance(report_sxw.rml_parse):
 
         if form['state'] in ['byperiod', 'all']:
             ctx['periods'] = form['periods']
-            print "PERIODOS ANTERIORES ctx['periods']: ",ctx['periods']
             date_start = min([period.date_start for period in period_obj.browse(self.cr, self.uid, ctx['periods'])])
             ctx['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('date_stop','<=',date_start)])
-            print "PERIODOS DESPUES ctx['periods']: ",ctx['periods']
             if not ctx['periods']:
                 missing_period()
         elif form['state'] in ['bydate']:
@@ -249,8 +231,6 @@ class account_balance(report_sxw.rml_parse):
         for acc in account_obj.browse(self.cr, self.uid, [x[0] for x in account_ids], ctx):
             period_balanceinit[acc['id']] = acc.balance
 
-        print 'FINALIZANDO CALCULO INITIAL BALANCE: ',datetime.datetime.now()
-        
         #
         # Generate the report lines (checking each account)
         #
@@ -329,11 +309,9 @@ class account_balance(report_sxw.rml_parse):
                     'total': True,
             }
             result_acc.append(res2)
-        print 'FIN: ',datetime.datetime.now()
-        print "result_acc %s"%result_acc
         return result_acc
 report_sxw.report_sxw('report.wizard.report.reporte', 
                       'wizard.report', 
-                      'l10n_co_account_financial_report/report/balance_full_4_cols.rml',
+                      'account_financial_report/report/balance_full_4_cols.rml',
                        parser=account_balance, 
                        header=False)

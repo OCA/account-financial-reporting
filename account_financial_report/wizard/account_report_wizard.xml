@@ -15,9 +15,6 @@
                 <group colspan="4">
                 <separator string="Accounts to include" colspan="4"/>
                     <field name="account_list" nolabel="1" colspan="4" domain="[('company_id','=',company_id)]"/>
-<!--
-                    <field name="account_list" nolabel="1" colspan="4"/>
--->
                     <field name="display_account" required="True"/>
                     <field name="display_account_level" required="True" />
                 </group>
@@ -27,20 +24,6 @@
                         <newline/>
                         <field name="state" required="True"/>
                         <newline/>
-
-<!--
-                        <group colspan="4">
-                            <group colspan="4">
-                                <separator string="Date Filter" colspan="4"/>
-                                <field name="date_from"/>
-                                <field name="date_to"/>
-                            </group>
-                            <group colspan="4">
-                                <separator string="Filter on Periods" colspan="4"/>
-                                <field name="periods" colspan="4" nolabel="1" domain="[('fiscalyear_id','=',fiscalyear)]"/>
-                            </group>
-                        </group>
--->
 
                         <group attrs="{'invisible':[('state','=','none')]}" colspan="4">
                             <group attrs="{'invisible':[('state','=','byperiod')]}" colspan="4">
@@ -201,8 +184,7 @@
             <field name="view_id" ref="wizard_report_view3"/>
             <field name="target">new</field>
         </record>
-        
-        
+
         <menuitem 
             id="menu_wizard_report3"
             name="Reporte Balance "

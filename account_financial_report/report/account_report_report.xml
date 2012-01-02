@@ -6,7 +6,7 @@
             string="General account balance"
             model="account.account"
             name="account.account.balance.gene"
-            rml="l10n_co_account_financial_report/report/balance_full.rml"
+            rml="account_financial_report/report/balance_full.rml"
             header="False"
             auto="False"
             menu="False"/>
@@ -15,7 +15,7 @@
             string="General account balance Four Columns"
             model="account.account"
             name="account.account.balance.gene.4"
-            rml="l10n_co_account_financial_report/report/balance_full_4_cols.rml"
+            rml="account_financial_report/report/balance_full_4_cols.rml"
             header="False"
             auto="False"
             menu="False"/>
@@ -24,7 +24,7 @@
             string="General account balance Two Columns"
             model="account.account"
             name="account.account.balance.gene.2"
-            rml="l10n_co_account_financial_report/report/balance_full_2_cols.rml"
+            rml="account_financial_report/report/balance_full_2_cols.rml"
             header="False"
             auto="False"
             menu="False"/>

@@ -39,7 +39,6 @@ class account_balance(report_sxw.rml_parse):
 
 
     def __init__(self, cr, uid, name, context):
-        print 'INICIO: ',datetime.datetime.now()
         super(account_balance, self).__init__(cr, uid, name, context)
         self.sum_debit = 0.00
         self.sum_credit = 0.00
@@ -198,10 +197,22 @@ class account_balance(report_sxw.rml_parse):
             ctx['date_to'] = form['date_to']
 
         accounts=[]
+        val = account_obj.browse(self.cr, self.uid, [aa_id[0] for aa_id in account_ids], ctx)
+        c = 0
         for aa_id in account_ids:
-                new_acc = account_obj.read(self.cr, self.uid, aa_id[0], ['type','code','name','balance','parent_id','level'], ctx)
-                new_acc.update({'label':aa_id[1],'total':aa_id[2]})
-                accounts.append(new_acc)
+            new_acc = {
+            'id'        :val[c].id, 
+            'type'      :val[c].type,
+            'code'      :val[c].code,
+            'name'      :val[c].name,
+            'balance'   :val[c].balance,
+            'parent_id' :val[c].parent_id and val[c].parent_id.id,
+            'level'     :val[c].level,
+            'label'     :aa_id[1],
+            'total'     :aa_id[2],
+            }
+            c += 1
+            accounts.append(new_acc)
 
         #
         # Generate the report lines (checking each account)
@@ -266,7 +277,6 @@ class account_balance(report_sxw.rml_parse):
                 if form['tot_check'] and res['type'] == 'view' and res['level'] == 1 and (res['id'] not in tot):
                     tot[res['id']] = True
                     tot_eje += res['balance']
-        print 'FIN: ',datetime.datetime.now()
         if form['tot_check']:
             str_label = form['lab_str']
             res2 = {
@@ -280,6 +290,6 @@ class account_balance(report_sxw.rml_parse):
         return result_acc
 report_sxw.report_sxw('report.account.account.balance.gene', 
                       'wizard.report.account.balance.gene', 
-                      'addons/l10n_co_account_financial_report/report/balance_full.rml',
+                      'account_financial_report/report/balance_full.rml',
                        parser=account_balance, 
                        header=False)
