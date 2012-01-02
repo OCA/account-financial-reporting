@@ -17,7 +17,7 @@ class wizard_report(osv.osv_memory):
         'date_to': fields.date('End date',required=True),
         'tot_check': fields.boolean('Show Total'),
         'lab_str': fields.char('Description', size= 128),
-        'inf_type': fields.selection([('bgen','Balance General'),('bcom','Balance Comprobacion'),('edogp','Estado Ganancias y Perdidas')],'Tipo Informe',required=True),
+        'inf_type': fields.selection([('bgen','Balance General'),('bcom','Balance Comprobacion'),('edogp','Estado Ganancias y Perdidas'),('bml','Libro Mayor Legal')],'Tipo Informe',required=True),
     }
     
     _defaults = {
