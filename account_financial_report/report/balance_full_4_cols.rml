@@ -2,7 +2,7 @@
 <document filename="test.pdf">
     <template pageSize="(21.59cm,27.94cm)" title="Test" author="Martin Simon" allowSplitting="20" showBoundary="0">
         <pageTemplate id="first">
-            <frame id="first" x1="1cm" y1="1.0cm" width="19.0cm" height="23cm"/>
+            <frame id="first" x1="0.5cm" y1="1.0cm" width="20.5cm" height="23cm"/>
             <pageGraphics>
                 <setFont name="Helvetica" size="9"/>
 
@@ -15,27 +15,22 @@
                     <blockTable colWidths="9.6cm,9.4cm" style="TITLE">
                         <tr>
                             <td><para style="TOP_TITLE"></para></td>
-                            <td><para style="TITLE_CENTER_NAME">[[ company.name and company.name or 'NOMBRE DE COMPANIA NO DISPONIBLE' ]]</para></td>
+                            <td><para style="TITLE_CENTER_NAME">
+                                <font>[[ (company.name and company.name or 'NOMBRE DE COMPANIA NO DISPONIBLE')]]</font>
+                                <font>[[ company.partner_id.vat and ('- %s-%s-%s'%(company.partner_id.vat[2:3],company.partner_id.vat[3:11],company.partner_id.vat[11:12])) or '' ]]</font>
+                            </para></td>
                         </tr>
                         <tr>
                             <td><para style="TOP_TITLE"></para></td>
-                            <td><para style="TITLE_CENTER">[[ (company.partner_id.vat and ('RIF: %s-%s-%s'%(company.partner_id.vat[2:3],company.partner_id.vat[3:11],company.partner_id.vat[11:12])) or removeParentNode('para')) ]]</para></td>
-                        </tr>
-                        <tr>
-                            <td><para style="TOP_TITLE"></para></td>
-                            <td><para style="TITLE_CENTER">[[ get_inf_text(data['form']) ]]</para></td>
+                            <td><para style="TITLE_CENTER">[[ get_informe_text(data['form']) ]][[data['form'] and (' (Expresado en %s)'%( company.currency_id.name)) or '']]</para></td>
                         </tr>
                         <tr>
                             <td><para style="TOP_TITLE"></para></td>
                             <td><para style="TITLE_CENTER">[[data['form'] and get_month(data['form']) or '']]</para></td>
                         </tr>
-                        <tr>
-                            <td><para style="TOP_TITLE"></para></td>
-                            <td><para style="TITLE_CENTER">[[data['form'] and ('(Expresado en %s)'%(company.currency_id.symbol)) or '']]</para></td>
-                        </tr>
                     </blockTable>
                 </place>
-                <drawRightString x="192mm" y="5mm">[[ get_inf_text(data['form']) ]] /  Pág.: <pageNumber/>-<pageCount/> </drawRightString> 
+                <drawRightString x="192mm" y="5mm">[[ get_informe_text(data['form']) ]] /  Pág.: <pageNumber/>-<pageCount/> </drawRightString> 
             </pageGraphics>
 
         </pageTemplate>
@@ -84,7 +79,7 @@
     <images/>
     <story>
         <para>[[setLang(user.context_lang)]]</para>
-        <blockTable colWidths="2.5cm,6.5cm,2.5cm,2.5cm,2.5cm,2.5cm" style="BODY" repeatRows="1">
+        <blockTable colWidths="2.5cm,6.5cm,2.5cm,3.5cm,3.5cm,2.5cm" style="BODY" repeatRows="1">
             <tr noRowsplits="1">
                 <td>
                     <para style="TITLE_LEFT_ALIGN">

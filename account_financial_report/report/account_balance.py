@@ -53,8 +53,8 @@ class account_balance(report_sxw.rml_parse):
             'lines': self.lines,
             'get_fiscalyear_text': self.get_fiscalyear_text,
             'get_periods_and_date_text': self.get_periods_and_date_text,
-            'get_inf_text': self.get_informe_text,
-            'get_month':self._get_month,
+            'get_informe_text': self.get_informe_text,
+            'get_month':self.get_month,
         })
         self.context = context
 
@@ -72,21 +72,25 @@ class account_balance(report_sxw.rml_parse):
             fiscalyear = fiscalyear_obj.browse(self.cr, self.uid, fiscalyear_obj.find(self.cr, self.uid))
             return "%s*" % (fiscalyear.name or fiscalyear.code)
             
-    def _get_month(self, form):
+    def get_month(self, form):
         '''
         return day, year and month
         '''
-
-        months=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"]
-
-        mes = months[time.strptime(form['date_to'],"%Y-%m-%d")[1]-1]
-        ano = time.strptime(form['date_to'],"%Y-%m-%d")[0]
-        dia = time.strptime(form['date_to'],"%Y-%m-%d")[2]
-
-        if form['inf_type']=='edogp':
-            return 'DESDE: '+self.formatLang(form['date_from'], date=True)+'  HASTA: '+self.formatLang(form['date_to'], date=True)
-        else:
-            return 'AL '+str(dia) + ' DE ' + mes.upper() + ' DE ' + str(ano)
+        if form['filter'] in ['bydate', 'all']:
+            months=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"]
+            mes = months[time.strptime(form['date_to'],"%Y-%m-%d")[1]-1]
+            ano = time.strptime(form['date_to'],"%Y-%m-%d")[0]
+            dia = time.strptime(form['date_to'],"%Y-%m-%d")[2]
+            return 'Período del '+self.formatLang(form['date_from'], date=True)+' al '+self.formatLang(form['date_to'], date=True)
+        elif form['filter'] in ['byperiod', 'all']:
+            aux=[]
+            period_obj = self.pool.get('account.period')
+            
+            for period in period_obj.browse(self.cr, self.uid, form['periods']):
+                aux.append(period.date_start)
+                aux.append(period.date_stop)
+            sorted(aux)
+            return 'Período del '+self.formatLang(aux[0], date=True)+' al '+self.formatLang(aux[-1], date=True)
 
     def get_informe_text(self, form):
         """
@@ -216,7 +220,6 @@ class account_balance(report_sxw.rml_parse):
         val = account_obj.browse(self.cr, self.uid, [aa_id[0] for aa_id in account_ids], ctx)
         c = 0
         for aa_id in account_ids:
-            print '%s  %s \n'%(val[c].name,val[c].balance)
             new_acc = {
             'id'        :val[c].id, 
             'type'      :val[c].type,
@@ -294,7 +297,6 @@ class account_balance(report_sxw.rml_parse):
                 if form['tot_check'] and res['type'] == 'view' and res['level'] == 1 and (res['id'] not in tot):
                     tot[res['id']] = True
                     tot_eje += res['balance']
-        print 'tot_eje',tot_eje
         if form['tot_check']:
             str_label = form['lab_str']
             res2 = {

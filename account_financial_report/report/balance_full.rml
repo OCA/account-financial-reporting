@@ -5,37 +5,26 @@
             <frame id="first" x1="1cm" y1="1.0cm" width="19.0cm" height="23cm"/>
             <pageGraphics>
                 <setFont name="Helvetica" size="9"/>
-
-<!--
-                <image x="1.0cm" y="25.0cm" height="2.5cm" width="9.6cm">[[company.logo and company.logo or removeParentNode('image')]]</image>
-                <drawString x="1.0cm" y="24.5cm">[[company.logo and removeParentNode('para') or company.name]]</drawString> 
--->
-
                 <place x="-3.5cm" y="22.50cm" width="19cm"  height="5.0cm"> 
                     <blockTable colWidths="9.6cm,9.4cm" style="TITLE">
                         <tr>
                             <td><para style="TOP_TITLE"></para></td>
-                            <td><para style="TITLE_CENTER_NAME">[[ company.name and company.name or 'NOMBRE DE COMPANIA NO DISPONIBLE' ]]</para></td>
+                            <td><para style="TITLE_CENTER_NAME">
+                                <font>[[ (company.name and company.name or 'NOMBRE DE COMPANIA NO DISPONIBLE')]]</font>
+                                <font>[[ company.partner_id.vat and ('- %s-%s-%s'%(company.partner_id.vat[2:3],company.partner_id.vat[3:11],company.partner_id.vat[11:12])) or '' ]]</font>
+                            </para></td>
                         </tr>
                         <tr>
                             <td><para style="TOP_TITLE"></para></td>
-                            <td><para style="TITLE_CENTER">[[ (company.partner_id.vat and ('RIF: %s-%s-%s'%(company.partner_id.vat[2:3],company.partner_id.vat[3:11],company.partner_id.vat[11:12])) or removeParentNode('para')) ]]</para></td>
-                        </tr>
-                        <tr>
-                            <td><para style="TOP_TITLE"></para></td>
-                            <td><para style="TITLE_CENTER">[[ get_inf_text(data['form']) ]]</para></td>
+                            <td><para style="TITLE_CENTER">[[ get_informe_text(data['form']) ]][[data['form'] and (' (Expresado en %s)'%( company.currency_id.name)) or '']]</para></td>
                         </tr>
                         <tr>
                             <td><para style="TOP_TITLE"></para></td>
                             <td><para style="TITLE_CENTER">[[data['form'] and get_month(data['form']) or '']]</para></td>
                         </tr>
-                        <tr>
-                            <td><para style="TOP_TITLE"></para></td>
-                            <td><para style="TITLE_CENTER">[[data['form'] and ('(Expresado en %s)'%(company.currency_id.symbol)) or '']]</para></td>
-                        </tr>
                     </blockTable>
                 </place>
-                <drawRightString x="192mm" y="5mm">[[ get_inf_text(data['form']) ]] /  Pág.: <pageNumber/>-<pageCount/> </drawRightString> 
+                <drawRightString x="192mm" y="5mm">[[ get_informe_text(data['form']) ]] /  Pág.: <pageNumber/>-<pageCount/> </drawRightString> 
             </pageGraphics>
 
         </pageTemplate>
