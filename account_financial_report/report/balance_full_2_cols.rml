@@ -5,37 +5,26 @@
             <frame id="first" x1="1cm" y1="1.0cm" width="19.0cm" height="23cm"/>
             <pageGraphics>
                 <setFont name="Helvetica" size="9"/>
-
-<!--
-                <image x="1.0cm" y="25.0cm" height="2.5cm" width="9.6cm">[[company.logo and company.logo or removeParentNode('image')]]</image>
-                <drawString x="1.0cm" y="24.5cm">[[company.logo and removeParentNode('para') or company.name]]</drawString> 
--->
-
                 <place x="-3.5cm" y="22.50cm" width="19cm"  height="5.0cm"> 
                     <blockTable colWidths="9.6cm,9.4cm" style="TITLE">
                         <tr>
                             <td><para style="TOP_TITLE"></para></td>
-                            <td><para style="TITLE_CENTER_NAME">[[ company.name and company.name or 'NOMBRE DE COMPANIA NO DISPONIBLE' ]]</para></td>
+                            <td><para style="TITLE_CENTER_NAME">
+                                <font>[[ (company.name and company.name or 'NOMBRE DE COMPANIA NO DISPONIBLE')]]</font>
+                                <font>[[ company.partner_id.vat and ('- %s-%s-%s'%(company.partner_id.vat[2:3],company.partner_id.vat[3:11],company.partner_id.vat[11:12])) or '' ]]</font>
+                            </para></td>
                         </tr>
                         <tr>
                             <td><para style="TOP_TITLE"></para></td>
-                            <td><para style="TITLE_CENTER">[[ (company.partner_id.vat and ('RIF: %s-%s-%s'%(company.partner_id.vat[2:3],company.partner_id.vat[3:11],company.partner_id.vat[11:12])) or removeParentNode('para')) ]]</para></td>
-                        </tr>
-                        <tr>
-                            <td><para style="TOP_TITLE"></para></td>
-                            <td><para style="TITLE_CENTER">[[ get_inf_text(data['form']) ]]</para></td>
+                            <td><para style="TITLE_CENTER">[[ get_informe_text(data['form']) ]][[data['form'] and (' (Expresado en %s)'%( company.currency_id.name)) or '']]</para></td>
                         </tr>
                         <tr>
                             <td><para style="TOP_TITLE"></para></td>
                             <td><para style="TITLE_CENTER">[[data['form'] and get_month(data['form']) or '']]</para></td>
                         </tr>
-                        <tr>
-                            <td><para style="TOP_TITLE"></para></td>
-                            <td><para style="TITLE_CENTER">[[data['form'] and ('(Expresado en %s)'%(company.currency_id.symbol)) or '']]</para></td>
-                        </tr>
                     </blockTable>
                 </place>
-                <drawRightString x="192mm" y="5mm">[[ get_inf_text(data['form']) ]] /  Pág.: <pageNumber/>-<pageCount/> </drawRightString> 
+                <drawRightString x="192mm" y="5mm">[[ get_informe_text(data['form']) ]] /  Pág.: <pageNumber/>-<pageCount/> </drawRightString> 
             </pageGraphics>
 
         </pageTemplate>
@@ -43,7 +32,7 @@
     <stylesheet>
         <blockTableStyle id="TITLE">
             <blockValign value="TOP"/>
-        </blockTableStyle>  
+        </blockTableStyle> 
         <blockTableStyle id="BODY">
             <blockValign value="TOP"/>
             <blockAlignment value="RIGHT"/>
@@ -75,32 +64,20 @@
             alignment="RIGHT" 
             spaceBefore="0.0" 
             spaceAfter="0.0"/>
-        <paraStyle 
-            name="TOP_TITLE" 
-            fontName="Helvetica-Bold" 
-            fontSize="9" 
-            leftIndent="0.0" 
-            alignment="LEFT"/>
-        <paraStyle name="TITLES" 
-            fontName="Helvetica-Bold" 
-            fontSize="8.0" 
-            leading="10" 
-            alignment="LEFT" 
-            spaceBefore="0.0" 
-            spaceAfter="0.0"/>
+        <paraStyle name="TOP_TITLE" fontName="Helvetica-Bold" fontSize="9"  leftIndent="0.0" alignment="LEFT"/>
+        <paraStyle name="TITLES" fontName="Helvetica-Bold" fontSize="8.0" leading="10" alignment="LEFT"  spaceBefore="0.0" spaceAfter="0.0"/>
         <paraStyle name="TITLE_CENTER" fontName="Helvetica-Bold" fontSize="9" leading="10" leftIndent="0.0" alignment="CENTER"/>
         <paraStyle name="TITLE_CENTER_NAME" fontName="Helvetica-Bold" fontSize="12" leading="13" leftIndent="0.0" alignment="CENTER"/>
         <paraStyle name="TITLE" alignment="CENTER" fontName="Helvetica" fontSize="18.0" leading="20" spaceBefore="-3.0" textColor="black"/>
-
     </stylesheet>
     <images/>
     <story>
         <para>[[setLang(user.context_lang)]]</para>
-        <blockTable colWidths="2.5cm,11.5cm,2.5cm,2.5cm" style="BODY" repeatRows="1">
+        <blockTable colWidths="2.5cm,9.5cm,3.5cm,3.5cm" style="BODY" repeatRows="1">
             <tr noRowsplits="1">
                 <td>
                     <para style="TITLE_LEFT_ALIGN">
-                    <font>Código</font>
+                        <font>Código</font>
                     </para>
                 </td>
                 <td>
@@ -119,7 +96,6 @@
                         <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
                         <i>[[a['label']==True and a['code'] or ''  ]]</i>
                     </para>
-                    
                 </td>
                 <td>
                     <para style="TITLES">

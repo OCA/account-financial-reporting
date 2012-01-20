@@ -53,8 +53,8 @@ class account_balance(report_sxw.rml_parse):
             'lines': self.lines,
             'get_fiscalyear_text': self.get_fiscalyear_text,
             'get_periods_and_date_text': self.get_periods_and_date_text,
-            'get_inf_text': self.get_informe_text,
-            'get_month':self._get_month,
+            'get_informe_text': self.get_informe_text,
+            'get_month':self.get_month,
         })
         self.context = context
 
@@ -78,27 +78,30 @@ class account_balance(report_sxw.rml_parse):
         """
         inf_type = {
             'bgen' : '               Balance General',
-            'bcom' : '       Balance de Comprobacion',
-            'edogp': 'Estado de Ganancias y Perdidas',
-            'bml': 'Libro Mayor Legal',
+            'bcom' : '       Balance de Comprobacion',            
+            'edogp': 'Estado de Ganancias y Perdidas' 
         }
         return inf_type[form['inf_type']]
 
-    def _get_month(self, form):
+    def get_month(self, form):
         '''
         return day, year and month
         '''
-
-        months=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"]
-
-        mes = months[time.strptime(form['date_to'],"%Y-%m-%d")[1]-1]
-        ano = time.strptime(form['date_to'],"%Y-%m-%d")[0]
-        dia = time.strptime(form['date_to'],"%Y-%m-%d")[2]
-
-        if form['inf_type']=='edogp':
-            return 'DESDE: '+self.formatLang(form['date_from'], date=True)+'  HASTA: '+self.formatLang(form['date_to'], date=True)
-        else:
-            return 'AL '+str(dia) + ' DE ' + mes.upper() + ' DE ' + str(ano)
+        if form['filter'] in ['bydate', 'all']:
+            months=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"]
+            mes = months[time.strptime(form['date_to'],"%Y-%m-%d")[1]-1]
+            ano = time.strptime(form['date_to'],"%Y-%m-%d")[0]
+            dia = time.strptime(form['date_to'],"%Y-%m-%d")[2]
+            return 'Período del '+self.formatLang(form['date_from'], date=True)+' al '+self.formatLang(form['date_to'], date=True)
+        elif form['filter'] in ['byperiod', 'all']:
+            aux=[]
+            period_obj = self.pool.get('account.period')
+            
+            for period in period_obj.browse(self.cr, self.uid, form['periods']):
+                aux.append(period.date_start)
+                aux.append(period.date_stop)
+            sorted(aux)
+            return 'Período del '+self.formatLang(aux[0], date=True)+' al '+self.formatLang(aux[-1], date=True)
 
     def get_periods_and_date_text(self, form):
         """
@@ -108,12 +111,12 @@ class account_balance(report_sxw.rml_parse):
         periods_str = None
         fiscalyear_id = form['fiscalyear'] or fiscalyear_obj.find(self.cr, self.uid)
         period_ids = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear_id),('special','=',False)])
-        if form['state'] in ['byperiod', 'all']:
+        if form['filter'] in ['byperiod', 'all']:
             period_ids = form['periods']
         periods_str = ', '.join([period.name or period.code for period in period_obj.browse(self.cr, self.uid, period_ids)])
 
         dates_str = None
-        if form['state'] in ['bydate', 'all']:
+        if form['filter'] in ['bydate', 'all']:
             dates_str = self.formatLang(form['date_from'], date=True) + ' - ' + self.formatLang(form['date_to'], date=True) + ' '
         return {'periods':periods_str, 'date':dates_str}
 
@@ -186,12 +189,12 @@ class account_balance(report_sxw.rml_parse):
         #############################################################################
 
         ctx = self.context.copy()
-        ctx['state'] = form.get('state','all')
+        ctx['filter'] = form.get('filter','all')
         ctx['fiscalyear'] = fiscalyear.id
         ctx['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('special','=',False)])
-        if form['state'] in ['byperiod', 'all']:
+        if form['filter'] in ['byperiod', 'all']:
             ctx['periods'] = period_obj.search(self.cr, self.uid, [('id','in',form['periods'] or ctx['periods']),('special','=',False)])
-        if form['state'] in ['bydate', 'all']:
+        if form['filter'] in ['bydate', 'all']:
             ctx['date_from'] = form['date_from']
             ctx['date_to'] = form['date_to']
 
@@ -227,20 +230,20 @@ class account_balance(report_sxw.rml_parse):
         #############################################################################
         
         ctx = self.context.copy()
-        ctx['state'] = form.get('state','all')
+        ctx['filter'] = form.get('filter','all')
         ctx['fiscalyear'] = fiscalyear.id
 
-        if form['state'] in ['byperiod', 'all']:
+        if form['filter'] in ['byperiod', 'all']:
             ctx['periods'] = form['periods']
             date_start = min([period.date_start for period in period_obj.browse(self.cr, self.uid, ctx['periods'])])
             ctx['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('date_stop','<=',date_start)])
             if not ctx['periods']:
                 missing_period()
-        elif form['state'] in ['bydate']:
+        elif form['filter'] in ['bydate']:
             ctx['date_from'] = fiscalyear.date_start
             ctx['date_to'] = form['date_from']
             ctx['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('date_stop','<=',ctx['date_to'])])
-        elif form['state'] == 'none':
+        elif form['filter'] == 'none':
             ctx['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('special','=',True)])
             date_start = min([period.date_start for period in period_obj.browse(self.cr, self.uid, ctx['periods'])])
             ctx['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('date_start','<=',date_start),('special','=',True)])
