@@ -22,16 +22,16 @@
                         <separator string="Period" colspan="4"/>
                         <field name="fiscalyear"/>
                         <newline/>
-                        <field name="state" required="True"/>
+                        <field name="filter" required="True"/>
                         <newline/>
 
-                        <group attrs="{'invisible':[('state','=','none')]}" colspan="4">
-                            <group attrs="{'invisible':[('state','=','byperiod')]}" colspan="4">
+                        <group attrs="{'invisible':[('filter','=','none')]}" colspan="4">
+                            <group attrs="{'invisible':[('filter','=','byperiod')]}" colspan="4">
                                 <separator string="Date Filter" colspan="4"/>
                                 <field name="date_from"/>
                                 <field name="date_to"/>
                             </group>
-                            <group attrs="{'invisible':[('state','=','bydate')]}" colspan="4">
+                            <group attrs="{'invisible':[('filter','=','bydate')]}" colspan="4">
                                 <separator string="Filter on Periods" colspan="4"/>
                                 <field name="periods" colspan="4" nolabel="1" domain="[('fiscalyear_id','=',fiscalyear)]"/>
                             </group>
@@ -87,15 +87,15 @@
                         <separator string="Period" colspan="4"/>
                         <field name="fiscalyear"/>
                         <newline/>
-                        <field name="state" required="True"/>
+                        <field name="filter" required="True"/>
                         <newline/>
-                        <group attrs="{'invisible':[('state','=','none')]}" colspan="4">
-                            <group attrs="{'invisible':[('state','=','byperiod')]}" colspan="4">
+                        <group attrs="{'invisible':[('filter','=','none')]}" colspan="4">
+                            <group attrs="{'invisible':[('filter','=','byperiod')]}" colspan="4">
                                 <separator string="Date Filter" colspan="4"/>
                                 <field name="date_from"/>
                                 <field name="date_to"/>
                             </group>
-                            <group attrs="{'invisible':[('state','=','bydate')]}" colspan="4">
+                            <group attrs="{'invisible':[('filter','=','bydate')]}" colspan="4">
                                 <separator string="Filter on Periods" colspan="4"/>
                                 <field name="periods" colspan="4" nolabel="1" domain="[('fiscalyear_id','=',fiscalyear)]"/>
                             </group>
@@ -149,15 +149,15 @@
                         <separator string="Period" colspan="4"/>
                         <field name="fiscalyear"/>
                         <newline/>
-                        <field name="state" required="True"/>
+                        <field name="filter" required="True"/>
                         <newline/>
-                        <group attrs="{'invisible':[('state','=','none')]}" colspan="4">
-                            <group attrs="{'invisible':[('state','=','byperiod')]}" colspan="4">
+                        <group attrs="{'invisible':[('filter','=','none')]}" colspan="4">
+                            <group attrs="{'invisible':[('filter','=','byperiod')]}" colspan="4">
                                 <separator string="Date Filter" colspan="4"/>
                                 <field name="date_from"/>
                                 <field name="date_to"/>
                             </group>
-                            <group attrs="{'invisible':[('state','=','bydate')]}" colspan="4">
+                            <group attrs="{'invisible':[('filter','=','bydate')]}" colspan="4">
                                 <separator string="Filter on Periods" colspan="4"/>
                                 <field name="periods" colspan="4" nolabel="1" domain="[('fiscalyear_id','=',fiscalyear)]"/>
                             </group>

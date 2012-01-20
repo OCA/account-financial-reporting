@@ -108,7 +108,7 @@
                     <para style="TITLES">Cuenta</para>
                 </td>
                 <td>
-                    <para style="TITLE_LEFT_ALIGN"></para>
+                    <para style="TITLE_LEFT_ALIGN">Balance</para>
                 </td>
             </tr>
             <tr>
@@ -127,7 +127,7 @@
                 <td>
                     <para style="TITLE_LEFT_ALIGN">
                         <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
-                        <font>[[ (a['total']==True) and formatLang(a['balance']) or '']]</font>
+                        <font>[[(a['total']==True) and formatLang(a['balance']) or '']]</font>
                     </para>
                 </td>
             </tr>

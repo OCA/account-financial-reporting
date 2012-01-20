@@ -30,13 +30,14 @@
 from osv import osv,fields
 import pooler
 import time
+
 class wizard_account_balance_gene(osv.osv_memory):
     _name = "wizard.report.account.balance.gene"
 
     _columns = {
         'company_id': fields.many2one('res.company','Company',required=True),
         'account_list': fields.many2many ('account.account','rel_wizard_account','account_list','account_id','Root accounts',required=True),
-        'state': fields.selection([('bydate','By Date'),('byperiod','By Period'),('all','By Date and Period'),('none','No Filter')],'Date/Period Filter'),
+        'filter': fields.selection([('bydate','By Date'),('byperiod','By Period'),('all','By Date and Period'),('none','No Filter')],'Date/Period Filter'),
         'fiscalyear': fields.many2one('account.fiscalyear','Fiscal year',help='Keep empty to use all open fiscal years to compute the balance',required=True),
         'periods': fields.many2many('account.period','rel_wizard_period','wizard_id','period_id','Periods',help='All periods in the fiscal year if empty'),
         'display_account': fields.selection([('bal_all','All'),('bal_solde', 'With balance'),('bal_mouvement','With movements')],'Display accounts'),
@@ -51,7 +52,7 @@ class wizard_account_balance_gene(osv.osv_memory):
     _defaults = {
         'date_from': lambda *a: time.strftime('%Y-%m-%d'),
         'date_to': lambda *a: time.strftime('%Y-%m-%d'),
-        'state': lambda *a:'byperiod',
+        'filter': lambda *a:'byperiod',
         'display_account_level': lambda *a: 0,
         'inf_type': lambda *a:'bcom',
         'company_id': lambda *a: 1,
@@ -78,7 +79,7 @@ class wizard_account_balance_gene(osv.osv_memory):
     def _check_state(self, cr, uid, data, context=None):
         if context is None:
             context = {}
-        if data['form']['state'] == 'bydate':
+        if data['form']['filter'] == 'bydate':
            self._check_date(cr, uid, data, context)
         return data['form']
     
@@ -106,6 +107,9 @@ class wizard_account_balance_gene(osv.osv_memory):
         data['ids'] = context.get('active_ids', [])
         data['model'] = context.get('active_model', 'ir.ui.menu')
         data['form'] = self.read(cr, uid, ids[0])
+        
+        print 'data',data
+        
         return {'type': 'ir.actions.report.xml', 'report_name': 'account.account.balance.gene', 'datas': data}
 
 wizard_account_balance_gene()
