@@ -22,7 +22,11 @@
                         </tr>
                         <tr>
                             <td><para style="TOP_TITLE"></para></td>
-                            <td><para style="TITLE_CENTER">[[ get_informe_text(data['form']) ]][[data['form'] and (' (Expresado en %s)'%( company.currency_id.name)) or '']]</para></td>
+                            <td><para style="TITLE_CENTER">[[ get_informe_text(data['form']) ]]</para></td>
+                        </tr>
+                        <tr>
+                            <td><para style="TOP_TITLE"></para></td>
+                            <td><para style="TITLE_CENTER">[[data['form'] and (' (Expresado en %s)'%( company.currency_id.name)) or '']]</para></td>
                         </tr>
                         <tr>
                             <td><para style="TOP_TITLE"></para></td>
@@ -65,14 +69,14 @@
         <paraStyle 
             name="TITLE_LEFT_ALIGN" 
             fontName="Helvetica-Bold" 
-            fontSize="8.0" 
+            fontSize="6.0" 
             leading="10" 
             alignment="RIGHT" 
             spaceBefore="0.0" 
             spaceAfter="0.0"/>
-        <paraStyle name="TOP_TITLE" fontName="Helvetica-Bold" fontSize="9"  leftIndent="0.0" alignment="LEFT"/>
-        <paraStyle name="TITLES" fontName="Helvetica-Bold" fontSize="8.0" leading="10" alignment="LEFT"  spaceBefore="0.0" spaceAfter="0.0"/>
-        <paraStyle name="TITLE_CENTER" fontName="Helvetica-Bold" fontSize="9" leading="10" leftIndent="0.0" alignment="CENTER"/>
+        <paraStyle name="TOP_TITLE" fontName="Helvetica-Bold" fontSize="7"  leftIndent="0.0" alignment="LEFT"/>
+        <paraStyle name="TITLES" fontName="Helvetica-Bold" fontSize="6.0" leading="10" alignment="LEFT"  spaceBefore="0.0" spaceAfter="0.0"/>
+        <paraStyle name="TITLE_CENTER" fontName="Helvetica-Bold" fontSize="7" leading="10" leftIndent="0.0" alignment="CENTER"/>
         <paraStyle name="TITLE_CENTER_NAME" fontName="Helvetica-Bold" fontSize="12" leading="13" leftIndent="0.0" alignment="CENTER"/>
         <paraStyle name="TITLE" alignment="CENTER" fontName="Helvetica" fontSize="18.0" leading="20" spaceBefore="-3.0" textColor="black"/>
     </stylesheet>
