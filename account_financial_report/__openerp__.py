@@ -38,6 +38,7 @@
     "update_xml" : [
         "wizard/wizard_report_report.xml"           , 
         "wizard/account_report_wizard.xml"          ,
+        "view/account_view.xml",
     ]                                               ,
     "active": False                                 ,
     "installable": True
