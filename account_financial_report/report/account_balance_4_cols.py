@@ -79,7 +79,8 @@ class account_balance(report_sxw.rml_parse):
         inf_type = {
             'bgen' : '               Balance General',
             'bcom' : '       Balance de Comprobacion',            
-            'edogp': 'Estado de Ganancias y Perdidas' 
+            'edogp': 'Estado de Ganancias y Perdidas',
+            'bml': 'Libro Mayor Legal'
         }
         return inf_type[form['inf_type']]
 
