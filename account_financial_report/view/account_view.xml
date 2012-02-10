@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    <!-- 
+    =====================================================
+    Vista para agregar ala vista en lista de la lista de 
+    cuentas contables el campo padre.
+    =====================================================
+    -->
+        <record id="view_account_search_padre" model="ir.ui.view">
+            <field name="name">account.account.search.padre</field>
+            <field name="model">account.account</field>
+            <field name="type">search</field>
+            <field name="inherit_id" ref="account.view_account_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="/search/group/field[@name='code']" position="after">
+                    <field name="parent_id"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>
