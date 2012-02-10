@@ -45,7 +45,7 @@ class wizard_account_balance_gene_2(osv.osv_memory):
         'date_to': fields.date('End date'),
         'tot_check': fields.boolean('Show Total'),
         'lab_str': fields.char('Description', size= 128),
-        'inf_type': fields.selection([('bgen','Balance General'),('bcom','Balance Comprobacion'),('edogp','Estado Ganancias y Perdidas')],'Tipo Informe',required=True),
+        'inf_type': fields.selection([('bgen','Balance General'),('bcom','Balance Comprobacion'),('edogp','Estado Ganancias y Perdidas'),('bdl','Diario Legal')],'Tipo Informe',required=True),
         #~ 'type_report': fields.selection([('un_col','Una Columna'),('dos_col','Dos Columnas'),('cuatro_col','Cuatro Columnas')],'Tipo Informe',required=True),
     }
     
