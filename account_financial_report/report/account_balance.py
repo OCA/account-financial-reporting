@@ -283,11 +283,11 @@ class account_balance(report_sxw.rml_parse):
                 # Check whether we must include this line in the report or not
                 #
 
-                if form['display_account'] == 'bal_mouvement' and account['parent_id']:
+                if form['display_account'] == 'con_movimiento' and account['parent_id']:
                     # Include accounts with movements
                     if abs(res['balance']) >= 0.5 * 10**-int(2):
                         result_acc.append(res)
-                elif form['display_account'] == 'bal_solde' and account['parent_id']:
+                elif form['display_account'] == 'con_balance' and account['parent_id']:
                     # Include accounts with balance
                     if abs(res['balance']) >= 0.5 * 10**-int(2):
                         result_acc.append(res)
