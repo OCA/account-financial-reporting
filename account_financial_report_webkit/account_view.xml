@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_account_form_webkit" model="ir.ui.view">
+            <field name="name">account.account.form.webkit</field>
+            <field name="model">account.account</field>
+            <field name="inherit_id" ref="account.view_account_form"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="active" position="after">
+                        <field name="centralized" groups="base.group_extended"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+    </data>
+</openerp>

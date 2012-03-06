@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="last_rec_date_form">
+            <!-- must be unique in this module. -->
+            <field name="name">last_rec_date_form</field>
+            <field name="model">account.move.line</field>
+            <!--parent python entity -->
+            <field name="inherit_id" ref="account.view_move_line_form"/>
+            <!-- modulename.view -->
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <separator string="Narration" colspan="4" position="before">
+                    <separator string="Misc."/>
+                    <newline/>
+                    <group>
+                        <field name="last_rec_date" readonly="1"/>
+                    </group>
+                </separator>
+            </field>
+        </record>
+    </data>
+</openerp>
