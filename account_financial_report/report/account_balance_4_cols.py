@@ -122,6 +122,14 @@ class account_balance(report_sxw.rml_parse):
         return {'periods':periods_str, 'date':dates_str}
 
 
+    def special_period(self, periods):
+        period_obj = self.pool.get('account.period')
+        period_brw = period_obj.browse(self.cr, self.uid, periods)
+        period_counter = [True for i in period_brw if not i.special]
+        if not period_counter:
+            return True
+        return False
+
     def lines(self, form, ids={}, done=None, level=0):
         """
         Returns all the data needed for the report lines
@@ -192,10 +200,20 @@ class account_balance(report_sxw.rml_parse):
         ctx = self.context.copy()
         ctx['filter'] = form.get('filter','all')
         ctx['fiscalyear'] = fiscalyear.id
-        ctx['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('special','=',False)])
+        #~ ctx['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('special','=',False)])
+        
+        if ctx['filter'] not in ['bydate','none']:
+            special = self.special_period(form['periods'])
+        else:
+            special = False
+        
         if form['filter'] in ['byperiod', 'all']:
-            ctx['periods'] = period_obj.search(self.cr, self.uid, [('id','in',form['periods'] or ctx['periods']),('special','=',False)])
-        if form['filter'] in ['bydate', 'all']:
+            if special:
+                ctx['periods'] = period_obj.search(self.cr, self.uid, [('id','in',form['periods'] or ctx['periods'])])
+            else:
+                ctx['periods'] = period_obj.search(self.cr, self.uid, [('id','in',form['periods'] or ctx['periods']),('special','=',False)])
+                
+        if form['filter'] in ['bydate','all','none']:
             ctx['date_from'] = form['date_from']
             ctx['date_to'] = form['date_to']
 
@@ -251,8 +269,10 @@ class account_balance(report_sxw.rml_parse):
 
         period_balanceinit = {}
         for acc in account_obj.browse(self.cr, self.uid, [x[0] for x in account_ids], ctx):
-            period_balanceinit[acc['id']] = acc.balance
-
+            if special:
+                period_balanceinit[acc['id']] = 0.0
+            else:
+                period_balanceinit[acc['id']] = acc.balance
         #
         # Generate the report lines (checking each account)
         #
@@ -302,7 +322,7 @@ class account_balance(report_sxw.rml_parse):
 
                 if form['display_account'] == 'con_movimiento' and account['parent_id']:
                     # Include accounts with movements
-                    if abs(res['balance']) >= 0.5 * 10**-int(2):
+                    if abs(res['debit']) >= 0.5 * 10**-int(2) or abs(res['credit']) >= 0.5 * 10**-int(2):
                         result_acc.append(res)
                 elif form['display_account'] == 'con_balance' and account['parent_id']:
                     # Include accounts with balance
