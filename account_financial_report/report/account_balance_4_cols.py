@@ -209,9 +209,9 @@ class account_balance(report_sxw.rml_parse):
         
         if form['filter'] in ['byperiod', 'all']:
             if special:
-                ctx['periods'] = period_obj.search(self.cr, self.uid, [('id','in',form['periods'] or ctx['periods'])])
+                ctx['periods'] = period_obj.search(self.cr, self.uid, [('id','in',form['periods'] or ctx.get('periods',False))])
             else:
-                ctx['periods'] = period_obj.search(self.cr, self.uid, [('id','in',form['periods'] or ctx['periods']),('special','=',False)])
+                ctx['periods'] = period_obj.search(self.cr, self.uid, [('id','in',form['periods'] or ctx.get('periods',False)),('special','=',False)])
                 
         if form['filter'] in ['bydate','all','none']:
             ctx['date_from'] = form['date_from']
