@@ -25,21 +25,22 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##############################################################################
 {
-    "name" : "Common financial reports"             ,
-    "version" : "1.0"                               ,
-    "author" : "OpenERP Venezuela"                  ,
-    "website" : "http://wiki.openerp.org.ve/"       ,
-    "depends" : ["base","account"]                  ,
-    "category" : "Localisation/Accounting"          ,
+    "name" : "Common financial reports",
+    "version" : "1.0",
+    "author" : "OpenERP Venezuela",
+    "website" : "http://wiki.openerp.org.ve/",
+    "depends" : ["base","account"],
+    "category" : "Localisation/Accounting",
     "description": """
-                   """                              ,
-    "init_xml" : []                                 ,
-    "demo_xml" : []                                 ,
+                   """,
+    "init_xml" : [],
+    "demo_xml" : [],
     "update_xml" : [
-        "wizard/wizard_report_report.xml"           , 
-        "wizard/account_report_wizard.xml"          ,
+        "security/security.xml",
+        "wizard/wizard_report_report.xml", 
+        "wizard/account_report_wizard.xml",
         "view/account_view.xml",
-    ]                                               ,
-    "active": False                                 ,
+    ],
+    "active": False,
     "installable": True
 }

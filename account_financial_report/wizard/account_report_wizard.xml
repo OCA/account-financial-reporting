@@ -65,6 +65,7 @@
             name="Reporte Balance 4 Columnas"
             parent="account.final_accounting_reports"
             sequence="99"
+            groups="account_financial_report.group_afreport"
             action="action_wizard_report"/>
         
         
@@ -128,6 +129,7 @@
             name="Reporte Balance 2 Columnas"
             parent="account.final_accounting_reports"
             sequence="99"
+            groups="account_financial_report.group_afreport"
             action="action_wizard_report2"/>
 
         <record id="wizard_report_view3" model="ir.ui.view">
@@ -190,6 +192,7 @@
             name="Reporte Balance "
             parent="account.final_accounting_reports"
             sequence="99"
+            groups="account_financial_report.group_afreport"
             action="action_wizard_report3"/>
 
     </data>
