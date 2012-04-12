@@ -55,7 +55,7 @@ class wizard_account_balance_gene(osv.osv_memory):
         'filter': lambda *a:'byperiod',
         'display_account_level': lambda *a: 0,
         'inf_type': lambda *a:'bcom',
-        'company_id': lambda *a: 1,
+        'company_id': lambda self,cr,uid,c: self.pool.get('res.company')._company_default_get(cr, uid, 'account.invoice', context=c),
         'fiscalyear': lambda self, cr, uid, c: self.pool.get('account.fiscalyear').find(cr, uid),
         'display_account': lambda *a:'con_movimiento',
     }
