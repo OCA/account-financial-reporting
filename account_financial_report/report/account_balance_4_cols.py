@@ -82,6 +82,7 @@ class account_balance(report_sxw.rml_parse):
             'edogp': 'Estado de Ganancias y Perdidas',
             'bml': 'Libro Mayor Legal'
         }
+        print "Hola Parserrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"
         return inf_type[form['inf_type']]
 
     def get_month(self, form):
@@ -338,7 +339,7 @@ class account_balance(report_sxw.rml_parse):
                     tot_crd += res['credit']
                     tot_eje += res['balance']
 
-        if form['tot_check']:
+        if (form['tot_check'] and res['type']=='view' and res['level']==1 and (res['id'] not in tot)):
             str_label = form['lab_str']
             res2 = {
                     'type' : 'view',
