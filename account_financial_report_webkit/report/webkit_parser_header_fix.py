@@ -33,6 +33,7 @@ import tempfile
 import time
 import pooler
 import tools
+import logging
 import openerp.addons
 
 
@@ -43,6 +44,7 @@ from openerp.addons.report_webkit import webkit_report
 from openerp.addons.report_webkit.webkit_report import mako_template
 from openerp.addons.report_webkit.report_helper import WebKitHelper
 
+_logger = logging.getLogger('financial.reports.webkit')
 
 # Class used only as a workaround to bug :
 # http://code.google.com/p/wkhtmltopdf/issues/detail?id=656
@@ -188,7 +190,7 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
                     htmls.append(html)
                 except Exception, e:
                     msg = exceptions.text_error_template().render()
-                    logger.error(msg)
+                    _logger.error(msg)
                     raise except_osv(_('Webkit render'), msg)
         else:
             try :
@@ -199,7 +201,7 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
                 htmls.append(html)
             except Exception, e:
                 msg = exceptions.text_error_template().render()
-                logger.error(msg)
+                _logger.error(msg)
                 raise except_osv(_('Webkit render'), msg)
 
         # NO html footer and header because we write them as text with wkhtmltopdf
@@ -214,7 +216,7 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
                                            **self.parser_instance.localcontext)
             except Exception, e:
                 msg = exceptions.text_error_template().render()
-                logger.error(msg)
+                _logger.error(msg)
                 raise except_osv(_('Webkit render'), msg)
             return (deb, 'html')
         bin = self.get_lib(cursor, uid)
