@@ -10,7 +10,7 @@
             <!-- modulename.view -->
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <separator string="Narration" colspan="4" position="before">
+                <separator string="Internal Note" colspan="4" position="before">
                     <separator string="Misc."/>
                     <newline/>
                     <group>

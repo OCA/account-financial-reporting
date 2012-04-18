@@ -76,7 +76,7 @@ class AccountReportPartnersLedgerWizard(osv.osv_memory):
                                AND COALESCE(p.special, FALSE) = FALSE
                                ORDER BY p.date_start ASC
                                LIMIT 1) AS period_start
-                UNION
+                UNION ALL
                 SELECT * FROM (SELECT p.id
                                FROM account_period p
                                LEFT JOIN account_fiscalyear f ON (p.fiscalyear_id = f.id)
