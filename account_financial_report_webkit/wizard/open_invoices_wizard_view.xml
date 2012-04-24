@@ -31,6 +31,7 @@
                         </page>
                         <page string="Layout Options" name="layout_options">
                             <field name="amount_currency"/>
+                            <field name="group_by_currency"/>
                         </page>
                     </page>
                     <page name="filters" position="attributes">

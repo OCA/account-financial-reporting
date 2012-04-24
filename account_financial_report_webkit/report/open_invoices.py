@@ -22,13 +22,25 @@ import pooler
 
 from collections import defaultdict
 from report import report_sxw
-from osv import osv
-from tools.translate import _
 from datetime import datetime
+from itertools import groupby
+from operator import itemgetter
+from mako.template import Template
 
+from tools.translate import _
+
+from openerp.osv import osv
 from common_partner_reports import CommonPartnersReportHeaderWebkit
 from webkit_parser_header_fix import HeaderFooterTextWebKitParser
+from openerp.addons.report_webkit import report_helper
+import addons
 
+
+def get_mako_template(obj, *args):
+    template_path = addons.get_module_resource(*args)
+    return Template(filename=template_path, input_encoding='utf-8')
+
+report_helper.WebKitHelper.get_mako_template = get_mako_template
 
 class PartnersOpenInvoicesWebkit(report_sxw.rml_parse, CommonPartnersReportHeaderWebkit):
 
@@ -65,6 +77,18 @@ class PartnersOpenInvoicesWebkit(report_sxw.rml_parse, CommonPartnersReportHeade
             ],
         })
 
+
+    def _group_lines_by_currency(self, account_br):
+        account_br.grouped_ledger_lines = {}
+        if not account_br.ledger_lines:
+            return
+        for part_id, plane_lines in account_br.ledger_lines.items():
+            account_br.grouped_ledger_lines[part_id] = []
+            plane_lines.sort(key=itemgetter('currency_code'))
+            for curr, lines in  groupby(plane_lines, key=itemgetter('currency_code')):
+                tmp = [x for x in lines]
+                account_br.grouped_ledger_lines[part_id].append((curr, tmp)) #I want to reiter many times
+    
     def set_context(self, objects, data, ids, report_type=None):
         """Populate a ledger_lines attribute on each browse record that will be used
         by mako template"""
@@ -84,6 +108,7 @@ class PartnersOpenInvoicesWebkit(report_sxw.rml_parse, CommonPartnersReportHeade
         result_selection = self._get_form_param('result_selection', data)
         date_until = self._get_form_param('until_date', data)
         chart_account = self._get_chart_account_id_br(data)
+        group_by_currency = self._get_form_param('group_by_currency', data)
 
         if main_filter == 'filter_no' and fiscalyear:
             start_period = self.get_first_fiscalyear_period(fiscalyear)
@@ -129,6 +154,8 @@ class PartnersOpenInvoicesWebkit(report_sxw.rml_parse, CommonPartnersReportHeade
 
             account.partners_order = self._order_partners(ledg_lines_pids, init_bal_lines_pids)
             account.ledger_lines = ledger_lines_memoizer.get(account.id, {})
+            if group_by_currency:
+                self._group_lines_by_currency(account)
             objects.append(account)
 
         self.localcontext.update({
