@@ -29,6 +29,7 @@ class AccountReportOpenInvoicesWizard(osv.osv_memory):
     _description = "Open Invoices Report"
 
     _columns = {
+        'group_by_currency':fields.boolean('Group Partner by currency'),
         'until_date': fields.date("Clearance date",
                                   required=True,
                                   help="""The clearance date is essentially a tool used for debtors provisionning calculation.
@@ -36,9 +37,7 @@ class AccountReportOpenInvoicesWizard(osv.osv_memory):
 By default, this date is equal to the the end date (ie: 31/12/2011 if you select fy 2011).
 
 By amending the clearance date, you will be, for instance, able to answer the question : 'based on my last year end debtors open invoices, which invoices are still unpaid today (today is my clearance date)?'
-"""),
-
-    }
+""")}
 
     def _check_until_date(self, cr, uid, ids, context=None):
         def get_key_id(obj, field):
@@ -111,7 +110,7 @@ By amending the clearance date, you will be, for instance, able to answer the qu
         if context is None:
             context = {}
         vals = self.read(cr, uid, ids,
-                         ['until_date',],
+                         ['until_date', 'group_by_currency'],
                          context=context)[0]
         data['form'].update(vals)
         return data
