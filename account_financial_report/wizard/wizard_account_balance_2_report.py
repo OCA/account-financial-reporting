@@ -29,6 +29,7 @@
 from osv import osv,fields
 import pooler
 import time
+from tools.translate import _
 
 class wizard_account_balance_gene_2(osv.osv_memory):
     _name = "wizard.report.account.balance.gene.2"
@@ -141,7 +142,7 @@ class wizard_account_balance_gene_2(osv.osv_memory):
             minmax = cr.dictfetchall()
             if minmax:
                 if (data['form']['date_to'] < minmax[0]['inicio']) or (data['form']['date_from'] > minmax[0]['fin']):
-                    raise osv.except_osv(_('Error !'),('La intersepcion entre el periodo y fecha es vacio'))
+                    raise osv.except_osv(_('Error !'),_('La intersepcion entre el periodo y fecha es vacio'))
 
         return {'type': 'ir.actions.report.xml', 'report_name': 'account.account.balance.gene.2', 'datas': data}
 
