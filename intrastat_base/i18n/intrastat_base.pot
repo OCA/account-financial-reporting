@@ -4,21 +4,16 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 6.0.3\n"
+"Project-Id-Version: OpenERP Server 6.0.4\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2011-09-09 08:18+0000\n"
-"PO-Revision-Date: 2011-09-09 08:18+0000\n"
+"POT-Creation-Date: 2012-06-05 13:28+0000\n"
+"PO-Revision-Date: 2012-06-05 13:28+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-
-#. module: intrastat_base
-#: help:product.template,exclude_from_intrastat:0
-msgid "If set to True, the product or service will not be taken into account for Intrastat Product or Service reports. So you should leave this field to False unless you have a good reason. Exemple of good reason : 'Shipping' is a service that should probably be excluded from the Intrastat Service report."
-msgstr ""
 
 #. module: intrastat_base
 #: model:ir.ui.menu,name:intrastat_base.menu_intrastat_base_root
@@ -40,6 +35,7 @@ msgstr ""
 #: code:addons/intrastat_base/intrastat_common.py:70
 #: code:addons/intrastat_base/intrastat_common.py:85
 #: code:addons/intrastat_base/intrastat_common.py:93
+#: code:addons/intrastat_base/product.py:41
 #, python-format
 msgid "Error :"
 msgstr ""
@@ -86,8 +82,18 @@ msgid "The name of the country must be unique !"
 msgstr ""
 
 #. module: intrastat_base
+#: constraint:product.template:0
+msgid "Error msg is in raise"
+msgstr ""
+
+#. module: intrastat_base
 #: help:account.tax,exclude_from_intrastat_if_present:0
 msgid "If this tax is present on an invoice line, this invoice line will be skipped when generating Intrastat Product or Service lines from invoices."
+msgstr ""
+
+#. module: intrastat_base
+#: field:product.template,is_accessory_cost:0
+msgid "Is accessory cost"
 msgstr ""
 
 #. module: intrastat_base
@@ -96,8 +102,8 @@ msgid "Intrastat country"
 msgstr ""
 
 #. module: intrastat_base
-#: model:ir.model,name:intrastat_base.model_report_intrastat_common
-msgid "Common functions for intrastat reports for products and services"
+#: help:product.template,exclude_from_intrastat:0
+msgid "If set to True, the product or service will not be taken into account for Intrastat Product or Service reports. So you should leave this field to False unless you have a very good reason."
 msgstr ""
 
 #. module: intrastat_base
@@ -110,6 +116,11 @@ msgstr ""
 #: code:addons/intrastat_base/intrastat_common.py:70
 #, python-format
 msgid "The VAT number is not set for the partner '%s'."
+msgstr ""
+
+#. module: intrastat_base
+#: model:ir.model,name:intrastat_base.model_report_intrastat_common
+msgid "Common functions for intrastat reports for products and services"
 msgstr ""
 
 #. module: intrastat_base
@@ -130,6 +141,11 @@ msgstr ""
 #. module: intrastat_base
 #: field:product.template,exclude_from_intrastat:0
 msgid "Exclude from Intrastat reports"
+msgstr ""
+
+#. module: intrastat_base
+#: help:product.template,is_accessory_cost:0
+msgid "Activate this option for shipping costs, packaging costs and all services related to the sale of products. This option is used for Intrastat reports."
 msgstr ""
 
 #. module: intrastat_base

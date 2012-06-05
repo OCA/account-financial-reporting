@@ -4,21 +4,16 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 6.0.3\n"
+"Project-Id-Version: OpenERP Server 6.0.4\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2011-09-09 08:21+0000\n"
-"PO-Revision-Date: 2011-09-09 08:21+0000\n"
+"POT-Creation-Date: 2012-06-05 13:28+0000\n"
+"PO-Revision-Date: 2012-06-05 13:28+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-
-#. module: intrastat_base
-#: help:product.template,exclude_from_intrastat:0
-msgid "If set to True, the product or service will not be taken into account for Intrastat Product or Service reports. So you should leave this field to False unless you have a good reason. Exemple of good reason : 'Shipping' is a service that should probably be excluded from the Intrastat Service report."
-msgstr "Si cette option est activée, le produit ou le service ne sera pas pris en compte pour les rapports de DEB et de DES. Sauf si vous avez une bonne raison, il faut donc laisser cette option désactivée. Exemple de bonne raison : 'Frais de port' est un service qui devrait a priori être exclu de la DES."
 
 #. module: intrastat_base
 #: model:ir.ui.menu,name:intrastat_base.menu_intrastat_base_root
@@ -40,6 +35,7 @@ msgstr "Erreur: l'UdM par défaut et l'UdM d'achat doivent appartenir à la mêm
 #: code:addons/intrastat_base/intrastat_common.py:70
 #: code:addons/intrastat_base/intrastat_common.py:85
 #: code:addons/intrastat_base/intrastat_common.py:93
+#: code:addons/intrastat_base/product.py:41
 #, python-format
 msgid "Error :"
 msgstr "Erreur :"
@@ -96,9 +92,19 @@ msgid "The name of the country must be unique !"
 msgstr "Le nom du pays doit être unique !"
 
 #. module: intrastat_base
+#: constraint:product.template:0
+msgid "Error msg is in raise"
+msgstr "Error msg is in raise"
+
+#. module: intrastat_base
 #: help:account.tax,exclude_from_intrastat_if_present:0
 msgid "If this tax is present on an invoice line, this invoice line will be skipped when generating Intrastat Product or Service lines from invoices."
 msgstr "Si cette taxe est présente sur une ligne de facture, cette ligne de facture ne sera pas prise en compte lors de la génération de la DEB et de la DES depuis les factures."
+
+#. module: intrastat_base
+#: field:product.template,is_accessory_cost:0
+msgid "Is accessory cost"
+msgstr "Frais accessoires"
 
 #. module: intrastat_base
 #: field:res.country,intrastat:0
@@ -106,9 +112,9 @@ msgid "Intrastat country"
 msgstr "Pays intrastat"
 
 #. module: intrastat_base
-#: model:ir.model,name:intrastat_base.model_report_intrastat_common
-msgid "Common functions for intrastat reports for products and services"
-msgstr "Common functions for intrastat reports for products and services"
+#: help:product.template,exclude_from_intrastat:0
+msgid "If set to True, the product or service will not be taken into account for Intrastat Product or Service reports. So you should leave this field to False unless you have a very good reason."
+msgstr "Si l'option est activée, le produit ou service ne sera pris en compte ni pour la DEB ni pour la DES. Cette option doit donc rester désactivée sauf si vous avez une très bonne raison."
 
 #. module: intrastat_base
 #: code:addons/intrastat_base/intrastat_common.py:64
@@ -121,6 +127,11 @@ msgstr "La monnaie de la société doit être 'EUR', mais est actuellement '%s'.
 #, python-format
 msgid "The VAT number is not set for the partner '%s'."
 msgstr "Le numéro de TVA n'est pas renseigné pour le partenaire '%s'."
+
+#. module: intrastat_base
+#: model:ir.model,name:intrastat_base.model_report_intrastat_common
+msgid "Common functions for intrastat reports for products and services"
+msgstr "Common functions for intrastat reports for products and services"
 
 #. module: intrastat_base
 #: model:ir.model,name:intrastat_base.model_res_country
@@ -143,9 +154,14 @@ msgid "Exclude from Intrastat reports"
 msgstr "Exclure de la DEB et de la DES"
 
 #. module: intrastat_base
+#: help:product.template,is_accessory_cost:0
+msgid "Activate this option for shipping costs, packaging costs and all services related to the sale of products. This option is used for Intrastat reports."
+msgstr "Activez cette option pour les frais de port, les frais d'emballage et tous les services liés à la vente de produits physiques. Cette option est utilisée pour la DEB et la DES."
+
+#. module: intrastat_base
 #: model:product.template,name:intrastat_base.shipping_costs_exclude_product_template
 msgid "Shipping costs"
-msgstr "Shipping costs"
+msgstr "Frais de port"
 
 #. module: intrastat_base
 #: code:addons/intrastat_base/intrastat_common.py:85

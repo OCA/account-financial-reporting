@@ -27,7 +27,7 @@ class product_template(osv.osv):
     _inherit = "product.template"
     _columns = {
         'exclude_from_intrastat': fields.boolean('Exclude from Intrastat reports', help="If set to True, the product or service will not be taken into account for Intrastat Product or Service reports. So you should leave this field to False unless you have a very good reason."),
-        'is_accessory_cost' : fields.boolean('Is accessory cost?', help='Activate this option for shipping costs, packaging costs and all services related to the sale of product. This option is used for Intrastat reports.'),
+        'is_accessory_cost' : fields.boolean('Is accessory cost', help='Activate this option for shipping costs, packaging costs and all services related to the sale of products. This option is used for Intrastat reports.'),
     }
 
     _default = {
