@@ -22,6 +22,9 @@
                     <field name="exclude_from_intrastat" />
                 </group>
             </field>
+            <field name="purchase_ok" position="after">
+                <field name="is_accessory_cost" />
+            </field>
         </data>
     </field>
 </record>
@@ -38,6 +41,9 @@
                 <group colspan="4">
                     <field name="exclude_from_intrastat" />
                 </group>
+            </field>
+            <field name="purchase_ok" position="after">
+                <field name="is_accessory_cost" />
             </field>
         </data>
     </field>

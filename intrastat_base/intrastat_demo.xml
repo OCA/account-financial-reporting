@@ -50,7 +50,7 @@
     <field name="type">service</field>
     <field name="categ_id" ref="product.product_category_services"/>
     <field name="list_price">30</field>
-    <field name="exclude_from_intrastat">False</field>
+    <field name="is_accessory_cost">True</field>
 </record>
 
 </data>
