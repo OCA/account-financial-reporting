@@ -238,7 +238,7 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
         if existing_partner_ids:
             # We may use orm here as the performance optimization is not that big
             sql = ("SELECT name|| ' ' ||CASE WHEN ref IS NOT NULL THEN '('||ref||')' ELSE '' END, id, ref, name"
-                   "  FROM res_partner WHERE id IN %s ORDER BY name, ref")
+                   "  FROM res_partner WHERE id IN %s ORDER BY LOWER(name), ref")
             self.cursor.execute(sql, (tuple(set(existing_partner_ids)),))
             res = self.cursor.fetchall()
 
