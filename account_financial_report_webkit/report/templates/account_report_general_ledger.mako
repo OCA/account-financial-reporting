@@ -179,7 +179,7 @@
                           <div class="act_as_cell">${line.get('move_name') or ''}</div>
                           ## journal
                           <div class="act_as_cell">${line.get('jcode') or ''}</div>
-                          ## journal
+                          ## account code
                           <div class="act_as_cell">${account.code}</div>
                           ## partner
                           <div class="act_as_cell overflow_ellipsis">${line.get('partner_name') or ''}</div>
