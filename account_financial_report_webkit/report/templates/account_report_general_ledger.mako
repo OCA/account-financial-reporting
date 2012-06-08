@@ -95,10 +95,12 @@
                         <div class="act_as_cell" style="width: 60px;">${_('Entry')}</div>
                         ## journal
                         <div class="act_as_cell" style="width: 70px;">${_('Journal')}</div>
+                        ## account code
+                        <div class="act_as_cell" style="width: 65px;">${_('Account')}</div>
                         ## partner
                         <div class="act_as_cell" style="width: 120px;">${_('Partner')}</div>
                         ## label
-                        <div class="act_as_cell" style="width: 265px;">${_('Label')}</div>
+                        <div class="act_as_cell" style="width: 200px;">${_('Label')}</div>
                         ## counterpart
                         <div class="act_as_cell" style="width: 100px;">${_('Counter part')}</div>
                         ## debit
@@ -132,6 +134,8 @@
                           ## move
                           <div class="act_as_cell"></div>
                           ## journal
+                          <div class="act_as_cell"></div>
+                          ## account code
                           <div class="act_as_cell"></div>
                           ## partner
                           <div class="act_as_cell"></div>
@@ -175,6 +179,8 @@
                           <div class="act_as_cell">${line.get('move_name') or ''}</div>
                           ## journal
                           <div class="act_as_cell">${line.get('jcode') or ''}</div>
+                          ## journal
+                          <div class="act_as_cell">${account.code}</div>
                           ## partner
                           <div class="act_as_cell overflow_ellipsis">${line.get('partner_name') or ''}</div>
                           ## label

@@ -132,10 +132,10 @@
 
                 <div class="act_as_thead">
                     <div class="act_as_row labels">
-                        ## code
-                        <div class="act_as_cell first_column" style="width: 20px;">${_('Code / Ref')}</div>
                         ## account name
                         <div class="act_as_cell" style="width: 80px;">${_('Account / Partner Name')}</div>
+                        ## code
+                        <div class="act_as_cell first_column" style="width: 20px;">${_('Code / Ref')}</div>
                         %if comparison_mode == 'no_comparison':
                             %if initial_balance_mode:
                                 ## initial balance
@@ -229,10 +229,10 @@
                 </div>
                 <div class="act_as_tfoot" style="margin-top:5px;">
                     <div class="act_as_row labels" style="font-weight: bold; font-size: 11x;">
-                        ## code
-                        <div class="act_as_cell first_column">${current_account.code}</div>
                         ## account name
                         <div class="act_as_cell">${current_account.name}</div>
+                        ## code
+                        <div class="act_as_cell first_column">${current_account.code}</div>
                         %if comparison_mode == 'no_comparison':
                             %if initial_balance_mode:
                                 ## opening balance
