@@ -132,10 +132,10 @@
 
                 <div class="act_as_thead">
                     <div class="act_as_row labels">
-                        ## code
-                        <div class="act_as_cell first_column" style="width: 20px;">${_('Code / Ref')}</div>
                         ## account name
                         <div class="act_as_cell" style="width: 80px;">${_('Account / Partner Name')}</div>
+                        ## code
+                        <div class="act_as_cell first_column" style="width: 20px;">${_('Code / Ref')}</div>
                         %if comparison_mode == 'no_comparison':
                             %if initial_balance_mode:
                                 ## initial balance
@@ -188,8 +188,8 @@
                         total_balance += partner.get('balance', 0.0)
                         %>
                         <div class="act_as_row lines">
-                            <div class="act_as_cell first_column">${partner_ref if partner_ref else ''}</div>
                             <div class="act_as_cell">${partner_name if partner_name else _('Unallocated') }</div>
+                            <div class="act_as_cell first_column">${partner_ref if partner_ref else ''}</div>
                             %if comparison_mode == 'no_comparison':
                                 %if initial_balance_mode:
                                     <div class="act_as_cell amount">${formatLang(partner.get('init_balance', 0.0)) | amount}</div>
@@ -229,10 +229,10 @@
                 </div>
                 <div class="act_as_tfoot" style="margin-top:5px;">
                     <div class="act_as_row labels" style="font-weight: bold; font-size: 11x;">
-                        ## code
-                        <div class="act_as_cell first_column">${current_account.code}</div>
                         ## account name
                         <div class="act_as_cell">${current_account.name}</div>
+                        ## code
+                        <div class="act_as_cell first_column">${current_account.code}</div>
                         %if comparison_mode == 'no_comparison':
                             %if initial_balance_mode:
                                 ## opening balance
