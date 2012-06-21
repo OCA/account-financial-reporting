@@ -78,8 +78,11 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
             <form string="General Account Balance [ Initial | Debit | Credit | Balance ]">
-                <group width='800' height='600'>
+                <group>
                 <field name="company_id"/>
+                <group>
+                    <field name="currency_id"/>
+                </group>
                 <newline/>
                 <group colspan="4">
                 <separator string="Accounts to include" colspan="4"/>
@@ -141,8 +144,12 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
             <form string="General Account Balance [ Initial | Debit | Credit | Balance ]">
-                <group width='800' height='600'>
+                <group>
                 <field name="company_id"/>
+                <group>
+                    <field name="currency_id"/>
+                </group>
+
                 <newline/>
                 <group colspan="4">
                 <separator string="Accounts to include" colspan="4"/>
