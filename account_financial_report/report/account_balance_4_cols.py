@@ -149,7 +149,7 @@ class account_balance(report_sxw.rml_parse):
         rc_obj = self.pool.get('res.company')
         return rc_obj.browse(self.cr, self.uid, company_id).currency_id.id
     
-    def lines(self, form, ids={}, done=None, level=0):
+    def lines(self, form, level=0):
         """
         Returns all the data needed for the report lines
         (account info plus debit/credit/balance in the selected period
@@ -165,12 +165,6 @@ class account_balance(report_sxw.rml_parse):
         tot_deb = 0.0
         tot_crd = 0.0
         tot_eje = 0.0
-        if not ids:
-            ids = self.ids
-        if not ids:
-            return []
-        if not done:
-            done = {}
 
         if form.has_key('account_list') and form['account_list']:
             account_ids = form['account_list']
@@ -182,11 +176,12 @@ class account_balance(report_sxw.rml_parse):
         period_obj = self.pool.get('account.period')
         fiscalyear_obj = self.pool.get('account.fiscalyear')
 
-        fiscalyear = None
         if form.get('fiscalyear'):
-            fiscalyear = fiscalyear_obj.browse(self.cr, self.uid, form['fiscalyear'])
-        else:
-            fiscalyear = fiscalyear_obj.browse(self.cr, self.uid, fiscalyear_obj.find(self.cr, self.uid))
+            if type(form.get('fiscalyear')) in (list,tuple):
+                fiscalyear = form['fiscalyear'] and form['fiscalyear'][0]
+            elif type(form.get('fiscalyear')) in (int,):
+                fiscalyear = form['fiscalyear']
+        fiscalyear = fiscalyear_obj.browse(self.cr, self.uid, fiscalyear)
 
         #
         # Get the accounts
@@ -304,11 +299,6 @@ class account_balance(report_sxw.rml_parse):
         tot = {}        
         for account in accounts:
             account_id = account['id']
-
-            if account_id in done:
-                pass
-
-            done[account_id] = 1
 
             accounts_levels[account_id] = account['level']
 
