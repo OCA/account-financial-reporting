@@ -48,6 +48,7 @@ class wizard_account_balance_gene_2(osv.osv_memory):
         'lab_str': fields.char('Description', size= 128),
         'inf_type': fields.selection([('bgen','Balance General'),('bcom','Balance Comprobacion'),('edogp','Estado Ganancias y Perdidas'),('bdl','Diario Legal')],'Tipo Informe',required=True),
         #~ 'type_report': fields.selection([('un_col','Una Columna'),('dos_col','Dos Columnas'),('cuatro_col','Cuatro Columnas')],'Tipo Informe',required=True),
+        'currency_id': fields.many2one('res.currency', 'Secondary Currency', help="Forces all values for this report to be expressed in this secondary currency."),
     }
     
     _defaults = {

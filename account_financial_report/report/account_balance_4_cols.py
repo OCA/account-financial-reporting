@@ -55,6 +55,7 @@ class account_balance(report_sxw.rml_parse):
             'get_periods_and_date_text': self.get_periods_and_date_text,
             'get_informe_text': self.get_informe_text,
             'get_month':self.get_month,
+            'exchange_name':self.exchange_name,
         })
         self.context = context
 
@@ -129,23 +130,42 @@ class account_balance(report_sxw.rml_parse):
         if not period_counter:
             return True
         return False
+        
+    def exchange_name(self, form):
+        self.from_currency_id = self.get_company_currency(form['company_id'] and type(form['company_id']) in (list,tuple) and form['company_id'][0] or form['company_id'])
+        if not form['currency_id']:
+            self.to_currency_id = self.from_currency_id
+        else:
+            self.to_currency_id = form['currency_id'] and type(form['currency_id']) in (list, tuple) and form['currency_id'][0] or form['currency_id']
+        name = self.pool.get('res.currency').browse(self.cr, self.uid, self.to_currency_id).name
+        return self.pool.get('res.currency').browse(self.cr, self.uid, self.to_currency_id).name
 
-    def lines(self, form, ids={}, done=None, level=0):
+    def exchange(self, from_amount):
+        if self.from_currency_id == self.to_currency_id:
+            return from_amount
+        curr_obj = self.pool.get('res.currency')
+        return curr_obj.compute(self.cr, self.uid, self.from_currency_id, self.to_currency_id, from_amount)
+    
+    def get_company_currency(self, company_id):
+        rc_obj = self.pool.get('res.company')
+        return rc_obj.browse(self.cr, self.uid, company_id).currency_id.id
+    
+    def lines(self, form, level=0):
         """
         Returns all the data needed for the report lines
         (account info plus debit/credit/balance in the selected period
         and the full year)
         """
+        self.from_currency_id = self.get_company_currency(form['company_id'] and type(form['company_id']) in (list,tuple) and form['company_id'][0] or form['company_id'])
+        if not form['currency_id']:
+            self.to_currency_id = self.from_currency_id
+        else:
+            self.to_currency_id = form['currency_id'] and type(form['currency_id']) in (list, tuple) and form['currency_id'][0] or form['currency_id']
+        tot_check = False
         tot_bin = 0.0
         tot_deb = 0.0
         tot_crd = 0.0
         tot_eje = 0.0
-        if not ids:
-            ids = self.ids
-        if not ids:
-            return []
-        if not done:
-            done = {}
 
         if form.has_key('account_list') and form['account_list']:
             account_ids = form['account_list']
@@ -157,11 +177,12 @@ class account_balance(report_sxw.rml_parse):
         period_obj = self.pool.get('account.period')
         fiscalyear_obj = self.pool.get('account.fiscalyear')
 
-        fiscalyear = None
         if form.get('fiscalyear'):
-            fiscalyear = fiscalyear_obj.browse(self.cr, self.uid, form['fiscalyear'])
-        else:
-            fiscalyear = fiscalyear_obj.browse(self.cr, self.uid, fiscalyear_obj.find(self.cr, self.uid))
+            if type(form.get('fiscalyear')) in (list,tuple):
+                fiscalyear = form['fiscalyear'] and form['fiscalyear'][0]
+            elif type(form.get('fiscalyear')) in (int,):
+                fiscalyear = form['fiscalyear']
+        fiscalyear = fiscalyear_obj.browse(self.cr, self.uid, fiscalyear)
 
         #
         # Get the accounts
@@ -280,11 +301,6 @@ class account_balance(report_sxw.rml_parse):
         for account in accounts:
             account_id = account['id']
 
-            if account_id in done:
-                pass
-
-            done[account_id] = 1
-
             accounts_levels[account_id] = account['level']
 
             #
@@ -300,10 +316,10 @@ class account_balance(report_sxw.rml_parse):
                         'code': account['code'],
                         'name': (account['total'] and not account['label']) and 'TOTAL %s'%(account['name'].upper()) or account['name'],
                         'level': account['level'],
-                        'balanceinit': period_balanceinit[account_id],
-                        'debit': account['debit'],
-                        'credit': account['credit'],
-                        'balance': period_balanceinit[account_id]+account['debit']-account['credit'],
+                        'balanceinit': self.exchange(period_balanceinit[account_id]),
+                        'debit': self.exchange(account['debit']),
+                        'credit': self.exchange(account['credit']),
+                        'balance': self.exchange(period_balanceinit[account_id]+account['debit']-account['credit']),
                         'parent_id': account['parent_id'],
                         'bal_type': '',
                         'label': account['label'],
@@ -332,6 +348,7 @@ class account_balance(report_sxw.rml_parse):
                     # Include all accounts
                     result_acc.append(res)
                 if form['tot_check'] and res['type'] == 'view' and res['level'] == 1 and (res['id'] not in tot):
+                    tot_check = True
                     tot[res['id']] = True
                     tot_bin += res['balanceinit']
                     tot_deb += res['debit']
@@ -339,7 +356,7 @@ class account_balance(report_sxw.rml_parse):
                     tot_eje += res['balance']
 
         #if (form['tot_check'] and res['type']=='view' and res['level']==1 and (res['id'] not in tot)):
-        if form['tot_check']:
+        if tot_check:
             str_label = form['lab_str']
             res2 = {
                     'type' : 'view',
