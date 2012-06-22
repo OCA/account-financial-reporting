@@ -153,7 +153,8 @@ class account_balance(report_sxw.rml_parse):
             self.to_currency_id = self.from_currency_id
         else:
             self.to_currency_id = form['currency_id'] and type(form['currency_id']) in (list, tuple) and form['currency_id'][0] or form['currency_id']
-
+        
+        tot_check = False
         tot_eje = 0.0
 
         if form.has_key('account_list') and form['account_list']:
@@ -312,9 +313,10 @@ class account_balance(report_sxw.rml_parse):
                     # Include all accounts
                     result_acc.append(res)
                 if form['tot_check'] and res['type'] == 'view' and res['level'] == 1 and (res['id'] not in tot):
+                    tot_check = True
                     tot[res['id']] = True
                     tot_eje += res['balance']
-        if form['tot_check']:
+        if tot_check:
             str_label = form['lab_str']
             res2 = {
                     'type' : 'view',
