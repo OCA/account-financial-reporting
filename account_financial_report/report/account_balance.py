@@ -123,11 +123,11 @@ class account_balance(report_sxw.rml_parse):
         return {'periods':periods_str, 'date':dates_str}
 
     def exchange_name(self, form):
-        self.from_currency_id = self.get_company_currency(form['company_id'] and form['company_id'][0])
+        self.from_currency_id = self.get_company_currency(form['company_id'] and type(form['company_id']) in (list,tuple) and form['company_id'][0] or form['company_id'])
         if not form['currency_id']:
             self.to_currency_id = self.from_currency_id
         else:
-            self.to_currency_id = form['currency_id'] and form['currency_id'][0]
+            self.to_currency_id = form['currency_id'] and type(form['currency_id']) in (list, tuple) and form['currency_id'][0] or form['currency_id']
         return self.pool.get('res.currency').browse(self.cr, self.uid, self.to_currency_id).name
  
     def exchange(self, from_amount):
@@ -148,11 +148,11 @@ class account_balance(report_sxw.rml_parse):
         and the full year)
         """
 
-        self.from_currency_id = self.get_company_currency(form['company_id'] and form['company_id'][0])
+        self.from_currency_id = self.get_company_currency(form['company_id'] and type(form['company_id']) in (list,tuple) and form['company_id'][0] or form['company_id'])
         if not form['currency_id']:
             self.to_currency_id = self.from_currency_id
         else:
-            self.to_currency_id = form['currency_id'] and form['currency_id'][0]
+            self.to_currency_id = form['currency_id'] and type(form['currency_id']) in (list, tuple) and form['currency_id'][0] or form['currency_id']
 
         tot_eje = 0.0
 
