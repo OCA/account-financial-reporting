@@ -77,11 +77,11 @@ class report_intrastat_common(osv.osv_memory):
         official_des_xml_schema = etree.XMLSchema(etree.fromstring(xsd))
         try: official_des_xml_schema.assertValid(xml_root)
         except Exception, e:   # if the validation of the XSD fails, we arrive here
-            import netsvc
-            logger = netsvc.Logger()
-            logger.notifyChannel('intrastat', netsvc.LOG_WARNING, "The XML file is invalid against the XML Schema Definition")
-            logger.notifyChannel('intrastat', netsvc.LOG_WARNING, xml_string)
-            logger.notifyChannel('intrastat', netsvc.LOG_WARNING, e)
+            import logging
+            _logger = logging.getLogger(__name__)
+            _logger.warning("The XML file is invalid against the XML Schema Definition")
+            _logger.warning(xml_string)
+            _logger.warning(e)
             raise osv.except_osv(_('Error :'), _('The generated XML file is not valid against the official XML Schema Definition. The generated XML file and the full error have been written in the server logs. Here is the error, which may give you an idea on the cause of the problem : %s.') % str(e))
         return True
 
