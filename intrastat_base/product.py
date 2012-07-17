@@ -30,8 +30,8 @@ class product_template(osv.osv):
         'is_accessory_cost' : fields.boolean('Is accessory cost', help='Activate this option for shipping costs, packaging costs and all services related to the sale of products. This option is used for Intrastat reports.'),
     }
 
-    _default = {
-        'exclude_from_intrastat': lambda *a: False,
+    _defaults = {
+        'exclude_from_intrastat': False,
     }
 
 
