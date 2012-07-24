@@ -80,7 +80,7 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
         tmp_dir = tempfile.gettempdir()
         out_filename = tempfile.mktemp(suffix=".pdf", prefix="webkit.tmp.")
         files = []
-        file_to_del = []
+        file_to_del = [out_filename]
         if comm_path:
             command = [comm_path]
         else:
@@ -116,22 +116,33 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
             file_to_del.append(html_file.name)
             command.append(html_file.name)
         command.append(out_filename)
+        stderr_fd, stderr_path = tempfile.mkstemp(text=True)
+        file_to_del.append(stderr_path)
         try:
-            status = subprocess.call(command, stderr=subprocess.PIPE) # ignore stderr
-            if status :
-                raise except_osv(
-                                _('Webkit raise an error' ),
-                                status
-                            )
-        except Exception:
-            for f_to_del in file_to_del :
-                os.unlink(f_to_del)
-
-        pdf = file(out_filename, 'rb').read()
-        for f_to_del in file_to_del :
-            os.unlink(f_to_del)
-
-        os.unlink(out_filename)
+            status = subprocess.call(command, stderr=stderr_fd)
+            os.close(stderr_fd) # force flush
+            stderr_fd = None    # avoid closing again in finally
+            fobj = open(stderr_path, 'r')
+            error_message = fobj.read()
+            fobj.close()
+            if not error_message:
+                error_message = _('No diagnosis message was provided')
+            else:
+                error_message = _('The following diagnosis message was provided:\n') + error_message
+            if status:
+                raise except_osv(_('Webkit error' ),
+                                 _("The command 'wkhtmltopdf' failed with error code = %s. Message: %s") % (status, error_message))
+            pdf_file = open(out_filename, 'rb')
+            pdf = pdf_file.read()
+            pdf_file.close()
+        finally:
+            if stderr_fd is not None:
+                os.close(stderr_fd)
+            for f_to_del in file_to_del:
+                try:
+                    os.unlink(f_to_del)
+                except (OSError, IOError), exc:
+                    _logger.error('cannot remove file %s: %s', f_to_del, exc)
         return pdf
 
     # override needed to keep the attachments' storing procedure
