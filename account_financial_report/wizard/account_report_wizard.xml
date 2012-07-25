@@ -11,7 +11,7 @@
                 <group>
                 <field name="company_id"/>
                 <group>
-                    <field name="currency_id"/>
+                    <field name="currency_id" domain="[('company_id','=',company_id)]"/>
                 </group>
 
                 <newline/>
@@ -81,7 +81,7 @@
                 <group>
                 <field name="company_id"/>
                 <group>
-                    <field name="currency_id"/>
+                    <field name="currency_id" domain="[('company_id','=',company_id)]"/>
                 </group>
                 <newline/>
                 <group colspan="4">
@@ -147,7 +147,7 @@
                 <group>
                 <field name="company_id"/>
                 <group>
-                    <field name="currency_id"/>
+                    <field name="currency_id" domain="[('company_id','=',company_id)]"/>
                 </group>
 
                 <newline/>
