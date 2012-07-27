@@ -169,6 +169,7 @@ class account_balance(report_sxw.rml_parse):
         if form.has_key('account_list') and form['account_list']:
             account_ids = form['account_list']
             del form['account_list']
+        credit_account_ids = account_ids
         res = {}
         result_acc = []
         accounts_levels = {}
@@ -192,14 +193,25 @@ class account_balance(report_sxw.rml_parse):
             ids2=[]
             for aa_brw in aa_obj.browse(cr, uid, ids, context):
                 if aa_brw.child_id and aa_brw.level < level and aa_brw.type !='consolidation':
-                    change_sign or ids2.append([aa_brw.id,True, False])
-                    ids2 += _get_children_and_consol(cr, uid, [x.id for x in aa_brw.child_id], level, context)
-                    change_sign and ids2.append(aa_brw.id) or ids2.append([aa_brw.id,False,True])
+                    if not change_sign:
+                        ids2.append([aa_brw.id,True, False])
+                    ids2 += _get_children_and_consol(cr, uid, [x.id for x in aa_brw.child_id], level, context,change_sign=change_sign)
+                    if change_sign:
+                        ids2.append(aa_brw.id) 
+                    else:
+                        ids2.append([aa_brw.id,False,True])
                 else:
-                    change_sign and ids2.append(aa_brw.id) or ids2.append([aa_brw.id,True,True])
+                    if change_sign:
+                        ids2.append(aa_brw.id) 
+                    else:
+                        ids2.append([aa_brw.id,True,True])
             return ids2
 
         account_ids = _get_children_and_consol(self.cr, self.uid, account_ids, form['display_account_level'] and form['display_account_level'] or 100,self.context)
+        
+        credit_account_ids = _get_children_and_consol(self.cr, self.uid, credit_account_ids, 100,self.context,change_sign=True)
+        
+        print 'credit_account_ids ', credit_account_ids
         
         account_obj = self.pool.get('account.account')
         period_obj = self.pool.get('account.period')
