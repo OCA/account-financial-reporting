@@ -187,16 +187,16 @@ class account_balance(report_sxw.rml_parse):
         # Get the accounts
         #
 
-        def _get_children_and_consol(cr, uid, ids, level, context={}):
+        def _get_children_and_consol(cr, uid, ids, level, context={},change_sign=False):
             aa_obj = self.pool.get('account.account')
             ids2=[]
             for aa_brw in aa_obj.browse(cr, uid, ids, context):
                 if aa_brw.child_id and aa_brw.level < level and aa_brw.type !='consolidation':
-                    ids2.append([aa_brw.id,True, False])
+                    change_sign or ids2.append([aa_brw.id,True, False])
                     ids2 += _get_children_and_consol(cr, uid, [x.id for x in aa_brw.child_id], level, context)
-                    ids2.append([aa_brw.id,False,True])
+                    change_sign and ids2.append(aa_brw.id) or ids2.append([aa_brw.id,False,True])
                 else:
-                    ids2.append([aa_brw.id,True,True])
+                    change_sign and ids2.append(aa_brw.id) or ids2.append([aa_brw.id,True,True])
             return ids2
 
         child_ids = _get_children_and_consol(self.cr, self.uid, account_ids, form['display_account_level'] and form['display_account_level'] or 100,self.context)
