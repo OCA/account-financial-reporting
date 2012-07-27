@@ -384,21 +384,20 @@ class account_balance(report_sxw.rml_parse):
             result_acc.append(res2)
         return result_acc
 
-
-report_sxw.report_sxw('report.wizard.report.reporte', 
+report_sxw.report_sxw('report.afr.1cols', 
                       'wizard.report', 
-                      'account_financial_report/report/balance_full_4_cols.rml',
+                      'account_financial_report/report/balance_full.rml',
                        parser=account_balance, 
                        header=False)
 
-report_sxw.report_sxw('report.account.account.balance.gene.2', 
-                      'wizard.report.account.balance.gene.2', 
+report_sxw.report_sxw('report.afr.2cols', 
+                      'wizard.report', 
                       'account_financial_report/report/balance_full_2_cols.rml',
                        parser=account_balance, 
                        header=False)
 
-report_sxw.report_sxw('report.account.account.balance.gene', 
-                      'wizard.report.account.balance.gene', 
-                      'account_financial_report/report/balance_full.rml',
+report_sxw.report_sxw('report.afr.4cols', 
+                      'wizard.report', 
+                      'account_financial_report/report/balance_full_4_cols.rml',
                        parser=account_balance, 
                        header=False)
