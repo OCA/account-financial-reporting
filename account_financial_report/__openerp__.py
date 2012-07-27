@@ -37,8 +37,8 @@
     "demo_xml" : [],
     "update_xml" : [
         "security/security.xml",
-        "wizard/wizard_report_report.xml", 
-        "wizard/account_report_wizard.xml",
+        "view/report.xml", 
+        "view/wizard.xml",
         "view/account_view.xml",
         "view/company_view.xml",
     ],

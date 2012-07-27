@@ -25,8 +25,4 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##############################################################################
 
-import wizard_account_balance_4_report
-import wizard_account_balance_2_report
-import wizard_account_balance_report
-
-
+import wizard
