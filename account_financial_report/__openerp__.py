@@ -26,9 +26,9 @@
 ##############################################################################
 {
     "name" : "Common financial reports",
-    "version" : "1.0",
-    "author" : "OpenERP Venezuela",
-    "website" : "http://wiki.openerp.org.ve/",
+    "version" : "2.0",
+    "author" : "Vauxoo",
+    "website" : "http://www.vauxoo.com",
     "depends" : ["base","account"],
     "category" : "Localisation/Accounting",
     "description": """
@@ -40,6 +40,7 @@
         "wizard/wizard_report_report.xml", 
         "wizard/account_report_wizard.xml",
         "view/account_view.xml",
+        "view/company_view.xml",
     ],
     "active": False,
     "installable": True
