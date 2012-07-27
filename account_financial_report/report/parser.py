@@ -190,18 +190,13 @@ class account_balance(report_sxw.rml_parse):
         def _get_children_and_consol(cr, uid, ids, level, context={}):
             aa_obj = self.pool.get('account.account')
             ids2=[]
-            temp=[]
-            read_data= aa_obj.read(cr, uid, ids,['id','child_id','level','type'], context)
-            for data in read_data:
-                if data['child_id'] and data['level'] < level and data['type']!='consolidation':
-                    ids2.append([data['id'],True, False])
-                    temp=[]
-                    for x in data['child_id']:
-                        temp.append(x)
-                    ids2 += _get_children_and_consol(cr, uid, temp, level, context)
-                    ids2.append([data['id'],False,True])
+            for aa_brw in aa_obj.browse(cr, uid, ids, context):
+                if aa_brw.child_id and aa_brw.level < level and aa_brw.type !='consolidation':
+                    ids2.append([aa_brw.id,True, False])
+                    ids2 += _get_children_and_consol(cr, uid, [x.id for x in aa_brw.child_id], level, context)
+                    ids2.append([aa_brw.id,False,True])
                 else:
-                    ids2.append([data['id'],True,True])
+                    ids2.append([aa_brw.id,True,True])
             return ids2
 
         child_ids = _get_children_and_consol(self.cr, self.uid, account_ids, form['display_account_level'] and form['display_account_level'] or 100,self.context)
