@@ -199,9 +199,7 @@ class account_balance(report_sxw.rml_parse):
                     change_sign and ids2.append(aa_brw.id) or ids2.append([aa_brw.id,True,True])
             return ids2
 
-        child_ids = _get_children_and_consol(self.cr, self.uid, account_ids, form['display_account_level'] and form['display_account_level'] or 100,self.context)
-        if child_ids:
-            account_ids = child_ids
+        account_ids = _get_children_and_consol(self.cr, self.uid, account_ids, form['display_account_level'] and form['display_account_level'] or 100,self.context)
         
         account_obj = self.pool.get('account.account')
         period_obj = self.pool.get('account.period')
