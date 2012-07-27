@@ -149,6 +149,10 @@ class account_balance(report_sxw.rml_parse):
         rc_obj = self.pool.get('res.company')
         return rc_obj.browse(self.cr, self.uid, company_id).currency_id.id
     
+    def get_company_credit_accounts(self, company_id):
+        rc_obj = self.pool.get('res.company')
+        return [brw.id for brw in rc_obj.browse(self.cr, self.uid, company_id).credit_account_ids]
+    
     def lines(self, form, level=0):
         """
         Returns all the data needed for the report lines
@@ -169,7 +173,11 @@ class account_balance(report_sxw.rml_parse):
         if form.has_key('account_list') and form['account_list']:
             account_ids = form['account_list']
             del form['account_list']
-        credit_account_ids = account_ids
+        
+        credit_account_ids = self.get_company_credit_accounts(form['company_id'] and type(form['company_id']) in (list,tuple) and form['company_id'][0] or form['company_id'])
+
+        print 'Primer print de credit_account_ids ', credit_account_ids
+        
         res = {}
         result_acc = []
         accounts_levels = {}
@@ -328,6 +336,7 @@ class account_balance(report_sxw.rml_parse):
                         'bal_type': '',
                         'label': account['label'],
                         'total': account['total'],
+                        'change_sign' : credit_account_ids and (account_id  in credit_account_ids and -1 or 1) or 1
                     }
                 #
                 # Round the values to zero if needed (-0.000001 ~= 0)
