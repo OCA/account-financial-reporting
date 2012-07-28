@@ -47,7 +47,7 @@ class wizard_report(osv.osv_memory):
         'tot_check': fields.boolean('Show Total'),
         'lab_str': fields.char('Description', size= 128),
         'inf_type': fields.selection([('bgen','Balance General'),('bcom','Balance Comprobacion'),('edogp','Estado Ganancias y Perdidas'),('bml','Libro Mayor Legal')],'Tipo Informe',required=True),
-        'columns': fields.selection([('one','One Column'),('two','Two Columns'),('four','Four Columns'),('thirteen','Thirteen Columns')],'Column Number',required=True),
+        'columns': fields.selection([('one','Balance'),('two','Debit | Credit'),('four','Balance init | Debit | Credit | Balance'),('thirteen','12 Months | Year Today')],'Column Number',required=True),
         'currency_id': fields.many2one('res.currency', 'Secondary Currency', help="Forces all values for this report to be expressed in this secondary currency."),
     }
     
