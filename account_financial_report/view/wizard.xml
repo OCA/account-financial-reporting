@@ -25,7 +25,10 @@
                 
                 <group>
                     <group colspan="2">
-                        <separator string="Accounts to include" colspan="4"/>
+                        <separator string="Accounts Info" colspan="4"/>
+                        <field name="display_account" required="True" colspan="4"/>
+                        <field name="display_account_level" required="True" colspan="4"/>
+                        <separator string="Account to Include" colspan="4"/>
                         <field name="account_list" nolabel="1" colspan="4" domain="[('company_id','=',company_id)]">
                             <tree>
                                 <field name='code'/>
@@ -33,12 +36,10 @@
                                 <field name='type'/>
                             </tree>
                         </field>
-                        <field name="display_account" required="True"/>
-                        <field name="display_account_level" required="True" />
                     </group>
                     <group colspan="2">
-                        <separator string="Period" colspan="4"/>
-                        <field name="fiscalyear"/>
+                        <separator string="FiscalYear Info" colspan="4"/>
+                        <field name="fiscalyear" domain="[('company_id','=',company_id)]"/>
                         <newline/>
                         <field name="filter" required="True"/>
                         <newline/>
@@ -51,7 +52,14 @@
                             </group>
                             <group attrs="{'invisible':[('filter','=','bydate')]}" colspan="4">
                                 <separator string="Filter on Periods" colspan="4"/>
-                                <field name="periods" colspan="4" nolabel="1" domain="[('fiscalyear_id','=',fiscalyear)]"/>
+                                <field name="periods" colspan="4" nolabel="1" domain="[('fiscalyear_id','=',fiscalyear)]">
+                                
+                                    <tree>
+                                        <field name='code'/>
+                                        <field name='name'/>
+                                        <field name='state'/>
+                                    </tree>
+                                </field>
                             </group>
                         </group>
                     </group>
