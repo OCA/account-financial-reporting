@@ -40,7 +40,7 @@ class wizard_report(osv.osv_memory):
         'filter': fields.selection([('bydate','By Date'),('byperiod','By Period'),('all','By Date and Period'),('none','No Filter')],'Date/Period Filter'),
         'fiscalyear': fields.many2one('account.fiscalyear','Fiscal year',help='Keep empty to use all open fiscal years to compute the balance',required=True),
         'periods': fields.many2many('account.period','rel_wizard_period','wizard_id','period_id','Periods',help='All periods in the fiscal year if empty'),
-        'display_account': fields.selection([('all','All'),('con_balance', 'With balance'),('con_movimiento','With movements')],'Display accounts'),
+        'display_account': fields.selection([('all','All Accounts'),('bal', 'With Balance'),('mov','With movements'),('bal_mov','With Balance / Movements')],'Display accounts'),
         'display_account_level': fields.integer('Up to level',help='Display accounts up to this level (0 to show all)'),
         'date_from': fields.date('Start date'),
         'date_to': fields.date('End date'),
@@ -59,7 +59,7 @@ class wizard_report(osv.osv_memory):
         'inf_type': lambda *a:'bcom',
         'company_id': lambda self,cr,uid,c: self.pool.get('res.company')._company_default_get(cr, uid, 'account.invoice', context=c),
         'fiscalyear': lambda self, cr, uid, c: self.pool.get('account.fiscalyear').find(cr, uid),
-        'display_account': lambda *a:'con_movimiento',
+        'display_account': lambda *a:'bal_mov',
         'columns': lambda *a:'four',
     }
     
