@@ -41,7 +41,7 @@
                         <separator string="FiscalYear Info" colspan="4"/>
                         <field name="fiscalyear" domain="[('company_id','=',company_id)]"/>
                         <newline/>
-                        <field name="filter" required="True"/>
+                        <field name="filter" required="True" invisible='True'/>
                         <newline/>
 
                         <group attrs="{'invisible':[('filter','=','none')]}" colspan="4">
@@ -51,7 +51,10 @@
                                 <field name="date_to"/>
                             </group>
                             <group attrs="{'invisible':[('filter','=','bydate')]}" colspan="4">
+<!--
                                 <separator string="Filter on Periods" colspan="4"/>
+-->
+                                <separator string="Periods to Include" colspan="4"/>
                                 <field name="periods" colspan="4" nolabel="1" domain="[('fiscalyear_id','=',fiscalyear)]">
                                 
                                     <tree>
