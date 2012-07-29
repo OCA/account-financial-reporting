@@ -159,6 +159,10 @@ class account_balance(report_sxw.rml_parse):
         (account info plus debit/credit/balance in the selected period
         and the full year)
         """
+        account_obj = self.pool.get('account.account')
+        period_obj = self.pool.get('account.period')
+        fiscalyear_obj = self.pool.get('account.fiscalyear')
+        
         self.from_currency_id = self.get_company_currency(form['company_id'] and type(form['company_id']) in (list,tuple) and form['company_id'][0] or form['company_id'])
         if not form['currency_id']:
             self.to_currency_id = self.from_currency_id
@@ -180,9 +184,6 @@ class account_balance(report_sxw.rml_parse):
         
         res = {}
         result_acc = []
-        account_obj = self.pool.get('account.account')
-        period_obj = self.pool.get('account.period')
-        fiscalyear_obj = self.pool.get('account.fiscalyear')
 
         if form.get('fiscalyear'):
             if type(form.get('fiscalyear')) in (list,tuple):
@@ -228,26 +229,28 @@ class account_balance(report_sxw.rml_parse):
         # Calculate the period Debit/Credit                                         #
         # (from the selected period or all the non special periods in the fy)       #
         #############################################################################
-
-        ctx_end = self.context.copy()
-        ctx_end['filter'] = form.get('filter','all')
-        ctx_end['fiscalyear'] = fiscalyear.id
-        #~ ctx_end['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('special','=',False)])
-        
-        if ctx_end['filter'] not in ['bydate','none']:
-            special = self.special_period(form['periods'])
-        else:
-            special = False
-        
-        if form['filter'] in ['byperiod', 'all']:
-            if special:
-                ctx_end['periods'] = period_obj.search(self.cr, self.uid, [('id','in',form['periods'] or ctx_end.get('periods',False))])
+        def _ctx_end(ctx):
+            ctx_end = ctx
+            ctx_end['filter'] = form.get('filter','all')
+            ctx_end['fiscalyear'] = fiscalyear.id
+            #~ ctx_end['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('special','=',False)])
+            
+            if ctx_end['filter'] not in ['bydate','none']:
+                special = self.special_period(form['periods'])
             else:
-                ctx_end['periods'] = period_obj.search(self.cr, self.uid, [('id','in',form['periods'] or ctx_end.get('periods',False)),('special','=',False)])
-                
-        if form['filter'] in ['bydate','all','none']:
-            ctx_end['date_from'] = form['date_from']
-            ctx_end['date_to'] = form['date_to']
+                special = False
+            
+            if form['filter'] in ['byperiod', 'all']:
+                if special:
+                    ctx_end['periods'] = period_obj.search(self.cr, self.uid, [('id','in',form['periods'] or ctx_end.get('periods',False))])
+                else:
+                    ctx_end['periods'] = period_obj.search(self.cr, self.uid, [('id','in',form['periods'] or ctx_end.get('periods',False)),('special','=',False)])
+                    
+            if form['filter'] in ['bydate','all','none']:
+                ctx_end['date_from'] = form['date_from']
+                ctx_end['date_to'] = form['date_to']
+            
+            return ctx_end.copy()
         
         def missing_period():
             ctx_init['fiscalyear'] = fiscalyear_obj.search(self.cr, self.uid, [('date_stop','<',fiscalyear.date_start)],order='date_stop') and \
@@ -260,25 +263,28 @@ class account_balance(report_sxw.rml_parse):
         #  to the end of the year)                                                  #
         #############################################################################
         
-        ctx_init = self.context.copy()
-        ctx_init['filter'] = form.get('filter','all')
-        ctx_init['fiscalyear'] = fiscalyear.id
+        def _ctx_init(ctx):
+            ctx_init = self.context.copy()
+            ctx_init['filter'] = form.get('filter','all')
+            ctx_init['fiscalyear'] = fiscalyear.id
 
-        if form['filter'] in ['byperiod', 'all']:
-            ctx_init['periods'] = form['periods']
-            date_start = min([period.date_start for period in period_obj.browse(self.cr, self.uid, ctx_init['periods'])])
-            ctx_init['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('date_stop','<=',date_start)])
-            if not ctx_init['periods']:
-                missing_period()
-        elif form['filter'] in ['bydate']:
-            ctx_init['date_from'] = fiscalyear.date_start
-            ctx_init['date_to'] = form['date_from']
-            ctx_init['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('date_stop','<=',ctx_init['date_to'])])
-        elif form['filter'] == 'none':
-            ctx_init['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('special','=',True)])
-            date_start = min([period.date_start for period in period_obj.browse(self.cr, self.uid, ctx_init['periods'])])
-            ctx_init['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('date_start','<=',date_start),('special','=',True)])
-
+            if form['filter'] in ['byperiod', 'all']:
+                ctx_init['periods'] = form['periods']
+                date_start = min([period.date_start for period in period_obj.browse(self.cr, self.uid, ctx_init['periods'])])
+                ctx_init['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('date_stop','<=',date_start)])
+                if not ctx_init['periods']:
+                    missing_period()
+            elif form['filter'] in ['bydate']:
+                ctx_init['date_from'] = fiscalyear.date_start
+                ctx_init['date_to'] = form['date_from']
+                ctx_init['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('date_stop','<=',ctx_init['date_to'])])
+            elif form['filter'] == 'none':
+                ctx_init['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('special','=',True)])
+                date_start = min([period.date_start for period in period_obj.browse(self.cr, self.uid, ctx_init['periods'])])
+                ctx_init['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('date_start','<=',date_start),('special','=',True)])
+            
+            return ctx_init.copy()
+            
         def z(n):
             return abs(n) < 0.005 and 0.0 or n
                 
@@ -286,6 +292,9 @@ class account_balance(report_sxw.rml_parse):
         # Generate the report lines (checking each account)
         #
         tot = {}        
+        
+        ctx_init = _ctx_init(self.context.copy())
+        ctx_end = _ctx_end(self.context.copy())
         
         for aa_id in account_ids:
             id = aa_id[0]
@@ -307,8 +316,10 @@ class account_balance(report_sxw.rml_parse):
                 }
                 
                 if form['columns'] != 'thirteen':
+
                     aa_brw_init = account_obj.browse(self.cr, self.uid, id, ctx_init)
                     aa_brw_end  = account_obj.browse(self.cr, self.uid, id, ctx_end)
+
                     i,d,c = map(z,[aa_brw_init.balance,aa_brw_end.debit,aa_brw_end.credit])
                     b = z(i+d-c)
                     res.update({
@@ -318,6 +329,14 @@ class account_balance(report_sxw.rml_parse):
                         'balance': self.exchange(b),
                     })
                 
+                if form['columns'] == 'thirteen':
+                    period_ids = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('special','=',False)],order='date_start asc')
+                    print 'TODOS LOS PERIODS ',period_ids
+                    pass
+                    for i in range(12):
+                        pass
+                    
+                    
                 #
                 # Check whether we must include this line in the report or not
                 #
