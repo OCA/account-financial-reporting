@@ -180,7 +180,6 @@ class account_balance(report_sxw.rml_parse):
         
         res = {}
         result_acc = []
-        accounts_levels = {}
         account_obj = self.pool.get('account.account')
         period_obj = self.pool.get('account.period')
         fiscalyear_obj = self.pool.get('account.fiscalyear')
@@ -202,17 +201,17 @@ class account_balance(report_sxw.rml_parse):
             for aa_brw in aa_obj.browse(cr, uid, ids, context):
                 if aa_brw.child_id and aa_brw.level < level and aa_brw.type !='consolidation':
                     if not change_sign:
-                        ids2.append([aa_brw.id,True, False])
+                        ids2.append([aa_brw.id,True, False,aa_brw])
                     ids2 += _get_children_and_consol(cr, uid, [x.id for x in aa_brw.child_id], level, context,change_sign=change_sign)
                     if change_sign:
                         ids2.append(aa_brw.id) 
                     else:
-                        ids2.append([aa_brw.id,False,True])
+                        ids2.append([aa_brw.id,False,True,aa_brw])
                 else:
                     if change_sign:
                         ids2.append(aa_brw.id) 
                     else:
-                        ids2.append([aa_brw.id,True,True])
+                        ids2.append([aa_brw.id,True,True,aa_brw])
             return ids2
 
         account_ids = _get_children_and_consol(self.cr, self.uid, account_ids, form['display_account_level'] and form['display_account_level'] or 100,self.context)
@@ -230,50 +229,30 @@ class account_balance(report_sxw.rml_parse):
         # (from the selected period or all the non special periods in the fy)       #
         #############################################################################
 
-        ctx = self.context.copy()
-        ctx['filter'] = form.get('filter','all')
-        ctx['fiscalyear'] = fiscalyear.id
-        #~ ctx['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('special','=',False)])
+        ctx_end = self.context.copy()
+        ctx_end['filter'] = form.get('filter','all')
+        ctx_end['fiscalyear'] = fiscalyear.id
+        #~ ctx_end['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('special','=',False)])
         
-        if ctx['filter'] not in ['bydate','none']:
+        if ctx_end['filter'] not in ['bydate','none']:
             special = self.special_period(form['periods'])
         else:
             special = False
         
         if form['filter'] in ['byperiod', 'all']:
             if special:
-                ctx['periods'] = period_obj.search(self.cr, self.uid, [('id','in',form['periods'] or ctx.get('periods',False))])
+                ctx_end['periods'] = period_obj.search(self.cr, self.uid, [('id','in',form['periods'] or ctx_end.get('periods',False))])
             else:
-                ctx['periods'] = period_obj.search(self.cr, self.uid, [('id','in',form['periods'] or ctx.get('periods',False)),('special','=',False)])
+                ctx_end['periods'] = period_obj.search(self.cr, self.uid, [('id','in',form['periods'] or ctx_end.get('periods',False)),('special','=',False)])
                 
         if form['filter'] in ['bydate','all','none']:
-            ctx['date_from'] = form['date_from']
-            ctx['date_to'] = form['date_to']
-
-        accounts=[]
-
-        val = account_obj.browse(self.cr, self.uid, [aa_id[0] for aa_id in account_ids], ctx)
-        c = 0
-        for aa_id in account_ids:
-            new_acc = {
-            'id'        :val[c].id, 
-            'type'      :val[c].type,
-            'code'      :val[c].code,
-            'name'      :val[c].name,
-            'debit'     :val[c].debit,
-            'credit'    :val[c].credit,
-            'parent_id' :val[c].parent_id and val[c].parent_id.id,
-            'level'     :val[c].level,
-            'label'     :aa_id[1],
-            'total'     :aa_id[2],
-            }
-            c += 1
-            accounts.append(new_acc)
+            ctx_end['date_from'] = form['date_from']
+            ctx_end['date_to'] = form['date_to']
         
         def missing_period():
-            ctx['fiscalyear'] = fiscalyear_obj.search(self.cr, self.uid, [('date_stop','<',fiscalyear.date_start)],order='date_stop') and \
+            ctx_init['fiscalyear'] = fiscalyear_obj.search(self.cr, self.uid, [('date_stop','<',fiscalyear.date_start)],order='date_stop') and \
                                 fiscalyear_obj.search(self.cr, self.uid, [('date_stop','<',fiscalyear.date_start)],order='date_stop')[-1] or []
-            ctx['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',ctx['fiscalyear']),('date_stop','<',fiscalyear.date_start)])
+            ctx_init['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',ctx_init['fiscalyear']),('date_stop','<',fiscalyear.date_start)])
         
         #############################################################################
         # Calculate the period initial Balance                                      #
@@ -281,81 +260,79 @@ class account_balance(report_sxw.rml_parse):
         #  to the end of the year)                                                  #
         #############################################################################
         
-        ctx = self.context.copy()
-        ctx['filter'] = form.get('filter','all')
-        ctx['fiscalyear'] = fiscalyear.id
+        ctx_init = self.context.copy()
+        ctx_init['filter'] = form.get('filter','all')
+        ctx_init['fiscalyear'] = fiscalyear.id
 
         if form['filter'] in ['byperiod', 'all']:
-            ctx['periods'] = form['periods']
-            date_start = min([period.date_start for period in period_obj.browse(self.cr, self.uid, ctx['periods'])])
-            ctx['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('date_stop','<=',date_start)])
-            if not ctx['periods']:
+            ctx_init['periods'] = form['periods']
+            date_start = min([period.date_start for period in period_obj.browse(self.cr, self.uid, ctx_init['periods'])])
+            ctx_init['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('date_stop','<=',date_start)])
+            if not ctx_init['periods']:
                 missing_period()
         elif form['filter'] in ['bydate']:
-            ctx['date_from'] = fiscalyear.date_start
-            ctx['date_to'] = form['date_from']
-            ctx['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('date_stop','<=',ctx['date_to'])])
+            ctx_init['date_from'] = fiscalyear.date_start
+            ctx_init['date_to'] = form['date_from']
+            ctx_init['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('date_stop','<=',ctx_init['date_to'])])
         elif form['filter'] == 'none':
-            ctx['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('special','=',True)])
-            date_start = min([period.date_start for period in period_obj.browse(self.cr, self.uid, ctx['periods'])])
-            ctx['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('date_start','<=',date_start),('special','=',True)])
+            ctx_init['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('special','=',True)])
+            date_start = min([period.date_start for period in period_obj.browse(self.cr, self.uid, ctx_init['periods'])])
+            ctx_init['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('date_start','<=',date_start),('special','=',True)])
 
-        period_balanceinit = {}
-        for acc in account_obj.browse(self.cr, self.uid, [x[0] for x in account_ids], ctx):
-            if special:
-                period_balanceinit[acc['id']] = 0.0
-            else:
-                period_balanceinit[acc['id']] = acc.balance
+        def z(n):
+            return abs(n) < 0.005 and 0.0 or n
+                
         #
         # Generate the report lines (checking each account)
         #
         tot = {}        
-        for account in accounts:
-            account_id = account['id']
-
-            accounts_levels[account_id] = account['level']
+        
+        for aa_id in account_ids:
+            id = aa_id[0]
 
             #
             # Check if we need to include this level
             #
             if not form['display_account_level'] or account['level'] <= form['display_account_level']:
-                #
-                # Copy the account values
-                #
                 res = {
-                        'id' : account_id,
-                        'type' : account['type'],
-                        'code': account['code'],
-                        'name': (account['total'] and not account['label']) and 'TOTAL %s'%(account['name'].upper()) or account['name'],
-                        'level': account['level'],
-                        'balanceinit': self.exchange(period_balanceinit[account_id]),
-                        'debit': self.exchange(account['debit']),
-                        'credit': self.exchange(account['credit']),
-                        'balance': self.exchange(period_balanceinit[account_id]+account['debit']-account['credit']),
-                        'parent_id': account['parent_id'],
-                        'bal_type': '',
-                        'label': account['label'],
-                        'total': account['total'],
-                        'change_sign' : credit_account_ids and (account_id  in credit_account_ids and -1 or 1) or 1
-                    }
-                #
-                # Round the values to zero if needed (-0.000001 ~= 0)
-                #
-
-                if abs(res['balance']) < 0.5 * 10**-4:
-                    res['balance'] = 0.0
-
+                'id'        : id,
+                'type'      : aa_id[3].type,
+                'code'      : aa_id[3].code,
+                'name'      : (aa_id[2] and not aa_id[1]) and 'TOTAL %s'%(aa_id[3].name.upper()) or aa_id[3].name,
+                'parent_id' : aa_id[3].parent_id and aa_id[3].parent_id.id,
+                'level'     : aa_id[3].level,
+                'label'     : aa_id[1],
+                'total'     : aa_id[2],
+                'change_sign' : credit_account_ids and (id  in credit_account_ids and -1 or 1) or 1
+                }
+                
+                if form['columns'] != 'thirteen':
+                    aa_brw_init = account_obj.browse(self.cr, self.uid, id, ctx_init)
+                    aa_brw_end  = account_obj.browse(self.cr, self.uid, id, ctx_end)
+                    i,d,c = map(z,[aa_brw_init.balance,aa_brw_end.debit,aa_brw_end.credit])
+                    b = z(i+d-c)
+                    res.update({
+                        'balanceinit': self.exchange(i),
+                        'debit': self.exchange(d),
+                        'credit': self.exchange(c),
+                        'balance': self.exchange(b),
+                    })
+                
                 #
                 # Check whether we must include this line in the report or not
                 #
 
-                if form['display_account'] == 'con_movimiento' and account['parent_id']:
+                if form['display_account'] == 'mov' and aa_id[3].parent_id:
                     # Include accounts with movements
-                    if abs(res['debit']) >= 0.5 * 10**-int(2) or abs(res['credit']) >= 0.5 * 10**-int(2):
+                    if abs(d) >= 0.005 or abs(c) >= 0.005:
                         result_acc.append(res)
-                elif form['display_account'] == 'con_balance' and account['parent_id']:
+                elif form['display_account'] == 'bal' and aa_id[3].parent_id:
                     # Include accounts with balance
-                    if abs(res['balance']) >= 0.5 * 10**-4:
+                    if abs(b) >= 0.005:
+                        result_acc.append(res)
+                elif form['display_account'] == 'bal_mov' and aa_id[3].parent_id:
+                    # Include accounts with balance or movements
+                    if abs(b) >= 0.005 or abs(d) >= 0.005 or abs(c) >= 0.005:
                         result_acc.append(res)
                 else:
                     # Include all accounts
