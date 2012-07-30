@@ -77,10 +77,11 @@ class account_balance(report_sxw.rml_parse):
         Returns the header text used on the report.
         """
         inf_type = {
-            'bgen' : '               Balance General',
-            'bcom' : '       Balance de Comprobacion',            
+            'bgen' : 'Balance General',
+            'IS'   : 'Income Statement',
+            'bcom' : 'Balance de Comprobacion',
             'edogp': 'Estado de Ganancias y Perdidas',
-            'bml': 'Libro Mayor Legal',
+            'bml'  : 'Libro Mayor Legal',
             'bdl'  : 'Diario Legal'
         }
         return inf_type[form['inf_type']]
@@ -159,43 +160,11 @@ class account_balance(report_sxw.rml_parse):
         (account info plus debit/credit/balance in the selected period
         and the full year)
         """
+        
         account_obj = self.pool.get('account.account')
         period_obj = self.pool.get('account.period')
         fiscalyear_obj = self.pool.get('account.fiscalyear')
         
-        self.from_currency_id = self.get_company_currency(form['company_id'] and type(form['company_id']) in (list,tuple) and form['company_id'][0] or form['company_id'])
-        if not form['currency_id']:
-            self.to_currency_id = self.from_currency_id
-        else:
-            self.to_currency_id = form['currency_id'] and type(form['currency_id']) in (list, tuple) and form['currency_id'][0] or form['currency_id']
-        tot_check = False
-        tot_bin = 0.0
-        tot_deb = 0.0
-        tot_crd = 0.0
-        tot_eje = 0.0
-
-        if form.has_key('account_list') and form['account_list']:
-            account_ids = form['account_list']
-            del form['account_list']
-        
-        credit_account_ids = self.get_company_credit_accounts(form['company_id'] and type(form['company_id']) in (list,tuple) and form['company_id'][0] or form['company_id'])
-
-        print 'Primer print de credit_account_ids ', credit_account_ids
-        
-        res = {}
-        result_acc = []
-
-        if form.get('fiscalyear'):
-            if type(form.get('fiscalyear')) in (list,tuple):
-                fiscalyear = form['fiscalyear'] and form['fiscalyear'][0]
-            elif type(form.get('fiscalyear')) in (int,):
-                fiscalyear = form['fiscalyear']
-        fiscalyear = fiscalyear_obj.browse(self.cr, self.uid, fiscalyear)
-
-        #
-        # Get the accounts
-        #
-
         def _get_children_and_consol(cr, uid, ids, level, context={},change_sign=False):
             aa_obj = self.pool.get('account.account')
             ids2=[]
@@ -215,20 +184,10 @@ class account_balance(report_sxw.rml_parse):
                         ids2.append([aa_brw.id,True,True,aa_brw])
             return ids2
 
-        account_ids = _get_children_and_consol(self.cr, self.uid, account_ids, form['display_account_level'] and form['display_account_level'] or 100,self.context)
-        
-        credit_account_ids = _get_children_and_consol(self.cr, self.uid, credit_account_ids, 100,self.context,change_sign=True)
-        
-        print 'credit_account_ids ', credit_account_ids
-        
-        account_obj = self.pool.get('account.account')
-        period_obj = self.pool.get('account.period')
-        fiscalyear_obj = self.pool.get('account.fiscalyear')
+        #############################################################################
+        # CONTEXT FOR ENDIND BALANCE                                                #
+        #############################################################################
 
-        #############################################################################
-        # Calculate the period Debit/Credit                                         #
-        # (from the selected period or all the non special periods in the fy)       #
-        #############################################################################
         def _ctx_end(ctx):
             ctx_end = ctx
             ctx_end['filter'] = form.get('filter','all')
@@ -252,15 +211,14 @@ class account_balance(report_sxw.rml_parse):
             
             return ctx_end.copy()
         
-        def missing_period():
+        def missing_period(ctx_init):
+            
             ctx_init['fiscalyear'] = fiscalyear_obj.search(self.cr, self.uid, [('date_stop','<',fiscalyear.date_start)],order='date_stop') and \
                                 fiscalyear_obj.search(self.cr, self.uid, [('date_stop','<',fiscalyear.date_start)],order='date_stop')[-1] or []
             ctx_init['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',ctx_init['fiscalyear']),('date_stop','<',fiscalyear.date_start)])
-        
+            return ctx_init
         #############################################################################
-        # Calculate the period initial Balance                                      #
-        # (fy balance minus the balance from the start of the selected period       #
-        #  to the end of the year)                                                  #
+        # CONTEXT FOR INITIAL BALANCE                                               #
         #############################################################################
         
         def _ctx_init(ctx):
@@ -273,7 +231,7 @@ class account_balance(report_sxw.rml_parse):
                 date_start = min([period.date_start for period in period_obj.browse(self.cr, self.uid, ctx_init['periods'])])
                 ctx_init['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('date_stop','<=',date_start)])
                 if not ctx_init['periods']:
-                    missing_period()
+                    ctx_init = missing_period(ctx_init.copy())
             elif form['filter'] in ['bydate']:
                 ctx_init['date_from'] = fiscalyear.date_start
                 ctx_init['date_to'] = form['date_from']
@@ -284,18 +242,82 @@ class account_balance(report_sxw.rml_parse):
                 ctx_init['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('date_start','<=',date_start),('special','=',True)])
             
             return ctx_init.copy()
-            
+
         def z(n):
             return abs(n) < 0.005 and 0.0 or n
                 
+
+        self.from_currency_id = self.get_company_currency(form['company_id'] and type(form['company_id']) in (list,tuple) and form['company_id'][0] or form['company_id'])
+        if not form['currency_id']:
+            self.to_currency_id = self.from_currency_id
+        else:
+            self.to_currency_id = form['currency_id'] and type(form['currency_id']) in (list, tuple) and form['currency_id'][0] or form['currency_id']
+
+        if form.has_key('account_list') and form['account_list']:
+            account_ids = form['account_list']
+            del form['account_list']
+        
+        credit_account_ids = self.get_company_credit_accounts(form['company_id'] and type(form['company_id']) in (list,tuple) and form['company_id'][0] or form['company_id'])
+
+        print 'Primer print de credit_account_ids ', credit_account_ids
+        
+        if form.get('fiscalyear'):
+            if type(form.get('fiscalyear')) in (list,tuple):
+                fiscalyear = form['fiscalyear'] and form['fiscalyear'][0]
+            elif type(form.get('fiscalyear')) in (int,):
+                fiscalyear = form['fiscalyear']
+        fiscalyear = fiscalyear_obj.browse(self.cr, self.uid, fiscalyear)
+
+        ################################################################
+        # Get the accounts                                             #
+        ################################################################
+
+        account_ids = _get_children_and_consol(self.cr, self.uid, account_ids, form['display_account_level'] and form['display_account_level'] or 100,self.context)
+        
+        credit_account_ids = _get_children_and_consol(self.cr, self.uid, credit_account_ids, 100,self.context,change_sign=True)
+        
+        print 'credit_account_ids ', credit_account_ids
+
         #
         # Generate the report lines (checking each account)
         #
+        
+        tot_check = False
+        
+        
+        if form['columns'] != 'thirteen':
+            
+            ctx_init = _ctx_init(self.context.copy())
+            ctx_end = _ctx_end(self.context.copy())
+
+            tot_bin = 0.0
+            tot_deb = 0.0
+            tot_crd = 0.0
+            tot_eje = 0.0
+        elif form['columns'] == 'thirteen':
+            tot_bal1 = 0.0
+            tot_bal2 = 0.0
+            tot_bal3 = 0.0
+            tot_bal4 = 0.0
+            tot_bal5 = 0.0
+            tot_bal6 = 0.0
+            tot_bal7 = 0.0
+            tot_bal8 = 0.0
+            tot_bal9 = 0.0
+            tot_bal10 = 0.0
+            tot_bal11 = 0.0
+            tot_bal12 = 0.0
+            tot_bal13 = 0.0
+        
+        res = {}
+        result_acc = []
         tot = {}        
         
-        ctx_init = _ctx_init(self.context.copy())
-        ctx_end = _ctx_end(self.context.copy())
-        
+
+        if form['columns'] == 'thirteen':
+            period_ids = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('special','=',False)],order='date_start asc')
+            print 'TODOS LOS PERIODS ',period_ids
+
         for aa_id in account_ids:
             id = aa_id[0]
 
@@ -329,54 +351,175 @@ class account_balance(report_sxw.rml_parse):
                         'balance': self.exchange(b),
                     })
                 
-                if form['columns'] == 'thirteen':
-                    period_ids = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('special','=',False)],order='date_start asc')
-                    print 'TODOS LOS PERIODS ',period_ids
-                    pass
-                    for i in range(12):
-                        pass
+                elif form['columns'] == 'thirteen':
+                    pn = 1
+                    for p_id in period_ids:
+                        form['periods'] = [p_id]
+                        
+                        ctx_init = _ctx_init(self.context.copy())
+                        aa_brw_init = account_obj.browse(self.cr, self.uid, id, ctx_init)
+                        
+                        ctx_end = _ctx_end(self.context.copy())
+                        aa_brw_end  = account_obj.browse(self.cr, self.uid, id, ctx_end)
+                        
+                        if form['inf_type'] == 'IS':
+                            d,c,b = map(z,[aa_brw_end.debit,aa_brw_end.credit,aa_brw_end.balance])
+                            res.update({
+                                'dbr%s'%pn: self.exchange(d),
+                                'cdr%s'%pn: self.exchange(c),
+                                'bal%s'%pn: self.exchange(b),
+                            })
+                        else:
+                            i,d,c = map(z,[aa_brw_init.balance,aa_brw_end.debit,aa_brw_end.credit])
+                            b = z(i+d-c)
+                            res.update({
+                                'dbr%s'%pn: self.exchange(d),
+                                'cdr%s'%pn: self.exchange(c),
+                                'bal%s'%pn: self.exchange(b),
+                            })
+                            
+                        pn +=1
+            
+                    form['periods'] = period_ids
                     
+                    ctx_init = _ctx_init(self.context.copy())
+                    aa_brw_init = account_obj.browse(self.cr, self.uid, id, ctx_init)
                     
+                    ctx_end = _ctx_end(self.context.copy())
+                    aa_brw_end  = account_obj.browse(self.cr, self.uid, id, ctx_end)
+                    
+                    if form['inf_type'] == 'IS':
+                        d,c,b = map(z,[aa_brw_end.debit,aa_brw_end.credit,aa_brw_end.balance])
+                        res.update({
+                            'dbr13': self.exchange(d),
+                            'cdr13': self.exchange(c),
+                            'bal13': self.exchange(b),
+                        })
+                    else:
+                        i,d,c = map(z,[aa_brw_init.balance,aa_brw_end.debit,aa_brw_end.credit])
+                        b = z(i+d-c)
+                        res.update({
+                            'dbr13': self.exchange(d),
+                            'cdr13': self.exchange(c),
+                            'bal13': self.exchange(b),
+                        })
+                
                 #
                 # Check whether we must include this line in the report or not
                 #
+                to_include = False
+                
+                if form['columns'] != 'thirteen':
 
-                if form['display_account'] == 'mov' and aa_id[3].parent_id:
-                    # Include accounts with movements
-                    if abs(d) >= 0.005 or abs(c) >= 0.005:
-                        result_acc.append(res)
-                elif form['display_account'] == 'bal' and aa_id[3].parent_id:
-                    # Include accounts with balance
-                    if abs(b) >= 0.005:
-                        result_acc.append(res)
-                elif form['display_account'] == 'bal_mov' and aa_id[3].parent_id:
-                    # Include accounts with balance or movements
-                    if abs(b) >= 0.005 or abs(d) >= 0.005 or abs(c) >= 0.005:
-                        result_acc.append(res)
-                else:
-                    # Include all accounts
+                    if form['display_account'] == 'mov' and aa_id[3].parent_id:
+                        # Include accounts with movements
+                        if abs(d) >= 0.005 or abs(c) >= 0.005:
+                            to_include = True
+                    elif form['display_account'] == 'bal' and aa_id[3].parent_id:
+                        # Include accounts with balance
+                        if abs(b) >= 0.005:
+                            to_include = True
+                    elif form['display_account'] == 'bal_mov' and aa_id[3].parent_id:
+                        # Include accounts with balance or movements
+                        if abs(b) >= 0.005 or abs(d) >= 0.005 or abs(c) >= 0.005:
+                            to_include = True
+                    else:
+                        # Include all accounts
+                        to_include = True
+                    
+                elif form['columns'] == 'thirteen':
+                    to_test = [False]
+                    if form['display_account'] == 'mov' and aa_id[3].parent_id:
+                        # Include accounts with movements
+                        for x in range(pn-1):
+                            to_test.append(res.get('dbr%s'%x,0.0) >= 0.005 and True or False)
+                            to_test.append(res.get('cdr%s'%x,0.0) >= 0.005 and True or False)
+                        if any(to_test):
+                            to_include = True
+                        
+                    elif form['display_account'] == 'bal' and aa_id[3].parent_id:
+                        # Include accounts with balance
+                        for x in range(pn-1):
+                            to_test.append(res.get('bal%s'%x,0.0) >= 0.005 and True or False)
+                        if any(to_test):
+                            to_include = True
+                            
+                    elif form['display_account'] == 'bal_mov' and aa_id[3].parent_id:
+                        # Include accounts with balance or movements
+                        for x in range(pn-1):
+                            to_test.append(res.get('bal%s'%x,0.0) >= 0.005 and True or False)
+                            to_test.append(res.get('dbr%s'%x,0.0) >= 0.005 and True or False)
+                            to_test.append(res.get('cdr%s'%x,0.0) >= 0.005 and True or False)
+                        if any(to_test):
+                            to_include = True
+                    else:
+                        # Include all accounts
+                        to_include = True
+                
+                if to_include:
                     result_acc.append(res)
-                if form['tot_check'] and res['type'] == 'view' and res['level'] == 1 and (res['id'] not in tot):
-                    tot_check = True
-                    tot[res['id']] = True
-                    tot_bin += res['balanceinit']
-                    tot_deb += res['debit']
-                    tot_crd += res['credit']
-                    tot_eje += res['balance']
+                    #
+                    # Check whether we must sumarize this line in the report or not
+                    #
+                    if form['tot_check'] and res['type'] == 'view' and res['level'] == 1 and (res['id'] not in tot):
+                        if form['columns'] != 'thirteen':
+                            
+                            tot_check = True
+                            tot[res['id']] = True
+                            tot_bin += res['balanceinit']
+                            tot_deb += res['debit']
+                            tot_crd += res['credit']
+                            tot_eje += res['balance']
 
-        #if (form['tot_check'] and res['type']=='view' and res['level']==1 and (res['id'] not in tot)):
+                        if form['columns'] == 'thirteen':
+                        
+                            tot_check = True
+                            tot[res['id']] = True
+                            tot_bal1 += res.get('bal1',0.0)
+                            tot_bal2 += res.get('bal2',0.0)
+                            tot_bal3 += res.get('bal3',0.0)
+                            tot_bal4 += res.get('bal4',0.0)
+                            tot_bal5 += res.get('bal5',0.0)
+                            tot_bal6 += res.get('bal6',0.0)
+                            tot_bal7 += res.get('bal7',0.0)
+                            tot_bal8 += res.get('bal8',0.0)
+                            tot_bal9 += res.get('bal9',0.0)
+                            tot_bal10 += res.get('bal10',0.0)
+                            tot_bal11 += res.get('bal11',0.0)
+                            tot_bal12 += res.get('bal12',0.0)
+                            tot_bal13 += res.get('bal13',0.0)
+
         if tot_check:
             str_label = form['lab_str']
             res2 = {
                     'type' : 'view',
                     'name': 'TOTAL %s'%(str_label),
-                    'balanceinit': tot_bin,
-                    'debit': tot_deb,
-                    'credit': tot_crd,
-                    'balance': tot_eje,
                     'label': False,
                     'total': True,
             }
+            if form['columns'] != 'thirteen':
+                res2.update({
+                        'balanceinit': tot_bin,
+                        'debit': tot_deb,
+                        'credit': tot_crd,
+                        'balance': tot_eje,
+                })
+            if form['columns'] == 'thirteen':
+                res2.update(dict(
+                            bal1 = tot_bal1,
+                            bal2 = tot_bal2,
+                            bal3 = tot_bal3,
+                            bal4 = tot_bal4,
+                            bal5 = tot_bal5,
+                            bal6 = tot_bal6,
+                            bal7 = tot_bal7,
+                            bal8 = tot_bal8,
+                            bal9 = tot_bal9,
+                            bal10 = tot_bal10,
+                            bal11 = tot_bal11,
+                            bal12 = tot_bal12,
+                            bal13 = tot_bal13,))
+                
             result_acc.append(res2)
         return result_acc
 
@@ -395,5 +538,11 @@ report_sxw.report_sxw('report.afr.2cols',
 report_sxw.report_sxw('report.afr.4cols', 
                       'wizard.report', 
                       'account_financial_report/report/balance_full_4_cols.rml',
+                       parser=account_balance, 
+                       header=False)
+
+report_sxw.report_sxw('report.afr.13cols', 
+                      'wizard.report', 
+                      'account_financial_report/report/balance_full_13_cols.rml',
                        parser=account_balance, 
                        header=False)

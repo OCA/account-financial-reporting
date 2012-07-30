@@ -9,7 +9,7 @@
             model="wizard.report"
             name="afr.1cols"
             rml="account_financial_report/report/balance_full.rml"
-            string="Balance de Comprobacion Wizard"
+            string="Balance 1 Columna"
             header="False"
         />
         
@@ -20,7 +20,7 @@
             model="wizard.report"
             name="afr.2cols"
             rml="account_financial_report/report/balance_full_2_cols.rml"
-            string="Balance de Comprobacion Wizard 2 Columnas"
+            string="Balance 2 Columnas"
             header="False"
         />
 
@@ -31,7 +31,18 @@
             model="wizard.report"
             name="afr.4cols"
             rml="account_financial_report/report/balance_full_4_cols.rml"
-            string="Balance de Comprobacion Wizard 4 Columnas"
+            string="Balance 4 Columnas"
+            header="False"
+        />
+
+        <report 
+            auto="False"
+            id="13_col_report"
+            menu="True"
+            model="wizard.report"
+            name="afr.13cols"
+            rml="account_financial_report/report/balance_full_13_cols.rml"
+            string="Balance 13 Columnas"
             header="False"
         />
     </data>

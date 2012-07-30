@@ -46,7 +46,7 @@ class wizard_report(osv.osv_memory):
         'date_to': fields.date('End date'),
         'tot_check': fields.boolean('Show Total'),
         'lab_str': fields.char('Description', size= 128),
-        'inf_type': fields.selection([('bgen','Balance General'),('bcom','Balance Comprobacion'),('edogp','Estado Ganancias y Perdidas'),('bml','Libro Mayor Legal')],'Tipo Informe',required=True),
+        'inf_type': fields.selection([('bgen','Balance Sheet'),('IS','Income Statement'),('bcom','Balance Comprobacion'),('edogp','Estado Ganancias y Perdidas'),('bml','Libro Mayor Legal')],'Tipo Informe',required=True),
         'columns': fields.selection([('one','End. Balance'),('two','Debit | Credit'),('four',' Init. Balance | Debit | Credit | End. Balance'),('thirteen','12 Months | YTD')],'Column Number',required=True),
         'currency_id': fields.many2one('res.currency', 'Secondary Currency', help="Forces all values for this report to be expressed in this secondary currency."),
     }
@@ -153,7 +153,7 @@ class wizard_report(osv.osv_memory):
         if data['form']['columns'] == 'four':
             name = 'afr.4cols'
         if data['form']['columns'] == 'thirteen':
-            name = 'wizard.report.account.balance.gene'
+            name = 'afr.13cols'
         
         print 'NOMBRE DEL REPORTE, ', name
         
