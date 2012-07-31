@@ -228,10 +228,10 @@ class account_balance(report_sxw.rml_parse):
 
             if form['filter'] in ['byperiod', 'all']:
                 ctx_init['periods'] = form['periods']
-                date_start = min([period.date_start for period in period_obj.browse(self.cr, self.uid, ctx_init['periods'])])
-                ctx_init['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('date_stop','<=',date_start)])
                 if not ctx_init['periods']:
                     ctx_init = missing_period(ctx_init.copy())
+                date_start = min([period.date_start for period in period_obj.browse(self.cr, self.uid, ctx_init['periods'])])
+                ctx_init['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('date_stop','<=',date_start)])
             elif form['filter'] in ['bydate']:
                 ctx_init['date_from'] = fiscalyear.date_start
                 ctx_init['date_to'] = form['date_from']
