@@ -55,7 +55,7 @@
                                 <separator string="Filter on Periods" colspan="4"/>
 -->
                                 <separator string="Periods to Include" colspan="4"/>
-                                <field name="periods" colspan="4" nolabel="1" domain="[('fiscalyear_id','=',fiscalyear)]">
+                                <field name="periods" colspan="4" nolabel="1" domain="[('fiscalyear_id','=',fiscalyear),('special','=',False),('company_id','=',company_id)]">
                                 
                                     <tree>
                                         <field name='code'/>
