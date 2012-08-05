@@ -150,9 +150,12 @@ class account_balance(report_sxw.rml_parse):
         rc_obj = self.pool.get('res.company')
         return rc_obj.browse(self.cr, self.uid, company_id).currency_id.id
     
-    def get_company_credit_accounts(self, company_id):
+    def get_company_accounts(self, company_id, acc='credit'):
         rc_obj = self.pool.get('res.company')
-        return [brw.id for brw in rc_obj.browse(self.cr, self.uid, company_id).credit_account_ids]
+        if acc=='credit':
+            return [brw.id for brw in rc_obj.browse(self.cr, self.uid, company_id).credit_account_ids]
+        else:
+            return [brw.id for brw in rc_obj.browse(self.cr, self.uid, company_id).debit_account_ids]
     
     def lines(self, form, level=0):
         """
@@ -257,9 +260,14 @@ class account_balance(report_sxw.rml_parse):
             account_ids = form['account_list']
             del form['account_list']
         
-        credit_account_ids = self.get_company_credit_accounts(form['company_id'] and type(form['company_id']) in (list,tuple) and form['company_id'][0] or form['company_id'])
-
+        credit_account_ids = self.get_company_accounts(form['company_id'] and type(form['company_id']) in (list,tuple) and form['company_id'][0] or form['company_id'],'credit')
+        
         print 'Primer print de credit_account_ids ', credit_account_ids
+
+
+        debit_account_ids = self.get_company_accounts(form['company_id'] and type(form['company_id']) in (list,tuple) and form['company_id'][0] or form['company_id'],'debit')
+
+        print 'Primer print de debit_account_ids ', debit_account_ids
         
         if form.get('fiscalyear'):
             if type(form.get('fiscalyear')) in (list,tuple):
@@ -277,6 +285,16 @@ class account_balance(report_sxw.rml_parse):
         credit_account_ids = _get_children_and_consol(self.cr, self.uid, credit_account_ids, 100,self.context,change_sign=True)
         
         print 'credit_account_ids ', credit_account_ids
+
+        debit_account_ids = _get_children_and_consol(self.cr, self.uid, debit_account_ids, 100,self.context,change_sign=True)
+        
+        print 'debit_account_ids ', debit_account_ids
+
+
+        credit_account_ids = list(set(credit_account_ids) - set(debit_account_ids))
+        
+        print 'Segundo print de credit_account_ids ', credit_account_ids
+        
 
         #
         # Generate the report lines (checking each account)

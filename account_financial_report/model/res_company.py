@@ -33,6 +33,10 @@ class res_company(osv.osv):
         'credit_account_ids':fields.many2many('account.account',
                                     'credit_account_company_rel',
                                     'company_id', 'account_id',
-                                    'Accounts'),
+                                    'Creditable Accounts'),
+        'debit_account_ids':fields.many2many('account.account',
+                                    'debit_account_company_rel',
+                                    'company_id', 'account_id',
+                                    'Debitable Accounts'),
     }
 res_company()
