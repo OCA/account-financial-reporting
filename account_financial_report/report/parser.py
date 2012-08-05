@@ -293,6 +293,7 @@ class account_balance(report_sxw.rml_parse):
             tot_bin = 0.0
             tot_deb = 0.0
             tot_crd = 0.0
+            tot_ytd = 0.0
             tot_eje = 0.0
         elif form['columns'] == 'thirteen':
             tot_bal1 = 0.0
@@ -313,6 +314,7 @@ class account_balance(report_sxw.rml_parse):
         result_acc = []
         tot = {}        
         
+        print 'TIPO DE INFORME ',form['inf_type']
 
         if form['columns'] == 'thirteen':
             period_ids = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('special','=',False)],order='date_start asc')
@@ -348,6 +350,7 @@ class account_balance(report_sxw.rml_parse):
                         'balanceinit': self.exchange(i),
                         'debit': self.exchange(d),
                         'credit': self.exchange(c),
+                        'ytd': self.exchange(d-c),
                         'balance': self.exchange(b),
                     })
                 
@@ -469,6 +472,7 @@ class account_balance(report_sxw.rml_parse):
                             tot_bin += res['balanceinit']
                             tot_deb += res['debit']
                             tot_crd += res['credit']
+                            tot_ytd += res['ytd']
                             tot_eje += res['balance']
 
                         if form['columns'] == 'thirteen':
@@ -502,6 +506,7 @@ class account_balance(report_sxw.rml_parse):
                         'balanceinit': tot_bin,
                         'debit': tot_deb,
                         'credit': tot_crd,
+                        'ytd': tot_ytd,
                         'balance': tot_eje,
                 })
             if form['columns'] == 'thirteen':
@@ -521,6 +526,7 @@ class account_balance(report_sxw.rml_parse):
                             bal13 = tot_bal13,))
                 
             result_acc.append(res2)
+        print 100 * 'FIN '
         return result_acc
 
 report_sxw.report_sxw('report.afr.1cols', 
@@ -538,6 +544,12 @@ report_sxw.report_sxw('report.afr.2cols',
 report_sxw.report_sxw('report.afr.4cols', 
                       'wizard.report', 
                       'account_financial_report/report/balance_full_4_cols.rml',
+                       parser=account_balance, 
+                       header=False)
+                       
+report_sxw.report_sxw('report.afr.5cols', 
+                      'wizard.report', 
+                      'account_financial_report/report/balance_full_5_cols.rml',
                        parser=account_balance, 
                        header=False)
 
