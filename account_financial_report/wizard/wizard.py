@@ -47,7 +47,7 @@ class wizard_report(osv.osv_memory):
         'tot_check': fields.boolean('Show Total'),
         'lab_str': fields.char('Description', size= 128),
         'inf_type': fields.selection([('bgen','Balance Sheet'),('IS','Income Statement'),('bcom','Balance Comprobacion'),('edogp','Estado Ganancias y Perdidas'),('bml','Libro Mayor Legal')],'Tipo Informe',required=True),
-        'columns': fields.selection([('one','End. Balance'),('two','Debit | Credit'),('four',' Init. Balance | Debit | Credit | End. Balance'),('thirteen','12 Months | YTD')],'Column Number',required=True),
+        'columns': fields.selection([('one','End. Balance'),('two','Debit | Credit'),('four','Init. | Dr. | Cr. | End.'),('five','Init. | Dr. | Cr. | YTD | End.'),('thirteen','12 Months | YTD')],'Column Number',required=True),
         'currency_id': fields.many2one('res.currency', 'Secondary Currency', help="Forces all values for this report to be expressed in this secondary currency."),
     }
     
@@ -60,7 +60,7 @@ class wizard_report(osv.osv_memory):
         'company_id': lambda self,cr,uid,c: self.pool.get('res.company')._company_default_get(cr, uid, 'account.invoice', context=c),
         'fiscalyear': lambda self, cr, uid, c: self.pool.get('account.fiscalyear').find(cr, uid),
         'display_account': lambda *a:'bal_mov',
-        'columns': lambda *a:'four',
+        'columns': lambda *a:'five',
     }
     
     def onchange_filter(self,cr,uid,ids,fiscalyear,filters,context=None):
@@ -152,6 +152,8 @@ class wizard_report(osv.osv_memory):
             name = 'afr.2cols'
         if data['form']['columns'] == 'four':
             name = 'afr.4cols'
+        if data['form']['columns'] == 'five':
+            name = 'afr.5cols'
         if data['form']['columns'] == 'thirteen':
             name = 'afr.13cols'
         

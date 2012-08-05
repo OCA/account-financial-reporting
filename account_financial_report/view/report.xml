@@ -37,6 +37,17 @@
 
         <report 
             auto="False"
+            id="5_col_report"
+            menu="True"
+            model="wizard.report"
+            name="afr.5cols"
+            rml="account_financial_report/report/balance_full_5_cols.rml"
+            string="Balance 5 Columnas"
+            header="False"
+        />
+
+        <report 
+            auto="False"
             id="13_col_report"
             menu="True"
             model="wizard.report"
