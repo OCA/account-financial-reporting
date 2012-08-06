@@ -35,9 +35,10 @@ class wizard_report(osv.osv_memory):
     _name = "wizard.report"
 
     _columns = {
+        'afr_id': fields.many2one('afr','Custom Report', help='If you have already set a Custom Report, Select it Here.'),
         'company_id': fields.many2one('res.company','Company',required=True),
         'currency_id': fields.many2one('res.currency', 'Currency', help="Currency at which this report will be expressed. If not selected will be used the one set in the company"),
-        'inf_type': fields.selection([('bgen','Balance Sheet'),('IS','Income Statement'),('bcom','Balance Comprobacion'),('edogp','Estado Ganancias y Perdidas'),('bml','Libro Mayor Legal')],'Tipo Informe',required=True),
+        'inf_type': fields.selection([('BS','Balance Sheet'),('IS','Income Statement')],'Type',required=True),
         'columns': fields.selection([('one','End. Balance'),('two','Debit | Credit'), ('four','Initial | Debit | Credit | YTD'), ('five','Initial | Debit | Credit | Period | YTD'),('thirteen','12 Months | YTD')],'Columns',required=True),
         'display_account': fields.selection([('all','All Accounts'),('bal', 'With Balance'),('mov','With movements'),('bal_mov','With Balance / Movements')],'Display accounts'),
         'display_account_level': fields.integer('Up to level',help='Display accounts up to this level (0 to show all)'),
@@ -61,21 +62,53 @@ class wizard_report(osv.osv_memory):
         'date_to': lambda *a: time.strftime('%Y-%m-%d'),
         'filter': lambda *a:'byperiod',
         'display_account_level': lambda *a: 0,
-        'inf_type': lambda *a:'bgen',
+        'inf_type': lambda *a:'BS',
         'company_id': lambda self,cr,uid,c: self.pool.get('res.company')._company_default_get(cr, uid, 'account.invoice', context=c),
         'fiscalyear': lambda self, cr, uid, c: self.pool.get('account.fiscalyear').find(cr, uid),
         'display_account': lambda *a:'bal_mov',
         'columns': lambda *a:'five',
     }
-    
-    def onchange_filter(self,cr,uid,ids,fiscalyear,filters,context=None):
+
+    def onchange_columns(self,cr,uid,ids,columns,fiscalyear,periods,context=None):
         if context is None:
             context = {}
-        res = {}
-        if filters in ("bydate","all"):
-            fisy = self.pool.get("account.fiscalyear")
-            fis_actual = fisy.browse(cr,uid,fiscalyear,context=context)
-            res = {'value':{'date_from': fis_actual.date_start, 'date_to': fis_actual.date_stop}}
+        res = {'value':{}}
+        if columns=='thirteen':
+            p_obj = self.pool.get("account.period")
+            periods = p_obj.search(cr,uid,[('fiscalyear_id','=',fiscalyear),('special','=',False)],context=context)
+            res['value'].update({'periods':periods})
+        else:
+            res['value'].update({'periods':periods})
+        return res
+        
+    def onchange_company_id(self,cr,uid,ids,company_id,context=None):
+        if context is None:
+            context = {}
+        context['company_id']=company_id
+        res = {'value':{}}
+        cur_id = self.pool.get('res.company').browse(cr,uid,company_id,context=context).currency_id.id
+        fy_id = self.pool.get('account.fiscalyear').find(cr, uid,context=context)
+        res['value'].update({'fiscalyear':fy_id})
+        res['value'].update({'currency_id':cur_id})
+        res['value'].update({'account_list':[]})
+        res['value'].update({'periods':[]})
+        res['value'].update({'afr_id':None})
+        return res
+
+    def onchange_afr_id(self,cr,uid,ids,afr_id,context=None):
+        if context is None:
+            context = {}
+        res = {'value':{}}
+        if not afr_id: return res
+        afr_brw = self.pool.get('afr').browse(cr,uid,afr_id,context=context)
+        res['value'].update({'currency_id':afr_brw.currency_id and afr_brw.currency_id.id or afr_brw.company_id.currency_id.id})
+        res['value'].update({'inf_type':afr_brw.inf_type or 'BS'})
+        res['value'].update({'columns':afr_brw.columns or 'five'})
+        res['value'].update({'display_account':afr_brw.display_account or 'bal_mov'})
+        res['value'].update({'display_account_level':afr_brw.display_account_level or 0})
+        res['value'].update({'fiscalyear':afr_brw.fiscalyear_id and afr_brw.fiscalyear_id.id})
+        res['value'].update({'account_list':[acc.id for acc in afr_brw.account_ids]})
+        res['value'].update({'periods':[p.id for p in afr_brw.period_ids]})
         return res
     
     def _get_defaults(self, cr, uid, data, context=None):
