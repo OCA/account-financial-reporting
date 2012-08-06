@@ -9,20 +9,16 @@
             <field name="arch" type="xml">
             <form string="Account Financial Report">
                 <group colspan="4">
-<!--
-                    <field name="name" colspan="4"/>
--->
-                </group>
-                <group colspan="4">
                     <group colspan="2">
                         <separator string="Company Info" colspan="4"/>
-                        <field name="company_id" colspan="4"/>
+                        <field name="company_id" on_change='onchange_company_id(company_id)' colspan="4"/>
                         <field name="currency_id" domain="[('company_id','=',company_id)]" colspan="4"/>
                     </group>
                     <group colspan="2">
                         <separator string="Report Info" colspan="4"/>
+                        <field name="afr_id"  on_change='onchange_afr_id(afr_id)'  colspan="4"/>
                         <field name="inf_type" colspan="4"/>
-                        <field name="columns" colspan="4"/>
+                        <field name="columns" on_change='onchange_columns(columns,fiscalyear,periods)' colspan="4"/>
                     </group>
                 </group>
                 <group colspan='2'>
@@ -33,7 +29,7 @@
                     </group>
                     <group colspan="2">
                         <separator string="FiscalYear Info" colspan="4"/>
-                        <field name="fiscalyear" domain="[('company_id','=',company_id)]"/>
+                        <field name="fiscalyear" on_change='onchange_columns(columns,fiscalyear,periods)'  domain="[('company_id','=',company_id)]"/>
                         <newline/>
                     </group>
                 </group>
@@ -50,7 +46,13 @@
                     </group>
                     <group colspan="1">
                         <separator string="Periods to Include" colspan="4"/>
-                        <field name="periods" colspan="4" nolabel="1" domain="[('fiscalyear_id','=',fiscalyear),('special','=',False),('company_id','=',company_id)]">
+                        <field 
+                            name="periods" 
+                            colspan="4" 
+                            nolabel="1" 
+                            domain="[('fiscalyear_id','=',fiscalyear),('special','=',False),('company_id','=',company_id)]"
+                             attrs="{'readonly':[('columns','=','thirteen')],}" 
+                             >
                         
                             <tree>
                                 <field name='code'/>
