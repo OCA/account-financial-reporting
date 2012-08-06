@@ -36,19 +36,24 @@ class wizard_report(osv.osv_memory):
 
     _columns = {
         'company_id': fields.many2one('res.company','Company',required=True),
-        'account_list': fields.many2many ('account.account','rel_wizard_account','account_list','account_id','Root accounts',required=True),
-        'filter': fields.selection([('bydate','By Date'),('byperiod','By Period'),('all','By Date and Period'),('none','No Filter')],'Date/Period Filter'),
-        'fiscalyear': fields.many2one('account.fiscalyear','Fiscal year',help='Keep empty to use all open fiscal years to compute the balance',required=True),
-        'periods': fields.many2many('account.period','rel_wizard_period','wizard_id','period_id','Periods',help='All periods in the fiscal year if empty'),
+        'currency_id': fields.many2one('res.currency', 'Currency', help="Currency at which this report will be expressed. If not selected will be used the one set in the company"),
+        'inf_type': fields.selection([('bgen','Balance Sheet'),('IS','Income Statement'),('bcom','Balance Comprobacion'),('edogp','Estado Ganancias y Perdidas'),('bml','Libro Mayor Legal')],'Tipo Informe',required=True),
+        'columns': fields.selection([('one','End. Balance'),('two','Debit | Credit'), ('four','Initial | Debit | Credit | YTD'), ('five','Initial | Debit | Credit | Period | YTD'),('thirteen','12 Months | YTD')],'Columns',required=True),
         'display_account': fields.selection([('all','All Accounts'),('bal', 'With Balance'),('mov','With movements'),('bal_mov','With Balance / Movements')],'Display accounts'),
         'display_account_level': fields.integer('Up to level',help='Display accounts up to this level (0 to show all)'),
-        'date_from': fields.date('Start date'),
+        
+        'account_list': fields.many2many ('account.account','rel_wizard_account','account_list','account_id','Root accounts',required=True),
+        
+        'fiscalyear': fields.many2one('account.fiscalyear','Fiscal year',help='Fiscal Year for this report',required=True),
+        'periods': fields.many2many('account.period','rel_wizard_period','wizard_id','period_id','Periods',help='All periods in the fiscal year if empty'),
+        
+        'tot_check': fields.boolean('Summarize?', help='Checking will add a new line at the end of the Report which will Summarize Columns in Report'),
+        'lab_str': fields.char('Description', help='Description for the Summary', size= 128),
+        
+        #~ Deprecated fields
+        'filter': fields.selection([('bydate','By Date'),('byperiod','By Period'),('all','By Date and Period'),('none','No Filter')],'Date/Period Filter'),
         'date_to': fields.date('End date'),
-        'tot_check': fields.boolean('Show Total'),
-        'lab_str': fields.char('Description', size= 128),
-        'inf_type': fields.selection([('bgen','Balance Sheet'),('IS','Income Statement'),('bcom','Balance Comprobacion'),('edogp','Estado Ganancias y Perdidas'),('bml','Libro Mayor Legal')],'Tipo Informe',required=True),
-        'columns': fields.selection([('one','End. Balance'),('two','Debit | Credit'),('four','Init. | Dr. | Cr. | End.'),('five','Init. | Dr. | Cr. | YTD | End.'),('thirteen','12 Months | YTD')],'Column Number',required=True),
-        'currency_id': fields.many2one('res.currency', 'Secondary Currency', help="Forces all values for this report to be expressed in this secondary currency."),
+        'date_from': fields.date('Start date'),
     }
     
     _defaults = {
@@ -56,7 +61,7 @@ class wizard_report(osv.osv_memory):
         'date_to': lambda *a: time.strftime('%Y-%m-%d'),
         'filter': lambda *a:'byperiod',
         'display_account_level': lambda *a: 0,
-        'inf_type': lambda *a:'bcom',
+        'inf_type': lambda *a:'bgen',
         'company_id': lambda self,cr,uid,c: self.pool.get('res.company')._company_default_get(cr, uid, 'account.invoice', context=c),
         'fiscalyear': lambda self, cr, uid, c: self.pool.get('account.fiscalyear').find(cr, uid),
         'display_account': lambda *a:'bal_mov',
