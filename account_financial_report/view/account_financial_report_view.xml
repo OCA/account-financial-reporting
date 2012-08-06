@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="account_financial_report_view" model="ir.ui.view">
+            <field name="name">Account Financial Report (Template)</field>
+            <field name="model">afr</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            <form string="Account Financial Report">
+                <group colspan="4">
+                    <field name="name" colspan="4"/>
+                </group>
+                <group colspan="4">
+                    <group colspan="2">
+                        <separator string="Company Info" colspan="4"/>
+                        <field name="company_id" colspan="4"/>
+                        <field name="currency_id" domain="[('company_id','=',company_id)]" colspan="4"/>
+                    </group>
+                    <group colspan="2">
+                        <separator string="Report Info" colspan="4"/>
+                        <field name="inf_type" colspan="4"/>
+                        <field name="columns" colspan="4"/>
+                    </group>
+                </group>
+                <group colspan='2'>
+                    <group colspan="2">
+                        <separator string="Accounts Info" colspan="4"/>
+                        <field name="display_account" required="True" colspan="4"/>
+                        <field name="display_account_level" required="True" colspan="4"/>
+                    </group>
+                    <group colspan="2">
+                        <separator string="FiscalYear Info" colspan="4"/>
+                        <field name="fiscalyear_id" domain="[('company_id','=',company_id)]"/>
+                        <newline/>
+                    </group>
+                </group>
+                <group colspan='4'>
+                    <group colspan="1">
+                        <separator string="Account to Include" colspan="4"/>
+                        <field name="account_ids" nolabel="1" colspan="4" domain="[('company_id','=',company_id)]">
+                            <tree>
+                                <field name='code'/>
+                                <field name='name'/>
+                                <field name='type'/>
+                            </tree>
+                        </field>
+                    </group>
+                    <group colspan="1">
+                        <separator string="Periods to Include" colspan="4"/>
+                        <field name="period_ids" colspan="4" nolabel="1" domain="[('fiscalyear_id','=',fiscalyear_id),('special','=',False),('company_id','=',company_id)]">
+                        
+                            <tree>
+                                <field name='code'/>
+                                <field name='name'/>
+                                <field name='state'/>
+                            </tree>
+                        </field>
+                    </group>
+                </group>
+                <group colspan="4">
+                    <group colspan="2">
+                        <separator string="Account's Sign Conventions" colspan="4"/>
+                        <label string="Please check the [ Account's Sign on Reports ] Section in the Company"/>
+<!--
+                        <button name="print_report" string="Print" type="object"/>
+-->
+                    </group>
+                    <group colspan="2">
+                        <separator string="Total" colspan="4"/>
+                        <field name="tot_check" colspan="4"/>
+                        <field name="lab_str" colspan="4" attrs="{'required':[('tot_check','=',True)], 'readonly':[('tot_check','=',False)],}" />
+                    </group>
+                </group>
+
+            </form>
+
+            </field>
+        </record>
+
+        <record id="account_financial_report_tree" model="ir.ui.view">
+            <field name="name">Account Financial Report (Template)</field>
+            <field name="model">afr</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+            <tree string="Account Financial Report (Templates)">
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="currency_id"/>
+                <field name="inf_type"/>
+                <field name="columns"/>
+                <field name="display_account"/>
+                <field name="display_account_level" required="True" colspan="4"/>
+                <field name="fiscalyear_id"/>
+                <field name="tot_check" colspan="4"/>
+<!--
+                <button name="print_report" string="Print" type="object"/>
+-->
+            </tree>
+
+            </field>
+        </record>
+
+
+
+
+        <record model="ir.actions.act_window" id="account_financial_report_action">
+            <field name="name">Account Financial Report</field>
+            <field name="res_model">afr</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut nunc magna. Vivamus felis sem, mattis vel consequat pharetra, adipiscing ut erat. In accumsan fermentum ullamcorper. Cras vitae sem magna, pellentesque condimentum metus. Cras at sem quis lectus vehicula adipiscing. Vivamus in urna ipsum, sed molestie magna. Nam ullamcorper arcu condimentum leo ultrices egestas. Nullam ut tincidunt orci. Proin sollicitudin luctus risus sit amet mattis. Duis eget risus non enim pharetra dignissim. Mauris eros eros, fringilla et interdum non, aliquam at orci.
+            </field>
+        </record>
+
+        
+        <menuitem 
+            id="account_financial_report_menu"
+            name="Account Financial Report (Templates)"
+            parent="account.final_accounting_reports"
+            sequence="100"
+            groups="account_financial_report.group_afreport"
+            action="account_financial_report_action"/>
+        
+        
+    </data>
+</openerp>

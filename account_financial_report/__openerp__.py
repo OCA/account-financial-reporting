@@ -41,6 +41,7 @@
         "view/wizard.xml",
         "view/account_view.xml",
         "view/company_view.xml",
+        "view/account_financial_report_view.xml",
     ],
     "active": False,
     "installable": True
