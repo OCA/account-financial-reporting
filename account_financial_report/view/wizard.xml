@@ -3,31 +3,42 @@
     <data>
 
         <record id="wizard_report_view" model="ir.ui.view">
-            <field name="name">Wizard Report Balance Four Columns</field>
+            <field name="name">Account Financial Report (Template)</field>
             <field name="model">wizard.report</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-            <form string="General Account Balance (Multireports)">
+            <form string="Account Financial Report">
+                <group colspan="4">
+<!--
+                    <field name="name" colspan="4"/>
+-->
+                </group>
                 <group colspan="4">
                     <group colspan="2">
                         <separator string="Company Info" colspan="4"/>
                         <field name="company_id" colspan="4"/>
                         <field name="currency_id" domain="[('company_id','=',company_id)]" colspan="4"/>
                     </group>
-                    
                     <group colspan="2">
                         <separator string="Report Info" colspan="4"/>
                         <field name="inf_type" colspan="4"/>
                         <field name="columns" colspan="4"/>
                     </group>
                 </group>
-                    <newline/>
-                
-                <group>
+                <group colspan='2'>
                     <group colspan="2">
                         <separator string="Accounts Info" colspan="4"/>
                         <field name="display_account" required="True" colspan="4"/>
                         <field name="display_account_level" required="True" colspan="4"/>
+                    </group>
+                    <group colspan="2">
+                        <separator string="FiscalYear Info" colspan="4"/>
+                        <field name="fiscalyear" domain="[('company_id','=',company_id)]"/>
+                        <newline/>
+                    </group>
+                </group>
+                <group colspan='4'>
+                    <group colspan="1">
                         <separator string="Account to Include" colspan="4"/>
                         <field name="account_list" nolabel="1" colspan="4" domain="[('company_id','=',company_id)]">
                             <tree>
@@ -37,42 +48,37 @@
                             </tree>
                         </field>
                     </group>
-                    <group colspan="2">
-                        <separator string="FiscalYear Info" colspan="4"/>
-                        <field name="fiscalyear" domain="[('company_id','=',company_id)]"/>
-                        <newline/>
-                        <field name="filter" required="True" invisible='True'/>
-                        <newline/>
-
-                        <group attrs="{'invisible':[('filter','=','none')]}" colspan="4">
-                            <group attrs="{'invisible':[('filter','=','byperiod')]}" colspan="4">
-                                <separator string="Date Filter" colspan="4"/>
-                                <field name="date_from"/>
-                                <field name="date_to"/>
-                            </group>
-                            <group attrs="{'invisible':[('filter','=','bydate')]}" colspan="4">
-<!--
-                                <separator string="Filter on Periods" colspan="4"/>
--->
-                                <separator string="Periods to Include" colspan="4"/>
-                                <field name="periods" colspan="4" nolabel="1" domain="[('fiscalyear_id','=',fiscalyear),('special','=',False),('company_id','=',company_id)]">
-                                
-                                    <tree>
-                                        <field name='code'/>
-                                        <field name='name'/>
-                                        <field name='state'/>
-                                    </tree>
-                                </field>
-                            </group>
-                        </group>
+                    <group colspan="1">
+                        <separator string="Periods to Include" colspan="4"/>
+                        <field name="periods" colspan="4" nolabel="1" domain="[('fiscalyear_id','=',fiscalyear),('special','=',False),('company_id','=',company_id)]">
+                        
+                            <tree>
+                                <field name='code'/>
+                                <field name='name'/>
+                                <field name='state'/>
+                            </tree>
+                        </field>
                     </group>
-                    <group colspan="4">
-                    <newline/>
-                    
-                        <group colspan="4">
-                            <separator string="Total" colspan="4"/>
-                            <field name="tot_check" colspan="4"/>
-                            <field name="lab_str" colspan="4"/>
+                </group>
+                <group colspan="4">
+                    <group colspan="2">
+                        <separator string="Account's Sign Conventions" colspan="4"/>
+                        <label string="Please check the [ Account's Sign on Reports ] Section in the Company"/>
+                    </group>
+                    <group colspan="2">
+                        <separator string="Total" colspan="4"/>
+                        <field name="tot_check" colspan="4"/>
+                        <field name="lab_str" colspan="4" attrs="{'required':[('tot_check','=',True)], 'readonly':[('tot_check','=',False)],}" />
+                    </group>
+                </group>
+                <group colspan="4">
+                    <separator string="" colspan="4"/>
+                    <group colspan="2">
+                        <label string=""/>
+                    </group>
+                    <group colspan="2">
+                        <group colspan="2">
+                            <label string=""/>
                         </group>
                         <button name="print_report" string="Print" type="object"/>
                     </group>
@@ -81,9 +87,10 @@
 
             </field>
         </record>
-        
+
+
         <record id="action_wizard_report" model="ir.actions.act_window">
-            <field name="name">Reporte Balance (Multireportes)</field>
+            <field name="name">Account Financial Report (Multireports)</field>
             <field name="res_model">wizard.report</field>
             <field name="view_type">form</field>
             <field name="view_mode">form</field>
