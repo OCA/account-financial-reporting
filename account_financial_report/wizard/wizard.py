@@ -199,8 +199,6 @@ class wizard_report(osv.osv_memory):
         if data['form']['columns'] == 'thirteen':
             name = 'afr.13cols'
         
-        print 'NOMBRE DEL REPORTE, ', name
-        
         return {'type': 'ir.actions.report.xml', 'report_name': name, 'datas': data}
             
 wizard_report()

@@ -261,13 +261,8 @@ class account_balance(report_sxw.rml_parse):
         
         credit_account_ids = self.get_company_accounts(form['company_id'] and type(form['company_id']) in (list,tuple) and form['company_id'][0] or form['company_id'],'credit')
         
-        print 'Primer print de credit_account_ids ', credit_account_ids
-
-
         debit_account_ids = self.get_company_accounts(form['company_id'] and type(form['company_id']) in (list,tuple) and form['company_id'][0] or form['company_id'],'debit')
 
-        print 'Primer print de debit_account_ids ', debit_account_ids
-        
         if form.get('fiscalyear'):
             if type(form.get('fiscalyear')) in (list,tuple):
                 fiscalyear = form['fiscalyear'] and form['fiscalyear'][0]
@@ -283,17 +278,9 @@ class account_balance(report_sxw.rml_parse):
         
         credit_account_ids = _get_children_and_consol(self.cr, self.uid, credit_account_ids, 100,self.context,change_sign=True)
         
-        print 'credit_account_ids ', credit_account_ids
-
         debit_account_ids = _get_children_and_consol(self.cr, self.uid, debit_account_ids, 100,self.context,change_sign=True)
         
-        print 'debit_account_ids ', debit_account_ids
-
-
         credit_account_ids = list(set(credit_account_ids) - set(debit_account_ids))
-        
-        print 'Segundo print de credit_account_ids ', credit_account_ids
-        
 
         #
         # Generate the report lines (checking each account)
@@ -381,7 +368,6 @@ class account_balance(report_sxw.rml_parse):
                 
                 if form['columns'] == 'qtr':
                     pn = 1
-                    print 'PERIODOS DEL QTR ', p
                     for p_id in p:
                         form['periods'] = p_id
                         
@@ -644,7 +630,6 @@ class account_balance(report_sxw.rml_parse):
                 })
                 
             result_acc.append(res2)
-        print 100 * 'FIN ', result_acc
         return result_acc
 
 report_sxw.report_sxw('report.afr.1cols', 
