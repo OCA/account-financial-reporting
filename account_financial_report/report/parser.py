@@ -369,9 +369,17 @@ class account_balance(report_sxw.rml_parse):
                         'debit': self.exchange(d),
                         'credit': self.exchange(c),
                         'ytd': self.exchange(d-c),
-                        'balance': self.exchange(b),
                     })
                 
+                    if form['inf_type'] == 'IS' and  form['columns'] == 'one':
+                        res.update({
+                            'balance': self.exchange(d-c),
+                        })
+                    else:
+                        res.update({
+                            'balance': self.exchange(b),
+                        })
+
                 elif form['columns'] == 'thirteen':
                     pn = 1
                     for p_id in period_ids:
