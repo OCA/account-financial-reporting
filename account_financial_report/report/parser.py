@@ -77,12 +77,8 @@ class account_balance(report_sxw.rml_parse):
         Returns the header text used on the report.
         """
         inf_type = {
-            'bgen' : 'Balance General',
-            'IS'   : 'Income Statement',
-            'bcom' : 'Balance de Comprobacion',
-            'edogp': 'Estado de Ganancias y Perdidas',
-            'bml'  : 'Libro Mayor Legal',
-            'bdl'  : 'Diario Legal'
+            'BS' : _('Balance Sheet'),
+            'IS'   : _('Income Statement'),
         }
         return inf_type[form['inf_type']]
 
@@ -301,18 +297,35 @@ class account_balance(report_sxw.rml_parse):
         #
         
         tot_check = False
-        
-        
-        if form['columns'] != 'thirteen':
-            
-            ctx_init = _ctx_init(self.context.copy())
-            ctx_end = _ctx_end(self.context.copy())
 
-            tot_bin = 0.0
-            tot_deb = 0.0
-            tot_crd = 0.0
-            tot_ytd = 0.0
-            tot_eje = 0.0
+
+        if form['columns'] == 'qtr':
+            period_ids = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('special','=',False)],order='date_start asc')
+            a=0
+            l=[]
+            p=[]
+            for x in period_ids:
+                a+=1
+                if a<3:
+                        l.append(x)
+                else:
+                        l.append(x)
+                        p.append(l)
+                        l=[]
+                        a=0
+            
+            #~ period_ids = p
+
+        elif form['columns'] == 'thirteen':
+            period_ids = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('special','=',False)],order='date_start asc')
+
+        if form['columns'] == 'qtr':
+            tot_bal1 = 0.0
+            tot_bal2 = 0.0
+            tot_bal3 = 0.0
+            tot_bal4 = 0.0
+            tot_bal5 = 0.0
+
         elif form['columns'] == 'thirteen':
             tot_bal1 = 0.0
             tot_bal2 = 0.0
@@ -327,16 +340,22 @@ class account_balance(report_sxw.rml_parse):
             tot_bal11 = 0.0
             tot_bal12 = 0.0
             tot_bal13 = 0.0
+
+        else:
+            
+            ctx_init = _ctx_init(self.context.copy())
+            ctx_end = _ctx_end(self.context.copy())
+
+            tot_bin = 0.0
+            tot_deb = 0.0
+            tot_crd = 0.0
+            tot_ytd = 0.0
+            tot_eje = 0.0
         
         res = {}
         result_acc = []
         tot = {}        
         
-        print 'TIPO DE INFORME ',form['inf_type']
-
-        if form['columns'] == 'thirteen':
-            period_ids = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('special','=',False)],order='date_start asc')
-            print 'TODOS LOS PERIODS ',period_ids
 
         for aa_id in account_ids:
             id = aa_id[0]
@@ -357,29 +376,60 @@ class account_balance(report_sxw.rml_parse):
                 'change_sign' : credit_account_ids and (id  in credit_account_ids and -1 or 1) or 1
                 }
                 
-                if form['columns'] != 'thirteen':
-
+                if form['columns'] == 'qtr':
+                    pn = 1
+                    print 'PERIODOS DEL QTR ', p
+                    for p_id in p:
+                        form['periods'] = p_id
+                        
+                        ctx_init = _ctx_init(self.context.copy())
+                        aa_brw_init = account_obj.browse(self.cr, self.uid, id, ctx_init)
+                        
+                        ctx_end = _ctx_end(self.context.copy())
+                        aa_brw_end  = account_obj.browse(self.cr, self.uid, id, ctx_end)
+                        
+                        if form['inf_type'] == 'IS':
+                            d,c,b = map(z,[aa_brw_end.debit,aa_brw_end.credit,aa_brw_end.balance])
+                            res.update({
+                                'dbr%s'%pn: self.exchange(d),
+                                'cdr%s'%pn: self.exchange(c),
+                                'bal%s'%pn: self.exchange(b),
+                            })
+                        else:
+                            i,d,c = map(z,[aa_brw_init.balance,aa_brw_end.debit,aa_brw_end.credit])
+                            b = z(i+d-c)
+                            res.update({
+                                'dbr%s'%pn: self.exchange(d),
+                                'cdr%s'%pn: self.exchange(c),
+                                'bal%s'%pn: self.exchange(b),
+                            })
+                            
+                        pn +=1
+            
+                    form['periods'] = period_ids
+                    
+                    ctx_init = _ctx_init(self.context.copy())
                     aa_brw_init = account_obj.browse(self.cr, self.uid, id, ctx_init)
+                    
+                    ctx_end = _ctx_end(self.context.copy())
                     aa_brw_end  = account_obj.browse(self.cr, self.uid, id, ctx_end)
-
-                    i,d,c = map(z,[aa_brw_init.balance,aa_brw_end.debit,aa_brw_end.credit])
-                    b = z(i+d-c)
-                    res.update({
-                        'balanceinit': self.exchange(i),
-                        'debit': self.exchange(d),
-                        'credit': self.exchange(c),
-                        'ytd': self.exchange(d-c),
-                    })
-                
-                    if form['inf_type'] == 'IS' and  form['columns'] == 'one':
+                    
+                    if form['inf_type'] == 'IS':
+                        d,c,b = map(z,[aa_brw_end.debit,aa_brw_end.credit,aa_brw_end.balance])
                         res.update({
-                            'balance': self.exchange(d-c),
+                            'dbr5': self.exchange(d),
+                            'cdr5': self.exchange(c),
+                            'bal5': self.exchange(b),
                         })
                     else:
+                        i,d,c = map(z,[aa_brw_init.balance,aa_brw_end.debit,aa_brw_end.credit])
+                        b = z(i+d-c)
                         res.update({
-                            'balance': self.exchange(b),
+                            'dbr5': self.exchange(d),
+                            'cdr5': self.exchange(c),
+                            'bal5': self.exchange(b),
                         })
-
+                
                 elif form['columns'] == 'thirteen':
                     pn = 1
                     for p_id in period_ids:
@@ -433,30 +483,35 @@ class account_balance(report_sxw.rml_parse):
                             'bal13': self.exchange(b),
                         })
                 
+                else:
+
+                    aa_brw_init = account_obj.browse(self.cr, self.uid, id, ctx_init)
+                    aa_brw_end  = account_obj.browse(self.cr, self.uid, id, ctx_end)
+
+                    i,d,c = map(z,[aa_brw_init.balance,aa_brw_end.debit,aa_brw_end.credit])
+                    b = z(i+d-c)
+                    res.update({
+                        'balanceinit': self.exchange(i),
+                        'debit': self.exchange(d),
+                        'credit': self.exchange(c),
+                        'ytd': self.exchange(d-c),
+                    })
+                
+                    if form['inf_type'] == 'IS' and  form['columns'] == 'one':
+                        res.update({
+                            'balance': self.exchange(d-c),
+                        })
+                    else:
+                        res.update({
+                            'balance': self.exchange(b),
+                        })
+
                 #
                 # Check whether we must include this line in the report or not
                 #
                 to_include = False
                 
-                if form['columns'] != 'thirteen':
-
-                    if form['display_account'] == 'mov' and aa_id[3].parent_id:
-                        # Include accounts with movements
-                        if abs(d) >= 0.005 or abs(c) >= 0.005:
-                            to_include = True
-                    elif form['display_account'] == 'bal' and aa_id[3].parent_id:
-                        # Include accounts with balance
-                        if abs(b) >= 0.005:
-                            to_include = True
-                    elif form['display_account'] == 'bal_mov' and aa_id[3].parent_id:
-                        # Include accounts with balance or movements
-                        if abs(b) >= 0.005 or abs(d) >= 0.005 or abs(c) >= 0.005:
-                            to_include = True
-                    else:
-                        # Include all accounts
-                        to_include = True
-                    
-                elif form['columns'] == 'thirteen':
+                if form['columns'] in ('thirteen', 'qtr'):
                     to_test = [False]
                     if form['display_account'] == 'mov' and aa_id[3].parent_id:
                         # Include accounts with movements
@@ -485,24 +540,41 @@ class account_balance(report_sxw.rml_parse):
                         # Include all accounts
                         to_include = True
                 
+                else:
+
+                    if form['display_account'] == 'mov' and aa_id[3].parent_id:
+                        # Include accounts with movements
+                        if abs(d) >= 0.005 or abs(c) >= 0.005:
+                            to_include = True
+                    elif form['display_account'] == 'bal' and aa_id[3].parent_id:
+                        # Include accounts with balance
+                        if abs(b) >= 0.005:
+                            to_include = True
+                    elif form['display_account'] == 'bal_mov' and aa_id[3].parent_id:
+                        # Include accounts with balance or movements
+                        if abs(b) >= 0.005 or abs(d) >= 0.005 or abs(c) >= 0.005:
+                            to_include = True
+                    else:
+                        # Include all accounts
+                        to_include = True
+                    
                 if to_include:
                     result_acc.append(res)
                     #
                     # Check whether we must sumarize this line in the report or not
                     #
                     if form['tot_check'] and res['type'] == 'view' and res['level'] == 1 and (res['id'] not in tot):
-                        if form['columns'] != 'thirteen':
-                            
+
+                        if form['columns'] == 'qtr':
                             tot_check = True
                             tot[res['id']] = True
-                            tot_bin += res['balanceinit']
-                            tot_deb += res['debit']
-                            tot_crd += res['credit']
-                            tot_ytd += res['ytd']
-                            tot_eje += res['balance']
+                            tot_bal1 += res.get('bal1',0.0)
+                            tot_bal2 += res.get('bal2',0.0)
+                            tot_bal3 += res.get('bal3',0.0)
+                            tot_bal4 += res.get('bal4',0.0)
+                            tot_bal5 += res.get('bal5',0.0)
 
-                        if form['columns'] == 'thirteen':
-                        
+                        elif form['columns'] == 'thirteen':
                             tot_check = True
                             tot[res['id']] = True
                             tot_bal1 += res.get('bal1',0.0)
@@ -519,6 +591,15 @@ class account_balance(report_sxw.rml_parse):
                             tot_bal12 += res.get('bal12',0.0)
                             tot_bal13 += res.get('bal13',0.0)
 
+                        else:
+                            tot_check = True
+                            tot[res['id']] = True
+                            tot_bin += res['balanceinit']
+                            tot_deb += res['debit']
+                            tot_crd += res['credit']
+                            tot_ytd += res['ytd']
+                            tot_eje += res['balance']
+
         if tot_check:
             str_label = form['lab_str']
             res2 = {
@@ -527,14 +608,13 @@ class account_balance(report_sxw.rml_parse):
                     'label': False,
                     'total': True,
             }
-            if form['columns'] != 'thirteen':
-                res2.update({
-                        'balanceinit': tot_bin,
-                        'debit': tot_deb,
-                        'credit': tot_crd,
-                        'ytd': tot_ytd,
-                        'balance': tot_eje,
-                })
+            if form['columns'] == 'qtr':
+                res2.update(dict(
+                            bal1 = tot_bal1,
+                            bal2 = tot_bal2,
+                            bal3 = tot_bal3,
+                            bal4 = tot_bal4,
+                            bal5 = tot_bal5,))
             if form['columns'] == 'thirteen':
                 res2.update(dict(
                             bal1 = tot_bal1,
@@ -550,9 +630,18 @@ class account_balance(report_sxw.rml_parse):
                             bal11 = tot_bal11,
                             bal12 = tot_bal12,
                             bal13 = tot_bal13,))
+
+            else:
+                res2.update({
+                        'balanceinit': tot_bin,
+                        'debit': tot_deb,
+                        'credit': tot_crd,
+                        'ytd': tot_ytd,
+                        'balance': tot_eje,
+                })
                 
             result_acc.append(res2)
-        print 100 * 'FIN '
+        print 100 * 'FIN ', result_acc
         return result_acc
 
 report_sxw.report_sxw('report.afr.1cols', 
@@ -576,6 +665,12 @@ report_sxw.report_sxw('report.afr.4cols',
 report_sxw.report_sxw('report.afr.5cols', 
                       'wizard.report', 
                       'account_financial_report/report/balance_full_5_cols.rml',
+                       parser=account_balance, 
+                       header=False)
+                       
+report_sxw.report_sxw('report.afr.qtrcols', 
+                      'wizard.report', 
+                      'account_financial_report/report/balance_full_qtr_cols.rml',
                        parser=account_balance, 
                        header=False)
 

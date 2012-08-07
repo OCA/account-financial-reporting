@@ -48,6 +48,17 @@
 
         <report 
             auto="False"
+            id="qtr_col_report"
+            menu="True"
+            model="wizard.report"
+            name="afr.qtrcols"
+            rml="account_financial_report/report/balance_full_qtr_cols.rml"
+            string="Balance QTRs Columnas"
+            header="False"
+        />
+
+        <report 
+            auto="False"
             id="13_col_report"
             menu="True"
             model="wizard.report"
