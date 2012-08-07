@@ -23,7 +23,7 @@
                         <field name="columns" on_change='onchange_columns(columns,fiscalyear_id,period_ids)' colspan="4"/>
                     </group>
                 </group>
-                <group colspan='2'>
+                <group colspan='4'>
                     <group colspan="2">
                         <separator string="Accounts Info" colspan="4"/>
                         <field name="display_account" required="True" colspan="4"/>
@@ -37,7 +37,7 @@
                 </group>
                 <group colspan='4'>
                     <group colspan="1">
-                        <separator string="Account to Include" colspan="4"/>
+                        <separator string="Accounts to Include" colspan="4"/>
                         <field name="account_ids" nolabel="1" colspan="4" domain="[('company_id','=',company_id)]">
                             <tree>
                                 <field name='code'/>
@@ -63,18 +63,32 @@
                         </field>
                     </group>
                 </group>
-                <group colspan="4">
-                    <group colspan="2">
-                        <separator string="Account's Sign Conventions" colspan="4"/>
-                        <label string="Please check the [ Account's Sign on Reports ] Section in the Company"/>
-<!--
-                        <button name="print_report" string="Print" type="object"/>
--->
-                    </group>
+                <group colspan='4'>
+                    <separator string="Account's Sign Conventions" colspan="4"/>
+                    <label string="Please check the [ Account's Sign on Reports ] Section in the Company"/>
+                </group>
+
+                <group colspan='4' col='4'>
                     <group colspan="2">
                         <separator string="Total" colspan="4"/>
                         <field name="tot_check" colspan="4"/>
                         <field name="lab_str" colspan="4" attrs="{'required':[('tot_check','=',True)], 'readonly':[('tot_check','=',False)],}" />
+                    </group>
+                    <group colspan="2">
+                        <separator string="" colspan="4"/>
+<!--
+                        <button 
+                            name="print_report" 
+                            string="Print" 
+                            type="object"
+                            icon='gtk-print'/>
+                        <button 
+                            type='special'
+                            special='cancel'
+                            string='_Cancel'
+                            icon='gtk-cancel'
+                        />
+-->
                     </group>
                 </group>
 
