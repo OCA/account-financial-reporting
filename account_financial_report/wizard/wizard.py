@@ -39,7 +39,7 @@ class wizard_report(osv.osv_memory):
         'company_id': fields.many2one('res.company','Company',required=True),
         'currency_id': fields.many2one('res.currency', 'Currency', help="Currency at which this report will be expressed. If not selected will be used the one set in the company"),
         'inf_type': fields.selection([('BS','Balance Sheet'),('IS','Income Statement')],'Type',required=True),
-        'columns': fields.selection([('one','End. Balance'),('two','Debit | Credit'), ('four','Initial | Debit | Credit | YTD'), ('five','Initial | Debit | Credit | Period | YTD'),('thirteen','12 Months | YTD')],'Columns',required=True),
+        'columns': fields.selection([('one','End. Balance'),('two','Debit | Credit'), ('four','Initial | Debit | Credit | YTD'), ('five','Initial | Debit | Credit | Period | YTD'),('qtr',"4 QTR's | YTD"),('thirteen','12 Months | YTD')],'Columns',required=True),
         'display_account': fields.selection([('all','All Accounts'),('bal', 'With Balance'),('mov','With movements'),('bal_mov','With Balance / Movements')],'Display accounts'),
         'display_account_level': fields.integer('Up to level',help='Display accounts up to this level (0 to show all)'),
         
@@ -192,6 +192,8 @@ class wizard_report(osv.osv_memory):
             name = 'afr.4cols'
         if data['form']['columns'] == 'five':
             name = 'afr.5cols'
+        if data['form']['columns'] == 'qtr':
+            name = 'afr.qtrcols'
         if data['form']['columns'] == 'thirteen':
             name = 'afr.13cols'
         
