@@ -76,11 +76,14 @@ class account_balance(report_sxw.rml_parse):
         """
         Returns the header text used on the report.
         """
+        afr_id = form['afr_id'] and type(form['afr_id']) in (list,tuple) and form['afr_id'][0] or form['afr_id']
+        if afr_id:
+            name = self.pool.get('afr').browse(self.cr, self.uid, afr_id).name
         inf_type = {
             'BS' : _('Balance Sheet'),
             'IS'   : _('Income Statement'),
         }
-        return inf_type[form['inf_type']]
+        return afr_id and name or inf_type[form['inf_type']]
 
     def get_month(self, form):
         '''
@@ -615,7 +618,7 @@ class account_balance(report_sxw.rml_parse):
                             bal3 = tot_bal3,
                             bal4 = tot_bal4,
                             bal5 = tot_bal5,))
-            if form['columns'] == 'thirteen':
+            elif form['columns'] == 'thirteen':
                 res2.update(dict(
                             bal1 = tot_bal1,
                             bal2 = tot_bal2,
