@@ -344,7 +344,7 @@ class account_balance(report_sxw.rml_parse):
             #
             # Check if we need to include this level
             #
-            if not form['display_account_level'] or account['level'] <= form['display_account_level']:
+            if not form['display_account_level'] or aa_id[3].level <= form['display_account_level']:
                 res = {
                 'id'        : id,
                 'type'      : aa_id[3].type,
