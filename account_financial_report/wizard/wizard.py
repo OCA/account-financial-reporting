@@ -109,6 +109,8 @@ class wizard_report(osv.osv_memory):
         res['value'].update({'fiscalyear':afr_brw.fiscalyear_id and afr_brw.fiscalyear_id.id})
         res['value'].update({'account_list':[acc.id for acc in afr_brw.account_ids]})
         res['value'].update({'periods':[p.id for p in afr_brw.period_ids]})
+        res['value'].update({'tot_check':afr_brw.tot_check or False})
+        res['value'].update({'lab_str':afr_brw.lab_str or _('Write a Description for your Summary Total')})
         return res
     
     def _get_defaults(self, cr, uid, data, context=None):
