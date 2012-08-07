@@ -6,12 +6,12 @@
             <pageGraphics>
                 <setFont name="Helvetica" size="9"/>
 
+                <image x="1.0cm" y="24.0cm" width="5.0cm">[[company.logo and company.logo or removeParentNode('image')]]</image>
 <!--
-                <image x="1.0cm" y="25.0cm" height="2.5cm" width="9.6cm">[[company.logo and company.logo or removeParentNode('image')]]</image>
                 <drawString x="1.0cm" y="24.5cm">[[company.logo and removeParentNode('para') or company.name]]</drawString> 
 -->
 
-                <place x="-3.5cm" y="41.0cm" width="19cm"  height="5.0cm"> 
+                <place x="-3.5cm" y="22.50cm" width="19cm"  height="5.0cm"> 
                     <blockTable colWidths="9.6cm,9.4cm" style="TITLE">
                         <tr>
                             <td><para style="TOP_TITLE"></para></td>
@@ -87,11 +87,11 @@
             <tr noRowsplits="1">
                 <td>
                     <para style="TITLE_LEFT_ALIGN">
-                    <font>Código</font>
+                    <font>CODE</font>
                     </para>
                 </td>
                 <td>
-                    <para style="TITLES">Cuenta</para>
+                    <para style="TITLES">ACCOUNT</para>
                 </td>
                 <td>
                     <para style="TITLE_LEFT_ALIGN">01</para>
@@ -130,7 +130,7 @@
                     <para style="TITLE_LEFT_ALIGN">12</para>
                 </td>
                 <td>
-                    <para style="TITLE_LEFT_ALIGN">13</para>
+                    <para style="TITLE_LEFT_ALIGN">YTD</para>
                 </td>
             </tr>
             <tr>
