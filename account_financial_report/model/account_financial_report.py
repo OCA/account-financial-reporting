@@ -79,4 +79,31 @@ class account_financial_report(osv.osv):
         defaults['name'] = new_name
         return super(account_financial_report,self).copy(cr, uid, id, defaults, context=context)
 
+
+    def onchange_columns(self,cr,uid,ids,columns,fiscalyear_id,period_ids,context=None):
+        if context is None:
+            context = {}
+        res = {'value':{}}
+        if columns in ('qtr', 'thirteen'):
+            p_obj = self.pool.get("account.period")
+            period_ids = p_obj.search(cr,uid,[('fiscalyear_id','=',fiscalyear_id),('special','=',False)],context=context)
+            res['value'].update({'period_ids':period_ids})
+        else:
+            res['value'].update({'period_ids':[]})
+        return res
+        
+    def onchange_company_id(self,cr,uid,ids,company_id,context=None):
+        if context is None:
+            context = {}
+        context['company_id']=company_id
+        res = {'value':{}}
+        cur_id = self.pool.get('res.company').browse(cr,uid,company_id,context=context).currency_id.id
+        fy_id = self.pool.get('account.fiscalyear').find(cr, uid,context=context)
+        res['value'].update({'fiscalyear_id':fy_id})
+        res['value'].update({'currency_id':cur_id})
+        res['value'].update({'account_ids':[]})
+        res['value'].update({'period_ids':[]})
+        return res
+
+
 account_financial_report()
