@@ -41,6 +41,7 @@
                                 <field name='code'/>
                                 <field name='name'/>
                                 <field name='type'/>
+                                <field name='level'/>
                             </tree>
                         </field>
                     </group>
@@ -51,7 +52,7 @@
                             colspan="4" 
                             nolabel="1" 
                             domain="[('fiscalyear_id','=',fiscalyear),('special','=',False),('company_id','=',company_id)]"
-                             attrs="{'readonly':[('columns','=','thirteen')],}" 
+                             attrs="{'readonly':[('columns','in',('qtr','thirteen'))],}" 
                              >
                         
                             <tree>

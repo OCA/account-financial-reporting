@@ -73,12 +73,12 @@ class wizard_report(osv.osv_memory):
         if context is None:
             context = {}
         res = {'value':{}}
-        if columns=='thirteen':
+        if columns in ('qtr', 'thirteen'):
             p_obj = self.pool.get("account.period")
             periods = p_obj.search(cr,uid,[('fiscalyear_id','=',fiscalyear),('special','=',False)],context=context)
             res['value'].update({'periods':periods})
         else:
-            res['value'].update({'periods':periods})
+            res['value'].update({'periods':[]})
         return res
         
     def onchange_company_id(self,cr,uid,ids,company_id,context=None):
