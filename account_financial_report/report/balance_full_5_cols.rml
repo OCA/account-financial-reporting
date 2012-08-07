@@ -6,8 +6,8 @@
             <pageGraphics>
                 <setFont name="Helvetica" size="9"/>
 
+                <image x="1.0cm" y="24.0cm" width="5.0cm">[[company.logo and company.logo or removeParentNode('image')]]</image>
 <!--
-                <image x="1.0cm" y="25.0cm" height="2.5cm" width="9.6cm">[[company.logo and company.logo or removeParentNode('image')]]</image>
                 <drawString x="1.0cm" y="24.5cm">[[company.logo and removeParentNode('para') or company.name]]</drawString> 
 -->
 
