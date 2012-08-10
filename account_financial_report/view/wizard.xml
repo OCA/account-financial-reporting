@@ -118,7 +118,7 @@
         
         <menuitem 
             id="menu_wizard_report"
-            name="Reporte Balance (Multireportes)"
+            name="Account Financial Report (Multireports)"
             parent="account.final_accounting_reports"
             sequence="99"
             groups="account_financial_report.group_afreport"
