@@ -46,6 +46,8 @@ class account_financial_report(osv.osv):
         'fiscalyear_id': fields.many2one('account.fiscalyear','Fiscal year',help='Fiscal Year for this report',required=True),
         'period_ids': fields.many2many('account.period','afr_period_rel','afr_id','period_id','Periods',help='All periods in the fiscal year if empty'),
         
+        'analytic_ledger': fields.boolean('Analytic Ledger', help="Allows to Generate an Analytic Ledger for accounts with moves. Available when Balance Sheet and 'Initial | Debit | Credit | YTD' are selected"),
+        
         'tot_check': fields.boolean('Summarize?', help='Checking will add a new line at the end of the Report which will Summarize Columns in Report'),
         'lab_str': fields.char('Description', help='Description for the Summary', size= 128),
         
@@ -90,6 +92,15 @@ class account_financial_report(osv.osv):
             res['value'].update({'period_ids':period_ids})
         else:
             res['value'].update({'period_ids':[]})
+        return res
+        
+    def onchange_analytic_ledger(self,cr,uid,ids,company_id,analytic_ledger,context=None):
+        if context is None:
+            context = {}
+        context['company_id']=company_id
+        res = {'value':{}}
+        cur_id = self.pool.get('res.company').browse(cr,uid,company_id,context=context).currency_id.id
+        res['value'].update({'currency_id':cur_id})
         return res
         
     def onchange_company_id(self,cr,uid,ids,company_id,context=None):
