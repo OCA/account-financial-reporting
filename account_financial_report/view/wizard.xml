@@ -20,7 +20,11 @@
                     <group colspan="2">
                         <separator string="Report Info" colspan="4"/>
                         <field name="afr_id"  on_change='onchange_afr_id(afr_id)'  colspan="4"/>
-                        <field name="inf_type" colspan="4"/>
+                        <field 
+                            name="inf_type" 
+                            colspan="4"
+                            on_change='onchange_inf_type(inf_type)'
+                            />
                         <field name="columns" on_change='onchange_columns(columns,fiscalyear,periods)' colspan="4"/>
                         <field name="analytic_ledger" colspan="4" 
                         attrs="{'readonly':['|',('columns','!=','four'),('inf_type','!=','BS')],}" 

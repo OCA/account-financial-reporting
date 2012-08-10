@@ -71,6 +71,16 @@ class wizard_report(osv.osv_memory):
         'columns': lambda *a:'five',
     }
 
+    def onchange_inf_type(self,cr,uid,ids,inf_type,context=None):
+        if context is None:
+            context = {}
+        res = {'value':{}}
+        
+        if inf_type != 'BS':
+            res['value'].update({'analytic_ledger':False})
+        
+        return res
+
     def onchange_columns(self,cr,uid,ids,columns,fiscalyear,periods,context=None):
         if context is None:
             context = {}
@@ -82,6 +92,8 @@ class wizard_report(osv.osv_memory):
         t = set(all_periods)
         go = periods[0][2] and s.issubset(t) or False
         
+        if columns != 'four':
+            res['value'].update({'analytic_ledger':False})
         
         if columns in ('qtr', 'thirteen'):
             res['value'].update({'periods':all_periods})

@@ -81,11 +81,24 @@ class account_financial_report(osv.osv):
         defaults['name'] = new_name
         return super(account_financial_report,self).copy(cr, uid, id, defaults, context=context)
 
+    def onchange_inf_type(self,cr,uid,ids,inf_type,context=None):
+        if context is None:
+            context = {}
+        res = {'value':{}}
+        
+        if inf_type != 'BS':
+            res['value'].update({'analytic_ledger':False})
+        
+        return res
 
     def onchange_columns(self,cr,uid,ids,columns,fiscalyear_id,period_ids,context=None):
         if context is None:
             context = {}
         res = {'value':{}}
+        
+        if columns != 'four':
+            res['value'].update({'analytic_ledger':False})
+        
         if columns in ('qtr', 'thirteen'):
             p_obj = self.pool.get("account.period")
             period_ids = p_obj.search(cr,uid,[('fiscalyear_id','=',fiscalyear_id),('special','=',False)],context=context)
