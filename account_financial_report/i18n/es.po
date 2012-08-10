@@ -6,13 +6,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-10 22:55+0000\n"
-"PO-Revision-Date: 2012-08-10 18:27-0400\n"
-"Last-Translator: Humberto Arocha <hbto@vauxoo.com>\n"
+"POT-Creation-Date: 2012-08-10 23:02+0000\n"
+"PO-Revision-Date: 2012-08-10 23:02+0000\n"
+"Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
 #. module: account_financial_report
@@ -154,19 +154,12 @@ msgstr "CREDITO"
 
 #. module: account_financial_report
 #: model:ir.actions.act_window,help:account_financial_report.account_financial_report_action
-msgid ""
-"\n"
+msgid "\n"
 "            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut nunc magna. Vivamus felis sem, mattis vel consequat pharetra, adipiscing ut erat. In accumsan fermentum ullamcorper. Cras vitae sem magna, pellentesque condimentum metus. Cras at sem quis lectus vehicula adipiscing. Vivamus in urna ipsum, sed molestie magna. Nam ullamcorper arcu condimentum leo ultrices egestas. Nullam ut tincidunt orci. Proin sollicitudin luctus risus sit amet mattis. Duis eget risus non enim pharetra dignissim. Mauris eros eros, fringilla et interdum non, aliquam at orci.\n"
 "            "
-msgstr ""
-"\n"
+msgstr "\n"
 "            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut nunc magna. Vivamus felis sem, mattis vel consequat pharetra, adipiscing ut erat. In accumsan fermentum ullamcorper. Cras vitae sem magna, pellentesque condimentum metus. Cras at sem quis lectus vehicula adipiscing. Vivamus in urna ipsum, sed molestie magna. Nam ullamcorper arcu condimentum leo ultrices egestas. Nullam ut tincidunt orci. Proin sollicitudin luctus risus sit amet mattis. Duis eget risus non enim pharetra dignissim. Mauris eros eros, fringilla et interdum non, aliquam at orci.\n"
 "            "
-
-#. module: account_financial_report
-#: model:ir.ui.menu,name:account_financial_report.menu_wizard_report
-msgid "Reporte Balance (Multireportes)"
-msgstr "Reporte Balance (Multireportes)"
 
 #. module: account_financial_report
 #: view:res.company:0
@@ -416,6 +409,7 @@ msgstr "Por Período"
 
 #. module: account_financial_report
 #: model:ir.actions.act_window,name:account_financial_report.action_wizard_report
+#: model:ir.ui.menu,name:account_financial_report.menu_wizard_report
 msgid "Account Financial Report (Multireports)"
 msgstr "Reportes Financieros (Multireportes)"
 
