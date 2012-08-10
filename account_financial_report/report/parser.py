@@ -94,7 +94,7 @@ class account_balance(report_sxw.rml_parse):
             mes = months[time.strptime(form['date_to'],"%Y-%m-%d")[1]-1]
             ano = time.strptime(form['date_to'],"%Y-%m-%d")[0]
             dia = time.strptime(form['date_to'],"%Y-%m-%d")[2]
-            return 'Período del '+self.formatLang(form['date_from'], date=True)+' al '+self.formatLang(form['date_to'], date=True)
+            return _('From ')+self.formatLang(form['date_from'], date=True)+ _(' to ')+self.formatLang(form['date_to'], date=True)
         elif form['filter'] in ['byperiod', 'all']:
             aux=[]
             period_obj = self.pool.get('account.period')
@@ -103,7 +103,7 @@ class account_balance(report_sxw.rml_parse):
                 aux.append(period.date_start)
                 aux.append(period.date_stop)
             sorted(aux)
-            return _('Período del ')+self.formatLang(aux[0], date=True)+_(' al ')+self.formatLang(aux[-1], date=True)
+            return _('From ')+self.formatLang(aux[0], date=True)+_(' to ')+self.formatLang(aux[-1], date=True)
 
     def get_periods_and_date_text(self, form):
         """
@@ -186,7 +186,6 @@ class account_balance(report_sxw.rml_parse):
             self.cr.execute(sql_detalle)
             resultat = self.cr.dictfetchall()
             balance = account['balanceinit']
-            #~ print balance
             for det in resultat:
                 balance += det['debit'] - det['credit']
                 res.append({
@@ -600,9 +599,7 @@ class account_balance(report_sxw.rml_parse):
                 
                 #~ ANALYTIC LEDGER
                 if to_include and form['analytic_ledger'] and form['columns']=='four' and form['inf_type'] == 'BS' and res['type'] in ('other','liquidity','receivable','payable'):
-                    print 'MAYOR ANALITICO'
                     res['mayor'] = self._get_analytic_ledger(res,ctx=ctx_end)
-                    print "res['mayor'] ", res['mayor']
                 else:
                     res['mayor'] = []
                 
