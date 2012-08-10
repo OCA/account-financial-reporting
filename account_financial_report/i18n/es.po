@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-10 16:47+0000\n"
-"PO-Revision-Date: 2012-08-10 17:35-0400\n"
+"POT-Creation-Date: 2012-08-10 22:55+0000\n"
+"PO-Revision-Date: 2012-08-10 18:27-0400\n"
 "Last-Translator: Humberto Arocha <hbto@vauxoo.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -132,11 +132,12 @@ msgid "Company Info"
 msgstr "Información de la Compañía"
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/parser.py:342
 #: code:addons/account_financial_report/wizard/wizard.py:185
 #: code:addons/account_financial_report/wizard/wizard.py:189
 #, python-format
 msgid "UserError"
-msgstr "Error de Usuario"
+msgstr "UserError"
 
 #. module: account_financial_report
 #: report:afr.analytic.ledger:0
@@ -219,7 +220,7 @@ msgstr "INICIAL"
 #. module: account_financial_report
 #: constraint:res.company:0
 msgid "Error! You can not create recursive companies."
-msgstr "Error! Usted no puede crear empresas recursiva."
+msgstr "¡Error! No se pueden crear compañías recursivas."
 
 #. module: account_financial_report
 #: field:wizard.report,afr_id:0
@@ -317,6 +318,12 @@ msgstr "Cuentas Acreditables"
 #: view:wizard.report:0
 msgid "_Cancel"
 msgstr "_Cancelar"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/parser.py:342
+#, python-format
+msgid "The Selected Fiscal Year Does not have Regular Periods"
+msgstr "El Ejercicio Fiscal Seleccionado no tiene Períodos Regulares"
 
 #. module: account_financial_report
 #: report:afr.13cols:0
