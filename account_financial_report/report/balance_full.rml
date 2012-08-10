@@ -21,7 +21,7 @@
                         </tr>
                         <tr>
                             <td><para style="TOP_TITLE"></para></td>
-                            <td><para style="TITLE_CENTER">[[data['form'] and (' (Expresado en %s)'%( exchange_name(data['form']))) or '']]</para></td>
+                            <td><para style="TITLE_CENTER">[[data['form'] and (' (Expressed in %s)'%( exchange_name(data['form']))) or '']]</para></td>
                         </tr>
                         <tr>
                             <td><para style="TOP_TITLE"></para></td>
