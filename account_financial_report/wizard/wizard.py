@@ -75,12 +75,21 @@ class wizard_report(osv.osv_memory):
         if context is None:
             context = {}
         res = {'value':{}}
+        
+        p_obj = self.pool.get("account.period")
+        all_periods = p_obj.search(cr,uid,[('fiscalyear_id','=',fiscalyear),('special','=',False)],context=context)
+        s = set(periods[0][2])
+        t = set(all_periods)
+        go = periods[0][2] and s.issubset(t) or False
+        
+        
         if columns in ('qtr', 'thirteen'):
-            p_obj = self.pool.get("account.period")
-            periods = p_obj.search(cr,uid,[('fiscalyear_id','=',fiscalyear),('special','=',False)],context=context)
-            res['value'].update({'periods':periods})
+            res['value'].update({'periods':all_periods})
         else:
-            res['value'].update({'periods':[]})
+            if go:
+                res['value'].update({'periods':periods})
+            else:
+                res['value'].update({'periods':[]})
         return res
         
     def onchange_analytic_ledger(self,cr,uid,ids,company_id,analytic_ledger,context=None):
@@ -120,6 +129,7 @@ class wizard_report(osv.osv_memory):
         res['value'].update({'fiscalyear':afr_brw.fiscalyear_id and afr_brw.fiscalyear_id.id})
         res['value'].update({'account_list':[acc.id for acc in afr_brw.account_ids]})
         res['value'].update({'periods':[p.id for p in afr_brw.period_ids]})
+        res['value'].update({'analytic_ledger':afr_brw.analytic_ledger or False})
         res['value'].update({'tot_check':afr_brw.tot_check or False})
         res['value'].update({'lab_str':afr_brw.lab_str or _('Write a Description for your Summary Total')})
         return res
