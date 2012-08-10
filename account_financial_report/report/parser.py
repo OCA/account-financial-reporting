@@ -163,8 +163,9 @@ class account_balance(report_sxw.rml_parse):
         if account['type'] in ('other','liquidity','receivable','payable'):
             #~ TODO: CUANDO EL PERIODO ESTE VACIO LLENARLO CON LOS PERIODOS DEL EJERCICIO
             #~ FISCAL, SIN LOS PERIODOS ESPECIALES
-            periods = str(tuple(ctx['periods']))
-            where = """where aml.period_id in %s and aa.id = %s and aml.state <> 'draft'"""%(periods,account['id'])
+            periods = ', '.join([str(i) for i in ctx['periods']])
+            #~ periods = str(tuple(ctx['periods']))
+            where = """where aml.period_id in (%s) and aa.id = %s and aml.state <> 'draft'"""%(periods,account['id'])
 
             sql_detalle = """select aml.id as id, aj.name as diario, aa.name as descripcion,
                 (select name from res_partner where aml.partner_id = id) as partner,
@@ -173,14 +174,14 @@ class account_balance(report_sxw.rml_parse):
                 case when aml.debit is null then 0.00 else aml.debit end as debit, 
                 case when aml.credit is null then 0.00 else aml.credit end as credit,
                 (select code from account_analytic_account where  aml.analytic_account_id = id) as analitica,
-                aml.date as fecha, ap.name as periodo,
+                aml.date as date, ap.name as periodo,
                 am.name as asiento
                 from account_move_line aml
                 inner join account_journal aj on aj.id = aml.journal_id
                 inner join account_account aa on aa.id = aml.account_id
                 inner join account_period ap on ap.id = aml.period_id
                 inner join account_move am on am.id = aml.move_id """ + where +\
-                """ order by fecha"""
+                """ order by date, am.name"""
 
             self.cr.execute(sql_detalle)
             resultat = self.cr.dictfetchall()
@@ -190,7 +191,7 @@ class account_balance(report_sxw.rml_parse):
                 balance += det['debit'] - det['credit']
                 res.append({
                     'id': det['id'],
-                    'date': det['fecha'],
+                    'date': det['date'],
                     'journal':det['diario'],
                     'partner':det['partner'],
                     'name':det['name'],
@@ -335,7 +336,9 @@ class account_balance(report_sxw.rml_parse):
         #
         
         tot_check = False
-
+        
+        if not form['periods']:
+            form['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('special','=',False)],order='date_start asc')
 
         if form['columns'] == 'qtr':
             period_ids = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('special','=',False)],order='date_start asc')
@@ -597,7 +600,11 @@ class account_balance(report_sxw.rml_parse):
                 
                 #~ ANALYTIC LEDGER
                 if to_include and form['analytic_ledger'] and form['columns']=='four' and form['inf_type'] == 'BS' and res['type'] in ('other','liquidity','receivable','payable'):
+                    print 'MAYOR ANALITICO'
                     res['mayor'] = self._get_analytic_ledger(res,ctx=ctx_end)
+                    print "res['mayor'] ", res['mayor']
+                else:
+                    res['mayor'] = []
                 
                 
                 if to_include:
