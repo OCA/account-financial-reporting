@@ -34,7 +34,7 @@ import datetime
 from report import report_sxw
 from tools import config
 from tools.translate import _
-
+from osv import osv
 class account_balance(report_sxw.rml_parse):
 
     def __init__(self, cr, uid, name, context):
@@ -338,6 +338,8 @@ class account_balance(report_sxw.rml_parse):
         
         if not form['periods']:
             form['periods'] = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('special','=',False)],order='date_start asc')
+            if not form['periods']:
+                raise osv.except_osv(_('UserError'),'The Selected Fiscal Year Does not have Regular Periods')
 
         if form['columns'] == 'qtr':
             period_ids = period_obj.search(self.cr, self.uid, [('fiscalyear_id','=',fiscalyear.id),('special','=',False)],order='date_start asc')
