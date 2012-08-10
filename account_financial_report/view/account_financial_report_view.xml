@@ -15,12 +15,19 @@
                     <group colspan="2">
                         <separator string="Company Info" colspan="4"/>
                         <field name="company_id" on_change='onchange_company_id(company_id)' colspan="4"/>
-                        <field name="currency_id" domain="[('company_id','=',company_id)]" colspan="4"/>
+                        <field name="currency_id" 
+                        domain="[('company_id','=',company_id)]" 
+                        attrs="{'readonly':[('analytic_ledger','=',True)]}" 
+                        colspan="4"/>
                     </group>
                     <group colspan="2">
                         <separator string="Report Info" colspan="4"/>
                         <field name="inf_type" colspan="4"/>
                         <field name="columns" on_change='onchange_columns(columns,fiscalyear_id,period_ids)' colspan="4"/>
+                        <field name="analytic_ledger" colspan="4"
+                        attrs="{'readonly':['|',('columns','!=','four'),('inf_type','!=','BS')],}" 
+                        on_change='onchange_analytic_ledger(company_id,analytic_ledger)'
+                        />
                     </group>
                 </group>
                 <group colspan='4'>

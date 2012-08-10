@@ -34,6 +34,17 @@
             string="Balance 4 Columnas"
             header="False"
         />
+        
+        <report 
+            auto="False"
+            id="analytic_ledger_report"
+            menu="True"
+            model="wizard.report"
+            name="afr.analytic.ledger"
+            rml="account_financial_report/report/balance_full_4_cols_analytic_ledger.rml"
+            string="Analytic Ledger"
+            header="False"
+        />
 
         <report 
             auto="False"

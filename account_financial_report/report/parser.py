@@ -155,7 +155,55 @@ class account_balance(report_sxw.rml_parse):
             return [brw.id for brw in rc_obj.browse(self.cr, self.uid, company_id).credit_account_ids]
         else:
             return [brw.id for brw in rc_obj.browse(self.cr, self.uid, company_id).debit_account_ids]
-    
+
+
+    def _get_analytic_ledger(self, account, ctx={}):
+        res = []
+
+        if account['type'] in ('other','liquidity','receivable','payable'):
+            #~ TODO: CUANDO EL PERIODO ESTE VACIO LLENARLO CON LOS PERIODOS DEL EJERCICIO
+            #~ FISCAL, SIN LOS PERIODOS ESPECIALES
+            periods = str(tuple(ctx['periods']))
+            where = """where aml.period_id in %s and aa.id = %s and aml.state <> 'draft'"""%(periods,account['id'])
+
+            sql_detalle = """select aml.id as id, aj.name as diario, aa.name as descripcion,
+                (select name from res_partner where aml.partner_id = id) as partner,
+                aa.code as cuenta, aml.name as name,
+                aml.ref as ref,
+                case when aml.debit is null then 0.00 else aml.debit end as debit, 
+                case when aml.credit is null then 0.00 else aml.credit end as credit,
+                (select code from account_analytic_account where  aml.analytic_account_id = id) as analitica,
+                aml.date as fecha, ap.name as periodo,
+                am.name as asiento
+                from account_move_line aml
+                inner join account_journal aj on aj.id = aml.journal_id
+                inner join account_account aa on aa.id = aml.account_id
+                inner join account_period ap on ap.id = aml.period_id
+                inner join account_move am on am.id = aml.move_id """ + where +\
+                """ order by fecha"""
+
+            self.cr.execute(sql_detalle)
+            resultat = self.cr.dictfetchall()
+            balance = account['balanceinit']
+            #~ print balance
+            for det in resultat:
+                balance += det['debit'] - det['credit']
+                res.append({
+                    'id': det['id'],
+                    'date': det['fecha'],
+                    'journal':det['diario'],
+                    'partner':det['partner'],
+                    'name':det['name'],
+                    'entry':det['asiento'],
+                    'ref': det['ref'],
+                    'debit': det['debit'],
+                    'credit': det['credit'],
+                    'analytic': det['analitica'],
+                    'period': det['periodo'],
+                    'balance': balance,
+                })
+        return res
+
     def lines(self, form, level=0):
         """
         Returns all the data needed for the report lines
@@ -546,7 +594,12 @@ class account_balance(report_sxw.rml_parse):
                     else:
                         # Include all accounts
                         to_include = True
-                    
+                
+                #~ ANALYTIC LEDGER
+                if to_include and form['analytic_ledger'] and form['columns']=='four' and form['inf_type'] == 'BS' and res['type'] in ('other','liquidity','receivable','payable'):
+                    res['mayor'] = self._get_analytic_ledger(res,ctx=ctx_end)
+                
+                
                 if to_include:
                     result_acc.append(res)
                     #
@@ -647,6 +700,12 @@ report_sxw.report_sxw('report.afr.2cols',
 report_sxw.report_sxw('report.afr.4cols', 
                       'wizard.report', 
                       'account_financial_report/report/balance_full_4_cols.rml',
+                       parser=account_balance, 
+                       header=False)
+
+report_sxw.report_sxw('report.afr.analytic.ledger', 
+                      'wizard.report', 
+                      'account_financial_report/report/balance_full_4_cols_analytic_ledger.rml',
                        parser=account_balance, 
                        header=False)
                        
