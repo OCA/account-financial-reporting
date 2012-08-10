@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
 <document filename="test.pdf">
-    <template pageSize="(21.59cm,27.94cm)" title="Test" author="Martin Simon" allowSplitting="20" showBoundary="0">
+    <template pageSize="(27.94cm,21.59cm)" title="Test" author="Martin Simon" allowSplitting="20" showBoundary="0">
         <pageTemplate id="first">
-            <frame id="first" x1="0.5cm" y1="1.0cm" width="20.5cm" height="23cm"/>
+            <frame id="first" x1="1.0cm" y1="1.0cm" width="26.0cm" height="16.65cm"/>
             <pageGraphics>
                 <setFont name="Helvetica" size="9"/>
 
-                <image x="1.0cm" y="24.0cm" width="5.0cm">[[company.logo and company.logo or removeParentNode('image')]]</image>
+                <image x="1.0cm" y="17.65cm" width="5.0cm">[[company.logo and company.logo or removeParentNode('image')]]</image>
 <!--
                 <drawString x="1.0cm" y="24.5cm">[[company.logo and removeParentNode('para') or company.name]]</drawString> 
 -->
 
-                <place x="-3.5cm" y="22.50cm" width="19cm"  height="5.0cm"> 
+                <place x="-3.5cm" y="16.15cm" width="19cm"  height="5.0cm"> 
                     <blockTable colWidths="9.6cm,9.4cm" style="TITLE">
                         <tr>
                             <td><para style="TOP_TITLE"></para></td>
@@ -34,7 +34,7 @@
                         </tr>
                     </blockTable>
                 </place>
-                <drawRightString x="192mm" y="5mm">[[ get_informe_text(data['form']) ]] /  Pág.: <pageNumber/>-<pageCount/> </drawRightString> 
+                <drawRightString x="270mm" y="5mm"> Pag.: <pageNumber/></drawRightString> 
             </pageGraphics>
 
         </pageTemplate>
@@ -45,7 +45,7 @@
             <blockAlignment value="RIGHT"/>
             <blockTopPadding length="1.0"/>
             <blockBottomPadding length="1.0"/>
-            <lineStyle kind="LINEABOVE" colorName="#e6e6e6" start="0,1" stop="-1,-1" thickness='0.25'/>
+            <lineStyle kind="LINEBELOW" colorName="#e6e6e6" start="0,0" stop="-1,-1" thickness='0.25'/>
         </blockTableStyle>
         <blockTableStyle id="TITLE">
             <blockValign value="TOP"/>
@@ -55,7 +55,7 @@
             <blockAlignment value="RIGHT"/>
             <blockTopPadding length="1.0"/>
             <blockBottomPadding length="1.0"/>
-            <lineStyle kind="LINEBELOW" colorName="#e6e6e6" start="0,1" stop="-1,-1" thickness='0.25'/>
+            <lineStyle kind="LINEBELOW" colorName="darkgrey" start="0,0" stop="-1,-1" thickness='0.25'/>
         </blockTableStyle>
         <blockTableStyle id="BODY_STRIKE">
             <blockValign value="TOP"/>
@@ -92,22 +92,37 @@
         <paraStyle 
             name="TITLE_LEFT_ALIGN" 
             fontName="Helvetica-Bold" 
-            fontSize="6.0" 
+            fontSize="7.0" 
             leading="10" 
             alignment="RIGHT" 
             spaceBefore="0.0" 
             spaceAfter="0.0"/>
         <paraStyle name="TOP_TITLE" fontName="Helvetica-Bold" fontSize="7"  leftIndent="0.0" alignment="LEFT"/>
-        <paraStyle name="TITLES" fontName="Helvetica-Bold" fontSize="6.0" leading="10" alignment="LEFT"  spaceBefore="0.0" spaceAfter="0.0"/>
+        <paraStyle 
+            name="TITLES" 
+            fontName="Helvetica-Bold" 
+            fontSize="7.0" 
+            leading="10" 
+            alignment="LEFT"  
+            spaceBefore="0.0" 
+            spaceAfter="0.0"/>
         <paraStyle name="TITLE_CENTER" fontName="Helvetica-Bold" fontSize="7" leading="10" leftIndent="0.0" alignment="CENTER"/>
         <paraStyle name="TITLE_CENTER_NAME" fontName="Helvetica-Bold" fontSize="12" leading="13" leftIndent="0.0" alignment="CENTER"/>
-        <paraStyle name="TITLE" alignment="CENTER" fontName="Helvetica" fontSize="18.0" leading="20" spaceBefore="-3.0" textColor="black"/>
+        <paraStyle 
+            name="TITLE" 
+            alignment="CENTER" 
+            fontName="Helvetica" 
+            fontSize="18.0" 
+            leading="20" 
+            spaceBefore="-3.0" 
+            textColor="black"/>
     </stylesheet>
     <images/>
     <story>
         <para>[[setLang(user.context_lang)]]</para>
-        <blockTable colWidths="2.5cm,6.5cm,2.5cm,3.5cm,3.5cm,2.5cm" style="BODY" repeatRows="1">
-            <tr noRowsplits="1">
+
+        <blockTable colWidths="2.5cm,13.5cm,2.5cm,2.5cm,2.5cm,2.5cm" style="BODY" repeatRows="0">
+            <tr noRowsplits="0">
                 <td>
                     <para style="TITLE_LEFT_ALIGN">
                     <font>CODE</font>
@@ -129,40 +144,85 @@
                     <para style="TITLE_LEFT_ALIGN">BALANCE</para>
                 </td>
             </tr>
+        </blockTable>
+
+                <blockTable colWidths="2.25cm,2.0cm,7.75cm,2.5cm,4.0cm,2.5cm,2.5cm,2.5cm" style="BODY_LINE" repeatRows="1">
+<!--
+                [[ (a['type'] &lt;&gt; 'view') or removeParentNode('blockTable') ]]
+-->
+                    <tr noRowsplits="1">
+                        <td>
+                            <para style="TITLES_NEW">
+                                <font>DATE</font>
+                            </para>
+                        </td>
+                        <td>
+                            <para style="TITLES_NEW">
+                                <font>PERIOD</font>
+                            </para>
+                        </td>
+                        <td>
+                            <para style="TITLES_NEW">REFERENCE</para>
+                        </td>
+                        <td>
+                            <para style="TITLES_NEW">JOURNAL ENTRY</para>
+                        </td>
+                        <td>
+                            <para style="TITLES_NEW">PARTNER</para>
+                        </td>
+                        <td>
+                            <para style="TITLE_LEFT_ALIGN"></para>
+                        </td>
+                        <td>
+                            <para style="TITLE_LEFT_ALIGN"></para>
+                        </td>
+                        <td>
+                            <para style="TITLE_LEFT_ALIGN"></para>
+                        </td>
+                    </tr>
+                </blockTable>
+
+
+
+        
+        
+    <section>
+        <para>[[ repeatIn([x for x in lines(data['form']) if x['type'] != 'view'], 'a') ]]</para>
+        <blockTable colWidths="2.5cm,13.5cm,2.5cm,2.5cm,2.5cm,2.5cm" style="BODY" repeatRows="0">
             <tr>
                 <td>
-                    <para style="TITLE_LEFT_ALIGN">[[ repeatIn(lines(data['form']), 'a') ]]
-                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                    <para style="TITLE_LEFT_ALIGN">
+                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier-Bold"}) or removeParentNode('font') ]]</font>
                         <i>[[a['label']==True and a['code'] or ''  ]]</i>
                     </para>
                 </td>
                 <td>
                     <para style="TITLES">
-                        <font>[[ ((a['total'] and not a['label']) and setTag('para','para',{'alignment':"RIGHT"}) or (a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}))) or removeParentNode('font') ]]</font>
+                        <font>[[ ((a['total'] and not a['label']) and setTag('para','para',{'alignment':"RIGHT"}) or (a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier-Bold"}))) or removeParentNode('font') ]]</font>
                         <font>[[ a['type']=='view' and  a['name'].upper() or a['name'].title() ]]</font>
                     </para>
                 </td>
                 <td>
                     <para style="TITLE_LEFT_ALIGN">
-                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier-Bold"}) or removeParentNode('font') ]]</font>
                         <font>[[ (a['total']==True) and formatLang(a['balanceinit'] and a['balanceinit'] * a.get('change_sign') or 0.0, digits=2, grouping=True)  or '']]</font>
                     </para>
                 </td>
                 <td>
                     <para style="TITLE_LEFT_ALIGN">
-                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier-Bold"}) or removeParentNode('font') ]]</font>
                         <font>[[ (a['total']==True) and formatLang(a['debit'], digits=2, grouping=True) or '']]</font>
                     </para>
                 </td>
                 <td>
                     <para style="TITLE_LEFT_ALIGN">
-                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier-Bold"}) or removeParentNode('font') ]]</font>
                         <font>[[ (a['total']==True) and formatLang(a['credit'], digits=2, grouping=True) or '']]</font>
                     </para>
                 </td>
                 <td>
                     <para style="TITLE_LEFT_ALIGN">
-                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier-Bold"}) or removeParentNode('font') ]]</font>
                         <font>[[ (a['total']==True) and formatLang(a['balance'] and a['balance'] * a.get('change_sign') or 0.0, digits=2, grouping=True) or '']]</font>
                     </para>
                 </td>
@@ -170,42 +230,19 @@
         </blockTable>
 
         <section>
-                <blockTable colWidths="4.0cm,7.0cm,3.0cm,3.0cm,3.0cm,3.0cm,3.0cm" style="BODY_LINE" repeatRows="1">
+            <para>[[ repeatIn(a['mayor'], 'm') ]]</para>
+                <blockTable colWidths="2.25cm,2.0cm,7.75cm,2.5cm,4.0cm,2.5cm,2.5cm,2.5cm" style="BODY_LINE" repeatRows="1">
+<!--
                 [[ (a['type'] &lt;&gt; 'view') or removeParentNode('blockTable') ]]
-                    <tr noRowsplits="1">
-                        <td>
-                            <para style="TITLE_LEFT_ALIGN">
-                                <font>Date</font>
-                            </para>
-                            <para style="TITLE_LEFT_ALIGN">
-                                <font>Period</font>
-                            </para>
-                        </td>
-                        <td>
-                            <para style="TITLES">Reference</para>
-                        </td>
-                        <td>
-                            <para style="TITLE_LEFT_ALIGN">Journal Entry</para>
-                        </td>
-                        <td>
-                            <para style="TITLE_LEFT_ALIGN">Partner</para>
-                        </td>
-                        <td>
-                            <para style="TITLE_LEFT_ALIGN">Debit</para>
-                        </td>
-                        <td>
-                            <para style="TITLE_LEFT_ALIGN">Credit</para>
-                        </td>
-                        <td>
-                            <para style="TITLE_LEFT_ALIGN">Balance</para>
-                        </td>
-                    </tr>
+-->
                     <tr>
                         <td>
-                            <para style="TITLE_LEFT_ALIGN_NEW">[[ repeatIn(a['mayor'], 'm') ]]
-                                <font>[[ set_fecha(m['date']) ]]</font>
+                            <para style="TITLES_NEW">
+                                <font> [[ formatLang( m['date'], date=True) ]]</font>
                             </para>
-                            <para style="TITLE_LEFT_ALIGN_NEW">
+                        </td>
+                        <td>
+                            <para style="TITLES_NEW">
                                 <font>[[ m['period'] ]]</font>
                             </para>
                         </td>
@@ -215,37 +252,43 @@
                             </para>
                         </td>
                         <td>
-                            <para style="TITLE_LEFT_ALIGN_NEW">
+                            <para style="TITLES_NEW">
                                 <font>[[ m['entry'] ]]</font>
                             </para>
-                            <para style="TITLE_LEFT_ALIGN_NEW">
+<!--
+                            <para style="TITLES_NEW">
                                 <font>[[ m['journal'] ]]</font>
                             </para>
+-->
                         </td>
                         <td>
-                            <para style="TITLE_LEFT_ALIGN_NEW">
+                            <para style="TITLES_NEW">
                                 <font>[[ m['partner'] ]]</font>
                             </para>
                         </td>
                         <td>
-                            <para style="TITLE_LEFT_ALIGN_NEW">
-                                <font>[[ formatLang(m['debit'], digits=2) or '0,00' ]]</font>
-                            </para>
+                    <para style="TITLE_LEFT_ALIGN">
+                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                        <font>[[ (a['total']==True) and formatLang(m['debit'], digits=2, grouping=True) or '']]</font>
+                    </para>
                         </td>
                         <td>
-                            <para style="TITLE_LEFT_ALIGN_NEW">
-                                <font>[[ formatLang(m['credit'], digits=2) or '0,00' ]]</font>
-                            </para>
+                    <para style="TITLE_LEFT_ALIGN">
+                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                        <font>[[ (a['total']==True) and formatLang(m['credit'], digits=2, grouping=True) or '']]</font>
+                    </para>
                         </td>
                         <td>
-                            <para style="TITLE_LEFT_ALIGN_NEW">
-                                <font>[[ formatLang(m['balance'], digits=2) or '0,00' ]]</font>
-                            </para>
+                    <para style="TITLE_LEFT_ALIGN">
+                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                        <font>[[ (a['total']==True) and formatLang(m['balance'] and m['balance'] * a.get('change_sign') or 0.0, digits=2, grouping=True) or '']]</font>
+                    </para>
                         </td>
                     </tr>
                 </blockTable>
         </section>
-
+        <spacer length="2.5mm"/>
+    </section>
 
     </story>
 </document>
