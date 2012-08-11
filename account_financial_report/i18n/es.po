@@ -6,13 +6,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-11 02:05+0000\n"
-"PO-Revision-Date: 2012-08-11 02:05+0000\n"
-"Last-Translator: <>\n"
+"POT-Creation-Date: 2012-08-11 17:38+0000\n"
+"PO-Revision-Date: 2012-08-11 13:11-0400\n"
+"Last-Translator: Humberto Arocha <hbto@vauxoo.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
 
 #. module: account_financial_report
@@ -50,7 +50,7 @@ msgid "BALANCE"
 msgstr "BALANCE"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/parser.py:83
+#: code:addons/account_financial_report/report/parser.py:85
 #: selection:afr,inf_type:0
 #: selection:wizard.report,inf_type:0
 #, python-format
@@ -126,7 +126,7 @@ msgid "By Date"
 msgstr "Por Fecha"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/wizard/wizard.py:220
+#: code:addons/account_financial_report/wizard/wizard.py:238
 #, python-format
 msgid "La interseccion entre el periodo y fecha es vacio"
 msgstr "La interseccion entre el periodo y fecha es vacio"
@@ -138,7 +138,7 @@ msgid "Company Info"
 msgstr "Información de la Compañía"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/parser.py:342
+#: code:addons/account_financial_report/report/parser.py:345
 #: code:addons/account_financial_report/wizard/wizard.py:185
 #: code:addons/account_financial_report/wizard/wizard.py:189
 #, python-format
@@ -235,8 +235,8 @@ msgid "Accounts to Include"
 msgstr "Cuentas a incluir"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/parser.py:97
-#: code:addons/account_financial_report/report/parser.py:106
+#: code:addons/account_financial_report/report/parser.py:100
+#: code:addons/account_financial_report/report/parser.py:109
 #, python-format
 msgid " to "
 msgstr " hasta "
@@ -309,7 +309,7 @@ msgid "Creditable Accounts"
 msgstr "Cuentas Acreditables"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/parser.py:342
+#: code:addons/account_financial_report/report/parser.py:345
 #, python-format
 msgid "The Selected Fiscal Year Does not have Regular Periods"
 msgstr "El Ejercicio Fiscal Seleccionado no tiene Períodos Regulares"
@@ -433,7 +433,7 @@ msgid "Fiscal Year for this report"
 msgstr "Ejercicio Fiscal para este reporte"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/parser.py:84
+#: code:addons/account_financial_report/report/parser.py:87
 #: selection:afr,inf_type:0
 #: selection:wizard.report,inf_type:0
 #, python-format
@@ -560,8 +560,8 @@ msgid "Keep sign on Reports for these accounts and children accounts that are wi
 msgstr "Mantiene el signo en los reportes para estas cuentas y las cuentas hijas que están dentro de las Cuentas Acreditables"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/parser.py:97
-#: code:addons/account_financial_report/report/parser.py:106
+#: code:addons/account_financial_report/report/parser.py:100
+#: code:addons/account_financial_report/report/parser.py:109
 #, python-format
 msgid "From "
 msgstr "Desde "
@@ -610,9 +610,11 @@ msgid "Name"
 msgstr "Nombre"
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/parser.py:83
 #: field:afr,analytic_ledger:0
 #: model:ir.actions.report.xml,name:account_financial_report.analytic_ledger_report
 #: field:wizard.report,analytic_ledger:0
+#, python-format
 msgid "Analytic Ledger"
 msgstr "Mayor Analítico"
 
@@ -630,7 +632,7 @@ msgstr "Todos los períodos en el ejercicio fiscal si se deja vacío"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/wizard/wizard.py:175
-#: code:addons/account_financial_report/wizard/wizard.py:220
+#: code:addons/account_financial_report/wizard/wizard.py:238
 #, python-format
 msgid "Error !"
 msgstr "Error !"

@@ -80,7 +80,7 @@ class account_balance(report_sxw.rml_parse):
         if afr_id:
             name = self.pool.get('afr').browse(self.cr, self.uid, afr_id).name
         elif form['analytic_ledger'] and form['columns']=='four' and form['inf_type'] == 'BS':
-            name = _('Analitic Ledger')
+            name = _('Analytic Ledger')
         elif form['inf_type'] == 'BS':
             name = _('Balance Sheet')
         elif form['inf_type'] == 'IS':
