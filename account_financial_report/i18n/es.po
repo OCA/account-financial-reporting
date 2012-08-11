@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-10 23:02+0000\n"
-"PO-Revision-Date: 2012-08-10 23:02+0000\n"
+"POT-Creation-Date: 2012-08-11 01:43+0000\n"
+"PO-Revision-Date: 2012-08-11 01:43+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -109,6 +109,12 @@ msgid "PERIOD"
 msgstr "PERIODO"
 
 #. module: account_financial_report
+#: selection:afr,display_account:0
+#: selection:wizard.report,display_account:0
+msgid "With Balance"
+msgstr "Con Balance"
+
+#. module: account_financial_report
 #: report:afr.13cols:0
 msgid "12"
 msgstr "12"
@@ -153,13 +159,9 @@ msgid "CREDIT"
 msgstr "CREDITO"
 
 #. module: account_financial_report
-#: model:ir.actions.act_window,help:account_financial_report.account_financial_report_action
-msgid "\n"
-"            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut nunc magna. Vivamus felis sem, mattis vel consequat pharetra, adipiscing ut erat. In accumsan fermentum ullamcorper. Cras vitae sem magna, pellentesque condimentum metus. Cras at sem quis lectus vehicula adipiscing. Vivamus in urna ipsum, sed molestie magna. Nam ullamcorper arcu condimentum leo ultrices egestas. Nullam ut tincidunt orci. Proin sollicitudin luctus risus sit amet mattis. Duis eget risus non enim pharetra dignissim. Mauris eros eros, fringilla et interdum non, aliquam at orci.\n"
-"            "
-msgstr "\n"
-"            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut nunc magna. Vivamus felis sem, mattis vel consequat pharetra, adipiscing ut erat. In accumsan fermentum ullamcorper. Cras vitae sem magna, pellentesque condimentum metus. Cras at sem quis lectus vehicula adipiscing. Vivamus in urna ipsum, sed molestie magna. Nam ullamcorper arcu condimentum leo ultrices egestas. Nullam ut tincidunt orci. Proin sollicitudin luctus risus sit amet mattis. Duis eget risus non enim pharetra dignissim. Mauris eros eros, fringilla et interdum non, aliquam at orci.\n"
-"            "
+#: view:wizard.report:0
+msgid "_Cancel"
+msgstr "_Cancelar"
 
 #. module: account_financial_report
 #: view:res.company:0
@@ -297,20 +299,14 @@ msgid "Fiscal year"
 msgstr "Ejercicio Fiscal"
 
 #. module: account_financial_report
-#: selection:afr,display_account:0
-#: selection:wizard.report,display_account:0
-msgid "With Balance"
-msgstr "Con Balance"
+#: model:ir.actions.act_window,help:account_financial_report.account_financial_report_action
+msgid "Create your own Customized Account Financial Reports, in here, you will be able to create Templates for generating Two types of Reports: Balance Sheets and Income Statements, incluiding Analytic Ledgers. Besides, you can select within a set of choices to get better detailed report, be it that you ask it by one or several periods, by months (12 Months + YTD), or by quarters (4QRT's + YTD). Even you can get your reports in currencies other than the one set on your company."
+msgstr "Cree sus propios Reportes Financieros Personalizados, aquí, Vd. podrá se capaz de Diseñar las Plantillas para la generación de Dos Tipos de Reportes: Balances Generales y Estados de Resultados, incluyendo Mayores Analíticos. Además, podrá seleccionar entre un conjunto de opciones para obtener un mejor reporte detallado, sea que lo pida para un período determinado, por meses (12 MESES + YTD) o por trimestres (4to's + YTD). Incluso puede obtener reportes en otras monedas distintas a la establecida en su compañia."
 
 #. module: account_financial_report
 #: field:res.company,credit_account_ids:0
 msgid "Creditable Accounts"
 msgstr "Cuentas Acreditables"
-
-#. module: account_financial_report
-#: view:wizard.report:0
-msgid "_Cancel"
-msgstr "_Cancelar"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/parser.py:342
