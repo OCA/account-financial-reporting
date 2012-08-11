@@ -188,7 +188,22 @@ class wizard_report(osv.osv_memory):
         else:
             raise osv.except_osv(_('UserError'),'No existe periodo fiscal')
 
-    def print_report(self, cr, uid, ids,data, context=None):
+    def period_span(self, cr, uid, ids, fy_id, context=None):
+        if context is None:
+            context = {}
+        ap_obj = self.pool.get('account.period')
+        fy_id = fy_id and type(fy_id) in (list,tuple) and fy_id[0] or fy_id
+        if not ids:
+            #~ No hay periodos
+            return ap_obj.search(cr, uid, [('fiscalyear_id','=',fy_id),('special','=',False)],order='date_start asc')
+        
+        ap_brws = ap_obj.browse(cr, uid, ids, context=context)
+        date_start = min([period.date_start for period in ap_brws])
+        date_stop = max([period.date_stop for period in ap_brws])
+        
+        return ap_obj.search(cr, uid, [('fiscalyear_id','=',fy_id),('special','=',False),('date_start','>=',date_start),('date_stop','<=',date_stop)],order='date_start asc')
+        
+    def print_report(self, cr, uid, ids, data, context=None):
         if context is None:
             context = {}
             
@@ -200,6 +215,9 @@ class wizard_report(osv.osv_memory):
         if data['form']['filter'] == 'byperiod':
             del data['form']['date_from']
             del data['form']['date_to']
+
+            data['form']['periods'] = self.period_span(cr, uid, data['form']['periods'], data['form']['fiscalyear'])
+
         elif data['form']['filter'] == 'bydate':
             self._check_date(cr, uid, data)
             del data['form']['periods']
