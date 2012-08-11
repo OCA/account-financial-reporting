@@ -79,11 +79,14 @@ class account_balance(report_sxw.rml_parse):
         afr_id = form['afr_id'] and type(form['afr_id']) in (list,tuple) and form['afr_id'][0] or form['afr_id']
         if afr_id:
             name = self.pool.get('afr').browse(self.cr, self.uid, afr_id).name
-        inf_type = {
-            'BS' : _('Balance Sheet'),
-            'IS'   : _('Income Statement'),
-        }
-        return afr_id and name or inf_type[form['inf_type']]
+        elif form['analytic_ledger'] and form['columns']=='four' and form['inf_type'] == 'BS':
+            name = _('Analitic Ledger')
+        elif form['inf_type'] == 'BS':
+            name = _('Balance Sheet')
+        elif form['inf_type'] == 'IS':
+            name = _('Income Statement')
+        
+        return name
 
     def get_month(self, form):
         '''
