@@ -140,9 +140,7 @@
             <field name="type">ir.actions.act_window</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
-            <field name="help">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut nunc magna. Vivamus felis sem, mattis vel consequat pharetra, adipiscing ut erat. In accumsan fermentum ullamcorper. Cras vitae sem magna, pellentesque condimentum metus. Cras at sem quis lectus vehicula adipiscing. Vivamus in urna ipsum, sed molestie magna. Nam ullamcorper arcu condimentum leo ultrices egestas. Nullam ut tincidunt orci. Proin sollicitudin luctus risus sit amet mattis. Duis eget risus non enim pharetra dignissim. Mauris eros eros, fringilla et interdum non, aliquam at orci.
-            </field>
+            <field name="help">Create your own Customized Account Financial Reports, in here, you will be able to create Templates for generating Two types of Reports: Balance Sheets and Income Statements, incluiding Analytic Ledgers. Besides, you can select within a set of choices to get better detailed report, be it that you ask it by one or several periods, by months (12 Months + YTD), or by quarters (4QRT's + YTD). Even you can get your reports in currencies other than the one set on your company.</field>
         </record>
 
         
