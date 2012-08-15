@@ -125,7 +125,7 @@
                 <td>
                     <para style="TITLE_LEFT_ALIGN">
                         <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
-                        <font>[[ (a['total']==True) and formatLang(a['balanceinit'] and a['balanceinit'] * a.get('change_sign') or 0.0, digits=2, grouping=True)  or '']]</font>
+                        <font>[[ (a['total']==True) and formatLang(a.get('change_sign', 1.0) * a.get('balanceinit'), digits=2, grouping=True) or '']]</font>
                     </para>
                 </td>
                 <td>
@@ -143,13 +143,13 @@
                 <td>
                     <para style="TITLE_LEFT_ALIGN">
                         <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
-                        <font>[[ (a['total']==True) and formatLang(a['ytd'] and a['ytd'] * a.get('change_sign') or 0.0, digits=2, grouping=True) or '']]</font>
+                        <font>[[ (a['total']==True) and formatLang(a.get('change_sign', 1.0) * a.get('ytd'), digits=2, grouping=True) or '']]</font>
                     </para>
                 </td>
                 <td>
                     <para style="TITLE_LEFT_ALIGN">
                         <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
-                        <font>[[ (a['total']==True) and formatLang(a['balance'] and a['balance'] * a.get('change_sign') or 0.0, digits=2, grouping=True) or '']]</font>
+                        <font>[[ (a['total']==True) and formatLang(a.get('change_sign', 1.0) * a.get('balance'), digits=2, grouping=True) or '']]</font>
                     </para>
                 </td>
             </tr>
