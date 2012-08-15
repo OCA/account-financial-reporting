@@ -213,7 +213,6 @@ class account_balance(report_sxw.rml_parse):
         (account info plus debit/credit/balance in the selected period
         and the full year)
         """
-        
         account_obj = self.pool.get('account.account')
         period_obj = self.pool.get('account.period')
         fiscalyear_obj = self.pool.get('account.fiscalyear')
@@ -618,7 +617,7 @@ class account_balance(report_sxw.rml_parse):
 
                         if form['columns'] == 'qtr':
                             tot_check = True
-                            tot[res['id']] = True
+                            #~ tot[res['id']] = True
                             tot_bal1 += res.get('bal1',0.0)
                             tot_bal2 += res.get('bal2',0.0)
                             tot_bal3 += res.get('bal3',0.0)
@@ -627,7 +626,7 @@ class account_balance(report_sxw.rml_parse):
 
                         elif form['columns'] == 'thirteen':
                             tot_check = True
-                            tot[res['id']] = True
+                            #~ tot[res['id']] = True
                             tot_bal1 += res.get('bal1',0.0)
                             tot_bal2 += res.get('bal2',0.0)
                             tot_bal3 += res.get('bal3',0.0)
@@ -644,7 +643,7 @@ class account_balance(report_sxw.rml_parse):
 
                         else:
                             tot_check = True
-                            tot[res['id']] = True
+                            #~ tot[res['id']] = True
                             tot_bin += res['balanceinit']
                             tot_deb += res['debit']
                             tot_crd += res['credit']
