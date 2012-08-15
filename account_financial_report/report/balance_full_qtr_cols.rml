@@ -83,7 +83,7 @@
     <images/>
     <story>
         <para>[[setLang(user.context_lang)]]</para>
-        <blockTable colWidths="2.5cm,6.5cm,2.5cm,3.5cm,3.5cm,2.5cm" style="BODY" repeatRows="1">
+        <blockTable colWidths="2.5cm,6.0cm,2.5cm,2.5cm,2.5cm,2.5cm,2.5cm" style="BODY" repeatRows="1">
             <tr noRowsplits="1">
                 <td>
                     <para style="TITLE_LEFT_ALIGN">
@@ -94,16 +94,19 @@
                     <para style="TITLES">ACCOUNT</para>
                 </td>
                 <td>
-                    <para style="TITLE_LEFT_ALIGN">INITIAL</para>
+                    <para style="TITLE_LEFT_ALIGN">Q1</para>
                 </td>
                 <td>
-                    <para style="TITLE_LEFT_ALIGN">DEBIT</para>
+                    <para style="TITLE_LEFT_ALIGN">Q2</para>
                 </td>
                 <td>
-                    <para style="TITLE_LEFT_ALIGN">CREDIT</para>
+                    <para style="TITLE_LEFT_ALIGN">Q3</para>
                 </td>
                 <td>
-                    <para style="TITLE_LEFT_ALIGN">BALANCE</para>
+                    <para style="TITLE_LEFT_ALIGN">Q4</para>
+                </td>
+                <td>
+                    <para style="TITLE_LEFT_ALIGN">YTD</para>
                 </td>
             </tr>
             <tr>
@@ -122,25 +125,31 @@
                 <td>
                     <para style="TITLE_LEFT_ALIGN">
                         <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
-                        <font>[[ (a['total']==True) and formatLang(a['balanceinit'] and a['balanceinit'] * a.get('change_sign') or 0.0, digits=2, grouping=True)  or '']]</font>
+                        <font>[[ (a['total']==True) and formatLang(a['bal1'] and a['bal1'] * a.get('change_sign') or 0.0, digits=2, grouping=True)  or '']]</font>
                     </para>
                 </td>
                 <td>
                     <para style="TITLE_LEFT_ALIGN">
                         <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
-                        <font>[[ (a['total']==True) and formatLang(a['debit'], digits=2, grouping=True) or '']]</font>
+                        <font>[[ (a['total']==True) and formatLang(a['bal2'] and a['bal2'] * a.get('change_sign') or 0.0, digits=2, grouping=True)  or '']]</font>
                     </para>
                 </td>
                 <td>
                     <para style="TITLE_LEFT_ALIGN">
                         <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
-                        <font>[[ (a['total']==True) and formatLang(a['credit'], digits=2, grouping=True) or '']]</font>
+                        <font>[[ (a['total']==True) and formatLang(a['bal3'] and a['bal3'] * a.get('change_sign') or 0.0, digits=2, grouping=True)  or '']]</font>
                     </para>
                 </td>
                 <td>
                     <para style="TITLE_LEFT_ALIGN">
                         <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
-                        <font>[[ (a['total']==True) and formatLang(a['balance'] and a['balance'] * a.get('change_sign') or 0.0, digits=2, grouping=True) or '']]</font>
+                        <font>[[ (a['total']==True) and formatLang(a['bal4'] and a['bal4'] * a.get('change_sign') or 0.0, digits=2, grouping=True)  or '']]</font>
+                    </para>
+                </td>
+                <td>
+                    <para style="TITLE_LEFT_ALIGN">
+                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                        <font>[[ (a['total']==True) and formatLang(a['bal5'] and a['bal5'] * a.get('change_sign') or 0.0, digits=2, grouping=True)  or '']]</font>
                     </para>
                 </td>
             </tr>

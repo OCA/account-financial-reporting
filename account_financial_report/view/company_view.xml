@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="view_company_credit_account_form">
+            <field name="name">res.company.form.inherit</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="model">res.company</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Account's Sign on Reports" position="inside">
+                        <group>
+                            <group>
+                                <separator string="Debitable Accounts" colspan="4"/>
+                                <label string="A debitable account is one which grows in the debit and diminishes in the credit" colspan="4"/>
+                                <label string="Keep sign on Reports for these accounts and children accounts that are within Accreditable Accounts" colspan="4"/>
+                                <field name="debit_account_ids" nolabel="1" colspan ="4" domain="[('company_id.name','=',name),('company_id.partner_id','=',partner_id),]">
+                                    <tree>
+                                        <field name='code'/>
+                                        <field name='name'/>
+                                        <field name='type'/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group>
+                                <separator string="Accreditable Accounts" colspan="4"/>
+                                <label string="An accreditable account is one which grows in the credit and diminishes in the debit" colspan="4"/>
+                                <label string="Reverse sign on Reports for these accounts and children accounts that are within Debitable Accounts" colspan="4"/>
+                                <field name="credit_account_ids" nolabel="1" colspan ="4" domain="[('company_id.name','=',name),('company_id.partner_id','=',partner_id),]">
+                                    <tree>
+                                        <field name='code'/>
+                                        <field name='name'/>
+                                        <field name='type'/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </group>
+                        
+                        
+
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+    </data>
+</openerp>
