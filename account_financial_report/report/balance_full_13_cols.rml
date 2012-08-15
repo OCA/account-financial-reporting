@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <document filename="test.pdf">
-    <template pageSize="(21.59cm,27.94cm)" title="Test" author="Martin Simon" allowSplitting="20" showBoundary="0">
+    <template pageSize="(43.18cm,27.94cm)" title="Test" author="Martin Simon" allowSplitting="20" showBoundary="0">
         <pageTemplate id="first">
-            <frame id="first" x1="0.5cm" y1="1.0cm" width="20.5cm" height="23cm"/>
+            <frame id="first" x1="0.5cm" y1="1.0cm" width="41.0cm" height="23cm"/>
             <pageGraphics>
                 <setFont name="Helvetica" size="9"/>
 
@@ -83,7 +83,7 @@
     <images/>
     <story>
         <para>[[setLang(user.context_lang)]]</para>
-        <blockTable colWidths="2.5cm,6.5cm,2.5cm,3.5cm,3.5cm,2.5cm" style="BODY" repeatRows="1">
+        <blockTable colWidths="2.0cm,6.5cm,2.5cm,2.5cm,2.5cm,2.5cm,2.5cm,2.5cm,2.5cm,2.5cm,2.5cm,2.5cm,2.5cm,2.5cm,2.5cm" style="BODY" repeatRows="1">
             <tr noRowsplits="1">
                 <td>
                     <para style="TITLE_LEFT_ALIGN">
@@ -94,16 +94,43 @@
                     <para style="TITLES">ACCOUNT</para>
                 </td>
                 <td>
-                    <para style="TITLE_LEFT_ALIGN">INITIAL</para>
+                    <para style="TITLE_LEFT_ALIGN">01</para>
                 </td>
                 <td>
-                    <para style="TITLE_LEFT_ALIGN">DEBIT</para>
+                    <para style="TITLE_LEFT_ALIGN">02</para>
                 </td>
                 <td>
-                    <para style="TITLE_LEFT_ALIGN">CREDIT</para>
+                    <para style="TITLE_LEFT_ALIGN">03</para>
                 </td>
                 <td>
-                    <para style="TITLE_LEFT_ALIGN">BALANCE</para>
+                    <para style="TITLE_LEFT_ALIGN">04</para>
+                </td>
+                <td>
+                    <para style="TITLE_LEFT_ALIGN">05</para>
+                </td>
+                <td>
+                    <para style="TITLE_LEFT_ALIGN">06</para>
+                </td>
+                <td>
+                    <para style="TITLE_LEFT_ALIGN">07</para>
+                </td>
+                <td>
+                    <para style="TITLE_LEFT_ALIGN">08</para>
+                </td>
+                <td>
+                    <para style="TITLE_LEFT_ALIGN">09</para>
+                </td>
+                <td>
+                    <para style="TITLE_LEFT_ALIGN">10</para>
+                </td>
+                <td>
+                    <para style="TITLE_LEFT_ALIGN">11</para>
+                </td>
+                <td>
+                    <para style="TITLE_LEFT_ALIGN">12</para>
+                </td>
+                <td>
+                    <para style="TITLE_LEFT_ALIGN">YTD</para>
                 </td>
             </tr>
             <tr>
@@ -122,25 +149,79 @@
                 <td>
                     <para style="TITLE_LEFT_ALIGN">
                         <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
-                        <font>[[ (a['total']==True) and formatLang(a['balanceinit'] and a['balanceinit'] * a.get('change_sign') or 0.0, digits=2, grouping=True)  or '']]</font>
+                        <font>[[ (a['total']==True) and formatLang(a['bal1'] and a['bal1'] * a.get('change_sign') or 0.0, digits=2, grouping=True)  or '']]</font>
                     </para>
                 </td>
                 <td>
                     <para style="TITLE_LEFT_ALIGN">
                         <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
-                        <font>[[ (a['total']==True) and formatLang(a['debit'], digits=2, grouping=True) or '']]</font>
+                        <font>[[ (a['total']==True) and formatLang(a['bal2'] and a['bal2'] * a.get('change_sign') or 0.0, digits=2, grouping=True)  or '']]</font>
                     </para>
                 </td>
                 <td>
                     <para style="TITLE_LEFT_ALIGN">
                         <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
-                        <font>[[ (a['total']==True) and formatLang(a['credit'], digits=2, grouping=True) or '']]</font>
+                        <font>[[ (a['total']==True) and formatLang(a['bal3'] and a['bal3'] * a.get('change_sign') or 0.0, digits=2, grouping=True)  or '']]</font>
                     </para>
                 </td>
                 <td>
                     <para style="TITLE_LEFT_ALIGN">
                         <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
-                        <font>[[ (a['total']==True) and formatLang(a['balance'] and a['balance'] * a.get('change_sign') or 0.0, digits=2, grouping=True) or '']]</font>
+                        <font>[[ (a['total']==True) and formatLang(a['bal4'] and a['bal4'] * a.get('change_sign') or 0.0, digits=2, grouping=True)  or '']]</font>
+                    </para>
+                </td>
+                <td>
+                    <para style="TITLE_LEFT_ALIGN">
+                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                        <font>[[ (a['total']==True) and formatLang(a['bal5'] and a['bal5'] * a.get('change_sign') or 0.0, digits=2, grouping=True)  or '']]</font>
+                    </para>
+                </td>
+                <td>
+                    <para style="TITLE_LEFT_ALIGN">
+                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                        <font>[[ (a['total']==True) and formatLang(a['bal6'] and a['bal6'] * a.get('change_sign') or 0.0, digits=2, grouping=True)  or '']]</font>
+                    </para>
+                </td>
+                <td>
+                    <para style="TITLE_LEFT_ALIGN">
+                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                        <font>[[ (a['total']==True) and formatLang(a['bal7'] and a['bal7'] * a.get('change_sign') or 0.0, digits=2, grouping=True)  or '']]</font>
+                    </para>
+                </td>
+                <td>
+                    <para style="TITLE_LEFT_ALIGN">
+                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                        <font>[[ (a['total']==True) and formatLang(a['bal8'] and a['bal8'] * a.get('change_sign') or 0.0, digits=2, grouping=True)  or '']]</font>
+                    </para>
+                </td>
+                <td>
+                    <para style="TITLE_LEFT_ALIGN">
+                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                        <font>[[ (a['total']==True) and formatLang(a['bal9'] and a['bal9'] * a.get('change_sign') or 0.0, digits=2, grouping=True)  or '']]</font>
+                    </para>
+                </td>
+                <td>
+                    <para style="TITLE_LEFT_ALIGN">
+                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                        <font>[[ (a['total']==True) and formatLang(a['bal10'] and a['bal10'] * a.get('change_sign') or 0.0, digits=2, grouping=True)  or '']]</font>
+                    </para>
+                </td>
+                <td>
+                    <para style="TITLE_LEFT_ALIGN">
+                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                        <font>[[ (a['total']==True) and formatLang(a['bal11'] and a['bal11'] * a.get('change_sign') or 0.0, digits=2, grouping=True)  or '']]</font>
+                    </para>
+                </td>
+                <td>
+                    <para style="TITLE_LEFT_ALIGN">
+                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                        <font>[[ (a['total']==True) and formatLang(a['bal12'] and a['bal12'] * a.get('change_sign') or 0.0, digits=2, grouping=True)  or '']]</font>
+                    </para>
+                </td>
+                <td>
+                    <para style="TITLE_LEFT_ALIGN">
+                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                        <font>[[ (a['total']==True) and formatLang(a['bal13'] and a['bal13'] * a.get('change_sign') or 0.0, digits=2, grouping=True)  or '']]</font>
                     </para>
                 </td>
             </tr>

@@ -5,6 +5,11 @@
             <frame id="first" x1="1cm" y1="1.0cm" width="19.0cm" height="23cm"/>
             <pageGraphics>
                 <setFont name="Helvetica" size="9"/>
+                
+                <image x="1.0cm" y="24.0cm" width="5.0cm">[[company.logo and company.logo or removeParentNode('image')]]</image>
+<!--
+                <drawString x="1.0cm" y="24.5cm">[[company.logo and removeParentNode('para') or company.name]]</drawString> 
+-->
                 <place x="-3.5cm" y="22.50cm" width="19cm"  height="5.0cm"> 
                     <blockTable colWidths="9.6cm,9.4cm" style="TITLE">
                         <tr>
@@ -20,7 +25,7 @@
                         </tr>
                         <tr>
                             <td><para style="TOP_TITLE"></para></td>
-                            <td><para style="TITLE_CENTER">[[data['form'] and (' (Expresado en %s)'%( exchange_name(data['form']))) or '']]</para></td>
+                            <td><para style="TITLE_CENTER">[[data['form'] and (' (Expressed in %s)'%( exchange_name(data['form']))) or '']]</para></td>
                         </tr>
                         <tr>
                             <td><para style="TOP_TITLE"></para></td>
@@ -81,17 +86,17 @@
             <tr noRowsplits="1">
                 <td>
                     <para style="TITLE_LEFT_ALIGN">
-                        <font>Código</font>
+                        <font>CODE</font>
                     </para>
                 </td>
                 <td>
-                    <para style="TITLES">Cuenta</para>
+                    <para style="TITLES">ACCOUNT</para>
                 </td>
                 <td>
-                    <para style="TITLE_LEFT_ALIGN">Débito</para>
+                    <para style="TITLE_LEFT_ALIGN">DEBIT</para>
                 </td>
                 <td>
-                    <para style="TITLE_LEFT_ALIGN">Crédito</para>
+                    <para style="TITLE_LEFT_ALIGN">CREDIT</para>
                 </td>
             </tr>
             <tr>

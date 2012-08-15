@@ -83,18 +83,18 @@
     <images/>
     <story>
         <para>[[setLang(user.context_lang)]]</para>
-        <blockTable colWidths="2.5cm,6.5cm,2.5cm,3.5cm,3.5cm,2.5cm" style="BODY" repeatRows="1">
+        <blockTable colWidths="2.5cm,6.0cm,2.5cm,2.5cm,2.5cm,2.5cm,2.5cm" style="BODY" repeatRows="1">
             <tr noRowsplits="1">
                 <td>
                     <para style="TITLE_LEFT_ALIGN">
-                    <font>CODE</font>
+                    <font>Code</font>
                     </para>
                 </td>
                 <td>
                     <para style="TITLES">ACCOUNT</para>
                 </td>
                 <td>
-                    <para style="TITLE_LEFT_ALIGN">INITIAL</para>
+                    <para style="TITLE_LEFT_ALIGN">INIT. BAL.</para>
                 </td>
                 <td>
                     <para style="TITLE_LEFT_ALIGN">DEBIT</para>
@@ -103,7 +103,10 @@
                     <para style="TITLE_LEFT_ALIGN">CREDIT</para>
                 </td>
                 <td>
-                    <para style="TITLE_LEFT_ALIGN">BALANCE</para>
+                    <para style="TITLE_LEFT_ALIGN">PERIOD</para>
+                </td>
+                <td>
+                    <para style="TITLE_LEFT_ALIGN">YTD</para>
                 </td>
             </tr>
             <tr>
@@ -135,6 +138,12 @@
                     <para style="TITLE_LEFT_ALIGN">
                         <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
                         <font>[[ (a['total']==True) and formatLang(a['credit'], digits=2, grouping=True) or '']]</font>
+                    </para>
+                </td>
+                <td>
+                    <para style="TITLE_LEFT_ALIGN">
+                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                        <font>[[ (a['total']==True) and formatLang(a['ytd'] and a['ytd'] * a.get('change_sign') or 0.0, digits=2, grouping=True) or '']]</font>
                     </para>
                 </td>
                 <td>
