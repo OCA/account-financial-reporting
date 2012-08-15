@@ -121,6 +121,10 @@ class account_financial_report(osv.osv):
             context = {}
         context['company_id']=company_id
         res = {'value':{}}
+        
+        if not company_id:
+            return res
+            
         cur_id = self.pool.get('res.company').browse(cr,uid,company_id,context=context).currency_id.id
         fy_id = self.pool.get('account.fiscalyear').find(cr, uid,context=context)
         res['value'].update({'fiscalyear_id':fy_id})
