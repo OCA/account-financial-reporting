@@ -27,6 +27,9 @@
         <%!
         def amount(text):
             return text.replace('-', '&#8209;')  # replace by a non-breaking hyphen (it will not word-wrap between hyphen and numbers)
+
+        def display_line(all_comparison_lines):
+            return any([line.get('balance') for line in all_comparison_lines])
         %>
 
         <%setLang(user.context_lang)%>
@@ -99,7 +102,6 @@
             </div>
         %endfor
 
-
         %for current_account in objects:
             <%
             partners_order = current_account.partners_order
@@ -110,9 +112,13 @@
 
             comparisons = current_account.comparisons
 
-            all_comparison_lines = [comp['partners_amounts'][partner_id[1]] for partner_id in partners_order for comp in comparisons]
-            if not current_account.balance and not any([line.get('balance') for line in all_comparison_lines]):
-                continue
+            # in multiple columns mode, we do not want to print accounts without any rows
+            if comparison_mode in ('single', 'multiple'):
+                all_comparison_lines = [comp['partners_amounts'][partner_id[1]]
+                                      for partner_id in partners_order 
+                                      for comp in comparisons]
+                if not display_line(all_comparison_lines):
+                    continue
 
             current_partner_amounts = current_account.partners_amounts
 
@@ -178,8 +184,17 @@
                         <%
                         partner = current_partner_amounts.get(partner_id, {})
 
-                        all_comparison_lines = [comp['partners_amounts'][partner_id] for comp in comparisons if comp['partners_amounts'].get(partner_id)]
-                        if not partner.get('balance') and not any([line.get('balance') for line in all_comparison_lines]):
+                        # in single mode, we have to display all the partners
+                        # even if their balance is 0.0 because the initial balance
+                        # should match with the previous year closings
+
+                        # in multiple columns mode, we do not want to print partners
+                        # which have a balance at 0.0 in each comparison column
+                        if comparison_mode in ('single', 'multiple'):
+                            all_comparison_lines = [comp['partners_amounts'][partner_id]
+                                                    for comp in comparisons 
+                                                    if comp['partners_amounts'].get(partner_id)]
+                        if not display_line(all_comparison_lines):
                             continue
 
                         total_initial_balance += partner.get('init_balance', 0.0)
