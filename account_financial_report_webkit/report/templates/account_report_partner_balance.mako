@@ -194,8 +194,8 @@
                             all_comparison_lines = [comp['partners_amounts'][partner_id]
                                                     for comp in comparisons 
                                                     if comp['partners_amounts'].get(partner_id)]
-                        if not display_line(all_comparison_lines):
-                            continue
+                            if not display_line(all_comparison_lines):
+                                continue
 
                         total_initial_balance += partner.get('init_balance', 0.0)
                         total_debit += partner.get('debit', 0.0)
