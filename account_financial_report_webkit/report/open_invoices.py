@@ -201,7 +201,8 @@ class PartnersOpenInvoicesWebkit(report_sxw.rml_parse, CommonPartnersReportHeade
         for account_id in accounts_ids:
             initial_move_lines_ids_per_partner = initial_move_lines_per_account.get(account_id, {})
 
-            # We get the move line ids of the account
+            # We get the move line ids of the account depending of the
+            # way the initial balance was created we include or not opening entries
             move_line_ids_per_partner = self.get_partners_move_lines_ids(account_id,
                                                                          main_filter,
                                                                          start,
