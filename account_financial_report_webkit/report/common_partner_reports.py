@@ -32,7 +32,9 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
 
     ####################Account move line retrieval helper ##########################
     def get_partners_move_lines_ids(self, account_id, main_filter, start, stop, target_move,
-                                    exclude_reconcile=False, partner_filter=False):
+                                    exclude_reconcile=False,
+                                    partner_filter=False,
+                                    opening_mode='exclude_opening'):
         filter_from = False
         if main_filter in ('filter_period', 'filter_no'):
             filter_from = 'period'
@@ -44,6 +46,7 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
                                                     start,
                                                     stop,
                                                     target_move,
+                                                    opening_mode=opening_mode,
                                                     exclude_reconcile=exclude_reconcile,
                                                     partner_filter=partner_filter)
 
@@ -78,7 +81,7 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
 
         return sql_conditions, search_params
 
-    def _get_partners_move_line_ids(self, filter_from, account_id, start, stop, target_move, opening_mode='include_opening',
+    def _get_partners_move_line_ids(self, filter_from, account_id, start, stop, target_move, opening_mode='exclude_opening',
                    exclude_reconcile=False, partner_filter=False):
 
         final_res = defaultdict(list)
