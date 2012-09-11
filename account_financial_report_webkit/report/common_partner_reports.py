@@ -91,9 +91,9 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
                         fiscalyear=fiscalyear,
                         stop_at_previous_opening=stop_at_previous_opening)
         first_special = self._get_first_special_period()
-        if first_special:
+        if first_special and first_special.id not in periods:
             periods.append(first_special.id)
-        return list(set(periods))
+        return periods
 
     def _get_query_params_from_periods(self, period_start, period_stop, mode='exclude_opening'):
         """
