@@ -324,3 +324,4 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
         if not res:
             return []
         return res
+
