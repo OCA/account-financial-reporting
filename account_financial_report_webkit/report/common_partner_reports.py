@@ -95,13 +95,21 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
         return list(set(periods))
 
     def _get_query_params_from_periods(self, period_start, period_stop, mode='exclude_opening'):
+        """
+        Build the part of the sql "where clause" which filters on the selected
+        periods.
+
+        :param browse_record period_start: first period of the report to print
+        :param browse_record period_stop: last period of the report to print
+        :param str mode: deprecated
+        """
         # we do not want opening period so we exclude opening
-        periods = self.pool.get('account.period').build_ctx_periods(self.cr, self.uid, period_start.id, period_stop.id)
+        periods = self.pool.get('account.period').build_ctx_periods(
+                self.cr, self.uid, period_start.id, period_stop.id)
         if not periods:
             return []
 
-        if mode == 'exclude_opening':
-            periods = self.exclude_opening_periods(periods)
+        periods = self.exclude_opening_periods(periods)
 
         search_params = {'period_ids': tuple(periods),
                          'date_stop': period_stop.date_stop}
@@ -111,6 +119,12 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
         return sql_conditions, search_params
 
     def _get_query_params_from_dates(self, date_start, date_stop, **args):
+        """
+        Build the part of the sql where clause based on the dates to print.
+
+        :param str date_start: start date of the report to print
+        :param str date_stop: end date of the report to print
+        """
 
         periods = self._get_opening_periods()
         if not periods:
@@ -127,7 +141,20 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
 
     def _get_partners_move_line_ids(self, filter_from, account_id, start, stop,
                                     target_move, opening_mode='exclude_opening',
-                                    exclude_reconcile=False, partner_filter=False):
+                                    exclude_reconcile=False, partner_filter=None):
+        """
+
+        :param str filter_from: "periods" or "dates"
+        :param int account_id: id of the account where to search move lines
+        :param str or browse_record start: start date or start period
+        :param str or browse_record stop: stop date or stop period
+        :param str target_move: 'posted' or 'all'
+        :param opening_mode: deprecated
+        :param boolean exclude_reconcile: wether the reconciled entries are
+            filtred or not
+        :param list partner_filter: list of partner ids, will filter on their
+            move lines
+        """
 
         final_res = defaultdict(list)
 
@@ -135,8 +162,8 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
         sql_joins = ''
         sql_where = " WHERE account_move_line.account_id = %(account_ids)s " \
                     " AND account_move_line.state = 'valid' "
-        
-        sql_conditions, search_params = getattr(self, '_get_query_params_from_'+filter_from+'s')(start, stop, mode=opening_mode)
+
+        sql_conditions, search_params = getattr(self, '_get_query_params_from_'+filter_from+'s')(start, stop)
 
         sql_where += sql_conditions
 
