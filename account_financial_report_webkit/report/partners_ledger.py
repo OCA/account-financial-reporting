@@ -72,7 +72,7 @@ class PartnersLedgerWebkit(report_sxw.rml_parse, CommonPartnersReportHeaderWebki
         OpenERP in the opening period.
 
         OpenERP allows to reconcile move lines between different partners,
-        so the generated entries in the opening period are wrong.
+        so the generated entries in the opening period are unreliable.
         """
         return 'initial_balance'
 
@@ -183,7 +183,8 @@ class PartnersLedgerWebkit(report_sxw.rml_parse, CommonPartnersReportHeaderWebki
                                                              stop,
                                                              target_move,
                                                              exclude_reconcile=False,
-                                                             partner_filter=partner_filter)
+                                                             partner_filter=partner_filter,
+                                                             opening_mode='exclude_opening')
             if not move_line_ids:
                 continue
             for partner_id in move_line_ids:
