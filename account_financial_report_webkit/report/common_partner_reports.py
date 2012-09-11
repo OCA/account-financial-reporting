@@ -23,7 +23,9 @@
 # By using properties we will have a more simple signature in fuctions
 
 from collections import defaultdict
+from datetime import datetime
 
+from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
 from common_reports import CommonReportHeaderWebkit
 
 
@@ -46,6 +48,51 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
                                                     target_move,
                                                     exclude_reconcile=exclude_reconcile,
                                                     partner_filter=partner_filter)
+
+    def _get_first_special_period(self):
+        """
+        Returns the browse record of the period with the `special` flag, which
+        is the special period of the first fiscal year used in the accounting.
+
+        i.e. it searches the first fiscal year with at least one journal entry,
+        and it returns the id of the first period for which `special` is True
+        in this fiscal year.
+
+        It is used for example in the partners reports, where we have to include
+        the first, and only the first opening period.
+
+        :return: browse record of the first special period.
+        """
+        move_line_obj = self.pool.get('account.move.line')
+        first_entry_id = move_line_obj.search(
+            self.cr, self.uid, [], order='date ASC', limit=1)
+        # it means there is no entry at all, that's unlikely to happen, but
+        # it may so
+        if not first_entry_id:
+            return
+        first_entry = move_line_obj.browse(self.cr, self.uid, first_entry_id[0])
+        fiscalyear = first_entry.period_id.fiscalyear_id
+        special_periods = [period for period in fiscalyear.period_ids if period.special]
+        # so, we have no opening period on the first year, nothing to return
+        if not special_periods:
+            return
+        return min(special_periods,
+                   key=lambda p: datetime.strptime(p.date_start, DEFAULT_SERVER_DATE_FORMAT))
+
+    def _get_period_range_from_start_period(self, start_period, include_opening=False,
+                                            fiscalyear=False,
+                                            stop_at_previous_opening=False):
+        """We retrieve all periods before start period"""
+        periods = super(CommonPartnersReportHeaderWebkit, self).\
+                _get_period_range_from_start_period(
+                        start_period,
+                        include_opening=include_opening,
+                        fiscalyear=fiscalyear,
+                        stop_at_previous_opening=stop_at_previous_opening)
+        first_special = self._get_first_special_period()
+        if first_special:
+            periods.append(first_special.id)
+        return list(set(periods))
 
     def _get_query_params_from_periods(self, period_start, period_stop, mode='exclude_opening'):
         # we do not want opening period so we exclude opening
