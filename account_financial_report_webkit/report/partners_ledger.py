@@ -183,8 +183,7 @@ class PartnersLedgerWebkit(report_sxw.rml_parse, CommonPartnersReportHeaderWebki
                                                              stop,
                                                              target_move,
                                                              exclude_reconcile=False,
-                                                             partner_filter=partner_filter,
-                                                             opening_mode='exclude_opening')
+                                                             partner_filter=partner_filter)
             if not move_line_ids:
                 continue
             for partner_id in move_line_ids:
