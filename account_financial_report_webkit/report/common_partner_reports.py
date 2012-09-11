@@ -78,8 +78,9 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
 
         return sql_conditions, search_params
 
-    def _get_partners_move_line_ids(self, filter_from, account_id, start, stop, target_move, opening_mode='include_opening',
-                   exclude_reconcile=False, partner_filter=False):
+    def _get_partners_move_line_ids(self, filter_from, account_id, start, stop,
+                                    target_move, opening_mode='exclude_opening',
+                                    exclude_reconcile=False, partner_filter=False):
 
         final_res = defaultdict(list)
 
