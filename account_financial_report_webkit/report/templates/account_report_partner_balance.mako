@@ -15,7 +15,7 @@
                 font-size: 15px;
                 background-color:#F0F0F0;
             }
-            
+
             .account_line .act_as_cell {
                 height: 30px;
                 vertical-align: bottom;

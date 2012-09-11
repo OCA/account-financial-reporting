@@ -79,7 +79,7 @@
                 %>
 
                 <div class="account_title bg" style="width: 1080px; margin-top: 20px; font-size: 12px;">${account.code} - ${account.name}</div>
-                
+
                 %for partner_name, p_id, p_ref, p_name in account.partners_order:
                 <%
                   total_debit = 0.0
@@ -88,7 +88,7 @@
                   cumul_balance_curr = 0.0
 
                   part_cumul_balance = 0.0
-                  part_cumul_balance_curr = 0.0 
+                  part_cumul_balance_curr = 0.0
                 %>
                 <div class="act_as_table list_table" style="margin-top: 5px;">
                     <div class="act_as_caption account_title">
