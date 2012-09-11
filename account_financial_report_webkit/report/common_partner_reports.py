@@ -23,7 +23,9 @@
 # By using properties we will have a more simple signature in fuctions
 
 from collections import defaultdict
+from datetime import datetime
 
+from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
 from common_reports import CommonReportHeaderWebkit
 
 
@@ -33,8 +35,7 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
     ####################Account move line retrieval helper ##########################
     def get_partners_move_lines_ids(self, account_id, main_filter, start, stop, target_move,
                                     exclude_reconcile=False,
-                                    partner_filter=False,
-                                    opening_mode='exclude_opening'):
+                                    partner_filter=False):
         filter_from = False
         if main_filter in ('filter_period', 'filter_no'):
             filter_from = 'period'
@@ -46,18 +47,70 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
                                                     start,
                                                     stop,
                                                     target_move,
-                                                    opening_mode=opening_mode,
                                                     exclude_reconcile=exclude_reconcile,
                                                     partner_filter=partner_filter)
 
+    def _get_first_special_period(self):
+        """
+        Returns the browse record of the period with the `special` flag, which
+        is the special period of the first fiscal year used in the accounting.
+
+        i.e. it searches the first fiscal year with at least one journal entry,
+        and it returns the id of the first period for which `special` is True
+        in this fiscal year.
+
+        It is used for example in the partners reports, where we have to include
+        the first, and only the first opening period.
+
+        :return: browse record of the first special period.
+        """
+        move_line_obj = self.pool.get('account.move.line')
+        first_entry_id = move_line_obj.search(
+            self.cr, self.uid, [], order='date ASC', limit=1)
+        # it means there is no entry at all, that's unlikely to happen, but
+        # it may so
+        if not first_entry_id:
+            return
+        first_entry = move_line_obj.browse(self.cr, self.uid, first_entry_id[0])
+        fiscalyear = first_entry.period_id.fiscalyear_id
+        special_periods = [period for period in fiscalyear.period_ids if period.special]
+        # so, we have no opening period on the first year, nothing to return
+        if not special_periods:
+            return
+        return min(special_periods,
+                   key=lambda p: datetime.strptime(p.date_start, DEFAULT_SERVER_DATE_FORMAT))
+
+    def _get_period_range_from_start_period(self, start_period, include_opening=False,
+                                            fiscalyear=False,
+                                            stop_at_previous_opening=False):
+        """We retrieve all periods before start period"""
+        periods = super(CommonPartnersReportHeaderWebkit, self).\
+                _get_period_range_from_start_period(
+                        start_period,
+                        include_opening=include_opening,
+                        fiscalyear=fiscalyear,
+                        stop_at_previous_opening=stop_at_previous_opening)
+        first_special = self._get_first_special_period()
+        if first_special and first_special.id not in periods:
+            periods.append(first_special.id)
+        return periods
+
     def _get_query_params_from_periods(self, period_start, period_stop, mode='exclude_opening'):
+        """
+        Build the part of the sql "where clause" which filters on the selected
+        periods.
+
+        :param browse_record period_start: first period of the report to print
+        :param browse_record period_stop: last period of the report to print
+        :param str mode: deprecated
+        """
         # we do not want opening period so we exclude opening
-        periods = self.pool.get('account.period').build_ctx_periods(self.cr, self.uid, period_start.id, period_stop.id)
+        periods = self.pool.get('account.period').build_ctx_periods(
+                self.cr, self.uid, period_start.id, period_stop.id)
         if not periods:
             return []
 
-        if mode == 'exclude_opening':
-            periods = self.exclude_opening_periods(periods)
+        periods = self.exclude_opening_periods(periods)
 
         search_params = {'period_ids': tuple(periods),
                          'date_stop': period_stop.date_stop}
@@ -67,6 +120,12 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
         return sql_conditions, search_params
 
     def _get_query_params_from_dates(self, date_start, date_stop, **args):
+        """
+        Build the part of the sql where clause based on the dates to print.
+
+        :param str date_start: start date of the report to print
+        :param str date_stop: end date of the report to print
+        """
 
         periods = self._get_opening_periods()
         if not periods:
@@ -81,8 +140,22 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
 
         return sql_conditions, search_params
 
-    def _get_partners_move_line_ids(self, filter_from, account_id, start, stop, target_move, opening_mode='exclude_opening',
-                   exclude_reconcile=False, partner_filter=False):
+    def _get_partners_move_line_ids(self, filter_from, account_id, start, stop,
+                                    target_move, opening_mode='exclude_opening',
+                                    exclude_reconcile=False, partner_filter=None):
+        """
+
+        :param str filter_from: "periods" or "dates"
+        :param int account_id: id of the account where to search move lines
+        :param str or browse_record start: start date or start period
+        :param str or browse_record stop: stop date or stop period
+        :param str target_move: 'posted' or 'all'
+        :param opening_mode: deprecated
+        :param boolean exclude_reconcile: wether the reconciled entries are
+            filtred or not
+        :param list partner_filter: list of partner ids, will filter on their
+            move lines
+        """
 
         final_res = defaultdict(list)
 
@@ -90,8 +163,8 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
         sql_joins = ''
         sql_where = " WHERE account_move_line.account_id = %(account_ids)s " \
                     " AND account_move_line.state = 'valid' "
-        
-        sql_conditions, search_params = getattr(self, '_get_query_params_from_'+filter_from+'s')(start, stop, mode=opening_mode)
+
+        sql_conditions, search_params = getattr(self, '_get_query_params_from_'+filter_from+'s')(start, stop)
 
         sql_where += sql_conditions
 
@@ -252,3 +325,4 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
         if not res:
             return []
         return res
+

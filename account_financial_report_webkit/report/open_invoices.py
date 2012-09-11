@@ -208,8 +208,7 @@ class PartnersOpenInvoicesWebkit(report_sxw.rml_parse, CommonPartnersReportHeade
                                                                          stop,
                                                                          target_move,
                                                                          exclude_reconcile=True,
-                                                                         partner_filter=partner_filter,
-                                                                         opening_mode='exclude_opening')
+                                                                         partner_filter=partner_filter)
 
             if not initial_move_lines_ids_per_partner and not move_line_ids_per_partner:
                 continue
