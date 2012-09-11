@@ -127,27 +127,27 @@ class PartnersLedgerWebkit(report_sxw.rml_parse, CommonPartnersReportHeaderWebki
         init_balance = main_filter in ('filter_no', 'filter_period')
         initial_balance_mode = init_balance and self._get_initial_balance_mode(start) or False
 
-        init_balance_memoizer = {}
+        initial_balance_lines = {}
         if initial_balance_mode == 'initial_balance':
-            init_balance_memoizer = self._compute_partners_initial_balances(accounts,
+            initial_balance_lines = self._compute_partners_initial_balances(accounts,
                                                                             start_period,
                                                                             partner_filter=partner_ids,
                                                                             exclude_reconcile=False)
 
-        ledger_lines_memoizer = self._compute_partner_ledger_lines(accounts,
-                                                                   main_filter,
-                                                                   target_move,
-                                                                   start,
-                                                                   stop,
-                                                                   partner_filter=partner_ids)
+        ledger_lines = self._compute_partner_ledger_lines(accounts,
+                                                          main_filter,
+                                                          target_move,
+                                                          start,
+                                                          stop,
+                                                          partner_filter=partner_ids)
         objects = []
         for account in self.pool.get('account.account').browse(self.cursor, self.uid, accounts):
-            account.ledger_lines = ledger_lines_memoizer.get(account.id, {})
-            account.init_balance = init_balance_memoizer.get(account.id, {})
+            account.ledger_lines = ledger_lines.get(account.id, {})
+            account.init_balance = initial_balance_lines.get(account.id, {})
             ## we have to compute partner order based on inital balance
             ## and ledger line as we may have partner with init bal
             ## that are not in ledger line and vice versa
-            ledg_lines_pids = ledger_lines_memoizer.get(account.id, {}).keys()
+            ledg_lines_pids = ledger_lines.get(account.id, {}).keys()
             if initial_balance_mode:
                 non_null_init_balances = dict([(ib, amounts) for ib, amounts in account.init_balance.iteritems()
                                                              if amounts['init_balance'] or amounts['init_balance_currency']])
@@ -157,7 +157,6 @@ class PartnersLedgerWebkit(report_sxw.rml_parse, CommonPartnersReportHeaderWebki
                 init_bal_lines_pids = []
 
             account.partners_order = self._order_partners(ledg_lines_pids, init_bal_lines_pids)
-            account.ledger_lines = ledger_lines_memoizer.get(account.id, {})
             objects.append(account)
 
         self.localcontext.update({
@@ -184,8 +183,7 @@ class PartnersLedgerWebkit(report_sxw.rml_parse, CommonPartnersReportHeaderWebki
                                                              stop,
                                                              target_move,
                                                              exclude_reconcile=False,
-                                                             partner_filter=partner_filter,
-                                                             opening_mode='exclude_opening')
+                                                             partner_filter=partner_filter)
             if not move_line_ids:
                 continue
             for partner_id in move_line_ids:
