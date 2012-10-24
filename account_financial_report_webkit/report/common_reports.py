@@ -347,6 +347,13 @@ class CommonReportHeaderWebkit(common_report_header):
         """ Read opening balances from the opening balance
         """
         opening_period_selected = self.get_included_opening_period(start_period)
+        if not opening_period_selected:
+            raise osv.except_osv(
+                    _('Error'),
+                    _('No opening period found to compute the opening balances.\n'
+                      'You have to configure a period on the first of January'
+                      ' with the special flag.'))
+
         res = {}
         for account_id in account_ids:
             res[account_id] = self._compute_init_balance(account_id, opening_period_selected, mode='read')
