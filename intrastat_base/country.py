@@ -27,7 +27,7 @@ class res_country(osv.osv):
         'intrastat': fields.boolean('Intrastat country', help="Set as True for countries that must be selected in the intrastat reports, i.e. for all European Union countries other than your own country."),
     }
     _defaults = {
-        'intrastat': lambda *a: False,
+        'intrastat': False,
     }
 
 res_country()
