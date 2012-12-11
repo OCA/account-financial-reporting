@@ -107,7 +107,6 @@ wkhtmltopdf. The texts are defined inside the report classes.
     'init_xml': [],
     'demo_xml' : [],
     'update_xml': ['account_view.xml',
-                   'account_move_line_view.xml',
                    'data/financial_webkit_header.xml',
                    'report/report.xml',
                    'wizard/wizard.xml',
