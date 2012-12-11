@@ -21,12 +21,11 @@
 
 import time
 
-from osv import fields, osv
+from openerp.osv import fields, orm
 
 
-class AccountReportGeneralLedgerWizard(osv.osv_memory):
-    """Will launch general ledger report and pass requiered args"""
-
+class AccountReportGeneralLedgerWizard(orm.TransientModel):
+    """Will launch general ledger report and pass required args"""
 
     _inherit = "account.common.account.report"
     _name = "general.ledger.webkit"
@@ -69,11 +68,9 @@ class AccountReportGeneralLedgerWizard(osv.osv_memory):
 
     def pre_print_report(self, cr, uid, ids, data, context=None):
         data = super(AccountReportGeneralLedgerWizard, self).pre_print_report(cr, uid, ids, data, context)
-        if context is None:
-            context = {}
         # will be used to attach the report on the main account
         data['ids'] = [data['form']['chart_account_id']]
-        vals = self.read(cr, uid, ids, 
+        vals = self.read(cr, uid, ids,
                          ['amount_currency',
                           'display_account',
                           'account_ids',
@@ -85,7 +82,12 @@ class AccountReportGeneralLedgerWizard(osv.osv_memory):
     def onchange_filter(self, cr, uid, ids, filter='filter_no', fiscalyear_id=False, context=None):
         res = {}
         if filter == 'filter_no':
-            res['value'] = {'period_from': False, 'period_to': False, 'date_from': False ,'date_to': False}
+            res['value'] = {
+                    'period_from': False,
+                    'period_to': False,
+                    'date_from': False,
+                    'date_to': False,
+                }
         if filter == 'filter_date':
             if fiscalyear_id:
                 fyear = self.pool.get('account.fiscalyear').browse(cr, uid, fiscalyear_id, context=context)
@@ -93,7 +95,12 @@ class AccountReportGeneralLedgerWizard(osv.osv_memory):
                 date_to = fyear.date_stop > time.strftime('%Y-%m-%d') and time.strftime('%Y-%m-%d') or fyear.date_stop
             else:
                 date_from, date_to = time.strftime('%Y-01-01'), time.strftime('%Y-%m-%d')
-            res['value'] = {'period_from': False, 'period_to': False, 'date_from': date_from, 'date_to': date_to}
+            res['value'] = {
+                    'period_from': False,
+                    'period_to': False,
+                    'date_from': date_from,
+                    'date_to': date_to
+                 }
         if filter == 'filter_period' and fiscalyear_id:
             start_period = end_period = False
             cr.execute('''
@@ -113,7 +120,7 @@ class AccountReportGeneralLedgerWizard(osv.osv_memory):
                                AND COALESCE(p.special, FALSE) = FALSE
                                ORDER BY p.date_stop DESC
                                LIMIT 1) AS period_stop''', (fiscalyear_id, fiscalyear_id))
-            periods =  [i[0] for i in cr.fetchall()]
+            periods = [i[0] for i in cr.fetchall()]
             if periods:
                 start_period = end_period = periods[0]
                 if len(periods) > 1:
@@ -122,11 +129,8 @@ class AccountReportGeneralLedgerWizard(osv.osv_memory):
         return res
 
     def _print_report(self, cursor, uid, ids, data, context=None):
-        context = context or {}
         # we update form with display account value
         data = self.pre_print_report(cursor, uid, ids, data, context=context)
         return {'type': 'ir.actions.report.xml',
                 'report_name': 'account.account_report_general_ledger_webkit',
                 'datas': data}
-
-AccountReportGeneralLedgerWizard()

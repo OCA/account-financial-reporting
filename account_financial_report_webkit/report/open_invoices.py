@@ -18,7 +18,6 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import pooler
 
 from collections import defaultdict
 from report import report_sxw
@@ -27,20 +26,22 @@ from itertools import groupby
 from operator import itemgetter
 from mako.template import Template
 
-from tools.translate import _
 
+import openerp.addons
+from openerp import pooler
 from openerp.osv import osv
-from common_partner_reports import CommonPartnersReportHeaderWebkit
-from webkit_parser_header_fix import HeaderFooterTextWebKitParser
+from openerp.tools.translate import _
 from openerp.addons.report_webkit import report_helper
-import addons
+from .common_partner_reports import CommonPartnersReportHeaderWebkit
+from .webkit_parser_header_fix import HeaderFooterTextWebKitParser
 
 
 def get_mako_template(obj, *args):
-    template_path = addons.get_module_resource(*args)
+    template_path = openerp.addons.get_module_resource(*args)
     return Template(filename=template_path, input_encoding='utf-8')
 
 report_helper.WebKitHelper.get_mako_template = get_mako_template
+
 
 class PartnersOpenInvoicesWebkit(report_sxw.rml_parse, CommonPartnersReportHeaderWebkit):
 
@@ -57,7 +58,7 @@ class PartnersOpenInvoicesWebkit(report_sxw.rml_parse, CommonPartnersReportHeade
         self.localcontext.update({
             'cr': cursor,
             'uid': uid,
-            'report_name':_('Open Invoices Report'),
+            'report_name': _('Open Invoices Report'),
             'display_account_raw': self._get_display_account_raw,
             'filter_form': self._get_filter,
             'target_move': self._get_target_move,
@@ -77,7 +78,6 @@ class PartnersOpenInvoicesWebkit(report_sxw.rml_parse, CommonPartnersReportHeade
             ],
         })
 
-
     def _group_lines_by_currency(self, account_br):
         account_br.grouped_ledger_lines = {}
         if not account_br.ledger_lines:
@@ -87,8 +87,8 @@ class PartnersOpenInvoicesWebkit(report_sxw.rml_parse, CommonPartnersReportHeade
             plane_lines.sort(key=itemgetter('currency_code'))
             for curr, lines in  groupby(plane_lines, key=itemgetter('currency_code')):
                 tmp = [x for x in lines]
-                account_br.grouped_ledger_lines[part_id].append((curr, tmp)) #I want to reiter many times
-    
+                account_br.grouped_ledger_lines[part_id].append((curr, tmp))  # I want to reiter many times
+
     def set_context(self, objects, data, ids, report_type=None):
         """Populate a ledger_lines attribute on each browse record that will be used
         by mako template"""

@@ -20,10 +20,10 @@
 ##############################################################################
 import time
 
-from osv import fields, osv
+from openerp.osv import fields, orm
 
 
-class AccountReportPartnersLedgerWizard(osv.osv_memory):
+class AccountReportPartnersLedgerWizard(orm.TransientModel):
     """Will launch partner ledger report and pass required args"""
 
     _inherit = "account.common.partner.report"
@@ -57,7 +57,8 @@ class AccountReportPartnersLedgerWizard(osv.osv_memory):
     def onchange_filter(self, cr, uid, ids, filter='filter_no', fiscalyear_id=False, context=None):
         res = {}
         if filter == 'filter_no':
-            res['value'] = {'period_from': False, 'period_to': False, 'date_from': False ,'date_to': False}
+            res['value'] = {'period_from': False, 'period_to': False, 'date_from': False, 'date_to': False}
+
         if filter == 'filter_date':
             if fiscalyear_id:
                 fyear = self.pool.get('account.fiscalyear').browse(cr, uid, fiscalyear_id, context=context)
@@ -85,7 +86,7 @@ class AccountReportPartnersLedgerWizard(osv.osv_memory):
                                AND COALESCE(p.special, FALSE) = FALSE
                                ORDER BY p.date_stop DESC
                                LIMIT 1) AS period_stop''', (fiscalyear_id, fiscalyear_id))
-            periods =  [i[0] for i in cr.fetchall()]
+            periods = [i[0] for i in cr.fetchall()]
             if periods:
                 start_period = end_period = periods[0]
                 if len(periods) > 1:
@@ -100,17 +101,14 @@ class AccountReportPartnersLedgerWizard(osv.osv_memory):
         # will be used to attach the report on the main account
         data['ids'] = [data['form']['chart_account_id']]
         vals = self.read(cr, uid, ids,
-                         ['amount_currency', 'partner_ids',],
+                         ['amount_currency', 'partner_ids'],
                          context=context)[0]
         data['form'].update(vals)
         return data
 
     def _print_report(self, cursor, uid, ids, data, context=None):
-        context = context or {}
         # we update form with display account value
         data = self.pre_print_report(cursor, uid, ids, data, context=context)
         return {'type': 'ir.actions.report.xml',
                 'report_name': 'account.account_report_partners_ledger_webkit',
                 'datas': data}
-
-AccountReportPartnersLedgerWizard()

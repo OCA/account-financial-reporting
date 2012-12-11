@@ -19,34 +19,33 @@
 #
 ##############################################################################
 
-from osv import fields, osv
-from tools.translate import _
+from openerp.osv import fields, orm
+from openerp.tools.translate import _
 
 
-class AccountMoveLine(osv.osv):
+class AccountMoveLine(orm.Model):
     """Overriding Account move line in order to add last_rec_date.
     Last rec date is the date of the last reconciliation (full or partial) account move line"""
     _inherit = 'account.move.line'
-    
+
     def init(self, cr):
         ##We do not want to catch error as if sql is not run it will give invalid data
         cr.execute("UPDATE account_move_line as acm "
-                   " SET last_rec_date =" 
+                   " SET last_rec_date ="
                    "     (SELECT date from account_move_line"
                    "          WHERE reconcile_id =  acm.reconcile_id"
                    "              AND reconcile_id IS NOT NULL"
                    "          ORDER BY date DESC LIMIT 1)"
                    " WHERE last_rec_date is null;")
-                   
+
         cr.execute("UPDATE account_move_line as acm "
-                   " SET last_rec_date =" 
+                   " SET last_rec_date ="
                    "     (SELECT date from account_move_line"
                    "          WHERE reconcile_partial_id =  acm.reconcile_partial_id"
                    "              AND reconcile_partial_id IS NOT NULL"
                    "          ORDER BY date DESC LIMIT 1)"
                    " WHERE last_rec_date is null;")
-                   
-                   
+
     def _get_move_line_from_line_rec(self, cr, uid, ids, context=None):
         moves = []
         for reconcile in self.pool.get('account.move.reconcile').browse(cr, uid, ids, context=context):
@@ -55,7 +54,7 @@ class AccountMoveLine(osv.osv):
             for move_line in reconcile.line_id:
                 moves.append(move_line.id)
         return list(set(moves))
-                   
+
     def _get_last_rec_date(self, cursor, uid, ids, name, args, context=None):
         if not isinstance(ids, list):
             ids = [ids]
@@ -79,11 +78,8 @@ class AccountMoveLine(osv.osv):
                      method=True,
                      string='Last reconciliation date',
                      store={'account.move.line': (lambda self, cr, uid, ids, c={}: ids, ['date'], 20),
-                            'account.move.reconcile': (_get_move_line_from_line_rec, None ,20)},
+                            'account.move.reconcile': (_get_move_line_from_line_rec, None, 20)},
                      type='date',
                      multi='all',
                      help="the date of the last reconciliation (full or partial) account move line"),
-
                 }
-
-AccountMoveLine()

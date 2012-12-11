@@ -20,16 +20,18 @@
 ##############################################################################
 
 
-from report import report_sxw
-from tools.translate import _
-import pooler
 from datetime import datetime
 
-from common_balance_reports import CommonBalanceReportHeaderWebkit
-from webkit_parser_header_fix import HeaderFooterTextWebKitParser
+from openerp import pooler
+from openerp.report import report_sxw
+from openerp.tools.translate import _
+from .common_balance_reports import CommonBalanceReportHeaderWebkit
+from .webkit_parser_header_fix import HeaderFooterTextWebKitParser
+
 
 def sign(number):
     return cmp(number, 0)
+
 
 class TrialBalanceWebkit(report_sxw.rml_parse, CommonBalanceReportHeaderWebkit):
 
@@ -37,7 +39,7 @@ class TrialBalanceWebkit(report_sxw.rml_parse, CommonBalanceReportHeaderWebkit):
         super(TrialBalanceWebkit, self).__init__(cursor, uid, name, context=context)
         self.pool = pooler.get_pool(self.cr.dbname)
         self.cursor = self.cr
-        
+
         company = self.pool.get('res.users').browse(self.cr, uid, uid, context=context).company_id
         header_report_name = ' - '.join((_('TRIAL BALANCE'), company.name, company.currency_id.name))
 

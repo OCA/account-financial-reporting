@@ -24,25 +24,25 @@
 
 import logging
 
+from openerp.osv import osv
+from openerp.tools.translate import _
 from openerp.addons.account.report.common_report_header import common_report_header
-from osv import osv
-from tools.translate import _
-
 
 _logger = logging.getLogger('financial.reports.webkit')
+
 
 class CommonReportHeaderWebkit(common_report_header):
     """Define common helper for financial report"""
 
     ####################From getter helper #####################################
     def get_start_period_br(self, data):
-        return self._get_info(data,'period_from', 'account.period')
+        return self._get_info(data, 'period_from', 'account.period')
 
     def get_end_period_br(self, data):
-        return self._get_info(data,'period_to', 'account.period')
+        return self._get_info(data, 'period_to', 'account.period')
 
     def get_fiscalyear_br(self, data):
-        return self._get_info(data,'fiscalyear_id', 'account.fiscalyear')
+        return self._get_info(data, 'fiscalyear_id', 'account.fiscalyear')
 
     def _get_chart_account_id_br(self, data):
         return self._get_info(data, 'chart_account_id', 'account.account')
@@ -109,8 +109,6 @@ class CommonReportHeaderWebkit(common_report_header):
     def _get_form_param(self, param, data, default=False):
         return data.get('form', {}).get(param, default)
 
-
-
     ####################Account and account line filter helper #################
 
     def sort_accounts_with_structure(self, root_account_ids, account_ids, context=None):
@@ -119,11 +117,11 @@ class CommonReportHeaderWebkit(common_report_header):
         def recursive_sort_by_code(accounts, parent):
             sorted_accounts = []
             # add all accounts with same parent
-            level_accounts = [account for account in accounts 
+            level_accounts = [account for account in accounts
                               if account['parent_id'] and account['parent_id'][0] == parent['id']]
             # add consolidation children of parent, as they are logically on the same level
             if parent.get('child_consol_ids'):
-                level_accounts.extend([account for account in accounts 
+                level_accounts.extend([account for account in accounts
                                        if account['id'] in parent['child_consol_ids']])
             # stop recursion if no children found
             if not level_accounts:
@@ -143,7 +141,7 @@ class CommonReportHeaderWebkit(common_report_header):
                                                          account_ids,
                                                          ['id', 'parent_id', 'level', 'code', 'child_consol_ids'],
                                                          context=context)
-                
+
         sorted_accounts = []
 
         root_accounts_data = [account_data for account_data in accounts_data
@@ -221,7 +219,7 @@ class CommonReportHeaderWebkit(common_report_header):
     def get_included_opening_period(self, period):
         """Return the opening included in normal period we use the assumption
         that there is only one opening period per fiscal year"""
-        period_obj =  self.pool.get('account.period')
+        period_obj = self.pool.get('account.period')
         return period_obj.search(self.cursor, self.uid,
                                  [('special', '=', True),
                                   ('date_start', '>=', period.date_start),
@@ -285,7 +283,7 @@ class CommonReportHeaderWebkit(common_report_header):
         if not include_opening:
             periods_search += [('special', '=', False)]
 
-        if fiscalyear :
+        if fiscalyear:
             periods_search.append(('fiscalyear_id', '=', fiscalyear.id))
         periods = period_obj.search(self.cursor, self.uid, periods_search)
         if include_opening and opening_period_id:
@@ -305,12 +303,12 @@ class CommonReportHeaderWebkit(common_report_header):
         period_obj = self.pool.get('account.period')
         p_id = period_obj.search(self.cursor,
                                  self.uid,
-                                 [('special','=', special),
+                                 [('special', '=', special),
                                   ('fiscalyear_id', '=', fiscalyear.id)],
                                  limit=1,
                                  order='date_start %s' % (order,))
         if not p_id:
-            raise osv.except_osv(_('No period found'),'')
+            raise osv.except_osv(_('No period found'), '')
         return period_obj.browse(self.cursor, self.uid, p_id[0])
 
     ####################Initial Balance helper #################################
@@ -401,7 +399,7 @@ class CommonReportHeaderWebkit(common_report_header):
     def _get_move_ids_from_dates(self, account_id, date_start, date_stop, target_move, mode='include_opening'):
         # TODO imporve perfomance by setting opening period as a property
         move_line_obj = self.pool.get('account.move.line')
-        search_period = [('date', '>=', date_start), 
+        search_period = [('date', '>=', date_start),
                          ('date', '<=', date_stop),
                          ('account_id', '=', account_id)]
 
@@ -424,7 +422,7 @@ class CommonReportHeaderWebkit(common_report_header):
 
         if main_filter in ('filter_period', 'filter_no'):
             return self._get_move_ids_from_periods(account_id, start, stop, target_move)
-            
+
         elif main_filter == 'filter_date':
             return self._get_move_ids_from_dates(account_id, start, stop, target_move)
         else:
@@ -435,7 +433,7 @@ class CommonReportHeaderWebkit(common_report_header):
             return []
         if not isinstance(move_line_ids, list):
             move_line_ids = [move_line_ids]
-        monster ="""
+        monster = """
 SELECT l.id AS id,
             l.date AS ldate,
             j.code AS jcode ,
@@ -473,7 +471,7 @@ FROM account_move_line l
         monster += (" ORDER BY %s" % (order,))
         try:
             self.cursor.execute(monster, (tuple(move_line_ids),))
-            res= self.cursor.dictfetchall()
+            res = self.cursor.dictfetchall()
         except Exception, exc:
             self.cursor.rollback()
             raise
@@ -500,8 +498,8 @@ WHERE move_id in %s"""
 
         try:
             self.cursor.execute(sql, (account_id, limit, tuple(move_ids)))
-            res= self.cursor.fetchall()
-        except Exception, exc:
+            res = self.cursor.fetchall()
+        except Exception as exc:
             self.cursor.rollback()
             raise
         return res and dict(res) or {}

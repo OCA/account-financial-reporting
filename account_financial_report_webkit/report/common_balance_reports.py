@@ -22,7 +22,7 @@
 
 from operator import add
 
-from common_reports import CommonReportHeaderWebkit
+from .common_reports import CommonReportHeaderWebkit
 
 
 class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
@@ -73,12 +73,17 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
                     'all_fiscalyear': True})
 
         if use_period_ids:
-            ctx.update({'periods': period_ids,})
+            ctx.update({'periods': period_ids})
         elif main_filter == 'filter_date':
             ctx.update({'date_from': start,
                         'date_to': stop})
 
-        accounts = account_obj.read(self.cursor, self.uid, account_ids, ['type','code','name','debit','credit', 'balance', 'parent_id','level','child_id'], ctx)
+        accounts = account_obj.read(
+                self.cursor,
+                self.uid,
+                account_ids,
+                ['type', 'code', 'name', 'debit', 'credit',  'balance', 'parent_id', 'level', 'child_id'],
+                ctx)
 
         accounts_by_id = {}
         for account in accounts:
@@ -86,7 +91,11 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
                 # sum for top level views accounts
                 child_ids = account_obj._get_children_and_consol(self.cursor, self.uid, account['id'], ctx)
                 if child_ids:
-                    child_init_balances = [init_bal['init_balance'] for acnt_id, init_bal in init_balance.iteritems() if acnt_id in child_ids ]
+                    child_init_balances = [ \
+                            init_bal['init_balance'] \
+                            for acnt_id, init_bal \
+                            in init_balance.iteritems() \
+                            if acnt_id in child_ids]
                     top_init_balance = reduce(add, child_init_balances)
                     account['init_balance'] = top_init_balance
                 else:
@@ -154,7 +163,7 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
         return {'diff': diff, 'percent_diff': percent_diff}
 
     def _comp_filters(self, data, comparison_number):
-        """ 
+        """
         @param data: data of the report
         @param comparison_number: number of comparisons
         @return: list of comparison filters, nb of comparisons used and comparison mode (no_comparison, single, multiple)
@@ -162,7 +171,7 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
         comp_filters = []
         for index in range(comparison_number):
             comp_filters.append(self._get_form_param("comp%s_filter" % (index,), data, default='filter_no'))
-            
+
         nb_comparisons = len([comp_filter for comp_filter in comp_filters if comp_filter != 'filter_no'])
         if not nb_comparisons:
             comparison_mode = 'no_comparison'

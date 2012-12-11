@@ -18,10 +18,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from osv import fields, osv
+from openerp.osv import fields, orm
 
 
-class AccountReportOpenInvoicesWizard(osv.osv_memory):
+class AccountReportOpenInvoicesWizard(orm.TransientModel):
     """Will launch partner ledger report and pass required args"""
 
     _inherit = "partners.ledger.webkit"
@@ -29,7 +29,7 @@ class AccountReportOpenInvoicesWizard(osv.osv_memory):
     _description = "Open Invoices Report"
 
     _columns = {
-        'group_by_currency':fields.boolean('Group Partner by currency'),
+        'group_by_currency': fields.boolean('Group Partner by currency'),
         'until_date': fields.date("Clearance date",
                                   required=True,
                                   help="""The clearance date is essentially a tool used for debtors provisionning calculation.
@@ -57,38 +57,38 @@ By amending the clearance date, you will be, for instance, able to answer the qu
         (_check_until_date, 'Clearance date must be the very last date of the last period or later.', ['until_date']),
     ]
 
-    def default_until_date(self, cursor, uid, ids, fiscalyear_id=False, period_id=False, date_to=False, context=None):
+    def default_until_date(self, cr, uid, ids, fiscalyear_id=False, period_id=False, date_to=False, context=None):
         res_date = False
         # first priority: period or date filters
         if period_id:
-            res_date = self.pool.get('account.period').read(cursor, uid, period_id, ['date_stop'], context=context)['date_stop']
+            res_date = self.pool.get('account.period').read(cr, uid, period_id, ['date_stop'], context=context)['date_stop']
         elif date_to:
             res_date = date_to
         elif fiscalyear_id:
-            res_date = self.pool.get('account.fiscalyear').read(cursor, uid, fiscalyear_id, ['date_stop'], context=context)['date_stop']
+            res_date = self.pool.get('account.fiscalyear').read(cr, uid, fiscalyear_id, ['date_stop'], context=context)['date_stop']
         return res_date
 
-    def onchange_fiscalyear(self, cursor, uid, ids, fiscalyear=False, period_id=False, date_to=False, until_date=False, context=None):
+    def onchange_fiscalyear(self, cr, uid, ids, fiscalyear=False, period_id=False, date_to=False, until_date=False, context=None):
         res = {'value': {}}
-        res['value']['until_date'] = self.default_until_date(cursor, uid, ids,
+        res['value']['until_date'] = self.default_until_date(cr, uid, ids,
                                                              fiscalyear_id=fiscalyear,
                                                              period_id=period_id,
                                                              date_to=date_to,
                                                              context=context)
         return res
 
-    def onchange_date_to(self, cursor, uid, ids, fiscalyear=False, period_id=False, date_to=False, until_date=False, context=None):
+    def onchange_date_to(self, cr, uid, ids, fiscalyear=False, period_id=False, date_to=False, until_date=False, context=None):
         res = {'value': {}}
-        res['value']['until_date'] = self.default_until_date(cursor, uid, ids,
+        res['value']['until_date'] = self.default_until_date(cr, uid, ids,
                                                              fiscalyear_id=fiscalyear,
                                                              period_id=period_id,
                                                              date_to=date_to,
                                                              context=context)
         return res
 
-    def onchange_period_to(self, cursor, uid, ids, fiscalyear=False, period_id=False, date_to=False, until_date=False, context=None):
+    def onchange_period_to(self, cr, uid, ids, fiscalyear=False, period_id=False, date_to=False, until_date=False, context=None):
         res = {'value': {}}
-        res['value']['until_date'] = self.default_until_date(cursor, uid, ids,
+        res['value']['until_date'] = self.default_until_date(cr, uid, ids,
                                                              fiscalyear_id=fiscalyear,
                                                              period_id=period_id,
                                                              date_to=date_to,
@@ -107,20 +107,15 @@ By amending the clearance date, you will be, for instance, able to answer the qu
 
     def pre_print_report(self, cr, uid, ids, data, context=None):
         data = super(AccountReportOpenInvoicesWizard, self).pre_print_report(cr, uid, ids, data, context)
-        if context is None:
-            context = {}
         vals = self.read(cr, uid, ids,
                          ['until_date', 'group_by_currency'],
                          context=context)[0]
         data['form'].update(vals)
         return data
 
-    def _print_report(self, cursor, uid, ids, data, context=None):
-        context = context or {}
+    def _print_report(self, cr, uid, ids, data, context=None):
         # we update form with display account value
-        data = self.pre_print_report(cursor, uid, ids, data, context=context)
+        data = self.pre_print_report(cr, uid, ids, data, context=context)
         return {'type': 'ir.actions.report.xml',
                 'report_name': 'account.account_report_open_invoices_webkit',
                 'datas': data}
-
-AccountReportOpenInvoicesWizard()
