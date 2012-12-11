@@ -32,8 +32,10 @@
                             </field>
                         </page>
                         <page string="Layout Options" name="layout_options">
-                            <field name="amount_currency"/>
-                            <field name="centralize"/>
+                            <group colspan="4" col="2">
+                                <field name="amount_currency"/>
+                                <field name="centralize"/>
+                            </group>
                         </page>
                     </page>
                     <page name="journal_ids" position="attributes">

@@ -25,7 +25,9 @@
                             <field name="partner_ids" colspan="4" nolabel="1"/>
                         </page>
                         <page string="Layout Options" name="layout_options">
-                            <field name="amount_currency"/>
+                            <group colspan="4" col="2">
+                                <field name="amount_currency"/>
+                            </group>
                         </page>
                     </page>
                     <page name="filters" position="attributes">
