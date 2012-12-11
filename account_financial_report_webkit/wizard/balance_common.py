@@ -142,26 +142,58 @@ class AccountBalanceCommonWizard(osv.osv_memory):
             placeholder = placeholder[0]
             for index in range(self.COMPARISON_LEVEL):
                 page = etree.Element('page', {'name': "comp%s" % (index,), 'string': _("Comparison %s") % (index+1,)})
-                page.append(etree.Element('field', {'name': "comp%s_filter" % (index,),
-                                                    'colspan': '4',
-                                                    'on_change': "onchange_comp_filter(%(index)s, filter, comp%(index)s_filter, fiscalyear_id, date_from, date_to)" % {'index': index}}))
-                page.append(etree.Element('field', {'name': "comp%s_fiscalyear_id" % (index,),
-                                                    'colspan': '4',
-                                                    'attrs': "{'required': [('comp%(index)s_filter','in',('filter_year','filter_opening'))], 'readonly':[('comp%(index)s_filter','not in',('filter_year','filter_opening'))]}" % {'index': index}}))
-                page.append(etree.Element('separator', {'string': _('Dates'), 'colspan':'4'}))
-                page.append(etree.Element('field', {'name': "comp%s_date_from" % (index,), 'colspan':'4',
-                                                    'attrs': "{'required': [('comp%(index)s_filter','=','filter_date')], 'readonly':[('comp%(index)s_filter','!=','filter_date')]}" % {'index': index}}))
-                page.append(etree.Element('field', {'name': "comp%s_date_to" % (index,), 'colspan':'4',
-                                                    'attrs': "{'required': [('comp%(index)s_filter','=','filter_date')], 'readonly':[('comp%(index)s_filter','!=','filter_date')]}" % {'index': index}}))
-                page.append(etree.Element('separator', {'string': _('Periods'), 'colspan':'4'}))
-                page.append(etree.Element('field', {'name': "comp%s_period_from" % (index,),
-                                                    'colspan': '4',
-                                                    'attrs': "{'required': [('comp%(index)s_filter','=','filter_period')], 'readonly':[('comp%(index)s_filter','!=','filter_period')]}" % {'index': index},
-                                                    'domain': "[('special', '=', False)]"}))
-                page.append(etree.Element('field', {'name': "comp%s_period_to" % (index,),
-                                                    'colspan': '4',
-                                                    'attrs': "{'required': [('comp%(index)s_filter','=','filter_period')], 'readonly':[('comp%(index)s_filter','!=','filter_period')]}" % {'index': index},
-                                                    'domain': "[('special', '=', False)]"}))
+                group = etree.Element('group')
+                page.append(group)
+                def modifiers_and_append(elem):
+                    orm.setup_modifiers(elem)
+                    group.append(elem)
+
+                modifiers_and_append(etree.Element(
+                    'field',
+                    {'name': "comp%s_filter" % index,
+                     'on_change': "onchange_comp_filter(%(index)s, filter, comp%(index)s_filter, fiscalyear_id, date_from, date_to)" % {'index': index}}))
+                modifiers_and_append(etree.Element(
+                    'field',
+                    {'name': "comp%s_fiscalyear_id" % index,
+                     'attrs':
+                     "{'required': [('comp%(index)s_filter','in',('filter_year','filter_opening'))]," \
+                     " 'invisible': [('comp%(index)s_filter','not in',('filter_year','filter_opening'))]}" % {'index': index}}))
+
+
+                dates_attrs = "{'required': [('comp%(index)s_filter','=','filter_date')], " \
+                              " 'invisible': [('comp%(index)s_filter','!=','filter_date')]}" % {'index': index}
+                modifiers_and_append(etree.Element(
+                    'separator',
+                    {'string': _('Dates'),
+                     'colspan': '4',
+                     'attrs': dates_attrs}))
+                modifiers_and_append(etree.Element(
+                    'field',
+                    {'name': "comp%s_date_from" % index,
+                     'attrs': dates_attrs}))
+                modifiers_and_append(etree.Element(
+                    'field',
+                    {'name': "comp%s_date_to" % index,
+                     'attrs': dates_attrs}))
+
+                periods_attrs = "{'required': [('comp%(index)s_filter','=','filter_period')]," \
+                                " 'invisible': [('comp%(index)s_filter','!=','filter_period')]}" % {'index': index}
+                periods_domain = "[('special', '=', False)]"
+                modifiers_and_append(etree.Element(
+                    'separator',
+                    {'string': _('Periods'),
+                     'colspan': '4',
+                     'attrs': periods_attrs}))
+                modifiers_and_append(etree.Element(
+                    'field',
+                    {'name': "comp%s_period_from" % index,
+                     'attrs': periods_attrs,
+                     'domain': periods_domain}))
+                modifiers_and_append(etree.Element(
+                    'field',
+                    {'name': "comp%s_period_to" % index,
+                     'attrs': periods_attrs,
+                     'domain': periods_domain}))
 
                 placeholder.addprevious(page)
             placeholder.getparent().remove(placeholder)
