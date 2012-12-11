@@ -32,7 +32,7 @@
             ${output}
         </%def>
 
-        <%setLang(user.context_lang)%>
+        <%setLang(user.lang)%>
 
         <div class="act_as_table data_table">
             <div class="act_as_row labels">
