@@ -32,7 +32,7 @@
             return any([line.get('balance') for line in all_comparison_lines])
         %>
 
-        <%setLang(user.context_lang)%>
+        <%setLang(user.lang)%>
 
         <%
         initial_balance_text = {'initial_balance': _('Computed'), 'opening_balance': _('Opening Entries'), False: _('No')}
