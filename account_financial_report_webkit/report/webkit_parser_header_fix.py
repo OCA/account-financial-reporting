@@ -34,12 +34,12 @@ import time
 import pooler
 import tools
 import logging
-import openerp.addons
 
 
 from mako import exceptions
 from osv.osv import except_osv
 from tools.translate import _
+from openerp import addons
 from openerp.addons.report_webkit import webkit_report
 from openerp.addons.report_webkit.webkit_report import mako_template
 from openerp.addons.report_webkit.report_helper import WebKitHelper
@@ -79,7 +79,6 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
             webkit_header = report_xml.webkit_header
         tmp_dir = tempfile.gettempdir()
         out_filename = tempfile.mktemp(suffix=".pdf", prefix="webkit.tmp.")
-        files = []
         file_to_del = [out_filename]
         if comm_path:
             command = [comm_path]
@@ -120,8 +119,8 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
         file_to_del.append(stderr_path)
         try:
             status = subprocess.call(command, stderr=stderr_fd)
-            os.close(stderr_fd) # force flush
-            stderr_fd = None    # avoid closing again in finally
+            os.close(stderr_fd) # ensure flush before reading
+            stderr_fd = None # avoid closing again in finally block
             fobj = open(stderr_path, 'r')
             error_message = fobj.read()
             fobj.close()
@@ -167,7 +166,7 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
         template =  False
 
         if report_xml.report_file :
-            path =openerp.addons.get_module_resource(report_xml.report_file)
+            path = addons.get_module_resource(*report_xml.report_file.split(os.path.sep))
             if os.path.exists(path) :
                 template = file(path).read()
         if not template and report_xml.report_webkit_data :
@@ -233,3 +232,4 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
         bin = self.get_lib(cursor, uid)
         pdf = self.generate_pdf(bin, report_xml, head, foot, htmls)
         return (pdf, 'pdf')
+
