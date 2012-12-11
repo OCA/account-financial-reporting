@@ -37,8 +37,8 @@ import logging
 
 
 from mako import exceptions
-from osv.osv import except_osv
-from tools.translate import _
+from openerp.osv.osv import except_osv
+from openerp.tools.translate import _
 from openerp import addons
 from openerp.addons.report_webkit import webkit_report
 from openerp.addons.report_webkit.webkit_report import mako_template
@@ -232,4 +232,3 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
         bin = self.get_lib(cursor, uid)
         pdf = self.generate_pdf(bin, report_xml, head, foot, htmls)
         return (pdf, 'pdf')
-
