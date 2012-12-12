@@ -44,7 +44,7 @@ The General ledger: details of all entries posted in your books sorted by accoun
 * The report only prints accounts with moves OR with a non
   null balance. No more endless report with empty accounts (field:
   display account is hidden)
-* initial balance calculation on the fly if no open entry posted
+* initial balance computation on the fly if no open entry posted
 * Thanks to a new checkbox in the account form, you will have the
   possibility to centralize any account you like.  This means you do
   not want to see all entries posted under the account ‘VAT on sales’;
@@ -108,7 +108,7 @@ library `wkhtmltopdf` for the pdf rendering (the library path must be
 set in a System Parameter `webkit_path`).
 
 Initial balances in these reports are based either on opening entry
-posted in the opening period or calculated on the fly. So make sure
+posted in the opening period or computed on the fly. So make sure
 that your past accounting opening entries are in an opening period.
 Initials balances are not computed when using the Date filter (since a
 date can be outside its logical period and the initial balance could

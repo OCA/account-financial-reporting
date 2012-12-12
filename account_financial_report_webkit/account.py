@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2011 Camptocamp SA (http://www.camptocamp.com)
 #
-# Author : Guewen Baconnier (Camptocamp)
+# Author: Guewen Baconnier (Camptocamp)
 #
 # WARNING: This program as such is intended to be used by professional
 # programmers who take the whole responsability of assessing all potential

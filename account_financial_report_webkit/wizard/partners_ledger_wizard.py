@@ -34,10 +34,13 @@ class AccountReportPartnersLedgerWizard(orm.TransientModel):
         'amount_currency': fields.boolean("With Currency",
                                           help="It adds the currency column"),
         'partner_ids': fields.many2many('res.partner', string='Filter on partner',
-                                         help="Only selected partners will be printed. Leave empty to print all partners."),
+                                         help="Only selected partners will be printed. "
+                                              "Leave empty to print all partners."),
         'filter': fields.selection([('filter_no', 'No Filters'),
                                     ('filter_date', 'Date'),
-                                    ('filter_period', 'Periods')], "Filter by", required=True, help='Filter by date : no opening balance will be displayed. (opening balance can only be calculated based on period to be correct).'),
+                                    ('filter_period', 'Periods')], "Filter by", required=True,
+                                   help='Filter by date: no opening balance will be displayed. '
+                                        '(opening balance can only be computed based on period to be correct).'),
     }
     _defaults = {
         'amount_currency': False,
@@ -51,7 +54,10 @@ class AccountReportPartnersLedgerWizard(orm.TransientModel):
         return True
 
     _constraints = [
-        (_check_fiscalyear, 'When no Fiscal year is selected, you must choose to filter by periods or by date.', ['filter']),
+        (_check_fiscalyear,
+         'When no Fiscal year is selected, you must choose to '
+         'filter by periods or by date.',
+         ['filter']),
     ]
 
     def onchange_filter(self, cr, uid, ids, filter='filter_no', fiscalyear_id=False, context=None):
