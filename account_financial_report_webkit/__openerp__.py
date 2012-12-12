@@ -24,7 +24,7 @@
 Financial Reports - Webkit
 ==========================
 
-This module replaces or adds the following standard OpenERP financial reports:
+This module adds or replaces the following standard OpenERP financial reports:
  - General ledger
  - Trial Balance (simple or comparative view)
  - Partner ledger
