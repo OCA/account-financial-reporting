@@ -117,7 +117,6 @@ wkhtmltopdf. The texts are defined inside the report classes.
                    'wizard/partner_balance_wizard_view.xml',
                    'wizard/open_invoices_wizard_view.xml',
                    'report_menus.xml',
-#                   'wizard/profit_loss_wizard_view.xml',
                    ],
     # tests order matter
     'test': ['tests/general_ledger.yml',
