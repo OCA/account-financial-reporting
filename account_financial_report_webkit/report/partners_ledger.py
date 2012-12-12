@@ -121,7 +121,7 @@ class PartnersLedgerWebkit(report_sxw.rml_parse, CommonPartnersReportHeaderWebki
         # when the opening period is included in the selected range of periods and
         # the opening period contains move lines, we must not compute the initial balance from previous periods
         # but only display the move lines of the opening period
-        # we identify them as :
+        # we identify them as:
         #  - 'initial_balance' means compute the sums of move lines from previous periods
         #  - 'opening_balance' means display the move lines of the opening period
         init_balance = main_filter in ('filter_no', 'filter_period')

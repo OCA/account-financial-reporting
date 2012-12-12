@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2011 Camptocamp SA (http://www.camptocamp.com)
 #
-# Author : Guewen Baconnier (Camptocamp)
+# Author: Guewen Baconnier (Camptocamp)
 #
 # WARNING: This program as such is intended to be used by professional
 # programmers who take the whole responsability of assessing all potential
@@ -88,8 +88,8 @@ class AccountBalanceCommonWizard(orm.TransientModel):
                                     ('filter_opening', 'Opening Only')],
                                     "Filter by",
                                     required=True,
-                                    help='Filter by date : no opening balance will be displayed. '
-                                         '(opening balance can only be calculated based on period to be correct).'),
+                                    help='Filter by date: no opening balance will be displayed. '
+                                         '(opening balance can only be computed based on period to be correct).'),
     }
 
     for index in range(COMPARISON_LEVEL):
