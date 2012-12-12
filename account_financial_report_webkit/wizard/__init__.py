@@ -24,4 +24,3 @@ from . import partners_ledger_wizard
 from . import trial_balance_wizard
 from . import partner_balance_wizard
 from . import open_invoices_wizard
-#from . import account_report_profit_loss_wizard
