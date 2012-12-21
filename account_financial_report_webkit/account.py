@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2011 Camptocamp SA (http://www.camptocamp.com)
 #
-# Author : Guewen Baconnier (Camptocamp)
+# Author: Guewen Baconnier (Camptocamp)
 #
 # WARNING: This program as such is intended to be used by professional
 # programmers who take the whole responsability of assessing all potential
@@ -28,18 +28,20 @@
 #
 ##############################################################################
 
-from osv import osv, fields
+from openerp.osv import fields, orm
 
 
-class AccountAccount(osv.osv):
+class AccountAccount(orm.Model):
     _inherit = 'account.account'
 
     _columns = {
-        'centralized': fields.boolean('Centralized', help="If flagged, no details will be displayed in the General Ledger report (the webkit one only), only centralized amounts per period.")
+        'centralized': fields.boolean(
+            'Centralized',
+            help="If flagged, no details will be displayed in "
+                 "the General Ledger report (the webkit one only), "
+                 "only centralized amounts per period.")
     }
 
     _defaults = {
         'centralized': False,
     }
-
-AccountAccount()

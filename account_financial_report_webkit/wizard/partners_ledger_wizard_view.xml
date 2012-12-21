@@ -5,7 +5,6 @@
         <record id="account_partner_ledger_view_webkit" model="ir.ui.view">
             <field name="name">Partner Ledger</field>
             <field name="model">partners.ledger.webkit</field>
-            <field name="type">form</field>
             <field name="inherit_id" ref="account.account_common_report_view"/>
             <field name="arch" type="xml">
                 <data>
@@ -17,6 +16,7 @@
                         <attribute name="colspan">4</attribute>
                     </field>
                     <xpath expr="//field[@name='target_move']" position="after">
+                        <newline/>
                         <field name="result_selection" colspan="4"/>
                     </xpath>
                     <page name="filters" position="after">
@@ -25,7 +25,9 @@
                             <field name="partner_ids" colspan="4" nolabel="1"/>
                         </page>
                         <page string="Layout Options" name="layout_options">
-                            <field name="amount_currency"/>
+                            <group colspan="4" col="2">
+                                <field name="amount_currency"/>
+                            </group>
                         </page>
                     </page>
                     <page name="filters" position="attributes">

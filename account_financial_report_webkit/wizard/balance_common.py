@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2011 Camptocamp SA (http://www.camptocamp.com)
 #
-# Author : Guewen Baconnier (Camptocamp)
+# Author: Guewen Baconnier (Camptocamp)
 #
 # WARNING: This program as such is intended to be used by professional
 # programmers who take the whole responsability of assessing all potential
@@ -30,10 +30,11 @@
 
 import time
 
-from osv import fields, osv
 from lxml import etree
-from tools.translate import _
 from datetime import datetime
+from openerp.osv import fields, orm
+from openerp.tools.translate import _
+
 
 def previous_year_date(date, nb_prev=1):
     if not date:
@@ -44,7 +45,8 @@ def previous_year_date(date, nb_prev=1):
                              day=parsed_date.day)
     return previous_date
 
-class AccountBalanceCommonWizard(osv.osv_memory):
+
+class AccountBalanceCommonWizard(orm.TransientModel):
     """Will launch trial balance report and pass required args"""
 
     _inherit = "account.common.account.report"
@@ -54,7 +56,7 @@ class AccountBalanceCommonWizard(osv.osv_memory):
     # an update module should be done if changed
     # in order to create fields in db
     COMPARISON_LEVEL = 3
-    
+
     COMPARE_SELECTION = [('filter_no', 'No Comparison'),
                          ('filter_year', 'Fiscal Year'),
                          ('filter_date', 'Date'),
@@ -63,7 +65,7 @@ class AccountBalanceCommonWizard(osv.osv_memory):
 
     M2O_DYNAMIC_FIELDS = [f % index for f in ["comp%s_fiscalyear_id",
                                               "comp%s_period_from",
-                                              "comp%s_period_to",]
+                                              "comp%s_period_to"]
                       for index in range(COMPARISON_LEVEL)]
     SIMPLE_DYNAMIC_FIELDS = [f % index for f in ["comp%s_filter",
                                                  "comp%s_date_from",
@@ -83,17 +85,21 @@ class AccountBalanceCommonWizard(osv.osv_memory):
         'filter': fields.selection([('filter_no', 'No Filters'),
                                     ('filter_date', 'Date'),
                                     ('filter_period', 'Periods'),
-                                    ('filter_opening', 'Opening Only')], "Filter by", required=True, help='Filter by date : no opening balance will be displayed. (opening balance can only be calculated based on period to be correct).'),
+                                    ('filter_opening', 'Opening Only')],
+                                    "Filter by",
+                                    required=True,
+                                    help='Filter by date: no opening balance will be displayed. '
+                                         '(opening balance can only be computed based on period to be correct).'),
     }
 
     for index in range(COMPARISON_LEVEL):
         _columns.update(
-            {"comp%s_filter" % (index,): fields.selection(COMPARE_SELECTION, string='Compare By', required=True),
-             "comp%s_fiscalyear_id" % (index,): fields.many2one('account.fiscalyear', 'Fiscal Year'),
-             "comp%s_period_from" % (index,): fields.many2one('account.period', 'Start Period'),
-             "comp%s_period_to" % (index,): fields.many2one('account.period', 'End Period'),
-             "comp%s_date_from" % (index,): fields.date("Start Date"),
-             "comp%s_date_to" % (index,): fields.date("End Date"),})
+            {"comp%s_filter" % index: fields.selection(COMPARE_SELECTION, string='Compare By', required=True),
+             "comp%s_fiscalyear_id" % index: fields.many2one('account.fiscalyear', 'Fiscal Year'),
+             "comp%s_period_from" % index: fields.many2one('account.period', 'Start Period'),
+             "comp%s_period_to" % index: fields.many2one('account.period', 'End Period'),
+             "comp%s_date_from" % index: fields.date("Start Date"),
+             "comp%s_date_to" % index: fields.date("End Date")})
 
     _defaults = {
         'account_ids': _get_account_ids,
@@ -141,27 +147,62 @@ class AccountBalanceCommonWizard(osv.osv_memory):
         if placeholder:
             placeholder = placeholder[0]
             for index in range(self.COMPARISON_LEVEL):
-                page = etree.Element('page', {'name': "comp%s" % (index,), 'string': _("Comparison %s") % (index+1,)})
-                page.append(etree.Element('field', {'name': "comp%s_filter" % (index,),
-                                                    'colspan': '4',
-                                                    'on_change': "onchange_comp_filter(%(index)s, filter, comp%(index)s_filter, fiscalyear_id, date_from, date_to)" % {'index': index}}))
-                page.append(etree.Element('field', {'name': "comp%s_fiscalyear_id" % (index,),
-                                                    'colspan': '4',
-                                                    'attrs': "{'required': [('comp%(index)s_filter','in',('filter_year','filter_opening'))], 'readonly':[('comp%(index)s_filter','not in',('filter_year','filter_opening'))]}" % {'index': index}}))
-                page.append(etree.Element('separator', {'string': _('Dates'), 'colspan':'4'}))
-                page.append(etree.Element('field', {'name': "comp%s_date_from" % (index,), 'colspan':'4',
-                                                    'attrs': "{'required': [('comp%(index)s_filter','=','filter_date')], 'readonly':[('comp%(index)s_filter','!=','filter_date')]}" % {'index': index}}))
-                page.append(etree.Element('field', {'name': "comp%s_date_to" % (index,), 'colspan':'4',
-                                                    'attrs': "{'required': [('comp%(index)s_filter','=','filter_date')], 'readonly':[('comp%(index)s_filter','!=','filter_date')]}" % {'index': index}}))
-                page.append(etree.Element('separator', {'string': _('Periods'), 'colspan':'4'}))
-                page.append(etree.Element('field', {'name': "comp%s_period_from" % (index,),
-                                                    'colspan': '4',
-                                                    'attrs': "{'required': [('comp%(index)s_filter','=','filter_period')], 'readonly':[('comp%(index)s_filter','!=','filter_period')]}" % {'index': index},
-                                                    'domain': "[('special', '=', False)]"}))
-                page.append(etree.Element('field', {'name': "comp%s_period_to" % (index,),
-                                                    'colspan': '4',
-                                                    'attrs': "{'required': [('comp%(index)s_filter','=','filter_period')], 'readonly':[('comp%(index)s_filter','!=','filter_period')]}" % {'index': index},
-                                                    'domain': "[('special', '=', False)]"}))
+                page = etree.Element(
+                    'page',
+                    {'name': "comp%s" % index,
+                     'string': _("Comparison %s") % (index + 1, )})
+                group = etree.Element('group')
+                page.append(group)
+
+                def modifiers_and_append(elem):
+                    orm.setup_modifiers(elem)
+                    group.append(elem)
+
+                modifiers_and_append(etree.Element(
+                    'field',
+                    {'name': "comp%s_filter" % index,
+                     'on_change': "onchange_comp_filter(%(index)s, filter, comp%(index)s_filter, fiscalyear_id, date_from, date_to)" % {'index': index}}))
+                modifiers_and_append(etree.Element(
+                    'field',
+                    {'name': "comp%s_fiscalyear_id" % index,
+                     'attrs':
+                     "{'required': [('comp%(index)s_filter','in',('filter_year','filter_opening'))]," \
+                     " 'invisible': [('comp%(index)s_filter','not in',('filter_year','filter_opening'))]}" % {'index': index}}))
+
+                dates_attrs = "{'required': [('comp%(index)s_filter','=','filter_date')], " \
+                              " 'invisible': [('comp%(index)s_filter','!=','filter_date')]}" % {'index': index}
+                modifiers_and_append(etree.Element(
+                    'separator',
+                    {'string': _('Dates'),
+                     'colspan': '4',
+                     'attrs': dates_attrs}))
+                modifiers_and_append(etree.Element(
+                    'field',
+                    {'name': "comp%s_date_from" % index,
+                     'attrs': dates_attrs}))
+                modifiers_and_append(etree.Element(
+                    'field',
+                    {'name': "comp%s_date_to" % index,
+                     'attrs': dates_attrs}))
+
+                periods_attrs = "{'required': [('comp%(index)s_filter','=','filter_period')]," \
+                                " 'invisible': [('comp%(index)s_filter','!=','filter_period')]}" % {'index': index}
+                periods_domain = "[('special', '=', False)]"
+                modifiers_and_append(etree.Element(
+                    'separator',
+                    {'string': _('Periods'),
+                     'colspan': '4',
+                     'attrs': periods_attrs}))
+                modifiers_and_append(etree.Element(
+                    'field',
+                    {'name': "comp%s_period_from" % index,
+                     'attrs': periods_attrs,
+                     'domain': periods_domain}))
+                modifiers_and_append(etree.Element(
+                    'field',
+                    {'name': "comp%s_period_to" % index,
+                     'attrs': periods_attrs,
+                     'domain': periods_domain}))
 
                 placeholder.addprevious(page)
             placeholder.getparent().remove(placeholder)
@@ -171,7 +212,7 @@ class AccountBalanceCommonWizard(osv.osv_memory):
     def onchange_filter(self, cr, uid, ids, filter='filter_no', fiscalyear_id=False, context=None):
         res = {}
         if filter == 'filter_no':
-            res['value'] = {'period_from': False, 'period_to': False, 'date_from': False ,'date_to': False}
+            res['value'] = {'period_from': False, 'period_to': False, 'date_from': False, 'date_to': False}
         if filter == 'filter_date':
             if fiscalyear_id:
                 fyear = self.pool.get('account.fiscalyear').browse(cr, uid, fiscalyear_id, context=context)
@@ -199,7 +240,7 @@ class AccountBalanceCommonWizard(osv.osv_memory):
                                AND COALESCE(p.special, FALSE) = FALSE
                                ORDER BY p.date_stop DESC
                                LIMIT 1) AS period_stop''', (fiscalyear_id, fiscalyear_id))
-            periods =  [i[0] for i in cr.fetchall()]
+            periods = [i[0] for i in cr.fetchall()]
             if periods:
                 start_period = end_period = periods[0]
                 if len(periods) > 1:
@@ -226,15 +267,28 @@ class AccountBalanceCommonWizard(osv.osv_memory):
         date_to_field = "comp%s_date_to" % (index,)
 
         if comp_filter == 'filter_no':
-            res['value'] = {fy_id_field: False, period_from_field: False, period_to_field: False, date_from_field: False ,date_to_field: False}
+            res['value'] = {
+                    fy_id_field: False,
+                    period_from_field: False,
+                    period_to_field: False,
+                    date_from_field: False,
+                    date_to_field: False
+                }
         if comp_filter in ('filter_year', 'filter_opening'):
-            res['value'] = {fy_id_field: last_fiscalyear_id, period_from_field: False, period_to_field: False, date_from_field: False ,date_to_field: False}
+            res['value'] = {
+                    fy_id_field: last_fiscalyear_id,
+                    period_from_field: False,
+                    period_to_field: False,
+                    date_from_field: False,
+                    date_to_field: False
+                }
         if comp_filter == 'filter_date':
             dates = {}
             if main_filter == 'filter_date':
                 dates = {
                     'date_start': previous_year_date(start_date, index + 1).strftime('%Y-%m-%d'),
-                    'date_stop': previous_year_date(stop_date, index + 1).strftime('%Y-%m-%d'),}
+                    'date_stop': previous_year_date(stop_date, index + 1).strftime('%Y-%m-%d'),
+                    }
             elif last_fiscalyear_id:
                 dates = fy_obj.read(cr, uid, last_fiscalyear_id, ['date_start', 'date_stop'], context=context)
 
@@ -258,7 +312,7 @@ class AccountBalanceCommonWizard(osv.osv_memory):
                                AND COALESCE(p.special, FALSE) = FALSE
                                ORDER BY p.date_stop DESC
                                LIMIT 1) AS period_stop''', {'fiscalyear': last_fiscalyear_id})
-            periods =  [i[0] for i in cr.fetchall()]
+            periods = [i[0] for i in cr.fetchall()]
             if periods and len(periods) > 1:
                 start_period = end_period = periods[0]
                 if len(periods) > 1:
@@ -279,7 +333,7 @@ class AccountBalanceCommonWizard(osv.osv_memory):
         # will be used to attach the report on the main account
         data['ids'] = [data['form']['chart_account_id']]
 
-        fields_to_read = ['account_ids',]
+        fields_to_read = ['account_ids', ]
         fields_to_read += self.DYNAMIC_FIELDS
         vals = self.read(cr, uid, ids, fields_to_read, context=context)[0]
 
@@ -291,5 +345,3 @@ class AccountBalanceCommonWizard(osv.osv_memory):
         vals['max_comparison'] = self.COMPARISON_LEVEL
         data['form'].update(vals)
         return data
-
-AccountBalanceCommonWizard()

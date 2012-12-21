@@ -18,16 +18,16 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import pooler
 
 from collections import defaultdict
-from report import report_sxw
-from osv import osv
-from tools.translate import _
 from datetime import datetime
 
-from common_partner_reports import CommonPartnersReportHeaderWebkit
-from webkit_parser_header_fix import HeaderFooterTextWebKitParser
+from openerp import pooler
+from openerp.osv import osv
+from openerp.report import report_sxw
+from openerp.tools.translate import _
+from .common_partner_reports import CommonPartnersReportHeaderWebkit
+from .webkit_parser_header_fix import HeaderFooterTextWebKitParser
 
 
 class PartnersLedgerWebkit(report_sxw.rml_parse, CommonPartnersReportHeaderWebkit):
@@ -45,7 +45,7 @@ class PartnersLedgerWebkit(report_sxw.rml_parse, CommonPartnersReportHeaderWebki
         self.localcontext.update({
             'cr': cursor,
             'uid': uid,
-            'report_name':_('Partner Ledger'),
+            'report_name': _('Partner Ledger'),
             'display_account_raw': self._get_display_account_raw,
             'filter_form': self._get_filter,
             'target_move': self._get_target_move,
@@ -121,7 +121,7 @@ class PartnersLedgerWebkit(report_sxw.rml_parse, CommonPartnersReportHeaderWebki
         # when the opening period is included in the selected range of periods and
         # the opening period contains move lines, we must not compute the initial balance from previous periods
         # but only display the move lines of the opening period
-        # we identify them as :
+        # we identify them as:
         #  - 'initial_balance' means compute the sums of move lines from previous periods
         #  - 'opening_balance' means display the move lines of the opening period
         init_balance = main_filter in ('filter_no', 'filter_period')

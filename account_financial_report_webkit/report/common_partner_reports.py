@@ -26,7 +26,7 @@ from collections import defaultdict
 from datetime import datetime
 
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
-from common_reports import CommonReportHeaderWebkit
+from .common_reports import CommonReportHeaderWebkit
 
 
 class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
@@ -164,7 +164,8 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
         sql_where = " WHERE account_move_line.account_id = %(account_ids)s " \
                     " AND account_move_line.state = 'valid' "
 
-        sql_conditions, search_params = getattr(self, '_get_query_params_from_'+filter_from+'s')(start, stop)
+        method = getattr(self, '_get_query_params_from_' + filter_from + 's')
+        sql_conditions, search_params = method(start, stop)
 
         sql_where += sql_conditions
 
@@ -178,7 +179,7 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
         if target_move == 'posted':
             sql_joins += "INNER JOIN account_move ON account_move_line.move_id = account_move.id"
             sql_where += " AND account_move.state = %(target_move)s"
-            search_params.update({'target_move': target_move,})
+            search_params.update({'target_move': target_move})
 
         search_params.update({
             'account_ids': account_id,
@@ -247,9 +248,11 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
 
         if not period_ids:
             period_ids = [-1]
-        search_param = {'date_start': start_period.date_start,
-                        'period_ids': tuple(period_ids),
-                        'account_ids': tuple(account_ids),}
+        search_param = {
+                'date_start': start_period.date_start,
+                'period_ids': tuple(period_ids),
+                'account_ids': tuple(account_ids),
+            }
         sql = ("SELECT ml.id, ml.account_id, ml.partner_id "
                "FROM account_move_line ml "
                "INNER JOIN account_account a "
@@ -325,4 +328,3 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
         if not res:
             return []
         return res
-

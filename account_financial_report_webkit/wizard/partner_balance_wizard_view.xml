@@ -4,12 +4,11 @@
 
         <!-- inheriting views from more than 2 differents inherited models like
         partner.balance.webkit -> account.common.balance.report -> account.common.account.report
-        is not supported so we have to copy paste the same view for partner balance, balance sheet, profit & loss
+        is not supported so we have to copy paste the same view for partner balance, balance sheet
           -->
         <record id="account_partner_balance_view_webkit" model="ir.ui.view">
             <field name="name">Partner Balance</field>
             <field name="model">partner.balance.webkit</field>
-            <field name="type">form</field>
             <field name="inherit_id" ref="account.account_common_report_view"/>
             <field name="arch" type="xml">
                 <data>
@@ -21,6 +20,7 @@
                         <attribute name="colspan">4</attribute>
                     </field>
                     <field name="target_move" position="after">
+                        <newline/>
                         <field name="result_selection" colspan="4"/>
                     </field>
                     <page name="filters" position="after">
@@ -38,7 +38,7 @@
                         <page string="Partners Filters" name="accounts">
                             <separator string="Print only" colspan="4"/>
                             <field name="partner_ids" colspan="4" nolabel="1"/>
-                        </page>                        
+                        </page>
                         <page name="placeholder"/>
                     </page>
                     <page name="journal_ids" position="attributes">

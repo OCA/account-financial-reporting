@@ -23,8 +23,8 @@
 from collections import defaultdict
 from operator import add
 
-from common_balance_reports import CommonBalanceReportHeaderWebkit
-from common_partner_reports import CommonPartnersReportHeaderWebkit
+from .common_balance_reports import CommonBalanceReportHeaderWebkit
+from .common_partner_reports import CommonPartnersReportHeaderWebkit
 
 
 class CommonPartnerBalanceReportHeaderWebkit(CommonBalanceReportHeaderWebkit, CommonPartnersReportHeaderWebkit):
@@ -95,21 +95,22 @@ class CommonPartnerBalanceReportHeaderWebkit(CommonBalanceReportHeaderWebkit, Co
                  FROM account_move_line"""
         sql_joins = ''
         sql_where = "WHERE account_move_line.account_id = %(account_id)s AND account_move_line.state = 'valid' "
-        sql_conditions, search_params = getattr(self, '_get_query_params_from_'+filter_from+'s')(start, stop, mode=mode)
+        method = getattr(self, '_get_query_params_from_' + filter_from + 's')
+        sql_conditions, search_params = method(start, stop, mode=mode)
         sql_where += sql_conditions
 
         if partner_filter_ids:
             sql_where += "   AND account_move_line.partner_id in %(partner_ids)s"
-            search_params.update({'partner_ids': tuple(partner_filter_ids),})
+            search_params.update({'partner_ids': tuple(partner_filter_ids)})
 
         if target_move == 'posted':
             sql_joins += "INNER JOIN account_move ON account_move_line.move_id = account_move.id"
             sql_where += " AND account_move.state = %(target_move)s"
-            search_params.update({'target_move': target_move,})
+            search_params.update({'target_move': target_move})
 
         sql_groupby = "GROUP BY account_move_line.partner_id"
 
-        search_params.update({'account_id': account_id,})
+        search_params.update({'account_id': account_id})
         query = ' '.join((sql_select, sql_joins, sql_where, sql_groupby))
 
         self.cursor.execute(query, search_params)
