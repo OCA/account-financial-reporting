@@ -26,7 +26,7 @@
     <% context.lookup.put_template('open_invoices_inclusion.mako.html', template1) %>
     <% template2 = helper.get_mako_template('account_financial_report_webkit','report', 'templates', 'grouped_by_curr_open_invoices_inclusion.mako.html') %>
     <% context.lookup.put_template('grouped_by_curr_open_invoices_inclusion.mako.html', template2) %>
-        <%setLang(user.context_lang)%>
+        <%setLang(user.lang)%>
 
         <div class="act_as_table data_table">
             <div class="act_as_row labels">

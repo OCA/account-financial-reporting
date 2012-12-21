@@ -20,13 +20,13 @@
 ##############################################################################
 
 
-from report import report_sxw
-from tools.translate import _
-import pooler
 from datetime import datetime
 
-from common_partner_balance_reports import CommonPartnerBalanceReportHeaderWebkit
-from webkit_parser_header_fix import HeaderFooterTextWebKitParser
+from openerp import pooler
+from openerp.report import report_sxw
+from openerp.tools.translate import _
+from .common_partner_balance_reports import CommonPartnerBalanceReportHeaderWebkit
+from .webkit_parser_header_fix import HeaderFooterTextWebKitParser
 
 
 class PartnerBalanceWebkit(report_sxw.rml_parse, CommonPartnerBalanceReportHeaderWebkit):
@@ -35,7 +35,7 @@ class PartnerBalanceWebkit(report_sxw.rml_parse, CommonPartnerBalanceReportHeade
         super(PartnerBalanceWebkit, self).__init__(cursor, uid, name, context=context)
         self.pool = pooler.get_pool(self.cr.dbname)
         self.cursor = self.cr
-        
+
         company = self.pool.get('res.users').browse(self.cr, uid, uid, context=context).company_id
         header_report_name = ' - '.join((_('PARTNER BALANCE'), company.name, company.currency_id.name))
 

@@ -19,15 +19,16 @@
 #
 ##############################################################################
 
-from report import report_sxw
-from tools.translate import _
-import pooler
 from operator import itemgetter
 from itertools import groupby
 from datetime import datetime
 
-from common_reports import CommonReportHeaderWebkit
-from webkit_parser_header_fix import HeaderFooterTextWebKitParser
+from openerp.report import report_sxw
+from openerp import pooler
+from openerp.tools.translate import _
+from .common_reports import CommonReportHeaderWebkit
+from .webkit_parser_header_fix import HeaderFooterTextWebKitParser
+
 
 class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
 
@@ -35,7 +36,7 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
         super(GeneralLedgerWebkit, self).__init__(cursor, uid, name, context=context)
         self.pool = pooler.get_pool(self.cr.dbname)
         self.cursor = self.cr
-        
+
         company = self.pool.get('res.users').browse(self.cr, uid, uid, context=context).company_id
         header_report_name = ' - '.join((_('GENERAL LEDGER'), company.name, company.currency_id.name))
 
@@ -158,14 +159,14 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
             period_obj = self.pool.get('account.period')
             # we need to sort the lines per period in order to use groupby
             # unique ids of each used period id in lines
-            period_ids = list(set([line['lperiod_id'] for line in ledger_lines ]))
+            period_ids = list(set([line['lperiod_id'] for line in ledger_lines]))
             # search on account.period in order to sort them by date_start
             sorted_period_ids = period_obj.search(self.cr, self.uid,
                                                   [('id', 'in', period_ids)],
                                                   order='special desc, date_start',
                                                   context=context)
             sorted_ledger_lines = sorted(ledger_lines, key=lambda x: sorted_period_ids.index(x['lperiod_id']))
-            
+
             for period_id, lines_per_period_iterator in groupby(sorted_ledger_lines, itemgetter('lperiod_id')):
                 lines_per_period = list(lines_per_period_iterator)
                 if not lines_per_period:
