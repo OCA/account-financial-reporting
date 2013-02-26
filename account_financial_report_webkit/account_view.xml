@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <data>
                     <field name="active" position="after">
-                        <field name="centralized" groups="base.group_extended"/>
+                        <field name="centralized" groups="account.group_account_manager"/>
                     </field>
                 </data>
             </field>
