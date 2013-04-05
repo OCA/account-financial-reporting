@@ -42,6 +42,7 @@ In the [ Account's Sign on Reports ] Section in the Company will be able to set 
     "init_xml" : [],
     "demo_xml" : [],
     "update_xml" : [
+        "security/ir.model.access.csv"
         "security/security.xml",
         "view/report.xml", 
         "view/wizard.xml",
