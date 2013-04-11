@@ -187,14 +187,15 @@ class AccountCSVExport(orm.TransientModel):
         """
         Return list to generate rows of the CSV file
         """
-        cr.execute("""
-                        select aac.code as analytic_code,aac.name as analytic_name,ac.code,ac.name,
+        cr.execute("""  select aac.code as analytic_code,aac.name as analytic_name,ac.code,ac.name,
                         sum(debit) as sum_debit,sum(credit) as sum_credit,sum(debit) - sum(credit) as balance
-                        from account_move_line as aml,account_account as ac,account_analytic_account as aac
-                        where aml.account_id = ac.id
-                        and aml.analytic_account_id = aac.id
-                        and period_id in %(period_ids)s
-                        group by aac.id,aac.code,aac.name,ac.id,ac.code,ac.name
+                        from account_move_line 
+                        left outer join account_analytic_account as aac
+                        on (account_move_line.analytic_account_id = aac.id)
+                        inner join account_account as ac
+                        on account_move_line.account_id = ac.id
+                        and account_move_line.period_id in %(period_ids)s
+                        group by aac.id,aac.code,ac.name,ac.id,ac.code,ac.name
                         order by aac.code
                    """,
                     {'fiscalyear_id': fiscalyear_id,'company_id':company_id,'period_ids':tuple(period_range_ids)}
