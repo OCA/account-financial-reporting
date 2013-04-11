@@ -27,6 +27,7 @@ import csv
 import codecs
 
 from openerp.osv import orm, fields
+from openerp.tools.translate import _
 
 
 class AccountUnicodeWriter(object):
@@ -71,26 +72,30 @@ class AccountUnicodeWriter(object):
             self.writerow(row)
 
 
-# TODO / Improve: Choose a fiscal year !
 class AccountCSVExport(orm.TransientModel):
     _name = 'account.csv.export'
-    _description = 'Export Accounting Entries'
+    _description = 'Export Accounting'
 
     _columns = {
         'data': fields.binary('CSV',readonly=True),
         'company_id': fields.many2one('res.company', 'Company', invisible=True),
         'fiscalyear_id': fields.many2one('account.fiscalyear', 'Fiscalyear', required=True),
-        'start_period_id': fields.many2one('account.period', 'Starting period', required=True),
-        'stop_period_id': fields.many2one('account.period', 'End period', required=True),
+        'periods': fields.many2many('account.period','rel_wizard_period','wizard_id','period_id','Periods',help='All periods in the fiscal year if empty'),
+        'export_filename': fields.char('Export CSV Filename', size=128),
     }
 
     def _get_company_default(self, cr, uid, context=None):
         comp_obj = self.pool['res.company']
-        fiscalyear_obj = self.pool['account.fiscalyear']
         return comp_obj._company_default_get(cr, uid, 'account.fiscalyear', context=context)
 
+    def _get_fiscalyear_default(self, cr, uid, context=None):
+        fiscalyear_obj = self.pool['account.fiscalyear']
+        context['company_id'] = self._get_company_default(cr, uid, context)
+        return fiscalyear_obj.find(cr,uid,dt=None,exception=True, context=context)
 
-    _defaults = {'company_id': _get_company_default}
+    _defaults = {'company_id': _get_company_default,
+                 'fiscalyear_id' : _get_fiscalyear_default,
+                 'export_filename' : 'account_export.csv'}
 
 
     def action_manual_export(self, cr, uid, ids, context=None):
@@ -118,13 +123,11 @@ class AccountCSVExport(orm.TransientModel):
 
 
     def _get_header(self, cr, uid, ids, context=None):
-        return [u'account_id',
-                u'code',
-                u'name'
-                u'si',
-                u'sum_debit',
-                u'sum_credit',
-                u'balance',
+        return [_(u'CODE'),
+                _(u'NAME'),
+                _(u'DEBIT'),
+                _(u'CREDIT'),
+                _(u'BALANCE'),
                 ]
 
     def _get_rows(self, cr, uid, ids, fiscalyear_id,period_range_ids,company_id,context=None):
@@ -132,7 +135,7 @@ class AccountCSVExport(orm.TransientModel):
         Return list to generate rows of the CSV file
         """
         cr.execute("""
-                        select ac.id,ac.code,ac.name,
+                        select ac.code,ac.name,
                         sum(debit) as sum_debit,sum(credit) as sum_credit,sum(debit) - sum(credit) as balance
                         from account_move_line as aml,account_account as ac
                         where aml.account_id = ac.id
@@ -149,36 +152,20 @@ class AccountCSVExport(orm.TransientModel):
             rows.append(list(line))
         return rows
     
-    def get_period_range(self,cr,uid,start_period_id,stop_period_id,company_id,context=None):
-        context = context or {}
-        ## Get period for this company_id
-        period_obj = self.pool.get('account.period')
-        date_start = period_obj.browse(cr,uid,start_period_id).date_start
-        date_stop = period_obj.browse(cr,uid,stop_period_id).date_stop
-        start_period_ids = period_obj.search(cr, uid,
-            [('date_start', '>=', date_start),
-             ('company_id', '=', company_id)]
-            )
-        stop_period_ids = period_obj.search(cr, uid,
-            [('date_stop', '<=', date_stop),
-             ('company_id', '=', company_id)]
-            )
-        ## Get only period present in start_period_ids and stop_period_ids
-        matching_period = list(set(start_period_ids).intersection(set(stop_period_ids)))
-        return matching_period
     
     def get_data(self, cr, uid, ids, context=None):
-        context = context or {}
-        context['lang'] = 'fr_FR'
-
         form = self.browse(cr, uid, ids[0], context=context)
-
-        start_period_id = form.start_period_id.id
-        stop_period_id = form.stop_period_id.id
         fiscalyear_id = form.fiscalyear_id.id
         user_obj = self.pool.get('res.users')
         company_id = user_obj.browse(cr, uid, uid).company_id.id
-        period_range_ids = self.get_period_range(cr, uid, start_period_id, stop_period_id,company_id,context)
+        # Get periods
+        p_obj = self.pool.get("account.period")
+        # 
+        if form.periods:
+            period_range_ids = [x.id for x in form.periods]
+        else:
+            p_obj = self.pool.get("account.period")
+            period_range_ids = p_obj.search(cr,uid,[('fiscalyear_id','=',fiscalyear_id)],context=context)
         rows = []
         rows.append(self._get_header(cr, uid, ids, context=context))
         rows.extend(self._get_rows(cr, uid, ids, fiscalyear_id,period_range_ids,company_id, context=context))
@@ -210,15 +197,13 @@ class AccountCSVExport(orm.TransientModel):
 
     
     def _get_header_analytic(self, cr, uid, ids, context=None):
-        return [u'account_id',
-                u'analytic_account_id',
-                u'code',
-                u'name',
-                u'analytic_code',
-                u'analytic_name',
-                u'sum_debit',
-                u'sum_credit',
-                u'balance',
+        return [_(u'ANALYTIC CODE'),
+                _(u'ANALYTIC NAME'),
+                _(u'CODE'),
+                _(u'ACCOUNT NAME'),
+                _(u'DEBIT'),
+                _(u'CREDIT'),
+                _(u'BALANCE'),
                 ]
 
 
@@ -229,14 +214,14 @@ class AccountCSVExport(orm.TransientModel):
         Return list to generate rows of the CSV file
         """
         cr.execute("""
-                        select ac.id,ac.code,ac.name,aac.id,aac.code as analytic_code,aac.name as analytic_name,
+                        select aac.code as analytic_code,aac.name as analytic_name,ac.code,ac.name,
                         sum(debit) as sum_debit,sum(credit) as sum_credit,sum(debit) - sum(credit) as balance
                         from account_move_line as aml,account_account as ac,account_analytic_account as aac
                         where aml.account_id = ac.id
                         and aml.analytic_account_id = aac.id
                         and period_id in %(period_ids)s
-                        group by ac.id,ac.code,aac.id,aac.code
-                        order by ac.code
+                        group by aac.id,aac.code,ac.id,ac.code
+                        order by aac.code
                    """,
                     {'fiscalyear_id': fiscalyear_id,'company_id':company_id,'period_ids':tuple(period_range_ids)}
                 )
@@ -249,17 +234,17 @@ class AccountCSVExport(orm.TransientModel):
 
 
     def get_data_analytic(self, cr, uid, ids, context=None):
-        context = context or {}
-        context['lang'] = 'fr_FR'
-
         form = self.browse(cr, uid, ids[0], context=context)
-
-        start_period_id = form.start_period_id.id
-        stop_period_id = form.stop_period_id.id
         fiscalyear_id = form.fiscalyear_id.id
         user_obj = self.pool.get('res.users')
         company_id = user_obj.browse(cr, uid, uid).company_id.id
-        period_range_ids = self.get_period_range(cr, uid, start_period_id, stop_period_id,company_id,context)
+        # Get periods
+        # 
+        if form.periods:
+            period_range_ids = [x.id for x in form.periods]
+        else:
+            p_obj = self.pool.get("account.period")
+            period_range_ids = p_obj.search(cr,uid,[('fiscalyear_id','=',fiscalyear_id)],context=context)
         rows = []
         rows.append(self._get_header_analytic(cr, uid, ids, context=context))
         rows.extend(self._get_rows_analytic(cr, uid, ids, fiscalyear_id,period_range_ids,company_id, context=context))
