@@ -140,7 +140,7 @@ class AccountCSVExport(orm.TransientModel):
                         from account_move_line as aml,account_account as ac
                         where aml.account_id = ac.id
                         and period_id in %(period_ids)s
-                        group by ac.id,ac.code
+                        group by ac.id,ac.code,ac.name
                         order by ac.code
                    """,
                     {'fiscalyear_id': fiscalyear_id,'company_id':company_id,'period_ids':tuple(period_range_ids)}
@@ -220,7 +220,7 @@ class AccountCSVExport(orm.TransientModel):
                         where aml.account_id = ac.id
                         and aml.analytic_account_id = aac.id
                         and period_id in %(period_ids)s
-                        group by aac.id,aac.code,ac.id,ac.code
+                        group by aac.id,aac.code,aac.name,ac.id,ac.code,ac.name
                         order by aac.code
                    """,
                     {'fiscalyear_id': fiscalyear_id,'company_id':company_id,'period_ids':tuple(period_range_ids)}
