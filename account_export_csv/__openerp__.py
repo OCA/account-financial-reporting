@@ -27,7 +27,13 @@
     'author' : 'Camptocamp',
     'description': """
     
-    Add a wizard that allow you to export a csv file of all the accounting entries.
+    Add a wizard that allow you to export a csv file based on accounting journal entries 
+    
+    - Trial Balance
+    - Analytic Balance (with accounts)
+    
+    You can filter by period 
+    
      
     """,
     'website': 'http://www.camptocamp.com',
