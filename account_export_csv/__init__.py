@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Author Joel Grand-Guillaume and Vincent Renaville Copyright 2013 Camptocamp SA
