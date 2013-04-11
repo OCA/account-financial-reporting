@@ -195,7 +195,7 @@ class AccountCSVExport(orm.TransientModel):
                         inner join account_account as ac
                         on account_move_line.account_id = ac.id
                         and account_move_line.period_id in %(period_ids)s
-                        group by aac.id,aac.code,ac.name,ac.id,ac.code,ac.name
+                        group by aac.id,aac.code,aac.name,ac.id,ac.code,ac.name
                         order by aac.code
                    """,
                     {'fiscalyear_id': fiscalyear_id,'company_id':company_id,'period_ids':tuple(period_range_ids)}
