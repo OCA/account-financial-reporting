@@ -2,18 +2,19 @@
 ##############################################################################
 #
 #    Author Joel Grand-Guillaume and Vincent Renaville Copyright 2013 Camptocamp SA
+#    CSV data formating inspired from http://docs.python.org/2.7/library/csv.html?highlight=csv#examples
 #
 #    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
+#    it under the terms of the GNU Affero General Public License as
+#    published by the Free Software Foundation, either version 3 of the
+#    License, or (at your option) any later version.
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
+#    GNU Affero General Public License for more details.
 #
-#    You should have received a copy of the GNU General Public License
+#    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
@@ -39,7 +40,7 @@ class AccountUnicodeWriter(object):
     def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
         # Redirect output to a queue
         self.queue = cStringIO.StringIO()
-        # self.writer = csv.writer(self.queue, delimiter=',', quotechar='"', quoting=csv.QUOTE_NONNUMERIC, **kwds)
+        # created a writer with Excel formating settings
         self.writer = csv.writer(self.queue, dialect=dialect, **kwds)
         self.stream = f
         self.encoder = codecs.getincrementalencoder(encoding)()
@@ -56,7 +57,6 @@ class AccountUnicodeWriter(object):
                 encoded_row.append(c)
         
         self.writer.writerow(encoded_row)
-        # self.writer.writerow([s.encode("utf-8") for s in row])
         # Fetch UTF-8 output from the queue ...
         data = self.queue.getvalue()
         data = data.decode("utf-8")
