@@ -1,8 +1,9 @@
 # -*- encoding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2009 Tiny SPRL (http://tiny.be). All Rights Reserved
+#    Report intrastat base module for OpenERP
+#    Copyright (C) 2011-2013 Akretion (http://www.akretion.com). All Rights Reserved
+#    @author Alexis de Lattre <alexis.delattre@akretion.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -24,8 +25,9 @@ from osv import osv, fields
 class res_country(osv.osv):
     _inherit = 'res.country'
     _columns = {
-        'intrastat': fields.boolean('Intrastat country', help="Set as True for countries that must be selected in the intrastat reports, i.e. for all European Union countries other than your own country."),
+        'intrastat': fields.boolean('EU country', help="Set to True for all European Union countries."),
     }
+
     _defaults = {
         'intrastat': False,
     }
