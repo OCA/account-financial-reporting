@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Report intrastat base module for OpenERP
-#    Copyright (C) 2010-2011 Akretion (http://www.akretion.com/) All Rights Reserved
+#    Copyright (C) 2010-2013 Akretion (http://www.akretion.com/)
 #    @author Alexis de Lattre <alexis.delattre@akretion.com>
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -20,16 +20,15 @@
 #
 ##############################################################################
 
-from osv import osv, fields
+from openerp.osv import osv, fields
 
-# We want to have the country field on res_partner_address always set
+# We want to have the country field on res_partner always set
 # because the selection of invoices for intrastat reports is based
-# on the country of the invoice partner address !
-class res_partner_address(osv.osv):
-    _inherit = 'res.partner.address'
+# on the country of the invoice partner !
+class res_partner(osv.Model):
+    _inherit = 'res.partner'
     _columns = {
        'country_id': fields.many2one('res.country', 'Country', required=True),
      }
 
-res_partner_address()
 

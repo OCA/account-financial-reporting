@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Report intrastat base module for OpenERP
-#    Copyright (C) 2010-2011 Akretion (http://www.akretion.com/). All rights reserved.
+#    Copyright (C) 2010-2013 Akretion (http://www.akretion.com/). All rights reserved.
 #    @author Alexis de Lattre <alexis.delattre@akretion.com>
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -20,12 +20,12 @@
 #
 ##############################################################################
 
-from osv import osv, fields
+from openerp.osv import osv
+from openerp.tools.translate import _
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from tools.translate import _
 
-class report_intrastat_common(osv.osv_memory):
+class report_intrastat_common(osv.TransientModel):
     _name = "report.intrastat.common"
     _description = "Common functions for intrastat reports for products and services"
 
@@ -115,7 +115,7 @@ class report_intrastat_common(osv.osv_memory):
             'type': 'ir.actions.act_window',
             'nodestroy': True,
             'target': 'current',
-            'res_id': [attach_id],
+            'res_id': attach_id,
             }
         return action
 

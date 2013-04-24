@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-    Copyright (C) 2011 Akretion (http://www.akretion.com/)
+    Copyright (C) 2011-2013 Akretion (http://www.akretion.com/)
     @author Alexis de Lattre <alexis.delattre@akretion.com>
     The licence is in the file __openerp__.py
 -->
@@ -13,18 +13,11 @@
 <record id="intrastat_base_tax" model="ir.ui.view">
     <field name="name">intrastat.base.tax</field>
     <field name="model">account.tax</field>
-    <field name="type">form</field>
     <field name="inherit_id" ref="account.view_tax_form"/>
     <field name="arch" type="xml">
-    <data>
         <field name="active" position="after">
-            <!-- I put it in a group because this field has a very long label
-            and I want to avoid reducing the size of the other fields -->
-            <group colspan="6">
-                <field name="exclude_from_intrastat_if_present" />
-            </group>
+             <field name="exclude_from_intrastat_if_present" />
         </field>
-    </data>
     </field>
 </record>
 

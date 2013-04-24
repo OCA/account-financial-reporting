@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>)
+    Copyright (C) 2011-2013 Akretion (http://www.akretion.com)
     The licence is in the file __openerp__.py
 -->
 
@@ -26,7 +26,7 @@
     <field name="inherit_id" ref="base.view_country_form" />
     <field name="arch" type="xml">
         <field name="code" position="after">
-            <field name="intrastat" select="1" />
+            <field name="intrastat" />
         </field>
     </field>
 </record>

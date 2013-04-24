@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Report intrastat base module for OpenERP
-#    Copyright (C) 2011 Akretion (http://www.akretion.com). All Rights Reserved
+#    Copyright (C) 2011-2013 Akretion (http://www.akretion.com)
 #    @author Alexis de Lattre <alexis.delattre@akretion.com>
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -22,14 +22,15 @@
 
 
 {
-    'name': 'Base module for Intrastat reporting',
+    'name': 'Intrastat Reporting Base',
     'version': '1.1',
     'category': 'Localisation/Report Intrastat',
     'license': 'AGPL-3',
+    'summary': 'Base module for Intrastat reporting',
     'description': """This module contains the common functions for 2 other modules :
 - l10n_fr_intrastat_service : the module for the "Déclaration Européenne des Services" (DES)
 - l10n_fr_intrastat_product : the module for the "Déclaration d'Echange de Biens" (DEB)
-This module is not usefull if it's not used together with one of those 2 modules.
+This module is not usefull if it's not used together with one of those 2 modules or other country-specific intrastat modules.
 
 This module doesn't have any France-specific stuff. So it can be used as a basis for other intrastat modules for other EU countries.
 

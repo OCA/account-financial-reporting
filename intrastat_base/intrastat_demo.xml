@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-    Copyright (C) 2011 Akretion (http://www.akretion.com/)
+    Copyright (C) 2011-2013 Akretion (http://www.akretion.com/)
     @author Alexis de Lattre <alexis.delattre@akretion.com>
     The licence is in the file __openerp__.py
 -->
@@ -13,7 +13,7 @@
     <field name="vat">FR58441019213</field>
 </record>
 
-<record id="base.res_partner_6" model="res.partner"> <!-- Elec Import -->
+<record id="base.res_partner_8" model="res.partner"> <!-- MediaPole -->
     <field name="vat">BE0828696437</field>
     <field name="supplier">True</field>
 </record>
@@ -23,7 +23,7 @@
     <field name="supplier">True</field>
 </record>
 
-<record id="base.res_partner_agrolait" model="res.partner">
+<record id="base.res_partner_2" model="res.partner"> <!-- Agrolait -->
     <field name="vat">BE0884025633</field>
     <field name="supplier">True</field>
 </record>
@@ -48,7 +48,7 @@
     <field name="name">Shipping costs</field>
     <field name="code">SHIP</field>
     <field name="type">service</field>
-    <field name="categ_id" ref="product.product_category_services"/>
+    <field name="categ_id" ref="product.product_category_all"/>
     <field name="list_price">30</field>
     <field name="is_accessory_cost">True</field>
 </record>

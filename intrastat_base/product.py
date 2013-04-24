@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Report intrastat base module for OpenERP
-#    Copyright (C) 2010-2012 Akretion (http://www.akretion.com/) All Rights Reserved
+#    Copyright (C) 2010-2013 Akretion (http://www.akretion.com/)
 #    @author Alexis de Lattre <alexis.delattre@akretion.com>
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -20,10 +20,10 @@
 #
 ##############################################################################
 
-from osv import osv, fields
-from tools.translate import _
+from openerp.osv import osv, fields
+from openerp.tools.translate import _
 
-class product_template(osv.osv):
+class product_template(osv.Model):
     _inherit = "product.template"
     _columns = {
         'exclude_from_intrastat': fields.boolean('Exclude from Intrastat reports', help="If set to True, the product or service will not be taken into account for Intrastat Product or Service reports. So you should leave this field to False unless you have a very good reason."),
