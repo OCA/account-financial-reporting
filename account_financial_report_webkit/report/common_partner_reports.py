@@ -110,12 +110,15 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
         if not periods:
             return []
 
-        periods = self.exclude_opening_periods(periods)
+        if mode != 'include_opening':
+            periods = self.exclude_opening_periods(periods)
 
         search_params = {'period_ids': tuple(periods),
                          'date_stop': period_stop.date_stop}
 
-        sql_conditions = "  AND account_move_line.period_id in %(period_ids)s"
+        sql_conditions = ""
+        if periods:
+            sql_conditions = "  AND account_move_line.period_id in %(period_ids)s"
 
         return sql_conditions, search_params
 
