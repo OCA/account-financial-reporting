@@ -105,6 +105,8 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
         accounts = self.get_all_accounts(new_ids, exclude_type=['view'])
         if initial_balance_mode == 'initial_balance':
             init_balance_memoizer = self._compute_initial_balances(accounts, start, fiscalyear)
+        elif initial_balance_mode == 'opening_balance':
+            init_balance_memoizer = self._read_opening_balance(accounts, start)
 
         ledger_lines_memoizer = self._compute_account_ledger_lines(accounts, init_balance_memoizer,
                                                                    main_filter, target_move, start, stop)
