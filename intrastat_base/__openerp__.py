@@ -41,14 +41,14 @@ Please contact Alexis de Lattre from Akretion <alexis.delattre@akretion.com> for
     'author': 'Akretion',
     'website': 'http://www.akretion.com',
     'depends': ['base_vat'],
-    'init_xml': ['country_data.xml'],
-    'update_xml': [
+    'data': [
+        'country_data.xml',
         'product_view.xml',
         'country_view.xml',
         'tax_view.xml',
         'intrastat_menu.xml',
     ],
-    'demo_xml': ['intrastat_demo.xml'],
+    'demo': ['intrastat_demo.xml'],
     'installable': True,
     'active': False,
 }
