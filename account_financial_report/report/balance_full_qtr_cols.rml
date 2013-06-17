@@ -26,7 +26,7 @@
                         </tr>
                         <tr>
                             <td><para style="TOP_TITLE"></para></td>
-                            <td><para style="TITLE_CENTER">[[data['form'] and (' (Expressed in %s)'%( exchange_name(data['form']))) or '']]</para></td>
+                            <td><para style="TITLE_CENTER">(Expressed in [[data['form'] and (' %s)'%( exchange_name(data['form']))) or '']])</para></td>
                         </tr>
                         <tr>
                             <td><para style="TOP_TITLE"></para></td>
@@ -82,7 +82,7 @@
     </stylesheet>
     <images/>
     <story>
-        <para>[[setLang(user.context_lang)]]</para>
+        <para>[[setLang(user.lang)]]</para>
         <blockTable colWidths="2.5cm,6.0cm,2.5cm,2.5cm,2.5cm,2.5cm,2.5cm" style="BODY" repeatRows="1">
             <tr noRowsplits="1">
                 <td>
