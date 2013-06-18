@@ -432,6 +432,9 @@ class account_balance(report_sxw.rml_parse):
         result_acc = []
         tot = {}
 
+        account_ids_x = account_obj.search(self.cr , self.uid, ([('id', 'in', [i[0] for i in account_ids]),('type','not in',('view','consolidation'))]))                                             
+        print account_ids_x  
+
         for aa_id in account_ids:
             id = aa_id[0]
 
