@@ -7,47 +7,55 @@
             <field name="model">wizard.report</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-            <form string="Account Financial Report">
-                <group colspan="4">
-                    <group colspan="2">
-                        <separator string="Company Info" colspan="4"/>
-                        <field name="company_id" on_change='onchange_company_id(company_id)' colspan="4"/>
+                <form string="Account Financial Report" version="7.0">
+                    <header>
+                        <button 
+                            name="print_report" 
+                            string="Print" 
+                            type="object"
+                            class="oe_highlight" />
+                        or
+                        <button 
+                            type='special'
+                            special='cancel'
+                            string='_Cancel'
+                            class="oe_link" />
+                    </header>
+                <h2><label for="afr_id"/></h2>
+                <field name="afr_id"  on_change='onchange_afr_id(afr_id)' nolabel="1"/>
+                <group>
+                    <group string="Company Info">
+                        <label for="company_id"/>
+                        <field name="company_id" on_change='onchange_company_id(company_id)' nolabel="1"/>
                         <field name="currency_id" 
                         domain="[('company_id','=',company_id)]" 
-                        attrs="{'readonly':[('analytic_ledger','=',True)]}" 
-                        colspan="4"/>
+                        attrs="{'readonly':[('analytic_ledger','=',True)]}"/>
                     </group>
-                    <group colspan="2">
-                        <separator string="Report Info" colspan="4"/>
-                        <field name="afr_id"  on_change='onchange_afr_id(afr_id)'  colspan="4"/>
+                    <group string="Report Info">
                         <field 
                             name="inf_type" 
-                            colspan="4"
                             on_change='onchange_inf_type(inf_type)'
                             />
-                        <field name="columns" on_change='onchange_columns(columns,fiscalyear,periods)' colspan="4"/>
-                        <field name="analytic_ledger" colspan="4" 
+                        <field name="columns" on_change='onchange_columns(columns,fiscalyear,periods)'/>
+                        <field name="analytic_ledger"  
                         attrs="{'readonly':['|',('columns','!=','four'),('inf_type','!=','BS')],}" 
                         on_change='onchange_analytic_ledger(company_id,analytic_ledger)'
                         />
                     </group>
                 </group>
-                <group colspan='4'>
-                    <group colspan="2">
-                        <separator string="Accounts Info" colspan="4"/>
-                        <field name="display_account" required="True" colspan="4"/>
-                        <field name="display_account_level" required="True" colspan="4"/>
+                <group>
+                    <group string="Accounts Info">
+                        <field name="display_account" required="True" />
+                        <field name="display_account_level" required="True" />
                     </group>
-                    <group colspan="2">
-                        <separator string="FiscalYear Info" colspan="4"/>
+                    <group string="FiscalYear Info">
                         <field name="fiscalyear" on_change='onchange_columns(columns,fiscalyear,periods)'  domain="[('company_id','=',company_id)]"/>
                         <newline/>
                     </group>
                 </group>
-                <group colspan='4'>
-                    <group colspan="1">
-                        <separator string="Accounts to Include" colspan="4"/>
-                        <field name="account_list" nolabel="1" colspan="4" domain="[('company_id','=',company_id)]">
+                <group >
+                    <group string="Accounts to Include">
+                        <field name="account_list" nolabel="1"  domain="[('company_id','=',company_id)]">
                             <tree>
                                 <field name='code'/>
                                 <field name='name'/>
@@ -56,16 +64,12 @@
                             </tree>
                         </field>
                     </group>
-                    <group colspan="1">
-                        <separator string="Periods to Include" colspan="4"/>
+                    <group string="Periods to Include">
                         <field 
                             name="periods" 
-                            colspan="4" 
                             nolabel="1" 
                             domain="[('fiscalyear_id','=',fiscalyear),('special','=',False),('company_id','=',company_id)]"
-                             attrs="{'readonly':[('columns','in',('qtr','thirteen'))],}" 
-                             >
-                        
+                             attrs="{'readonly':[('columns','in',('qtr','thirteen'))],}">
                             <tree>
                                 <field name='code'/>
                                 <field name='name'/>
@@ -74,34 +78,19 @@
                         </field>
                     </group>
                 </group>
-                <group colspan='4'>
-                    <separator string="Account's Sign Conventions" colspan="4"/>
+                <group string="Account's Sign Conventions">
                     <label string="Please check the [ Account's Sign on Reports ] Section in the Company"/>
                 </group>
 
-                <group colspan='4' col='4'>
-                    <group colspan="2">
-                        <separator string="Total" colspan="4"/>
-                        <field name="tot_check" colspan="4"/>
-                        <field name="lab_str" colspan="4" attrs="{'required':[('tot_check','=',True)], 'readonly':[('tot_check','=',False)],}" />
+                <group>
+                    <group string="Total" >
+                        <field name="tot_check" />
+                        <field name="lab_str"  attrs="{'required':[('tot_check','=',True)], 'readonly':[('tot_check','=',False)],}" />
                     </group>
-                    <group colspan="2">
-                        <separator string="" colspan="4"/>
-                        <button 
-                            name="print_report" 
-                            string="Print" 
-                            type="object"
-                            icon='gtk-print'/>
-                        <button 
-                            type='special'
-                            special='cancel'
-                            string='_Cancel'
-                            icon='gtk-cancel'
-                        />
+                    <group string=" " >
                     </group>
                 </group>
             </form>
-
             </field>
         </record>
 
@@ -112,7 +101,7 @@
             <field name="view_type">form</field>
             <field name="view_mode">form</field>
             <field name="view_id" ref="wizard_report_view"/>
-            <field name="target">new</field>
+            <field name="target">inline</field>
         </record>
         
         
