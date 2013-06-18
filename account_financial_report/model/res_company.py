@@ -4,8 +4,8 @@
 #    Module Writen to OpenERP, Open Source Management Solution
 #    Copyright (C) OpenERP Venezuela (<http://openerp.com.ve>).
 #    All Rights Reserved
-###############Credits######################################################
-#    Coded by: Humberto Arocha <hbto@vauxoo.com>           
+# Credits######################################################
+#    Coded by: Humberto Arocha <hbto@vauxoo.com>
 #    Planified by: Rafael Silva <rsilvam@vauxoo.com>
 #    Audited by: Nhomar Hernandez <nhomar@vauxoo.com>
 #############################################################################
@@ -21,22 +21,23 @@
 #
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-################################################################################
+##########################################################################
 
 from osv import osv
 from osv import fields
 from tools.translate import _
 
+
 class res_company(osv.osv):
     _inherit = 'res.company'
     _columns = {
-        'credit_account_ids':fields.many2many('account.account',
-                                    'credit_account_company_rel',
-                                    'company_id', 'account_id',
-                                    'Creditable Accounts'),
-        'debit_account_ids':fields.many2many('account.account',
-                                    'debit_account_company_rel',
-                                    'company_id', 'account_id',
-                                    'Debitable Accounts'),
+        'credit_account_ids': fields.many2many('account.account',
+                                               'credit_account_company_rel',
+                                               'company_id', 'account_id',
+                                               'Creditable Accounts'),
+        'debit_account_ids': fields.many2many('account.account',
+                                              'debit_account_company_rel',
+                                              'company_id', 'account_id',
+                                              'Debitable Accounts'),
     }
 res_company()
