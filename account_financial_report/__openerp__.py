@@ -28,8 +28,10 @@
     "version": "2.0",
     "author": "Vauxoo",
     "website": "http://www.vauxoo.com",
-    "depends": ["base", "account"],
-    "category": "Localisation/Accounting",
+    "depends": ["base",
+                "account"
+                ],
+    "category": "Accounting",
     "description": """
 Multiporpuse Accounting report generator.
 =========================================
