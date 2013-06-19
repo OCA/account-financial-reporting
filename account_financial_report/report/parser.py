@@ -432,34 +432,39 @@ class account_balance(report_sxw.rml_parse):
         result_acc = []
         tot = {}
 
-        account_ids_black = account_obj.search(self.cr, self.uid, ([('id', 'in', [i[0] for i in account_ids]),('type','not in',('view','consolidation'))]))
-        account_ids_black = account_obj.browse(self.cr, self.uid, account_ids_black)
-        account_ids_black.sort(key=lambda x: x.level)
-        account_ids_black.reverse()
+        ###############################################################
+        #
+        #
+        ###############################################################
 
-        account_ids_not_black = account_obj.search(self.cr, self.uid, ([('id', 'in', [i[0] for i in account_ids]),('type','in',('view','consolidation'))])) 
-        account_ids_not_black = account_obj.browse(self.cr, self.uid, account_ids_not_black)
-        account_ids_not_black.sort(key=lambda x: x.level)
-        account_ids_not_black.reverse()
+        account_black_ids = account_obj.search(self.cr, self.uid, ([('id', 'in', [i[0] for i in account_ids]),('type','not in',('view','consolidation'))]))
+        account_black = account_obj.browse(self.cr, self.uid, account_black_ids)
+        account_black.sort(key=lambda x: x.level)
+        account_black.reverse()
+
+        account_not_black_ids = account_obj.search(self.cr, self.uid, ([('id', 'in', [i[0] for i in account_ids]),('type','in',('view','consolidation'))])) 
+        account_not_black = account_obj.browse(self.cr, self.uid, account_not_black_ids)
+        account_not_black.sort(key=lambda x: x.level)
+        account_not_black.reverse()
 
         
-        black = []
+        dict_black = {}
         print "Negros"
-        for i in account_ids_black:
+        for i in account_black:
             black_data = {}
             black_data['obj'] = i
             black_data['debit'] = i.debit
             black_data['credit'] = i.credit
             black_data['balance'] = i.balance
             black_data['parent_id'] = i.parent_id
-            #print i.name
+            print i.id, i.name
             #print i.level
             #print black_data
-            black.append(black_data)
+            dict_black[i.id] = black_data
         
-        not_black = []
+        dict_not_black = {}
         print "No Negros"
-        for i in account_ids_not_black:
+        for i in account_not_black:
             not_black_data = {}
             not_black_data['obj'] = i
             not_black_data['debit'] = i.debit
@@ -468,10 +473,21 @@ class account_balance(report_sxw.rml_parse):
             not_black_data['parent_id'] = i.parent_id
             #print i.name
             #print i.level
-            not_black.append(not_black_data)
-      
+            dict_not_black[i.id] = not_black_data
+        
+        
+        for i in dict_not_black:
+            print dict_not_black[i].get('obj').name
+            print dict_not_black[i].get('obj')._get_child_ids(self.cr, self.uid)
+
         #import pdb
         #pdb.set_trace()
+        
+        ###############################################################
+        #
+        #
+        ###############################################################
+        
         start_time = time.clock() 
 
         for aa_id in account_ids:
