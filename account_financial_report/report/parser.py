@@ -450,9 +450,6 @@ class account_balance(report_sxw.rml_parse):
 
             account_black_ids = account_obj.search(self.cr, self.uid, ([('id', 'in', [i[0] for i in account_ids]),('type','not in',('view','consolidation'))]))
             account_black = account_obj.browse(self.cr, self.uid, account_black_ids, ctx_to_use)
-            #account_black.sort(key=lambda x: x.level)
-            #account_black.reverse()
-            #account_black_ids = [i.id for i in account_black]
 
             account_not_black_ids = account_obj.search(self.cr, self.uid, ([('id', 'in', [i[0] for i in account_ids]),('type','in',('view','consolidation'))])) 
             account_not_black = account_obj.browse(self.cr, self.uid, account_not_black_ids, ctx_to_use)
