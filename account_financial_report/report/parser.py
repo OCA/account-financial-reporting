@@ -439,6 +439,10 @@ class account_balance(report_sxw.rml_parse):
         #
         ###############################################################
 
+        account_black_ids = account_obj.search(self.cr, self.uid, (
+                                               [('id', 'in', [i[0] for i in account_ids]), 
+                                                ('type', 'not in', 
+                                                ('view', 'consolidation'))]))
         all_account_period = {}  # todas las cuentas por periodo
         if form['columns'] == 'thirteen':
             for p_act in range(0, 13):
@@ -454,8 +458,6 @@ class account_balance(report_sxw.rml_parse):
                     ctx_i = _ctx_init(self.context.copy())
                     ctx_to_use = _ctx_init(self.context.copy())
 
-                account_black_ids = account_obj.search(self.cr, self.uid, ([('id', 'in', [i[
-                                                       0] for i in account_ids]), ('type', 'not in', ('view', 'consolidation'))]))
                 account_black = account_obj.browse(
                     self.cr, self.uid, account_black_ids, ctx_to_use)
 
