@@ -35,6 +35,7 @@ from report import report_sxw
 from tools import config
 from tools.translate import _
 from osv import osv
+import pdb
 
 
 class account_balance(report_sxw.rml_parse):
@@ -437,62 +438,65 @@ class account_balance(report_sxw.rml_parse):
         #
         #
         ###############################################################
-        form['periods'] = [0]
-        ctx_init = _ctx_init(self.context.copy())
+        pdb.set_trace()
+        print period_ids
+        for p_id in period_ids:
+            form['periods'] = [p_id]
+            ctx_init = _ctx_init(self.context.copy())
 
-        account_black_ids = account_obj.search(self.cr, self.uid, ([('id', 'in', [i[0] for i in account_ids]),('type','not in',('view','consolidation'))]))
-        account_black = account_obj.browse(self.cr, self.uid, account_black_ids, ctx_init)
-        account_black.sort(key=lambda x: x.level)
-        account_black.reverse()
-        account_black_ids = [i.id for i in account_black]
+            account_black_ids = account_obj.search(self.cr, self.uid, ([('id', 'in', [i[0] for i in account_ids]),('type','not in',('view','consolidation'))]))
+            account_black = account_obj.browse(self.cr, self.uid, account_black_ids, ctx_init)
+            account_black.sort(key=lambda x: x.level)
+            account_black.reverse()
+            account_black_ids = [i.id for i in account_black]
 
-        account_not_black_ids = account_obj.search(self.cr, self.uid, ([('id', 'in', [i[0] for i in account_ids]),('type','in',('view','consolidation'))])) 
-        account_not_black = account_obj.browse(self.cr, self.uid, account_not_black_ids, ctx_init)
-        account_not_black.sort(key=lambda x: x.level)
-        account_not_black.reverse()
-        account_not_black_ids = [i.id for i in account_not_black]
-        
-        dict_black = {}
-        print "Negros"
-        for i in account_black:
-            black_data = {}
-            black_data['obj'] = i
-            black_data['debit'] = i.debit
-            black_data['credit'] = i.credit
-            black_data['balance'] = i.balance
-            black_data['parent_id'] = i.parent_id
-            print i.id, i.name
-            #print i.level
-            #print black_data
-            dict_black[i.id] = black_data
-        
-        dict_not_black = {}
-        print "No Negros"
-        for i in account_not_black:
-            not_black_data = {}
-            not_black_data['obj'] = i
-            not_black_data['debit'] = 0.0
-            not_black_data['credit'] = 0.0
-            not_black_data['balance'] = 0.0
-            not_black_data['parent_id'] = i.parent_id
-            dict_not_black[i.id] = not_black_data
-        
-        all_account = dict_black.copy() #se hace una copia, porque se modificara
-      
-        print "##################"
-        for i in dict_not_black:
-            print dict_not_black[i].get('obj').name , dict_not_black[i].get('debit')
-
-        for acc_id in account_not_black_ids:
-            print dict_not_black[acc_id].get('obj').name
-            acc_childs = dict_not_black[acc_id].get('obj')._get_child_ids(self.cr, self.uid).popitem()[1] #hijos de la cuenta i (id)
-            for child_id in acc_childs:
-                dict_not_black[acc_id]['debit'] += all_account[child_id].get('debit')
-            all_account[acc_id] = dict_not_black[acc_id]
+            account_not_black_ids = account_obj.search(self.cr, self.uid, ([('id', 'in', [i[0] for i in account_ids]),('type','in',('view','consolidation'))])) 
+            account_not_black = account_obj.browse(self.cr, self.uid, account_not_black_ids, ctx_init)
+            account_not_black.sort(key=lambda x: x.level)
+            account_not_black.reverse()
+            account_not_black_ids = [i.id for i in account_not_black]
             
-        print "##################"
-        for i in all_account:
-            print all_account[i].get('obj').name , all_account[i].get('debit')
+            dict_black = {}
+            print "Negros"
+            for i in account_black:
+                black_data = {}
+                black_data['obj'] = i
+                black_data['debit'] = i.debit
+                black_data['credit'] = i.credit
+                black_data['balance'] = i.balance
+                black_data['parent_id'] = i.parent_id
+                print i.id, i.name
+                #print i.level
+                #print black_data
+                dict_black[i.id] = black_data
+            
+            dict_not_black = {}
+            print "No Negros"
+            for i in account_not_black:
+                not_black_data = {}
+                not_black_data['obj'] = i
+                not_black_data['debit'] = 0.0
+                not_black_data['credit'] = 0.0
+                not_black_data['balance'] = 0.0
+                not_black_data['parent_id'] = i.parent_id
+                dict_not_black[i.id] = not_black_data
+            
+            all_account = dict_black.copy() #se hace una copia, porque se modificara
+          
+            print "##################"
+            for i in dict_not_black:
+                print dict_not_black[i].get('obj').name , dict_not_black[i].get('debit')
+
+            for acc_id in account_not_black_ids:
+                print dict_not_black[acc_id].get('obj').name
+                acc_childs = dict_not_black[acc_id].get('obj')._get_child_ids(self.cr, self.uid).popitem()[1] #hijos de la cuenta i (id)
+                for child_id in acc_childs:
+                    dict_not_black[acc_id]['debit'] += all_account[child_id].get('debit')
+                all_account[acc_id] = dict_not_black[acc_id]
+                
+            print "##################"
+            for i in all_account:
+                print all_account[i].get('obj').name , all_account[i].get('debit')
         
         #import pdb
         #pdb.set_trace()
