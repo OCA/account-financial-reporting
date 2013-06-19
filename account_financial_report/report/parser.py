@@ -347,7 +347,7 @@ class account_balance(report_sxw.rml_parse):
         ################################################################
         # Get the accounts                                             #
         ################################################################
-
+        start_time = time.clock()
         account_ids = _get_children_and_consol(self.cr, self.uid, account_ids, form[
                                                'display_account_level'] and form['display_account_level'] or 100, self.context)
 
@@ -359,7 +359,7 @@ class account_balance(report_sxw.rml_parse):
 
         credit_account_ids = list(set(
             credit_account_ids) - set(debit_account_ids))
-
+        print time.clock() - start_time, "seconds"
         #
         # Generate the report lines (checking each account)
         #
@@ -432,8 +432,25 @@ class account_balance(report_sxw.rml_parse):
         result_acc = []
         tot = {}
 
-        account_ids_x = account_obj.search(self.cr , self.uid, ([('id', 'in', [i[0] for i in account_ids]),('type','not in',('view','consolidation'))]))                                             
-        print account_ids_x  
+        account_ids_black = account_obj.search(self.cr, self.uid, ([('id', 'in', [i[0] for i in account_ids]),('type','not in',('view','consolidation'))]))
+        account_ids_black = account_obj.browse(self.cr, self.uid, account_ids_black)
+
+        account_ids_not_black = account_obj.search(self.cr, self.uid, ([('id', 'in', [i[0] for i in account_ids]),('type','in',('view','consolidation'))])) 
+        account_ids_not_black = account_obj.browse(self.cr, self.uid, account_ids_not_black)
+        account_ids_not_black.sort(key=lambda x: x.level)
+        account_ids_not_black.reverse()
+
+        print "Negros"
+        for i in account_ids_black:
+            print i.name
+            print i.level
+        
+        print "No Negros"
+        for i in account_ids_not_black:
+            print i.name
+            print i.level
+       
+        start_time = time.clock() 
 
         for aa_id in account_ids:
             id = aa_id[0]
@@ -707,7 +724,8 @@ class account_balance(report_sxw.rml_parse):
                             tot_crd += res['credit']
                             tot_ytd += res['ytd']
                             tot_eje += res['balance']
-
+        print time.clock() - start_time, "seconds"
+        
         if tot_check:
             str_label = form['lab_str']
             res2 = {
