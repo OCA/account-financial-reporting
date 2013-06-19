@@ -433,15 +433,15 @@ class account_balance(report_sxw.rml_parse):
         result_acc = []
         tot = {}
 
-        start_time = time.clock() 
+        start_time = time.clock()
         ###############################################################
-        #
+        # calculos optimos
         #
         ###############################################################
-        
-        all_account_period = {} #todas las cuentas por periodo
-        if form['columns'] == 'thirteen': 
-            for p_act in range(0,13):
+
+        all_account_period = {}  # todas las cuentas por periodo
+        if form['columns'] == 'thirteen':
+            for p_act in range(0, 13):
 
                 if p_act == 12:
                     form['periods'] = period_ids
@@ -454,19 +454,23 @@ class account_balance(report_sxw.rml_parse):
                     ctx_i = _ctx_init(self.context.copy())
                     ctx_to_use = _ctx_init(self.context.copy())
 
-                
-                account_black_ids = account_obj.search(self.cr, self.uid, ([('id', 'in', [i[0] for i in account_ids]),('type','not in',('view','consolidation'))]))
-                account_black = account_obj.browse(self.cr, self.uid, account_black_ids, ctx_to_use)
+                account_black_ids = account_obj.search(self.cr, self.uid, ([('id', 'in', [i[
+                                                       0] for i in account_ids]), ('type', 'not in', ('view', 'consolidation'))]))
+                account_black = account_obj.browse(
+                    self.cr, self.uid, account_black_ids, ctx_to_use)
 
                 if form['inf_type'] == 'BF':
-                    account_black_init = account_obj.browse(self.cr, self.uid, account_black_ids, ctx_i)
+                    account_black_init = account_obj.browse(
+                        self.cr, self.uid, account_black_ids, ctx_i)
 
-                account_not_black_ids = account_obj.search(self.cr, self.uid, ([('id', 'in', [i[0] for i in account_ids]),('type','in',('view','consolidation'))])) 
-                account_not_black = account_obj.browse(self.cr, self.uid, account_not_black_ids, ctx_to_use)
+                account_not_black_ids = account_obj.search(self.cr, self.uid, ([('id', 'in', [
+                                                           i[0] for i in account_ids]), ('type', 'in', ('view', 'consolidation'))]))
+                account_not_black = account_obj.browse(
+                    self.cr, self.uid, account_not_black_ids, ctx_to_use)
                 account_not_black.sort(key=lambda x: x.level)
                 account_not_black.reverse()
                 account_not_black_ids = [i.id for i in account_not_black]
-                
+
                 #~ Negros
                 dict_black = {}
                 for i in account_black:
@@ -478,13 +482,11 @@ class account_balance(report_sxw.rml_parse):
                     if form['inf_type'] == 'BF':
                         black_data['balanceinit'] = 0.0
                     dict_black[i.id] = black_data
-                
+
                 if form['inf_type'] == 'BF':
                     for i in account_black_init:
                         dict_black[i.id]['balanceinit'] = i.balance
                 #########################
-
-
 
                 #~ No negros
                 dict_not_black = {}
@@ -498,53 +500,55 @@ class account_balance(report_sxw.rml_parse):
                         not_black_data['balanceinit'] = 0.0
                     dict_not_black[i.id] = not_black_data
                 ###########################
-                
-                all_account = dict_black.copy() #se hace una copia, porque se modificara
-              
+
+                all_account = dict_black.copy(
+                )  # se hace una copia, porque se modificara
+
                 print "##################"
                 for i in dict_not_black:
-                    print dict_not_black[i].get('obj').name , dict_not_black[i].get('debit')
+                    print dict_not_black[i].get('obj').name, dict_not_black[i].get('debit')
 
                 for acc_id in account_not_black_ids:
                     print dict_not_black[acc_id].get('obj').name
                     acc_childs = dict_not_black[acc_id].get('obj').child_id
                     for child_id in acc_childs:
-                        dict_not_black[acc_id]['debit'] += all_account[child_id.id].get('debit')
-                        dict_not_black[acc_id]['credit'] += all_account[child_id.id].get('credit')
-                        dict_not_black[acc_id]['balance'] += all_account[child_id.id].get('balance')
+                        dict_not_black[acc_id]['debit'] += all_account[
+                            child_id.id].get('debit')
+                        dict_not_black[acc_id]['credit'] += all_account[
+                            child_id.id].get('credit')
+                        dict_not_black[acc_id]['balance'] += all_account[
+                            child_id.id].get('balance')
                         if form['inf_type'] == 'BF':
-                            dict_not_black[acc_id]['balanceinit'] += all_account[child_id.id].get('balanceinit')
+                            dict_not_black[acc_id]['balanceinit'] += all_account[
+                                child_id.id].get('balanceinit')
                     all_account[acc_id] = dict_not_black[acc_id]
-                    
+
                 print "##################"
                 for i in all_account:
-                    print all_account[i].get('obj').name , all_account[i].get('debit')
+                    print all_account[i].get('obj').name, all_account[i].get('debit')
                 if p_act == 12:
                     all_account_period['all'] = all_account
                 else:
-                    all_account_period[ period_ids[p_act] ] = all_account
-        
+                    all_account_period[period_ids[p_act]] = all_account
 
-        #pdb.set_trace() 
-        #print "periodo 1 #######################"
-        #for i in all_account_period.get(1):
+        # pdb.set_trace()
+        # print "periodo 1 #######################"
+        # for i in all_account_period.get(1):
         #    j = all_account_period.get(1).get(i)
         #    print j.get('obj').name , j.get('debit')
-
-        #print "periodo 2 #######################"
-        #for i in all_account_period.get(2):
+        # print "periodo 2 #######################"
+        # for i in all_account_period.get(2):
         #    j = all_account_period.get(2).get(i)
         #    print j.get('obj').name , j.get('debit')
-        
-        #print all_account_period
+        # print all_account_period
         print time.clock() - start_time, "seconds"
         #
         ###############################################################
-        #
+        # Fin de calculos optimos, sumatoria de valores
         #
         ###############################################################
-        
-        start_time = time.clock() 
+
+        start_time = time.clock()
 
         for aa_id in account_ids:
             id = aa_id[0]
@@ -613,7 +617,7 @@ class account_balance(report_sxw.rml_parse):
 
                         if form['inf_type'] == 'IS':
                             d, c, b = map(z, [
-                                      all_account_period[p_id].get(id).get('debit', 0.0), all_account_period[p_id].get(id).get('credit', 0.0), all_account_period[p_id].get(id).get('balance', 0.0)])
+                                          all_account_period[p_id].get(id).get('debit', 0.0), all_account_period[p_id].get(id).get('credit', 0.0), all_account_period[p_id].get(id).get('balance', 0.0)])
                             res.update({
                                 'dbr%s' % pn: self.exchange(d),
                                 'cdr%s' % pn: self.exchange(c),
@@ -621,7 +625,7 @@ class account_balance(report_sxw.rml_parse):
                             })
                         else:
                             i, d, c = map(z, [
-                                      all_account_period[p_id].get(id).get('balanceinit', 0.0), all_account_period[p_id].get(id).get('debit', 0.0), all_account_period[p_id].get(id).get('credit', 0.0)])
+                                          all_account_period[p_id].get(id).get('balanceinit', 0.0), all_account_period[p_id].get(id).get('debit', 0.0), all_account_period[p_id].get(id).get('credit', 0.0)])
                             b = z(i+d-c)
                             res.update({
                                 'dbr%s' % pn: self.exchange(d),
@@ -783,7 +787,7 @@ class account_balance(report_sxw.rml_parse):
                             tot_ytd += res['ytd']
                             tot_eje += res['balance']
         print time.clock() - start_time, "seconds"
-        
+
         if tot_check:
             str_label = form['lab_str']
             res2 = {
