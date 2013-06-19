@@ -459,7 +459,7 @@ class account_balance(report_sxw.rml_parse):
                 account_black = account_obj.browse(
                     self.cr, self.uid, account_black_ids, ctx_to_use)
 
-                if form['inf_type'] == 'BF':
+                if form['inf_type'] == 'BS':
                     account_black_init = account_obj.browse(
                         self.cr, self.uid, account_black_ids, ctx_i)
 
@@ -479,11 +479,11 @@ class account_balance(report_sxw.rml_parse):
                     black_data['debit'] = i.debit
                     black_data['credit'] = i.credit
                     black_data['balance'] = i.balance
-                    if form['inf_type'] == 'BF':
+                    if form['inf_type'] == 'BS':
                         black_data['balanceinit'] = 0.0
                     dict_black[i.id] = black_data
 
-                if form['inf_type'] == 'BF':
+                if form['inf_type'] == 'BS':
                     for i in account_black_init:
                         dict_black[i.id]['balanceinit'] = i.balance
                 #########################
@@ -496,7 +496,7 @@ class account_balance(report_sxw.rml_parse):
                     not_black_data['debit'] = 0.0
                     not_black_data['credit'] = 0.0
                     not_black_data['balance'] = 0.0
-                    if form['inf_type'] == 'BF':
+                    if form['inf_type'] == 'BS':
                         not_black_data['balanceinit'] = 0.0
                     dict_not_black[i.id] = not_black_data
                 ###########################
@@ -518,7 +518,7 @@ class account_balance(report_sxw.rml_parse):
                             child_id.id].get('credit')
                         dict_not_black[acc_id]['balance'] += all_account[
                             child_id.id].get('balance')
-                        if form['inf_type'] == 'BF':
+                        if form['inf_type'] == 'BS':
                             dict_not_black[acc_id]['balanceinit'] += all_account[
                                 child_id.id].get('balanceinit')
                     all_account[acc_id] = dict_not_black[acc_id]
