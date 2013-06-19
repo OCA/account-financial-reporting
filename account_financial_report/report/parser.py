@@ -442,44 +442,45 @@ class account_balance(report_sxw.rml_parse):
         print period_ids
         for p_id in period_ids:
             form['periods'] = [p_id]
-            ctx_init = _ctx_init(self.context.copy())
+
+            if form['inf_type'] == 'IS':
+                ctx_to_use = _ctx_end(self.context.copy())
+            else:
+                ctx_to_use = _ctx_init(self.context.copy())
 
             account_black_ids = account_obj.search(self.cr, self.uid, ([('id', 'in', [i[0] for i in account_ids]),('type','not in',('view','consolidation'))]))
-            account_black = account_obj.browse(self.cr, self.uid, account_black_ids, ctx_init)
-            account_black.sort(key=lambda x: x.level)
-            account_black.reverse()
-            account_black_ids = [i.id for i in account_black]
+            account_black = account_obj.browse(self.cr, self.uid, account_black_ids, ctx_to_use)
+            #account_black.sort(key=lambda x: x.level)
+            #account_black.reverse()
+            #account_black_ids = [i.id for i in account_black]
 
             account_not_black_ids = account_obj.search(self.cr, self.uid, ([('id', 'in', [i[0] for i in account_ids]),('type','in',('view','consolidation'))])) 
-            account_not_black = account_obj.browse(self.cr, self.uid, account_not_black_ids, ctx_init)
+            account_not_black = account_obj.browse(self.cr, self.uid, account_not_black_ids, ctx_to_use)
             account_not_black.sort(key=lambda x: x.level)
             account_not_black.reverse()
             account_not_black_ids = [i.id for i in account_not_black]
             
+            #~ Negros
             dict_black = {}
-            print "Negros"
             for i in account_black:
                 black_data = {}
                 black_data['obj'] = i
                 black_data['debit'] = i.debit
                 black_data['credit'] = i.credit
                 black_data['balance'] = i.balance
-                black_data['parent_id'] = i.parent_id
-                print i.id, i.name
-                #print i.level
-                #print black_data
                 dict_black[i.id] = black_data
-            
+            #########################
+
+            #~ No negros
             dict_not_black = {}
-            print "No Negros"
             for i in account_not_black:
                 not_black_data = {}
                 not_black_data['obj'] = i
                 not_black_data['debit'] = 0.0
                 not_black_data['credit'] = 0.0
                 not_black_data['balance'] = 0.0
-                not_black_data['parent_id'] = i.parent_id
                 dict_not_black[i.id] = not_black_data
+            ###########################
             
             all_account = dict_black.copy() #se hace una copia, porque se modificara
           
