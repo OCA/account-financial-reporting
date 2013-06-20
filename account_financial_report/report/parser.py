@@ -417,10 +417,8 @@ class account_balance(report_sxw.rml_parse):
             tot_bal13 = 0.0
 
         else:
-
             ctx_init = _ctx_init(self.context.copy())
             ctx_end = _ctx_end(self.context.copy())
-
             tot_bin = 0.0
             tot_deb = 0.0
             tot_crd = 0.0
@@ -461,11 +459,12 @@ class account_balance(report_sxw.rml_parse):
         elif form['columns'] == 'qtr':
             limit = 5
             periods_to_use = p
-
+        else:
+            limit = 1
         
-        if form['columns'] == 'thirteen' or form['columns'] == 'qtr':
-            for p_act in range(limit):
+        for p_act in range(limit):
 
+            if limit != 1:
                 if p_act == limit-1:
                     form['periods'] = period_ids
                 else:
@@ -474,75 +473,6 @@ class account_balance(report_sxw.rml_parse):
                     elif form['columns'] == 'qtr':
                         form['periods'] = p[p_act]
 
-                if form['inf_type'] == 'IS':
-                    ctx_to_use = _ctx_end(self.context.copy())
-                else:
-                    ctx_i = _ctx_init(self.context.copy())
-                    ctx_to_use = _ctx_end(self.context.copy())
-
-                account_black = account_obj.browse(
-                    self.cr, self.uid, account_black_ids, ctx_to_use)
-
-                if form['inf_type'] == 'BS':
-                    account_black_init = account_obj.browse(
-                        self.cr, self.uid, account_black_ids, ctx_i)
-
-                #~ Negros
-                dict_black = {}
-                for i in account_black:
-                    black_data = {}
-                    black_data['obj'] = i
-                    black_data['debit'] = i.debit
-                    black_data['credit'] = i.credit
-                    black_data['balance'] = i.balance
-                    if form['inf_type'] == 'BS':
-                        black_data['balanceinit'] = 0.0
-                    dict_black[i.id] = black_data
-
-                #Se adicionan los valores de balanceinit al diccionario
-                if form['inf_type'] == 'BS':
-                    for i in account_black_init:
-                        dict_black[i.id]['balanceinit'] = i.balance
-                #########################
-
-                #~ No negros
-                dict_not_black = {}
-                for i in account_not_black:
-                    not_black_data = {}
-                    not_black_data['obj'] = i
-                    not_black_data['debit'] = 0.0
-                    not_black_data['credit'] = 0.0
-                    not_black_data['balance'] = 0.0
-                    if form['inf_type'] == 'BS':
-                        not_black_data['balanceinit'] = 0.0
-                    dict_not_black[i.id] = not_black_data
-                ###########################
-
-                all_account = dict_black.copy(
-                )  # se hace una copia, porque se modificara
-
-                for acc_id in account_not_black_ids:
-                    acc_childs = dict_not_black[acc_id].get('obj').child_id
-                    for child_id in acc_childs:
-                        dict_not_black[acc_id]['debit'] += all_account[
-                            child_id.id].get('debit')
-                        dict_not_black[acc_id]['credit'] += all_account[
-                            child_id.id].get('credit')
-                        dict_not_black[acc_id]['balance'] += all_account[
-                            child_id.id].get('balance')
-                        if form['inf_type'] == 'BS':
-                            dict_not_black[acc_id]['balanceinit'] += all_account[
-                                child_id.id].get('balanceinit')
-                    all_account[acc_id] = dict_not_black[acc_id]
-
-                if p_act == limit-1:
-                    all_account_period['all'] = all_account
-                else:
-                    if form['columns'] == 'thirteen':
-                        all_account_period[period_ids[p_act]] = all_account
-                    elif form['columns'] == 'qtr':
-                        all_account_period[p_act] = all_account
-        else:
             if form['inf_type'] == 'IS':
                 ctx_to_use = _ctx_end(self.context.copy())
             else:
@@ -568,6 +498,7 @@ class account_balance(report_sxw.rml_parse):
                     black_data['balanceinit'] = 0.0
                 dict_black[i.id] = black_data
 
+            #Se adicionan los valores de balanceinit al diccionario
             if form['inf_type'] == 'BS':
                 for i in account_black_init:
                     dict_black[i.id]['balanceinit'] = i.balance
@@ -603,7 +534,13 @@ class account_balance(report_sxw.rml_parse):
                             child_id.id].get('balanceinit')
                 all_account[acc_id] = dict_not_black[acc_id]
 
-            all_account_period['all'] = all_account
+            if p_act == limit-1:
+                all_account_period['all'] = all_account
+            else:
+                if form['columns'] == 'thirteen':
+                    all_account_period[period_ids[p_act]] = all_account
+                elif form['columns'] == 'qtr':
+                    all_account_period[p_act] = all_account
 
         # pdb.set_trace()
         # print "periodo 1 #######################"
