@@ -505,7 +505,7 @@ class account_balance(report_sxw.rml_parse):
                 all_account_period['all'] = all_account
             else:
                 if form['columns'] == 'thirteen':
-                    all_account_period[period_ids[p_act]] = all_account
+                    all_account_period[p_act] = all_account
                 elif form['columns'] == 'qtr':
                     all_account_period[p_act] = all_account
 
@@ -575,11 +575,11 @@ class account_balance(report_sxw.rml_parse):
 
                 elif form['columns'] == 'thirteen':
                     pn = 1
-                    for p_id in period_ids:
+                    for p_num in range(12):
 
                         if form['inf_type'] == 'IS':
                             d, c, b = map(z, [
-                                          all_account_period[p_id].get(id).get('debit', 0.0), all_account_period[p_id].get(id).get('credit', 0.0), all_account_period[p_id].get(id).get('balance', 0.0)])
+                                          all_account_period[p_num].get(id).get('debit', 0.0), all_account_period[p_num].get(id).get('credit', 0.0), all_account_period[p_num].get(id).get('balance', 0.0)])
                             res.update({
                                 'dbr%s' % pn: self.exchange(d),
                                 'cdr%s' % pn: self.exchange(c),
@@ -587,7 +587,7 @@ class account_balance(report_sxw.rml_parse):
                             })
                         else:
                             i, d, c = map(z, [
-                                          all_account_period[p_id].get(id).get('balanceinit', 0.0), all_account_period[p_id].get(id).get('debit', 0.0), all_account_period[p_id].get(id).get('credit', 0.0)])
+                                          all_account_period[p_num].get(id).get('balanceinit', 0.0), all_account_period[p_num].get(id).get('debit', 0.0), all_account_period[p_num].get(id).get('credit', 0.0)])
                             b = z(i+d-c)
                             res.update({
                                 'dbr%s' % pn: self.exchange(d),
