@@ -443,6 +443,17 @@ class account_balance(report_sxw.rml_parse):
                                                [('id', 'in', [i[0] for i in account_ids]), 
                                                 ('type', 'not in', 
                                                 ('view', 'consolidation'))]))
+
+        account_not_black_ids = account_obj.search(self.cr, self.uid, ([('id', 'in', [
+                                                   i[0] for i in account_ids]), ('type', 'in', ('view', 'consolidation'))]))
+
+        #This could be done quickly with a sql sentence
+        account_not_black = account_obj.browse(
+            self.cr, self.uid, account_not_black_ids, ctx_to_use)
+        account_not_black.sort(key=lambda x: x.level)
+        account_not_black.reverse()
+        account_not_black_ids = [i.id for i in account_not_black]
+
         all_account_period = {}  # todas las cuentas por periodo
         if form['columns'] == 'thirteen':
             for p_act in range(0, 13):
@@ -464,14 +475,6 @@ class account_balance(report_sxw.rml_parse):
                 if form['inf_type'] == 'BS':
                     account_black_init = account_obj.browse(
                         self.cr, self.uid, account_black_ids, ctx_i)
-
-                account_not_black_ids = account_obj.search(self.cr, self.uid, ([('id', 'in', [
-                                                           i[0] for i in account_ids]), ('type', 'in', ('view', 'consolidation'))]))
-                account_not_black = account_obj.browse(
-                    self.cr, self.uid, account_not_black_ids, ctx_to_use)
-                account_not_black.sort(key=lambda x: x.level)
-                account_not_black.reverse()
-                account_not_black_ids = [i.id for i in account_not_black]
 
                 #~ Negros
                 dict_black = {}
