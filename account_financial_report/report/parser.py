@@ -507,12 +507,7 @@ class account_balance(report_sxw.rml_parse):
                 all_account = dict_black.copy(
                 )  # se hace una copia, porque se modificara
 
-                print "##################"
-                for i in dict_not_black:
-                    print dict_not_black[i].get('obj').name, dict_not_black[i].get('debit')
-
                 for acc_id in account_not_black_ids:
-                    print dict_not_black[acc_id].get('obj').name
                     acc_childs = dict_not_black[acc_id].get('obj').child_id
                     for child_id in acc_childs:
                         dict_not_black[acc_id]['debit'] += all_account[
@@ -526,9 +521,6 @@ class account_balance(report_sxw.rml_parse):
                                 child_id.id].get('balanceinit')
                     all_account[acc_id] = dict_not_black[acc_id]
 
-                print "##################"
-                for i in all_account:
-                    print all_account[i].get('obj').name, all_account[i].get('debit')
                 if p_act == 12:
                     all_account_period['all'] = all_account
                 else:
@@ -588,12 +580,7 @@ class account_balance(report_sxw.rml_parse):
                 all_account = dict_black.copy(
                 )  # se hace una copia, porque se modificara
 
-                print "##################"
-                for i in dict_not_black:
-                    print dict_not_black[i].get('obj').name, dict_not_black[i].get('debit')
-
                 for acc_id in account_not_black_ids:
-                    print dict_not_black[acc_id].get('obj').name
                     acc_childs = dict_not_black[acc_id].get('obj').child_id
                     for child_id in acc_childs:
                         dict_not_black[acc_id]['debit'] += all_account[
@@ -607,9 +594,6 @@ class account_balance(report_sxw.rml_parse):
                                 child_id.id].get('balanceinit')
                     all_account[acc_id] = dict_not_black[acc_id]
 
-                print "##################"
-                for i in all_account:
-                    print all_account[i].get('obj').name, all_account[i].get('debit')
                 if p_act == 4:
                     all_account_period['all'] = all_account
                 else:
@@ -662,12 +646,7 @@ class account_balance(report_sxw.rml_parse):
             all_account = dict_black.copy(
             )  # se hace una copia, porque se modificara
 
-            print "##################"
-            for i in dict_not_black:
-                print dict_not_black[i].get('obj').name, dict_not_black[i].get('debit')
-
             for acc_id in account_not_black_ids:
-                print dict_not_black[acc_id].get('obj').name
                 acc_childs = dict_not_black[acc_id].get('obj').child_id
                 for child_id in acc_childs:
                     dict_not_black[acc_id]['debit'] += all_account[
@@ -681,9 +660,6 @@ class account_balance(report_sxw.rml_parse):
                             child_id.id].get('balanceinit')
                 all_account[acc_id] = dict_not_black[acc_id]
 
-            print "##################"
-            for i in all_account:
-                print all_account[i].get('obj').name, all_account[i].get('debit')
             all_account_period['all'] = all_account
 
         # pdb.set_trace()
@@ -784,8 +760,6 @@ class account_balance(report_sxw.rml_parse):
                                 'cdr%s' % pn: self.exchange(c),
                                 'bal%s' % pn: self.exchange(b),
                             })
-                            print p_id
-                            print all_account_period[p_id].get(id).get('debit'), all_account_period[p_id].get(id).get('credit'), all_account_period[p_id].get(id).get('balance')
 
                         pn += 1
 
