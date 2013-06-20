@@ -449,7 +449,7 @@ class account_balance(report_sxw.rml_parse):
 
         #This could be done quickly with a sql sentence
         account_not_black = account_obj.browse(
-            self.cr, self.uid, account_not_black_ids, ctx_to_use)
+            self.cr, self.uid, account_not_black_ids)
         account_not_black.sort(key=lambda x: x.level)
         account_not_black.reverse()
         account_not_black_ids = [i.id for i in account_not_black]
@@ -467,7 +467,7 @@ class account_balance(report_sxw.rml_parse):
                     ctx_to_use = _ctx_end(self.context.copy())
                 else:
                     ctx_i = _ctx_init(self.context.copy())
-                    ctx_to_use = _ctx_init(self.context.copy())
+                    ctx_to_use = _ctx_end(self.context.copy())
 
                 account_black = account_obj.browse(
                     self.cr, self.uid, account_black_ids, ctx_to_use)
