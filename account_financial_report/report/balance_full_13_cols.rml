@@ -4,7 +4,7 @@
         <pageTemplate id="first">
             <frame id="first" x1="0.5cm" y1="1.0cm" width="41.0cm" height="23cm"/>
             <pageGraphics>
-                <setFont name="Helvetica" size="9"/>
+                <setFont name="Helvetica" size="6"/>
 
                 <image x="1.0cm" y="24.0cm" width="5.0cm">[[company.logo and company.logo or removeParentNode('image')]]</image>
 <!--
@@ -34,7 +34,7 @@
                         </tr>
                     </blockTable>
                 </place>
-                <drawRightString x="192mm" y="5mm">[[ get_informe_text(data['form']) ]] /  Pág.: <pageNumber/>-<pageCount/> </drawRightString> 
+                <drawRightString x="410.9mm" y="5mm">[[ get_informe_text(data['form']) ]] /  Pág.: <pageNumber/>-<pageCount/> </drawRightString> 
             </pageGraphics>
 
         </pageTemplate>
@@ -64,7 +64,12 @@
         </blockTableStyle>
 
         <initialize>
-            <paraStyle name="all" alignment="justify"/>
+            <paraStyle 
+                name="all" 
+                alignment="justify"
+                fontName="Helvetica"
+                fontSize="6.0" 
+                />
         </initialize>
         <paraStyle 
             name="TITLE_LEFT_ALIGN" 
