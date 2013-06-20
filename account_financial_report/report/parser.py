@@ -390,14 +390,30 @@ class account_balance(report_sxw.rml_parse):
                         p.append(l)
                         l = []
                         a = 0
-            for i in range(1, 6):
-                eval(str('tot_bal%s'%i)+'=0.0', self.context, mode='exec', nocopy=True)
+            tot_bal1 = 0.0
+            tot_bal2 = 0.0
+            tot_bal3 = 0.0
+            tot_bal4 = 0.0
+            tot_bal5 = 0.0 
         elif form['columns'] == 'thirteen':
             period_ids = period_obj.search(self.cr, self.uid, [(
                 'fiscalyear_id', '=', fiscalyear.id), ('special', '=', False)], order='date_start asc')
-            for i in range(1, 14):
-                eval(str('tot_bal%s'%i)+'=0.0', self.context, mode='exec', nocopy=True)
+            tot_bal1 = 0.0
+            tot_bal1 = 0.0
+            tot_bal2 = 0.0
+            tot_bal3 = 0.0
+            tot_bal4 = 0.0
+            tot_bal5 = 0.0
+            tot_bal6 = 0.0
+            tot_bal7 = 0.0
+            tot_bal8 = 0.0
+            tot_bal9 = 0.0
+            tot_bal10 = 0.0
+            tot_bal11 = 0.0
+            tot_bal12 = 0.0
+            tot_bal13 = 0.0
         else:
+            ctx_end = _ctx_end(self.context.copy())
             tot_bin = 0.0
             tot_deb = 0.0
             tot_crd = 0.0
@@ -713,14 +729,28 @@ class account_balance(report_sxw.rml_parse):
                         if form['columns'] == 'qtr':
                             tot_check = True
                             #~ tot[res['id']] = True
-                            for i in range(1, 6):
-                                eval("tot_bal%s += res.get('bal%s', 0.0)" % (i,i), self.context, mode='exec', nocopy=True)
+                            tot_bal1 += res.get('bal1', 0.0)
+                            tot_bal2 += res.get('bal2', 0.0)
+                            tot_bal3 += res.get('bal3', 0.0)
+                            tot_bal4 += res.get('bal4', 0.0)
+                            tot_bal5 += res.get('bal5', 0.0) 
 
                         elif form['columns'] == 'thirteen':
                             tot_check = True
                             #~ tot[res['id']] = True
-                            for i in range(1, 14):
-                                eval("tot_bal%s += res.get('bal%s', 0.0)" % (i,i), self.context, mode='exec', nocopy=True)
+                            tot_bal1 += res.get('bal1', 0.0)
+                            tot_bal2 += res.get('bal2', 0.0)
+                            tot_bal3 += res.get('bal3', 0.0)
+                            tot_bal4 += res.get('bal4', 0.0)
+                            tot_bal5 += res.get('bal5', 0.0)
+                            tot_bal6 += res.get('bal6', 0.0)
+                            tot_bal7 += res.get('bal7', 0.0)
+                            tot_bal8 += res.get('bal8', 0.0)
+                            tot_bal9 += res.get('bal9', 0.0)
+                            tot_bal10 += res.get('bal10', 0.0)
+                            tot_bal11 += res.get('bal11', 0.0)
+                            tot_bal12 += res.get('bal12', 0.0)
+                            tot_bal13 += res.get('bal13', 0.0) 
                         else:
                             tot_check = True
                             #~ tot[res['id']] = True
@@ -730,6 +760,7 @@ class account_balance(report_sxw.rml_parse):
                             tot_ytd += res['ytd']
                             tot_eje += res['balance']
 
+        #pdb.set_trace()
         if tot_check:
             str_label = form['lab_str']
             res2 = {
@@ -739,33 +770,27 @@ class account_balance(report_sxw.rml_parse):
                 'total': True,
             }
             if form['columns'] == 'qtr':
-                for i in range(1, 6):
-                    bal = 'bal%s' % i
-                    res2[bal] = eval("tot_bal%s", self.context, mode='exec', nocopy=True)
-                    #pdb.set_trace()
-                    #eval("tot_bal%s += res.get('bal%s', 0.0)" % (i,i), self.context, mode='exec', nocopy=True)
-                
                 res2.update(dict(
-                            bal1=tot_bal1,
-                            bal2=tot_bal2,
-                            bal3=tot_bal3,
-                            bal4=tot_bal4,
-                            bal5=tot_bal5,))
+                            bal1=z(tot_bal1),
+                            bal2=z(tot_bal2),
+                            bal3=z(tot_bal3),
+                            bal4=z(tot_bal4),
+                            bal5=z(tot_bal5),))
             elif form['columns'] == 'thirteen':
                 res2.update(dict(
-                            bal1=tot_bal1,
-                            bal2=tot_bal2,
-                            bal3=tot_bal3,
-                            bal4=tot_bal4,
-                            bal5=tot_bal5,
-                            bal6=tot_bal6,
-                            bal7=tot_bal7,
-                            bal8=tot_bal8,
-                            bal9=tot_bal9,
-                            bal10=tot_bal10,
-                            bal11=tot_bal11,
-                            bal12=tot_bal12,
-                            bal13=tot_bal13,))
+                            bal1=z(tot_bal1),
+                            bal2=z(tot_bal2),
+                            bal3=z(tot_bal3),
+                            bal4=z(tot_bal4),
+                            bal5=z(tot_bal5),
+                            bal6=z(tot_bal6),
+                            bal7=z(tot_bal7),
+                            bal8=z(tot_bal8),
+                            bal9=z(tot_bal9),
+                            bal10=z(tot_bal10),
+                            bal11=z(tot_bal11),
+                            bal12=z(tot_bal12),
+                            bal13=z(tot_bal13),))
 
             else:
                 res2.update({
@@ -777,7 +802,7 @@ class account_balance(report_sxw.rml_parse):
                 })
 
             result_acc.append(res2)
-        return result_acc
+            return result_acc
 
 report_sxw.report_sxw('report.afr.1cols',
                       'wizard.report',
