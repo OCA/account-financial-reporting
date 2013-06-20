@@ -348,7 +348,6 @@ class account_balance(report_sxw.rml_parse):
         ################################################################
         # Get the accounts                                             #
         ################################################################
-        start_time = time.clock()
         account_ids = _get_children_and_consol(self.cr, self.uid, account_ids, form[
                                                'display_account_level'] and form['display_account_level'] or 100, self.context)
 
@@ -360,7 +359,6 @@ class account_balance(report_sxw.rml_parse):
 
         credit_account_ids = list(set(
             credit_account_ids) - set(debit_account_ids))
-        print time.clock() - start_time, "seconds"
         #
         # Generate the report lines (checking each account)
         #
@@ -400,7 +398,6 @@ class account_balance(report_sxw.rml_parse):
             tot_bal3 = 0.0
             tot_bal4 = 0.0
             tot_bal5 = 0.0
-
         elif form['columns'] == 'thirteen':
             tot_bal1 = 0.0
             tot_bal2 = 0.0
@@ -415,7 +412,6 @@ class account_balance(report_sxw.rml_parse):
             tot_bal11 = 0.0
             tot_bal12 = 0.0
             tot_bal13 = 0.0
-
         else:
             ctx_init = _ctx_init(self.context.copy())
             ctx_end = _ctx_end(self.context.copy())
@@ -429,7 +425,6 @@ class account_balance(report_sxw.rml_parse):
         result_acc = []
         tot = {}
 
-        start_time = time.clock()
         ###############################################################
         # calculos optimos
         #
@@ -542,24 +537,11 @@ class account_balance(report_sxw.rml_parse):
                 elif form['columns'] == 'qtr':
                     all_account_period[p_act] = all_account
 
-        # pdb.set_trace()
-        # print "periodo 1 #######################"
-        # for i in all_account_period.get(1):
-        #    j = all_account_period.get(1).get(i)
-        #    print j.get('obj').name , j.get('debit')
-        # print "periodo 2 #######################"
-        # for i in all_account_period.get(2):
-        #    j = all_account_period.get(2).get(i)
-        #    print j.get('obj').name , j.get('debit')
-        # print all_account_period
-        print time.clock() - start_time, "seconds"
-        #
         ###############################################################
         # Fin de calculos optimos, sumatoria de valores
         #
         ###############################################################
 
-        start_time = time.clock()
 
         for aa_id in account_ids:
             id = aa_id[0]
@@ -792,7 +774,6 @@ class account_balance(report_sxw.rml_parse):
                             tot_crd += res['credit']
                             tot_ytd += res['ytd']
                             tot_eje += res['balance']
-        print time.clock() - start_time, "seconds"
 
         if tot_check:
             str_label = form['lab_str']
