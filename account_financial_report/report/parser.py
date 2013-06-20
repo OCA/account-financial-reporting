@@ -36,7 +36,7 @@ from tools import config
 from tools.translate import _
 from osv import osv
 import pdb
-
+from openerp.tools.safe_eval import safe_eval as eval
 
 class account_balance(report_sxw.rml_parse):
 
@@ -387,31 +387,13 @@ class account_balance(report_sxw.rml_parse):
                         p.append(l)
                         l = []
                         a = 0
-
+            for i in range(1, 6):
+                eval(str('tot_bal%s'%i)+'=0.0', self.context, mode='exec', nocopy=True)
         elif form['columns'] == 'thirteen':
             period_ids = period_obj.search(self.cr, self.uid, [(
                 'fiscalyear_id', '=', fiscalyear.id), ('special', '=', False)], order='date_start asc')
-
-        if form['columns'] == 'qtr':
-            tot_bal1 = 0.0
-            tot_bal2 = 0.0
-            tot_bal3 = 0.0
-            tot_bal4 = 0.0
-            tot_bal5 = 0.0
-        elif form['columns'] == 'thirteen':
-            tot_bal1 = 0.0
-            tot_bal2 = 0.0
-            tot_bal3 = 0.0
-            tot_bal4 = 0.0
-            tot_bal5 = 0.0
-            tot_bal6 = 0.0
-            tot_bal7 = 0.0
-            tot_bal8 = 0.0
-            tot_bal9 = 0.0
-            tot_bal10 = 0.0
-            tot_bal11 = 0.0
-            tot_bal12 = 0.0
-            tot_bal13 = 0.0
+            for i in range(1, 14):
+                eval(str('tot_bal%s'%i)+'=0.0', self.context, mode='exec', nocopy=True)
         else:
             tot_bin = 0.0
             tot_deb = 0.0
@@ -443,9 +425,9 @@ class account_balance(report_sxw.rml_parse):
         account_not_black.reverse()
         account_not_black_ids = [i.id for i in account_not_black]
 
-        all_account_period = {}  # todas las cuentas por periodo
+        all_account_period = {}  # Todas las cuentas por periodo
         
-        # iteration limit depending on the number of columns
+        # Iteration limit depending on the number of columns
         if form['columns'] == 'thirteen':
             limit = 13
         elif form['columns'] == 'qtr':
@@ -476,52 +458,40 @@ class account_balance(report_sxw.rml_parse):
                 account_black_init = account_obj.browse(
                     self.cr, self.uid, account_black_ids, ctx_i)
 
-            #~ Negros
+            #~ Black
             dict_black = {}
             for i in account_black:
-                black_data = {}
-                black_data['obj'] = i
-                black_data['debit'] = i.debit
-                black_data['credit'] = i.credit
-                black_data['balance'] = i.balance
+                dict_black[i.id] = {'obj': i, 'debit': i.debit, 'credit':i.credit, 'balance': i.balance  }
                 if form['inf_type'] == 'BS':
-                    black_data['balanceinit'] = 0.0
-                dict_black[i.id] = black_data
+                    dict_black.get(i.id)['balanceinit'] = 0.0
 
             #Se adicionan los valores de balanceinit al diccionario
             if form['inf_type'] == 'BS':
                 for i in account_black_init:
-                    dict_black[i.id]['balanceinit'] = i.balance
-            #########################
+                    dict_black.get(i.id)['balanceinit'] = i.balance
 
-            #~ No negros
+            #~ Not black
             dict_not_black = {}
             for i in account_not_black:
-                not_black_data = {}
-                not_black_data['obj'] = i
-                not_black_data['debit'] = 0.0
-                not_black_data['credit'] = 0.0
-                not_black_data['balance'] = 0.0
+                dict_not_black[i.id] = {'obj': i, 'debit': i.debit, 'credit':i.credit, 'balance': i.balance  }
                 if form['inf_type'] == 'BS':
-                    not_black_data['balanceinit'] = 0.0
-                dict_not_black[i.id] = not_black_data
-            ###########################
+                    dict_not_black.get(i.id)['balanceinit'] = 0.0
 
             all_account = dict_black.copy(
             )  # se hace una copia, porque se modificara
 
             for acc_id in account_not_black_ids:
-                acc_childs = dict_not_black[acc_id].get('obj').child_id
+                acc_childs = dict_not_black.get(acc_id).get('obj').child_id
                 for child_id in acc_childs:
-                    dict_not_black[acc_id]['debit'] += all_account[
-                        child_id.id].get('debit')
-                    dict_not_black[acc_id]['credit'] += all_account[
-                        child_id.id].get('credit')
-                    dict_not_black[acc_id]['balance'] += all_account[
-                        child_id.id].get('balance')
+                    dict_not_black.get(acc_id)['debit'] += all_account.get(
+                        child_id.id).get('debit')
+                    dict_not_black.get(acc_id)['credit'] += all_account.get(
+                        child_id.id).get('credit')
+                    dict_not_black.get(acc_id)['balance'] += all_account.get(
+                        child_id.id).get('balance')
                     if form['inf_type'] == 'BS':
-                        dict_not_black[acc_id]['balanceinit'] += all_account[
-                            child_id.id].get('balanceinit')
+                        dict_not_black.get(acc_id)['balanceinit'] += all_account.get(
+                            child_id.id).get('balanceinit')
                 all_account[acc_id] = dict_not_black[acc_id]
 
             if p_act == limit-1:
@@ -732,29 +702,14 @@ class account_balance(report_sxw.rml_parse):
                         if form['columns'] == 'qtr':
                             tot_check = True
                             #~ tot[res['id']] = True
-                            tot_bal1 += res.get('bal1', 0.0)
-                            tot_bal2 += res.get('bal2', 0.0)
-                            tot_bal3 += res.get('bal3', 0.0)
-                            tot_bal4 += res.get('bal4', 0.0)
-                            tot_bal5 += res.get('bal5', 0.0)
+                            for i in range(1, 6):
+                                eval("tot_bal%s += res.get('bal%s', 0.0)" % (i,i), self.context, mode='exec', nocopy=True)
 
                         elif form['columns'] == 'thirteen':
                             tot_check = True
                             #~ tot[res['id']] = True
-                            tot_bal1 += res.get('bal1', 0.0)
-                            tot_bal2 += res.get('bal2', 0.0)
-                            tot_bal3 += res.get('bal3', 0.0)
-                            tot_bal4 += res.get('bal4', 0.0)
-                            tot_bal5 += res.get('bal5', 0.0)
-                            tot_bal6 += res.get('bal6', 0.0)
-                            tot_bal7 += res.get('bal7', 0.0)
-                            tot_bal8 += res.get('bal8', 0.0)
-                            tot_bal9 += res.get('bal9', 0.0)
-                            tot_bal10 += res.get('bal10', 0.0)
-                            tot_bal11 += res.get('bal11', 0.0)
-                            tot_bal12 += res.get('bal12', 0.0)
-                            tot_bal13 += res.get('bal13', 0.0)
-
+                            for i in range(1, 14):
+                                eval("tot_bal%s += res.get('bal%s', 0.0)" % (i,i), self.context, mode='exec', nocopy=True)
                         else:
                             tot_check = True
                             #~ tot[res['id']] = True
