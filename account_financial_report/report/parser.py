@@ -461,7 +461,14 @@ class account_balance(report_sxw.rml_parse):
             #~ Black
             dict_black = {}
             for i in account_black:
-                dict_black[i.id] = {'obj': i, 'debit': i.debit, 'credit':i.credit, 'balance': i.balance  }
+                d = i.debit
+                c = i.credit
+                dict_black[i.id] = {
+                        'obj': i, 
+                        'debit': d, 
+                        'credit': c, 
+                        'balance': d-c  
+                        }
                 if form['inf_type'] == 'BS':
                     dict_black.get(i.id)['balanceinit'] = 0.0
 
