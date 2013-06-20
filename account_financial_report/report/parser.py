@@ -654,8 +654,7 @@ class account_balance(report_sxw.rml_parse):
                 }
 
                 if form['columns'] == 'qtr':
-                    pn = 1
-                    for p_id in p:
+                    for pn  in range(1,5):
 
                         if form['inf_type'] == 'IS':
                             d, c, b = map(z, [
@@ -674,8 +673,6 @@ class account_balance(report_sxw.rml_parse):
                                 'cdr%s' % pn: self.exchange(c),
                                 'bal%s' % pn: self.exchange(b),
                             })
-
-                        pn += 1
 
                     if form['inf_type'] == 'IS':
                         d, c, b = map(z, [
