@@ -473,7 +473,7 @@ class account_balance(report_sxw.rml_parse):
             #~ Not black
             dict_not_black = {}
             for i in account_not_black:
-                dict_not_black[i.id] = {'obj': i, 'debit': i.debit, 'credit':i.credit, 'balance': i.balance  }
+                dict_not_black[i.id] = {'obj': i, 'debit': 0.0, 'credit':0.0, 'balance':0.0}
                 if form['inf_type'] == 'BS':
                     dict_not_black.get(i.id)['balanceinit'] = 0.0
 
