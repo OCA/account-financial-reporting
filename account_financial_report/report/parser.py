@@ -348,9 +348,12 @@ class account_balance(report_sxw.rml_parse):
         ################################################################
         # Get the accounts                                             #
         ################################################################
+        all_account_ids = _get_children_and_consol(self.cr, self.uid, account_ids, 100, self.context)
+        
         account_ids = _get_children_and_consol(self.cr, self.uid, account_ids, form[
                                                'display_account_level'] and form['display_account_level'] or 100, self.context)
 
+        
         credit_account_ids = _get_children_and_consol(
             self.cr, self.uid, credit_account_ids, 100, self.context, change_sign=True)
 
@@ -411,12 +414,12 @@ class account_balance(report_sxw.rml_parse):
         ###############################################################
 
         account_black_ids = account_obj.search(self.cr, self.uid, (
-                                               [('id', 'in', [i[0] for i in account_ids]), 
+                                               [('id', 'in', [i[0] for i in all_account_ids]), 
                                                 ('type', 'not in', 
                                                 ('view', 'consolidation'))]))
 
         account_not_black_ids = account_obj.search(self.cr, self.uid, ([('id', 'in', [
-                                                   i[0] for i in account_ids]), ('type', 'in', ('view', 'consolidation'))]))
+                                                   i[0] for i in all_account_ids]), ('type', 'in', ('view', 'consolidation'))]))
 
         #This could be done quickly with a sql sentence
         account_not_black = account_obj.browse(
@@ -490,6 +493,7 @@ class account_balance(report_sxw.rml_parse):
             for acc_id in account_not_black_ids:
                 acc_childs = dict_not_black.get(acc_id).get('obj').child_id
                 for child_id in acc_childs:
+                    #pdb.set_trace()
                     dict_not_black.get(acc_id)['debit'] += all_account.get(
                         child_id.id).get('debit')
                     dict_not_black.get(acc_id)['credit'] += all_account.get(
@@ -735,6 +739,12 @@ class account_balance(report_sxw.rml_parse):
                 'total': True,
             }
             if form['columns'] == 'qtr':
+                for i in range(1, 6):
+                    bal = 'bal%s' % i
+                    res2[bal] = eval("tot_bal%s", self.context, mode='exec', nocopy=True)
+                    #pdb.set_trace()
+                    #eval("tot_bal%s += res.get('bal%s', 0.0)" % (i,i), self.context, mode='exec', nocopy=True)
+                
                 res2.update(dict(
                             bal1=tot_bal1,
                             bal2=tot_bal2,
