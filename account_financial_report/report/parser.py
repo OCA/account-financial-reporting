@@ -413,8 +413,6 @@ class account_balance(report_sxw.rml_parse):
             tot_bal12 = 0.0
             tot_bal13 = 0.0
         else:
-            ctx_init = _ctx_init(self.context.copy())
-            ctx_end = _ctx_end(self.context.copy())
             tot_bin = 0.0
             tot_deb = 0.0
             tot_crd = 0.0
@@ -447,18 +445,15 @@ class account_balance(report_sxw.rml_parse):
 
         all_account_period = {}  # todas las cuentas por periodo
         
-
+        # iteration limit depending on the number of columns
         if form['columns'] == 'thirteen':
             limit = 13
-            periods_to_use = period_ids
         elif form['columns'] == 'qtr':
             limit = 5
-            periods_to_use = p
         else:
             limit = 1
         
         for p_act in range(limit):
-
             if limit != 1:
                 if p_act == limit-1:
                     form['periods'] = period_ids
@@ -644,12 +639,6 @@ class account_balance(report_sxw.rml_parse):
                         })
 
                 else:
-
-                    aa_brw_init = account_obj.browse(
-                        self.cr, self.uid, id, ctx_init)
-                    aa_brw_end = account_obj.browse(
-                        self.cr, self.uid, id, ctx_end)
-
                     i, d, c = map(z, [
                                   all_account_period['all'][id]['balanceinit'], all_account_period['all'][id]['debit'], all_account_period['all'][id]['credit']])
                     b = z(i+d-c)
