@@ -38,6 +38,7 @@ from osv import osv
 import pdb
 from openerp.tools.safe_eval import safe_eval as eval
 
+
 class account_balance(report_sxw.rml_parse):
 
     def __init__(self, cr, uid, name, context):
@@ -348,12 +349,12 @@ class account_balance(report_sxw.rml_parse):
         ################################################################
         # Get the accounts                                             #
         ################################################################
-        all_account_ids = _get_children_and_consol(self.cr, self.uid, account_ids, 100, self.context)
-        
+        all_account_ids = _get_children_and_consol(
+            self.cr, self.uid, account_ids, 100, self.context)
+
         account_ids = _get_children_and_consol(self.cr, self.uid, account_ids, form[
                                                'display_account_level'] and form['display_account_level'] or 100, self.context)
 
-        
         credit_account_ids = _get_children_and_consol(
             self.cr, self.uid, credit_account_ids, 100, self.context, change_sign=True)
 
@@ -394,7 +395,7 @@ class account_balance(report_sxw.rml_parse):
             tot_bal2 = 0.0
             tot_bal3 = 0.0
             tot_bal4 = 0.0
-            tot_bal5 = 0.0 
+            tot_bal5 = 0.0
         elif form['columns'] == 'thirteen':
             period_ids = period_obj.search(self.cr, self.uid, [(
                 'fiscalyear_id', '=', fiscalyear.id), ('special', '=', False)], order='date_start asc')
@@ -430,14 +431,14 @@ class account_balance(report_sxw.rml_parse):
         ###############################################################
 
         account_black_ids = account_obj.search(self.cr, self.uid, (
-                                               [('id', 'in', [i[0] for i in all_account_ids]), 
-                                                ('type', 'not in', 
+                                               [('id', 'in', [i[0] for i in all_account_ids]),
+                                                ('type', 'not in',
                                                 ('view', 'consolidation'))]))
 
         account_not_black_ids = account_obj.search(self.cr, self.uid, ([('id', 'in', [
                                                    i[0] for i in all_account_ids]), ('type', 'in', ('view', 'consolidation'))]))
 
-        #This could be done quickly with a sql sentence
+        # This could be done quickly with a sql sentence
         account_not_black = account_obj.browse(
             self.cr, self.uid, account_not_black_ids)
         account_not_black.sort(key=lambda x: x.level)
@@ -445,7 +446,7 @@ class account_balance(report_sxw.rml_parse):
         account_not_black_ids = [i.id for i in account_not_black]
 
         all_account_period = {}  # Todas las cuentas por periodo
-        
+
         # Iteration limit depending on the number of columns
         if form['columns'] == 'thirteen':
             limit = 13
@@ -453,7 +454,7 @@ class account_balance(report_sxw.rml_parse):
             limit = 5
         else:
             limit = 1
-        
+
         for p_act in range(limit):
             if limit != 1:
                 if p_act == limit-1:
@@ -483,15 +484,15 @@ class account_balance(report_sxw.rml_parse):
                 d = i.debit
                 c = i.credit
                 dict_black[i.id] = {
-                        'obj': i, 
-                        'debit': d, 
-                        'credit': c, 
-                        'balance': d-c  
-                        }
+                    'obj': i,
+                    'debit': d,
+                    'credit': c,
+                    'balance': d-c
+                }
                 if form['inf_type'] == 'BS':
                     dict_black.get(i.id)['balanceinit'] = 0.0
 
-            #Se adicionan los valores de balanceinit al diccionario
+            # Se adicionan los valores de balanceinit al diccionario
             if form['inf_type'] == 'BS':
                 for i in account_black_init:
                     dict_black.get(i.id)['balanceinit'] = i.balance
@@ -499,7 +500,8 @@ class account_balance(report_sxw.rml_parse):
             #~ Not black
             dict_not_black = {}
             for i in account_not_black:
-                dict_not_black[i.id] = {'obj': i, 'debit': 0.0, 'credit':0.0, 'balance':0.0}
+                dict_not_black[i.id] = {
+                    'obj': i, 'debit': 0.0, 'credit': 0.0, 'balance': 0.0}
                 if form['inf_type'] == 'BS':
                     dict_not_black.get(i.id)['balanceinit'] = 0.0
 
@@ -509,7 +511,7 @@ class account_balance(report_sxw.rml_parse):
             for acc_id in account_not_black_ids:
                 acc_childs = dict_not_black.get(acc_id).get('obj').child_id
                 for child_id in acc_childs:
-                    #pdb.set_trace()
+                    # pdb.set_trace()
                     dict_not_black.get(acc_id)['debit'] += all_account.get(
                         child_id.id).get('debit')
                     dict_not_black.get(acc_id)['credit'] += all_account.get(
@@ -534,7 +536,6 @@ class account_balance(report_sxw.rml_parse):
         #
         ###############################################################
 
-
         for aa_id in account_ids:
             id = aa_id[0]
 
@@ -555,7 +556,7 @@ class account_balance(report_sxw.rml_parse):
                 }
 
                 if form['columns'] == 'qtr':
-                    for pn  in range(1,5):
+                    for pn in range(1, 5):
 
                         if form['inf_type'] == 'IS':
                             d, c, b = map(z, [
@@ -733,7 +734,7 @@ class account_balance(report_sxw.rml_parse):
                             tot_bal2 += res.get('bal2', 0.0)
                             tot_bal3 += res.get('bal3', 0.0)
                             tot_bal4 += res.get('bal4', 0.0)
-                            tot_bal5 += res.get('bal5', 0.0) 
+                            tot_bal5 += res.get('bal5', 0.0)
 
                         elif form['columns'] == 'thirteen':
                             tot_check = True
@@ -750,7 +751,7 @@ class account_balance(report_sxw.rml_parse):
                             tot_bal10 += res.get('bal10', 0.0)
                             tot_bal11 += res.get('bal11', 0.0)
                             tot_bal12 += res.get('bal12', 0.0)
-                            tot_bal13 += res.get('bal13', 0.0) 
+                            tot_bal13 += res.get('bal13', 0.0)
                         else:
                             tot_check = True
                             #~ tot[res['id']] = True
@@ -760,7 +761,7 @@ class account_balance(report_sxw.rml_parse):
                             tot_ytd += res['ytd']
                             tot_eje += res['balance']
 
-        #pdb.set_trace()
+        # pdb.set_trace()
         if tot_check:
             str_label = form['lab_str']
             res2 = {
