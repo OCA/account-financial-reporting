@@ -446,7 +446,7 @@ class account_balance(report_sxw.rml_parse):
         account_not_black_ids = [i.id for i in account_not_black]
 
         all_account_period = {}  # All accounts per period 
-
+        
         # Iteration limit depending on the number of columns
         if form['columns'] == 'thirteen':
             limit = 13
@@ -560,7 +560,7 @@ class account_balance(report_sxw.rml_parse):
 
                         if form['inf_type'] == 'IS':
                             d, c, b = map(z, [
-                                          all_account_period[pn-1][id]['debit'], all_account_period[pn-1][id]['credit'], all_account_period[pn-1][id]['balance']])
+                                          all_account_period.get(pn-1).get(id).get('debit', 0.0), all_account_period.get(pn-1).get(id).get('credit', 0.0), all_account_period.get(pn-1).get(id).get('balance', 0.0)])
                             res.update({
                                 'dbr%s' % pn: self.exchange(d),
                                 'cdr%s' % pn: self.exchange(c),
@@ -568,7 +568,7 @@ class account_balance(report_sxw.rml_parse):
                             })
                         else:
                             i, d, c = map(z, [
-                                          all_account_period[pn-1][id]['balanceinit'], all_account_period[pn-1][id]['debit'], all_account_period[pn-1][id]['credit']])
+                                          all_account_period.get(pn-1).get(id).get('balanceinit', 0.0), all_account_period.get(pn-1).get(id).get('debit', 0.0), all_account_period.get(pn-1).get(id).get('credit', 0.0)])
                             b = z(i+d-c)
                             res.update({
                                 'dbr%s' % pn: self.exchange(d),
@@ -578,7 +578,7 @@ class account_balance(report_sxw.rml_parse):
 
                     if form['inf_type'] == 'IS':
                         d, c, b = map(z, [
-                                      all_account_period['all'][id]['debit'], all_account_period['all'][id]['credit'], all_account_period['all'][id]['balance']])
+                                      all_account_period.get('all').get(id).get('debit', 0.0), all_account_period.get('all').get(id).get('credit',0.0), all_account_period.get('all').get(id).get('balance')])
                         res.update({
                             'dbr5': self.exchange(d),
                             'cdr5': self.exchange(c),
@@ -586,7 +586,7 @@ class account_balance(report_sxw.rml_parse):
                         })
                     else:
                         i, d, c = map(z, [
-                                      all_account_period['all'][id]['balanceinit'], all_account_period['all'][id]['debit'], all_account_period['all'][id]['credit']])
+                                      all_account_period.get('all').get(id).get('balanceinit', 0.0), all_account_period.get('all').get(id).get('debit', 0.0), all_account_period.get('all').get(id).get('credit',0.0)])
                         b = z(i+d-c)
                         res.update({
                             'dbr5': self.exchange(d),
@@ -600,7 +600,7 @@ class account_balance(report_sxw.rml_parse):
 
                         if form['inf_type'] == 'IS':
                             d, c, b = map(z, [
-                                          all_account_period[p_num].get(id).get('debit', 0.0), all_account_period[p_num].get(id).get('credit', 0.0), all_account_period[p_num].get(id).get('balance', 0.0)])
+                                          all_account_period.get(p_num).get(id).get('debit', 0.0), all_account_period.get(p_num).get(id).get('credit', 0.0), all_account_period.get(p_num).get(id).get('balance', 0.0)])
                             res.update({
                                 'dbr%s' % pn: self.exchange(d),
                                 'cdr%s' % pn: self.exchange(c),
@@ -608,7 +608,7 @@ class account_balance(report_sxw.rml_parse):
                             })
                         else:
                             i, d, c = map(z, [
-                                          all_account_period[p_num].get(id).get('balanceinit', 0.0), all_account_period[p_num].get(id).get('debit', 0.0), all_account_period[p_num].get(id).get('credit', 0.0)])
+                                          all_account_period.get(p_num).get(id).get('balanceinit', 0.0), all_account_period.get(p_num).get(id).get('debit', 0.0), all_account_period.get(p_num).get(id).get('credit', 0.0)])
                             b = z(i+d-c)
                             res.update({
                                 'dbr%s' % pn: self.exchange(d),
@@ -620,7 +620,7 @@ class account_balance(report_sxw.rml_parse):
 
                     if form['inf_type'] == 'IS':
                         d, c, b = map(z, [
-                                      all_account_period['all'].get(id).get('debit', 0.0), all_account_period['all'].get(id).get('credit', 0.0), all_account_period['all'].get(id).get('balance', 0.0)])
+                                      all_account_period.get('all').get(id).get('debit', 0.0), all_account_period.get('all').get(id).get('credit', 0.0), all_account_period.get('all').get(id).get('balance', 0.0)])
                         res.update({
                             'dbr13': self.exchange(d),
                             'cdr13': self.exchange(c),
@@ -628,7 +628,7 @@ class account_balance(report_sxw.rml_parse):
                         })
                     else:
                         i, d, c = map(z, [
-                                      all_account_period['all'].get(id).get('balanceinit', 0.0), all_account_period['all'].get(id).get('debit', 0.0), all_account_period['all'].get(id).get('credit', 0.0)])
+                                      all_account_period.get('all').get(id).get('balanceinit', 0.0), all_account_period.get('all').get(id).get('debit', 0.0), all_account_period.get('all').get(id).get('credit', 0.0)])
                         b = z(i+d-c)
                         res.update({
                             'dbr13': self.exchange(d),
@@ -638,7 +638,7 @@ class account_balance(report_sxw.rml_parse):
 
                 else:
                     i, d, c = map(z, [
-                                  all_account_period['all'].get(id).get('balanceinit', 0.0), all_account_period['all'].get(id).get('debit', 0.0), all_account_period['all'].get(id).get('credit', 0.0)])
+                                  all_account_period.get('all').get(id).get('balanceinit', 0.0), all_account_period.get('all').get(id).get('debit', 0.0), all_account_period.get('all').get(id).get('credit', 0.0)])
                     b = z(i+d-c)
                     res.update({
                         'balanceinit': self.exchange(i),
