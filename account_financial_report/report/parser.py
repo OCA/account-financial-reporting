@@ -426,8 +426,8 @@ class account_balance(report_sxw.rml_parse):
         tot = {}
 
         ###############################################################
-        # calculos optimos
-        #
+        # Calculations of credit, debit and balance, 
+        # without repeating operations.
         ###############################################################
 
         account_black_ids = account_obj.search(self.cr, self.uid, (
@@ -445,7 +445,7 @@ class account_balance(report_sxw.rml_parse):
         account_not_black.reverse()
         account_not_black_ids = [i.id for i in account_not_black]
 
-        all_account_period = {}  # Todas las cuentas por periodo
+        all_account_period = {}  # All accounts per period 
 
         # Iteration limit depending on the number of columns
         if form['columns'] == 'thirteen':
@@ -492,7 +492,8 @@ class account_balance(report_sxw.rml_parse):
                 if form['inf_type'] == 'BS':
                     dict_black.get(i.id)['balanceinit'] = 0.0
 
-            # Se adicionan los valores de balanceinit al diccionario
+            # If the report is a balance sheet
+            # Balanceinit values are added to the dictionary
             if form['inf_type'] == 'BS':
                 for i in account_black_init:
                     dict_black.get(i.id)['balanceinit'] = i.balance
@@ -506,12 +507,11 @@ class account_balance(report_sxw.rml_parse):
                     dict_not_black.get(i.id)['balanceinit'] = 0.0
 
             all_account = dict_black.copy(
-            )  # se hace una copia, porque se modificara
+            )  #It makes a copy because they modify 
 
             for acc_id in account_not_black_ids:
                 acc_childs = dict_not_black.get(acc_id).get('obj').child_id
                 for child_id in acc_childs:
-                    # pdb.set_trace()
                     dict_not_black.get(acc_id)['debit'] += all_account.get(
                         child_id.id).get('debit')
                     dict_not_black.get(acc_id)['credit'] += all_account.get(
@@ -532,7 +532,7 @@ class account_balance(report_sxw.rml_parse):
                     all_account_period[p_act] = all_account
 
         ###############################################################
-        # Fin de calculos optimos, sumatoria de valores
+        # End of the calculations of credit, debit and balance
         #
         ###############################################################
 
@@ -638,7 +638,7 @@ class account_balance(report_sxw.rml_parse):
 
                 else:
                     i, d, c = map(z, [
-                                  all_account_period['all'][id]['balanceinit'], all_account_period['all'][id]['debit'], all_account_period['all'][id]['credit']])
+                                  all_account_period['all'].get(id).get('balanceinit', 0.0), all_account_period['all'].get(id).get('debit', 0.0), all_account_period['all'].get(id).get('credit', 0.0)])
                     b = z(i+d-c)
                     res.update({
                         'balanceinit': self.exchange(i),
@@ -761,7 +761,6 @@ class account_balance(report_sxw.rml_parse):
                             tot_ytd += res['ytd']
                             tot_eje += res['balance']
 
-        # pdb.set_trace()
         if tot_check:
             str_label = form['lab_str']
             res2 = {
