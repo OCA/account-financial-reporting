@@ -35,6 +35,8 @@ from report import report_sxw
 from tools import config
 from tools.translate import _
 from osv import osv
+import pdb
+from openerp.tools.safe_eval import safe_eval as eval
 
 
 class account_balance(report_sxw.rml_parse):
@@ -347,6 +349,8 @@ class account_balance(report_sxw.rml_parse):
         ################################################################
         # Get the accounts                                             #
         ################################################################
+        all_account_ids = _get_children_and_consol(
+            self.cr, self.uid, account_ids, 100, self.context)
 
         account_ids = _get_children_and_consol(self.cr, self.uid, account_ids, form[
                                                'display_account_level'] and form['display_account_level'] or 100, self.context)
@@ -359,7 +363,6 @@ class account_balance(report_sxw.rml_parse):
 
         credit_account_ids = list(set(
             credit_account_ids) - set(debit_account_ids))
-
         #
         # Generate the report lines (checking each account)
         #
@@ -388,21 +391,15 @@ class account_balance(report_sxw.rml_parse):
                         p.append(l)
                         l = []
                         a = 0
-
-            #~ period_ids = p
-
-        elif form['columns'] == 'thirteen':
-            period_ids = period_obj.search(self.cr, self.uid, [(
-                'fiscalyear_id', '=', fiscalyear.id), ('special', '=', False)], order='date_start asc')
-
-        if form['columns'] == 'qtr':
             tot_bal1 = 0.0
             tot_bal2 = 0.0
             tot_bal3 = 0.0
             tot_bal4 = 0.0
             tot_bal5 = 0.0
-
         elif form['columns'] == 'thirteen':
+            period_ids = period_obj.search(self.cr, self.uid, [(
+                'fiscalyear_id', '=', fiscalyear.id), ('special', '=', False)], order='date_start asc')
+            tot_bal1 = 0.0
             tot_bal1 = 0.0
             tot_bal2 = 0.0
             tot_bal3 = 0.0
@@ -416,12 +413,8 @@ class account_balance(report_sxw.rml_parse):
             tot_bal11 = 0.0
             tot_bal12 = 0.0
             tot_bal13 = 0.0
-
         else:
-
-            ctx_init = _ctx_init(self.context.copy())
             ctx_end = _ctx_end(self.context.copy())
-
             tot_bin = 0.0
             tot_deb = 0.0
             tot_crd = 0.0
@@ -431,6 +424,117 @@ class account_balance(report_sxw.rml_parse):
         res = {}
         result_acc = []
         tot = {}
+
+        ###############################################################
+        # Calculations of credit, debit and balance, 
+        # without repeating operations.
+        ###############################################################
+
+        account_black_ids = account_obj.search(self.cr, self.uid, (
+                                               [('id', 'in', [i[0] for i in all_account_ids]),
+                                                ('type', 'not in',
+                                                ('view', 'consolidation'))]))
+
+        account_not_black_ids = account_obj.search(self.cr, self.uid, ([('id', 'in', [
+                                                   i[0] for i in all_account_ids]), ('type', 'in', ('view', 'consolidation'))]))
+
+        # This could be done quickly with a sql sentence
+        account_not_black = account_obj.browse(
+            self.cr, self.uid, account_not_black_ids)
+        account_not_black.sort(key=lambda x: x.level)
+        account_not_black.reverse()
+        account_not_black_ids = [i.id for i in account_not_black]
+
+        all_account_period = {}  # All accounts per period 
+        
+        # Iteration limit depending on the number of columns
+        if form['columns'] == 'thirteen':
+            limit = 13
+        elif form['columns'] == 'qtr':
+            limit = 5
+        else:
+            limit = 1
+
+        for p_act in range(limit):
+            if limit != 1:
+                if p_act == limit-1:
+                    form['periods'] = period_ids
+                else:
+                    if form['columns'] == 'thirteen':
+                        form['periods'] = [period_ids[p_act]]
+                    elif form['columns'] == 'qtr':
+                        form['periods'] = p[p_act]
+
+            if form['inf_type'] == 'IS':
+                ctx_to_use = _ctx_end(self.context.copy())
+            else:
+                ctx_i = _ctx_init(self.context.copy())
+                ctx_to_use = _ctx_end(self.context.copy())
+
+            account_black = account_obj.browse(
+                self.cr, self.uid, account_black_ids, ctx_to_use)
+
+            if form['inf_type'] == 'BS':
+                account_black_init = account_obj.browse(
+                    self.cr, self.uid, account_black_ids, ctx_i)
+
+            #~ Black
+            dict_black = {}
+            for i in account_black:
+                d = i.debit
+                c = i.credit
+                dict_black[i.id] = {
+                    'obj': i,
+                    'debit': d,
+                    'credit': c,
+                    'balance': d-c
+                }
+                if form['inf_type'] == 'BS':
+                    dict_black.get(i.id)['balanceinit'] = 0.0
+
+            # If the report is a balance sheet
+            # Balanceinit values are added to the dictionary
+            if form['inf_type'] == 'BS':
+                for i in account_black_init:
+                    dict_black.get(i.id)['balanceinit'] = i.balance
+
+            #~ Not black
+            dict_not_black = {}
+            for i in account_not_black:
+                dict_not_black[i.id] = {
+                    'obj': i, 'debit': 0.0, 'credit': 0.0, 'balance': 0.0}
+                if form['inf_type'] == 'BS':
+                    dict_not_black.get(i.id)['balanceinit'] = 0.0
+
+            all_account = dict_black.copy(
+            )  #It makes a copy because they modify 
+
+            for acc_id in account_not_black_ids:
+                acc_childs = dict_not_black.get(acc_id).get('obj').child_id
+                for child_id in acc_childs:
+                    dict_not_black.get(acc_id)['debit'] += all_account.get(
+                        child_id.id).get('debit')
+                    dict_not_black.get(acc_id)['credit'] += all_account.get(
+                        child_id.id).get('credit')
+                    dict_not_black.get(acc_id)['balance'] += all_account.get(
+                        child_id.id).get('balance')
+                    if form['inf_type'] == 'BS':
+                        dict_not_black.get(acc_id)['balanceinit'] += all_account.get(
+                            child_id.id).get('balanceinit')
+                all_account[acc_id] = dict_not_black[acc_id]
+
+            if p_act == limit-1:
+                all_account_period['all'] = all_account
+            else:
+                if form['columns'] == 'thirteen':
+                    all_account_period[p_act] = all_account
+                elif form['columns'] == 'qtr':
+                    all_account_period[p_act] = all_account
+
+        ###############################################################
+        # End of the calculations of credit, debit and balance
+        #
+        ###############################################################
 
         for aa_id in account_ids:
             id = aa_id[0]
@@ -452,21 +556,11 @@ class account_balance(report_sxw.rml_parse):
                 }
 
                 if form['columns'] == 'qtr':
-                    pn = 1
-                    for p_id in p:
-                        form['periods'] = p_id
-
-                        ctx_init = _ctx_init(self.context.copy())
-                        aa_brw_init = account_obj.browse(
-                            self.cr, self.uid, id, ctx_init)
-
-                        ctx_end = _ctx_end(self.context.copy())
-                        aa_brw_end = account_obj.browse(
-                            self.cr, self.uid, id, ctx_end)
+                    for pn in range(1, 5):
 
                         if form['inf_type'] == 'IS':
                             d, c, b = map(z, [
-                                          aa_brw_end.debit, aa_brw_end.credit, aa_brw_end.balance])
+                                          all_account_period.get(pn-1).get(id).get('debit', 0.0), all_account_period.get(pn-1).get(id).get('credit', 0.0), all_account_period.get(pn-1).get(id).get('balance', 0.0)])
                             res.update({
                                 'dbr%s' % pn: self.exchange(d),
                                 'cdr%s' % pn: self.exchange(c),
@@ -474,7 +568,7 @@ class account_balance(report_sxw.rml_parse):
                             })
                         else:
                             i, d, c = map(z, [
-                                          aa_brw_init.balance, aa_brw_end.debit, aa_brw_end.credit])
+                                          all_account_period.get(pn-1).get(id).get('balanceinit', 0.0), all_account_period.get(pn-1).get(id).get('debit', 0.0), all_account_period.get(pn-1).get(id).get('credit', 0.0)])
                             b = z(i+d-c)
                             res.update({
                                 'dbr%s' % pn: self.exchange(d),
@@ -482,21 +576,9 @@ class account_balance(report_sxw.rml_parse):
                                 'bal%s' % pn: self.exchange(b),
                             })
 
-                        pn += 1
-
-                    form['periods'] = period_ids
-
-                    ctx_init = _ctx_init(self.context.copy())
-                    aa_brw_init = account_obj.browse(
-                        self.cr, self.uid, id, ctx_init)
-
-                    ctx_end = _ctx_end(self.context.copy())
-                    aa_brw_end = account_obj.browse(
-                        self.cr, self.uid, id, ctx_end)
-
                     if form['inf_type'] == 'IS':
                         d, c, b = map(z, [
-                                      aa_brw_end.debit, aa_brw_end.credit, aa_brw_end.balance])
+                                      all_account_period.get('all').get(id).get('debit', 0.0), all_account_period.get('all').get(id).get('credit',0.0), all_account_period.get('all').get(id).get('balance')])
                         res.update({
                             'dbr5': self.exchange(d),
                             'cdr5': self.exchange(c),
@@ -504,7 +586,7 @@ class account_balance(report_sxw.rml_parse):
                         })
                     else:
                         i, d, c = map(z, [
-                                      aa_brw_init.balance, aa_brw_end.debit, aa_brw_end.credit])
+                                      all_account_period.get('all').get(id).get('balanceinit', 0.0), all_account_period.get('all').get(id).get('debit', 0.0), all_account_period.get('all').get(id).get('credit',0.0)])
                         b = z(i+d-c)
                         res.update({
                             'dbr5': self.exchange(d),
@@ -514,20 +596,11 @@ class account_balance(report_sxw.rml_parse):
 
                 elif form['columns'] == 'thirteen':
                     pn = 1
-                    for p_id in period_ids:
-                        form['periods'] = [p_id]
-
-                        ctx_init = _ctx_init(self.context.copy())
-                        aa_brw_init = account_obj.browse(
-                            self.cr, self.uid, id, ctx_init)
-
-                        ctx_end = _ctx_end(self.context.copy())
-                        aa_brw_end = account_obj.browse(
-                            self.cr, self.uid, id, ctx_end)
+                    for p_num in range(12):
 
                         if form['inf_type'] == 'IS':
                             d, c, b = map(z, [
-                                          aa_brw_end.debit, aa_brw_end.credit, aa_brw_end.balance])
+                                          all_account_period.get(p_num).get(id).get('debit', 0.0), all_account_period.get(p_num).get(id).get('credit', 0.0), all_account_period.get(p_num).get(id).get('balance', 0.0)])
                             res.update({
                                 'dbr%s' % pn: self.exchange(d),
                                 'cdr%s' % pn: self.exchange(c),
@@ -535,7 +608,7 @@ class account_balance(report_sxw.rml_parse):
                             })
                         else:
                             i, d, c = map(z, [
-                                          aa_brw_init.balance, aa_brw_end.debit, aa_brw_end.credit])
+                                          all_account_period.get(p_num).get(id).get('balanceinit', 0.0), all_account_period.get(p_num).get(id).get('debit', 0.0), all_account_period.get(p_num).get(id).get('credit', 0.0)])
                             b = z(i+d-c)
                             res.update({
                                 'dbr%s' % pn: self.exchange(d),
@@ -545,19 +618,9 @@ class account_balance(report_sxw.rml_parse):
 
                         pn += 1
 
-                    form['periods'] = period_ids
-
-                    ctx_init = _ctx_init(self.context.copy())
-                    aa_brw_init = account_obj.browse(
-                        self.cr, self.uid, id, ctx_init)
-
-                    ctx_end = _ctx_end(self.context.copy())
-                    aa_brw_end = account_obj.browse(
-                        self.cr, self.uid, id, ctx_end)
-
                     if form['inf_type'] == 'IS':
                         d, c, b = map(z, [
-                                      aa_brw_end.debit, aa_brw_end.credit, aa_brw_end.balance])
+                                      all_account_period.get('all').get(id).get('debit', 0.0), all_account_period.get('all').get(id).get('credit', 0.0), all_account_period.get('all').get(id).get('balance', 0.0)])
                         res.update({
                             'dbr13': self.exchange(d),
                             'cdr13': self.exchange(c),
@@ -565,7 +628,7 @@ class account_balance(report_sxw.rml_parse):
                         })
                     else:
                         i, d, c = map(z, [
-                                      aa_brw_init.balance, aa_brw_end.debit, aa_brw_end.credit])
+                                      all_account_period.get('all').get(id).get('balanceinit', 0.0), all_account_period.get('all').get(id).get('debit', 0.0), all_account_period.get('all').get(id).get('credit', 0.0)])
                         b = z(i+d-c)
                         res.update({
                             'dbr13': self.exchange(d),
@@ -574,14 +637,8 @@ class account_balance(report_sxw.rml_parse):
                         })
 
                 else:
-
-                    aa_brw_init = account_obj.browse(
-                        self.cr, self.uid, id, ctx_init)
-                    aa_brw_end = account_obj.browse(
-                        self.cr, self.uid, id, ctx_end)
-
                     i, d, c = map(z, [
-                                  aa_brw_init.balance, aa_brw_end.debit, aa_brw_end.credit])
+                                  all_account_period.get('all').get(id).get('balanceinit', 0.0), all_account_period.get('all').get(id).get('debit', 0.0), all_account_period.get('all').get(id).get('credit', 0.0)])
                     b = z(i+d-c)
                     res.update({
                         'balanceinit': self.exchange(i),
@@ -695,7 +752,6 @@ class account_balance(report_sxw.rml_parse):
                             tot_bal11 += res.get('bal11', 0.0)
                             tot_bal12 += res.get('bal12', 0.0)
                             tot_bal13 += res.get('bal13', 0.0)
-
                         else:
                             tot_check = True
                             #~ tot[res['id']] = True
@@ -715,26 +771,26 @@ class account_balance(report_sxw.rml_parse):
             }
             if form['columns'] == 'qtr':
                 res2.update(dict(
-                            bal1=tot_bal1,
-                            bal2=tot_bal2,
-                            bal3=tot_bal3,
-                            bal4=tot_bal4,
-                            bal5=tot_bal5,))
+                            bal1=z(tot_bal1),
+                            bal2=z(tot_bal2),
+                            bal3=z(tot_bal3),
+                            bal4=z(tot_bal4),
+                            bal5=z(tot_bal5),))
             elif form['columns'] == 'thirteen':
                 res2.update(dict(
-                            bal1=tot_bal1,
-                            bal2=tot_bal2,
-                            bal3=tot_bal3,
-                            bal4=tot_bal4,
-                            bal5=tot_bal5,
-                            bal6=tot_bal6,
-                            bal7=tot_bal7,
-                            bal8=tot_bal8,
-                            bal9=tot_bal9,
-                            bal10=tot_bal10,
-                            bal11=tot_bal11,
-                            bal12=tot_bal12,
-                            bal13=tot_bal13,))
+                            bal1=z(tot_bal1),
+                            bal2=z(tot_bal2),
+                            bal3=z(tot_bal3),
+                            bal4=z(tot_bal4),
+                            bal5=z(tot_bal5),
+                            bal6=z(tot_bal6),
+                            bal7=z(tot_bal7),
+                            bal8=z(tot_bal8),
+                            bal9=z(tot_bal9),
+                            bal10=z(tot_bal10),
+                            bal11=z(tot_bal11),
+                            bal12=z(tot_bal12),
+                            bal13=z(tot_bal13),))
 
             else:
                 res2.update({
