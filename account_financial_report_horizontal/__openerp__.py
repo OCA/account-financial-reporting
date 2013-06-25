@@ -3,6 +3,8 @@
 #
 #    OpenERP, Open Source Management Solution
 #    This module copyright (C) 2012 Therp BV (<http://therp.nl>).
+#    Copyright (C) 2013 Agile Business Group sagl
+#    (<http://www.agilebg.com>)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,9 +21,9 @@
 #
 ##############################################################################
 {
-    "name" : "Accounting Reports Alternative",
-    "version" : "0.1r6",
-    "author" : "Therp BV",
+    "name" : "Accounting Financial Reports Horizontal",
+    "version" : "0.2",
+    "author" : ["Therp BV", "Agile Business Group"],
     "category": 'Accounting & Finance',
     'complexity': "normal",
     "description": """
@@ -44,4 +46,3 @@ This is a port of the financial reports 'Balance sheet' and
     'installable': True,
     'active': False,
 }
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
