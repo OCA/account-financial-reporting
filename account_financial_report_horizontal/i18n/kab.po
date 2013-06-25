@@ -419,8 +419,8 @@ msgstr ""
 
 #. module: account_financial_report_horizontal
 #: model:ir.ui.menu,name:account_financial_report_horizontal.final_accounting_reports
-msgid "Alt. Accounting Reports"
-msgstr "Alt. Accounting Reports"
+msgid "Horizontal Acc. Reports"
+msgstr "Horizontal Acc. Reports"
 
 #. module: account_financial_report_horizontal
 #: help:account.bs.report,chart_account_id:0
