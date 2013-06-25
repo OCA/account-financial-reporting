@@ -136,7 +136,7 @@
   </stylesheet>
   <images/>
   <story>
-  	<para style="terp_default_8">[[ setLang(data['lang']) ]]</para>
+  	<para style="terp_default_8">[[ setLang(data['form']['lang']) ]]</para>
     <blockTable colWidths="539.0" style="Table_Company_Name">
       <tr>
         <td>

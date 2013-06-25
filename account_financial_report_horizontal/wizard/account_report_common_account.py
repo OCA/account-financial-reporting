@@ -41,5 +41,6 @@ class account_common_account_report(orm.TransientModel):
         if context is None:
             context = {}
         data['form'].update(self.read(cr, uid, ids, ['display_account'], context=context)[0])
+        data['form']['lang'] = self.pool.get('res.users').browse(cr, uid, uid, context).lang
         return data
 
