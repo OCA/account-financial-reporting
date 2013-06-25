@@ -3,6 +3,8 @@
 #
 #    OpenERP, Open Source Management Solution
 #    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    Copyright (C) 2013 Agile Business Group sagl
+#    (<http://www.agilebg.com>) (<lorenzo.battistini@agilebg.com>)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,10 +21,10 @@
 #
 ##############################################################################
 
-from osv import osv, fields
+from osv import orm, fields
 from tools.translate import _
 
-class account_bs_report(osv.osv_memory):
+class account_bs_report(orm.TransientModel):
     """
     This wizard will provide the account balance sheet report by periods, between any two dates.
     """
@@ -50,7 +52,7 @@ class account_bs_report(osv.osv_memory):
             context = {}
         data['form'].update(self.read(cr, uid, ids, ['display_type','reserve_account_id'])[0])
         if not data['form']['reserve_account_id']:
-            raise osv.except_osv(_('Warning'),_('Please define the Reserve and Profit/Loss account for current user company !'))
+            raise orm.except_orm(_('Warning'),_('Please define the Reserve and Profit/Loss account for current user company !'))
         data = self.pre_print_report(cr, uid, ids, data, context=context)
         if data['form']['display_type']:
             return {
@@ -64,7 +66,3 @@ class account_bs_report(osv.osv_memory):
                 'report_name': 'account.balancesheet',
                 'datas': data,
             }
-
-account_bs_report()
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
