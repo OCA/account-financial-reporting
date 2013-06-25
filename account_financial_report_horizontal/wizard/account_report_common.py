@@ -3,6 +3,8 @@
 #
 #    OpenERP, Open Source Management Solution
 #    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    Copyright (C) 2013 Agile Business Group sagl
+#    (<http://www.agilebg.com>) (<lorenzo.battistini@agilebg.com>)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -22,10 +24,10 @@
 import time
 from lxml import etree
 
-from osv import fields, osv
+from osv import fields, orm
 from tools.translate import _
 
-class account_common_report(osv.osv_memory):
+class account_common_report(orm.TransientModel):
     _name = "account_financial_report_horizontal.common.report"
     _description = "Account Common Report"
 
@@ -139,6 +141,3 @@ class account_common_report(osv.osv_memory):
         data['form']['used_context'] = used_context
         return self._print_report(cr, uid, ids, data, context=context)
 
-account_common_report()
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
