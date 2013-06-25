@@ -25,7 +25,7 @@ class account_pl_report(osv.osv_memory):
     """
     This wizard will provide the account profit and loss report by periods, between any two dates.
     """
-    _inherit = "account_report_alt.common.account.report"
+    _inherit = "account_financial_report_horizontal.common.account.report"
     _name = "account.pl.report"
     _description = "Account Profit And Loss Report"
     _columns = {

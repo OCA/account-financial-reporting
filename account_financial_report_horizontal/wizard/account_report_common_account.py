@@ -22,9 +22,9 @@
 from osv import osv, fields
 
 class account_common_account_report(osv.osv_memory):
-    _name = 'account_report_alt.common.account.report'
+    _name = 'account_financial_report_horizontal.common.account.report'
     _description = 'Account Common Account Report'
-    _inherit = "account_report_alt.common.report"
+    _inherit = "account_financial_report_horizontal.common.report"
     _columns = {
         'display_account': fields.selection([('bal_all','All'), ('bal_movement','With movements'),
                                             ('bal_solde','With balance is not equal to 0'),
