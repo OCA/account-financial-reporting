@@ -4,6 +4,6 @@
         <menuitem
             parent="account.menu_finance_legal_statement"
             id="final_accounting_reports"
-            name="Alt. Accounting Reports"/>
+            name="Horizontal Financial Reports"/>
     </data>
 </openerp>
