@@ -27,7 +27,7 @@ class account_bs_report(osv.osv_memory):
     This wizard will provide the account balance sheet report by periods, between any two dates.
     """
     _name = 'account.bs.report'
-    _inherit = "account_report_alt.common.account.report"
+    _inherit = "account_financial_report_horizontal.common.account.report"
     _description = 'Account Balance Sheet Report'
 
     def _get_def_reserve_account(self, cr, uid, context=None):

@@ -4,7 +4,7 @@
 
         <record id="account_common_report_view" model="ir.ui.view">
             <field name="name">Common Report</field>
-            <field name="model">account_report_alt.common.report</field>
+            <field name="model">account_financial_report_horizontal.common.report</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
             <form string="Report Options">
@@ -38,7 +38,7 @@
 
         <record id="action_account_common_menu" model="ir.actions.act_window">
             <field name="name">Common Report</field>
-            <field name="res_model">account_report_alt.common.report</field>
+            <field name="res_model">account_financial_report_horizontal.common.report</field>
             <field name="view_type">form</field>
             <field name="view_mode">form</field>
             <field name="view_id" ref="account_common_report_view"/>

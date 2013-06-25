@@ -23,7 +23,7 @@ import time
 
 import pooler
 from report import report_sxw
-from openerp.addons.account_report_alt.report import account_profit_loss
+from openerp.addons.account_financial_report_horizontal.report import account_profit_loss
 from common_report_header import common_report_header
 from tools.translate import _
 
@@ -214,11 +214,11 @@ class report_balancesheet_horizontal(report_sxw.rml_parse, common_report_header)
         return self.result.get(group, [])
 
 report_sxw.report_sxw('report.account.balancesheet.horizontal', 'account.account',
-    'addons/account_report_alt/report/account_balance_sheet_horizontal.rml',parser=report_balancesheet_horizontal,
+    'addons/account_financial_report_horizontal/report/account_balance_sheet_horizontal.rml',parser=report_balancesheet_horizontal,
     header='internal landscape')
 
 report_sxw.report_sxw('report.account.balancesheet', 'account.account',
-    'addons/account_report_alt/report/account_balance_sheet.rml',parser=report_balancesheet_horizontal,
+    'addons/account_financial_report_horizontal/report/account_balance_sheet.rml',parser=report_balancesheet_horizontal,
     header='internal')
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

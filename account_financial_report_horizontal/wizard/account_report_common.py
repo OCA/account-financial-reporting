@@ -26,7 +26,7 @@ from osv import fields, osv
 from tools.translate import _
 
 class account_common_report(osv.osv_memory):
-    _name = "account_report_alt.common.report"
+    _name = "account_financial_report_horizontal.common.report"
     _description = "Account Common Report"
 
     _columns = {

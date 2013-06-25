@@ -6,7 +6,7 @@
             <field name="name">Profit and Loss</field>
             <field name="model">account.pl.report</field>
             <field name="type">form</field>
-            <field name="inherit_id" ref="account_report_alt.account_common_report_view" />
+            <field name="inherit_id" ref="account_financial_report_horizontal.account_common_report_view" />
             <field name="arch" type="xml">
             <data>
             <xpath expr="//field[@name='target_move']" position="replace">
