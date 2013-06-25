@@ -431,7 +431,7 @@ msgstr "Отмена"
 #. module: account_financial_report_horizontal
 #: model:ir.ui.menu,name:account_financial_report_horizontal.final_accounting_reports
 #, fuzzy
-msgid "Alt. Accounting Reports"
+msgid "Horizontal Acc. Reports"
 msgstr "Отчеты бухучета"
 
 #. module: account_financial_report_horizontal
