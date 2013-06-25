@@ -27,8 +27,8 @@
     "category": 'Accounting & Finance',
     'complexity': "normal",
     "description": """
-This is a port of the financial reports 'Balance sheet' and
-'Profit and Loss' from OpenERP 6.0 to OpenERP 6.1
+This is a port of the horizontal financial reports 'Balance sheet' and
+'Profit and Loss' from OpenERP 6.1 to OpenERP 7.0
     """,
     'website': 'http://therp.nl',
     'images' : [],
