@@ -30,13 +30,6 @@ class account_bs_report(osv.osv_memory):
     _inherit = "account_financial_report_horizontal.common.account.report"
     _description = 'Account Balance Sheet Report'
 
-    def _get_def_reserve_account(self, cr, uid, context=None):
-        chart_id = self._get_account(cr, uid, context=context)
-        res = self.onchange_chart_id(cr, uid, [], chart_id, context=context)
-        if not res:
-            return False
-        return res['value']['reserve_account_id']
-
     _columns = {
         'display_type': fields.boolean("Landscape Mode"),
         'reserve_account_id': fields.many2one('account.account', 'Reserve & Profit/Loss Account',
@@ -50,17 +43,7 @@ class account_bs_report(osv.osv_memory):
     _defaults={
         'display_type': True,
         'journal_ids': [],
-        'reserve_account_id': _get_def_reserve_account,
     }
-
-    def onchange_chart_id(self, cr, uid, ids, chart_id, context=None):
-        if not chart_id:
-            return {}
-        account = self.pool.get('account.account').browse(cr, uid, chart_id , context=context)
-        if not account.company_id.property_reserve_and_surplus_account:
-            return {'value': {'reserve_account_id': False}}
-        return {'value': {'reserve_account_id': account.company_id.property_reserve_and_surplus_account.id}}
-
 
     def _print_report(self, cr, uid, ids, data, context=None):
         if context is None:
