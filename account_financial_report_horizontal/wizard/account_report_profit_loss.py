@@ -3,6 +3,8 @@
 #
 #    OpenERP, Open Source Management Solution
 #    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    Copyright (C) 2013 Agile Business Group sagl
+#    (<http://www.agilebg.com>) (<lorenzo.battistini@agilebg.com>)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,9 +21,9 @@
 #
 ##############################################################################
 
-from osv import osv, fields
+from osv import orm, fields
 
-class account_pl_report(osv.osv_memory):
+class account_pl_report(orm.TransientModel):
     """
     This wizard will provide the account profit and loss report by periods, between any two dates.
     """
@@ -56,6 +58,3 @@ class account_pl_report(osv.osv_memory):
                 'datas': data,
                 }
 
-account_pl_report()
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
