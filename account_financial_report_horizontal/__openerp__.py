@@ -4,7 +4,7 @@
 #    OpenERP, Open Source Management Solution
 #    This module copyright (C) 2012 Therp BV (<http://therp.nl>).
 #    Copyright (C) 2013 Agile Business Group sagl
-#    (<http://www.agilebg.com>)
+#    (<http://www.agilebg.com>) (<lorenzo.battistini@agilebg.com>)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -32,16 +32,15 @@ This is a port of the horizontal financial reports 'Balance sheet' and
     """,
     'website': 'http://therp.nl',
     'images' : [],
-    'init_xml': [],
     "depends" : ["account"],
-    'update_xml': [
+    'data': [
         'menu.xml',
         'account_report.xml',
         'wizard/account_report_common_view.xml',
         'wizard/account_report_balance_sheet_view.xml',
         'wizard/account_report_profit_loss_view.xml',
     ],
-    'demo_xml': [],
+    'demo': [],
     'test': [ ],
     'installable': True,
     'active': False,
