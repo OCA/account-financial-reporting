@@ -83,5 +83,8 @@
         <record id="base.be" model="res.country">
             <field name="intrastat" eval="True"/>
         </record>
+        <record id="base.hr" model="res.country">
+            <field name="intrastat" eval="True"/>
+        </record>
     </data>
 </openerp>
