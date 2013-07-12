@@ -124,6 +124,12 @@ class account_common_report(orm.TransientModel):
                 raise osv.except_osv(_('Error'),_('Select a starting and an ending period'))
             result['period_from'] = data['form']['period_from']
             result['period_to'] = data['form']['period_to']
+        if data['form']['period_to'] and result['period_to']:
+            period_from = data['form'].get('period_from', False) and data['form']['period_from'][0] or False
+            period_to = data['form'].get('period_to', False) and data['form']['period_to'][0] or False
+            period_obj = self.pool.get('account.period')
+            result['periods'] = period_obj.build_ctx_periods(cr, uid, period_from, period_to)
+
         return result
  
     def _print_report(self, cr, uid, ids, data, context=None):
