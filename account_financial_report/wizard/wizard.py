@@ -56,7 +56,8 @@ class wizard_report(osv.osv_memory):
 
         'target_move': fields.selection([('posted', 'All Posted Entries'),
                                         ('all', 'All Entries'),
-                                         ], 'Target Moves', help='Print All Accounting Entries or just Posted Accounting Entries'),
+                                         ], 'Entries to Include', required=True,
+                                         help='Print All Accounting Entries or just Posted Accounting Entries'),
         #~ Deprecated fields
         'filter': fields.selection([('bydate', 'By Date'), ('byperiod', 'By Period'), ('all', 'By Date and Period'), ('none', 'No Filter')], 'Date/Period Filter'),
         'date_to': fields.date('End date'),

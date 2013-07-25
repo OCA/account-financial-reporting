@@ -181,7 +181,8 @@ class account_balance(report_sxw.rml_parse):
             #~ periods = str(tuple(ctx['periods']))
             where = """where aml.period_id in (%s) and aa.id = %s and aml.state <> 'draft'""" % (
                 periods, account['id'])
-
+            if ctx.get('state','posted')=='posted':
+                where += "AND am.state = 'posted'"
             sql_detalle = """select aml.id as id, aj.name as diario, aa.name as descripcion,
                 (select name from res_partner where aml.partner_id = id) as partner,
                 aa.code as cuenta, aml.name as name,
@@ -321,7 +322,8 @@ class account_balance(report_sxw.rml_parse):
         def z(n):
             return abs(n) < 0.005 and 0.0 or n
 
-        self.context['state'] = form['target_move']
+        self.context['state'] = form['target_move'] or 'posted'
+
         self.from_currency_id = self.get_company_currency(form['company_id'] and type(form[
                                                           'company_id']) in (list, tuple) and form['company_id'][0] or form['company_id'])
         if not form['currency_id']:
