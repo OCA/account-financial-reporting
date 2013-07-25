@@ -53,7 +53,8 @@ class account_financial_report(osv.osv):
         'lab_str': fields.char('Description', help='Description for the Summary', size=128),
         'target_move': fields.selection([('posted', 'All Posted Entries'),
                                         ('all', 'All Entries'),
-                                         ], 'Target Moves', help='Print All Accounting Entries or just Posted Accounting Entries'),
+                                         ], 'Entries to Include', required=True,
+                                         help='Print All Accounting Entries or just Posted Accounting Entries'),
 
         #~ Deprecated fields
         'filter': fields.selection([('bydate', 'By Date'), ('byperiod', 'By Period'), ('all', 'By Date and Period'), ('none', 'No Filter')], 'Date/Period Filter'),
