@@ -321,6 +321,7 @@ class account_balance(report_sxw.rml_parse):
         def z(n):
             return abs(n) < 0.005 and 0.0 or n
 
+        self.context['state'] = form['target_move']
         self.from_currency_id = self.get_company_currency(form['company_id'] and type(form[
                                                           'company_id']) in (list, tuple) and form['company_id'][0] or form['company_id'])
         if not form['currency_id']:
