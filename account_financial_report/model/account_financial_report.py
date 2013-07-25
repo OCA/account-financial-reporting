@@ -51,6 +51,9 @@ class account_financial_report(osv.osv):
 
         'tot_check': fields.boolean('Summarize?', help='Checking will add a new line at the end of the Report which will Summarize Columns in Report'),
         'lab_str': fields.char('Description', help='Description for the Summary', size=128),
+        'target_move': fields.selection([('posted', 'All Posted Entries'),
+                                        ('all', 'All Entries'),
+                                         ], 'Target Moves', help='Print All Accounting Entries or just Posted Accounting Entries'),
 
         #~ Deprecated fields
         'filter': fields.selection([('bydate', 'By Date'), ('byperiod', 'By Period'), ('all', 'By Date and Period'), ('none', 'No Filter')], 'Date/Period Filter'),
@@ -69,6 +72,7 @@ class account_financial_report(osv.osv):
         'date_from': lambda *a: time.strftime('%Y-%m-%d'),
         'date_to': lambda *a: time.strftime('%Y-%m-%d'),
         'filter': lambda *a: 'byperiod',
+        'target_move': 'posted',
     }
 
     def copy(self, cr, uid, id, defaults, context=None):
