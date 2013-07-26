@@ -16,7 +16,7 @@
                             <td><para style="TOP_TITLE"></para></td>
                             <td><para style="TITLE_CENTER_NAME">
                                 <font>[[ (company.name and company.name or 'NOMBRE DE COMPANIA NO DISPONIBLE')]]</font>
-                                <font>[[ company.partner_id.vat and ('- %s-%s-%s'%(company.partner_id.vat[2:3],company.partner_id.vat[3:11],company.partner_id.vat[11:12])) or '' ]]</font>
+                                <font>[[ get_vat_by_country(data['form']) ]]</font>
                             </para></td>
                         </tr>
                         <tr>
