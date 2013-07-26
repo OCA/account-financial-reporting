@@ -827,6 +827,12 @@ report_sxw.report_sxw('report.afr.analytic.ledger',
                       'account_financial_report/report/balance_full_4_cols_analytic_ledger.rml',
                       parser=account_balance,
                       header=False)
+                      
+report_sxw.report_sxw('report.afr.journal.ledger',
+                      'wizard.report',
+                      'account_financial_report/report/balance_full_4_cols_journal_ledger.rml',
+                      parser=account_balance,
+                      header=False)
 
 report_sxw.report_sxw('report.afr.5cols',
                       'wizard.report',
@@ -845,3 +851,4 @@ report_sxw.report_sxw('report.afr.13cols',
                       'account_financial_report/report/balance_full_13_cols.rml',
                       parser=account_balance,
                       header=False)
+
