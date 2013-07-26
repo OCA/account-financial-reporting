@@ -51,6 +51,7 @@
                     <group string="Accounts Info">
                         <field name="display_account" required="True" />
                         <field name="display_account_level" required="True" />
+                        <field name="target_move"/>
                     </group>
                     <group string="FiscalYear Info">
                         <field name="fiscalyear" on_change='onchange_columns(columns,fiscalyear,periods)'  domain="[('company_id','=',company_id)]"/>

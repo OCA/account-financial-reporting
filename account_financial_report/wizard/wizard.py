@@ -55,6 +55,10 @@ class wizard_report(osv.osv_memory):
         'tot_check': fields.boolean('Summarize?', help='Checking will add a new line at the end of the Report which will Summarize Columns in Report'),
         'lab_str': fields.char('Description', help='Description for the Summary', size=128),
 
+        'target_move': fields.selection([('posted', 'All Posted Entries'),
+                                        ('all', 'All Entries'),
+                                         ], 'Entries to Include', required=True,
+                                         help='Print All Accounting Entries or just Posted Accounting Entries'),
         #~ Deprecated fields
         'filter': fields.selection([('bydate', 'By Date'), ('byperiod', 'By Period'), ('all', 'By Date and Period'), ('none', 'No Filter')], 'Date/Period Filter'),
         'date_to': fields.date('End date'),
@@ -71,6 +75,7 @@ class wizard_report(osv.osv_memory):
         'fiscalyear': lambda self, cr, uid, c: self.pool.get('account.fiscalyear').find(cr, uid),
         'display_account': lambda *a: 'bal_mov',
         'columns': lambda *a: 'five',
+        'target_move': 'posted',
     }
 
     def onchange_inf_type(self, cr, uid, ids, inf_type, context=None):
