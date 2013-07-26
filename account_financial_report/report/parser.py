@@ -69,7 +69,7 @@ class account_balance(report_sxw.rml_parse):
         Return the vat of the partner by country
         """
         rc_obj = self.pool.get('res.company')
-        country_code=rc_obj.browse(self.cr, self.uid, form['company_id'][0]).partner_id.country_id.code
+        country_code=rc_obj.browse(self.cr, self.uid, form['company_id'][0]).partner_id.country_id.code or ''
         string_vat= rc_obj.browse(self.cr, self.uid, form['company_id'][0]).partner_id.vat or ''
         if string_vat:
             if country_code=='MX':
