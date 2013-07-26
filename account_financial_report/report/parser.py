@@ -453,10 +453,13 @@ class account_balance(report_sxw.rml_parse):
                                                 ('type', 'not in',
                                                 ('view', 'consolidation'))]))
 
+        account_black_ids = list(set(account_black_ids))
+
         c_account_not_black_ids = account_obj.search(self.cr, self.uid, ([
                                                    ('id', 'in', account_consol_ids),
                                                    ('type', '=', 'view')]))
-                                                   
+        account_not_black_ids = list(set(account_not_black_ids) - set(c_account_not_black_ids))
+
         # This could be done quickly with a sql sentence
         account_not_black = account_obj.browse(
             self.cr, self.uid, account_not_black_ids)
