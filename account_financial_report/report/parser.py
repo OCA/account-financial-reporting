@@ -181,7 +181,8 @@ class account_balance(report_sxw.rml_parse):
             #~ periods = str(tuple(ctx['periods']))
             where = """where aml.period_id in (%s) and aa.id = %s and aml.state <> 'draft'""" % (
                 periods, account['id'])
-
+            if ctx.get('state','posted')=='posted':
+                where += "AND am.state = 'posted'"
             sql_detalle = """select aml.id as id, aj.name as diario, aa.name as descripcion,
                 (select name from res_partner where aml.partner_id = id) as partner,
                 aa.code as cuenta, aml.name as name,
@@ -321,6 +322,8 @@ class account_balance(report_sxw.rml_parse):
         def z(n):
             return abs(n) < 0.005 and 0.0 or n
 
+        self.context['state'] = form['target_move'] or 'posted'
+
         self.from_currency_id = self.get_company_currency(form['company_id'] and type(form[
                                                           'company_id']) in (list, tuple) and form['company_id'][0] or form['company_id'])
         if not form['currency_id']:
@@ -331,6 +334,7 @@ class account_balance(report_sxw.rml_parse):
 
         if 'account_list' in form and form['account_list']:
             account_ids = form['account_list']
+            account_list= form['account_list']
             del form['account_list']
 
         credit_account_ids = self.get_company_accounts(form['company_id'] and type(form[
@@ -436,7 +440,28 @@ class account_balance(report_sxw.rml_parse):
                                                 ('view', 'consolidation'))]))
 
         account_not_black_ids = account_obj.search(self.cr, self.uid, ([('id', 'in', [
-                                                   i[0] for i in all_account_ids]), ('type', 'in', ('view', 'consolidation'))]))
+                                                   i[0] for i in all_account_ids]),('type', '=', 'view')]))
+
+        acc_cons_ids = account_obj.search(self.cr, self.uid, ([('id', 'in', [
+                                                   i[0] for i in all_account_ids]), ('type', 'in', ('consolidation',))]))
+
+        account_consol_ids = acc_cons_ids and account_obj._get_children_and_consol(
+                                self.cr, self.uid, acc_cons_ids) or []
+
+        account_black_ids += account_obj.search(self.cr, self.uid, (
+                                               [('id', 'in', account_consol_ids ),
+                                                ('type', 'not in',
+                                                ('view', 'consolidation'))]))
+
+        account_black_ids = list(set(account_black_ids))
+
+        c_account_not_black_ids = account_obj.search(self.cr, self.uid, ([
+                                                   ('id', 'in', account_consol_ids),
+                                                   ('type', '=', 'view')]))
+        delete_cons = False
+        if c_account_not_black_ids:
+            delete_cons = set(account_not_black_ids) & set(c_account_not_black_ids) and True or False
+            account_not_black_ids = list(set(account_not_black_ids) - set(c_account_not_black_ids))
 
         # This could be done quickly with a sql sentence
         account_not_black = account_obj.browse(
@@ -444,6 +469,25 @@ class account_balance(report_sxw.rml_parse):
         account_not_black.sort(key=lambda x: x.level)
         account_not_black.reverse()
         account_not_black_ids = [i.id for i in account_not_black]
+
+        c_account_not_black = account_obj.browse(
+            self.cr, self.uid, c_account_not_black_ids)
+        c_account_not_black.sort(key=lambda x: x.level)
+        c_account_not_black.reverse()
+        c_account_not_black_ids = [i.id for i in c_account_not_black]
+
+        if delete_cons:
+            account_not_black_ids = c_account_not_black_ids + account_not_black_ids
+            account_not_black = c_account_not_black + account_not_black
+        else:
+            acc_cons_brw = account_obj.browse(
+                self.cr, self.uid, acc_cons_ids)
+            acc_cons_brw.sort(key=lambda x: x.level)
+            acc_cons_brw.reverse()
+            acc_cons_ids = [i.id for i in acc_cons_brw]
+
+            account_not_black_ids = c_account_not_black_ids + acc_cons_ids + account_not_black_ids
+            account_not_black = c_account_not_black + acc_cons_brw + account_not_black
 
         all_account_period = {}  # All accounts per period 
         
@@ -510,8 +554,12 @@ class account_balance(report_sxw.rml_parse):
             )  #It makes a copy because they modify 
 
             for acc_id in account_not_black_ids:
-                acc_childs = dict_not_black.get(acc_id).get('obj').child_id
+                acc_childs = dict_not_black.get(acc_id).get('obj').type=='view' \
+                and dict_not_black.get(acc_id).get('obj').child_id \
+                or dict_not_black.get(acc_id).get('obj').child_consol_ids
                 for child_id in acc_childs:
+                    if child_id.type == 'consolidation' and delete_cons:
+                        continue
                     dict_not_black.get(acc_id)['debit'] += all_account.get(
                         child_id.id).get('debit')
                     dict_not_black.get(acc_id)['credit'] += all_account.get(
@@ -538,7 +586,8 @@ class account_balance(report_sxw.rml_parse):
 
         for aa_id in account_ids:
             id = aa_id[0]
-
+            if aa_id[3].type == 'consolidation' and delete_cons:
+                continue
             #
             # Check if we need to include this level
             #
@@ -725,11 +774,10 @@ class account_balance(report_sxw.rml_parse):
                     #
                     # Check whether we must sumarize this line in the report or not
                     #
-                    if form['tot_check'] and res['type'] == 'view' and res['level'] == 1 and (res['id'] not in tot):
-
+                    if form['tot_check'] and (res['id'] in account_list) and (res['id'] not in tot):
                         if form['columns'] == 'qtr':
                             tot_check = True
-                            #~ tot[res['id']] = True
+                            tot[res['id']] = True
                             tot_bal1 += res.get('bal1', 0.0)
                             tot_bal2 += res.get('bal2', 0.0)
                             tot_bal3 += res.get('bal3', 0.0)
@@ -738,7 +786,7 @@ class account_balance(report_sxw.rml_parse):
 
                         elif form['columns'] == 'thirteen':
                             tot_check = True
-                            #~ tot[res['id']] = True
+                            tot[res['id']] = True
                             tot_bal1 += res.get('bal1', 0.0)
                             tot_bal2 += res.get('bal2', 0.0)
                             tot_bal3 += res.get('bal3', 0.0)
@@ -754,7 +802,7 @@ class account_balance(report_sxw.rml_parse):
                             tot_bal13 += res.get('bal13', 0.0)
                         else:
                             tot_check = True
-                            #~ tot[res['id']] = True
+                            tot[res['id']] = True
                             tot_bin += res['balanceinit']
                             tot_deb += res['debit']
                             tot_crd += res['credit']
