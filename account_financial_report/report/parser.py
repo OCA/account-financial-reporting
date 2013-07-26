@@ -440,7 +440,28 @@ class account_balance(report_sxw.rml_parse):
                                                 ('view', 'consolidation'))]))
 
         account_not_black_ids = account_obj.search(self.cr, self.uid, ([('id', 'in', [
-                                                   i[0] for i in all_account_ids]), ('type', 'in', ('view', 'consolidation'))]))
+                                                   i[0] for i in all_account_ids]),('type', '=', 'view')]))
+
+        acc_cons_ids = account_obj.search(self.cr, self.uid, ([('id', 'in', [
+                                                   i[0] for i in all_account_ids]), ('type', 'in', ('consolidation',))]))
+
+        account_consol_ids = acc_cons_ids and account_obj._get_children_and_consol(
+                                self.cr, self.uid, acc_cons_ids) or []
+
+        account_black_ids += account_obj.search(self.cr, self.uid, (
+                                               [('id', 'in', account_consol_ids ),
+                                                ('type', 'not in',
+                                                ('view', 'consolidation'))]))
+
+        account_black_ids = list(set(account_black_ids))
+
+        c_account_not_black_ids = account_obj.search(self.cr, self.uid, ([
+                                                   ('id', 'in', account_consol_ids),
+                                                   ('type', '=', 'view')]))
+        delete_cons = False
+        if c_account_not_black_ids:
+            delete_cons = set(account_not_black_ids) & set(c_account_not_black_ids) and True or False
+            account_not_black_ids = list(set(account_not_black_ids) - set(c_account_not_black_ids))
 
         # This could be done quickly with a sql sentence
         account_not_black = account_obj.browse(
@@ -448,6 +469,25 @@ class account_balance(report_sxw.rml_parse):
         account_not_black.sort(key=lambda x: x.level)
         account_not_black.reverse()
         account_not_black_ids = [i.id for i in account_not_black]
+
+        c_account_not_black = account_obj.browse(
+            self.cr, self.uid, c_account_not_black_ids)
+        c_account_not_black.sort(key=lambda x: x.level)
+        c_account_not_black.reverse()
+        c_account_not_black_ids = [i.id for i in c_account_not_black]
+
+        if delete_cons:
+            account_not_black_ids = c_account_not_black_ids + account_not_black_ids
+            account_not_black = c_account_not_black + account_not_black
+        else:
+            acc_cons_brw = account_obj.browse(
+                self.cr, self.uid, acc_cons_ids)
+            acc_cons_brw.sort(key=lambda x: x.level)
+            acc_cons_brw.reverse()
+            acc_cons_ids = [i.id for i in acc_cons_brw]
+
+            account_not_black_ids = c_account_not_black_ids + acc_cons_ids + account_not_black_ids
+            account_not_black = c_account_not_black + acc_cons_brw + account_not_black
 
         all_account_period = {}  # All accounts per period 
         
@@ -514,8 +554,12 @@ class account_balance(report_sxw.rml_parse):
             )  #It makes a copy because they modify 
 
             for acc_id in account_not_black_ids:
-                acc_childs = dict_not_black.get(acc_id).get('obj').child_id
+                acc_childs = dict_not_black.get(acc_id).get('obj').type=='view' \
+                and dict_not_black.get(acc_id).get('obj').child_id \
+                or dict_not_black.get(acc_id).get('obj').child_consol_ids
                 for child_id in acc_childs:
+                    if child_id.type == 'consolidation' and delete_cons:
+                        continue
                     dict_not_black.get(acc_id)['debit'] += all_account.get(
                         child_id.id).get('debit')
                     dict_not_black.get(acc_id)['credit'] += all_account.get(
@@ -542,7 +586,8 @@ class account_balance(report_sxw.rml_parse):
 
         for aa_id in account_ids:
             id = aa_id[0]
-
+            if aa_id[3].type == 'consolidation' and delete_cons:
+                continue
             #
             # Check if we need to include this level
             #
