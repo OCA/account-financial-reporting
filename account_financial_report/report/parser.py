@@ -79,7 +79,7 @@ class account_balance(report_sxw.rml_parse):
             else:
                 return string_vat
         else:
-            return _('\nVAT DE COMPANIA NO DISPONIBLE')
+            return _('\nVAT OF COMPANY NOT AVAILABLE')
 
     def get_fiscalyear_text(self, form):
         """
