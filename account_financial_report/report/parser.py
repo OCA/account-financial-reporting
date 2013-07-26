@@ -181,7 +181,8 @@ class account_balance(report_sxw.rml_parse):
             #~ periods = str(tuple(ctx['periods']))
             where = """where aml.period_id in (%s) and aa.id = %s and aml.state <> 'draft'""" % (
                 periods, account['id'])
-
+            if ctx.get('state','posted')=='posted':
+                where += "AND am.state = 'posted'"
             sql_detalle = """select aml.id as id, aj.name as diario, aa.name as descripcion,
                 (select name from res_partner where aml.partner_id = id) as partner,
                 aa.code as cuenta, aml.name as name,
@@ -321,6 +322,8 @@ class account_balance(report_sxw.rml_parse):
         def z(n):
             return abs(n) < 0.005 and 0.0 or n
 
+        self.context['state'] = form['target_move'] or 'posted'
+
         self.from_currency_id = self.get_company_currency(form['company_id'] and type(form[
                                                           'company_id']) in (list, tuple) and form['company_id'][0] or form['company_id'])
         if not form['currency_id']:
@@ -331,6 +334,7 @@ class account_balance(report_sxw.rml_parse):
 
         if 'account_list' in form and form['account_list']:
             account_ids = form['account_list']
+            account_list= form['account_list']
             del form['account_list']
 
         credit_account_ids = self.get_company_accounts(form['company_id'] and type(form[
@@ -725,11 +729,10 @@ class account_balance(report_sxw.rml_parse):
                     #
                     # Check whether we must sumarize this line in the report or not
                     #
-                    if form['tot_check'] and res['type'] == 'view' and res['level'] == 1 and (res['id'] not in tot):
-
+                    if form['tot_check'] and (res['id'] in account_list) and (res['id'] not in tot):
                         if form['columns'] == 'qtr':
                             tot_check = True
-                            #~ tot[res['id']] = True
+                            tot[res['id']] = True
                             tot_bal1 += res.get('bal1', 0.0)
                             tot_bal2 += res.get('bal2', 0.0)
                             tot_bal3 += res.get('bal3', 0.0)
@@ -738,7 +741,7 @@ class account_balance(report_sxw.rml_parse):
 
                         elif form['columns'] == 'thirteen':
                             tot_check = True
-                            #~ tot[res['id']] = True
+                            tot[res['id']] = True
                             tot_bal1 += res.get('bal1', 0.0)
                             tot_bal2 += res.get('bal2', 0.0)
                             tot_bal3 += res.get('bal3', 0.0)
@@ -754,7 +757,7 @@ class account_balance(report_sxw.rml_parse):
                             tot_bal13 += res.get('bal13', 0.0)
                         else:
                             tot_check = True
-                            #~ tot[res['id']] = True
+                            tot[res['id']] = True
                             tot_bin += res['balanceinit']
                             tot_deb += res['debit']
                             tot_crd += res['credit']

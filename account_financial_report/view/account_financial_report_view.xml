@@ -30,6 +30,7 @@
                     <group string="Accounts Info" >
                         <field name="display_account" required="True" />
                         <field name="display_account_level" required="True" />
+                        <field name="target_move"/>
                     </group>
                     <group string="FiscalYear Info" >
                         <field name="fiscalyear_id" on_change='onchange_columns(columns,fiscalyear_id,period_ids)' 
