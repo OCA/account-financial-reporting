@@ -59,8 +59,27 @@ class account_balance(report_sxw.rml_parse):
             'get_informe_text': self.get_informe_text,
             'get_month': self.get_month,
             'exchange_name': self.exchange_name,
+            'get_vat_by_country': self.get_vat_by_country,
         })
         self.context = context
+        
+        
+    def get_vat_by_country(self, form):
+        """
+        Return the vat of the partner by country
+        """
+        rc_obj = self.pool.get('res.company')
+        country_code=rc_obj.browse(self.cr, self.uid, form['company_id'][0]).partner_id.country_id.code or ''
+        string_vat= rc_obj.browse(self.cr, self.uid, form['company_id'][0]).partner_id.vat or ''
+        if string_vat:
+            if country_code=='MX':
+                return '%s' % (string_vat[2:])
+            elif country_code=='VE':
+                return '- %s-%s-%s'%(string_vat[2:3],string_vat[3:11],string_vat[11:12])
+            else:
+                return string_vat
+        else:
+            return _('\nVAT OF COMPANY NOT AVAILABLE')
 
     def get_fiscalyear_text(self, form):
         """
@@ -249,6 +268,7 @@ class account_balance(report_sxw.rml_parse):
                     else:
                         ids2.append([aa_brw.id, True, True, aa_brw])
             return ids2
+
 
         #############################################################################
         # CONTEXT FOR ENDIND BALANCE                                                #

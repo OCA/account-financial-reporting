@@ -685,3 +685,11 @@ msgstr "12 Meses | YTD"
 msgid "Total"
 msgstr "Total"
 
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/parser.py:82
+#, python-format
+msgid "\n"
+"VAT OF COMPANY NOT AVAILABLE"
+msgstr "\n"
+"VAT DE LA COMPAÑIA NO DISPONIBLE"
+
