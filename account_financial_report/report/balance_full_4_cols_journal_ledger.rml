@@ -47,6 +47,14 @@
             <blockBottomPadding length="1.0"/>
             <lineStyle kind="LINEBELOW" colorName="#e6e6e6" start="0,0" stop="-1,-1" thickness='0.25'/>
         </blockTableStyle>
+        <blockTableStyle id="BODY_LINE_FILLED">
+            <blockBackground colorName="lightgrey" start="0,0" stop="-1,-1"/>
+            <blockValign value="TOP"/>
+            <blockAlignment value="RIGHT"/>
+            <blockTopPadding length="1.0"/>
+            <blockBottomPadding length="1.0"/>
+            <lineStyle kind="LINEBELOW" colorName="#e6e6e6" start="0,0" stop="-1,-1" thickness='0.25'/>
+        </blockTableStyle>
         <blockTableStyle id="TITLE">
             <blockValign value="TOP"/>
         </blockTableStyle> 
@@ -286,11 +294,11 @@
                 </blockTable>
             <section>
                 <para>[[ repeatIn(j.get('obj').line_id, 'k') ]]</para>
-                    <blockTable colWidths="6.0cm,3.0cm,3.0cm,1.5cm,5.0cm,2.5cm,2.5cm,2.5cm" style="BODY_LINE" repeatRows="1">
+                    <blockTable colWidths="6.0cm,3.0cm,3.0cm,1.5cm,5.0cm,2.5cm,2.5cm,2.5cm" style="BODY_LINE_FILLED" repeatRows="1">
                         <tr>
                             <td>
                                 <para style="TITLES_NEW">
-                                    <font> [[ k.name ]]</font>
+                                    <font> [[  k.account_id.code == a['code'] and k.name or removeParentNode('blockTable')  ]]</font>
                                 </para>
                             </td>
                             <td>
@@ -315,19 +323,66 @@
                             </td>
                             <td>
                         <para style="TITLES_NEW_RIGHT">
-                            <font>[[ k.type&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                            <font>[[ k.account_id.type&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
                             <font>[[ k.debit and formatLang(k.debit, digits=2, grouping=True) or '' ]] </font>
                         </para>
                             </td>
                             <td>
                         <para style="TITLES_NEW_RIGHT">
-                            <font>[[ k.type&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                            <font>[[ k.account_id.type&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
                             <font>[[ k.credit and formatLang(k.credit, digits=2, grouping=True) or '' ]] </font>
                         </para>
                             </td>
                             <td>
                         <para style="TITLES_NEW_RIGHT">
-                            <font>[[ k.type&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                            <font>[[ k.account_id.type&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                            <font>[[ k.reconcile_id and k.reconcile_id.name or k.reconcile_partial_id and k.reconcile_partial_id.name or '']]</font>
+                        </para>
+                            </td>
+                        </tr>
+                    </blockTable>
+                    <blockTable colWidths="6.0cm,3.0cm,3.0cm,1.5cm,5.0cm,2.5cm,2.5cm,2.5cm" style="BODY_LINE" repeatRows="1">
+                        <tr>
+                            <td>
+                                <para style="TITLES_NEW">
+                                    <font> [[  k.account_id.code != a['code'] and k.name or removeParentNode('blockTable')  ]]</font>
+                                </para>
+                            </td>
+                            <td>
+                                <para style="TITLES_NEW">
+                                    <font>[[ k.ref and k.ref or '']]</font>
+                                </para>
+                            </td>
+                            <td>
+                                <para style="TITLES_NEW">
+                                    <font>[[ k.partner_id and k.partner_id.name or '']]</font>
+                                </para>
+                            </td>
+                            <td>
+                                <para style="TITLES_NEW">
+                                    <font>[[ k.account_id and k.account_id.code or '']]</font>
+                                </para>
+                            </td>
+                            <td>
+                                <para style="TITLES_NEW">
+                                    <font>[[ k.account_id and k.account_id.name or '']]</font>
+                                </para>
+                            </td>
+                            <td>
+                        <para style="TITLES_NEW_RIGHT">
+                            <font>[[ k.account_id.type&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                            <font>[[ k.debit and formatLang(k.debit, digits=2, grouping=True) or '' ]] </font>
+                        </para>
+                            </td>
+                            <td>
+                        <para style="TITLES_NEW_RIGHT">
+                            <font>[[ k.account_id.type&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                            <font>[[ k.credit and formatLang(k.credit, digits=2, grouping=True) or '' ]] </font>
+                        </para>
+                            </td>
+                            <td>
+                        <para style="TITLES_NEW_RIGHT">
+                            <font>[[ k.account_id.type&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
                             <font>[[ k.reconcile_id and k.reconcile_id.name or k.reconcile_partial_id and k.reconcile_partial_id.name or '']]</font>
                         </para>
                             </td>
