@@ -84,43 +84,13 @@ class report_pl_account_horizontal(report_sxw.rml_parse, common_report_header):
         return _(source)
     
     def get_data(self, data):
-        
-        def _process_child(disp_acc, account_id, typ, context):
-            acc_obj = self.pool.get('account.account')
-            account = acc_obj.browse(cr, uid, account_id, context)
-            account_dict = {
-                'id': account.id,
+        def get_account_repr(account, account_type):
+            return {
                 'code': account.code,
                 'name': account.name,
                 'level': account.level,
-                'balance': account.balance and (typ == 'income' and -1 or 1) * account.balance,
-            }
-            if not account.child_id:
-                if (account.user_type.report_type) and (account.user_type.report_type == typ):
-                    currency = account.currency_id and account.currency_id or account.company_id.currency_id
-                    if typ == 'expense' and account.type != 'view' and (account.debit != account.credit):
-                        self.result_sum_dr += account.debit - account.credit
-                    if typ == 'income' and account.type != 'view' and (account.debit != account.credit):
-                        self.result_sum_cr += account.credit - account.debit
-                    if disp_acc == 'bal_movement':
-                        if (not currency_pool.is_zero(self.cr, self.uid, currency, account.credit)
-                            ) or (not currency_pool.is_zero(self.cr, self.uid, currency, account.debit)
-                            ) or (not currency_pool.is_zero(self.cr, self.uid, currency, account.balance)):
-                            return [account_dict]
-                    elif disp_acc == 'bal_solde':
-                        if not currency_pool.is_zero(self.cr, self.uid, currency, account.balance):
-                            return [account_dict]
-                    else:
-                        return [account_dict]
-                else:
-                    return []
-            children = []
-            for child in account.child_id:
-                children += _process_child(disp_acc, child.id, typ, context)
-            if children:
-                return [account_dict] + children
-            else:
-                return []
+                'balance': account.balance and (account_type == 'income' and -1 or 1) * account.balance,
+                }
 
         cr, uid = self.cr, self.uid
         db_pool = pooler.get_pool(self.cr.dbname)
@@ -148,9 +118,26 @@ class report_pl_account_horizontal(report_sxw.rml_parse, common_report_header):
         account_id = data['form'].get('chart_account_id', False)
         if account_id:
             account_id = account_id[0]
+        account_ids = account_pool._get_children_and_consol(cr, uid, account_id, context=ctx)
+        accounts = account_pool.browse(cr, uid, account_ids, context=ctx)
         
         for typ in types:
-            accounts_temp = _process_child(data['form']['display_account'], account_id, typ, ctx)
+            accounts_temp = []
+            for account in accounts:
+                if (account.user_type.report_type) and (account.user_type.report_type == typ):
+                    currency = account.currency_id and account.currency_id or account.company_id.currency_id
+                    if typ == 'expense' and account.type <> 'view' and (account.debit <> account.credit):
+                        self.result_sum_dr += account.debit - account.credit
+                    if typ == 'income' and account.type <> 'view' and (account.debit <> account.credit):
+                        self.result_sum_cr += account.credit - account.debit
+                    if data['form']['display_account'] == 'bal_movement':
+                        if (not currency_pool.is_zero(self.cr, self.uid, currency, account.credit)) or (not currency_pool.is_zero(self.cr, self.uid, currency, account.debit)) or (not currency_pool.is_zero(self.cr, self.uid, currency, account.balance)):
+                            accounts_temp.append(get_account_repr(account, typ))
+                    elif data['form']['display_account'] == 'bal_solde':
+                        if not currency_pool.is_zero(self.cr, self.uid, currency, account.balance):
+                            accounts_temp.append(get_account_repr(account, typ))
+                    else:
+                        accounts_temp.append(get_account_repr(account, typ))
             if self.result_sum_dr > self.result_sum_cr:
                 self.res_pl['type'] = _('Net Loss')
                 self.res_pl['balance'] = (self.result_sum_dr - self.result_sum_cr)
