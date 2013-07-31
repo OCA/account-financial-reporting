@@ -48,6 +48,7 @@ class account_financial_report(osv.osv):
         'period_ids': fields.many2many('account.period', 'afr_period_rel', 'afr_id', 'period_id', 'Periods', help='All periods in the fiscal year if empty'),
 
         'analytic_ledger': fields.boolean('Analytic Ledger', help="Allows to Generate an Analytic Ledger for accounts with moves. Available when Balance Sheet and 'Initial | Debit | Credit | YTD' are selected"),
+        'journal_ledger': fields.boolean('journal Ledger', help="Allows to Generate an journal Ledger for accounts with moves. Available when Balance Sheet and 'Initial | Debit | Credit | YTD' are selected"),
 
         'tot_check': fields.boolean('Summarize?', help='Checking will add a new line at the end of the Report which will Summarize Columns in Report'),
         'lab_str': fields.char('Description', help='Description for the Summary', size=128),

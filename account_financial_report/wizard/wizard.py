@@ -50,6 +50,7 @@ class wizard_report(osv.osv_memory):
         'periods': fields.many2many('account.period', 'rel_wizard_period', 'wizard_id', 'period_id', 'Periods', help='All periods in the fiscal year if empty'),
 
         'analytic_ledger': fields.boolean('Analytic Ledger', help="Allows to Generate an Analytic Ledger for accounts with moves. Available when Balance Sheet and 'Initial | Debit | Credit | YTD' are selected"),
+        'journal_ledger': fields.boolean('Journal Ledger', help="Allows to Generate an Journal Ledger for accounts with moves. Available when Balance Sheet and 'Initial | Debit | Credit | YTD' are selected"),
 
         'tot_check': fields.boolean('Summarize?', help='Checking will add a new line at the end of the Report which will Summarize Columns in Report'),
         'lab_str': fields.char('Description', help='Description for the Summary', size=128),
@@ -273,6 +274,8 @@ class wizard_report(osv.osv_memory):
         if data['form']['columns'] == 'four':
             if data['form']['analytic_ledger'] and data['form']['inf_type'] == 'BS':
                 name = 'afr.analytic.ledger'
+            elif data['form']['journal_ledger'] and data['form']['inf_type'] == 'BS':
+                name = 'afr.journal.ledger'
             else:
                 name = 'afr.4cols'
         if data['form']['columns'] == 'five':
