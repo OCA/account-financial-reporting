@@ -239,6 +239,46 @@ class account_balance(report_sxw.rml_parse):
                 })
         return res
 
+    def _get_journal_ledger(self, account, ctx={}):
+        res = []
+        am_obj = self.pool.get('account.move')
+        print 'AM OBJ ', am_obj
+        if account['type'] in ('other', 'liquidity', 'receivable', 'payable'):
+            #~ TODO: CUANDO EL PERIODO ESTE VACIO LLENARLO CON LOS PERIODOS DEL EJERCICIO
+            #~ FISCAL, SIN LOS PERIODOS ESPECIALES
+            periods = ', '.join([str(i) for i in ctx['periods']])
+            #~ periods = str(tuple(ctx['periods']))
+            where = """where aml.period_id in (%s) and aa.id = %s and aml.state <> 'draft'""" % (
+                periods, account['id'])
+            if ctx.get('state','posted')=='posted':
+                where += "AND am.state = 'posted'"
+            sql_detalle = """SELECT 
+                DISTINCT am.id as am_id,
+                aj.name as diario,
+                am.name as name,
+                am.date as date, 
+                ap.name as periodo
+                from account_move_line aml
+                inner join account_journal aj on aj.id = aml.journal_id
+                inner join account_account aa on aa.id = aml.account_id
+                inner join account_period ap on ap.id = aml.period_id
+                inner join account_move am on am.id = aml.move_id """ + where +\
+                """ order by date, am.name"""
+
+            self.cr.execute(sql_detalle)
+            resultat = self.cr.dictfetchall()
+            for det in resultat:
+                res.append({
+                    'am_id': det['am_id'],
+                    'journal': det['diario'],
+                    'name': det['name'],
+                    'date': det['date'],
+                    'period': det['periodo'],
+                    'obj': am_obj.browse(self.cr,self.uid,det['am_id'])
+                })
+                print 'ACCOUNT NAME', am_obj.browse(self.cr,self.uid,det['am_id']).name
+        return res
+
     def lines(self, form, level=0):
         """
         Returns all the data needed for the report lines
@@ -786,6 +826,8 @@ class account_balance(report_sxw.rml_parse):
                 #~ ANALYTIC LEDGER
                 if to_include and form['analytic_ledger'] and form['columns'] == 'four' and form['inf_type'] == 'BS' and res['type'] in ('other', 'liquidity', 'receivable', 'payable'):
                     res['mayor'] = self._get_analytic_ledger(res, ctx=ctx_end)
+                elif to_include and form['journal_ledger'] and form['columns'] == 'four' and form['inf_type'] == 'BS' and res['type'] in ('other', 'liquidity', 'receivable', 'payable'):
+                    res['journal'] = self._get_journal_ledger(res, ctx=ctx_end)
                 else:
                     res['mayor'] = []
 
@@ -895,6 +937,12 @@ report_sxw.report_sxw('report.afr.analytic.ledger',
                       'account_financial_report/report/balance_full_4_cols_analytic_ledger.rml',
                       parser=account_balance,
                       header=False)
+                      
+report_sxw.report_sxw('report.afr.journal.ledger',
+                      'wizard.report',
+                      'account_financial_report/report/balance_full_4_cols_journal_ledger.rml',
+                      parser=account_balance,
+                      header=False)
 
 report_sxw.report_sxw('report.afr.5cols',
                       'wizard.report',
@@ -913,3 +961,4 @@ report_sxw.report_sxw('report.afr.13cols',
                       'account_financial_report/report/balance_full_13_cols.rml',
                       parser=account_balance,
                       header=False)
+
