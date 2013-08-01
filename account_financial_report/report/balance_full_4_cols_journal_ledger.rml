@@ -4,7 +4,7 @@
         <pageTemplate id="first">
             <frame id="first" x1="1.0cm" y1="1.0cm" width="26.0cm" height="16.65cm"/>
             <pageGraphics>
-                <setFont name="Helvetica" size="9"/>
+                <setFont name="Helvetica-Oblique" size="6"/>
 
                 <image x="1.0cm" y="17.65cm" width="5.0cm">[[company.logo and company.logo or removeParentNode('image')]]</image>
 <!--
@@ -33,10 +33,9 @@
                             <td><para style="TITLE_CENTER">[[data['form'] and get_month(data['form']) or '']]</para></td>
                         </tr>
                     </blockTable>
-                </place>
-                <drawRightString x="270mm" y="5mm"> Pag.: <pageNumber/></drawRightString> 
+                </place>                
+                <drawRightString x="270mm" y="5mm">Printing Date: [[ formatLang(time.strftime('%Y-%m-%d'),date=True) ]] [[ get_informe_text(data['form']) ]] /  Pág.: <pageNumber/>-<pageCount/></drawRightString> 
             </pageGraphics>
-
         </pageTemplate>
     </template>
     <stylesheet>
