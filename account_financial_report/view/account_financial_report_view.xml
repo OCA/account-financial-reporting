@@ -24,15 +24,8 @@
                         <field name="analytic_ledger" 
                         attrs="{'readonly':['|',('columns','!=','four'),('inf_type','!=','BS')],}" 
                         on_change='onchange_analytic_ledger(company_id,analytic_ledger)' />
-                    </group>
-                    <group string="Report Info" >
-                        <field 
-                            name="inf_type" 
-                            on_change='onchange_inf_type(inf_type)' />
-                        <field name="columns" on_change='onchange_columns(columns,fiscalyear_id,period_ids)' />
                         <field name="journal_ledger" 
-                        attrs="{'readonly':['|',('columns','!=','four'),('inf_type','!=','BS')],}" 
-                        on_change='(company_id,journal_ledger)' />
+                        attrs="{'readonly':['|',('columns','!=','four'),('inf_type','!=','BS')],}" />
                     </group>
                 </group>
                 <group>
