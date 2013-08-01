@@ -34,12 +34,6 @@ class account_bs_report(orm.TransientModel):
 
     _columns = {
         'display_type': fields.boolean("Landscape Mode"),
-        'reserve_account_id': fields.many2one('account.account', 'Reserve & Profit/Loss Account',
-                                      required=True,
-                                      help='This Account is used for transfering Profit/Loss ' \
-                                           '(Profit: Amount will be added, Loss: Amount will be duducted), ' \
-                                           'which is calculated from Profilt & Loss Report',
-                                      domain = [('type','=','other')]),
     }
 
     _defaults={
@@ -50,9 +44,7 @@ class account_bs_report(orm.TransientModel):
     def _print_report(self, cr, uid, ids, data, context=None):
         if context is None:
             context = {}
-        data['form'].update(self.read(cr, uid, ids, ['display_type','reserve_account_id'])[0])
-        if not data['form']['reserve_account_id']:
-            raise orm.except_orm(_('Warning'),_('Please define the Reserve and Profit/Loss account for current user company !'))
+        data['form'].update(self.read(cr, uid, ids, ['display_type'])[0])
         data = self.pre_print_report(cr, uid, ids, data, context=context)
         if data['form']['display_type']:
             return {
