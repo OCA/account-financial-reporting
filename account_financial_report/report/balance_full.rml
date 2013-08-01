@@ -29,7 +29,7 @@
                         </tr>
                     </blockTable>
                 </place>
-                <drawRightString x="207mm" y="5mm">Printing Date: [[ formatLang(time.strftime('%Y-%m-%d'),date=True) ]] [[ get_informe_text(data['form']) ]] /  Pág.: <pageNumber/>-<pageCount/></drawRightString> 
+                <drawRightString x="207mm" y="5mm">Printing Date: [[ formatLang(time.strftime('%Y-%m-%d %H:%M:%S'),date_time=True) ]] [[ get_informe_text(data['form']) ]] /  Pág.: <pageNumber/>-<pageCount/></drawRightString> 
 
             </pageGraphics>
 
