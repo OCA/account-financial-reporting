@@ -113,7 +113,7 @@ class report_pl_account_horizontal(report_sxw.rml_parse, common_report_header):
         elif data['form']['filter'] == 'filter_date':
             ctx['date_from'] = data['form'].get('date_from', False)
             ctx['date_to'] =  data['form'].get('date_to', False)
-
+        ctx['state'] = data['form'].get('target_move', 'all')
         cal_list = {}
         account_id = data['form'].get('chart_account_id', False)
         if account_id:
