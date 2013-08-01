@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    This module copyright (C) 2012 Therp BV (<http://therp.nl>).
+#    This module copyright (C) 2012 Therp BV (<http://therp.nl>),
 #    Copyright (C) 2013 Agile Business Group sagl
 #    (<http://www.agilebg.com>) (<lorenzo.battistini@agilebg.com>)
 #
@@ -27,10 +27,10 @@
     "category": 'Accounting & Finance',
     'complexity': "normal",
     "description": """
-This is a port of the horizontal financial reports 'Balance sheet' and
-'Profit and Loss' from OpenERP 6.1 to OpenERP 7.0
+This is a port to OpenERP 7.0 of the horizontal financial reports
+'Balance sheet' and 'Profit and Loss' as found in OpenERP 6.0.
     """,
-    'website': 'http://therp.nl',
+    'website': 'https://launchpad.net/account-financial-report',
     'images' : [],
     "depends" : ["account"],
     'data': [
