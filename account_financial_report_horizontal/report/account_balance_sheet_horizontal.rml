@@ -216,7 +216,7 @@
         </td>
         <td>
           <para style="terp_default_Right_9">
-            <font>[[ a['level1']&lt;4 and ( setTag('para','para',{'style':'terp_default_Right_9_Bold'})) or removeParentNode('font')  ]]</font>
+            <font>[[ a['level']&lt;4 and ( setTag('para','para',{'style':'terp_default_Right_9_Bold'})) or removeParentNode('font')  ]]</font>
             <font>[[ a['name']=='Net Profit' and setTag('para','para',{'style':'terp_default_Right_9_Bold'}) or removeParentNode('font') ]]</font>
             <font>[[ a['code'] and formatLang(a['balance']) or removeParentNode('font') ]] [[ company.currency_id.symbol ]]</font>
           </para>
