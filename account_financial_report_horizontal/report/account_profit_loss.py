@@ -1,7 +1,10 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2009 Tiny SPRL (<http://tiny.be>).
+#    This module copyright (C) 2004-2009 Tiny SPRL (<http://tiny.be>),
+#    Copyright (C) 2012 Therp BV (<http://therp.nl>),
+#    Copyright (C) 2013 Agile Business Group sagl
+#    (<http://www.agilebg.com>) (<lorenzo.battistini@agilebg.com>)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -113,7 +116,7 @@ class report_pl_account_horizontal(report_sxw.rml_parse, common_report_header):
         elif data['form']['filter'] == 'filter_date':
             ctx['date_from'] = data['form'].get('date_from', False)
             ctx['date_to'] =  data['form'].get('date_to', False)
-
+        ctx['state'] = data['form'].get('target_move', 'all')
         cal_list = {}
         account_id = data['form'].get('chart_account_id', False)
         if account_id:
