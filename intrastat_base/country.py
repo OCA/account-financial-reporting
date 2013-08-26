@@ -32,4 +32,3 @@ class res_country(osv.Model):
         'intrastat': False,
     }
 
-res_country()

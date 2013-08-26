@@ -24,5 +24,6 @@ import country
 import product
 import tax
 import partner
+import company
 import intrastat_common
 

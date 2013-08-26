@@ -24,6 +24,10 @@ from openerp.osv import osv
 from openerp.tools.translate import _
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class report_intrastat_common(osv.TransientModel):
     _name = "report.intrastat.common"
@@ -41,12 +45,15 @@ class report_intrastat_common(osv.TransientModel):
         return result
 
 
-    def _compute_end_date(self, cr, uid, ids, object, context=None):
+    def _compute_dates(self, cr, uid, ids, object, context=None):
         result = {}
         for intrastat in object.browse(cr, uid, ids, context=context):
             start_date_datetime = datetime.strptime(intrastat.start_date, '%Y-%m-%d')
             end_date_str = datetime.strftime(start_date_datetime + relativedelta(day=31), '%Y-%m-%d')
-            result[intrastat.id] = end_date_str
+            result[intrastat.id] = {
+                'end_date': end_date_str,
+                'year_month': start_date_datetime.strftime('%Y-%m'),
+                }
         return result
 
 
@@ -128,5 +135,16 @@ class report_intrastat_common(osv.TransientModel):
             result['value'].update({'partner_vat': company['vat']})
         return result
 
-report_intrastat_common()
 
+    def send_reminder_email(self, cr, uid, company, module_name, template_xmlid, intrastat_id, context=None):
+        template_data = self.pool['ir.model.data'].get_object_reference(cr, uid, module_name, template_xmlid)
+        if template_data and template_data[0] == 'email.template':
+            template_id = template_data[1]
+        else:
+            raise
+        if company.intrastat_remind_user_ids:
+            self.pool['email.template'].send_mail(cr, uid, template_id, intrastat_id, context=context)
+            logger.info('Intrastat Reminder email has been sent (XMLID: %s).' % template_xmlid)
+        else:
+            logger.warning('The list of users receiving the Intrastat Reminder is empty on company %s' % company.name)
+        return True
