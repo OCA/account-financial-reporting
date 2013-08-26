@@ -45,5 +45,3 @@ class product_template(osv.Model):
         (_check_accessory_cost, "Error msg is in raise", ['is_accessory_cost', 'type'])
         ]
 
-product_template()
-

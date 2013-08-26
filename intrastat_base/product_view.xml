@@ -16,7 +16,7 @@
     <field name="inherit_id" ref="account.product_normal_form_view" />
     <field name="arch" type="xml">
         <group name="properties" position="after">
-            <group string="Intrastat properties" name="intrastat">
+            <group string="Intrastat Properties" name="intrastat">
                 <field name="exclude_from_intrastat" />
                 <field name="is_accessory_cost" />
             </group>
@@ -31,7 +31,7 @@
     <field name="inherit_id" ref="account.product_template_form_view"/>
     <field name="arch" type="xml">
         <field name="supplier_taxes_id" position="after">
-            <group string="Intrastat properties" name="intrastat">
+            <group string="Intrastat Properties" name="intrastat">
                 <field name="exclude_from_intrastat" />
                 <field name="is_accessory_cost" />
             </group>
