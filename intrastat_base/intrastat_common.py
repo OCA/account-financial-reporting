@@ -141,7 +141,7 @@ class report_intrastat_common(osv.TransientModel):
         if template_data and template_data[0] == 'email.template':
             template_id = template_data[1]
         else:
-            raise
+            raise osv.except_osv(_('Error :'), _("Wrong model for XMLID '%s.%s': model is '%s' and it should be 'email.template'.") %(module_name, template_xmlid, template_data[0]))
         if company.intrastat_remind_user_ids:
             self.pool['email.template'].send_mail(cr, uid, template_id, intrastat_id, context=context)
             logger.info('Intrastat Reminder email has been sent (XMLID: %s).' % template_xmlid)
