@@ -22,19 +22,18 @@
     'name' : 'Account Export CSV',
     'version' : '1',
     'depends' : [
-                 'account', 
+                 'account',
                  ],
     'author' : 'Camptocamp',
     'description': """
-    
+
     Add a wizard that allow you to export a csv file based on accounting journal entries 
-    
+
     - Trial Balance
     - Analytic Balance (with accounts)
-    
-    You can filter by period 
-    
-     
+
+    You can filter by period
+
     """,
     'website': 'http://www.camptocamp.com',
     'data': [
