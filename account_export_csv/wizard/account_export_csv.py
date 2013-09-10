@@ -48,14 +48,14 @@ class AccountUnicodeWriter(object):
     def writerow(self, row):
         #we ensure that we do not try to encode none or bool
         row = [x or u'' for x in row]
-        
+
         encoded_row = []
         for c in row:
             if type(c) == unicode:
                 encoded_row.append(c.encode("utf-8"))
             else:
                 encoded_row.append(c)
-        
+
         self.writer.writerow(encoded_row)
         # Fetch UTF-8 output from the queue ...
         data = self.queue.getvalue()
@@ -144,12 +144,12 @@ class AccountCSVExport(orm.TransientModel):
                     {'fiscalyear_id': fiscalyear_id,'company_id':company_id,'period_ids':tuple(period_range_ids)}
                 )
         res = cr.fetchall()
-        
+
         rows = []
         for line in res:
             rows.append(list(line))
         return rows
-    
+
     def action_manual_export_analytic(self, cr, uid, ids, context=None):
         this = self.browse(cr, uid, ids)[0]
         rows = self.get_data(cr, uid, ids,"analytic", context)
@@ -172,7 +172,7 @@ class AccountCSVExport(orm.TransientModel):
             'views': [(False, 'form')],
             'target': 'new',
         }
-    
+
     def _get_header_analytic(self, cr, uid, ids, context=None):
         return [_(u'ANALYTIC CODE'),
                 _(u'ANALYTIC NAME'),
@@ -201,7 +201,7 @@ class AccountCSVExport(orm.TransientModel):
                     {'fiscalyear_id': fiscalyear_id,'company_id':company_id,'period_ids':tuple(period_range_ids)}
                 )
         res = cr.fetchall()
-        
+
         rows = []
         for line in res:
             rows.append(list(line))
