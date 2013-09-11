@@ -31,6 +31,7 @@
 
     - Trial Balance
     - Analytic Balance (with accounts)
+    - Journal Entries
 
     You can filter by period
 
