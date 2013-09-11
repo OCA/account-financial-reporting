@@ -85,7 +85,7 @@ class AccountCSVExport(orm.TransientModel):
         'company_id': fields.many2one('res.company', 'Company', invisible=True),
         'fiscalyear_id': fields.many2one('account.fiscalyear', 'Fiscalyear', required=True),
         'periods': fields.many2many('account.period','rel_wizard_period','wizard_id','period_id','Periods',help='All periods in the fiscal year if empty'),
-        'journal_ids': fields.many2many('account.journal','rel_wizard_journal','wizard_id','journal_id','Journals', help='If empty, use all journals'),
+        'journal_ids': fields.many2many('account.journal','rel_wizard_journal','wizard_id','journal_id','Journals', help='If empty, use all journals, only used for journal entries'),
         'company_id': fields.many2one('res.company', 'Company', invisible=True),
         'fiscalyear_id': fields.many2one('account.fiscalyear', 'Fiscalyear', required=True),
         'export_filename': fields.char('Export CSV Filename', size=128),
@@ -136,7 +136,12 @@ class AccountCSVExport(orm.TransientModel):
                 _(u'BALANCE'),
                 ]
 
-    def _get_rows_account(self, cr, uid, ids, fiscalyear_id,period_range_ids,company_id,context=None):
+    def _get_rows_account(self, cr, uid, ids,
+            fiscalyear_id,
+            period_range_ids,
+            journal_ids,
+            company_id,
+            context=None):
         """
         Return list to generate rows of the CSV file
         """
@@ -191,7 +196,12 @@ class AccountCSVExport(orm.TransientModel):
                 _(u'BALANCE'),
                 ]
 
-    def _get_rows_analytic(self, cr, uid, ids, fiscalyear_id,period_range_ids,company_id,context=None):
+    def _get_rows_analytic(self, cr, uid, ids,
+            fiscalyear_id,
+            period_range_ids,
+            journal_ids,
+            company_id,
+            context=None):
         """
         Return list to generate rows of the CSV file
         """
@@ -222,9 +232,10 @@ class AccountCSVExport(orm.TransientModel):
         We also write the data to the wizard with SQL query as write seams to use
         too much memory as well
 
-        Thos improvment permitted to improve the export from a 100k line to 400k lines
+        Thos improvment permitted to improve the export from a 100k line to 200k lines
+        with default `limit_memory_hard = 805306368` (768MB)
         """
-        #XXX check why it still fail with more than 500k and when
+        #XXX check why it still fail with more than 200k line and when
         this = self.browse(cr, uid, ids)[0]
         rows = self.get_data(cr, uid, ids, "journal_entries", context)
         with tempfile.TemporaryFile() as file_data:
@@ -279,7 +290,12 @@ class AccountCSVExport(orm.TransientModel):
                 ]
 
 
-    def _get_rows_journal_entries(self, cr, uid, ids, fiscalyear_id, period_range_ids, company_id, context=None):
+    def _get_rows_journal_entries(self, cr, uid, ids,
+            fiscalyear_id,
+            period_range_ids,
+            journal_ids,
+            company_id,
+            context=None):
         """
         Return list to generate rows of the CSV file
         """
@@ -323,9 +339,10 @@ class AccountCSVExport(orm.TransientModel):
           LEFT JOIN account_tax_code on (account_tax_code.id=account_move_line.tax_code_id)
           LEFT JOIN account_analytic_account on (account_analytic_account.id=account_move_line.analytic_account_id)
         WHERE account_period.id IN %(period_ids)s
+        AND account_journal.id IN %(journal_ids)s
         ORDER BY account_move_line.date
         """,
-        {'period_ids': tuple(period_range_ids)}
+        {'period_ids': tuple(period_range_ids), 'journal_ids': tuple(journal_ids)}
         )
         res = cr.fetchall()
         rows = []
@@ -347,7 +364,19 @@ class AccountCSVExport(orm.TransientModel):
             # If not period selected , we take all periods
             p_obj = self.pool.get("account.period")
             period_range_ids = p_obj.search(cr,uid,[('fiscalyear_id','=',fiscalyear_id)],context=context)
+        journal_ids = None
+        if form.journal_ids:
+            journal_ids = [x.id for x in form.journal_ids]
+        else:
+            j_obj = self.pool.get("account.journal")
+            journal_ids = j_obj.search(cr, uid, [], context=context)
         rows = []
         rows.append(get_header_func(cr, uid, ids, context=context))
-        rows.extend(get_rows_func(cr, uid, ids, fiscalyear_id,period_range_ids,company_id, context=context))
+        rows.extend(get_rows_func(
+            cr, uid, ids,
+            fiscalyear_id,
+            period_range_ids,
+            journal_ids,
+            company_id,
+            context=context))
         return rows
