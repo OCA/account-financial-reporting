@@ -197,14 +197,14 @@
       </tr>
       <tr>
         <td>
-          <para style="terp_default_9"><font>[[ a['level']&lt;4 and ( setTag('para','para',{'style':'terp_default_Bold_9'})) or removeParentNode('font')  ]]</font><font>[[ a['code1'] ]]</font></para>
+          <para style="terp_default_9"><font>[[ a['level']&lt;4 and ( setTag('para','para')) or removeParentNode('font')  ]]</font><font>[[ a['code1'] ]]</font></para>
         </td>
         <td>
-          <para style="terp_default_9"><font color="white">[[  '. '*(a['level1']-1) ]]</font><font>[[ a['level1']&lt;4 and ( setTag('para','para',{'style':'terp_default_Bold_9'})) or removeParentNode('font')  ]][[ a['name1'] ]]</font></para>
+          <para style="terp_default_9"><font color="white">[[  '. '*(a['level1']-1) ]]</font><font>[[ a['level1']&lt;4 and ( setTag('para','para')) or removeParentNode('font')  ]][[ a['name1'] ]]</font></para>
         </td>
         <td>
           <para style="terp_default_Right_9">
-            <font>[[ a['level1']&lt;4 and ( setTag('para','para',{'style':'terp_default_Right_9_Bold'})) or removeParentNode('font')  ]]</font>
+            <font>[[ a['level1']&lt;4 and ( setTag('para','para')) or removeParentNode('font')  ]]</font>
             <font>[[ a['code1'] and formatLang(a['balance1']) or removeParentNode('font') ]] [[ company.currency_id.symbol ]]</font>
           </para>
         </td>
