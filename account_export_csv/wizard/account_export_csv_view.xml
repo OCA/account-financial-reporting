@@ -20,6 +20,7 @@
                         <button special="cancel" string="Close" icon="gtk-cancel"/>
                         <button name="action_manual_export_account" string="Trial Balance" type="object" icon="gtk-execute"/>
                         <button name="action_manual_export_analytic" string="Analytic Balance (with accounts)" type="object" icon="gtk-execute"/>
+                        <button name="action_manual_export_journal_entries" string="Journal Entries" type="object" icon="gtk-execute"/>
                      </group>
                    <separator string ="" colspan="4"/>
                     <group colspan="4">
