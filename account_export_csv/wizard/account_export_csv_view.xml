@@ -14,6 +14,7 @@
                      </group>
                     <group colspan="4" col="2">
                         <field name="periods" domain="[('state', '=', 'draft'),('fiscalyear_id','=',fiscalyear_id)]"/>
+                        <field name="journal_ids"/>
                     </group>
                    <separator string ="" colspan="4"/>
                     <group colspan="4" col="3">
