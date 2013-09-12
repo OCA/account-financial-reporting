@@ -8,3 +8,4 @@ from . import webkit_parser_header_fix
 from . import trial_balance
 from . import partner_balance
 from . import open_invoices
+from . import print_journal

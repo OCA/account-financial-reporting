@@ -2,6 +2,8 @@
 ##############################################################################
 #
 #    Author: Nicolas Bessi. Copyright Camptocamp SA
+#    Copyright (C) 2012 SYLEAM Info Services (<http://www.syleam.fr/>)
+#              Sebastien LANGE <sebastien.lange@syleam.fr>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -24,3 +26,4 @@ from . import partners_ledger_wizard
 from . import trial_balance_wizard
 from . import partner_balance_wizard
 from . import open_invoices_wizard
+from . import print_journal
