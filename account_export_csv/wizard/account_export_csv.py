@@ -51,7 +51,7 @@ class AccountUnicodeWriter(object):
         #we ensure that we do not try to encode none or bool
         row = (x or u'' for x in row)
 
-        encoded_row = (c.encode("utf-8") if isinstance(c, unicode) else c for c in row)
+        encoded_row = [c.encode("utf-8") if isinstance(c, unicode) else c for c in row]
 
         self.writer.writerow(encoded_row)
         # Fetch UTF-8 output from the queue ...
