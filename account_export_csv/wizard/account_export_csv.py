@@ -131,7 +131,6 @@ class AccountCSVExport(orm.TransientModel):
             fiscalyear_id,
             period_range_ids,
             journal_ids,
-            company_id,
             context=None):
         """
         Return list to generate rows of the CSV file
@@ -145,7 +144,7 @@ class AccountCSVExport(orm.TransientModel):
                         group by ac.id,ac.code,ac.name
                         order by ac.code
                    """,
-                    {'fiscalyear_id': fiscalyear_id,'company_id':company_id,'period_ids':tuple(period_range_ids)}
+                    {'fiscalyear_id': fiscalyear_id, 'period_ids':tuple(period_range_ids)}
                 )
         res = cr.fetchall()
 
@@ -191,7 +190,6 @@ class AccountCSVExport(orm.TransientModel):
             fiscalyear_id,
             period_range_ids,
             journal_ids,
-            company_id,
             context=None):
         """
         Return list to generate rows of the CSV file
@@ -207,7 +205,7 @@ class AccountCSVExport(orm.TransientModel):
                         group by aac.id,aac.code,aac.name,ac.id,ac.code,ac.name
                         order by aac.code
                    """,
-                    {'fiscalyear_id': fiscalyear_id,'company_id':company_id,'period_ids':tuple(period_range_ids)}
+                    {'fiscalyear_id': fiscalyear_id, 'period_ids':tuple(period_range_ids)}
                 )
         res = cr.fetchall()
 
@@ -292,7 +290,6 @@ class AccountCSVExport(orm.TransientModel):
             fiscalyear_id,
             period_range_ids,
             journal_ids,
-            company_id,
             context=None):
         """
         Create a generator of rows of the CSV file
@@ -358,13 +355,12 @@ class AccountCSVExport(orm.TransientModel):
         form = self.browse(cr, uid, ids[0], context=context)
         fiscalyear_id = form.fiscalyear_id.id
         user_obj = self.pool.get('res.users')
-        company_id = user_obj.browse(cr, uid, uid).company_id.id
         if form.periods:
             period_range_ids = [x.id for x in form.periods]
         else:
             # If not period selected , we take all periods
             p_obj = self.pool.get("account.period")
-            period_range_ids = p_obj.search(cr,uid,[('fiscalyear_id','=',fiscalyear_id)],context=context)
+            period_range_ids = p_obj.search(cr, uid, [('fiscalyear_id','=',fiscalyear_id)], context=context)
         journal_ids = None
         if form.journal_ids:
             journal_ids = [x.id for x in form.journal_ids]
@@ -376,7 +372,6 @@ class AccountCSVExport(orm.TransientModel):
                                              fiscalyear_id,
                                              period_range_ids,
                                              journal_ids,
-                                             company_id,
                                              context=context)
                                )
         return rows
