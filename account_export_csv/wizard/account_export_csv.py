@@ -19,6 +19,7 @@
 #
 ##############################################################################
 
+import itertools
 import time
 import tempfile
 import StringIO
@@ -46,16 +47,14 @@ class AccountUnicodeWriter(object):
         self.stream = f
         self.encoder = codecs.getincrementalencoder(encoding)()
 
-    def writerow(self, row, base64_compress=False):
+    def writerow(self, row):
         #we ensure that we do not try to encode none or bool
-        row = [x or u'' for x in row]
+        row = (x or u'' for x in row)
 
         encoded_row = []
         for c in row:
-            if type(c) == unicode:
+            if isinstance(c, unicode):
                 val = c.encode("utf-8")
-                if base64_compress:
-                    val = base64.encodestring(val)
             else:
                 val = c
 
@@ -72,9 +71,9 @@ class AccountUnicodeWriter(object):
         # empty queue
         self.queue.truncate(0)
 
-    def writerows(self, rows, base64_compress=False):
+    def writerows(self, rows):
         for row in rows:
-            self.writerow(row, base64_compress=base64_compress)
+            self.writerow(row)
 
 class AccountCSVExport(orm.TransientModel):
     _name = 'account.csv.export'
@@ -106,7 +105,7 @@ class AccountCSVExport(orm.TransientModel):
 
     def action_manual_export_account(self, cr, uid, ids, context=None):
         this = self.browse(cr, uid, ids)[0]
-        rows = self.get_data(cr, uid, ids,"account", context)
+        rows = self.get_data(cr, uid, ids, "account", context)
         file_data = StringIO.StringIO()
         try:
             writer = AccountUnicodeWriter(file_data)
@@ -230,12 +229,19 @@ class AccountCSVExport(orm.TransientModel):
         """
         Here we use TemporaryFile to avoid full filling the OpenERP worker Memory
         We also write the data to the wizard with SQL query as write seams to use
-        too much memory as well
+        too much memory as well.
 
-        Thos improvment permitted to improve the export from a 100k line to 200k lines
-        with default `limit_memory_hard = 805306368` (768MB)
+        Those improvements permitted to improve the export from a 100k line to 200k lines
+        with default `limit_memory_hard = 805306368` (768MB) with more lines,
+        you might encounter a MemoryError when trying to download the file even
+        if it has been generated.
+
+        To be able to export bigger volume of data, it is advised to set
+        limit_memory_hard to  (2 GB) to generate the file and let
+        OpenERP load it in the wizard when trying to download it.
+
+        Tested with up to a generation of 700k entry lines
         """
-        #XXX check why it still fail with more than 200k line and when
         this = self.browse(cr, uid, ids)[0]
         rows = self.get_data(cr, uid, ids, "journal_entries", context)
         with tempfile.TemporaryFile() as file_data:
@@ -297,7 +303,7 @@ class AccountCSVExport(orm.TransientModel):
             company_id,
             context=None):
         """
-        Return list to generate rows of the CSV file
+        Create a generator of rows of the CSV file
         """
         cr.execute("""
         SELECT
@@ -344,12 +350,15 @@ class AccountCSVExport(orm.TransientModel):
         """,
         {'period_ids': tuple(period_range_ids), 'journal_ids': tuple(journal_ids)}
         )
-        res = cr.fetchall()
-        rows = []
-        for line in res:
-            rows.append(list(line))
-        return rows
-
+        while 1:
+            # http://initd.org/psycopg/docs/cursor.html#cursor.fetchmany
+            # Set cursor.arraysize to minimize network round trips
+            cr.arraysize=100
+            rows = cr.fetchmany()
+            if not rows:
+                break
+            for row in rows:
+                yield row
 
     def get_data(self, cr, uid, ids,result_type,context=None):
         get_header_func = getattr(self,("_get_header_%s"%(result_type)), None)
@@ -370,13 +379,12 @@ class AccountCSVExport(orm.TransientModel):
         else:
             j_obj = self.pool.get("account.journal")
             journal_ids = j_obj.search(cr, uid, [], context=context)
-        rows = []
-        rows.append(get_header_func(cr, uid, ids, context=context))
-        rows.extend(get_rows_func(
-            cr, uid, ids,
-            fiscalyear_id,
-            period_range_ids,
-            journal_ids,
-            company_id,
-            context=context))
+        rows = itertools.chain((get_header_func(cr, uid, ids, context=context),),
+                               get_rows_func(cr, uid, ids,
+                                             fiscalyear_id,
+                                             period_range_ids,
+                                             journal_ids,
+                                             company_id,
+                                             context=context)
+                               )
         return rows
