@@ -17,7 +17,7 @@
                         <field name="journal_ids"/>
                     </group>
                    <separator string ="Report" colspan="4"/>
-                    <group colspan="4" style="bo">
+                    <group colspan="4">
                         <field name="data" filename="export_filename"/>
                      </group>
                     <footer>
