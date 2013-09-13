@@ -30,6 +30,7 @@ from datetime import datetime
 from common_reports import CommonReportHeaderWebkit
 from webkit_parser_header_fix import HeaderFooterTextWebKitParser
 
+
 class PrintJournalWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
 
     def __init__(self, cursor, uid, name, context):
@@ -37,7 +38,10 @@ class PrintJournalWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
         self.pool = pooler.get_pool(self.cr.dbname)
         self.cursor = self.cr
 
-        company = self.pool.get('res.users').browse(self.cr, uid, uid, context=context).company_id
+        company_obj = self.pool.get('res.company')
+
+        company_id = company_obj._company_default_get(self.cr, uid, 'res.users', context=context)
+        company = company_obj.browse(self.cr, uid, company_id, context=context)
         header_report_name = ' - '.join((_('JOURNALS'), company.name, company.currency_id.name))
 
         footer_date_time = self.formatLang(str(datetime.today()), date_time=True)
@@ -45,7 +49,7 @@ class PrintJournalWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
         self.localcontext.update({
             'cr': cursor,
             'uid': uid,
-            'report_name':_('Journals'),
+            'report_name': _('Journals'),
             'display_account_raw': self._get_display_account_raw,
             'filter_form': self._get_filter,
             'target_move': self._get_target_move,
@@ -83,7 +87,7 @@ class PrintJournalWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
         chart_account = self._get_chart_account_id_br(data)
         account_period_obj = self.pool.get('account.period')
 
-        domain= [('journal_id', 'in', journal_ids)]
+        domain = [('journal_id', 'in', journal_ids)]
         if main_filter == 'filter_no':
             domain += [
                 ('date', '>=', self.get_first_fiscalyear_period(fiscalyear).date_start),
@@ -134,8 +138,6 @@ class PrintJournalWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
         })
 
         return super(PrintJournalWebkit, self).set_context(objects, data, new_ids, report_type=report_type)
-
-
 
 HeaderFooterTextWebKitParser('report.account.account_report_print_journal_webkit',
                              'account.journal.period',
