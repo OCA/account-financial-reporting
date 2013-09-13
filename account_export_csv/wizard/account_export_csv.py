@@ -237,7 +237,6 @@ class AccountCSVExport(orm.TransientModel):
         with tempfile.TemporaryFile() as file_data:
             writer = AccountUnicodeWriter(file_data)
             writer.writerows(rows)
-            del rows
             with tempfile.TemporaryFile() as base64_data:
                 file_data.seek(0)
                 base64.encode(file_data, base64_data)
