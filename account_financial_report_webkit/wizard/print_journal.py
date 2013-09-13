@@ -31,7 +31,6 @@ from lxml import etree
 class AccountReportPrintJournalWizard(osv.osv_memory):
     """Will launch print journal report and pass requiered args"""
 
-
     _inherit = "account.common.account.report"
     _name = "print.journal.webkit"
     _description = "Journals Report"
@@ -71,7 +70,7 @@ class AccountReportPrintJournalWizard(osv.osv_memory):
     def onchange_filter(self, cr, uid, ids, filter='filter_no', fiscalyear_id=False, context=None):
         res = {}
         if filter == 'filter_no':
-            res['value'] = {'period_from': False, 'period_to': False, 'date_from': False ,'date_to': False}
+            res['value'] = {'period_from': False, 'period_to': False, 'date_from': False, 'date_to': False}
         if filter == 'filter_date':
             if fiscalyear_id:
                 fyear = self.pool.get('account.fiscalyear').browse(cr, uid, fiscalyear_id, context=context)
@@ -99,7 +98,7 @@ class AccountReportPrintJournalWizard(osv.osv_memory):
                                AND COALESCE(p.special, FALSE) = FALSE
                                ORDER BY p.date_stop DESC
                                LIMIT 1) AS period_stop''', (fiscalyear_id, fiscalyear_id))
-            periods =  [i[0] for i in cr.fetchall()]
+            periods = [i[0] for i in cr.fetchall()]
             if periods:
                 start_period = end_period = periods[0]
                 if len(periods) > 1:
@@ -118,9 +117,9 @@ class AccountReportPrintJournalWizard(osv.osv_memory):
         doc = etree.XML(res['arch'])
 
         if context.get('sale_purchase_only'):
-            domain ="[('type', 'in', ('sale','purchase','sale_refund','purchase_refund'))]"
+            domain = "[('type', 'in', ('sale','purchase','sale_refund','purchase_refund'))]"
         else:
-            domain ="[('type', 'not in', ('sale','purchase','sale_refund','purchase_refund'))]"
+            domain = "[('type', 'not in', ('sale','purchase','sale_refund','purchase_refund'))]"
         nodes = doc.xpath("//field[@name='journal_ids']")
         for node in nodes:
             node.set('domain', domain)
