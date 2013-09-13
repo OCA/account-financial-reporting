@@ -85,7 +85,6 @@ class AccountCSVExport(orm.TransientModel):
         'fiscalyear_id': fields.many2one('account.fiscalyear', 'Fiscalyear', required=True),
         'periods': fields.many2many('account.period','rel_wizard_period','wizard_id','period_id','Periods',help='All periods in the fiscal year if empty'),
         'journal_ids': fields.many2many('account.journal','rel_wizard_journal','wizard_id','journal_id','Journals', help='If empty, use all journals, only used for journal entries'),
-        'company_id': fields.many2one('res.company', 'Company', invisible=True),
         'fiscalyear_id': fields.many2one('account.fiscalyear', 'Fiscalyear', required=True),
         'export_filename': fields.char('Export CSV Filename', size=128),
     }
