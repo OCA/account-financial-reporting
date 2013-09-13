@@ -237,7 +237,7 @@ class AccountCSVExport(orm.TransientModel):
         if it has been generated.
 
         To be able to export bigger volume of data, it is advised to set
-        limit_memory_hard to  (2 GB) to generate the file and let
+        limit_memory_hard to 2097152000 (2 GB) to generate the file and let
         OpenERP load it in the wizard when trying to download it.
 
         Tested with up to a generation of 700k entry lines
