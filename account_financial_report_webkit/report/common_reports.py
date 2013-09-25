@@ -56,6 +56,9 @@ class CommonReportHeaderWebkit(common_report_header):
             return self.pool.get(model).browse(self.cursor, self.uid, info)
         return False
 
+    def _get_journals_br(self, data):
+        return self._get_info(data, 'journal_ids', 'account.journal')
+
     def _get_display_account(self, data):
         val = self._get_form_param('display_account', data)
         if val == 'bal_all':
