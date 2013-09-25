@@ -22,5 +22,14 @@
             parent="account.next_id_22" action="action_account_open_invoices_menu_webkit"
             groups="account.group_account_manager,account.group_account_user" id="menu_account_open_invoices"/>
 
+        <menuitem icon="STOCK_PRINT" name="Journals"
+            parent="account.menu_journals_report" action="action_account_print_journal_menu_webkit"
+            groups="account.group_account_manager,account.group_account_user" id="account.menu_account_print_journal"/>
+
+        <menuitem icon="STOCK_PRINT" name="Sale/Purchase Journals"
+            parent="account.menu_journals_report" action="action_account_print_journal_sale_purchase_menu_webkit"
+            groups="account.group_account_manager,account.group_account_user" id="account.menu_account_print_sale_purchase_journal"
+            sequence="1"/>
+
     </data>
 </openerp>

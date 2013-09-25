@@ -115,7 +115,7 @@ date can be outside its logical period and the initial balance could
 be different when computed by data or by initial balance for the
 period). The opening period is assumed to be the Jan. 1st of the year
 with an opening flag and the first period of the year must start also
-on Jan 1st. 
+on Jan 1st.
 
 Totals for amounts in currencies are effective if the partner belongs to
 an account with a secondary currency.
@@ -147,6 +147,7 @@ wkhtmltopdf. The texts are defined inside the report classes.
                    'wizard/trial_balance_wizard_view.xml',
                    'wizard/partner_balance_wizard_view.xml',
                    'wizard/open_invoices_wizard_view.xml',
+                   'wizard/print_journal_view.xml',
                    'report_menus.xml',
                    ],
     # tests order matter
