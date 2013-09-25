@@ -20,21 +20,22 @@
 
 {
     'name' : 'Account Export CSV',
-    'version' : '1',
+    'version' : '1.1',
     'depends' : [
-                 'account', 
+                 'account',
                  ],
     'author' : 'Camptocamp',
     'description': """
-    
+
     Add a wizard that allow you to export a csv file based on accounting journal entries 
-    
+
     - Trial Balance
     - Analytic Balance (with accounts)
-    
-    You can filter by period 
-    
-     
+    - Journal Entries
+
+    You can filter by period
+
+    TODO: rearange wizard view with only one button to generate file plus define a selection list to select report type
     """,
     'website': 'http://www.camptocamp.com',
     'data': [
