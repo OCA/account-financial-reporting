@@ -134,6 +134,7 @@ class report_balancesheet_horizontal(report_sxw.rml_parse, common_report_header)
             'name': self.res_bl['type'],
             'level': False,
             'balance':self.res_bl['balance'],
+            'type':self.res_bl['type'],
         }
         for typ in types:
             accounts_temp = []
@@ -197,6 +198,7 @@ class report_balancesheet_horizontal(report_sxw.rml_parse, common_report_header)
                               'code1': cal_list['asset'][i]['code'],
                               'name1': cal_list['asset'][i]['name'],
                               'level1': cal_list['asset'][i]['level'],
+                              'balance1':cal_list['asset'][i]['balance'],
                               'type1':cal_list['asset'][i]['type'],
                           }
                         self.result_temp.append(temp)
