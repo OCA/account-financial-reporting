@@ -93,6 +93,7 @@ class report_pl_account_horizontal(report_sxw.rml_parse, common_report_header):
                 'name': account.name,
                 'level': account.level,
                 'balance': account.balance and (account_type == 'income' and -1 or 1) * account.balance,
+                'type': account.type,
                 }
 
         cr, uid = self.cr, self.uid
@@ -158,10 +159,12 @@ class report_pl_account_horizontal(report_sxw.rml_parse, common_report_header):
                           'name': cal_list['expense'][i]['name'],
                           'level': cal_list['expense'][i]['level'],
                           'balance':cal_list['expense'][i]['balance'],
+                          'type':cal_list['expense'][i]['type'],
                           'code1': cal_list['income'][i]['code'],
                           'name1': cal_list['income'][i]['name'],
                           'level1': cal_list['income'][i]['level'],
                           'balance1': cal_list['income'][i]['balance'],
+                          'type1':cal_list['income'][i]['type'],
                           }
                     self.result_temp.append(temp)
                 else:
@@ -171,10 +174,12 @@ class report_pl_account_horizontal(report_sxw.rml_parse, common_report_header):
                               'name': '',
                               'level': False,
                               'balance':False,
+                              'type':False,
                               'code1': cal_list['income'][i]['code'],
                               'name1': cal_list['income'][i]['name'],
                               'level1': cal_list['income'][i]['level'],
                               'balance1': cal_list['income'][i]['balance'],
+                              'type1':cal_list['income'][i]['type'],
                               }
                         self.result_temp.append(temp)
                     if  i < len(cal_list['expense']):
@@ -183,10 +188,12 @@ class report_pl_account_horizontal(report_sxw.rml_parse, common_report_header):
                               'name': cal_list['expense'][i]['name'],
                               'level': cal_list['expense'][i]['level'],
                               'balance': cal_list['expense'][i]['balance'],
+                              'type': cal_list['expense'][i]['type'],
                               'code1': '',
                               'name1': '',
                               'level1': False,
                               'balance1':False,
+                              'type1':False,
                               }
                         self.result_temp.append(temp)
         return None
