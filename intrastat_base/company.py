@@ -20,10 +20,11 @@
 #
 ##############################################################################
 
-from openerp.osv import osv, orm, fields
+from openerp.osv import orm, fields
 from openerp.tools.translate import _
 
-class res_company(osv.Model):
+
+class res_company(orm.Model):
     _inherit = "res.company"
 
     def _compute_intrastat_email_list(self, cr, uid, ids, name, arg, context=None):
@@ -48,14 +49,14 @@ class res_company(osv.Model):
             help='Comma-separated list of email addresses of Users Receiving the Intrastat Reminder. For use in the email template.'),
     }
 
-
     def _check_intrastat_remind_users(self, cr, uid, ids):
         for company in self.browse(cr, uid, ids):
             for user in company.intrastat_remind_user_ids:
                 if not user.email:
-                    raise orm.except_orm(_('Error :'), _("Missing e-mail address on user '%s'.") %(user.name))
+                    raise orm.except_orm(_('Error :'), _("Missing e-mail address on user '%s'.") % (user.name))
         return True
 
     _constraints = [
-        (_check_intrastat_remind_users, "error msg in raise", ['intrastat_remind_user_ids']),
+        (_check_intrastat_remind_users, "error msg in raise",
+            ['intrastat_remind_user_ids']),
     ]

@@ -20,7 +20,7 @@
 #
 ##############################################################################
 
-from openerp.osv import osv
+from openerp.osv import orm
 from openerp.tools.translate import _
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -29,7 +29,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class report_intrastat_common(osv.TransientModel):
+class report_intrastat_common(orm.TransientModel):
     _name = "report.intrastat.common"
     _description = "Common functions for intrastat reports for products and services"
 
@@ -44,7 +44,6 @@ class report_intrastat_common(osv.TransientModel):
             result[intrastat.id] = {'num_lines': num_lines, 'total_amount': total_amount}
         return result
 
-
     def _compute_dates(self, cr, uid, ids, object, context=None):
         result = {}
         for intrastat in object.browse(cr, uid, ids, context=context):
@@ -56,7 +55,6 @@ class report_intrastat_common(osv.TransientModel):
                 }
         return result
 
-
     def _check_start_date(self, cr, uid, ids, object, context=None):
         '''Check that the start date is the first day of the month'''
         for date_to_check in object.read(cr, uid, ids, ['start_date'], context=context):
@@ -65,54 +63,48 @@ class report_intrastat_common(osv.TransientModel):
                 return False
         return True
 
-
     def _check_generate_lines(self, cr, uid, intrastat, context=None):
         if not intrastat.company_id.country_id:
-            raise osv.except_osv(_('Error :'), _("The country is not set on the company '%s'.") %intrastat.company_id.name)
+            raise orm.except_orm(_('Error :'), _("The country is not set on the company '%s'.") % intrastat.company_id.name)
         if not intrastat.currency_id.name == 'EUR':
-            raise osv.except_osv(_('Error :'), _("The company currency must be 'EUR', but is currently '%s'.") %intrastat.currency_id.name)
+            raise orm.except_orm(_('Error :'), _("The company currency must be 'EUR', but is currently '%s'.") % intrastat.currency_id.name)
         return True
-
 
     def _check_generate_xml(self, cr, uid, intrastat, context=None):
         if not intrastat.company_id.partner_id.vat:
-            raise osv.except_osv(_('Error :'), _("The VAT number is not set for the partner '%s'.") %intrastat.company_id.partner_id.name)
+            raise orm.except_orm(_('Error :'), _("The VAT number is not set for the partner '%s'.") % intrastat.company_id.partner_id.name)
         return True
-
 
     def _check_xml_schema(self, cr, uid, xml_root, xml_string, xsd, context=None):
         '''Validate the XML file against the XSD'''
         from lxml import etree
         official_des_xml_schema = etree.XMLSchema(etree.fromstring(xsd))
-        try: official_des_xml_schema.assertValid(xml_root)
+        try:
+            official_des_xml_schema.assertValid(xml_root)
         except Exception, e:   # if the validation of the XSD fails, we arrive here
             import logging
             _logger = logging.getLogger(__name__)
             _logger.warning("The XML file is invalid against the XML Schema Definition")
             _logger.warning(xml_string)
             _logger.warning(e)
-            raise osv.except_osv(_('Error :'), _('The generated XML file is not valid against the official XML Schema Definition. The generated XML file and the full error have been written in the server logs. Here is the error, which may give you an idea on the cause of the problem : %s.') % str(e))
+            raise orm.except_orm(_('Error :'), _('The generated XML file is not valid against the official XML Schema Definition. The generated XML file and the full error have been written in the server logs. Here is the error, which may give you an idea on the cause of the problem : %s.') % str(e))
         return True
-
 
     def _attach_xml_file(self, cr, uid, ids, object, xml_string, start_date_datetime, declaration_name, context=None):
         '''Attach the XML file to the report_intrastat_product/service object'''
         import base64
-        if len(ids) != 1:
-            raise osv.except_osv(_('Error :'), 'Hara kiri in attach_xml_file')
+        assert len(ids) == 1, "Only one ID accepted"
         filename = datetime.strftime(start_date_datetime, '%Y-%m') + '_' + declaration_name + '.xml'
         attach_name = declaration_name.upper() + ' ' + datetime.strftime(start_date_datetime, '%Y-%m')
         attach_obj = self.pool.get('ir.attachment')
         if not context:
             context = {}
-        context.update({'default_res_id' : ids[0], 'default_res_model': object._name})
+        context.update({'default_res_id': ids[0], 'default_res_model': object._name})
         attach_id = attach_obj.create(cr, uid, {'name': attach_name, 'datas': base64.encodestring(xml_string), 'datas_fname': filename}, context=context)
         return attach_id
 
-
     def _open_attach_view(self, cr, uid, attach_id, title='XML file', context=None):
         '''Returns an action which opens the form view of the corresponding attachement'''
-        # Only works in v6 -> not used in v5
         action = {
             'name': title,
             'view_type': 'form',
@@ -126,7 +118,6 @@ class report_intrastat_common(osv.TransientModel):
             }
         return action
 
-
     def partner_on_change(self, cr, uid, ids, partner_id=False):
         result = {}
         result['value'] = {}
@@ -135,13 +126,12 @@ class report_intrastat_common(osv.TransientModel):
             result['value'].update({'partner_vat': company['vat']})
         return result
 
-
     def send_reminder_email(self, cr, uid, company, module_name, template_xmlid, intrastat_id, context=None):
         template_data = self.pool['ir.model.data'].get_object_reference(cr, uid, module_name, template_xmlid)
         if template_data and template_data[0] == 'email.template':
             template_id = template_data[1]
         else:
-            raise osv.except_osv(_('Error :'), _("Wrong model for XMLID '%s.%s': model is '%s' and it should be 'email.template'.") %(module_name, template_xmlid, template_data[0]))
+            raise orm.except_orm(_('Error :'), _("Wrong model for XMLID '%s.%s': model is '%s' and it should be 'email.template'.") % (module_name, template_xmlid, template_data[0]))
         if company.intrastat_remind_user_ids:
             self.pool['email.template'].send_mail(cr, uid, template_id, intrastat_id, context=context)
             logger.info('Intrastat Reminder email has been sent (XMLID: %s).' % template_xmlid)

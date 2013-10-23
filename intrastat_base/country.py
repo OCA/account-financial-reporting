@@ -20,9 +20,10 @@
 #
 ##############################################################################
 
-from openerp.osv import osv, fields
+from openerp.osv import orm, fields
 
-class res_country(osv.Model):
+
+class res_country(orm.Model):
     _inherit = 'res.country'
     _columns = {
         'intrastat': fields.boolean('EU country', help="Set to True for all European Union countries."),
@@ -31,4 +32,3 @@ class res_country(osv.Model):
     _defaults = {
         'intrastat': False,
     }
-

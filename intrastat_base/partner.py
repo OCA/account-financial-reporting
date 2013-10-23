@@ -20,15 +20,14 @@
 #
 ##############################################################################
 
-from openerp.osv import osv, fields
+from openerp.osv import orm, fields
+
 
 # We want to have the country field on res_partner always set
 # because the selection of invoices for intrastat reports is based
 # on the country of the invoice partner !
-class res_partner(osv.Model):
+class res_partner(orm.Model):
     _inherit = 'res.partner'
     _columns = {
        'country_id': fields.many2one('res.country', 'Country', required=True),
      }
-
-

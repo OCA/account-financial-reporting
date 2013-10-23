@@ -20,28 +20,28 @@
 #
 ##############################################################################
 
-from openerp.osv import osv, fields
+from openerp.osv import orm, fields
 from openerp.tools.translate import _
 
-class product_template(osv.Model):
+
+class product_template(orm.Model):
     _inherit = "product.template"
     _columns = {
         'exclude_from_intrastat': fields.boolean('Exclude from Intrastat reports', help="If set to True, the product or service will not be taken into account for Intrastat Product or Service reports. So you should leave this field to False unless you have a very good reason."),
-        'is_accessory_cost' : fields.boolean('Is accessory cost', help='Activate this option for shipping costs, packaging costs and all services related to the sale of products. This option is used for Intrastat reports.'),
+        'is_accessory_cost': fields.boolean('Is accessory cost', help='Activate this option for shipping costs, packaging costs and all services related to the sale of products. This option is used for Intrastat reports.'),
     }
 
     _defaults = {
         'exclude_from_intrastat': False,
     }
 
-
     def _check_accessory_cost(self, cr, uid, ids):
         for product in self.browse(cr, uid, ids):
             if product.is_accessory_cost and product.type != 'service':
-                raise osv.except_osv(_('Error :'), _("The option 'Is accessory cost?' should only be activated on 'Service' products. You have activated this option for the product '%s' which is of type '%s'" % (product.name, product.type)))
+                raise orm.except_orm(_('Error :'), _("The option 'Is accessory cost?' should only be activated on 'Service' products. You have activated this option for the product '%s' which is of type '%s'" % (product.name, product.type)))
         return True
 
     _constraints = [
-        (_check_accessory_cost, "Error msg is in raise", ['is_accessory_cost', 'type'])
+        (_check_accessory_cost, "Error msg is in raise",
+            ['is_accessory_cost', 'type'])
         ]
-
