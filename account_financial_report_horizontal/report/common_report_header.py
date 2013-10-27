@@ -72,11 +72,6 @@ class common_report_header(object):
             return pooler.get_pool(self.cr.dbname).get('account.fiscalyear').browse(self.cr, self.uid, data['form']['fiscalyear_id'][0]).name
         return ''
 
-    def _get_company(self, data):
-        if data.get('form', False) and data['form'].get('chart_account_id', False):
-            return pooler.get_pool(self.cr.dbname).get('account.account').browse(self.cr, self.uid, data['form']['chart_account_id'][0]).company_id.name
-        return ''
-
     def _get_journal(self, data):
         codes = []
         if data.get('form', False) and data['form'].get('journal_ids', False):
