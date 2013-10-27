@@ -71,10 +71,3 @@ class common_report_header(object):
         if data.get('form', False) and data['form'].get('fiscalyear_id', False):
             return pooler.get_pool(self.cr.dbname).get('account.fiscalyear').browse(self.cr, self.uid, data['form']['fiscalyear_id'][0]).name
         return ''
-
-    def _get_currency(self, data):
-        if data.get('form', False) and data['form'].get('chart_account_id', False):
-            return pooler.get_pool(self.cr.dbname).get('account.account').browse(self.cr, self.uid, data['form']['chart_account_id']).company_id.currency_id.symbol
-        return ''
-
-#vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

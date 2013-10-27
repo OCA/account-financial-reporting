@@ -40,7 +40,6 @@ class report_pl_account_horizontal(report_sxw.rml_parse, common_report_header):
             'time': time,
             'get_lines': self.get_lines,
             'get_lines_another': self.get_lines_another,
-            'get_currency': self._get_currency,
             'get_data': self.get_data,
             'sum_dr': self.sum_dr,
             'sum_cr': self.sum_cr,
