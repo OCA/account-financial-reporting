@@ -37,7 +37,6 @@ class account_common_report(orm.TransientModel):
         'filter': fields.selection([('filter_no', 'No Filters'), ('filter_date', 'Date'), ('filter_period', 'Periods')], "Filter by", required=True),
         'period_from': fields.many2one('account.period', 'Start period'),
         'period_to': fields.many2one('account.period', 'End period'),
-        'journal_ids': fields.many2many('account.journal', 'account_common_journal_rel', 'account_id', 'journal_id', 'Journals', required=True),
         'date_from': fields.date("Start Date"),
         'date_to': fields.date("End Date"),
         'target_move': fields.selection([('posted', 'All Posted Entries'),
@@ -98,12 +97,8 @@ class account_common_report(orm.TransientModel):
         fiscalyears = self.pool.get('account.fiscalyear').search(cr, uid, [('date_start', '<', now), ('date_stop', '>', now)], limit=1 )
         return fiscalyears and fiscalyears[0] or False
 
-    def _get_all_journal(self, cr, uid, context=None):
-        return self.pool.get('account.journal').search(cr, uid ,[])
-
     _defaults = {
             'fiscalyear_id': _get_fiscalyear,
-            'journal_ids': _get_all_journal,
             'filter': 'filter_no',
             'chart_account_id': _get_account,
             'target_move': 'posted',
@@ -114,7 +109,6 @@ class account_common_report(orm.TransientModel):
             context = {}
         result = {}
         result['fiscalyear'] = 'fiscalyear_id' in data['form'] and data['form']['fiscalyear_id'] or False
-        result['journal_ids'] = 'journal_ids' in data['form'] and data['form']['journal_ids'] or False
         result['chart_account_id'] = 'chart_account_id' in data['form'] and data['form']['chart_account_id'] or False
         if data['form']['filter'] == 'filter_date':
             result['date_from'] = data['form']['date_from']
@@ -141,7 +135,7 @@ class account_common_report(orm.TransientModel):
         data = {}
         data['ids'] = context.get('active_ids', [])
         data['model'] = context.get('active_model', 'ir.ui.menu')
-        data['form'] = self.read(cr, uid, ids, ['date_from',  'date_to',  'fiscalyear_id', 'journal_ids', 'period_from', 'period_to',  'filter',  'chart_account_id', 'target_move'])[0]
+        data['form'] = self.read(cr, uid, ids, ['date_from',  'date_to',  'fiscalyear_id', 'period_from', 'period_to',  'filter',  'chart_account_id', 'target_move'])[0]
         used_context = self._build_contexts(cr, uid, ids, data, context=context)
         data['form']['periods'] = used_context.get('periods', False) and used_context['periods'] or []
         data['form']['used_context'] = used_context
