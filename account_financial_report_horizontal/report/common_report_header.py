@@ -72,13 +72,6 @@ class common_report_header(object):
             return pooler.get_pool(self.cr.dbname).get('account.fiscalyear').browse(self.cr, self.uid, data['form']['fiscalyear_id'][0]).name
         return ''
 
-    def _get_journal(self, data):
-        codes = []
-        if data.get('form', False) and data['form'].get('journal_ids', False):
-            self.cr.execute('select code from account_journal where id IN %s',(tuple(data['form']['journal_ids']),))
-            codes = [x for x, in self.cr.fetchall()]
-        return codes
-
     def _get_currency(self, data):
         if data.get('form', False) and data['form'].get('chart_account_id', False):
             return pooler.get_pool(self.cr.dbname).get('account.account').browse(self.cr, self.uid, data['form']['chart_account_id']).company_id.currency_id.symbol
