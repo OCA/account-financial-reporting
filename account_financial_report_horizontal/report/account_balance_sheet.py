@@ -43,7 +43,6 @@ class report_balancesheet_horizontal(report_sxw.rml_parse, common_report_header)
             'time': time,
             'get_lines': self.get_lines,
             'get_lines_another': self.get_lines_another,
-            'get_company': self._get_company,
             'get_currency': self._get_currency,
             'sum_dr': self.sum_dr,
             'sum_cr': self.sum_cr,
@@ -58,7 +57,6 @@ class report_balancesheet_horizontal(report_sxw.rml_parse, common_report_header)
             'get_journal': self._get_journal,
             'get_start_date':self._get_start_date,
             'get_end_date':self._get_end_date,
-            'get_company':self._get_company,
             'get_target_move': self._get_target_move,
         })
         self.context = context
