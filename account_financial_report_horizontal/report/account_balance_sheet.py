@@ -54,7 +54,6 @@ class report_balancesheet_horizontal(report_sxw.rml_parse, common_report_header)
             'get_end_period': self.get_end_period,
             'get_sortby': self._get_sortby,
             'get_filter': self._get_filter,
-            'get_journal': self._get_journal,
             'get_start_date':self._get_start_date,
             'get_end_date':self._get_end_date,
             'get_target_move': self._get_target_move,
