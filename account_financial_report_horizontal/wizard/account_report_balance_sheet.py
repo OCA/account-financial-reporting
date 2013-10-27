@@ -38,7 +38,6 @@ class account_bs_report(orm.TransientModel):
 
     _defaults={
         'display_type': True,
-        'journal_ids': [],
     }
 
     def _print_report(self, cr, uid, ids, data, context=None):
