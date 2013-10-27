@@ -36,7 +36,6 @@ class account_pl_report(orm.TransientModel):
 
     _defaults = {
         'display_type': True,
-        'journal_ids': [],
         'target_move': 'all',
     }
 

@@ -23,9 +23,6 @@
                                     <field name="period_from"  domain="[('fiscalyear_id', '=', fiscalyear_id)]" attrs="{'readonly':[('filter','!=','filter_period')], 'required':[('filter', '=', 'filter_period')]}" colspan="4"/>
                                     <field name="period_to" domain="[('fiscalyear_id', '=', fiscalyear_id)]" attrs="{'readonly':[('filter','!=','filter_period')], 'required':[('filter', '=', 'filter_period')]}" colspan="4"/>
                             </page>
-                            <page string="Journals" name="journal_ids">
-                                <field name="journal_ids" colspan="4" nolabel="1"/>
-                            </page>
                         </notebook>
                     <separator colspan="4"/>
                     <group col="4" colspan="4">
