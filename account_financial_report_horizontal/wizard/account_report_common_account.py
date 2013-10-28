@@ -23,14 +23,16 @@
 
 from osv import orm, fields
 
+
 class account_common_account_report(orm.TransientModel):
     _name = 'account_financial_report_horizontal.common.account.report'
     _description = 'Account Common Account Report'
     _inherit = "account_financial_report_horizontal.common.report"
     _columns = {
-        'display_account': fields.selection([('bal_all','All'), ('bal_movement','With movements'),
-                                            ('bal_solde','With balance is not equal to 0'),
-                                            ],'Display accounts', required=True),
+        'display_account': fields.selection([
+            ('bal_all', 'All'), ('bal_movement', 'With movements'),
+            ('bal_solde', 'With balance is not equal to 0'),
+            ], 'Display accounts', required=True),
 
     }
     _defaults = {
@@ -40,7 +42,8 @@ class account_common_account_report(orm.TransientModel):
     def pre_print_report(self, cr, uid, ids, data, context=None):
         if context is None:
             context = {}
-        data['form'].update(self.read(cr, uid, ids, ['display_account'], context=context)[0])
-        data['form']['lang'] = self.pool.get('res.users').browse(cr, uid, uid, context).lang
+        data['form'].update(self.read(
+            cr, uid, ids, ['display_account'], context=context)[0])
+        data['form']['lang'] = self.pool.get('res.users').browse(
+            cr, uid, uid, context).lang
         return data
-
