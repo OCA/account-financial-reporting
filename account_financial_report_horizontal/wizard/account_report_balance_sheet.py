@@ -22,11 +22,12 @@
 ##############################################################################
 
 from osv import orm, fields
-from tools.translate import _
+
 
 class account_bs_report(orm.TransientModel):
     """
-    This wizard will provide the account balance sheet report by periods, between any two dates.
+    This wizard will provide the account balance sheet report by periods,
+    between any two dates.
     """
     _name = 'account.bs.report'
     _inherit = "account_financial_report_horizontal.common.account.report"
@@ -36,7 +37,7 @@ class account_bs_report(orm.TransientModel):
         'display_type': fields.boolean("Landscape Mode"),
     }
 
-    _defaults={
+    _defaults = {
         'display_type': True,
     }
 

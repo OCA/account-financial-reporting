@@ -22,6 +22,7 @@
 import pooler
 from tools.translate import _
 
+
 class common_report_header(object):
 
     def _get_start_date(self, data):
@@ -43,17 +44,25 @@ class common_report_header(object):
 
     def get_start_period(self, data):
         if data.get('form', False) and data['form'].get('period_from', False):
-            return pooler.get_pool(self.cr.dbname).get('account.period').browse(self.cr,self.uid,data['form']['period_from'][0]).name
+            return pooler.get_pool(self.cr.dbname).get(
+                'account.period').browse(self.cr, self.uid, data[
+                'form']['period_from'][0]).name
         return ''
 
     def get_end_period(self, data):
         if data.get('form', False) and data['form'].get('period_to', False):
-            return pooler.get_pool(self.cr.dbname).get('account.period').browse(self.cr, self.uid, data['form']['period_to'][0]).name
+            return pooler.get_pool(self.cr.dbname).get(
+                'account.period').browse(self.cr, self.uid, data[
+                'form']['period_to'][0]).name
         return ''
 
     def _get_account(self, data):
-        if data.get('form', False) and data['form'].get('chart_account_id', False):
-            return pooler.get_pool(self.cr.dbname).get('account.account').browse(self.cr, self.uid, data['form']['chart_account_id'][0]).name
+        if data.get('form', False) and data['form'].get(
+            'chart_account_id', False
+        ):
+            return pooler.get_pool(self.cr.dbname).get(
+                'account.account').browse(self.cr, self.uid, data[
+                'form']['chart_account_id'][0]).name
         return ''
 
     def _get_sortby(self, data):
@@ -68,6 +77,10 @@ class common_report_header(object):
         return _('No Filter')
 
     def _get_fiscalyear(self, data):
-        if data.get('form', False) and data['form'].get('fiscalyear_id', False):
-            return pooler.get_pool(self.cr.dbname).get('account.fiscalyear').browse(self.cr, self.uid, data['form']['fiscalyear_id'][0]).name
+        if data.get('form', False) and data['form'].get(
+            'fiscalyear_id', False
+        ):
+            return pooler.get_pool(self.cr.dbname).get(
+                'account.fiscalyear').browse(self.cr, self.uid, data[
+                'form']['fiscalyear_id'][0]).name
         return ''
