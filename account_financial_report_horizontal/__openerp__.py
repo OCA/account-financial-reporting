@@ -21,9 +21,9 @@
 #
 ##############################################################################
 {
-    "name" : "Accounting Financial Reports Horizontal",
-    "version" : "0.2",
-    "author" : ["Therp BV", "Agile Business Group"],
+    "name": "Accounting Financial Reports Horizontal",
+    "version": "0.2",
+    "author": ["Therp BV", "Agile Business Group"],
     "category": 'Accounting & Finance',
     'complexity': "normal",
     "description": """
@@ -31,8 +31,8 @@ This is a port to OpenERP 7.0 of the horizontal financial reports
 'Balance sheet' and 'Profit and Loss' as found in OpenERP 6.0.
     """,
     'website': 'https://launchpad.net/account-financial-report',
-    'images' : [],
-    "depends" : ["account"],
+    'images': [],
+    "depends": ["account"],
     'data': [
         'menu.xml',
         'account_report.xml',
@@ -41,7 +41,7 @@ This is a port to OpenERP 7.0 of the horizontal financial reports
         'wizard/account_report_profit_loss_view.xml',
     ],
     'demo': [],
-    'test': [ ],
+    'test': [],
     'installable': True,
     'active': False,
 }
