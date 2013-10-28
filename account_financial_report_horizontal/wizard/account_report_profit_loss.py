@@ -23,9 +23,11 @@
 
 from osv import orm, fields
 
+
 class account_pl_report(orm.TransientModel):
     """
-    This wizard will provide the account profit and loss report by periods, between any two dates.
+    This wizard will provide the account profit and loss report by periods,
+    between any two dates.
     """
     _inherit = "account_financial_report_horizontal.common.account.report"
     _name = "account.pl.report"
@@ -56,4 +58,3 @@ class account_pl_report(orm.TransientModel):
                 'report_name': 'account.profit_loss',
                 'datas': data,
                 }
-
