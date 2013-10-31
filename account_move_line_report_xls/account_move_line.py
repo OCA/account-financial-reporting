@@ -20,9 +20,9 @@
 #
 ##############################################################################
 
-from osv import osv, fields
+from openerp.osv import fields, orm
 
-class account_move_line(osv.osv):
+class account_move_line(orm.Model):
     _inherit = 'account.move.line'
     
     # override list in custom module to add/drop columns or change order
@@ -31,6 +31,3 @@ class account_move_line(osv.osv):
             'move', 'name', 'date', 'period', 'partner', 'account',
             'date_maturity', 'debit', 'credit', 'balance', 'reconcile', 'reconcile_partial',
         ]
-        
-        
-account_move_line()

@@ -20,5 +20,5 @@
 #
 ##############################################################################
 
-import account_move_line
-import report
+from . import account_move_line
+from . import report
