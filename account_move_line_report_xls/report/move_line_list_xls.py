@@ -23,12 +23,11 @@
 import xlwt
 import time
 from datetime import datetime
-from report import report_sxw
-from report_xls.report_xls import report_xls
-from report_xls.utils import rowcol_to_cell, _render
-from account_move_line_report.report.move_line_list_print import move_line_list_print
-from tools.translate import _
-import pooler
+from openerp.report import report_sxw
+from openerp.addons.report_xls.report_xls import report_xls
+from openerp.addons.report_xls.utils import rowcol_to_cell, _render
+from openerp.tools.translate import _
+from openerp import pooler
 import logging
 _logger = logging.getLogger(__name__)
 
