@@ -22,13 +22,13 @@
 
 import xlwt
 import time
-from report import report_sxw
-from report_xls.report_xls import report_xls
-from report_xls.utils import rowcol_to_cell
-from account_financial_report_webkit.report.trial_balance import TrialBalanceWebkit
-from tools.translate import _
-import logging
-_logger = logging.getLogger(__name__)
+from openerp.report import report_sxw
+from openerp.addons.report_xls.report_xls import report_xls
+from openerp.addons.report_xls.utils import rowcol_to_cell
+from openerp.addons.account_financial_report_webkit.report.trial_balance import TrialBalanceWebkit
+from openerp.tools.translate import _
+#import logging
+#_logger = logging.getLogger(__name__)
 
 class trial_balance_xls(report_xls):
     column_sizes = [12,60,17,17,17,17,17,17]

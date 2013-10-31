@@ -20,11 +20,11 @@
 #
 ##############################################################################
 
-from osv import fields, osv
+from openerp.osv import orm
 #import logging
 #_logger = logging.getLogger(__name__)
 
-class partner_ledger_webkit_wizard(osv.osv_memory):
+class partner_ledger_webkit_wizard(orm.TransientModel):
     _inherit = 'partners.ledger.webkit'
        
     def xls_export(self, cr, uid, ids, context=None):
@@ -40,4 +40,3 @@ class partner_ledger_webkit_wizard(osv.osv_memory):
                     'datas': data}
         else:
             return super(partner_ledger_webkit_wizard, self)._print_report(cr, uid, ids, data, context=context)
-partner_ledger_webkit_wizard()    

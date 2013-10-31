@@ -20,8 +20,8 @@
 #
 ##############################################################################
 
-import general_ledger_wizard
-import trial_balance_wizard
-import partners_balance_wizard
-import partners_ledger_wizard
-import open_invoices_wizard
+from . import general_ledger_wizard
+from . import trial_balance_wizard
+from . import partners_balance_wizard
+from . import partners_ledger_wizard
+from . import open_invoices_wizard

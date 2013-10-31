@@ -23,13 +23,13 @@
 import xlwt
 import time
 from datetime import datetime
-from report import report_sxw
-from report_xls.report_xls import report_xls
-from report_xls.utils import rowcol_to_cell
-from account_financial_report_webkit.report.partners_ledger import PartnersLedgerWebkit
-from tools.translate import _
-import logging
-_logger = logging.getLogger(__name__)
+from openerp.report import report_sxw
+from openerp.addons.report_xls.report_xls import report_xls
+from openerp.addons.report_xls.utils import rowcol_to_cell
+from openerp.addons.account_financial_report_webkit.report.partners_ledger import PartnersLedgerWebkit
+from openerp.tools.translate import _
+#import logging
+#_logger = logging.getLogger(__name__)
 
 _column_sizes = [
     ('date', 12),
