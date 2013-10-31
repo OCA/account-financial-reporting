@@ -22,13 +22,13 @@
 
 import xlwt
 import time
-from report import report_sxw
-from report_xls.report_xls import report_xls
-from report_xls.utils import rowcol_to_cell
-from account_financial_report_webkit.report.partner_balance import PartnerBalanceWebkit
-from tools.translate import _
-import logging
-_logger = logging.getLogger(__name__)
+from openerp.report import report_sxw
+from openerp.addons.report_xls.report_xls import report_xls
+from openerp.addons.report_xls.utils import rowcol_to_cell
+from openerp.addons.account_financial_report_webkit.report.partner_balance import PartnerBalanceWebkit
+from openerp.tools.translate import _
+#import logging
+#_logger = logging.getLogger(__name__)
 
 def display_line(all_comparison_lines):
     return any([line.get('balance') for line in all_comparison_lines])
