@@ -19,10 +19,10 @@
 #
 ##############################################################################
 
-from osv import osv
+from openerp.osv import orm
 
 
-class AccountTrialBalanceWizard(osv.osv_memory):
+class AccountTrialBalanceWizard(orm.TransientModel):
     """Will launch trial balance report and pass required args"""
 
     _inherit = "account.common.balance.report"

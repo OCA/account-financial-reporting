@@ -31,8 +31,6 @@ import os
 import subprocess
 import tempfile
 import time
-import pooler
-import tools
 import logging
 
 
@@ -40,6 +38,8 @@ from mako import exceptions
 from openerp.osv.osv import except_osv
 from openerp.tools.translate import _
 from openerp import addons
+from openerp import pooler
+from openerp import tools
 from openerp.addons.report_webkit import webkit_report
 from openerp.addons.report_webkit.webkit_report import mako_template
 from openerp.addons.report_webkit.report_helper import WebKitHelper
