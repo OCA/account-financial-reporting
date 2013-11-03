@@ -22,13 +22,12 @@
 #
 ##############################################################################
 
-from osv import osv
-from osv import fields
+from openerp.osv import fields, orm
 import time
 from lxml import etree
 
 
-class AccountReportPrintJournalWizard(osv.osv_memory):
+class AccountReportPrintJournalWizard(orm.TransientModel):
     """Will launch print journal report and pass requiered args"""
 
     _inherit = "account.common.account.report"

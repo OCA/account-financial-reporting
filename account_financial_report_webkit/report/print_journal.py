@@ -22,9 +22,9 @@
 #
 ##############################################################################
 
-from report import report_sxw
-from tools.translate import _
-import pooler
+from openerp.report import report_sxw
+from openerp.tools.translate import _
+from openerp import pooler
 from datetime import datetime
 
 from common_reports import CommonReportHeaderWebkit
