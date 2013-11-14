@@ -21,7 +21,6 @@
     </head>
     <body>
  
-    <% import addons %>        
     <% template1 = helper.get_mako_template('account_financial_report_webkit','report', 'templates', 'open_invoices_inclusion.mako.html') %>
     <% context.lookup.put_template('open_invoices_inclusion.mako.html', template1) %>
     <% template2 = helper.get_mako_template('account_financial_report_webkit','report', 'templates', 'grouped_by_curr_open_invoices_inclusion.mako.html') %>
@@ -73,7 +72,7 @@
             </div>
         </div>
         %for acc in objects:
-            %if hasattr(acc, 'grouped_ledger_lines'):
+            %if 'grouped_ledger_lines' in acc:
                <% fl = formatLang %>
               <%include file="grouped_by_curr_open_invoices_inclusion.mako.html" args="account=acc,formatLang=fl"/>
             %else:

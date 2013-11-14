@@ -124,7 +124,7 @@
              <field name="report_rml">account_financial_report_webkit/report/templates/account_report_print_journal.mako</field>
              <field name="report_file">account_financial_report_webkit/report/templates/account_report_print_journal.mako</field>
          </record>
-        <record id="property_account_report_open_invoices_webkit" model="ir.property">
+        <record id="property_account_report_print_journal_webkit" model="ir.property">
             <field name="name">account_report_print_journal_webkit</field>
             <field name="fields_id" ref="report_webkit.field_ir_act_report_xml_webkit_header"/>
             <field eval="'ir.header_webkit,'+str(ref('account_financial_report_webkit.financial_landscape_header'))" model="ir.header_webkit" name="value"/>
