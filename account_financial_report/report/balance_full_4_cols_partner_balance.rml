@@ -146,29 +146,23 @@
             </tr>
         </blockTable>
 
-                <blockTable colWidths="2.25cm,2.0cm,7.75cm,2.5cm,4.0cm,2.5cm,2.5cm,2.5cm" style="BODY_LINE" repeatRows="1">
+                <blockTable colWidths="2.25cm,13.75cm,2.5cm,2.5cm,2.5cm,2.5cm" style="BODY_LINE" repeatRows="1">
 <!--
                 [[ (a['type'] &lt;&gt; 'view') or removeParentNode('blockTable') ]]
 -->
                     <tr noRowsplits="1">
                         <td>
                             <para style="TITLES_NEW">
-                                <font>DATE</font>
+                                <font></font>
                             </para>
                         </td>
                         <td>
                             <para style="TITLES_NEW">
-                                <font>PERIOD</font>
+                                <font>PARTNER</font>
                             </para>
                         </td>
                         <td>
-                            <para style="TITLES_NEW">REFERENCE</para>
-                        </td>
-                        <td>
-                            <para style="TITLES_NEW">JOURNAL ENTRY</para>
-                        </td>
-                        <td>
-                            <para style="TITLES_NEW">PARTNER</para>
+                            <para style="TITLES_NEW"></para>
                         </td>
                         <td>
                             <para style="TITLE_LEFT_ALIGN"></para>
