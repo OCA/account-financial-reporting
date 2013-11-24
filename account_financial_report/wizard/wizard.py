@@ -51,7 +51,9 @@ class wizard_report(osv.osv_memory):
 
         'analytic_ledger': fields.boolean('Analytic Ledger', help="Allows to Generate an Analytic Ledger for accounts with moves. Available when Balance Sheet and 'Initial | Debit | Credit | YTD' are selected"),
         'journal_ledger': fields.boolean('Journal Ledger', help="Allows to Generate an Journal Ledger for accounts with moves. Available when Balance Sheet and 'Initial | Debit | Credit | YTD' are selected"),
-
+        'partner_balance': fields.boolean('Partner Balance', help="""Allows to
+            Generate a Partner Balance for accounts with moves. Available when
+            Balance Sheet and 'Initial | Debit | Credit | YTD' are selected"""),
         'tot_check': fields.boolean('Summarize?', help='Checking will add a new line at the end of the Report which will Summarize Columns in Report'),
         'lab_str': fields.char('Description', help='Description for the Summary', size=128),
 
@@ -276,6 +278,8 @@ class wizard_report(osv.osv_memory):
                 name = 'afr.analytic.ledger'
             elif data['form']['journal_ledger'] and data['form']['inf_type'] == 'BS':
                 name = 'afr.journal.ledger'
+            elif data['form']['partner_balance'] and data['form']['inf_type'] == 'BS':
+                name = 'afr.partner.balance'
             else:
                 name = 'afr.4cols'
         if data['form']['columns'] == 'five':
