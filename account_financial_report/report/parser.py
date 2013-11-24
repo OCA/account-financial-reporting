@@ -35,7 +35,6 @@ from report import report_sxw
 from tools import config
 from tools.translate import _
 from osv import osv
-import pdb
 from openerp.tools.safe_eval import safe_eval as eval
 
 
@@ -189,6 +188,81 @@ class account_balance(report_sxw.rml_parse):
             return [brw.id for brw in rc_obj.browse(self.cr, self.uid, company_id).credit_account_ids]
         else:
             return [brw.id for brw in rc_obj.browse(self.cr, self.uid, company_id).debit_account_ids]
+
+    def _get_partner_balance(self, account, init_period, ctx=None):
+        rp_obj = self.pool.get('res.partner')
+        res = []
+        ctx = ctx or {}
+        if account['type'] in ('other', 'liquidity', 'receivable', 'payable'):
+            sql_query = """
+                SELECT 
+                    CASE
+                        WHEN aml.partner_id IS NOT NULL
+                       THEN (SELECT name FROM res_partner WHERE aml.partner_id = id)
+                    ELSE 'UNKNOWN'
+                        END AS partner_name,
+                    CASE
+                        WHEN aml.partner_id IS NOT NULL
+                       THEN aml.partner_id
+                    ELSE 0
+                        END AS p_idx,
+                    SUM(aml.debit) AS debit,
+                    SUM(aml.credit) AS credit
+                FROM account_move_line AS aml
+                INNER JOIN account_account aa ON aa.id = aml.account_id
+                INNER JOIN account_move am ON am.id = aml.move_id 
+                %s
+                GROUP BY p_idx, partner_name
+                ORDER BY partner_name""" 
+
+            WHERE_POSTED = ''
+            if ctx.get('state','posted')=='posted':
+                WHERE_POSTED = "AND am.state = 'posted'"
+
+            cur_periods = ', '.join([str(i) for i in ctx['periods']])
+            init_periods = ', '.join([str(i) for i in init_period])
+
+            WHERE = """
+                WHERE aml.period_id IN (%s) 
+                    AND aa.id = %s 
+                    AND aml.state <> 'draft'
+                    """ % (init_periods, account['id'])
+            query_init = sql_query%(WHERE+WHERE_POSTED)
+
+            WHERE = """
+                WHERE aml.period_id IN (%s) 
+                    AND aa.id = %s 
+                    AND aml.state <> 'draft'
+                    """ % (cur_periods, account['id'])
+
+            query_bal = sql_query%(WHERE+WHERE_POSTED)
+
+            query = '''
+                SELECT
+                    vinit.partner_name,
+                    (vinit.debit - vinit.credit) AS balanceinit,
+                    vbal.debit,
+                    vbal.credit,
+                    (vinit.debit - vinit.credit +  vbal.debit -  vbal.credit) AS balance
+                    FROM (%s) vinit
+                    JOIN (%s) vbal ON vinit.p_idx = vbal.p_idx
+                '''%(query_init,query_bal)
+
+#            import pdb
+#            pdb.set_trace()
+
+            self.cr.execute(query)
+            res_dict = self.cr.dictfetchall()
+            balance = account['balanceinit']
+            for det in res_dict:
+                res.append({
+                    'partner_name': det['partner_name'],
+                    'balanceinit': det['balanceinit'],
+                    'debit': det['debit'],
+                    'credit': det['credit'],
+                    'balance': det['balance'],
+                })
+        return res
 
     def _get_analytic_ledger(self, account, ctx={}):
         res = []
@@ -828,6 +902,8 @@ class account_balance(report_sxw.rml_parse):
                     res['mayor'] = self._get_analytic_ledger(res, ctx=ctx_end)
                 elif to_include and form['journal_ledger'] and form['columns'] == 'four' and form['inf_type'] == 'BS' and res['type'] in ('other', 'liquidity', 'receivable', 'payable'):
                     res['journal'] = self._get_journal_ledger(res, ctx=ctx_end)
+                elif to_include and form['partner_balance'] and form['columns'] == 'four' and form['inf_type'] == 'BS' and res['type'] in ('other', 'liquidity', 'receivable', 'payable'):
+                    res['partner'] = self._get_partner_balance(res, ctx_i['periods'], ctx=ctx_end)
                 else:
                     res['mayor'] = []
 
@@ -935,6 +1011,12 @@ report_sxw.report_sxw('report.afr.4cols',
 report_sxw.report_sxw('report.afr.analytic.ledger',
                       'wizard.report',
                       'account_financial_report/report/balance_full_4_cols_analytic_ledger.rml',
+                      parser=account_balance,
+                      header=False)
+                      
+report_sxw.report_sxw('report.afr.partner.balance',
+                      'wizard.report',
+                      'account_financial_report/report/balance_full_4_cols_partner_balance.rml',
                       parser=account_balance,
                       header=False)
                       
