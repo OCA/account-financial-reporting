@@ -267,15 +267,23 @@ class account_balance(report_sxw.rml_parse):
 
             self.cr.execute(query)
             res_dict = self.cr.dictfetchall()
+            unknown = False
             for det in res_dict:
                 i,d,c,b = det['balanceinit'], det['debit'], det['credit'], det['balance'],
-                any([bool(i),bool(d),bool(c),bool(b)]) and res.append({
+                if not any([i,d,c,b]):
+                    continue
+                data = {
                     'partner_name': det['partner_name'],
                     'balanceinit': i,
                     'debit': d,
                     'credit': c,
                     'balance': b,
-                })
+                }
+                if not det['p_idx']:
+                    unknown = data
+                    continue
+                res.append(data)
+            unknown and res.append(unknown)
         return res
 
     def _get_analytic_ledger(self, account, ctx={}):
