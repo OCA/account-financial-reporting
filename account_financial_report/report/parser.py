@@ -206,14 +206,16 @@ class account_balance(report_sxw.rml_parse):
                        THEN aml.partner_id
                     ELSE 0
                         END AS p_idx,
-                    SUM(aml.debit) AS debit,
-                    SUM(aml.credit) AS credit
+                    %s,
+                    %s,
+                    %s,
+                    %s
                 FROM account_move_line AS aml
                 INNER JOIN account_account aa ON aa.id = aml.account_id
                 INNER JOIN account_move am ON am.id = aml.move_id 
                 %s
                 GROUP BY p_idx, partner_name
-                ORDER BY partner_name""" 
+                """ 
 
             WHERE_POSTED = ''
             if ctx.get('state','posted')=='posted':
@@ -227,7 +229,11 @@ class account_balance(report_sxw.rml_parse):
                     AND aa.id = %s 
                     AND aml.state <> 'draft'
                     """ % (init_periods, account['id'])
-            query_init = sql_query%(WHERE+WHERE_POSTED)
+            query_init = sql_query%('SUM(aml.debit) AS init_dr',
+                                    'SUM(aml.credit) AS init_cr', 
+                                    '0.0 AS bal_dr',
+                                    '0.0 AS bal_cr',
+                                    WHERE+WHERE_POSTED)
 
             WHERE = """
                 WHERE aml.period_id IN (%s) 
@@ -235,32 +241,40 @@ class account_balance(report_sxw.rml_parse):
                     AND aml.state <> 'draft'
                     """ % (cur_periods, account['id'])
 
-            query_bal = sql_query%(WHERE+WHERE_POSTED)
+            query_bal = sql_query%('0.0 AS init_dr',
+                                   '0.0 AS init_cr', 
+                                   'SUM(aml.debit) AS bal_dr',
+                                   'SUM(aml.credit) AS bal_cr',
+                                   WHERE+WHERE_POSTED)
 
             query = '''
                 SELECT
-                    vinit.partner_name,
-                    (vinit.debit - vinit.credit) AS balanceinit,
-                    vbal.debit,
-                    vbal.credit,
-                    (vinit.debit - vinit.credit +  vbal.debit -  vbal.credit) AS balance
+                    partner_name, 
+                    p_idx, 
+                    SUM(init_dr)-SUM(init_cr) AS balanceinit,
+                    SUM(bal_dr) AS debit,
+                    SUM(bal_cr) AS credit,
+                    SUM(init_dr) - SUM(init_cr) + SUM(bal_dr) - SUM(bal_cr) AS balance
+                FROM (
+                    SELECT
+                    *
                     FROM (%s) vinit
-                    JOIN (%s) vbal ON vinit.p_idx = vbal.p_idx
+                    UNION ALL (%s)
+                ) v
+                GROUP BY p_idx, partner_name
+                ORDER BY partner_name
                 '''%(query_init,query_bal)
-
-#            import pdb
-#            pdb.set_trace()
 
             self.cr.execute(query)
             res_dict = self.cr.dictfetchall()
-            balance = account['balanceinit']
             for det in res_dict:
-                res.append({
+                i,d,c,b = det['balanceinit'], det['debit'], det['credit'], det['balance'],
+                any([bool(i),bool(d),bool(c),bool(b)]) and res.append({
                     'partner_name': det['partner_name'],
-                    'balanceinit': det['balanceinit'],
-                    'debit': det['debit'],
-                    'credit': det['credit'],
-                    'balance': det['balance'],
+                    'balanceinit': i,
+                    'debit': d,
+                    'credit': c,
+                    'balance': b,
                 })
         return res
 
