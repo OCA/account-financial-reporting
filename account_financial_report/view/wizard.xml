@@ -44,6 +44,9 @@
                         <field name="journal_ledger"  
                         attrs="{'readonly':['|',('columns','!=','four'),('inf_type','!=','BS')],}" 
                         />
+                        <field name="partner_balance"  
+                        attrs="{'readonly':['|',('columns','!=','four'),('inf_type','!=','BS')],}" 
+                        />
                     </group>
                 </group>
                 <group>
