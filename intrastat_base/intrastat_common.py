@@ -95,12 +95,11 @@ class report_intrastat_common(orm.TransientModel):
         import base64
         assert len(ids) == 1, "Only one ID accepted"
         filename = datetime.strftime(start_date_datetime, '%Y-%m') + '_' + declaration_name + '.xml'
-        attach_name = declaration_name.upper() + ' ' + datetime.strftime(start_date_datetime, '%Y-%m')
         attach_obj = self.pool.get('ir.attachment')
         if not context:
             context = {}
         context.update({'default_res_id': ids[0], 'default_res_model': object._name})
-        attach_id = attach_obj.create(cr, uid, {'name': attach_name, 'datas': base64.encodestring(xml_string), 'datas_fname': filename}, context=context)
+        attach_id = attach_obj.create(cr, uid, {'name': filename, 'datas': base64.encodestring(xml_string), 'datas_fname': filename}, context=context)
         return attach_id
 
     def _open_attach_view(self, cr, uid, attach_id, title='XML file', context=None):
