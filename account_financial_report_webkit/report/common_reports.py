@@ -226,7 +226,8 @@ class CommonReportHeaderWebkit(common_report_header):
         return period_obj.search(self.cursor, self.uid,
                                  [('special', '=', True),
                                   ('date_start', '>=', period.date_start),
-                                  ('date_stop', '<=', period.date_stop)],
+                                  ('date_stop', '<=', period.date_stop),
+                                  ('company_id', '=', period.company_id.id)],
                                   limit=1)
 
     def periods_contains_move_lines(self, period_ids):
