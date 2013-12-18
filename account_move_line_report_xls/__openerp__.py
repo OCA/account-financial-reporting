@@ -22,12 +22,20 @@
 
 {
     'name': 'Account Move Line XLS export',
-    'version': '0.2',
+    'version': '0.5',
     'license': 'AGPL-3',
     'author': 'Noviat',
     'category' : 'Accounting & Finance',
     'description': """
-    This module adds a button on the journal items ('account.move.line') list view in order to export the selected lines.
+
+Journal Items Excel Export
+==========================
+
+This module adds a button on the journal items ('account.move.line') list view in order to export the selected lines.
+
+If you are installing this module manually, you need also the module 'report_xls', that is located in:
+https://launchpad.net/openerp-reporting-engines"
+
     """,
     'depends': ['account', 'report_xls'],
     'demo_xml': [],
