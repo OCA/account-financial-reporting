@@ -25,9 +25,9 @@
     'version': '0.1',
     'license': 'AGPL-3',
     'author': 'Noviat',
-    'category' : 'Accounting & Finance',
+    'category': 'Accounting & Finance',
     'description': """
-    
+
 Journal Reports
 ===============
 
@@ -36,20 +36,20 @@ This module adds journal reports by period and by fiscal year with
     - option to group entries with same general account & VAT case
     - vat info per entry
     - vat summary
-    
+
 These reports are available in PDF and XLS format.
 
-If you are installing this module manually, you need also the module 'report_xls', that is located in:
-https://launchpad.net/openerp-reporting-engines"
+This module depends upon the 'report_xls' module,
+cf. https://launchpad.net/openerp-reporting-engines
 
     """,
     'depends': [
         'account_voucher',
-        'report_xls'
+        'report_xls',
     ],
     'demo_xml': [],
     'init_xml': [],
-    'update_xml' : [
+    'update_xml': [
         'wizard/print_journal_wizard.xml',
     ],
 }

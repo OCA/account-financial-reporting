@@ -27,18 +27,19 @@ import time
 import logging
 _logger = logging.getLogger(__name__)
 
+
 class account_print_journal_xls(orm.TransientModel):
-    _inherit = 'account.print.journal'    
+    _inherit = 'account.print.journal'
     _name = 'account.print.journal.xls'
     _description = 'Print/Export Journal'
     _columns = {
         'journal_ids': fields.many2many('account.journal', string='Journals', required=True),
         'group_entries': fields.boolean('Group Entries', help="Group entries with same General Account & Tax Code."),
         }
-    _defaults={
+    _defaults = {
         'group_entries': True,
     }
-    
+
     def fields_get(self, cr, uid, fields=None, context=None):
         res = super(account_print_journal_xls, self).fields_get(cr, uid, fields, context)
         if context.get('print_by') == 'fiscalyear':
@@ -53,19 +54,19 @@ class account_print_journal_xls(orm.TransientModel):
                 res['period_from']['required'] = True
             if 'period_to' in res:
                 res['period_to']['required'] = True
-        return res   
+        return res
 
     def fy_period_ids(self, cr, uid, fiscalyear_id):
         """ returns all periods from a fiscalyear sorted by date """
         fy_period_ids = []
-        cr.execute('SELECT id, coalesce(special, False) AS special FROM account_period ' \
+        cr.execute('SELECT id, coalesce(special, False) AS special FROM account_period '
                    'WHERE fiscalyear_id=%s ORDER BY date_start, special DESC',
                    (fiscalyear_id,))
         res = cr.fetchall()
         if res:
-            fy_period_ids = map(lambda x: x[0], res)
+            fy_period_ids = [x[0] for x in res]
         return fy_period_ids
-            
+
     def onchange_fiscalyear_id(self, cr, uid, ids, fiscalyear_id=False, context=None):
         res = {'value': {}}
         if context.get('print_by') == 'fiscalyear':
@@ -79,7 +80,7 @@ class account_print_journal_xls(orm.TransientModel):
     def fields_view_get(self, cr, uid, view_id=None, view_type='form', context=None, toolbar=False, submenu=False):
         """ skip account.common.journal.report,fields_view_get (adds domain filter on journal type)  """
         return super(account_common_journal_report, self).fields_view_get(cr, uid, view_id, view_type, context, toolbar, submenu)
-       
+
     def xls_export(self, cr, uid, ids, context=None):
         return self.print_report(cr, uid, ids, context=context)
 
@@ -88,7 +89,7 @@ class account_print_journal_xls(orm.TransientModel):
             context = {}
         move_obj = self.pool.get('account.move')
         print_by = context.get('print_by')
-        wiz_form = self.browse(cr, uid, ids)[0]      
+        wiz_form = self.browse(cr, uid, ids)[0]
         fiscalyear_id = wiz_form.fiscalyear_id.id
         company_id = wiz_form.company_id.id
 
@@ -97,18 +98,18 @@ class account_print_journal_xls(orm.TransientModel):
         else:
             period_from = wiz_form.period_from
             period_to = wiz_form.period_to
-            cr.execute("SELECT id, coalesce(special, False) AS special FROM account_period ap " \
-                       "WHERE ap.date_start>=%s AND ap.date_stop<=%s AND company_id=%s " \
+            cr.execute("SELECT id, coalesce(special, False) AS special FROM account_period ap "
+                       "WHERE ap.date_start>=%s AND ap.date_stop<=%s AND company_id=%s "
                        "ORDER BY date_start, special DESC",
                        (period_from.date_start, period_to.date_stop, company_id))
-            wiz_period_ids = map(lambda x: x[0], cr.fetchall())  
+            wiz_period_ids = [x[0] for x in cr.fetchall()]
         wiz_journal_ids = [j.id for j in wiz_form.journal_ids]
 
         # sort journals
-        cr.execute('SELECT id FROM account_journal ' \
+        cr.execute('SELECT id FROM account_journal '
                    'WHERE id IN %s ORDER BY type DESC',
                    (tuple(wiz_journal_ids),))
-        wiz_journal_ids = map(lambda x: x[0], cr.fetchall())   
+        wiz_journal_ids = [x[0] for x in cr.fetchall()]
 
         datas = {
             'model': 'account.journal',
@@ -122,13 +123,13 @@ class account_print_journal_xls(orm.TransientModel):
         if wiz_form.target_move == 'posted':
             move_states = ['posted']
         else:
-            move_states = ['draft','posted']
+            move_states = ['draft', 'posted']
 
         if print_by == 'fiscalyear':
             journal_fy_ids = []
             for journal_id in wiz_journal_ids:
-                aml_ids = move_obj.search(cr, uid, 
-                    [('journal_id', '=', journal_id), ('period_id', 'in', wiz_period_ids), ('state', 'in', move_states)], 
+                aml_ids = move_obj.search(cr, uid,
+                    [('journal_id', '=', journal_id), ('period_id', 'in', wiz_period_ids), ('state', 'in', move_states)],
                     limit=1)
                 if aml_ids:
                     journal_fy_ids.append((journal_id, fiscalyear_id))
@@ -144,8 +145,8 @@ class account_print_journal_xls(orm.TransientModel):
             for journal_id in wiz_journal_ids:
                 period_ids = []
                 for period_id in wiz_period_ids:
-                    aml_ids = move_obj.search(cr, uid, 
-                        [('journal_id', '=', journal_id), ('period_id', '=', period_id), ('state', 'in', move_states)], 
+                    aml_ids = move_obj.search(cr, uid,
+                        [('journal_id', '=', journal_id), ('period_id', '=', period_id), ('state', 'in', move_states)],
                         limit=1)
                     if aml_ids:
                         period_ids.append(period_id)
