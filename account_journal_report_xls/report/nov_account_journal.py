@@ -215,7 +215,7 @@ class nov_journal_print(report_sxw.rml_parse):
         grouped_lines = [lines_in[0]]
         move_id = lines_in[0]['move_id']
         line_cnt = len(lines_in)
-        for i, line in enumerate(lines_in):
+        for i in range(1,line_cnt):
             line = lines_in[i]
             if line['move_id'] == move_id:
                 grouped_lines.append(line)
