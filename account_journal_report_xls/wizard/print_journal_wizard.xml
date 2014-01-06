@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+           
+      <record id="view_print_journal_xls" model="ir.ui.view">
+        <field name="name">Print/Export Journals</field>
+        <field name="model">account.print.journal.xls</field>
+        <field name="inherit_id" ref="account.account_common_report_view"/>
+        <field name="arch" type="xml">
+          <data>
+            <field name="fiscalyear_id" position="attributes">
+              <attribute name="on_change">onchange_fiscalyear_id(fiscalyear_id, context)</attribute>
+            </field>
+            <xpath expr="/form/label[@string='']" position="replace">
+              <separator string="Journals" colspan="4"/>
+              <label nolabel="1" colspan="4" string="This report allows you to generate a pdf or xls of your journals"/>
+            </xpath>
+            <xpath expr="//notebook" position="replace">
+            </xpath>
+            <xpath expr="//field[@name='target_move']" position="after">
+              <field name="sort_selection"/>
+              <field name="amount_currency"/> 
+              <field name="group_entries"/>
+              <newline/>
+              <separator string="Periods" colspan="4"/>
+              <field name="period_from" domain="[('fiscalyear_id', '=', fiscalyear_id)]" colspan="4"/>
+              <field name="period_to" domain="[('fiscalyear_id', '=', fiscalyear_id)]" colspan="4"/>
+              <separator string="Journals" colspan="4"/>
+              <field name="journal_ids" colspan="4" nolabel="1"/>
+            </xpath>
+            <button string="Print" position="replace">
+              <button icon="gtk-print" name="print_report" string="Print" type="object"/>
+              <button icon="gtk-execute" name="xls_export" string="Export" type="object" class="oe_highlight" context="{'xls_export':1}"/>
+            </button>
+          </data>
+        </field>
+      </record>
+
+      <record id="action_print_journal_by_period_xls" model="ir.actions.act_window">
+        <field name="name">Journal by Period</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.print.journal.xls</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="context">{'print_by':'period'}</field>
+        <field name="view_id" ref="view_print_journal_xls"/>
+        <field name="target">new</field>
+      </record>
+      <menuitem
+        name="Journal by Period"
+        sequence="1"
+        parent="account.menu_journals_report"
+        action="action_print_journal_by_period_xls"
+        id="menu_print_journal_by_period_xls"
+        icon="STOCK_PRINT"/>
+      
+      <record id="action_print_journal_by_fiscalyear_xls" model="ir.actions.act_window">
+        <field name="name">Journal by Fiscal Year</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.print.journal.xls</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="context">{'print_by':'fiscalyear'}</field>
+        <field name="view_id" ref="view_print_journal_xls"/>
+        <field name="target">new</field>
+      </record>
+      <menuitem
+        name="Journal by Fiscal Year"
+        sequence="2"
+        parent="account.menu_journals_report"
+        action="action_print_journal_by_fiscalyear_xls"
+        id="menu_print_journal_by_fiscalyear_xls"
+        icon="STOCK_PRINT"/>
+
+      <record id="account.menu_account_print_sale_purchase_journal" model="ir.ui.menu">
+        <field name="sequence">3</field>
+      </record>
+      
+    </data>
+</openerp>
