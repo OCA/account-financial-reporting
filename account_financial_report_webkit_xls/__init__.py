@@ -20,8 +20,8 @@
 #
 ##############################################################################
 
-from . import wizard
 try:
+    from . import wizard
     from . import report
 except ImportError:
     import logging

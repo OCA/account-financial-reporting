@@ -20,8 +20,8 @@
 #
 ##############################################################################
 
-from . import account_move_line
 try:
+    from . import account_move_line
     from . import report
 except ImportError:
     import logging
