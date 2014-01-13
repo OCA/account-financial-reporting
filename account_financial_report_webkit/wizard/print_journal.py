@@ -105,26 +105,6 @@ class AccountReportPrintJournalWizard(orm.TransientModel):
             res['value'] = {'period_from': start_period, 'period_to': end_period, 'date_from': False, 'date_to': False}
         return res
 
-    def fields_view_get(self, cr, uid, view_id=None, view_type='form', context=None, toolbar=False, submenu=False):
-        '''
-        used to set the domain on 'journal_ids' field: we exclude or only propose the journals of type
-        sale/purchase (+refund) accordingly to the presence of the key 'sale_purchase_only' in the context.
-        '''
-        if context is None:
-            context = {}
-        res = super(AccountReportPrintJournalWizard, self).fields_view_get(cr, uid, view_id=view_id, view_type=view_type, context=context, toolbar=toolbar, submenu=submenu)
-        doc = etree.XML(res['arch'])
-
-        if context.get('sale_purchase_only'):
-            domain = "[('type', 'in', ('sale','purchase','sale_refund','purchase_refund'))]"
-        else:
-            domain = "[('type', 'not in', ('sale','purchase','sale_refund','purchase_refund'))]"
-        nodes = doc.xpath("//field[@name='journal_ids']")
-        for node in nodes:
-            node.set('domain', domain)
-        res['arch'] = etree.tostring(doc)
-        return res
-
     def _print_report(self, cursor, uid, ids, data, context=None):
         context = context or {}
         # we update form with display account value
