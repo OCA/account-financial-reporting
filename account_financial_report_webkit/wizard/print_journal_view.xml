@@ -86,16 +86,5 @@
             <field name="model">account.journal.period</field>
         </record>
 
-        <record id="action_account_print_journal_sale_purchase_menu_webkit" model="ir.actions.act_window">
-            <field name="name">Journals</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">print.journal.webkit</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">form</field>
-            <field name="view_id" ref="account_report_print_journal_view_webkit"/>
-            <field name="context">{'sale_purchase_only':True}</field>
-            <field name="target">new</field>
-        </record>
-
     </data>
 </openerp>
