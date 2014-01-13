@@ -3,7 +3,7 @@
 #
 #    OpenERP, Open Source Management Solution
 #
-#    Copyright (c) 2013 Noviat nv/sa (www.noviat.com). All rights reserved.
+#    Copyright (c) 2014 Noviat nv/sa (www.noviat.com). All rights reserved.
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -12,11 +12,11 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU Affero General Public License for more details.
 #
 #    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
 
@@ -165,6 +165,10 @@ class nov_journal_print(report_sxw.rml_parse):
             #_logger.warn('code_string= %s', code_string)
             [x.update({'docname': eval(code_string) or '-'}) for x in lines]
 
+        # group lines
+        if self.group_entries:
+            lines = self._group_lines(lines)
+
         # format debit, credit, amount_currency for pdf report
         if self.display_currency and self.report_type == 'pdf':
             curr_obj = self.pool.get('res.currency')
@@ -174,10 +178,6 @@ class nov_journal_print(report_sxw.rml_parse):
                 }) for x in lines]
         else:
             [x.update({'amount1': self.formatLang(x['debit']), 'amount2': self.formatLang(x['credit'])}) for x in lines]
-
-        # group lines
-        if self.group_entries:
-            lines = self._group_lines(lines)
 
         # insert a flag in every move_line to indicate the end of a move
         # this flag will be used to draw a full line between moves
@@ -215,7 +215,7 @@ class nov_journal_print(report_sxw.rml_parse):
         grouped_lines = [lines_in[0]]
         move_id = lines_in[0]['move_id']
         line_cnt = len(lines_in)
-        for i in range(1,line_cnt):
+        for i in range(1, line_cnt):
             line = lines_in[i]
             if line['move_id'] == move_id:
                 grouped_lines.append(line)
