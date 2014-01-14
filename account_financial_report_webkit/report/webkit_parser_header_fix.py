@@ -72,13 +72,14 @@ _logger = logging.getLogger('financial.reports.webkit')
 
 # redefine mako_template as this is overriden by jinja since saas-1
 # from openerp.addons.report_webkit.webkit_report import mako_template
+from mako.template import Template
+from mako.lookup import TemplateLookup
+
 def mako_template(text):
     """Build a Mako template.
 
     This template uses UTF-8 encoding
     """
-    from mako.template import Template
-    from mako.lookup import TemplateLookup
     tmp_lookup  = TemplateLookup() #we need it in order to allow inclusion and inheritance
     return Template(text, input_encoding='utf-8', output_encoding='utf-8', lookup=tmp_lookup)
 
