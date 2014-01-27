@@ -1,0 +1,256 @@
+# Dutch translation of OpenERP Server 6.1.
+# This file contains the translation of the following modules:
+#	* account_journal_report_xls
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 6.1\n"
+"Report-Msgid-Bugs-To: support@noviat.be\n"
+"POT-Creation-Date: 2013-11-23 17:11:14.936000\n"
+"PO-Revision-Date: 2013-11-23 17:11:14.936000\n"
+"Last-Translator: Luc De Meyer (Noviat nv/sa)\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. module: account_journal_report_xls
+#: model:ir.actions.act_window,name:account_journal_report_xls.action_print_journal_by_period_xls
+msgid "Journal by Period"
+msgstr "Dagboekoverzicht per periode"
+
+#. module: account_journal_report_xls
+#: model:ir.actions.act_window,name:account_journal_report_xls.action_print_journal_by_fiscalyear_xls
+msgid "Journal by Fiscal Year"
+msgstr "Dagboekoverzicht per boekjaar"
+
+#. module: account_journal_report_xls
+#: model:ir.ui.menu,name:account_journal_report_xls.menu_print_journal_by_period_xls
+msgid "Journal by Period"
+msgstr "Dagboekoverzicht per periode"
+
+#. module: account_journal_report_xls
+#: model:ir.ui.menu,name:account_journal_report_xls.menu_print_journal_by_fiscalyear_xls
+msgid "Journal by Fiscal Year"
+msgstr "Dagboekoverzicht per boekjaar"
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,chart_account_id:0
+msgid "Chart of Account"
+msgstr "Rekeningschema"
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,fiscalyear_id:0
+msgid "Fiscal Year"
+msgstr "Boekjaar"
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,target_move:0
+msgid "Target Moves"
+msgstr "Boekingen"
+
+#. module: account_journal_report_xls
+#: selection:account.print.journal.xls,target_move:0
+msgid "All Posted Entries"
+msgstr "Alle goedgekeurde boekingen"
+
+#. module: account_journal_report_xls
+#: selection:account.print.journal.xls,target_move:0
+msgid "All Entries"
+msgstr "Alle boekingen"
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,sort_selection:0
+msgid "Entries Sorted by"
+msgstr "Boekingen gesorteerd op"
+
+#. module: account_journal_report_xls
+#: selection:account.print.journal.xls,sort_selection:0
+msgid "Journal Entry Number"
+msgstr "Nummer journaalpost"
+
+#. module: account_journal_report_xls
+#: selection:account.print.journal.xls,sort_selection:0
+msgid "Date"
+msgstr "Datum"
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,amount_currency:0
+msgid "With Currency"
+msgstr "Met valuta"
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,group_entries:0
+msgid "Group Entries"
+msgstr "Groepeer dagboekregels"
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,period_from:0
+msgid "Start Period"
+msgstr "Beginperiode"
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,period_to:0
+msgid "End Period"
+msgstr "Eindperiode"
+
+#. module: account_journal_report_xls
+#: code:addons/account_journal_report_xls/wizard/print_journal_wizard.py:10
+msgid "No records found for your selection!"
+msgstr "Geen records gevonden voor uw keuze!"
+
+#. module: account_journal_report_xls
+#: code:addons/account_journal_report_xls/wizard/print_journal_wizard.py:11
+msgid "No Data Available"
+msgstr "Geen gegevens beschikbaar"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Period"
+msgstr "Periode"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Fiscal Year"
+msgstr "Boekjaar"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Journal Overview"
+msgstr "Dagboekoverzicht"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Entry"
+msgstr "Boeking"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Date"
+msgstr "Datum"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Account"
+msgstr "Rekening"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Description"
+msgstr "Omschrijving"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Partner"
+msgstr "Partner"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Partner Reference"
+msgstr "Ref. Partner"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Maturity Date"
+msgstr "Vervaldatum"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Debit"
+msgstr "Debet"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Credit"
+msgstr "Credit"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Balance"
+msgstr "Saldo"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Rec."
+msgstr "Rec."
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Part. Rec."
+msgstr "Rec. Part."
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "VAT"
+msgstr "BTW"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "VAT Amount"
+msgstr "Bedrag BTW"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Amount"
+msgstr "Bedrag"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Currency"
+msgstr "Valuta"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Am. Currency"
+msgstr "Bedrag valuta"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Curr."
+msgstr "Val."
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Document"
+msgstr "Document"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Entry Reference"
+msgstr "Boeking ref."
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Entry Id"
+msgstr "Boeking id"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "VAT Declaration"
+msgstr "BTW aangifte"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Case"
+msgstr "Vak"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Invoice"
+msgstr "Factuur"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Voucher"
+msgstr "Voucher"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Statement"
+msgstr "Uitreksel"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Grouped Entries"
+msgstr "Gegroepeerde boekingsregels"
+
