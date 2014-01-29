@@ -6,14 +6,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 5.0.7\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2010-04-23 11:30:50+0000\n"
-"PO-Revision-Date: 2010-05-02 13:29+0100\n"
-"Last-Translator: Jordi Esteve <jesteve@zikzakmedia.com>\n"
+"POT-Creation-Date: 2010-04-23 11:30+0000\n"
+"PO-Revision-Date: 2014-01-28 16:24+0000\n"
+"Last-Translator: Jordi Esteve (www.zikzakmedia.com) "
+"<jesteve@zikzakmedia.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
+"X-Launchpad-Export-Date: 2014-01-29 06:02+0000\n"
+"X-Generator: Launchpad (build 16916)\n"
 
 #. module: account_financial_report
 #: wizard_field:account.invoice.list.report,init,in_invoice:0
@@ -24,7 +26,7 @@ msgstr "Facturas proveedor"
 #: wizard_field:account.balance.full.report,init,display_account:0
 #: wizard_field:account.general.ledger.cumulative.report,checktype,display_account:0
 msgid "Display accounts "
-msgstr "Imprimir cuentas"
+msgstr "Imprimir cuentas "
 
 #. module: account_financial_report
 #: rml:account.account.chart.report:0
@@ -202,7 +204,8 @@ msgstr "Error del usuario"
 #: model:ir.module.module,description:account_financial_report.module_meta_information
 msgid ""
 "\n"
-"Add some common financial/accounting reports and some wizards to quickly compute them:\n"
+"Add some common financial/accounting reports and some wizards to quickly "
+"compute them:\n"
 "  * Account chart list\n"
 "  * Invoice list\n"
 "  * Account move (journal ledger)\n"
@@ -210,12 +213,16 @@ msgid ""
 "  * Account balance compared period-fiscal year\n"
 "  * Cumulative general ledger\n"
 "\n"
-"They can be found in the \"Financial Management/Legal Statements/Generic Reports\" menu or in the tree/form views of accounts, journals, invoices, account entries and account move lines.\n"
+"They can be found in the \"Financial Management/Legal Statements/Generic "
+"Reports\" menu or in the tree/form views of accounts, journals, invoices, "
+"account entries and account move lines.\n"
 "\n"
-"Some reports are based on previous work by Pexego and others on the c2c_finance_report module for TinyERP 4.2 by Camptocamp SA.\n"
+"Some reports are based on previous work by Pexego and others on the "
+"c2c_finance_report module for TinyERP 4.2 by Camptocamp SA.\n"
 msgstr ""
 "\n"
-"Proporciona algunos informes contable/financieros comunes y algunos asistentes para calcular rápidamente:\n"
+"Proporciona algunos informes contable/financieros comunes y algunos "
+"asistentes para calcular rápidamente:\n"
 "   * Listado del plan contable\n"
 "   * Listado de facturas emitidas/recibidas\n"
 "   * Asientos contables (libro diario)\n"
@@ -223,9 +230,13 @@ msgstr ""
 "   * Balance de sumas y saldos\n"
 "   * Libro mayor con saldos acumulativos\n"
 "\n"
-"Están disponibles en el menú \"Gestión Financiera / Declaraciones oficiales / Informes genéricos\" o en las vistas árbol /formulario de las cuentas contables, diarios, facturas, asientos contables y líneas de asiento contable.\n"
+"Están disponibles en el menú \"Gestión Financiera / Declaraciones oficiales "
+"/ Informes genéricos\" o en las vistas árbol /formulario de las cuentas "
+"contables, diarios, facturas, asientos contables y líneas de asiento "
+"contable.\n"
 "\n"
-"Algunos informes se basan en trabajos anteriores de Pexego y otros en el módulo c2c_finance_report para TinyERP 4.2 de Camptocamp SA.\n"
+"Algunos informes se basan en trabajos anteriores de Pexego y otros en el "
+"módulo c2c_finance_report para TinyERP 4.2 de Camptocamp SA.\n"
 
 #. module: account_financial_report
 #: rml:account.move.line.report:0
@@ -463,8 +474,12 @@ msgstr "Con saldo distinto a 0"
 
 #. module: account_financial_report
 #: rml:account.invoice.list.report:0
-msgid "<td>                             <para style=\"Standard\" size=\"5\">Invoice description</para>                         </td>"
-msgstr "<td>                             <para style=\"Standard\" size=\"5\">Descripción factura</para>                         </td>"
+msgid ""
+"<td>                             <para style=\"Standard\" size=\"5\">Invoice "
+"description</para>                         </td>"
+msgstr ""
+"<td>                             <para style=\"Standard\" "
+"size=\"5\">Descripción factura</para>                         </td>"
 
 #. module: account_financial_report
 #: wizard_view:account.invoice.list.report,init:0
@@ -490,8 +505,14 @@ msgstr "Cuentas a incluir"
 
 #. module: account_financial_report
 #: rml:account.invoice.list.report:0
-msgid "<blockTable colWidths=\"1.8cm,1.4cm,1.4cm,1.8cm,1.8cm,2cm,3.5cm,2cm,4cm,1.2cm,1.8cm,1.4cm,1.8cm,1.6cm\" repeatRows=\"1\" style=\"Table3\">"
-msgstr "<blockTable colWidths=\"1.8cm,1.4cm,1.4cm,1.8cm,1.8cm,2cm,3.5cm,2cm,4cm,1.2cm,1.8cm,1.4cm,1.8cm,1.6cm\" repeatRows=\"1\" style=\"Table3\">"
+msgid ""
+"<blockTable "
+"colWidths=\"1.8cm,1.4cm,1.4cm,1.8cm,1.8cm,2cm,3.5cm,2cm,4cm,1.2cm,1.8cm,1.4cm"
+",1.8cm,1.6cm\" repeatRows=\"1\" style=\"Table3\">"
+msgstr ""
+"<blockTable "
+"colWidths=\"1.8cm,1.4cm,1.4cm,1.8cm,1.8cm,2cm,3.5cm,2cm,4cm,1.2cm,1.8cm,1.4cm"
+",1.8cm,1.6cm\" repeatRows=\"1\" style=\"Table3\">"
 
 #. module: account_financial_report
 #: rml:account.general.ledger.cumulative:0
@@ -1114,7 +1135,9 @@ msgstr "Facturas rectificativas de Cliente (Abonos)"
 #. module: account_financial_report
 #: help:account.balance.full.report,init,fiscalyear:0
 msgid "Keep empty to use all open fiscal years to compute the balance"
-msgstr "Dejarlo vacío para usar todos los ejercicios fiscales abiertos para calcular el saldo."
+msgstr ""
+"Dejarlo vacío para usar todos los ejercicios fiscales abiertos para calcular "
+"el saldo."
 
 #. module: account_financial_report
 #: rml:account.general.ledger.cumulative:0
@@ -1129,4 +1152,3 @@ msgstr "Total"
 #, python-format
 msgid "SR: "
 msgstr "FRP: "
-
