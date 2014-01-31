@@ -1,13 +1,13 @@
-# French translation of OpenERP Server 6.1.
+# French translation of OpenERP Server 7.0.
 # This file contains the translation of the following modules:
 #	* account_move_line_report_xls
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 6.1\n"
-"Report-Msgid-Bugs-To: support@noviat.be\n"
-"POT-Creation-Date: 2013-11-23 16:11:12.706000\n"
-"PO-Revision-Date: 2013-11-23 16:11:12.706000\n"
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: support@noviat.com\n"
+"POT-Creation-Date: 2014-01-08 23:46:06.568000\n"
+"PO-Revision-Date: 2014-01-08 23:46:06.568000\n"
 "Last-Translator: Luc De Meyer (Noviat nv/sa)\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -108,4 +108,69 @@ msgstr "Montant devise"
 #: report:move.line.list.xls:0
 msgid "Curr."
 msgstr "Dev."
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Journal"
+msgstr "Journal"
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Comp. Curr."
+msgstr "Dev. Soc."
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Analytic Account"
+msgstr "Compte analytique"
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Product"
+msgstr "Article"
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Product Reference"
+msgstr "Réf. Article"
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Unit of Measure"
+msgstr "Unité de mesure"
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Qty"
+msgstr "Qty"
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Statement"
+msgstr "Relevé"
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Invoice"
+msgstr "Facture"
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Residual Amount"
+msgstr "Montant résiduel"
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Res. Am. in Curr."
+msgstr "Montant résiduel en dev."
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Notes"
+msgstr "Notes"
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Lit."
+msgstr "Lit."
 

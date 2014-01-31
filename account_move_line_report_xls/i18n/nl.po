@@ -1,13 +1,13 @@
-# Dutch translation of OpenERP Server 6.1.
+# Dutch translation of OpenERP Server 7.0.
 # This file contains the translation of the following modules:
 #	* account_move_line_report_xls
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 6.1\n"
-"Report-Msgid-Bugs-To: support@noviat.be\n"
-"POT-Creation-Date: 2013-11-23 16:11:12.702000\n"
-"PO-Revision-Date: 2013-11-23 16:11:12.702000\n"
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: support@noviat.com\n"
+"POT-Creation-Date: 2014-01-08 23:46:06.564000\n"
+"PO-Revision-Date: 2014-01-08 23:46:06.564000\n"
 "Last-Translator: Luc De Meyer (Noviat nv/sa)\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -108,4 +108,69 @@ msgstr "Bedrag valuta"
 #: report:move.line.list.xls:0
 msgid "Curr."
 msgstr "Val."
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Journal"
+msgstr "Dagboek"
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Comp. Curr."
+msgstr "Bedr. Val."
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Analytic Account"
+msgstr "Kostenplaats"
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Product"
+msgstr "Product"
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Product Reference"
+msgstr "Ref. Product"
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Unit of Measure"
+msgstr "Maateenheid"
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Qty"
+msgstr "HvH"
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Statement"
+msgstr "Uitreksel"
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Invoice"
+msgstr "Factuur"
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Residual Amount"
+msgstr "Restbedrag"
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Res. Am. in Curr."
+msgstr "Restbedrag in val."
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Notes"
+msgstr "Notities"
+
+#. module: account_move_line_report_xls
+#: report:move.line.list.xls:0
+msgid "Lit."
+msgstr "Lit."
 
