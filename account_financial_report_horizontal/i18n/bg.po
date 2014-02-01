@@ -8,27 +8,25 @@ msgstr ""
 "Project-Id-Version: OpenERP Server 6.0dev\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-03-11 21:59+0000\n"
-"PO-Revision-Date: 2011-04-01 09:39+0000\n"
+"PO-Revision-Date: 2014-01-31 18:07+0000\n"
 "Last-Translator: Dimitar Markov <dimitar.markov@gmail.com>\n"
 "Language-Team: \n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-05 04:55+0000\n"
-"X-Generator: Launchpad (build 14085)\n"
+"X-Launchpad-Export-Date: 2014-06-19 06:33+0000\n"
+"X-Generator: Launchpad (build 17048)\n"
+"Language: \n"
 
 #. module: account_financial_report_horizontal
 #: model:ir.actions.report.xml,name:account_financial_report_horizontal.account_balance_sheet_horizontal
-#, fuzzy
 msgid "Balance Sheet Horizontal"
-msgstr "Баланс"
+msgstr ""
 
 #. module: account_financial_report_horizontal
 #: report:account.profit_loss:0
-#, fuzzy
 msgid "Incomes"
-msgstr "Приходни сметки"
+msgstr ""
 
 #. module: account_financial_report_horizontal
 #: code:addons/account_financial_report_horizontal/report/common_report_header.py:92
@@ -40,9 +38,8 @@ msgstr "Грешка"
 
 #. module: account_financial_report_horizontal
 #: model:ir.actions.report.xml,name:account_financial_report_horizontal.account_profit_loss_horizontal
-#, fuzzy
 msgid "Profit and Loss Horizontal"
-msgstr "Печалба и загуби"
+msgstr ""
 
 #. module: account_financial_report_horizontal
 #: field:account.bs.report,reserve_account_id:0
@@ -60,8 +57,10 @@ msgid "Filters"
 msgstr "Филтри"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
-#: report:account.profit_horizontal:0 report:account.profit_loss:0
+#: report:account.balancesheet:0
+#: report:account.balancesheet.horizontal:0
+#: report:account.profit_horizontal:0
+#: report:account.profit_loss:0
 msgid "Filter By"
 msgstr "Филтриране по"
 
@@ -79,20 +78,24 @@ msgid ""
 msgstr ""
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
+#: report:account.balancesheet:0
+#: report:account.balancesheet.horizontal:0
 msgid "Balance:"
 msgstr ""
 
 #. module: account_financial_report_horizontal
-#: view:account.pl.report:0 report:account.profit_horizontal:0
+#: view:account.pl.report:0
+#: report:account.profit_horizontal:0
 #: report:account.profit_loss:0
 #: model:ir.ui.menu,name:account_financial_report_horizontal.menu_account_pl_report
 msgid "Profit And Loss"
 msgstr "Печалба и загуби"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
-#: report:account.profit_horizontal:0 report:account.profit_loss:0
+#: report:account.balancesheet:0
+#: report:account.balancesheet.horizontal:0
+#: report:account.profit_horizontal:0
+#: report:account.profit_loss:0
 msgid "Display Account"
 msgstr "Показване на сметка"
 
@@ -120,7 +123,8 @@ msgid "Particular"
 msgstr ""
 
 #. module: account_financial_report_horizontal
-#: selection:account.bs.report,filter:0 selection:account.pl.report,filter:0
+#: selection:account.bs.report,filter:0
+#: selection:account.pl.report,filter:0
 #: selection:account_financial_report_horizontal.common.account.report,filter:0
 #: selection:account_financial_report_horizontal.common.report,filter:0
 #: code:addons/account_financial_report_horizontal/report/common_report_header.py:97
@@ -129,29 +133,36 @@ msgid "Date"
 msgstr "Дата"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
-#: field:account.bs.report,date_from:0 field:account.pl.report,date_from:0
-#: report:account.profit_horizontal:0 report:account.profit_loss:0
+#: report:account.balancesheet:0
+#: report:account.balancesheet.horizontal:0
+#: field:account.bs.report,date_from:0
+#: field:account.pl.report,date_from:0
+#: report:account.profit_horizontal:0
+#: report:account.profit_loss:0
 #: field:account_financial_report_horizontal.common.account.report,date_from:0
 #: field:account_financial_report_horizontal.common.report,date_from:0
 msgid "Start Date"
 msgstr "Начална дата"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
-#: report:account.profit_horizontal:0 report:account.profit_loss:0
+#: report:account.balancesheet:0
+#: report:account.balancesheet.horizontal:0
+#: report:account.profit_horizontal:0
+#: report:account.profit_loss:0
 msgid "Chart of Account"
 msgstr "Сметкоплан"
 
 #. module: account_financial_report_horizontal
-#: field:account.bs.report,period_from:0 field:account.pl.report,period_from:0
+#: field:account.bs.report,period_from:0
+#: field:account.pl.report,period_from:0
 #: field:account_financial_report_horizontal.common.account.report,period_from:0
 #: field:account_financial_report_horizontal.common.report,period_from:0
 msgid "Start period"
 msgstr "Начало на период"
 
 #. module: account_financial_report_horizontal
-#: field:account.bs.report,journal_ids:0 field:account.pl.report,journal_ids:0
+#: field:account.bs.report,journal_ids:0
+#: field:account.pl.report,journal_ids:0
 #: field:account_financial_report_horizontal.common.account.report,journal_ids:0
 #: view:account_financial_report_horizontal.common.report:0
 #: field:account_financial_report_horizontal.common.report,journal_ids:0
@@ -159,9 +170,12 @@ msgid "Journals"
 msgstr "Дневници"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
-#: field:account.bs.report,target_move:0 field:account.pl.report,target_move:0
-#: report:account.profit_horizontal:0 report:account.profit_loss:0
+#: report:account.balancesheet:0
+#: report:account.balancesheet.horizontal:0
+#: field:account.bs.report,target_move:0
+#: field:account.pl.report,target_move:0
+#: report:account.profit_horizontal:0
+#: report:account.profit_loss:0
 #: field:account_financial_report_horizontal.common.account.report,target_move:0
 #: field:account_financial_report_horizontal.common.report,target_move:0
 msgid "Target Moves"
@@ -173,7 +187,8 @@ msgid "Report Options"
 msgstr "Настройки на справка"
 
 #. module: account_financial_report_horizontal
-#: selection:account.bs.report,filter:0 selection:account.pl.report,filter:0
+#: selection:account.bs.report,filter:0
+#: selection:account.pl.report,filter:0
 #: selection:account_financial_report_horizontal.common.account.report,filter:0
 #: view:account_financial_report_horizontal.common.report:0
 #: selection:account_financial_report_horizontal.common.report,filter:0
@@ -191,9 +206,12 @@ msgid ""
 msgstr ""
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
-#: field:account.bs.report,date_to:0 field:account.pl.report,date_to:0
-#: report:account.profit_horizontal:0 report:account.profit_loss:0
+#: report:account.balancesheet:0
+#: report:account.balancesheet.horizontal:0
+#: field:account.bs.report,date_to:0
+#: field:account.pl.report,date_to:0
+#: report:account.profit_horizontal:0
+#: report:account.profit_loss:0
 #: field:account_financial_report_horizontal.common.account.report,date_to:0
 #: field:account_financial_report_horizontal.common.report,date_to:0
 msgid "End Date"
@@ -205,18 +223,22 @@ msgid "Dates"
 msgstr "Дати"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
-#: report:account.profit_horizontal:0 report:account.profit_loss:0
+#: report:account.balancesheet:0
+#: report:account.balancesheet.horizontal:0
+#: report:account.profit_horizontal:0
+#: report:account.profit_loss:0
 msgid "Start Period"
 msgstr "Начало на период"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
+#: report:account.balancesheet:0
+#: report:account.balancesheet.horizontal:0
 msgid "Assets"
 msgstr ""
 
 #. module: account_financial_report_horizontal
-#: report:account.profit_horizontal:0 report:account.profit_loss:0
+#: report:account.profit_horizontal:0
+#: report:account.profit_loss:0
 msgid "Total:"
 msgstr "Общо:"
 
@@ -231,7 +253,8 @@ msgid "All Posted Entries"
 msgstr "Всички публикувани записи"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
+#: report:account.balancesheet:0
+#: report:account.balancesheet.horizontal:0
 msgid "Liabilities"
 msgstr ""
 
@@ -250,8 +273,10 @@ msgid "Select a starting and an ending period"
 msgstr "Задайте начален и краен период"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
-#: report:account.profit_horizontal:0 report:account.profit_loss:0
+#: report:account.balancesheet:0
+#: report:account.balancesheet.horizontal:0
+#: report:account.profit_horizontal:0
+#: report:account.profit_loss:0
 msgid "End Period"
 msgstr "Краен период"
 
@@ -262,8 +287,10 @@ msgid "Not implemented"
 msgstr "Не е реализирано"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
-#: report:account.profit_horizontal:0 report:account.profit_loss:0
+#: report:account.balancesheet:0
+#: report:account.balancesheet.horizontal:0
+#: report:account.profit_horizontal:0
+#: report:account.profit_loss:0
 msgid "Fiscal Year"
 msgstr "Финансова година"
 
@@ -279,7 +306,8 @@ msgid "Net Profit"
 msgstr "Нетна печалба"
 
 #. module: account_financial_report_horizontal
-#: selection:account.bs.report,filter:0 selection:account.pl.report,filter:0
+#: selection:account.bs.report,filter:0
+#: selection:account.pl.report,filter:0
 #: selection:account_financial_report_horizontal.common.account.report,filter:0
 #: selection:account_financial_report_horizontal.common.report,filter:0
 msgid "No Filters"
@@ -305,8 +333,10 @@ msgid "Chart of account"
 msgstr "Сметкоплан"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
-#: report:account.profit_horizontal:0 report:account.profit_loss:0
+#: report:account.balancesheet:0
+#: report:account.balancesheet.horizontal:0
+#: report:account.profit_horizontal:0
+#: report:account.profit_loss:0
 msgid "Balance"
 msgstr "Баланс"
 
@@ -344,16 +374,17 @@ msgid "All"
 msgstr "Всички"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
-#: report:account.profit_horizontal:0 report:account.profit_loss:0
+#: report:account.balancesheet:0
+#: report:account.balancesheet.horizontal:0
+#: report:account.profit_horizontal:0
+#: report:account.profit_loss:0
 msgid "Code"
 msgstr "Код"
 
 #. module: account_financial_report_horizontal
 #: model:ir.actions.report.xml,name:account_financial_report_horizontal.account_profit_loss
-#, fuzzy
 msgid "Profit and Loss"
-msgstr "Печалба и загуби"
+msgstr ""
 
 #. module: account_financial_report_horizontal
 #: model:ir.model,name:account_financial_report_horizontal.model_account_financial_report_horizontal_common_account_report
@@ -372,19 +403,20 @@ msgstr ""
 
 #. module: account_financial_report_horizontal
 #: report:account.profit_loss:0
-#, fuzzy
 msgid "Expenses"
-msgstr "Сметка за разходи"
+msgstr ""
 
 #. module: account_financial_report_horizontal
-#: field:account.bs.report,period_to:0 field:account.pl.report,period_to:0
+#: field:account.bs.report,period_to:0
+#: field:account.pl.report,period_to:0
 #: field:account_financial_report_horizontal.common.account.report,period_to:0
 #: field:account_financial_report_horizontal.common.report,period_to:0
 msgid "End period"
 msgstr "Край на периода"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
+#: report:account.balancesheet:0
+#: report:account.balancesheet.horizontal:0
 #: view:account.bs.report:0
 #: model:ir.actions.act_window,name:account_financial_report_horizontal.action_account_bs_report
 #: model:ir.actions.report.xml,name:account_financial_report_horizontal.account_balance_sheet
@@ -426,9 +458,8 @@ msgstr "Отказ"
 
 #. module: account_financial_report_horizontal
 #: model:ir.ui.menu,name:account_financial_report_horizontal.final_accounting_reports
-#, fuzzy
-msgid "Horizontal Acc. Reports"
-msgstr "Счетоводни отчети"
+msgid "Alt. Accounting Reports"
+msgstr ""
 
 #. module: account_financial_report_horizontal
 #: help:account.bs.report,chart_account_id:0
@@ -439,7 +470,8 @@ msgid "Select Charts of Accounts"
 msgstr "Избери сметколан"
 
 #. module: account_financial_report_horizontal
-#: field:account.bs.report,filter:0 field:account.pl.report,filter:0
+#: field:account.bs.report,filter:0
+#: field:account.pl.report,filter:0
 #: field:account_financial_report_horizontal.common.account.report,filter:0
 #: field:account_financial_report_horizontal.common.report,filter:0
 msgid "Filter by"
@@ -461,4 +493,3 @@ msgstr "Всучки записи"
 msgid ""
 "Please define the Reserve and Profit/Loss account for current user company !"
 msgstr ""
-
