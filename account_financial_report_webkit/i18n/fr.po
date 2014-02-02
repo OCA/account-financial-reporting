@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-02-01 06:52+0000\n"
+"X-Launchpad-Export-Date: 2014-02-02 05:58+0000\n"
 "X-Generator: Launchpad (build 16916)\n"
 
 #. module: account_financial_report_webkit
@@ -1347,66 +1347,3 @@ msgstr ""
 #: field:trial.balance.webkit,comp2_filter:0
 msgid "Compare By"
 msgstr "Compare By"
-
-#~ msgid "onchange_date_to(fiscalyear_id, period_to, date_to, until_date)"
-#~ msgstr "onchange_date_to(fiscalyear_id, period_to, date_to, until_date)"
-
-#~ msgid "Journal Filter"
-#~ msgstr "Journal Filter"
-
-#~ msgid "Webkit error"
-#~ msgstr "Webkit error"
-
-#~ msgid ""
-#~ "Filter by date: no opening balance will be displayed. (opening balance can "
-#~ "only be computed based on period to be correct)."
-#~ msgstr ""
-#~ "Filter by date: no opening balance will be displayed. (opening balance can "
-#~ "only be computed based on period to be correct)."
-
-#~ msgid "[('fiscalyear_id', '=', fiscalyear_id), ('special', '=', False)]"
-#~ msgstr "[('fiscalyear_id', '=', fiscalyear_id), ('special', '=', False)]"
-
-#~ msgid "True"
-#~ msgstr "True"
-
-#~ msgid "Journals Report"
-#~ msgstr "Journals Report"
-
-#~ msgid "onchange_period_to(fiscalyear_id, period_to, date_to, until_date)"
-#~ msgstr "onchange_period_to(fiscalyear_id, period_to, date_to, until_date)"
-
-#~ msgid "Group Partner by currency"
-#~ msgstr "Group Partner by currency"
-
-#~ msgid "The command 'wkhtmltopdf' failed with error code = %s. Message: %s"
-#~ msgstr "The command 'wkhtmltopdf' failed with error code = %s. Message: %s"
-
-#~ msgid "JOURNALS"
-#~ msgstr "JOURNALS"
-
-#~ msgid "onchange_fiscalyear(fiscalyear_id, period_to, date_to, until_date)"
-#~ msgstr "onchange_fiscalyear(fiscalyear_id, period_to, date_to, until_date)"
-
-#~ msgid ""
-#~ "This report allows you to print or generate a pdf of your print journal with "
-#~ "details of all your account journals"
-#~ msgstr ""
-#~ "This report allows you to print or generate a pdf of your print journal with "
-#~ "details of all your account journals"
-
-#~ msgid "No diagnosis message was provided"
-#~ msgstr "No diagnosis message was provided"
-
-#~ msgid "{'required': [('filter', '=', 'filter_opening')]}"
-#~ msgstr "{'required': [('filter', '=', 'filter_opening')]}"
-
-#~ msgid ""
-#~ "No opening period found to compute the opening balances.\n"
-#~ "You have to configure a period on the first of January with the special flag."
-#~ msgstr ""
-#~ "No opening period found to compute the opening balances.\n"
-#~ "You have to configure a period on the first of January with the special flag."
-
-#~ msgid "The following diagnosis message was provided:\n"
-#~ msgstr "The following diagnosis message was provided:\n"
