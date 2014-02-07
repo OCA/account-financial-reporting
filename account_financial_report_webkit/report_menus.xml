@@ -26,10 +26,13 @@
             parent="account.menu_journals_report" action="action_account_print_journal_menu_webkit"
             groups="account.group_account_manager,account.group_account_user" id="account.menu_account_print_journal"/>
 
-        <menuitem icon="STOCK_PRINT" name="Sale/Purchase Journals"
-            parent="account.menu_journals_report" action="action_account_print_journal_sale_purchase_menu_webkit"
-            groups="account.group_account_manager,account.group_account_user" id="account.menu_account_print_sale_purchase_journal"
-            sequence="1"/>
+        <!--
+        Hide Sale / Purchase Journals menu, replaced by a unique
+        "Journals" menu
+        -->
+        <record id="account.menu_account_print_sale_purchase_journal" model="ir.ui.menu">
+            <field name="groups">base.group_no_one</field>
+        </record>
 
     </data>
 </openerp>
