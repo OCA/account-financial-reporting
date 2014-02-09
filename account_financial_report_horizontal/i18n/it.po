@@ -8,24 +8,24 @@ msgstr ""
 "Project-Id-Version: account-financial-report\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-03-11 21:59+0000\n"
-"PO-Revision-Date: 2014-02-07 13:33+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2014-02-08 17:26+0000\n"
+"Last-Translator: Andrea Cometa <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-02-08 07:15+0000\n"
+"X-Launchpad-Export-Date: 2014-02-09 06:49+0000\n"
 "X-Generator: Launchpad (build 16916)\n"
 
 #. module: account_financial_report_horizontal
 #: model:ir.actions.report.xml,name:account_financial_report_horizontal.account_balance_sheet_horizontal
 msgid "Balance Sheet Horizontal"
-msgstr ""
+msgstr "Bilancio orizzontale"
 
 #. module: account_financial_report_horizontal
 #: report:account.profit_loss:0
 msgid "Incomes"
-msgstr ""
+msgstr "Entrate"
 
 #. module: account_financial_report_horizontal
 #: code:addons/account_financial_report_horizontal/report/common_report_header.py:92
@@ -33,27 +33,27 @@ msgstr ""
 #: code:addons/account_financial_report_horizontal/wizard/account_report_common.py:126
 #, python-format
 msgid "Error"
-msgstr ""
+msgstr "Errore"
 
 #. module: account_financial_report_horizontal
 #: model:ir.actions.report.xml,name:account_financial_report_horizontal.account_profit_loss_horizontal
 msgid "Profit and Loss Horizontal"
-msgstr ""
+msgstr "Conto economico orizzontale"
 
 #. module: account_financial_report_horizontal
 #: field:account.bs.report,reserve_account_id:0
 msgid "Reserve & Profit/Loss Account"
-msgstr ""
+msgstr "Conto per riserve e profitti/perdite"
 
 #. module: account_financial_report_horizontal
 #: view:account_financial_report_horizontal.common.report:0
 msgid "Print"
-msgstr ""
+msgstr "Stampa"
 
 #. module: account_financial_report_horizontal
 #: view:account_financial_report_horizontal.common.report:0
 msgid "Filters"
-msgstr ""
+msgstr "Filtri"
 
 #. module: account_financial_report_horizontal
 #: report:account.balancesheet:0
@@ -61,12 +61,12 @@ msgstr ""
 #: report:account.profit_horizontal:0
 #: report:account.profit_loss:0
 msgid "Filter By"
-msgstr ""
+msgstr "Filtra per"
 
 #. module: account_financial_report_horizontal
 #: model:ir.model,name:account_financial_report_horizontal.model_account_pl_report
 msgid "Account Profit And Loss Report"
-msgstr ""
+msgstr "Report dei conti di perdite e profitti"
 
 #. module: account_financial_report_horizontal
 #: view:account.bs.report:0
@@ -75,12 +75,15 @@ msgid ""
 "allowing you to quickly check the balance of each of your accounts in a "
 "single report"
 msgstr ""
+"Questo report permette di stampare o generare un pdf del proprio Bilancio di "
+"Verifica rendendo possibile controllare velocemente il saldo di ciascun "
+"conto in un report singolo"
 
 #. module: account_financial_report_horizontal
 #: report:account.balancesheet:0
 #: report:account.balancesheet.horizontal:0
 msgid "Balance:"
-msgstr ""
+msgstr "Saldo:"
 
 #. module: account_financial_report_horizontal
 #: view:account.pl.report:0
@@ -88,7 +91,7 @@ msgstr ""
 #: report:account.profit_loss:0
 #: model:ir.ui.menu,name:account_financial_report_horizontal.menu_account_pl_report
 msgid "Profit And Loss"
-msgstr ""
+msgstr "Profitto e perdita"
 
 #. module: account_financial_report_horizontal
 #: report:account.balancesheet:0
@@ -96,30 +99,30 @@ msgstr ""
 #: report:account.profit_horizontal:0
 #: report:account.profit_loss:0
 msgid "Display Account"
-msgstr ""
+msgstr "Mostra il conto"
 
 #. module: account_financial_report_horizontal
 #: model:ir.actions.act_window,name:account_financial_report_horizontal.action_account_common_menu
 msgid "Common Report"
-msgstr ""
+msgstr "Report Comune"
 
 #. module: account_financial_report_horizontal
 #: code:addons/account_financial_report_horizontal/report/common_report_header.py:100
 #, python-format
 msgid "No Filter"
-msgstr ""
+msgstr "Nessun filtro"
 
 #. module: account_financial_report_horizontal
 #: selection:account.bs.report,display_account:0
 #: selection:account.pl.report,display_account:0
 #: selection:account_financial_report_horizontal.common.account.report,display_account:0
 msgid "With balance is not equal to 0"
-msgstr ""
+msgstr "Con saldo diverso da zero"
 
 #. module: account_financial_report_horizontal
 #: report:account.profit_horizontal:0
 msgid "Particular"
-msgstr ""
+msgstr "Dettaglio"
 
 #. module: account_financial_report_horizontal
 #: selection:account.bs.report,filter:0
@@ -129,7 +132,7 @@ msgstr ""
 #: code:addons/account_financial_report_horizontal/report/common_report_header.py:97
 #, python-format
 msgid "Date"
-msgstr ""
+msgstr "Data"
 
 #. module: account_financial_report_horizontal
 #: report:account.balancesheet:0
@@ -141,7 +144,7 @@ msgstr ""
 #: field:account_financial_report_horizontal.common.account.report,date_from:0
 #: field:account_financial_report_horizontal.common.report,date_from:0
 msgid "Start Date"
-msgstr ""
+msgstr "Data di Inizio"
 
 #. module: account_financial_report_horizontal
 #: report:account.balancesheet:0
@@ -149,7 +152,7 @@ msgstr ""
 #: report:account.profit_horizontal:0
 #: report:account.profit_loss:0
 msgid "Chart of Account"
-msgstr ""
+msgstr "Piano dei conti"
 
 #. module: account_financial_report_horizontal
 #: field:account.bs.report,period_from:0
@@ -157,7 +160,7 @@ msgstr ""
 #: field:account_financial_report_horizontal.common.account.report,period_from:0
 #: field:account_financial_report_horizontal.common.report,period_from:0
 msgid "Start period"
-msgstr ""
+msgstr "Periodo di inizio"
 
 #. module: account_financial_report_horizontal
 #: field:account.bs.report,journal_ids:0
@@ -166,7 +169,7 @@ msgstr ""
 #: view:account_financial_report_horizontal.common.report:0
 #: field:account_financial_report_horizontal.common.report,journal_ids:0
 msgid "Journals"
-msgstr ""
+msgstr "Sezionali"
 
 #. module: account_financial_report_horizontal
 #: report:account.balancesheet:0
@@ -178,12 +181,12 @@ msgstr ""
 #: field:account_financial_report_horizontal.common.account.report,target_move:0
 #: field:account_financial_report_horizontal.common.report,target_move:0
 msgid "Target Moves"
-msgstr ""
+msgstr "Registrazioni:"
 
 #. module: account_financial_report_horizontal
 #: view:account_financial_report_horizontal.common.report:0
 msgid "Report Options"
-msgstr ""
+msgstr "Opzioni Report"
 
 #. module: account_financial_report_horizontal
 #: selection:account.bs.report,filter:0
@@ -194,7 +197,7 @@ msgstr ""
 #: code:addons/account_financial_report_horizontal/report/common_report_header.py:99
 #, python-format
 msgid "Periods"
-msgstr ""
+msgstr "Periodi"
 
 #. module: account_financial_report_horizontal
 #: help:account.bs.report,reserve_account_id:0
@@ -203,6 +206,9 @@ msgid ""
 "added, Loss: Amount will be duducted), which is calculated from Profilt & "
 "Loss Report"
 msgstr ""
+"Questo conto è usato per trasferire Profitti/Perdite (Profitti: gli importi "
+"saranno aggiunti, Perdite: gli importi saranno dedotti), calcolati dal "
+"report del conto economico"
 
 #. module: account_financial_report_horizontal
 #: report:account.balancesheet:0
@@ -214,12 +220,12 @@ msgstr ""
 #: field:account_financial_report_horizontal.common.account.report,date_to:0
 #: field:account_financial_report_horizontal.common.report,date_to:0
 msgid "End Date"
-msgstr ""
+msgstr "Data Fine"
 
 #. module: account_financial_report_horizontal
 #: view:account_financial_report_horizontal.common.report:0
 msgid "Dates"
-msgstr ""
+msgstr "Date"
 
 #. module: account_financial_report_horizontal
 #: report:account.balancesheet:0
@@ -227,19 +233,19 @@ msgstr ""
 #: report:account.profit_horizontal:0
 #: report:account.profit_loss:0
 msgid "Start Period"
-msgstr ""
+msgstr "Periodo Iniziale"
 
 #. module: account_financial_report_horizontal
 #: report:account.balancesheet:0
 #: report:account.balancesheet.horizontal:0
 msgid "Assets"
-msgstr ""
+msgstr "Cespiti"
 
 #. module: account_financial_report_horizontal
 #: report:account.profit_horizontal:0
 #: report:account.profit_loss:0
 msgid "Total:"
-msgstr ""
+msgstr "Totale:"
 
 #. module: account_financial_report_horizontal
 #: selection:account.bs.report,target_move:0
@@ -249,13 +255,13 @@ msgstr ""
 #: code:addons/account_financial_report_horizontal/report/common_report_header.py:68
 #, python-format
 msgid "All Posted Entries"
-msgstr ""
+msgstr "Tutte le registrazioni Pubblicate"
 
 #. module: account_financial_report_horizontal
 #: report:account.balancesheet:0
 #: report:account.balancesheet.horizontal:0
 msgid "Liabilities"
-msgstr ""
+msgstr "Passività"
 
 #. module: account_financial_report_horizontal
 #: help:account.bs.report,fiscalyear_id:0
@@ -263,13 +269,13 @@ msgstr ""
 #: help:account_financial_report_horizontal.common.account.report,fiscalyear_id:0
 #: help:account_financial_report_horizontal.common.report,fiscalyear_id:0
 msgid "Keep empty for all open fiscal year"
-msgstr ""
+msgstr "Lasciare vuoto per tutti gli anni fiscali aperti"
 
 #. module: account_financial_report_horizontal
 #: code:addons/account_financial_report_horizontal/wizard/account_report_common.py:120
 #, python-format
 msgid "Select a starting and an ending period"
-msgstr ""
+msgstr "Selezionare un periodo di inizio e fine"
 
 #. module: account_financial_report_horizontal
 #: report:account.balancesheet:0
@@ -277,13 +283,13 @@ msgstr ""
 #: report:account.profit_horizontal:0
 #: report:account.profit_loss:0
 msgid "End Period"
-msgstr ""
+msgstr "Periodo finale"
 
 #. module: account_financial_report_horizontal
 #: code:addons/account_financial_report_horizontal/report/common_report_header.py:92
 #, python-format
 msgid "Not implemented"
-msgstr ""
+msgstr "Non implementato"
 
 #. module: account_financial_report_horizontal
 #: report:account.balancesheet:0
@@ -291,7 +297,7 @@ msgstr ""
 #: report:account.profit_horizontal:0
 #: report:account.profit_loss:0
 msgid "Fiscal Year"
-msgstr ""
+msgstr "Anno Fiscale"
 
 #. module: account_financial_report_horizontal
 #: code:addons/account_financial_report_horizontal/report/account_balance_sheet.py:73
@@ -302,7 +308,7 @@ msgstr ""
 #: code:addons/account_financial_report_horizontal/report/account_profit_loss.py:137
 #, python-format
 msgid "Net Profit"
-msgstr ""
+msgstr "Profitto netto"
 
 #. module: account_financial_report_horizontal
 #: selection:account.bs.report,filter:0
@@ -310,18 +316,18 @@ msgstr ""
 #: selection:account_financial_report_horizontal.common.account.report,filter:0
 #: selection:account_financial_report_horizontal.common.report,filter:0
 msgid "No Filters"
-msgstr ""
+msgstr "Nessun Filtro"
 
 #. module: account_financial_report_horizontal
 #: model:ir.model,name:account_financial_report_horizontal.model_account_financial_report_horizontal_common_report
 msgid "Account Common Report"
-msgstr ""
+msgstr "Report di contabilità generale"
 
 #. module: account_financial_report_horizontal
 #: code:addons/account_financial_report_horizontal/wizard/account_report_common.py:126
 #, python-format
 msgid "not implemented"
-msgstr ""
+msgstr "non implementato"
 
 #. module: account_financial_report_horizontal
 #: field:account.bs.report,chart_account_id:0
@@ -329,7 +335,7 @@ msgstr ""
 #: field:account_financial_report_horizontal.common.account.report,chart_account_id:0
 #: field:account_financial_report_horizontal.common.report,chart_account_id:0
 msgid "Chart of account"
-msgstr ""
+msgstr "Piano dei conti"
 
 #. module: account_financial_report_horizontal
 #: report:account.balancesheet:0
@@ -337,7 +343,7 @@ msgstr ""
 #: report:account.profit_horizontal:0
 #: report:account.profit_loss:0
 msgid "Balance"
-msgstr ""
+msgstr "Saldo"
 
 #. module: account_financial_report_horizontal
 #: code:addons/account_financial_report_horizontal/report/account_balance_sheet.py:78
@@ -347,7 +353,7 @@ msgstr ""
 #: code:addons/account_financial_report_horizontal/report/account_profit_loss.py:134
 #, python-format
 msgid "Net Loss"
-msgstr ""
+msgstr "Perdita netta"
 
 #. module: account_financial_report_horizontal
 #: view:account.pl.report:0
@@ -355,20 +361,22 @@ msgid ""
 "The Profit and Loss report gives you an overview of your company profit and "
 "loss in a single document"
 msgstr ""
+"Il report su perdite e profitti fornisce una visuale dell'andamento "
+"dell'azienda in un unico documento"
 
 #. module: account_financial_report_horizontal
 #: selection:account.bs.report,display_account:0
 #: selection:account.pl.report,display_account:0
 #: selection:account_financial_report_horizontal.common.account.report,display_account:0
 msgid "With movements"
-msgstr ""
+msgstr "Con movimenti"
 
 #. module: account_financial_report_horizontal
 #: selection:account.bs.report,display_account:0
 #: selection:account.pl.report,display_account:0
 #: selection:account_financial_report_horizontal.common.account.report,display_account:0
 msgid "All"
-msgstr ""
+msgstr "Tutti"
 
 #. module: account_financial_report_horizontal
 #: report:account.balancesheet:0
@@ -376,32 +384,32 @@ msgstr ""
 #: report:account.profit_horizontal:0
 #: report:account.profit_loss:0
 msgid "Code"
-msgstr ""
+msgstr "Codice"
 
 #. module: account_financial_report_horizontal
 #: model:ir.actions.report.xml,name:account_financial_report_horizontal.account_profit_loss
 msgid "Profit and Loss"
-msgstr ""
+msgstr "Conto Economico"
 
 #. module: account_financial_report_horizontal
 #: model:ir.model,name:account_financial_report_horizontal.model_account_financial_report_horizontal_common_account_report
 msgid "Account Common Account Report"
-msgstr ""
+msgstr "Report Conti di Contabilità Generale"
 
 #. module: account_financial_report_horizontal
 #: model:ir.actions.act_window,name:account_financial_report_horizontal.action_account_pl_report
 msgid "Account Profit And Loss"
-msgstr ""
+msgstr "Conto per profitti e perdite"
 
 #. module: account_financial_report_horizontal
 #: model:ir.model,name:account_financial_report_horizontal.model_account_bs_report
 msgid "Account Balance Sheet Report"
-msgstr ""
+msgstr "Report di Bilancio"
 
 #. module: account_financial_report_horizontal
 #: report:account.profit_loss:0
 msgid "Expenses"
-msgstr ""
+msgstr "Spese"
 
 #. module: account_financial_report_horizontal
 #: field:account.bs.report,period_to:0
@@ -409,7 +417,7 @@ msgstr ""
 #: field:account_financial_report_horizontal.common.account.report,period_to:0
 #: field:account_financial_report_horizontal.common.report,period_to:0
 msgid "End period"
-msgstr ""
+msgstr "Periodo finale"
 
 #. module: account_financial_report_horizontal
 #: report:account.balancesheet:0
@@ -419,7 +427,7 @@ msgstr ""
 #: model:ir.actions.report.xml,name:account_financial_report_horizontal.account_balance_sheet
 #: model:ir.ui.menu,name:account_financial_report_horizontal.menu_account_bs_report
 msgid "Balance Sheet"
-msgstr ""
+msgstr "Bilancio"
 
 #. module: account_financial_report_horizontal
 #: field:account.bs.report,fiscalyear_id:0
@@ -427,31 +435,31 @@ msgstr ""
 #: field:account_financial_report_horizontal.common.account.report,fiscalyear_id:0
 #: field:account_financial_report_horizontal.common.report,fiscalyear_id:0
 msgid "Fiscal year"
-msgstr ""
+msgstr "Anno fiscale"
 
 #. module: account_financial_report_horizontal
 #: code:addons/account_financial_report_horizontal/wizard/account_report_balance_sheet.py:70
 #, python-format
 msgid "Warning"
-msgstr ""
+msgstr "Attenzione"
 
 #. module: account_financial_report_horizontal
 #: field:account.bs.report,display_type:0
 #: field:account.pl.report,display_type:0
 msgid "Landscape Mode"
-msgstr ""
+msgstr "Modalità Orizzontale"
 
 #. module: account_financial_report_horizontal
 #: field:account.bs.report,display_account:0
 #: field:account.pl.report,display_account:0
 #: field:account_financial_report_horizontal.common.account.report,display_account:0
 msgid "Display accounts"
-msgstr ""
+msgstr "Mostra conti"
 
 #. module: account_financial_report_horizontal
 #: view:account_financial_report_horizontal.common.report:0
 msgid "Cancel"
-msgstr ""
+msgstr "Annulla"
 
 #. module: account_financial_report_horizontal
 #: model:ir.ui.menu,name:account_financial_report_horizontal.final_accounting_reports
@@ -464,7 +472,7 @@ msgstr ""
 #: help:account_financial_report_horizontal.common.account.report,chart_account_id:0
 #: help:account_financial_report_horizontal.common.report,chart_account_id:0
 msgid "Select Charts of Accounts"
-msgstr ""
+msgstr "Selezionare il Piano dei Conti"
 
 #. module: account_financial_report_horizontal
 #: field:account.bs.report,filter:0
@@ -472,7 +480,7 @@ msgstr ""
 #: field:account_financial_report_horizontal.common.account.report,filter:0
 #: field:account_financial_report_horizontal.common.report,filter:0
 msgid "Filter by"
-msgstr ""
+msgstr "Filtra per"
 
 #. module: account_financial_report_horizontal
 #: selection:account.bs.report,target_move:0
@@ -482,7 +490,7 @@ msgstr ""
 #: code:addons/account_financial_report_horizontal/report/common_report_header.py:67
 #, python-format
 msgid "All Entries"
-msgstr ""
+msgstr "Tutte le Registrazioni"
 
 #. module: account_financial_report_horizontal
 #: code:addons/account_financial_report_horizontal/wizard/account_report_balance_sheet.py:70
@@ -490,3 +498,5 @@ msgstr ""
 msgid ""
 "Please define the Reserve and Profit/Loss account for current user company !"
 msgstr ""
+"Va definito il conto per riserve, e profitti/perdite per l'azienda "
+"dell'attuale utente"
