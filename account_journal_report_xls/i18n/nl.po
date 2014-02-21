@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.1\n"
 "Report-Msgid-Bugs-To: support@noviat.be\n"
-"POT-Creation-Date: 2013-11-23 17:11:14.936000\n"
-"PO-Revision-Date: 2013-11-23 17:11:14.936000\n"
+"POT-Creation-Date: 2014-01-19 17:16:37.980000\n"
+"PO-Revision-Date: 2014-01-19 17:16:37.980000\n"
 "Last-Translator: Luc De Meyer (Noviat nv/sa)\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -121,8 +121,33 @@ msgstr "Dagboekoverzicht"
 
 #. module: account_journal_report_xls
 #: report:nov.account.journal.print:0
+msgid "Journal Items"
+msgstr "Boekingsregels"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
 msgid "Entry"
 msgstr "Boeking"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Name"
+msgstr "Naam"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Reference"
+msgstr "Referentie"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Effective Date"
+msgstr "Datum"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Period"
+msgstr "Periode"
 
 #. module: account_journal_report_xls
 #: report:nov.account.journal.print:0
@@ -133,6 +158,16 @@ msgstr "Datum"
 #: report:nov.account.journal.print:0
 msgid "Account"
 msgstr "Rekening"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Account Name"
+msgstr "Omschrijving rekening"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Journal"
+msgstr "Dagboek"
 
 #. module: account_journal_report_xls
 #: report:nov.account.journal.print:0
@@ -181,6 +216,16 @@ msgstr "Rec. Part."
 
 #. module: account_journal_report_xls
 #: report:nov.account.journal.print:0
+msgid "Tax Code"
+msgstr "BTW vak"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Tax/Base Amount"
+msgstr "Bedrag BTW/Mvh"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
 msgid "VAT"
 msgstr "BTW"
 
@@ -208,6 +253,16 @@ msgstr "Bedrag valuta"
 #: report:nov.account.journal.print:0
 msgid "Curr."
 msgstr "Val."
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Comp. Curr."
+msgstr "Bedr. Val."
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Analytic Account"
+msgstr "Kostenplaats"
 
 #. module: account_journal_report_xls
 #: report:nov.account.journal.print:0
