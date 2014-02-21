@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.1\n"
 "Report-Msgid-Bugs-To: support@noviat.be\n"
-"POT-Creation-Date: 2013-11-23 17:11:14.941000\n"
-"PO-Revision-Date: 2013-11-23 17:11:14.941000\n"
+"POT-Creation-Date: 2014-01-19 17:16:37.990000\n"
+"PO-Revision-Date: 2014-01-19 17:16:37.990000\n"
 "Last-Translator: Luc De Meyer (Noviat nv/sa)\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -121,8 +121,33 @@ msgstr "Journal détaillé"
 
 #. module: account_journal_report_xls
 #: report:nov.account.journal.print:0
+msgid "Journal Items"
+msgstr "Écritures comptables"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
 msgid "Entry"
 msgstr "Écriture"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Name"
+msgstr "Nom"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Reference"
+msgstr "Référence"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Effective Date"
+msgstr "Date"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Period"
+msgstr "Période"
 
 #. module: account_journal_report_xls
 #: report:nov.account.journal.print:0
@@ -133,6 +158,16 @@ msgstr "Date"
 #: report:nov.account.journal.print:0
 msgid "Account"
 msgstr "Compte"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Account Name"
+msgstr "Description compte "
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Journal"
+msgstr "Journal"
 
 #. module: account_journal_report_xls
 #: report:nov.account.journal.print:0
@@ -181,6 +216,16 @@ msgstr "Let. Part."
 
 #. module: account_journal_report_xls
 #: report:nov.account.journal.print:0
+msgid "Tax Code"
+msgstr "Case TVA"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Tax/Base Amount"
+msgstr "Montant TVA/Base"
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
 msgid "VAT"
 msgstr "TVA"
 
@@ -208,6 +253,16 @@ msgstr "Montant devise"
 #: report:nov.account.journal.print:0
 msgid "Curr."
 msgstr "Dev."
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Comp. Curr."
+msgstr "Dev. Soc."
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Analytic Account"
+msgstr "Compte analytique"
 
 #. module: account_journal_report_xls
 #: report:nov.account.journal.print:0

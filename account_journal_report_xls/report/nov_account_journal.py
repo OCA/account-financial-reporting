@@ -121,9 +121,12 @@ class nov_journal_print(report_sxw.rml_parse):
 
         select_extra, join_extra, where_extra = j_obj._report_xls_query_extra(self.cr, self.uid, self.context)
 
+        # SQL select for performance reasons, as a consequence, there are no field value translations.
+        # If performance is no issue, you can adapt the _report_xls_template in an inherited module to add field value translations.
         self.cr.execute("SELECT l.move_id AS move_id, l.id AS aml_id, "
             "am.name AS move_name, coalesce(am.ref,'') AS move_ref, am.date AS move_date, "
-            "aa.id AS account_id, aa.code AS acc_code, "
+            "aa.id AS account_id, aa.code AS acc_code, aa.name AS acc_name, "
+            "aj.name AS journal, aj.code AS journal_code, "
             "coalesce(rp.name,'') AS partner_name, coalesce(rp.ref,'') AS partner_ref, rp.id AS partner_id, "
             "coalesce(l.name,'') AS aml_name, "
             "l.date_maturity AS date_maturity, "
@@ -131,6 +134,7 @@ class nov_journal_print(report_sxw.rml_parse):
             "coalesce(atc.code,'') AS tax_code, atc.id AS tax_code_id, coalesce(l.tax_amount,0.0) AS tax_amount, "
             "coalesce(l.debit,0.0) AS debit, coalesce(l.credit,0.0) AS credit, "
             "coalesce(amr.name,'') AS reconcile, coalesce(amrp.name,'') AS reconcile_partial, "
+            "ana.name AS an_acc_name, coalesce(ana.code,'') AS an_acc_code, "
             "coalesce(l.amount_currency,0.0) AS amount_currency, "
             "rc.id AS currency_id, rc.name AS currency_name, rc.symbol AS currency_symbol, "
             "coalesce(ai.internal_number,'-') AS inv_number, coalesce(abs.name,'-') AS st_number, coalesce(av.number,'-') AS voucher_number "
@@ -138,6 +142,7 @@ class nov_journal_print(report_sxw.rml_parse):
             "FROM account_move_line l "
             "INNER JOIN account_move am ON l.move_id = am.id "
             "INNER JOIN account_account aa ON l.account_id = aa.id "
+            "INNER JOIN account_journal aj ON l.journal_id = aj.id "
             "INNER JOIN account_period ap ON l.period_id = ap.id "
             "LEFT OUTER JOIN account_invoice ai ON ai.move_id = am.id "
             "LEFT OUTER JOIN account_voucher av ON av.move_id = am.id "
@@ -146,6 +151,7 @@ class nov_journal_print(report_sxw.rml_parse):
             "LEFT OUTER JOIN account_tax_code atc ON l.tax_code_id = atc.id  "
             "LEFT OUTER JOIN account_move_reconcile amr ON l.reconcile_id = amr.id  "
             "LEFT OUTER JOIN account_move_reconcile amrp ON l.reconcile_partial_id = amrp.id  "
+            "LEFT OUTER JOIN account_analytic_account ana ON l.analytic_account_id = ana.id  "
             "LEFT OUTER JOIN res_currency rc ON l.currency_id = rc.id  "
             + join_extra +
             "WHERE l.period_id IN %s AND l.journal_id = %s "

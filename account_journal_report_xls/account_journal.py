@@ -65,6 +65,11 @@ class account_journal(orm.Model):
             #'partner_ref',       # res.partner,ref
             #'move_ref',          # account.move,ref
             #'move_id',           # account.move,id
+            #'acc_name',          # account.account,name
+            #'journal',           # account.journal,name
+            #'journal_code',      # account.journal,code
+            #'analytic_account',       # account.analytic.account,name
+            #'analytic_account_code',  # account.analytic.account,code
         ]
         return res
 
