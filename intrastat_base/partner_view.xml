@@ -14,12 +14,12 @@
     <field name="model">res.partner</field>
     <field name="inherit_id" ref="base.view_partner_form" />
     <field name="arch" type="xml">
-        <xpath expr="//group//field[@name='country_id']"
+        <xpath expr="//field[@name='country_id']"
                position="attributes">
             <attribute name="attrs">{'readonly': [('use_parent_address','=',True)], 'required': True}</attribute>
         </xpath>
 
-        <xpath expr="//form[@string='Contact']//field[@name='country_id']"
+        <xpath expr="//field[@name='child_ids']/form//field[@name='country_id']"
                position="attributes">
             <attribute name="attrs">{'required': True}</attribute>
         </xpath>
