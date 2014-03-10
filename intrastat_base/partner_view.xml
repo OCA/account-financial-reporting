@@ -19,7 +19,7 @@
             <attribute name="attrs">{'readonly': [('use_parent_address','=',True)], 'required': True}</attribute>
         </xpath>
 
-        <xpath expr="//form[@string='Contact']/sheet/group[2]/div/field[@name='country_id']"
+        <xpath expr="//form[@string='Contact']//field[@name='country_id']"
                position="attributes">
             <attribute name="attrs">{'required': True}</attribute>
         </xpath>
