@@ -23,6 +23,5 @@
 from . import country
 from . import product
 from . import tax
-from . import partner
 from . import company
 from . import intrastat_common
