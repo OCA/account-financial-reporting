@@ -30,7 +30,7 @@ from openerp.addons.account.report.common_report_header import common_report_hea
 
 _logger = logging.getLogger('financial.reports.webkit')
 
-
+MAX_MONSTER_SLICE = 50000
 class CommonReportHeaderWebkit(common_report_header):
     """Define common helper for financial report"""
 
@@ -433,6 +433,14 @@ class CommonReportHeaderWebkit(common_report_header):
             raise osv.except_osv(_('No valid filter'), _('Please set a valid time filter'))
 
     def _get_move_line_datas(self, move_line_ids, order='per.special DESC, l.date ASC, per.date_start ASC, m.name ASC'):
+        # Possible bang if move_line_ids is too long
+        # We can not slice here as we have to do the sort.
+        # If slice has to be done it means that we have to reorder in python
+        # after all is finished. That quite crapy...
+        # We have a defective desing here (mea culpa) that should be fixed
+        #
+        # TODO improve that by making a better domain or if not possible
+        # by using python sort
         if not move_line_ids:
             return []
         if not isinstance(move_line_ids, list):
@@ -441,6 +449,7 @@ class CommonReportHeaderWebkit(common_report_header):
 SELECT l.id AS id,
             l.date AS ldate,
             j.code AS jcode ,
+            j.type AS jtype,
             l.currency_id,
             l.account_id,
             l.amount_currency,
@@ -455,7 +464,8 @@ SELECT l.id AS id,
             l.partner_id AS lpartner_id,
             p.name AS partner_name,
             m.name AS move_name,
-             COALESCE(partialrec.name, fullrec.name, '') AS rec_name,
+            COALESCE(partialrec.name, fullrec.name, '') AS rec_name,
+            COALESCE(partialrec.id, fullrec.id, NULL) AS rec_id,
             m.id AS move_id,
             c.name AS currency_code,
             i.id AS invoice_id,
