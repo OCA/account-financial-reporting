@@ -117,7 +117,7 @@
              <field eval="1" name="header"/>
              <field name="model">account.account</field>
              <field name="type">ir.actions.report.xml</field>
-             <field name="name">Aged Partner Palance</field>
+             <field name="name">Aged Partner Balance</field>
              <field name="report_rml">account_financial_report_webkit/report/templates/aged_trial_webkit.mako</field>
              <field name="report_file">account_financial_report_webkit/report/templates/aged_trial_webkit.mako</field>
          </record>
