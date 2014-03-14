@@ -191,7 +191,7 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
             reference_line = sale_lines[0]
         elif len(refund_lines) == 1:
             reference_line = refund_lines[0]
-        key = line.get('date_maturity', ldate')
+        key = line.get('date_maturity', 'ldate')
         return self._compute_delay_from_key(key,
                                             reference_line,
                                             end_date)
