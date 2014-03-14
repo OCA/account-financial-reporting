@@ -228,7 +228,6 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
         aged_ranges = [x.get('aged_lines', {}) for x in aged_lines]
         for drange in RANGES:
             totals[drange] = sum(x.get(drange, 0.0) for x in aged_ranges)
-        print totals
         return totals
 
     def compute_percents(self, totals):
@@ -236,7 +235,6 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
         base = float(totals['balance']) or 1.0
         for drange in RANGES:
             percents[drange] = (float(totals[drange]) / base) * 100.0
-        print percents
         return percents
 
     def get_reconcile_count_lookup(self, lines):
