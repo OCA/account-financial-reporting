@@ -179,7 +179,7 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
                                             end_date)
 
     def compute_delay_from_date(self, line, end_date, ledger_lines):
-        return self._compute_delay_from_key('date',
+        return self._compute_delay_from_key('ldate',
                                             line,
                                             end_date)
 
@@ -191,7 +191,7 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
             reference_line = sale_lines[0]
         elif len(refund_lines) == 1:
             reference_line = refund_lines[0]
-        key = line.get('date_maturity', reference_line['date'])
+        key = line.get('date_maturity', reference_line['ldate'])
         return self._compute_delay_from_key(key,
                                             reference_line,
                                             end_date)
