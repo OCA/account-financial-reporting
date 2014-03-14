@@ -123,15 +123,10 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
         del(acc.ledger_lines)
         return res
 
-    def compute_aged_lines(self, partner_id, lines, data):
-        lines_to_age = self.filter_lines(partner_id, lines)
+    def compute_aged_lines(self, partner_id, ledger_lines, data):
+        lines_to_age = self.filter_lines(partner_id, ledger_lines)
         res = {}
-        period_to_id = data['form']['period_to']
-
-        period_to = self.pool['account.period'].browse(self.cr,
-                                                       self.uid,
-                                                       period_to_id)
-        end_date = period_to.date_stop
+        end_date = self._get_end_date(data)
         aged_lines = dict.fromkeys(RANGES, 0.0)
         reconcile_lookup = self.get_reconcile_count_lookup(lines_to_age)
         res['aged_lines'] = aged_lines
@@ -139,11 +134,26 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
             compute_method = self.get_compute_method(reconcile_lookup,
                                                      partner_id,
                                                      line)
-            delay = compute_method(line, end_date)
+            delay = compute_method(line, end_date, ledger_lines)
             classification = self.classify_line(partner_id, delay)
             aged_lines[classification] += line['debit'] - line['credit']
         self.compute_balance(res, aged_lines)
         return res
+
+    def _get_end_date(self, data):
+        end_date = None
+        date_to = data['form']['date_to']
+        period_to_id = data['form']['period_to']
+        if date_to:
+            end_date = date_to
+        elif period_to_id:
+            period_to = self.pool['account.period'].browse(self.cr,
+                                                           self.uid,
+                                                           period_to_id)
+            end_date = period_to.date_stop
+        else:
+            raise ValueError('End date and end period not available')
+        return end_date
 
     def _compute_delay_from_key(self, key, line, end_date):
         from_date = datetime.strptime(line[key], DEFAULT_SERVER_DATE_FORMAT)
@@ -151,18 +161,28 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
         delta = end_date - from_date
         return delta.days
 
-    def compute_delay_from_maturity(self, line, end_date):
+    def compute_delay_from_maturity(self, line, end_date, ledger_lines):
         return self._compute_delay_from_key('date_maturity',
                                             line,
                                             end_date)
 
-    def compute_delay_from_date(self, line, end_date):
+    def compute_delay_from_date(self, line, end_date, ledger_lines):
         return self._compute_delay_from_key('date',
                                             line,
                                             end_date)
 
-    def compute_delay_from_partial_rec(self, line, end_date):
-        return 25
+    def compute_delay_from_partial_rec(self, line, end_date, ledger_lines):
+        sale_lines = [x for x in ledger_lines if x['jtype'] in REC_PAY_TYPE]
+        refund_lines = [x for x in ledger_lines if x['jtype'] in REFUND_TYPE]
+        reference_line = line
+        if len(sale_lines) == 1:
+            reference_line = sale_lines[0]
+        elif len(refund_lines) == 1:
+            reference_line = refund_lines[0]
+        key = line.get('date_maturity', reference_line['date'])
+        return self._compute_delay_from_key(key,
+                                            reference_line,
+                                            end_date)
 
     def get_compute_method(self, reconcile_lookup, partner_id, line):
         if reconcile_lookup.get(line['rec_id'], 0.0) > 1:
