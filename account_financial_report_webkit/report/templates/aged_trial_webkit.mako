@@ -117,7 +117,7 @@
                          <%percents = acc.aged_percents%>
                          <%totals = acc.aged_totals%>
                            <div class="act_as_cell first_column">${partner_name}</div>
-                           <div class="act_as_cell">TOSEPC</div>
+                           <div class="act_as_cell">${p_ref or ''}</div>
 
                            <div class="act_as_cell amount">${formatLang(line.get('balance') or 0.0) | amount}</div>
                             %for classif in ranges:
