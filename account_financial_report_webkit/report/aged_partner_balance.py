@@ -91,14 +91,25 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
         })
 
     def _get_ranges(self):
+        """:returns: :cons:`RANGES`"""
         return RANGES
 
     def _get_ranges_titles(self):
+        """:returns: :cons: `RANGES_TITLES`"""
         return RANGES_TITLES
 
     def set_context(self, objects, data, ids, report_type=None):
         """Populate aged_lines, aged_balance, aged_percents attributes
         on each browse record that will be used by mako template
+
+        The computation are based on the ledger_lines attribute set on account
+        contained by :attr:`objects`
+
+        self.object were previously set by parent class
+        :class: `.open_invoices.PartnersOpenInvoicesWebkit`
+
+        :returns: parent :class:`.open_invoices.PartnersOpenInvoicesWebkit`
+                  call to set_context
         """
         res = super(AccountAgedTrialBalanceWebkit, self).set_context(
             objects,
@@ -124,6 +135,7 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
         return res
 
     def compute_aged_lines(self, partner_id, ledger_lines, data):
+        """Add to accounts browse records contained in :attr:`objects`"""
         lines_to_age = self.filter_lines(partner_id, ledger_lines)
         res = {}
         end_date = self._get_end_date(data)
