@@ -30,7 +30,7 @@ This module adds or replaces the following standard OpenERP financial reports:
  - Partner ledger
  - Partner balance
  - Open invoices report
-
+ - Aged Partner Balance
 
 Main improvements per report:
 -----------------------------
@@ -147,6 +147,7 @@ wkhtmltopdf. The texts are defined inside the report classes.
                    'wizard/trial_balance_wizard_view.xml',
                    'wizard/partner_balance_wizard_view.xml',
                    'wizard/open_invoices_wizard_view.xml',
+                   'wizard/aged_partner_balance_wizard.xml',
                    'wizard/print_journal_view.xml',
                    'report_menus.xml',
                    ],

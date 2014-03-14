@@ -18,6 +18,10 @@
             parent="account.next_id_22" action="action_account_partner_balance_menu_webkit"
             groups="account.group_account_manager,account.group_account_user" id="account.menu_account_partner_balance_report"/>
 
+        <menuitem icon="STOCK_PRINT" name="Aged Partner Balance"
+            parent="account.next_id_22" action="action_account_aged_trial_balance_menu_webkit"
+            groups="account.group_account_manager,account.group_account_user" id="account.menu_aged_trial_balance"/>
+
         <menuitem icon="STOCK_PRINT" name="Open Invoices"
             parent="account.next_id_22" action="action_account_open_invoices_menu_webkit"
             groups="account.group_account_manager,account.group_account_user" id="menu_account_open_invoices"/>
