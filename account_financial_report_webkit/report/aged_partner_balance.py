@@ -190,6 +190,14 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
         return end_date
 
     def _compute_delay_from_key(self, key, line, end_date):
+        """Compute overdue delay delta in days for line using attribute in key
+        delta = end_date - date of key
+
+        :param key: date key to be used to compute delta
+        :param end_date: end_date computed for wizard data
+
+        :returns: delta in days
+        """
         from_date = datetime.strptime(line[key], DEFAULT_SERVER_DATE_FORMAT)
         end_date = datetime.strptime(end_date, DEFAULT_SERVER_DATE_FORMAT)
         delta = end_date - from_date
