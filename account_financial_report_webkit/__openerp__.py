@@ -100,6 +100,47 @@ The Partner balance: list of account with balances
 * Subtotal by account and partner
 * Alphabetical sorting (same as in partner balance)
 
+
+Aged Partner Balance: Summary of aged open amount per partner
+
+This report is an accounting tool helping in various tasks.
+You can credit control or partner balance provisions computation for instance.
+
+The aged balance report allows you to print balances per partner
+like the trial balance but add an extra information :
+
+* It will split balances into due amounts
+  (due date not reached à the end date of the report) and overdue amounts
+  Overdue data are also split by period.
+* For each partner following columns will be displayed:
+
+  * Total balance (all figures must match with same date partner balance report).
+     This column equals the sum of all following columns)
+
+   * Due
+   * Overdue <= 30 days
+   * Overdue <= 60 days
+   * Overdue <= 90 days
+   * Overdue <= 120 days
+   * Older
+
+Hypothesis / Contraints of aged partner balance
+
+* Overdues columns will be by default  be based on 30 days range fix number of days.
+  This can be changed by changes the RANGES constraint
+* All data will be displayed in company currency
+* When partial payments, the payment must appear in the same colums than the invoice
+  (Except if multiple payment terms)
+* Data granularity: partner (will not display figures at invoices level)
+* The report aggregate data per account with sub-totals
+* Initial balance must be calculated the same way that
+  the partner balance / Ignoring the opening entry
+  in special period (idem open invoice report)
+* Only accounts with internal type payable or receivable are considered
+  (idem open invoice report)
+* If maturity date is null then use move line date
+
+
 Limitations:
 ------------
 
