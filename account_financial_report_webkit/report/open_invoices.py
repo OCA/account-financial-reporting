@@ -93,7 +93,6 @@ class PartnersOpenInvoicesWebkit(report_sxw.rml_parse, CommonPartnersReportHeade
         """Populate a ledger_lines attribute on each browse record that will be used
         by mako template"""
         new_ids = data['form']['chart_account_id']
-       # import pdb; pdb.set_trace()
         # Account initial balance memoizer
         init_balance_memoizer = {}
         # Reading form
