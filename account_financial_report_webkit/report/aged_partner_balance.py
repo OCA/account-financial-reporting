@@ -193,6 +193,7 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
         """Compute overdue delay delta in days for line using attribute in key
         delta = end_date - date of key
 
+        :param line: current ledger line
         :param key: date key to be used to compute delta
         :param end_date: end_date computed for wizard data
 
@@ -204,24 +205,42 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
         return delta.days
 
     def compute_delay_from_maturity(self, line, end_date, ledger_lines):
+        """Compute overdue delay delta in days for line using attribute in key
+        delta = end_date - maturity date
+
+        :param line: current ledger line
+        :param end_date: end_date computed for wizard data
+
+        :returns: delta in days
+        """
         return self._compute_delay_from_key('date_maturity',
                                             line,
                                             end_date)
 
     def compute_delay_from_date(self, line, end_date, ledger_lines):
+        """Compute overdue delay delta in days for line using attribute in key
+        delta = end_date - maturity date
+
+        :param line: current ledger line
+        :param end_date: end_date computed for wizard data
+
+        :returns: delta in days
+        """
         return self._compute_delay_from_key('ldate',
                                             line,
                                             end_date)
 
     def compute_delay_from_partial_rec(self, line, end_date, ledger_lines):
-        sale_lines = [x for x in ledger_lines if x['jtype'] in REC_PAY_TYPE]
-        refund_lines = [x for x in ledger_lines if x['jtype'] in REFUND_TYPE]
+        sale_lines = [x for x in ledger_lines if x['jtype'] in REC_PAY_TYPE and
+                      line['rec_id'] == x['rec_id']]
+        refund_lines = [x for x in ledger_lines if x['jtype'] in REFUND_TYPE and
+                        line['rec_id'] == x['rec_id']]
         reference_line = line
         if len(sale_lines) == 1:
             reference_line = sale_lines[0]
         elif len(refund_lines) == 1:
             reference_line = refund_lines[0]
-        key = 'date_maturity' if line.get('date_maturity') else 'ldate'
+        key = 'date_maturity' if reference_line.get('date_maturity') else 'ldate'
         return self._compute_delay_from_key(key,
                                             reference_line,
                                             end_date)
