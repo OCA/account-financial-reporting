@@ -22,7 +22,7 @@
 
 {
     'name': 'Financial Journal reports',
-    'version': '0.1',
+    'version': '0.2',
     'license': 'AGPL-3',
     'author': 'Noviat',
     'category': 'Accounting & Finance',

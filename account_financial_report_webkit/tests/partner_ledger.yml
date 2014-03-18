@@ -29,7 +29,7 @@
         data_dict = {'chart_account_id':ref('account.chart0'), 'fiscalyear_id': ref('account.data_fiscalyear'),
                      'until_date': '%s-12-31' %(datetime.now().year), 'target_move': 'posted',
                      'amount_currency': True, 'result_selection': 'customer_supplier',
-                     'partner_ids': [ref('base.res_partner_agrolait'), ref('base.res_partner_asus')]}
+                     'partner_ids': [ref('base.res_partner_2'), ref('base.res_partner_1')]}
         from tools import test_reports
         test_reports.try_report_action(cr, uid, 'action_account_partners_ledger_menu_webkit',wiz_data=data_dict, context=ctx, our_module='account_financial_report_webkit')
 

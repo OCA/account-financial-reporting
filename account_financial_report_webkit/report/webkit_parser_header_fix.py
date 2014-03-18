@@ -41,7 +41,6 @@ from openerp import addons
 from openerp import pooler
 from openerp import tools
 from openerp.addons.report_webkit import webkit_report
-from openerp.addons.report_webkit.webkit_report import mako_template
 from openerp.addons.report_webkit.report_helper import WebKitHelper
 
 _logger = logging.getLogger('financial.reports.webkit')
@@ -69,6 +68,20 @@ _logger = logging.getLogger('financial.reports.webkit')
 #                ('--footer-line',),
 #            ],
 #        })
+
+
+# redefine mako_template as this is overriden by jinja since saas-1
+# from openerp.addons.report_webkit.webkit_report import mako_template
+from mako.template import Template
+from mako.lookup import TemplateLookup
+
+def mako_template(text):
+    """Build a Mako template.
+
+    This template uses UTF-8 encoding
+    """
+    tmp_lookup  = TemplateLookup() #we need it in order to allow inclusion and inheritance
+    return Template(text, input_encoding='utf-8', output_encoding='utf-8', lookup=tmp_lookup)
 
 
 class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
