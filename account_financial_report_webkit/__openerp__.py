@@ -197,7 +197,8 @@ wkhtmltopdf. The texts are defined inside the report classes.
              'tests/partner_ledger.yml',
              'tests/trial_balance.yml',
              'tests/partner_balance.yml',
-             'tests/open_invoices.yml',],
+             'tests/open_invoices.yml',
+             'tests/aged_trial_balance.yml'],
     #'tests/account_move_line.yml'
     'active': False,
     'installable': True,
