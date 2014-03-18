@@ -167,7 +167,7 @@ an issue in wkhtmltopdf
 the header and footer are created as text with arguments passed to
 wkhtmltopdf. The texts are defined inside the report classes.
 """,
-    'version': '1.0',
+    'version': '1.1',
     'author': 'Camptocamp',
     'license': 'AGPL-3',
     'category': 'Finance',
