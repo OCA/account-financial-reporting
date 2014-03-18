@@ -268,11 +268,12 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
                       line['rec_id'] == x['rec_id']]
         refund_lines = [x for x in ledger_lines if x['jtype'] in REFUND_TYPE and
                         line['rec_id'] == x['rec_id']]
-        reference_line = line
         if len(sale_lines) == 1:
             reference_line = sale_lines[0]
         elif len(refund_lines) == 1:
             reference_line = refund_lines[0]
+        else:
+            reference_line = line
         key = 'date_maturity' if reference_line.get('date_maturity') else 'ldate'
         return self._compute_delay_from_key(key,
                                             reference_line,
@@ -292,10 +293,8 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
         """
         if reconcile_lookup.get(line['rec_id'], 0.0) > 1:
             return self.compute_delay_from_partial_rec
-        if line['jtype'] in INV_TYPE:
-            if line.get('date_maturity'):
-                return self.compute_delay_from_maturity
-            return self.compute_delay_from_date
+        elif line['jtype'] in INV_TYPE and line.get('date_maturity'):
+            return self.compute_delay_from_maturity
         else:
             return self.compute_delay_from_date
 
@@ -387,15 +386,13 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
         # but it seems not really possible for a partner
         # So I'll keep that option.
         l_ids = tuple(x['id'] for x in lines)
-        sql = ("SELECT reconcile_partial_id, COUNT(*) FROM account_move_line \n"
-               "   WHERE reconcile_partial_id IS NOT NULL \n"
-               "   AND id in %s \n"
+        sql = ("SELECT reconcile_partial_id, COUNT(*) FROM account_move_line"
+               "   WHERE reconcile_partial_id IS NOT NULL"
+               "   AND id in %s"
                "   GROUP BY reconcile_partial_id")
         self.cr.execute(sql, (l_ids,))
         res = self.cr.fetchall()
-        if res:
-            return dict((x[0], x[1]) for x in res)
-        return {}
+        return dict((x[0], x[1]) for x in res)
 
 HeaderFooterTextWebKitParser(
     'report.account.account_aged_trial_balance_webkit',
