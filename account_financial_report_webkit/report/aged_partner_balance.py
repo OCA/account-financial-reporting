@@ -18,6 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from __future__ import division
 from datetime import datetime
 
 from openerp import pooler
@@ -364,9 +365,9 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
 
     def compute_percents(self, totals):
         percents = {}
-        base = float(totals['balance']) or 1.0
+        base = totals['balance'] or 1.0
         for drange in RANGES:
-            percents[drange] = (float(totals[drange]) / base) * 100.0
+            percents[drange] = (totals[drange] / base) * 100.0
         return percents
 
     def get_reconcile_count_lookup(self, lines):
