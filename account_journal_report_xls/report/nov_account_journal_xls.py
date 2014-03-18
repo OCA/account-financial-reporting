@@ -86,6 +86,10 @@ class account_journal_xls(report_xls):
                 'header': [1, 12, 'text',  _render("_('Account')")],
                 'lines': [1, 0, 'text', _render("l['acc_code']")],
                 'totals': [1, 0, 'text', None]},
+            'acc_name': {
+                'header': [1, 36, 'text', _render("_('Account Name')")],
+                'lines': [1, 0, 'text', _render("l['acc_name']")],
+                'totals': [1, 0, 'text', None]},
             'aml_name': {
                 'header': [1, 42, 'text', _render("_('Description')")],
                 'lines': [1, 0, 'text', _render("l['aml_name']")],
@@ -93,6 +97,22 @@ class account_journal_xls(report_xls):
             'period': {
                 'header': [1, 12, 'text', _render("_('Period')")],
                 'lines': [1, 0, 'text', _render("l['period']")],
+                'totals': [1, 0, 'text', None]},
+            'journal': {
+                'header': [1, 20, 'text', _render("_('Journal')")],
+                'lines': [1, 0, 'text', _render("l['journal']")],
+                'totals': [1, 0, 'text', None]},
+            'journal_code': {
+                'header': [1, 10, 'text', _render("_('Journal')")],
+                'lines': [1, 0, 'text', _render("l['journal_code']")],
+                'totals': [1, 0, 'text', None]},
+            'analytic_account': {
+                'header': [1, 20, 'text', _render("_('Analytic Account')")],
+                'lines': [1, 0, 'text', _render("l['an_acc_name']")],
+                'totals': [1, 0, 'text', None]},
+            'analytic_account_code': {
+                'header': [1, 20, 'text', _render("_('Analytic Account')")],
+                'lines': [1, 0, 'text', _render("l['an_acc_code']")],
                 'totals': [1, 0, 'text', None]},
             'partner_name': {
                 'header': [1, 36, 'text', _render("_('Partner')")],
