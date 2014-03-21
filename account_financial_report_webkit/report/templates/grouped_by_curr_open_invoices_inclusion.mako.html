@@ -36,9 +36,11 @@
                 ## move
                 <div class="act_as_cell" style="width: 70px;">${_('Entry')}</div>
                 ## journal
-                <div class="act_as_cell" style="width: 70px;">${_('Journal')}</div>
+                <div class="act_as_cell" style="width: 50px;">${_('Journal')}</div>
+                ## move reference
+                <div class="act_as_cell" style="width: 75px;">${_('Ref.')}</div>
                 ## label
-                <div class="act_as_cell" style="width: 255px;">${_('Label')}</div>
+                <div class="act_as_cell" style="width: 200px;">${_('Label')}</div>
                 ## reconcile
                 <div class="act_as_cell" style="width: 80px;">${_('Rec.')}</div>
                 ## maturity
@@ -83,6 +85,8 @@
                   <div class="act_as_cell">${line.get('move_name') or ''}</div>
                   ## journal
                   <div class="act_as_cell">${line.get('jcode') or ''}</div>
+                   ## move reference
+                  <div class="act_as_cell">${line.get('lref') or ''}</div>
                   ## label
                   <div class="act_as_cell">${label}</div>
                   ## reconcile
