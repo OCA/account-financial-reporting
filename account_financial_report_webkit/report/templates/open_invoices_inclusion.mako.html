@@ -9,7 +9,7 @@
     %>
 
     <div class="account_title bg" style="width: 1080px; margin-top: 20px; font-size: 12px;">${account.code} - ${account.name}</div>
-    
+
     %for partner_name, p_id, p_ref, p_name in account.partners_order:
     <%
       total_debit = 0.0
@@ -18,7 +18,7 @@
       cumul_balance_curr = 0.0
 
       part_cumul_balance = 0.0
-      part_cumul_balance_curr = 0.0 
+      part_cumul_balance_curr = 0.0
     %>
     <div class="act_as_table list_table" style="margin-top: 5px;">
         <div class="act_as_caption account_title">
@@ -31,15 +31,15 @@
                 ## period
                 <div class="act_as_cell" style="width: 70px;">${_('Period')}</div>
                 ## move
-                <div class="act_as_cell" style="width: 70px;">${_('Entry')}</div>
+                <div class="act_as_cell" style="width: 100px;">${_('Entry')}</div>
                 ## journal
-                <div class="act_as_cell" style="width: 50px;">${_('Journal')}</div>
+                <div class="act_as_cell" style="width: 70px;">${_('Journal')}</div>
                 ## partner
-                <div class="act_as_cell" style="width: 60px;">${_('Partner')}</div>
+                <div class="act_as_cell" style="width: 120px;">${_('Partner')}</div>
                 ## move reference
-                <div class="act_as_cell" style="width: 75px;">${_('Ref.')}</div>
+                <div class="act_as_cell" style="width: 100px;">${_('Reference')}</div>
                 ## label
-                <div class="act_as_cell" style="width: 255px;">${_('Label')}</div>
+                <div class="act_as_cell" style="width: 180px;">${_('Label')}</div>
                 ## reconcile
                 <div class="act_as_cell" style="width: 80px;">${_('Rec.')}</div>
                 ## maturity
@@ -122,6 +122,8 @@
               <div class="act_as_cell"></div>
               ## partner
               <div class="act_as_cell"></div>
+              ## move reference
+              <div class="act_as_cell"></div>
               ## label
               <div class="act_as_cell">${_('Cumulated Balance on Partner')}</div>
               ## reconcile
@@ -156,9 +158,9 @@
     %endfor
     <div class="act_as_table list_table" style="margin-top:5px;">
         <div class="act_as_row labels" style="font-weight: bold; font-size: 12px;">
-                <div class="act_as_cell first_column" style="width: 330px;">${account.code} - ${account.name}</div>
+                <div class="act_as_cell first_column" style="width: 520px;">${account.code} - ${account.name}</div>
                 ## label
-                <div class="act_as_cell" style="width: 395px;">${_("Cumulated Balance on Account")}</div>
+                <div class="act_as_cell" style="width: 320px;">${_("Cumulated Balance on Account")}</div>
                 ## debit
                 <div class="act_as_cell amount" style="width: 80px;">${ formatLang(account_total_debit) | amount }</div>
                 ## credit
