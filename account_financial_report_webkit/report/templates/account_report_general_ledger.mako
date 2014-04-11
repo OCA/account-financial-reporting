@@ -23,7 +23,11 @@
         initial_balance_text = {'initial_balance': _('Computed'), 'opening_balance': _('Opening Entries'), False: _('No')}
         %>
 
-        <div class="act_as_table data_table">
+        %if amount_currency(data):
+        <div class="act_as_table data_table" style="width: 1205px;">
+        %else:
+        <div class="act_as_table data_table" style="width: 1100px;">
+        %endif
             <div class="act_as_row labels">
                 <div class="act_as_cell">${_('Chart of Account')}</div>
                 <div class="act_as_cell">${_('Fiscal Year')}</div>
