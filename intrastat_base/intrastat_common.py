@@ -22,6 +22,7 @@
 
 from openerp.osv import orm
 from openerp.tools.translate import _
+from openerp import tools
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import logging
@@ -93,12 +94,14 @@ class report_intrastat_common(orm.TransientModel):
         return True
 
     def _check_xml_schema(
-            self, cr, uid, xml_root, xml_string, xsd, context=None):
+            self, cr, uid, xml_root, xml_string, xsd_file, context=None):
         '''Validate the XML file against the XSD'''
         from lxml import etree
-        official_des_xml_schema = etree.XMLSchema(etree.fromstring(xsd))
+        xsd_etree_obj = etree.parse(
+            tools.file_open(xsd_file))
+        official_schema = etree.XMLSchema(xsd_etree_obj)
         try:
-            official_des_xml_schema.assertValid(xml_root)
+            official_schema.assertValid(xml_root)
         except Exception, e:
             # if the validation of the XSD fails, we arrive here
             _logger = logging.getLogger(__name__)
@@ -157,13 +160,13 @@ class report_intrastat_common(orm.TransientModel):
             }
         return action
 
-    def partner_on_change(self, cr, uid, ids, partner_id=False):
+    def partner_on_change(self, cr, uid, ids, partner_id=False, context=None):
         result = {}
         result['value'] = {}
         if partner_id:
             company = self.pool['res.partner'].read(
-                cr, uid, partner_id, ['vat'])
-            result['value'].update({'partner_vat': company['vat']})
+                cr, uid, partner_id, ['vat'], context=context)
+            result['value']['partner_vat'] = company['vat']
         return result
 
     def send_reminder_email(
