@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Report intrastat base module for OpenERP
-#    Copyright (C) 2011-2013 Akretion (http://www.akretion.com). All Rights Reserved
+#    Copyright (C) 2011-2013 Akretion (http://www.akretion.com).
 #    @author Alexis de Lattre <alexis.delattre@akretion.com>
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -26,7 +26,9 @@ from openerp.osv import orm, fields
 class res_country(orm.Model):
     _inherit = 'res.country'
     _columns = {
-        'intrastat': fields.boolean('EU country', help="Set to True for all European Union countries."),
+        'intrastat': fields.boolean(
+            'EU Country',
+            help="Set to True for all European Union countries."),
     }
 
     _defaults = {

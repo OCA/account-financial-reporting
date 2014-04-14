@@ -31,6 +31,21 @@
     </field>
 </record>
 
+<!-- there is no native search view, so I can't inherit -->
+<record id="intrastat_base_country_search" model="ir.ui.view">
+    <field name="name">intrastat.base.country.search</field>
+    <field name="model">res.country</field>
+    <field name="arch" type="xml">
+        <search string="Search Countries">
+            <field name="name" />
+            <field name="code" />
+            <filter name="intrastat" string="EU Country"
+                domain="[('intrastat', '=', True)]" />
+        </search>
+    </field>
+</record>
+
+
 
 </data>
 </openerp>

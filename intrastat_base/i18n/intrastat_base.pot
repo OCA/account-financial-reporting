@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 6.0.4\n"
-"Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2012-06-05 13:28+0000\n"
-"PO-Revision-Date: 2012-06-05 13:28+0000\n"
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-04-14 14:18+0000\n"
+"PO-Revision-Date: 2014-04-14 14:18+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,106 +16,13 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: intrastat_base
-#: model:ir.ui.menu,name:intrastat_base.menu_intrastat_base_root
-msgid "Intrastat reporting"
+#: help:product.template,is_accessory_cost:0
+msgid "Activate this option for shipping costs, packaging costs and all services related to the sale of products. This option is used for Intrastat reports."
 msgstr ""
 
 #. module: intrastat_base
-#: sql_constraint:res.country:0
-msgid "The code of the country must be unique !"
-msgstr ""
-
-#. module: intrastat_base
-#: constraint:product.template:0
-msgid "Error: The default UOM and the purchase UOM must be in the same category."
-msgstr ""
-
-#. module: intrastat_base
-#: code:addons/intrastat_base/intrastat_common.py:64
-#: code:addons/intrastat_base/intrastat_common.py:70
-#: code:addons/intrastat_base/intrastat_common.py:85
-#: code:addons/intrastat_base/intrastat_common.py:93
-#: code:addons/intrastat_base/product.py:41
-#, python-format
-msgid "Error :"
-msgstr ""
-
-#. module: intrastat_base
-#: model:ir.model,name:intrastat_base.model_account_tax
-msgid "account.tax"
-msgstr ""
-
-#. module: intrastat_base
-#: field:account.tax,exclude_from_intrastat_if_present:0
-msgid "Exclude invoice line from intrastat if this tax is present"
-msgstr ""
-
-#. module: intrastat_base
-#: help:res.country,intrastat:0
-msgid "Set as True for countries that must be selected in the intrastat reports, i.e. for all European Union countries other than your own country."
-msgstr ""
-
-#. module: intrastat_base
-#: view:product.product:0
-#: view:product.template:0
-msgid "Intrastat properties"
-msgstr ""
-
-#. module: intrastat_base
-#: model:ir.module.module,description:intrastat_base.module_meta_information
-msgid "This module contains the common functions for 2 other modules :\n"
-"- l10n_fr_intrastat_service : the module for the \"Déclaration Européenne des Services\" (DES)\n"
-"- l10n_fr_intrastat_product : the module for the \"Déclaration d'Echange de Biens\" (DEB)\n"
-"This module is not usefull if it's not used together with one of those 2 modules.\n"
-"\n"
-"This module doesn't have any France-specific stuff. So it can be used as a basis for other intrastat modules for other EU countries.\n"
-"\n"
-"WARNING : this module conflicts with the module \"report_intrastat\" from the addons. If you have already installed the module \"report_intrastat\", you should uninstall it first before installing this module.\n"
-"\n"
-"Please contact Alexis de Lattre from Akretion <alexis.delattre@akretion.com> for any help or question about this module.\n"
-"    "
-msgstr ""
-
-#. module: intrastat_base
-#: sql_constraint:res.country:0
-msgid "The name of the country must be unique !"
-msgstr ""
-
-#. module: intrastat_base
-#: constraint:product.template:0
-msgid "Error msg is in raise"
-msgstr ""
-
-#. module: intrastat_base
-#: help:account.tax,exclude_from_intrastat_if_present:0
-msgid "If this tax is present on an invoice line, this invoice line will be skipped when generating Intrastat Product or Service lines from invoices."
-msgstr ""
-
-#. module: intrastat_base
-#: field:product.template,is_accessory_cost:0
-msgid "Is accessory cost"
-msgstr ""
-
-#. module: intrastat_base
-#: field:res.country,intrastat:0
-msgid "Intrastat country"
-msgstr ""
-
-#. module: intrastat_base
-#: help:product.template,exclude_from_intrastat:0
-msgid "If set to True, the product or service will not be taken into account for Intrastat Product or Service reports. So you should leave this field to False unless you have a very good reason."
-msgstr ""
-
-#. module: intrastat_base
-#: code:addons/intrastat_base/intrastat_common.py:64
-#, python-format
-msgid "The company currency must be 'EUR', but is currently '%s'."
-msgstr ""
-
-#. module: intrastat_base
-#: code:addons/intrastat_base/intrastat_common.py:70
-#, python-format
-msgid "The VAT number is not set for the partner '%s'."
+#: view:res.company:0
+msgid "Common Intrastat Settings"
 msgstr ""
 
 #. module: intrastat_base
@@ -124,18 +31,35 @@ msgid "Common functions for intrastat reports for products and services"
 msgstr ""
 
 #. module: intrastat_base
+#: model:ir.model,name:intrastat_base.model_res_company
+msgid "Companies"
+msgstr ""
+
+#. module: intrastat_base
 #: model:ir.model,name:intrastat_base.model_res_country
 msgid "Country"
 msgstr ""
 
 #. module: intrastat_base
-#: model:ir.model,name:intrastat_base.model_product_template
-msgid "Product Template"
+#: view:res.country:0
+#: field:res.country,intrastat:0
+msgid "EU Country"
 msgstr ""
 
 #. module: intrastat_base
-#: model:ir.module.module,shortdesc:intrastat_base.module_meta_information
-msgid "Base module for Intrastat reporting"
+#: code:addons/intrastat_base/company.py:58
+#: code:addons/intrastat_base/intrastat_common.py:77
+#: code:addons/intrastat_base/intrastat_common.py:82
+#: code:addons/intrastat_base/intrastat_common.py:90
+#: code:addons/intrastat_base/intrastat_common.py:110
+#: code:addons/intrastat_base/product.py:51
+#, python-format
+msgid "Error :"
+msgstr ""
+
+#. module: intrastat_base
+#: constraint:product.template:0
+msgid "Error msg is in raise"
 msgstr ""
 
 #. module: intrastat_base
@@ -144,8 +68,75 @@ msgid "Exclude from Intrastat reports"
 msgstr ""
 
 #. module: intrastat_base
-#: help:product.template,is_accessory_cost:0
-msgid "Activate this option for shipping costs, packaging costs and all services related to the sale of products. This option is used for Intrastat reports."
+#: field:account.tax,exclude_from_intrastat_if_present:0
+msgid "Exclude invoice line from intrastat if this tax is present"
+msgstr ""
+
+#. module: intrastat_base
+#: help:product.template,exclude_from_intrastat:0
+msgid "If set to True, the product or service will not be taken into account for Intrastat Product or Service reports. So you should leave this field to False unless you have a very good reason."
+msgstr ""
+
+#. module: intrastat_base
+#: help:account.tax,exclude_from_intrastat_if_present:0
+msgid "If this tax is present on an invoice line, this invoice line will be skipped when generating Intrastat Product or Service lines from invoices."
+msgstr ""
+
+#. module: intrastat_base
+#: view:product.product:0
+#: view:product.template:0
+msgid "Intrastat Properties"
+msgstr ""
+
+#. module: intrastat_base
+#: view:res.company:0
+msgid "Intrastat Settings"
+msgstr ""
+
+#. module: intrastat_base
+#: model:ir.ui.menu,name:intrastat_base.menu_intrastat_base_root
+msgid "Intrastat reporting"
+msgstr ""
+
+#. module: intrastat_base
+#: field:product.template,is_accessory_cost:0
+msgid "Is accessory cost"
+msgstr ""
+
+#. module: intrastat_base
+#: help:res.company,intrastat_remind_user_ids:0
+msgid "List of OpenERP users who will receive a notification to remind them about the Intrastat declaration."
+msgstr ""
+
+#. module: intrastat_base
+#: field:res.company,intrastat_email_list:0
+msgid "List of emails of Users Receiving the Intrastat Reminder"
+msgstr ""
+
+#. module: intrastat_base
+#: code:addons/intrastat_base/company.py:59
+#, python-format
+msgid "Missing e-mail address on user '%s'."
+msgstr ""
+
+#. module: intrastat_base
+#: model:ir.model,name:intrastat_base.model_res_partner
+msgid "Partner"
+msgstr ""
+
+#. module: intrastat_base
+#: model:ir.model,name:intrastat_base.model_product_template
+msgid "Product Template"
+msgstr ""
+
+#. module: intrastat_base
+#: view:res.country:0
+msgid "Search Countries"
+msgstr ""
+
+#. module: intrastat_base
+#: help:res.country,intrastat:0
+msgid "Set to True for all European Union countries."
 msgstr ""
 
 #. module: intrastat_base
@@ -154,13 +145,47 @@ msgid "Shipping costs"
 msgstr ""
 
 #. module: intrastat_base
-#: code:addons/intrastat_base/intrastat_common.py:85
+#: model:ir.model,name:intrastat_base.model_account_tax
+msgid "Tax"
+msgstr ""
+
+#. module: intrastat_base
+#: code:addons/intrastat_base/intrastat_common.py:91
+#, python-format
+msgid "The VAT number is not set for the partner '%s'."
+msgstr ""
+
+#. module: intrastat_base
+#: code:addons/intrastat_base/intrastat_common.py:83
+#, python-format
+msgid "The company currency must be 'EUR', but is currently '%s'."
+msgstr ""
+
+#. module: intrastat_base
+#: code:addons/intrastat_base/intrastat_common.py:78
+#, python-format
+msgid "The country is not set on the company '%s'."
+msgstr ""
+
+#. module: intrastat_base
+#: code:addons/intrastat_base/intrastat_common.py:111
 #, python-format
 msgid "The generated XML file is not valid against the official XML Schema Definition. The generated XML file and the full error have been written in the server logs. Here is the error, which may give you an idea on the cause of the problem : %s."
 msgstr ""
 
 #. module: intrastat_base
-#: model:ir.model,name:intrastat_base.model_res_partner_address
-msgid "Partner Addresses"
+#: code:addons/intrastat_base/product.py:56
+#, python-format
+msgid "The option 'Is accessory cost?' should only be activated on 'Service' products. You have activated this option for the product '%s' which is of type '%s'"
+msgstr ""
+
+#. module: intrastat_base
+#: field:res.company,intrastat_remind_user_ids:0
+msgid "Users Receiving the Intrastat Reminder"
+msgstr ""
+
+#. module: intrastat_base
+#: constraint:res.company:0
+msgid "error msg in raise"
 msgstr ""
 

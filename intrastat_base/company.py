@@ -27,7 +27,8 @@ from openerp.tools.translate import _
 class res_company(orm.Model):
     _inherit = "res.company"
 
-    def _compute_intrastat_email_list(self, cr, uid, ids, name, arg, context=None):
+    def _compute_intrastat_email_list(
+            self, cr, uid, ids, name, arg, context=None):
         result = {}
         for company in self.browse(cr, uid, ids, context=context):
             result[company.id] = ''
@@ -39,21 +40,24 @@ class res_company(orm.Model):
         return result
 
     _columns = {
-        'intrastat_remind_user_ids': fields.many2many('res.users',
-            id1='company_id', id2='user_id',
+        'intrastat_remind_user_ids': fields.many2many(
+            'res.users', id1='company_id', id2='user_id',
             string="Users Receiving the Intrastat Reminder",
-            help="List of OpenERP users who will receive a notification to remind them about the Intrastat declaration."),
-        'intrastat_email_list': fields.function(_compute_intrastat_email_list,
-            type='char', size=1000,
-            string='List of emails of Users Receiving the Intrastat Reminder',
-            help='Comma-separated list of email addresses of Users Receiving the Intrastat Reminder. For use in the email template.'),
+            help="List of OpenERP users who will receive a notification to "
+            "remind them about the Intrastat declaration."),
+        'intrastat_email_list': fields.function(
+            _compute_intrastat_email_list, type='char', size=1000,
+            string='List of emails of Users Receiving the Intrastat Reminder'),
     }
 
     def _check_intrastat_remind_users(self, cr, uid, ids):
         for company in self.browse(cr, uid, ids):
             for user in company.intrastat_remind_user_ids:
                 if not user.email:
-                    raise orm.except_orm(_('Error :'), _("Missing e-mail address on user '%s'.") % (user.name))
+                    raise orm.except_orm(
+                        _('Error :'),
+                        _("Missing e-mail address on user '%s'.")
+                        % (user.name))
         return True
 
     _constraints = [
