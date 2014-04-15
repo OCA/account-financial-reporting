@@ -1,9 +1,8 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Author: Nicolas Bessi. Copyright Camptocamp SA
-#    Copyright (C) 2012 SYLEAM Info Services (<http://www.syleam.fr/>)
-#              Sebastien LANGE <sebastien.lange@syleam.fr>
+#    Author: Nicolas Bessi
+#    Copyright 2014 Camptocamp SA
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,12 +18,22 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp.osv import orm
 
-from . import balance_common
-from . import general_ledger_wizard
-from . import partners_ledger_wizard
-from . import trial_balance_wizard
-from . import partner_balance_wizard
-from . import open_invoices_wizard
-from . import print_journal
-from . import aged_partner_balance_wizard
+
+class AccountAgedTrialBalance(orm.TransientModel):
+    """Will launch age partner balance report.
+    This report is based on Open Invoice Report
+    and share a lot of knowledge with him
+    """
+
+    _inherit = "open.invoices.webkit"
+    _name = "account.aged.trial.balance.webkit"
+    _description = "Aged partner balanced"
+
+    def _print_report(self, cr, uid, ids, data, context=None):
+        # we update form with display account value
+        data = self.pre_print_report(cr, uid, ids, data, context=context)
+        return {'type': 'ir.actions.report.xml',
+                'report_name': 'account.account_aged_trial_balance_webkit',
+                'datas': data}
