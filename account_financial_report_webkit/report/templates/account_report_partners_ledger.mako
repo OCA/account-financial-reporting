@@ -67,7 +67,7 @@
                 <div class="act_as_cell">${ initial_balance_text[initial_balance_mode] }</div>
             </div>
         </div>
-    
+
         %for account in objects:
             %if account.ledger_lines or account.init_balance:
                 <%
@@ -102,13 +102,15 @@
                             ## period
                             <div class="act_as_cell" style="width: 70px;">${_('Period')}</div>
                             ## move
-                            <div class="act_as_cell" style="width: 70px;">${_('Entry')}</div>
+                            <div class="act_as_cell" style="width: 100px;">${_('Entry')}</div>
                             ## journal
                             <div class="act_as_cell" style="width: 70px;">${_('Journal')}</div>
                             ## partner
-                            <div class="act_as_cell" style="width: 60px;">${_('Partner')}</div>
+                            <div class="act_as_cell" style="width: 100px;">${_('Partner')}</div>
+                            ## move reference
+                            <div class="act_as_cell" style="width: 60px;">${_('Reference')}</div>
                             ## label
-                            <div class="act_as_cell" style="width: 310px;">${_('Label')}</div>
+                            <div class="act_as_cell" style="width: 280px;">${_('Label')}</div>
                             ## reconcile
                             <div class="act_as_cell" style="width: 80px;">${_('Rec.')}</div>
                             ## debit
@@ -149,6 +151,8 @@
                               ## journal
                               <div class="act_as_cell"></div>
                               ## partner
+                              <div class="act_as_cell"></div>
+                              ## move reference
                               <div class="act_as_cell"></div>
                               ## label
                               <div class="act_as_cell" >${_('Initial Balance')}</div>
@@ -191,6 +195,8 @@
                               <div class="act_as_cell">${line.get('jcode') or ''}</div>
                               ## partner
                               <div class="act_as_cell overflow_ellipsis">${line.get('partner_name') or ''}</div>
+                              ## move reference
+                              <div class="act_as_cell">${line.get('lref') or ''}</div>
                               ## label
                               <div class="act_as_cell">${label}</div>
                               ## reconcile
@@ -220,6 +226,8 @@
                           ## journal
                           <div class="act_as_cell"></div>
                           ## partner
+                          <div class="act_as_cell"></div>
+                          ## move reference
                           <div class="act_as_cell"></div>
                           ## label
                           <div class="act_as_cell">${_('Cumulated Balance on Partner')}</div>
@@ -254,9 +262,9 @@
 
                 <div class="act_as_table list_table" style="margin-top:5px;">
                     <div class="act_as_row labels" style="font-weight: bold; font-size: 12px;">
-                            <div class="act_as_cell first_column" style="width: 320px;">${account.code} - ${account.name}</div>
+                            <div class="act_as_cell first_column" style="width: 450px;">${account.code} - ${account.name}</div>
                             ## label
-                            <div class="act_as_cell" style="width: 390px;">${_("Cumulated Balance on Account")}</div>
+                            <div class="act_as_cell" style="width: 360px;">${_("Cumulated Balance on Account")}</div>
                             ## debit
                             <div class="act_as_cell amount" style="width: 80px;">${ formatLang(account_total_debit) | amount }</div>
                             ## credit
