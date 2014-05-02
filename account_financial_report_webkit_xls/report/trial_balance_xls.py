@@ -218,9 +218,9 @@ class trial_balance_xls(report_xls):
                 ('account', account_span, 0, 'text', current_account.name),
             ]
             if _p.comparison_mode == 'no_comparison':
-                
-                debit_cell = rowcol_to_cell(row_pos, 3)                
-                credit_cell = rowcol_to_cell(row_pos, 4)
+
+                debit_cell = rowcol_to_cell(row_pos, 4)
+                credit_cell = rowcol_to_cell(row_pos, 5)
                 bal_formula = debit_cell + '-' + credit_cell
                 
                 if _p.initial_balance_mode:
