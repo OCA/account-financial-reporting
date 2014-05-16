@@ -45,6 +45,28 @@
             string="Analytic Ledger"
             header="False"
         />
+        
+        <report 
+            auto="False"
+            id="partner_balance_report"
+            menu="True"
+            model="wizard.report"
+            name="afr.partner.balance"
+            rml="account_financial_report/report/balance_full_4_cols_partner_balance.rml"
+            string="Partner Balance"
+            header="False"
+        />
+        
+        <report 
+            auto="False"
+            id="journal_ledger_report"
+            menu="True"
+            model="wizard.report"
+            name="afr.journal.ledger"
+            rml="account_financial_report/report/balance_full_4_cols_journal_ledger.rml"
+            string="journal Ledger"
+            header="False"
+        />
 
         <report 
             auto="False"
@@ -78,5 +100,7 @@
             string="Balance 13 Columnas"
             header="False"
         />
+        
+
     </data>
 </openerp>

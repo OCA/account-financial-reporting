@@ -146,29 +146,23 @@
             </tr>
         </blockTable>
 
-                <blockTable colWidths="2.25cm,2.0cm,7.75cm,2.5cm,4.0cm,2.5cm,2.5cm,2.5cm" style="BODY_LINE" repeatRows="1">
+                <blockTable colWidths="2.25cm,13.75cm,2.5cm,2.5cm,2.5cm,2.5cm" style="BODY_LINE" repeatRows="1">
 <!--
                 [[ (a['type'] &lt;&gt; 'view') or removeParentNode('blockTable') ]]
 -->
                     <tr noRowsplits="1">
                         <td>
                             <para style="TITLES_NEW">
-                                <font>DATE</font>
+                                <font></font>
                             </para>
                         </td>
                         <td>
                             <para style="TITLES_NEW">
-                                <font>PERIOD</font>
+                                <font>PARTNER</font>
                             </para>
                         </td>
                         <td>
-                            <para style="TITLES_NEW">REFERENCE</para>
-                        </td>
-                        <td>
-                            <para style="TITLES_NEW">JOURNAL ENTRY</para>
-                        </td>
-                        <td>
-                            <para style="TITLES_NEW">PARTNER</para>
+                            <para style="TITLES_NEW"></para>
                         </td>
                         <td>
                             <para style="TITLE_LEFT_ALIGN"></para>
@@ -230,41 +224,26 @@
         </blockTable>
 
         <section>
-            <para>[[ repeatIn(a['mayor'], 'm') ]]</para>
-                <blockTable colWidths="2.25cm,2.0cm,7.75cm,2.5cm,4.0cm,2.5cm,2.5cm,2.5cm" style="BODY_LINE" repeatRows="1">
+            <para>[[ repeatIn(a['partner'], 'm') ]]</para>
+                <blockTable colWidths="2.25cm,13.75cm,2.5cm,2.5cm,2.5cm,2.5cm" style="BODY_LINE" repeatRows="1">
 <!--
                 [[ (a['type'] &lt;&gt; 'view') or removeParentNode('blockTable') ]]
 -->
                     <tr>
                         <td>
                             <para style="TITLES_NEW">
-                                <font> [[ formatLang( m['date'], date=True) ]]</font>
                             </para>
                         </td>
                         <td>
                             <para style="TITLES_NEW">
-                                <font>[[ m['period'] ]]</font>
+                                <font>[[ m['partner_name'] ]]</font>
                             </para>
                         </td>
                         <td>
-                            <para style="TITLES_NEW">
-                                <font>[[ m['name'] ]] [[ m['ref'] and (' - Ref %s'%m['ref']) or '' ]] </font>
-                            </para>
-                        </td>
-                        <td>
-                            <para style="TITLES_NEW">
-                                <font>[[ m['entry'] ]]</font>
-                            </para>
-<!--
-                            <para style="TITLES_NEW">
-                                <font>[[ m['journal'] ]]</font>
-                            </para>
--->
-                        </td>
-                        <td>
-                            <para style="TITLES_NEW">
-                                <font>[[ m['partner'] ]]</font>
-                            </para>
+                    <para style="TITLE_LEFT_ALIGN">
+                        <font>[[ a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Courier"}) or removeParentNode('font') ]]</font>
+                        <font>[[ (a['total']==True) and formatLang(m['balanceinit'] and m['balanceinit'] * m.get('change_sign',1.0) or 0.0, digits=2, grouping=True)  or '']]</font>
+                    </para>
                         </td>
                         <td>
                     <para style="TITLE_LEFT_ALIGN">

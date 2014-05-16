@@ -1,55 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-
         <record id="account_financial_report_view" model="ir.ui.view">
             <field name="name">Account Financial Report (Template)</field>
             <field name="model">afr</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-            <form string="Account Financial Report (Templates)">
-                <group colspan="4">
-                    <field name="name" colspan="4"/>
-                </group>
-                <group colspan="4">
-                    <group colspan="2">
-                        <separator string="Company Info" colspan="4"/>
-                        <field name="company_id" on_change='onchange_company_id(company_id)' colspan="4"/>
+                <form string="Account Financial Report (Templates)" version="7.0">
+                    <h2><label for="name"/></h2> 
+                    <field name="name" nolabel="1"/>
+                <group>
+                    <group string="Company Info" >
+                        <field name="company_id" on_change='onchange_company_id(company_id)' />
                         <field name="currency_id" 
                         domain="[('company_id','=',company_id)]" 
-                        attrs="{'readonly':[('analytic_ledger','=',True)]}" 
-                        colspan="4"/>
+                        attrs="{'readonly':[('analytic_ledger','=',True)]}" />
                     </group>
-                    <group colspan="2">
-                        <separator string="Report Info" colspan="4"/>
+                    <group string="Report Info" >
                         <field 
                             name="inf_type" 
-                            colspan="4"
-                            on_change='onchange_inf_type(inf_type)'
-                            />
-                        <field name="columns" on_change='onchange_columns(columns,fiscalyear_id,period_ids)' colspan="4"/>
-                        <field name="analytic_ledger" colspan="4"
+                            on_change='onchange_inf_type(inf_type)' />
+                        <field name="columns" on_change='onchange_columns(columns,fiscalyear_id,period_ids)' />
+                        <field name="analytic_ledger" 
                         attrs="{'readonly':['|',('columns','!=','four'),('inf_type','!=','BS')],}" 
-                        on_change='onchange_analytic_ledger(company_id,analytic_ledger)'
-                        />
+                        on_change='onchange_analytic_ledger(company_id,analytic_ledger)' />
+                        <field name="journal_ledger" 
+                        attrs="{'readonly':['|',('columns','!=','four'),('inf_type','!=','BS')],}" />
                     </group>
                 </group>
-                <group colspan='4'>
-                    <group colspan="2">
-                        <separator string="Accounts Info" colspan="4"/>
-                        <field name="display_account" required="True" colspan="4"/>
-                        <field name="display_account_level" required="True" colspan="4"/>
+                <group>
+                    <group string="Accounts Info" >
+                        <field name="display_account" required="True" />
+                        <field name="display_account_level" required="True" />
+                        <field name="target_move"/>
                     </group>
-                    <group colspan="2">
-                        <separator string="FiscalYear Info" colspan="4"/>
-                        <field name="fiscalyear_id" on_change='onchange_columns(columns,fiscalyear_id,period_ids)' domain="[('company_id','=',company_id)]"/>
-                        <newline/>
+                    <group string="FiscalYear Info" >
+                        <field name="fiscalyear_id" on_change='onchange_columns(columns,fiscalyear_id,period_ids)' 
+                               domain="[('company_id','=',company_id)]"/>
                     </group>
                 </group>
-                <group colspan='4'>
-                    <group colspan="1">
-                        <separator string="Accounts to Include" colspan="4"/>
-                        <field name="account_ids" nolabel="1" colspan="4" domain="[('company_id','=',company_id)]">
+                <group>
+                    <group string="Accounts to Include">
+                        <field name="account_ids" nolabel="1"  domain="[('company_id','=',company_id)]">
                             <tree>
                                 <field name='code'/>
                                 <field name='name'/>
@@ -58,14 +50,11 @@
                             </tree>
                         </field>
                     </group>
-                    <group colspan="1">
-                        <separator string="Periods to Include" colspan="4"/>
+                    <group string="Periods to Include">
                         <field name="period_ids" 
-                        colspan="4" nolabel="1" 
+                         nolabel="1" 
                         domain="[('fiscalyear_id','=',fiscalyear_id),('special','=',False),('company_id','=',company_id)]"
-                        attrs="{'readonly':[('columns','in',('qtr','thirteen'))],}" 
-                        >
-                        
+                        attrs="{'readonly':[('columns','in',('qtr','thirteen'))],}" >
                             <tree>
                                 <field name='code'/>
                                 <field name='name'/>
@@ -74,37 +63,18 @@
                         </field>
                     </group>
                 </group>
-                <group colspan='4'>
-                    <separator string="Account's Sign Conventions" colspan="4"/>
+                <group string="Account's Sign Conventions">
                     <label string="Please check the [ Account's Sign on Reports ] Section in the Company"/>
                 </group>
-
-                <group colspan='4' col='4'>
-                    <group colspan="2">
-                        <separator string="Total" colspan="4"/>
-                        <field name="tot_check" colspan="4"/>
-                        <field name="lab_str" colspan="4" attrs="{'required':[('tot_check','=',True)], 'readonly':[('tot_check','=',False)],}" />
+                <group>
+                    <group string="Total">
+                        <field name="tot_check"/>
+                        <field name="lab_str"  attrs="{'required':[('tot_check','=',True)], 'readonly':[('tot_check','=',False)],}" />
                     </group>
-                    <group colspan="2">
-                        <separator string="" colspan="4"/>
-<!--
-                        <button 
-                            name="print_report" 
-                            string="Print" 
-                            type="object"
-                            icon='gtk-print'/>
-                        <button 
-                            type='special'
-                            special='cancel'
-                            string='_Cancel'
-                            icon='gtk-cancel'
-                        />
--->
+                    <group string=" " >
                     </group>
                 </group>
-
             </form>
-
             </field>
         </record>
 
@@ -120,19 +90,12 @@
                 <field name="inf_type"/>
                 <field name="columns"/>
                 <field name="display_account"/>
-                <field name="display_account_level" required="True" colspan="4"/>
+                <field name="display_account_level" required="True" />
                 <field name="fiscalyear_id"/>
-                <field name="tot_check" colspan="4"/>
-<!--
-                <button name="print_report" string="Print" type="object"/>
--->
+                <field name="tot_check" />
             </tree>
-
             </field>
         </record>
-
-
-
 
         <record model="ir.actions.act_window" id="account_financial_report_action">
             <field name="name">Account Financial Report</field>
@@ -142,7 +105,6 @@
             <field name="view_mode">tree,form</field>
             <field name="help">Create your own Customized Account Financial Reports, in here, you will be able to create Templates for generating Two types of Reports: Balance Sheets and Income Statements, incluiding Analytic Ledgers. Besides, you can select within a set of choices to get better detailed report, be it that you ask it by one or several periods, by months (12 Months + YTD), or by quarters (4QRT's + YTD). Even you can get your reports in currencies other than the one set on your company.</field>
         </record>
-
         
         <menuitem 
             id="account_financial_report_menu"
@@ -151,7 +113,6 @@
             sequence="100"
             groups="account_financial_report.group_afreport"
             action="account_financial_report_action"/>
-        
         
     </data>
 </openerp>
