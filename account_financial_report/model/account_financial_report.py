@@ -27,7 +27,7 @@
 ##############################################################################
 
 from osv import osv, fields
-import pooler
+#~ import pooler
 import time
 from tools.translate import _
 
@@ -73,7 +73,7 @@ class account_financial_report(osv.osv):
                                         ('all', 'All Entries'),
                                          ], 'Entries to Include', required=True,
                                         help='Print All Accounting Entries or just Posted Accounting Entries'),
-
+        'narration': fields.text('Notes'),
         #~ Deprecated fields
         'filter': fields.selection([('bydate', 'By Date'), ('byperiod', 'By Period'),
                                    ('all', 'By Date and Period'), ('none', 'No Filter')], 'Date/Period Filter'),

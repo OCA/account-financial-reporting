@@ -61,6 +61,7 @@ class wizard_report(osv.osv_memory):
                                         ('all', 'All Entries'),
                                          ], 'Entries to Include', required=True,
                                         help='Print All Accounting Entries or just Posted Accounting Entries'),
+        'narration': fields.text('Notes', readonly=True),
         #~ Deprecated fields
         'filter': fields.selection([('bydate', 'By Date'), ('byperiod', 'By Period'), ('all', 'By Date and Period'), ('none', 'No Filter')], 'Date/Period Filter'),
         'date_to': fields.date('End date'),
@@ -151,6 +152,7 @@ class wizard_report(osv.osv_memory):
         if not afr_id:
             return res
         afr_brw = self.pool.get('afr').browse(cr, uid, afr_id, context=context)
+
         res['value'].update({
                             'currency_id': afr_brw.currency_id and afr_brw.currency_id.id or afr_brw.company_id.currency_id.id})
         res['value'].update({'inf_type': afr_brw.inf_type or 'BS'})
@@ -167,6 +169,7 @@ class wizard_report(osv.osv_memory):
         res['value'].update({
                             'analytic_ledger': afr_brw.analytic_ledger or False})
         res['value'].update({'tot_check': afr_brw.tot_check or False})
+        res['value'].update({'narration': afr_brw.narration or ''})
         res['value'].update({'lab_str': afr_brw.lab_str or _(
             'Write a Description for your Summary Total')})
         return res
