@@ -8,10 +8,10 @@
 
                 <image x="1.0cm" y="24.0cm" width="5.0cm">[[company.logo and company.logo or removeParentNode('image')]]</image>
 <!--
-                <drawString x="1.0cm" y="24.5cm">[[company.logo and removeParentNode('para') or company.name]]</drawString> 
+                <drawString x="1.0cm" y="24.5cm">[[company.logo and removeParentNode('para') or company.name]]</drawString>
 -->
 
-                <place x="-3.5cm" y="22.50cm" width="19cm"  height="5.0cm"> 
+                <place x="-3.5cm" y="22.50cm" width="19cm"  height="5.0cm">
                     <blockTable colWidths="9.6cm,9.4cm" style="TITLE">
                         <tr>
                             <td><para style="TOP_TITLE"></para></td>
@@ -34,7 +34,7 @@
                         </tr>
                     </blockTable>
                 </place>
-                <drawRightString x="207mm" y="5mm">Printing Date: [[ formatLang(time.strftime('%Y-%m-%d %H:%M:%S'),date_time=True) ]] [[ get_informe_text(data['form']) ]] /  Pág.: <pageNumber/>-<pageCount/></drawRightString> 
+                <drawRightString x="207mm" y="5mm">Printing Date: [[ formatLang(time.strftime('%Y-%m-%d %H:%M:%S'),date_time=True) ]] [[ get_informe_text(data['form']) ]] /  Pág.: <pageNumber/>-<pageCount/></drawRightString>
             </pageGraphics>
 
         </pageTemplate>
@@ -42,7 +42,7 @@
     <stylesheet>
         <blockTableStyle id="TITLE">
             <blockValign value="TOP"/>
-        </blockTableStyle> 
+        </blockTableStyle>
         <blockTableStyle id="BODY">
             <blockValign value="TOP"/>
             <blockAlignment value="RIGHT"/>
@@ -66,13 +66,13 @@
         <initialize>
             <paraStyle name="all" alignment="justify"/>
         </initialize>
-        <paraStyle 
-            name="TITLE_LEFT_ALIGN" 
-            fontName="Helvetica-Bold" 
-            fontSize="6.0" 
-            leading="10" 
-            alignment="RIGHT" 
-            spaceBefore="0.0" 
+        <paraStyle
+            name="TITLE_LEFT_ALIGN"
+            fontName="Helvetica-Bold"
+            fontSize="6.0"
+            leading="10"
+            alignment="RIGHT"
+            spaceBefore="0.0"
             spaceAfter="0.0"/>
         <paraStyle name="TOP_TITLE" fontName="Helvetica-Bold" fontSize="7"  leftIndent="0.0" alignment="LEFT"/>
         <paraStyle name="TITLES" fontName="Helvetica-Bold" fontSize="6.0" leading="10" alignment="LEFT"  spaceBefore="0.0" spaceAfter="0.0"/>
@@ -82,7 +82,7 @@
     </stylesheet>
     <images/>
     <story>
-        <para>[[setLang(user.lang)]]</para>
+        <para>[[setLang(user.context_lang)]]</para>
         <blockTable colWidths="2.5cm,6.0cm,2.5cm,2.5cm,2.5cm,2.5cm,2.5cm" style="BODY" repeatRows="1">
             <tr noRowsplits="1">
                 <td>

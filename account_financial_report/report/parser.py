@@ -26,16 +26,16 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##############################################################################
 
-import xml
-import copy
-from operator import itemgetter
+#~ import xml
+#~ import copy
+#~ from operator import itemgetter
 import time
-import datetime
+#~ import datetime
 from report import report_sxw
-from tools import config
+#~ from tools import config
 from tools.translate import _
 from osv import osv
-from openerp.tools.safe_eval import safe_eval as eval
+#~ from openerp.tools.safe_eval import safe_eval as eval
 
 
 class account_balance(report_sxw.rml_parse):
@@ -118,11 +118,11 @@ class account_balance(report_sxw.rml_parse):
         return day, year and month
         '''
         if form['filter'] in ['bydate', 'all']:
-            months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-                      "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
-            mes = months[time.strptime(form['date_to'], "%Y-%m-%d")[1] - 1]
-            ano = time.strptime(form['date_to'], "%Y-%m-%d")[0]
-            dia = time.strptime(form['date_to'], "%Y-%m-%d")[2]
+            #~ months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                      #~ "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+            #~ mes = months[time.strptime(form['date_to'], "%Y-%m-%d")[1] - 1]
+            #~ ano = time.strptime(form['date_to'], "%Y-%m-%d")[0]
+            #~ dia = time.strptime(form['date_to'], "%Y-%m-%d")[2]
             return _('From ') + self.formatLang(form['date_from'], date=True) + _(' to ') + self.formatLang(form['date_to'], date=True)
         elif form['filter'] in ['byperiod', 'all']:
             aux = []
@@ -138,10 +138,11 @@ class account_balance(report_sxw.rml_parse):
         """
         Returns the text with the periods/dates used on the report.
         """
+        form = form or {}
         period_obj = self.pool.get('account.period')
+        fiscalyear_obj = self.pool.get('account.fiscalyear')
         periods_str = None
-        fiscalyear_id = form[
-            'fiscalyear'] or fiscalyear_obj.find(self.cr, self.uid)
+        fiscalyear_id = form['fiscalyear'] or fiscalyear_obj.find(self.cr, self.uid)
         period_ids = period_obj.search(self.cr, self.uid, [(
             'fiscalyear_id', '=', fiscalyear_id), ('special', '=', False)])
         if form['filter'] in ['byperiod', 'all']:
@@ -191,12 +192,12 @@ class account_balance(report_sxw.rml_parse):
             return [brw.id for brw in rc_obj.browse(self.cr, self.uid, company_id).debit_account_ids]
 
     def _get_partner_balance(self, account, init_period, ctx=None):
-        rp_obj = self.pool.get('res.partner')
+        #~ rp_obj = self.pool.get('res.partner')
         res = []
         ctx = ctx or {}
         if account['type'] in ('other', 'liquidity', 'receivable', 'payable'):
             sql_query = """
-                SELECT 
+                SELECT
                     CASE
                         WHEN aml.partner_id IS NOT NULL
                        THEN (SELECT name FROM res_partner WHERE aml.partner_id = id)
@@ -213,7 +214,7 @@ class account_balance(report_sxw.rml_parse):
                     %s
                 FROM account_move_line AS aml
                 INNER JOIN account_account aa ON aa.id = aml.account_id
-                INNER JOIN account_move am ON am.id = aml.move_id 
+                INNER JOIN account_move am ON am.id = aml.move_id
                 %s
                 GROUP BY p_idx, partner_name
                 """
@@ -226,8 +227,8 @@ class account_balance(report_sxw.rml_parse):
             init_periods = ', '.join([str(i) for i in init_period])
 
             WHERE = """
-                WHERE aml.period_id IN (%s) 
-                    AND aa.id = %s 
+                WHERE aml.period_id IN (%s)
+                    AND aa.id = %s
                     AND aml.state <> 'draft'
                     """ % (init_periods, account['id'])
             query_init = sql_query % ('SUM(aml.debit) AS init_dr',
@@ -237,8 +238,8 @@ class account_balance(report_sxw.rml_parse):
                                       WHERE + WHERE_POSTED)
 
             WHERE = """
-                WHERE aml.period_id IN (%s) 
-                    AND aa.id = %s 
+                WHERE aml.period_id IN (%s)
+                    AND aa.id = %s
                     AND aml.state <> 'draft'
                     """ % (cur_periods, account['id'])
 
@@ -250,8 +251,8 @@ class account_balance(report_sxw.rml_parse):
 
             query = '''
                 SELECT
-                    partner_name, 
-                    p_idx, 
+                    partner_name,
+                    p_idx,
                     SUM(init_dr)-SUM(init_cr) AS balanceinit,
                     SUM(bal_dr) AS debit,
                     SUM(bal_cr) AS credit,
@@ -350,11 +351,11 @@ class account_balance(report_sxw.rml_parse):
                 periods, account['id'])
             if ctx.get('state', 'posted') == 'posted':
                 where += "AND am.state = 'posted'"
-            sql_detalle = """SELECT 
+            sql_detalle = """SELECT
                 DISTINCT am.id as am_id,
                 aj.name as diario,
                 am.name as name,
-                am.date as date, 
+                am.date as date,
                 ap.name as periodo
                 from account_move_line aml
                 inner join account_journal aj on aj.id = aml.journal_id
