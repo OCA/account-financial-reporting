@@ -13,7 +13,7 @@
                         <field name="fiscalyear_id"  domain="[('company_id', '=', company_id)]"/>
                      </group>
                     <group colspan="4" col="2">
-                        <field name="periods" domain="[('state', '=', 'draft'),('fiscalyear_id','=',fiscalyear_id)]"/>
+                        <field name="periods" domain="[('fiscalyear_id','=',fiscalyear_id)]"/>
                         <field name="journal_ids"/>
                     </group>
                    <separator string ="Report" colspan="4"/>
