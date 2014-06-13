@@ -198,7 +198,6 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
         css = report_xml.webkit_header.css
         if not css:
             css = ''
-        user = self.pool.get('res.users').browse(cursor, uid, uid)
 
         translate_call = partial(self.translate_call, parser_instance)
         #default_filters=['unicode', 'entity'] can be used to set global filter
