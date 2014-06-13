@@ -88,7 +88,8 @@ def mako_template(text):
 
 class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
 
-    def generate_pdf(self, comm_path, report_xml, header, footer, html_list, webkit_header=False):
+    def generate_pdf(self, comm_path, report_xml, header, footer, html_list,
+                     webkit_header=False, parser_instance=False):
         """Call webkit in order to generate pdf"""
         if not webkit_header:
             webkit_header = report_xml.webkit_header
@@ -117,8 +118,8 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
         if webkit_header.format:
             command.extend(['--page-size', str(webkit_header.format).replace(',', '.')])
 
-        if self.parser_instance.localcontext.get('additional_args', False):
-            for arg in self.parser_instance.localcontext['additional_args']:
+        if parser_instance.localcontext.get('additional_args', False):
+            for arg in parser_instance.localcontext['additional_args']:
                 command.extend(arg)
 
         count = 0
@@ -248,5 +249,6 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
                 raise except_osv(_('Webkit render'), msg)
             return (deb, 'html')
         bin = self.get_lib(cursor, uid)
-        pdf = self.generate_pdf(bin, report_xml, head, foot, htmls)
+        pdf = self.generate_pdf(bin, report_xml, head, foot, htmls,
+                                parser_instance=parser_instance)
         return (pdf, 'pdf')
