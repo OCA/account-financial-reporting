@@ -48,11 +48,12 @@ _logger = logging.getLogger('financial.reports.webkit')
 # Class used only as a workaround to bug:
 # http://code.google.com/p/wkhtmltopdf/issues/detail?id=656
 
-# html headers and footers do not work on big files (hundreds of pages) so we replace them by
-# text headers and footers passed as arguments to wkhtmltopdf
+# html headers and footers do not work on big files (hundreds of pages) so we
+# replace them by text headers and footers passed as arguments to wkhtmltopdf
 # this class has to be removed once the bug is fixed
 
-# in your report class, to print headers and footers as text, you have to add them in the localcontext with a key 'additional_args'
+# in your report class, to print headers and footers as text, you have to add
+# them in the localcontext with a key 'additional_args'
 # for instance:
 #        header_report_name = _('PARTNER LEDGER')
 #        footer_date_time = self.formatLang(str(datetime.today()), date_time=True)
@@ -75,12 +76,13 @@ _logger = logging.getLogger('financial.reports.webkit')
 from mako.template import Template
 from mako.lookup import TemplateLookup
 
+
 def mako_template(text):
     """Build a Mako template.
 
     This template uses UTF-8 encoding
     """
-    tmp_lookup  = TemplateLookup() #we need it in order to allow inclusion and inheritance
+    tmp_lookup = TemplateLookup()  # we need it in order to allow inclusion and inheritance
     return Template(text, input_encoding='utf-8', output_encoding='utf-8', lookup=tmp_lookup)
 
 
@@ -121,7 +123,7 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
 
         count = 0
         for html in html_list:
-            with tempfile.NamedTemporaryFile(suffix="%d.body.html" %count,
+            with tempfile.NamedTemporaryFile(suffix="%d.body.html" % count,
                                              delete=False) as html_file:
                 count += 1
                 html_file.write(self._sanitize_html(html))
@@ -132,8 +134,8 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
         file_to_del.append(stderr_path)
         try:
             status = subprocess.call(command, stderr=stderr_fd)
-            os.close(stderr_fd) # ensure flush before reading
-            stderr_fd = None # avoid closing again in finally block
+            os.close(stderr_fd)  # ensure flush before reading
+            stderr_fd = None  # avoid closing again in finally block
             fobj = open(stderr_path, 'r')
             error_message = fobj.read()
             fobj.close()
@@ -142,7 +144,7 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
             else:
                 error_message = _('The following diagnosis message was provided:\n') + error_message
             if status:
-                raise except_osv(_('Webkit error' ),
+                raise except_osv(_('Webkit error'),
                                  _("The command 'wkhtmltopdf' failed with error code = %s. Message: %s") % (status, error_message))
             with open(out_filename, 'rb') as pdf_file:
                 pdf = pdf_file.read()
@@ -162,10 +164,12 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
         """generate the PDF"""
 
         if context is None:
-            context={}
+            context = {}
         htmls = []
         if report_xml.report_type != 'webkit':
-            return super(HeaderFooterTextWebKitParser,self).create_single_pdf(cursor, uid, ids, data, report_xml, context=context)
+            return super(HeaderFooterTextWebKitParser, self
+                         ).create_single_pdf(cursor, uid, ids, data,
+                                             report_xml, context=context)
 
         parser_instance = self.parser(cursor,
                                       uid,
@@ -176,18 +180,18 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
         objs = self.getObjects(cursor, uid, ids, context)
         parser_instance.set_context(objs, data, ids, report_xml.report_type)
 
-        template =  False
+        template = False
 
         if report_xml.report_file:
             path = addons.get_module_resource(*report_xml.report_file.split(os.path.sep))
             if os.path.exists(path):
                 template = file(path).read()
         if not template and report_xml.report_webkit_data:
-            template =  report_xml.report_webkit_data
+            template = report_xml.report_webkit_data
         if not template:
             raise except_osv(_('Error!'), _('Webkit Report template not found !'))
         header = report_xml.webkit_header.html
-        footer = report_xml.webkit_header.footer_html
+
         if not header and report_xml.header:
             raise except_osv(
                   _('No header defined for this Webkit report!'),
@@ -227,7 +231,8 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
                 _logger.error(msg)
                 raise except_osv(_('Webkit render'), msg)
 
-        # NO html footer and header because we write them as text with wkhtmltopdf
+        # NO html footer and header because we write them as text with
+        # wkhtmltopdf
         head = foot = False
 
         if report_xml.webkit_debug:
