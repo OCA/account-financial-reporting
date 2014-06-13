@@ -32,6 +32,7 @@ import subprocess
 import tempfile
 import time
 import logging
+from functools import partial
 
 
 from mako import exceptions
@@ -90,8 +91,8 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
         """Call webkit in order to generate pdf"""
         if not webkit_header:
             webkit_header = report_xml.webkit_header
-        tmp_dir = tempfile.gettempdir()
-        out_filename = tempfile.mktemp(suffix=".pdf", prefix="webkit.tmp.")
+        fd, out_filename = tempfile.mkstemp(suffix=".pdf",
+                                            prefix="webkit.tmp.")
         file_to_del = [out_filename]
         if comm_path:
             command = [comm_path]
@@ -121,10 +122,10 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
 
         count = 0
         for html in html_list:
-            html_file = file(os.path.join(tmp_dir, str(time.time()) + str(count) +'.body.html'), 'w')
-            count += 1
-            html_file.write(html)
-            html_file.close()
+            with tempfile.NamedTemporaryFile(suffix="%d.body.html" %count,
+                                             delete=False) as html_file:
+                count += 1
+                html_file.write(self._sanitize_html(html))
             file_to_del.append(html_file.name)
             command.append(html_file.name)
         command.append(out_filename)
@@ -144,9 +145,9 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
             if status:
                 raise except_osv(_('Webkit error' ),
                                  _("The command 'wkhtmltopdf' failed with error code = %s. Message: %s") % (status, error_message))
-            pdf_file = open(out_filename, 'rb')
-            pdf = pdf_file.read()
-            pdf_file.close()
+            with open(out_filename, 'rb') as pdf_file:
+                pdf = pdf_file.read()
+            os.close(fd)
         finally:
             if stderr_fd is not None:
                 os.close(stderr_fd)
@@ -160,20 +161,21 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
     # override needed to keep the attachments' storing procedure
     def create_single_pdf(self, cursor, uid, ids, data, report_xml, context=None):
         """generate the PDF"""
+
         if context is None:
             context={}
         htmls = []
         if report_xml.report_type != 'webkit':
             return super(HeaderFooterTextWebKitParser,self).create_single_pdf(cursor, uid, ids, data, report_xml, context=context)
 
-        self.parser_instance = self.parser(cursor,
-                                           uid,
-                                           self.name2,
-                                           context=context)
+        parser_instance = self.parser(cursor,
+                                      uid,
+                                      self.name2,
+                                      context=context)
 
         self.pool = pooler.get_pool(cursor.dbname)
         objs = self.getObjects(cursor, uid, ids, context)
-        self.parser_instance.set_context(objs, data, ids, report_xml.report_type)
+        parser_instance.set_context(objs, data, ids, report_xml.report_type)
 
         template =  False
 
@@ -190,7 +192,7 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
         if not header and report_xml.header:
             raise except_osv(
                   _('No header defined for this Webkit report!'),
-                  _('Please set a header in company settings')
+                  _('Please set a header in company settings.')
               )
 
         css = report_xml.webkit_header.css
@@ -198,17 +200,18 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
             css = ''
         user = self.pool.get('res.users').browse(cursor, uid, uid)
 
+        translate_call = partial(self.translate_call, parser_instance)
         #default_filters=['unicode', 'entity'] can be used to set global filter
         body_mako_tpl = mako_template(template)
         helper = WebKitHelper(cursor, uid, report_xml.id, context)
         if report_xml.precise_mode:
             for obj in objs:
-                self.parser_instance.localcontext['objects'] = [obj]
+                parser_instance.localcontext['objects'] = [obj]
                 try:
                     html = body_mako_tpl.render(helper=helper,
                                                 css=css,
-                                                _=self.translate_call,
-                                                **self.parser_instance.localcontext)
+                                                _=translate_call,
+                                                **parser_instance.localcontext)
                     htmls.append(html)
                 except Exception, e:
                     msg = exceptions.text_error_template().render()
@@ -218,8 +221,8 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
             try:
                 html = body_mako_tpl.render(helper=helper,
                                             css=css,
-                                            _=self.translate_call,
-                                            **self.parser_instance.localcontext)
+                                            _=translate_call,
+                                            **parser_instance.localcontext)
                 htmls.append(html)
             except Exception, e:
                 msg = exceptions.text_error_template().render()
@@ -234,8 +237,8 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
                 deb = body_mako_tpl.render(helper=helper,
                                            css=css,
                                            _debug=tools.ustr("\n".join(htmls)),
-                                           _=self.translate_call,
-                                           **self.parser_instance.localcontext)
+                                           _=translate_call,
+                                           **parser_instance.localcontext)
             except Exception, e:
                 msg = exceptions.text_error_template().render()
                 _logger.error(msg)
