@@ -30,7 +30,6 @@
 import os
 import subprocess
 import tempfile
-import time
 import logging
 from functools import partial
 
