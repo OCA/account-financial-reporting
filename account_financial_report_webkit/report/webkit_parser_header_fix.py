@@ -213,7 +213,7 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
                                                 _=translate_call,
                                                 **parser_instance.localcontext)
                     htmls.append(html)
-                except Exception, e:
+                except Exception:
                     msg = exceptions.text_error_template().render()
                     _logger.error(msg)
                     raise except_osv(_('Webkit render'), msg)
@@ -224,7 +224,7 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
                                             _=translate_call,
                                             **parser_instance.localcontext)
                 htmls.append(html)
-            except Exception, e:
+            except Exception:
                 msg = exceptions.text_error_template().render()
                 _logger.error(msg)
                 raise except_osv(_('Webkit render'), msg)
@@ -239,7 +239,7 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
                                            _debug=tools.ustr("\n".join(htmls)),
                                            _=translate_call,
                                            **parser_instance.localcontext)
-            except Exception, e:
+            except Exception:
                 msg = exceptions.text_error_template().render()
                 _logger.error(msg)
                 raise except_osv(_('Webkit render'), msg)
