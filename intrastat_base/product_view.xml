@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-    Copyright (C) 2010-2013 Akretion (http://www.akretion.com/)
+    Copyright (C) 2010-2014 Akretion (http://www.akretion.com/)
     @author Alexis de Lattre <alexis.delattre@akretion.com>
     The licence is in the file __openerp__.py
 -->
@@ -9,11 +9,10 @@
 <openerp>
 <data>
 
-<!-- Add field on product.product view -->
-<record id="intrastat_base_product_normal_form" model="ir.ui.view">
-    <field name="name">intrastat.base.product.normal.form</field>
-    <field name="model">product.product</field>
-    <field name="inherit_id" ref="account.product_normal_form_view" />
+<record id="intrastat_base_product_template_form" model="ir.ui.view">
+    <field name="name">intrastat.base.product.template.form</field>
+    <field name="model">product.template</field>
+    <field name="inherit_id" ref="account.product_template_form_view"/>
     <field name="arch" type="xml">
         <group name="properties" position="after">
             <group string="Intrastat Properties" name="intrastat">
@@ -22,22 +21,6 @@
                     attrs="{'invisible': [('type', '!=', 'service')]}"/>
             </group>
         </group>
-    </field>
-</record>
-
-<!-- Same on product.template view -->
-<record id="intrastat_base_product_template_form" model="ir.ui.view">
-    <field name="name">intrastat.base.product.template.form</field>
-    <field name="model">product.template</field>
-    <field name="inherit_id" ref="account.product_template_form_view"/>
-    <field name="arch" type="xml">
-        <field name="supplier_taxes_id" position="after">
-            <group string="Intrastat Properties" name="intrastat">
-                <field name="exclude_from_intrastat" />
-                <field name="is_accessory_cost"
-                    attrs="{'invisible': [('type', '!=', 'service')]}"/>
-            </group>
-        </field>
     </field>
 </record>
 
