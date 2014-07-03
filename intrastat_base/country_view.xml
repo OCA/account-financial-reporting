@@ -9,7 +9,7 @@
 <data>
 
 <!-- Add intrastat field on res_country -->
-<record id="intrastat_base_country_tree" model="ir.ui.view">
+<record id="view_country_tree" model="ir.ui.view">
     <field name="name">intrastat.base.country.tree</field>
     <field name="model">res.country</field>
     <field name="inherit_id" ref="base.view_country_tree" />
@@ -20,7 +20,7 @@
     </field>
 </record>
 
-<record id="intrastat_base_country_form" model="ir.ui.view">
+<record id="view_country_form" model="ir.ui.view">
     <field name="name">intrastat.base.country.form</field>
     <field name="model">res.country</field>
     <field name="inherit_id" ref="base.view_country_form" />
@@ -32,7 +32,7 @@
 </record>
 
 <!-- there is no native search view, so I can't inherit -->
-<record id="intrastat_base_country_search" model="ir.ui.view">
+<record id="view_country_search" model="ir.ui.view">
     <field name="name">intrastat.base.country.search</field>
     <field name="model">res.country</field>
     <field name="arch" type="xml">
@@ -44,7 +44,6 @@
         </search>
     </field>
 </record>
-
 
 
 </data>

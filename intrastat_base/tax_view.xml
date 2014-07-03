@@ -10,7 +10,7 @@
 <data>
 
 <!-- Add 'exclude_from_intrastat_if_present' on tax form view -->
-<record id="intrastat_base_tax" model="ir.ui.view">
+<record id="view_tax_form" model="ir.ui.view">
     <field name="name">intrastat.base.tax</field>
     <field name="model">account.tax</field>
     <field name="inherit_id" ref="account.view_tax_form"/>
