@@ -95,7 +95,7 @@ msgstr "Configuration DEB/DES"
 
 #. module: intrastat_base
 #: model:ir.ui.menu,name:intrastat_base.menu_intrastat_base_root
-msgid "Intrastat reporting"
+msgid "Intrastat Reporting"
 msgstr "DEB et DES"
 
 #. module: intrastat_base
