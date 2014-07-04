@@ -73,6 +73,7 @@
         icon="STOCK_PRINT"/>
 
       <record id="account.menu_account_print_sale_purchase_journal" model="ir.ui.menu">
+      	<field name="name">sale.purchase.journal</field>
         <field name="sequence">3</field>
       </record>
       

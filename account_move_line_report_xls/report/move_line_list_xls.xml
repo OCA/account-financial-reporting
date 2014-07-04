@@ -7,7 +7,6 @@
       <field name="model">account.move.line</field>
       <field name="type">ir.actions.report.xml</field>
       <field name="report_name">move.line.list.xls</field>
-      <field name="report_type">xls</field>
       <field name="auto" eval="False"/>
     </record>
 
