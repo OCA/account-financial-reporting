@@ -1,0 +1,283 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* account_journal_report_xls
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0-20140512-231707\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-05-14 08:40+0000\n"
+"PO-Revision-Date: 2014-05-14 08:40+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: account_journal_report_xls
+#: selection:account.print.journal.xls,filter:0
+msgid "No Filters"
+msgstr "No Filters"
+
+#. module: account_journal_report_xls
+#: code:addons/account_journal_report_xls/report/nov_account_journal_xls.py:312
+#, python-format
+msgid "The 'Balance' field is a calculated XLS field requiring the presence of the 'Debit' and 'Credit' fields !"
+msgstr "The 'Balance' field is a calculated XLS field requiring the presence of the 'Debit' and 'Credit' fields !"
+
+#. module: account_journal_report_xls
+#: model:ir.model,name:account_journal_report_xls.model_account_print_journal_xls
+msgid "Print/Export Journal"
+msgstr "Print/Export Journal"
+
+#. module: account_journal_report_xls
+#: code:addons/account_journal_report_xls/report/nov_account_journal.py:88
+#, python-format
+msgid "Period"
+msgstr "Period"
+
+#. module: account_journal_report_xls
+#: code:addons/account_journal_report_xls/report/nov_account_journal_xls.py:259
+#, python-format
+msgid "VAT Declaration"
+msgstr "VAT Declaration"
+
+#. module: account_journal_report_xls
+#: code:addons/account_journal_report_xls/report/nov_account_journal.py:168
+#, python-format
+msgid "Statement"
+msgstr "Statement"
+
+#. module: account_journal_report_xls
+#: code:addons/account_journal_report_xls/report/nov_account_journal.py:91
+#, python-format
+msgid "Debit"
+msgstr "Debit"
+
+#. module: account_journal_report_xls
+#: view:account.print.journal.xls:0
+msgid "Print"
+msgstr "Print"
+
+#. module: account_journal_report_xls
+#: help:account.print.journal.xls,group_entries:0
+msgid "Group entries with same General Account & Tax Code."
+msgstr "Group entries with same General Account & Tax Code."
+
+#. module: account_journal_report_xls
+#: code:addons/account_journal_report_xls/report/nov_account_journal_xls.py:271
+#, python-format
+msgid "vat_summary_cols_number should be < cols_number !"
+msgstr "vat_summary_cols_number should be < cols_number !"
+
+#. module: account_journal_report_xls
+#: view:account.print.journal.xls:0
+msgid "onchange_fiscalyear_id(fiscalyear_id, context)"
+msgstr "onchange_fiscalyear_id(fiscalyear_id, context)"
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,sort_selection:0
+msgid "Entries Sorted by"
+msgstr "Entries Sorted by"
+
+#. module: account_journal_report_xls
+#: selection:account.print.journal.xls,sort_selection:0
+msgid "Journal Entry Number"
+msgstr "Journal Entry Number"
+
+#. module: account_journal_report_xls
+#: model:ir.model,name:account_journal_report_xls.model_account_journal
+msgid "Journal"
+msgstr "Sezionale"
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,amount_currency:0
+msgid "With Currency"
+msgstr "With Currency"
+
+#. module: account_journal_report_xls
+#: view:account.print.journal.xls:0
+msgid "This report allows you to generate a pdf or xls of your journals"
+msgstr "This report allows you to generate a pdf or xls of your journals"
+
+#. module: account_journal_report_xls
+#: selection:account.print.journal.xls,filter:0
+#: selection:account.print.journal.xls,sort_selection:0
+msgid "Date"
+msgstr "Date"
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,chart_account_id:0
+msgid "Chart of Account"
+msgstr "Chart of Account"
+
+#. module: account_journal_report_xls
+#: model:ir.actions.act_window,name:account_journal_report_xls.action_print_journal_by_fiscalyear_xls
+#: model:ir.ui.menu,name:account_journal_report_xls.menu_print_journal_by_fiscalyear_xls
+msgid "Journal by Fiscal Year"
+msgstr "Journal by Fiscal Year"
+
+#. module: account_journal_report_xls
+#: view:account.print.journal.xls:0
+#: field:account.print.journal.xls,journal_ids:0
+msgid "Journals"
+msgstr "Journals"
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,target_move:0
+msgid "Target Moves"
+msgstr "Target Moves"
+
+#. module: account_journal_report_xls
+#: help:account.print.journal.xls,chart_account_id:0
+msgid "Select Charts of Accounts"
+msgstr "Select Charts of Accounts"
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,date_to:0
+msgid "End Date"
+msgstr "End Date"
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,period_from:0
+msgid "Start Period"
+msgstr "Start Period"
+
+#. module: account_journal_report_xls
+#: help:account.print.journal.xls,amount_currency:0
+msgid "Print Report with the currency column if the currency differs from the company currency."
+msgstr "Print Report with the currency column if the currency differs from the company currency."
+
+#. module: account_journal_report_xls
+#: selection:account.print.journal.xls,target_move:0
+msgid "All Posted Entries"
+msgstr "All Posted Entries"
+
+#. module: account_journal_report_xls
+#: help:account.print.journal.xls,fiscalyear_id:0
+msgid "Keep empty for all open fiscal year"
+msgstr "Keep empty for all open fiscal year"
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,period_to:0
+msgid "End Period"
+msgstr "End Period"
+
+#. module: account_journal_report_xls
+#: code:addons/account_journal_report_xls/report/nov_account_journal.py:91
+#, python-format
+msgid "Credit"
+msgstr "Credit"
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,fiscalyear_id:0
+#: code:addons/account_journal_report_xls/report/nov_account_journal.py:88
+#, python-format
+msgid "Fiscal Year"
+msgstr "Fiscal Year"
+
+#. module: account_journal_report_xls
+#: model:ir.actions.act_window,name:account_journal_report_xls.action_print_journal_by_period_xls
+#: model:ir.ui.menu,name:account_journal_report_xls.menu_print_journal_by_period_xls
+msgid "Journal by Period"
+msgstr "Journal by Period"
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,group_entries:0
+msgid "Group Entries"
+msgstr "Group Entries"
+
+#. module: account_journal_report_xls
+#: code:addons/account_journal_report_xls/report/nov_account_journal_xls.py:202
+#, python-format
+msgid "Journal Overview"
+msgstr "Journal Overview"
+
+#. module: account_journal_report_xls
+#: code:addons/account_journal_report_xls/wizard/print_journal_wizard.py:137
+#: code:addons/account_journal_report_xls/wizard/print_journal_wizard.py:156
+#, python-format
+msgid "No Data Available"
+msgstr "No Data Available"
+
+#. module: account_journal_report_xls
+#: code:addons/account_journal_report_xls/wizard/print_journal_wizard.py:137
+#: code:addons/account_journal_report_xls/wizard/print_journal_wizard.py:156
+#, python-format
+msgid "No records found for your selection!"
+msgstr "No records found for your selection!"
+
+#. module: account_journal_report_xls
+#: code:addons/account_journal_report_xls/report/nov_account_journal_xls.py:270
+#, python-format
+msgid "Programming Error!"
+msgstr "Programming Error!"
+
+#. module: account_journal_report_xls
+#: code:addons/account_journal_report_xls/report/nov_account_journal.py:91
+#, python-format
+msgid "Amount"
+msgstr "Amount"
+
+#. module: account_journal_report_xls
+#: code:addons/account_journal_report_xls/report/nov_account_journal.py:215
+#, python-format
+msgid "Grouped Entries"
+msgstr "Grouped Entries"
+
+#. module: account_journal_report_xls
+#: code:addons/account_journal_report_xls/report/nov_account_journal.py:91
+#, python-format
+msgid "Currency"
+msgstr "Currency"
+
+#. module: account_journal_report_xls
+#: view:account.print.journal.xls:0
+msgid "Export"
+msgstr "Export"
+
+#. module: account_journal_report_xls
+#: view:account.print.journal.xls:0
+#: selection:account.print.journal.xls,filter:0
+msgid "Periods"
+msgstr "Periods"
+
+#. module: account_journal_report_xls
+#: code:addons/account_journal_report_xls/report/nov_account_journal.py:166
+#, python-format
+msgid "Invoice"
+msgstr "Invoice"
+
+#. module: account_journal_report_xls
+#: code:addons/account_journal_report_xls/report/nov_account_journal.py:166
+#: code:addons/account_journal_report_xls/report/nov_account_journal.py:168
+#, python-format
+msgid "Voucher"
+msgstr "Voucher"
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,date_from:0
+msgid "Start Date"
+msgstr "Start Date"
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,filter:0
+msgid "Filter by"
+msgstr "Filter by"
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,company_id:0
+msgid "Company"
+msgstr "Company"
+
+#. module: account_journal_report_xls
+#: selection:account.print.journal.xls,target_move:0
+msgid "All Entries"
+msgstr "All Entries"
+
+#. module: account_journal_report_xls
+#: code:addons/account_journal_report_xls/report/nov_account_journal_xls.py:311
+#, python-format
+msgid "Customisation Error!"
+msgstr "Customisation Error!"
