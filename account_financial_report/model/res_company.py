@@ -23,12 +23,12 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##########################################################################
 
-from osv import osv
-from osv import fields
-from tools.translate import _
+from openerp.osv import orm
+from openerp.osv import fields
+from openerp.tools.translate import _
 
 
-class res_company(osv.osv):
+class res_company(orm.Model):
     _inherit = 'res.company'
     _columns = {
         'credit_account_ids': fields.many2many('account.account',

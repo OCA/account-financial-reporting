@@ -22,10 +22,10 @@
 ##############################################################################
 
 import time
-import pooler
-from report import report_sxw
+import openerp.pooler
+from openerp.report import report_sxw
 from common_report_header import common_report_header
-from tools.translate import _
+from openerp.tools.translate import _
 
 
 class report_pl_account_horizontal(report_sxw.rml_parse, common_report_header):

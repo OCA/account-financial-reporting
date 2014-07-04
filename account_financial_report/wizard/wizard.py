@@ -26,13 +26,14 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##############################################################################
 
-from osv import osv, fields
-import pooler
+from openerp.osv import orm, fields
+
+import openerp.pooler
 import time
-from tools.translate import _
+from openerp.tools.translate import _
 
 
-class wizard_report(osv.osv_memory):
+class wizard_report(orm.TransientModel):
     _name = "wizard.report"
 
     _columns = {
@@ -199,7 +200,7 @@ class wizard_report(osv.osv_memory):
             context = {}
 
         if data['form']['date_from'] > data['form']['date_to']:
-            raise osv.except_osv(_('Error !'), (
+            raise orm.except_orm(_('Error !'), (
                 'La fecha final debe ser mayor a la inicial'))
 
         sql = """SELECT f.id, f.date_start, f.date_stop
@@ -210,12 +211,12 @@ class wizard_report(osv.osv_memory):
 
         if res:
             if (data['form']['date_to'] > res[0]['date_stop'] or data['form']['date_from'] < res[0]['date_start']):
-                raise osv.except_osv(_('UserError'), 'Las fechas deben estar entre %s y %s' % (
+                raise orm.except_orm(_('UserError'), 'Las fechas deben estar entre %s y %s' % (
                     res[0]['date_start'], res[0]['date_stop']))
             else:
                 return 'report'
         else:
-            raise osv.except_osv(_('UserError'), 'No existe periodo fiscal')
+            raise orm.except_orm(_('UserError'), 'No existe periodo fiscal')
 
     def period_span(self, cr, uid, ids, fy_id, context=None):
         if context is None:
@@ -266,7 +267,7 @@ class wizard_report(osv.osv_memory):
             minmax = cr.dictfetchall()
             if minmax:
                 if (data['form']['date_to'] < minmax[0]['inicio']) or (data['form']['date_from'] > minmax[0]['fin']):
-                    raise osv.except_osv(_('Error !'), _(
+                    raise orm.except_orm(_('Error !'), _(
                         'La interseccion entre el periodo y fecha es vacio'))
 
         if data['form']['columns'] == 'one':

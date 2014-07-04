@@ -34,10 +34,10 @@ from openerp.tools.translate import _
 from openerp.addons.report_webkit import report_helper
 from .common_partner_reports import CommonPartnersReportHeaderWebkit
 from .webkit_parser_header_fix import HeaderFooterTextWebKitParser
-
+from openerp.modules.module import get_module_resource
 
 def get_mako_template(obj, *args):
-    template_path = openerp.addons.get_module_resource(*args)
+    template_path = get_module_resource(*args)
     return Template(filename=template_path, input_encoding='utf-8')
 
 report_helper.WebKitHelper.get_mako_template = get_mako_template
@@ -93,6 +93,7 @@ class PartnersOpenInvoicesWebkit(report_sxw.rml_parse, CommonPartnersReportHeade
         """Populate a ledger_lines attribute on each browse record that will be used
         by mako template"""
         new_ids = data['form']['chart_account_id']
+
         # Account initial balance memoizer
         init_balance_memoizer = {}
         # Reading form

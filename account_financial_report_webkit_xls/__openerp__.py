@@ -36,9 +36,8 @@
         
     """,
     'depends': ['report_xls', 'account_financial_report_webkit'],
-    'demo_xml': [],
-    'init_xml': [],
-    'update_xml' : [
+    'demo': [],
+    'data' : [
         'wizard/general_ledger_wizard_view.xml',   
         'wizard/trial_balance_wizard_view.xml',   
         'wizard/partners_ledger_wizard_view.xml',

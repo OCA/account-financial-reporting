@@ -31,10 +31,10 @@ import copy
 from operator import itemgetter
 import time
 import datetime
-from report import report_sxw
-from tools import config
-from tools.translate import _
-from osv import osv
+from openerp.report import report_sxw
+from openerp.tools import config
+from openerp.tools.translate import _
+from openerp.osv import osv
 from openerp.tools.safe_eval import safe_eval as eval
 
 
