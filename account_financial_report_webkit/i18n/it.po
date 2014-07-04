@@ -236,7 +236,7 @@ msgstr "Libro Mastro Webkit"
 #: report:addons/account_financial_report_webkit/report/templates/account_report_open_invoices.mako:116
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partners_ledger.mako:112
 msgid "Rec."
-msgstr ""
+msgstr "Riconc."
 
 #. module: account_financial_report_webkit
 #: constraint:account.account:0
@@ -578,7 +578,7 @@ msgstr ""
 #: report:addons/account_financial_report_webkit/report/templates/account_report_open_invoices.mako:124
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partners_ledger.mako:118
 msgid "Cumul. Bal."
-msgstr "Bil. Cumul."
+msgstr "Saldo"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:22
