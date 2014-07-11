@@ -282,7 +282,6 @@ class AccountCSVExport(orm.TransientModel):
         }
 
     def _get_header_journal_entries(self, cr, uid, ids, context=None):
-
         return [
             # Standard Sage export fields
             _(u'DATE'),
@@ -310,6 +309,7 @@ class AccountCSVExport(orm.TransientModel):
             _(u'TAX CODE CODE'),
             _(u'TAX CODE NAME'),
             _(u'TAX AMOUNT'),
+            _(u'BANK STATEMENT'),
         ]
 
     def _get_rows_journal_entries(self, cr, uid, ids,
@@ -344,7 +344,8 @@ class AccountCSVExport(orm.TransientModel):
           account_fiscalyear.name as fiscal_year,
           account_tax_code.code AS aml_tax_code_code,
           account_tax_code.name AS aml_tax_code_name,
-          account_move_line.tax_amount AS aml_tax_amount
+          account_move_line.tax_amount AS aml_tax_amount,
+          account_bank_statement.name AS bank_statement
         FROM
           public.account_move_line
           JOIN account_account on
@@ -369,6 +370,8 @@ class AccountCSVExport(orm.TransientModel):
             (account_tax_code.id=account_move_line.tax_code_id)
           LEFT JOIN account_analytic_account on
             (account_analytic_account.id=account_move_line.analytic_account_id)
+          LEFT JOIN account_bank_statement on
+            (account_bank_statement.id=account_move_line.statement_id)
         WHERE account_period.id IN %(period_ids)s
         AND account_journal.id IN %(journal_ids)s
         ORDER BY account_move_line.date
