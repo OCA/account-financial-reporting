@@ -21,5 +21,4 @@
 #                                                                             =
 #==============================================================================
 
-import models
-from . import wizard
+from . import mis_builder_dashboard
