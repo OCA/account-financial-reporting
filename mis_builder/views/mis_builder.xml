@@ -119,7 +119,8 @@
                         </h1>
                     </div>
                     <div class="oe_right oe_button_box" name="buttons"> 
-                        <button type="action" name="%(mis_report_instance_result_action)d" string="Open result" />
+                        <button type="action" name="%(mis_report_instance_result_action)d" string="Preview" />
+                        <button type="action" name="%(mis_report_instance_add_to_dashboard_action)d" string="Add to dashboard" />
                     </div>
                     <group col="2">
                         <field name="description"/>
