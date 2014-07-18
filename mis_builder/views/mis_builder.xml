@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="mis_report_view_tree">
+            <field name="name">mis.report.view.tree</field>
+            <field name="model">mis.report</field>
+            <field name="arch" type="xml">
+                <tree string="MIS Reports">
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="mis_report_view_form">
+            <field name="name">mis.report.view.form</field>
+            <field name="model">mis.report</field>
+            <field name="arch" type="xml">
+                <form string="MIS Report" version="7.0">
+                <sheet>
+                    <group col="2">
+                        <field name="name"/>
+                        <field name="description"/>
+                        <field name="query_ids">
+                            <tree string="Queries" editable="bottom">
+                                <field name="name"/>
+                                <field name="model_id"/>
+                                <field name="field_ids" domain="[('model_id', '=', model_id)]" widget="many2many_tags"/>
+                                <field name="date_field" domain="[('model_id', '=', model_id), ('ttype', 'in', ('date', 'datetime'))]"/>
+                                <field name="domain"/>
+                            </tree>
+                        </field>
+                        <field name="kpi_ids">
+                            <tree string="KPI's" editable="bottom">
+                                <field name="sequence" widget="handle"/>
+                                <field name="name"/>
+                                <field name="description"/>
+                                <field name="expression"/>
+                                <field name="type"/>
+                                <field name="dp"/>
+                                <field name="divider"/>
+                                <field name="suffix"/>
+                                <field name="compare_method"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="mis_report_view_action">
+            <field name="name">mis.report.view.action</field>
+            <field name="view_id" ref="mis_report_view_tree"/>
+            <field name="res_model">mis.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="mis_report_view_menu" parent="base.menu_reporting_config" name="MIS Reports" action="mis_report_view_action"/>
+
+        <record model="ir.ui.view" id="mis_report_instance_result_view_form">
+            <field name="name">mis.report.instance.result.view.form</field>
+            <field name="model">mis.report.instance</field>
+            <field name="priority" eval="17"/>
+            <field name="arch" type="xml">
+                <form string="MIS Report Result" version="7.0">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <field name="description"/>
+                            <field name="pivot_date"/>
+                        </group>
+                        <widget type="mis_report"></widget>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="mis_report_instance_result_action">
+            <field name="name">mis.report.instance.result.view.action</field>
+            <field name="view_id" ref="mis_report_instance_result_view_form"/>
+            <field name="res_model">mis.report.instance</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record model="ir.ui.view" id="mis_report_instance_view_tree">
+            <field name="name">mis.report.instance.view.tree</field>
+            <field name="model">mis.report.instance</field>
+            <field name="arch" type="xml">
+                <tree string="MIS Report Instances">
+                    <field name="report_id"/>
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="mis_report_instance_view_form">
+            <field name="name">mis.report.instance.view.form</field>
+            <field name="model">mis.report.instance</field>
+            <field name="priority" eval="16"/>
+            <field name="arch" type="xml">
+                <form string="MIS Report Instance" version="7.0">
+                <sheet>
+                    <div class="oe_title">
+                        <div class="oe_edit_only">
+                            <label for="name"/>
+                        </div>
+                        <h1>
+                            <field name="name" placeholder="Name"/>
+                        </h1>
+                    </div>
+                    <div class="oe_right oe_button_box" name="buttons"> 
+                        <button type="action" name="%(mis_report_instance_result_action)d" string="Open result" />
+                    </div>
+                    <group col="2">
+                        <field name="description"/>
+                        <field name="report_id"/>
+                        <field name="date"/>
+                        <field name="period_ids">
+                            <tree string="KPI's" editable="bottom">
+                                <field name="sequence" widget="handle"/>
+                                <field name="name"/>
+                                <field name="type"/>
+                                <field name="offset"/>
+                                <field name="duration"/>
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                                <field name="period_from"/>
+                                <field name="period_to"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="mis_report_instance_view_action">
+            <field name="name">mis.report.instance.view.action</field>
+            <field name="view_id" ref="mis_report_instance_view_tree"/>
+            <field name="res_model">mis.report.instance</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="mis_report_instance_view_menu" parent="base.menu_reporting_config" name="MIS Report Instances" action="mis_report_instance_view_action"/>
+
+    </data>
+</openerp>

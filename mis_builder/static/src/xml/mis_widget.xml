@@ -1,0 +1,18 @@
+<template>
+    <t t-name="mis_builder.MisReport">
+        <p>Yo!</p>
+        <table t-if="widget.mis_report_data">
+            <th>
+                <td></td>
+                <td t-foreach="widget.mis_report_data.rows" t-as="col">
+                    <t t-esc="col.name"/>
+                </td>
+            </th>
+            <tr t-foreach="widget.mis_report_data.rows" t-as="row">
+                <th>
+                    <t t-esc="row.name"/>
+                </th>
+            </tr>
+        </table>
+    </t>
+</template>
