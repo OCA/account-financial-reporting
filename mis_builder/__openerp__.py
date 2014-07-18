@@ -31,6 +31,7 @@
     'website': 'http://acsone.eu',
     'depends': ['account'],
     'data': [
+        'wizard/mis_builder_dashboard.xml',
         'views/mis_builder.xml',
     ],
     'test': [

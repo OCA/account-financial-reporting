@@ -460,7 +460,7 @@ class mis_report_instance(orm.Model):
 
         cols = []
         for period in r.period_ids:
-            col = dict(name=period.name)
+            cols.append(dict(name=period.name, description=period.name))
         res['cols'] = cols
 
         return res
