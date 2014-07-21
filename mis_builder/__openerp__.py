@@ -36,7 +36,11 @@
     ],
     'test': [
     ],
-    'demo': [
+    'demo': ['tests/mis.report.kpi.csv',
+             'tests/mis.report.query.csv',
+             'tests/mis.report.csv',
+             'tests/mis.report.instance.period.csv',
+             'tests/mis.report.instance.csv',
     ],
     'js': [
         'static/src/js/*.js'

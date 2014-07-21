@@ -1,0 +1,2 @@
+"id","date","description","name","period_ids/id","report_id/id"
+"mis_report_instance","2014-07-18","","Test-report-instance","mis_report_instance_period_1,mis_report_instance_period_2,mis_report_instance_period_3,mis_report_instance_period_4,mis_report_instance_period_5,mis_report_instance_period_6","mis_report"
