@@ -34,14 +34,14 @@
                         <field name="kpi_ids">
                             <tree string="KPI's" editable="bottom">
                                 <field name="sequence" widget="handle"/>
-                                <field name="name"/>
-                                <field name="description"/>
+                                <field name="description" on_change="onchange_description(description, context)"/>
+                                <field name="name" on_change="onchange_name(name, context)"/>
                                 <field name="expression"/>
-                                <field name="type"/>
-                                <field name="dp"/>
-                                <field name="divider"/>
+                                <field name="type" on_change="onchange_type(type, context)"/>
+                                <field name="dp" attrs="{'invisible': [('type', '=', 'str')]}"/>
+                                <field name="divider" attrs="{'invisible': [('type', '=', 'str')]}"/>
                                 <field name="suffix"/>
-                                <field name="compare_method"/>
+                                <field name="compare_method" attrs="{'invisible': [('type', '=', 'str')]}"/>
                             </tree>
                         </field>
                     </group>
@@ -99,6 +99,7 @@
                     <field name="report_id"/>
                     <field name="name"/>
                     <field name="description"/>
+                    <field name="target_move"/>
                 </tree>
             </field>
         </record>
@@ -125,6 +126,7 @@
                     <group col="2">
                         <field name="description"/>
                         <field name="report_id"/>
+                        <field name="target_move"/>
                         <field name="date"/>
                         <field name="period_ids">
                             <tree string="KPI's" editable="bottom">

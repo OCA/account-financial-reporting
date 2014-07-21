@@ -1,17 +1,28 @@
 <template>
     <t t-name="mis_builder.MisReport">
-        <p>Yo!</p>
+        <p> </p>
         <table t-if="widget.mis_report_data">
             <th>
                 <td></td>
-                <td t-foreach="widget.mis_report_data.cols" t-as="col" style="padding-right:10px">
+                <th t-foreach="widget.mis_report_data.cols" t-as="col" style="padding-right:10px">
                     <t t-esc="col.name"/>
-                </td>
+                </th>
             </th>
             <tr t-foreach="widget.mis_report_data.rows" t-as="row">
                 <th>
-                    <t t-esc="row.name"/>
+                    <t t-esc="row.description"/>
                 </th>
+                <td></td>
+                <td t-foreach="widget.mis_report_data.cols" t-as="col" style="padding-right:10px">
+                    <t t-foreach="col.values" t-as="value">
+                        <t t-if="value == row.name">
+                            <t t-esc="value_value.val_r"/>
+                            <t t-if="value_value.val_c">
+                                <t t-esc="value_value.val_c"/>
+                            </t>
+                        </t>
+                    </t>
+                </td>
             </tr>
         </table>
     </t>

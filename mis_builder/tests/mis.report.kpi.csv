@@ -1,0 +1,7 @@
+"id","compare_method","description","expression","divider","name","dp","sequence","type","suffix"
+"mis_report_kpi_1","Percentage","chiffre d'affaire","-bal_70","","ca","","","Numeric","€"
+"mis_report_kpi_2","Percentage","cost","-bal_60 - bal_61","","cost","","","Numeric","€"
+"mis_report_kpi_3","Percentage","profit","ca - cost","","profit","","","Numeric","€"
+"mis_report_kpi_4","Difference","margin","profit/ca","","margin","","","Percentage","%"
+"mis_report_kpi_5","None","couleur","'vert' if profit > 0 else 'rouge'","","couleur","","","String"
+"mis_report_kpi_6","Percentage","total invoice","len(inv)","","total_invoice","","","Numeric","€"

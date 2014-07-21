@@ -26,6 +26,7 @@ from datetime import datetime, timedelta
 from dateutil import parser
 import traceback
 from lxml import etree
+import re
 
 from openerp.osv import orm, fields
 from openerp.tools.safe_eval import safe_eval
@@ -76,11 +77,12 @@ class mis_report_kpi(orm.Model):
                                  string='Type'),
         'divider': fields.selection([('1e-6', _('µ')),
                                      ('1e-3', _('m')),
+                                     ('1', _('1')),
                                      ('1e3', _('k')),
                                      ('1e6', _('M'))],
                                     string='Factor'),
         'dp': fields.integer(string='Rounding'),
-        'suffix': fields.char(size=16, string='Unit'),
+        'suffix': fields.char(size=16, string='Suffix'),
         'compare_method': fields.selection([('diff', _('Difference')),
                                             ('pct', _('Percentage')),
                                             ('none', _('None'))],
@@ -99,9 +101,40 @@ class mis_report_kpi(orm.Model):
 
     _order = 'sequence'
 
-    # TODO: constraint to check name is a valid python identifier
-    # TODO: onchange type pct -> force comparison method = diff
-    # TODO: onchange type str -> divider, dp, suffix, compare_method read only
+    def _check_name(self, cr, uid, ids, context=None):
+        for record_name in self.read(cr, uid, ids, ['name']):
+            if not re.match("[_A-Za-z][_a-zA-Z0-9]*$", record_name['name']):
+                return False
+        return True
+
+    _constraints = [
+        (_check_name, 'The name must be a valid python identifier', ['name']),
+    ]
+
+    def onchange_name(self, cr, uid, ids, name, context=None):
+        # check it is a valid python identifier
+        res = {}
+        if name and not re.match("[_A-Za-z][_a-zA-Z0-9]*$", name):
+            res['warning'] = {'title': 'Invalid name', 'message': 'The name must be a valid python identifier'}
+        return res
+
+    def onchange_description(self, cr, uid, ids, description, context=None):
+        # construct name from description
+        clean = lambda varStr: re.sub('\W|^(?=\d)', '_', varStr)
+        res = {}
+        if description:
+            res = {'value': {'name': clean(description)}}
+        return res
+
+    def onchange_type(self, cr, uid, ids, kpi_type, context=None):
+        res = {}
+        if kpi_type == 'pct':
+            res['value'] = {'compare_method': 'diff'}
+        elif kpi_type == 'str':
+            res['value'] = {'compare_method': 'none',
+                            'divider': '',
+                            'dp': 0}
+        return res
 
     def _render(self, kpi, value):
         """ render a KPI value as a unicode string, ready for display """
@@ -207,6 +240,11 @@ class mis_report_instance_period(orm.Model):
         if isinstance(ids, (int, long)):
             ids = [ids]
         res = {}
+        company_id = context.get('force_company')
+        if not company_id:
+            user = self.pool.get('res.users').read(cr, uid, uid, ['company_id'], context=context)
+            if user['company_id']:
+                company_id = user['company_id'][0]
         for c in self.browse(cr, uid, ids, context=context):
             d = parser.parse(c.report_instance_id.pivot_date)
             if c.type == 'd':
@@ -223,17 +261,17 @@ class mis_report_instance_period(orm.Model):
                 date_to = date_to.strftime(tools.DEFAULT_SERVER_DATE_FORMAT)
                 period_ids = None
             elif c.type == 'fp':
-                # TODO: filter on company_id
                 # TODO: date!
                 period_obj = self.pool['account.period']
                 all_period_ids = period_obj.search(cr, uid,
-                                                   [('special', '=', False)],
+                                                   [('special', '=', False), ('company_id', '=', company_id)],
                                                    order='date_start',
                                                    context=context)
                 current_period_ids = period_obj.search(cr, uid,
                                                        [('special', '=', False),
                                                         ('date_start', '<=', d),
-                                                        ('date_stop', '>=', d)],
+                                                        ('date_stop', '>=', d),
+                                                        ('company_id', '=', company_id)],
                                                        context=context)
                 if not current_period_ids:
                     raise orm.except_orm(_("Error!"),
@@ -264,7 +302,7 @@ class mis_report_instance_period(orm.Model):
 
     _columns = {
         'name': fields.char(size=32, required=True,
-                            string='Name', translate=True),
+                            string='Description', translate=True),
         'type': fields.selection([('d', _('Day')),
                                   ('w', _('Week')),
                                   ('fp', _('Fiscal Period')),
@@ -296,19 +334,23 @@ class mis_report_instance_period(orm.Model):
     }
 
     _defaults = {
-        'offset':-1,
+        'offset': -1,
         'duration': 1,
     }
 
     _order = 'sequence'
 
-    # TODO: constraint duration >= 1
+    _sql_constraints = [
+        ('duration', 'CHECK (duration>0)', 'Wrong duration, it must be positive!')
+    ]
 
     def _fetch_balances(self, cr, uid, c, context=None):
         """ fetch the general account balances for the given period
 
         returns a dictionary {bal_<account.code>: account.balance}
         """
+        if context is None:
+            context = {}
         account_obj = self.pool['account.account']
 
         search_ctx = dict(context)
@@ -320,8 +362,12 @@ class mis_report_instance_period(orm.Model):
                                'date_to': c.date_to})
 
         # TODO: initial balance?
-        # TODO: draft or posted?
-        account_ids = account_obj.search(cr, uid, [])
+        company_id = context.get('force_company')
+        if not company_id:
+            user = self.pool.get('res.users').read(cr, uid, uid, ['company_id'], context=context)
+            if user['company_id']:
+                company_id = user['company_id'][0]
+        account_ids = account_obj.search(cr, uid, [('company_id', '=', company_id)], context=context)
         account_datas = account_obj.read(cr, uid, account_ids,
                                          ['code', 'balance'],
                                          context=search_ctx)
@@ -340,6 +386,11 @@ class mis_report_instance_period(orm.Model):
         res = {}
 
         report = c.report_instance_id.report_id
+        company_id = context.get('force_company')
+        if not company_id:
+            user = self.pool.get('res.users').read(cr, uid, uid, ['company_id'], context=context)
+            if user['company_id']:
+                company_id = user['company_id'][0]
         for query in report.query_ids:
             obj = self.pool[query.model_id.model]
             domain = query.domain and safe_eval(query.domain) or []
@@ -353,11 +404,10 @@ class mis_report_instance_period(orm.Model):
                 # domain.extend([(query.date_field.name, '>=', datetime_from),
                 #                (query.date_field.name, '<', datetime_to)])
                 raise orm.except_orm(_('Error!'), _('Not implemented'))
+            domain.extend([('company_id', '=', company_id)])
             field_names = [field.name for field in query.field_ids]
-            obj_ids = obj.search(cr, uid, domain,
-                                 context=context)
-            obj_datas = obj.read(cr, uid, obj_ids, field_names,
-                                 context=context)
+            obj_ids = obj.search(cr, uid, domain, context=context)
+            obj_datas = obj.read(cr, uid, obj_ids, field_names, context=context)
             res[query.name] = [AutoStruct(**d) for d in obj_datas]
 
         return res
@@ -381,7 +431,7 @@ class mis_report_instance_period(orm.Model):
         localdict.update(self._fetch_balances(cr, uid, c, context=context))
         localdict.update(self._fetch_queries(cr, uid, c, context=context))
 
-        for kpi in c.report_instance_id.report.kpi_ids:
+        for kpi in c.report_instance_id.report_id.kpi_ids:
             try:
                 kpi_val = safe_eval(kpi.expression, localdict)
             except ZeroDivisionError:
@@ -443,12 +493,20 @@ class mis_report_instance(orm.Model):
                                       'report_instance_id',
                                       required=True,
                                       string='Periods'),
+        #'comparison_column': fields.many2many('mis.report.instance')
+        'target_move': fields.selection([('posted', 'All Posted Entries'),
+                                         ('all', 'All Entries'),
+                                        ], 'Target Moves', required=True),
+    }
+
+    _defaults = {
+            'target_move': 'posted',
     }
 
     def compute(self, cr, uid, _ids, context=None):
         assert isinstance(_ids, (int, long))
-
         r = self.browse(cr, uid, _ids, context=context)
+        context['state'] = r.target_move
 
         res = {}
 
@@ -459,8 +517,9 @@ class mis_report_instance(orm.Model):
         res['rows'] = rows
 
         cols = []
+        report_instance_period_obj = self.pool.get('mis.report.instance.period')
         for period in r.period_ids:
-            cols.append(dict(name=period.name, description=period.name))
+            cols.append(dict(name=period.name, values=report_instance_period_obj._compute(cr, uid, period, context=context)))
         res['cols'] = cols
 
         return res
