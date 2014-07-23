@@ -350,6 +350,7 @@ class mis_report_instance_period(orm.Model):
         'sequence': fields.integer(string='Sequence'),
         'report_instance_id': fields.many2one('mis.report.instance',
                                               string='Report Instance'),
+        'comparison_column_ids': fields.many2many('mis.report.instance.period', 'mis_report_instance_period_rel', 'period_id', 'compare_period_id', string='Compare with'),
     }
 
     _defaults = {
@@ -360,7 +361,8 @@ class mis_report_instance_period(orm.Model):
     _order = 'sequence'
 
     _sql_constraints = [
-        ('duration', 'CHECK (duration>0)', 'Wrong duration, it must be positive!')
+        ('duration', 'CHECK (duration>0)', 'Wrong duration, it must be positive!'),
+        ('name_unique', 'unique(name, report_instance_id)', 'Period name should be unique by report'),
     ]
 
     def _fetch_balances(self, cr, uid, c, context=None):
@@ -374,8 +376,8 @@ class mis_report_instance_period(orm.Model):
 
         search_ctx = dict(context)
         if c.period_from:
-            search_ctx.update({'period_from': c.period_from,
-                               'period_to': c.period_to})
+            search_ctx.update({'period_from': c.period_from.id,
+                               'period_to': c.period_to.id})
         else:
             search_ctx.update({'date_from': c.date_from,
                                'date_to': c.date_to})
@@ -475,8 +477,6 @@ class mis_report_instance(orm.Model):
     """ The MIS report instance combines compute and
     display a MIS report template for a set of periods """
 
-    # TODO: mechanism to add comparison columns
-
     def _get_pivot_date(self, cr, uid, ids, field_name, arg, context=None):
         res = {}
         for r in self.browse(cr, uid, ids, context=context):
@@ -507,7 +507,6 @@ class mis_report_instance(orm.Model):
                                       'report_instance_id',
                                       required=True,
                                       string='Periods'),
-        #'comparison_column': fields.many2many('mis.report.instance')
         'target_move': fields.selection([('posted', 'All Posted Entries'),
                                          ('all', 'All Entries'),
                                         ], 'Target Moves', required=True),
@@ -532,8 +531,20 @@ class mis_report_instance(orm.Model):
 
         cols = []
         report_instance_period_obj = self.pool.get('mis.report.instance.period')
+        kpi_obj = self.pool.get('mis.report.kpi')
         for period in r.period_ids:
-            cols.append(dict(name=period.name, values=report_instance_period_obj._compute(cr, uid, period, context=context)))
+            current_col = dict(name=period.name, values=report_instance_period_obj._compute(cr, uid, period, context=context))
+            cols.append(current_col)
+            for compare_col in period.comparison_column_ids:
+                column1 = current_col
+                for col in cols:
+                    if col['name'] == compare_col.name:
+                        column2 = col
+                        continue
+                compare_values = {}
+                for kpi in r.report_id.kpi_ids:
+                    compare_values[kpi.name] = {'val_r': kpi_obj._render_comparison(kpi, column1['values'][kpi.name]['val'], column2['values'][kpi.name]['val'])}
+                cols.append(dict(name='%s - %s' % (period.name, compare_col.name), values=compare_values))
         res['cols'] = cols
 
         return res

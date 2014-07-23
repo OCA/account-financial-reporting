@@ -139,6 +139,9 @@
                                 <field name="date_to"/>
                                 <field name="period_from"/>
                                 <field name="period_to"/>
+                                <field name="report_instance_id" invisible="1"/>
+                                <field name="id" invisible="1"/>
+                                <field name="comparison_column_ids" domain="[('report_instance_id', '=', report_instance_id), ('id', '!=', id)]" widget="many2many_tags"/>
                             </tree>
                         </field>
                     </group>
