@@ -25,8 +25,8 @@
 from datetime import datetime, timedelta
 from dateutil import parser
 import traceback
-from lxml import etree
 import re
+import calendar
 
 from openerp.osv import orm, fields
 from openerp.tools.safe_eval import safe_eval
@@ -46,6 +46,15 @@ def _get_selection_label(selection, value):
         if v == value:
             return l
     return ''
+
+
+def utc_midnight(d, add_day=0):
+    d = datetime.strptime(d, tools.DEFAULT_SERVER_DATE_FORMAT)
+    if add_day:
+        d = d + timedelta(days=add_day)
+    timestamp = calendar.timegm(d.timetuple())
+    d_utc_midnight = datetime.utcfromtimestamp(timestamp)
+    return datetime.strftime(d_utc_midnight, tools.DEFAULT_SERVER_DATETIME_FORMAT)
 
 
 class mis_report_kpi(orm.Model):
@@ -198,6 +207,16 @@ class mis_report_query(orm.Model):
     }
 
     _order = 'name'
+
+    def _check_name(self, cr, uid, ids, context=None):
+        for record_name in self.read(cr, uid, ids, ['name']):
+            if not re.match("[_A-Za-z][_a-zA-Z0-9]*$", record_name['name']):
+                return False
+        return True
+
+    _constraints = [
+        (_check_name, 'The name must be a valid python identifier', ['name']),
+    ]
 
 
 class mis_report(orm.Model):
@@ -368,15 +387,12 @@ class mis_report_instance_period(orm.Model):
             if user['company_id']:
                 company_id = user['company_id'][0]
         account_ids = account_obj.search(cr, uid, [('company_id', '=', company_id)], context=context)
-        account_datas = account_obj.read(cr, uid, account_ids,
-                                         ['code', 'balance'],
-                                         context=search_ctx)
+        account_datas = account_obj.read(cr, uid, account_ids, ['code', 'balance'], context=search_ctx)
         balances = {}
-
+        clean = lambda varStr: re.sub('\W|^(?=\d)', '_', varStr)
         for account_data in account_datas:
-            # TODO: normalize code (strip special chars)
             # TODO: company_id in key
-            key = 'bal_' + account_data['code']
+            key = 'bal' + clean(account_data['code'])
             assert key not in balances
             balances[key] = account_data['balance']
 
@@ -398,12 +414,10 @@ class mis_report_instance_period(orm.Model):
                 domain.extend([(query.date_field.name, '>=', c.date_from),
                                (query.date_field.name, '<=', c.date_to)])
             else:
-                # TODO: datetime support (convert date to utc midnight)
-                # datetime_from = utc_midnight(date_from)
-                # datetime_to = utc_midnight(date_to + 1)
-                # domain.extend([(query.date_field.name, '>=', datetime_from),
-                #                (query.date_field.name, '<', datetime_to)])
-                raise orm.except_orm(_('Error!'), _('Not implemented'))
+                datetime_from = utc_midnight(c.date_from)
+                datetime_to = utc_midnight(c.date_to, add_day=1)
+                domain.extend([(query.date_field.name, '>=', datetime_from),
+                               (query.date_field.name, '<', datetime_to)])
             domain.extend([('company_id', '=', company_id)])
             field_names = [field.name for field in query.field_ids]
             obj_ids = obj.search(cr, uid, domain, context=context)
