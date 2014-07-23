@@ -1,29 +1,39 @@
 <template>
     <t t-name="mis_builder.MisReport">
         <p> </p>
-        <table t-if="widget.mis_report_data">
-            <th>
-                <td></td>
-                <th t-foreach="widget.mis_report_data.cols" t-as="col" style="padding-right:10px">
-                    <t t-esc="col.name"/>
-                </th>
-            </th>
-            <tr t-foreach="widget.mis_report_data.rows" t-as="row">
-                <th>
-                    <t t-esc="row.description"/>
-                </th>
-                <td></td>
-                <td t-foreach="widget.mis_report_data.cols" t-as="col" style="padding-right:10px">
-                    <t t-foreach="col.values" t-as="value">
-                        <t t-if="value == row.name">
-                            <t t-esc="value_value.val_r"/>
-                            <t t-if="value_value.val_c">
-                                <t t-esc="value_value.val_c"/>
+        <table t-if="widget.mis_report_data" class="oe_list_content">
+            <thead>
+                <tr class="oe_list_header_columns">
+                    <th class="oe_list_header_char"></th>
+                    <th t-foreach="widget.mis_report_data.cols" t-as="col" class="oe_list_header_char">
+                        <div>
+                            <t t-esc="col.name"/>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr t-foreach="widget.mis_report_data.rows" t-as="row">
+                    <th>
+                        <div>
+                            <t t-esc="row.description"/>
+                        </div>
+                    </th>
+                    <td t-foreach="widget.mis_report_data.cols" t-as="col">
+                        <t t-foreach="col.values" t-as="value">
+                            <t t-if="value == row.name">
+                                <t t-esc="value_value.val_r"/>
                             </t>
                         </t>
-                    </t>
-                </td>
-            </tr>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="oe_list_footer" />
+                    <td t-foreach="widget.mis_report_data.cols" class="oe_list_footer" />
+                </tr>
+            </tfoot>
         </table>
     </t>
 </template>
