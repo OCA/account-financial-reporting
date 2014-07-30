@@ -32,6 +32,7 @@ from openerp.osv import orm, fields
 from openerp.tools.safe_eval import safe_eval
 from openerp.tools.translate import _
 from openerp import tools
+from collections import OrderedDict
 
 
 class AutoStruct(object):
@@ -535,42 +536,47 @@ class mis_report_instance(orm.Model):
         r = self.browse(cr, uid, _ids, context=context)
         context['state'] = r.target_move
 
-        res = {}
+        content = OrderedDict()
+        #empty line name for header
+        header = OrderedDict()
+        header[''] = {'kpi_name': '', 'cols': []}
 
-        rows = []
+        #initialize lines with kpi
         for kpi in r.report_id.kpi_ids:
-            rows.append(dict(name=kpi.name,
-                             description=kpi.description))
-        res['rows'] = rows
+            content[kpi.name] = {'kpi_name': kpi.description, 'cols': []}
 
-        cols = []
         report_instance_period_obj = self.pool.get('mis.report.instance.period')
         kpi_obj = self.pool.get('mis.report.kpi')
-        for period in r.period_ids:
-            current_col = dict(name=period.name,
-                             values=report_instance_period_obj._compute(cr, uid, period, context=context),
-                             date=period.duration > 1 and
-                             _('from %s to %s' % (period.period_from and period.period_from.name
-                                                  or self._format_date(cr, uid, period.date_from, context=context),
-                                                  period.period_to and period.period_to.name
-                                                  or self._format_date(cr, uid, period.date_to, context=context)))
-                             or period.period_from and period.period_from.name or period.date_from)
-            cols.append(current_col)
-        # add comparison column
-            for compare_col in period.comparison_column_ids:
-                column1 = current_col
-                for col in cols:
-                    if col['name'] == compare_col.name:
-                        column2 = col
-                        continue
-                compare_values = {}
-                for kpi in r.report_id.kpi_ids:
-                    compare_values[kpi.name] = {'val_r': kpi_obj._render_comparison(kpi,
-                                                                                    column1['values'][kpi.name]['val'],
-                                                                                    column2['values'][kpi.name]['val'])}
-                cols.append(dict(name='%s - %s' % (period.name, compare_col.name),
-                                 values=compare_values,
-                                 date=''))
-        res['cols'] = cols
 
-        return res
+        period_values = {}
+
+        for period in r.period_ids:
+            # add the column header
+            header['']['cols'].append(dict(name=period.name,
+                                           date=period.duration > 1 and
+                                           _('from %s to %s' %
+                                             (period.period_from and period.period_from.name
+                                              or self._format_date(cr, uid, period.date_from, context=context),
+                                              period.period_to and period.period_to.name
+                                              or self._format_date(cr, uid, period.date_to, context=context)))
+                                           or period.period_from and period.period_from.name or period.date_from))
+            # compute kpi values
+            values = report_instance_period_obj._compute(cr, uid, period, context=context)
+            period_values[period.name] = values
+            for key in values:
+                content[key]['cols'].append(values[key])
+
+        # add comparison column
+        for period in r.period_ids:
+            for compare_col in period.comparison_column_ids:
+                # add the column header
+                header['']['cols'].append(dict(name='%s - %s' % (period.name, compare_col.name), date=''))
+                column1_values = period_values[period.name]
+                column2_values = period_values[compare_col.name]
+                for kpi in r.report_id.kpi_ids:
+                    content[kpi.name]['cols'].append({'val_r': kpi_obj._render_comparison(kpi,
+                                                                                      column1_values[kpi.name]['val'],
+                                                                                      column2_values[kpi.name]['val'])})
+
+        return {'header': header,
+                'content': content}
