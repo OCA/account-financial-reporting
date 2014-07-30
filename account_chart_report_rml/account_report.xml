@@ -7,7 +7,7 @@
         menu="False"
         model="account.account"
         name="account.print.chart"
-        rml="account_chart_report/report/chart_of_accounts.rml"
+        rml="account_chart_report_rml/report/chart_of_accounts.rml"
         string="Print chart account"
         report_type="pdf"
      />

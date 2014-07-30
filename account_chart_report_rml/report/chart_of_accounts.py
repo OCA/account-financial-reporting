@@ -55,6 +55,6 @@ class account_char(report_sxw.rml_parse):
 report_sxw.report_sxw(
     'report.account.print.chart',
     'account.account',
-    'account_chart_report/report/chart_of_accounts.rml',
+    'account_chart_report_rml/report/chart_of_accounts.rml',
     parser=account_char,
 )
