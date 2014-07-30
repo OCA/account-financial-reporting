@@ -5,38 +5,38 @@
             <thead>
                 <tr class="oe_list_header_columns">
                     <th class="oe_list_header_char"></th>
-                    <th t-foreach="widget.mis_report_data.cols" t-as="col" class="oe_list_header_char rallign">
+                    <t t-foreach="widget.mis_report_data.header" t-as="h">
+                    <th t-foreach="h_value.cols" t-as="header" class="oe_list_header_char rallign">
                         <div>
-                            <t t-esc="col.name"/>
+                            <t t-esc="header.name"/>
                         </div>
                         <div>
-                            <t t-esc="col.date"/>
+                            <t t-esc="header.date"/>
                         </div>
                     </th>
+                    </t>
                 </tr>
             </thead>
             <tbody>
-                <tr t-foreach="widget.mis_report_data.rows" t-as="row">
+                <tr t-foreach="widget.mis_report_data.content" t-as="c">
                     <th>
                         <div>
-                            <t t-esc="row.description"/>
+                            <t t-esc="c_value.kpi_name"/>
                         </div>
                     </th>
-                    <td t-foreach="widget.mis_report_data.cols" t-as="col" class="rallign">
-                        <t t-foreach="col.values" t-as="value">
-                            <t t-if="value == row.name">
-                            <label t-att="{'title': value_value.val_c}" class=" oe_form_label_help oe_align_right">
-                                <t t-esc="value_value.val_r"/>
-                            </label>
-                            </t>
-                        </t>
+                    <td t-foreach="c_value.cols" t-as="value" class="rallign">
+                        <label t-att="{'title': value_value.val_c}" class=" oe_form_label_help oe_align_right">
+                            <t t-esc="value_value.val_r"/>
+                        </label>
                     </td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
                     <td class="oe_list_footer" />
-                    <td t-foreach="widget.mis_report_data.cols" class="oe_list_footer" />
+                    <t t-foreach="widget.mis_report_data.header" t-as="f">
+                        <td t-foreach="f_value.cols" class="oe_list_footer" />
+                    </t>
                 </tr>
             </tfoot>
         </table>
