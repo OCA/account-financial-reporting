@@ -27,6 +27,7 @@
                                 <field name="name"/>
                                 <field name="model_id"/>
                                 <field name="field_ids" domain="[('model_id', '=', model_id)]" widget="many2many_tags"/>
+                                <field name="field_name"/>
                                 <field name="date_field" domain="[('model_id', '=', model_id), ('ttype', 'in', ('date', 'datetime'))]"/>
                                 <field name="domain"/>
                             </tree>
@@ -34,7 +35,7 @@
                         <field name="kpi_ids">
                             <tree string="KPI's" editable="bottom">
                                 <field name="sequence" widget="handle"/>
-                                <field name="description" on_change="onchange_description(description, context)"/>
+                                <field name="description" on_change="onchange_description(description, name, context)"/>
                                 <field name="name" on_change="onchange_name(name, context)"/>
                                 <field name="expression"/>
                                 <field name="type" on_change="onchange_type(type, context)"/>
@@ -51,7 +52,7 @@
         </record>
 
         <record model="ir.actions.act_window" id="mis_report_view_action">
-            <field name="name">mis.report.view.action</field>
+            <field name="name">Mis report</field>
             <field name="view_id" ref="mis_report_view_tree"/>
             <field name="res_model">mis.report</field>
             <field name="view_type">form</field>
@@ -66,24 +67,13 @@
             <field name="priority" eval="17"/>
             <field name="arch" type="xml">
                 <form string="MIS Report Result" version="7.0">
-                    <sheet>
-                        <div class="oe_title">
-                            <h1>
-                                <field name="name" placeholder="Name"/>
-                            </h1>
-                        </div>
-                        <group>
-                            <field name="description"/>
-                            <field name="pivot_date"/>
-                        </group>
-                        <widget type="mis_report"></widget>
-                    </sheet>
+                    <widget type="mis_report"></widget>
                 </form>
             </field>
         </record>
 
         <record model="ir.actions.act_window" id="mis_report_instance_result_action">
-            <field name="name">mis.report.instance.result.view.action</field>
+            <field name="name">Preview</field>
             <field name="view_id" ref="mis_report_instance_result_view_form"/>
             <field name="res_model">mis.report.instance</field>
             <field name="view_type">form</field>
@@ -142,6 +132,7 @@
                                 <field name="report_instance_id" invisible="1"/>
                                 <field name="id" invisible="1"/>
                                 <field name="comparison_column_ids" domain="[('report_instance_id', '=', report_instance_id), ('id', '!=', id)]" widget="many2many_tags"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
                             </tree>
                         </field>
                     </group>
@@ -151,7 +142,7 @@
         </record>
 
         <record model="ir.actions.act_window" id="mis_report_instance_view_action">
-            <field name="name">mis.report.instance.view.action</field>
+            <field name="name">Mis report instance</field>
             <field name="view_id" ref="mis_report_instance_view_tree"/>
             <field name="res_model">mis.report.instance</field>
             <field name="view_type">form</field>

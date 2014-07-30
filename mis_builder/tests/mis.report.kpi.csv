@@ -5,3 +5,4 @@
 "mis_report_kpi_4","Difference","margin","profit/ca","","margin","","4","Percentage","%"
 "mis_report_kpi_5","None","couleur","'vert' if profit > 0 else 'rouge'","","couleur","","5","String",""
 "mis_report_kpi_6","Percentage","total invoice","len(inv)","","total_invoice","","6","Numeric","€"
+"mis_report_kpi_test","Percentage","total test","len(test)","","total_test","","1","Numeric",""

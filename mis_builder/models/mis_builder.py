@@ -48,13 +48,17 @@ def _get_selection_label(selection, value):
     return ''
 
 
-def utc_midnight(d, add_day=0):
+def _utc_midnight(d, add_day=0):
     d = datetime.strptime(d, tools.DEFAULT_SERVER_DATE_FORMAT)
     if add_day:
         d = d + timedelta(days=add_day)
     timestamp = calendar.timegm(d.timetuple())
     d_utc_midnight = datetime.utcfromtimestamp(timestamp)
     return datetime.strftime(d_utc_midnight, tools.DEFAULT_SERVER_DATETIME_FORMAT)
+
+
+def _clean(varStr):
+    return re.sub('\W|^(?=\d)', '_', varStr)
 
 
 class mis_report_kpi(orm.Model):
@@ -106,6 +110,7 @@ class mis_report_kpi(orm.Model):
         'divider': '1',
         'dp': 0,
         'compare_method': 'pct',
+        'sequence': 1,
     }
 
     _order = 'sequence'
@@ -127,12 +132,11 @@ class mis_report_kpi(orm.Model):
             res['warning'] = {'title': 'Invalid name', 'message': 'The name must be a valid python identifier'}
         return res
 
-    def onchange_description(self, cr, uid, ids, description, context=None):
+    def onchange_description(self, cr, uid, ids, description, name, context=None):
         # construct name from description
-        clean = lambda varStr: re.sub('\W|^(?=\d)', '_', varStr)
         res = {}
-        if description:
-            res = {'value': {'name': clean(description)}}
+        if description and not name:
+            res = {'value': {'name': _clean(description)}}
         return res
 
     def onchange_type(self, cr, uid, ids, kpi_type, context=None):
@@ -152,7 +156,7 @@ class mis_report_kpi(orm.Model):
                                     kpi.divider, kpi.dp, kpi.suffix)
         elif kpi.type == 'pct':
             return self._render_num(value,
-                                    100, kpi.dp, '%')
+                                    0.01, kpi.dp, '%')
         else:
             return unicode(value)
 
@@ -170,7 +174,7 @@ class mis_report_kpi(orm.Model):
                                         kpi.divider, kpi.dp, kpi.suffix,
                                         sign='+')
             elif kpi.compare_method == 'pct' and base_value != 0:
-                return self._render_num(value / base_value - base_value,
+                return self._render_num(value / base_value - 1,
                                         0.01, kpi.dp, '%',
                                         sign='+')
         return ''
@@ -192,6 +196,15 @@ class mis_report_query(orm.Model):
 
     _name = 'mis.report.query'
 
+    def _get_field_names(self, cr, uid, ids, name, args, context=None):
+        res = {}
+        for query in self.browse(cr, uid, ids, context=context):
+            field_name = []
+            for field in query.field_ids:
+                field_name.append(field.name)
+            res[query.id] = ', '.join(field_name)
+        return res
+
     _columns = {
         'name': fields.char(size=32, required=True,
                             string='Name'),
@@ -199,6 +212,9 @@ class mis_report_query(orm.Model):
                                     string='Model'),
         'field_ids': fields.many2many('ir.model.fields', required=True,
                                       string='Fields to fetch'),
+        'field_name': fields.function(_get_field_names, type='char', string='Fetched fields name',
+                                      store={'mis.report.query':
+                                             (lambda self, cr, uid, ids, c={}: ids, ['field_ids'], 20), }),
         'date_field': fields.many2one('ir.model.fields', required=True,
                                       string='Date field',
                                       domain=[('ttype', 'in', ('date', 'datetime'))]),
@@ -259,11 +275,6 @@ class mis_report_instance_period(orm.Model):
         if isinstance(ids, (int, long)):
             ids = [ids]
         res = {}
-        company_id = context.get('force_company')
-        if not company_id:
-            user = self.pool.get('res.users').read(cr, uid, uid, ['company_id'], context=context)
-            if user['company_id']:
-                company_id = user['company_id'][0]
         for c in self.browse(cr, uid, ids, context=context):
             d = parser.parse(c.report_instance_id.pivot_date)
             if c.type == 'd':
@@ -280,17 +291,16 @@ class mis_report_instance_period(orm.Model):
                 date_to = date_to.strftime(tools.DEFAULT_SERVER_DATE_FORMAT)
                 period_ids = None
             elif c.type == 'fp':
-                # TODO: date!
                 period_obj = self.pool['account.period']
                 all_period_ids = period_obj.search(cr, uid,
-                                                   [('special', '=', False), ('company_id', '=', company_id)],
+                                                   [('special', '=', False), ('company_id', '=', c.company_id.id)],
                                                    order='date_start',
                                                    context=context)
                 current_period_ids = period_obj.search(cr, uid,
                                                        [('special', '=', False),
                                                         ('date_start', '<=', d),
                                                         ('date_stop', '>=', d),
-                                                        ('company_id', '=', company_id)],
+                                                        ('company_id', '=', c.company_id.id)],
                                                        context=context)
                 if not current_period_ids:
                     raise orm.except_orm(_("Error!"),
@@ -350,12 +360,18 @@ class mis_report_instance_period(orm.Model):
         'sequence': fields.integer(string='Sequence'),
         'report_instance_id': fields.many2one('mis.report.instance',
                                               string='Report Instance'),
-        'comparison_column_ids': fields.many2many('mis.report.instance.period', 'mis_report_instance_period_rel', 'period_id', 'compare_period_id', string='Compare with'),
+        'comparison_column_ids': fields.many2many('mis.report.instance.period', 'mis_report_instance_period_rel',
+                                                  'period_id', 'compare_period_id', string='Compare with'),
+        'company_id': fields.many2one('res.company', 'Company', required=True)
     }
 
     _defaults = {
         'offset': -1,
         'duration': 1,
+        'sequence': 1,
+        'company_id': lambda s, cr, uid, c: s.pool.get('res.company')._company_default_get(cr, uid,
+                                                                                           'mis.report.instance.period',
+                                                                                           context=c)
     }
 
     _order = 'sequence'
@@ -383,18 +399,11 @@ class mis_report_instance_period(orm.Model):
                                'date_to': c.date_to})
 
         # TODO: initial balance?
-        company_id = context.get('force_company')
-        if not company_id:
-            user = self.pool.get('res.users').read(cr, uid, uid, ['company_id'], context=context)
-            if user['company_id']:
-                company_id = user['company_id'][0]
-        account_ids = account_obj.search(cr, uid, [('company_id', '=', company_id)], context=context)
+        account_ids = account_obj.search(cr, uid, [('company_id', '=', c.company_id.id)], context=context)
         account_datas = account_obj.read(cr, uid, account_ids, ['code', 'balance'], context=search_ctx)
         balances = {}
-        clean = lambda varStr: re.sub('\W|^(?=\d)', '_', varStr)
         for account_data in account_datas:
-            # TODO: company_id in key
-            key = 'bal' + clean(account_data['code'])
+            key = 'bal' + _clean(account_data['code'])
             assert key not in balances
             balances[key] = account_data['balance']
 
@@ -404,11 +413,6 @@ class mis_report_instance_period(orm.Model):
         res = {}
 
         report = c.report_instance_id.report_id
-        company_id = context.get('force_company')
-        if not company_id:
-            user = self.pool.get('res.users').read(cr, uid, uid, ['company_id'], context=context)
-            if user['company_id']:
-                company_id = user['company_id'][0]
         for query in report.query_ids:
             obj = self.pool[query.model_id.model]
             domain = query.domain and safe_eval(query.domain) or []
@@ -416,11 +420,12 @@ class mis_report_instance_period(orm.Model):
                 domain.extend([(query.date_field.name, '>=', c.date_from),
                                (query.date_field.name, '<=', c.date_to)])
             else:
-                datetime_from = utc_midnight(c.date_from)
-                datetime_to = utc_midnight(c.date_to, add_day=1)
+                datetime_from = _utc_midnight(c.date_from)
+                datetime_to = _utc_midnight(c.date_to, add_day=1)
                 domain.extend([(query.date_field.name, '>=', datetime_from),
                                (query.date_field.name, '<', datetime_to)])
-            domain.extend([('company_id', '=', company_id)])
+            if obj._columns.get('company_id', False):
+                domain.extend([('company_id', '=', c.company_id.id)])
             field_names = [field.name for field in query.field_ids]
             obj_ids = obj.search(cr, uid, domain, context=context)
             obj_datas = obj.read(cr, uid, obj_ids, field_names, context=context)
@@ -516,8 +521,17 @@ class mis_report_instance(orm.Model):
             'target_move': 'posted',
     }
 
+    def _format_date(self, cr, uid, date, context=None):
+        # format date following user language
+        lang = self.pool['res.users'].read(cr, uid, uid, ['lang'], context=context)['lang']
+        language_id = self.pool['res.lang'].search(cr, uid, [('code', '=', lang)], context=context)[0]
+        tformat = self.pool['res.lang'].read(cr, uid, language_id, ['date_format'])['date_format']
+        return datetime.strftime(datetime.strptime(date, tools.DEFAULT_SERVER_DATE_FORMAT), tformat)
+
     def compute(self, cr, uid, _ids, context=None):
         assert isinstance(_ids, (int, long))
+        if context is None:
+            context = {}
         r = self.browse(cr, uid, _ids, context=context)
         context['state'] = r.target_move
 
@@ -533,8 +547,16 @@ class mis_report_instance(orm.Model):
         report_instance_period_obj = self.pool.get('mis.report.instance.period')
         kpi_obj = self.pool.get('mis.report.kpi')
         for period in r.period_ids:
-            current_col = dict(name=period.name, values=report_instance_period_obj._compute(cr, uid, period, context=context))
+            current_col = dict(name=period.name,
+                             values=report_instance_period_obj._compute(cr, uid, period, context=context),
+                             date=period.duration > 1 and
+                             _('from %s to %s' % (period.period_from and period.period_from.name
+                                                  or self._format_date(cr, uid, period.date_from, context=context),
+                                                  period.period_to and period.period_to.name
+                                                  or self._format_date(cr, uid, period.date_to, context=context)))
+                             or period.period_from and period.period_from.name or period.date_from)
             cols.append(current_col)
+        # add comparison column
             for compare_col in period.comparison_column_ids:
                 column1 = current_col
                 for col in cols:
@@ -543,8 +565,12 @@ class mis_report_instance(orm.Model):
                         continue
                 compare_values = {}
                 for kpi in r.report_id.kpi_ids:
-                    compare_values[kpi.name] = {'val_r': kpi_obj._render_comparison(kpi, column1['values'][kpi.name]['val'], column2['values'][kpi.name]['val'])}
-                cols.append(dict(name='%s - %s' % (period.name, compare_col.name), values=compare_values))
+                    compare_values[kpi.name] = {'val_r': kpi_obj._render_comparison(kpi,
+                                                                                    column1['values'][kpi.name]['val'],
+                                                                                    column2['values'][kpi.name]['val'])}
+                cols.append(dict(name='%s - %s' % (period.name, compare_col.name),
+                                 values=compare_values,
+                                 date=''))
         res['cols'] = cols
 
         return res
