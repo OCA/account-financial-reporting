@@ -5,9 +5,12 @@
             <thead>
                 <tr class="oe_list_header_columns">
                     <th class="oe_list_header_char"></th>
-                    <th t-foreach="widget.mis_report_data.cols" t-as="col" class="oe_list_header_char">
+                    <th t-foreach="widget.mis_report_data.cols" t-as="col" class="oe_list_header_char rallign">
                         <div>
                             <t t-esc="col.name"/>
+                        </div>
+                        <div>
+                            <t t-esc="col.date"/>
                         </div>
                     </th>
                 </tr>
@@ -19,10 +22,12 @@
                             <t t-esc="row.description"/>
                         </div>
                     </th>
-                    <td t-foreach="widget.mis_report_data.cols" t-as="col">
+                    <td t-foreach="widget.mis_report_data.cols" t-as="col" class="rallign">
                         <t t-foreach="col.values" t-as="value">
                             <t t-if="value == row.name">
+                            <label t-att="{'title': value_value.val_c}" class=" oe_form_label_help oe_align_right">
                                 <t t-esc="value_value.val_r"/>
+                            </label>
                             </t>
                         </t>
                     </td>
