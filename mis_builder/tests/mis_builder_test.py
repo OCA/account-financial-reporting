@@ -23,6 +23,7 @@
 
 import openerp.tests.common as common
 from openerp.addons.mis_builder import models
+from collections import OrderedDict
 
 
 DB = common.DB
@@ -36,16 +37,29 @@ class mis_builder_test(common.TransactionCase):
 
     def test_datetime_conversion(self):
         date_to_convert = '2014-07-05'
-        date_time_convert = models.mis_builder._utc_midnight(date_to_convert)
-        self.assertEqual(date_time_convert, '2014-07-05 00:00:00', 'The converted date time convert must contains hour')
-        date_time_convert = models.mis_builder._utc_midnight(date_to_convert, add_day=1)
-        self.assertEqual(date_time_convert, '2014-07-06 00:00:00', 'The converted date time convert must contains hour')
+        date_time_convert = models.mis_builder._utc_midnight(date_to_convert, 'Europe/Brussels')
+        self.assertEqual(date_time_convert, '2014-07-05 02:00:00', 'The converted date time convert must contains hour')
+        date_time_convert = models.mis_builder._utc_midnight(date_to_convert, 'Europe/Brussels', add_day=1)
+        self.assertEqual(date_time_convert, '2014-07-06 02:00:00', 'The converted date time convert must contains hour')
+        date_time_convert = models.mis_builder._utc_midnight(date_to_convert, 'US/Pacific')
+        self.assertEqual(date_time_convert, '2014-07-04 17:00:00', 'The converted date time convert must contains hour')
+        date_time_convert = models.mis_builder._utc_midnight(date_to_convert, 'US/Pacific', add_day=1)
+        self.assertEqual(date_time_convert, '2014-07-05 17:00:00', 'The converted date time convert must contains hour')
 
     def test_fetch_query(self):
         # create a report on a model without company_id field : account.analytic.balance
         data = self.registry('mis.report.instance').compute(self.cr, self.uid, self.ref('mis_builder.mis_report_instance_test'))
-        self.assertDictContainsSubset({'rows': [{'description': u'total test', 'name': u'total_test'}],
-                                       'cols': [{'values': {u'total_test': {'val_c': None, 'val': 0, 'val_r': '0'}},
-                                                 'name': u'today'}]}, data)
+        self.assertDictContainsSubset({'content': OrderedDict([(u'total_test',
+                                                                {'kpi_name': u'total test',
+                                                                 'cols': [{'style': None,
+                                                                           'val_c': None,
+                                                                           'val': 0,
+                                                                           'val_r': '0 '}]})]),
+                                       'header': OrderedDict([('',
+                                                               {'kpi_name': '',
+                                                                'cols': [{'date': '2014-07-31',
+                                                                          'name': u'today'}]
+                                                                })])
+                                       }, data)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
