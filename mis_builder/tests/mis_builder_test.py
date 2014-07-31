@@ -38,13 +38,13 @@ class mis_builder_test(common.TransactionCase):
     def test_datetime_conversion(self):
         date_to_convert = '2014-07-05'
         date_time_convert = models.mis_builder._utc_midnight(date_to_convert, 'Europe/Brussels')
-        self.assertEqual(date_time_convert, '2014-07-05 02:00:00', 'The converted date time convert must contains hour')
+        self.assertEqual(date_time_convert, '2014-07-04 22:00:00', 'The converted date time convert must contains hour')
         date_time_convert = models.mis_builder._utc_midnight(date_to_convert, 'Europe/Brussels', add_day=1)
-        self.assertEqual(date_time_convert, '2014-07-06 02:00:00', 'The converted date time convert must contains hour')
+        self.assertEqual(date_time_convert, '2014-07-05 22:00:00', 'The converted date time convert must contains hour')
         date_time_convert = models.mis_builder._utc_midnight(date_to_convert, 'US/Pacific')
-        self.assertEqual(date_time_convert, '2014-07-04 17:00:00', 'The converted date time convert must contains hour')
+        self.assertEqual(date_time_convert, '2014-07-05 07:00:00', 'The converted date time convert must contains hour')
         date_time_convert = models.mis_builder._utc_midnight(date_to_convert, 'US/Pacific', add_day=1)
-        self.assertEqual(date_time_convert, '2014-07-05 17:00:00', 'The converted date time convert must contains hour')
+        self.assertEqual(date_time_convert, '2014-07-06 07:00:00', 'The converted date time convert must contains hour')
 
     def test_fetch_query(self):
         # create a report on a model without company_id field : account.analytic.balance
