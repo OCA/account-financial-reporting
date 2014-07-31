@@ -53,10 +53,10 @@ def _utc_midnight(d, tz_name, add_day=0):
     d = datetime.strptime(d, tools.DEFAULT_SERVER_DATE_FORMAT)
     if add_day:
         d = d + timedelta(days=add_day)
-    utc = pytz.timezone('UTC')
+    utc_tz = pytz.timezone('UTC')
     context_tz = pytz.timezone(tz_name)
-    utc_timestamp = utc.localize(d, is_dst=False)
-    return datetime.strftime(utc_timestamp.astimezone(context_tz), tools.DEFAULT_SERVER_DATETIME_FORMAT)
+    local_timestamp = context_tz.localize(d, is_dst=False)
+    return datetime.strftime(local_timestamp.astimezone(utc_tz), tools.DEFAULT_SERVER_DATETIME_FORMAT)
 
 
 def _clean(varStr):
@@ -167,15 +167,15 @@ class mis_report_kpi(orm.Model):
         """ render the comparison of two KPI values, ready for display """
         if value is None or base_value is None:
             return ''
-        if average_value:
-            value = value / float(average_value)
-        if average_base_value:
-            base_value = base_value / float(average_base_value)
         if kpi.type == 'pct':
             return self._render_num(value - base_value,
                                     0.01, kpi.dp, _('pp'),
                                     sign='+')
         elif kpi.type == 'num':
+            if average_value:
+                value = value / float(average_value)
+            if average_base_value:
+                base_value = base_value / float(average_base_value)
             if kpi.compare_method == 'diff':
                 return self._render_num(value - base_value,
                                         kpi.divider, kpi.dp, kpi.suffix,
