@@ -26,7 +26,7 @@ from datetime import datetime, timedelta
 from dateutil import parser
 import traceback
 import re
-import calendar
+import pytz
 
 from openerp.osv import orm, fields
 from openerp.tools.safe_eval import safe_eval
@@ -49,13 +49,14 @@ def _get_selection_label(selection, value):
     return ''
 
 
-def _utc_midnight(d, add_day=0):
+def _utc_midnight(d, tz_name, add_day=0):
     d = datetime.strptime(d, tools.DEFAULT_SERVER_DATE_FORMAT)
     if add_day:
         d = d + timedelta(days=add_day)
-    timestamp = calendar.timegm(d.timetuple())
-    d_utc_midnight = datetime.utcfromtimestamp(timestamp)
-    return datetime.strftime(d_utc_midnight, tools.DEFAULT_SERVER_DATETIME_FORMAT)
+    utc = pytz.timezone('UTC')
+    context_tz = pytz.timezone(tz_name)
+    utc_timestamp = utc.localize(d, is_dst=False)
+    return datetime.strftime(utc_timestamp.astimezone(context_tz), tools.DEFAULT_SERVER_DATETIME_FORMAT)
 
 
 def _clean(varStr):
@@ -426,8 +427,8 @@ class mis_report_instance_period(orm.Model):
                 domain.extend([(query.date_field.name, '>=', c.date_from),
                                (query.date_field.name, '<=', c.date_to)])
             else:
-                datetime_from = _utc_midnight(c.date_from)
-                datetime_to = _utc_midnight(c.date_to, add_day=1)
+                datetime_from = _utc_midnight(c.date_from, context.get('tz', 'UTC'))
+                datetime_to = _utc_midnight(c.date_to, context.get('tz', 'UTC'), add_day=1)
                 domain.extend([(query.date_field.name, '>=', datetime_from),
                                (query.date_field.name, '<', datetime_to)])
             if obj._columns.get('company_id', False):
