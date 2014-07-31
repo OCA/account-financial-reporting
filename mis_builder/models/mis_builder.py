@@ -162,10 +162,14 @@ class mis_report_kpi(orm.Model):
         else:
             return unicode(value)
 
-    def _render_comparison(self, kpi, value, base_value):
+    def _render_comparison(self, kpi, value, base_value, average_value, average_base_value):
         """ render the comparison of two KPI values, ready for display """
         if value is None or base_value is None:
             return ''
+        if average_value:
+            value = value / float(average_value)
+        if average_base_value:
+            base_value = base_value / float(average_base_value)
         if kpi.type == 'pct':
             return self._render_num(value - base_value,
                                     0.01, kpi.dp, _('pp'),
@@ -583,8 +587,14 @@ class mis_report_instance(orm.Model):
                 column2_values = period_values[compare_col.name]
                 for kpi in r.report_id.kpi_ids:
                     content[kpi.name]['cols'].append({'val_r': kpi_obj._render_comparison(kpi,
-                                                                                      column1_values[kpi.name]['val'],
-                                                                                      column2_values[kpi.name]['val'])})
+                                            column1_values[kpi.name]['val'],
+                                            column2_values[kpi.name]['val'],
+                                            (datetime.strptime(period.date_to, tools.DEFAULT_SERVER_DATE_FORMAT) -
+                                            datetime.strptime(period.date_from,
+                                                              tools.DEFAULT_SERVER_DATE_FORMAT)).days + 1,
+                                            (datetime.strptime(compare_col.date_to, tools.DEFAULT_SERVER_DATE_FORMAT) -
+                                             datetime.strptime(compare_col.date_from,
+                                                               tools.DEFAULT_SERVER_DATE_FORMAT)).days + 1)})
 
         return {'header': header,
                 'content': content}
