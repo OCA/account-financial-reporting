@@ -84,6 +84,7 @@ class mis_report_kpi(orm.Model):
                                    translate=True),
         'expression': fields.char(required=True,
                                   string='Expression'),
+        'css_style': fields.char(string='CSS style'),
         'type': fields.selection([('num', _('Numeric')),
                                   ('pct', _('Percentage')),
                                   ('str', _('String'))],
@@ -183,7 +184,7 @@ class mis_report_kpi(orm.Model):
     def _render_num(self, value, divider, dp, suffix, sign='-'):
         divider_label = _get_selection_label(
             self._columns['divider'].selection, divider)
-        fmt = '{:%s,.%df}%s%s' % (sign, dp, divider_label, suffix or '')
+        fmt = '{:%s,.%df}%s %s' % (sign, dp, divider_label, suffix or '')
         value = round(value / float(divider or 1), dp) or 0
         return fmt.format(value)
 
@@ -469,11 +470,18 @@ class mis_report_instance_period(orm.Model):
                 kpi_val_comment = None
 
             localdict[kpi.name] = kpi_val
+            try:
+                kpi_style = None
+                if kpi.css_style:
+                    kpi_style = safe_eval(kpi.css_style, localdict)
+            except:
+                kpi_style = None
 
             res[kpi.name] = {
                 'val': kpi_val,
                 'val_r': kpi_val_rendered,
                 'val_c': kpi_val_comment,
+                'style': kpi_style,
             }
 
         return res
