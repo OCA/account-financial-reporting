@@ -60,7 +60,7 @@ def _utc_midnight(d, tz_name, add_day=0):
 
 
 def _clean(varStr):
-    return re.sub('\W|^(?=\d)', '_', varStr)
+    return re.sub('\W|^(?=\d)', '_', varStr).lower()
 
 
 class mis_report_kpi(orm.Model):
