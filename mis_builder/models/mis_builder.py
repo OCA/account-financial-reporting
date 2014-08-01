@@ -213,6 +213,13 @@ class mis_report_query(orm.Model):
             res[query.id] = ', '.join(field_name)
         return res
 
+    def onchange_field_ids(self, cr, uid, ids, field_ids, context=None):
+        # compute field_names
+        field_name = []
+        for field in self.pool.get('ir.model.fields').read(cr, uid, field_ids[0][2], ['name'], context=context):
+            field_name.append(field['name'])
+        return {'value': {'field_name': ', '.join(field_name)}}
+
     _columns = {
         'name': fields.char(size=32, required=True,
                             string='Name'),

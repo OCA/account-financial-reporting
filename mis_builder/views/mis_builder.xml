@@ -26,7 +26,8 @@
                             <tree string="Queries" editable="bottom">
                                 <field name="name"/>
                                 <field name="model_id"/>
-                                <field name="field_ids" domain="[('model_id', '=', model_id)]" widget="many2many_tags"/>
+                                <field name="field_ids" domain="[('model_id', '=', model_id)]" widget="many2many_tags"
+                                                        on_change="onchange_field_ids(field_ids, context)"/>
                                 <field name="field_name"/>
                                 <field name="date_field" domain="[('model_id', '=', model_id), ('ttype', 'in', ('date', 'datetime'))]"/>
                                 <field name="domain"/>
@@ -126,6 +127,7 @@
                                 <field name="type"/>
                                 <field name="offset"/>
                                 <field name="duration"/>
+                                <field name="normalize_factor"/>
                                 <field name="date_from"/>
                                 <field name="date_to"/>
                                 <field name="period_from"/>
