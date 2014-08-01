@@ -1,3 +1,3 @@
-"id","description","name","period_ids/id","report_id/id"
-"mis_report_instance","","Test-report-instance","mis_report_instance_period_1,mis_report_instance_period_2,mis_report_instance_period_3,mis_report_instance_period_4,mis_report_instance_period_5","mis_report"
-"mis_report_instance_test","","Test-report-instance without company","mis_report_instance_period_test","mis_report_test"
+"id","date","description","name","period_ids/id","report_id/id"
+"mis_report_instance","","","Test-report-instance","mis_report_instance_period_1,mis_report_instance_period_2,mis_report_instance_period_3,mis_report_instance_period_4,mis_report_instance_period_5","mis_report"
+"mis_report_instance_test","2014-07-31","","Test-report-instance without company","mis_report_instance_period_test","mis_report_test"
