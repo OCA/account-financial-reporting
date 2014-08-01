@@ -370,13 +370,16 @@ class mis_report_instance_period(orm.Model):
                                               string='Report Instance'),
         'comparison_column_ids': fields.many2many('mis.report.instance.period', 'mis_report_instance_period_rel',
                                                   'period_id', 'compare_period_id', string='Compare with'),
-        'company_id': fields.many2one('res.company', 'Company', required=True)
+        'company_id': fields.many2one('res.company', 'Company', required=True),
+        'normalize_factor': fields.integer(string='Factor',
+                                           help='Factor to use to normalize the period (used in comparison'),
     }
 
     _defaults = {
         'offset': -1,
         'duration': 1,
         'sequence': 1,
+        'normalize_factor': 1,
         'company_id': lambda s, cr, uid, c: s.pool.get('res.company')._company_default_get(cr, uid,
                                                                                            'mis.report.instance.period',
                                                                                            context=c)
@@ -386,6 +389,7 @@ class mis_report_instance_period(orm.Model):
 
     _sql_constraints = [
         ('duration', 'CHECK (duration>0)', 'Wrong duration, it must be positive!'),
+        ('normalize_factor', 'CHECK (normalize_factor>0)', 'Wrong normalize factor, it must be positive!'),
         ('name_unique', 'unique(name, report_instance_id)', 'Period name should be unique by report'),
     ]
 
@@ -591,13 +595,7 @@ class mis_report_instance(orm.Model):
                     content[kpi.name]['cols'].append({'val_r': kpi_obj._render_comparison(cr, uid, kpi,
                                             column1_values[kpi.name]['val'],
                                             column2_values[kpi.name]['val'],
-                                            (datetime.strptime(period.date_to, tools.DEFAULT_SERVER_DATE_FORMAT) -
-                                            datetime.strptime(period.date_from,
-                                                              tools.DEFAULT_SERVER_DATE_FORMAT)).days + 1,
-                                            (datetime.strptime(compare_col.date_to, tools.DEFAULT_SERVER_DATE_FORMAT) -
-                                             datetime.strptime(compare_col.date_from,
-                                                               tools.DEFAULT_SERVER_DATE_FORMAT)).days + 1,
-                                                                                          context=context)})
+                                            period.normalize_factor, compare_col.normalize_factor, context=context)})
 
         return {'header': header,
                 'content': content}
