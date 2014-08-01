@@ -152,46 +152,47 @@ class mis_report_kpi(orm.Model):
                             'dp': 0}
         return res
 
-    def _render(self, kpi, value):
+    def _render(self, cr, uid, kpi, value, context=None):
         """ render a KPI value as a unicode string, ready for display """
         if kpi.type == 'num':
-            return self._render_num(value,
-                                    kpi.divider, kpi.dp, kpi.suffix)
+            return self._render_num(cr, uid, value, kpi.divider, kpi.dp, kpi.suffix, context=context)
         elif kpi.type == 'pct':
-            return self._render_num(value,
-                                    0.01, kpi.dp, '%')
+            return self._render_num(cr, uid, value, 0.01, kpi.dp, '%', context=context)
         else:
             return unicode(value)
 
-    def _render_comparison(self, kpi, value, base_value, average_value, average_base_value):
+    def _render_comparison(self, cr, uid, kpi, value, base_value, average_value, average_base_value, context=None):
         """ render the comparison of two KPI values, ready for display """
         if value is None or base_value is None:
             return ''
         if kpi.type == 'pct':
-            return self._render_num(value - base_value,
-                                    0.01, kpi.dp, _('pp'),
-                                    sign='+')
+            return self._render_num(cr, uid, value - base_value, 0.01, kpi.dp, _('pp'), sign='+', context=context)
         elif kpi.type == 'num':
             if average_value:
                 value = value / float(average_value)
             if average_base_value:
                 base_value = base_value / float(average_base_value)
             if kpi.compare_method == 'diff':
-                return self._render_num(value - base_value,
-                                        kpi.divider, kpi.dp, kpi.suffix,
-                                        sign='+')
+                return self._render_num(cr, uid, value - base_value, kpi.divider,
+                                        kpi.dp, kpi.suffix, sign='+', context=context)
             elif kpi.compare_method == 'pct' and base_value != 0:
-                return self._render_num(value / base_value - 1,
+                return self._render_num(cr, uid, value / base_value - 1,
                                         0.01, kpi.dp, '%',
-                                        sign='+')
+                                        sign='+', context=context)
         return ''
 
-    def _render_num(self, value, divider, dp, suffix, sign='-'):
-        divider_label = _get_selection_label(
-            self._columns['divider'].selection, divider)
-        fmt = '{:%s,.%df}%s %s' % (sign, dp, divider_label, suffix or '')
+    def _render_num(self, cr, uid, value, divider, dp, suffix, sign='-', context=None):
+        divider_label = _get_selection_label(self._columns['divider'].selection, divider)
+        if divider_label == '1':
+            divider_label = ''
+        # format number following user language
+        lang = self.pool['res.users'].read(cr, uid, uid, ['lang'], context=context)['lang']
+        language_id = self.pool['res.lang'].search(cr, uid, [('code', '=', lang)], context=context)
         value = round(value / float(divider or 1), dp) or 0
-        return fmt.format(value)
+        return '%s %s%s' % (self.pool['res.lang'].format(cr, uid, language_id,
+                                                         '%%%s.%df' % (sign, dp),
+                                                         value, context=context),
+                            divider_label, suffix or '')
 
 
 class mis_report_query(orm.Model):
@@ -471,7 +472,7 @@ class mis_report_instance_period(orm.Model):
                 kpi_val_rendered = '#ERR'
                 kpi_val_comment = traceback.format_exc()
             else:
-                kpi_val_rendered = kpi_obj._render(kpi, kpi_val)
+                kpi_val_rendered = kpi_obj._render(cr, uid, kpi, kpi_val, context=context)
                 kpi_val_comment = None
 
             localdict[kpi.name] = kpi_val
@@ -587,7 +588,7 @@ class mis_report_instance(orm.Model):
                 column1_values = period_values[period.name]
                 column2_values = period_values[compare_col.name]
                 for kpi in r.report_id.kpi_ids:
-                    content[kpi.name]['cols'].append({'val_r': kpi_obj._render_comparison(kpi,
+                    content[kpi.name]['cols'].append({'val_r': kpi_obj._render_comparison(cr, uid, kpi,
                                             column1_values[kpi.name]['val'],
                                             column2_values[kpi.name]['val'],
                                             (datetime.strptime(period.date_to, tools.DEFAULT_SERVER_DATE_FORMAT) -
@@ -595,7 +596,8 @@ class mis_report_instance(orm.Model):
                                                               tools.DEFAULT_SERVER_DATE_FORMAT)).days + 1,
                                             (datetime.strptime(compare_col.date_to, tools.DEFAULT_SERVER_DATE_FORMAT) -
                                              datetime.strptime(compare_col.date_from,
-                                                               tools.DEFAULT_SERVER_DATE_FORMAT)).days + 1)})
+                                                               tools.DEFAULT_SERVER_DATE_FORMAT)).days + 1,
+                                                                                          context=context)})
 
         return {'header': header,
                 'content': content}
