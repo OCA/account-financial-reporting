@@ -578,7 +578,7 @@ class mis_report_instance(orm.Model):
         for period in r.period_ids:
             # add the column header
             header['']['cols'].append(dict(name=period.name,
-                                           date=period.duration > 1 and
+                                           date=(period.duration > 1 or period.type == 'w') and
                                            _('from %s to %s' %
                                              (period.period_from and period.period_from.name
                                               or self._format_date(cr, uid, period.date_from, context=context),
