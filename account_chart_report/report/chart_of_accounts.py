@@ -23,11 +23,11 @@
 from openerp.report import report_sxw
 
 
-class account_char(report_sxw.rml_parse):
+class AccountChar(report_sxw.rml_parse):
     _name = 'report.account.print.chart'
 
     def __init__(self, cr, uid, name, context=None):
-        super(account_char, self).__init__(cr, uid, name, context=context)
+        super(AccountChar, self).__init__(cr, uid, name, context=context)
         self.localcontext.update({
             "get_lst_account": self._get_lst_account,
             "cr": cr,
@@ -36,7 +36,7 @@ class account_char(report_sxw.rml_parse):
         })
 
     def _get_lst_account(self, cr, uid, account_id, context):
-        account_obj = self.pool.get("account.account")
+        account_obj = self.pool['account.account']
         actual_account = account_obj.browse(cr, uid, account_id,
                                             context=context)
         lst_account = []
@@ -55,6 +55,6 @@ class account_char(report_sxw.rml_parse):
 report_sxw.report_sxw(
     'report.account.print.chart',
     'account.account',
-    'account_chart_report_rml/report/chart_of_accounts.rml',
-    parser=account_char,
+    'account_chart_report/report/chart_of_accounts.rml',
+    parser=AccountChar,
 )
