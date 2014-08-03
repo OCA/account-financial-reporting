@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <document filename="Chart of accounts.pdf">
-  <template title="Account Balance" author="Mathieu Benoit (mathieu.benoit@savoirfairelinux.com)" allowSplitting="20">
+  <template title="Account Balance" author="Mathieu Benoit (mathieu.benoit@savoirfairelinux.com)" allowSplitting="1">
     <pageTemplate id="first">
-      <frame id="first" x1="35.0" y1="35.0" width="525" height="772"/>
+      <frame id="first" x1="35.0" y1="35.0" width="650" height="772"/>
     </pageTemplate>
   </template>
   <stylesheet>
@@ -28,7 +28,7 @@
     <images/>
   </stylesheet>
   <story>
-    <blockTable colWidths="525.0" style="Table_Tilte_Table">
+    <blockTable colWidths="650.0" style="Table_Tilte_Table">
       <tr>
         <td>
           <para style="P15">Chart of accounts</para>
@@ -47,7 +47,7 @@
         <para style="P11">
       <font color="white"> </font>
     </para>
-  <blockTable colWidths="80,340.0" style="Table2" repeatRows="1">
+  <blockTable colWidths="70,450" style="Table2" repeatRows="1">
       <tr noRowsplits="1">
         <td><para style="P12a">Code</para></td>
         <td><para style="P12a">Account</para></td>

@@ -23,14 +23,14 @@
 from openerp.osv import fields, orm
 
 
-class chart_of_account_report(orm.TransientModel):
+class ChartOfAccountsReport(orm.TransientModel):
     _name = 'account.print.chart.accounts.report'
     _description = 'Chart of accounts Report'
 
     domain_char_account = [('parent_id', '=', False)]
     _columns = {
         'chart_account_id': fields.many2one('account.account',
-                                            'Chart of Account',
+                                            'Chart of Accounts',
                                             help='Select Charts of Accounts',
                                             required=True,
                                             domain=domain_char_account),
