@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+
+    <record id="account_report_print_char_accounts_view" model="ir.ui.view">
+      <field name="name">Print chart of accounts</field>
+      <field name="model">account.print.chart.accounts.report</field>
+      <field name="arch" type="xml">
+        <form string="Report Options" version="7.0">
+          <group col="4" colspan="4">
+            <field name="chart_account_id" widget='selection'/>
+          </group>
+          <footer>
+            <button class="oe_highlight" name="print_report" string="Print"
+                    type="object"/>
+            or
+            <button string="Cancel" class="oe_link" special="cancel"/>
+          </footer>
+        </form>
+      </field>
+    </record>
+
+    <record id="action_print_chart_menu" model="ir.actions.act_window">
+      <field name="name">Print chart of accounts</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">account.print.chart.accounts.report</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">form</field>
+      <field name="target">new</field>
+    </record>
+
+    <menuitem
+        icon="STOCK_PRINT"
+        name="Print chart of accounts"
+        parent="account.menu_finance_charts"
+        action="action_print_chart_menu"
+        id="menu_wizard_print_chart_account"
+        />
+
+  </data>
+</openerp>
