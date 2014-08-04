@@ -113,7 +113,7 @@ class mis_report_kpi(orm.Model):
         'divider': '1',
         'dp': 0,
         'compare_method': 'pct',
-        'sequence': 1,
+        'sequence': 10,
     }
 
     _order = 'sequence'
@@ -385,7 +385,7 @@ class mis_report_instance_period(orm.Model):
     _defaults = {
         'offset': -1,
         'duration': 1,
-        'sequence': 1,
+        'sequence': 10,
         'normalize_factor': 1,
         'company_id': lambda s, cr, uid, c: s.pool.get('res.company')._company_default_get(cr, uid,
                                                                                            'mis.report.instance.period',
@@ -500,6 +500,7 @@ class mis_report_instance_period(orm.Model):
                 'val_c': kpi_val_comment,
                 'style': kpi_style,
                 'suffix': kpi.suffix,
+                'dp': kpi.dp,
             }
 
         return res

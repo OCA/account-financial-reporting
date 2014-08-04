@@ -27,8 +27,6 @@ from openerp.addons.report_xls.report_xls import report_xls
 import logging
 _logger = logging.getLogger(__name__)
 
-_ir_translation_name = 'mis.report.instance.xls'
-
 
 class mis_builder_xls_parser(report_sxw.rml_parse):
 
@@ -50,7 +48,6 @@ class mis_builder_xls(report_xls):
         self.rh_cell_style_date = xlwt.easyxf(rh_cell_format, num_format_str=report_xls.date_format)
         # lines
         self.mis_rh_cell_style = xlwt.easyxf(_xs['borders_all'] + _xs['bold'] + _xs['fill'])
-        self.mis_cell_style = xlwt.easyxf(_xs['borders_all'] + _xs['right'], num_format_str=report_xls.decimal_format)
 
     def generate_xls_report(self, _p, _xs, data, objects, wb):
 
@@ -91,6 +88,7 @@ class mis_builder_xls(report_xls):
         c_specs = map(lambda x: self.render(x, col_specs_template, 'header_date'), header_name_list)
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
         row_pos = self.xls_write_row(ws, row_pos, row_data, row_style=self.rh_cell_style_date)
+
         ws.set_horz_split_pos(row_pos)
         ws.set_vert_split_pos(1)
 
@@ -100,9 +98,14 @@ class mis_builder_xls(report_xls):
             ws.write(row_pos, col, line['kpi_name'], self.mis_rh_cell_style)
             for value in line['cols']:
                 col += 1
-                kpi_cell_style = self.mis_cell_style
+                num_format_str = '#'
+                if value.get('dp'):
+                    num_format_str += '.'
+                    for x in range(int(value['dp'])):
+                        num_format_str = num_format_str + '#'
                 if value.get('suffix'):
-                    kpi_cell_style = xlwt.easyxf(_xs['borders_all'] + _xs['right'], num_format_str='#,##0.00" %s"' % value['suffix'])
+                    num_format_str = num_format_str + ' "%s"' % value['suffix']
+                kpi_cell_style = xlwt.easyxf(_xs['borders_all'] + _xs['right'], num_format_str=num_format_str)
                 if value.get('val'):
                     ws.write(row_pos, col, value['val'], kpi_cell_style)
                 else:
