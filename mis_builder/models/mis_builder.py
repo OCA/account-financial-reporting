@@ -326,13 +326,16 @@ class mis_report_instance_period(orm.Model):
             elif c.type == 'fp':
                 period_obj = self.pool['account.period']
                 all_period_ids = period_obj.search(cr, uid,
-                                                   [('special', '=', False), ('company_id', '=', c.company_id.id)],
+                                                   [('special', '=', False),
+                                                    '|', ('company_id', '=', False),
+                                                    ('company_id', '=', c.company_id.id)],
                                                    order='date_start',
                                                    context=context)
                 current_period_ids = period_obj.search(cr, uid,
                                                        [('special', '=', False),
                                                         ('date_start', '<=', d),
                                                         ('date_stop', '>=', d),
+                                                        '|', ('company_id', '=', False),
                                                         ('company_id', '=', c.company_id.id)],
                                                        context=context)
                 if not current_period_ids:
@@ -436,7 +439,7 @@ class mis_report_instance_period(orm.Model):
                                'date_to': c.date_to})
 
         # TODO: initial balance?
-        account_ids = account_obj.search(cr, uid, [('company_id', '=', c.company_id.id)], context=context)
+        account_ids = account_obj.search(cr, uid, ['|', ('company_id', '=', False), ('company_id', '=', c.company_id.id)], context=context)
         account_datas = account_obj.read(cr, uid, account_ids, ['code', 'balance'], context=search_ctx)
         balances = {}
         for account_data in account_datas:
@@ -462,7 +465,7 @@ class mis_report_instance_period(orm.Model):
                 domain.extend([(query.date_field.name, '>=', datetime_from),
                                (query.date_field.name, '<', datetime_to)])
             if obj._columns.get('company_id', False):
-                domain.extend([('company_id', '=', c.company_id.id)])
+                domain.extend(['|', ('company_id', '=', False), ('company_id', '=', c.company_id.id)])
             field_names = [field.name for field in query.field_ids]
             obj_ids = obj.search(cr, uid, domain, context=context)
             obj_datas = obj.read(cr, uid, obj_ids, field_names, context=context)
