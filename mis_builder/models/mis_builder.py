@@ -279,8 +279,12 @@ class mis_report(orm.Model):
 
     def create(self, cr, uid, vals, context=None):
         if 'kpi_ids' in vals:
+            mis_report_kpi_obj = self.pool.get('mis.report.kpi')
             for idx, line in enumerate(vals['kpi_ids']):
-                line[2]['sequence'] = idx + 1
+                if line[0] == 0:
+                    line[2]['sequence'] = idx + 1
+                else:
+                    mis_report_kpi_obj.write(cr, uid, [line[1]], {'sequence': idx + 1}, context=context)
         return super(mis_report, self).create(cr, uid, vals, context=context)
 
     def write(self, cr, uid, ids, vals, context=None):
@@ -566,8 +570,12 @@ class mis_report_instance(orm.Model):
 
     def create(self, cr, uid, vals, context=None):
         if 'period_ids' in vals:
+            mis_report_instance_period_obj = self.pool.get('mis.report.instance.period')
             for idx, line in enumerate(vals['period_ids']):
-                line[2]['sequence'] = idx + 1
+                if line[0] == 0:
+                    line[2]['sequence'] = idx + 1
+                else:
+                    mis_report_instance_period_obj.write(cr, uid, [line[1]], {'sequence': idx + 1}, context=context)
         return super(mis_report_instance, self).create(cr, uid, vals, context=context)
 
     def write(self, cr, uid, ids, vals, context=None):
