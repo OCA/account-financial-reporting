@@ -501,6 +501,7 @@ class mis_report_instance_period(orm.Model):
                 'style': kpi_style,
                 'suffix': kpi.suffix,
                 'dp': kpi.dp,
+                'is_percentage': kpi.type == 'pct',
             }
 
         return res
