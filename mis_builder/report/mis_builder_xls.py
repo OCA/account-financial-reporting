@@ -101,13 +101,15 @@ class mis_builder_xls(report_xls):
                 num_format_str = '#'
                 if value.get('dp'):
                     num_format_str += '.'
-                    for x in range(int(value['dp'])):
-                        num_format_str = num_format_str + '#'
+                    num_format_str += '0' * int(value['dp'])
                 if value.get('suffix'):
                     num_format_str = num_format_str + ' "%s"' % value['suffix']
                 kpi_cell_style = xlwt.easyxf(_xs['borders_all'] + _xs['right'], num_format_str=num_format_str)
                 if value.get('val'):
-                    ws.write(row_pos, col, value['val'], kpi_cell_style)
+                    val = value['val']
+                    if value.get('is_percentage'):
+                        val = val / 0.01
+                    ws.write(row_pos, col, val, kpi_cell_style)
                 else:
                     ws.write(row_pos, col, value['val_r'], kpi_cell_style)
             row_pos += 1
