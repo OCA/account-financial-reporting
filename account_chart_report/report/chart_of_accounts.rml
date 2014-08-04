@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<document filename="Chart of accounts.pdf">
+  <template title="Account Balance" author="Mathieu Benoit (mathieu.benoit@savoirfairelinux.com)" allowSplitting="1">
+    <pageTemplate id="first">
+      <frame id="first" x1="35.0" y1="35.0" width="650" height="772"/>
+    </pageTemplate>
+  </template>
+  <stylesheet>
+    <blockTableStyle id="Table_Tilte_Table">
+      <blockAlignment value="LEFT"/>
+      <blockValign value="TOP"/>
+    </blockTableStyle>
+   <blockTableStyle id="Table2">
+      <blockValign value="TOP"/>
+      <blockAlignment value="RIGHT"/>
+      <lineStyle kind="LINEBELOW" colorName="#000000" start="0,0" stop="-1,0"/>
+      <lineStyle kind="LINEBELOW" colorName="#e6e6e6" start="0,1" stop="-1,-1"/>
+    </blockTableStyle>
+    <initialize>
+      <paraStyle name="all" alignment="justify"/>
+    </initialize>
+    <paraStyle name="P8" fontName="Helvetica"/>
+    <paraStyle name="P11" fontName="Helvetica" fontSize="8.0" leading="10" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="P12" fontName="Helvetica-Bold" fontSize="8.0" leading="10" alignment="LEFT" spaceBefore="6.0" spaceAfter="6.0"/>
+    <paraStyle name="P14" rightIndent="17.0" leftIndent="-0.0" fontName="Helvetica-Bold" fontSize="8.0" leading="10" spaceBefore="0.0" spaceAfter="6.0"/>
+    <paraStyle name="P15" fontName="Helvetica-Bold" fontSize="12.0" leading="15" alignment="CENTER" spaceBefore="12.0" spaceAfter="6.0"/>
+    <paraStyle name="P12a" fontName="Helvetica-Bold" fontSize="8.0" leading="10" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <images/>
+  </stylesheet>
+  <story>
+    <blockTable colWidths="650.0" style="Table_Tilte_Table">
+      <tr>
+        <td>
+          <para style="P15">Chart of accounts</para>
+        </td>
+      </tr>
+    </blockTable>
+    <para style="P11">
+      <font color="white"> </font>
+    </para>
+    <para style="P11">
+      <font color="white"> </font>
+    </para>
+      <para style="P11">
+      <font color="white"> </font>
+    </para>
+        <para style="P11">
+      <font color="white"> </font>
+    </para>
+  <blockTable colWidths="70,450" style="Table2" repeatRows="1">
+      <tr noRowsplits="1">
+        <td><para style="P12a">Code</para></td>
+        <td><para style="P12a">Account</para></td>
+      </tr>
+      <tr>
+    <td><para style="P14">[[ repeatIn(get_lst_account(cr, uid, data["form"]["id_account"], actual_context), 'a') ]]<font>[[ (a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Helvetica"})) or removeParentNode('font') ]]</font><i>[[ a['code'] or removeParentNode('tr')  ]]</i></para></td>
+        <td><para style="P14"><font>[[ (a['type']&lt;&gt;'view' and setTag('para','para',{'fontName':"Helvetica"})) or removeParentNode('font') ]]</font><font color="white">[[ '..'*(a['level']-1) ]]</font><font>[[ a['name'] ]]</font> </para></td>
+      </tr>
+    </blockTable>
+    <para style="P11">
+      <font color="white"> </font>
+    </para>
+  </story>
+</document>

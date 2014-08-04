@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+    <report
+        auto="False"
+        id="account_chart_account"
+        menu="False"
+        model="account.account"
+        name="account.print.chart"
+        rml="account_chart_report/report/chart_of_accounts.rml"
+        string="Print chart account"
+        report_type="pdf"
+     />
+  </data>
+</openerp>
