@@ -22,10 +22,8 @@
 #==============================================================================
 
 import xlwt
-from datetime import datetime
 from openerp.report import report_sxw
 from openerp.addons.report_xls.report_xls import report_xls
-from openerp.tools.translate import translate
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -37,14 +35,6 @@ class mis_builder_xls_parser(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
         super(mis_builder_xls_parser, self).__init__(cr, uid, name, context=context)
         self.context = context
-        self.localcontext.update({
-            'datetime': datetime,
-            '_': self._,
-        })
-
-    def _(self, src):
-        lang = self.context.get('lang', 'en_US')
-        return translate(self.cr, _ir_translation_name, 'report', lang, src) or src
 
 
 class mis_builder_xls(report_xls):
@@ -55,20 +45,14 @@ class mis_builder_xls(report_xls):
         # Cell Styles
         _xs = self.xls_styles
         # header
-        rh_cell_format = _xs['bold'] + _xs['fill'] + _xs['borders_all']
+        rh_cell_format = _xs['bold'] + _xs['fill'] + _xs['borders_all'] + _xs['right']
         self.rh_cell_style = xlwt.easyxf(rh_cell_format)
-        self.rh_cell_style_center = xlwt.easyxf(rh_cell_format + _xs['center'])
-        self.rh_cell_style_right = xlwt.easyxf(rh_cell_format + _xs['right'])
+        self.rh_cell_style_date = xlwt.easyxf(rh_cell_format, num_format_str=report_xls.date_format)
         # lines
-        mis_cell_format = _xs['borders_all']
-        self.mis_cell_style = xlwt.easyxf(mis_cell_format)
-        self.mis_cell_style_center = xlwt.easyxf(mis_cell_format + _xs['center'])
-        self.mis_cell_style_date = xlwt.easyxf(mis_cell_format + _xs['left'], num_format_str=report_xls.date_format)
-        self.mis_cell_style_decimal = xlwt.easyxf(mis_cell_format + _xs['right'], num_format_str=report_xls.decimal_format)
+        self.mis_rh_cell_style = xlwt.easyxf(_xs['borders_all'] + _xs['bold'] + _xs['fill'])
+        self.mis_cell_style = xlwt.easyxf(_xs['borders_all'] + _xs['right'], num_format_str=report_xls.decimal_format)
 
     def generate_xls_report(self, _p, _xs, data, objects, wb):
-
-        _ = _p._
 
         report_name = objects[0].name
         ws = wb.add_sheet(report_name[:31])
@@ -83,51 +67,48 @@ class mis_builder_xls(report_xls):
         ws.footer_str = self.xls_footers['standard']
 
         # Title
-        cell_style = xlwt.easyxf(_xs['xls_title'])
         c_specs = [
             ('report_name', 1, 0, 'text', report_name),
         ]
         row_data = self.xls_row_template(c_specs, ['report_name'])
-        row_pos = self.xls_write_row(ws, row_pos, row_data, row_style=cell_style)
+        row_pos = self.xls_write_row(ws, row_pos, row_data, row_style=xlwt.easyxf(_xs['xls_title']))
         row_pos += 1
 
-        # get the computed result
+        # get the computed result of the report
         data = self.pool.get('mis.report.instance').compute(self.cr, self.uid, objects[0].id)
 
         # Column headers
         header_name_list = ['']
-        col_specs_template = {'': {'header': [1, 42, 'text', ''],
-                                   'header_date': [1, 42, 'text', '']}}
+        col_specs_template = {'': {'header': [1, 30, 'text', ''],
+                                   'header_date': [1, 1, 'text', '']}}
         for col in data['header']['']['cols']:
-            col_specs_template[col['name']] = {'header': [1, 42, 'text', col['name']],
-                                               'header_date': [1, 42, 'text', col['date']]}
+            col_specs_template[col['name']] = {'header': [1, 30, 'text', col['name']],
+                                               'header_date': [1, 1, 'text', col['date']]}
             header_name_list.append(col['name'])
-        c_specs = map(lambda x: self.render(x, col_specs_template, 'header', render_space={'_': _p._}), header_name_list)
+        c_specs = map(lambda x: self.render(x, col_specs_template, 'header'), header_name_list)
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
         row_pos = self.xls_write_row(ws, row_pos, row_data, row_style=self.rh_cell_style, set_column_size=True)
-        ws.set_horz_split_pos(row_pos)
-        c_specs = map(lambda x: self.render(x, col_specs_template, 'header_date', render_space={'_': _p._}), header_name_list)
+        c_specs = map(lambda x: self.render(x, col_specs_template, 'header_date'), header_name_list)
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
-        row_pos = self.xls_write_row(ws, row_pos, row_data, row_style=self.rh_cell_style, set_column_size=True)
+        row_pos = self.xls_write_row(ws, row_pos, row_data, row_style=self.rh_cell_style_date)
         ws.set_horz_split_pos(row_pos)
+        ws.set_vert_split_pos(1)
 
         for key in data['content']:
             line = data['content'][key]
-            kpi_list = [line['kpi_name']]
-            col_specs_template = {line['kpi_name']: {'lines': [1, 42, 'text', line['kpi_name']]}}
-            col_count = 0
+            col = 0
+            ws.write(row_pos, col, line['kpi_name'], self.mis_rh_cell_style)
             for value in line['cols']:
-                col_count = col_count + 1
-                kpi_value_name = '_'.join([line['kpi_name'], str(col_count)])
-                kpi_list.append(kpi_value_name)
+                col += 1
+                kpi_cell_style = self.mis_cell_style
+                if value.get('suffix'):
+                    kpi_cell_style = xlwt.easyxf(_xs['borders_all'] + _xs['right'], num_format_str='#,##0.00" %s"' % value['suffix'])
                 if value.get('val'):
-                    col_specs_template[kpi_value_name] = {'lines': [1, 42, 'number', value['val']]}
+                    ws.write(row_pos, col, value['val'], kpi_cell_style)
                 else:
-                    col_specs_template[kpi_value_name] = {'lines': [1, 42, 'text', value['val_r']]}
+                    ws.write(row_pos, col, value['val_r'], kpi_cell_style)
+            row_pos += 1
 
-            c_specs = map(lambda x: self.render(x, col_specs_template, 'lines'), kpi_list)
-            row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
-            row_pos = self.xls_write_row(ws, row_pos, row_data, row_style=self.mis_cell_style)
 
 mis_builder_xls('report.mis.report.instance.xls',
     'mis.report.instance',
