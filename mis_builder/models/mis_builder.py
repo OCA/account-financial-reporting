@@ -499,6 +499,7 @@ class mis_report_instance_period(orm.Model):
                 'val_r': kpi_val_rendered,
                 'val_c': kpi_val_comment,
                 'style': kpi_style,
+                'suffix': kpi.suffix,
             }
 
         return res
