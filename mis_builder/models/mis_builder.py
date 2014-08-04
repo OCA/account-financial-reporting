@@ -113,7 +113,7 @@ class mis_report_kpi(orm.Model):
         'divider': '1',
         'dp': 0,
         'compare_method': 'pct',
-        'sequence': 10,
+        'sequence': 100,
     }
 
     _order = 'sequence'
@@ -277,6 +277,20 @@ class mis_report(orm.Model):
                                    string='KPI\'s'),
     }
 
+    def create(self, cr, uid, vals, context=None):
+        if 'kpi_ids' in vals:
+            for idx, line in enumerate(vals['kpi_ids']):
+                line[2]['sequence'] = idx + 1
+        return super(mis_report, self).create(cr, uid, vals, context=context)
+
+    def write(self, cr, uid, ids, vals, context=None):
+        res = super(mis_report, self).write(cr, uid, ids, vals, context=context)
+        mis_report_kpi_obj = self.pool.get('mis.report.kpi')
+        for report in self.browse(cr, uid, ids, context):
+            for idx, kpi in enumerate(report.kpi_ids):
+                mis_report_kpi_obj.write(cr, uid, [kpi.id], {'sequence': idx + 1}, context=context)
+        return res
+
 
 class mis_report_instance_period(orm.Model):
     """ A MIS report instance has the logic to compute
@@ -385,7 +399,7 @@ class mis_report_instance_period(orm.Model):
     _defaults = {
         'offset': -1,
         'duration': 1,
-        'sequence': 10,
+        'sequence': 100,
         'normalize_factor': 1,
         'company_id': lambda s, cr, uid, c: s.pool.get('res.company')._company_default_get(cr, uid,
                                                                                            'mis.report.instance.period',
@@ -549,6 +563,20 @@ class mis_report_instance(orm.Model):
     _defaults = {
             'target_move': 'posted',
     }
+
+    def create(self, cr, uid, vals, context=None):
+        if 'period_ids' in vals:
+            for idx, line in enumerate(vals['period_ids']):
+                line[2]['sequence'] = idx + 1
+        return super(mis_report_instance, self).create(cr, uid, vals, context=context)
+
+    def write(self, cr, uid, ids, vals, context=None):
+        res = super(mis_report_instance, self).write(cr, uid, ids, vals, context=context)
+        mis_report_instance_period_obj = self.pool.get('mis.report.instance.period')
+        for instance in self.browse(cr, uid, ids, context):
+            for idx, period in enumerate(instance.period_ids):
+                mis_report_instance_period_obj.write(cr, uid, [period.id], {'sequence': idx + 1}, context=context)
+        return res
 
     def _format_date(self, cr, uid, date, context=None):
         # format date following user language
