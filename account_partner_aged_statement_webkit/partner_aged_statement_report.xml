@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+<!--
+        <report
+            auto="False"
+            id="partner_aged_statement_report"
+            model="res.partner"
+            name="webkit.partner_aged_statement_report"
+            file="account_partner_aged_statement_webkit/report/partner_aged_statement.mako"
+            string="Partner Aged Statement"
+            webkit_header="base_headers_webkit.base_reports_portrait_header"
+            report_type="webkit"/>
+-->
+        <report
+            auto="False"
+            id="partner_aged_statement_report"
+            model="res.partner"
+            name="webkit.partner_aged_statement_report"
+            file="account_partner_aged_statement_webkit/report/partner_aged_statement.mako"
+            string="Partner Aged Statement"
+            webkit_header="base_headers_webkit.base_reports_portrait_header"
+            report_type="webkit"/>
+
+    </data>
+</openerp>
