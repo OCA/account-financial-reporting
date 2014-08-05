@@ -26,10 +26,8 @@
     'author': 'Savoir-faire Linux',
     'website': 'http://www.savoirfairelinux.com',
     'depends': [
-        'account_financial_report_webkit_xls',
-        'report_webkit',
-        'base_headers_webkit',
         'mail',
+        'account',
     ],
     'category': 'Accounting',
     'description': """
