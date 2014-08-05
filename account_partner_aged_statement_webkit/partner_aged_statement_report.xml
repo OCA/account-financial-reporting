@@ -2,26 +2,15 @@
 <openerp>
     <data>
 
-<!--
         <report
             auto="False"
             id="partner_aged_statement_report"
             model="res.partner"
-            name="webkit.partner_aged_statement_report"
-            file="account_partner_aged_statement_webkit/report/partner_aged_statement.mako"
+            name="account.aged_trial_balance_partner"
+            file="account/report/account_aged_partner_balance.rml"
             string="Partner Aged Statement"
-            webkit_header="base_headers_webkit.base_reports_portrait_header"
-            report_type="webkit"/>
--->
-        <report
-            auto="False"
-            id="partner_aged_statement_report"
-            model="res.partner"
-            name="webkit.partner_aged_statement_report"
-            file="account_partner_aged_statement_webkit/report/partner_aged_statement.mako"
-            string="Partner Aged Statement"
-            webkit_header="base_headers_webkit.base_reports_portrait_header"
-            report_type="webkit"/>
+            report_type="pdf"
+            />
 
     </data>
 </openerp>
