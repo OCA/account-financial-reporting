@@ -31,15 +31,14 @@
     'website': 'http://acsone.eu',
     'depends': ['mis_builder', 'crm'],
     'data': [
-             'mis.report.kpi.csv',
+    ],
+    'test': [
+    ],
+    'demo': ['mis.report.kpi.csv',
              'mis.report.query.csv',
              'mis.report.csv',
              'mis.report.instance.period.csv',
              'mis.report.instance.csv',
-    ],
-    'test': [
-    ],
-    'demo': [
     ],
     'installable': True,
     'application': True,

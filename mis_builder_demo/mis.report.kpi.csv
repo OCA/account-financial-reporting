@@ -1,10 +1,9 @@
 id,compare_method,description,expression,divider,name,dp,sequence,type,suffix
-mis_report_kpi_1,Percentage,chiffre d'affaire,-bal_70,,ca,,1,Numeric,€
-mis_report_kpi_2,Percentage,cost,-bal_60 - bal_61,,cost,,2,Numeric,€
-mis_report_kpi_3,Percentage,profit,ca - cost,,profit,,3,Numeric,€
-mis_report_kpi_4,Difference,margin,profit/ca,,margin,,4,Percentage,%
-mis_report_kpi_5,None,couleur,'vert' if profit > 0 else 'rouge',,couleur,,5,String,
-mis_report_kpi_6,Percentage,total invoice,len(inv),,total_invoice,,6,Numeric,€
+mis_report_kpi_1,Percentage,CA,-balx2001,,ca,,1,Numeric,€
+mis_report_kpi_2,Percentage,CAHT invoice,sum([s.amount_untaxed for s in inv]),,total_invoice,,2,Numeric,€
+mis_report_kpi_3,Percentage,Cost,balx2110,,cost,,3,Numeric,€
+mis_report_kpi_4,Percentage,Profit,ca - cost,,profit,,4,Numeric,€
+mis_report_kpi_5,Difference,Margin,profit/ca,,margin,,5,Percentage,%
 mis_report_phonecall_kpi_1,Percentage,Total phone call,len(phone),,total_phone_call,,1,Numeric,
 mis_report_phonecall_kpi_2,Percentage,Average duration phone call,sum([p.duration for p in phone])/total_phone_call,,average_duration_phone_call,2,2,Numeric,
 mis_report_phonecall_kpi_3,Percentage,Total converted phone call,sum([p.opportunity_id and 1 or 0 for p in phone]),,phone_call_convert,,3,Numeric,
