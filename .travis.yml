@@ -14,7 +14,7 @@ install:
   - git clone https://github.com/OCA/reporting-engine ${HOME}/reporting-engine -b ${VERSION}
   - git clone https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
   - sudo wget http://downloads.sourceforge.net/project/wkhtmltopdf/0.12.1/wkhtmltox-0.12.1_linux-precise-i386.deb -P /tmp/
-  - dpkg -i /tmp/wkhtmltox-0.12.1_linux-precise-i386.deb
+  - sudo dpkg -i /tmp/wkhtmltox-0.12.1_linux-precise-i386.deb
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   - travis_install_nightly
 
