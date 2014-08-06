@@ -42,7 +42,7 @@
              'tests/mis.report.csv',
              'tests/mis.report.instance.period.csv',
              'tests/mis.report.instance.csv',
-    ],
+             ],
     'js': [
         'static/src/js/*.js'
     ],

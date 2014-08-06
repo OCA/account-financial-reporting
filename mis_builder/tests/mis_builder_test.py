@@ -37,29 +37,42 @@ class mis_builder_test(common.TransactionCase):
 
     def test_datetime_conversion(self):
         date_to_convert = '2014-07-05'
-        date_time_convert = models.mis_builder._utc_midnight(date_to_convert, 'Europe/Brussels')
-        self.assertEqual(date_time_convert, '2014-07-04 22:00:00', 'The converted date time convert must contains hour')
-        date_time_convert = models.mis_builder._utc_midnight(date_to_convert, 'Europe/Brussels', add_day=1)
-        self.assertEqual(date_time_convert, '2014-07-05 22:00:00', 'The converted date time convert must contains hour')
-        date_time_convert = models.mis_builder._utc_midnight(date_to_convert, 'US/Pacific')
-        self.assertEqual(date_time_convert, '2014-07-05 07:00:00', 'The converted date time convert must contains hour')
-        date_time_convert = models.mis_builder._utc_midnight(date_to_convert, 'US/Pacific', add_day=1)
-        self.assertEqual(date_time_convert, '2014-07-06 07:00:00', 'The converted date time convert must contains hour')
+        date_time_convert = models.mis_builder._utc_midnight(
+            date_to_convert, 'Europe/Brussels')
+        self.assertEqual(date_time_convert, '2014-07-04 22:00:00',
+                         'The converted date time convert must contains hour')
+        date_time_convert = models.mis_builder._utc_midnight(
+            date_to_convert, 'Europe/Brussels', add_day=1)
+        self.assertEqual(date_time_convert, '2014-07-05 22:00:00',
+                         'The converted date time convert must contains hour')
+        date_time_convert = models.mis_builder._utc_midnight(
+            date_to_convert, 'US/Pacific')
+        self.assertEqual(date_time_convert, '2014-07-05 07:00:00',
+                         'The converted date time convert must contains hour')
+        date_time_convert = models.mis_builder._utc_midnight(
+            date_to_convert, 'US/Pacific', add_day=1)
+        self.assertEqual(date_time_convert, '2014-07-06 07:00:00',
+                         'The converted date time convert must contains hour')
 
     def test_fetch_query(self):
-        # create a report on a model without company_id field : account.analytic.balance
-        data = self.registry('mis.report.instance').compute(self.cr, self.uid, self.ref('mis_builder.mis_report_instance_test'))
-        self.assertDictContainsSubset({'content': OrderedDict([(u'total_test',
-                                                                {'kpi_name': u'total test',
-                                                                 'cols': [{'style': None,
-                                                                           'val_c': None,
-                                                                           'val': 0,
-                                                                           'val_r': '0 '}]})]),
-                                       'header': OrderedDict([('',
-                                                               {'kpi_name': '',
-                                                                'cols': [{'date': '2014-07-31',
-                                                                          'name': u'today'}]
-                                                                })])
-                                       }, data)
+        # create a report on a model without company_id field :
+        # account.analytic.balance
+        data = self.registry('mis.report.instance').compute(
+            self.cr, self.uid,
+            self.ref('mis_builder.mis_report_instance_test'))
+        self.assertDictContainsSubset(
+            {'content':
+             OrderedDict([(u'total_test',
+                           {'kpi_name': u'total test',
+                            'cols': [{'style': None,
+                                      'val_c': None,
+                                      'val': 0,
+                                      'val_r': '0 '}]})]),
+             'header': OrderedDict([('',
+                                     {'kpi_name': '',
+                                      'cols': [{'date': '2014-07-31',
+                                                'name': u'today'}]
+                                      })])
+             }, data)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
