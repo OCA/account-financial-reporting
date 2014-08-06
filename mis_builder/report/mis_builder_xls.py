@@ -31,23 +31,29 @@ _logger = logging.getLogger(__name__)
 class mis_builder_xls_parser(report_sxw.rml_parse):
 
     def __init__(self, cr, uid, name, context):
-        super(mis_builder_xls_parser, self).__init__(cr, uid, name, context=context)
+        super(mis_builder_xls_parser, self).__init__(
+            cr, uid, name, context=context)
         self.context = context
 
 
 class mis_builder_xls(report_xls):
 
-    def __init__(self, name, table, rml=False, parser=False, header=True, store=False):
-        super(mis_builder_xls, self).__init__(name, table, rml, parser, header, store)
+    def __init__(self, name, table, rml=False, parser=False, header=True,
+                 store=False):
+        super(mis_builder_xls, self).__init__(
+            name, table, rml, parser, header, store)
 
         # Cell Styles
         _xs = self.xls_styles
         # header
-        rh_cell_format = _xs['bold'] + _xs['fill'] + _xs['borders_all'] + _xs['right']
+        rh_cell_format = _xs['bold'] + _xs['fill'] + \
+            _xs['borders_all'] + _xs['right']
         self.rh_cell_style = xlwt.easyxf(rh_cell_format)
-        self.rh_cell_style_date = xlwt.easyxf(rh_cell_format, num_format_str=report_xls.date_format)
+        self.rh_cell_style_date = xlwt.easyxf(
+            rh_cell_format, num_format_str=report_xls.date_format)
         # lines
-        self.mis_rh_cell_style = xlwt.easyxf(_xs['borders_all'] + _xs['bold'] + _xs['fill'])
+        self.mis_rh_cell_style = xlwt.easyxf(
+            _xs['borders_all'] + _xs['bold'] + _xs['fill'])
 
     def generate_xls_report(self, _p, _xs, data, objects, wb):
 
@@ -68,26 +74,36 @@ class mis_builder_xls(report_xls):
             ('report_name', 1, 0, 'text', report_name),
         ]
         row_data = self.xls_row_template(c_specs, ['report_name'])
-        row_pos = self.xls_write_row(ws, row_pos, row_data, row_style=xlwt.easyxf(_xs['xls_title']))
+        row_pos = self.xls_write_row(
+            ws, row_pos, row_data, row_style=xlwt.easyxf(_xs['xls_title']))
         row_pos += 1
 
         # get the computed result of the report
-        data = self.pool.get('mis.report.instance').compute(self.cr, self.uid, objects[0].id)
+        data = self.pool.get('mis.report.instance').compute(
+            self.cr, self.uid, objects[0].id)
 
         # Column headers
         header_name_list = ['']
         col_specs_template = {'': {'header': [1, 30, 'text', ''],
                                    'header_date': [1, 1, 'text', '']}}
         for col in data['header']['']['cols']:
-            col_specs_template[col['name']] = {'header': [1, 30, 'text', col['name']],
-                                               'header_date': [1, 1, 'text', col['date']]}
+            col_specs_template[col['name']] = {'header': [1, 30, 'text',
+                                                          col['name']],
+                                               'header_date': [1, 1, 'text',
+                                                               col['date']]}
             header_name_list.append(col['name'])
-        c_specs = map(lambda x: self.render(x, col_specs_template, 'header'), header_name_list)
+        c_specs = map(
+            lambda x: self.render(x, col_specs_template, 'header'),
+            header_name_list)
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
-        row_pos = self.xls_write_row(ws, row_pos, row_data, row_style=self.rh_cell_style, set_column_size=True)
-        c_specs = map(lambda x: self.render(x, col_specs_template, 'header_date'), header_name_list)
+        row_pos = self.xls_write_row(
+            ws, row_pos, row_data, row_style=self.rh_cell_style,
+            set_column_size=True)
+        c_specs = map(lambda x: self.render(
+            x, col_specs_template, 'header_date'), header_name_list)
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
-        row_pos = self.xls_write_row(ws, row_pos, row_data, row_style=self.rh_cell_style_date)
+        row_pos = self.xls_write_row(
+            ws, row_pos, row_data, row_style=self.rh_cell_style_date)
 
         ws.set_horz_split_pos(row_pos)
         ws.set_vert_split_pos(1)
@@ -104,7 +120,9 @@ class mis_builder_xls(report_xls):
                     num_format_str += '0' * int(value['dp'])
                 if value.get('suffix'):
                     num_format_str = num_format_str + ' "%s"' % value['suffix']
-                kpi_cell_style = xlwt.easyxf(_xs['borders_all'] + _xs['right'], num_format_str=num_format_str)
+                kpi_cell_style = xlwt.easyxf(
+                    _xs['borders_all'] + _xs['right'],
+                    num_format_str=num_format_str)
                 if value.get('val'):
                     val = value['val']
                     if value.get('is_percentage'):
@@ -116,7 +134,7 @@ class mis_builder_xls(report_xls):
 
 
 mis_builder_xls('report.mis.report.instance.xls',
-    'mis.report.instance',
-    parser=mis_builder_xls_parser)
+                'mis.report.instance',
+                parser=mis_builder_xls_parser)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

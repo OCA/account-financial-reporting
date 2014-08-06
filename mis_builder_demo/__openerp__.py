@@ -39,7 +39,7 @@
              'mis.report.csv',
              'mis.report.instance.period.csv',
              'mis.report.instance.csv',
-    ],
+             ],
     'installable': True,
     'application': True,
     'auto_install': False,
