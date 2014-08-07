@@ -1,3 +1,3 @@
-#import account_balance
-import account_balance_sheet
-import account_profit_loss
+# import account_balance
+from . import account_balance_sheet
+from . import account_profit_loss

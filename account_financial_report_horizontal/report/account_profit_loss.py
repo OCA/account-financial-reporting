@@ -22,10 +22,9 @@
 ##############################################################################
 
 import time
-import pooler
-from report import report_sxw
+from openerp.report import report_sxw
 from common_report_header import common_report_header
-from tools.translate import _
+from openerp.tools.translate import _
 
 
 class report_pl_account_horizontal(report_sxw.rml_parse, common_report_header):
@@ -63,8 +62,8 @@ class report_pl_account_horizontal(report_sxw.rml_parse, common_report_header):
         new_ids = ids
         if (data['model'] == 'ir.ui.menu'):
             new_ids = 'chart_account_id' in data['form'] and data['form'][
-                'chart_account_id'] and [data['form'][
-                'chart_account_id'][0]] or []
+                'chart_account_id'] and [data['form']['chart_account_id'][0]] \
+                or []
             objects = self.pool.get('account.account').browse(
                 self.cr, self.uid, new_ids)
             lang_dict = self.pool.get('res.users').read(
@@ -98,18 +97,17 @@ class report_pl_account_horizontal(report_sxw.rml_parse, common_report_header):
                 'balance': account.balance and (
                     account_type == 'income' and -1 or 1) * account.balance,
                 'type': account.type,
-                }
+            }
 
         cr, uid = self.cr, self.uid
-        db_pool = pooler.get_pool(self.cr.dbname)
 
-        account_pool = db_pool.get('account.account')
-        currency_pool = db_pool.get('res.currency')
+        account_pool = self.pool['account.account']
+        currency_pool = self.pool['res.currency']
 
         types = [
             'expense',
             'income'
-            ]
+        ]
 
         ctx = self.context.copy()
         ctx['fiscalyear'] = data['form'].get('fiscalyear_id', False)
@@ -247,5 +245,3 @@ report_sxw.report_sxw(
     'addons/account_financial_report_horizontal/report/'
     'account_profit_loss.rml',
     parser=report_pl_account_horizontal, header='internal')
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
