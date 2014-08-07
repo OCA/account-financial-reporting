@@ -24,9 +24,10 @@ from openerp.osv import orm
 #import logging
 #_logger = logging.getLogger(__name__)
 
+
 class general_ledger_webkit_wizard(orm.TransientModel):
     _inherit = 'general.ledger.webkit'
-       
+
     def xls_export(self, cr, uid, ids, context=None):
         return self.check_report(cr, uid, ids, context=context)
 
@@ -39,5 +40,5 @@ class general_ledger_webkit_wizard(orm.TransientModel):
                     'report_name': 'account.account_report_general_ledger_xls',
                     'datas': data}
         else:
-            return super(general_ledger_webkit_wizard, self)._print_report(cr, uid, ids, data, context=context)
-        
+            return super(general_ledger_webkit_wizard, self)._print_report(
+                cr, uid, ids, data, context=context)
