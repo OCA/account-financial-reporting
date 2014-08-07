@@ -21,10 +21,8 @@
 ##############################################################################
 
 import xlwt
-import time
 from datetime import datetime
 from openerp.osv import orm
-from openerp.report import report_sxw
 from openerp.addons.report_xls.report_xls import report_xls
 from openerp.addons.report_xls.utils import rowcol_to_cell, _render
 from .nov_account_journal import nov_journal_print
@@ -36,7 +34,8 @@ _logger = logging.getLogger(__name__)
 class account_journal_xls_parser(nov_journal_print):
 
     def __init__(self, cr, uid, name, context):
-        super(account_journal_xls_parser, self).__init__(cr, uid, name, context=context)
+        super(account_journal_xls_parser, self).__init__(cr, uid, name,
+                                                         context=context)
         journal_obj = self.pool.get('account.journal')
         self.context = context
         wanted_list = journal_obj._report_xls_fields(cr, uid, context)
@@ -50,8 +49,10 @@ class account_journal_xls_parser(nov_journal_print):
 
 class account_journal_xls(report_xls):
 
-    def __init__(self, name, table, rml=False, parser=False, header=True, store=False):
-        super(account_journal_xls, self).__init__(name, table, rml, parser, header, store)
+    def __init__(self, name, table, rml=False, parser=False, header=True,
+                 store=False):
+        super(account_journal_xls, self).__init__(
+            name, table, rml, parser, header, store)
 
         # Cell Styles
         _xs = self.xls_styles
@@ -63,24 +64,36 @@ class account_journal_xls(report_xls):
         # lines
         aml_cell_format = _xs['borders_all']
         self.aml_cell_style = xlwt.easyxf(aml_cell_format)
-        self.aml_cell_style_center = xlwt.easyxf(aml_cell_format + _xs['center'])
-        self.aml_cell_style_date = xlwt.easyxf(aml_cell_format + _xs['left'], num_format_str=report_xls.date_format)
-        self.aml_cell_style_decimal = xlwt.easyxf(aml_cell_format + _xs['right'], num_format_str=report_xls.decimal_format)
+        self.aml_cell_style_center = xlwt.easyxf(
+            aml_cell_format + _xs['center'])
+        self.aml_cell_style_date = xlwt.easyxf(
+            aml_cell_format + _xs['left'],
+            num_format_str=report_xls.date_format)
+        self.aml_cell_style_decimal = xlwt.easyxf(
+            aml_cell_format + _xs['right'],
+            num_format_str=report_xls.decimal_format)
         # totals
         rt_cell_format = _xs['bold'] + _xs['fill'] + _xs['borders_all']
         self.rt_cell_style = xlwt.easyxf(rt_cell_format)
         self.rt_cell_style_right = xlwt.easyxf(rt_cell_format + _xs['right'])
-        self.rt_cell_style_decimal = xlwt.easyxf(rt_cell_format + _xs['right'], num_format_str=report_xls.decimal_format)
+        self.rt_cell_style_decimal = xlwt.easyxf(
+            rt_cell_format + _xs['right'],
+            num_format_str=report_xls.decimal_format)
 
         # XLS Template Journal Items
         self.col_specs_lines_template = {
             'move_name': {
                 'header': [1, 20, 'text', _render("_('Entry')")],
-                'lines': [1, 0, 'text', _render("l['move_name'] != '/' and l['move_name'] or ('*'+str(l['move_id']))")],
+                'lines':
+                [1, 0, 'text',
+                 _render("l['move_name'] != '/' and l['move_name'] or ('*'+str(l['move_id']))")],
                 'totals': [1, 0, 'text', None]},
             'move_date': {
                 'header': [1, 13, 'text', _render("_('Date')")],
-                'lines': [1, 0, 'date', _render("datetime.strptime(l['move_date'],'%Y-%m-%d')"), None, self.aml_cell_style_date],
+                'lines':
+                [1, 0, 'date',
+                 _render("datetime.strptime(l['move_date'],'%Y-%m-%d')"),
+                 None, self.aml_cell_style_date],
                 'totals': [1, 0, 'text', None]},
             'acc_code': {
                 'header': [1, 12, 'text',  _render("_('Account')")],
@@ -124,47 +137,72 @@ class account_journal_xls(report_xls):
                 'totals': [1, 0, 'text', None]},
             'date_maturity': {
                 'header': [1, 13, 'text', _render("_('Maturity Date')")],
-                'lines': [1, 0, _render("l['date_maturity'] and 'date' or 'text'"),
-                    _render("l['date_maturity'] and datetime.strptime(l['date_maturity'],'%Y-%m-%d') or None"),
+                'lines':
+                [1, 0,
+                 _render("l['date_maturity'] and 'date' or 'text'"),
+                 _render(
+                     "l['date_maturity'] and datetime.strptime(l['date_maturity'],'%Y-%m-%d') or None"),
                     None, self.aml_cell_style_date],
                 'totals': [1, 0, 'text', None]},
             'debit': {
-                'header': [1, 18, 'text', _render("_('Debit')"), None, self.rh_cell_style_right],
-                'lines': [1, 0, 'number', _render("l['debit']"), None, self.aml_cell_style_decimal],
-                'totals': [1, 0, 'number', None, _render("debit_formula"), self.rt_cell_style_decimal]},
+                'header': [1, 18, 'text', _render("_('Debit')"), None,
+                           self.rh_cell_style_right],
+                'lines': [1, 0, 'number', _render("l['debit']"), None,
+                          self.aml_cell_style_decimal],
+                'totals': [1, 0, 'number', None, _render("debit_formula"),
+                           self.rt_cell_style_decimal]},
             'credit': {
-                'header': [1, 18, 'text', _render("_('Credit')"), None, self.rh_cell_style_right],
-                'lines': [1, 0, 'number', _render("l['credit']"), None, self.aml_cell_style_decimal],
-                'totals': [1, 0, 'number', None, _render("credit_formula"), self.rt_cell_style_decimal]},
+                'header': [1, 18, 'text', _render("_('Credit')"), None,
+                           self.rh_cell_style_right],
+                'lines': [1, 0, 'number', _render("l['credit']"), None,
+                          self.aml_cell_style_decimal],
+                'totals': [1, 0, 'number', None, _render("credit_formula"),
+                           self.rt_cell_style_decimal]},
             'balance': {
-                'header': [1, 18, 'text', _render("_('Balance')"), None, self.rh_cell_style_right],
-                'lines': [1, 0, 'number', None, _render("bal_formula"), self.aml_cell_style_decimal],
-                'totals': [1, 0, 'number', None, _render("bal_formula"), self.rt_cell_style_decimal]},
+                'header': [1, 18, 'text', _render("_('Balance')"), None,
+                           self.rh_cell_style_right],
+                'lines': [1, 0, 'number', None, _render("bal_formula"),
+                          self.aml_cell_style_decimal],
+                'totals': [1, 0, 'number', None, _render("bal_formula"),
+                           self.rt_cell_style_decimal]},
             'reconcile': {
-                'header': [1, 12, 'text', _render("_('Rec.')"), None, self.rh_cell_style_center],
-                'lines': [1, 0, 'text', _render("l['reconcile']"), None, self.aml_cell_style_center],
+                'header': [1, 12, 'text', _render("_('Rec.')"), None,
+                           self.rh_cell_style_center],
+                'lines': [1, 0, 'text', _render("l['reconcile']"), None,
+                          self.aml_cell_style_center],
                 'totals': [1, 0, 'text', None]},
             'reconcile_partial': {
-                'header': [1, 12, 'text', _render("_('Part. Rec.')"), None, self.rh_cell_style_center],
-                'lines': [1, 0, 'text', _render("l['reconcile_partial']"), None, self.aml_cell_style_center],
+                'header': [1, 12, 'text', _render("_('Part. Rec.')"), None,
+                           self.rh_cell_style_center],
+                'lines': [1, 0, 'text', _render("l['reconcile_partial']"),
+                          None, self.aml_cell_style_center],
                 'totals': [1, 0, 'text', None]},
             'tax_code': {
-                'header': [1, 6, 'text', _render("_('VAT')"), None, self.rh_cell_style_center],
-                'lines': [1, 0, 'text', _render("l['tax_code']"), None, self.aml_cell_style_center],
+                'header': [1, 6, 'text', _render("_('VAT')"), None,
+                           self.rh_cell_style_center],
+                'lines': [1, 0, 'text', _render("l['tax_code']"), None,
+                          self.aml_cell_style_center],
                 'totals': [1, 0, 'text', None]},
             'tax_amount': {
-                'header': [1, 18, 'text', _render("_('VAT Amount')"), None, self.rh_cell_style_right],
-                'lines': [1, 0, 'number', _render("l['tax_amount']"), None, self.aml_cell_style_decimal],
+                'header': [1, 18, 'text', _render("_('VAT Amount')"), None,
+                           self.rh_cell_style_right],
+                'lines': [1, 0, 'number', _render("l['tax_amount']"), None,
+                          self.aml_cell_style_decimal],
                 'totals': [1, 0, 'text', None]},
             'amount_currency': {
-                'header': [1, 18, 'text', _render("_('Am. Currency')"), None, self.rh_cell_style_right],
-                'lines': [1, 0, _render("l['amount_currency'] and 'number' or 'text'"),
-                    _render("l['amount_currency'] or None"),
-                    None, self.aml_cell_style_decimal],
+                'header': [1, 18, 'text', _render("_('Am. Currency')"), None,
+                           self.rh_cell_style_right],
+                'lines':
+                [1, 0,
+                 _render("l['amount_currency'] and 'number' or 'text'"),
+                 _render("l['amount_currency'] or None"),
+                 None, self.aml_cell_style_decimal],
                 'totals': [1, 0, 'text', None]},
             'currency_name': {
-                'header': [1, 6, 'text', _render("_('Curr.')"), None, self.rh_cell_style_center],
-                'lines': [1, 0, 'text', _render("l['currency_name']"), None, self.aml_cell_style_center],
+                'header': [1, 6, 'text', _render("_('Curr.')"), None,
+                           self.rh_cell_style_center],
+                'lines': [1, 0, 'text', _render("l['currency_name']"), None,
+                          self.aml_cell_style_center],
                 'totals': [1, 0, 'text', None]},
             'docname': {
                 'header': [1, 35, 'text', _render("_('Document')")],
@@ -189,8 +227,10 @@ class account_journal_xls(report_xls):
                 'header': [1, 6, 'text', _render("_('Case')")],
                 'tax_totals': [1, 0, 'text', _render("t.code")]},
             'tax_amount': {
-                'header': [1, 18, 'text', _render("_('Amount')"), None, self.rh_cell_style_right],
-                'tax_totals': [1, 0, 'number', _render("sum_vat(o,t)"), None, self.aml_cell_style_decimal]},
+                'header': [1, 18, 'text', _render("_('Amount')"), None,
+                           self.rh_cell_style_right],
+                'tax_totals': [1, 0, 'number', _render("sum_vat(o,t)"), None,
+                               self.aml_cell_style_decimal]},
         }
 
     def _journal_title(self, o, ws, _p, row_pos, xlwt, _xs):
@@ -200,12 +240,13 @@ class account_journal_xls(report_xls):
             _p.title(o)[0],
             _p.title(o)[1],
             _p._("Journal Overview") + ' - ' + _p.company.currency_id.name,
-            ])
+        ])
         c_specs = [
             ('report_name', 1, 0, 'text', report_name),
         ]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
-        row_pos = self.xls_write_row(ws, row_pos, row_data, row_style=cell_style)
+        row_pos = self.xls_write_row(
+            ws, row_pos, row_data, row_style=cell_style)
         return row_pos + 1
 
     def _journal_lines(self, o, ws, _p, row_pos, xlwt, _xs):
@@ -215,9 +256,13 @@ class account_journal_xls(report_xls):
         credit_pos = self.credit_pos
 
         # Column headers
-        c_specs = map(lambda x: self.render(x, self.col_specs_lines_template, 'header', render_space={'_': _p._}), wanted_list)
+        c_specs = map(lambda x: self.render(
+            x, self.col_specs_lines_template, 'header',
+            render_space={'_': _p._}), wanted_list)
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
-        row_pos = self.xls_write_row(ws, row_pos, row_data, row_style=self.rh_cell_style, set_column_size=True)
+        row_pos = self.xls_write_row(
+            ws, row_pos, row_data, row_style=self.rh_cell_style,
+            set_column_size=True)
         ws.set_horz_split_pos(row_pos)
 
         # account move lines
@@ -229,9 +274,12 @@ class account_journal_xls(report_xls):
             debit_cell = rowcol_to_cell(row_pos, debit_pos)
             credit_cell = rowcol_to_cell(row_pos, credit_pos)
             bal_formula = debit_cell + '-' + credit_cell
-            c_specs = map(lambda x: self.render(x, self.col_specs_lines_template, 'lines'), wanted_list)
+            c_specs = map(
+                lambda x: self.render(x, self.col_specs_lines_template,
+                                      'lines'), wanted_list)
             row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
-            row_pos = self.xls_write_row(ws, row_pos, row_data, row_style=self.aml_cell_style)
+            row_pos = self.xls_write_row(
+                ws, row_pos, row_data, row_style=self.aml_cell_style)
             if l['draw_line'] and cnt != aml_cnt:
                 row_pos += 1
 
@@ -245,9 +293,11 @@ class account_journal_xls(report_xls):
         debit_cell = rowcol_to_cell(row_pos, debit_pos)
         credit_cell = rowcol_to_cell(row_pos, credit_pos)
         bal_formula = debit_cell + '-' + credit_cell
-        c_specs = map(lambda x: self.render(x, self.col_specs_lines_template, 'totals'), wanted_list)
+        c_specs = map(lambda x: self.render(
+            x, self.col_specs_lines_template, 'totals'), wanted_list)
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
-        row_pos = self.xls_write_row(ws, row_pos, row_data, row_style=self.rt_cell_style_right)
+        row_pos = self.xls_write_row(
+            ws, row_pos, row_data, row_style=self.rt_cell_style_right)
         return row_pos + 1
 
     def _journal_vat_summary(self, o, ws, _p, row_pos, xlwt, _xs):
@@ -258,7 +308,8 @@ class account_journal_xls(report_xls):
         title_cell_style = xlwt.easyxf(_xs['bold'])
         c_specs = [('summary_title', 1, 0, 'text', _p._("VAT Declaration"))]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
-        row_pos = self.xls_write_row(ws, row_pos, row_data, row_style=title_cell_style) + 1
+        row_pos = self.xls_write_row(
+            ws, row_pos, row_data, row_style=title_cell_style) + 1
 
         wanted_list = self.wanted_list
         vat_summary_wanted_list = ['tax_case_name', 'tax_code', 'tax_amount']
@@ -267,33 +318,45 @@ class account_journal_xls(report_xls):
         cols_number = len(wanted_list)
         vat_summary_cols_number = len(vat_summary_wanted_list)
         if vat_summary_cols_number > cols_number:
-            raise orm.except_orm(_('Programming Error!'),
+            raise orm.except_orm(
+                _('Programming Error!'),
                 _("vat_summary_cols_number should be < cols_number !"))
         index = 0
         for i in range(vat_summary_cols_number):
             col = vat_summary_wanted_list[i]
-            col_size = self.col_specs_lines_template[wanted_list[index]]['header'][1]
-            templ_col_size = self.col_specs_vat_summary_template[col]['header'][1]
-            #_logger.warn("col=%s, col_size=%s, templ_col_size=%s", col, col_size, templ_col_size)
+            col_size = self.col_specs_lines_template[
+                wanted_list[index]]['header'][1]
+            templ_col_size = self.col_specs_vat_summary_template[
+                col]['header'][1]
+            # _logger.warn("col=%s, col_size=%s, templ_col_size=%s",
+            # col, col_size, templ_col_size)
             col_span = 1
             if templ_col_size > col_size:
                 new_size = col_size
                 while templ_col_size > new_size:
                     col_span += 1
                     index += 1
-                    new_size += self.col_specs_lines_template[wanted_list[index]]['header'][1]
+                    new_size += self.col_specs_lines_template[
+                        wanted_list[index]]['header'][1]
             self.col_specs_vat_summary_template[col]['header'][0] = col_span
-            self.col_specs_vat_summary_template[col]['tax_totals'][0] = col_span
+            self.col_specs_vat_summary_template[
+                col]['tax_totals'][0] = col_span
             index += 1
 
-        c_specs = map(lambda x: self.render(x, self.col_specs_vat_summary_template, 'header'), vat_summary_wanted_list)
+        c_specs = map(lambda x: self.render(
+            x, self.col_specs_vat_summary_template, 'header'),
+            vat_summary_wanted_list)
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
-        row_pos = self.xls_write_row(ws, row_pos, row_data, row_style=self.rh_cell_style)
+        row_pos = self.xls_write_row(
+            ws, row_pos, row_data, row_style=self.rh_cell_style)
 
         for t in _p.tax_codes(o):
-            c_specs = map(lambda x: self.render(x, self.col_specs_vat_summary_template, 'tax_totals'), vat_summary_wanted_list)
+            c_specs = map(lambda x: self.render(
+                x, self.col_specs_vat_summary_template, 'tax_totals'),
+                vat_summary_wanted_list)
             row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
-            row_pos = self.xls_write_row(ws, row_pos, row_data, row_style=self.aml_cell_style)
+            row_pos = self.xls_write_row(
+                ws, row_pos, row_data, row_style=self.aml_cell_style)
 
         return row_pos
 
@@ -306,14 +369,17 @@ class account_journal_xls(report_xls):
         self.col_specs_lines_template.update(_p.template_changes)
 
         self.debit_pos = 'debit' in wanted_list and wanted_list.index('debit')
-        self.credit_pos = 'credit' in wanted_list and wanted_list.index('credit')
-        if not (self.credit_pos and self.debit_pos) and 'balance' in wanted_list:
+        self.credit_pos = 'credit' in wanted_list and wanted_list.index(
+            'credit')
+        if not (self.credit_pos and self.debit_pos) and 'balance'\
+                in wanted_list:
             raise orm.except_orm(_('Customisation Error!'),
-                _("The 'Balance' field is a calculated XLS field requiring the presence of the 'Debit' and 'Credit' fields !"))
+                                 _("The 'Balance' field is a calculated XLS field requiring the presence of the 'Debit' and 'Credit' fields !"))
 
         for o in objects:
 
-            sheet_name = ' - '.join([o[1].code, o[0].code])[:31].replace('/', '-')
+            sheet_name = ' - '.join([o[1].code, o[0].code]
+                                    )[:31].replace('/', '-')
             sheet_name = sheet_name[:31].replace('/', '-')
             ws = wb.add_sheet(sheet_name)
             ws.panes_frozen = True
@@ -332,6 +398,6 @@ class account_journal_xls(report_xls):
             row_pos = self._journal_vat_summary(o, ws, _p, row_pos, xlwt, _xs)
 
 account_journal_xls('report.nov.account.journal.xls', 'account.journal.period',
-    parser=account_journal_xls_parser)
+                    parser=account_journal_xls_parser)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
