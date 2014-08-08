@@ -20,16 +20,18 @@
 ##############################################################################
 
 from openerp.osv import fields, orm
-from openerp.tools.translate import _
 
 
 class AccountMoveLine(orm.Model):
+
     """Overriding Account move line in order to add last_rec_date.
-    Last rec date is the date of the last reconciliation (full or partial) account move line"""
+    Last rec date is the date of the last reconciliation (full or partial)
+    account move line"""
     _inherit = 'account.move.line'
 
     def init(self, cr):
-        ##We do not want to catch error as if sql is not run it will give invalid data
+        # We do not want to catch error as if sql is not run it will give
+        # invalid data
         cr.execute("UPDATE account_move_line as acm "
                    " SET last_rec_date ="
                    "     (SELECT date from account_move_line"
@@ -41,14 +43,16 @@ class AccountMoveLine(orm.Model):
         cr.execute("UPDATE account_move_line as acm "
                    " SET last_rec_date ="
                    "     (SELECT date from account_move_line"
-                   "          WHERE reconcile_partial_id =  acm.reconcile_partial_id"
+                   "          WHERE reconcile_partial_id"
+                   "                             = acm.reconcile_partial_id"
                    "              AND reconcile_partial_id IS NOT NULL"
                    "          ORDER BY date DESC LIMIT 1)"
                    " WHERE last_rec_date is null;")
 
     def _get_move_line_from_line_rec(self, cr, uid, ids, context=None):
         moves = []
-        for reconcile in self.pool.get('account.move.reconcile').browse(cr, uid, ids, context=context):
+        for reconcile in self.pool['account.move.reconcile'].browse(
+                cr, uid, ids, context=context):
             for move_line in reconcile.line_partial_ids:
                 moves.append(move_line.id)
             for move_line in reconcile.line_id:
@@ -64,22 +68,27 @@ class AccountMoveLine(orm.Model):
             rec = line.reconcile_id or line.reconcile_partial_id or False
             if rec:
                 # we use cursor in order to gain some perfs
-                cursor.execute('SELECT date from account_move_line where'
-                              ' reconcile_id = %s OR reconcile_partial_id = %s'
-                              ' ORDER BY date DESC LIMIT 1 ',
-                              (rec.id, rec.id))
+                cursor.execute('SELECT date from account_move_line'
+                               ' WHERE reconcile_id = %s'
+                               ' OR reconcile_partial_id = %s'
+                               ' ORDER BY date DESC LIMIT 1 ',
+                               (rec.id, rec.id))
                 res_set = cursor.fetchone()
                 if res_set:
                     res[line.id] = {'last_rec_date': res_set[0]}
         return res
 
     _columns = {
-                'last_rec_date': fields.function(_get_last_rec_date,
-                     method=True,
-                     string='Last reconciliation date',
-                     store={'account.move.line': (lambda self, cr, uid, ids, c={}: ids, ['date'], 20),
-                            'account.move.reconcile': (_get_move_line_from_line_rec, None, 20)},
-                     type='date',
-                     multi='all',
-                     help="the date of the last reconciliation (full or partial) account move line"),
-                }
+        'last_rec_date': fields.function(
+            _get_last_rec_date,
+            method=True,
+            string='Last reconciliation date',
+            store={'account.move.line': (lambda self, cr, uid, ids, c={}: ids,
+                                         ['date'], 20),
+                   'account.move.reconcile': (_get_move_line_from_line_rec,
+                                              None, 20)},
+            type='date',
+            multi='all',
+            help="the date of the last reconciliation (full or partial) \
+                  account move line"),
+    }
