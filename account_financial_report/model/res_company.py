@@ -10,8 +10,8 @@
 #    Audited by: Nhomar Hernandez <nhomar@vauxoo.com>
 #############################################################################
 #    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
+#    it under the terms of the GNU Affero General Public License as published
+#    by the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
 #
 #    This program is distributed in the hope that it will be useful,
@@ -23,12 +23,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##########################################################################
 
-from osv import osv
-from osv import fields
-from tools.translate import _
+from openerp.osv import orm, fields
 
 
-class res_company(osv.osv):
+class res_company(orm.Model):
     _inherit = 'res.company'
     _columns = {
         'credit_account_ids': fields.many2many('account.account',
@@ -40,4 +38,3 @@ class res_company(osv.osv):
                                               'company_id', 'account_id',
                                               'Debitable Accounts'),
     }
-res_company()
