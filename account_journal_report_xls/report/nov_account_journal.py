@@ -216,7 +216,7 @@ class nov_journal_print(report_sxw.rml_parse):
         else:
             code_string = j_obj._report_xls_document_extra(
                 self.cr, self.uid, self.context)
-            #_logger.warn('code_string= %s', code_string)
+            # _logger.warn('code_string= %s', code_string)
             [x.update({'docname': eval(code_string) or '-'}) for x in lines]
 
         # group lines
@@ -261,7 +261,7 @@ class nov_journal_print(report_sxw.rml_parse):
                 key = (line['account_id'],
                        line['tax_code_id'],
                        line['partner_id'])
-                if not key in lines_grouped:
+                if key not in lines_grouped:
                     lines_grouped[key] = line
                 else:
                     lines_grouped[key]['debit'] += line['debit']
@@ -358,5 +358,3 @@ report_sxw.report_sxw(
     'report.nov.account.journal.print', 'account.journal',
     'addons/account_journal_report_xls/report/nov_account_journal.rml',
     parser=nov_journal_print, header=False)
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

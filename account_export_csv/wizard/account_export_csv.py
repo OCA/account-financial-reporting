@@ -215,8 +215,8 @@ class AccountCSVExport(orm.TransientModel):
         Return list to generate rows of the CSV file
         """
         cr.execute("""  select aac.code as analytic_code,
-        aac.name as analytic_name,
-        ac.code,ac.name,
+                        aac.name as analytic_name,
+                        ac.code,ac.name,
                         sum(debit) as sum_debit,
                         sum(credit) as sum_credit,
                         sum(debit) - sum(credit) as balance
@@ -333,7 +333,6 @@ class AccountCSVExport(orm.TransientModel):
           account_move_reconcile.name as full_reconcile,
           account_move_line.reconcile_partial_id AS partial_reconcile_id,
           account_analytic_account.code AS analytic_account_code,
-
           account_move.name AS entry_number,
           account_account.name AS account_name,
           account_move_line.debit - account_move_line.credit AS balance,

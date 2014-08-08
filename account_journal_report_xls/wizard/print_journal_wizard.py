@@ -114,7 +114,9 @@ class account_print_journal_xls(orm.TransientModel):
                 FROM account_period ap
                 WHERE ap.date_start>=%s AND ap.date_stop<=%s AND company_id=%s
                 ORDER BY date_start, special DESC""",
-                       (period_from.date_start, period_to.date_stop, company_id))
+                       (period_from.date_start,
+                        period_to.date_stop,
+                        company_id))
             wiz_period_ids = map(lambda x: x[0], cr.fetchall())
         wiz_journal_ids = [j.id for j in wiz_form.journal_ids]
 
@@ -190,5 +192,3 @@ class account_print_journal_xls(orm.TransientModel):
                 'type': 'ir.actions.report.xml',
                 'report_name': 'nov.account.journal.print',
                 'datas': datas}
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

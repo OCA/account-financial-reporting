@@ -27,8 +27,8 @@ from openerp.addons.report_xls.utils import rowcol_to_cell
 from openerp.addons.account_financial_report_webkit.report.open_invoices\
     import PartnersOpenInvoicesWebkit
 from openerp.tools.translate import _
-#import logging
-#_logger = logging.getLogger(__name__)
+# import logging
+# _logger = logging.getLogger(__name__)
 
 
 class open_invoices_xls(report_xls):
@@ -45,7 +45,7 @@ class open_invoices_xls(report_xls):
         ws.fit_width_to_pages = 1
         ws.header_str = self.xls_headers['standard']
         ws.footer_str = self.xls_footers['standard']
-        #-------------------------------------------------------
+        # -------------------------------------------------------
         # number of columns is 11 in case of normal report, 13 in case the
         # option currency is selected and 12 in case of the regroup by currency
         # option is checked
@@ -62,90 +62,90 @@ class open_invoices_xls(report_xls):
             nbr_columns = 13
         else:
             nbr_columns = 11
-        #-------------------------------------------------------
+        # -------------------------------------------------------
         global style_font12  # cell style for report title
         style_font12 = xlwt.easyxf(_xs['xls_title'])
-        #-------------------------------------------------------
+        # -------------------------------------------------------
         global style_default
         style_default = xlwt.easyxf(_xs['borders_all'])
-        #-------------------------------------------------------
+        # -------------------------------------------------------
         global style_default_italic
         style_default_italic = xlwt.easyxf(_xs['borders_all'] + _xs['italic'])
-        #-------------------------------------------------------
+        # -------------------------------------------------------
         global style_bold
         style_bold = xlwt.easyxf(_xs['bold'] + _xs['borders_all'])
-        #-------------------------------------------------------
+        # -------------------------------------------------------
         global style_bold_center
         style_bold_center = xlwt.easyxf(
             _xs['bold'] + _xs['borders_all'] + _xs['center'])
-        #-------------------------------------------------------
+        # -------------------------------------------------------
         global style_bold_italic
         style_bold_italic = xlwt.easyxf(
             _xs['bold'] + _xs['borders_all'] + _xs['italic'])
-        #-------------------------------------------------------
+        # -------------------------------------------------------
         global style_bold_italic_decimal
         style_bold_italic_decimal = xlwt.easyxf(
             _xs['bold'] + _xs['borders_all'] + _xs['italic'] + _xs['right'],
             num_format_str=report_xls.decimal_format)
-        #-------------------------------------------------------
+        # -------------------------------------------------------
         global style_bold_blue
         style_bold_blue = xlwt.easyxf(
             _xs['bold'] + _xs['fill_blue'] + _xs['borders_all'])
-        #-------------------------------------------------------
+        # -------------------------------------------------------
         global style_bold_blue_italic_decimal
         style_bold_blue_italic_decimal = xlwt.easyxf(
             _xs['bold'] + _xs['fill_blue'] +
             _xs['borders_all'] + _xs['italic'],
             num_format_str=report_xls.decimal_format)
-        #-------------------------------------------------------
+        # -------------------------------------------------------
         # cell style for header titles: 'Chart of accounts' - 'Fiscal year' ...
         global style_bold_blue_center
         style_bold_blue_center = xlwt.easyxf(
             _xs['bold'] + _xs['fill_blue'] + _xs['borders_all'] +
             _xs['center'])
-        #-------------------------------------------------------
+        # -------------------------------------------------------
         # cell style for header data: 'Chart of accounts' - 'Fiscal year' ...
         global style_center
         style_center = xlwt.easyxf(
             _xs['borders_all'] + _xs['wrap'] + _xs['center'])
-        #-------------------------------------------------------
+        # -------------------------------------------------------
         # cell style for columns titles 'Date'- 'Period' - 'Entry'...
         global style_yellow_bold
         style_yellow_bold = xlwt.easyxf(
             _xs['bold'] + _xs['fill'] + _xs['borders_all'])
-        #-------------------------------------------------------
+        # -------------------------------------------------------
         # cell style for columns titles 'Date'- 'Period' - 'Entry'...
         global style_yellow_bold_right
         style_yellow_bold_right = xlwt.easyxf(
             _xs['bold'] + _xs['fill'] + _xs['borders_all'] + _xs['right'])
-        #-------------------------------------------------------
+        # -------------------------------------------------------
         global style_right
         style_right = xlwt.easyxf(_xs['borders_all'] + _xs['right'])
-        #-------------------------------------------------------
+        # -------------------------------------------------------
         global style_right_italic
         style_right_italic = xlwt.easyxf(
             _xs['borders_all'] + _xs['right'] + _xs['italic'])
-        #-------------------------------------------------------
+        # -------------------------------------------------------
         global style_decimal
         style_decimal = xlwt.easyxf(
             _xs['borders_all'] + _xs['right'],
             num_format_str=report_xls.decimal_format)
-        #-------------------------------------------------------
+        # -------------------------------------------------------
         global style_decimal_italic
         style_decimal_italic = xlwt.easyxf(
             _xs['borders_all'] + _xs['right'] + _xs['italic'],
             num_format_str=report_xls.decimal_format)
-        #-------------------------------------------------------
+        # -------------------------------------------------------
         global style_date
         style_date = xlwt.easyxf(
             _xs['borders_all'] + _xs['left'],
             num_format_str=report_xls.date_format)
-        #-------------------------------------------------------
+        # -------------------------------------------------------
         global style_date_italic
         style_date_italic = xlwt.easyxf(
             _xs['borders_all'] + _xs['left'] + _xs['italic'],
             num_format_str=report_xls.date_format)
-        #-------------------------------------------------------
+        # -------------------------------------------------------
         global style_account_title, style_account_title_right,\
             style_account_title_decimal
         cell_format = _xs['xls_title'] + _xs['bold'] + \
@@ -155,11 +155,11 @@ class open_invoices_xls(report_xls):
         style_account_title_decimal = xlwt.easyxf(
             cell_format + _xs['right'],
             num_format_str=report_xls.decimal_format)
-        #-------------------------------------------------------
+        # -------------------------------------------------------
         global style_partner_row
         cell_format = _xs['bold']
         style_partner_row = xlwt.easyxf(cell_format)
-        #-------------------------------------------------------
+        # -------------------------------------------------------
         global style_partner_cumul, style_partner_cumul_right,\
             style_partner_cumul_center, style_partner_cumul_decimal
         cell_format = _xs['bold'] + _xs['fill'] + _xs['borders_all']

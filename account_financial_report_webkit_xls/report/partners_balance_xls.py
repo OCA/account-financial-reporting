@@ -26,8 +26,8 @@ from openerp.addons.report_xls.utils import rowcol_to_cell
 from openerp.addons.account_financial_report_webkit.report.partner_balance\
     import PartnerBalanceWebkit
 from openerp.tools.translate import _
-#import logging
-#_logger = logging.getLogger(__name__)
+# import logging
+# _logger = logging.getLogger(__name__)
 
 
 def display_line(all_comparison_lines):
@@ -295,7 +295,8 @@ class partners_balance_xls(report_xls):
         regular_cell_style_center = xlwt.easyxf(
             regular_cell_format + _xs['center'])
         regular_cell_style_decimal = xlwt.easyxf(
-            regular_cell_format + _xs['right'], num_format_str=report_xls.decimal_format)
+            regular_cell_format + _xs['right'],
+            num_format_str=report_xls.decimal_format)
         regular_cell_style_pct = xlwt.easyxf(
             regular_cell_format + _xs['center'], num_format_str='0')
 
@@ -427,5 +428,3 @@ class partners_balance_xls(report_xls):
 partners_balance_xls('report.account.account_report_partner_balance_xls',
                      'account.account',
                      parser=PartnerBalanceWebkit)
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -29,7 +29,7 @@
     'description': """
 
     Add a wizard that allow you to export a csv file based on accounting
-journal entries
+    journal entries
 
     - Trial Balance
     - Analytic Balance (with accounts)
@@ -38,7 +38,7 @@ journal entries
     You can filter by period
 
     TODO: rearange wizard view with only one button to generate file plus
-define a selection list to select report type
+    define a selection list to select report type
     """,
     'website': 'http://www.camptocamp.com',
     'data': [

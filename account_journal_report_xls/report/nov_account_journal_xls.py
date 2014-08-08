@@ -86,7 +86,8 @@ class account_journal_xls(report_xls):
                 'header': [1, 20, 'text', _render("_('Entry')")],
                 'lines':
                 [1, 0, 'text',
-                 _render("l['move_name'] != '/' and l['move_name'] or ('*'+str(l['move_id']))")],
+                 _render("l['move_name'] != '/' and l['move_name']\
+                 or ('*'+str(l['move_id']))")],
                 'totals': [1, 0, 'text', None]},
             'move_date': {
                 'header': [1, 13, 'text', _render("_('Date')")],
@@ -141,7 +142,8 @@ class account_journal_xls(report_xls):
                 [1, 0,
                  _render("l['date_maturity'] and 'date' or 'text'"),
                  _render(
-                     "l['date_maturity'] and datetime.strptime(l['date_maturity'],'%Y-%m-%d') or None"),
+                     "l['date_maturity'] and datetime.\
+                     strptime(l['date_maturity'],'%Y-%m-%d') or None"),
                     None, self.aml_cell_style_date],
                 'totals': [1, 0, 'text', None]},
             'debit': {
@@ -374,7 +376,9 @@ class account_journal_xls(report_xls):
         if not (self.credit_pos and self.debit_pos) and 'balance'\
                 in wanted_list:
             raise orm.except_orm(_('Customisation Error!'),
-                                 _("The 'Balance' field is a calculated XLS field requiring the presence of the 'Debit' and 'Credit' fields !"))
+                                 _("The 'Balance' field is a calculated XLS\
+                                    field requiring the presence of the\
+                                    'Debit' and 'Credit' fields !"))
 
         for o in objects:
 
@@ -399,5 +403,3 @@ class account_journal_xls(report_xls):
 
 account_journal_xls('report.nov.account.journal.xls', 'account.journal.period',
                     parser=account_journal_xls_parser)
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
