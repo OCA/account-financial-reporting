@@ -51,7 +51,7 @@ class move_line_xls_parser(report_sxw.rml_parse):
 
     def _(self, src):
         lang = self.context.get('lang', 'en_US')
-        return translate(self.cr, _ir_translation_name, 'report', lang, src)\
+        return translate(self.cr, _ir_translation_name, 'report', lang, src) \
             or src
 
 
@@ -136,8 +136,8 @@ class move_line_xls(report_xls):
                 [1, 0,
                  _render("line.date_maturity.val and 'date' or 'text'"),
                  _render(
-                     "line.date_maturity.val\
-                     and datetime.strptime(line.date_maturity,'%Y-%m-%d')\
+                     "line.date_maturity.val \
+                     and datetime.strptime(line.date_maturity,'%Y-%m-%d') \
                      or None"),
                     None, self.aml_cell_style_date],
                 'totals': [1, 0, 'text', None]},
@@ -298,7 +298,7 @@ class move_line_xls(report_xls):
         if not (credit_pos and debit_pos) and 'balance' in wanted_list:
             raise orm.except_orm(
                 _('Customisation Error!'),
-                _("The 'Balance' field is a calculated XLS field requiring\
+                _("The 'Balance' field is a calculated XLS field requiring \
                 the presence of the 'Debit' and 'Credit' fields !"))
 
         # report_name = objects[0]._description or objects[0]._name
