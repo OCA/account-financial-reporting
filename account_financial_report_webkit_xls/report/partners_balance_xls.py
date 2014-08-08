@@ -23,7 +23,7 @@
 import xlwt
 from openerp.addons.report_xls.report_xls import report_xls
 from openerp.addons.report_xls.utils import rowcol_to_cell
-from openerp.addons.account_financial_report_webkit.report.partner_balance\
+from openerp.addons.account_financial_report_webkit.report.partner_balance \
     import PartnerBalanceWebkit
 from openerp.tools.translate import _
 # import logging
@@ -186,7 +186,8 @@ class partners_balance_xls(report_xls):
                          _p.fiscalyear.name, None, cell_style_right)]
         if _p.comparison_mode in ('single', 'multiple'):
             for index in range(_p.nb_comparison):
-                if _p.comp_params[index]['comparison_filter'] == 'filter_year'\
+                if _p.comp_params[index][
+                        'comparison_filter'] == 'filter_year' \
                         and _p.comp_params[index].get('fiscalyear', False):
                     c_specs += [('balance_%s' % index, 1, 0, 'text',
                                  _('Balance %s') %
@@ -336,7 +337,7 @@ class partners_balance_xls(report_xls):
             # Name-Code/ref-Balance Year-Balance Year2-Balance C2-Balance C3"
             row_pos = self.print_account_header(ws, _p, _xs, xlwt, row_pos)
 
-            for (partner_code_name, partner_id, partner_ref, partner_name)\
+            for (partner_code_name, partner_id, partner_ref, partner_name) \
                     in partners_order:
                 partner = current_partner_amounts.get(partner_id, {})
                 # in single mode, we have to display all the partners even if

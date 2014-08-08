@@ -24,7 +24,7 @@ import xlwt
 from datetime import datetime
 from openerp.addons.report_xls.report_xls import report_xls
 from openerp.addons.report_xls.utils import rowcol_to_cell
-from openerp.addons.account_financial_report_webkit.report.general_ledger\
+from openerp.addons.account_financial_report_webkit.report.general_ledger \
     import GeneralLedgerWebkit
 from openerp.tools.translate import _
 # import logging
@@ -200,13 +200,13 @@ class general_ledger_xls(report_xls):
         cnt = 0
         for account in objects:
 
-            display_initial_balance = account.init_balance and\
+            display_initial_balance = account.init_balance and \
                 (account.init_balance.get(
                     'debit', 0.0) != 0.0 or account.
                     init_balance.get('credit', 0.0) != 0.0)
             display_ledger_lines = account.ledger_lines
 
-            if _p.display_account_raw(data) == 'all' or\
+            if _p.display_account_raw(data) == 'all' or \
                     (display_ledger_lines or display_initial_balance):
                 # TO DO : replace cumul amounts by xls formulas
                 cnt += 1

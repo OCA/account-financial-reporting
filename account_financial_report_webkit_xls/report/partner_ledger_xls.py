@@ -24,7 +24,7 @@ import xlwt
 from datetime import datetime
 from openerp.addons.report_xls.report_xls import report_xls
 from openerp.addons.report_xls.utils import rowcol_to_cell
-from openerp.addons.account_financial_report_webkit.report.partners_ledger\
+from openerp.addons.account_financial_report_webkit.report.partners_ledger \
     import PartnersLedgerWebkit
 from openerp.tools.translate import _
 # import logging
@@ -240,7 +240,7 @@ class partner_ledger_xls(report_xls):
                 row_pos += 1
                 row_start_account = row_pos
 
-                for partner_name, p_id, p_ref, p_name in\
+                for partner_name, p_id, p_ref, p_name in \
                         account.partners_order:
 
                     total_debit = 0.0
@@ -267,7 +267,7 @@ class partner_ledger_xls(report_xls):
                         p_id, {}).get('credit') or 0.0
 
                     init_line = False
-                    if _p.initial_balance_mode and\
+                    if _p.initial_balance_mode and \
                             (total_debit or total_credit):
                         init_line = True
 
