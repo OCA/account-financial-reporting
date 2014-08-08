@@ -69,8 +69,8 @@ class report_balancesheet_horizontal(
     def set_context(self, objects, data, ids, report_type=None):
         new_ids = ids
         if (data['model'] == 'ir.ui.menu'):
-            new_ids = 'chart_account_id' in data['form']\
-                and data['form']['chart_account_id']\
+            new_ids = 'chart_account_id' in data['form'] \
+                and data['form']['chart_account_id'] \
                 and [data['form']['chart_account_id'][0]] or []
             objects = self.pool.get('account.account').browse(
                 self.cr, self.uid, new_ids)
