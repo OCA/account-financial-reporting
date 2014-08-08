@@ -26,10 +26,9 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##############################################################################
 
-from osv import osv, fields
-import pooler
+from openerp.osv import osv, fields
 import time
-from tools.translate import _
+from openerp.tools.translate import _
 
 
 class account_financial_report(osv.osv):
@@ -38,45 +37,77 @@ class account_financial_report(osv.osv):
     _columns = {
         'name': fields.char('Name', size=128, required=True),
         'company_id': fields.many2one('res.company', 'Company', required=True),
-        'currency_id': fields.many2one(
-            'res.currency', 'Currency', help="Currency at which this report will be expressed. If not selected will be used the one set in the company"),
-        'inf_type': fields.selection(
-            [('BS', 'Balance Sheet'), ('IS', 'Income Statement')], 'Type', required=True),
-        'columns': fields.selection([('one', 'End. Balance'), ('two', 'Debit | Credit'), ('four', 'Initial | Debit | Credit | YTD'),
-                                    ('five', 'Initial | Debit | Credit | Period | YTD'), ('qtr', "4 QTR's | YTD"), ('thirteen', '12 Months | YTD')], 'Columns', required=True),
-        'display_account': fields.selection([('all', 'All Accounts'), ('bal', 'With Balance'),
-                                            ('mov', 'With movements'), ('bal_mov', 'With Balance / Movements')], 'Display accounts'),
-        'display_account_level': fields.integer(
-            'Up to level', help='Display accounts up to this level (0 to show all)'),
-        'account_ids': fields.many2many(
-            'account.account', 'afr_account_rel', 'afr_id', 'account_id', 'Root accounts', required=True),
-        'fiscalyear_id': fields.many2one(
-            'account.fiscalyear', 'Fiscal year', help='Fiscal Year for this report', required=True),
-        'period_ids': fields.many2many('account.period', 'afr_period_rel', 'afr_id',
-                                       'period_id', 'Periods', help='All periods in the fiscal year if empty'),
+        'currency_id': fields.many2one('res.currency', 'Currency',
+                                       help="Currency at which this report\
+                                       will be expressed. If not selected will\
+                                       be used the one set in the company"),
+        'inf_type': fields.selection([('BS', 'Balance Sheet'),
+                                      ('IS', 'Income Statement')],
+                                     'Type',
+                                     required=True),
+        'columns': fields.selection(
+            [('one', 'End. Balance'),
+             ('two', 'Debit | Credit'),
+             ('four', 'Initial | Debit | Credit | YTD'),
+             ('five', 'Initial | Debit | Credit | Period | YTD'),
+             ('qtr', "4 QTR's | YTD"),
+             ('thirteen', '12 Months | YTD')], 'Columns', required=True),
+        'display_account': fields.selection(
+            [('all', 'All Accounts'),
+             ('bal', 'With Balance'),
+             ('mov', 'With movements'),
+             ('bal_mov', 'With Balance / Movements')], 'Display accounts'),
+        'display_account_level': fields.integer('Up to level',
+                                                help='Display accounts up to\
+                                                this level (0 to show all)'),
+        'account_ids': fields.many2many('account.account', 'afr_account_rel',
+                                        'afr_id', 'account_id',
+                                        'Root accounts', required=True),
+        'fiscalyear_id': fields.many2one('account.fiscalyear', 'Fiscal year',
+                                         help='Fiscal Year for this report',
+                                         required=True),
+        'period_ids': fields.many2many(
+            'account.period', 'afr_period_rel', 'afr_id', 'period_id',
+            'Periods', help='All periods in the fiscal year if empty'),
 
-        'analytic_ledger': fields.boolean(
-            'Analytic Ledger', help="Allows to Generate an Analytic Ledger for accounts with moves. Available when Balance Sheet and 'Initial | Debit | Credit | YTD' are selected"),
-        'journal_ledger': fields.boolean(
-            'journal Ledger', help="Allows to Generate an journal Ledger for accounts with moves. Available when Balance Sheet and 'Initial | Debit | Credit | YTD' are selected"),
-        'partner_balance': fields.boolean('Partner Balance', help="Allows to "
-                                          "Generate a Partner Balance for accounts with moves. Available when "
-                                          "Balance Sheet and 'Initial | Debit | Credit | YTD' are selected"),
+        'analytic_ledger': fields.boolean('Analytic Ledger',
+                                          help="Allows to Generate an Analytic\
+                                          Ledger for accounts with moves.\
+                                          Available when Balance Sheet and\
+                                          'Initial | Debit | Credit | YTD'\
+                                          are selected"),
+        'journal_ledger': fields.boolean('journal Ledger',
+                                         help="Allows to Generate an journal\
+                                         Ledger for accounts with moves.\
+                                         Available when Balance Sheet and\
+                                         'Initial | Debit | Credit | YTD'\
+                                         are selected"),
+        'partner_balance': fields.boolean('Partner Balance',
+                                          help="Allows to Generate a Partner\
+                                          Balance for accounts with moves.\
+                                          Available when  Balance Sheet and\
+                                          'Initial | Debit | Credit | YTD'\
+                                          are selected"),
         'tot_check': fields.boolean(
-            'Summarize?', help='Checking will add a new line at the end of the Report which will Summarize Columns in Report'),
-        'lab_str':
-        fields.char(
-            'Description',
-            help='Description for the Summary',
-            size=128),
-        'target_move': fields.selection([('posted', 'All Posted Entries'),
-                                        ('all', 'All Entries'),
-                                         ], 'Entries to Include', required=True,
-                                        help='Print All Accounting Entries or just Posted Accounting Entries'),
+            'Summarize?',
+            help='Checking will add a new line at the end of the Report which\
+                  will Summarize Columns in Report'),
+        'lab_str': fields.char('Description',
+                               help='Description for the Summary',
+                               size=128),
+        'target_move': fields.selection(
+            [('posted', 'All Posted Entries'),
+             ('all', 'All Entries'), ],
+            'Entries to Include', required=True,
+            help='Print All Accounting Entries or just Posted\
+                  Accounting Entries'),
 
-        #~ Deprecated fields
-        'filter': fields.selection([('bydate', 'By Date'), ('byperiod', 'By Period'),
-                                   ('all', 'By Date and Period'), ('none', 'No Filter')], 'Date/Period Filter'),
+        # ~ Deprecated fields
+        'filter': fields.selection([('bydate', 'By Date'),
+                                    ('byperiod', 'By Period'),
+                                    ('all', 'By Date and Period'),
+                                    ('none', 'No Filter')],
+                                   'Date/Period Filter'),
         'date_to': fields.date('End date'),
         'date_from': fields.date('Start date'),
     }
@@ -144,8 +175,10 @@ class account_financial_report(osv.osv):
 
         if columns in ('qtr', 'thirteen'):
             p_obj = self.pool.get("account.period")
-            period_ids = p_obj.search(cr, uid, [('fiscalyear_id', '=', fiscalyear_id), (
-                'special', '=', False)], context=context)
+            period_ids = p_obj.search(cr, uid,
+                                      [('fiscalyear_id', '=', fiscalyear_id),
+                                       ('special', '=', False)],
+                                      context=context)
             res['value'].update({'period_ids': period_ids})
         else:
             res['value'].update({'period_ids': []})
