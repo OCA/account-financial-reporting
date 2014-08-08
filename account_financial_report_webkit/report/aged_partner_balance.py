@@ -35,14 +35,15 @@ def make_ranges(top, offset):
     :param offset: offset for ranges
 
     :returns: list of sorted ranges tuples in days
-              eg. [(-100000, 0), (0, offset), (offset, n*offset), ... (top, 100000)]
+              eg. [(-100000, 0), (0, offset),
+                   (offset, n*offset), ... (top, 100000)]
     """
     ranges = [(n, min(n + offset, top)) for n in xrange(0, top, offset)]
     ranges.insert(0, (-100000000000, 0))
     ranges.append((top, 100000000000))
     return ranges
 
-#list of overdue ranges
+# list of overdue ranges
 RANGES = make_ranges(120, 30)
 
 
@@ -53,20 +54,22 @@ def make_ranges_titles():
     titles.append(_('Older'))
     return titles
 
-#list of overdue ranges title
+# list of overdue ranges title
 RANGES_TITLES = make_ranges_titles()
-#list of payable journal types
+# list of payable journal types
 REC_PAY_TYPE = ('purchase', 'sale')
-#list of refund payable type
+# list of refund payable type
 REFUND_TYPE = ('purchase_refund', 'sale_refund')
 INV_TYPE = REC_PAY_TYPE + REFUND_TYPE
 
 
 class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
+
     """Compute Aged Partner Balance based on result of Open Invoices"""
 
     def __init__(self, cursor, uid, name, context=None):
-        """Constructor, refer to :class:`openerp.report.report_sxw.rml_parse`"""
+        """Constructor,
+           refer to :class:`openerp.report.report_sxw.rml_parse`"""
         super(AccountAgedTrialBalanceWebkit, self).__init__(cursor, uid, name,
                                                             context=context)
         self.pool = pooler.get_pool(self.cr.dbname)
@@ -95,7 +98,8 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
                 ('--header-left', header_report_name),
                 ('--header-spacing', '2'),
                 ('--footer-left', footer_date_time),
-                ('--footer-right', ' '.join((_('Page'), '[page]', _('of'), '[topage]'))),
+                ('--footer-right',
+                 ' '.join((_('Page'), '[page]', _('of'), '[topage]'))),
                 ('--footer-line',),
             ],
         })
@@ -141,9 +145,10 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
                                                      data)
                 if aged_lines:
                     acc.aged_lines[part_id] = aged_lines
-            acc.aged_totals = totals = self.compute_totals(acc.aged_lines.values())
+            acc.aged_totals = totals = self.compute_totals(
+                acc.aged_lines.values())
             acc.aged_percents = self.compute_percents(totals)
-        #Free some memory
+        # Free some memory
         del(acc.ledger_lines)
         return res
 
@@ -265,17 +270,18 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
 
         :returns: delta in days
         """
-        sale_lines = [x for x in ledger_lines if x['jtype'] in REC_PAY_TYPE and
-                      line['rec_id'] == x['rec_id']]
-        refund_lines = [x for x in ledger_lines if x['jtype'] in REFUND_TYPE and
-                        line['rec_id'] == x['rec_id']]
+        sale_lines = [x for x in ledger_lines if x['jtype'] in REC_PAY_TYPE
+                      and line['rec_id'] == x['rec_id']]
+        refund_lines = [x for x in ledger_lines if x['jtype'] in REFUND_TYPE
+                        and line['rec_id'] == x['rec_id']]
         if len(sale_lines) == 1:
             reference_line = sale_lines[0]
         elif len(refund_lines) == 1:
             reference_line = refund_lines[0]
         else:
             reference_line = line
-        key = 'date_maturity' if reference_line.get('date_maturity') else 'ldate'
+        key = 'date_maturity' if reference_line.get(
+            'date_maturity') else 'ldate'
         return self._compute_delay_from_key(key,
                                             reference_line,
                                             end_date)
@@ -398,6 +404,7 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
 HeaderFooterTextWebKitParser(
     'report.account.account_aged_trial_balance_webkit',
     'account.account',
-    'addons/account_financial_report_webkit/report/templates/aged_trial_webkit.mako',
+    'addons/account_financial_report_webkit/report/templates/\
+                                                    aged_trial_webkit.mako',
     parser=AccountAgedTrialBalanceWebkit,
 )
