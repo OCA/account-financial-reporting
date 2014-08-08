@@ -24,8 +24,8 @@
 import time
 from lxml import etree
 
-from osv import fields, orm
-from tools.translate import _
+from openerp.osv import fields, orm
+from openerp.tools.translate import _
 
 
 class account_common_report(orm.TransientModel):

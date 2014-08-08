@@ -24,7 +24,6 @@
 
 import time
 
-import openerp.pooler as pooler
 from openerp.report import report_sxw
 from openerp.addons.account_financial_report_horizontal.report import (
     account_profit_loss
@@ -97,14 +96,13 @@ class report_balancesheet_horizontal(
 
     def get_data(self, data):
         cr, uid = self.cr, self.uid
-        db_pool = pooler.get_pool(self.cr.dbname)
 
         # Getting Profit or Loss Balance from profit and Loss report
         self.obj_pl.get_data(data)
         self.res_bl = self.obj_pl.final_result()
 
-        account_pool = db_pool.get('account.account')
-        currency_pool = db_pool.get('res.currency')
+        account_pool = self.pool['account.account']
+        currency_pool = self.pool['res.currency']
 
         types = [
             'liability',
@@ -276,5 +274,3 @@ report_sxw.report_sxw(
     'account_balance_sheet.rml',
     parser=report_balancesheet_horizontal,
     header='internal')
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
