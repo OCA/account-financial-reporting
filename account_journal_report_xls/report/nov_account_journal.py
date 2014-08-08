@@ -85,7 +85,7 @@ class nov_journal_print(report_sxw.rml_parse):
 
     def _(self, src):
         lang = self.context.get('lang', 'en_US')
-        return translate(self.cr, _ir_translation_name, 'report', lang, src)\
+        return translate(self.cr, _ir_translation_name, 'report', lang, src) \
             or src
 
     def _title(self, object):
@@ -93,7 +93,7 @@ class nov_journal_print(report_sxw.rml_parse):
                  self._('Fiscal Year')) + ' ' + object[1].name, object[0].name)
 
     def _amount_title(self):
-        return self.display_currency and\
+        return self.display_currency and \
             (self._('Amount'), self._('Currency')) or (
                 self._('Debit'), self._('Credit'))
 
@@ -140,58 +140,58 @@ class nov_journal_print(report_sxw.rml_parse):
         # If performance is no issue, you can adapt the _report_xls_template in
         # an inherited module to add field value translations.
         self.cr.execute("SELECT l.move_id AS move_id, l.id AS aml_id, "
-                        "am.name AS move_name,"
-                        "coalesce(am.ref,'') AS move_ref,"
+                        "am.name AS move_name, "
+                        "coalesce(am.ref,'') AS move_ref, "
                         "am.date AS move_date, "
-                        "aa.id AS account_id, aa.code AS acc_code,"
+                        "aa.id AS account_id, aa.code AS acc_code, "
                         "aa.name AS acc_name, "
                         "aj.name AS journal, aj.code AS journal_code, "
-                        "coalesce(rp.name,'') AS partner_name,"
-                        "coalesce(rp.ref,'') AS partner_ref,"
+                        "coalesce(rp.name,'') AS partner_name, "
+                        "coalesce(rp.ref,'') AS partner_ref, "
                         "rp.id AS partner_id, "
                         "coalesce(l.name,'') AS aml_name, "
                         "l.date_maturity AS date_maturity, "
                         "coalesce(ap.code, ap.name) AS period, "
-                        "coalesce(atc.code,'') AS tax_code,"
-                        "atc.id AS tax_code_id,"
+                        "coalesce(atc.code,'') AS tax_code, "
+                        "atc.id AS tax_code_id, "
                         "coalesce(l.tax_amount,0.0) AS tax_amount, "
-                        "coalesce(l.debit,0.0) AS debit,"
+                        "coalesce(l.debit,0.0) AS debit, "
                         "coalesce(l.credit,0.0) AS credit, "
-                        "coalesce(amr.name,'') AS reconcile,"
+                        "coalesce(amr.name,'') AS reconcile, "
                         "coalesce(amrp.name,'') AS reconcile_partial, "
-                        "ana.name AS an_acc_name,"
+                        "ana.name AS an_acc_name, "
                         "coalesce(ana.code,'') AS an_acc_code, "
                         "coalesce(l.amount_currency,0.0) AS amount_currency, "
-                        "rc.id AS currency_id, rc.name AS currency_name,"
+                        "rc.id AS currency_id, rc.name AS currency_name, "
                         "rc.symbol AS currency_symbol, "
-                        "coalesce(ai.internal_number,'-') AS inv_number,"
-                        "coalesce(abs.name,'-') AS st_number,"
+                        "coalesce(ai.internal_number,'-') AS inv_number, "
+                        "coalesce(abs.name,'-') AS st_number, "
                         "coalesce(av.number,'-') AS voucher_number "
                         + select_extra +
                         "FROM account_move_line l "
                         "INNER JOIN account_move am ON l.move_id = am.id "
-                        "INNER JOIN account_account aa"
+                        "INNER JOIN account_account aa "
                         "ON l.account_id = aa.id "
-                        "INNER JOIN account_journal aj"
+                        "INNER JOIN account_journal aj "
                         "ON l.journal_id = aj.id "
                         "INNER JOIN account_period ap ON l.period_id = ap.id "
-                        "LEFT OUTER JOIN account_invoice ai"
+                        "LEFT OUTER JOIN account_invoice ai "
                         "ON ai.move_id = am.id "
-                        "LEFT OUTER JOIN account_voucher av"
+                        "LEFT OUTER JOIN account_voucher av "
                         "ON av.move_id = am.id "
-                        "LEFT OUTER JOIN account_bank_statement abs"
+                        "LEFT OUTER JOIN account_bank_statement abs "
                         "ON l.statement_id = abs.id "
-                        "LEFT OUTER JOIN res_partner rp"
+                        "LEFT OUTER JOIN res_partner rp "
                         "ON l.partner_id = rp.id "
-                        "LEFT OUTER JOIN account_tax_code atc"
+                        "LEFT OUTER JOIN account_tax_code atc "
                         "ON l.tax_code_id = atc.id  "
-                        "LEFT OUTER JOIN account_move_reconcile amr"
+                        "LEFT OUTER JOIN account_move_reconcile amr "
                         "ON l.reconcile_id = amr.id  "
-                        "LEFT OUTER JOIN account_move_reconcile amrp"
+                        "LEFT OUTER JOIN account_move_reconcile amrp "
                         "ON l.reconcile_partial_id = amrp.id  "
-                        "LEFT OUTER JOIN account_analytic_account ana"
+                        "LEFT OUTER JOIN account_analytic_account ana "
                         "ON l.analytic_account_id = ana.id  "
-                        "LEFT OUTER JOIN res_currency rc"
+                        "LEFT OUTER JOIN res_currency rc "
                         "ON l.currency_id = rc.id  "
                         + join_extra +
                         "WHERE l.period_id IN %s AND l.journal_id = %s "
@@ -300,7 +300,7 @@ class nov_journal_print(report_sxw.rml_parse):
         self.cr.execute(
             "SELECT distinct tax_code_id FROM account_move_line l "
             "INNER JOIN account_move am ON l.move_id = am.id "
-            "WHERE l.period_id in %s AND l.journal_id=%s"
+            "WHERE l.period_id in %s AND l.journal_id=%s "
             "AND l.tax_code_id IS NOT NULL AND am.state IN %s",
             (tuple(period_ids), journal_id, tuple(self.move_states)))
         ids = map(lambda x: x[0], self.cr.fetchall())

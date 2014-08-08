@@ -86,7 +86,7 @@ class account_journal_xls(report_xls):
                 'header': [1, 20, 'text', _render("_('Entry')")],
                 'lines':
                 [1, 0, 'text',
-                 _render("l['move_name'] != '/' and l['move_name']\
+                 _render("l['move_name'] != '/' and l['move_name'] \
                  or ('*'+str(l['move_id']))")],
                 'totals': [1, 0, 'text', None]},
             'move_date': {
@@ -373,11 +373,11 @@ class account_journal_xls(report_xls):
         self.debit_pos = 'debit' in wanted_list and wanted_list.index('debit')
         self.credit_pos = 'credit' in wanted_list and wanted_list.index(
             'credit')
-        if not (self.credit_pos and self.debit_pos) and 'balance'\
+        if not (self.credit_pos and self.debit_pos) and 'balance' \
                 in wanted_list:
             raise orm.except_orm(_('Customisation Error!'),
-                                 _("The 'Balance' field is a calculated XLS\
-                                    field requiring the presence of the\
+                                 _("The 'Balance' field is a calculated XLS \
+                                    field requiring the presence of the \
                                     'Debit' and 'Credit' fields !"))
 
         for o in objects:

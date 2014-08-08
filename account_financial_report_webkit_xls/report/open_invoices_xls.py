@@ -24,7 +24,7 @@ import xlwt
 from datetime import datetime
 from openerp.addons.report_xls.report_xls import report_xls
 from openerp.addons.report_xls.utils import rowcol_to_cell
-from openerp.addons.account_financial_report_webkit.report.open_invoices\
+from openerp.addons.account_financial_report_webkit.report.open_invoices \
     import PartnersOpenInvoicesWebkit
 from openerp.tools.translate import _
 # import logging
@@ -146,7 +146,7 @@ class open_invoices_xls(report_xls):
             _xs['borders_all'] + _xs['left'] + _xs['italic'],
             num_format_str=report_xls.date_format)
         # -------------------------------------------------------
-        global style_account_title, style_account_title_right,\
+        global style_account_title, style_account_title_right, \
             style_account_title_decimal
         cell_format = _xs['xls_title'] + _xs['bold'] + \
             _xs['fill'] + _xs['borders_all']
@@ -160,7 +160,7 @@ class open_invoices_xls(report_xls):
         cell_format = _xs['bold']
         style_partner_row = xlwt.easyxf(cell_format)
         # -------------------------------------------------------
-        global style_partner_cumul, style_partner_cumul_right,\
+        global style_partner_cumul, style_partner_cumul_right, \
             style_partner_cumul_center, style_partner_cumul_decimal
         cell_format = _xs['bold'] + _xs['fill'] + _xs['borders_all']
         style_partner_cumul = xlwt.easyxf(cell_format)
@@ -336,7 +336,7 @@ class open_invoices_xls(report_xls):
         # ${line.get('is_from_previous_periods') and
         # 'open_invoice_previous_line' or ''} ${line.get('is_clearance_line')
         # and 'clearance_line' or ''}">
-        if line.get('is_from_previous_periods')\
+        if line.get('is_from_previous_periods') \
                 or line.get('is_clearance_line'):
             style_line_default = style_default_italic
             style_line_right = style_right_italic
@@ -419,7 +419,7 @@ class open_invoices_xls(report_xls):
         # ${line.get('is_from_previous_periods') and
         # 'open_invoice_previous_line' or ''} ${line.get('is_clearance_line')
         # and 'clearance_line' or ''}">
-        if line.get('is_from_previous_periods') or\
+        if line.get('is_from_previous_periods') or \
                 line.get('is_clearance_line'):
             style_line_default = style_default_italic
             style_line_right = style_right_italic
@@ -633,10 +633,10 @@ class open_invoices_xls(report_xls):
         range_credit_stop = rowcol_to_cell(row_position - 1, start_col + 4)
 
         search_key = _('Cumulated Balance on Partner')
-        total_debit_account = 'SUMIF(' + reference_start + ':' +\
+        total_debit_account = 'SUMIF(' + reference_start + ':' + \
             reference_stop + ';"' + search_key + '";' + range_debit_start + \
             ':' + range_debit_stop + ')'
-        total_credit_account = 'SUMIF(' + reference_start + ':' +\
+        total_credit_account = 'SUMIF(' + reference_start + ':' + \
             reference_stop + ';"' + search_key + '";' + range_credit_start + \
             ':' + range_credit_stop + ')'
 
@@ -646,7 +646,7 @@ class open_invoices_xls(report_xls):
 
         bal_curr_start = rowcol_to_cell(row_start_account, start_col + 6)
         bal_curr_end = rowcol_to_cell(row_position - 1, start_col + 6)
-        cumul_balance_curr = 'SUMIF(' + reference_start + ':' +\
+        cumul_balance_curr = 'SUMIF(' + reference_start + ':' + \
             reference_stop + ';"' + search_key + '";' + \
             bal_curr_start + ':' + bal_curr_end + ')'
 
@@ -707,10 +707,10 @@ class open_invoices_xls(report_xls):
         range_credit_stop = rowcol_to_cell(row_position - 1, start_col + 4)
 
         search_key = _('Cumulated Balance on Partner')
-        total_debit_account = 'SUMIF(' + reference_start + ':' +\
+        total_debit_account = 'SUMIF(' + reference_start + ':' + \
             reference_stop + ';"' + search_key + '";' + range_debit_start + \
             ':' + range_debit_stop + ')'
-        total_credit_account = 'SUMIF(' + reference_start + ':' +\
+        total_credit_account = 'SUMIF(' + reference_start + ':' + \
             reference_stop + ';"' + search_key + '";' + range_credit_start + \
             ':' + range_credit_stop + ')'
 
@@ -720,7 +720,7 @@ class open_invoices_xls(report_xls):
 
         bal_curr_start = rowcol_to_cell(row_start_account, start_col + 6)
         bal_curr_end = rowcol_to_cell(row_position - 1, start_col + 6)
-        cumul_balance_curr = 'SUMIF(' + reference_start + ':' +\
+        cumul_balance_curr = 'SUMIF(' + reference_start + ':' + \
             reference_stop + ';"' + search_key + '";' + \
             bal_curr_start + ':' + bal_curr_end + ')'
 

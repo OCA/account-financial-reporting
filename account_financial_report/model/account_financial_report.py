@@ -38,9 +38,10 @@ class account_financial_report(osv.osv):
         'name': fields.char('Name', size=128, required=True),
         'company_id': fields.many2one('res.company', 'Company', required=True),
         'currency_id': fields.many2one('res.currency', 'Currency',
-                                       help="Currency at which this report\
-                                       will be expressed. If not selected will\
-                                       be used the one set in the company"),
+                                       help="Currency at which this report \
+                                       will be expressed. If not selected \
+                                       will be used the one set in the \
+                                       company"),
         'inf_type': fields.selection([('BS', 'Balance Sheet'),
                                       ('IS', 'Income Statement')],
                                      'Type',
@@ -58,7 +59,7 @@ class account_financial_report(osv.osv):
              ('mov', 'With movements'),
              ('bal_mov', 'With Balance / Movements')], 'Display accounts'),
         'display_account_level': fields.integer('Up to level',
-                                                help='Display accounts up to\
+                                                help='Display accounts up to \
                                                 this level (0 to show all)'),
         'account_ids': fields.many2many('account.account', 'afr_account_rel',
                                         'afr_id', 'account_id',
@@ -70,27 +71,24 @@ class account_financial_report(osv.osv):
             'account.period', 'afr_period_rel', 'afr_id', 'period_id',
             'Periods', help='All periods in the fiscal year if empty'),
 
-        'analytic_ledger': fields.boolean('Analytic Ledger',
-                                          help="Allows to Generate an Analytic\
-                                          Ledger for accounts with moves.\
-                                          Available when Balance Sheet and\
-                                          'Initial | Debit | Credit | YTD'\
-                                          are selected"),
-        'journal_ledger': fields.boolean('journal Ledger',
-                                         help="Allows to Generate an journal\
-                                         Ledger for accounts with moves.\
-                                         Available when Balance Sheet and\
-                                         'Initial | Debit | Credit | YTD'\
-                                         are selected"),
-        'partner_balance': fields.boolean('Partner Balance',
-                                          help="Allows to Generate a Partner\
-                                          Balance for accounts with moves.\
-                                          Available when  Balance Sheet and\
-                                          'Initial | Debit | Credit | YTD'\
-                                          are selected"),
+        'analytic_ledger': fields.boolean(
+            'Analytic Ledger',
+            help="Allows to Generate an Analytic Ledger for accounts with \
+            moves. Available when Balance Sheet and 'Initial | Debit \
+            | Credit | YTD' are selected"),
+        'journal_ledger': fields.boolean(
+            'journal Ledger',
+            help="Allows to Generate an journal Ledger for accounts with \
+            moves. Available when Balance Sheet and 'Initial | Debit | \
+            Credit | YTD' are selected"),
+        'partner_balance': fields.boolean(
+            'Partner Balance',
+            help="Allows to Generate a Partner Balance for accounts with \
+            moves. Available when  Balance Sheet and 'Initial | Debit | \
+            Credit | YTD' are selected"),
         'tot_check': fields.boolean(
             'Summarize?',
-            help='Checking will add a new line at the end of the Report which\
+            help='Checking will add a new line at the end of the Report which \
                   will Summarize Columns in Report'),
         'lab_str': fields.char('Description',
                                help='Description for the Summary',
@@ -99,7 +97,7 @@ class account_financial_report(osv.osv):
             [('posted', 'All Posted Entries'),
              ('all', 'All Entries'), ],
             'Entries to Include', required=True,
-            help='Print All Accounting Entries or just Posted\
+            help='Print All Accounting Entries or just Posted \
                   Accounting Entries'),
 
         # ~ Deprecated fields

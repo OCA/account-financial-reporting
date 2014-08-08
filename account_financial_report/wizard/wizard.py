@@ -39,10 +39,10 @@ class wizard_report(osv.osv_memory):
             'afr', 'Custom Report',
             help='If you have already set a Custom Report, Select it Here.'),
         'company_id': fields.many2one('res.company', 'Company', required=True),
-        'currency_id': fields.many2one('res.currency', 'Currency',
-                                       help="Currency at which this report\
-                                       will be expressed. If not selected will\
-                                       be used the one set in the company"),
+        'currency_id': fields.many2one(
+            'res.currency', 'Currency',
+            help="Currency at which this report will be expressed. If not \
+            selected will be used the one set in the company"),
         'inf_type': fields.selection([('BS', 'Balance Sheet'),
                                       ('IS', 'Income Statement')],
                                      'Type',
@@ -81,22 +81,22 @@ class wizard_report(osv.osv_memory):
 
         'analytic_ledger': fields.boolean(
             'Analytic Ledger',
-            help="Allows to Generate an Analytic Ledger for accounts with\
-            moves. Available when Balance Sheet and 'Initial | Debit | Credit\
+            help="Allows to Generate an Analytic Ledger for accounts with \
+            moves. Available when Balance Sheet and 'Initial | Debit | Credit \
             | YTD' are selected"),
         'journal_ledger': fields.boolean(
             'Journal Ledger',
-            help="Allows to Generate an Journal Ledger for accounts with\
-            moves. Available when Balance Sheet and 'Initial | Debit | Credit\
+            help="Allows to Generate an Journal Ledger for accounts with \
+            moves. Available when Balance Sheet and 'Initial | Debit | Credit \
             | YTD' are selected"),
         'partner_balance': fields.boolean(
             'Partner Balance',
-            help="Allows to Generate a Partner Balance for accounts with\
-            moves. Available when Balance Sheet and 'Initial | Debit | Credit\
+            help="Allows to Generate a Partner Balance for accounts with \
+            moves. Available when Balance Sheet and 'Initial | Debit | Credit \
             | YTD' are selected"),
         'tot_check': fields.boolean('Summarize?',
-                                    help='Checking will add a new line at the\
-                                    end of the Report which will Summarize\
+                                    help='Checking will add a new line at the \
+                                    end of the Report which will Summarize \
                                     Columns in Report'),
         'lab_str': fields.char('Description',
                                help='Description for the Summary', size=128),
@@ -106,7 +106,7 @@ class wizard_report(osv.osv_memory):
              ('all', 'All Entries'),
              ], 'Entries to Include',
             required=True,
-            help='Print All Accounting Entries or just Posted Accounting\
+            help='Print All Accounting Entries or just Posted Accounting \
             Entries'),
         # ~ Deprecated fields
         'filter': fields.selection([('bydate', 'By Date'),
@@ -338,7 +338,7 @@ class wizard_report(osv.osv_memory):
             cr.execute(sqlmm)
             minmax = cr.dictfetchall()
             if minmax:
-                if (data['form']['date_to'] < minmax[0]['inicio'])\
+                if (data['form']['date_to'] < minmax[0]['inicio']) \
                         or (data['form']['date_from'] > minmax[0]['fin']):
                     raise osv.except_osv(_('Error !'), _(
                         'La interseccion entre el periodo y fecha es vacio'))
@@ -348,13 +348,13 @@ class wizard_report(osv.osv_memory):
         if data['form']['columns'] == 'two':
             name = 'afr.2cols'
         if data['form']['columns'] == 'four':
-            if data['form']['analytic_ledger']\
+            if data['form']['analytic_ledger'] \
                     and data['form']['inf_type'] == 'BS':
                 name = 'afr.analytic.ledger'
-            elif data['form']['journal_ledger']\
+            elif data['form']['journal_ledger'] \
                     and data['form']['inf_type'] == 'BS':
                 name = 'afr.journal.ledger'
-            elif data['form']['partner_balance']\
+            elif data['form']['partner_balance'] \
                     and data['form']['inf_type'] == 'BS':
                 name = 'afr.partner.balance'
             else:

@@ -23,7 +23,7 @@
 import xlwt
 from openerp.addons.report_xls.report_xls import report_xls
 from openerp.addons.report_xls.utils import rowcol_to_cell
-from openerp.addons.account_financial_report_webkit.report.trial_balance\
+from openerp.addons.account_financial_report_webkit.report.trial_balance \
     import TrialBalanceWebkit
 from openerp.tools.translate import _
 # import logging
@@ -190,7 +190,8 @@ class trial_balance_xls(report_xls):
                          _p.fiscalyear.name, None, cell_style_right)]
         if _p.comparison_mode in ('single', 'multiple'):
             for index in range(_p.nb_comparison):
-                if _p.comp_params[index]['comparison_filter'] == 'filter_year'\
+                if _p.comp_params[index][
+                    'comparison_filter'] == 'filter_year' \
                         and _p.comp_params[index].get('fiscalyear', False):
                     c_specs += [('balance_%s' % index, 1, 0, 'text',
                                  _('Balance %s') %
