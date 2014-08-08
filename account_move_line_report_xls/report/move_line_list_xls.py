@@ -136,7 +136,9 @@ class move_line_xls(report_xls):
                 [1, 0,
                  _render("line.date_maturity.val and 'date' or 'text'"),
                  _render(
-                     "line.date_maturity.val and datetime.strptime(line.date_maturity,'%Y-%m-%d') or None"),
+                     "line.date_maturity.val\
+                     and datetime.strptime(line.date_maturity,'%Y-%m-%d')\
+                     or None"),
                     None, self.aml_cell_style_date],
                 'totals': [1, 0, 'text', None]},
             'debit': {
@@ -296,9 +298,10 @@ class move_line_xls(report_xls):
         if not (credit_pos and debit_pos) and 'balance' in wanted_list:
             raise orm.except_orm(
                 _('Customisation Error!'),
-                _("The 'Balance' field is a calculated XLS field requiring the presence of the 'Debit' and 'Credit' fields !"))
+                _("The 'Balance' field is a calculated XLS field requiring\
+                the presence of the 'Debit' and 'Credit' fields !"))
 
-        #report_name = objects[0]._description or objects[0]._name
+        # report_name = objects[0]._description or objects[0]._name
         report_name = _("Journal Items")
         ws = wb.add_sheet(report_name[:31])
         ws.panes_frozen = True
@@ -364,5 +367,3 @@ class move_line_xls(report_xls):
 move_line_xls('report.move.line.list.xls',
               'account.move.line',
               parser=move_line_xls_parser)
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
