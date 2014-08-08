@@ -22,7 +22,6 @@
 ##############################################################################
 
 import time
-import openerp.pooler as pooler
 from openerp.report import report_sxw
 from common_report_header import common_report_header
 from openerp.tools.translate import _
@@ -101,10 +100,9 @@ class report_pl_account_horizontal(report_sxw.rml_parse, common_report_header):
             }
 
         cr, uid = self.cr, self.uid
-        db_pool = pooler.get_pool(self.cr.dbname)
 
-        account_pool = db_pool.get('account.account')
-        currency_pool = db_pool.get('res.currency')
+        account_pool = self.pool['account.account']
+        currency_pool = self.pool['res.currency']
 
         types = [
             'expense',
@@ -247,5 +245,3 @@ report_sxw.report_sxw(
     'addons/account_financial_report_horizontal/report/'
     'account_profit_loss.rml',
     parser=report_pl_account_horizontal, header='internal')
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

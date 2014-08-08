@@ -27,8 +27,8 @@ from openerp.addons.report_xls.utils import rowcol_to_cell
 from openerp.addons.account_financial_report_webkit.report.general_ledger\
     import GeneralLedgerWebkit
 from openerp.tools.translate import _
-#import logging
-#_logger = logging.getLogger(__name__)
+# import logging
+# _logger = logging.getLogger(__name__)
 
 _column_sizes = [
     ('date', 12),
@@ -146,7 +146,8 @@ class general_ledger_xls(report_xls):
         c_hdr_cell_style = xlwt.easyxf(cell_format)
         c_hdr_cell_style_right = xlwt.easyxf(cell_format + _xs['right'])
         c_hdr_cell_style_center = xlwt.easyxf(cell_format + _xs['center'])
-        c_hdr_cell_style_decimal = xlwt.easyxf(cell_format + _xs['right'],
+        c_hdr_cell_style_decimal = xlwt.easyxf(
+            cell_format + _xs['right'],
             num_format_str=report_xls.decimal_format)
 
         # Column Initial Balance Row
@@ -350,4 +351,3 @@ class general_ledger_xls(report_xls):
 general_ledger_xls('report.account.account_report_general_ledger_xls',
                    'account.account',
                    parser=GeneralLedgerWebkit)
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

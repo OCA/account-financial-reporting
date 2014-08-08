@@ -27,8 +27,8 @@ from openerp.addons.report_xls.utils import rowcol_to_cell
 from openerp.addons.account_financial_report_webkit.report.partners_ledger\
     import PartnersLedgerWebkit
 from openerp.tools.translate import _
-#import logging
-#_logger = logging.getLogger(__name__)
+# import logging
+# _logger = logging.getLogger(__name__)
 
 _column_sizes = [
     ('date', 12),
@@ -331,7 +331,7 @@ class partner_ledger_xls(report_xls):
                         debit_cell = rowcol_to_cell(row_pos, 7)
                         credit_cell = rowcol_to_cell(row_pos, 8)
                         cumbal_formula += debit_cell + '-' + credit_cell
-                        ################## Print row ledger line data #########
+                        # Print row ledger line data #
 
                         if line.get('ldate'):
                             c_specs = [
@@ -376,7 +376,7 @@ class partner_ledger_xls(report_xls):
                             ws, row_pos, row_data, ll_cell_style)
                     # end for line
 
-                    ################## Print row Cumulated Balance by partner #
+                    # Print row Cumulated Balance by partner #
                     debit_partner_start = rowcol_to_cell(row_start_partner, 7)
                     debit_partner_end = rowcol_to_cell(row_pos - 1, 7)
                     debit_partner_total = 'SUM(' + debit_partner_start + \
@@ -427,7 +427,7 @@ class partner_ledger_xls(report_xls):
                     account_balance_cumul += cumul_balance
                     account_balance_cumul_curr += cumul_balance_curr
 
-                ################## Print row Cumulated Balance by account #####
+                #  Print row Cumulated Balance by account #
                 c_specs = [
                     ('acc_title', 5, 0, 'text', ' - '.
                      join([account.code, account.name])), ]
@@ -462,4 +462,3 @@ class partner_ledger_xls(report_xls):
 partner_ledger_xls('report.account.account_report_partner_ledger_xls',
                    'account.account',
                    parser=PartnersLedgerWebkit)
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

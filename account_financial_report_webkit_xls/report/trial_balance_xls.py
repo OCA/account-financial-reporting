@@ -26,8 +26,8 @@ from openerp.addons.report_xls.utils import rowcol_to_cell
 from openerp.addons.account_financial_report_webkit.report.trial_balance\
     import TrialBalanceWebkit
 from openerp.tools.translate import _
-#import logging
-#_logger = logging.getLogger(__name__)
+# import logging
+# _logger = logging.getLogger(__name__)
 
 
 class trial_balance_xls(report_xls):
@@ -325,5 +325,3 @@ class trial_balance_xls(report_xls):
 trial_balance_xls('report.account.account_report_trial_balance_xls',
                   'account.account',
                   parser=TrialBalanceWebkit)
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

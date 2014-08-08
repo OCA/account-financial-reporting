@@ -21,8 +21,8 @@
 ##############################################################################
 
 from openerp.osv import orm
-#import logging
-#_logger = logging.getLogger(__name__)
+# import logging
+# _logger = logging.getLogger(__name__)
 
 
 class general_ledger_webkit_wizard(orm.TransientModel):
