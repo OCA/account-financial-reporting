@@ -6,11 +6,16 @@
             auto="False"
             id="partner_aged_statement_report"
             model="res.partner"
-            name="account.aged_trial_balance_partner"
-            file="account/report/account_aged_partner_balance.rml"
             string="Partner Aged Statement"
-            report_type="pdf"
+            name="webkit.partner_aged_statement_report"
+            file="account_partner_aged_statement_webkit/report/partner_aged_statement.mako"
+            report_type="webkit"
+            webkit_header="base_headers_webkit.base_reports_portrait_header"
             />
+
+<!--            name="account.aged_trial_balance_partner"
+            file="account/report/account_aged_partner_balance.rml"
+            report_type="pdf"-->
 
     </data>
 </openerp>

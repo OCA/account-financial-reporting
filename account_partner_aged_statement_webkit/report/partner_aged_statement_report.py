@@ -1,6 +1,9 @@
 # -*- encoding: utf-8 -*-
-
-# ##############################################################################
+###############################################################################
+#
+#    OpenERP, Open Source Management Solution
+#    This module copyright (C) 2010 - 2014 Savoir-faire Linux
+#    (<http://www.savoirfairelinux.com>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -16,7 +19,6 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ###############################################################################
-
 
 import time
 
@@ -40,16 +42,80 @@ class PartnerAgedTrialReport(aged_trial_report):
         self._company = current_user.company_id
         if self.localcontext.get("active_model", "") == "res.partner":
             self._partner = self.localcontext["active_id"]
+        self.localcontext.update({
+            'message': self._message,
+            'getLines30': self._lines_get30,
+            'getLines3060': self._lines_get_30_60,
+            'getLines60': self._lines_get60,
+        })
+
+    def _lines_get30(self, obj):
+        today = datetime.now()
+        stop = today - relativedelta(days=30)
+
+        moveline_obj = pooler.get_pool(self.cr.dbname)['account.move.line']
+        movelines = moveline_obj.search(
+            self.cr, self.uid,
+            [('partner_id', '=', obj.id),
+             ('account_id.type', 'in', ['receivable', 'payable']),
+             ('state', '<>', 'draft'), ('reconcile_id', '=', False),
+             '|',
+             '&', ('date_maturity', '<=', today), ('date_maturity', '>', stop),
+             '&', ('date_maturity', '=', False),
+             '&', ('date', '<=', today), ('date', '>', stop)],
+            context=self.localcontext)
+        movelines = moveline_obj.browse(self.cr, self.uid, movelines)
+        return movelines
+
+    def _lines_get_30_60(self, obj):
+        start = datetime.now() - relativedelta(days=30)
+        stop = start - relativedelta(days=30)
+
+        moveline_obj = pooler.get_pool(self.cr.dbname)['account.move.line']
+        movelines = moveline_obj.search(
+            self.cr, self.uid,
+            [('partner_id', '=', obj.id),
+             ('account_id.type', 'in', ['receivable', 'payable']),
+             ('state', '<>', 'draft'), ('reconcile_id', '=', False),
+             '|',
+             '&', ('date_maturity', '<=', start), ('date_maturity', '>', stop),
+             '&', ('date_maturity', '=', False),
+             '&', ('date', '<=', start), ('date', '>', stop)],
+            context=self.localcontext)
+        movelines = moveline_obj.browse(self.cr, self.uid, movelines)
+        return movelines
+
+    def _lines_get60(self, obj):
+        start = datetime.now() - relativedelta(days=60)
+
+        moveline_obj = pooler.get_pool(self.cr.dbname)['account.move.line']
+        movelines = moveline_obj.search(
+            self.cr, self.uid,
+            [('partner_id', '=', obj.id),
+             ('account_id.type', 'in', ['receivable', 'payable']),
+             ('state', '<>', 'draft'), ('reconcile_id', '=', False),
+             '|', ('date_maturity', '<=', start),
+             ('date_maturity', '=', False), ('date', '<=', start)],
+            context=self.localcontext)
+        movelines = moveline_obj.browse(self.cr, self.uid, movelines)
+        return movelines
+
+    def _message(self, obj, company):
+        company_pool = pooler.get_pool(self.cr.dbname)['res.company']
+        message = company_pool.browse(
+            self.cr, self.uid, company.id, {'lang': obj.lang}).overdue_msg
+        return message.split('\n')
 
     def _get_fiscalyear(self, data):
-        now = data['form']['date_from']
+        now = data['fInvoicesorm']['date_from']
         domain = [
             ('company_id', '=', self._company.id),
             ('date_start', '<', now),
             ('date_stop', '>', now),
         ]
-        fiscalyears_obj = pooler.get_pool(self.cr.dbname).get('account.fiscalyear')
-        fiscalyears = fiscalyears_obj.search(self.cr, self.uid, domain, limit=1)
+        fiscalyears_obj = pooler.get_pool(self.cr.dbname)['account.fiscalyear']
+        fiscalyears = fiscalyears_obj.search(
+            self.cr, self.uid, domain, limit=1, context=self.localcontext)
         if fiscalyears:
             return fiscalyears_obj.browse(
                 self.cr, self.uid, fiscalyears[0], context=self.localcontext
@@ -62,12 +128,11 @@ class PartnerAgedTrialReport(aged_trial_report):
         accounts = account_obj.search(
             self.cr, self.uid,
             [('parent_id', '=', False), ('company_id', '=', self._company.id)],
-            limit=1,
-        )
+            limit=1, context=self.localcontext)
         if accounts:
             return account_obj.browse(
-                self.cr, self.uid, accounts[0], context=self.localcontext
-            ).name
+                self.cr, self.uid, accounts[0],
+                context=self.localcontext).name
         else:
             return ''
 
@@ -77,7 +142,10 @@ class PartnerAgedTrialReport(aged_trial_report):
     def _get_journal(self, data):
         codes = []
         if data.get('form', False) and data['form'].get('journal_ids', False):
-            self.cr.execute('select code from account_journal where id IN %s', (tuple(data['form']['journal_ids']),))
+            self.cr.execute(
+                'select code from account_journal where id IN %s',
+                (tuple(data['form']['journal_ids']),)
+            )
             codes = [x for x, in self.cr.fetchall()]
         return codes
 
@@ -110,13 +178,18 @@ class PartnerAgedTrialReport(aged_trial_report):
         res = super(PartnerAgedTrialReport, self).set_context(
             objects, data, ids, report_type=report_type)
         if self._partner is not None:
-            self.query = "{0} AND l.partner_id = {1}".format(self.query, self._partner)
+            self.query = "{0} AND l.partner_id = {1}".format(
+                self.query,
+                self._partner)
 
         return res
 
 report_sxw.report_sxw(
-    'report.account.aged_trial_balance_partner',
+    'report.webkit.partner_aged_statement_report',
     'res.partner',
-    'addons/account/report/account_aged_partner_balance.rml',
+    ('addons/'
+     'account_partner_aged_statement_webkit/'
+     'report/'
+     'partner_aged_statement.mako'),
     parser=PartnerAgedTrialReport,
-    header="internal landscape")
+)
