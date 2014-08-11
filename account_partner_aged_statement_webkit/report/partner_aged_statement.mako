@@ -25,14 +25,10 @@
             .classif_title {
                 text-align:right;
             }
-<%doc>
-            .classif{
-              width: ${700/len(ranges)}px;
-            }
-            </%doc>
             .total{
                font-weight:bold;
             }
+
             ${css}
         </style>
     </head>
@@ -43,122 +39,144 @@
         return text.replace('-', '&#8209;')
     %>
     <body>
-        <%setLang(user.lang)%>
-
-        <div class="act_as_table data_table">
-            <div class="act_as_row labels">
-                <div class="act_as_cell">${_('Chart of Account')}</div>
-                <div class="act_as_cell">${_('Fiscal Year')}</div>
-                <%doc>
-                <div class="act_as_cell">
-                    %if filter_form(data) == 'filter_date':
-                        ${_('Dates Filter')}
-                    %else:
-                        ${_('Periods Filter')}
-                    %endif
-                </div>
-                </%doc>
-
-                <div class="act_as_cell">${_('Clearance Date')}</div>
-                <div class="act_as_cell">${_('Accounts Filter')}</div>
-                <div class="act_as_cell">${_('Target Moves')}</div>
-
-            </div>
-
-            <%doc>
-            <div class="act_as_row">
-                <div class="act_as_cell">${ chart_account.name }</div>
-                <div class="act_as_cell">${ fiscalyear.name if fiscalyear else '-' }</div>
-                <div class="act_as_cell">
-                    ${_('From:')}
-                    %if filter_form(data) == 'filter_date':
-                        ${formatLang(start_date, date=True) if start_date else u'' }
-                    %else:
-                        ${start_period.name if start_period else u''}
-                    %endif
-                    ${_('To:')}
-                    %if filter_form(data) == 'filter_date':
-                        ${ formatLang(stop_date, date=True) if stop_date else u'' }
-                    %else:
-                        ${stop_period.name if stop_period else u'' }
-                    %endif
-                </div>
-                <div class="act_as_cell">${ formatLang(date_until, date=True) }</div>
-                <div class="act_as_cell">
-                    %if partner_ids:
-                        ${_('Custom Filter')}
-                    %else:
-                        ${ display_partner_account(data) }
-                    %endif
-                </div>
-                <div class="act_as_cell">${ display_target_move(data) }</div>
-            </div>
-        </div>
-        %for acc in objects:
-          %if acc.aged_lines:
-          <div class="account_title bg" style="width: 1080px; margin-top: 20px; font-size: 12px;">${acc.code} - ${acc.name}</div>
-
-
-
-                <div class="act_as_table list_table" style="margin-top: 5px;">
-                  <div class="act_as_thead">
-                    <div class="act_as_row labels">
-                      ## partner
-                      <div class="act_as_cell first_column" style="width: 60px;">${_('Partner')}</div>
-                      ## code
-                      <div class="act_as_cell" style="width: 70px;">${_('code')}</div>
-                      ## balance
-                      <div class="act_as_cell classif_title" style="width: 70px;">${_('balance')}</div>
-                      ## Classifications
-                      %for title in ranges_titles:
-                        <div class="act_as_cell classif classif_title">${title}</div>
-                      %endfor
-                    </div>
-                  </div>
-                  <div class="act_as_tbody">
-                    %for partner_name, p_id, p_ref, p_name in acc.partners_order:
-                       %if acc.aged_lines.get(p_id):
-                       <div class="act_as_row lines">
-                         <%line = acc.aged_lines[p_id]%>
-                         <%percents = acc.aged_percents%>
-                         <%totals = acc.aged_totals%>
-                           <div class="act_as_cell first_column">${partner_name}</div>
-                           <div class="act_as_cell">${p_ref or ''}</div>
-
-                           <div class="act_as_cell amount">${formatLang(line.get('balance') or 0.0) | amount}</div>
-                            %for classif in ranges:
-                              <div class="act_as_cell classif amount">
-                                ${formatLang(line['aged_lines'][classif] or 0.0) | amount}
-                              </div>
-                            %endfor
-                       </div>
-                       %endif
-                    %endfor
-                    <div class="act_as_row labels">
-                      <div class="act_as_cell total">${_('Total')}</div>
-                      <div class="act_as_cell"></div>
-                      <div class="act_as_cell amount classif total">${formatLang(totals['balance']) | amount}</div>
-                      %for classif in ranges:
-                        <div class="act_as_cell amount classif total">${formatLang(totals[classif]) | amount}</div>
-                      %endfor
-                    </div>
-
-                    <div class="act_as_row">
-                      <div class="act_as_cell"><b>${_('Percents')}</b></div>
-                      <div class="act_as_cell"></div>
-                      <div class="act_as_cell"></div>
-                      %for classif in ranges:
-                        <div class="act_as_cell amount percent_line  classif">${formatLang(percents[classif]) | amount}%</div>
-                      %endfor
-                    </div>
-                  </div>
-                  <br/>
-
-                 %endif
-              %endfor
-            </%doc>
-
-
-        </div>
+    %for partner in objects:
+        <%setLang(partner.lang)%>
+        <br/>
+        <br/>
+        <%from datetime import date %>
+        ${_('Date')}: ${formatLang(str(date.today()), date=True)}
+        <br>
+        ${_('Partner')}: ${partner.name}
+        <br>
+        ${_('Subject')}: <b>${_('Overdue Statement')}</b>
+        <br/>
+        <br/>
+        %for message_line in message(partner, company):
+            <p>
+            ${message_line}
+            </p>
+        %endfor
+        <br>
+        ${user.name}
+        <br>
+        <br>
+        %if (partner.credit + partner.debit == 0) :
+            <div class="title">${_('Nothing due for this partner')}</div>
+        %else:
+            <div class="title">${_('Aged Balance')}</div>
+            <br>
+        %for l in get_lines(data['form']):
+            %if l:
+                <table class=basic_table style="width: 100%;">
+                    <tr>
+                        <th>${_('Not Due')}</th>
+                        <th>${_('0-30')}</th>
+                        <th>${_('30-60')}</th>
+                        <th>${_('60-90')}</th>
+                        <th>${_('90-120')}</th>
+                        <th>${_('+120')}</th>
+                        <th>${_('Total')}</th>
+                    </tr>
+                    <tr>
+                        <td>${ formatLang(l['direction'], currency_obj=company.currency_id) }</td>
+                        <td>${ formatLang(l['4'], currency_obj=company.currency_id) }</td>
+                        <td>${ formatLang(l['3'], currency_obj=company.currency_id) }</td>
+                        <td>${ formatLang(l['2'], currency_obj=company.currency_id) }</td>
+                        <td>${ formatLang(l['1'], currency_obj=company.currency_id) }</td>
+                        <td>${ formatLang(l['0'], currency_obj=company.currency_id) }</td>
+                        <td>${ formatLang(l['total'], currency_obj=company.currency_id) }</td>
+                    </tr>
+                </table>
+            %endif  ## if l
+        %endfor  ## for l in get_lines(data['form'])
+        <br>
+        <br>
+        <div class="title">${_('List of Due Invoices')}</div>
+        <br>
+        %if getLines30(partner):
+            <div class="total">${_('0-30')}</div>
+            <table class=basic_table style="width: 100%;">
+                <tr>
+                    <th>${_('Date')}</th>
+                    <th>${_('Description')}</th>
+                    <th>${_('Reference')}</th>
+                    <th>${_('Due date')}</th>
+                    <th>${_('Amount')}</th>
+                    <th>${_('Paid')}</th>
+                    <th>${_('Total')}<br/>(${company.currency_id.name})</th>
+                    <th>${_('Total')}<br/>(fgn. cur.)</th>
+                </tr>
+                %for line in getLines30(partner):
+                <tr>
+                    <td>${ formatLang(line.date, date=True) }</td>
+                    <td>${ line.name }</td>
+                    <td>${ line.ref }</td>
+                    <td>${ line.date_maturity and formatLang(line.date_maturity,date=True) or '' }</td>
+                    <td>${ formatLang(line.debit) or 0 }</td>
+                    <td>${ formatLang(line.credit) or 0 }</td>
+                    <td>${ formatLang(line.debit - line.credit, currency_obj = company.currency_id)  }</td>
+                    <td>${ line.amount_currency and formatLang(line.amount_currency, currency_obj = line.currency_id) or '' }</td>
+                </tr>
+                %endfor  ## for line in getLines30(partner)
+            </table>
+        %endif  ## if getLines30(partner)
+        <br/>
+        %if getLines3060(partner):
+            <div class="total">${_('30-60')}</div>
+            <table class=basic_table style="width: 100%;">
+                <tr>
+                    <th>${_('Date')}</th>
+                    <th>${_('Description')}</th>
+                    <th>${_('Reference')}</th>
+                    <th>${_('Due date')}</th>
+                    <th>${_('Amount')}</th>
+                    <th>${_('Paid')}</th>
+                    <th>${_('Total')}<br/>(${company.currency_id.name})</th>
+                    <th>${_('Total')}<br/>(fgn. cur.)</th>
+                </tr>
+                %for line in getLines3060(partner):
+                <tr>
+                    <td>${ formatLang(line.date, date=True) }</td>
+                    <td>${ line.name }</td>
+                    <td>${ line.ref }</td>
+                    <td>${ line.date_maturity and formatLang(line.date_maturity,date=True) or '' }</td>
+                    <td>${ formatLang(line.debit) or 0 }</td>
+                    <td>${ formatLang(line.credit) or 0 }</td>
+                    <td>${ formatLang(line.debit - line.credit, currency_obj = company.currency_id)  }</td>
+                    <td>${ line.amount_currency and formatLang(line.amount_currency, currency_obj = line.currency_id) or '' }</td>
+                </tr>
+                %endfor  ## for line in getLines3060(partner)
+            </table>
+        %endif  ## if getLines3060(partner)
+        <br/>
+        %if getLines60(partner):
+            <div class="total">${_('+60')}</div>
+            <table class=basic_table style="width: 100%;">
+                <tr>
+                    <th>${_('Date')}</th>
+                    <th>${_('Description')}</th>
+                    <th>${_('Reference')}</th>
+                    <th>${_('Due date')}</th>
+                    <th>${_('Amount')}</th>
+                    <th>${_('Paid')}</th>
+                    <th>${_('Total')}<br/>(${company.currency_id.name})</th>
+                    <th>${_('Total')}<br/>(fgn. cur.)</th>
+                </tr>
+                %for line in getLines60(partner):
+                <tr>
+                    <td>${ formatLang(line.date, date=True) }</td>
+                    <td>${ line.name }</td>
+                    <td>${ line.ref }</td>
+                    <td>${ line.date_maturity and formatLang(line.date_maturity,date=True) or '' }</td>
+                    <td>${ formatLang(line.debit) or 0 }</td>
+                    <td>${ formatLang(line.credit) or 0 }</td>
+                    <td>${ formatLang(line.debit - line.credit, currency_obj = company.currency_id)  }</td>
+                    <td>${ line.amount_currency and formatLang(line.amount_currency, currency_obj = line.currency_id) or '' }</td>
+                </tr>
+                %endfor  ## for line in getLines60(partner)
+            </table>
+        %endif  ## if getLines60(partner)
+        %endif  ## if (partner.credit + partner.debit == 0)
+    %endfor  ## for partner in objects
     </body>
 </html>

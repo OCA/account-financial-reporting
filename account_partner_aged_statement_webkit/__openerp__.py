@@ -26,6 +26,8 @@
     'author': 'Savoir-faire Linux',
     'website': 'http://www.savoirfairelinux.com',
     'depends': [
+        'report_webkit',
+        'base_headers_webkit',
         'mail',
         'account',
     ],
@@ -36,16 +38,20 @@ Print & Send Partner Aged Statement by email
 
 This module adds in the system :
  * a new mail template "Aged Statement Letter";
- * the abitlity to print the partner aged statement;
- * a button "Send by email" in the pricelist form view which load the template
- and attache the pricelist to the email.
+ * the ability to print the partner aged statement;
+ * a button "Send by email" in the partner form view which load the template
+ and attach the statement to the email.
 
-So far the module does not drill down through pricelist items that are
-based on another pricelist or based on purchase pricelists.
+Comparing to 'Overdue Payment' report provided with OpenERP, this one adds more
+informations :
+ * the summary per period
+ * the list of invoices per period
+ * the invoices are also shown with the foreign currency
 
 Contributors
 ------------
 * Marc Cassuto (marc.cassuto@savoirfairelinux.com)
+* Vincent Vinet (vincent.vinet@savoirfairelinux.com)
     """,
     'data': [
         'partner_aged_statement_report.xml',
