@@ -4,29 +4,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <style type="text/css">
-            .overflow_ellipsis {
-                text-overflow: ellipsis;
-                overflow: hidden;
-                white-space: nowrap;
-            }
-
-            .open_invoice_previous_line {
-                font-style: italic;
-            }
-
-            .percent_line {
-                font-style: italic;
-            }
-
-            .amount {
-                text-align:right;
-            }
-
-            .classif_title {
-                text-align:right;
-            }
             .total{
                font-weight:bold;
+            }
+            .break{
+                display: block;
+                clear: both;
+                page-break-after: always;
             }
 
             ${css}
@@ -65,7 +49,7 @@
         %else:
             <div class="title">${_('Aged Balance')}</div>
             <br>
-        %for l in get_lines(data['form']):
+        %for l in get_lines(data['form'], partner):
             %if l:
                 <table class=basic_table style="width: 100%;">
                     <tr>
@@ -176,7 +160,8 @@
                 %endfor  ## for line in getLines60(partner)
             </table>
         %endif  ## if getLines60(partner)
-        %endif  ## if (partner.credit + partner.debit == 0)
+        %endif  ## if (partner.credit + partner.debit == 0
+        <div class="break"></div>
     %endfor  ## for partner in objects
     </body>
 </html>
