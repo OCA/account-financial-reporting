@@ -177,12 +177,24 @@ class PartnerAgedTrialReport(aged_trial_report):
         data["form"] = form
         res = super(PartnerAgedTrialReport, self).set_context(
             objects, data, ids, report_type=report_type)
+        self.orig_query = self.query
         if self._partner is not None:
             self.query = "{0} AND l.partner_id = {1}".format(
                 self.query,
                 self._partner)
 
         return res
+
+    def _get_lines(self, form, partner):
+        # self.query is used to get the lines in super()._get_lines
+        self.query = "{0} AND l.partner_id = {1}".format(
+                self.orig_query,
+                partner.id,
+        )
+        res = super(PartnerAgedTrialReport, self)._get_lines(form)
+        self.query = self.orig_query
+        return res
+
 
 report_sxw.report_sxw(
     'report.webkit.partner_aged_statement_report',

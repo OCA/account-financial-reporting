@@ -65,7 +65,7 @@
         %else:
             <div class="title">${_('Aged Balance')}</div>
             <br>
-        %for l in get_lines(data['form']):
+        %for l in get_lines(data['form'], partner):
             %if l:
                 <table class=basic_table style="width: 100%;">
                     <tr>
