@@ -41,7 +41,7 @@ class PartnerAgedTrialReport(aged_trial_report):
         current_user = self.localcontext["user"]
         self._company = current_user.company_id
         if self.localcontext.get("active_model", "") == "res.partner":
-            self._partner = self.localcontext["active_id"]
+            self._partners = self.localcontext["active_ids"]
         self.localcontext.update({
             'message': self._message,
             'getLines30': self._lines_get30,
@@ -177,10 +177,11 @@ class PartnerAgedTrialReport(aged_trial_report):
         data["form"] = form
         res = super(PartnerAgedTrialReport, self).set_context(
             objects, data, ids, report_type=report_type)
-        if self._partner is not None:
-            self.query = "{0} AND l.partner_id = {1}".format(
+        if self._partners is not None:
+            self.query = "{0} AND l.partner_id in ({1})".format(
                 self.query,
-                self._partner)
+                ", ".join(str(int(i)) for i in self._partners),
+            )
 
         return res
 
