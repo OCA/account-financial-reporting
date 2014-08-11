@@ -41,7 +41,7 @@ class PartnerAgedTrialReport(aged_trial_report):
         current_user = self.localcontext["user"]
         self._company = current_user.company_id
         if self.localcontext.get("active_model", "") == "res.partner":
-            self._partners = self.localcontext["active_ids"]
+            self._partner = self.localcontext["active_id"]
         self.localcontext.update({
             'message': self._message,
             'getLines30': self._lines_get30,
@@ -177,13 +177,20 @@ class PartnerAgedTrialReport(aged_trial_report):
         data["form"] = form
         res = super(PartnerAgedTrialReport, self).set_context(
             objects, data, ids, report_type=report_type)
-        if self._partners is not None:
-            self.query = "{0} AND l.partner_id in ({1})".format(
-                self.query,
-                ", ".join(str(int(i)) for i in self._partners),
-            )
-
+        self.orig_query = self.query
+        
         return res
+
+    def _get_lines(self, form, partner):
+        # self.query is used to get the lines in super()._get_lines
+        self.query = "{0} AND l.partner_id = {1}".format(
+                self.orig_query,
+                partner.id,
+        )
+        res = super(PartnerAgedTrialReport, self)._get_lines(form)
+        self.query = self.orig_query
+        return res
+
 
 report_sxw.report_sxw(
     'report.webkit.partner_aged_statement_report',
