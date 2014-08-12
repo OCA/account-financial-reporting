@@ -157,15 +157,10 @@ class partner_ledger_xls(report_xls):
         c_hdr_cell_style = xlwt.easyxf(cell_format)
         c_hdr_cell_style_right = xlwt.easyxf(cell_format + _xs['right'])
         c_hdr_cell_style_center = xlwt.easyxf(cell_format + _xs['center'])
-        c_hdr_cell_style_decimal = xlwt.easyxf(
-            cell_format + _xs['right'],
-            num_format_str=report_xls.decimal_format)
 
         # Column Initial Balance Row
         cell_format = _xs['italic'] + _xs['borders_all']
         c_init_cell_style = xlwt.easyxf(cell_format)
-        c_init_cell_style_right = xlwt.easyxf(cell_format + _xs['right'])
-        c_init_cell_style_center = xlwt.easyxf(cell_format + _xs['center'])
         c_init_cell_style_decimal = xlwt.easyxf(
             cell_format + _xs['right'],
             num_format_str=report_xls.decimal_format)
@@ -209,7 +204,6 @@ class partner_ledger_xls(report_xls):
         # cell styles for ledger lines
         ll_cell_format = _xs['borders_all']
         ll_cell_style = xlwt.easyxf(ll_cell_format)
-        ll_cell_style_right = xlwt.easyxf(ll_cell_format + _xs['right'])
         ll_cell_style_center = xlwt.easyxf(ll_cell_format + _xs['center'])
         ll_cell_style_date = xlwt.easyxf(
             ll_cell_format + _xs['left'],
@@ -238,7 +232,6 @@ class partner_ledger_xls(report_xls):
                 row_pos = self.xls_write_row(
                     ws, row_pos, row_data, c_title_cell_style)
                 row_pos += 1
-                row_start_account = row_pos
 
                 for partner_name, p_id, p_ref, p_name in \
                         account.partners_order:
