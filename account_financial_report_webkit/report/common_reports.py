@@ -375,7 +375,7 @@ class CommonReportHeaderWebkit(common_report_header):
                                     (tuple(period_ids), account_id))
                 res = self.cursor.dictfetchone()
 
-            except Exception, exc:
+            except Exception:
                 self.cursor.rollback()
                 raise
 
@@ -549,7 +549,7 @@ FROM account_move_line l
         try:
             self.cursor.execute(monster, (tuple(move_line_ids),))
             res = self.cursor.dictfetchall()
-        except Exception, exc:
+        except Exception:
             self.cursor.rollback()
             raise
         return res or []
@@ -578,7 +578,7 @@ WHERE move_id in %s"""
         try:
             self.cursor.execute(sql, (account_id, limit, tuple(move_ids)))
             res = self.cursor.fetchall()
-        except Exception as exc:
+        except Exception:
             self.cursor.rollback()
             raise
         return res and dict(res) or {}

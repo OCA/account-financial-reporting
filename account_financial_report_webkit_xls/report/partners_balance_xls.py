@@ -293,13 +293,9 @@ class partners_balance_xls(report_xls):
         # cell styles for account data
         regular_cell_format = _xs['borders_all']
         regular_cell_style = xlwt.easyxf(regular_cell_format)
-        regular_cell_style_center = xlwt.easyxf(
-            regular_cell_format + _xs['center'])
         regular_cell_style_decimal = xlwt.easyxf(
             regular_cell_format + _xs['right'],
             num_format_str=report_xls.decimal_format)
-        regular_cell_style_pct = xlwt.easyxf(
-            regular_cell_format + _xs['center'], num_format_str='0')
 
         row_pos += 1
         for current_account in objects:
