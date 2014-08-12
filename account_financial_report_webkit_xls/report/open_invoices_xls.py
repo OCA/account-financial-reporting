@@ -37,19 +37,17 @@ class open_invoices_xls(report_xls):
     def global_initializations(self, wb, _p, xlwt, _xs, objects, data):
         # this procedure will initialise variables and Excel cell styles and
         # return them as global ones
-        global ws
-        ws = wb.add_sheet(_p.report_name[:31])
-        ws.panes_frozen = True
-        ws.remove_splits = True
-        ws.portrait = 0  # Landscape
-        ws.fit_width_to_pages = 1
-        ws.header_str = self.xls_headers['standard']
-        ws.footer_str = self.xls_footers['standard']
+        self.ws = wb.add_sheet(_p.report_name[:31])
+        self.ws.panes_frozen = True
+        self.ws.remove_splits = True
+        self.ws.portrait = 0  # Landscape
+        self.ws.fit_width_to_pages = 1
+        self.ws.header_str = self.xls_headers['standard']
+        self.ws.footer_str = self.xls_footers['standard']
         # -------------------------------------------------------
         # number of columns is 11 in case of normal report, 13 in case the
         # option currency is selected and 12 in case of the regroup by currency
         # option is checked
-        global nbr_columns
         group_lines = False
         # search if the regroup option is selected by browsing the accounts
         # defined in objects - see account_report_open_invoices.mako
@@ -57,116 +55,77 @@ class open_invoices_xls(report_xls):
             if hasattr(acc, 'grouped_ledger_lines'):
                 group_lines = True
         if group_lines:
-            nbr_columns = 12
+            self.nbr_columns = 12
         elif _p.amount_currency(data) and not group_lines:
-            nbr_columns = 13
+            self.nbr_columns = 13
         else:
-            nbr_columns = 11
+            self.nbr_columns = 11
         # -------------------------------------------------------
-        global style_font12  # cell style for report title
-        style_font12 = xlwt.easyxf(_xs['xls_title'])
+        # cell style for report title
+        self.style_font12 = xlwt.easyxf(_xs['xls_title'])
         # -------------------------------------------------------
-        global style_default
-        style_default = xlwt.easyxf(_xs['borders_all'])
+        self.style_default = xlwt.easyxf(_xs['borders_all'])
         # -------------------------------------------------------
-        global style_default_italic
-        style_default_italic = xlwt.easyxf(_xs['borders_all'] + _xs['italic'])
+        self.style_default_italic = xlwt.easyxf(
+            _xs['borders_all'] + _xs['italic'])
         # -------------------------------------------------------
-        global style_bold
-        style_bold = xlwt.easyxf(_xs['bold'] + _xs['borders_all'])
-        # -------------------------------------------------------
-        global style_bold_center
-        style_bold_center = xlwt.easyxf(
-            _xs['bold'] + _xs['borders_all'] + _xs['center'])
-        # -------------------------------------------------------
-        global style_bold_italic
-        style_bold_italic = xlwt.easyxf(
-            _xs['bold'] + _xs['borders_all'] + _xs['italic'])
-        # -------------------------------------------------------
-        global style_bold_italic_decimal
-        style_bold_italic_decimal = xlwt.easyxf(
-            _xs['bold'] + _xs['borders_all'] + _xs['italic'] + _xs['right'],
-            num_format_str=report_xls.decimal_format)
-        # -------------------------------------------------------
-        global style_bold_blue
-        style_bold_blue = xlwt.easyxf(
-            _xs['bold'] + _xs['fill_blue'] + _xs['borders_all'])
-        # -------------------------------------------------------
-        global style_bold_blue_italic_decimal
-        style_bold_blue_italic_decimal = xlwt.easyxf(
-            _xs['bold'] + _xs['fill_blue'] +
-            _xs['borders_all'] + _xs['italic'],
-            num_format_str=report_xls.decimal_format)
+        self.style_bold = xlwt.easyxf(_xs['bold'] + _xs['borders_all'])
         # -------------------------------------------------------
         # cell style for header titles: 'Chart of accounts' - 'Fiscal year' ...
-        global style_bold_blue_center
-        style_bold_blue_center = xlwt.easyxf(
+        self.style_bold_blue_center = xlwt.easyxf(
             _xs['bold'] + _xs['fill_blue'] + _xs['borders_all'] +
             _xs['center'])
         # -------------------------------------------------------
         # cell style for header data: 'Chart of accounts' - 'Fiscal year' ...
-        global style_center
-        style_center = xlwt.easyxf(
+        self.style_center = xlwt.easyxf(
             _xs['borders_all'] + _xs['wrap'] + _xs['center'])
         # -------------------------------------------------------
         # cell style for columns titles 'Date'- 'Period' - 'Entry'...
-        global style_yellow_bold
-        style_yellow_bold = xlwt.easyxf(
+        self.style_yellow_bold = xlwt.easyxf(
             _xs['bold'] + _xs['fill'] + _xs['borders_all'])
         # -------------------------------------------------------
         # cell style for columns titles 'Date'- 'Period' - 'Entry'...
-        global style_yellow_bold_right
-        style_yellow_bold_right = xlwt.easyxf(
+        self.style_yellow_bold_right = xlwt.easyxf(
             _xs['bold'] + _xs['fill'] + _xs['borders_all'] + _xs['right'])
         # -------------------------------------------------------
-        global style_right
-        style_right = xlwt.easyxf(_xs['borders_all'] + _xs['right'])
+        self.style_right = xlwt.easyxf(_xs['borders_all'] + _xs['right'])
         # -------------------------------------------------------
-        global style_right_italic
-        style_right_italic = xlwt.easyxf(
+        self.style_right_italic = xlwt.easyxf(
             _xs['borders_all'] + _xs['right'] + _xs['italic'])
         # -------------------------------------------------------
-        global style_decimal
-        style_decimal = xlwt.easyxf(
+        self.style_decimal = xlwt.easyxf(
             _xs['borders_all'] + _xs['right'],
             num_format_str=report_xls.decimal_format)
         # -------------------------------------------------------
-        global style_decimal_italic
-        style_decimal_italic = xlwt.easyxf(
+        self.style_decimal_italic = xlwt.easyxf(
             _xs['borders_all'] + _xs['right'] + _xs['italic'],
             num_format_str=report_xls.decimal_format)
         # -------------------------------------------------------
-        global style_date
-        style_date = xlwt.easyxf(
+        self.style_date = xlwt.easyxf(
             _xs['borders_all'] + _xs['left'],
             num_format_str=report_xls.date_format)
         # -------------------------------------------------------
-        global style_date_italic
-        style_date_italic = xlwt.easyxf(
+        self.style_date_italic = xlwt.easyxf(
             _xs['borders_all'] + _xs['left'] + _xs['italic'],
             num_format_str=report_xls.date_format)
         # -------------------------------------------------------
-        global style_account_title, style_account_title_right, \
-            style_account_title_decimal
         cell_format = _xs['xls_title'] + _xs['bold'] + \
             _xs['fill'] + _xs['borders_all']
-        style_account_title = xlwt.easyxf(cell_format)
-        style_account_title_right = xlwt.easyxf(cell_format + _xs['right'])
-        style_account_title_decimal = xlwt.easyxf(
+        self.style_account_title = xlwt.easyxf(cell_format)
+        self.style_account_title_right = xlwt.easyxf(
+            cell_format + _xs['right'])
+        self.style_account_title_decimal = xlwt.easyxf(
             cell_format + _xs['right'],
             num_format_str=report_xls.decimal_format)
         # -------------------------------------------------------
-        global style_partner_row
         cell_format = _xs['bold']
-        style_partner_row = xlwt.easyxf(cell_format)
+        self.style_partner_row = xlwt.easyxf(cell_format)
         # -------------------------------------------------------
-        global style_partner_cumul, style_partner_cumul_right, \
-            style_partner_cumul_center, style_partner_cumul_decimal
         cell_format = _xs['bold'] + _xs['fill'] + _xs['borders_all']
-        style_partner_cumul = xlwt.easyxf(cell_format)
-        style_partner_cumul_right = xlwt.easyxf(cell_format + _xs['right'])
-        style_partner_cumul_center = xlwt.easyxf(cell_format + _xs['center'])
-        style_partner_cumul_decimal = xlwt.easyxf(
+        self.style_partner_cumul = xlwt.easyxf(cell_format)
+        self.style_partner_cumul_right = xlwt.easyxf(
+            cell_format + _xs['right'])
+        self.style_partner_cumul_decimal = xlwt.easyxf(
             cell_format + _xs['right'],
             num_format_str=report_xls.decimal_format)
 
@@ -175,10 +134,10 @@ class open_invoices_xls(report_xls):
         report_name = ' - '.join([_p.report_name.upper(),
                                  _p.company.partner_id.name,
                                  _p.company.currency_id.name])
-        c_specs = [('report_name', nbr_columns, 0, 'text', report_name), ]
+        c_specs = [('report_name', self.nbr_columns, 0, 'text', report_name), ]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
         row_position = self.xls_write_row(
-            ws, row_position, row_data, row_style=style_font12)
+            self.ws, row_position, row_data, row_style=self.style_font12)
         return row_position
 
     # send an empty row to the Excel document
@@ -188,7 +147,7 @@ class open_invoices_xls(report_xls):
                    for i in range(0, len(c_sizes))]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
         row_position = self.xls_write_row(
-            ws, row_position, row_data, set_column_size=True)
+            self.ws, row_position, row_data, set_column_size=True)
         return row_position
 
     # Fill in the titles of the header summary tables: Chart of account -
@@ -196,31 +155,33 @@ class open_invoices_xls(report_xls):
     def print_header_titles(self, _p, data, row_position):
         c_specs = [
             ('coa', 2, 0, 'text', _('Chart of Account'),
-             None, style_bold_blue_center),
+             None, self.style_bold_blue_center),
             ('fy', 2, 0, 'text', _('Fiscal Year'),
-             None, style_bold_blue_center),
+             None, self.style_bold_blue_center),
             ('df', 2, 0, 'text', _p.filter_form(data) == 'filter_date' and _(
                 'Dates Filter') or _('Periods Filter'), None,
-             style_bold_blue_center),
-            ('cd', 1 if nbr_columns == 11 else 2, 0, 'text',
-             _('Clearance Date'), None, style_bold_blue_center),
+             self.style_bold_blue_center),
+            ('cd', 1 if self.nbr_columns == 11 else 2, 0, 'text',
+             _('Clearance Date'), None, self.style_bold_blue_center),
             ('af', 2, 0, 'text', _('Accounts Filter'),
-             None, style_bold_blue_center),
-            ('tm', 3 if nbr_columns == 13 else 2, 0, 'text',
-             _('Target Moves'), None, style_bold_blue_center),
+             None, self.style_bold_blue_center),
+            ('tm', 3 if self.nbr_columns == 13 else 2, 0, 'text',
+             _('Target Moves'), None, self.style_bold_blue_center),
         ]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
         row_position = self.xls_write_row(
-            ws, row_position, row_data, row_style=style_bold_blue_center)
+            self.ws, row_position, row_data,
+            row_style=self.style_bold_blue_center)
         return row_position
 
     # Fill in the data of the header summary tables: Chart of account - Fiscal
     # year - ...
     def print_header_data(self, _p, data, row_position):
         c_specs = [
-            ('coa', 2, 0, 'text', _p.chart_account.name, None, style_center),
+            ('coa', 2, 0, 'text', _p.chart_account.name,
+             None, self.style_center),
             ('fy', 2, 0, 'text', _p.fiscalyear.name if _p.fiscalyear else '-',
-             None, style_center),
+             None, self.style_center),
         ]
         df = _('From') + ': '
         if _p.filter_form(data) == 'filter_date':
@@ -233,60 +194,64 @@ class open_invoices_xls(report_xls):
         else:
             df += _p.stop_period.name if _p.stop_period else u''
         c_specs += [
-            ('df', 2, 0, 'text', df, None, style_center),
-            ('cd', 1 if nbr_columns == 11 else 2, 0, 'text',
-             _p.date_until, None, style_center),  # clearance date
+            ('df', 2, 0, 'text', df, None, self.style_center),
+            ('cd', 1 if self.nbr_columns == 11 else 2, 0, 'text',
+             _p.date_until, None, self.style_center),  # clearance date
             ('af', 2, 0, 'text', _('Custom Filter')
              if _p.partner_ids else _p.display_partner_account(data), None,
-             style_center),
-            ('tm', 3 if nbr_columns == 13 else 2, 0, 'text',
-             _p.display_target_move(data), None, style_center),
+             self.style_center),
+            ('tm', 3 if self.nbr_columns == 13 else 2, 0, 'text',
+             _p.display_target_move(data), None, self.style_center),
         ]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
         row_position = self.xls_write_row(
-            ws, row_position, row_data, row_style=style_center)
+            self.ws, row_position, row_data, row_style=self.style_center)
         return row_position
 
     # Fill in a row with the titles of the columns for the invoice lines: Date
     # - Period - Entry -...
     def print_columns_title(self, _p, row_position, data, group_lines=False):
         c_specs = [
-            ('date', 1, 0, 'text', _('Date'), None, style_yellow_bold),
-            ('period', 1, 0, 'text', _('Period'), None, style_yellow_bold),
-            ('entry', 1, 0, 'text', _('Entry'), None, style_yellow_bold),
-            ('journal', 1, 0, 'text', _('Journal'), None, style_yellow_bold),
+            ('date', 1, 0, 'text', _('Date'), None, self.style_yellow_bold),
+            ('period', 1, 0, 'text', _('Period'),
+             None, self.style_yellow_bold),
+            ('entry', 1, 0, 'text', _('Entry'), None, self.style_yellow_bold),
+            ('journal', 1, 0, 'text', _('Journal'),
+             None, self.style_yellow_bold),
         ]
         if not group_lines:
             c_specs += [('partner', 1, 0, 'text', _('Partner'),
-                         None, style_yellow_bold), ]
+                         None, self.style_yellow_bold), ]
         c_specs += [
-            ('label', 1, 0, 'text', _('Label'), None, style_yellow_bold),
-            ('rec', 1, 0, 'text', _('Rec.'), None, style_yellow_bold),
-            ('due_date', 1, 0, 'text', _('Due Date'), None, style_yellow_bold),
-            ('debit', 1, 0, 'text', _('Debit'), None, style_yellow_bold_right),
+            ('label', 1, 0, 'text', _('Label'), None, self.style_yellow_bold),
+            ('rec', 1, 0, 'text', _('Rec.'), None, self.style_yellow_bold),
+            ('due_date', 1, 0, 'text', _('Due Date'),
+             None, self.style_yellow_bold),
+            ('debit', 1, 0, 'text', _('Debit'),
+             None, self.style_yellow_bold_right),
             ('credit', 1, 0, 'text', _('Credit'),
-             None, style_yellow_bold_right),
+             None, self.style_yellow_bold_right),
             ('cumul', 1, 0, 'text', _('Cumul. Bal.'),
-             None, style_yellow_bold_right),
+             None, self.style_yellow_bold_right),
         ]
         if group_lines:
             c_specs += [
                 ('currbal', 1, 0, 'text', _('Curr. Balance'),
-                 None, style_yellow_bold_right),
+                 None, self.style_yellow_bold_right),
                 ('curr', 1, 0, 'text', _('Curr.'),
-                 None, style_yellow_bold_right),
+                 None, self.style_yellow_bold_right),
             ]
         else:
             if _p.amount_currency(data):
                 c_specs += [
                     ('currbal', 1, 0, 'text', _('Curr. Balance'),
-                     None, style_yellow_bold_right),
+                     None, self.style_yellow_bold_right),
                     ('curr', 1, 0, 'text', _('Curr.'),
-                     None, style_yellow_bold_right),
+                     None, self.style_yellow_bold_right),
                 ]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
         row_position = self.xls_write_row(
-            ws, row_position, row_data, row_style=style_yellow_bold)
+            self.ws, row_position, row_data, row_style=self.style_yellow_bold)
         return row_position
 
     # Fill in a row with the code and the name of an account + the partner
@@ -294,34 +259,34 @@ class open_invoices_xls(report_xls):
     def print_row_code_account(self, regroupmode, account, row_position,
                                partner_name):
         if regroupmode == "regroup":
-            c_specs = [('acc_title', nbr_columns, 0, 'text',
+            c_specs = [('acc_title', self.nbr_columns, 0, 'text',
                         ' - '.join([account.code, account.name, partner_name
                                     or _('No partner')])), ]
         else:
             c_specs = [
-                ('acc_title', nbr_columns, 0, 'text', ' - '.
+                ('acc_title', self.nbr_columns, 0, 'text', ' - '.
                  join([account.code, account.name])), ]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
         row_position = self.xls_write_row(
-            ws, row_position, row_data, style_account_title)
+            self.ws, row_position, row_data, self.style_account_title)
         return row_position + 1
 
     def print_row_partner(self, row_position, partner_name):
         c_specs = [
-            ('partner', nbr_columns, 0, 'text',
+            ('partner', self.nbr_columns, 0, 'text',
              partner_name or _('No partner')), ]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
         row_position = self.xls_write_row(
-            ws, row_position, row_data, style_partner_row)
+            self.ws, row_position, row_data, self.style_partner_row)
         return row_position
 
     def print_group_currency(self, row_position, curr, _p):
         c_specs = [
-            ('curr', nbr_columns, 0, 'text',
+            ('curr', self.nbr_columns, 0, 'text',
              curr or _p.company.currency_id.name), ]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
         row_position = self.xls_write_row(
-            ws, row_position, row_data, style_bold)
+            self.ws, row_position, row_data, self.style_bold)
         return row_position
 
     # Fill in rows of invoice line
@@ -338,15 +303,15 @@ class open_invoices_xls(report_xls):
         # and 'clearance_line' or ''}">
         if line.get('is_from_previous_periods') \
                 or line.get('is_clearance_line'):
-            style_line_default = style_default_italic
-            style_line_right = style_right_italic
-            style_line_date = style_date_italic
-            style_line_decimal = style_decimal_italic
+            style_line_default = self.style_default_italic
+            style_line_right = self.style_right_italic
+            style_line_date = self.style_date_italic
+            style_line_decimal = self.style_decimal_italic
         else:
-            style_line_default = style_default
-            style_line_right = style_right
-            style_line_date = style_date
-            style_line_decimal = style_decimal
+            style_line_default = self.style_default
+            style_line_right = self.style_right
+            style_line_date = self.style_date
+            style_line_decimal = self.style_decimal
         if line.get('ldate'):
             c_specs = [('date', 1, 0, 'date', datetime.strptime(
                 line['ldate'], '%Y-%m-%d'), None, style_line_date)]
@@ -405,10 +370,11 @@ class open_invoices_xls(report_xls):
 
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
         row_position = self.xls_write_row(
-            ws, row_position, row_data, style_line_default)
+            self.ws, row_position, row_data, style_line_default)
         return row_position
 
-    # Fill in rows of invoice line when the option currency regroup is selected
+    # Fill in rows of invoice line when the option currency regroup is
+    # selecself.wsd
     def print_group_lines(self, row_position, account, line, _p, line_number):
 
         label_elements = [line.get('lname') or '']
@@ -421,15 +387,15 @@ class open_invoices_xls(report_xls):
         # and 'clearance_line' or ''}">
         if line.get('is_from_previous_periods') or \
                 line.get('is_clearance_line'):
-            style_line_default = style_default_italic
-            style_line_right = style_right_italic
-            style_line_date = style_date_italic
-            style_line_decimal = style_decimal_italic
+            style_line_default = self.style_default_italic
+            style_line_right = self.style_right_italic
+            style_line_date = self.style_date_italic
+            style_line_decimal = self.style_decimal_italic
         else:
-            style_line_default = style_default
-            style_line_right = style_right
-            style_line_date = style_date
-            style_line_decimal = style_decimal
+            style_line_default = self.style_default
+            style_line_right = self.style_right
+            style_line_date = self.style_date
+            style_line_decimal = self.style_decimal
 
         debit_cell = rowcol_to_cell(row_position, 7)
         credit_cell = rowcol_to_cell(row_position, 8)
@@ -483,7 +449,7 @@ class open_invoices_xls(report_xls):
 
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
         row_position = self.xls_write_row(
-            ws, row_position, row_data, style_line_default)
+            self.ws, row_position, row_data, style_line_default)
         return (row_position, cumul_balance)
 
     # print by partner the totals and cumulated balance (Excel formulas)
@@ -520,30 +486,31 @@ class open_invoices_xls(report_xls):
             ('rec', 1, 0, 'text', None),
             ('empty5', 1, 0, 'text', None),
             ('debit', 1, 0, 'number', None,
-             debit_partner_total, style_partner_cumul_decimal),
+             debit_partner_total, self.style_partner_cumul_decimal),
             ('credit', 1, 0, 'number', None,
-             credit_partner_total, style_partner_cumul_decimal),
+             credit_partner_total, self.style_partner_cumul_decimal),
             ('cumul_bal', 1, 0, 'number', None,
-             bal_partner_total, style_partner_cumul_decimal),
+             bal_partner_total, self.style_partner_cumul_decimal),
         ]
         if _p.amount_currency(data):
             if account.currency_id:
                 c_specs += [('cumul_bal_curr', 1, 0, 'number', None,
-                             cumul_balance_curr, style_partner_cumul_decimal),
+                             cumul_balance_curr,
+                             self.style_partner_cumul_decimal),
                             ('curr_name', 1, 0, 'text',
                              account.currency_id.name,
-                             None, style_partner_cumul_right),
+                             None, self.style_partner_cumul_right),
                             ]
             else:
                 c_specs += [('cumul_bal_curr', 1, 0, 'text', '-', None,
-                             style_partner_cumul_right),
+                             self.style_partner_cumul_right),
                             ('curr_name', 1, 0, 'text', '',
-                             None, style_partner_cumul_right)
+                             None, self.style_partner_cumul_right)
                             ]
 
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
         row_position = self.xls_write_row(
-            ws, row_position, row_data, style_partner_cumul)
+            self.ws, row_position, row_data, self.style_partner_cumul)
         return row_position + 1
 
     # print by partner the totals and cumulated balance (Excel formulas) when
@@ -582,29 +549,29 @@ class open_invoices_xls(report_xls):
             ('rec', 1, 0, 'text', None),
             ('empty5', 1, 0, 'text', None),
             ('debit', 1, 0, 'number', None,
-             debit_partner_total, style_partner_cumul_decimal),
+             debit_partner_total, self.style_partner_cumul_decimal),
             ('credit', 1, 0, 'number', None,
-             credit_partner_total, style_partner_cumul_decimal),
+             credit_partner_total, self.style_partner_cumul_decimal),
             ('cumul_bal', 1, 0, 'number', None,
-             bal_partner_total, style_partner_cumul_decimal),
+             bal_partner_total, self.style_partner_cumul_decimal),
         ]
         if account.currency_id:
             c_specs += [
                 ('cumul_bal_curr', 1, 0, 'number', None,
-                 cumul_balance_curr, style_partner_cumul_decimal),
+                 cumul_balance_curr, self.style_partner_cumul_decimal),
                 ('curr_name', 1, 0, 'text', account.currency_id.name,
-                 None, style_partner_cumul_right),
+                 None, self.style_partner_cumul_right),
             ]
         else:
             c_specs += [
                 ('cumul_bal_curr', 1, 0, 'text', "-",
-                 None, style_partner_cumul_right),
+                 None, self.style_partner_cumul_right),
                 ('curr_name', 1, 0, 'text', "",
-                 None, style_partner_cumul_right),
+                 None, self.style_partner_cumul_right),
             ]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
         row_position = self.xls_write_row(
-            ws, row_position, row_data, style_partner_cumul)
+            self.ws, row_position, row_data, self.style_partner_cumul)
         return row_position + 1
 
     # print by account the totals of the credit and debit + balance calculation
@@ -657,11 +624,11 @@ class open_invoices_xls(report_xls):
              _('Cumulated Balance on Account')),
             ('empty2', 1, 0, 'text', None),
             ('debit', 1, 0, 'number', None,
-             total_debit_account, style_account_title_decimal),
+             total_debit_account, self.style_account_title_decimal),
             ('credit', 1, 0, 'number', None,
-             total_credit_account, style_account_title_decimal),
+             total_credit_account, self.style_account_title_decimal),
             ('balance', 1, 0, 'number', None,
-             bal_account_total, style_account_title_decimal),
+             bal_account_total, self.style_account_title_decimal),
         ]
         if _p.amount_currency(data):
             if account.currency_id:
@@ -669,17 +636,17 @@ class open_invoices_xls(report_xls):
                              cumul_balance_curr),
                             ('curr_name', 1, 0, 'text',
                              account.currency_id.name,
-                             None, style_account_title_right),
+                             None, self.style_account_title_right),
                             ]
             else:
                 c_specs += [('cumul_bal_curr', 1, 0, 'text',  "-", None,
-                             style_account_title_right),
+                             self.style_account_title_right),
                             ('curr_name', 1, 0, 'text', "",
-                             None, style_account_title_right)
+                             None, self.style_account_title_right)
                             ]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
         row_position = self.xls_write_row(
-            ws, row_position, row_data, style_account_title)
+            self.ws, row_position, row_data, self.style_account_title)
         return row_position + 1
 
     # print by account the totals of the credit and debit + balance calculation
@@ -731,27 +698,27 @@ class open_invoices_xls(report_xls):
              _('Cumulated Balance on Account')),
             ('empty2', 1, 0, 'text', None),
             ('debit', 1, 0, 'number', None,
-             total_debit_account, style_account_title_decimal),
+             total_debit_account, self.style_account_title_decimal),
             ('credit', 1, 0, 'number', None,
-             total_credit_account, style_account_title_decimal),
+             total_credit_account, self.style_account_title_decimal),
             ('balance', 1, 0, 'number', None,
-             bal_account_total, style_account_title_decimal),
+             bal_account_total, self.style_account_title_decimal),
         ]
         if account.currency_id:
             c_specs += [('cumul_bal_curr', 1, 0, 'number', None,
-                         cumul_balance_curr, style_account_title_decimal),
+                         cumul_balance_curr, self.style_account_title_decimal),
                         ('curr_name', 1, 0, 'text', account.currency_id.name,
-                         None, style_account_title_decimal),
+                         None, self.style_account_title_decimal),
                         ]
         else:
             c_specs += [('cumul_bal_curr', 1, 0, 'text', "-", None,
-                         style_account_title_right),
+                         self.style_account_title_right),
                         ('curr_name', 1, 0, 'text', "",
-                         None, style_account_title_right)
+                         None, self.style_account_title_right)
                         ]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
         row_position = self.xls_write_row(
-            ws, row_position, row_data, style_account_title)
+            self.ws, row_position, row_data, self.style_account_title)
         return row_position + 1
 
     # export the invoice AR/AP lines when the option currency regroup is
@@ -834,7 +801,7 @@ class open_invoices_xls(report_xls):
         # Print Header Table data
         row_pos = self.print_header_data(_p, data, row_pos)
         # Freeze the line
-        ws.set_horz_split_pos(row_pos)
+        self.ws.set_horz_split_pos(row_pos)
         # Print empty row
         row_pos = self.print_empty_row(row_pos)
 
