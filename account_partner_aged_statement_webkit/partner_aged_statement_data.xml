@@ -2,7 +2,7 @@
 <openerp>
     <!-- Mail template is done in a NOUPDATE block
          so users can freely customize/delete them -->
-    <data noupdate="1">
+    <data noupdate="0">
 
         <!--Email template -->
         <record id="email_template_aged_statement" model="email.template">
@@ -19,23 +19,21 @@
             <field name="body_html"><![CDATA[
 <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
 
-    <p>Dear Sir/Madam,</p>
+    <!--<p>${user.company_id.overdue_msg.replace('\n', '&lt;br/&gt;')} </p>-->
+    % for line in user.company_id.overdue_msg.split('\n'):
+            <p> ${line}<br/> </p>
+    % endfor
 
-    <p> Our records indicate that some payments on your account are still due.
     <br/>
-    Please find in the attached document your aged balance
+    ${user.name}
     <br/>
-    If the amount has already been paid, please disregard this notice.
-    Otherwise, please forward us the total amount stated below.
-    </p>
+    <br/>
 
     <p style="border-left: 1px solid #8e0000; margin-left: 30px;">
        &nbsp;&nbsp;<strong>REFERENCES</strong><br />
        &nbsp;&nbsp;Total overdue amount: ${object.credit} ${user.company_id.currency_id.name}<br/>
     </p>
 
-    <p>If you have any question, do not hesitate to contact us.</p>
-    <p>Best Regards,</p>
     <br/>
     <br/>
     <div style="width: 375px; margin: 0px; padding: 0px; background-color: #8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;">
