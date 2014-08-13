@@ -48,6 +48,9 @@ informations :
  * the list of invoices per period
  * the invoices are also shown with the foreign currency
 
+ Both messages, in the PDF and the email are taken from the Overdue Payments
+ Message defined on the Company's configuration.
+
 Contributors
 ------------
 * Marc Cassuto (marc.cassuto@savoirfairelinux.com)
