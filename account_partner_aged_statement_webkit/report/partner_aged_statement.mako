@@ -93,13 +93,13 @@
                 %for line in getLines30(partner):
                 <tr>
                     <td>${ formatLang(line.date, date=True) }</td>
-                    <td>${ line.name }</td>
+                    <td>${ line.move_id.name }</td>
                     <td>${ line.ref }</td>
                     <td>${ line.date_maturity and formatLang(line.date_maturity,date=True) or '' }</td>
-                    <td>${ formatLang(line.debit) or 0 }</td>
-                    <td>${ formatLang(line.credit) or 0 }</td>
-                    <td>${ formatLang(line.debit - line.credit, currency_obj = company.currency_id)  }</td>
-                    <td>${ line.amount_currency and formatLang(line.amount_currency, currency_obj = line.currency_id) or '' }</td>
+                    <td style="text-align: right;">${ formatLang(line.debit) or 0.0 }</td>
+                    <td style="text-align: right;">${ formatLang(line.credit) or 0.0 }</td>
+                    <td style="text-align: right;">${ formatLang(line.debit - line.credit, currency_obj = company.currency_id)  }</td>
+                    <td style="text-align: right;">${ line.amount_currency and formatLang(line.amount_currency, currency_obj = line.currency_id) or '' }</td>
                 </tr>
                 %endfor  ## for line in getLines30(partner)
             </table>
@@ -121,13 +121,13 @@
                 %for line in getLines3060(partner):
                 <tr>
                     <td>${ formatLang(line.date, date=True) }</td>
-                    <td>${ line.name }</td>
+                    <td>${ line.move_id.name }</td>
                     <td>${ line.ref }</td>
                     <td>${ line.date_maturity and formatLang(line.date_maturity,date=True) or '' }</td>
-                    <td>${ formatLang(line.debit) or 0 }</td>
-                    <td>${ formatLang(line.credit) or 0 }</td>
-                    <td>${ formatLang(line.debit - line.credit, currency_obj = company.currency_id)  }</td>
-                    <td>${ line.amount_currency and formatLang(line.amount_currency, currency_obj = line.currency_id) or '' }</td>
+                    <td style="text-align: right;">${ formatLang(line.debit) or 0 }</td>
+                    <td style="text-align: right;">${ formatLang(line.credit) or 0 }</td>
+                    <td style="text-align: right;">${ formatLang(line.debit - line.credit, currency_obj = company.currency_id)  }</td>
+                    <td style="text-align: right;">${ line.amount_currency and formatLang(line.amount_currency, currency_obj = line.currency_id) or '' }</td>
                 </tr>
                 %endfor  ## for line in getLines3060(partner)
             </table>
@@ -149,13 +149,13 @@
                 %for line in getLines60(partner):
                 <tr>
                     <td>${ formatLang(line.date, date=True) }</td>
-                    <td>${ line.name }</td>
+                    <td>${ line.move_id.name }</td>
                     <td>${ line.ref }</td>
                     <td>${ line.date_maturity and formatLang(line.date_maturity,date=True) or '' }</td>
-                    <td>${ formatLang(line.debit) or 0 }</td>
-                    <td>${ formatLang(line.credit) or 0 }</td>
-                    <td>${ formatLang(line.debit - line.credit, currency_obj = company.currency_id)  }</td>
-                    <td>${ line.amount_currency and formatLang(line.amount_currency, currency_obj = line.currency_id) or '' }</td>
+                    <td style="text-align: right;">${ formatLang(line.debit) or 0 }</td>
+                    <td style="text-align: right;">${ formatLang(line.credit) or 0 }</td>
+                    <td style="text-align: right;">${ formatLang(line.debit - line.credit, currency_obj = company.currency_id)  }</td>
+                    <td style="text-align: right;">${ line.amount_currency and formatLang(line.amount_currency, currency_obj = line.currency_id) or '' }</td>
                 </tr>
                 %endfor  ## for line in getLines60(partner)
             </table>
