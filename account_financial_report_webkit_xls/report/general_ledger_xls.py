@@ -229,9 +229,6 @@ class general_ledger_xls(report_xls):
                         'init_balance') or 0.0
                     cumul_balance_curr = account.init_balance.get(
                         'init_balance_currency') or 0.0
-                    debit_cell = rowcol_to_cell(row_pos, 8)
-                    credit_cell = rowcol_to_cell(row_pos, 9)
-                    bal_formula = debit_cell + '-' + credit_cell
                     c_specs = [('empty%s' % x, 1, 0, 'text', None)
                                for x in range(6)]
                     c_specs += [
