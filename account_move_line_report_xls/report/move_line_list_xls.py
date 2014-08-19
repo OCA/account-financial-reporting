@@ -339,7 +339,7 @@ class move_line_xls(report_xls):
             debit_cell = rowcol_to_cell(row_pos, debit_pos)
             credit_cell = rowcol_to_cell(row_pos, credit_pos)
             bal_formula = debit_cell + '-' + credit_cell
-            _logger.log(logging.DEBUG, 'dummy call - %s' % bal_formula)
+            _logger.debug('dummy call - %s', bal_formula)
             c_specs = map(
                 lambda x: self.render(x, self.col_specs_template, 'lines'),
                 wanted_list)
@@ -352,15 +352,15 @@ class move_line_xls(report_xls):
         debit_start = rowcol_to_cell(row_pos - aml_cnt, debit_pos)
         debit_stop = rowcol_to_cell(row_pos - 1, debit_pos)
         debit_formula = 'SUM(%s:%s)' % (debit_start, debit_stop)
-        _logger.log(logging.DEBUG, 'dummy call - %s' % debit_formula)
+        _logger.debug('dummy call - %s', debit_formula)
         credit_start = rowcol_to_cell(row_pos - aml_cnt, credit_pos)
         credit_stop = rowcol_to_cell(row_pos - 1, credit_pos)
         credit_formula = 'SUM(%s:%s)' % (credit_start, credit_stop)
-        _logger.log(logging.DEBUG, 'dummy call - %s' % credit_formula)
+        _logger.debug('dummy call - %s', credit_formula)
         debit_cell = rowcol_to_cell(row_pos, debit_pos)
         credit_cell = rowcol_to_cell(row_pos, credit_pos)
         bal_formula = debit_cell + '-' + credit_cell
-        _logger.log(logging.DEBUG, 'dummy call - %s' % bal_formula)
+        _logger.debug('dummy call - %s', bal_formula)
         c_specs = map(
             lambda x: self.render(x, self.col_specs_template, 'totals'),
             wanted_list)
