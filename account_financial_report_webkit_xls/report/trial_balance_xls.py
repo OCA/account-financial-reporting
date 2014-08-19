@@ -215,7 +215,6 @@ class trial_balance_xls(report_xls):
         ws.set_horz_split_pos(row_pos)
 
         last_child_consol_ids = []
-        last_level = False
 
         # cell styles for account data
         view_cell_format = _xs['bold'] + _xs['fill'] + _xs['borders_all']
@@ -254,20 +253,12 @@ class trial_balance_xls(report_xls):
 
             comparisons = current_account.comparisons
 
-            if current_account.id in last_child_consol_ids:
-                # current account is a consolidation child of the last account:
-                # use the level of last account
-                level = last_level
-                level_class = 'account_level_consol'
-            else:
+            if current_account.id not in last_child_consol_ids:
                 # current account is a not a consolidation child: use its own
                 # level
-                level = current_account.level or 0
-                level_class = "account_level_%s" % (level,)
                 last_child_consol_ids = [
                     child_consol_id.id for child_consol_id in
                     current_account.child_consol_ids]
-                last_level = current_account.level
 
             c_specs = [
                 ('code', 1, 0, 'text', current_account.code),
