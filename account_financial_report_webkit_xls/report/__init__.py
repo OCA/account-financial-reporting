@@ -25,5 +25,3 @@ from . import trial_balance_xls
 from . import partners_balance_xls
 from . import partner_ledger_xls
 from . import open_invoices_xls
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
