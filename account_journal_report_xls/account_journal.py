@@ -21,8 +21,6 @@
 ##############################################################################
 
 from openerp.osv import orm
-from openerp.addons.report_xls.utils import rowcol_to_cell, _render
-from openerp.tools.translate import _
 
 
 class account_journal(orm.Model):
@@ -59,17 +57,18 @@ class account_journal(orm.Model):
             'credit',            # account.move.line,credit
             'balance',           # debit-credit
             'docname',           # origin document if any
-            #'date_maturity',     # account.move.line,date_maturity
-            #'reconcile',         # account.move.line,reconcile_id.name
-            #'reconcile_partial', # account.move.line,reconcile_partial_id.name
-            #'partner_ref',       # res.partner,ref
-            #'move_ref',          # account.move,ref
-            #'move_id',           # account.move,id
-            #'acc_name',          # account.account,name
-            #'journal',           # account.journal,name
-            #'journal_code',      # account.journal,code
-            #'analytic_account',       # account.analytic.account,name
-            #'analytic_account_code',  # account.analytic.account,code
+            # 'date_maturity',     # account.move.line,date_maturity
+            # 'reconcile',         # account.move.line,reconcile_id.name
+            # 'reconcile_partial',
+            # account.move.line,reconcile_partial_id.name
+            # 'partner_ref',       # res.partner,ref
+            # 'move_ref',          # account.move,ref
+            # 'move_id',           # account.move,id
+            # 'acc_name',          # account.account,name
+            # 'journal',           # account.journal,name
+            # 'journal_code',      # account.journal,code
+            # 'analytic_account',       # account.analytic.account,name
+            # 'analytic_account_code',  # account.analytic.account,code
         ]
         return res
 
@@ -81,7 +80,8 @@ class account_journal(orm.Model):
         my_change = {
             'move_name':{
                 'header': [1, 20, 'text', _render("_('My Move Title')")],
-                'lines': [1, 0, 'text', _render("l['move_name'] != '/' and l['move_name'] or ('*'+str(l['move_id']))")],
+                'lines': [1, 0, 'text', _render("l['move_name'] != '/' and
+                l['move_name'] or ('*'+str(l['move_id']))")],
                 'totals': [1, 0, 'text', None]},
         }
         return my_change

@@ -23,6 +23,7 @@ from openerp.osv import fields, orm
 
 
 class AccountPartnerBalanceWizard(orm.TransientModel):
+
     """Will launch partner balance report and pass required args"""
 
     _inherit = "account.common.balance.report"
@@ -30,12 +31,15 @@ class AccountPartnerBalanceWizard(orm.TransientModel):
     _description = "Partner Balance Report"
 
     _columns = {
-        'result_selection': fields.selection([('customer', 'Receivable Accounts'),
-                                              ('supplier', 'Payable Accounts'),
-                                              ('customer_supplier', 'Receivable and Payable Accounts')],
-                                              "Partner's", required=True),
-        'partner_ids': fields.many2many('res.partner', string='Filter on partner',
-                                         help="Only selected partners will be printed. Leave empty to print all partners."),
+        'result_selection': fields.selection(
+            [('customer', 'Receivable Accounts'),
+             ('supplier', 'Payable Accounts'),
+             ('customer_supplier', 'Receivable and Payable Accounts')],
+            "Partner's", required=True),
+        'partner_ids': fields.many2many(
+            'res.partner', string='Filter on partner',
+            help="Only selected partners will be printed. \
+                  Leave empty to print all partners."),
     }
 
     _defaults = {
@@ -43,7 +47,8 @@ class AccountPartnerBalanceWizard(orm.TransientModel):
     }
 
     def pre_print_report(self, cr, uid, ids, data, context=None):
-        data = super(AccountPartnerBalanceWizard, self).pre_print_report(cr, uid, ids, data, context)
+        data = super(AccountPartnerBalanceWizard, self).\
+            pre_print_report(cr, uid, ids, data, context)
         vals = self.read(cr, uid, ids,
                          ['result_selection', 'partner_ids'],
                          context=context)[0]

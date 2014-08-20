@@ -20,7 +20,5 @@
 #
 ##############################################################################
 
-import nov_account_journal
-import nov_account_journal_xls
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+from . import nov_account_journal
+from . import nov_account_journal_xls

@@ -35,7 +35,8 @@ This module adds or replaces the following standard OpenERP financial reports:
 Main improvements per report:
 -----------------------------
 
-The General ledger: details of all entries posted in your books sorted by account.
+The General ledger: details of all entries posted in your books sorted by
+account.
 
 * Filter by account is available in the wizard (no need to go to the
   Chart of Accounts to do this anymore) or by View account (the report
@@ -114,7 +115,8 @@ like the trial balance but add an extra information :
   Overdue data are also split by period.
 * For each partner following columns will be displayed:
 
-  * Total balance (all figures must match with same date partner balance report).
+  * Total balance (all figures must match with same date partner balance
+    report).
      This column equals the sum of all following columns)
 
    * Due
@@ -126,11 +128,11 @@ like the trial balance but add an extra information :
 
 Hypothesis / Contraints of aged partner balance
 
-* Overdues columns will be by default  be based on 30 days range fix number of days.
-  This can be changed by changes the RANGES constraint
+* Overdues columns will be by default  be based on 30 days range fix number of
+  days. This can be changed by changes the RANGES constraint
 * All data will be displayed in company currency
-* When partial payments, the payment must appear in the same colums than the invoice
-  (Except if multiple payment terms)
+* When partial payments, the payment must appear in the same colums than the
+  invoice (Except if multiple payment terms)
 * Data granularity: partner (will not display figures at invoices level)
 * The report aggregate data per account with sub-totals
 * Initial balance must be calculated the same way that
@@ -173,25 +175,24 @@ wkhtmltopdf. The texts are defined inside the report classes.
     'category': 'Finance',
     'website': 'http://www.camptocamp.com',
     'images': [
-        'images/ledger.png',],
+        'images/ledger.png', ],
     'depends': ['account',
                 'report_webkit'],
-    'init_xml': [],
-    'demo_xml' : [],
-    'update_xml': ['account_view.xml',
-                   'data/financial_webkit_header.xml',
-                   'report/report.xml',
-                   'wizard/wizard.xml',
-                   'wizard/balance_common_view.xml',
-                   'wizard/general_ledger_wizard_view.xml',
-                   'wizard/partners_ledger_wizard_view.xml',
-                   'wizard/trial_balance_wizard_view.xml',
-                   'wizard/partner_balance_wizard_view.xml',
-                   'wizard/open_invoices_wizard_view.xml',
-                   'wizard/aged_partner_balance_wizard.xml',
-                   'wizard/print_journal_view.xml',
-                   'report_menus.xml',
-                   ],
+    'demo': [],
+    'data': ['account_view.xml',
+             'data/financial_webkit_header.xml',
+             'report/report.xml',
+             'wizard/wizard.xml',
+             'wizard/balance_common_view.xml',
+             'wizard/general_ledger_wizard_view.xml',
+             'wizard/partners_ledger_wizard_view.xml',
+             'wizard/trial_balance_wizard_view.xml',
+             'wizard/partner_balance_wizard_view.xml',
+             'wizard/open_invoices_wizard_view.xml',
+             'wizard/aged_partner_balance_wizard.xml',
+             'wizard/print_journal_view.xml',
+             'report_menus.xml',
+             ],
     # tests order matter
     'test': ['tests/general_ledger.yml',
              'tests/partner_ledger.yml',
@@ -199,7 +200,7 @@ wkhtmltopdf. The texts are defined inside the report classes.
              'tests/partner_balance.yml',
              'tests/open_invoices.yml',
              'tests/aged_trial_balance.yml'],
-    #'tests/account_move_line.yml'
+    # 'tests/account_move_line.yml'
     'active': False,
     'installable': True,
     'application': True,
