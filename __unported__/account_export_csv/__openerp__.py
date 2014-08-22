@@ -1,9 +1,8 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution
-#
-#    Copyright (c) 2013 Noviat nv/sa (www.noviat.com). All rights reserved.
+#    Author Joel Grand-Guillaume and Vincent Renaville
+#    Copyright 2013 Camptocamp SA
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,31 +18,33 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+
 {
-    'name': 'Add XLS export to accounting reports',
-    'version': '0.4',
-    'license': 'AGPL-3',
-    'author': 'Noviat',
-    'category': 'Generic Modules/Accounting',
+    'name': 'Account Export CSV',
+    'version': '1.1',
+    'depends': [
+        'account',
+    ],
+    'author': 'Camptocamp',
     'description': """
 
-    This module adds XLS export to the following accounting reports:
-        - general ledger
-        - trial balance
-        - partner ledger
-        - partner balance
-        - open invoices
+    Add a wizard that allow you to export a csv file based on accounting
+    journal entries
 
+    - Trial Balance
+    - Analytic Balance (with accounts)
+    - Journal Entries
+
+    You can filter by period
+
+    TODO: rearange wizard view with only one button to generate file plus
+    define a selection list to select report type
     """,
-    'depends': ['report_xls', 'account_financial_report_webkit'],
-    'demo': [],
+    'website': 'http://www.camptocamp.com',
     'data': [
-        'wizard/general_ledger_wizard_view.xml',
-        'wizard/trial_balance_wizard_view.xml',
-        'wizard/partners_ledger_wizard_view.xml',
-        'wizard/partners_balance_wizard_view.xml',
-        'wizard/open_invoices_wizard_view.xml',
+        'wizard/account_export_csv_view.xml',
+        'menu.xml',
     ],
+    'installable': False,
     'active': False,
-    'installable': True,
 }

@@ -48,6 +48,6 @@ Contributors
         'account_report.xml',
         'wizard/account_report_chart_of_account.xml',
     ],
-    'installable': True,
+    'installable': False,
     'auto_install': False,
 }
