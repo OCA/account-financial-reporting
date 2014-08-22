@@ -52,5 +52,3 @@ cf. https://launchpad.net/openerp-reporting-engines
         'wizard/print_journal_wizard.xml',
     ],
 }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -24,18 +24,18 @@
 
 import time
 
-import pooler
-from report import report_sxw
+from openerp.report import report_sxw
 from openerp.addons.account_financial_report_horizontal.report import (
     account_profit_loss
 )
 from common_report_header import common_report_header
-from tools.translate import _
+from openerp.tools.translate import _
 
 
 class report_balancesheet_horizontal(
     report_sxw.rml_parse, common_report_header
 ):
+
     def __init__(self, cr, uid, name, context=None):
         super(report_balancesheet_horizontal, self).__init__(
             cr, uid, name, context=context)
@@ -69,11 +69,9 @@ class report_balancesheet_horizontal(
     def set_context(self, objects, data, ids, report_type=None):
         new_ids = ids
         if (data['model'] == 'ir.ui.menu'):
-            new_ids = 'chart_account_id' in data['form'] and data[
-                'form'
-                ]['chart_account_id'] and [data[
-                'form'
-                ]['chart_account_id'][0]] or []
+            new_ids = 'chart_account_id' in data['form'] \
+                and data['form']['chart_account_id'] \
+                and [data['form']['chart_account_id'][0]] or []
             objects = self.pool.get('account.account').browse(
                 self.cr, self.uid, new_ids)
             lang_dict = self.pool.get('res.users').read(
@@ -81,7 +79,7 @@ class report_balancesheet_horizontal(
             data['lang'] = lang_dict.get('context_lang') or False
         return super(
             report_balancesheet_horizontal, self
-            ).set_context(objects, data, new_ids, report_type=report_type)
+        ).set_context(objects, data, new_ids, report_type=report_type)
 
     def sum_dr(self):
         if self.res_bl['type'] == _('Net Profit'):
@@ -98,14 +96,13 @@ class report_balancesheet_horizontal(
 
     def get_data(self, data):
         cr, uid = self.cr, self.uid
-        db_pool = pooler.get_pool(self.cr.dbname)
 
-        #Getting Profit or Loss Balance from profit and Loss report
+        # Getting Profit or Loss Balance from profit and Loss report
         self.obj_pl.get_data(data)
         self.res_bl = self.obj_pl.final_result()
 
-        account_pool = db_pool.get('account.account')
-        currency_pool = db_pool.get('res.currency')
+        account_pool = self.pool['account.account']
+        currency_pool = self.pool['res.currency']
 
         types = [
             'liability',
@@ -124,7 +121,6 @@ class report_balancesheet_horizontal(
             ctx['date_to'] = data['form'].get('date_to', False)
         ctx['state'] = data['form'].get('target_move', 'all')
         cal_list = {}
-        pl_dict = {}
         account_dict = {}
         account_id = data['form'].get('chart_account_id', False)
         if account_id:
@@ -161,13 +157,13 @@ class report_balancesheet_horizontal(
                         'level': account.level,
                         'balance': (
                             account.balance and typ == 'liability' and -1 or 1
-                            ) * account.balance,
+                        ) * account.balance,
                         'type': account.type,
                     }
                     currency = (
                         account.currency_id and account.currency_id
                         or account.company_id.currency_id
-                        )
+                    )
                     if typ == 'liability' and account.type != 'view' and (
                         account.debit != account.credit
                     ):
@@ -184,7 +180,7 @@ class report_balancesheet_horizontal(
                                 not currency_pool.is_zero(
                                     self.cr, self.uid, currency, account.debit
                                 )
-                            ) or (
+                        ) or (
                                 not currency_pool.is_zero(
                                     self.cr, self.uid, currency,
                                     account.balance
@@ -226,7 +222,7 @@ class report_balancesheet_horizontal(
                         'level1': cal_list['asset'][i]['level'],
                         'balance1': cal_list['asset'][i]['balance'],
                         'type1': cal_list['asset'][i]['type'],
-                        }
+                    }
                     self.result_temp.append(temp)
                 else:
                     if i < len(cal_list['asset']):
@@ -278,5 +274,3 @@ report_sxw.report_sxw(
     'account_balance_sheet.rml',
     parser=report_balancesheet_horizontal,
     header='internal')
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

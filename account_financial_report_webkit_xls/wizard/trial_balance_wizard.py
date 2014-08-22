@@ -21,12 +21,13 @@
 ##############################################################################
 
 from openerp.osv import orm
-#import logging
-#_logger = logging.getLogger(__name__)
+# import logging
+# _logger = logging.getLogger(__name__)
+
 
 class trial_balance_wizard(orm.TransientModel):
     _inherit = 'trial.balance.webkit'
-       
+
     def xls_export(self, cr, uid, ids, context=None):
         return self.check_report(cr, uid, ids, context=context)
 
@@ -39,5 +40,5 @@ class trial_balance_wizard(orm.TransientModel):
                     'report_name': 'account.account_report_trial_balance_xls',
                     'datas': data}
         else:
-            return super(trial_balance_wizard, self)._print_report(cr, uid, ids, data, context=context)
-
+            return super(trial_balance_wizard, self)._print_report(
+                cr, uid, ids, data, context=context)

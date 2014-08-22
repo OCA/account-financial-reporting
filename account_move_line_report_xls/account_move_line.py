@@ -21,8 +21,6 @@
 ##############################################################################
 
 from openerp.osv import orm
-from openerp.addons.report_xls.utils import rowcol_to_cell, _render
-from openerp.tools.translate import _
 
 
 class account_move_line(orm.Model):
@@ -34,11 +32,11 @@ class account_move_line(orm.Model):
             'move', 'name', 'date', 'journal', 'period', 'partner', 'account',
             'date_maturity', 'debit', 'credit', 'balance',
             'reconcile', 'reconcile_partial', 'analytic_account',
-            #'ref', 'partner_ref', 'tax_code', 'tax_amount', 'amount_residual',
-            #'amount_currency', 'currency_name', 'company_currency',
-            #'amount_residual_currency',
-            #'product', 'product_ref', 'product_uom', 'quantity',
-            #'statement', 'invoice', 'narration', 'blocked',
+            # 'ref', 'partner_ref', 'tax_code', 'tax_amount',
+            # 'amount_residual', 'amount_currency', 'currency_name',
+            # 'company_currency', 'amount_residual_currency',
+            # 'product', 'product_ref', 'product_uom', 'quantity',
+            # 'statement', 'invoice', 'narration', 'blocked',
         ]
 
     # Change/Add Template entries

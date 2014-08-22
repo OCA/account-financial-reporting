@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Author Joel Grand-Guillaume and Vincent Renaville Copyright 2013 Camptocamp SA
+#    Author Joel Grand-Guillaume and Vincent Renaville Copyright 2013
+#    Camptocamp SA
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,4 +19,4 @@
 #
 ##############################################################################
 
-import wizard
+from . import wizard

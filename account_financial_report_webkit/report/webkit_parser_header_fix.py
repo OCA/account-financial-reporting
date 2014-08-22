@@ -56,7 +56,8 @@ _logger = logging.getLogger('financial.reports.webkit')
 # them in the localcontext with a key 'additional_args'
 # for instance:
 #        header_report_name = _('PARTNER LEDGER')
-#        footer_date_time = self.formatLang(str(datetime.today()), date_time=True)
+#        footer_date_time = self.formatLang(str(datetime.today()),
+#                                           date_time=True)
 #        self.localcontext.update({
 #            'additional_args': [
 #                ('--header-font-name', 'Helvetica'),
@@ -65,7 +66,8 @@ _logger = logging.getLogger('financial.reports.webkit')
 #                ('--footer-font-size', '7'),
 #                ('--header-left', header_report_name),
 #                ('--footer-left', footer_date_time),
-#                ('--footer-right', ' '.join((_('Page'), '[page]', _('of'), '[topage]'))),
+#                ('--footer-right', ' '.join((_('Page'), '[page]', _('of'),
+#                                            '[topage]'))),
 #                ('--footer-line',),
 #            ],
 #        })
@@ -82,8 +84,10 @@ def mako_template(text):
 
     This template uses UTF-8 encoding
     """
-    tmp_lookup = TemplateLookup()  # we need it in order to allow inclusion and inheritance
-    return Template(text, input_encoding='utf-8', output_encoding='utf-8', lookup=tmp_lookup)
+    tmp_lookup = TemplateLookup(
+    )  # we need it in order to allow inclusion and inheritance
+    return Template(text, input_encoding='utf-8', output_encoding='utf-8',
+                    lookup=tmp_lookup)
 
 
 class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
@@ -106,17 +110,29 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
         command.extend(['--encoding', 'utf-8'])
 
         if webkit_header.margin_top:
-            command.extend(['--margin-top', str(webkit_header.margin_top).replace(',', '.')])
+            command.extend(
+                ['--margin-top',
+                 str(webkit_header.margin_top).replace(',', '.')])
         if webkit_header.margin_bottom:
-            command.extend(['--margin-bottom', str(webkit_header.margin_bottom).replace(',', '.')])
+            command.extend(
+                ['--margin-bottom',
+                 str(webkit_header.margin_bottom).replace(',', '.')])
         if webkit_header.margin_left:
-            command.extend(['--margin-left', str(webkit_header.margin_left).replace(',', '.')])
+            command.extend(
+                ['--margin-left',
+                 str(webkit_header.margin_left).replace(',', '.')])
         if webkit_header.margin_right:
-            command.extend(['--margin-right', str(webkit_header.margin_right).replace(',', '.')])
+            command.extend(
+                ['--margin-right',
+                 str(webkit_header.margin_right).replace(',', '.')])
         if webkit_header.orientation:
-            command.extend(['--orientation', str(webkit_header.orientation).replace(',', '.')])
+            command.extend(
+                ['--orientation',
+                 str(webkit_header.orientation).replace(',', '.')])
         if webkit_header.format:
-            command.extend(['--page-size', str(webkit_header.format).replace(',', '.')])
+            command.extend(
+                ['--page-size',
+                 str(webkit_header.format).replace(',', '.')])
 
         if parser_instance.localcontext.get('additional_args', False):
             for arg in parser_instance.localcontext['additional_args']:
@@ -143,10 +159,14 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
             if not error_message:
                 error_message = _('No diagnosis message was provided')
             else:
-                error_message = _('The following diagnosis message was provided:\n') + error_message
+                error_message = _(
+                    'The following diagnosis message was provided:\n') + \
+                    error_message
             if status:
                 raise except_osv(_('Webkit error'),
-                                 _("The command 'wkhtmltopdf' failed with error code = %s. Message: %s") % (status, error_message))
+                                 _("The command 'wkhtmltopdf' failed with \
+                                 error code = %s. Message: %s") %
+                                 (status, error_message))
             with open(out_filename, 'rb') as pdf_file:
                 pdf = pdf_file.read()
             os.close(fd)
@@ -161,7 +181,8 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
         return pdf
 
     # override needed to keep the attachments' storing procedure
-    def create_single_pdf(self, cursor, uid, ids, data, report_xml, context=None):
+    def create_single_pdf(self, cursor, uid, ids, data, report_xml,
+                          context=None):
         """generate the PDF"""
 
         if context is None:
@@ -184,27 +205,30 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
         template = False
 
         if report_xml.report_file:
-            path = addons.get_module_resource(*report_xml.report_file.split(os.path.sep))
+            path = addons.get_module_resource(
+                *report_xml.report_file.split(os.path.sep))
             if os.path.exists(path):
                 template = file(path).read()
         if not template and report_xml.report_webkit_data:
             template = report_xml.report_webkit_data
         if not template:
-            raise except_osv(_('Error!'), _('Webkit Report template not found !'))
+            raise except_osv(
+                _('Error!'), _('Webkit Report template not found !'))
         header = report_xml.webkit_header.html
 
         if not header and report_xml.header:
             raise except_osv(
-                  _('No header defined for this Webkit report!'),
-                  _('Please set a header in company settings.')
-              )
+                _('No header defined for this Webkit report!'),
+                _('Please set a header in company settings.')
+            )
 
         css = report_xml.webkit_header.css
         if not css:
             css = ''
 
         translate_call = partial(self.translate_call, parser_instance)
-        #default_filters=['unicode', 'entity'] can be used to set global filter
+        # default_filters=['unicode', 'entity'] can be used to set global
+        # filter
         body_mako_tpl = mako_template(template)
         helper = WebKitHelper(cursor, uid, report_xml.id, context)
         if report_xml.precise_mode:

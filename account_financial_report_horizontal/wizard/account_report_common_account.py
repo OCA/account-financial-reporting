@@ -21,7 +21,7 @@
 #
 ##############################################################################
 
-from osv import orm, fields
+from openerp.osv import orm, fields
 
 
 class account_common_account_report(orm.TransientModel):
