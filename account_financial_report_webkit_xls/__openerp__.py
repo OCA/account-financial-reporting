@@ -25,7 +25,7 @@
     'license': 'AGPL-3',
     'author': 'Noviat',
     'category': 'Generic Modules/Accounting',
-    'description': """ 
+    'description': """
 
     This module adds XLS export to the following accounting reports:
         - general ledger
@@ -33,14 +33,13 @@
         - partner ledger
         - partner balance
         - open invoices
-        
+
     """,
     'depends': ['report_xls', 'account_financial_report_webkit'],
-    'demo_xml': [],
-    'init_xml': [],
-    'update_xml' : [
-        'wizard/general_ledger_wizard_view.xml',   
-        'wizard/trial_balance_wizard_view.xml',   
+    'demo': [],
+    'data': [
+        'wizard/general_ledger_wizard_view.xml',
+        'wizard/trial_balance_wizard_view.xml',
         'wizard/partners_ledger_wizard_view.xml',
         'wizard/partners_balance_wizard_view.xml',
         'wizard/open_invoices_wizard_view.xml',

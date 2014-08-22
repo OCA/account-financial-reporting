@@ -33,17 +33,22 @@ def sign(number):
     return cmp(number, 0)
 
 
-class TrialBalanceWebkit(report_sxw.rml_parse, CommonBalanceReportHeaderWebkit):
+class TrialBalanceWebkit(report_sxw.rml_parse,
+                         CommonBalanceReportHeaderWebkit):
 
     def __init__(self, cursor, uid, name, context):
-        super(TrialBalanceWebkit, self).__init__(cursor, uid, name, context=context)
+        super(TrialBalanceWebkit, self).__init__(cursor, uid, name,
+                                                 context=context)
         self.pool = pooler.get_pool(self.cr.dbname)
         self.cursor = self.cr
 
-        company = self.pool.get('res.users').browse(self.cr, uid, uid, context=context).company_id
-        header_report_name = ' - '.join((_('TRIAL BALANCE'), company.name, company.currency_id.name))
+        company = self.pool.get('res.users').browse(self.cr, uid, uid,
+                                                    context=context).company_id
+        header_report_name = ' - '.join((_('TRIAL BALANCE'), company.name,
+                                         company.currency_id.name))
 
-        footer_date_time = self.formatLang(str(datetime.today()), date_time=True)
+        footer_date_time = self.formatLang(str(datetime.today()),
+                                           date_time=True)
 
         self.localcontext.update({
             'cr': cursor,
@@ -63,22 +68,26 @@ class TrialBalanceWebkit(report_sxw.rml_parse, CommonBalanceReportHeaderWebkit):
                 ('--header-left', header_report_name),
                 ('--header-spacing', '2'),
                 ('--footer-left', footer_date_time),
-                ('--footer-right', ' '.join((_('Page'), '[page]', _('of'), '[topage]'))),
+                ('--footer-right', ' '.join((_('Page'), '[page]', _('of'),
+                                             '[topage]'))),
                 ('--footer-line',),
             ],
         })
 
     def set_context(self, objects, data, ids, report_type=None):
-        """Populate a ledger_lines attribute on each browse record that will be used
-        by mako template"""
-        objects, new_ids, context_report_values = self.compute_balance_data(data)
+        """Populate a ledger_lines attribute on each browse record that will
+           be used by mako template"""
+        objects, new_ids, context_report_values = self.\
+            compute_balance_data(data)
 
         self.localcontext.update(context_report_values)
 
-        return super(TrialBalanceWebkit, self).set_context(objects, data, new_ids,
-                                                            report_type=report_type)
+        return super(TrialBalanceWebkit, self).set_context(
+            objects, data, new_ids, report_type=report_type)
 
-HeaderFooterTextWebKitParser('report.account.account_report_trial_balance_webkit',
-                             'account.account',
-                             'addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako',
-                             parser=TrialBalanceWebkit)
+HeaderFooterTextWebKitParser(
+    'report.account.account_report_trial_balance_webkit',
+    'account.account',
+    'addons/account_financial_report_webkit/report/templates/\
+        account_report_trial_balance.mako',
+    parser=TrialBalanceWebkit)
