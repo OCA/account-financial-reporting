@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
+# -*- encoding: utf-8 -*-
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    This module copyright (C) 2012 Therp BV (<http://therp.nl>),
-#    Copyright (C) 2013 Agile Business Group sagl
-#    (<http://www.agilebg.com>) (<lorenzo.battistini@agilebg.com>)
+#
+#    Copyright (c) 2013 Noviat nv/sa (www.noviat.com). All rights reserved.
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -21,27 +20,30 @@
 #
 ##############################################################################
 {
-    "name": "Accounting Financial Reports Horizontal",
-    "version": "0.2",
-    "author": ["Therp BV", "Agile Business Group"],
-    "category": 'Accounting & Finance',
-    'complexity': "normal",
-    "description": """
-This is a port to OpenERP 7.0 of the horizontal financial reports
-'Balance sheet' and 'Profit and Loss' as found in OpenERP 6.0.
+    'name': 'Add XLS export to accounting reports',
+    'version': '0.4',
+    'license': 'AGPL-3',
+    'author': 'Noviat',
+    'category': 'Generic Modules/Accounting',
+    'description': """
+
+    This module adds XLS export to the following accounting reports:
+        - general ledger
+        - trial balance
+        - partner ledger
+        - partner balance
+        - open invoices
+
     """,
-    'website': 'https://launchpad.net/account-financial-report',
-    'images': [],
-    "depends": ["account"],
-    'data': [
-        'menu.xml',
-        'account_report.xml',
-        'wizard/account_report_common_view.xml',
-        'wizard/account_report_balance_sheet_view.xml',
-        'wizard/account_report_profit_loss_view.xml',
-    ],
+    'depends': ['report_xls', 'account_financial_report_webkit'],
     'demo': [],
-    'test': [],
-    'installable': True,
+    'data': [
+        'wizard/general_ledger_wizard_view.xml',
+        'wizard/trial_balance_wizard_view.xml',
+        'wizard/partners_ledger_wizard_view.xml',
+        'wizard/partners_balance_wizard_view.xml',
+        'wizard/open_invoices_wizard_view.xml',
+    ],
     'active': False,
+    'installable': False,
 }

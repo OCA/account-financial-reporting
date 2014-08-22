@@ -61,5 +61,5 @@ where appropriate""",
         "view/account_financial_report_view.xml",
     ],
     "active": False,
-    "installable": True
+    'installable': False
 }
