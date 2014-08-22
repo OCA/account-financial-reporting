@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
-        <menuitem
-            parent="account.menu_finance_legal_statement"
-            id="final_accounting_reports"
-            name="Horizontal Financial Reports"/>
-    </data>
-</openerp>
