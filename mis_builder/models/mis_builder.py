@@ -208,6 +208,7 @@ class mis_report_kpi(orm.Model):
                                                          '%%%s.%df' % (
                                                              sign, dp),
                                                          value,
+                                                         grouping=True,
                                                          context=context),
                             divider_label, suffix or '')
 
