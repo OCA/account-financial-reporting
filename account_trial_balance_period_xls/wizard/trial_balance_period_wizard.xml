@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+
+    <record id="trial_balance_period_wizard_view" model="ir.ui.view">
+      <field name="name">Trial Balance per Period</field>
+      <field name="model">trial.balance.period.wizard</field>
+      <field name="arch" type="xml">
+        <form string="Report Options" version="7.0">
+          <label nolabel="1" colspan="4" string="Excel report of the Trial Balance per Period."/>
+          <group col="4" colspan="4">
+            <field name="chart_account_id" widget="selection" on_change="onchange_chart_id(chart_account_id, context)"/>
+            <field name="company_id" invisible="1"/>
+            <field name="fiscalyear_id" domain="[('company_id','=',company_id)]" on_change="onchange_fiscalyear_id(fiscalyear_id, context)"/>
+            <field name="target_move"/>
+            <field name="level"/>
+          </group>
+          <group string="Periods" colspan="4">
+            <field name="period_from" domain="[('fiscalyear_id', '=', fiscalyear_id)]" colspan="4"/>
+            <field name="period_to" domain="[('fiscalyear_id', '=', fiscalyear_id)]" colspan="4"/>
+          </group>
+          <notebook tabpos="up" colspan="4">
+            <page string="Journals" name="journal_ids">
+              <field name="journal_ids" colspan="4" nolabel="1"/>
+            </page>
+            <page string="Accounts" name="account_ids">
+              <label string="Export only"/>
+              <field name="account_ids" domain="[('type', '=', 'view'), ('parent_id', '!=', False), ('level', '&lt;', level==0 and 999 or level+1), ('id', 'child_of', [chart_account_id])]" colspan="4" nolabel="1">
+                <tree>
+                  <field name="code"/>
+                  <field name="name"/>
+                  <field name="type"/>
+                </tree>
+              </field>
+            </page>
+          </notebook>
+          <footer>
+            <button name="xls_export" icon="gtk-execute" string="Export" type="object" context="{'xls_export':1}" default_focus="1" class="oe_highlight"/>
+            or
+            <button string="Cancel" class="oe_link" special="cancel" />
+          </footer>
+        </form>
+      </field>
+    </record>
+
+    <record id="action_trial_balance_period_wizard" model="ir.actions.act_window">
+      <field name="name">Trial Balance per Period</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">trial.balance.period.wizard</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">form</field>
+      <field name="view_id" ref="trial_balance_period_wizard_view"/>
+      <field name="target">new</field>
+    </record>
+
+    <menuitem
+      name="Trial Balance per Period"
+      sequence="10"
+      parent="account.final_accounting_reports"
+      action="action_trial_balance_period_wizard"
+      id="menu_trial_balance_period_wizard"
+      icon="STOCK_PRINT"/>
+
+  </data>
+</openerp>
