@@ -1,4 +1,37 @@
 -
+  I first fix the demo periods (7.0 only)
+  see https://code.launchpad.net/~acsone-openerp/openobject-addons/7.0-bug-1281579-sbi/+merge/207311
+  which was merged in 8.0
+-
+    !python  {model: account.period}: |
+        import time
+        if not self.search(cr, uid, [('special', '=', False),
+                                     ('fiscalyear_id', '=', ref('account.data_fiscalyear')),
+                                     ('company_id', '=', ref('base.main_company'))]):
+            cur_year = time.strftime('%Y')
+            self.create(cr, uid, {
+              'code': '00/' + cur_year,
+              'name': 'X 00/' + cur_year,
+              'special': True,
+              'fiscalyear_id': ref('account.data_fiscalyear'),
+              'date_start': cur_year + '-01-01',
+              'date_stop': cur_year + '-01-01',
+              'company_id': ref('base.main_company'),
+            })
+        self.write(cr, uid, ref('account.period_1'), {'special': False})
+        self.write(cr, uid, ref('account.period_2'), {'special': False})
+        self.write(cr, uid, ref('account.period_3'), {'special': False})
+        self.write(cr, uid, ref('account.period_4'), {'special': False})
+        self.write(cr, uid, ref('account.period_5'), {'special': False})
+        self.write(cr, uid, ref('account.period_6'), {'special': False})
+        self.write(cr, uid, ref('account.period_7'), {'special': False})
+        self.write(cr, uid, ref('account.period_8'), {'special': False})
+        self.write(cr, uid, ref('account.period_9'), {'special': False})
+        self.write(cr, uid, ref('account.period_10'), {'special': False})
+        self.write(cr, uid, ref('account.period_11'), {'special': False})
+        self.write(cr, uid, ref('account.period_12'), {'special': False})
+
+-
   In order to test the PDF General Ledger webkit wizard I will print report with default setting
 -
     !python {model: account.account}: |
