@@ -300,7 +300,10 @@ class account_balance(report_sxw.rml_parse):
             unknown and res.append(unknown)
         return res
 
-    def _get_analytic_ledger(self, account, ctx={}):
+    def _get_analytic_ledger(self, account, ctx=None):
+        if ctx is None:
+            ctx = {}
+
         res = []
 
         if account['type'] in ('other', 'liquidity', 'receivable', 'payable'):
@@ -370,7 +373,10 @@ class account_balance(report_sxw.rml_parse):
                 })
         return res
 
-    def _get_journal_ledger(self, account, ctx={}):
+    def _get_journal_ledger(self, account, ctx=None):
+        if ctx is None:
+            ctx = {}
+
         res = []
         am_obj = self.pool.get('account.move')
         print 'AM OBJ ', am_obj
@@ -423,8 +429,10 @@ class account_balance(report_sxw.rml_parse):
         period_obj = self.pool.get('account.period')
         fiscalyear_obj = self.pool.get('account.fiscalyear')
 
-        def _get_children_and_consol(cr, uid, ids, level, context={},
+        def _get_children_and_consol(cr, uid, ids, level, context=None,
                                      change_sign=False):
+            if context is None:
+                context = {}
             aa_obj = self.pool.get('account.account')
             ids2 = []
             for aa_brw in aa_obj.browse(cr, uid, ids, context):
