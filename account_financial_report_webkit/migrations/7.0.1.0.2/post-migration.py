@@ -29,7 +29,7 @@ def migrate(cr, version):
                    "          WHERE reconcile_id =  acm.reconcile_id"
                    "          ORDER BY date DESC LIMIT 1)"
                    " WHERE last_rec_date IS NULL"
-		   "     AND reconcile_id IS NOT NULL;")
+                   "     AND reconcile_id IS NOT NULL;")
 
         cr.execute("UPDATE account_move_line as acm "
                    " SET last_rec_date ="
@@ -38,4 +38,4 @@ def migrate(cr, version):
                    "                             = acm.reconcile_partial_id"
                    "          ORDER BY date DESC LIMIT 1)"
                    " WHERE last_rec_date IS NULL"
-		   "     AND reconcile_partial_id IS NOT NULL;")
+                   "     AND reconcile_partial_id IS NOT NULL;")
