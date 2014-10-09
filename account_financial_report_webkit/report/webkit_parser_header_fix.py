@@ -35,13 +35,13 @@ from functools import partial
 
 
 from mako import exceptions
-from openerp.osv.osv import except_osv
+from openerp.osv.orm import except_orm
 from openerp.tools.translate import _
-from openerp import addons
 from openerp import pooler
 from openerp import tools
 from openerp.addons.report_webkit import webkit_report
 from openerp.addons.report_webkit.report_helper import WebKitHelper
+from openerp.modules.module import get_module_resource
 
 _logger = logging.getLogger('financial.reports.webkit')
 
@@ -163,7 +163,7 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
                     'The following diagnosis message was provided:\n') + \
                     error_message
             if status:
-                raise except_osv(_('Webkit error'),
+                raise except_orm(_('Webkit error'),
                                  _("The command 'wkhtmltopdf' failed with \
                                  error code = %s. Message: %s") %
                                  (status, error_message))
@@ -205,19 +205,19 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
         template = False
 
         if report_xml.report_file:
-            path = addons.get_module_resource(
+            path = get_module_resource(
                 *report_xml.report_file.split(os.path.sep))
             if os.path.exists(path):
                 template = file(path).read()
         if not template and report_xml.report_webkit_data:
             template = report_xml.report_webkit_data
         if not template:
-            raise except_osv(
+            raise except_orm(
                 _('Error!'), _('Webkit Report template not found !'))
         header = report_xml.webkit_header.html
 
         if not header and report_xml.header:
-            raise except_osv(
+            raise except_orm(
                 _('No header defined for this Webkit report!'),
                 _('Please set a header in company settings.')
             )
@@ -243,7 +243,7 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
                 except Exception:
                     msg = exceptions.text_error_template().render()
                     _logger.error(msg)
-                    raise except_osv(_('Webkit render'), msg)
+                    raise except_orm(_('Webkit render'), msg)
         else:
             try:
                 html = body_mako_tpl.render(helper=helper,
@@ -254,7 +254,7 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
             except Exception:
                 msg = exceptions.text_error_template().render()
                 _logger.error(msg)
-                raise except_osv(_('Webkit render'), msg)
+                raise except_orm(_('Webkit render'), msg)
 
         # NO html footer and header because we write them as text with
         # wkhtmltopdf
@@ -270,7 +270,7 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
             except Exception:
                 msg = exceptions.text_error_template().render()
                 _logger.error(msg)
-                raise except_osv(_('Webkit render'), msg)
+                raise except_orm(_('Webkit render'), msg)
             return (deb, 'html')
         bin = self.get_lib(cursor, uid)
         pdf = self.generate_pdf(bin, report_xml, head, foot, htmls,

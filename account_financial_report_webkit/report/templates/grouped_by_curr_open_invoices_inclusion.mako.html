@@ -1,13 +1,13 @@
 ## -*- coding: utf-8 -*-
 <%page args="account, formatLang" />
-%if account.grouped_ledger_lines and account.partners_order:
+%if account.grouped_ledger_lines and partners_order[account.id]:
     <%
     account_total_debit = 0.0
     account_total_credit = 0.0
     account_balance_cumul = 0.0
     account_balance_cumul_curr = 0.0
     %>
-   %for partner_name, p_id, p_ref, p_name in account.partners_order:
+   %for partner_name, p_id, p_ref, p_name in partners_order[account.id]:
     <div class="account_title bg" style="width: 1080px; margin-top:
       20px; font-size: 12px;">${account.code} - ${account.name} --  ${partner_name or _('No Partner')} </div>
 

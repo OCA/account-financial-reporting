@@ -110,7 +110,7 @@
                     </div>
                   </div>
                   <div class="act_as_tbody">
-                    %for partner_name, p_id, p_ref, p_name in acc.partners_order:
+                    %for partner_name, p_id, p_ref, p_name in partners_order[acc.id]:
                        %if acc.aged_lines.get(p_id):
                        <div class="act_as_row lines">
                          <%line = acc.aged_lines[p_id]%>

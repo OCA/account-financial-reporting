@@ -1,6 +1,6 @@
 ## -*- coding: utf-8 -*-
 <%page args="account, formatLang" />
-%if account.ledger_lines and account.partners_order:
+%if ledger_lines[account.id] and partners_order[account.id]:
     <%
     account_total_debit = 0.0
     account_total_credit = 0.0
@@ -10,7 +10,7 @@
 
     <div class="account_title bg" style="width: 1080px; margin-top: 20px; font-size: 12px;">${account.code} - ${account.name}</div>
 
-    %for partner_name, p_id, p_ref, p_name in account.partners_order:
+    %for partner_name, p_id, p_ref, p_name in partners_order[account.id]:
     <%
       total_debit = 0.0
       total_credit = 0.0
@@ -67,7 +67,7 @@
             def amount(text):
                 return text.replace('-', '&#8209;')  # replace by a non-breaking hyphen (it will not word-wrap between hyphen and numbers)
             %>
-            %for line in account.ledger_lines.get(p_id, []):
+            %for line in ledger_lines[account.id].get(p_id, []):
               <%
               total_debit += line.get('debit') or 0.0
               total_credit += line.get('credit') or 0.0

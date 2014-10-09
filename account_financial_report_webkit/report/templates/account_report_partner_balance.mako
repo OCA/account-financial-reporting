@@ -105,7 +105,7 @@
 
         %for current_account in objects:
             <%
-            partners_order = current_account.partners_order
+            partners_order = partners_order[current_account.id]
 
             # do not display accounts without partners
             if not partners_order:

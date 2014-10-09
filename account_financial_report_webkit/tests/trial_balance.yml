@@ -5,7 +5,7 @@
         from datetime import datetime
         ctx={}
         data_dict = {'chart_account_id':ref('account.chart0')}
-        from tools import test_reports
+        from openerp.tools import test_reports
         test_reports.try_report_action(cr, uid, 'action_account_trial_balance_menu_webkit',wiz_data=data_dict, context=ctx, our_module='account_financial_report_webkit')
 
 -
@@ -16,7 +16,7 @@
         ctx={}
         data_dict = {'chart_account_id':ref('account.chart0')}
         ctx.update({'model': 'account.account','active_ids':[ref('account.assets_view'), ref('account.liabilities_view')],'active_id': ref('account.assets_view')})
-        from tools import test_reports
+        from openerp.tools import test_reports
         test_reports.try_report_action(cr, uid, 'action_account_trial_balance_menu_webkit',wiz_data=data_dict, context=ctx, our_module='account_financial_report_webkit')
 
 -
@@ -27,7 +27,7 @@
         ctx={}
         data_dict = {'chart_account_id':ref('account.chart0'), 'fiscalyear_id': ref('account.data_fiscalyear'),
                      'filter': 'filter_period', 'period_from': ref('account.period_1'), 'period_to': ref('account.period_12')}
-        from tools import test_reports
+        from openerp.tools import test_reports
         test_reports.try_report_action(cr, uid, 'action_account_trial_balance_menu_webkit',wiz_data=data_dict, context=ctx, our_module='account_financial_report_webkit')
 
 -
@@ -38,7 +38,7 @@
         ctx={}
         data_dict = {'chart_account_id':ref('account.chart0'), 'fiscalyear_id': ref('account.data_fiscalyear'),
                      'filter': 'filter_date', 'date_from': '%s-01-01' %(datetime.now().year), 'date_to': '%s-12-31' %(datetime.now().year)}
-        from tools import test_reports
+        from openerp.tools import test_reports
         test_reports.try_report_action(cr, uid, 'action_account_trial_balance_menu_webkit',wiz_data=data_dict, context=ctx, our_module='account_financial_report_webkit')
 
 -
@@ -49,7 +49,7 @@
         ctx={}
         data_dict = {'chart_account_id':ref('account.chart0'), 'fiscalyear_id': ref('account.data_fiscalyear'),
                      'comp0_filter': 'filter_year', 'comp0_fiscalyear_id': ref('account.data_fiscalyear')}
-        from tools import test_reports
+        from openerp.tools import test_reports
         test_reports.try_report_action(cr, uid, 'action_account_trial_balance_menu_webkit',wiz_data=data_dict, context=ctx, our_module='account_financial_report_webkit')
 
 -
@@ -63,5 +63,5 @@
                      'comp1_filter': 'filter_period', 'comp1_period_from': ref('account.period_1'), 'comp1_period_to': ref('account.period_12'),
                      'comp2_filter': 'filter_date', 'comp2_date_from': '%s-01-01' %(datetime.now().year), 'comp2_date_to': '%s-12-31' %(datetime.now().year)
                      }
-        from tools import test_reports
+        from openerp.tools import test_reports
         test_reports.try_report_action(cr, uid, 'action_account_trial_balance_menu_webkit',wiz_data=data_dict, context=ctx, our_module='account_financial_report_webkit')

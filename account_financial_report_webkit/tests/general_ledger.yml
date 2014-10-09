@@ -5,7 +5,7 @@
         ctx={}
         data_dict = {'chart_account_id':ref('account.chart0')}
         ctx.update({'model': 'account.account','active_ids':[ref('account.chart0')],'active_id':ref('account.chart0')})
-        from tools import test_reports
+        from openerp.tools import test_reports
         test_reports.try_report_action(cr, uid, 'action_account_general_ledger_menu_webkit',wiz_data=data_dict, context=ctx, our_module='account_financial_report_webkit')
 
 -
@@ -15,7 +15,7 @@
         ctx={}
         data_dict = {'chart_account_id':ref('account.chart0'), 'target_move': 'posted'}
         ctx.update({'model': 'account.account','active_ids':[ref('account.chart0')],'active_id':ref('account.chart0')})
-        from tools import test_reports
+        from openerp.tools import test_reports
         test_reports.try_report_action(cr, uid, 'action_account_general_ledger_menu_webkit',wiz_data=data_dict, context=ctx, our_module='account_financial_report_webkit')
 
 -
@@ -25,7 +25,7 @@
         ctx={}
         data_dict = {'chart_account_id':ref('account.chart0'), 'display_account': 'bal_mix'}
         ctx.update({'model': 'account.account','active_ids':[ref('account.chart0')],'active_id':ref('account.chart0')})
-        from tools import test_reports
+        from openerp.tools import test_reports
         test_reports.try_report_action(cr, uid, 'action_account_general_ledger_menu_webkit',wiz_data=data_dict, context=ctx, our_module='account_financial_report_webkit')
         
 -
@@ -35,7 +35,7 @@
         ctx={}
         data_dict = {'chart_account_id':ref('account.chart0'), 'amount_currency': 1}
         ctx.update({'model': 'account.account','active_ids':[ref('account.chart0')],'active_id':ref('account.chart0')})
-        from tools import test_reports
+        from openerp.tools import test_reports
         test_reports.try_report_action(cr, uid, 'action_account_general_ledger_menu_webkit',wiz_data=data_dict, context=ctx, our_module='account_financial_report_webkit')
 
 #Filter by date 
@@ -48,7 +48,7 @@
         data_dict = {'chart_account_id':ref('account.chart0'),'amount_currency': 1, 'chart_account_id': 1, 'date_from': '%s-01-01' %(datetime.now().year), 
                      'date_to':'%s-04-01' %(datetime.now().year), 'display_account': 'bal_all', 'filter': 'filter_date',}
         ctx.update({'model': 'account.account','active_ids':[ref('account.chart0')],'active_id':ref('account.chart0')})
-        from tools import test_reports
+        from openerp.tools import test_reports
         test_reports.try_report_action(cr, uid, 'action_account_general_ledger_menu_webkit',wiz_data=data_dict, context=ctx, our_module='account_financial_report_webkit')
 
 -
@@ -60,6 +60,6 @@
         data_dict = {'chart_account_id':ref('account.chart0'),'amount_currency': 1, 'chart_account_id': 1, 'date_from': '%s-01-01' %(datetime.now().year), 
                      'date_to':'%s-04-01' %(datetime.now().year), 'display_account': 'bal_all', 'filter': 'filter_date',}
         ctx.update({'model': 'account.account','active_ids':[ref('account.chart0')],'active_id':ref('account.chart0')})
-        from tools import test_reports
+        from openerp.tools import test_reports
         test_reports.try_report_action(cr, uid, 'action_account_general_ledger_menu_webkit',wiz_data=data_dict, context=ctx, our_module='account_financial_report_webkit')
 # I still have to parse report content but for this I need accounting data on multiple exercises and faor all fiscal year
