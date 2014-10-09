@@ -119,20 +119,22 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
         ledger_lines_memoizer = self._compute_account_ledger_lines(
             accounts, init_balance_memoizer, main_filter, target_move, start,
             stop)
-        objects = []
-        for account in self.pool.get('account.account').browse(self.cursor,
-                                                               self.uid,
-                                                               accounts):
+        objects = self.pool.get('account.account').browse(self.cursor,
+                                                          self.uid,
+                                                          accounts)
+
+        init_balance = {}
+        ledger_lines = {}
+        for account in objects:
             if do_centralize and account.centralized \
                     and ledger_lines_memoizer.get(account.id):
-                account.ledger_lines = self._centralize_lines(
+                ledger_lines[account.id] = self._centralize_lines(
                     main_filter, ledger_lines_memoizer.get(account.id, []))
             else:
-                account.ledger_lines = ledger_lines_memoizer.get(
+                ledger_lines[account.id] = ledger_lines_memoizer.get(
                     account.id, [])
-            account.init_balance = init_balance_memoizer.get(account.id, {})
-
-            objects.append(account)
+            init_balance[account.id] = init_balance_memoizer.get(account.id,
+                                                                 {})
 
         self.localcontext.update({
             'fiscalyear': fiscalyear,
@@ -142,6 +144,8 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
             'stop_period': stop_period,
             'chart_account': chart_account,
             'initial_balance_mode': initial_balance_mode,
+            'init_balance': init_balance,
+            'ledger_lines': ledger_lines,
         })
 
         return super(GeneralLedgerWebkit, self).set_context(

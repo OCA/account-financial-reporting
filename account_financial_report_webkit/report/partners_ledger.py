@@ -146,12 +146,17 @@ class PartnersLedgerWebkit(report_sxw.rml_parse,
         ledger_lines = self._compute_partner_ledger_lines(
             accounts, main_filter, target_move, start, stop,
             partner_filter=partner_ids)
-        objects = []
-        for account in self.pool.get('account.account').browse(self.cursor,
-                                                               self.uid,
-                                                               accounts):
-            account.ledger_lines = ledger_lines.get(account.id, {})
-            account.init_balance = initial_balance_lines.get(account.id, {})
+        objects = self.pool.get('account.account').browse(self.cursor,
+                                                          self.uid,
+                                                          accounts)
+
+        init_balance = {}
+        ledger_lines_dict = {}
+        partners_order = {}
+        for account in objects:
+            ledger_lines_dict[account.id] = ledger_lines.get(account.id, {})
+            init_balance[account.id] = initial_balance_lines.get(account.id,
+                                                                 {})
             # we have to compute partner order based on inital balance
             # and ledger line as we may have partner with init bal
             # that are not in ledger line and vice versa
@@ -159,17 +164,16 @@ class PartnersLedgerWebkit(report_sxw.rml_parse,
             if initial_balance_mode:
                 non_null_init_balances = dict(
                     [(ib, amounts) for ib, amounts
-                     in account.init_balance.iteritems()
+                     in init_balance[account.id].iteritems()
                      if amounts['init_balance']
                      or amounts['init_balance_currency']])
                 init_bal_lines_pids = non_null_init_balances.keys()
             else:
-                account.init_balance = {}
+                init_balance[account.id] = {}
                 init_bal_lines_pids = []
 
-            account.partners_order = self._order_partners(
+            partners_order[account.id] = self._order_partners(
                 ledg_lines_pids, init_bal_lines_pids)
-            objects.append(account)
 
         self.localcontext.update({
             'fiscalyear': fiscalyear,
@@ -180,6 +184,9 @@ class PartnersLedgerWebkit(report_sxw.rml_parse,
             'partner_ids': partner_ids,
             'chart_account': chart_account,
             'initial_balance_mode': initial_balance_mode,
+            'init_balance': init_balance,
+            'ledger_lines': ledger_lines_dict,
+            'partners_order': partners_order
         })
 
         return super(PartnersLedgerWebkit, self).set_context(

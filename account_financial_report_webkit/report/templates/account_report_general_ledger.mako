@@ -75,8 +75,8 @@
         <!-- we use div with css instead of table for tabular data because div do not cut rows at half at page breaks -->
         %for account in objects:
         <%
-          display_initial_balance = account.init_balance and (account.init_balance.get('debit', 0.0) != 0.0 or account.init_balance.get('credit', 0.0) != 0.0)
-          display_ledger_lines = account.ledger_lines
+          display_initial_balance = init_balance[account.id] and (init_balance[account.id].get('debit') != 0.0 or init_balance[account.id].get('credit', 0.0) != 0.0)
+          display_ledger_lines = ledger_lines[account.id]
         %>
           %if display_account_raw(data) == 'all' or (display_ledger_lines or display_initial_balance):
               <%
@@ -128,10 +128,10 @@
                 <div class="act_as_tbody">
                       %if display_initial_balance:
                         <%
-                        cumul_debit = account.init_balance.get('debit') or 0.0
-                        cumul_credit = account.init_balance.get('credit') or 0.0
-                        cumul_balance = account.init_balance.get('init_balance') or 0.0
-                        cumul_balance_curr = account.init_balance.get('init_balance_currency') or 0.0
+                        cumul_debit = init_balance[account.id].get('debit') or 0.0
+                        cumul_credit = init_balance[account.id].get('credit') or 0.0
+                        cumul_balance = init_balance[account.id].get('init_balance') or 0.0
+                        cumul_balance_curr = init_balance[account.id].get('init_balance_currency') or 0.0
                         %>
                         <div class="act_as_row initial_balance">
                           ## date
@@ -153,9 +153,9 @@
                           ## counterpart
                           <div class="act_as_cell"></div>
                           ## debit
-                          <div class="act_as_cell amount">${formatLang(account.init_balance.get('debit')) | amount}</div>
+                          <div class="act_as_cell amount">${formatLang(init_balance[account.id].get('debit')) | amount}</div>
                           ## credit
-                          <div class="act_as_cell amount">${formatLang(account.init_balance.get('credit')) | amount}</div>
+                          <div class="act_as_cell amount">${formatLang(init_balance[account.id].get('credit')) | amount}</div>
                           ## balance cumulated
                           <div class="act_as_cell amount" style="padding-right: 1px;">${formatLang(cumul_balance) | amount }</div>
                          %if amount_currency(data):
@@ -167,7 +167,7 @@
 
                         </div>
                       %endif
-                      %for line in account.ledger_lines:
+                      %for line in ledger_lines[account.id]:
                         <%
                         cumul_debit += line.get('debit') or 0.0
                         cumul_credit += line.get('credit') or 0.0

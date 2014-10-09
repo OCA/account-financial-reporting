@@ -39,7 +39,7 @@ class AccountAccount(orm.Model):
             'Centralized',
             help="If flagged, no details will be displayed in "
                  "the General Ledger report (the webkit one only), "
-                 "only centralized amounts per period.")
+                 "only centralized amounts per period."),
     }
 
     _defaults = {

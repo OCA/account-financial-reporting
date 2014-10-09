@@ -26,7 +26,6 @@ from operator import itemgetter
 from mako.template import Template
 
 
-import openerp.addons
 from openerp import pooler
 from openerp.osv import osv
 from openerp.report import report_sxw
@@ -34,10 +33,11 @@ from openerp.tools.translate import _
 from openerp.addons.report_webkit import report_helper
 from .common_partner_reports import CommonPartnersReportHeaderWebkit
 from .webkit_parser_header_fix import HeaderFooterTextWebKitParser
+from openerp.modules.module import get_module_resource
 
 
 def get_mako_template(obj, *args):
-    template_path = openerp.addons.get_module_resource(*args)
+    template_path = get_module_resource(*args)
     return Template(filename=template_path, input_encoding='utf-8')
 
 report_helper.WebKitHelper.get_mako_template = get_mako_template
