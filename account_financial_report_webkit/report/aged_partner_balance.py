@@ -128,6 +128,7 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
                   call to set_context
 
         """
+
         res = super(AccountAgedTrialBalanceWebkit, self).set_context(
             objects,
             data,
@@ -135,21 +136,35 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
             report_type=report_type
         )
 
+        agged_lines_accounts = {}
+        agged_totals_accounts = {}
+        agged_percents_accounts = {}
+
         for acc in self.objects:
-            acc.aged_lines = {}
-            acc.agged_totals = {}
-            acc.agged_percents = {}
-            for part_id, partner_lines in acc.ledger_lines.items():
+            agged_lines_accounts[acc.id] = {}
+            agged_totals_accounts[acc.id] = {}
+            agged_percents_accounts[acc.id] = {}
+
+            for part_id, partner_lines in\
+                    self.localcontext['ledger_lines'][acc.id].items():
+
                 aged_lines = self.compute_aged_lines(part_id,
                                                      partner_lines,
                                                      data)
                 if aged_lines:
-                    acc.aged_lines[part_id] = aged_lines
-            acc.aged_totals = totals = self.compute_totals(
-                acc.aged_lines.values())
-            acc.aged_percents = self.compute_percents(totals)
+                    agged_lines_accounts[acc.id][part_id] = aged_lines
+            agged_totals_accounts[acc.id] = totals = self.compute_totals(
+                agged_lines_accounts[acc.id].values())
+            agged_percents_accounts[acc.id] = self.compute_percents(totals)
+
+        self.localcontext.update({
+            'agged_lines_accounts': agged_lines_accounts,
+            'agged_totals_accounts': agged_totals_accounts,
+            'agged_percents_accounts': agged_percents_accounts,
+        })
+
         # Free some memory
-        del(acc.ledger_lines)
+        del(self.localcontext['ledger_lines'])
         return res
 
     def compute_aged_lines(self, partner_id, ledger_lines, data):

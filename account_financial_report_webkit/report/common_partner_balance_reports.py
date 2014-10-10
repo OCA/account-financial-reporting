@@ -278,19 +278,29 @@ class CommonPartnerBalanceReportHeaderWebkit(CommonBalanceReportHeaderWebkit,
                         partner_filter_ids=partner_ids)
                 comparison_params.append(comp_params)
                 comp_accounts_by_ids.append(comparison_result)
-        objects = []
+        objects = self.pool.get('account.account').browse(self.cursor,
+                                                          self.uid,
+                                                          account_ids)
 
-        for account in self.pool.get('account.account').browse(self.cursor,
-                                                               self.uid,
-                                                               account_ids):
+        init_balance_accounts = {}
+        comparisons_accounts = {}
+        partners_order_accounts = {}
+        partners_amounts_accounts = {}
+        debit_accounts = {}
+        credit_accounts = {}
+        balance_accounts = {}
+
+        for account in objects:
             if not account.parent_id:  # hide top level account
                 continue
-            account.debit = accounts_by_ids[account.id]['debit']
-            account.credit = accounts_by_ids[account.id]['credit']
-            account.balance = accounts_by_ids[account.id]['balance']
-            account.init_balance = accounts_by_ids[
+            debit_accounts[account.id] = accounts_by_ids[account.id]['debit']
+            credit_accounts[account.id] = accounts_by_ids[account.id]['credit']
+            balance_accounts[account.id] = \
+                accounts_by_ids[account.id]['balance']
+            init_balance_accounts[account.id] = accounts_by_ids[
                 account.id].get('init_balance', 0.0)
-            account.partners_amounts = partner_details_by_ids[account.id]
+            partners_amounts_accounts[account.id] =\
+                partner_details_by_ids[account.id]
             comp_accounts = []
             for comp_account_by_id in comp_accounts_by_ids:
                 values = comp_account_by_id.get(account.id)
@@ -302,24 +312,25 @@ class CommonPartnerBalanceReportHeaderWebkit(CommonBalanceReportHeaderWebkit,
 
                 for partner_id, partner_values in \
                         values['partners_amounts'].copy().iteritems():
-                    base_partner_balance = account.partners_amounts[
-                        partner_id]['balance'] if \
-                        account.partners_amounts.get(partner_id) else 0.0
+                    base_partner_balance = partners_amounts_accounts[account.id][partner_id]['balance']\
+                        if partners_amounts_accounts.get(account.id)\
+                        and partners_amounts_accounts.get(account.id)\
+                        .get(partner_id) else 0.0
                     partner_values.update(self._get_diff(
                         base_partner_balance,
                         partner_values.get('balance', 0.0)))
                     values['partners_amounts'][
                         partner_id].update(partner_values)
 
-            account.comparisons = comp_accounts
+            comparisons_accounts[account.id] = comp_accounts
 
             all_partner_ids = reduce(add, [comp['partners_amounts'].keys()
                                            for comp in comp_accounts],
-                                     account.partners_amounts.keys())
+                                     partners_amounts_accounts[account.id]
+                                     .keys())
 
-            account.partners_order = self._order_partners(all_partner_ids)
-
-            objects.append(account)
+            partners_order_accounts[account.id] = \
+                self._order_partners(all_partner_ids)
 
         context_report_values = {
             'fiscalyear': fiscalyear,
@@ -333,6 +344,13 @@ class CommonPartnerBalanceReportHeaderWebkit(CommonBalanceReportHeaderWebkit,
             'comp_params': comparison_params,
             'initial_balance_mode': initial_balance_mode,
             'compute_diff': self._get_diff,
+            'init_balance_accounts': init_balance_accounts,
+            'comparisons_accounts': comparisons_accounts,
+            'partners_order_accounts': partners_order_accounts,
+            'partners_amounts_accounts': partners_amounts_accounts,
+            'debit_accounts': debit_accounts,
+            'credit_accounts': credit_accounts,
+            'balance_accounts': balance_accounts,
         }
 
         return objects, new_ids, context_report_values
