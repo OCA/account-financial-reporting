@@ -296,11 +296,14 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
             elif account.type == 'view':
                 to_display_accounts.update(
                     dict([(a.id, True) for a in account.child_id]))
-            debit_accounts['account_id'] = accounts_by_ids[account.id]['debit']
-            credit_accounts['account_id'] = accounts_by_ids[account.id]['credit']
-            balance_accounts['account_id'] = accounts_by_ids[account.id]['balance']
-            init_balance_accounts[account.id] = accounts_by_ids[
-                account.id].get('init_balance', 0.0)
+            debit_accounts['account_id'] = \
+                accounts_by_ids[account.id]['debit']
+            credit_accounts['account_id'] = \
+                accounts_by_ids[account.id]['credit']
+            balance_accounts['account_id'] = \
+                accounts_by_ids[account.id]['balance']
+            init_balance_accounts[account.id] =  \
+                accounts_by_ids[account.id].get('init_balance', 0.0)
 
             # if any amount is != 0 in comparisons, we have to display the
             # whole account
