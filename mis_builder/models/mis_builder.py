@@ -670,6 +670,7 @@ class mis_report_instance(orm.Model):
     }
 
     def create(self, cr, uid, vals, context=None):
+        # TODO: explain this
         if 'period_ids' in vals:
             mis_report_instance_period_obj = self.pool.get(
                 'mis.report.instance.period')
@@ -684,6 +685,7 @@ class mis_report_instance(orm.Model):
                                                        context=context)
 
     def write(self, cr, uid, ids, vals, context=None):
+        # TODO: explain this
         res = super(mis_report_instance, self).write(
             cr, uid, ids, vals, context=context)
         mis_report_instance_period_obj = self.pool.get(
