@@ -226,21 +226,21 @@ class mis_report_query(orm.Model):
     def _get_field_names(self, cr, uid, ids, name, args, context=None):
         res = {}
         for query in self.browse(cr, uid, ids, context=context):
-            field_name = []
+            field_names = []
             for field in query.field_ids:
-                field_name.append(field.name)
-            res[query.id] = ', '.join(field_name)
+                field_names.append(field.name)
+            res[query.id] = ', '.join(field_names)
         return res
 
     def onchange_field_ids(self, cr, uid, ids, field_ids, context=None):
         # compute field_names
-        field_name = []
+        field_names = []
         for field in self.pool.get('ir.model.fields').read(cr, uid,
                                                            field_ids[0][2],
                                                            ['name'],
                                                            context=context):
-            field_name.append(field['name'])
-        return {'value': {'field_name': ', '.join(field_name)}}
+            field_names.append(field['name'])
+        return {'value': {'field_names': ', '.join(field_names)}}
 
     _columns = {
         'name': fields.char(size=32, required=True,
@@ -249,11 +249,11 @@ class mis_report_query(orm.Model):
                                     string='Model'),
         'field_ids': fields.many2many('ir.model.fields', required=True,
                                       string='Fields to fetch'),
-        'field_name': fields.function(_get_field_names, type='char',
-                                      string='Fetched fields name',
-                                      store={'mis.report.query':
-                                             (lambda self, cr, uid, ids, c={}:
-                                              ids, ['field_ids'], 20), }),
+        'field_names': fields.function(_get_field_names, type='char',
+                                       string='Fetched fields name',
+                                       store={'mis.report.query':
+                                              (lambda self, cr, uid, ids, c={}:
+                                               ids, ['field_ids'], 20), }),
         'date_field': fields.many2one('ir.model.fields', required=True,
                                       string='Date field',
                                       domain=[('ttype', 'in', ('date',

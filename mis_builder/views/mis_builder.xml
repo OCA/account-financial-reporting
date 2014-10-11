@@ -28,7 +28,7 @@
                                 <field name="model_id"/>
                                 <field name="field_ids" domain="[('model_id', '=', model_id)]" widget="many2many_tags"
                                                         on_change="onchange_field_ids(field_ids, context)"/>
-                                <field name="field_name"/>
+                                <field name="field_names"/>
                                 <field name="date_field" domain="[('model_id', '=', model_id), ('ttype', 'in', ('date', 'datetime'))]"/>
                                 <field name="domain"/>
                             </tree>
