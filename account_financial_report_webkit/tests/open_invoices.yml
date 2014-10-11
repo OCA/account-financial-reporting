@@ -5,7 +5,7 @@
         from datetime import datetime
         ctx={}
         data_dict = {'chart_account_id':ref('account.chart0'), 'until_date': '%s-12-31' %(datetime.now().year)}
-        from tools import test_reports
+        from openerp.tools import test_reports
         test_reports.try_report_action(cr, uid, 'action_account_open_invoices_menu_webkit',wiz_data=data_dict, context=ctx, our_module='account_financial_report_webkit')
 
 -
@@ -17,7 +17,7 @@
         data_dict = {'chart_account_id':ref('account.chart0'), 'fiscalyear_id': ref('account.data_fiscalyear'),
                      'until_date': '%s-12-31' %(datetime.now().year), 'target_move': 'posted',
                      'amount_currency': True, 'result_selection': 'customer_supplier'}
-        from tools import test_reports
+        from openerp.tools import test_reports
         test_reports.try_report_action(cr, uid, 'action_account_open_invoices_menu_webkit',wiz_data=data_dict, context=ctx, our_module='account_financial_report_webkit')
 
 -
@@ -30,7 +30,7 @@
                      'until_date': '%s-12-31' %(datetime.now().year), 'target_move': 'posted',
                      'amount_currency': True, 'result_selection': 'customer_supplier',
                      'partner_ids': [ref('base.res_partner_2'), ref('base.res_partner_1')]}
-        from tools import test_reports
+        from openerp.tools import test_reports
         test_reports.try_report_action(cr, uid, 'action_account_open_invoices_menu_webkit',wiz_data=data_dict, context=ctx, our_module='account_financial_report_webkit')
 
 -
@@ -43,7 +43,7 @@
                      'until_date': '%s-12-31' %(datetime.now().year), 'target_move': 'posted',
                      'amount_currency': True, 'result_selection': 'customer_supplier',
                      'filter': 'filter_period', 'period_from': ref('account.period_1'), 'period_to': ref('account.period_12')}
-        from tools import test_reports
+        from openerp.tools import test_reports
         test_reports.try_report_action(cr, uid, 'action_account_open_invoices_menu_webkit',wiz_data=data_dict, context=ctx, our_module='account_financial_report_webkit')
 
 -
@@ -56,5 +56,5 @@
                      'until_date': '%s-12-31' %(datetime.now().year), 'target_move': 'posted',
                      'amount_currency': True, 'result_selection': 'customer_supplier',
                      'filter': 'filter_date', 'date_from': '%s-01-01' %(datetime.now().year), 'date_to': '%s-12-31' %(datetime.now().year)}
-        from tools import test_reports
+        from openerp.tools import test_reports
         test_reports.try_report_action(cr, uid, 'action_account_open_invoices_menu_webkit',wiz_data=data_dict, context=ctx, our_module='account_financial_report_webkit')

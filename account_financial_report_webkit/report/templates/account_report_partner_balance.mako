@@ -105,13 +105,13 @@
 
         %for current_account in objects:
             <%
-            partners_order = current_account.partners_order
+            partners_order = partners_order_accounts[current_account.id]
 
             # do not display accounts without partners
             if not partners_order:
                 continue
 
-            comparisons = current_account.comparisons
+            comparisons = comparisons_accounts[current_account.id]
 
             # in multiple columns mode, we do not want to print accounts without any rows
             if comparison_mode in ('single', 'multiple'):
@@ -121,7 +121,7 @@
                 if not display_line(all_comparison_lines):
                     continue
 
-            current_partner_amounts = current_account.partners_amounts
+            current_partner_amounts = partners_amounts_accounts[current_account.id]
 
             total_initial_balance = 0.0
             total_debit = 0.0

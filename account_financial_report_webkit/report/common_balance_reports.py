@@ -276,24 +276,34 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
                 comparison_params.append(comp_params)
                 comp_accounts_by_ids.append(comparison_result)
 
-        to_display = dict.fromkeys(account_ids, True)
-        objects = []
-        for account in self.pool.get('account.account').browse(self.cursor,
-                                                               self.uid,
-                                                               account_ids):
+        objects = self.pool.get('account.account').browse(self.cursor,
+                                                          self.uid,
+                                                          account_ids)
+
+        to_display_accounts = dict.fromkeys(account_ids, True)
+        init_balance_accounts = dict.fromkeys(account_ids, False)
+        comparisons_accounts = dict.fromkeys(account_ids, [])
+        debit_accounts = dict.fromkeys(account_ids, False)
+        credit_accounts = dict.fromkeys(account_ids, False)
+        balance_accounts = dict.fromkeys(account_ids, False)
+
+        for account in objects:
             if not account.parent_id:  # hide top level account
                 continue
             if account.type == 'consolidation':
-                to_display.update(
+                to_display_accounts.update(
                     dict([(a.id, False) for a in account.child_consol_ids]))
             elif account.type == 'view':
-                to_display.update(
+                to_display_accounts.update(
                     dict([(a.id, True) for a in account.child_id]))
-            account.debit = accounts_by_ids[account.id]['debit']
-            account.credit = accounts_by_ids[account.id]['credit']
-            account.balance = accounts_by_ids[account.id]['balance']
-            account.init_balance = accounts_by_ids[
-                account.id].get('init_balance', 0.0)
+            debit_accounts['account_id'] = \
+                accounts_by_ids[account.id]['debit']
+            credit_accounts['account_id'] = \
+                accounts_by_ids[account.id]['credit']
+            balance_accounts['account_id'] = \
+                accounts_by_ids[account.id]['balance']
+            init_balance_accounts[account.id] =  \
+                accounts_by_ids[account.id].get('init_balance', 0.0)
 
             # if any amount is != 0 in comparisons, we have to display the
             # whole account
@@ -308,21 +318,18 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
                                        values.get('balance', 0.0),
                                        values.get('init_balance', 0.0)))
                 comp_accounts.append(values)
-            account.comparisons = comp_accounts
+            comparisons_accounts[account.id] = comp_accounts
             # we have to display the account if a comparison as an amount or
             # if we have an amount in the main column
             # we set it as a property to let the data in the report if someone
             # want to use it in a custom report
-            display_account = display_account or any((account.debit,
-                                                      account.credit,
-                                                      account.balance,
-                                                      account.init_balance))
-            to_display.update(
-                {account.id: display_account and to_display[account.id]})
-            objects.append(account)
-
-        for account in objects:
-            account.to_display = to_display[account.id]
+            display_account = display_account\
+                or any((account.debit,
+                        account.credit, account.balance,
+                        init_balance_accounts[account.id]))
+            to_display_accounts.update(
+                {account.id: display_account and
+                 to_display_accounts[account.id]})
 
         context_report_values = {
             'fiscalyear': fiscalyear,
@@ -336,5 +343,12 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
             'initial_balance': init_balance,
             'initial_balance_mode': initial_balance_mode,
             'comp_params': comparison_params,
+            'to_display_accounts': to_display_accounts,
+            'init_balance_accounts': init_balance_accounts,
+            'comparisons_accounts': comparisons_accounts,
+            'debit_accounts': debit_accounts,
+            'credit_accounts': credit_accounts,
+            'balance_accounts': balance_accounts,
         }
+
         return objects, new_ids, context_report_values
