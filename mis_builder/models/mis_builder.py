@@ -60,8 +60,12 @@ def _utc_midnight(d, tz_name, add_day=0):
                              tools.DEFAULT_SERVER_DATETIME_FORMAT)
 
 
-def _clean(varStr):
-    return re.sub('\W|^(?=\d)', '_', varStr).lower()
+def _python_var(var_str):
+    return re.sub(r'\W|^(?=\d)', '_', var_str).lower()
+
+
+def _python_bal_var(account_code):
+    return 'bal_' + re.sub(r'\W', '_', account_code)
 
 
 class mis_report_kpi(orm.Model):
@@ -87,7 +91,7 @@ class mis_report_kpi(orm.Model):
                                    translate=True),
         'expression': fields.char(required=True,
                                   string='Expression'),
-        'css_style': fields.char(string='CSS style'),
+        'css_style': fields.char(string='CSS style expression'),
         'type': fields.selection([('num', _('Numeric')),
                                   ('pct', _('Percentage')),
                                   ('str', _('String'))],
@@ -121,6 +125,8 @@ class mis_report_kpi(orm.Model):
     _order = 'sequence'
 
     def _check_name(self, cr, uid, ids, context=None):
+        # TODO: kpi name cannot start with bal
+        # TODO: factor out the name check function (DRY)
         for record_name in self.read(cr, uid, ids, ['name']):
             if not re.match("[_A-Za-z][_a-zA-Z0-9]*$", record_name['name']):
                 return False
@@ -131,6 +137,7 @@ class mis_report_kpi(orm.Model):
     ]
 
     def onchange_name(self, cr, uid, ids, name, context=None):
+        # TODO: factor out the name check function (DRY)
         # check it is a valid python identifier
         res = {}
         if name and not re.match("[_A-Za-z][_a-zA-Z0-9]*$", name):
@@ -144,7 +151,7 @@ class mis_report_kpi(orm.Model):
         # construct name from description
         res = {}
         if description and not name:
-            res = {'value': {'name': _clean(description)}}
+            res = {'value': {'name': _python_var(description)}}
         return res
 
     def onchange_type(self, cr, uid, ids, kpi_type, context=None):
@@ -265,6 +272,8 @@ class mis_report_query(orm.Model):
     _order = 'name'
 
     def _check_name(self, cr, uid, ids, context=None):
+        # TODO: factor out the name check function (DRY)
+        # TODO: query name must start with bal
         for record_name in self.read(cr, uid, ids, ['name']):
             if not re.match("[_A-Za-z][_a-zA-Z0-9]*$", record_name['name']):
                 return False
@@ -303,7 +312,10 @@ class mis_report(orm.Model):
                                    string='KPI\'s'),
     }
 
+    # TODO: kpi name cannot be start with query name
+
     def create(self, cr, uid, vals, context=None):
+        # TODO: explain this
         if 'kpi_ids' in vals:
             mis_report_kpi_obj = self.pool.get('mis.report.kpi')
             for idx, line in enumerate(vals['kpi_ids']):
@@ -316,6 +328,7 @@ class mis_report(orm.Model):
         return super(mis_report, self).create(cr, uid, vals, context=context)
 
     def write(self, cr, uid, ids, vals, context=None):
+        # TODO: explain this
         res = super(mis_report, self).write(
             cr, uid, ids, vals, context=context)
         mis_report_kpi_obj = self.pool.get('mis.report.kpi')
@@ -491,14 +504,17 @@ class mis_report_instance_period(orm.Model):
                                'date_to': c.date_to})
 
         # TODO: initial balance?
-        account_ids = account_obj.search(cr, uid, ['|', ('company_id', '=',
-                                                         False), (
-            'company_id', '=', c.company_id.id)], context=context)
+        # TODO: use child of company_id?
+        account_ids = account_obj.search(
+            cr, uid,
+            ['|', ('company_id', '=', False),
+             ('company_id', '=', c.company_id.id)],
+            context=context)
         account_datas = account_obj.read(
             cr, uid, account_ids, ['code', 'balance'], context=search_ctx)
         balances = {}
         for account_data in account_datas:
-            key = 'bal' + _clean(account_data['code'])
+            key = _python_bal_var(account_data['code'])
             assert key not in balances
             balances[key] = account_data['balance']
 
@@ -522,9 +538,8 @@ class mis_report_instance_period(orm.Model):
                 domain.extend([(query.date_field.name, '>=', datetime_from),
                                (query.date_field.name, '<', datetime_to)])
             if obj._columns.get('company_id', False):
-                domain.extend(
-                    ['|', ('company_id', '=', False), ('company_id', '=',
-                                                       c.company_id.id)])
+                domain.extend(['|', ('company_id', '=', False),
+                               ('company_id', '=', c.company_id.id)])
             field_names = [field.name for field in query.field_ids]
             obj_ids = obj.search(cr, uid, domain, context=context)
             obj_datas = obj.read(
