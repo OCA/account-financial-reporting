@@ -68,6 +68,17 @@ def _python_bal_var(account_code):
     return 'bal_' + re.sub(r'\W', '_', account_code)
 
 
+def _get_bal_vars_in_expr(expr):
+    return re.findall(expr, r'\bbal_\w+')
+
+
+def _get_vars_in_expr(expr, varnames=None):
+    if not varnames:
+        return []
+    varnames_re = r'\b' + r'\b|\b'.join(varnames) + r'\b'
+    return re.findall(expr, varnames_re)
+
+
 class mis_report_kpi(orm.Model):
 
     """ A KPI is an element of a MIS report.
@@ -546,6 +557,13 @@ class mis_report_instance_period(orm.Model):
                 cr, uid, obj_ids, field_names, context=context)
             res[query.name] = [AutoStruct(**d) for d in obj_datas]
 
+        return res
+
+    def _get_bal_vars_in_report(self, report):
+        res = set()
+        for kpi in report.kpi_ids:
+            for bal_var in _get_bal_vars_in_expr(kpi.expression):
+                res.add(bal_var)
         return res
 
     def _compute(self, cr, uid, c, context=None):
