@@ -1204,6 +1204,7 @@ msgstr ""
 #: help:account.aged.trial.balance.webkit,until_date:0
 #: help:open.invoices.webkit,until_date:0
 msgid ""
+msgstr ""
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/webkit_parser_header_fix.py:167
