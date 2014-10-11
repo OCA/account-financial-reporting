@@ -69,14 +69,22 @@ def _python_bal_var(account_code):
 
 
 def _get_bal_vars_in_expr(expr):
-    return re.findall(expr, r'\bbal_\w+')
+    return re.findall(r'\bbal_\w+', expr)
 
 
 def _get_vars_in_expr(expr, varnames=None):
     if not varnames:
         return []
     varnames_re = r'\b' + r'\b|\b'.join(varnames) + r'\b'
-    return re.findall(expr, varnames_re)
+    return re.findall(varnames_re, expr)
+
+
+def _get_bal_vars_in_report(report):
+    res = set()
+    for kpi in report.kpi_ids:
+        for bal_var in _get_bal_vars_in_expr(kpi.expression):
+            res.add(bal_var)
+    return res
 
 
 class mis_report_kpi(orm.Model):
@@ -274,8 +282,8 @@ class mis_report_query(orm.Model):
                                                ids, ['field_ids'], 20), }),
         'date_field': fields.many2one('ir.model.fields', required=True,
                                       string='Date field',
-                                      domain=[('ttype', 'in', ('date',
-                                                               'datetime'))]),
+                                      domain=[('ttype', 'in',
+                                               ('date', 'datetime'))]),
         'domain': fields.char(string='Domain'),
         'report_id': fields.many2one('mis.report', string='Report'),
     }
@@ -385,22 +393,16 @@ class mis_report_instance_period(orm.Model):
                 all_period_ids = period_obj.search(
                     cr, uid,
                     [('special', '=', False),
-                     '|', (
-                         'company_id', '=',
-                         False),
-                     ('company_id', '=',
-                      c.company_id.id)],
+                     '|', ('company_id', '=', False),
+                     ('company_id', '=', c.company_id.id)],
                     order='date_start',
                     context=context)
                 current_period_ids = period_obj.search(
                     cr, uid,
                     [('special', '=', False),
                      ('date_start', '<=', d),
-                     ('date_stop',
-                      '>=', d),
-                     '|',
-                     ('company_id',
-                      '=', False),
+                     ('date_stop', '>=', d),
+                     '|', ('company_id', '=', False),
                      ('company_id', '=', c.company_id.id)],
                     context=context)
                 if not current_period_ids:
@@ -497,7 +499,7 @@ class mis_report_instance_period(orm.Model):
          'Period name should be unique by report'),
     ]
 
-    def _fetch_balances(self, cr, uid, c, context=None):
+    def _fetch_balances(self, cr, uid, c, bal_vars, context=None):
         """ fetch the general account balances for the given period
 
         returns a dictionary {bal_<account.code>: account.balance}
@@ -520,7 +522,13 @@ class mis_report_instance_period(orm.Model):
             cr, uid,
             ['|', ('company_id', '=', False),
              ('company_id', '=', c.company_id.id)],
-            context=context)
+            context=search_ctx)
+        # first fetch all codes and filter the one we need
+        account_datas = account_obj.read(
+            cr, uid, account_ids, ['code', ], context=search_ctx)
+        account_ids = [a['id'] for a in account_datas
+                       if _python_bal_var(a['code']) in bal_vars]
+        # fetch balances
         account_datas = account_obj.read(
             cr, uid, account_ids, ['code', 'balance'], context=search_ctx)
         balances = {}
@@ -559,14 +567,7 @@ class mis_report_instance_period(orm.Model):
 
         return res
 
-    def _get_bal_vars_in_report(self, report):
-        res = set()
-        for kpi in report.kpi_ids:
-            for bal_var in _get_bal_vars_in_expr(kpi.expression):
-                res.add(bal_var)
-        return res
-
-    def _compute(self, cr, uid, c, context=None):
+    def _compute(self, cr, uid, c, bal_vars, context=None):
         if context is None:
             context = {}
 
@@ -582,7 +583,7 @@ class mis_report_instance_period(orm.Model):
             'len': len,
             'avg': lambda l: sum(l) / float(len(l)),
         }
-        localdict.update(self._fetch_balances(cr, uid, c, context=context))
+        localdict.update(self._fetch_balances(cr, uid, c, bal_vars, context=context))
         localdict.update(self._fetch_queries(cr, uid, c, context=context))
 
         for kpi in c.report_instance_id.report_id.kpi_ids:
@@ -727,6 +728,8 @@ class mis_report_instance(orm.Model):
 
         period_values = {}
 
+        bal_vars = _get_bal_vars_in_report(r.report_id)
+
         for period in r.period_ids:
             # add the column header
             header['']['cols'].append(dict(
@@ -743,7 +746,7 @@ class mis_report_instance(orm.Model):
                 period.date_from))
             # compute kpi values
             values = report_instance_period_obj._compute(
-                cr, uid, period, context=context)
+                cr, uid, period, bal_vars, context=context)
             period_values[period.name] = values
             for key in values:
                 content[key]['cols'].append(values[key])
