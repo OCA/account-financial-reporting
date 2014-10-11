@@ -69,9 +69,9 @@
         </div>
 
         %for account in objects:
-            %if account.ledger_lines or account.init_balance:
+            %if ledger_lines[account.id] or init_balance[account.id]:
                 <%
-                if not account.partners_order:
+                if not partners_order[account.id]:
                     continue
                 account_total_debit = 0.0
                 account_total_credit = 0.0
@@ -81,7 +81,7 @@
 
                 <div class="account_title bg" style="width: 1080px; margin-top: 20px; font-size: 12px;">${account.code} - ${account.name}</div>
 
-                %for partner_name, p_id, p_ref, p_name in account.partners_order:
+                %for partner_name, p_id, p_ref, p_name in partners_order[account.id]:
                 <%
                   total_debit = 0.0
                   total_credit = 0.0
@@ -129,14 +129,14 @@
                     </div>
                     <div class="act_as_tbody">
                         <%
-                        total_debit = account.init_balance.get(p_id, {}).get('debit') or 0.0
-                        total_credit = account.init_balance.get(p_id, {}).get('credit') or 0.0
+                        total_debit = init_balance[account.id].get(p_id, {}).get('debit') or 0.0
+                        total_credit =init_balance[account.id].get(p_id, {}).get('credit') or 0.0
                         %>
                           %if initial_balance_mode and (total_debit or total_credit):
                             <%
-                              part_cumul_balance = account.init_balance.get(p_id, {}).get('init_balance') or 0.0
-                              part_cumul_balance_curr = account.init_balance.get(p_id, {}).get('init_balance_currency') or 0.0
-                              balance_forward_currency = account.init_balance.get(p_id, {}).get('currency_name') or ''
+                              part_cumul_balance = init_balance[account.id].get(p_id, {}).get('init_balance') or 0.0
+                              part_cumul_balance_curr = init_balance[account.id].get(p_id, {}).get('init_balance_currency') or 0.0
+                              balance_forward_currency = init_balance[account.id].get(p_id, {}).get('currency_name') or ''
 
                               cumul_balance += part_cumul_balance
                               cumul_balance_curr += part_cumul_balance_curr
@@ -174,7 +174,7 @@
                           </div>
                           %endif
 
-                        %for line in account.ledger_lines.get(p_id, []):
+                        %for line in ledger_lines[account.id].get(p_id, []):
                           <%
                           total_debit += line.get('debit') or 0.0
                           total_credit += line.get('credit') or 0.0

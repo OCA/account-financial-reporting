@@ -89,7 +89,7 @@
             </div>
         </div>
         %for acc in objects:
-          %if acc.aged_lines:
+          %if agged_lines_accounts[acc.id]:
           <div class="account_title bg" style="width: 1080px; margin-top: 20px; font-size: 12px;">${acc.code} - ${acc.name}</div>
 
 
@@ -110,12 +110,12 @@
                     </div>
                   </div>
                   <div class="act_as_tbody">
-                    %for partner_name, p_id, p_ref, p_name in acc.partners_order:
-                       %if acc.aged_lines.get(p_id):
+                    %for partner_name, p_id, p_ref, p_name in partners_order[acc.id]:
+                       %if agged_lines_accounts[acc.id].get(p_id):
                        <div class="act_as_row lines">
-                         <%line = acc.aged_lines[p_id]%>
-                         <%percents = acc.aged_percents%>
-                         <%totals = acc.aged_totals%>
+                         <%line = agged_lines_accounts[acc.id][p_id]%>
+                         <%percents = agged_percents_accounts[acc.id]%>
+                         <%totals = agged_totals_accounts[acc.id]%>
                            <div class="act_as_cell first_column">${partner_name}</div>
                            <div class="act_as_cell">${p_ref or ''}</div>
 
