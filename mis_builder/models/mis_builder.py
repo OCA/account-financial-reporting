@@ -583,8 +583,10 @@ class mis_report_instance_period(orm.Model):
             'len': len,
             'avg': lambda l: sum(l) / float(len(l)),
         }
-        localdict.update(self._fetch_balances(cr, uid, c, bal_vars, context=context))
-        localdict.update(self._fetch_queries(cr, uid, c, context=context))
+        localdict.update(self._fetch_balances(cr, uid, c, bal_vars,
+                                              context=context))
+        localdict.update(self._fetch_queries(cr, uid, c,
+                                             context=context))
 
         for kpi in c.report_instance_id.report_id.kpi_ids:
             try:
