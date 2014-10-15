@@ -725,10 +725,12 @@ class open_invoices_xls(report_xls):
     # selected
     def print_grouped_line_report(self, row_pos, account, _xs, xlwt, _p, data):
 
-        if account.grouped_ledger_lines and account.partners_order:
+        if account.grouped_ledger_lines and \
+           _p['partners_order'][account.id]:
             row_start_account = row_pos
 
-            for partner_name, p_id, p_ref, p_name in account.partners_order:
+            for partner_name, p_id, p_ref, p_name \
+                    in _p['partners_order'][account.id]:
                 row_pos = self.print_row_code_account(
                     "regroup", account, row_pos, partner_name)
 
@@ -757,13 +759,16 @@ class open_invoices_xls(report_xls):
     # export the invoice AR/AP lines
     def print_ledger_lines(self, row_pos, account, _xs, xlwt, _p, data):
 
-        if account.ledger_lines and account.partners_order:
+        if _p['ledger_lines'][account.id] \
+           and _p['partners_order'][account.id]:
+
             row_start_account = row_pos
 
             # Print account line: code - account
             row_pos = self.print_row_code_account(
                 "noregroup", account, row_pos, "")
-            for partner_name, p_id, p_ref, p_name in account.partners_order:
+            for partner_name, p_id, p_ref, p_name \
+                    in _p['partners_order'][account.id]:
 
                 # Print partner row
                 row_pos = self.print_row_partner(row_pos, partner_name)
@@ -773,7 +778,7 @@ class open_invoices_xls(report_xls):
 
                 row_pos_start = row_pos
                 line_number = 0
-                for line in account.ledger_lines.get(p_id, []):
+                for line in _p['ledger_lines'][account.id].get(p_id, []):
                     line_number += 1
                     # print ledger lines
                     row_pos = self.print_lines(

@@ -214,7 +214,7 @@ class partner_ledger_xls(report_xls):
 
         cnt = 0
         for account in objects:
-            if account.ledger_lines or account.init_balance:
+            if _p['ledger_lines'].get(account.id, False) or _p['init_balance'].get(account.id, False):
                 if not account.partners_order:
                     continue
                 cnt += 1
@@ -254,9 +254,9 @@ class partner_ledger_xls(report_xls):
                     row_pos = self.xls_write_row(ws, row_pos, c_hdr_data)
                     row_start_partner = row_pos
 
-                    total_debit = account.init_balance.get(
+                    total_debit = _p['init_balance'][account.id].get(
                         p_id, {}).get('debit') or 0.0
-                    total_credit = account.init_balance.get(
+                    total_credit = _p['init_balance'][account.id].get(
                         p_id, {}).get('credit') or 0.0
 
                     init_line = False
@@ -264,12 +264,15 @@ class partner_ledger_xls(report_xls):
                             (total_debit or total_credit):
                         init_line = True
 
-                        part_cumul_balance = account.init_balance.get(
-                            p_id, {}).get('init_balance') or 0.0
-                        part_cumul_balance_curr = account.init_balance.get(
-                            p_id, {}).get('init_balance_currency') or 0.0
-                        balance_forward_currency = account.init_balance.get(
-                            p_id, {}).get('currency_name') or ''
+                        part_cumul_balance = \
+                            _p['init_balance'][account.id].get(
+                                p_id, {}).get('init_balance') or 0.0
+                        part_cumul_balance_curr = \
+                            _p['init_balance'][account.id].get(
+                                p_id, {}).get('init_balance_currency') or 0.0
+                        balance_forward_currency = \
+                            _p['init_balance'][account.id].get(
+                                p_id, {}).get('currency_name') or ''
 
                         cumul_balance += part_cumul_balance
                         cumul_balance_curr += part_cumul_balance_curr
@@ -304,7 +307,7 @@ class partner_ledger_xls(report_xls):
                         row_pos = self.xls_write_row(
                             ws, row_pos, row_data, c_init_cell_style)
 
-                    for line in account.ledger_lines.get(p_id, []):
+                    for line in _p['ledger_lines'][account.id].get(p_id, []):
 
                         total_debit += line.get('debit') or 0.0
                         total_credit += line.get('credit') or 0.0

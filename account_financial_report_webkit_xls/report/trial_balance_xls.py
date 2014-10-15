@@ -237,7 +237,7 @@ class trial_balance_xls(report_xls):
 
         for current_account in objects:
 
-            if not current_account.to_display:
+            if not _p['to_display_accounts'][current_account.id]:
                 continue
 
             if current_account.type == 'view':
@@ -277,7 +277,9 @@ class trial_balance_xls(report_xls):
                     bal_formula = init_cell + '+' + \
                         debit_cell + '-' + credit_cell
                     c_specs += [('init_bal', 1, 0, 'number',
-                                 current_account.init_balance, None,
+                                 _p['init_balance_'
+                                    'accounts'][current_account.id],
+                                 None,
                                  cell_style_decimal)]
                 c_specs += [
                     ('debit', 1, 0, 'number', current_account.debit,
