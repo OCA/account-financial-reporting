@@ -214,7 +214,8 @@ class partner_ledger_xls(report_xls):
 
         cnt = 0
         for account in objects:
-            if _p['ledger_lines'].get(account.id, False) or _p['init_balance'].get(account.id, False):
+            if _p['ledger_lines'].get(account.id, False) or \
+                    _p['init_balance'].get(account.id, False):
                 if not account.partners_order:
                     continue
                 cnt += 1
