@@ -639,7 +639,7 @@ class open_invoices_xls(report_xls):
                              None, self.style_account_title_right),
                             ]
             else:
-                c_specs += [('cumul_bal_curr', 1, 0, 'text',  "-", None,
+                c_specs += [('cumul_bal_curr', 1, 0, 'text', "-", None,
                              self.style_account_title_right),
                             ('curr_name', 1, 0, 'text', "",
                              None, self.style_account_title_right)
