@@ -100,8 +100,8 @@ class partner_ledger_xls(report_xls):
             ('df', 2, 0, 'text', _p.filter_form(data) ==
              'filter_date' and _('Dates Filter') or _('Periods Filter')),
             ('af', 1, 0, 'text', _('Accounts Filter')),
-            ('tm', 2, 0, 'text',  _('Target Moves')),
-            ('ib', nbr_columns - 8, 0, 'text',  _('Initial Balance')),
+            ('tm', 2, 0, 'text', _('Target Moves')),
+            ('ib', nbr_columns - 8, 0, 'text', _('Initial Balance')),
 
         ]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
