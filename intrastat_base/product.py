@@ -56,7 +56,8 @@ class product_template(orm.Model):
                         % (product.name, product.type)))
         return True
 
-    _constraints = [
-        (_check_accessory_cost, "Error msg is in raise",
-            ['is_accessory_cost', 'type'])
-        ]
+    _constraints = [(
+        _check_accessory_cost,
+        "Wrong configuration of the product",
+        ['is_accessory_cost', 'type']
+        )]

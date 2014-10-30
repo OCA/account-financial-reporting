@@ -60,7 +60,8 @@ class res_company(orm.Model):
                         % (user.name))
         return True
 
-    _constraints = [
-        (_check_intrastat_remind_users, "error msg in raise",
-            ['intrastat_remind_user_ids']),
-    ]
+    _constraints = [(
+        _check_intrastat_remind_users,
+        "Wrong configuration of the Users Receiving the Intrastat Reminder",
+        ['intrastat_remind_user_ids']
+        )]
