@@ -98,8 +98,8 @@ class general_ledger_xls(report_xls):
             ('df', 3, 0, 'text', _p.filter_form(data) ==
              'filter_date' and _('Dates Filter') or _('Periods Filter')),
             ('af', 1, 0, 'text', _('Accounts Filter')),
-            ('tm', 2, 0, 'text',  _('Target Moves')),
-            ('ib', 2, 0, 'text',  _('Initial Balance')),
+            ('tm', 2, 0, 'text', _('Target Moves')),
+            ('ib', 2, 0, 'text', _('Initial Balance')),
 
         ]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
@@ -197,11 +197,12 @@ class general_ledger_xls(report_xls):
         cnt = 0
         for account in objects:
 
-            display_initial_balance = account.init_balance and \
-                (account.init_balance.get(
-                    'debit', 0.0) != 0.0 or account.
-                    init_balance.get('credit', 0.0) != 0.0)
-            display_ledger_lines = account.ledger_lines
+            display_initial_balance = _p['init_balance'][account.id] and \
+                (_p['init_balance'][account.id].get(
+                    'debit', 0.0) != 0.0 or
+                    _p['init_balance'][account.id].get('credit', 0.0)
+                    != 0.0)
+            display_ledger_lines = _p['ledger_lines'][account.id]
 
             if _p.display_account_raw(data) == 'all' or \
                     (display_ledger_lines or display_initial_balance):
@@ -223,11 +224,11 @@ class general_ledger_xls(report_xls):
                 row_start = row_pos
 
                 if display_initial_balance:
-                    cumul_debit = account.init_balance.get('debit') or 0.0
-                    cumul_credit = account.init_balance.get('credit') or 0.0
-                    cumul_balance = account.init_balance.get(
-                        'init_balance') or 0.0
-                    cumul_balance_curr = account.init_balance.get(
+                    init_balance = _p['init_balance'][account.id]
+                    cumul_debit = init_balance.get('debit') or 0.0
+                    cumul_credit = init_balance.get('credit') or 0.0
+                    cumul_balance = init_balance.get('init_balance') or 0.0
+                    cumul_balance_curr = init_balance.get(
                         'init_balance_currency') or 0.0
                     c_specs = [('empty%s' % x, 1, 0, 'text', None)
                                for x in range(6)]

@@ -71,10 +71,10 @@ class partners_balance_xls(report_xls):
             ('df', 1, 0, 'text', _p.filter_form(data) == 'filter_date' and _(
                 'Dates Filter') or _('Periods Filter'), None,
              cell_style_center),
-            ('pf', 1, 0, 'text',  _('Partners Filter'),
+            ('pf', 1, 0, 'text', _('Partners Filter'),
              None, cell_style_center),
-            ('tm', 1, 0, 'text',  _('Target Moves'), None, cell_style_center),
-            ('ib', 1, 0, 'text',  _('Initial Balance'),
+            ('tm', 1, 0, 'text', _('Target Moves'), None, cell_style_center),
+            ('ib', 1, 0, 'text', _('Initial Balance'),
              None, cell_style_center),
             ('coa', 1, 0, 'text', _('Chart of Account'),
              None, cell_style_center),

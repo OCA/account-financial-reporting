@@ -45,5 +45,5 @@
         'wizard/open_invoices_wizard_view.xml',
     ],
     'active': False,
-    'installable': False,
+    'installable': True,
 }
