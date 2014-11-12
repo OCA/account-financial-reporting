@@ -300,13 +300,15 @@ class partners_balance_xls(report_xls):
         row_pos += 1
         for current_account in objects:
 
-            partners_order = current_account.partners_order
+            partners_order = _p['partners_order_accounts']\
+                .get(current_account.id, False)
 
             # do not display accounts without partners
             if not partners_order:
                 continue
 
-            comparisons = current_account.comparisons
+            comparisons = _p['comparisons_accounts']\
+                .get(current_account.id, False)
 
             # in multiple columns mode, we do not want to print accounts
             # without any rows
@@ -317,7 +319,8 @@ class partners_balance_xls(report_xls):
                 if not display_line(all_comparison_lines):
                     continue
 
-            current_partner_amounts = current_account.partners_amounts
+            current_partner_amounts = _p['partners_amounts_accounts']\
+                .get(current_account.id, False)
 
             if _p.comparison_mode in ('single', 'multiple'):
                 comparison_total = {}
