@@ -44,6 +44,7 @@
         'wizard/partners_balance_wizard_view.xml',
         'wizard/open_invoices_wizard_view.xml',
     ],
+    'test': ['tests/trial_balance.yml'],
     'active': False,
     'installable': True,
 }
