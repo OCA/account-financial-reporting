@@ -251,7 +251,7 @@ class trial_balance_xls(report_xls):
                 cell_style_decimal = regular_cell_style_decimal
                 cell_style_pct = regular_cell_style_pct
 
-            comparisons = current_account.comparisons
+            comparisons = _p['comparisons_accounts'][current_account.id]
 
             if current_account.id not in last_child_consol_ids:
                 # current account is a not a consolidation child: use its own
