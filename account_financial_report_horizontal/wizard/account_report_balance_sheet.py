@@ -25,6 +25,7 @@ from openerp.osv import orm, fields
 
 
 class account_bs_report(orm.TransientModel):
+
     """
     This wizard will provide the account balance sheet report by periods,
     between any two dates.

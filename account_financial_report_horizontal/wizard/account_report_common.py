@@ -43,7 +43,7 @@ class account_common_report(orm.TransientModel):
         'filter': fields.selection([
             ('filter_no', 'No Filters'), ('filter_date', 'Date'),
             ('filter_period', 'Periods')
-            ],
+        ],
             "Filter by", required=True),
         'period_from': fields.many2one('account.period', 'Start period'),
         'period_to': fields.many2one('account.period', 'End period'),
@@ -55,7 +55,7 @@ class account_common_report(orm.TransientModel):
                                         ], 'Target Moves', required=True
                                         ),
 
-        }
+    }
 
     def fields_view_get(
         self, cr, uid, view_id=None, view_type='form', context=None,
@@ -87,13 +87,13 @@ class account_common_report(orm.TransientModel):
             res['value'] = {
                 'period_from': False, 'period_to': False,
                 'date_from': False, 'date_to': False
-                }
+            }
         if filter == 'filter_date':
             res['value'] = {
                 'period_from': False, 'period_to': False,
                 'date_from': time.strftime('%Y-01-01'),
                 'date_to': time.strftime('%Y-%m-%d')
-                }
+            }
         if filter == 'filter_period' and fiscalyear_id:
             start_period = end_period = False
             cr.execute('''
@@ -114,7 +114,7 @@ class account_common_report(orm.TransientModel):
                                ORDER BY p.date_stop DESC
                                LIMIT 1) AS period_stop''', (
                 fiscalyear_id, fiscalyear_id
-                )
+            )
             )
             periods = [i[0] for i in cr.fetchall()]
             if periods and len(periods) > 1:
@@ -123,7 +123,7 @@ class account_common_report(orm.TransientModel):
             res['value'] = {
                 'period_from': start_period, 'period_to': end_period,
                 'date_from': False, 'date_to': False
-                }
+            }
         return res
 
     def _get_account(self, cr, uid, context=None):
@@ -187,7 +187,7 @@ class account_common_report(orm.TransientModel):
         data['form'] = self.read(cr, uid, ids, [
             'date_from',  'date_to',  'fiscalyear_id', 'period_from',
             'period_to',  'filter',  'chart_account_id', 'target_move'
-            ])[0]
+        ])[0]
         used_context = self._build_contexts(
             cr, uid, ids, data, context=context)
         data['form']['periods'] = used_context.get(

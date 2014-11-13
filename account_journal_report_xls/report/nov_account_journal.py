@@ -207,11 +207,11 @@ class nov_journal_print(report_sxw.rml_parse):
         if journal.type in ('sale', 'sale_refund', 'purchase',
                             'purchase_refund'):
             [x.update({'docname': (_('Invoice') + ': ' + x['inv_number'])
-                      or (_('Voucher') + ': ' + x['voucher_number']) or '-'})
+                       or (_('Voucher') + ': ' + x['voucher_number']) or '-'})
              for x in lines]
         elif journal.type in ('bank', 'cash'):
             [x.update({'docname': (_('Statement') + ': ' + x['st_number'])
-                      or (_('Voucher') + ': ' + x['voucher_number']) or '-'})
+                       or (_('Voucher') + ': ' + x['voucher_number']) or '-'})
              for x in lines]
         else:
             code_string = j_obj._report_xls_document_extra(
