@@ -54,8 +54,8 @@ class trial_balance_xls(report_xls):
         # Title
         cell_style = xlwt.easyxf(_xs['xls_title'])
         report_name = ' - '.join([_p.report_name.upper(),
-                                 _p.company.partner_id.name,
-                                 _p.company.currency_id.name])
+                                  _p.company.partner_id.name,
+                                  _p.company.currency_id.name])
         c_specs = [
             ('report_name', 1, 0, 'text', report_name),
         ]

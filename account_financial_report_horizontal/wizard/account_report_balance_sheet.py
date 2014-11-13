@@ -29,6 +29,7 @@ class account_bs_report(orm.TransientModel):
     This wizard will provide the account balance sheet report by periods,
     between any two dates.
     """
+
     _name = 'account.bs.report'
     _inherit = "account_financial_report_horizontal.common.account.report"
     _description = 'Account Balance Sheet Report'

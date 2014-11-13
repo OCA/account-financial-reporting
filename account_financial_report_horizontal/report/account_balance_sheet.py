@@ -28,7 +28,7 @@ from openerp.report import report_sxw
 from openerp.addons.account_financial_report_horizontal.report import (
     account_profit_loss
 )
-from common_report_header import common_report_header
+from .common_report_header import common_report_header
 from openerp.tools.translate import _
 
 

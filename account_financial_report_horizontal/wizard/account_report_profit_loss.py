@@ -29,6 +29,7 @@ class account_pl_report(orm.TransientModel):
     This wizard will provide the account profit and loss report by periods,
     between any two dates.
     """
+
     _inherit = "account_financial_report_horizontal.common.account.report"
     _name = "account.pl.report"
     _description = "Account Profit And Loss Report"
@@ -57,4 +58,4 @@ class account_pl_report(orm.TransientModel):
                 'type': 'ir.actions.report.xml',
                 'report_name': 'account.profit_loss',
                 'datas': data,
-                }
+            }

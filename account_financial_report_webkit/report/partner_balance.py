@@ -42,8 +42,8 @@ class PartnerBalanceWebkit(report_sxw.rml_parse,
         company = self.pool.get('res.users').browse(
             self.cr, uid, uid, context=context).company_id
         header_report_name = ' - '.join((_('PARTNER BALANCE'),
-                                        company.name,
-                                        company.currency_id.name))
+                                         company.name,
+                                         company.currency_id.name))
 
         footer_date_time = self.formatLang(
             str(datetime.today()), date_time=True)
