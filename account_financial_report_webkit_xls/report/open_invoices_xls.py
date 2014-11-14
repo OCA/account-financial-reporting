@@ -132,8 +132,8 @@ class open_invoices_xls(report_xls):
     # print the first line "OPEN INVOICE REPORT - db name - Currency
     def print_title(self, _p, row_position):
         report_name = ' - '.join([_p.report_name.upper(),
-                                 _p.company.partner_id.name,
-                                 _p.company.currency_id.name])
+                                  _p.company.partner_id.name,
+                                  _p.company.currency_id.name])
         c_specs = [('report_name', self.nbr_columns, 0, 'text', report_name), ]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
         row_position = self.xls_write_row(

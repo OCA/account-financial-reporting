@@ -22,6 +22,7 @@ from openerp.osv import orm
 
 
 class AccountAgedTrialBalance(orm.TransientModel):
+
     """Will launch age partner balance report.
     This report is based on Open Invoice Report
     and share a lot of knowledge with him

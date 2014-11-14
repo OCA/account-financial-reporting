@@ -25,6 +25,7 @@ from openerp.osv import orm, fields
 
 
 class account_pl_report(orm.TransientModel):
+
     """
     This wizard will provide the account profit and loss report by periods,
     between any two dates.
@@ -57,4 +58,4 @@ class account_pl_report(orm.TransientModel):
                 'type': 'ir.actions.report.xml',
                 'report_name': 'account.profit_loss',
                 'datas': data,
-                }
+            }
