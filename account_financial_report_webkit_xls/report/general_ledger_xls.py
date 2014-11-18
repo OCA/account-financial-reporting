@@ -253,7 +253,7 @@ class general_ledger_xls(report_xls):
                     row_pos = self.xls_write_row(
                         ws, row_pos, row_data, c_init_cell_style)
 
-                for line in account.ledger_lines:
+                for line in _p['ledger_lines'][account.id]:
 
                     cumul_debit += line.get('debit') or 0.0
                     cumul_credit += line.get('credit') or 0.0

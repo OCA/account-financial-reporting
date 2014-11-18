@@ -216,7 +216,7 @@ class partner_ledger_xls(report_xls):
         for account in objects:
             if _p['ledger_lines'].get(account.id, False) or \
                     _p['init_balance'].get(account.id, False):
-                if not account.partners_order:
+                if not _p['partners_order'].get(account.id, False):
                     continue
                 cnt += 1
                 account_total_debit = 0.0
@@ -235,7 +235,7 @@ class partner_ledger_xls(report_xls):
                 row_pos += 1
 
                 for partner_name, p_id, p_ref, p_name in \
-                        account.partners_order:
+                        _p['partners_order'][account.id]:
 
                     total_debit = 0.0
                     total_credit = 0.0
