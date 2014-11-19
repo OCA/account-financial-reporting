@@ -160,7 +160,8 @@ class AccountBalanceCommonWizard(orm.TransientModel):
 
         res['fields'].update(self.fields_get(cr, uid,
                                              allfields=self.DYNAMIC_FIELDS,
-                                             context=context, write_access=True))
+                                             context=context,
+                                             write_access=True))
 
         eview = etree.fromstring(res['arch'])
         placeholder = eview.xpath("//page[@name='placeholder']")
