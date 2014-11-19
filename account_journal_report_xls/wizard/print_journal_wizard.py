@@ -43,9 +43,11 @@ class account_print_journal_xls(orm.TransientModel):
         'group_entries': True,
     }
 
-    def fields_get(self, cr, uid, fields=None, context=None):
+    def fields_get(self, cr, uid, allfields=None, context=None,
+                   write_access=True):
         res = super(account_print_journal_xls, self).fields_get(
-            cr, uid, fields, context)
+            cr, uid, allfields=allfields, context=context,
+            write_access=write_access)
         if context.get('print_by') == 'fiscalyear':
             if 'fiscalyear_id' in res:
                 res['fiscalyear_id']['required'] = True
