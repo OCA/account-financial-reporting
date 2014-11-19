@@ -308,7 +308,7 @@ class mis_report(orm.Model):
     """ A MIS report template (without period information)
 
     The MIS report holds:
-    * an implicit query fetching allow the account balances;
+    * an implicit query fetching all the account balances;
       for each account, the balance is stored in a variable named
       bal_{code} where {code} is the account code
     * a list of explicit queries; the result of each query is
@@ -361,7 +361,7 @@ class mis_report(orm.Model):
 class mis_report_instance_period(orm.Model):
 
     """ A MIS report instance has the logic to compute
-    a report template for a give date period.
+    a report template for a given date period.
 
     Periods have a duration (day, week, fiscal period) and
     are defined as an offset relative to a pivot date.
