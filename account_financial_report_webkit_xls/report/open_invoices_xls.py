@@ -723,7 +723,8 @@ class open_invoices_xls(report_xls):
 
     # export the invoice AR/AP lines when the option currency regroup is
     # selected
-    def print_grouped_line_report(self, row_pos, account, _xs, xlwtlib, _p, data):
+    def print_grouped_line_report(
+            self, row_pos, account, _xs, xlwtlib, _p, data):
 
         if account.grouped_ledger_lines and account.partners_order:
             row_start_account = row_pos
