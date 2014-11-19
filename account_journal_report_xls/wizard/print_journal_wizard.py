@@ -33,8 +33,13 @@ class account_print_journal_xls(orm.TransientModel):
     _name = 'account.print.journal.xls'
     _description = 'Print/Export Journal'
     _columns = {
-        'journal_ids': fields.many2many('account.journal', string='Journals',
-                                        required=True),
+        'journal_ids': fields.many2many(
+            'account.journal',
+            'account_print_journal_xls_journal_rel',
+            'journal_xls_id',
+            'journal_id',
+            string='Journals',
+            required=True),
         'group_entries': fields.boolean(
             'Group Entries',
             help="Group entries with same General Account & Tax Code."),
