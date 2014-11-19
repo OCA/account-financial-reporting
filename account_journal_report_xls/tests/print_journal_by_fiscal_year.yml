@@ -1,0 +1,83 @@
+-
+  In order to test the Excel General Ledger webkit wizard I will print report on all the journals
+-
+    !python {model: account.account}: |
+        ctx = {}
+        data_dict = {'chart_account_id': ref('account.chart0'),
+                     'journal_ids': self.pool['account.journal'].search(cr, uid, []),
+                    }
+        ctx.update({'model': 'account.account',
+                    'active_ids': [ref('account.chart0')],
+                    'active_id': ref('account.chart0')})
+        from openerp.tools import test_reports
+        test_reports.try_report_action(
+          cr, uid,
+          'account_journal_report_xls.action_print_journal_by_fiscalyear_xls',
+          wiz_data=data_dict,
+          context=ctx,
+          wiz_buttons='print_report',
+          our_module='account_journal_report_xls')
+
+-
+  In order to test the Excel General Ledger webkit wizard I will print report with entries sorted  by date
+-
+    !python {model: account.account}: |
+        ctx = {}
+        data_dict = {'chart_account_id': ref('account.chart0'),
+                     'journal_ids': self.pool['account.journal'].search(cr, uid, []),
+                     'sort_selection': 'l.date',
+                    }
+        ctx.update({'model': 'account.account',
+                    'active_ids': [ref('account.chart0')],
+                    'active_id': ref('account.chart0')})
+        from openerp.tools import test_reports
+        test_reports.try_report_action(
+          cr, uid,
+          'account_journal_report_xls.action_print_journal_by_fiscalyear_xls',
+          wiz_data=data_dict,
+          context=ctx,
+          wiz_buttons='print_report',
+          our_module='account_journal_report_xls')
+
+-
+  In order to test the Excel General Ledger webkit wizard I will print report without grouped entries
+-
+    !python {model: account.account}: |
+        ctx = {}
+        data_dict = {'chart_account_id': ref('account.chart0'),
+                     'journal_ids': self.pool['account.journal'].search(cr, uid, []),
+                     'group_entries': False,
+                    }
+        ctx.update({'model': 'account.account',
+                    'active_ids': [ref('account.chart0')],
+                    'active_id': ref('account.chart0')})
+        from openerp.tools import test_reports
+        test_reports.try_report_action(
+          cr, uid,
+          'account_journal_report_xls.action_print_journal_by_fiscalyear_xls',
+          wiz_data=data_dict,
+          context=ctx,
+          wiz_buttons='print_report',
+          our_module='account_journal_report_xls')
+
+-
+  In order to test the Excel General Ledger webkit wizard I will print report with currency
+-
+    !python {model: account.account}: |
+        ctx = {}
+        data_dict = {'chart_account_id': ref('account.chart0'),
+                     'journal_ids': self.pool['account.journal'].search(cr, uid, []),
+                     'amount_currency': False,
+                    }
+        ctx.update({'model': 'account.account',
+                    'active_ids': [ref('account.chart0')],
+                    'active_id': ref('account.chart0')})
+        from openerp.tools import test_reports
+        test_reports.try_report_action(
+          cr, uid,
+          'account_journal_report_xls.action_print_journal_by_fiscalyear_xls',
+          wiz_data=data_dict,
+          context=ctx,
+          wiz_buttons='print_report',
+          our_module='account_journal_report_xls')
+
