@@ -51,4 +51,5 @@ cf. https://launchpad.net/openerp-reporting-engines
     'data': [
         'wizard/print_journal_wizard.xml',
     ],
+    'installable': True,
 }
