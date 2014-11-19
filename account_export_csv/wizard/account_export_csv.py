@@ -93,8 +93,6 @@ class AccountCSVExport(orm.TransientModel):
             'journal_id',
             'Journals',
             help='If empty, use all journals, only used for journal entries'),
-        'fiscalyear_id': fields.many2one('account.fiscalyear', 'Fiscalyear',
-                                         required=True),
         'export_filename': fields.char('Export CSV Filename', size=128),
     }
 
