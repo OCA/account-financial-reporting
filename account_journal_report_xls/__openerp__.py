@@ -40,7 +40,7 @@ This module adds journal reports by period and by fiscal year with
 These reports are available in PDF and XLS format.
 
 This module depends upon the 'report_xls' module,
-cf. https://launchpad.net/openerp-reporting-engines
+cf. https://github.com/OCA/reporting-engine
 
     """,
     'depends': [
