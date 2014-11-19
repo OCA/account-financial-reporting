@@ -235,7 +235,7 @@ class account_journal_xls(report_xls):
                                self.aml_cell_style_decimal]},
         }
 
-    def _journal_title(self, o, ws, _p, row_pos, xlwt, _xs):
+    def _journal_title(self, o, ws, _p, row_pos, _xs):
         cell_style = xlwt.easyxf(_xs['xls_title'])
         report_name = (10 * ' ').join([
             _p.company.name,
@@ -251,7 +251,7 @@ class account_journal_xls(report_xls):
             ws, row_pos, row_data, row_style=cell_style)
         return row_pos + 1
 
-    def _journal_lines(self, o, ws, _p, row_pos, xlwt, _xs):
+    def _journal_lines(self, o, ws, _p, row_pos, _xs):
 
         wanted_list = self.wanted_list
         debit_pos = self.debit_pos
@@ -305,7 +305,7 @@ class account_journal_xls(report_xls):
             ws, row_pos, row_data, row_style=self.rt_cell_style_right)
         return row_pos + 1
 
-    def _journal_vat_summary(self, o, ws, _p, row_pos, xlwt, _xs):
+    def _journal_vat_summary(self, o, ws, _p, row_pos, _xs):
 
         if not _p.tax_codes(o):
             return row_pos
@@ -400,9 +400,9 @@ class account_journal_xls(report_xls):
             ws.footer_str = self.xls_footers['standard']
 
             # Data
-            row_pos = self._journal_title(o, ws, _p, row_pos, xlwt, _xs)
-            row_pos = self._journal_lines(o, ws, _p, row_pos, xlwt, _xs)
-            row_pos = self._journal_vat_summary(o, ws, _p, row_pos, xlwt, _xs)
+            row_pos = self._journal_title(o, ws, _p, row_pos, _xs)
+            row_pos = self._journal_lines(o, ws, _p, row_pos, _xs)
+            row_pos = self._journal_vat_summary(o, ws, _p, row_pos, _xs)
 
 account_journal_xls('report.nov.account.journal.xls', 'account.journal.period',
                     parser=account_journal_xls_parser)
