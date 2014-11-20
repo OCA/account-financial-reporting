@@ -88,22 +88,22 @@ class nov_journal_print(report_sxw.rml_parse):
         return translate(self.cr, _ir_translation_name, 'report', lang, src) \
             or src
 
-    def _title(self, object):
+    def _title(self, obj):
         return ((self.print_by == 'period' and self._('Period') or
-                 self._('Fiscal Year')) + ' ' + object[1].name, object[0].name)
+                 self._('Fiscal Year')) + ' ' + obj[1].name, obj[0].name)
 
     def _amount_title(self):
         return self.display_currency and \
             (self._('Amount'), self._('Currency')) or (
                 self._('Debit'), self._('Credit'))
 
-    def _lines(self, object):
+    def _lines(self, obj):
         j_obj = self.pool['account.journal']
         _ = self._
-        journal = object[0]
+        journal = obj[0]
         journal_id = journal.id
         if self.print_by == 'period':
-            period = object[1]
+            period = obj[1]
             period_id = period.id
             period_ids = [period_id]
             # update status period
@@ -129,7 +129,7 @@ class nov_journal_print(report_sxw.rml_parse):
                 has been fixed now !""",
                               period.name, journal.name)
         else:
-            fiscalyear = object[1]
+            fiscalyear = obj[1]
             period_ids = [x.id for x in fiscalyear.period_ids]
 
         select_extra, join_extra, where_extra = j_obj._report_xls_query_extra(
@@ -207,11 +207,11 @@ class nov_journal_print(report_sxw.rml_parse):
         if journal.type in ('sale', 'sale_refund', 'purchase',
                             'purchase_refund'):
             [x.update({'docname': (_('Invoice') + ': ' + x['inv_number'])
-                      or (_('Voucher') + ': ' + x['voucher_number']) or '-'})
+                       or (_('Voucher') + ': ' + x['voucher_number']) or '-'})
              for x in lines]
         elif journal.type in ('bank', 'cash'):
             [x.update({'docname': (_('Statement') + ': ' + x['st_number'])
-                      or (_('Voucher') + ': ' + x['voucher_number']) or '-'})
+                       or (_('Voucher') + ': ' + x['voucher_number']) or '-'})
              for x in lines]
         else:
             code_string = j_obj._report_xls_document_extra(
@@ -289,13 +289,13 @@ class nov_journal_print(report_sxw.rml_parse):
 
         return lines_out
 
-    def _tax_codes(self, object):
-        journal_id = object[0].id
+    def _tax_codes(self, obj):
+        journal_id = obj[0].id
         if self.print_by == 'period':
-            period_id = object[1].id
+            period_id = obj[1].id
             period_ids = [period_id]
         else:
-            fiscalyear = object[1]
+            fiscalyear = obj[1]
             period_ids = [x.id for x in fiscalyear.period_ids]
         self.cr.execute(
             "SELECT distinct tax_code_id FROM account_move_line l "
@@ -315,13 +315,13 @@ class nov_journal_print(report_sxw.rml_parse):
             self.cr, self.uid, tax_code_ids, self.context)
         return tax_codes
 
-    def _totals(self, field, object, tax_code_id=None):
-        journal_id = object[0].id
+    def _totals(self, field, obj, tax_code_id=None):
+        journal_id = obj[0].id
         if self.print_by == 'period':
-            period_id = object[1].id
+            period_id = obj[1].id
             period_ids = [period_id]
         else:
-            fiscalyear = object[1]
+            fiscalyear = obj[1]
             period_ids = [x.id for x in fiscalyear.period_ids]
         select = "SELECT sum(" + field + ") FROM account_move_line l " \
             "INNER JOIN account_move am ON l.move_id = am.id " \
@@ -332,17 +332,17 @@ class nov_journal_print(report_sxw.rml_parse):
             select, (tuple(period_ids), journal_id, tuple(self.move_states)))
         return self.cr.fetchone()[0] or 0.0
 
-    def _sum1(self, object):
-        return self._totals('debit', object)
+    def _sum1(self, obj):
+        return self._totals('debit', obj)
 
-    def _sum2(self, object):
+    def _sum2(self, obj):
         if self.display_currency:
             return ''
         else:
-            return self._totals('credit', object)
+            return self._totals('credit', obj)
 
-    def _sum_vat(self, object, tax_code):
-        return self._totals('tax_amount', object, tax_code.id)
+    def _sum_vat(self, obj, tax_code):
+        return self._totals('tax_amount', obj, tax_code.id)
 
     def formatLang(self, value, digits=None, date=False, date_time=False,
                    grouping=True, monetary=False, dp=False,

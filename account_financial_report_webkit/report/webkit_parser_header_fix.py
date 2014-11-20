@@ -272,7 +272,7 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
                 _logger.error(msg)
                 raise except_osv(_('Webkit render'), msg)
             return (deb, 'html')
-        bin = self.get_lib(cursor, uid)
-        pdf = self.generate_pdf(bin, report_xml, head, foot, htmls,
+        binary = self.get_lib(cursor, uid)
+        pdf = self.generate_pdf(binary, report_xml, head, foot, htmls,
                                 parser_instance=parser_instance)
         return (pdf, 'pdf')

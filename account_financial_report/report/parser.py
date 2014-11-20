@@ -379,7 +379,6 @@ class account_balance(report_sxw.rml_parse):
 
         res = []
         am_obj = self.pool.get('account.move')
-        print 'AM OBJ ', am_obj
         if account['type'] in ('other', 'liquidity', 'receivable', 'payable'):
             # ~ TODO: CUANDO EL PERIODO ESTE VACIO LLENARLO CON LOS PERIODOS
             # DEL EJERCICIO
@@ -415,8 +414,6 @@ class account_balance(report_sxw.rml_parse):
                     'period': det['periodo'],
                     'obj': am_obj.browse(self.cr, self.uid, det['am_id'])
                 })
-                print 'ACCOUNT NAME', am_obj.browse(self.cr, self.uid,
-                                                    det['am_id']).name
         return res
 
     def lines(self, form, level=0):

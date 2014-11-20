@@ -235,8 +235,8 @@ class account_journal_xls(report_xls):
                                self.aml_cell_style_decimal]},
         }
 
-    def _journal_title(self, o, ws, _p, row_pos, xlwt, _xs):
-        cell_style = xlwt.easyxf(_xs['xls_title'])
+    def _journal_title(self, o, ws, _p, row_pos, xlwtlib, _xs):
+        cell_style = xlwtlib.easyxf(_xs['xls_title'])
         report_name = (10 * ' ').join([
             _p.company.name,
             _p.title(o)[0],
@@ -251,7 +251,7 @@ class account_journal_xls(report_xls):
             ws, row_pos, row_data, row_style=cell_style)
         return row_pos + 1
 
-    def _journal_lines(self, o, ws, _p, row_pos, xlwt, _xs):
+    def _journal_lines(self, o, ws, _p, row_pos, xlwtlib, _xs):
 
         wanted_list = self.wanted_list
         debit_pos = self.debit_pos
@@ -305,12 +305,12 @@ class account_journal_xls(report_xls):
             ws, row_pos, row_data, row_style=self.rt_cell_style_right)
         return row_pos + 1
 
-    def _journal_vat_summary(self, o, ws, _p, row_pos, xlwt, _xs):
+    def _journal_vat_summary(self, o, ws, _p, row_pos, xlwtlib, _xs):
 
         if not _p.tax_codes(o):
             return row_pos
 
-        title_cell_style = xlwt.easyxf(_xs['bold'])
+        title_cell_style = xlwtlib.easyxf(_xs['bold'])
         c_specs = [('summary_title', 1, 0, 'text', _p._("VAT Declaration"))]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
         row_pos = self.xls_write_row(

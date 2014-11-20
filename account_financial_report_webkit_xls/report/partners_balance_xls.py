@@ -37,11 +37,11 @@ def display_line(all_comparison_lines):
 class partners_balance_xls(report_xls):
     column_sizes = [12, 40, 25, 17, 17, 17, 17, 17]
 
-    def print_title(self, ws, _p, row_position, xlwt, _xs):
-        cell_style = xlwt.easyxf(_xs['xls_title'])
+    def print_title(self, ws, _p, row_position, xlwtlib, _xs):
+        cell_style = xlwtlib.easyxf(_xs['xls_title'])
         report_name = ' - '.join([_p.report_name.upper(),
-                                 _p.company.partner_id.name,
-                                 _p.company.currency_id.name])
+                                  _p.company.partner_id.name,
+                                  _p.company.currency_id.name])
         c_specs = [
             ('report_name', 1, 0, 'text', report_name),
         ]
@@ -59,10 +59,10 @@ class partners_balance_xls(report_xls):
             ws, row_position, row_data, set_column_size=True)
         return row_position
 
-    def print_header_titles(self, ws, _p, data, row_position, xlwt, _xs):
+    def print_header_titles(self, ws, _p, data, row_position, xlwtlib, _xs):
         cell_format = _xs['bold'] + _xs['fill_blue'] + _xs['borders_all']
-        cell_style = xlwt.easyxf(cell_format)
-        cell_style_center = xlwt.easyxf(cell_format + _xs['center'])
+        cell_style = xlwtlib.easyxf(cell_format)
+        cell_style_center = xlwtlib.easyxf(cell_format + _xs['center'])
 
         c_specs = [
             ('fy', 1, 0, 'text', _('Fiscal Year'), None, cell_style_center),
@@ -84,11 +84,11 @@ class partners_balance_xls(report_xls):
             ws, row_position, row_data, row_style=cell_style)
         return row_position
 
-    def print_header_data(self, ws, _p, data, row_position, xlwt, _xs,
+    def print_header_data(self, ws, _p, data, row_position, xlwtlib, _xs,
                           initial_balance_text):
         cell_format = _xs['borders_all'] + _xs['wrap'] + _xs['top']
-        cell_style = xlwt.easyxf(cell_format)
-        cell_style_center = xlwt.easyxf(cell_format + _xs['center'])
+        cell_style = xlwtlib.easyxf(cell_format)
+        cell_style_center = xlwtlib.easyxf(cell_format + _xs['center'])
         c_specs = [
             ('fy', 1, 0, 'text', _p.fiscalyear.name if _p.fiscalyear else '-',
              None, cell_style_center),
@@ -122,16 +122,16 @@ class partners_balance_xls(report_xls):
             ws, row_position, row_data, row_style=cell_style)
         return row_position
 
-    def print_comparison_header(self, _xs, xlwt, row_position, _p, ws,
+    def print_comparison_header(self, _xs, xlwtlib, row_position, _p, ws,
                                 initial_balance_text):
         cell_format_ct = _xs['bold'] + _xs['fill_blue'] + _xs['borders_all']
-        cell_style_ct = xlwt.easyxf(cell_format_ct)
+        cell_style_ct = xlwtlib.easyxf(cell_format_ct)
         c_specs = [('ct', 7, 0, 'text', _('Comparisons'))]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
         row_position = self.xls_write_row(
             ws, row_position, row_data, row_style=cell_style_ct)
         cell_format = _xs['borders_all'] + _xs['wrap'] + _xs['top']
-        cell_style_center = xlwt.easyxf(cell_format)
+        cell_style_center = xlwtlib.easyxf(cell_format)
         for index, params in enumerate(_p.comp_params):
             c_specs = [
                 ('c', 2, 0, 'text', _('Comparison') + str(index + 1) +
@@ -155,12 +155,12 @@ class partners_balance_xls(report_xls):
                 ws, row_position, row_data, row_style=cell_style_center)
         return row_position
 
-    def print_account_header(self, ws, _p, _xs, xlwt, row_position):
+    def print_account_header(self, ws, _p, _xs, xlwtlib, row_position):
         cell_format = _xs['bold'] + _xs['fill'] + \
             _xs['borders_all'] + _xs['wrap'] + _xs['top']
-        cell_style = xlwt.easyxf(cell_format)
-        cell_style_right = xlwt.easyxf(cell_format + _xs['right'])
-        cell_style_center = xlwt.easyxf(cell_format + _xs['center'])
+        cell_style = xlwtlib.easyxf(cell_format)
+        cell_style_right = xlwtlib.easyxf(cell_format + _xs['right'])
+        cell_style_center = xlwtlib.easyxf(cell_format + _xs['center'])
         if len(_p.comp_params) == 2:
             account_span = 3
         else:
@@ -210,10 +210,10 @@ class partners_balance_xls(report_xls):
         return row_position
 
     def print_row_code_account(self, ws, current_account, row_position, _xs,
-                               xlwt):
+                               xlwtlib):
         cell_format = _xs['xls_title'] + _xs['bold'] + \
             _xs['fill'] + _xs['borders_all']
-        cell_style = xlwt.easyxf(cell_format)
+        cell_style = xlwtlib.easyxf(cell_format)
         c_specs = [
             ('acc_title', 7, 0, 'text', ' - '.join([current_account.code,
                                                     current_account.name])), ]
@@ -222,12 +222,12 @@ class partners_balance_xls(report_xls):
             ws, row_position, row_data, cell_style)
         return row_position
 
-    def print_account_totals(self, _xs, xlwt, ws, row_start_account,
+    def print_account_totals(self, _xs, xlwtlib, ws, row_start_account,
                              row_position, current_account, _p):
         cell_format = _xs['bold'] + _xs['fill'] + \
             _xs['borders_all'] + _xs['wrap'] + _xs['top']
-        cell_style = xlwt.easyxf(cell_format)
-        cell_style_decimal = xlwt.easyxf(
+        cell_style = xlwtlib.easyxf(cell_format)
+        cell_style_decimal = xlwtlib.easyxf(
             cell_format + _xs['right'],
             num_format_str=report_xls.decimal_format)
         c_specs = [

@@ -34,7 +34,7 @@ from openerp.tools.translate import _
 class open_invoices_xls(report_xls):
     column_sizes = [12, 12, 20, 15, 30, 30, 14, 14, 14, 14, 14, 14, 10]
 
-    def global_initializations(self, wb, _p, xlwt, _xs, objects, data):
+    def global_initializations(self, wb, _p, xlwtlib, _xs, objects, data):
         # this procedure will initialise variables and Excel cell styles and
         # return them as global ones
         self.ws = wb.add_sheet(_p.report_name[:31])
@@ -62,78 +62,78 @@ class open_invoices_xls(report_xls):
             self.nbr_columns = 11
         # -------------------------------------------------------
         # cell style for report title
-        self.style_font12 = xlwt.easyxf(_xs['xls_title'])
+        self.style_font12 = xlwtlib.easyxf(_xs['xls_title'])
         # -------------------------------------------------------
-        self.style_default = xlwt.easyxf(_xs['borders_all'])
+        self.style_default = xlwtlib.easyxf(_xs['borders_all'])
         # -------------------------------------------------------
-        self.style_default_italic = xlwt.easyxf(
+        self.style_default_italic = xlwtlib.easyxf(
             _xs['borders_all'] + _xs['italic'])
         # -------------------------------------------------------
-        self.style_bold = xlwt.easyxf(_xs['bold'] + _xs['borders_all'])
+        self.style_bold = xlwtlib.easyxf(_xs['bold'] + _xs['borders_all'])
         # -------------------------------------------------------
         # cell style for header titles: 'Chart of accounts' - 'Fiscal year' ...
-        self.style_bold_blue_center = xlwt.easyxf(
+        self.style_bold_blue_center = xlwtlib.easyxf(
             _xs['bold'] + _xs['fill_blue'] + _xs['borders_all'] +
             _xs['center'])
         # -------------------------------------------------------
         # cell style for header data: 'Chart of accounts' - 'Fiscal year' ...
-        self.style_center = xlwt.easyxf(
+        self.style_center = xlwtlib.easyxf(
             _xs['borders_all'] + _xs['wrap'] + _xs['center'])
         # -------------------------------------------------------
         # cell style for columns titles 'Date'- 'Period' - 'Entry'...
-        self.style_yellow_bold = xlwt.easyxf(
+        self.style_yellow_bold = xlwtlib.easyxf(
             _xs['bold'] + _xs['fill'] + _xs['borders_all'])
         # -------------------------------------------------------
         # cell style for columns titles 'Date'- 'Period' - 'Entry'...
-        self.style_yellow_bold_right = xlwt.easyxf(
+        self.style_yellow_bold_right = xlwtlib.easyxf(
             _xs['bold'] + _xs['fill'] + _xs['borders_all'] + _xs['right'])
         # -------------------------------------------------------
-        self.style_right = xlwt.easyxf(_xs['borders_all'] + _xs['right'])
+        self.style_right = xlwtlib.easyxf(_xs['borders_all'] + _xs['right'])
         # -------------------------------------------------------
-        self.style_right_italic = xlwt.easyxf(
+        self.style_right_italic = xlwtlib.easyxf(
             _xs['borders_all'] + _xs['right'] + _xs['italic'])
         # -------------------------------------------------------
-        self.style_decimal = xlwt.easyxf(
+        self.style_decimal = xlwtlib.easyxf(
             _xs['borders_all'] + _xs['right'],
             num_format_str=report_xls.decimal_format)
         # -------------------------------------------------------
-        self.style_decimal_italic = xlwt.easyxf(
+        self.style_decimal_italic = xlwtlib.easyxf(
             _xs['borders_all'] + _xs['right'] + _xs['italic'],
             num_format_str=report_xls.decimal_format)
         # -------------------------------------------------------
-        self.style_date = xlwt.easyxf(
+        self.style_date = xlwtlib.easyxf(
             _xs['borders_all'] + _xs['left'],
             num_format_str=report_xls.date_format)
         # -------------------------------------------------------
-        self.style_date_italic = xlwt.easyxf(
+        self.style_date_italic = xlwtlib.easyxf(
             _xs['borders_all'] + _xs['left'] + _xs['italic'],
             num_format_str=report_xls.date_format)
         # -------------------------------------------------------
         cell_format = _xs['xls_title'] + _xs['bold'] + \
             _xs['fill'] + _xs['borders_all']
-        self.style_account_title = xlwt.easyxf(cell_format)
-        self.style_account_title_right = xlwt.easyxf(
+        self.style_account_title = xlwtlib.easyxf(cell_format)
+        self.style_account_title_right = xlwtlib.easyxf(
             cell_format + _xs['right'])
-        self.style_account_title_decimal = xlwt.easyxf(
+        self.style_account_title_decimal = xlwtlib.easyxf(
             cell_format + _xs['right'],
             num_format_str=report_xls.decimal_format)
         # -------------------------------------------------------
         cell_format = _xs['bold']
-        self.style_partner_row = xlwt.easyxf(cell_format)
+        self.style_partner_row = xlwtlib.easyxf(cell_format)
         # -------------------------------------------------------
         cell_format = _xs['bold'] + _xs['fill'] + _xs['borders_all']
-        self.style_partner_cumul = xlwt.easyxf(cell_format)
-        self.style_partner_cumul_right = xlwt.easyxf(
+        self.style_partner_cumul = xlwtlib.easyxf(cell_format)
+        self.style_partner_cumul_right = xlwtlib.easyxf(
             cell_format + _xs['right'])
-        self.style_partner_cumul_decimal = xlwt.easyxf(
+        self.style_partner_cumul_decimal = xlwtlib.easyxf(
             cell_format + _xs['right'],
             num_format_str=report_xls.decimal_format)
 
     # print the first line "OPEN INVOICE REPORT - db name - Currency
     def print_title(self, _p, row_position):
         report_name = ' - '.join([_p.report_name.upper(),
-                                 _p.company.partner_id.name,
-                                 _p.company.currency_id.name])
+                                  _p.company.partner_id.name,
+                                  _p.company.currency_id.name])
         c_specs = [('report_name', self.nbr_columns, 0, 'text', report_name), ]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
         row_position = self.xls_write_row(
@@ -723,7 +723,8 @@ class open_invoices_xls(report_xls):
 
     # export the invoice AR/AP lines when the option currency regroup is
     # selected
-    def print_grouped_line_report(self, row_pos, account, _xs, xlwt, _p, data):
+    def print_grouped_line_report(
+            self, row_pos, account, _xs, xlwtlib, _p, data):
 
         if account.grouped_ledger_lines and account.partners_order:
             row_start_account = row_pos
@@ -755,7 +756,7 @@ class open_invoices_xls(report_xls):
         return row_pos
 
     # export the invoice AR/AP lines
-    def print_ledger_lines(self, row_pos, account, _xs, xlwt, _p, data):
+    def print_ledger_lines(self, row_pos, account, _xs, xlwtlib, _p, data):
 
         if account.ledger_lines and account.partners_order:
             row_start_account = row_pos

@@ -131,7 +131,7 @@ class AccountBalanceCommonWizard(orm.TransientModel):
          periods or by date.', ['filter']),
     ]
 
-    def default_get(self, cr, uid, fields, context=None):
+    def default_get(self, cr, uid, fields_list, context=None):
         """
              To get default values for the object.
 
@@ -145,7 +145,7 @@ class AccountBalanceCommonWizard(orm.TransientModel):
 
         """
         res = super(AccountBalanceCommonWizard, self).default_get(
-            cr, uid, fields, context=context)
+            cr, uid, fields_list, context=context)
         for index in range(self.COMPARISON_LEVEL):
             field = "comp%s_filter" % (index,)
             if not res.get(field, False):
@@ -159,8 +159,9 @@ class AccountBalanceCommonWizard(orm.TransientModel):
             submenu=submenu)
 
         res['fields'].update(self.fields_get(cr, uid,
-                             allfields=self.DYNAMIC_FIELDS,
-                             context=context, write_access=True))
+                                             allfields=self.DYNAMIC_FIELDS,
+                                             context=context,
+                                             write_access=True))
 
         eview = etree.fromstring(res['arch'])
         placeholder = eview.xpath("//page[@name='placeholder']")
