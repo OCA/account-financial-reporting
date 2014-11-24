@@ -94,7 +94,7 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
             account_ids,
             ['type', 'code', 'name', 'debit', 'credit',
                 'balance', 'parent_id', 'level', 'child_id'],
-            ctx)
+            context=ctx)
 
         accounts_by_id = {}
         for account in accounts:
@@ -296,11 +296,11 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
             elif account.type == 'view':
                 to_display_accounts.update(
                     dict([(a.id, True) for a in account.child_id]))
-            debit_accounts['account_id'] = \
+            debit_accounts[account.id] = \
                 accounts_by_ids[account.id]['debit']
-            credit_accounts['account_id'] = \
+            credit_accounts[account.id] = \
                 accounts_by_ids[account.id]['credit']
-            balance_accounts['account_id'] = \
+            balance_accounts[account.id] = \
                 accounts_by_ids[account.id]['balance']
             init_balance_accounts[account.id] =  \
                 accounts_by_ids[account.id].get('init_balance', 0.0)
@@ -324,8 +324,9 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
             # we set it as a property to let the data in the report if someone
             # want to use it in a custom report
             display_account = display_account\
-                or any((account.debit,
-                        account.credit, account.balance,
+                or any((debit_accounts[account.id],
+                        credit_accounts[account.id],
+                        balance_accounts[account.id],
                         init_balance_accounts[account.id]))
             to_display_accounts.update(
                 {account.id: display_account and
