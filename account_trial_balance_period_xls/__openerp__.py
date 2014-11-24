@@ -37,4 +37,3 @@ This report generates an excel overview of the Trial Balance per Period.
         'wizard/trial_balance_period_wizard.xml',
     ],
 }
-
