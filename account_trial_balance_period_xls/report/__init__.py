@@ -20,4 +20,4 @@
 #
 ##############################################################################
 
-import trial_balance_period_xls
+from . import trial_balance_period_xls
