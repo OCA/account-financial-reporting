@@ -28,8 +28,8 @@ from openerp.tools.translate import _
 from openerp import pooler
 from datetime import datetime
 
-from common_reports import CommonReportHeaderWebkit
-from webkit_parser_header_fix import HeaderFooterTextWebKitParser
+from .common_reports import CommonReportHeaderWebkit
+from .webkit_parser_header_fix import HeaderFooterTextWebKitParser
 
 
 class PrintJournalWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
