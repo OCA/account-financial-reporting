@@ -175,5 +175,3 @@ class account_trial_balance_period_wizard(orm.TransientModel):
             'type': 'ir.actions.report.xml',
             'report_name': 'account.trial.balance.period.xls',
             'datas': datas}
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

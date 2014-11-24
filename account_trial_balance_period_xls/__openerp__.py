@@ -37,4 +37,4 @@ This report generates an excel overview of the Trial Balance per Period.
         'wizard/trial_balance_period_wizard.xml',
     ],
 }
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+
