@@ -669,5 +669,3 @@ trial_balance_period_xls(
     'report.account.trial.balance.period.xls',
     'account.journal',
     parser=trial_balance_period_xls_parser)
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
