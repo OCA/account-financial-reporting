@@ -282,17 +282,19 @@ class trial_balance_xls(report_xls):
                                  None,
                                  cell_style_decimal)]
                 c_specs += [
-                    ('debit', 1, 0, 'number', current_account.debit,
+                    ('debit', 1, 0, 'number',
+                     _p['debit_accounts'][current_account.id],
                      None, cell_style_decimal),
-                    ('credit', 1, 0, 'number', current_account.credit,
+                    ('credit', 1, 0, 'number',
+                     _p['credit_accounts'][current_account.id],
                      None, cell_style_decimal),
                 ]
                 c_specs += [('balance', 1, 0, 'number', None,
                              bal_formula, cell_style_decimal)]
             else:
                 c_specs += [('balance', 1, 0, 'number',
-                             current_account.balance, None,
-                             cell_style_decimal)]
+                             _p['balance_accounts'][current_account.id],
+                             None, cell_style_decimal)]
 
             if _p.comparison_mode in ('single', 'multiple'):
                 c = 1
