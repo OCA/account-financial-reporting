@@ -52,5 +52,4 @@ Please contact Alexis de Lattre from Akretion <alexis.delattre@akretion.com> for
     ],
     'demo': ['intrastat_demo.xml'],
     'installable': True,
-    'active': False,
 }
