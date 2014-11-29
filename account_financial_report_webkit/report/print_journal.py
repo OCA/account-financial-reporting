@@ -126,7 +126,8 @@ class PrintJournalWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
         objects = account_journal_period_obj.browse(self.cursor, self.uid,
                                                     new_ids)
         # Sort by journal and period
-        objects.sort(key=lambda a: (a.journal_id.code, a.period_id.date_start))
+        objects = sorted(objects, key=lambda a: (a.journal_id.code,
+                                                 a.period_id.date_start))
         move_obj = self.pool.get('account.move')
         for journal_period in objects:
             domain_arg = [
