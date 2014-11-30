@@ -23,8 +23,7 @@
 
 import itertools
 import tempfile
-import StringIO
-import cStringIO
+from cStringIO import StringIO
 import base64
 
 import csv
@@ -43,7 +42,7 @@ class AccountUnicodeWriter(object):
 
     def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
         # Redirect output to a queue
-        self.queue = cStringIO.StringIO()
+        self.queue = StringIO()
         # created a writer with Excel formating settings
         self.writer = csv.writer(self.queue, dialect=dialect, **kwds)
         self.stream = f
@@ -117,7 +116,7 @@ class AccountCSVExport(orm.TransientModel):
     def action_manual_export_account(self, cr, uid, ids, context=None):
         this = self.browse(cr, uid, ids)[0]
         rows = self.get_data(cr, uid, ids, "account", context)
-        file_data = StringIO.StringIO()
+        file_data = StringIO()
         try:
             writer = AccountUnicodeWriter(file_data)
             writer.writerows(rows)
@@ -177,7 +176,7 @@ class AccountCSVExport(orm.TransientModel):
     def action_manual_export_analytic(self, cr, uid, ids, context=None):
         this = self.browse(cr, uid, ids)[0]
         rows = self.get_data(cr, uid, ids, "analytic", context)
-        file_data = StringIO.StringIO()
+        file_data = StringIO()
         try:
             writer = AccountUnicodeWriter(file_data)
             writer.writerows(rows)
