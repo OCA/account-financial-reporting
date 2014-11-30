@@ -105,7 +105,8 @@ class AccountCSVExport(orm.TransientModel):
 
     def _get_fiscalyear_default(self, cr, uid, context=None):
         fiscalyear_obj = self.pool['account.fiscalyear']
-        context['company_id'] = self._get_company_default(cr, uid, context)
+        context = dict(context,
+                       company_id=self._get_company_default(cr, uid, context))
         return fiscalyear_obj.find(cr, uid, dt=None, exception=True,
                                    context=context)
 
