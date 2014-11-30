@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <menuitem
+            icon="STOCK_EXECUTE"
+            name="Accounting CSV Export"
+            action="action_account_csv_export"
+            id="menu_account_csv_export"
+            parent="account.menu_finance_reports"
+            sequence="110"
+            />
+
+
+    </data>
+</openerp>
