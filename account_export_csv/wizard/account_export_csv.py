@@ -243,7 +243,7 @@ class AccountCSVExport(orm.TransientModel):
         """
         Here we use TemporaryFile to avoid full filling the OpenERP worker
         Memory
-        We also write the data to the wizard with SQL query as write seams
+        We also write the data to the wizard with SQL query as write seems
         to use too much memory as well.
 
         Those improvements permitted to improve the export from a 100k line to
