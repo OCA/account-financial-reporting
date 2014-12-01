@@ -72,6 +72,13 @@ class ProductTemplate(models.Model):
         "available from the World Customs Organisation, see "
         "http://www.wcoomd.org/. Some countries have made their own "
         "extensions to this nomenclature.")
+    origin_country_id = fields.Many2one(
+        'res.country', string='Country of Origin',
+        help="Country of origin of the product i.e. product "
+        "'made in ____'. If you have different countries of origin "
+        "depending on the supplier from which you purchased the product, "
+        "leave this field empty and use the equivalent field on the "
+        "'product supplier info' form.")
 
 
 class ProductCategory(models.Model):

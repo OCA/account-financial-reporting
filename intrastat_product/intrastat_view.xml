@@ -17,6 +17,7 @@
     <field name="arch" type="xml">
         <field name="exclude_from_intrastat" position="before">
             <field name="intrastat_id" attrs="{'invisible': [('type', '=', 'service')]}"/>
+            <field name="origin_country_id" attrs="{'invisible': [('type', '=', 'service')]}"/>
         </field>
     </field>
 </record>
