@@ -21,10 +21,15 @@
     def amount(text):
         # replace by a non-breaking hyphen (it will not word-wrap between hyphen and numbers)
         return text.replace('-', '&#8209;')
+
+    first = True
     %>
     <body>
     %for partner in objects:
         <%setLang(partner.lang)%>
+        %if not first:
+            <div class="break"></div>
+        %endif
         <br/>
         <br/>
         <%from datetime import date %>
@@ -161,7 +166,8 @@
             </table>
         %endif  ## if getLines60(partner)
         %endif  ## if (partner.credit + partner.debit == 0
-        <div class="break"></div>
+
+        <%! first = False %>
     %endfor  ## for partner in objects
     </body>
 </html>
