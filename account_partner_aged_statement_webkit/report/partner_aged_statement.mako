@@ -22,12 +22,11 @@
         # replace by a non-breaking hyphen (it will not word-wrap between hyphen and numbers)
         return text.replace('-', '&#8209;')
 
-    first = True
     %>
     <body>
-    %for partner in objects:
+    %for idx, partner in enumerate(objects):
         <%setLang(partner.lang)%>
-        %if not first:
+        %if idx > 0:
             <div class="break"></div>
         %endif
         <br/>
@@ -166,8 +165,6 @@
             </table>
         %endif  ## if getLines60(partner)
         %endif  ## if (partner.credit + partner.debit == 0
-
-        <%! first = False %>
     %endfor  ## for partner in objects
     </body>
 </html>
