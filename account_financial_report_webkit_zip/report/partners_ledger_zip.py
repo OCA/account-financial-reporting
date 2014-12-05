@@ -216,9 +216,9 @@ class PartnersLedgerWebkitZip(PartnersLedgerWebkit):
         )
         account.ledger_lines = ledger_lines.get(account.id, {})
         account.init_balance = initial_balance_lines.get(account.id, {})
-        ## we have to compute partner order based on inital balance
-        ## and ledger line as we may have partner with init bal
-        ## that are not in ledger line and vice versa
+        # we have to compute partner order based on inital balance
+        # and ledger line as we may have partner with init bal
+        # that are not in ledger line and vice versa
         ledg_lines_pids = ledger_lines.get(account.id, {}).keys()
         if initial_balance_mode:
             non_null_init_balances = dict(

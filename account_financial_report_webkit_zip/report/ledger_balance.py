@@ -68,10 +68,8 @@ class LedgerBalanceWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
                 ('--header-left', header_report_name),
                 ('--header-spacing', '2'),
                 ('--footer-left', footer_date_time),
-                ('--footer-right', ' '.join((_('Page'),
-                                            '[page]',
-                                            _('of'),
-                                            '[topage]'))),
+                ('--footer-right', ' '.join(
+                    (_('Page'), '[page]', _('of'), '[topage]'))),
                 ('--footer-line',),
             ],
         })
