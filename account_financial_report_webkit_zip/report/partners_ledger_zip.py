@@ -19,14 +19,9 @@
 #
 ##############################################################################
 
-from collections import defaultdict
-from datetime import datetime
-
-from openerp import pooler
-from openerp.osv import osv
-from openerp.report import report_sxw
 from openerp.tools.translate import _
-from openerp.addons.account_financial_report_webkit.report.partners_ledger import PartnersLedgerWebkit
+from openerp.addons.account_financial_report_webkit.\
+    report.partners_ledger import PartnersLedgerWebkit
 from .webkit_parser_multiple_files import MultipleFilesWebKitParser
 
 
@@ -163,7 +158,8 @@ class PartnersLedgerWebkitZip(PartnersLedgerWebkit):
         return accounts, cumulated_balance
 
     def set_context(self, objects, data, ids, report_type=None):
-        """Populate a ledger_lines attribute on each browse record that will be used
+        """Populate a ledger_lines attribute on each
+        browse record that will be used
         by mako template"""
         new_ids = data['form']['chart_account_id']
 
@@ -262,7 +258,9 @@ class PartnersLedgerWebkitZip(PartnersLedgerWebkit):
         )
 
 
-MultipleFilesWebKitParser('report.account.account_report_partners_ledger_zip',
-                          'account.account',
-                          'addons/account_financial_report_webkit/report/templates/account_report_partners_ledger.mako',
-                          parser=PartnersLedgerWebkitZip)
+MultipleFilesWebKitParser(
+    'report.account.account_report_partners_ledger_zip',
+    'account.account',
+    'addons/account_financial_report_webkit/report/'
+    'templates/account_report_partners_ledger.mako',
+    parser=PartnersLedgerWebkitZip)

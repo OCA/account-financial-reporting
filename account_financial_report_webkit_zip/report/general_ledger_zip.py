@@ -18,14 +18,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from operator import itemgetter
-from itertools import groupby
-from datetime import datetime
-
-from openerp.report import report_sxw
-from openerp import pooler
-from openerp.tools.translate import _
-from openerp.addons.account_financial_report_webkit.report.general_ledger import GeneralLedgerWebkit
+from openerp.addons.account_financial_report_webkit.\
+    report.general_ledger import GeneralLedgerWebkit
 from .webkit_parser_multiple_files import MultipleFilesWebKitParser
 
 

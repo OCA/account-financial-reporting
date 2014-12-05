@@ -18,29 +18,35 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-from operator import itemgetter
-from itertools import groupby
 from datetime import datetime
 
 from openerp.report import report_sxw
 from openerp import pooler
 from openerp.tools.translate import _
-from openerp.addons.account_financial_report_webkit.report.common_reports import CommonReportHeaderWebkit
-from openerp.addons.account_financial_report_webkit.report.webkit_parser_header_fix import HeaderFooterTextWebKitParser
+from openerp.addons.account_financial_report_webkit.\
+    report.common_reports import CommonReportHeaderWebkit
+from openerp.addons.account_financial_report_webkit.\
+    report.webkit_parser_header_fix import HeaderFooterTextWebKitParser
 
 
 class LedgerBalanceWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
 
     def __init__(self, cursor, uid, name, context):
-        super(LedgerBalanceWebkit, self).__init__(cursor, uid, name, context=context)
+        super(LedgerBalanceWebkit, self).__init__(
+            cursor, uid, name, context=context
+        )
         self.pool = pooler.get_pool(self.cr.dbname)
         self.cursor = self.cr
 
-        company = self.pool.get('res.users').browse(self.cr, uid, uid, context=context).company_id
-        header_report_name = ' - '.join((_('LEDGER BALANCE'), company.name, company.currency_id.name))
+        company = self.pool.get('res.users').browse(
+            self.cr, uid, uid, context=context
+        ).company_id
+        header_report_name = ' - '.join((_('LEDGER BALANCE'),
+                                        company.name,
+                                        company.currency_id.name))
 
-        footer_date_time = self.formatLang(str(datetime.today()), date_time=True)
+        footer_date_time = self.formatLang(str(datetime.today()),
+                                           date_time=True)
 
         self.localcontext.update({
             'cr': cursor,
@@ -62,7 +68,10 @@ class LedgerBalanceWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
                 ('--header-left', header_report_name),
                 ('--header-spacing', '2'),
                 ('--footer-left', footer_date_time),
-                ('--footer-right', ' '.join((_('Page'), '[page]', _('of'), '[topage]'))),
+                ('--footer-right', ' '.join((_('Page'),
+                                            '[page]',
+                                            _('of'),
+                                            '[topage]'))),
                 ('--footer-line',),
             ],
         })
@@ -71,7 +80,9 @@ class LedgerBalanceWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
         self.localcontext['lang'] = lang
         self.lang_dict_called = False
 
-HeaderFooterTextWebKitParser('report.account.account_report_ledger_balance_webkit',
-                             'account.account',
-                             'addons/account_financial_report_webkit_zip/report/templates/account_report_ledger_balance.mako',
-                             parser=LedgerBalanceWebkit)
+HeaderFooterTextWebKitParser(
+    'report.account.account_report_ledger_balance_webkit',
+    'account.account',
+    'addons/account_financial_report_webkit_zip/'
+    'report/templates/account_report_ledger_balance.mako',
+    parser=LedgerBalanceWebkit)

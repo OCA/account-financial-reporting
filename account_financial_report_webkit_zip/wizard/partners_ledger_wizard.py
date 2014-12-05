@@ -21,7 +21,7 @@
 from openerp.osv import orm
 
 
-class AccountReportPartnersLedgerWizard(orm.TransientModel):
+class AccountReportPartnerLedgerWizard(orm.TransientModel):
     _inherit = "partners.ledger.webkit"
 
     def zip_export(self, cr, uid, ids, context=None):
@@ -31,10 +31,12 @@ class AccountReportPartnersLedgerWizard(orm.TransientModel):
         context = context or {}
         if context.get('zip_export'):
             data = self.pre_print_report(cr, uid, ids, data, context=context)
-            return {'type': 'ir.actions.report.xml',
-                    'report_name': 'account.account_report_partners_ledger_zip',
-                    'datas': data}
+            return {
+                'type': 'ir.actions.report.xml',
+                'report_name': 'account.account_report_partners_ledger_zip',
+                'datas': data
+            }
         else:
-            return super(AccountReportPartnersLedgerWizard, self)._print_report(
+            return super(AccountReportPartnerLedgerWizard, self)._print_report(
                 cr, uid, ids, data, context=context
             )

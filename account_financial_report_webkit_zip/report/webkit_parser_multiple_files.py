@@ -27,11 +27,10 @@ from functools import partial
 from mako import exceptions
 from openerp.osv.osv import except_osv
 from openerp.tools.translate import _
-from openerp.netsvc import Service
 from openerp import addons
 from openerp import pooler
-from openerp import tools
-from openerp.addons.account_financial_report_webkit.report.webkit_parser_header_fix import HeaderFooterTextWebKitParser
+from openerp.addons.account_financial_report_webkit.report.\
+    webkit_parser_header_fix import HeaderFooterTextWebKitParser
 from openerp.addons.report_webkit.report_helper import WebKitHelper
 from .ledger_balance import LedgerBalanceWebkit
 
