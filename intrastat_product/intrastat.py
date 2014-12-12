@@ -22,7 +22,7 @@
 ##############################################################################
 
 from openerp import models, fields, api, _
-from openerp.exceptions import Warning
+from openerp.exceptions import ValidationError
 
 
 class ReportIntrastatCode(models.Model):
@@ -39,7 +39,6 @@ class ReportIntrastatCode(models.Model):
         'Description', help="Short text description of the H.S. category")
 
     @api.multi
-    @api.depends('name', 'description')
     def name_get(self):
         res = []
         for code in self:
@@ -52,7 +51,7 @@ class ReportIntrastatCode(models.Model):
     @api.constrains('name')
     def _hs_code(self):
         if self.name and not self.name.isdigit():
-            raise Warning(
+            raise ValidationError(
                 _("H.S. codes should only contain digits. It is not the case "
                     "of H.S. code '%s'.") % self.name)
 
