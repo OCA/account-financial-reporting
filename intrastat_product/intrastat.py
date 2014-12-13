@@ -31,12 +31,24 @@ class ReportIntrastatCode(models.Model):
     _order = "name"
 
     name = fields.Char(
-        string='H.S. code', required=True,
+        string='H.S. code',
         help="Full length Harmonized System code (digits only). Full list is "
         "available from the World Customs Organisation, see "
         "http://www.wcoomd.org")
     description = fields.Char(
         'Description', help="Short text description of the H.S. category")
+    intrastat_code = fields.Char(
+        string='European Intrastat Code', size=9, required=True,
+        help="Code used for the Intrastat declaration. Must be part "
+        "of the 'Combined Nomenclature' (CN), cf "
+        "http://en.wikipedia.org/wiki/Combined_Nomenclature"
+        "Must have 8 digits with sometimes a 9th digit.")
+    intrastat_uom_id = fields.Many2one(
+        'product.uom', string='UoM for Intrastat Report',
+        help="Select the unit of measure if one is required for "
+        "this particular Intrastat Code (other than the weight in Kg). "
+        "If no particular unit of measure is required, leave empty.")
+    active = fields.Boolean(default=True)
 
     @api.multi
     def name_get(self):
@@ -48,12 +60,23 @@ class ReportIntrastatCode(models.Model):
             res.append((code.id, name))
         return res
 
-    @api.constrains('name')
+    @api.constrains('name', 'intrastat_code')
     def _hs_code(self):
         if self.name and not self.name.isdigit():
             raise ValidationError(
                 _("H.S. codes should only contain digits. It is not the case "
                     "of H.S. code '%s'.") % self.name)
+        if self.intrastat_code and not self.intrastat_code.isdigit():
+            raise ValidationError(
+                _("The field Intrastat Code should only contain digits. "
+                    "It is not the case of Intrastat Code '%s'.")
+                % self.intrastat_code)
+        if self.intrastat_code and len(self.intrastat_code) not in (8, 9):
+            raise ValidationError(
+                _("The field Intrastat Code should "
+                    "contain 8 or 9 digits. It is not the case of "
+                    "Intrastat Code '%s'.")
+                % self.intrastat_code)
 
     _sql_constraints = [(
         'hs_code_uniq',

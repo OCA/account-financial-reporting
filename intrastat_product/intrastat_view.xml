@@ -43,7 +43,7 @@
     <field name="arch" type="xml">
         <search string="Search Intrastat Codes">
             <field name="name"
-                filter_domain="['|', ('name', 'like', self), ('description', 'ilike', self)]"/>
+                filter_domain="['|', '|', ('name', 'like', self), ('intrastat_code', 'like', self), ('description', 'ilike', self)]"/>
         </search>
     </field>
 </record>
@@ -55,6 +55,8 @@
     <field name="arch" type="xml">
         <tree string="Intrastat Codes">
             <field name="name"/>
+            <field name="intrastat_code" />
+            <field name="intrastat_uom_id"/>
             <field name="description"/>
         </tree>
     </field>
@@ -68,7 +70,10 @@
         <form string="Intrastat Code">
             <group name="main">
                 <field name="name" />
+                <field name="intrastat_code"/>
+                <field name="intrastat_uom_id"/>
                 <field name="description" />
+                <field name="active"/>
             </group>
         </form>
     </field>
