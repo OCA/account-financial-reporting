@@ -72,6 +72,14 @@ def _get_bal_vars_in_expr(expr):
     return re.findall(r'\bbal_\w+', expr)
 
 
+def _python_bals_var(account_code):
+    return 'bals_' + re.sub(r'\W', '_', account_code)
+
+
+def _get_bals_vars_in_expr(expr):
+    return re.findall(r'\bbals_\w+', expr)
+
+
 def _get_vars_in_expr(expr, varnames=None):
     if not varnames:
         return []
@@ -87,9 +95,18 @@ def _get_bal_vars_in_report(report):
     return res
 
 
+def _get_bals_vars_in_report(report):
+    res = set()
+    for kpi in report.kpi_ids:
+        for bals_var in _get_bals_vars_in_expr(kpi.expression):
+            res.add(bals_var)
+    return res
+
+
 def _is_valid_python_var(name):
     return re.match("[_A-Za-z][_a-zA-Z0-9]*$", name) \
-        and not name.startswith('bal_')
+        and not name.startswith('bal_') \
+        and not name.startswith('bals_')
 
 
 class mis_report_kpi(orm.Model):
@@ -310,6 +327,9 @@ class mis_report(orm.Model):
     * an implicit query fetching all the account balances;
       for each account, the balance is stored in a variable named
       bal_{code} where {code} is the account code
+    * an implicit query fetching all the account balances solde;
+      for each account, the balance solde is stored in a variable named
+      bals_{code} where {code} is the account code
     * a list of explicit queries; the result of each query is
       stored in a variable with same name as a query, containing as list
       of data structures populated with attributes for each fields to fetch
@@ -535,6 +555,48 @@ class mis_report_instance_period(orm.Model):
 
         return balances
 
+    def _fetch_balances_solde(self, cr, uid, c, bals_vars, context=None):
+        """ fetch the general account balances sold at the end of
+            the given period
+
+        returns a dictionary {bals_<account.code>: account.balance.solde}
+        """
+        # TODO : compute the balance solde !
+        if context is None:
+            context = {}
+        account_obj = self.pool['account.account']
+
+        search_ctx = dict(context)
+        if c.period_from:
+            search_ctx.update({'period_from': c.period_from.id,
+                               'period_to': c.period_to.id})
+        else:
+            search_ctx.update({'date_from': c.date_from,
+                               'date_to': c.date_to})
+
+        # TODO: initial balance?
+        # TODO: use child of company_id?
+        account_ids = account_obj.search(
+            cr, uid,
+            ['|', ('company_id', '=', False),
+             ('company_id', '=', c.company_id.id)],
+            context=search_ctx)
+        # first fetch all codes and filter the one we need
+        account_datas = account_obj.read(
+            cr, uid, account_ids, ['code', ], context=search_ctx)
+        account_ids = [a['id'] for a in account_datas
+                       if _python_bals_var(a['code']) in bals_vars]
+        # fetch balances
+        account_datas = account_obj.read(
+            cr, uid, account_ids, ['code', 'balance'], context=search_ctx)
+        balances = {}
+        for account_data in account_datas:
+            key = _python_bals_var(account_data['code'])
+            assert key not in balances
+            balances[key] = account_data['balance']
+
+        return balances
+
     def _fetch_queries(self, cr, uid, c, context):
         res = {}
 
@@ -563,7 +625,7 @@ class mis_report_instance_period(orm.Model):
 
         return res
 
-    def _compute(self, cr, uid, c, bal_vars, context=None):
+    def _compute(self, cr, uid, c, bal_vars, bals_vars, context=None):
         if context is None:
             context = {}
 
@@ -580,6 +642,8 @@ class mis_report_instance_period(orm.Model):
             'avg': lambda l: sum(l) / float(len(l)),
         }
         localdict.update(self._fetch_balances(cr, uid, c, bal_vars,
+                                              context=context))
+        localdict.update(self._fetch_balances_solde(cr, uid, c, bals_vars,
                                               context=context))
         localdict.update(self._fetch_queries(cr, uid, c,
                                              context=context))
@@ -737,6 +801,7 @@ class mis_report_instance(orm.Model):
         period_values = {}
 
         bal_vars = _get_bal_vars_in_report(r.report_id)
+        bals_vars = _get_bals_vars_in_report(r.report_id)
 
         for period in r.period_ids:
             # add the column header
@@ -754,7 +819,7 @@ class mis_report_instance(orm.Model):
                 period.date_from))
             # compute kpi values
             values = report_instance_period_obj._compute(
-                cr, uid, period, bal_vars, context=context)
+                cr, uid, period, bal_vars, bals_vars, context=context)
             period_values[period.name] = values
             for key in values:
                 content[key]['cols'].append(values[key])
