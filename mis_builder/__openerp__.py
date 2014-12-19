@@ -36,6 +36,7 @@
         'wizard/mis_builder_dashboard.xml',
         'views/mis_builder.xml',
         'security/ir.model.access.csv',
+        'security/mis_builder_security.xml',
     ],
     'test': [
     ],

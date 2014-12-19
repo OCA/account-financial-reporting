@@ -87,6 +87,11 @@ def _get_bal_vars_in_report(report):
     return res
 
 
+def _is_valid_python_var(name):
+    return re.match("[_A-Za-z][_a-zA-Z0-9]*$", name) \
+        and not name.startswith('bal_')
+
+
 class mis_report_kpi(orm.Model):
 
     """ A KPI is an element of a MIS report.
@@ -144,10 +149,8 @@ class mis_report_kpi(orm.Model):
     _order = 'sequence'
 
     def _check_name(self, cr, uid, ids, context=None):
-        # TODO: kpi name cannot start with bal
-        # TODO: factor out the name check function (DRY)
         for record_name in self.read(cr, uid, ids, ['name']):
-            if not re.match("[_A-Za-z][_a-zA-Z0-9]*$", record_name['name']):
+            if not _is_valid_python_var(record_name['name']):
                 return False
         return True
 
@@ -156,10 +159,8 @@ class mis_report_kpi(orm.Model):
     ]
 
     def onchange_name(self, cr, uid, ids, name, context=None):
-        # TODO: factor out the name check function (DRY)
-        # check it is a valid python identifier
         res = {}
-        if name and not re.match("[_A-Za-z][_a-zA-Z0-9]*$", name):
+        if name and not _is_valid_python_var(name):
             res['warning'] = {
                 'title': 'Invalid name',
                 'message': 'The name must be a valid python identifier'}
@@ -167,7 +168,7 @@ class mis_report_kpi(orm.Model):
 
     def onchange_description(self, cr, uid, ids, description, name,
                              context=None):
-        # construct name from description
+        """ construct name from description """
         res = {}
         if description and not name:
             res = {'value': {'name': _python_var(description)}}
@@ -291,10 +292,8 @@ class mis_report_query(orm.Model):
     _order = 'name'
 
     def _check_name(self, cr, uid, ids, context=None):
-        # TODO: factor out the name check function (DRY)
-        # TODO: query name must start with bal
         for record_name in self.read(cr, uid, ids, ['name']):
-            if not re.match("[_A-Za-z][_a-zA-Z0-9]*$", record_name['name']):
+            if not _is_valid_python_var(record_name['name']):
                 return False
         return True
 
@@ -470,7 +469,9 @@ class mis_report_instance_period(orm.Model):
             'period_id',
             'compare_period_id',
             string='Compare with'),
-        'company_id': fields.many2one('res.company', 'Company', required=True),
+        'company_id': fields.related('report_instance_id', 'company_id',
+                                     type="many2one", relation="res.company",
+                                     string="Company", readonly=True),
         'normalize_factor': fields.integer(
             string='Factor',
             help='Factor to use to normalize the period (used in comparison'),
@@ -481,11 +482,6 @@ class mis_report_instance_period(orm.Model):
         'duration': 1,
         'sequence': 100,
         'normalize_factor': 1,
-        'company_id': lambda s, cr, uid, c:
-        s.pool.get('res.company')._company_default_get(
-            cr, uid,
-            'mis.report.instance.period',
-            context=c)
     }
 
     _order = 'sequence'
@@ -663,10 +659,16 @@ class mis_report_instance(orm.Model):
         'target_move': fields.selection([('posted', 'All Posted Entries'),
                                          ('all', 'All Entries'),
                                          ], 'Target Moves', required=True),
+        'company_id': fields.many2one('res.company', 'Company', required=True),
     }
 
     _defaults = {
         'target_move': 'posted',
+        'company_id': lambda s, cr, uid, c:
+            s.pool.get('res.company')._company_default_get(
+                cr, uid,
+                'mis.report.instance',
+                context=c)
     }
 
     def create(self, cr, uid, vals, context=None):
