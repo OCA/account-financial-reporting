@@ -672,6 +672,8 @@ class mis_report_instance(orm.Model):
     }
 
     def create(self, cr, uid, vals, context=None):
+        if not vals:
+            return context.get('active_id', None)
         # TODO: explain this
         if 'period_ids' in vals:
             mis_report_instance_period_obj = self.pool.get(
