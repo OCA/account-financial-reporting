@@ -126,8 +126,9 @@ class PrintJournalWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
         objects = account_journal_period_obj.browse(self.cursor, self.uid,
                                                     new_ids)
         # Sort by journal and period
-        objects = sorted(objects, key=lambda a: (a.journal_id.code,
-                                                 a.period_id.date_start))
+        # TODO: this is broken in 8.0
+        # objects.sort(key=lambda a: (a.journal_id.code,
+        #                             a.period_id.date_start))
         move_obj = self.pool.get('account.move')
         for journal_period in objects:
             domain_arg = [
@@ -140,9 +141,11 @@ class PrintJournalWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
                                        order="name")
             journal_period.moves = move_obj.browse(self.cursor, self.uid,
                                                    move_ids)
-            # Sort account move line by account accountant
+            # Sort account move line by date and account code
             for move in journal_period.moves:
-                move.line_id.sort(key=lambda a: (a.date, a.account_id.code))
+                # TODO: this is broken in 8.0
+                # move.line_id.sort(key=lambda a: (a.date, a.account_id.code))
+                pass
 
         self.localcontext.update({
             'fiscalyear': fiscalyear,
