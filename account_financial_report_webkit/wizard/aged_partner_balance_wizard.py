@@ -18,7 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import orm
+from openerp.osv import orm, fields
 
 
 class AccountAgedTrialBalance(orm.TransientModel):
@@ -30,6 +30,17 @@ class AccountAgedTrialBalance(orm.TransientModel):
     _inherit = "open.invoices.webkit"
     _name = "account.aged.trial.balance.webkit"
     _description = "Aged partner balanced"
+
+    _columns = {
+        'filter': fields.selection(
+            [('filter_period', 'Periods')],
+            "Filter by",
+            required=True),
+    }
+
+    _defaults = {
+        'filter': 'filter_period',
+    }
 
     def _print_report(self, cr, uid, ids, data, context=None):
         # we update form with display account value

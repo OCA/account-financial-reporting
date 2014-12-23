@@ -1580,3 +1580,8 @@ msgstr ""
 #: view:trial.balance.webkit:account_financial_report_webkit.account_trial_balance_view_webkit
 msgid "{'required': [('filter', '=', 'filter_opening')]}"
 msgstr ""
+
+#. module: account_financial_report_webkit
+#: view:account.aged.trial.balance.webkit:account_financial_report_webkit.account_aged_trial_balance_webkit
+msgid "At the end of"
+msgstr "À fin de"
