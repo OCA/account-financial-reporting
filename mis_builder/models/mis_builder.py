@@ -132,6 +132,8 @@ class mis_report_kpi(orm.Model):
                                    translate=True),
         'expression': fields.char(required=True,
                                   string='Expression'),
+        'default_css_style': fields.char(
+                                 string='Default CSS style expression'),
         'css_style': fields.char(string='CSS style expression'),
         'type': fields.selection([('num', _('Numeric')),
                                   ('pct', _('Percentage')),
@@ -677,6 +679,7 @@ class mis_report_instance_period(orm.Model):
                 'val_r': kpi_val_rendered,
                 'val_c': kpi_val_comment,
                 'style': kpi_style,
+                'default_style': kpi.default_css_style or None,
                 'suffix': kpi.suffix,
                 'dp': kpi.dp,
                 'is_percentage': kpi.type == 'pct',
@@ -788,11 +791,13 @@ class mis_report_instance(orm.Model):
         content = OrderedDict()
         # empty line name for header
         header = OrderedDict()
-        header[''] = {'kpi_name': '', 'cols': []}
+        header[''] = {'kpi_name': '', 'cols': [], 'default_style': ''}
 
         # initialize lines with kpi
         for kpi in r.report_id.kpi_ids:
-            content[kpi.name] = {'kpi_name': kpi.description, 'cols': []}
+            content[kpi.name] = {'kpi_name': kpi.description,
+                                 'cols': [],
+                                 'default_style': ''}
 
         report_instance_period_obj = self.pool.get(
             'mis.report.instance.period')
@@ -822,6 +827,7 @@ class mis_report_instance(orm.Model):
                 cr, uid, period, bal_vars, bals_vars, context=context)
             period_values[period.name] = values
             for key in values:
+                content[key]['default_style'] = values[key]['default_style']
                 content[key]['cols'].append(values[key])
 
         # add comparison column
