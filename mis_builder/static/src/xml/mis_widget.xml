@@ -19,13 +19,13 @@
             </thead>
             <tbody>
                 <tr t-foreach="widget.mis_report_data.content" t-as="c">
-                    <th>
+                    <th t-att="{'style': c_value.default_style}">
                         <div>
                             <t t-esc="c_value.kpi_name"/>
                         </div>
                     </th>
                     <t t-foreach="c_value.cols" t-as="value">
-                        <td class="rallign" t-att="{'style': value_value.style}">
+                        <td class="rallign" t-att="{'style': c_value.default_style + ';' + value_value.style}">
                             <label t-att="{'title': value_value.val_c}" class=" oe_form_label_help oe_align_right">
                                 <t t-esc="value_value.val_r"/>
                             </label>
