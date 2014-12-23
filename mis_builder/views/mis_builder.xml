@@ -44,6 +44,7 @@
                                 <field name="divider" attrs="{'invisible': [('type', '=', 'str')]}"/>
                                 <field name="suffix"/>
                                 <field name="compare_method" attrs="{'invisible': [('type', '=', 'str')]}"/>
+                                <field name="default_css_style"/>
                                 <field name="css_style"/>
                             </tree>
                         </field>
