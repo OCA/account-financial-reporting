@@ -1,0 +1,218 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* account_partner_aged_statement_webkit
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-12-24 18:15+0000\n"
+"PO-Revision-Date: 2014-12-24 18:15+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: account_partner_aged_statement_webkit
+#: model:email.template,subject:account_partner_aged_statement_webkit.email_template_aged_statement
+msgid "${object.company_id.name} - Your aged balance"
+msgstr "${object.company_id.name} - Votre balance agée"
+
+#. module: account_partner_aged_statement_webkit
+#: model:ir.actions.report.xml,name:account_partner_aged_statement_webkit.partner_aged_statement_report
+msgid "Partner Aged Statement"
+msgstr "Déclaration annuaire "
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:60
+msgid "Not Due"
+msgstr "Non dû"
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:141
+msgid "+60"
+msgstr "+60"
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:89
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:117
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:145
+msgid "Description"
+msgstr "Description"
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:39
+msgid "Overdue Statement"
+msgstr "Déclaration en retard"
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:82
+msgid "List of Due Invoices"
+msgstr "Liste de factures dûes"
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:62
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:113
+msgid "30-60"
+msgstr "30-60"
+
+#. module: account_partner_aged_statement_webkit
+#: model:email.template,report_name:account_partner_aged_statement_webkit.email_template_aged_statement
+msgid "\n"
+"                ${(object.name or '').replace('/','_')}\n"
+"            "
+msgstr ""
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:93
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:121
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:149
+msgid "Paid"
+msgstr "Payé"
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:35
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:88
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:116
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:144
+msgid "Date"
+msgstr "Date"
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:64
+msgid "90-120"
+msgstr "90-120"
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:52
+msgid "Nothing due for this partner"
+msgstr "Rien de dû pour ce partenaire"
+
+#. module: account_partner_aged_statement_webkit
+#: model:email.template,body_html:account_partner_aged_statement_webkit.email_template_aged_statement
+msgid "\n"
+"<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; \">\n"
+"\n"
+"    <!--<p>${user.company_id.overdue_msg.replace('\\n', '&lt;br/&gt;')} </p>-->\n"
+"    % for line in user.company_id.overdue_msg.split('\\n'):\n"
+"            <p> ${line}<br/> </p>\n"
+"    % endfor\n"
+"\n"
+"    <br/>\n"
+"    ${user.name}\n"
+"    <br/>\n"
+"    <br/>\n"
+"\n"
+"    <p style=\"border-left: 1px solid #8e0000; margin-left: 30px;\">\n"
+"       &nbsp;&nbsp;<strong>RÉFÉRENCES</strong><br />\n"
+"       &nbsp;&nbsp;Total du montant en retard: ${object.credit} ${user.company_id.currency_id.name}<br/>\n"
+"    </p>\n"
+"\n"
+"    <br/>\n"
+"    <br/>\n"
+"    <div style=\"width: 375px; margin: 0px; padding: 0px; background-color: #8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;\">\n"
+"        <h3 style=\"margin: 0px; padding: 2px 14px; font-size: 12px; color: #DDD;\">\n"
+"            <strong style=\"text-transform:uppercase;\">${user.company_id.name}</strong></h3>\n"
+"    </div>\n"
+"    <div style=\"width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;\">\n"
+"        <span style=\"color: #222; margin-bottom: 5px; display: block; \">\n"
+"        % if user.company_id.street:\n"
+"            ${user.company_id.street}<br/>\n"
+"        % endif\n"
+"        % if user.company_id.street2:\n"
+"            ${user.company_id.street2}<br/>\n"
+"        % endif\n"
+"        % if user.company_id.city or user.company_id.zip:\n"
+"            ${user.company_id.zip} ${user.company_id.city}<br/>\n"
+"        % endif\n"
+"        % if user.company_id.country_id:\n"
+"            ${user.company_id.state_id and ('%s, ' % user.company_id.state_id.name) or ''} ${user.company_id.country_id.name or ''}<br/>\n"
+"        % endif\n"
+"        </span>\n"
+"        % if user.company_id.phone:\n"
+"            <div style=\"margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; \">\n"
+"                Téléphone:&nbsp; ${user.company_id.phone}\n"
+"            </div>\n"
+"        % endif\n"
+"        % if user.company_id.website:\n"
+"            <div>\n"
+"                Site :&nbsp;<a href=\"${user.company_id.website}\">${user.company_id.website}</a>\n"
+"            </div>\n"
+"        %endif\n"
+"        <p></p>\n"
+"    </div>\n"
+"</div>\n"
+"            "
+msgstr ""
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:63
+msgid "60-90"
+msgstr "60-90"
+
+#. module: account_partner_aged_statement_webkit
+#: view:res.partner:0
+msgid "Send Aged Statement"
+msgstr "Envoyer la déclaration âgées"
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:92
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:120
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:148
+msgid "Amount"
+msgstr "Montant"
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:90
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:118
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:146
+msgid "Reference"
+msgstr "Référence"
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:91
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:119
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:147
+msgid "Due date"
+msgstr "Date dû"
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:54
+msgid "Aged Balance"
+msgstr "Balance agée"
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:65
+msgid "+120"
+msgstr "+120"
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:61
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:85
+msgid "0-30"
+msgstr "0-30"
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:37
+#: model:ir.model,name:account_partner_aged_statement_webkit.model_res_partner
+msgid "Partner"
+msgstr "Partenaire"
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:66
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:94
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:95
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:122
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:123
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:150
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:151
+msgid "Total"
+msgstr "Total"
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:39
+msgid "Subject"
+msgstr "Sujet"
+
