@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
 ##############################################################################
 #
-#    Report intrastat base module for OpenERP
-#    Copyright (C) 2010-2013 Akretion (http://www.akretion.com/).
+#    Report intrastat base module for Odoo
+#    Copyright (C) 2010-2014 Akretion (http://www.akretion.com/).
 #    @author Alexis de Lattre <alexis.delattre@akretion.com>
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -20,9 +20,9 @@
 #
 ##############################################################################
 
-from openerp.osv import orm
-from openerp.tools.translate import _
-from openerp import tools
+from openerp import models, api, tools, _
+from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
+from openerp.exceptions import Warning, ValidationError
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import logging
@@ -30,71 +30,64 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class report_intrastat_common(orm.TransientModel):
+class ReportIntrastatCommon(models.AbstractModel):
     _name = "report.intrastat.common"
     _description = "Common functions for intrastat reports for products "
     "and services"
 
-    def _compute_numbers(self, cr, uid, ids, object, context=None):
-        result = {}
-        for intrastat in object.browse(cr, uid, ids, context=context):
-            total_amount = 0.0
-            num_lines = 0
-            for line in intrastat.intrastat_line_ids:
-                total_amount += line.amount_company_currency
-                num_lines += 1
-            result[intrastat.id] = {
-                'num_lines': num_lines,
-                'total_amount': total_amount,
-                }
-        return result
+    @api.one
+    @api.depends(
+        'intrastat_line_ids', 'intrastat_line_ids.amount_company_currency')
+    def _compute_numbers(self):
+        total_amount = 0.0
+        num_lines = 0
+        for line in self.intrastat_line_ids:
+            total_amount += line.amount_company_currency
+            num_lines += 1
+        self.num_lines = num_lines
+        self.total_amount = total_amount
 
-    def _compute_dates(self, cr, uid, ids, object, context=None):
-        result = {}
-        for intrastat in object.browse(cr, uid, ids, context=context):
-            start_date_datetime = datetime.strptime(
-                intrastat.start_date, '%Y-%m-%d')
-            end_date_str = datetime.strftime(
-                start_date_datetime + relativedelta(day=31), '%Y-%m-%d')
-            result[intrastat.id] = {
-                'end_date': end_date_str,
-                'year_month': start_date_datetime.strftime('%Y-%m'),
-                }
-        return result
+    @api.one
+    @api.depends('start_date')
+    def _compute_dates(self):
+        start_date_dt = datetime.strptime(
+            self.start_date, DEFAULT_SERVER_DATE_FORMAT)
+        self.end_date = datetime.strftime(
+            start_date_dt + relativedelta(day=31), DEFAULT_SERVER_DATE_FORMAT)
+        self.year_month = start_date_dt.strftime('%Y-%m')
 
-    def _check_start_date(self, cr, uid, ids, object, context=None):
+    @api.one
+    @api.constrains('start_date')
+    def _check_start_date(self):
         '''Check that the start date is the first day of the month'''
-        for date_to_check in object.read(
-                cr, uid, ids, ['start_date'], context=context):
-            datetime_to_check = datetime.strptime(
-                date_to_check['start_date'], '%Y-%m-%d')
-            if datetime_to_check.day != 1:
-                return False
-        return True
+        datetime_to_check = datetime.strptime(
+            self.start_date, DEFAULT_SERVER_DATE_FORMAT)
+        if datetime_to_check.day != 1:
+            return ValidationError(
+                _('The start date must be the first day of the month'))
 
-    def _check_generate_lines(self, cr, uid, intrastat, context=None):
-        if not intrastat.company_id.country_id:
-            raise orm.except_orm(
-                _('Error :'),
+    @api.one
+    def _check_generate_lines(self):
+        if not self.company_id.country_id:
+            raise Warning(
                 _("The country is not set on the company '%s'.")
-                % intrastat.company_id.name)
-        if not intrastat.currency_id.name == 'EUR':
-            raise orm.except_orm(
-                _('Error :'),
+                % self.company_id.name)
+        if self.currency_id.name != 'EUR':
+            raise Warning(
                 _("The company currency must be 'EUR', but is currently '%s'.")
-                % intrastat.currency_id.name)
+                % self.currency_id.name)
         return True
 
-    def _check_generate_xml(self, cr, uid, intrastat, context=None):
-        if not intrastat.company_id.partner_id.vat:
-            raise orm.except_orm(
-                _('Error :'),
+    @api.one
+    def _check_generate_xml(self):
+        if not self.company_id.partner_id.vat:
+            raise Warning(
                 _("The VAT number is not set for the partner '%s'.")
-                % intrastat.company_id.partner_id.name)
+                % self.company_id.partner_id.name)
         return True
 
-    def _check_xml_schema(
-            self, cr, uid, xml_root, xml_string, xsd_file, context=None):
+    @api.model
+    def _check_xml_schema(self, xml_root, xml_string, xsd_file):
         '''Validate the XML file against the XSD'''
         from lxml import etree
         xsd_etree_obj = etree.parse(
@@ -104,13 +97,12 @@ class report_intrastat_common(orm.TransientModel):
             official_schema.assertValid(xml_root)
         except Exception, e:
             # if the validation of the XSD fails, we arrive here
-            _logger = logging.getLogger(__name__)
-            _logger.warning(
+            logger = logging.getLogger(__name__)
+            logger.warning(
                 "The XML file is invalid against the XML Schema Definition")
-            _logger.warning(xml_string)
-            _logger.warning(e)
-            raise orm.except_orm(
-                _('Error :'),
+            logger.warning(xml_string)
+            logger.warning(e)
+            raise Warning(
                 _("The generated XML file is not valid against the official "
                     "XML Schema Definition. The generated XML file and the "
                     "full error have been written in the server logs. "
@@ -119,39 +111,29 @@ class report_intrastat_common(orm.TransientModel):
                 % str(e))
         return True
 
-    def _attach_xml_file(
-            self, cr, uid, ids, object, xml_string, start_date_datetime,
-            declaration_name, context=None):
+    @api.multi
+    def _attach_xml_file(self, xml_string, declaration_name):
         '''Attach the XML file to the report_intrastat_product/service '''
         '''object'''
+        self.ensure_one()
         import base64
-        assert len(ids) == 1, "Only one ID accepted"
-        filename = '%s_%s.xml' % (
-            datetime.strftime(start_date_datetime, '%Y-%m'),
-            declaration_name)
-        if not context:
-            context = {}
-        context.update({
-            'default_res_id': ids[0],
-            'default_res_model': object._name
-            })
-        attach_id = self.pool['ir.attachment'].create(
-            cr, uid, {
-                'name': filename,
-                'datas': base64.encodestring(xml_string),
-                'datas_fname': filename},
-            context=context)
-        return attach_id
+        filename = '%s_%s.xml' % (self.year_month, declaration_name)
+        attach = self.with_context(
+            default_res_id=self.id,
+            default_res_model=self._name).env['ir.attachment'].create({
+            'name': filename,
+            'datas': base64.encodestring(xml_string),
+            'datas_fname': filename})
+        return attach.id
 
-    def _open_attach_view(
-            self, cr, uid, attach_id, title='XML file', context=None):
+    @api.model
+    def _open_attach_view(self, attach_id, title='XML file'):
         '''Returns an action which opens the form view of the '''
         '''corresponding attachement'''
         action = {
             'name': title,
             'view_type': 'form',
-            'view_mode': 'form,tree',
-            'view_id': False,
+            'view_mode': 'form',
             'res_model': 'ir.attachment',
             'type': 'ir.actions.act_window',
             'nodestroy': True,
@@ -160,30 +142,27 @@ class report_intrastat_common(orm.TransientModel):
             }
         return action
 
-    def partner_on_change(self, cr, uid, ids, partner_id=False, context=None):
-        result = {}
-        result['value'] = {}
-        if partner_id:
-            company = self.pool['res.partner'].read(
-                cr, uid, partner_id, ['vat'], context=context)
-            result['value']['partner_vat'] = company['vat']
-        return result
-
-    def send_reminder_email(
-            self, cr, uid, company, module_name, template_xmlid,
-            intrastat_id, context=None):
-        template_model, template_id =\
-            self.pool['ir.model.data'].get_object_reference(
-                cr, uid, module_name, template_xmlid)
-        assert template_model == 'email.template', 'Wrong model'
-        if company.intrastat_remind_user_ids:
+    @api.one
+    def send_reminder_email(self, mail_template_xmlid):
+        mail_template = self.env.ref(mail_template_xmlid)
+        if self.company_id.intrastat_remind_user_ids:
             self.pool['email.template'].send_mail(
-                cr, uid, template_id, intrastat_id, context=context)
+                self._cr, self._uid, mail_template.id, self.id,
+                context=self._context)
             logger.info(
                 'Intrastat Reminder email has been sent (XMLID: %s).'
-                % template_xmlid)
+                % mail_template_xmlid)
         else:
             logger.warning(
                 'The list of users receiving the Intrastat Reminder is empty '
-                'on company %s' % company.name)
+                'on company %s' % self.company_id.name)
         return True
+
+    @api.multi
+    def unlink(self):
+        for intrastat in self:
+            if intrastat.state == 'done':
+                raise Warning(
+                    _('Cannot delete the declaration %s '
+                        'because it is in Done state') % self.year_month)
+        return super(ReportIntrastatCommon, self).unlink()

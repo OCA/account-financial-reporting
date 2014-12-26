@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
 ##############################################################################
 #
-#    Report intrastat base module for OpenERP
-#    Copyright (C) 2011-2013 Akretion (http://www.akretion.com)
+#    Report intrastat base module for Odoo
+#    Copyright (C) 2011-2014 Akretion (http://www.akretion.com)
 #    @author Alexis de Lattre <alexis.delattre@akretion.com>
 #
 #    This program is free software: you can redistribute it and/or modify

@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Report intrastat base module for OpenERP
-#    Copyright (C) 2010-2013 Akretion (http://www.akretion.com/)
+#    Copyright (C) 2010-2014 Akretion (http://www.akretion.com/)
 #    @author Alexis de Lattre <alexis.delattre@akretion.com>
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -20,44 +20,32 @@
 #
 ##############################################################################
 
-from openerp.osv import orm, fields
-from openerp.tools.translate import _
+from openerp import models, fields, api, _
+from openerp.exceptions import ValidationError
 
 
-class product_template(orm.Model):
+class ProductTemplate(models.Model):
     _inherit = "product.template"
-    _columns = {
-        'exclude_from_intrastat': fields.boolean(
-            'Exclude from Intrastat reports',
-            help="If set to True, the product or service will not be "
-            "taken into account for Intrastat Product or Service reports. "
-            "So you should leave this field to False unless you have a "
-            "very good reason."),
-        'is_accessory_cost': fields.boolean(
-            'Is accessory cost',
-            help="Activate this option for shipping costs, packaging "
-            "costs and all services related to the sale of products. "
-            "This option is used for Intrastat reports."),
-    }
 
-    _defaults = {
-        'exclude_from_intrastat': False,
-    }
+    exclude_from_intrastat = fields.Boolean(
+        string='Exclude from Intrastat reports',
+        help="If set to True, the product or service will not be "
+        "taken into account for Intrastat Product or Service reports. "
+        "So you should leave this field to False unless you have a "
+        "very good reason.")
+    is_accessory_cost = fields.Boolean(
+        string='Is accessory cost',
+        help="Activate this option for shipping costs, packaging "
+        "costs and all services related to the sale of products. "
+        "This option is used for Intrastat reports.")
 
-    def _check_accessory_cost(self, cr, uid, ids):
-        for product in self.browse(cr, uid, ids):
-            if product.is_accessory_cost and product.type != 'service':
-                raise orm.except_orm(
-                    _('Error :'),
-                    _("The option 'Is accessory cost?' should only be "
-                        "activated on 'Service' products. You have activated "
-                        "this option for the product '%s' which is of type "
-                        "'%s'"
-                        % (product.name, product.type)))
-        return True
-
-    _constraints = [(
-        _check_accessory_cost,
-        "Wrong configuration of the product",
-        ['is_accessory_cost', 'type']
-        )]
+    @api.one
+    @api.constrains('type', 'is_accessory_cost')
+    def _check_accessory_cost(self):
+        if self.is_accessory_cost and self.type != 'service':
+            raise ValidationError(
+                _("The option 'Is accessory cost?' should only be "
+                    "activated on 'Service' products. You have activated "
+                    "this option for the product '%s' which is of type "
+                    "'%s'"
+                    % (self.name, self.type)))

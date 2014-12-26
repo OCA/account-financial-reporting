@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
 ##############################################################################
 #
-#    Intrastat base module for OpenERP
-#    Copyright (C) 2013 Akretion (http://www.akretion.com)
+#    Intrastat base module for Odoo
+#    Copyright (C) 2013-2014 Akretion (http://www.akretion.com)
 #    @author Alexis de Lattre <alexis.delattre@akretion.com>
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -20,48 +20,37 @@
 #
 ##############################################################################
 
-from openerp.osv import orm, fields
-from openerp.tools.translate import _
+from openerp import models, fields, api, _
+from openerp.exceptions import ValidationError
 
 
-class res_company(orm.Model):
+class ResCompany(models.Model):
     _inherit = "res.company"
 
-    def _compute_intrastat_email_list(
-            self, cr, uid, ids, name, arg, context=None):
-        result = {}
-        for company in self.browse(cr, uid, ids, context=context):
-            result[company.id] = ''
-            for user in company.intrastat_remind_user_ids:
-                if result[company.id]:
-                    result[company.id] += ',%s' % (user.email)
-                else:
-                    result[company.id] = user.email
-        return result
+    @api.one
+    @api.depends(
+        'intrastat_remind_user_ids', 'intrastat_remind_user_ids.email')
+    def _compute_intrastat_email_list(self):
+        emails = []
+        for user in self.intrastat_remind_user_ids:
+            if user.email:
+                emails.append(user.email)
+        self.intrastat_email_list = ','.join(emails)
 
-    _columns = {
-        'intrastat_remind_user_ids': fields.many2many(
-            'res.users', id1='company_id', id2='user_id',
-            string="Users Receiving the Intrastat Reminder",
-            help="List of OpenERP users who will receive a notification to "
-            "remind them about the Intrastat declaration."),
-        'intrastat_email_list': fields.function(
-            _compute_intrastat_email_list, type='char', size=1000,
-            string='List of emails of Users Receiving the Intrastat Reminder'),
-    }
+    intrastat_remind_user_ids = fields.Many2many(
+        'res.users', column1='company_id', column2='user_id',
+        string="Users Receiving the Intrastat Reminder",
+        help="List of OpenERP users who will receive a notification to "
+        "remind them about the Intrastat declaration.")
+    intrastat_email_list = fields.Char(
+        compute='_compute_intrastat_email_list',
+        string='List of emails of Users Receiving the Intrastat Reminder')
 
-    def _check_intrastat_remind_users(self, cr, uid, ids):
-        for company in self.browse(cr, uid, ids):
-            for user in company.intrastat_remind_user_ids:
-                if not user.email:
-                    raise orm.except_orm(
-                        _('Error :'),
-                        _("Missing e-mail address on user '%s'.")
-                        % (user.name))
-        return True
-
-    _constraints = [(
-        _check_intrastat_remind_users,
-        "Wrong configuration of the Users Receiving the Intrastat Reminder",
-        ['intrastat_remind_user_ids']
-        )]
+    @api.one
+    @api.constrains('intrastat_remind_user_ids')
+    def _check_intrastat_remind_users(self):
+        for user in self.intrastat_remind_user_ids:
+            if not user.email:
+                raise ValidationError(
+                    _("Missing e-mail address on user '%s'.")
+                    % (user.name))
