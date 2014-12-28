@@ -50,7 +50,7 @@ msgstr "Déclaration en retard"
 #. module: account_partner_aged_statement_webkit
 #: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:82
 msgid "List of Due Invoices"
-msgstr "Liste de factures dûes"
+msgstr "Liste de factures dues"
 
 #. module: account_partner_aged_statement_webkit
 #: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:62
@@ -176,12 +176,12 @@ msgstr "Référence"
 #: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:119
 #: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:147
 msgid "Due date"
-msgstr "Date dû"
+msgstr "Date due"
 
 #. module: account_partner_aged_statement_webkit
 #: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:54
 msgid "Aged Balance"
-msgstr "Balance agée"
+msgstr "Balance âgée"
 
 #. module: account_partner_aged_statement_webkit
 #: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:65
