@@ -91,7 +91,7 @@ class PartnersOpenInvoicesWebkit(report_sxw.rml_parse,
             return
         for part_id, plane_lines in account_br.ledger_lines.items():
             account_br.grouped_ledger_lines[part_id] = []
-            plane_lines.sort(key=itemgetter('currency_code'))
+            plane_lines = sorted(plane_lines, key=itemgetter('currency_code'))
             for curr, lines in groupby(plane_lines,
                                        key=itemgetter('currency_code')):
                 tmp = [x for x in lines]
