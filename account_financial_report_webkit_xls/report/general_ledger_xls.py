@@ -35,72 +35,11 @@ class GeneralLedgerWebkitSupplier(GeneralLedgerWebkit):
     """ Extends General Ledger Parser to add the supplier invoice
     number in the move lines """
 
-    def _get_move_line_datas(self, move_line_ids,
-                             order='per.special DESC, l.date ASC, \
-                             per.date_start ASC, m.name ASC'):
-        # copied from account_financial_report_webkit/report/common_reports.py
-        # and adjusted to add the required column
-
-        # Possible bang if move_line_ids is too long
-        # We can not slice here as we have to do the sort.
-        # If slice has to be done it means that we have to reorder in python
-        # after all is finished. That quite crapy...
-        # We have a defective desing here (mea culpa) that should be fixed
-        #
-        # TODO improve that by making a better domain or if not possible
-        # by using python sort
-        if not move_line_ids:
-            return []
-        if not isinstance(move_line_ids, list):
-            move_line_ids = [move_line_ids]
-        monster = """
-        SELECT l.id AS id,
-            l.date AS ldate,
-            j.code AS jcode ,
-            j.type AS jtype,
-            l.currency_id,
-            l.account_id,
-            l.amount_currency,
-            l.ref AS lref,
-            l.name AS lname,
-            COALESCE(l.debit, 0.0) - COALESCE(l.credit, 0.0) AS balance,
-            l.debit,
-            l.credit,
-            l.period_id AS lperiod_id,
-            per.code as period_code,
-            per.special AS peropen,
-            l.partner_id AS lpartner_id,
-            p.name AS partner_name,
-            m.name AS move_name,
-            COALESCE(partialrec.name, fullrec.name, '') AS rec_name,
-            COALESCE(partialrec.id, fullrec.id, NULL) AS rec_id,
-            m.id AS move_id,
-            c.name AS currency_code,
-            i.id AS invoice_id,
-            i.type AS invoice_type,
-            i.number AS invoice_number,
-            i.supplier_invoice_number AS supplier_invoice_number,
-            l.date_maturity
-        FROM account_move_line l
-        JOIN account_move m on (l.move_id=m.id)
-        LEFT JOIN res_currency c on (l.currency_id=c.id)
-        LEFT JOIN account_move_reconcile partialrec
-        on (l.reconcile_partial_id = partialrec.id)
-        LEFT JOIN account_move_reconcile fullrec on (l.reconcile_id = fullrec.id)
-        LEFT JOIN res_partner p on (l.partner_id=p.id)
-        LEFT JOIN account_invoice i on (m.id =i.move_id)
-        LEFT JOIN account_period per on (per.id=l.period_id)
-        JOIN account_journal j on (l.journal_id=j.id)
-        WHERE l.id in %s"""
-        monster += (" ORDER BY %s" % (order,))
-        try:
-            self.cursor.execute(monster, (tuple(move_line_ids),))
-            res = self.cursor.dictfetchall()
-        except Exception:
-            self.cursor.rollback()
-            raise
-        return res or []
-
+    def _get_move_line_select(self):
+        res = super(GeneralLedgerWebkitSupplier, self)._get_move_line_select()
+        return res + """
+            , i.supplier_invoice_number AS supplier_invoice_number
+        """
 
 _column_sizes = [
     ('date', 12),
@@ -182,8 +121,8 @@ class general_ledger_xls(report_xls):
             ('df', COLS_DF, 0, 'text', _p.filter_form(data) ==
              'filter_date' and _('Dates Filter') or _('Periods Filter')),
             ('af', COLS_AF, 0, 'text', _('Accounts Filter')),
-            ('tm', COLS_TM, 0, 'text',  _('Target Moves')),
-            ('ib', COLS_IB, 0, 'text',  _('Initial Balance')),
+            ('tm', COLS_TM, 0, 'text', _('Target Moves')),
+            ('ib', COLS_IB, 0, 'text', _('Initial Balance')),
 
         ]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
@@ -195,7 +134,8 @@ class general_ledger_xls(report_xls):
         cell_style_center = xlwt.easyxf(cell_format + _xs['center'])
         c_specs = [
             ('coa', COLS_COA, 0, 'text', _p.chart_account.name),
-            ('fy', COLS_FY, 0, 'text', _p.fiscalyear.name if _p.fiscalyear else '-'),
+            ('fy', COLS_FY, 0, 'text',
+             _p.fiscalyear.name if _p.fiscalyear else '-'),
         ]
         df = _('From') + ': '
         if _p.filter_form(data) == 'filter_date':
