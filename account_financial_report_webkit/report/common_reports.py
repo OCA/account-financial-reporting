@@ -493,6 +493,11 @@ class CommonReportHeaderWebkit(common_report_header):
                 _('No valid filter'), _('Please set a valid time filter'))
 
     def _get_move_line_select(self):
+        '''
+        Get the columns to put in the SQL SELECT for _get_move_line_datas
+
+        See _get_move_line_datas for available tables and aliases
+        '''
         return """
             l.id AS id,
             l.date AS ldate,
@@ -522,9 +527,13 @@ class CommonReportHeaderWebkit(common_report_header):
             l.date_maturity
         """
 
-    def _get_move_line_datas(self, move_line_ids,
-                             order='per.special DESC, l.date ASC, \
-                             per.date_start ASC, m.name ASC'):
+    def _get_move_line_order(self):
+        ''' Get the default SQL ORDER statement for _get_move_line_datas '''
+        return 'per.special DESC, l.date ASC, per.date_start ASC, m.name ASC'
+
+    def _get_move_line_datas(self, move_line_ids, order=None):
+        if order is None:
+            order = self._get_move_line_order()
         # Possible bang if move_line_ids is too long
         # We can not slice here as we have to do the sort.
         # If slice has to be done it means that we have to reorder in python
