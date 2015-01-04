@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: OpenERP Server 7.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-04-10 15:11+0000\n"
-"PO-Revision-Date: 2015-01-03 18:37+0100\n"
+"PO-Revision-Date: 2015-01-04 11:35+0100\n"
 "Last-Translator: Rudolf Schnapka <schnapkar@golive-saar.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -31,7 +31,7 @@ msgstr "CSV-Dateiname für Export"
 #. module: account_export_csv
 #: view:account.csv.export:0
 msgid "Trial Balance"
-msgstr "Stichtagsbilanz"
+msgstr "Stichtagssaldo"
 
 #. module: account_export_csv
 #: field:account.csv.export,company_id:0
@@ -41,7 +41,7 @@ msgstr "Unternehmen"
 #. module: account_export_csv
 #: view:account.csv.export:0
 msgid "Analytic Balance (with accounts)"
-msgstr "Analytische Bilanz (mit Konten)"
+msgstr "Salden analytischer Konten (mit Konten)"
 
 #. module: account_export_csv
 #: help:account.csv.export,periods:0
@@ -78,7 +78,7 @@ msgstr "Geschäftsjahr"
 #. module: account_export_csv
 #: view:account.csv.export:0
 msgid "Analytic Balance (with accounts)"
-msgstr "Analytische Bilanz (mit Konten)"
+msgstr "Salden analytischer Konten (mit Konten)"
 
 #. module: account_export_csv
 #: field:account.csv.export,stop_period_id:0

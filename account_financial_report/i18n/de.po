@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: OpenERP Server 7.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-17 21:47+0000\n"
-"PO-Revision-Date: 2015-01-03 20:04+0100\n"
+"PO-Revision-Date: 2015-01-04 12:02+0100\n"
 "Last-Translator: Rudolf Schnapka <schnapkar@golive-saar.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -25,7 +25,7 @@ msgid ""
 "within Debitable Accounts"
 msgstr ""
 "Umgekehrtes Vorzeichen auf Berichten für diese und dessen untergeordnete "
-"Soll-Konten"
+"(belastbare) Soll-Konten"
 
 #. module: account_financial_report
 #: selection:afr,filter:0
@@ -49,7 +49,9 @@ msgstr "4-spaltige Bilanz"
 msgid ""
 "An accreditable account is one which grows in the credit and diminishes in "
 "the debit"
-msgstr "Ein Passiv-Konto ist eines, welches im Haben zu- und im Soll abnimmt"
+msgstr ""
+"Ein Passiv-Konto (Forderungs-) ist eines, welches im Haben zu- und im Soll "
+"abnimmt"
 
 #. module: account_financial_report
 #: report:afr.1cols:0
@@ -211,7 +213,7 @@ msgstr "SCHLÜSSEL"
 msgid ""
 "A debitable account is one which grows in the debit and diminishes in the "
 "credit"
-msgstr "Ein Aktiv-Konto nimmt im Soll zu und im Haben ab"
+msgstr "Ein Aktiv-Konto (Verbindlichkeiten-) nimmt im Soll zu und im Haben ab"
 
 #. module: account_financial_report
 #: report:afr.5cols:0
@@ -320,9 +322,9 @@ msgstr ""
 "Vorlagen für zwei Arten von Berichten anlegen: Bilanzen und Erfolgsberichte "
 "(GuV), einschließlich Nebenbuchhaltungen. Sie können mittels verschiedener "
 "Einstellung den Detaillierungsgrad bestimmen, seien es die Perioden, Monate "
-"(12 Monate + SP) oder Quartale (4 Quartale + SP). Sie können die Berichte "
-"sogar in eine anderen als der Hauswährung erstellen lassen. (SP = "
-"Sonderperiode)"
+"(12 Monate + StTag) oder Quartale (4 Quartale + StTag). Sie können die "
+"Berichte sogar in eine anderen als der Hauswährung erstellen lassen. (StTag = "
+"YTD = Jahreserfolg bis Stichtag)"
 
 #. module: account_financial_report
 #: field:res.company,credit_account_ids:0
@@ -432,7 +434,7 @@ msgstr "Nach Periode"
 #: selection:afr,columns:0
 #: selection:wizard.report,columns:0
 msgid "4 QTR's | YTD"
-msgstr "$ Qrt | YTD"
+msgstr "4 Qrt | YTD"
 
 #. module: account_financial_report
 #: model:ir.actions.act_window,name:account_financial_report.action_wizard_report
@@ -444,7 +446,7 @@ msgstr "FiBu Finanzbericht (Multi-Berichte)"
 #: view:afr:0
 #: view:wizard.report:0
 msgid "Accounts Info"
-msgstr "Konteninfo"
+msgstr "Kontenauskunft"
 
 #. module: account_financial_report
 #: help:afr,display_account_level:0
@@ -529,7 +531,7 @@ msgstr "Info zum Geschäftsjahr"
 #: selection:afr,columns:0
 #: selection:wizard.report,columns:0
 msgid "Initial | Debit | Credit | YTD"
-msgstr "EB | Soll | Haben | Saldo"
+msgstr "EB | Soll | Haben | Erfolg"
 
 #. module: account_financial_report
 #: field:afr,period_ids:0
@@ -578,7 +580,7 @@ msgstr ""
 #: selection:afr,columns:0
 #: selection:wizard.report,columns:0
 msgid "Initial | Debit | Credit | Period | YTD"
-msgstr "EB | Soll | Haben | Periode | Saldo"
+msgstr "EB | Soll | Haben | Periode | Erfolg"
 
 #. module: account_financial_report
 #: selection:afr,columns:0
