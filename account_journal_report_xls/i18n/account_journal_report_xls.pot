@@ -1,0 +1,316 @@
+# French translation of OpenERP Server 6.1.
+# This file contains the translation of the following modules:
+#	* account_journal_report_xls
+#
+# Rudolf Schnapka <schnapkar@golive-saar.de>, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 6.1\n"
+"Report-Msgid-Bugs-To: support@noviat.be\n"
+"POT-Creation-Date: 2014-01-19 17:16:37.990000\n"
+"PO-Revision-Date: 2015-01-04 11:07+0100\n"
+"Last-Translator: Rudolf Schnapka <schnapkar@golive-saar.de>\n"
+"Language-Team: German <kde-i18n-de@kde.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#. module: account_journal_report_xls
+#: model:ir.actions.act_window,name:account_journal_report_xls.action_print_journal_by_period_xls
+msgid "Journal by Period"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: model:ir.actions.act_window,name:account_journal_report_xls.action_print_journal_by_fiscalyear_xls
+msgid "Journal by Fiscal Year"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: model:ir.ui.menu,name:account_journal_report_xls.menu_print_journal_by_period_xls
+msgid "Journal by Period"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: model:ir.ui.menu,name:account_journal_report_xls.menu_print_journal_by_fiscalyear_xls
+msgid "Journal by Fiscal Year"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,chart_account_id:0
+msgid "Chart of Account"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,fiscalyear_id:0
+msgid "Fiscal Year"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,target_move:0
+msgid "Target Moves"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: selection:account.print.journal.xls,target_move:0
+msgid "All Posted Entries"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: selection:account.print.journal.xls,target_move:0
+msgid "All Entries"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,sort_selection:0
+msgid "Entries Sorted by"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: selection:account.print.journal.xls,sort_selection:0
+msgid "Journal Entry Number"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: selection:account.print.journal.xls,sort_selection:0
+msgid "Date"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,amount_currency:0
+msgid "With Currency"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,group_entries:0
+msgid "Group Entries"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,period_from:0
+msgid "Start Period"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: field:account.print.journal.xls,period_to:0
+msgid "End Period"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: code:addons/account_journal_report_xls/wizard/print_journal_wizard.py:10
+msgid "No records found for your selection!"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: code:addons/account_journal_report_xls/wizard/print_journal_wizard.py:11
+msgid "No Data Available"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Period"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Fiscal Year"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Journal Overview"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Journal Items"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Entry"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Name"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Reference"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Effective Date"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Period"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Date"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Account"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Account Name"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Journal"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Description"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Partner"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Partner Reference"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Maturity Date"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Debit"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Credit"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Balance"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Rec."
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Part. Rec."
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Tax Code"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Tax/Base Amount"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "VAT"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "VAT Amount"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Amount"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Currency"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Am. Currency"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Curr."
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Comp. Curr."
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Analytic Account"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Document"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Entry Reference"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Entry Id"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "VAT Declaration"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Case"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Invoice"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Voucher"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Statement"
+msgstr ""
+
+#. module: account_journal_report_xls
+#: report:nov.account.journal.print:0
+msgid "Grouped Entries"
+msgstr ""
+
+
