@@ -70,7 +70,7 @@ class AccountAgedTrialBalance(orm.TransientModel):
             required=True),
         'fiscalyear_id': fields.many2one(
             'account.fiscalyear',
-            'Fiscal Year', help='Keep empty for all open fiscal year',
+            'Fiscal Year',
             required=True),
         'period_to': fields.many2one('account.period', 'End Period',
                                      required=True),
