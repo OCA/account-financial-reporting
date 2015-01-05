@@ -18,7 +18,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from datetime import date
 from openerp.osv import orm, fields
+from openerp.tools import DEFAULT_SERVER_DATE_FORMAT as DATE_FORMAT
+from openerp.tools.translate import _
 
 
 class AccountAgedTrialBalance(orm.TransientModel):
@@ -31,6 +34,35 @@ class AccountAgedTrialBalance(orm.TransientModel):
     _name = "account.aged.trial.balance.webkit"
     _description = "Aged partner balanced"
 
+    def _get_current_fiscalyear(self, cr, uid, context=None):
+        user_obj = self.pool['res.users']
+        company = user_obj.browse(cr, uid, uid, context=context).company_id
+        fyear_obj = self.pool['account.period']
+        today = date.today().strftime(DATE_FORMAT)
+        fyear_ids = fyear_obj.search(
+            cr, uid,
+            [('date_start', '>=', today),
+             ('date_stop', '<=', today),
+             ('company_id', '=', company.id)],
+            limit=1,
+            context=context)
+        if fyear_ids:
+            return fyear_ids[0]
+
+    def _get_first_period(self, cr, uid, context=None):
+        user_obj = self.pool['res.users']
+        company = user_obj.browse(cr, uid, uid, context=context).company_id
+        period_obj = self.pool['account.period']
+        period_ids = period_obj.search(cr, uid,
+                                       [('special', '=', False),
+                                        ('company_id', '=', company.id)],
+                                       limit=1,
+                                       order='date_start ASC',
+                                       context=context)
+        if not period_ids:
+            raise orm.except_orm(_('Error'), _('No period found'))
+        return period_ids[0]
+
     _columns = {
         'filter': fields.selection(
             [('filter_period', 'Periods')],
@@ -40,6 +72,8 @@ class AccountAgedTrialBalance(orm.TransientModel):
 
     _defaults = {
         'filter': 'filter_period',
+        'fiscalyear_id': _get_current_fiscalyear,
+        'period_from': _get_first_period,
     }
 
     def _print_report(self, cr, uid, ids, data, context=None):
