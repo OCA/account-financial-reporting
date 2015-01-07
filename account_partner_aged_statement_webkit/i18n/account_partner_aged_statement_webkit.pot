@@ -216,3 +216,12 @@ msgstr ""
 msgid "Subject"
 msgstr ""
 
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:39
+msgid "Phone:"
+msgstr ""
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:39
+msgid "Mail:"
+msgstr ""
