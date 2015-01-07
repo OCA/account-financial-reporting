@@ -155,7 +155,7 @@ msgstr "60-90"
 #. module: account_partner_aged_statement_webkit
 #: view:res.partner:0
 msgid "Send Aged Statement"
-msgstr "Envoyer la déclaration âgées"
+msgstr "Envoyer le relevé de balance âgées"
 
 #. module: account_partner_aged_statement_webkit
 #: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:92
