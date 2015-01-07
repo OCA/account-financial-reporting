@@ -18,12 +18,12 @@ msgstr ""
 #. module: account_partner_aged_statement_webkit
 #: model:email.template,subject:account_partner_aged_statement_webkit.email_template_aged_statement
 msgid "${object.company_id.name} - Your aged balance"
-msgstr "${object.company_id.name} - Votre balance agée"
+msgstr "${object.company_id.name} - Votre balance âgée"
 
 #. module: account_partner_aged_statement_webkit
 #: model:ir.actions.report.xml,name:account_partner_aged_statement_webkit.partner_aged_statement_report
 msgid "Partner Aged Statement"
-msgstr "Déclaration annuaire "
+msgstr "Relevé de balance âgée"
 
 #. module: account_partner_aged_statement_webkit
 #: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:60
