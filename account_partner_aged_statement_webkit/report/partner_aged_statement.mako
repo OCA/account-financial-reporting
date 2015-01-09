@@ -55,7 +55,7 @@
             <br>
         %for l in get_lines(data['form'], partner):
             %if l:
-                <table class=basic_table style="width: 100%;">
+                <table class="basic_table" style="width: 100%;">
                     <tr>
                         <th>${_('Not Due')}</th>
                         <th>${_('0-30')}</th>
@@ -83,7 +83,7 @@
         %if getLines30(partner):
             <br>
             <div class="total">${_('0-30')}</div>
-            <table class=basic_table style="width: 100%;">
+            <table class="basic_table" style="width: 100%;">
                 <tr>
                     <th>${_('Date')}</th>
                     <th>${_('Description')}</th>
@@ -111,7 +111,7 @@
         %if getLines3060(partner):
             <br/>
             <div class="total">${_('30-60')}</div>
-            <table class=basic_table style="width: 100%;">
+            <table class="basic_table" style="width: 100%;">
                 <tr>
                     <th>${_('Date')}</th>
                     <th>${_('Description')}</th>
@@ -136,10 +136,10 @@
                 %endfor  ## for line in getLines3060(partner)
             </table>
         %endif  ## if getLines3060(partner)
-        <br/>
         %if getLines60(partner):
+            <br/>
             <div class="total">${_('+60')}</div>
-            <table class=basic_table style="width: 100%;">
+            <table class="basic_table" style="width: 100%;">
                 <tr>
                     <th>${_('Date')}</th>
                     <th>${_('Description')}</th>
