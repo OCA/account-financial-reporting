@@ -80,8 +80,8 @@
         <br>
         <br>
         <div class="title">${_('List of Due Invoices')}</div>
-        <br>
         %if getLines30(partner):
+            <br>
             <div class="total">${_('0-30')}</div>
             <table class=basic_table style="width: 100%;">
                 <tr>
@@ -108,8 +108,8 @@
                 %endfor  ## for line in getLines30(partner)
             </table>
         %endif  ## if getLines30(partner)
-        <br/>
         %if getLines3060(partner):
+            <br/>
             <div class="total">${_('30-60')}</div>
             <table class=basic_table style="width: 100%;">
                 <tr>
