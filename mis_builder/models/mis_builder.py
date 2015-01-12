@@ -576,7 +576,7 @@ class mis_report_instance_period(orm.Model):
             search_ctx.update({'date_from': c.date_from,
                                'date_to': c.date_to})
 
-        # TODO: initial balance?
+        search_ctx['initial_bal'] = True
         # TODO: use child of company_id?
         account_ids = account_obj.search(
             cr, uid,
