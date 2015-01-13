@@ -138,10 +138,10 @@ class PrintJournalWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
                 domain_arg += [('state', '=', 'posted')]
             move_ids = move_obj.search(self.cursor, self.uid, domain_arg,
                                        order="name")
-            moves[journal_period..id] = move_obj.browse(self.cursor, self.uid,
+            moves[journal_period.id] = move_obj.browse(self.cursor, self.uid,
                                                    move_ids)
             # Sort account move line by account accountant
-            for move in moves[journal_period..id]:
+            for move in moves[journal_period.id]:
                 move.line_id.sorted(key=lambda a: (a.date, a.account_id.code))
 
         self.localcontext.update({
@@ -151,7 +151,7 @@ class PrintJournalWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
             'start_period': start_period,
             'stop_period': stop_period,
             'chart_account': chart_account,
-            'moves', moves,
+            'moves': moves,
         })
 
         return super(PrintJournalWebkit, self).set_context(
