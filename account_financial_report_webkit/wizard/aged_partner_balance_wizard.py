@@ -49,20 +49,6 @@ class AccountAgedTrialBalance(orm.TransientModel):
         if fyear_ids:
             return fyear_ids[0]
 
-    def _get_first_period(self, cr, uid, context=None):
-        user_obj = self.pool['res.users']
-        company = user_obj.browse(cr, uid, uid, context=context).company_id
-        period_obj = self.pool['account.period']
-        period_ids = period_obj.search(cr, uid,
-                                       [('special', '=', False),
-                                        ('company_id', '=', company.id)],
-                                       limit=1,
-                                       order='date_start ASC',
-                                       context=context)
-        if not period_ids:
-            raise orm.except_orm(_('Error'), _('No period found'))
-        return period_ids[0]
-
     _columns = {
         'filter': fields.selection(
             [('filter_period', 'Periods')],
@@ -79,8 +65,23 @@ class AccountAgedTrialBalance(orm.TransientModel):
     _defaults = {
         'filter': 'filter_period',
         'fiscalyear_id': _get_current_fiscalyear,
-        'period_from': _get_first_period,
     }
+
+    def onchange_fiscalyear(self, cr, uid, ids, fiscalyear=False,
+                            period_id=False, date_to=False, until_date=False,
+                            context=None):
+        res = super(AccountAgedTrialBalance, self).onchange_fiscalyear(
+            cr, uid, ids, fiscalyear=fiscalyear, period_id=period_id,
+            date_to=date_to, until_date=until_date, context=context
+        )
+        filters = self.onchange_filter(cr, uid, ids, filter='filter_period',
+                                       fiscalyear_id=fiscalyear,
+                                       context=context)
+        res['value'].update({
+            'period_from': filters['value']['period_from'],
+            'period_to': filters['value']['period_to'],
+        })
+        return res
 
     def _print_report(self, cr, uid, ids, data, context=None):
         # we update form with display account value
