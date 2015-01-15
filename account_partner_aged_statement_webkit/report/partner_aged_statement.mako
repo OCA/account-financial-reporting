@@ -39,11 +39,13 @@
         ${_('Subject')}: <b>${_('Overdue Statement')}</b>
         <br/>
         <br/>
-        %for message_line in message(partner, company):
-            <p>
-            ${message_line}
-            </p>
-        %endfor
+        %if show_message:
+            %for message_line in message(partner, company):
+                <p>
+                ${message_line}
+                </p>
+            %endfor
+        %endif
         <br>
         ${user.name}
         <br>

@@ -26,6 +26,11 @@ msgid "Partner Aged Statement"
 msgstr ""
 
 #. module: account_partner_aged_statement_webkit
+#: model:ir.actions.report.xml,name:account_partner_aged_statement_webkit.supplier_aged_statement_report
+msgid "Supplier Aged Statement"
+msgstr ""
+
+#. module: account_partner_aged_statement_webkit
 #: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:60
 msgid "Not Due"
 msgstr ""

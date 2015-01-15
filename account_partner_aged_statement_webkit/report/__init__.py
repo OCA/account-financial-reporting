@@ -20,4 +20,7 @@
 #
 ###############################################################################
 
-from . import partner_aged_statement_report
+from . import (
+    partner_aged_statement_report,
+    supplier_aged_statement_report,
+)

@@ -47,6 +47,7 @@ class PartnerAgedTrialReport(aged_trial_report):
             'getLines30': self._lines_get30,
             'getLines3060': self._lines_get_30_60,
             'getLines60': self._lines_get60,
+            'show_message': True,
         })
 
     def _lines_get30(self, obj):

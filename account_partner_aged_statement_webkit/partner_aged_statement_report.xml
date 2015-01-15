@@ -17,5 +17,16 @@
             file="account/report/account_aged_partner_balance.rml"
             report_type="pdf"-->
 
+        <report
+            auto="False"
+            id="supplier_aged_statement_report"
+            model="res.partner"
+            string="Supplier Aged Statement (fournisseur)"
+            name="webkit.supplier_aged_statement_report"
+            file="account_partner_aged_statement_webkit/report/partner_aged_statement.mako"
+            report_type="webkit"
+            webkit_header="base_headers_webkit.base_reports_portrait_header"
+            />
+
     </data>
 </openerp>
