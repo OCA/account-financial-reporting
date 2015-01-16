@@ -99,7 +99,7 @@
                     %endif
                 </div>
             </div>
-            %for move in journal_period.moves:
+            %for move in moves[journal_period.id]:
             <%
             new_move = True
             %>
