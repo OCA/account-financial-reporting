@@ -45,7 +45,7 @@ msgstr "Gewinn und Verlust Quer"
 #. module: account_financial_report_horizontal
 #: field:account.bs.report,reserve_account_id:0
 msgid "Reserve & Profit/Loss Account"
-msgstr "Rücklagen- und Gewinnvortragskonten"
+msgstr "Rücklagen- und Erfolgskonten"
 
 #. module: account_financial_report_horizontal
 #: view:account_financial_report_horizontal.common.report:0
@@ -257,7 +257,7 @@ msgstr "Summe:"
 #: code:addons/account_financial_report_horizontal/report/common_report_header.py:68
 #, python-format
 msgid "All Posted Entries"
-msgstr "Alle Buchungen"
+msgstr "Alle Gebuchten"
 
 #. module: account_financial_report_horizontal
 #: report:account.balancesheet:0
@@ -277,7 +277,7 @@ msgstr "Leer lassen, für alle offenen Geschäftsjahre"
 #: code:addons/account_financial_report_horizontal/wizard/account_report_common.py:120
 #, python-format
 msgid "Select a starting and an ending period"
-msgstr "Wähle eine Anfangs- und Abschlussperiode"
+msgstr "Wähle eine Anfangs- und eine Abschlussperiode"
 
 #. module: account_financial_report_horizontal
 #: report:account.balancesheet:0
