@@ -133,7 +133,7 @@ class mis_report_kpi(orm.Model):
         'expression': fields.char(required=True,
                                   string='Expression'),
         'default_css_style': fields.char(
-                                 string='Default CSS style expression'),
+            string='Default CSS style expression'),
         'css_style': fields.char(string='CSS style expression'),
         'type': fields.selection([('num', _('Numeric')),
                                   ('pct', _('Percentage')),
@@ -534,7 +534,6 @@ class mis_report_instance_period(orm.Model):
             search_ctx.update({'date_from': c.date_from,
                                'date_to': c.date_to})
 
-        # TODO: initial balance?
         # TODO: use child of company_id?
         account_ids = account_obj.search(
             cr, uid,
@@ -558,25 +557,40 @@ class mis_report_instance_period(orm.Model):
         return balances
 
     def _fetch_balances_solde(self, cr, uid, c, bals_vars, context=None):
-        """ fetch the general account balances sold at the end of
+        """ fetch the general account balances solde at the end of
             the given period
+
+            the period from is computed by searching the last special period
+            with journal entries.
+            If nothing is found, the first period is used.
 
         returns a dictionary {bals_<account.code>: account.balance.solde}
         """
-        # TODO : compute the balance solde !
         if context is None:
             context = {}
         account_obj = self.pool['account.account']
+        balances = {}
 
         search_ctx = dict(context)
-        if c.period_from:
-            search_ctx.update({'period_from': c.period_from.id,
+        if c.period_to:
+            move_obj = self.pool['account.move']
+            move_id = move_obj.search(
+                cr, uid, [('period_id.special', '=', True),
+                          ('period_id.date_start', '<=',
+                           c.period_to.date_start)],
+                order="period_id desc", limit=1, context=context)
+            if move_id:
+                computed_period_from = move_obj.browse(
+                    cr, uid, move_id[0], context=context).period_id.id
+            else:
+                computed_period_from = self.pool['account.period'].search(
+                    cr, uid, [('company_id', '=', c.company_id.id)],
+                    order='date_start', limit=1)[0]
+            search_ctx.update({'period_from': computed_period_from,
                                'period_to': c.period_to.id})
         else:
-            search_ctx.update({'date_from': c.date_from,
-                               'date_to': c.date_to})
+            return balances
 
-        search_ctx['initial_bal'] = True
         # TODO: use child of company_id?
         account_ids = account_obj.search(
             cr, uid,
@@ -591,7 +605,7 @@ class mis_report_instance_period(orm.Model):
         # fetch balances
         account_datas = account_obj.read(
             cr, uid, account_ids, ['code', 'balance'], context=search_ctx)
-        balances = {}
+
         for account_data in account_datas:
             key = _python_bals_var(account_data['code'])
             assert key not in balances
@@ -646,7 +660,7 @@ class mis_report_instance_period(orm.Model):
         localdict.update(self._fetch_balances(cr, uid, c, bal_vars,
                                               context=context))
         localdict.update(self._fetch_balances_solde(cr, uid, c, bals_vars,
-                                              context=context))
+                                                    context=context))
         localdict.update(self._fetch_queries(cr, uid, c,
                                              context=context))
 
@@ -732,10 +746,10 @@ class mis_report_instance(orm.Model):
     _defaults = {
         'target_move': 'posted',
         'company_id': lambda s, cr, uid, c:
-            s.pool.get('res.company')._company_default_get(
-                cr, uid,
-                'mis.report.instance',
-                context=c)
+        s.pool.get('res.company')._company_default_get(
+            cr, uid,
+            'mis.report.instance',
+            context=c)
     }
 
     def create(self, cr, uid, vals, context=None):
