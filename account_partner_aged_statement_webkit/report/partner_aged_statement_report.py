@@ -48,6 +48,9 @@ class PartnerAgedTrialReport(aged_trial_report):
             'getLines3060': self._lines_get_30_60,
             'getLines60': self._lines_get60,
             'show_message': True,
+            'line_amount': self._line_amount,
+            'line_paid': self._line_paid,
+            'balance_amount': lambda amount: amount,
         })
 
     def _lines_get30(self, obj):
@@ -58,7 +61,7 @@ class PartnerAgedTrialReport(aged_trial_report):
         movelines = moveline_obj.search(
             self.cr, self.uid,
             [('partner_id', '=', obj.id),
-             ('account_id.type', 'in', ['receivable', 'payable']),
+             ('account_id.type', 'in', ['receivable']),
              ('state', '<>', 'draft'), ('reconcile_id', '=', False),
              '|',
              '&', ('date_maturity', '<=', today), ('date_maturity', '>', stop),
@@ -76,7 +79,7 @@ class PartnerAgedTrialReport(aged_trial_report):
         movelines = moveline_obj.search(
             self.cr, self.uid,
             [('partner_id', '=', obj.id),
-             ('account_id.type', 'in', ['receivable', 'payable']),
+             ('account_id.type', 'in', ['receivable']),
              ('state', '<>', 'draft'), ('reconcile_id', '=', False),
              '|',
              '&', ('date_maturity', '<=', start), ('date_maturity', '>', stop),
@@ -93,7 +96,7 @@ class PartnerAgedTrialReport(aged_trial_report):
         movelines = moveline_obj.search(
             self.cr, self.uid,
             [('partner_id', '=', obj.id),
-             ('account_id.type', 'in', ['receivable', 'payable']),
+             ('account_id.type', 'in', ['receivable']),
              ('state', '<>', 'draft'), ('reconcile_id', '=', False),
              '|', ('date_maturity', '<=', start),
              ('date_maturity', '=', False), ('date', '<=', start)],
@@ -185,6 +188,7 @@ class PartnerAgedTrialReport(aged_trial_report):
                 ", ".join(str(int(i)) for i in self._partners),
             )
 
+        self.ACCOUNT_TYPE = ['receivable']
         return res
 
     def _get_lines(self, form, partner):
@@ -195,6 +199,49 @@ class PartnerAgedTrialReport(aged_trial_report):
         res = super(PartnerAgedTrialReport, self)._get_lines(form)
         self.query = self.orig_query
         return res
+
+    def _line_amount(self, line):
+        invoice = line.invoice
+        invoice_type = invoice and invoice.type or False
+        print invoice_type, line.debit, line.account_id.type
+
+        if invoice_type == 'in_invoice':
+            return line.credit or 0.0
+
+        if invoice_type == 'in_refund':
+            return -line.debit or 0.0
+
+        if invoice_type == 'out_invoice':
+            return line.debit or 0.0
+
+        if invoice_type == 'out_refund':
+            return -line.credit or 0.0
+
+        if line.account_id.type == 'payable':
+            return line.credit or 0.0
+
+        return line.debit or 0.0
+
+    def _line_paid(self, line):
+        invoice = line.invoice
+        invoice_type = invoice and invoice.type or False
+
+        if invoice_type == 'in_invoice':
+            return line.debit or 0.0
+
+        if invoice_type == 'in_refund':
+            return -line.credit or 0.0
+
+        if invoice_type == 'out_invoice':
+            return line.credit or 0.0
+
+        if invoice_type == 'out_refund':
+            return -line.debit or 0.0
+
+        if line.account_id.type == 'payable':
+            return line.debit or 0.0
+
+        return line.credit or 0.0
 
 
 report_sxw.report_sxw(

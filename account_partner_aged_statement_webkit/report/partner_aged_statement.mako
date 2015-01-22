@@ -68,13 +68,13 @@
                         <th>${_('Total')}</th>
                     </tr>
                     <tr>
-                        <td>${ formatLang(l['direction'], currency_obj=company.currency_id) }</td>
-                        <td>${ formatLang(l['4'], currency_obj=company.currency_id) }</td>
-                        <td>${ formatLang(l['3'], currency_obj=company.currency_id) }</td>
-                        <td>${ formatLang(l['2'], currency_obj=company.currency_id) }</td>
-                        <td>${ formatLang(l['1'], currency_obj=company.currency_id) }</td>
-                        <td>${ formatLang(l['0'], currency_obj=company.currency_id) }</td>
-                        <td>${ formatLang(l['total'], currency_obj=company.currency_id) }</td>
+                        <td>${ formatLang(balance_amount(l['direction']), currency_obj=company.currency_id) }</td>
+                        <td>${ formatLang(balance_amount(l['4']), currency_obj=company.currency_id) }</td>
+                        <td>${ formatLang(balance_amount(l['3']), currency_obj=company.currency_id) }</td>
+                        <td>${ formatLang(balance_amount(l['2']), currency_obj=company.currency_id) }</td>
+                        <td>${ formatLang(balance_amount(l['1']), currency_obj=company.currency_id) }</td>
+                        <td>${ formatLang(balance_amount(l['0']), currency_obj=company.currency_id) }</td>
+                        <td>${ formatLang(balance_amount(l['total']), currency_obj=company.currency_id) }</td>
                     </tr>
                 </table>
             %endif  ## if l
@@ -102,9 +102,9 @@
                     <td>${ line.move_id.name }</td>
                     <td>${ line.ref }</td>
                     <td>${ line.date_maturity and formatLang(line.date_maturity,date=True) or '' }</td>
-                    <td style="text-align: right;">${ formatLang(line.debit) or 0.0 }</td>
-                    <td style="text-align: right;">${ formatLang(line.credit) or 0.0 }</td>
-                    <td style="text-align: right;">${ formatLang(line.debit - line.credit, currency_obj = company.currency_id)  }</td>
+                    <td style="text-align: right;">${ formatLang(line_amount(line))}</td>
+                    <td style="text-align: right;">${ formatLang(line_paid(line))}</td>
+                    <td style="text-align: right;">${ formatLang(line_amount(line) - line_paid(line), currency_obj = company.currency_id)  }</td>
                     <td style="text-align: right;">${ line.amount_currency and formatLang(line.amount_currency, currency_obj = line.currency_id) or '' }</td>
                 </tr>
                 %endfor  ## for line in getLines30(partner)
@@ -130,9 +130,9 @@
                     <td>${ line.move_id.name }</td>
                     <td>${ line.ref }</td>
                     <td>${ line.date_maturity and formatLang(line.date_maturity,date=True) or '' }</td>
-                    <td style="text-align: right;">${ formatLang(line.debit) or 0 }</td>
-                    <td style="text-align: right;">${ formatLang(line.credit) or 0 }</td>
-                    <td style="text-align: right;">${ formatLang(line.debit - line.credit, currency_obj = company.currency_id)  }</td>
+                    <td style="text-align: right;">${ formatLang(line_amount(line))}</td>
+                    <td style="text-align: right;">${ formatLang(line_paid(line))}</td>
+                    <td style="text-align: right;">${ formatLang(line_amount(line) - line_paid(line), currency_obj = company.currency_id)  }</td>
                     <td style="text-align: right;">${ line.amount_currency and formatLang(line.amount_currency, currency_obj = line.currency_id) or '' }</td>
                 </tr>
                 %endfor  ## for line in getLines3060(partner)
@@ -158,9 +158,9 @@
                     <td>${ line.move_id.name }</td>
                     <td>${ line.ref }</td>
                     <td>${ line.date_maturity and formatLang(line.date_maturity,date=True) or '' }</td>
-                    <td style="text-align: right;">${ formatLang(line.debit) or 0 }</td>
-                    <td style="text-align: right;">${ formatLang(line.credit) or 0 }</td>
-                    <td style="text-align: right;">${ formatLang(line.debit - line.credit, currency_obj = company.currency_id)  }</td>
+                    <td style="text-align: right;">${ formatLang(line_amount(line))}</td>
+                    <td style="text-align: right;">${ formatLang(line_paid(line))}</td>
+                    <td style="text-align: right;">${ formatLang(line_amount(line) - line_paid(line), currency_obj = company.currency_id)  }</td>
                     <td style="text-align: right;">${ line.amount_currency and formatLang(line.amount_currency, currency_obj = line.currency_id) or '' }</td>
                 </tr>
                 %endfor  ## for line in getLines60(partner)

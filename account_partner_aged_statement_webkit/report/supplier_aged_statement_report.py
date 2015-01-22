@@ -39,7 +39,17 @@ class SupplierAgedTrialReport(PartnerAgedTrialReport):
             'getLines3060': self._lines_get_30_60,
             'getLines60': self._lines_get60,
             'show_message': False,
+            'get_lines': self._get_lines,
+            'balance_amount': lambda amount: -amount,
         })
+
+    def set_context(self, objects, data, ids, report_type=None):
+        res = super(SupplierAgedTrialReport, self).set_context(
+            objects, data, ids, report_type=report_type)
+
+        self.ACCOUNT_TYPE = ['payable']
+
+        return res
 
     def _lines_get30(self, obj):
         today = datetime.now()
@@ -91,6 +101,7 @@ class SupplierAgedTrialReport(PartnerAgedTrialReport):
             context=self.localcontext)
         movelines = moveline_obj.browse(self.cr, self.uid, movelines)
         return movelines
+
 
 report_sxw.report_sxw(
     'report.webkit.supplier_aged_statement_report',
