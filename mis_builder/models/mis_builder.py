@@ -133,7 +133,7 @@ class mis_report_kpi(orm.Model):
         'expression': fields.char(required=True,
                                   string='Expression'),
         'default_css_style': fields.char(
-            string='Default CSS style expression'),
+            string='Default CSS style'),
         'css_style': fields.char(string='CSS style expression'),
         'type': fields.selection([('num', _('Numeric')),
                                   ('pct', _('Percentage')),
