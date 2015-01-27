@@ -20,24 +20,23 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, orm
+from openerp import fields, models, api
 
 
-class ChartOfAccountsReport(orm.TransientModel):
+class ChartOfAccountsReport(models.TransientModel):
     _name = 'account.print.chart.accounts.report'
     _description = 'Chart of accounts Report'
 
     domain_char_account = [('parent_id', '=', False)]
-    _columns = {
-        'chart_account_id': fields.many2one('account.account',
-                                            'Chart of Accounts',
-                                            help='Select Charts of Accounts',
-                                            required=True,
-                                            domain=domain_char_account),
-    }
-
-    def print_report(self, cr, uid, ids, data, context=None):
-        res = self.read(cr, uid, ids, context=context)[0]
+    
+    chart_account_id = fields.Many2one('account.account', 
+                                       'Chart of Accounts',
+                                       help='Select Charts of Accounts',
+                                       required=True,
+                                       domain=domain_char_account)
+    @api.multi
+    def print_report(self, data):
+        res = self.read()[0]
         account_id = res["chart_account_id"][0]
         data["form"] = {"id_account": account_id}
         return {
