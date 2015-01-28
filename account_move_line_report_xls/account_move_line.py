@@ -20,14 +20,15 @@
 #
 ##############################################################################
 
-from openerp.osv import orm
+from openerp import models, api
 
 
-class account_move_line(orm.Model):
+class account_move_line(models.Model):
     _inherit = 'account.move.line'
 
     # override list in custom module to add/drop columns or change order
-    def _report_xls_fields(self, cr, uid, context=None):
+    @api.multi
+    def _report_xls_fields(self):
         return [
             'move', 'name', 'date', 'journal', 'period', 'partner', 'account',
             'date_maturity', 'debit', 'credit', 'balance',
@@ -40,7 +41,8 @@ class account_move_line(orm.Model):
         ]
 
     # Change/Add Template entries
-    def _report_xls_template(self, cr, uid, context=None):
+    @api.multi
+    def _report_xls_template(self):
         """
         Template updates, e.g.
 

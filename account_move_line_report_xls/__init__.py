@@ -21,8 +21,8 @@
 ##############################################################################
 
 try:
-    from . import account_move_line
-    from . import report
+    import account_move_line
+    import report
 except ImportError:
     import logging
     logging.getLogger('openerp.module').\
