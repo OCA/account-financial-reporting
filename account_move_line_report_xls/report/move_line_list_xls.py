@@ -134,9 +134,9 @@ class move_line_xls(report_xls):
                 'header': [1, 13, 'text', _render("_('Maturity Date')")],
                 'lines':
                 [1, 0,
-                 _render("line.date_maturity.val and 'date' or 'text'"),
+                 _render("line.date_maturity and 'date' or 'text'"),
                  _render(
-                     "line.date_maturity.val \
+                     "line.date_maturity \
                      and datetime.strptime(line.date_maturity,'%Y-%m-%d') \
                      or None"),
                     None, self.aml_cell_style_date],
