@@ -126,7 +126,8 @@ class PrintJournalWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
         objects = account_journal_period_obj.browse(self.cursor, self.uid,
                                                     new_ids)
         # Sort by journal and period
-        objects.sorted(key=lambda a: (a.journal_id.code, a.period_id.date_start))
+        objects.sorted(key=lambda a: (a.journal_id.code,
+                                      a.period_id.date_start))
         move_obj = self.pool.get('account.move')
         moves = {}
         for journal_period in objects:
@@ -139,7 +140,7 @@ class PrintJournalWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
             move_ids = move_obj.search(self.cursor, self.uid, domain_arg,
                                        order="name")
             moves[journal_period.id] = move_obj.browse(self.cursor, self.uid,
-                                                   move_ids)
+                                                       move_ids)
             # Sort account move line by account accountant
             for move in moves[journal_period.id]:
                 move.line_id.sorted(key=lambda a: (a.date, a.account_id.code))
