@@ -27,7 +27,7 @@ class account_move_line(models.Model):
     _inherit = 'account.move.line'
 
     # override list in custom module to add/drop columns or change order
-    @api.multi
+    @api.model
     def _report_xls_fields(self):
         return [
             'move', 'name', 'date', 'journal', 'period', 'partner', 'account',
@@ -41,7 +41,7 @@ class account_move_line(models.Model):
         ]
 
     # Change/Add Template entries
-    @api.multi
+    @api.model
     def _report_xls_template(self):
         """
         Template updates, e.g.
