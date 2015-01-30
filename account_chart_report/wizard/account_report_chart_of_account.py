@@ -35,8 +35,7 @@ class ChartOfAccountsReport(models.TransientModel):
 
     @api.multi
     def print_report(self, data):
-        res = self.read()[0]
-        account_id = res["chart_account_id"][0]
+        account_id = self.chart_account_id.id
         data["form"] = {"id_account": account_id}
         return {
             'type': 'ir.actions.report.xml',

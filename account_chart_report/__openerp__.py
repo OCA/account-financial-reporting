@@ -36,6 +36,7 @@ Contributors
 ------------
 * Marc Cassuto (marc.cassuto@savoirfairelinux.com)
 * Mathieu Benoit (mathieu.benoit@savoirfairelinux.com)
+* Guillaume Auger (guillaume.auger@savoirfairelinux.com)
 
     """,
     'author': 'Savoir-faire Linux',
