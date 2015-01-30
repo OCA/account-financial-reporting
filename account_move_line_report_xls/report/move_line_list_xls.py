@@ -136,9 +136,9 @@ class move_line_xls(report_xls):
                 [1, 0,
                  _render("line.date_maturity and 'date' or 'text'"),
                  _render(
-                     "line.date_maturity \
-                     and datetime.strptime(line.date_maturity,'%Y-%m-%d') \
-                     or None"),
+                     "line.date_maturity"
+                     " and datetime.strptime(line.date_maturity,'%Y-%m-%d')"
+                     " or None"),
                     None, self.aml_cell_style_date],
                 'totals': [1, 0, 'text', None]},
             'debit': {
