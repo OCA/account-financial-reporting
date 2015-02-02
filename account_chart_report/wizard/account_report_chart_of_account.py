@@ -28,11 +28,11 @@ class ChartOfAccountsReport(models.TransientModel):
     _description = 'Chart of accounts Report'
 
     chart_account_id = fields.Many2one(
-            'account.account',
-            'Chart of Accounts',
-            help='Select Charts of Accounts',
-            required=True,
-            domain=([('parent_id', '=', False)]))
+        'account.account',
+        'Chart of Accounts',
+        help='Select Charts of Accounts',
+        required=True,
+        domain=([('parent_id', '=', False)]))
 
     @api.multi
     def print_report(self, data):
