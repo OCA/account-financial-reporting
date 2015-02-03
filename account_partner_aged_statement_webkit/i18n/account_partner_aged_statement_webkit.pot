@@ -158,6 +158,11 @@ msgid "60-90"
 msgstr ""
 
 #. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:0
+msgid "Currency"
+msgstr ""
+
+#. module: account_partner_aged_statement_webkit
 #: view:res.partner:0
 msgid "Send Aged Statement"
 msgstr ""

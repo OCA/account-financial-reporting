@@ -55,34 +55,36 @@
         %else:
             <div class="title">${_('Aged Balance')}</div>
             <br>
-        %for l in get_lines(data['form'], partner):
-            %if l:
-                <table class="basic_table" style="width: 100%;">
-                    <tr>
-                        <th>${_('Not Due')}</th>
-                        <th>${_('0-30')}</th>
-                        <th>${_('30-60')}</th>
-                        <th>${_('60-90')}</th>
-                        <th>${_('90-120')}</th>
-                        <th>${_('+120')}</th>
-                        <th>${_('Total')}</th>
-                    </tr>
-                    <tr>
-                        <td>${ formatLang(balance_amount(l['direction']), currency_obj=company.currency_id) }</td>
-                        <td>${ formatLang(balance_amount(l['4']), currency_obj=company.currency_id) }</td>
-                        <td>${ formatLang(balance_amount(l['3']), currency_obj=company.currency_id) }</td>
-                        <td>${ formatLang(balance_amount(l['2']), currency_obj=company.currency_id) }</td>
-                        <td>${ formatLang(balance_amount(l['1']), currency_obj=company.currency_id) }</td>
-                        <td>${ formatLang(balance_amount(l['0']), currency_obj=company.currency_id) }</td>
-                        <td>${ formatLang(balance_amount(l['total']), currency_obj=company.currency_id) }</td>
-                    </tr>
-                </table>
-            %endif  ## if l
-        %endfor  ## for l in get_lines(data['form'])
+        %if get_balance(partner, company):
+            <table class="basic_table" style="width: 100%;">
+                <tr>
+                    <th>${_('Not Due')}</th>
+                    <th>${_('0-30')}</th>
+                    <th>${_('30-60')}</th>
+                    <th>${_('60-90')}</th>
+                    <th>${_('90-120')}</th>
+                    <th>${_('+120')}</th>
+                    <th>${_('Total')}</th>
+                    <th>${_('Currency')}</th>
+                </tr>
+                %for l in get_balance(partner, company):
+                <tr>
+                    <td>${ l['not_due'] }</td>
+                    <td>${ l['30'] }</td>
+                    <td>${ l['3060'] }</td>
+                    <td>${ l['6090'] }</td>
+                    <td>${ l['90120'] }</td>
+                    <td>${ l['120'] }</td>
+                    <td>${ l['total'] }</td>
+                    <td>${ l['currency_name']}</td>
+                </tr>
+                %endfor
+            </table>
+        %endif
         <br>
         <br>
         <div class="title">${_('List of Due Invoices')}</div>
-        %if getLines30(partner):
+        %if getLines30(partner, company):
             <br>
             <div class="total">${_('0-30')}</div>
             <table class="basic_table" style="width: 100%;">
@@ -93,24 +95,24 @@
                     <th>${_('Due date')}</th>
                     <th>${_('Amount')}</th>
                     <th>${_('Paid')}</th>
-                    <th>${_('Total')}<br/>(${company.currency_id.name})</th>
-                    <th>${_('Total')}<br/>(fgn. cur.)</th>
+                    <th>${_('Total')}</th>
+                    <th>${_('Currency')}</th>
                 </tr>
-                %for line in getLines30(partner):
+                %for line in getLines30(partner, company):
                 <tr>
-                    <td>${ formatLang(line.date, date=True) }</td>
-                    <td>${ line.move_id.name }</td>
-                    <td>${ line.ref }</td>
-                    <td>${ line.date_maturity and formatLang(line.date_maturity,date=True) or '' }</td>
-                    <td style="text-align: right;">${ formatLang(line_amount(line))}</td>
-                    <td style="text-align: right;">${ formatLang(line_paid(line))}</td>
-                    <td style="text-align: right;">${ formatLang(line_amount(line) - line_paid(line), currency_obj = company.currency_id)  }</td>
-                    <td style="text-align: right;">${ line.amount_currency and formatLang(line.amount_currency, currency_obj = line.currency_id) or '' }</td>
+                    <td>${ formatLang(line['date_original'], date=True) }</td>
+                    <td>${ line['name'] }</td>
+                    <td>${ line['ref'] }</td>
+                    <td>${ line['date_due'] and formatLang(line['date_due'], date=True) or '' }</td>
+                    <td style="text-align: right;">${ formatLang(line['amount_original']) }</td>
+                    <td style="text-align: right;">${ formatLang(line['amount_original'] - line['amount_unreconciled']) }</td>
+                    <td style="text-align: right;">${ formatLang(line['amount_unreconciled']) }</td>
+                    <td>${ line['currency_name'] }</td>
                 </tr>
-                %endfor  ## for line in getLines30(partner)
+                %endfor  ## for line in getLines30(partner, company)
             </table>
-        %endif  ## if getLines30(partner)
-        %if getLines3060(partner):
+        %endif  ## if getLines30(partner, company)
+        %if getLines3060(partner, company):
             <br/>
             <div class="total">${_('30-60')}</div>
             <table class="basic_table" style="width: 100%;">
@@ -121,24 +123,24 @@
                     <th>${_('Due date')}</th>
                     <th>${_('Amount')}</th>
                     <th>${_('Paid')}</th>
-                    <th>${_('Total')}<br/>(${company.currency_id.name})</th>
-                    <th>${_('Total')}<br/>(fgn. cur.)</th>
+                    <th>${_('Total')}</th>
+                    <th>${_('Currency')}</th>
                 </tr>
-                %for line in getLines3060(partner):
+                %for line in getLines3060(partner, company):
                 <tr>
-                    <td>${ formatLang(line.date, date=True) }</td>
-                    <td>${ line.move_id.name }</td>
-                    <td>${ line.ref }</td>
-                    <td>${ line.date_maturity and formatLang(line.date_maturity,date=True) or '' }</td>
-                    <td style="text-align: right;">${ formatLang(line_amount(line))}</td>
-                    <td style="text-align: right;">${ formatLang(line_paid(line))}</td>
-                    <td style="text-align: right;">${ formatLang(line_amount(line) - line_paid(line), currency_obj = company.currency_id)  }</td>
-                    <td style="text-align: right;">${ line.amount_currency and formatLang(line.amount_currency, currency_obj = line.currency_id) or '' }</td>
+                    <td>${ formatLang(line['date_original'], date=True) }</td>
+                    <td>${ line['name'] }</td>
+                    <td>${ line['ref'] }</td>
+                    <td>${ line['date_due'] and formatLang(line['date_due'], date=True) or '' }</td>
+                    <td style="text-align: right;">${ formatLang(line['amount_original']) }</td>
+                    <td style="text-align: right;">${ formatLang(line['amount_original'] - line['amount_unreconciled']) }</td>
+                    <td style="text-align: right;">${ formatLang(line['amount_unreconciled']) }</td>
+                    <td>${ line['currency_name'] }</td>
                 </tr>
-                %endfor  ## for line in getLines3060(partner)
+                %endfor  ## for line in getLines3060(partner, company)
             </table>
-        %endif  ## if getLines3060(partner)
-        %if getLines60(partner):
+        %endif  ## if getLines3060(partner, company)
+        %if getLines60(partner, company):
             <br/>
             <div class="total">${_('+60')}</div>
             <table class="basic_table" style="width: 100%;">
@@ -149,21 +151,21 @@
                     <th>${_('Due date')}</th>
                     <th>${_('Amount')}</th>
                     <th>${_('Paid')}</th>
-                    <th>${_('Total')}<br/>(${company.currency_id.name})</th>
-                    <th>${_('Total')}<br/>(fgn. cur.)</th>
+                    <th>${_('Total')}</th>
+                    <th>${_('Currency')}</th>
                 </tr>
-                %for line in getLines60(partner):
+                %for line in getLines60(partner, company):
                 <tr>
-                    <td>${ formatLang(line.date, date=True) }</td>
-                    <td>${ line.move_id.name }</td>
-                    <td>${ line.ref }</td>
-                    <td>${ line.date_maturity and formatLang(line.date_maturity,date=True) or '' }</td>
-                    <td style="text-align: right;">${ formatLang(line_amount(line))}</td>
-                    <td style="text-align: right;">${ formatLang(line_paid(line))}</td>
-                    <td style="text-align: right;">${ formatLang(line_amount(line) - line_paid(line), currency_obj = company.currency_id)  }</td>
-                    <td style="text-align: right;">${ line.amount_currency and formatLang(line.amount_currency, currency_obj = line.currency_id) or '' }</td>
+                    <td>${ formatLang(line['date_original'], date=True) }</td>
+                    <td>${ line['name'] }</td>
+                    <td>${ line['ref'] }</td>
+                    <td>${ line['date_due'] and formatLang(line['date_due'], date=True) or '' }</td>
+                    <td style="text-align: right;">${ formatLang(line['amount_original']) }</td>
+                    <td style="text-align: right;">${ formatLang(line['amount_original'] - line['amount_unreconciled']) }</td>
+                    <td style="text-align: right;">${ formatLang(line['amount_unreconciled']) }</td>
+                    <td>${ line['currency_name'] }</td>
                 </tr>
-                %endfor  ## for line in getLines60(partner)
+                %endfor  ## for line in getLines60(partner, company)
             </table>
         %endif  ## if getLines60(partner)
         %endif  ## if (partner.credit + partner.debit == 0

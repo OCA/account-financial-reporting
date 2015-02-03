@@ -22,9 +22,6 @@
 
 from .partner_aged_statement_report import PartnerAgedTrialReport
 from openerp.report import report_sxw
-from dateutil.relativedelta import relativedelta
-from openerp import pooler
-from datetime import datetime
 
 
 class SupplierAgedTrialReport(PartnerAgedTrialReport):
@@ -35,72 +32,9 @@ class SupplierAgedTrialReport(PartnerAgedTrialReport):
     def __init__(self, cr, uid, name, context):
         super(SupplierAgedTrialReport, self).__init__(cr, uid, name, context)
         self.localcontext.update({
-            'getLines30': self._lines_get30,
-            'getLines3060': self._lines_get_30_60,
-            'getLines60': self._lines_get60,
             'show_message': False,
-            'get_lines': self._get_lines,
-            'balance_amount': lambda amount: -amount,
         })
-
-    def set_context(self, objects, data, ids, report_type=None):
-        res = super(SupplierAgedTrialReport, self).set_context(
-            objects, data, ids, report_type=report_type)
-
-        self.ACCOUNT_TYPE = ['payable']
-
-        return res
-
-    def _lines_get30(self, obj):
-        today = datetime.now()
-        stop = today - relativedelta(days=30)
-
-        moveline_obj = pooler.get_pool(self.cr.dbname)['account.move.line']
-        movelines = moveline_obj.search(
-            self.cr, self.uid,
-            [('partner_id', '=', obj.id),
-             ('account_id.type', 'in', ['payable']),
-             ('state', '<>', 'draft'), ('reconcile_id', '=', False),
-             '|',
-             '&', ('date_maturity', '<=', today), ('date_maturity', '>', stop),
-             '&', ('date_maturity', '=', False),
-             '&', ('date', '<=', today), ('date', '>', stop)],
-            context=self.localcontext)
-        movelines = moveline_obj.browse(self.cr, self.uid, movelines)
-        return movelines
-
-    def _lines_get_30_60(self, obj):
-        start = datetime.now() - relativedelta(days=30)
-        stop = start - relativedelta(days=30)
-
-        moveline_obj = pooler.get_pool(self.cr.dbname)['account.move.line']
-        movelines = moveline_obj.search(
-            self.cr, self.uid,
-            [('partner_id', '=', obj.id),
-             ('account_id.type', 'in', ['payable']),
-             ('state', '<>', 'draft'), ('reconcile_id', '=', False),
-             '|',
-             '&', ('date_maturity', '<=', start), ('date_maturity', '>', stop),
-             '&', ('date_maturity', '=', False),
-             '&', ('date', '<=', start), ('date', '>', stop)],
-            context=self.localcontext)
-        movelines = moveline_obj.browse(self.cr, self.uid, movelines)
-        return movelines
-
-    def _lines_get60(self, obj):
-        start = datetime.now() - relativedelta(days=60)
-
-        moveline_obj = pooler.get_pool(self.cr.dbname)['account.move.line']
-        movelines = moveline_obj.search(
-            self.cr, self.uid,
-            [('partner_id', '=', obj.id),
-             ('account_id.type', 'in', ['payable']),
-             ('state', '<>', 'draft'), ('reconcile_id', '=', False),
-             '|', ('date_maturity', '<=', start),
-             ('date_maturity', '=', False), ('date', '<=', start)],
-            context=self.localcontext)
-        movelines = moveline_obj.browse(self.cr, self.uid, movelines)
-        return movelines
+        self.ttype = 'payment'
 
 
 report_sxw.report_sxw(

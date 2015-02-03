@@ -195,6 +195,11 @@ msgid "0-30"
 msgstr "0-30"
 
 #. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:0
+msgid "Currency"
+msgstr "Devise"
+
+#. module: account_partner_aged_statement_webkit
 #: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:37
 #: model:ir.model,name:account_partner_aged_statement_webkit.model_res_partner
 msgid "Partner"

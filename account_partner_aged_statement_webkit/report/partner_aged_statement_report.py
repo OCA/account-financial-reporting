@@ -25,8 +25,11 @@ import time
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
+import itertools
+
 from openerp import pooler
 from openerp.report import report_sxw
+from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
 
 from openerp.addons.account.report.account_aged_partner_balance import (
     aged_trial_report
@@ -48,60 +51,247 @@ class PartnerAgedTrialReport(aged_trial_report):
             'getLines3060': self._lines_get_30_60,
             'getLines60': self._lines_get60,
             'show_message': True,
-            'line_amount': self._line_amount,
-            'line_paid': self._line_paid,
-            'balance_amount': lambda amount: amount,
+            'get_current_invoice_lines': self._get_current_invoice_lines,
+            'get_balance': self._get_balance,
         })
+        self.partner_invoices_dict = {}
+        self.ttype = 'receipt'
 
-    def _lines_get30(self, obj):
-        today = datetime.now()
+    def _get_balance(self, partner, company, date=False):
+        """
+        Get the lines of balance to display in the report
+        """
+        today = date and datetime.strptime(date, DEFAULT_SERVER_DATE_FORMAT) \
+            or datetime.now()
+        date_30 = today - relativedelta(days=30)
+        date_60 = today - relativedelta(days=60)
+        date_90 = today - relativedelta(days=90)
+        date_120 = today - relativedelta(days=120)
+
+        today = today.strftime(DEFAULT_SERVER_DATE_FORMAT)
+        date_30 = date_30.strftime(DEFAULT_SERVER_DATE_FORMAT)
+        date_60 = date_60.strftime(DEFAULT_SERVER_DATE_FORMAT)
+        date_90 = date_90.strftime(DEFAULT_SERVER_DATE_FORMAT)
+        date_120 = date_120.strftime(DEFAULT_SERVER_DATE_FORMAT)
+
+        movelines = self._get_current_invoice_lines(partner, company, today)
+        movelines = sorted(movelines, key=lambda x: x['currency_name'])
+
+        grouped_movelines = [
+            (key, list(group)) for key, group in itertools.groupby(
+                movelines, key=lambda x: x['currency_name'])
+        ]
+
+        res = {}
+        for currency_name, lines in grouped_movelines:
+            res[currency_name] = {
+                'not_due': 0,
+                '30': 0,
+                '3060': 0,
+                '6090': 0,
+                '90120': 0,
+                '120': 0,
+                'total': 0,
+                'currency_name': currency_name,
+            }
+            current_dict = res[currency_name]
+
+            for line in lines:
+                amount = line['amount_unreconciled']
+
+                if line['date_due'] > today or not line['date_due']:
+                    current_dict['not_due'] += amount
+
+                elif line['date_due'] > date_30:
+                    current_dict['30'] += amount
+
+                elif line['date_due'] > date_60:
+                    current_dict['3060'] += amount
+
+                elif line['date_due'] > date_90:
+                    current_dict['6090'] += amount
+
+                elif line['date_due'] > date_120:
+                    current_dict['90120'] += amount
+
+                elif line['date_due']:
+                    current_dict['120'] += amount
+
+                current_dict['total'] += amount
+
+        return res.values()
+
+    def _get_current_invoice_lines(self, partner, company, date):
+        """
+        Get all invoices with unpaid amounts for the given supplier
+        :return: a list of dict containing invoice data
+        {
+            'date_due': the date of maturity
+            'amount_original': the original date
+            'amount_unreconciled': the amount left to pay
+            'currency_id': the currency of the move line
+            'currency_name': the name of the currency
+            'name': the name of the move line
+        }
+        """
+        # Only compute this method one time per partner
+        if partner.id in self.partner_invoices_dict:
+            return self.partner_invoices_dict[partner.id]
+
+        voucher_obj = pooler.get_pool(self.cr.dbname)['account.voucher']
+        journal_obj = pooler.get_pool(self.cr.dbname)['account.journal']
+        move_line_obj = pooler.get_pool(self.cr.dbname)['account.move.line']
+        currency_obj = pooler.get_pool(self.cr.dbname)['res.currency']
+
+        currency = company.currency_id
+
+        # Get the journal with the correct currency
+        journal_ids = journal_obj.search(
+            self.cr, self.uid, [
+                ('type', 'in', ['bank', 'cash']),
+                ('currency', '=', currency.id),
+            ], context=self.localcontext)
+
+        if not journal_ids:
+            journal_ids = journal_obj.search(
+                self.cr, self.uid, [('type', 'in', ['bank', 'cash'])],
+                context=self.localcontext)
+
+        journal_id = journal_ids[0]
+
+        # Retreive every invoice in a first time
+        voucher_lines = voucher_obj.recompute_voucher_lines(
+            self.cr, self.uid, ids=False, partner_id=partner.id,
+            journal_id=journal_id, price=0, currency_id=currency.id,
+            ttype=self.ttype, date=date, context=self.localcontext)['value']
+
+        # Map the result by move line
+        line_dict = {
+            line['move_line_id']: line for line in
+            voucher_lines['line_cr_ids'] + voucher_lines['line_dr_ids']
+        }
+
+        # If some of the invoices have different currency than the currency
+        # of the company, need to get the lines in these currency
+        other_currencies = {}
+        for move_line in move_line_obj.browse(
+            self.cr, self.uid, line_dict.keys(), context=self.localcontext
+        ):
+            invoice = move_line.invoice
+            if invoice and invoice.currency_id.id != currency.id:
+                if invoice.currency_id.id in other_currencies:
+                    other_currencies[invoice.currency_id.id]['move_line_ids'].\
+                        append(invoice.id)
+                else:
+                    # Get the journal with the correct currency
+                    journal_ids = journal_obj.search(
+                        self.cr, self.uid, [
+                            ('type', 'in', ['bank', 'cash']),
+                            ('currency', '=', invoice.currency_id.id),
+                        ], context=self.localcontext)
+
+                    if not journal_ids:
+                        journal_ids = journal_obj.search(
+                            self.cr, self.uid,
+                            [('type', 'in', ['bank', 'cash'])],
+                            context=self.localcontext)
+
+                    journal_id = journal_ids[0]
+
+                    lines_in_currency = voucher_obj.recompute_voucher_lines(
+                        self.cr, self.uid, ids=False, partner_id=partner.id,
+                        journal_id=journal_id, price=0,
+                        currency_id=invoice.currency_id.id,
+                        ttype=self.ttype, date=date,
+                        context=self.localcontext)['value']
+
+                    other_currencies[invoice.currency_id.id] = {
+                        'lines_in_currency': {
+                            line['move_line_id']: line for line in
+                            lines_in_currency['line_cr_ids']
+                            + lines_in_currency['line_dr_ids']
+                        },
+                        'move_line_ids': [move_line.id],
+                    }
+
+        for currency_id in other_currencies:
+            for move_line_id in other_currencies[currency_id]['move_line_ids']:
+                line_dict[move_line_id] = other_currencies[currency_id][
+                    'lines_in_currency'][move_line_id]
+
+        for line in line_dict:
+            move_line = move_line_obj.browse(
+                self.cr, self.uid, line_dict[line]['move_line_id'],
+                context=self.localcontext)
+            line_dict[line]['ref'] = move_line.ref
+
+            currency = currency_obj.browse(
+                self.cr, self.uid, line_dict[line]['currency_id'],
+                context=self.localcontext)
+            line_dict[line]['currency_name'] = currency.name
+
+        # Adjust the amount signs depending on the report type
+        if self.ttype == 'receipt':
+            for line in line_dict:
+                if line_dict[line]['type'] == 'dr':
+                    line_dict[line]['amount_original'] *= -1
+                    line_dict[line]['amount_unreconciled'] *= -1
+
+        elif self.ttype == 'payment':
+            for line in line_dict:
+                if line_dict[line]['type'] == 'cr':
+                    line_dict[line]['amount_original'] *= -1
+                    line_dict[line]['amount_unreconciled'] *= -1
+
+        self.partner_invoices_dict[partner.id] = line_dict.values()
+
+        return self.partner_invoices_dict[partner.id]
+
+    def _lines_get30(self, partner, company, date=False):
+        today = date and datetime.strptime(date, DEFAULT_SERVER_DATE_FORMAT) \
+            or datetime.now()
         stop = today - relativedelta(days=30)
 
-        moveline_obj = pooler.get_pool(self.cr.dbname)['account.move.line']
-        movelines = moveline_obj.search(
-            self.cr, self.uid,
-            [('partner_id', '=', obj.id),
-             ('account_id.type', 'in', ['receivable']),
-             ('state', '<>', 'draft'), ('reconcile_id', '=', False),
-             '|',
-             '&', ('date_maturity', '<=', today), ('date_maturity', '>', stop),
-             '&', ('date_maturity', '=', False),
-             '&', ('date', '<=', today), ('date', '>', stop)],
-            context=self.localcontext)
-        movelines = moveline_obj.browse(self.cr, self.uid, movelines)
+        today = today.strftime(DEFAULT_SERVER_DATE_FORMAT)
+        stop = stop.strftime(DEFAULT_SERVER_DATE_FORMAT)
+
+        movelines = self._get_current_invoice_lines(partner, company, today)
+        movelines = [
+            line for line in movelines
+            if not line['date_due'] or stop < line['date_due'] <= today
+        ]
         return movelines
 
-    def _lines_get_30_60(self, obj):
-        start = datetime.now() - relativedelta(days=30)
+    def _lines_get_30_60(self, partner, company, date=False):
+        today = date and datetime.strptime(date, DEFAULT_SERVER_DATE_FORMAT) \
+            or datetime.now()
+        start = today - relativedelta(days=30)
         stop = start - relativedelta(days=30)
 
-        moveline_obj = pooler.get_pool(self.cr.dbname)['account.move.line']
-        movelines = moveline_obj.search(
-            self.cr, self.uid,
-            [('partner_id', '=', obj.id),
-             ('account_id.type', 'in', ['receivable']),
-             ('state', '<>', 'draft'), ('reconcile_id', '=', False),
-             '|',
-             '&', ('date_maturity', '<=', start), ('date_maturity', '>', stop),
-             '&', ('date_maturity', '=', False),
-             '&', ('date', '<=', start), ('date', '>', stop)],
-            context=self.localcontext)
-        movelines = moveline_obj.browse(self.cr, self.uid, movelines)
+        today = today.strftime(DEFAULT_SERVER_DATE_FORMAT)
+        start = start.strftime(DEFAULT_SERVER_DATE_FORMAT)
+        stop = stop.strftime(DEFAULT_SERVER_DATE_FORMAT)
+
+        movelines = self._get_current_invoice_lines(partner, company, today)
+        movelines = [
+            line for line in movelines
+            if stop < line['date_due'] <= start
+        ]
         return movelines
 
-    def _lines_get60(self, obj):
-        start = datetime.now() - relativedelta(days=60)
+    def _lines_get60(self, partner, company, date=False):
+        today = date and datetime.strptime(date, DEFAULT_SERVER_DATE_FORMAT) \
+            or datetime.now()
+        start = today - relativedelta(days=60)
 
-        moveline_obj = pooler.get_pool(self.cr.dbname)['account.move.line']
-        movelines = moveline_obj.search(
-            self.cr, self.uid,
-            [('partner_id', '=', obj.id),
-             ('account_id.type', 'in', ['receivable']),
-             ('state', '<>', 'draft'), ('reconcile_id', '=', False),
-             '|', ('date_maturity', '<=', start),
-             ('date_maturity', '=', False), ('date', '<=', start)],
-            context=self.localcontext)
-        movelines = moveline_obj.browse(self.cr, self.uid, movelines)
+        today = today.strftime(DEFAULT_SERVER_DATE_FORMAT)
+        start = start.strftime(DEFAULT_SERVER_DATE_FORMAT)
+
+        movelines = self._get_current_invoice_lines(partner, company, today)
+        movelines = [
+            line for line in movelines
+            if line['date_due'] and line['date_due'] <= start
+        ]
         return movelines
 
     def _message(self, obj, company):
@@ -199,49 +389,6 @@ class PartnerAgedTrialReport(aged_trial_report):
         res = super(PartnerAgedTrialReport, self)._get_lines(form)
         self.query = self.orig_query
         return res
-
-    def _line_amount(self, line):
-        invoice = line.invoice
-        invoice_type = invoice and invoice.type or False
-        print invoice_type, line.debit, line.account_id.type
-
-        if invoice_type == 'in_invoice':
-            return line.credit or 0.0
-
-        if invoice_type == 'in_refund':
-            return -line.debit or 0.0
-
-        if invoice_type == 'out_invoice':
-            return line.debit or 0.0
-
-        if invoice_type == 'out_refund':
-            return -line.credit or 0.0
-
-        if line.account_id.type == 'payable':
-            return line.credit or 0.0
-
-        return line.debit or 0.0
-
-    def _line_paid(self, line):
-        invoice = line.invoice
-        invoice_type = invoice and invoice.type or False
-
-        if invoice_type == 'in_invoice':
-            return line.debit or 0.0
-
-        if invoice_type == 'in_refund':
-            return -line.credit or 0.0
-
-        if invoice_type == 'out_invoice':
-            return line.credit or 0.0
-
-        if invoice_type == 'out_refund':
-            return -line.debit or 0.0
-
-        if line.account_id.type == 'payable':
-            return line.debit or 0.0
-
-        return line.credit or 0.0
 
 
 report_sxw.report_sxw(
