@@ -47,7 +47,7 @@ class PartnerAgedTrialReport(aged_trial_report):
             self._partners = self.localcontext["active_ids"]
         self.localcontext.update({
             'message': self._message,
-            'getLines30': self._lines_get30,
+            'getLines30': self._lines_get_30,
             'getLines3060': self._lines_get_30_60,
             'getLines60': self._lines_get60,
             'show_message': True,
@@ -243,13 +243,22 @@ class PartnerAgedTrialReport(aged_trial_report):
                     line_dict[line]['amount_original'] *= -1
                     line_dict[line]['amount_unreconciled'] *= -1
 
-        self.partner_invoices_dict[partner.id] = line_dict.values()
+        # Order the invoices by date and check for lines with no amount
+        invoice_list = [
+            inv for inv in
+            sorted(line_dict.values(), key=lambda x: x['date_original'])
+            if inv['amount_original'] or inv['amount_unreconciled']
+        ]
+
+        # Order from the most recent to the older invoice.
+        invoice_list.reverse()
+
+        self.partner_invoices_dict[partner.id] = invoice_list
 
         return self.partner_invoices_dict[partner.id]
 
-    def _lines_get30(self, partner, company, date=False):
-        today = date and datetime.strptime(date, DEFAULT_SERVER_DATE_FORMAT) \
-            or datetime.now()
+    def _lines_get_30(self, partner, company):
+        today = datetime.now()
         stop = today - relativedelta(days=30)
 
         today = today.strftime(DEFAULT_SERVER_DATE_FORMAT)
@@ -262,9 +271,8 @@ class PartnerAgedTrialReport(aged_trial_report):
         ]
         return movelines
 
-    def _lines_get_30_60(self, partner, company, date=False):
-        today = date and datetime.strptime(date, DEFAULT_SERVER_DATE_FORMAT) \
-            or datetime.now()
+    def _lines_get_30_60(self, partner, company):
+        today = datetime.now()
         start = today - relativedelta(days=30)
         stop = start - relativedelta(days=30)
 
@@ -279,9 +287,8 @@ class PartnerAgedTrialReport(aged_trial_report):
         ]
         return movelines
 
-    def _lines_get60(self, partner, company, date=False):
-        today = date and datetime.strptime(date, DEFAULT_SERVER_DATE_FORMAT) \
-            or datetime.now()
+    def _lines_get60(self, partner, company):
+        today = datetime.now()
         start = today - relativedelta(days=60)
 
         today = today.strftime(DEFAULT_SERVER_DATE_FORMAT)
