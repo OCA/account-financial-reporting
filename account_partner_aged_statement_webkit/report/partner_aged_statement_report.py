@@ -57,12 +57,11 @@ class PartnerAgedTrialReport(aged_trial_report):
         self.partner_invoices_dict = {}
         self.ttype = 'receipt'
 
-    def _get_balance(self, partner, company, date=False):
+    def _get_balance(self, partner, company):
         """
         Get the lines of balance to display in the report
         """
-        today = date and datetime.strptime(date, DEFAULT_SERVER_DATE_FORMAT) \
-            or datetime.now()
+        today = datetime.now()
         date_30 = today - relativedelta(days=30)
         date_60 = today - relativedelta(days=60)
         date_90 = today - relativedelta(days=90)
