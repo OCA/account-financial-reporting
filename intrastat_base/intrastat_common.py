@@ -72,17 +72,27 @@ class report_intrastat_common(orm.TransientModel):
                 return False
         return True
 
-    def _check_generate_lines(self, cr, uid, intrastat, context=None):
-        if not intrastat.company_id.country_id:
+    def check_generate_lines(self, cr, uid, intrastat, context=None):
+        """Check wether all requirements are met for generating lines."""
+        if not intrastat.company_id:
+            # Should not be possible, but just in case:
+            raise orm.except_orm(
+                _('Error :'),
+                _("Company not yet set on intrastat report.")
+            )
+        company_obj = intrastat.company_id  # Simplify references
+        if not company_obj.country_id:
             raise orm.except_orm(
                 _('Error :'),
                 _("The country is not set on the company '%s'.")
-                % intrastat.company_id.name)
-        if not intrastat.currency_id.name == 'EUR':
+                % company_obj.name
+            )
+        if not company_obj.currency_id.name == 'EUR':
             raise orm.except_orm(
                 _('Error :'),
                 _("The company currency must be 'EUR', but is currently '%s'.")
-                % intrastat.currency_id.name)
+                % company_obj.currency_id.name
+            )
         return True
 
     def _check_generate_xml(self, cr, uid, intrastat, context=None):
