@@ -25,20 +25,6 @@
     'name': 'Print chart of accounts',
     'version': '1.0',
     'category': 'Reports/pdf',
-    'description': """Print chart of accounts.
-
-This module add the menu Accounting \ Charts \ Print chart of Accounts
-and allow to print the selected chart of accounts.
-
-This module is based on the old RML engine report.
-
-Contributors
-------------
-* Marc Cassuto (marc.cassuto@savoirfairelinux.com)
-* Mathieu Benoit (mathieu.benoit@savoirfairelinux.com)
-* Guillaume Auger (guillaume.auger@savoirfairelinux.com)
-
-    """,
     'author': 'Savoir-faire Linux',
     'website': 'http://www.savoirfairelinux.com',
     'depends': [
