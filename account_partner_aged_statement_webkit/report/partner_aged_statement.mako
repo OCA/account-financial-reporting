@@ -33,9 +33,9 @@
         <br/>
         <%from datetime import date %>
         ${_('Date')}: ${formatLang(str(date.today()), date=True)}
-        <br>
+        <br/>
         ${_('Partner')}: ${partner.name}
-        <br>
+        <br/>
         ${_('Subject')}: <b>${_('Overdue Statement')}</b>
         <br/>
         <br/>
@@ -46,15 +46,15 @@
                 </p>
             %endfor
         %endif
-        <br>
+        <br/>
         ${user.name}
-        <br>
-        <br>
+        <br/>
+        <br/>
         %if (partner.credit + partner.debit == 0) :
             <div class="title">${_('Nothing due for this partner')}</div>
         %else:
             <div class="title">${_('Aged Balance')}</div>
-            <br>
+            <br/>
         %if get_balance(partner, company):
             <table class="basic_table" style="width: 100%;">
                 <tr>
@@ -81,11 +81,11 @@
                 %endfor
             </table>
         %endif
-        <br>
-        <br>
+        <br/>
+        <br/>
         <div class="title">${_('List of Due Invoices')}</div>
         %if getLines30(partner, company):
-            <br>
+            <br/>
             <div class="total">${_('0-30')}</div>
             <table class="basic_table" style="width: 100%;">
                 <tr>

@@ -21,7 +21,7 @@
 ###############################################################################
 
 import time
-
+import pytz
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
@@ -56,12 +56,15 @@ class PartnerAgedTrialReport(aged_trial_report):
         })
         self.partner_invoices_dict = {}
         self.ttype = 'receipt'
+        tz = self.localcontext.get('tz', False)
+        tz = tz and pytz.timezone(tz) or pytz.utc
+        self.today = datetime.now(tz)
 
     def _get_balance(self, partner, company):
         """
         Get the lines of balance to display in the report
         """
-        today = datetime.now()
+        today = self.today
         date_30 = today - relativedelta(days=30)
         date_60 = today - relativedelta(days=60)
         date_90 = today - relativedelta(days=90)
@@ -257,7 +260,7 @@ class PartnerAgedTrialReport(aged_trial_report):
         return self.partner_invoices_dict[partner.id]
 
     def _lines_get_30(self, partner, company):
-        today = datetime.now()
+        today = self.today
         stop = today - relativedelta(days=30)
 
         today = today.strftime(DEFAULT_SERVER_DATE_FORMAT)
@@ -271,7 +274,7 @@ class PartnerAgedTrialReport(aged_trial_report):
         return movelines
 
     def _lines_get_30_60(self, partner, company):
-        today = datetime.now()
+        today = self.today
         start = today - relativedelta(days=30)
         stop = start - relativedelta(days=30)
 
@@ -282,12 +285,12 @@ class PartnerAgedTrialReport(aged_trial_report):
         movelines = self._get_current_invoice_lines(partner, company, today)
         movelines = [
             line for line in movelines
-            if stop < line['date_due'] <= start
+            if line['date_due'] and stop < line['date_due'] <= start
         ]
         return movelines
 
     def _lines_get60(self, partner, company):
-        today = datetime.now()
+        today = self.today
         start = today - relativedelta(days=60)
 
         today = today.strftime(DEFAULT_SERVER_DATE_FORMAT)
@@ -304,50 +307,10 @@ class PartnerAgedTrialReport(aged_trial_report):
         company_pool = pooler.get_pool(self.cr.dbname)['res.company']
         message = company_pool.browse(
             self.cr, self.uid, company.id, {'lang': obj.lang}).overdue_msg
-        return message.split('\n')
-
-    def _get_fiscalyear(self, data):
-        now = data['fInvoicesorm']['date_from']
-        domain = [
-            ('company_id', '=', self._company.id),
-            ('date_start', '<', now),
-            ('date_stop', '>', now),
-        ]
-        fiscalyears_obj = pooler.get_pool(self.cr.dbname)['account.fiscalyear']
-        fiscalyears = fiscalyears_obj.search(
-            self.cr, self.uid, domain, limit=1, context=self.localcontext)
-        if fiscalyears:
-            return fiscalyears_obj.browse(
-                self.cr, self.uid, fiscalyears[0], context=self.localcontext
-            ).name
-        else:
-            return ''
-
-    def _get_account(self, data):
-        account_obj = pooler.get_pool(self.cr.dbname).get('account.account')
-        accounts = account_obj.search(
-            self.cr, self.uid,
-            [('parent_id', '=', False), ('company_id', '=', self._company.id)],
-            limit=1, context=self.localcontext)
-        if accounts:
-            return account_obj.browse(
-                self.cr, self.uid, accounts[0],
-                context=self.localcontext).name
-        else:
-            return ''
+        return message and message.split('\n') or ''
 
     def _get_company(self, data):
         return self._company.name
-
-    def _get_journal(self, data):
-        codes = []
-        if data.get('form', False) and data['form'].get('journal_ids', False):
-            self.cr.execute(
-                'select code from account_journal where id IN %s',
-                (tuple(data['form']['journal_ids']),)
-            )
-            codes = [x for x, in self.cr.fetchall()]
-        return codes
 
     def _get_currency(self, data):
         return self._company.currency_id.symbol
