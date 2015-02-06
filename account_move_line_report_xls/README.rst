@@ -1,15 +1,25 @@
 Journal Items Excel Export
 ==========================
 
-This module adds a button on the journal items ('account.move.line') list view
-in order to export the selected lines.
+This module extends the functionality of the journal items 
+('account.move.line') list view and allow you to export the selected lines.
 
-If you are installing this module manually, you need also the **report_xls**
+Installation
+============
+
+To install this module manually, you need also the **report_xls**
 module located in:
+
 https://launchpad.net/openerp-reporting-engines
 
-Report customisation
-''''''''''''''''''''
+Usage
+=====
+
+To use this module, you need to:
+
+* go to the list view of the journal items
+* select the line you wish to export
+* click on the button on top to export
 
 The Excel export can be tailored to your exact needs via the following methods
 of the 'account.move.line' object:
@@ -33,8 +43,15 @@ of the 'account.move.line' object:
 
   Change/extend the Excel template.
 
-Customisation assistance
-''''''''''''''''''''''''
+Credits
+=======
+
+Contributors
+------------
+* Guillaume Auger <guillaume.auger@savoirfairelinux.com>
+
+Maintainer
+----------
 Contact info@noviat.com for help with the customisation and/or development
-of Excel reports in OpenERP.
+of Excel reports in Odoo.
 
