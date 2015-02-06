@@ -48,10 +48,19 @@ Credits
 
 Contributors
 ------------
+* Noviat <info@noviat.com>
 * Guillaume Auger <guillaume.auger@savoirfairelinux.com>
 
 Maintainer
 ----------
-Contact info@noviat.com for help with the customisation and/or development
-of Excel reports in Odoo.
+.. image:: http://odoo-community.org/logo.png
+   :alt: Odoo Community Association
+   :target: http://odoo-community.org
 
+This module is maintained by the OCA.
+
+OCA, or the Odoo Community Association, is a nonprofit organization whose
+mission is to support the collaborative development of Odoo features and
+promote its widespread use.
+
+To contribute to this module, please visit http://odoo-community.org.
