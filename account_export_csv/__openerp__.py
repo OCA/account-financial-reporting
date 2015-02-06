@@ -41,6 +41,7 @@
     define a selection list to select report type
     """,
     'website': 'http://www.camptocamp.com',
+    'license': 'AGPL-3',
     'data': [
         'wizard/account_export_csv_view.xml',
         'menu.xml',
