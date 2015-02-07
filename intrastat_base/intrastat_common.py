@@ -20,10 +20,8 @@
 #
 ##############################################################################
 
-from openerp import models, api, tools, _
-from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
+from openerp import models, fields, api, tools, _
 from openerp.exceptions import Warning, ValidationError
-from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import logging
 
@@ -50,20 +48,17 @@ class ReportIntrastatCommon(models.AbstractModel):
     @api.one
     @api.depends('start_date')
     def _compute_dates(self):
-        start_date_dt = datetime.strptime(
-            self.start_date, DEFAULT_SERVER_DATE_FORMAT)
-        self.end_date = datetime.strftime(
-            start_date_dt + relativedelta(day=31), DEFAULT_SERVER_DATE_FORMAT)
+        start_date_dt = fields.Date.from_string(self.start_date)
+        self.end_date = fields.Date.to_string(
+            start_date_dt + relativedelta(day=31))
         self.year_month = start_date_dt.strftime('%Y-%m')
 
     @api.one
-    @api.constrains('start_date')
     def _check_start_date(self):
         '''Check that the start date is the first day of the month'''
-        datetime_to_check = datetime.strptime(
-            self.start_date, DEFAULT_SERVER_DATE_FORMAT)
+        datetime_to_check = fields.Date.from_string(self.start_date)
         if datetime_to_check.day != 1:
-            return ValidationError(
+            raise ValidationError(
                 _('The start date must be the first day of the month'))
 
     @api.one
