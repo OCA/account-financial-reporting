@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: account-financial-report\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-05-07 07:02+0000\n"
-"PO-Revision-Date: 2015-01-04 10:53+0100\n"
-"Last-Translator: Rudolf Schnapka <schnapkar@golive-saar.de>\n"
+"PO-Revision-Date: 2015-02-07 10:07+0100\n"
+"Last-Translator: Rudolf Schnapka <rs@techno-flex.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2014-06-19 06:33+0000\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.5.4\n"
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -35,8 +35,7 @@ msgid "Please set a valid time filter"
 msgstr "Setzen Sie bitte eine gültige Zeiteingrenzung"
 
 #. module: account_financial_report_webkit
-#: view:general.ledger.webkit:0
-#: view:open.invoices.webkit:0
+#: view:general.ledger.webkit:0 view:open.invoices.webkit:0
 #: view:partners.ledger.webkit:0
 msgid "Layout Options"
 msgstr "Layout-Einstellungen"
@@ -160,10 +159,8 @@ msgid "Due Date"
 msgstr "Fälligkeit"
 
 #. module: account_financial_report_webkit
-#: view:general.ledger.webkit:0
-#: view:open.invoices.webkit:0
-#: view:partner.balance.webkit:0
-#: view:partners.ledger.webkit:0
+#: view:general.ledger.webkit:0 view:open.invoices.webkit:0
+#: view:partner.balance.webkit:0 view:partners.ledger.webkit:0
 #: view:trial.balance.webkit:0
 msgid "Print only"
 msgstr "Nur drucken"
@@ -272,7 +269,7 @@ msgstr "Keine Periode gefunden"
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:63
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:123
 msgid "Initial Balance"
-msgstr "Eröffnungsbilanz"
+msgstr "Eröffnungssaldo"
 
 #. module: account_financial_report_webkit
 #: constraint:account.move.line:0
@@ -292,8 +289,8 @@ msgstr "Bericht zum Hauptbuch"
 #: constraint:open.invoices.webkit:0
 msgid "Clearance date must be the very last date of the last period or later."
 msgstr ""
-"Das Datum der Auflösung muss das letzte Datum der letzten Periode oder danach "
-"sein."
+"Das Datum der Auflösung muss das letzte Datum der letzten Periode oder "
+"danach sein."
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_profit_loss.mako:48
@@ -319,10 +316,8 @@ msgstr "Kontenplan auswählen"
 
 #. module: account_financial_report_webkit
 #: field:account.common.balance.report,filter:0
-#: field:general.ledger.webkit,filter:0
-#: field:open.invoices.webkit,filter:0
-#: field:partner.balance.webkit,filter:0
-#: field:partners.ledger.webkit,filter:0
+#: field:general.ledger.webkit,filter:0 field:open.invoices.webkit,filter:0
+#: field:partner.balance.webkit,filter:0 field:partners.ledger.webkit,filter:0
 #: field:trial.balance.webkit,filter:0
 msgid "Filter by"
 msgstr "Filtern nach"
@@ -378,10 +373,8 @@ msgstr ""
 "Legen Sie bitte in den Unternehmenseinstellungen einen Berichtskopf fest"
 
 #. module: account_financial_report_webkit
-#: view:general.ledger.webkit:0
-#: view:open.invoices.webkit:0
-#: view:partner.balance.webkit:0
-#: view:partners.ledger.webkit:0
+#: view:general.ledger.webkit:0 view:open.invoices.webkit:0
+#: view:partner.balance.webkit:0 view:partners.ledger.webkit:0
 #: view:trial.balance.webkit:0
 msgid "Time Filters"
 msgstr "Zeiteingrenzung"
@@ -413,9 +406,9 @@ msgstr ""
 "Das Tilgungsdatum dient im Wesentlichen der Ermittelung der Raten zum "
 "Schuldausgleich. Per Vorgabe ist dieses mit dem Periodenenddatum identisch "
 "(z. B. 31. 12. 2011 wenn Sie das Geschäftsjahr 2011 ansprechen). Durch "
-"Anpassung des Tilgungsdatums können Sie z.B. diese Frage beantworten: 'Auf "
-"Grundlage der offenen Posten des letzten Jahresendes, welche Rechnungen sind "
-"heute noch nicht getilgt (heute ist das Tilgungsdatum)?'"
+"Anpassung des Tilgungsdatums können Sie z. B. diese Frage beantworten: 'Auf "
+"Grundlage der offenen Posten des letzten Jahresabschlusses sind welche "
+"Rechnungen heute noch nicht getilgt (heute ist das Tilgungsdatum)?'\n"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_open_invoices.mako:40
@@ -428,8 +421,8 @@ msgid ""
 "This report allows you to print or generate a pdf of your partner ledger "
 "with details of all your payable/receivable account"
 msgstr ""
-"Dieser Bericht liefert Ihnen die Salden der Partnerbuchhaltung mit Details zu "
-"allen Forderungen und Verbindlichkeiten"
+"Dieser Bericht liefert Ihnen die Salden der Partnerbuchhaltung mit Details "
+"zu allen Forderungen und Verbindlichkeiten"
 
 #. module: account_financial_report_webkit
 #: selection:account.common.balance.report,display_account:0
@@ -561,10 +554,8 @@ msgstr "Mit Buchungen"
 
 #. module: account_financial_report_webkit
 #: constraint:account.common.balance.report:0
-#: constraint:general.ledger.webkit:0
-#: constraint:open.invoices.webkit:0
-#: constraint:partner.balance.webkit:0
-#: constraint:partners.ledger.webkit:0
+#: constraint:general.ledger.webkit:0 constraint:open.invoices.webkit:0
+#: constraint:partner.balance.webkit:0 constraint:partners.ledger.webkit:0
 #: constraint:trial.balance.webkit:0
 msgid ""
 "The fiscalyear, periods or chart of account chosen have to belong to the "
@@ -635,8 +626,8 @@ msgid ""
 "You can not define children to an account with internal type different of "
 "\"View\"! "
 msgstr ""
-"Konfigurationsfehler! Unterkonten dürfen nur Konten der internen Art "
-"\"Sicht\" untergeordnet werden."
+"Konfigurationsfehler! Unterkonten dürfen nur Konten der internen Art \"Sicht"
+"\" untergeordnet werden."
 
 #. module: account_financial_report_webkit
 #: field:account.common.balance.report,comp0_date_from:0
@@ -818,17 +809,15 @@ msgstr "Interne Vermerk"
 
 #. module: account_financial_report_webkit
 #: constraint:account.common.balance.report:0
-#: constraint:general.ledger.webkit:0
-#: constraint:open.invoices.webkit:0
-#: constraint:partner.balance.webkit:0
-#: constraint:partners.ledger.webkit:0
+#: constraint:general.ledger.webkit:0 constraint:open.invoices.webkit:0
+#: constraint:partner.balance.webkit:0 constraint:partners.ledger.webkit:0
 #: constraint:trial.balance.webkit:0
 msgid ""
 "When no Fiscal year is selected, you must choose to filter by periods or by "
 "date."
 msgstr ""
-"Wenn kein Geschäftsjahr ausgewählt ist, müssen Sie entweder nach Periode oder "
-"Datum eingrenzen."
+"Wenn kein Geschäftsjahr ausgewählt ist, müssen Sie entweder nach Periode "
+"oder Datum eingrenzen."
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:50
@@ -942,10 +931,8 @@ msgstr "% Abweichung"
 
 #. module: account_financial_report_webkit
 #: help:account.common.balance.report,filter:0
-#: help:open.invoices.webkit,filter:0
-#: help:partner.balance.webkit,filter:0
-#: help:partners.ledger.webkit,filter:0
-#: help:trial.balance.webkit,filter:0
+#: help:open.invoices.webkit,filter:0 help:partner.balance.webkit,filter:0
+#: help:partners.ledger.webkit,filter:0 help:trial.balance.webkit,filter:0
 msgid ""
 "Filter by date : no opening balance will be displayed. (opening balance can "
 "only be calculated based on period to be correct)."
@@ -960,9 +947,9 @@ msgid ""
 "You can not select an account type with a deferral method different of "
 "\"Unreconciled\" for accounts with internal type \"Payable/Receivable\"! "
 msgstr ""
-"Konfigurationsfehler! Sie dürfen für Konten der internen Art "
-"Forderungen/Verbindlichkeiten kein Konto auswählen, welches als Abgrenzungart "
-"\"Nicht Ausgleichbar\" ist."
+"Konfigurationsfehler! Sie dürfen für Konten der internen Art Forderungen/"
+"Verbindlichkeiten kein Konto auswählen, welches als Abgrenzungart \"Nicht "
+"Ausgleichbar\" ist."
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/partner_balance.py:47
@@ -979,8 +966,7 @@ msgid "Centralized Entries"
 msgstr "Abstimmbuchungen"
 
 #. module: account_financial_report_webkit
-#: view:general.ledger.webkit:0
-#: view:partner.balance.webkit:0
+#: view:general.ledger.webkit:0 view:partner.balance.webkit:0
 #: view:trial.balance.webkit:0
 msgid "Accounts Filters"
 msgstr "Kontenfilter"
@@ -1038,7 +1024,7 @@ msgstr "Akt. Saldo"
 #. module: account_financial_report_webkit
 #: model:ir.model,name:account_financial_report_webkit.model_account_move_line
 msgid "Journal Items"
-msgstr "Journaleinträge"
+msgstr "Journalposten"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/common_reports.py:416
@@ -1160,7 +1146,7 @@ msgstr "Abweichung"
 #: field:partners.ledger.webkit,target_move:0
 #: field:trial.balance.webkit,target_move:0
 msgid "Target Moves"
-msgstr "Gegenbuchung"
+msgstr "Buchungsziele"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:44
@@ -1177,8 +1163,7 @@ msgstr "Ab:"
 #: field:account.common.balance.report,comp1_date_to:0
 #: field:account.common.balance.report,comp2_date_to:0
 #: field:account.common.balance.report,date_to:0
-#: field:general.ledger.webkit,date_to:0
-#: field:open.invoices.webkit,date_to:0
+#: field:general.ledger.webkit,date_to:0 field:open.invoices.webkit,date_to:0
 #: field:partner.balance.webkit,comp0_date_to:0
 #: field:partner.balance.webkit,comp1_date_to:0
 #: field:partner.balance.webkit,comp2_date_to:0
@@ -1221,8 +1206,7 @@ msgid "Partner Ledger Report"
 msgstr "Bericht der Partnerbuchhaltung"
 
 #. module: account_financial_report_webkit
-#: view:open.invoices.webkit:0
-#: view:partner.balance.webkit:0
+#: view:open.invoices.webkit:0 view:partner.balance.webkit:0
 #: view:partners.ledger.webkit:0
 msgid "Partners Filters"
 msgstr "Partnereingrenzung"
@@ -1363,5 +1347,3 @@ msgstr "Falsche Soll- oder Habenbetrag in der Buchungszeile!"
 #: field:trial.balance.webkit,comp2_filter:0
 msgid "Compare By"
 msgstr "Vergleich nach"
-
-

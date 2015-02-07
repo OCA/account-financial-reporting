@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: OpenERP Server 6.0dev\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-03-11 21:59+0000\n"
-"PO-Revision-Date: 2015-01-03 20:16+0100\n"
-"Last-Translator: Rudolf Schnapka <schnapkar@golive-saar.de>\n"
+"PO-Revision-Date: 2015-02-07 08:19+0100\n"
+"Last-Translator: Rudolf Schnapka <rs@techno-flex.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2014-06-19 06:33+0000\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.5.4\n"
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -58,10 +58,8 @@ msgid "Filters"
 msgstr "Filter"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0
-#: report:account.balancesheet.horizontal:0
-#: report:account.profit_horizontal:0
-#: report:account.profit_loss:0
+#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
+#: report:account.profit_horizontal:0 report:account.profit_loss:0
 msgid "Filter By"
 msgstr "Filter nach"
 
@@ -81,26 +79,22 @@ msgstr ""
 "Form eines einzigen Berichts."
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0
-#: report:account.balancesheet.horizontal:0
+#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
 msgid "Balance:"
 msgstr "Saldo:"
 
 #. module: account_financial_report_horizontal
-#: view:account.pl.report:0
-#: report:account.profit_horizontal:0
+#: view:account.pl.report:0 report:account.profit_horizontal:0
 #: report:account.profit_loss:0
 #: model:ir.ui.menu,name:account_financial_report_horizontal.menu_account_pl_report
 msgid "Profit And Loss"
 msgstr "Gewinn und Verlust"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0
-#: report:account.balancesheet.horizontal:0
-#: report:account.profit_horizontal:0
-#: report:account.profit_loss:0
+#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
+#: report:account.profit_horizontal:0 report:account.profit_loss:0
 msgid "Display Account"
-msgstr "Anzeige Konten"
+msgstr "Konto anzeigen"
 
 #. module: account_financial_report_horizontal
 #: model:ir.actions.act_window,name:account_financial_report_horizontal.action_account_common_menu
@@ -126,8 +120,7 @@ msgid "Particular"
 msgstr "Speziell"
 
 #. module: account_financial_report_horizontal
-#: selection:account.bs.report,filter:0
-#: selection:account.pl.report,filter:0
+#: selection:account.bs.report,filter:0 selection:account.pl.report,filter:0
 #: selection:account_financial_report_horizontal.common.account.report,filter:0
 #: selection:account_financial_report_horizontal.common.report,filter:0
 #: code:addons/account_financial_report_horizontal/report/common_report_header.py:97
@@ -136,49 +129,39 @@ msgid "Date"
 msgstr "Datum"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0
-#: report:account.balancesheet.horizontal:0
-#: field:account.bs.report,date_from:0
-#: field:account.pl.report,date_from:0
-#: report:account.profit_horizontal:0
-#: report:account.profit_loss:0
+#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
+#: field:account.bs.report,date_from:0 field:account.pl.report,date_from:0
+#: report:account.profit_horizontal:0 report:account.profit_loss:0
 #: field:account_financial_report_horizontal.common.account.report,date_from:0
 #: field:account_financial_report_horizontal.common.report,date_from:0
 msgid "Start Date"
 msgstr "Start Datum"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0
-#: report:account.balancesheet.horizontal:0
-#: report:account.profit_horizontal:0
-#: report:account.profit_loss:0
+#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
+#: report:account.profit_horizontal:0 report:account.profit_loss:0
 msgid "Chart of Account"
 msgstr "Kontenplan"
 
 #. module: account_financial_report_horizontal
-#: field:account.bs.report,period_from:0
-#: field:account.pl.report,period_from:0
+#: field:account.bs.report,period_from:0 field:account.pl.report,period_from:0
 #: field:account_financial_report_horizontal.common.account.report,period_from:0
 #: field:account_financial_report_horizontal.common.report,period_from:0
 msgid "Start period"
 msgstr "Beginn der Periode"
 
 #. module: account_financial_report_horizontal
-#: field:account.bs.report,journal_ids:0
-#: field:account.pl.report,journal_ids:0
+#: field:account.bs.report,journal_ids:0 field:account.pl.report,journal_ids:0
 #: field:account_financial_report_horizontal.common.account.report,journal_ids:0
 #: view:account_financial_report_horizontal.common.report:0
 #: field:account_financial_report_horizontal.common.report,journal_ids:0
 msgid "Journals"
-msgstr "Buchungsjournale"
+msgstr "Journale"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0
-#: report:account.balancesheet.horizontal:0
-#: field:account.bs.report,target_move:0
-#: field:account.pl.report,target_move:0
-#: report:account.profit_horizontal:0
-#: report:account.profit_loss:0
+#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
+#: field:account.bs.report,target_move:0 field:account.pl.report,target_move:0
+#: report:account.profit_horizontal:0 report:account.profit_loss:0
 #: field:account_financial_report_horizontal.common.account.report,target_move:0
 #: field:account_financial_report_horizontal.common.report,target_move:0
 msgid "Target Moves"
@@ -190,8 +173,7 @@ msgid "Report Options"
 msgstr "Report Optionen"
 
 #. module: account_financial_report_horizontal
-#: selection:account.bs.report,filter:0
-#: selection:account.pl.report,filter:0
+#: selection:account.bs.report,filter:0 selection:account.pl.report,filter:0
 #: selection:account_financial_report_horizontal.common.account.report,filter:0
 #: view:account_financial_report_horizontal.common.report:0
 #: selection:account_financial_report_horizontal.common.report,filter:0
@@ -213,12 +195,9 @@ msgstr ""
 "Verlust ermittelt."
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0
-#: report:account.balancesheet.horizontal:0
-#: field:account.bs.report,date_to:0
-#: field:account.pl.report,date_to:0
-#: report:account.profit_horizontal:0
-#: report:account.profit_loss:0
+#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
+#: field:account.bs.report,date_to:0 field:account.pl.report,date_to:0
+#: report:account.profit_horizontal:0 report:account.profit_loss:0
 #: field:account_financial_report_horizontal.common.account.report,date_to:0
 #: field:account_financial_report_horizontal.common.report,date_to:0
 msgid "End Date"
@@ -230,22 +209,18 @@ msgid "Dates"
 msgstr "Daten"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0
-#: report:account.balancesheet.horizontal:0
-#: report:account.profit_horizontal:0
-#: report:account.profit_loss:0
+#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
+#: report:account.profit_horizontal:0 report:account.profit_loss:0
 msgid "Start Period"
 msgstr "Anfangsperiode"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0
-#: report:account.balancesheet.horizontal:0
+#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
 msgid "Assets"
 msgstr "Anlagen"
 
 #. module: account_financial_report_horizontal
-#: report:account.profit_horizontal:0
-#: report:account.profit_loss:0
+#: report:account.profit_horizontal:0 report:account.profit_loss:0
 msgid "Total:"
 msgstr "Summe:"
 
@@ -260,8 +235,7 @@ msgid "All Posted Entries"
 msgstr "Alle Gebuchten"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0
-#: report:account.balancesheet.horizontal:0
+#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
 msgid "Liabilities"
 msgstr "Verbindlichkeiten"
 
@@ -280,10 +254,8 @@ msgid "Select a starting and an ending period"
 msgstr "Wähle eine Anfangs- und eine Abschlussperiode"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0
-#: report:account.balancesheet.horizontal:0
-#: report:account.profit_horizontal:0
-#: report:account.profit_loss:0
+#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
+#: report:account.profit_horizontal:0 report:account.profit_loss:0
 msgid "End Period"
 msgstr "Abschlussperiode"
 
@@ -294,10 +266,8 @@ msgid "Not implemented"
 msgstr "Nicht implementiert"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0
-#: report:account.balancesheet.horizontal:0
-#: report:account.profit_horizontal:0
-#: report:account.profit_loss:0
+#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
+#: report:account.profit_horizontal:0 report:account.profit_loss:0
 msgid "Fiscal Year"
 msgstr "Geschäftsjahr"
 
@@ -313,8 +283,7 @@ msgid "Net Profit"
 msgstr "Netto Gewinn"
 
 #. module: account_financial_report_horizontal
-#: selection:account.bs.report,filter:0
-#: selection:account.pl.report,filter:0
+#: selection:account.bs.report,filter:0 selection:account.pl.report,filter:0
 #: selection:account_financial_report_horizontal.common.account.report,filter:0
 #: selection:account_financial_report_horizontal.common.report,filter:0
 msgid "No Filters"
@@ -340,10 +309,8 @@ msgid "Chart of account"
 msgstr "Kontenplan"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0
-#: report:account.balancesheet.horizontal:0
-#: report:account.profit_horizontal:0
-#: report:account.profit_loss:0
+#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
+#: report:account.profit_horizontal:0 report:account.profit_loss:0
 msgid "Balance"
 msgstr "Saldo"
 
@@ -381,10 +348,8 @@ msgid "All"
 msgstr "Alle"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0
-#: report:account.balancesheet.horizontal:0
-#: report:account.profit_horizontal:0
-#: report:account.profit_loss:0
+#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
+#: report:account.profit_horizontal:0 report:account.profit_loss:0
 msgid "Code"
 msgstr "Schlüssel"
 
@@ -414,16 +379,14 @@ msgid "Expenses"
 msgstr "Auslagen"
 
 #. module: account_financial_report_horizontal
-#: field:account.bs.report,period_to:0
-#: field:account.pl.report,period_to:0
+#: field:account.bs.report,period_to:0 field:account.pl.report,period_to:0
 #: field:account_financial_report_horizontal.common.account.report,period_to:0
 #: field:account_financial_report_horizontal.common.report,period_to:0
 msgid "End period"
 msgstr "Abschlussperiode"
 
 #. module: account_financial_report_horizontal
-#: report:account.balancesheet:0
-#: report:account.balancesheet.horizontal:0
+#: report:account.balancesheet:0 report:account.balancesheet.horizontal:0
 #: view:account.bs.report:0
 #: model:ir.actions.act_window,name:account_financial_report_horizontal.action_account_bs_report
 #: model:ir.actions.report.xml,name:account_financial_report_horizontal.account_balance_sheet
@@ -449,7 +412,7 @@ msgstr "Warnung"
 #: field:account.bs.report,display_type:0
 #: field:account.pl.report,display_type:0
 msgid "Landscape Mode"
-msgstr "Quermodus"
+msgstr "Querdruck"
 
 #. module: account_financial_report_horizontal
 #: field:account.bs.report,display_account:0
@@ -474,11 +437,10 @@ msgstr "Altern. Kontenberichte"
 #: help:account_financial_report_horizontal.common.account.report,chart_account_id:0
 #: help:account_financial_report_horizontal.common.report,chart_account_id:0
 msgid "Select Charts of Accounts"
-msgstr "Wähle Kontenplan"
+msgstr "Wähle Kontenpläne"
 
 #. module: account_financial_report_horizontal
-#: field:account.bs.report,filter:0
-#: field:account.pl.report,filter:0
+#: field:account.bs.report,filter:0 field:account.pl.report,filter:0
 #: field:account_financial_report_horizontal.common.account.report,filter:0
 #: field:account_financial_report_horizontal.common.report,filter:0
 msgid "Filter by"
@@ -502,4 +464,3 @@ msgid ""
 msgstr ""
 "Legen Sie das Konto für Rücklagen und Gewinn-/Verlustvortrag Ihres "
 "Unternehmens fest!"
-

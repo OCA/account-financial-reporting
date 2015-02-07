@@ -1,6 +1,6 @@
 # French translation of OpenERP Server 7.0.
 # This file contains the translation of the following modules:
-#	* account_move_line_report_xls
+# 	* account_move_line_report_xls
 #
 # Rudolf Schnapka <schnapkar@golive-saar.de>, 2015.
 msgid ""
@@ -8,25 +8,25 @@ msgstr ""
 "Project-Id-Version: OpenERP Server 7.0\n"
 "Report-Msgid-Bugs-To: support@noviat.com\n"
 "POT-Creation-Date: 2014-01-08 23:46:06.568000\n"
-"PO-Revision-Date: 2015-01-04 11:26+0100\n"
-"Last-Translator: Rudolf Schnapka <schnapkar@golive-saar.de>\n"
+"PO-Revision-Date: 2015-02-07 08:32+0100\n"
+"Last-Translator: Rudolf Schnapka <rs@techno-flex.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #. module: account_move_line_report_xls
 #: report:move.line.list.xls:0
 msgid "Journal Items"
-msgstr "Journal-Buchzeilen"
+msgstr "Journalposten"
 
 #. module: account_move_line_report_xls
 #: report:move.line.list.xls:0
 msgid "Entry"
-msgstr "Buchzeile"
+msgstr "Posten"
 
 #. module: account_move_line_report_xls
 #: report:move.line.list.xls:0
@@ -177,5 +177,3 @@ msgstr "Notizen"
 #: report:move.line.list.xls:0
 msgid "Lit."
 msgstr "Lit."
-
-
