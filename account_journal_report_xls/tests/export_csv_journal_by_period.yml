@@ -1,0 +1,107 @@
+-
+  In order to test the Excel General Ledger webkit wizard I will print report on all the journals
+-
+    !python {model: account.account}: |
+        ctx = {}
+        fiscalyear_id = self.pool['account.fiscalyear'].search(cr, uid, [])[0]
+        wizard = self.pool['account.print.journal.xls']
+        period_ids = wizard.fy_period_ids(cr, uid, fiscalyear_id)
+        data_dict = {'chart_account_id': ref('account.chart0'),
+                     'journal_ids': self.pool['account.journal'].search(cr, uid, []),
+                     'fiscalyear_id': fiscalyear_id,
+                     'period_from': period_ids[0],
+                     'period_to': period_ids[-1],
+                    }
+        ctx.update({'model': 'account.account',
+                    'active_ids': [ref('account.chart0')],
+                    'active_id': ref('account.chart0')})
+        from openerp.tools import test_reports
+        test_reports.try_report_action(
+          cr, uid,
+          'account_journal_report_xls.action_print_journal_by_period_xls',
+          wiz_data=data_dict,
+          context=ctx,
+          wiz_buttons='xls_export',
+          our_module='account_journal_report_xls')
+
+-
+  In order to test the Excel General Ledger webkit wizard I will print report with entries sorted  by date
+-
+    !python {model: account.account}: |
+        ctx = {}
+        fiscalyear_id = self.pool['account.fiscalyear'].search(cr, uid, [])[0]
+        wizard = self.pool['account.print.journal.xls']
+        period_ids = wizard.fy_period_ids(cr, uid, fiscalyear_id)
+        data_dict = {'chart_account_id': ref('account.chart0'),
+                     'journal_ids': self.pool['account.journal'].search(cr, uid, []),
+                     'sort_selection': 'l.date',
+                     'fiscalyear_id': fiscalyear_id,
+                     'period_from': period_ids[0],
+                     'period_to': period_ids[-1],
+                    }
+        ctx.update({'model': 'account.account',
+                    'active_ids': [ref('account.chart0')],
+                    'active_id': ref('account.chart0')})
+        from openerp.tools import test_reports
+        test_reports.try_report_action(
+          cr, uid,
+          'account_journal_report_xls.action_print_journal_by_period_xls',
+          wiz_data=data_dict,
+          context=ctx,
+          wiz_buttons='xls_export',
+          our_module='account_journal_report_xls')
+
+-
+  In order to test the Excel General Ledger webkit wizard I will print report without grouped entries
+-
+    !python {model: account.account}: |
+        ctx = {}
+        fiscalyear_id = self.pool['account.fiscalyear'].search(cr, uid, [])[0]
+        wizard = self.pool['account.print.journal.xls']
+        period_ids = wizard.fy_period_ids(cr, uid, fiscalyear_id)
+        data_dict = {'chart_account_id': ref('account.chart0'),
+                     'journal_ids': self.pool['account.journal'].search(cr, uid, []),
+                     'group_entries': False,
+                     'fiscalyear_id': fiscalyear_id,
+                     'period_from': period_ids[0],
+                     'period_to': period_ids[-1],
+                    }
+        ctx.update({'model': 'account.account',
+                    'active_ids': [ref('account.chart0')],
+                    'active_id': ref('account.chart0')})
+        from openerp.tools import test_reports
+        test_reports.try_report_action(
+          cr, uid,
+          'account_journal_report_xls.action_print_journal_by_period_xls',
+          wiz_data=data_dict,
+          context=ctx,
+          wiz_buttons='xls_export',
+          our_module='account_journal_report_xls')
+
+-
+  In order to test the Excel General Ledger webkit wizard I will print report with currency
+-
+    !python {model: account.account}: |
+        ctx = {}
+        fiscalyear_id = self.pool['account.fiscalyear'].search(cr, uid, [])[0]
+        wizard = self.pool['account.print.journal.xls']
+        period_ids = wizard.fy_period_ids(cr, uid, fiscalyear_id)
+        data_dict = {'chart_account_id': ref('account.chart0'),
+                     'journal_ids': self.pool['account.journal'].search(cr, uid, []),
+                     'amount_currency': False,
+                     'fiscalyear_id': fiscalyear_id,
+                     'period_from': period_ids[0],
+                     'period_to': period_ids[-1],
+                    }
+        ctx.update({'model': 'account.account',
+                    'active_ids': [ref('account.chart0')],
+                    'active_id': ref('account.chart0')})
+        from openerp.tools import test_reports
+        test_reports.try_report_action(
+          cr, uid,
+          'account_journal_report_xls.action_print_journal_by_period_xls',
+          wiz_data=data_dict,
+          context=ctx,
+          wiz_buttons='xls_export',
+          our_module='account_journal_report_xls')
+
