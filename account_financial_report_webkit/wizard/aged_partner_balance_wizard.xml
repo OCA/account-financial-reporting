@@ -42,14 +42,17 @@
           <field name="fiscalyear_id" position="attributes">
             <attribute name="on_change">onchange_fiscalyear(fiscalyear_id, period_to, date_to, until_date)</attribute>
           </field>
-          <field name="date_to" position="attributes">
-            <attribute name="on_change">onchange_date_to(fiscalyear_id, period_to, date_to, until_date)</attribute>
+          <field name="filter" position="attributes">
+            <attribute name="invisible">True</attribute>
+          </field>
+          <field name="period_from" position="attributes">
+            <attribute name="invisible">True</attribute>
           </field>
           <field name="period_to" position="attributes">
             <attribute name="on_change">onchange_period_to(fiscalyear_id, period_to, date_to, until_date)</attribute>
           </field>
-          <field name="period_from" position="attributes">
-            <attribute name="domain">[('fiscalyear_id', '=', fiscalyear_id), ('special', '=', False)]</attribute>
+          <field name="period_to" position="attributes">
+            <attribute name="String">At the end of</attribute>
           </field>
           <field name="period_to" position="attributes">
             <attribute name="domain">[('fiscalyear_id', '=', fiscalyear_id), ('special', '=', False)]</attribute>
