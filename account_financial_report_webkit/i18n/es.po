@@ -1367,3 +1367,8 @@ msgstr "¡Valor haber o debe erróneo en el asiento contable!"
 #: field:trial.balance.webkit,comp2_filter:0
 msgid "Compare By"
 msgstr "Comparar por"
+
+#. module: account_financial_report_webkit
+#: view:account.aged.trial.balance.webkit:account_financial_report_webkit.account_aged_trial_balance_webkit
+msgid "At the end of"
+msgstr "Al final de"
