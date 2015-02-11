@@ -169,6 +169,8 @@
                                   <div class="act_as_cell sep_left amount">${formatLang(part_cumul_balance_curr) | amount }</div>
                                   ## curency code
                                   <div class="act_as_cell">${balance_forward_currency}</div>
+				  <!-- TODO:  What happens if there are differents currencies in the same group? -->
+				  <% cumul_balance_curr += line.get('amount_currency') or 0.0 %>
                              %endif
 
                           </div>
