@@ -72,7 +72,7 @@ class report_intrastat_common(orm.TransientModel):
                 return False
         return True
 
-    def check_generate_lines(self, cr, uid, intrastat, context=None):
+    def _check_generate_lines(self, cr, uid, intrastat, context=None):
         """Check wether all requirements are met for generating lines."""
         if not intrastat.company_id:
             # Should not be possible, but just in case:
