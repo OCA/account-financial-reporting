@@ -63,14 +63,18 @@ class ReportIntrastatCommon(models.AbstractModel):
 
     @api.one
     def _check_generate_lines(self):
-        if not self.company_id.country_id:
+        """Check wether all requirements are met for generating lines."""
+        if not self.company_id:
+            raise Warning(_("Company not yet set on intrastat report."))
+        company_obj = self.company_id
+        if not company_obj.country_id:
             raise Warning(
                 _("The country is not set on the company '%s'.")
-                % self.company_id.name)
-        if self.currency_id.name != 'EUR':
+                % company_obj.name)
+        if company_obj.currency_id.name != 'EUR':
             raise Warning(
                 _("The company currency must be 'EUR', but is currently '%s'.")
-                % self.currency_id.name)
+                % company_obj.currency_id.name)
         return True
 
     @api.one
