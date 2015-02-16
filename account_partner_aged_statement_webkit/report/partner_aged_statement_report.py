@@ -174,7 +174,7 @@ class PartnerAgedTrialReport(aged_trial_report):
         }
 
         # If some of the invoices have different currency than the currency
-        # of the company, need to get the lines in these currency
+        # of the company, need to get the lines in these currencies
         other_currencies = {}
         for move_line in move_line_obj.browse(
             self.cr, self.uid, line_dict.keys(), context=self.localcontext
@@ -183,7 +183,7 @@ class PartnerAgedTrialReport(aged_trial_report):
             if invoice and invoice.currency_id.id != currency.id:
                 if invoice.currency_id.id in other_currencies:
                     other_currencies[invoice.currency_id.id]['move_line_ids'].\
-                        append(invoice.id)
+                        append(move_line.id)
                 else:
                     # Get the journal with the correct currency
                     journal_ids = journal_obj.search(
