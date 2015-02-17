@@ -28,6 +28,7 @@
     "version": "2.0",
     "author": "Vauxoo",
     "website": "http://www.vauxoo.com",
+    "license": "GPL-3 or any later version",
     "depends": ["base",
                 "account"
                 ],

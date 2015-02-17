@@ -31,6 +31,7 @@ This is a port to OpenERP 7.0 of the horizontal financial reports
 'Balance sheet' and 'Profit and Loss' as found in OpenERP 6.0.
     """,
     'website': 'https://launchpad.net/account-financial-report',
+    'license': 'AGPL-3',
     'images': [],
     "depends": ["account"],
     'data': [
