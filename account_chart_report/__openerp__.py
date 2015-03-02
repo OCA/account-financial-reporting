@@ -25,7 +25,7 @@
     'name': 'Print chart of accounts',
     'version': '1.0',
     'category': 'Reports/pdf',
-    'author': 'Savoir-faire Linux',
+    'author': "Savoir-faire Linux,Odoo Community Association (OCA)",
     'website': 'http://www.savoirfairelinux.com',
     'license': 'AGPL-3',
     'depends': [
