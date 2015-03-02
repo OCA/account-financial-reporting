@@ -26,7 +26,7 @@
 {
     "name": "Common financial reports",
     "version": "2.0",
-    "author": "Vauxoo",
+    "author": "Vauxoo,Odoo Community Association (OCA)",
     "website": "http://www.vauxoo.com",
     "depends": ["base",
                 "account"
