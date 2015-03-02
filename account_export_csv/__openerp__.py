@@ -25,7 +25,7 @@
     'depends': [
         'account',
     ],
-    'author': 'Camptocamp',
+    'author': "Camptocamp,Odoo Community Association (OCA)",
     'description': """
 
     Add a wizard that allow you to export a csv file based on accounting
