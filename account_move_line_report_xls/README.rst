@@ -51,6 +51,10 @@ Contributors
 * Noviat <info@noviat.com>
 * Guillaume Auger <guillaume.auger@savoirfairelinux.com>
 
+Icon
+----
+* https://openclipart.org/detail/38353/58294main-The.Brain.in.Space-page-91-spreadsheet-by-rejon
+
 Maintainer
 ----------
 .. image:: http://odoo-community.org/logo.png
