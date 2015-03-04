@@ -64,20 +64,19 @@ def _python_var(var_str):
     return re.sub(r'\W|^(?=\d)', '_', var_str).lower()
 
 
-def _python_bal_var(account_code):
-    return 'bal_' + re.sub(r'\W', '_', account_code)
+def _python_bal_var(account_code, is_solde=False):
+    prefix = 'bals_' if is_solde else 'bal_'
+    return prefix + re.sub(r'\W', '_', account_code)
 
 
-def _get_bal_vars_in_expr(expr):
-    return re.findall(r'\bbal_\w+', expr)
+def _get_bal_code(bal_var, is_solde=False):
+    prefix = 'bals_' if is_solde else 'bal_'
+    return bal_var.replace(prefix, '')
 
 
-def _python_bals_var(account_code):
-    return 'bals_' + re.sub(r'\W', '_', account_code)
-
-
-def _get_bals_vars_in_expr(expr):
-    return re.findall(r'\bbals_\w+', expr)
+def _get_bal_vars_in_expr(expr, is_solde=False):
+    prefix = 'bals_' if is_solde else 'bal_'
+    return re.findall(r'\b%s\w+' % prefix, expr)
 
 
 def _get_vars_in_expr(expr, varnames=None):
@@ -87,19 +86,11 @@ def _get_vars_in_expr(expr, varnames=None):
     return re.findall(varnames_re, expr)
 
 
-def _get_bal_vars_in_report(report):
+def _get_bal_vars_in_report(report, is_solde=False):
     res = set()
     for kpi in report.kpi_ids:
-        for bal_var in _get_bal_vars_in_expr(kpi.expression):
+        for bal_var in _get_bal_vars_in_expr(kpi.expression, is_solde):
             res.add(bal_var)
-    return res
-
-
-def _get_bals_vars_in_report(report):
-    res = set()
-    for kpi in report.kpi_ids:
-        for bals_var in _get_bals_vars_in_expr(kpi.expression):
-            res.add(bals_var)
     return res
 
 
@@ -203,60 +194,57 @@ class mis_report_kpi(orm.Model):
                             'dp': 0}
         return res
 
-    def _render(self, cr, uid, kpi, value, context=None):
+    def _render(self, cr, uid, lang_id, kpi, value, context=None):
         """ render a KPI value as a unicode string, ready for display """
         if kpi.type == 'num':
-            return self._render_num(cr, uid, value, kpi.divider, kpi.dp,
-                                    kpi.suffix, context=context)
+            return self._render_num(cr, uid, lang_id, value, kpi.divider,
+                                    kpi.dp, kpi.suffix, context=context)
         elif kpi.type == 'pct':
-            return self._render_num(cr, uid, value, 0.01, kpi.dp, '%',
-                                    context=context)
+            return self._render_num(cr, uid, lang_id, value, 0.01,
+                                    kpi.dp, '%', context=context)
         else:
             return unicode(value)
 
-    def _render_comparison(self, cr, uid, kpi, value, base_value,
+    def _render_comparison(self, cr, uid, lang_id, kpi, value, base_value,
                            average_value, average_base_value, context=None):
         """ render the comparison of two KPI values, ready for display """
         if value is None or base_value is None:
             return ''
         if kpi.type == 'pct':
-            return self._render_num(cr, uid, value - base_value, 0.01, kpi.dp,
-                                    _('pp'), sign='+', context=context)
+            return self._render_num(cr, uid, lang_id, value - base_value, 0.01,
+                                    kpi.dp, _('pp'), sign='+', context=context)
         elif kpi.type == 'num':
             if average_value:
                 value = value / float(average_value)
             if average_base_value:
                 base_value = base_value / float(average_base_value)
             if kpi.compare_method == 'diff':
-                return self._render_num(cr, uid, value - base_value,
+                return self._render_num(cr, uid, lang_id, value - base_value,
                                         kpi.divider,
                                         kpi.dp, kpi.suffix, sign='+',
                                         context=context)
             elif kpi.compare_method == 'pct' and base_value != 0:
-                return self._render_num(cr, uid, value / base_value - 1,
-                                        0.01, kpi.dp, '%',
-                                        sign='+', context=context)
+                return self._render_num(cr, uid, lang_id,
+                                        value / base_value - 1, 0.01,
+                                        kpi.dp, '%', sign='+', context=context)
         return ''
 
-    def _render_num(self, cr, uid, value, divider, dp, suffix, sign='-',
-                    context=None):
+    def _render_num(self, cr, uid, lang_id, value, divider,
+                    dp, suffix, sign='-', context=None):
         divider_label = _get_selection_label(
             self._columns['divider'].selection, divider)
         if divider_label == '1':
             divider_label = ''
         # format number following user language
-        lang = self.pool['res.users'].read(
-            cr, uid, uid, ['lang'], context=context)['lang']
-        language_id = self.pool['res.lang'].search(
-            cr, uid, [('code', '=', lang)], context=context)
         value = round(value / float(divider or 1), dp) or 0
-        return '%s %s%s' % (self.pool['res.lang'].format(cr, uid, language_id,
-                                                         '%%%s.%df' % (
-                                                             sign, dp),
-                                                         value,
-                                                         grouping=True,
-                                                         context=context),
-                            divider_label, suffix or '')
+        return '%s %s%s' % (self.pool['res.lang'].format(
+            cr, uid, lang_id,
+            '%%%s.%df' % (
+                sign, dp),
+            value,
+            grouping=True,
+            context=context),
+            divider_label, suffix or '')
 
 
 class mis_report_query(orm.Model):
@@ -281,10 +269,11 @@ class mis_report_query(orm.Model):
     def onchange_field_ids(self, cr, uid, ids, field_ids, context=None):
         # compute field_names
         field_names = []
-        for field in self.pool.get('ir.model.fields').read(cr, uid,
-                                                           field_ids[0][2],
-                                                           ['name'],
-                                                           context=context):
+        for field in self.pool.get('ir.model.fields').read(
+                cr, uid,
+                field_ids[0][2],
+                ['name'],
+                context=context):
             field_names.append(field['name'])
         return {'value': {'field_names': ', '.join(field_names)}}
 
@@ -517,14 +506,41 @@ class mis_report_instance_period(orm.Model):
          'Period name should be unique by report'),
     ]
 
+    def _fetch_bal(self, cr, uid, company_id, bal_vars, context=None,
+                   is_solde=False):
+        account_obj = self.pool['account.account']
+        # TODO: use child of company_id?
+        # first fetch all codes and filter the one we need
+        bal_code = [_get_bal_code(bal, is_solde) for bal in bal_vars]
+
+        account_ids = account_obj.search(
+            cr, uid,
+            ['|', ('company_id', '=', False),
+             ('company_id', '=', company_id),
+             ('code', 'in', bal_code)],
+            context=context)
+
+        # fetch balances
+        account_datas = account_obj.read(
+            cr, uid, account_ids, ['code', 'balance'], context=context)
+        balances = {}
+        for account_data in account_datas:
+            key = _python_bal_var(account_data['code'], is_solde=is_solde)
+            assert key not in balances
+            balances[key] = account_data['balance']
+
+        return balances
+
     def _fetch_balances(self, cr, uid, c, bal_vars, context=None):
         """ fetch the general account balances for the given period
 
         returns a dictionary {bal_<account.code>: account.balance}
         """
+        if not bal_vars:
+            return {}
+
         if context is None:
             context = {}
-        account_obj = self.pool['account.account']
 
         search_ctx = dict(context)
         if c.period_from:
@@ -534,27 +550,8 @@ class mis_report_instance_period(orm.Model):
             search_ctx.update({'date_from': c.date_from,
                                'date_to': c.date_to})
 
-        # TODO: use child of company_id?
-        account_ids = account_obj.search(
-            cr, uid,
-            ['|', ('company_id', '=', False),
-             ('company_id', '=', c.company_id.id)],
-            context=search_ctx)
-        # first fetch all codes and filter the one we need
-        account_datas = account_obj.read(
-            cr, uid, account_ids, ['code', ], context=search_ctx)
-        account_ids = [a['id'] for a in account_datas
-                       if _python_bal_var(a['code']) in bal_vars]
         # fetch balances
-        account_datas = account_obj.read(
-            cr, uid, account_ids, ['code', 'balance'], context=search_ctx)
-        balances = {}
-        for account_data in account_datas:
-            key = _python_bal_var(account_data['code'])
-            assert key not in balances
-            balances[key] = account_data['balance']
-
-        return balances
+        return self._fetch_bal(cr, uid, c.company_id.id, bal_vars, search_ctx)
 
     def _fetch_balances_solde(self, cr, uid, c, bals_vars, context=None):
         """ fetch the general account balances solde at the end of
@@ -568,8 +565,9 @@ class mis_report_instance_period(orm.Model):
         """
         if context is None:
             context = {}
-        account_obj = self.pool['account.account']
         balances = {}
+        if not bals_vars:
+            return balances
 
         search_ctx = dict(context)
         if c.period_to:
@@ -591,27 +589,9 @@ class mis_report_instance_period(orm.Model):
         else:
             return balances
 
-        # TODO: use child of company_id?
-        account_ids = account_obj.search(
-            cr, uid,
-            ['|', ('company_id', '=', False),
-             ('company_id', '=', c.company_id.id)],
-            context=search_ctx)
-        # first fetch all codes and filter the one we need
-        account_datas = account_obj.read(
-            cr, uid, account_ids, ['code', ], context=search_ctx)
-        account_ids = [a['id'] for a in account_datas
-                       if _python_bals_var(a['code']) in bals_vars]
         # fetch balances
-        account_datas = account_obj.read(
-            cr, uid, account_ids, ['code', 'balance'], context=search_ctx)
-
-        for account_data in account_datas:
-            key = _python_bals_var(account_data['code'])
-            assert key not in balances
-            balances[key] = account_data['balance']
-
-        return balances
+        return self._fetch_bal(cr, uid, c.company_id.id, bals_vars,
+                               search_ctx, is_solde=True)
 
     def _fetch_queries(self, cr, uid, c, context):
         res = {}
@@ -641,7 +621,7 @@ class mis_report_instance_period(orm.Model):
 
         return res
 
-    def _compute(self, cr, uid, c, bal_vars, bals_vars, context=None):
+    def _compute(self, cr, uid, lang_id, c, bal_vars, bals_vars, context=None):
         if context is None:
             context = {}
 
@@ -677,7 +657,7 @@ class mis_report_instance_period(orm.Model):
                 kpi_val_comment = traceback.format_exc()
             else:
                 kpi_val_rendered = kpi_obj._render(
-                    cr, uid, kpi, kpi_val, context=context)
+                    cr, uid, lang_id, kpi, kpi_val, context=context)
                 kpi_val_comment = None
 
             localdict[kpi.name] = kpi_val
@@ -782,14 +762,10 @@ class mis_report_instance(orm.Model):
                     context=context)
         return res
 
-    def _format_date(self, cr, uid, date, context=None):
+    def _format_date(self, cr, uid, lang_id, date, context=None):
         # format date following user language
-        lang = self.pool['res.users'].read(
-            cr, uid, uid, ['lang'], context=context)['lang']
-        language_id = self.pool['res.lang'].search(
-            cr, uid, [('code', '=', lang)], context=context)[0]
         tformat = self.pool['res.lang'].read(
-            cr, uid, language_id, ['date_format'])['date_format']
+            cr, uid, lang_id, ['date_format'])[0]['date_format']
         return datetime.strftime(datetime.strptime(
             date,
             tools.DEFAULT_SERVER_DATE_FORMAT),
@@ -820,7 +796,12 @@ class mis_report_instance(orm.Model):
         period_values = {}
 
         bal_vars = _get_bal_vars_in_report(r.report_id)
-        bals_vars = _get_bals_vars_in_report(r.report_id)
+        bals_vars = _get_bal_vars_in_report(r.report_id, is_solde=True)
+
+        lang = self.pool['res.users'].read(
+            cr, uid, uid, ['lang'], context=context)['lang']
+        lang_id = self.pool['res.lang'].search(
+            cr, uid, [('code', '=', lang)], context=context)
 
         for period in r.period_ids:
             # add the column header
@@ -829,16 +810,16 @@ class mis_report_instance(orm.Model):
                 date=(period.duration > 1 or period.type == 'w') and
                 _('from %s to %s' %
                   (period.period_from and period.period_from.name
-                   or self._format_date(cr, uid, period.date_from,
+                   or self._format_date(cr, uid, lang_id, period.date_from,
                                         context=context),
                    period.period_to and period.period_to.name
-                   or self._format_date(cr, uid, period.date_to,
+                   or self._format_date(cr, uid, lang_id, period.date_to,
                                         context=context)))
                 or period.period_from and period.period_from.name or
                 period.date_from))
             # compute kpi values
             values = report_instance_period_obj._compute(
-                cr, uid, period, bal_vars, bals_vars, context=context)
+                cr, uid, lang_id, period, bal_vars, bals_vars, context=context)
             period_values[period.name] = values
             for key in values:
                 content[key]['default_style'] = values[key]['default_style']
@@ -858,6 +839,7 @@ class mis_report_instance(orm.Model):
                         {'val_r': kpi_obj._render_comparison(
                             cr,
                             uid,
+                            lang_id,
                             kpi,
                             column1_values[kpi.name]['val'],
                             column2_values[kpi.name]['val'],

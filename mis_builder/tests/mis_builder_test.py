@@ -67,7 +67,9 @@ class mis_builder_test(common.TransactionCase):
             {'content':
              OrderedDict([(u'total_test',
                            {'kpi_name': u'total test',
+                            'default_style': None,
                             'cols': [{'style': None,
+                                      'default_style': None,
                                       'suffix': False,
                                       'val_c': None,
                                       'val': 0,
@@ -76,9 +78,8 @@ class mis_builder_test(common.TransactionCase):
                                       'dp': 0}]})]),
              'header': OrderedDict([('',
                                      {'kpi_name': '',
+                                      'default_style': '',
                                       'cols': [{'date': '2014-07-31',
                                                 'name': u'today'}]
                                       })])
              }, data)
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
