@@ -46,14 +46,8 @@
              'tests/mis.report.instance.period.csv',
              'tests/mis.report.instance.csv',
              ],
-    'js': [
-        'static/src/js/*.js'
-    ],
     'qweb': [
         'static/src/xml/*.xml'
-    ],
-    'css': [
-        'static/src/css/*.css'
     ],
     'installable': True,
     'application': True,
