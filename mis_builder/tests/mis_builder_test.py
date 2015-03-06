@@ -65,17 +65,25 @@ class mis_builder_test(common.TransactionCase):
             self.ref('mis_builder.mis_report_instance_test'))
         self.assertDictContainsSubset(
             {'content':
-             OrderedDict([(u'total_test',
-                           {'kpi_name': u'total test',
-                            'default_style': None,
-                            'cols': [{'style': None,
-                                      'default_style': None,
-                                      'suffix': False,
-                                      'val_c': None,
-                                      'val': 0,
-                                      'val_r': '0 ',
-                                      'is_percentage': False,
-                                      'dp': 0}]})]),
+             OrderedDict([(
+                 u'total_test',
+                 {'kpi_name': u'total test',
+                  'default_style': None,
+                  'cols': [{
+                         'period_name': 'today',
+                         'period_id':
+                         self.ref(
+                             'mis_builder.mis_report_instance_period_test'),
+                         'style': None,
+                         'default_style': None,
+                         'suffix': False,
+                         'val_c': 'len(test)',
+                         'val': 0,
+                         'val_r': '0 ',
+                         'is_percentage': False,
+                         'dp': 0}]
+                  }
+             )]),
              'header': OrderedDict([('',
                                      {'kpi_name': '',
                                       'default_style': '',

@@ -506,6 +506,49 @@ class mis_report_instance_period(orm.Model):
          'Period name should be unique by report'),
     ]
 
+    def compute_domain(self, cr, uid, ids, bal_, context=None):
+        if isinstance(ids, (int, long)):
+            ids = [ids]
+        domain = []
+        # extract all bal code
+        b = _get_bal_vars_in_expr(bal_, is_solde=False)
+        bs = _get_bal_vars_in_expr(bal_, is_solde=True)
+        all_code = []
+        all_code.extend([_get_bal_code(bal, False) for bal in b])
+        all_code.extend([_get_bal_code(bal, True) for bal in bs])
+
+        domain.append(('account_id.code', 'in', all_code))
+
+        # compute date/period
+        period_ids = []
+        date_from = None
+        date_to = None
+
+        period_obj = self.pool['account.period']
+
+        for c in self.browse(cr, uid, ids, context=context):
+            target_move = c.report_instance_id.target_move
+            if target_move == 'posted':
+                domain.append(('move_id.state', '=', target_move))
+            if c.period_from:
+                compute_period_ids = period_obj.build_ctx_periods(
+                    cr, uid, c.period_from.id, c.period_to.id)
+                period_ids.extend(compute_period_ids)
+            else:
+                if not date_from or date_from > c.date_from:
+                    date_from = c.date_from
+                if not date_to or date_to < c.date_to:
+                    date_to = c.date_to
+        if period_ids:
+            if date_from:
+                domain.append('|')
+            domain.append(('period_id', 'in', period_ids))
+        if date_from:
+            domain.extend([('date', '>=', c.date_from),
+                           ('date', '<=', c.date_to)])
+
+        return domain
+
     def _fetch_bal(self, cr, uid, company_id, bal_vars, context=None,
                    is_solde=False):
         account_obj = self.pool['account.account']
@@ -646,19 +689,19 @@ class mis_report_instance_period(orm.Model):
 
         for kpi in c.report_instance_id.report_id.kpi_ids:
             try:
+                kpi_val_comment = kpi.expression
                 kpi_val = safe_eval(kpi.expression, localdict)
             except ZeroDivisionError:
                 kpi_val = None
                 kpi_val_rendered = '#DIV/0'
-                kpi_val_comment = traceback.format_exc()
+                kpi_val_comment += '\n\n%s' % (traceback.format_exc(),)
             except:
                 kpi_val = None
                 kpi_val_rendered = '#ERR'
-                kpi_val_comment = traceback.format_exc()
+                kpi_val_comment += '\n\n%s' % (traceback.format_exc(),)
             else:
                 kpi_val_rendered = kpi_obj._render(
                     cr, uid, lang_id, kpi, kpi_val, context=context)
-                kpi_val_comment = None
 
             localdict[kpi.name] = kpi_val
             try:
@@ -677,6 +720,8 @@ class mis_report_instance_period(orm.Model):
                 'suffix': kpi.suffix,
                 'dp': kpi.dp,
                 'is_percentage': kpi.type == 'pct',
+                'period_id': c.id,
+                'period_name': c.name,
             }
 
         return res
