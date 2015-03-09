@@ -81,6 +81,6 @@ class LedgerBalanceWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
 HeaderFooterTextWebKitParser(
     'report.account.account_report_ledger_balance_webkit',
     'account.account',
-    'addons/account_financial_report_webkit_zip/'
+    'addons/account_financial_report_compressed/'
     'report/templates/account_report_ledger_balance.mako',
     parser=LedgerBalanceWebkit)

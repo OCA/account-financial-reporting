@@ -18,25 +18,25 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import orm
-
-
-class AccountReportPartnerLedgerWizard(orm.TransientModel):
-    _inherit = "partners.ledger.webkit"
-
-    def zip_export(self, cr, uid, ids, context=None):
-        return self.check_report(cr, uid, ids, context=context)
-
-    def _print_report(self, cr, uid, ids, data, context=None):
-        context = context or {}
-        if context.get('zip_export'):
-            data = self.pre_print_report(cr, uid, ids, data, context=context)
-            return {
-                'type': 'ir.actions.report.xml',
-                'report_name': 'account.account_report_partners_ledger_zip',
-                'datas': data
-            }
-        else:
-            return super(AccountReportPartnerLedgerWizard, self)._print_report(
-                cr, uid, ids, data, context=context
-            )
+{
+    'name': 'Add multiple export to ledger reports',
+    'version': '0.1',
+    'license': 'AGPL-3',
+    'author': 'Camptocamp',
+    'category': 'Generic Modules/Accounting',
+    'description': """
+        This module add a multiple export option for ledgers
+        (partners and general), in order to export one PDF file
+        per account. This is useful if the customer has many lines.
+    """,
+    'depends': ['account_financial_report_webkit'],
+    'demo_xml': [],
+    'init_xml': [],
+    'update_xml': [
+        'report.xml',
+        'wizard/general_ledger_wizard_view.xml',
+        'wizard/partners_ledger_wizard_view.xml',
+    ],
+    'active': False,
+    'installable': True,
+}

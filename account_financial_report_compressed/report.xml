@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-        <record id="account_report_general_ledger_zip" model="ir.actions.report.xml">
-            <field name="report_type">zip</field>
-            <field name="report_name">account.account_report_general_ledger_zip</field>
+        <record id="account_report_general_ledger_compressed" model="ir.actions.report.xml">
+            <field name="report_type">compressed</field>
+            <field name="report_name">account.account_report_general_ledger_compressed</field>
             <field eval="[(6,0,[])]" name="groups_id"/>
             <field eval="0" name="multi"/>
             <field eval="0" name="auto"/>
@@ -11,19 +11,19 @@
             <field name="model">account.account</field>
             <field name="type">ir.actions.report.xml</field>
             <field name="name">General Ledger</field>
-            <field name="report_file">account_financial_report_webkit_zip/report/templates/account_report_general_ledger.mako</field>
+            <field name="report_file">account_financial_report_compressed/report/templates/account_report_general_ledger.mako</field>
         </record>
 
-        <record id="property_account_report_general_ledger_zip" model="ir.property">
-            <field name="name">property_account_report_general_ledger_zip</field>
+        <record id="property_account_report_general_ledger_compressed" model="ir.property">
+            <field name="name">property_account_report_general_ledger_compressed</field>
             <field name="fields_id" ref="report_webkit.field_ir_act_report_xml_webkit_header"/>
             <field eval="'ir.header_webkit,'+str(ref('account_financial_report_webkit.financial_landscape_header'))" model="ir.header_webkit" name="value"/>
-            <field eval="'ir.actions.report.xml,'+str(ref('account_financial_report_webkit_zip.account_report_general_ledger_zip'))" model="ir.actions.report.xml" name="res_id"/>
+            <field eval="'ir.actions.report.xml,'+str(ref('account_financial_report_compressed.account_report_general_ledger_compressed'))" model="ir.actions.report.xml" name="res_id"/>
         </record>
 
-        <record id="account_report_partners_ledger_zip" model="ir.actions.report.xml">
-            <field name="report_type">zip</field>
-            <field name="report_name">account.account_report_partners_ledger_zip</field>
+        <record id="account_report_partners_ledger_compressed" model="ir.actions.report.xml">
+            <field name="report_type">compressed</field>
+            <field name="report_name">account.account_report_partners_ledger_compressed</field>
             <field eval="[(6,0,[])]" name="groups_id"/>
             <field eval="0" name="multi"/>
             <field eval="0" name="auto"/>
@@ -31,14 +31,14 @@
             <field name="model">account.account</field>
             <field name="type">ir.actions.report.xml</field>
             <field name="name">Partners Ledger</field>
-            <field name="report_file">account_financial_report_webkit_zip/report/templates/account_report_partners_ledger.mako</field>
+            <field name="report_file">account_financial_report_compressed/report/templates/account_report_partners_ledger.mako</field>
         </record>
 
-        <record id="property_account_report_partners_ledger_zip" model="ir.property">
-            <field name="name">property_account_report_partners_ledger_zip</field>
+        <record id="property_account_report_partners_ledger_compressed" model="ir.property">
+            <field name="name">property_account_report_partners_ledger_compressed</field>
             <field name="fields_id" ref="report_webkit.field_ir_act_report_xml_webkit_header"/>
             <field eval="'ir.header_webkit,'+str(ref('account_financial_report_webkit.financial_landscape_header'))" model="ir.header_webkit" name="value"/>
-            <field eval="'ir.actions.report.xml,'+str(ref('account_financial_report_webkit_zip.account_report_partners_ledger_zip'))" model="ir.actions.report.xml" name="res_id"/>
+            <field eval="'ir.actions.report.xml,'+str(ref('account_financial_report_compressed.account_report_partners_ledger_compressed'))" model="ir.actions.report.xml" name="res_id"/>
         </record>
 
         <record id="account_report_ledger_balance_webkit" model="ir.actions.report.xml">
@@ -51,14 +51,14 @@
             <field name="model">account.account</field>
             <field name="type">ir.actions.report.xml</field>
             <field name="name">Ledger Balance</field>
-            <field name="report_file">account_financial_report_webkit_zip/report/templates/account_report_ledger_balance.mako</field>
+            <field name="report_file">account_financial_report_compressed/report/templates/account_report_ledger_balance.mako</field>
         </record>
 
         <record id="property_account_report_ledger_balance_webkit" model="ir.property">
             <field name="name">property_account_report_ledger_balance_webkit</field>
             <field name="fields_id" ref="report_webkit.field_ir_act_report_xml_webkit_header"/>
             <field eval="'ir.header_webkit,'+str(ref('account_financial_report_webkit.financial_landscape_header'))" model="ir.header_webkit" name="value"/>
-            <field eval="'ir.actions.report.xml,'+str(ref('account_financial_report_webkit_zip.account_report_ledger_balance_webkit'))" model="ir.actions.report.xml" name="res_id"/>
+            <field eval="'ir.actions.report.xml,'+str(ref('account_financial_report_compressed.account_report_ledger_balance_webkit'))" model="ir.actions.report.xml" name="res_id"/>
         </record>
 
     </data>

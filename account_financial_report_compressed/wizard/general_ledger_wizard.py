@@ -24,16 +24,18 @@ from openerp.osv import orm
 class AccountReportGeneralLedgerWizard(orm.TransientModel):
     _inherit = 'general.ledger.webkit'
 
-    def zip_export(self, cr, uid, ids, context=None):
+    def compressed_export(self, cr, uid, ids, context=None):
         return self.check_report(cr, uid, ids, context=context)
 
     def _print_report(self, cr, uid, ids, data, context=None):
         context = context or {}
-        if context.get('zip_export'):
+        if context.get('compressed_export'):
             data = self.pre_print_report(cr, uid, ids, data, context=context)
-            return {'type': 'ir.actions.report.xml',
-                    'report_name': 'account.account_report_general_ledger_zip',
-                    'datas': data}
+            return {
+                'type': 'ir.actions.report.xml',
+                'report_name':
+                'account.account_report_general_ledger_compressed',
+                'datas': data}
         else:
             return super(AccountReportGeneralLedgerWizard, self)._print_report(
                 cr, uid, ids, data, context=context

@@ -23,7 +23,7 @@ from openerp.addons.account_financial_report_webkit.\
 from .webkit_parser_multiple_files import MultipleFilesWebKitParser
 
 
-class GeneralLedgerWebkitZip(GeneralLedgerWebkit):
+class GeneralLedgerWebkitCompressed(GeneralLedgerWebkit):
 
     def get_account_ids(self, cursor, uid, ids, data, context=None):
         # Retrieve all ids for ZIP report
@@ -193,6 +193,7 @@ class GeneralLedgerWebkitZip(GeneralLedgerWebkit):
         )
 
 
-MultipleFilesWebKitParser('report.account.account_report_general_ledger_zip',
-                          'account.account',
-                          parser=GeneralLedgerWebkitZip)
+MultipleFilesWebKitParser(
+    'report.account.account_report_general_ledger_compressed',
+    'account.account',
+    parser=GeneralLedgerWebkitCompressed)

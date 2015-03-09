@@ -18,7 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from . import general_ledger_zip
-from . import partners_ledger_zip
+from . import general_ledger_compressed
+from . import partners_ledger_compressed
 from . import ledger_balance
 from . import webkit_parser_multiple_files

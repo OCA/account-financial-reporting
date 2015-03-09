@@ -67,8 +67,8 @@ class MultipleFilesWebKitParser(HeaderFooterTextWebKitParser):
                 cr, uid, report_ids[0], context=context
             )
             self.title = report_xml.name
-            if report_xml.report_type == 'zip':
-                return self.create_zip_report(
+            if report_xml.report_type == 'compressed':
+                return self.create_compressed_report(
                     cr, uid, ids, data, report_xml, context
                 )
         return super(MultipleFilesWebKitParser, self).create(
@@ -76,8 +76,8 @@ class MultipleFilesWebKitParser(HeaderFooterTextWebKitParser):
         )
 
     # Use this method to write multiple PDF files in one ZIP file.
-    def create_zip_report(self, cursor, uid, ids, data,
-                          report_xml, context=None):
+    def create_compressed_report(self, cursor, uid, ids, data,
+                                 report_xml, context=None):
 
         if context is None:
             context = {}
@@ -137,7 +137,7 @@ class MultipleFilesWebKitParser(HeaderFooterTextWebKitParser):
                              _('Webkit Report template not found !'))
         balance_mako_tpl = mako_template(balance_template)
 
-        # create zip file
+        # create compressed file
         try:
             fd, out_filename = tempfile.mkstemp(suffix=".zip",
                                                 prefix="webkit.tmp.")
