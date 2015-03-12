@@ -24,8 +24,9 @@
     'name': 'Account Move Line XLS export',
     'version': '0.6',
     'license': 'AGPL-3',
-    'author': "Noviat,Odoo Community Association (OCA)",
+    'author': "Noviat, Odoo Community Association (OCA)",
     'category': 'Accounting & Finance',
+    'summary': 'Journal Items Excel export',
     'depends': ['account', 'report_xls'],
     'data': [
         'report/move_line_list_xls.xml',
