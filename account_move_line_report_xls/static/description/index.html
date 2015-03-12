@@ -1,0 +1,133 @@
+<data>
+
+  <section class="oe_container">
+    <div class="oe_row oe_spaced">
+      <div class="oe_span12">
+        <h2 class="oe_slogan">Journal Items Excel export</h2>
+      </div>
+      <div class="oe_span6">
+        <div class="oe_demo oe_picture oe_screenshot">
+          <img src="journal_items.png"/>
+        </div>
+      </div>
+      <div class="oe_span6">
+        <p class="oe_mt32">
+          This module extends the functionality of the journal items ('account.move.line') list view and allow you to export the selected lines.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="oe_container oe_dark">
+    <div class="oe_row oe_spaced">
+      <div class="oe_span12">
+        <h2 class="oe_slogan">Installation &amp; Usage</h2>
+        <p class="oe_mt32">
+          To install this module, you need also the <b>report_xls</b> module located in:
+          <br/><a href="https://github.com/OCA/reporting-engine">https://github.com/OCA/reporting-engine</a>
+        </p>
+        <p class="oe_mt32">
+          To use this module, you need to:
+          <ul>
+            <li>go to the list view of the journal items</li>
+            <li>select the lines you wish to export</li>
+            <li>click on the button on top to export</li>
+          </ul>
+        </p>
+        <p class="oe_mt32">
+          The Excel export can be tailored to your exact needs via the following methods of the 'account.move.line' object:
+          <ul>
+            <li>
+              <b>_report_xls_fields</b>
+              <div style="padding-top:10px">
+                Add/drop columns or change order from the list of columns that are defined in the Excel template.
+                <br>
+                  The following fields are available:
+                  <div style="margin-left:40px">
+                    <code>
+                      move, name, date, journal, period, partner, account,
+                      <br/>
+                      date_maturity, debit, credit, balance,
+                      <br/>
+                      reconcile, reconcile_partial, analytic_account,
+                      <br/>
+                      ref, partner_ref, tax_code, tax_amount, amount_residual,
+                      <br/>
+                      amount_currency, currency_name, company_currency,
+                      <br/>
+                      amount_residual_currency, product, product_ref', product_uom, quantity,
+                      <br/>statement, invoice, narration, blocked
+                    </code>
+                  </div>
+                </div>
+            </li>
+          </ul>
+        </p>
+        <p class="oe_mt32">
+          <ul>
+            <li>
+              <b>_report_xls_template</b>
+              <div style="padding-top:10px">
+                Change/extend the Excel template.
+              </div>
+            </li>
+          </ul>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="oe_container">
+    <div class="oe_row oe_spaced">
+      <h2 class="oe_slogan">Credits</h2>
+      <div class="oe_span6">
+        <p class="oe_mt32">
+          Author:
+          <ul>
+            <li>
+              <a href="mailto:info@noviat.com">Luc De Meyer (Noviat)</a>
+            </li>
+          </ul>
+        </p>
+      </div>
+      <div class="oe_span6">
+        <p class="oe_mt32">
+          Contributors:
+          <ul>
+            <li>
+              <a href="mailto:guillaume.auger@savoirfairelinux.com">Guillaume Auger, Savoir-faire LINUX</a>
+            </li>
+          </ul>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="oe_container oe_dark">
+    <div class="oe_row oe_spaced">
+      <div class="oe_span12">
+        <h2 class="oe_slogan">Maintainer</h2>
+      </div>
+      <div class="oe_span8">
+        <p class="oe_mt32">
+          This module is maintained by the OCA.
+        </p>
+        <p>
+          OCA, or the Odoo Community Association, is a nonprofit organization whose mission is to support the collaborative development
+          of Odoo features and promote its widespread use.
+        </p>
+        <p>
+          To contribute to this module, please visit <a href="http://odoo-community.org">http://odoo-community.org.</a>
+        </p>
+      </div>
+      <div class="oe_span4">
+        <a href="http://odoo-community.org">
+          <div class="oe_picture">
+            <img src="oca_logo.png"/>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</data>
