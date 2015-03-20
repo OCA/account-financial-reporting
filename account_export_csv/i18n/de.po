@@ -1,0 +1,115 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#   * account_export_csv
+#
+# Rudolf Schnapka <schnapkar@golive-saar.de>, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-04-10 15:11+0000\n"
+"PO-Revision-Date: 2015-01-04 11:35+0100\n"
+"Last-Translator: Rudolf Schnapka <schnapkar@golive-saar.de>\n"
+"Language-Team: German <kde-i18n-de@kde.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+"Language: de\n"
+"X-Generator: Lokalize 1.5\n"
+
+#. module: account_export_csv
+#: model:ir.model,name:account_export_csv.model_account_csv_export
+msgid "Export Accounting"
+msgstr "Finanzbuchhaltung exportieren"
+
+#. module: account_export_csv
+#: field:account.csv.export,export_filename:0
+msgid "Export CSV Filename"
+msgstr "CSV-Dateiname für Export"
+
+#. module: account_export_csv
+#: view:account.csv.export:0
+msgid "Trial Balance"
+msgstr "Stichtagssaldo"
+
+#. module: account_export_csv
+#: field:account.csv.export,company_id:0
+msgid "Company"
+msgstr "Unternehmen"
+
+#. module: account_export_csv
+#: view:account.csv.export:0
+msgid "Analytic Balance (with accounts)"
+msgstr "Salden analytischer Konten (mit Konten)"
+
+#. module: account_export_csv
+#: help:account.csv.export,periods:0
+msgid "All periods in the fiscal year if empty"
+msgstr "Alle Perioden des Geschäftsjahres, wenn leer"
+
+#. module: account_export_csv
+#: field:account.csv.export,periods:0
+msgid "Periods"
+msgstr "Perioden"
+
+#. module: account_export_csv
+#: view:account.csv.export:0
+msgid "Close"
+msgstr "Schließen"
+
+#. module: account_export_csv
+#: view:account.csv.export:0
+#: model:ir.actions.act_window,name:account_export_csv.action_account_csv_export
+#: model:ir.ui.menu,name:account_export_csv.menu_account_csv_export
+msgid "Accounting CSV Export"
+msgstr "CSV-Export der Finanzbuchhaltung"
+
+#. module: account_export_csv
+#: field:account.csv.export,data:0
+msgid "CSV"
+msgstr "CSV"
+
+#. module: account_export_csv
+#: field:account.csv.export,fiscalyear_id:0
+msgid "Fiscalyear"
+msgstr "Geschäftsjahr"
+
+#. module: account_export_csv
+#: view:account.csv.export:0
+msgid "Analytic Balance (with accounts)"
+msgstr "Salden analytischer Konten (mit Konten)"
+
+#. module: account_export_csv
+#: field:account.csv.export,stop_period_id:0
+msgid "End period"
+msgstr "Abschlussperiode"
+
+#. module: account_export_csv
+#: view:account.csv.export:0
+msgid "Close"
+msgstr "Schließen"
+
+#. module: account_export_csv
+#: view:account.csv.export:0
+#: model:ir.actions.act_window,name:account_export_csv.action_account_csv_export
+#: model:ir.ui.menu,name:account_export_csv.menu_account_csv_export
+msgid "Accounting CSV Export"
+msgstr "CSV-Export der Finanzbuchhaltung"
+
+#. module: account_export_csv
+#: field:account.csv.export,data:0
+msgid "CSV"
+msgstr "CSV"
+
+#. module: account_export_csv
+#: model:ir.model,name:account_export_csv.model_account_csv_export
+msgid "Export Accounting Entries"
+msgstr "Export der Buchungen"
+
+#. module: account_export_csv
+#: field:account.csv.export,fiscalyear_id:0
+msgid "Fiscalyear"
+msgstr "Geschäftsjahr"
+
+
