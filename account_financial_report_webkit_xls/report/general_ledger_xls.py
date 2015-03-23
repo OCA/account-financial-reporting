@@ -256,7 +256,7 @@ class general_ledger_xls(report_xls):
                     cumul_balance_curr = account.init_balance.get(
                         'init_balance_currency') or 0.0
                     c_specs = [('empty%s' % x, 1, 0, 'text', None)
-                               for x in range(6)]
+                               for x in range(7)]
                     c_specs += [
                         ('init_bal', 1, 0, 'text', _('Initial Balance')),
                         ('counterpart', 1, 0, 'text', None),
@@ -340,8 +340,8 @@ class general_ledger_xls(report_xls):
                 credit_start = rowcol_to_cell(row_start, 9)
                 credit_end = rowcol_to_cell(row_pos - 1, 9)
                 credit_formula = 'SUM(' + credit_start + ':' + credit_end + ')'
-                balance_debit = rowcol_to_cell(row_pos, 8)
-                balance_credit = rowcol_to_cell(row_pos, 9)
+                balance_debit = rowcol_to_cell(row_pos, 9)
+                balance_credit = rowcol_to_cell(row_pos, 10)
                 balance_formula = balance_debit + '-' + balance_credit
                 c_specs = [
                     ('acc_title', COLS_TOT - 4, 0, 'text',
