@@ -21,7 +21,6 @@
 from datetime import date
 from openerp.osv import orm, fields
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT as DATE_FORMAT
-from openerp.tools.translate import _
 
 
 class AccountAgedTrialBalance(orm.TransientModel):
