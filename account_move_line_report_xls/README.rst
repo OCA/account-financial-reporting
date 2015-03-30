@@ -1,3 +1,6 @@
+.. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
+    :alt: License
+
 Journal Items Excel Export
 ==========================
 
@@ -7,10 +10,10 @@ This module extends the functionality of the journal items
 Installation
 ============
 
-To install this module manually, you need also the **report_xls**
+To install this module, you need also the **report_xls**
 module located in:
 
-https://launchpad.net/openerp-reporting-engines
+https://github.com/OCA/reporting-engine
 
 Usage
 =====
@@ -18,7 +21,7 @@ Usage
 To use this module, you need to:
 
 * go to the list view of the journal items
-* select the line you wish to export
+* select the lines you wish to export
 * click on the button on top to export
 
 The Excel export can be tailored to your exact needs via the following methods
@@ -46,9 +49,12 @@ of the 'account.move.line' object:
 Credits
 =======
 
+Author
+------------
+* Luc De Meyer, Noviat <info@noviat.com>
+
 Contributors
 ------------
-* Noviat <info@noviat.com>
 * Guillaume Auger <guillaume.auger@savoirfairelinux.com>
 
 Icon
