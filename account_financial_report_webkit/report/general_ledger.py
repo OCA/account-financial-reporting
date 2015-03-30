@@ -121,7 +121,8 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
             stop)
         objects = self.pool.get('account.account').browse(self.cursor,
                                                           self.uid,
-                                                          accounts)
+                                                          accounts,
+                                                          context=self.localcontext)
 
         init_balance = {}
         ledger_lines = {}

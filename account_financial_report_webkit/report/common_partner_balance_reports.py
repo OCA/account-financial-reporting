@@ -280,7 +280,8 @@ class CommonPartnerBalanceReportHeaderWebkit(CommonBalanceReportHeaderWebkit,
                 comp_accounts_by_ids.append(comparison_result)
         objects = self.pool.get('account.account').browse(self.cursor,
                                                           self.uid,
-                                                          account_ids)
+                                                          account_ids,
+                                                          context=self.localcontext)
 
         init_balance_accounts = {}
         comparisons_accounts = {}

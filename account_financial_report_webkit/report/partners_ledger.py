@@ -148,7 +148,8 @@ class PartnersLedgerWebkit(report_sxw.rml_parse,
             partner_filter=partner_ids)
         objects = self.pool.get('account.account').browse(self.cursor,
                                                           self.uid,
-                                                          accounts)
+                                                          accounts,
+                                                          context=self.localcontext)
 
         init_balance = {}
         ledger_lines_dict = {}

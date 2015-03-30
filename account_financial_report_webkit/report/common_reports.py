@@ -423,7 +423,8 @@ class CommonReportHeaderWebkit(common_report_header):
 
         for acc in self.pool.get('account.account').browse(self.cursor,
                                                            self.uid,
-                                                           account_ids):
+                                                           account_ids,
+                                                           context=self.localcontext):
             res[acc.id] = self._compute_init_balance(default_values=True)
             if acc.user_type.close_method == 'none':
                 # we compute the initial balance for close_method == none only
