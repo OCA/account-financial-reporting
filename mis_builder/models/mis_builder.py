@@ -42,6 +42,8 @@ FUNCTION = [('credit', 'cred'),
 
 FUNCTION_LIST = [x[1] for x in FUNCTION]
 
+PARAMETERS = ['s_', 'i_', '_']
+
 
 class AutoStruct(object):
 
@@ -72,9 +74,18 @@ def _python_var(var_str):
     return re.sub(r'\W|^(?=\d)', '_', var_str).lower()
 
 
+def _get_sufix(is_solde=False, is_initial=False):
+    if is_solde:
+        return 's_'
+    elif is_initial:
+        return 'i_'
+    else:
+        return '_'
+
+
 def _python_account_var(function, account_code, is_solde=False,
                         is_initial=False):
-    prefix = function + 's_' if is_solde else function + '_'
+    prefix = function + _get_sufix(is_solde=is_solde, is_initial=is_initial)
     return prefix + re.sub(r'\W', '_', account_code)
 
 
@@ -84,10 +95,11 @@ def _get_account_code(account_var):
     return res[0]
 
 
-def _get_account_vars_in_expr(expr, is_solde=False):
+def _get_account_vars_in_expr(expr, is_solde=False, is_initial=False):
     res = []
     for function in FUNCTION_LIST:
-        prefix = function + 's_' if is_solde else function + '_'
+        prefix = function + _get_sufix(is_solde=is_solde,
+                                       is_initial=is_initial)
         res.extend(re.findall(r'\b%s\w+' % prefix, expr))
     return res
 
@@ -99,19 +111,21 @@ def _get_vars_in_expr(expr, varnames=None):
     return re.findall(varnames_re, expr)
 
 
-def _get_account_vars_in_report(report, is_solde=False):
+def _get_account_vars_in_report(report, is_solde=False, is_initial=False):
     res = set()
     for kpi in report.kpi_ids:
-        for account_var in _get_account_vars_in_expr(kpi.expression, is_solde):
+        for account_var in _get_account_vars_in_expr(kpi.expression, is_solde,
+                                                     is_initial):
             res.add(account_var)
     return res
 
 
 def _is_valid_python_var(name):
     for item in FUNCTION_LIST:
-        if name.startswith(item + '_') or name.startswith(item + 's_'):
-            return False
-    return re.match("[_A-Za-z][_a-zA-Z0-9]*$", name) \
+        for param in PARAMETERS:
+            if name.startswith(item + param):
+                return False
+    return re.match("[_A-Za-z][_a-zA-Z0-9]*$", name)
 
 
 class mis_report_kpi(orm.Model):
@@ -525,11 +539,14 @@ class mis_report_instance_period(orm.Model):
             ids = [ids]
         domain = []
         # extract all bal code
-        b = _get_account_vars_in_expr(account_, is_solde=False)
-        bs = _get_account_vars_in_expr(account_, is_solde=True)
+        account = _get_account_vars_in_expr(account_)
+        account_s = _get_account_vars_in_expr(account_, is_solde=True)
+        account_i = _get_account_vars_in_expr(account_, is_initial=True)
+
         all_code = []
-        all_code.extend([_get_account_code(bal) for bal in b])
-        all_code.extend([_get_account_code(bal) for bal in bs])
+        all_code.extend([_get_account_code(acc) for acc in account])
+        all_code.extend([_get_account_code(acc) for acc in account_s])
+        all_code.extend([_get_account_code(acc) for acc in account_i])
 
         domain.append(('account_id.code', 'in', all_code))
 
@@ -595,6 +612,55 @@ class mis_report_instance_period(orm.Model):
 
         return balances
 
+    def _get_context_period(self, cr, uid, report_period, is_solde=False,
+                            is_initial=False, context=None):
+        context_period = {}
+        move_obj = self.pool['account.move']
+        period_obj = self.pool['account.period']
+        if not is_solde and not is_initial:
+            if report_period.period_from:
+                context_period.\
+                    update({'period_from': report_period.period_from.id,
+                            'period_to': report_period.period_to.id})
+            else:
+                context_period.update({'date_from': report_period.date_from,
+                                       'date_to': report_period.date_to})
+        else:
+            period_to = report_period.period_to
+            if is_initial:
+                move_id = move_obj.search(
+                    cr, uid, [('period_id.special', '=', False),
+                              ('period_id.date_start', '<',
+                               period_to.date_start)],
+                    order="period_id desc", limit=1, context=context)
+                if move_id:
+                    computed_period_to = move_obj.browse(
+                        cr, uid, move_id[0], context=context).period_id.id
+                else:
+                    computed_period_to = self.pool['account.period'].search(
+                        cr, uid, [('company_id', '=',
+                                   report_period.company_id.id)],
+                        order='date_start desc', limit=1)[0]
+                # Change start period to search correctly period from
+                period_to = period_obj.browse(cr, uid, [computed_period_to],
+                                              context=context)[0]
+            move_id = move_obj.search(
+                cr, uid, [('period_id.special', '=', True),
+                          ('period_id.date_start', '<=',
+                           period_to.date_start)],
+                order="period_id desc", limit=1, context=context)
+            if move_id:
+                computed_period_from = move_obj.browse(
+                    cr, uid, move_id[0], context=context).period_id.id
+            else:
+                computed_period_from = self.pool['account.period'].search(
+                    cr, uid, [('company_id', '=',
+                               report_period.company_id.id)],
+                    order='date_start', limit=1)[0]
+            context_period.update({'period_from': computed_period_from,
+                                   'period_to': period_to.id})
+        return context_period
+
     def _fetch_balances(self, cr, uid, c, account_vars, context=None):
         """ fetch the general account balances for the given period
 
@@ -607,15 +673,11 @@ class mis_report_instance_period(orm.Model):
             context = {}
 
         search_ctx = dict(context)
-        if c.period_from:
-            search_ctx.update({'period_from': c.period_from.id,
-                               'period_to': c.period_to.id})
-        else:
-            search_ctx.update({'date_from': c.date_from,
-                               'date_to': c.date_to})
-
+        search_ctx.update(self._get_context_period(cr, uid, c,
+                                                   context=context))
         # fetch balances
-        return self._fetch_account(cr, uid, c.company_id.id, account_vars, search_ctx)
+        return self._fetch_account(cr, uid, c.company_id.id, account_vars,
+                                   search_ctx)
 
     def _fetch_balances_solde(self, cr, uid, c, account_vars, context=None):
         """ fetch the general account balances solde at the end of
@@ -635,27 +697,34 @@ class mis_report_instance_period(orm.Model):
 
         search_ctx = dict(context)
         if c.period_to:
-            move_obj = self.pool['account.move']
-            move_id = move_obj.search(
-                cr, uid, [('period_id.special', '=', True),
-                          ('period_id.date_start', '<=',
-                           c.period_to.date_start)],
-                order="period_id desc", limit=1, context=context)
-            if move_id:
-                computed_period_from = move_obj.browse(
-                    cr, uid, move_id[0], context=context).period_id.id
-            else:
-                computed_period_from = self.pool['account.period'].search(
-                    cr, uid, [('company_id', '=', c.company_id.id)],
-                    order='date_start', limit=1)[0]
-            search_ctx.update({'period_from': computed_period_from,
-                               'period_to': c.period_to.id})
+            search_ctx.update(self._get_context_period(cr, uid, c,
+                                                       is_solde=True,
+                                                       context=context))
         else:
             return balances
 
         # fetch balances
         return self._fetch_account(cr, uid, c.company_id.id, account_vars,
                                    search_ctx, is_solde=True)
+
+    def _fetch_balances_initial(self, cr, uid, c, account_vars, context=None):
+        if context is None:
+            context = {}
+        balances = {}
+        if not account_vars:
+            return balances
+
+        search_ctx = dict(context)
+        if c.period_to:
+            search_ctx.update(self._get_context_period(cr, uid, c,
+                                                       is_initial=True,
+                                                       context=context))
+        else:
+            return balances
+
+        # fetch balances
+        return self._fetch_account(cr, uid, c.company_id.id, account_vars,
+                                   search_ctx, is_initial=True)
 
     def _fetch_queries(self, cr, uid, c, context):
         res = {}
@@ -686,7 +755,7 @@ class mis_report_instance_period(orm.Model):
         return res
 
     def _compute(self, cr, uid, lang_id, c, account_vars, accounts_vars,
-                 context=None):
+                 accounti_vars, context=None):
         if context is None:
             context = {}
 
@@ -706,6 +775,9 @@ class mis_report_instance_period(orm.Model):
                                               context=context))
         localdict.update(self._fetch_balances_solde(cr, uid, c, accounts_vars,
                                                     context=context))
+        localdict.update(self._fetch_balances_initial(cr, uid, c,
+                                                      accounti_vars,
+                                                      context=context))
         localdict.update(self._fetch_queries(cr, uid, c,
                                              context=context))
 
@@ -864,6 +936,8 @@ class mis_report_instance(orm.Model):
 
         account_vars = _get_account_vars_in_report(r.report_id)
         accounts_vars = _get_account_vars_in_report(r.report_id, is_solde=True)
+        accounti_vars = _get_account_vars_in_report(r.report_id,
+                                                    is_initial=True)
 
         lang = self.pool['res.users'].read(
             cr, uid, uid, ['lang'], context=context)['lang']
@@ -887,7 +961,7 @@ class mis_report_instance(orm.Model):
             # compute kpi values
             values = report_instance_period_obj._compute(
                 cr, uid, lang_id, period, account_vars, accounts_vars,
-                context=context)
+                accounti_vars, context=context)
             period_values[period.name] = values
             for key in values:
                 content[key]['default_style'] = values[key]['default_style']
