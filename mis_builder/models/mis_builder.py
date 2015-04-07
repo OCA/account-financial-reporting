@@ -35,6 +35,14 @@ from openerp import tools
 from collections import OrderedDict
 
 
+FUNCTION = [('credit', 'cred'),
+            ('debit', 'deb'),
+            ('balance', 'bal')
+            ]
+
+FUNCTION_LIST = [x[1] for x in FUNCTION]
+
+
 class AutoStruct(object):
 
     def __init__(self, **kwargs):
@@ -64,19 +72,24 @@ def _python_var(var_str):
     return re.sub(r'\W|^(?=\d)', '_', var_str).lower()
 
 
-def _python_bal_var(account_code, is_solde=False):
-    prefix = 'bals_' if is_solde else 'bal_'
+def _python_account_var(function, account_code, is_solde=False,
+                        is_initial=False):
+    prefix = function + 's_' if is_solde else function + '_'
     return prefix + re.sub(r'\W', '_', account_code)
 
 
-def _get_bal_code(bal_var, is_solde=False):
-    prefix = 'bals_' if is_solde else 'bal_'
-    return bal_var.replace(prefix, '')
+def _get_account_code(account_var):
+    res = re.findall(r'_(\d+)', account_var)
+    assert len(res) == 1
+    return res[0]
 
 
-def _get_bal_vars_in_expr(expr, is_solde=False):
-    prefix = 'bals_' if is_solde else 'bal_'
-    return re.findall(r'\b%s\w+' % prefix, expr)
+def _get_account_vars_in_expr(expr, is_solde=False):
+    res = []
+    for function in FUNCTION_LIST:
+        prefix = function + 's_' if is_solde else function + '_'
+        res.extend(re.findall(r'\b%s\w+' % prefix, expr))
+    return res
 
 
 def _get_vars_in_expr(expr, varnames=None):
@@ -86,18 +99,19 @@ def _get_vars_in_expr(expr, varnames=None):
     return re.findall(varnames_re, expr)
 
 
-def _get_bal_vars_in_report(report, is_solde=False):
+def _get_account_vars_in_report(report, is_solde=False):
     res = set()
     for kpi in report.kpi_ids:
-        for bal_var in _get_bal_vars_in_expr(kpi.expression, is_solde):
-            res.add(bal_var)
+        for account_var in _get_account_vars_in_expr(kpi.expression, is_solde):
+            res.add(account_var)
     return res
 
 
 def _is_valid_python_var(name):
+    for item in FUNCTION_LIST:
+        if name.startswith(item + '_') or name.startswith(item + 's_'):
+            return False
     return re.match("[_A-Za-z][_a-zA-Z0-9]*$", name) \
-        and not name.startswith('bal_') \
-        and not name.startswith('bals_')
 
 
 class mis_report_kpi(orm.Model):
@@ -506,16 +520,16 @@ class mis_report_instance_period(orm.Model):
          'Period name should be unique by report'),
     ]
 
-    def compute_domain(self, cr, uid, ids, bal_, context=None):
+    def compute_domain(self, cr, uid, ids, account_, context=None):
         if isinstance(ids, (int, long)):
             ids = [ids]
         domain = []
         # extract all bal code
-        b = _get_bal_vars_in_expr(bal_, is_solde=False)
-        bs = _get_bal_vars_in_expr(bal_, is_solde=True)
+        b = _get_account_vars_in_expr(account_, is_solde=False)
+        bs = _get_account_vars_in_expr(account_, is_solde=True)
         all_code = []
-        all_code.extend([_get_bal_code(bal, False) for bal in b])
-        all_code.extend([_get_bal_code(bal, True) for bal in bs])
+        all_code.extend([_get_account_code(bal) for bal in b])
+        all_code.extend([_get_account_code(bal) for bal in bs])
 
         domain.append(('account_id.code', 'in', all_code))
 
@@ -549,37 +563,44 @@ class mis_report_instance_period(orm.Model):
 
         return domain
 
-    def _fetch_bal(self, cr, uid, company_id, bal_vars, context=None,
-                   is_solde=False):
+    def _fetch_account(self, cr, uid, company_id, account_vars, context=None,
+                       is_solde=False, is_initial=False):
         account_obj = self.pool['account.account']
         # TODO: use child of company_id?
-        # first fetch all codes and filter the one we need
-        bal_code = [_get_bal_code(bal, is_solde) for bal in bal_vars]
-
+        # first fetch all codes and filter the one we need+
+        account_code = []
+        for account_var in account_vars:
+            account = _get_account_code(account_var)
+            if account not in account_code:
+                account_code.append(account)
         account_ids = account_obj.search(
             cr, uid,
             ['|', ('company_id', '=', False),
              ('company_id', '=', company_id),
-             ('code', 'in', bal_code)],
+             ('code', 'in', account_code)],
             context=context)
 
         # fetch balances
         account_datas = account_obj.read(
-            cr, uid, account_ids, ['code', 'balance'], context=context)
+            cr, uid, account_ids, ['code', 'balance', 'credit', 'debit'],
+            context=context)
         balances = {}
         for account_data in account_datas:
-            key = _python_bal_var(account_data['code'], is_solde=is_solde)
-            assert key not in balances
-            balances[key] = account_data['balance']
+            for item in FUNCTION:
+                key = _python_account_var(item[1], account_data['code'],
+                                          is_solde=is_solde,
+                                          is_initial=is_initial)
+                assert key not in balances
+                balances[key] = account_data[item[0]]
 
         return balances
 
-    def _fetch_balances(self, cr, uid, c, bal_vars, context=None):
+    def _fetch_balances(self, cr, uid, c, account_vars, context=None):
         """ fetch the general account balances for the given period
 
         returns a dictionary {bal_<account.code>: account.balance}
         """
-        if not bal_vars:
+        if not account_vars:
             return {}
 
         if context is None:
@@ -594,9 +615,9 @@ class mis_report_instance_period(orm.Model):
                                'date_to': c.date_to})
 
         # fetch balances
-        return self._fetch_bal(cr, uid, c.company_id.id, bal_vars, search_ctx)
+        return self._fetch_account(cr, uid, c.company_id.id, account_vars, search_ctx)
 
-    def _fetch_balances_solde(self, cr, uid, c, bals_vars, context=None):
+    def _fetch_balances_solde(self, cr, uid, c, account_vars, context=None):
         """ fetch the general account balances solde at the end of
             the given period
 
@@ -609,7 +630,7 @@ class mis_report_instance_period(orm.Model):
         if context is None:
             context = {}
         balances = {}
-        if not bals_vars:
+        if not account_vars:
             return balances
 
         search_ctx = dict(context)
@@ -633,8 +654,8 @@ class mis_report_instance_period(orm.Model):
             return balances
 
         # fetch balances
-        return self._fetch_bal(cr, uid, c.company_id.id, bals_vars,
-                               search_ctx, is_solde=True)
+        return self._fetch_account(cr, uid, c.company_id.id, account_vars,
+                                   search_ctx, is_solde=True)
 
     def _fetch_queries(self, cr, uid, c, context):
         res = {}
@@ -664,7 +685,8 @@ class mis_report_instance_period(orm.Model):
 
         return res
 
-    def _compute(self, cr, uid, lang_id, c, bal_vars, bals_vars, context=None):
+    def _compute(self, cr, uid, lang_id, c, account_vars, accounts_vars,
+                 context=None):
         if context is None:
             context = {}
 
@@ -680,9 +702,9 @@ class mis_report_instance_period(orm.Model):
             'len': len,
             'avg': lambda l: sum(l) / float(len(l)),
         }
-        localdict.update(self._fetch_balances(cr, uid, c, bal_vars,
+        localdict.update(self._fetch_balances(cr, uid, c, account_vars,
                                               context=context))
-        localdict.update(self._fetch_balances_solde(cr, uid, c, bals_vars,
+        localdict.update(self._fetch_balances_solde(cr, uid, c, accounts_vars,
                                                     context=context))
         localdict.update(self._fetch_queries(cr, uid, c,
                                              context=context))
@@ -840,8 +862,8 @@ class mis_report_instance(orm.Model):
 
         period_values = {}
 
-        bal_vars = _get_bal_vars_in_report(r.report_id)
-        bals_vars = _get_bal_vars_in_report(r.report_id, is_solde=True)
+        account_vars = _get_account_vars_in_report(r.report_id)
+        accounts_vars = _get_account_vars_in_report(r.report_id, is_solde=True)
 
         lang = self.pool['res.users'].read(
             cr, uid, uid, ['lang'], context=context)['lang']
@@ -864,7 +886,8 @@ class mis_report_instance(orm.Model):
                 period.date_from))
             # compute kpi values
             values = report_instance_period_obj._compute(
-                cr, uid, lang_id, period, bal_vars, bals_vars, context=context)
+                cr, uid, lang_id, period, account_vars, accounts_vars,
+                context=context)
             period_values[period.name] = values
             for key in values:
                 content[key]['default_style'] = values[key]['default_style']
