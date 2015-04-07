@@ -22,7 +22,7 @@
 #
 ##############################################################################
 
-import mis_builder_test
+from . import mis_builder_test
 
 fast_suite = [
 ]
