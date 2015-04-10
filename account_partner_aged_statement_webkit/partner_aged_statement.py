@@ -47,7 +47,13 @@ class PartnerAgedStatement(orm.Model):
                 cr, uid, 'mail', 'email_compose_message_wizard_form')[1]
         except ValueError:
             compose_form_id = False
-
+        # When doing search with related company, it creates a bug saying
+        # the xx id doesn't exist in mail.message.
+        # The default_parent_id is used by mail.compose.message model
+        # to get the message_id. It must be false when doing search with
+        # related company
+        if 'default_parent_id' in context:
+            del context['default_parent_id']
         ctx = dict(context)
         ctx.update({
             'default_model': 'res.partner',
