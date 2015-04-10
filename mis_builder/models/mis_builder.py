@@ -42,7 +42,13 @@ FUNCTION = [('credit', 'cred'),
 
 FUNCTION_LIST = [x[1] for x in FUNCTION]
 
-PARAMETERS = ['s_', 'i_', '_']
+PARAMETERS = ['s', 'i', '']
+PARAMETERS_WITHOUT_BLANK = [x for x in PARAMETERS if x != '']
+SEPARATOR = '_'
+
+PARAMETERS_STR = ''.join(PARAMETERS)
+
+FUNCTION_CONDITION = '|'.join(PARAMETERS_WITHOUT_BLANK)
 
 
 class AutoStruct(object):
@@ -76,54 +82,84 @@ def _python_var(var_str):
 
 def _get_sufix(is_solde=False, is_initial=False):
     if is_solde:
-        return 's_'
+        return 's'
     elif is_initial:
-        return 'i_'
+        return 'i'
     else:
-        return '_'
+        return ''
+
+
+def _get_prefix(function, is_solde=False, is_initial=False):
+    return function + _get_sufix(is_solde=is_solde, is_initial=is_initial) \
+        + SEPARATOR
 
 
 def _python_account_var(function, account_code, is_solde=False,
                         is_initial=False):
-    prefix = function + _get_sufix(is_solde=is_solde, is_initial=is_initial)
+    prefix = _get_prefix(function, is_solde=is_solde, is_initial=is_initial)
     return prefix + re.sub(r'\W', '_', account_code)
 
 
+# TODO : To review
 def _get_account_code(account_var):
     res = re.findall(r'_(\d+)', account_var)
     assert len(res) == 1
     return res[0]
 
 
-def _get_account_vars_in_expr(expr, is_solde=False, is_initial=False):
-    res = []
+# TODO : To review
+def _get_account_vars_in_expr(expr, res_vars, is_solde=False, is_initial=False):
+    pass
+
+
+# TODO : Not use here, Check in upstream
+# def _get_vars_in_expr(expr, varnames=None):
+#     if not varnames:
+#         return []
+#     varnames_re = r'\b' + r'\b|\b'.join(varnames) + r'\b'
+#     return re.findall(varnames_re, expr)
+
+
+def _get_eval_expression(expr, domain_mapping):
+    domain_list = []
     for function in FUNCTION_LIST:
-        prefix = function + _get_sufix(is_solde=is_solde,
-                                       is_initial=is_initial)
-        res.extend(re.findall(r'\b%s\w+' % prefix, expr))
-    return res
+        domain_list.extend(re.findall(r'\b%s[%s]?_\w+(\[.+?\])' % (function, PARAMETERS_STR), expr))
+    for domain in domain_list:
+        expr = expr.replace(domain, domain_mapping[domain])
+    return expr
 
 
-def _get_vars_in_expr(expr, varnames=None):
-    if not varnames:
-        return []
-    varnames_re = r'\b' + r'\b|\b'.join(varnames) + r'\b'
-    return re.findall(varnames_re, expr)
-
-
-def _get_account_vars_in_report(report, is_solde=False, is_initial=False):
-    res = set()
+def _get_account_vars_in_report(report, domain_mapping, is_solde=False,
+                                is_initial=False):
+    res_vars = {}
+    domain_count = 0
     for kpi in report.kpi_ids:
-        for account_var in _get_account_vars_in_expr(kpi.expression, is_solde,
-                                                     is_initial):
-            res.add(account_var)
-    return res
+        for function in FUNCTION_LIST:
+            prefix = _get_prefix(function, is_solde=is_solde, is_initial=is_initial)
+            find_res = re.findall(r'\b%s\w+(?:\[.+?\])?' % prefix, kpi.expression)
+            for item in find_res:
+                match = re.match(r'\b(%s)(\w+)(\[.+?\])?' % prefix, item)
+                var_tuple = match.groups()
+                domain = "" if var_tuple[2] is None else var_tuple[2]
+                key = ""
+                if domain != "":
+                    if domain not in domain_mapping:
+                        key = 'd' + str(domain_count)
+                        domain_count += 1
+                        domain_mapping[domain] = key
+                    else:
+                        key = domain_mapping[domain]
+                key_domain = (key, domain)
+                if not res_vars.get(key_domain, False):
+                    res_vars[key_domain] = set()
+                res_vars[key_domain].add(var_tuple[1])
+    return res_vars
 
 
 def _is_valid_python_var(name):
     for item in FUNCTION_LIST:
         for param in PARAMETERS:
-            if name.startswith(item + param):
+            if name.startswith(item + param + SEPARATOR):
                 return False
     return re.match("[_A-Za-z][_a-zA-Z0-9]*$", name)
 
@@ -534,6 +570,7 @@ class mis_report_instance_period(orm.Model):
          'Period name should be unique by report'),
     ]
 
+    # TODO : To review
     def compute_domain(self, cr, uid, ids, account_, context=None):
         if isinstance(ids, (int, long)):
             ids = [ids]
@@ -583,32 +620,39 @@ class mis_report_instance_period(orm.Model):
     def _fetch_account(self, cr, uid, company_id, account_vars, context=None,
                        is_solde=False, is_initial=False):
         account_obj = self.pool['account.account']
+        account_move_line_obj = self.pool['account.move.line']
         # TODO: use child of company_id?
         # first fetch all codes and filter the one we need+
-        account_code = []
-        for account_var in account_vars:
-            account = _get_account_code(account_var)
-            if account not in account_code:
-                account_code.append(account)
-        account_ids = account_obj.search(
-            cr, uid,
-            ['|', ('company_id', '=', False),
-             ('company_id', '=', company_id),
-             ('code', 'in', account_code)],
-            context=context)
-
-        # fetch balances
-        account_datas = account_obj.read(
-            cr, uid, account_ids, ['code', 'balance', 'credit', 'debit'],
-            context=context)
         balances = {}
-        for account_data in account_datas:
-            for item in FUNCTION:
-                key = _python_account_var(item[1], account_data['code'],
-                                          is_solde=is_solde,
-                                          is_initial=is_initial)
-                assert key not in balances
-                balances[key] = account_data[item[0]]
+        for key_domain, account_code in account_vars.iteritems():
+            key, domain = key_domain
+            account_ids = account_obj.search(
+                cr, uid,
+                ['|', ('company_id', '=', False),
+                 ('company_id', '=', company_id),
+                 ('code', 'in', list(account_code))],
+                context=context)
+            # fetch balances
+            where_clause = ''
+            where_clause_params = ()
+            if domain != '':
+                domain_eval = safe_eval(domain)
+                query = account_move_line_obj._where_calc(cr, uid, domain_eval, context=context)
+                from_clause, where_clause, where_clause_params = query.get_sql()
+                assert from_clause == '"account_move_line"'
+                where_clause = where_clause.replace("account_move_line", "l")
+                where_clause_params = tuple(where_clause_params)
+            account_datas = self.pool['account.account']._compute(cr, uid, account_ids,['balance', 'credit', 'debit'], arg=None, context=context, query=where_clause, query_params=where_clause_params)
+            for id, fields in account_datas.iteritems():
+                account_data = account_obj.read(cr, uid, [id], ['code'],
+                                                context=context)[0]
+                for item in FUNCTION:
+                    var = _python_account_var(item[1], account_data['code'],
+                                              is_solde=is_solde,
+                                              is_initial=is_initial)
+                    var = var + key
+                    assert key not in balances
+                    balances[var] = fields[item[0]]
 
         return balances
 
@@ -755,7 +799,7 @@ class mis_report_instance_period(orm.Model):
         return res
 
     def _compute(self, cr, uid, lang_id, c, account_vars, accounts_vars,
-                 accounti_vars, context=None):
+                 accounti_vars, domain_mapping, context=None):
         if context is None:
             context = {}
 
@@ -783,8 +827,10 @@ class mis_report_instance_period(orm.Model):
 
         for kpi in c.report_instance_id.report_id.kpi_ids:
             try:
+                kpi_eval_expression = _get_eval_expression(kpi.expression,
+                                                           domain_mapping)
                 kpi_val_comment = kpi.expression
-                kpi_val = safe_eval(kpi.expression, localdict)
+                kpi_val = safe_eval(kpi_eval_expression, localdict)
             except ZeroDivisionError:
                 kpi_val = None
                 kpi_val_rendered = '#DIV/0'
@@ -933,10 +979,14 @@ class mis_report_instance(orm.Model):
         kpi_obj = self.pool.get('mis.report.kpi')
 
         period_values = {}
-
-        account_vars = _get_account_vars_in_report(r.report_id)
-        accounts_vars = _get_account_vars_in_report(r.report_id, is_solde=True)
+        domain_mapping = {}
+        account_vars = _get_account_vars_in_report(r.report_id,
+                                                   domain_mapping)
+        accounts_vars = _get_account_vars_in_report(r.report_id,
+                                                    domain_mapping,
+                                                    is_solde=True)
         accounti_vars = _get_account_vars_in_report(r.report_id,
+                                                    domain_mapping,
                                                     is_initial=True)
 
         lang = self.pool['res.users'].read(
@@ -961,7 +1011,7 @@ class mis_report_instance(orm.Model):
             # compute kpi values
             values = report_instance_period_obj._compute(
                 cr, uid, lang_id, period, account_vars, accounts_vars,
-                accounti_vars, context=context)
+                accounti_vars, domain_mapping, context=context)
             period_values[period.name] = values
             for key in values:
                 content[key]['default_style'] = values[key]['default_style']
