@@ -76,7 +76,7 @@
 	      <field name="model">mis.report.instance</field>
 	      <field name="type">ir.actions.report.xml</field>
 	      <field name="report_name">mis.report.instance.xls</field>
-	      <!--field name="report_type">xls</field-->
+	      <field name="report_type">xls</field>
 	      <field name="auto" eval="False"/>
 	    </record>
 
@@ -87,7 +87,7 @@
             <field name="arch" type="xml">
                 <form string="MIS Report Result" version="7.0">
                     <widget type="mis_report"></widget>
-                    <!--button icon="gtk-execute" name="%(xls_export)d" string="Export" type="action" colspan="2"/-->
+                    <button icon="gtk-execute" name="%(xls_export)d" string="Export" type="action" colspan="2"/>
                 </form>
             </field>
         </record>
