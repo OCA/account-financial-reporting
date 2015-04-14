@@ -26,20 +26,10 @@
     'category': 'Localisation/Report Intrastat',
     'license': 'AGPL-3',
     'summary': 'Base module for Intrastat reporting',
-    'description': """This module contains the common functions for 2 other modules :
-- l10n_fr_intrastat_service : the module for the "Déclaration Européenne des Services" (DES)
-- l10n_fr_intrastat_product : the module for the "Déclaration d'Echange de Biens" (DEB)
-This module is not usefull if it's not used together with one of those 2 modules or other country-specific intrastat modules.
-
-This module doesn't have any France-specific stuff. So it can be used as a basis for other intrastat modules for other EU countries.
-
-WARNING : this module conflicts with the module "report_intrastat" from the addons. If you have already installed the module "report_intrastat", you should uninstall it first before installing this module.
-
-Please contact Alexis de Lattre from Akretion <alexis.delattre@akretion.com> for any help or question about this module.
-    """,
     'author': 'Akretion',
     'website': 'http://www.akretion.com',
     'depends': ['base_vat'],
+    'conflicts': ['report_intrastat'],
     'data': [
         'country_data.xml',
         'product_view.xml',

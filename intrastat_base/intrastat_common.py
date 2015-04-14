@@ -117,10 +117,10 @@ class ReportIntrastatCommon(models.AbstractModel):
         self.ensure_one()
         import base64
         filename = '%s_%s.xml' % (self.year_month, declaration_name)
-        attach = self.with_context(
-            default_res_id=self.id,
-            default_res_model=self._name).env['ir.attachment'].create({
+        attach = self.env['ir.attachment'].create({
             'name': filename,
+            'res_id': self.id,
+            'res_model': self._name,
             'datas': base64.encodestring(xml_string),
             'datas_fname': filename})
         return attach.id
