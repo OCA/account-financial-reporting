@@ -572,22 +572,28 @@ class mis_report_instance_period(orm.Model):
          'Period name should be unique by report'),
     ]
 
-    # TODO : To adapt to work with expression domain
+    # TODO : To review
     def compute_domain(self, cr, uid, ids, account_, context=None):
         if isinstance(ids, (int, long)):
             ids = [ids]
-        domain = []
+        domain_list = []
         # extract all bal code
-        account = _get_account_vars_in_expr(account_)
-        account_s = _get_account_vars_in_expr(account_, is_solde=True)
-        account_i = _get_account_vars_in_expr(account_, is_initial=True)
-
-        all_code = []
-        all_code.extend([_get_account_code(acc) for acc in account])
-        all_code.extend([_get_account_code(acc) for acc in account_s])
-        all_code.extend([_get_account_code(acc) for acc in account_i])
-
-        domain.append(('account_id.code', 'in', all_code))
+        res_vars = {}
+        domain_mapping = {}
+        _get_account_vars_in_expr(account_, res_vars, domain_mapping,
+                                  is_solde=False, is_initial=False)
+        for key_domain, account_code in res_vars.iteritems():
+            key, domain = key_domain
+            partial_domain = [('account_id.code', 'in', list(account_code))]
+            if domain != '':
+                partial_domain.insert(0, '&')
+                domain_eval = safe_eval(domain)
+                partial_domain.extend(domain_eval)
+            domain_list.extend(partial_domain)
+        nb_or = len(res_vars) - 1
+        while nb_or > 0:
+            domain_list.insert(0, '|')
+            nb_or -= 1
 
         # compute date/period
         period_ids = []
@@ -599,7 +605,7 @@ class mis_report_instance_period(orm.Model):
         for c in self.browse(cr, uid, ids, context=context):
             target_move = c.report_instance_id.target_move
             if target_move == 'posted':
-                domain.append(('move_id.state', '=', target_move))
+                domain_list.append(('move_id.state', '=', target_move))
             if c.period_from:
                 compute_period_ids = period_obj.build_ctx_periods(
                     cr, uid, c.period_from.id, c.period_to.id)
@@ -611,13 +617,12 @@ class mis_report_instance_period(orm.Model):
                     date_to = c.date_to
         if period_ids:
             if date_from:
-                domain.append('|')
-            domain.append(('period_id', 'in', period_ids))
+                domain_list.append('|')
+            domain_list.append(('period_id', 'in', period_ids))
         if date_from:
-            domain.extend([('date', '>=', c.date_from),
-                           ('date', '<=', c.date_to)])
-
-        return domain
+            domain_list.extend([('date', '>=', c.date_from),
+                                ('date', '<=', c.date_to)])
+        return domain_list
 
     def _fetch_account(self, cr, uid, company_id, account_vars, context=None,
                        is_solde=False, is_initial=False):
