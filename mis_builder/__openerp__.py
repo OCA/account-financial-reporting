@@ -31,7 +31,8 @@
     """,
     'author': 'ACSONE SA/NV',
     'website': 'http://acsone.eu',
-    'depends': ['account'],
+    'depends': ['account',
+                'account_partial_balance'],  # OCA/AFT
     'data': [
         'wizard/mis_builder_dashboard.xml',
         'views/mis_builder.xml',
