@@ -109,6 +109,9 @@ class CommonReportHeaderWebkit(common_report_header):
 
     def _get_amount_currency(self, data):
         return self._get_form_param('amount_currency', data)
+    
+    def _get_new_page_after_each_account(self, data):
+        return self._get_form_param('new_page_after_each_account', data)
 
     def _get_date_from(self, data):
         return self._get_form_param('date_from', data)
