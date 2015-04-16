@@ -1381,7 +1381,12 @@ msgstr "Met valuta"
 #. module: account_financial_report_webkit
 #: field:general.ledger.webkit,new_page_after_each_account:0
 msgid "Page break after each account"
-msgstr ""
+msgstr "Pagina-einde na elke account"
+
+#. module: account_financial_report_webkit
+#: help:general.ledger.webkit,new_page_after_each_account:0
+msgid "It adds a page break after each account"
+msgstr "Het voegt een pagina-einde na elke account"
 
 #. module: account_financial_report_webkit
 #: selection:account.common.balance.report,display_account:0

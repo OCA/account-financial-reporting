@@ -1066,6 +1066,11 @@ msgid "Page break after each account"
 msgstr ""
 
 #. module: account_financial_report_webkit
+#: help:general.ledger.webkit,new_page_after_each_account:0
+msgid "It adds a page break after each account"
+msgstr ""
+
+#. module: account_financial_report_webkit
 #: field:open.invoices.webkit,result_selection:0
 #: field:partner.balance.webkit,result_selection:0
 #: field:partners.ledger.webkit,result_selection:0
