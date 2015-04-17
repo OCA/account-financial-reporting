@@ -238,6 +238,9 @@
                 </div>
             </div>
           %endif
+          %if new_page_after_each_account(data):
+            <p style="page-break-after:always"></p>
+          %endif
         %endfor
     </body>
 </html>
