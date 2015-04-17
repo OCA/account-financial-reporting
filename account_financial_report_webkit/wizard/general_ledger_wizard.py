@@ -42,7 +42,8 @@ class AccountReportGeneralLedgerWizard(orm.TransientModel):
     _columns = {
         'amount_currency': fields.boolean("With Currency",
                                           help="It adds the currency column"),
-
+        'new_page_after_each_account': fields.boolean("Page break after each account", 
+                                                      help="It adds a page break after each account"), 
         'display_account': fields.selection(
             [('bal_all', 'All'),
              ('bal_mix', 'With transactions or non zero balance')],
@@ -61,6 +62,7 @@ class AccountReportGeneralLedgerWizard(orm.TransientModel):
         'display_account': 'bal_mix',
         'account_ids': _get_account_ids,
         'centralize': True,
+        'new_page_after_each_account': False,
     }
 
     def _check_fiscalyear(self, cr, uid, ids, context=None):
@@ -84,6 +86,7 @@ class AccountReportGeneralLedgerWizard(orm.TransientModel):
         vals = self.read(cr, uid, ids,
                          ['amount_currency',
                           'display_account',
+                          'new_page_after_each_account',
                           'account_ids',
                           'centralize'],
                          context=context)[0]

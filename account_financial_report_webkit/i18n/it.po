@@ -1105,6 +1105,16 @@ msgid "With Currency"
 msgstr "Con valuta"
 
 #. module: account_financial_report_webkit
+#: field:general.ledger.webkit,new_page_after_each_account:0
+msgid "Page break after each account"
+msgstr "Interruzione di pagina dopo ogni account"
+
+#. module: account_financial_report_webkit
+#: help:general.ledger.webkit,new_page_after_each_account:0
+msgid "It adds a page break after each account"
+msgstr "Aggiunge un'interruzione di pagina dopo ogni conto"
+
+#. module: account_financial_report_webkit
 #: field:open.invoices.webkit,result_selection:0
 #: field:partner.balance.webkit,result_selection:0
 #: field:partners.ledger.webkit,result_selection:0
