@@ -8,7 +8,8 @@ class AccountingExpressionProcessor(object):
     Expressions of the form <field><mode>[accounts][optional move line domain]
     are supported, where:
         * field is bal, crd, deb
-        * mode is i (initial balance), e (ending balance), p (moves over period)
+        * mode is i (initial balance), e (ending balance),
+          p (moves over period)
         * accounts is a list of accounts, possibly containing % wildcards
         * an optional domain on analytic lines allowing filters on eg analytic
           accounts or journal
@@ -24,10 +25,10 @@ class AccountingExpressionProcessor(object):
           accounting variables as described above; this let the processor
           group domains and modes and accounts;
         * when all expressions have been parsed, invoke done_parsing()
-          to notify the processor that he can prepare to query (mainly
+          to notify the processor that it can prepare to query (mainly
           search all accounts - children, consolidation - that will need to
           be queried;
-        * for each period, call do_queries(), the call replace_expr() for each
+        * for each period, call do_queries(), then call replace_expr() for each
           expression to replace accounting variables with their resulting value
           for the given period.
 
@@ -37,7 +38,8 @@ class AccountingExpressionProcessor(object):
           one query per domain and mode);
         * it queries using the orm read_group which reduces to a query with
           sum on debit and credit and group by on account_id (note: it seems
-          the orm then does one query per account to fetch the account name...);
+          the orm then does one query per account to fetch the account
+          name...);
         * additionally, one query per view/consolidation account is done to
           discover the children accounts.
     """
@@ -163,7 +165,8 @@ class AccountingExpressionProcessor(object):
             v = 0.0
             for account_code in account_codes:
                 for account_id in self._account_ids_by_code[account_code]:
-                    debit, credit = account_ids_data.get(account_id, (0.0, 0.0))
+                    debit, credit = \
+                        account_ids_data.get(account_id, (0.0, 0.0))
                     if field == 'deb':
                         v += debit
                     elif field == 'crd':
