@@ -56,7 +56,8 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
             'target_move': self._get_target_move,
             'initial_balance': self._get_initial_balance,
             'amount_currency': self._get_amount_currency,
-            'new_page_after_each_account': self._get_new_page_after_each_account,
+            'new_page_after_each_account':
+                self._get_new_page_after_each_account,
             'display_target_move': self._get_display_target_move,
             'accounts': self._get_accounts_br,
             'additional_args': [
