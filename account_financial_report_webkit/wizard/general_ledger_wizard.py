@@ -42,8 +42,9 @@ class AccountReportGeneralLedgerWizard(orm.TransientModel):
     _columns = {
         'amount_currency': fields.boolean("With Currency",
                                           help="It adds the currency column"),
-        'new_page_after_each_account': fields.boolean("Page break after each account", 
-                                                      help="It adds a page break after each account"), 
+        'new_page_after_each_account': fields.boolean(
+            "Page break after each account",
+            help="It adds a page break after each account"),
         'display_account': fields.selection(
             [('bal_all', 'All'),
              ('bal_mix', 'With transactions or non zero balance')],
