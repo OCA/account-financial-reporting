@@ -1,5 +1,6 @@
 import re
 from collections import defaultdict
+from openerp.osv import expression
 
 
 class AccountingExpressionProcessor(object):
@@ -138,11 +139,6 @@ class AccountingExpressionProcessor(object):
 
         Returns a domain that can be used to search on account.move.line.
         """
-        def or_domains(self, domains):
-            """ convert a list of domain into one domain OR'ing the domains """
-            # TODO
-            return []
-
         domains = []
         for mo in self.ACC_RE.finditer(expr):
             field, mode, account_codes, domain = self._parse_mo(mo)
@@ -157,8 +153,8 @@ class AccountingExpressionProcessor(object):
             elif field == 'deb':
                 domain.append(('debit', '>', 0))
             domain.extend(domain)
-            domains.append(domain)
-        return or_domains(domains)
+            domains.append(expression.normalize_domain(domain))
+        return expression.OR(domains)
 
     def do_queries(self, period_domain, period_domain_i, period_domain_e):
         aml_model = self.env['account.move.line']
