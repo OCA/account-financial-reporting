@@ -76,51 +76,6 @@ def _python_var(var_str):
     return re.sub(r'\W|^(?=\d)', '_', var_str).lower()
 
 
-def _get_sufix(is_solde=False, is_initial=False):
-    if is_solde:
-        return 's'
-    elif is_initial:
-        return 'i'
-    else:
-        return ''
-
-
-def _get_prefix(function, is_solde=False, is_initial=False):
-    return function + _get_sufix(is_solde=is_solde, is_initial=is_initial)
-
-
-# TODO : To review
-def _get_account_vars_in_expr(expr, res_vars, domain_mapping, is_solde=False,
-                              is_initial=False):
-    for function in FUNCTION_LIST:
-        prefix = _get_prefix(function, is_solde=is_solde,
-                             is_initial=is_initial)
-        find_res = re.findall(r'\b%s(?:_[0-9]+|\[.*?\])(?:\[.+?\])?' % prefix,
-                              expr)
-        for item in find_res:
-            match = re.match(r'\b(%s)(_[0-9]+|\[.*?\])(\[.+?\])?' % prefix,
-                             item)
-            var_tuple = match.groups()
-            domain = "" if var_tuple[2] is None else var_tuple[2]
-            key = ""
-            if domain != "":
-                if domain not in domain_mapping:
-                    key = 'd' + str(len(res_vars.keys()))
-                    domain_mapping[domain] = key
-                else:
-                    key = domain_mapping[domain]
-            key_domain = (key, domain)
-            if not res_vars.get(key_domain, False):
-                res_vars[key_domain] = set()
-            if var_tuple[1].startswith('_'):
-                account_codes = var_tuple[1][1:]
-            else:
-                account_codes = var_tuple[1][1:-1]
-            account_codes = [a.strip() for a in account_codes.split(',')]
-            account_codes_set = set(account_codes)
-            res_vars[key_domain] |= account_codes_set
-
-
 def _is_valid_python_var(name):
     for item in FUNCTION_LIST:
         for param in PARAMETERS:
@@ -535,57 +490,43 @@ class mis_report_instance_period(orm.Model):
          'Period name should be unique by report'),
     ]
 
-    # TODO : To review
     def compute_domain(self, cr, uid, ids, account_, context=None):
         if isinstance(ids, (int, long)):
             ids = [ids]
-        domain_list = []
-        # extract all bal code
-        res_vars = {}
-        domain_mapping = {}
-        _get_account_vars_in_expr(account_, res_vars, domain_mapping,
-                                  is_solde=False, is_initial=False)
-        for key_domain, account_code in res_vars.iteritems():
-            key, domain = key_domain
-            partial_domain = [('account_id.code', 'in', list(account_code))]
-            if domain != '':
-                partial_domain.insert(0, '&')
-                domain_eval = safe_eval(domain)
-                partial_domain.extend(domain_eval)
-            domain_list.extend(partial_domain)
-        nb_or = len(res_vars) - 1
-        while nb_or > 0:
-            domain_list.insert(0, '|')
-            nb_or -= 1
-
-        # compute date/period
-        period_ids = []
-        date_from = None
-        date_to = None
-
-        period_obj = self.pool['account.period']
-
-        for c in self.browse(cr, uid, ids, context=context):
-            target_move = c.report_instance_id.target_move
+        domain = []
+        this = self.browse(cr, uid, ids, context=context)[0]
+        env = Environment(cr, uid, {})
+        aep = AccountingExpressionProcessor(env)
+        aep.parse_expr(account_)
+        aep.done_parsing([('company_id', '=',
+                           this.report_instance_id.company_id.id)])
+        domain.extend(aep.get_aml_domain_for_expr(account_))
+        if domain != []:
+            # compute date/period
+            period_ids = []
+            date_from = None
+            date_to = None
+            period_obj = self.pool['account.period']
+            target_move = this.report_instance_id.target_move
             if target_move == 'posted':
-                domain_list.append(('move_id.state', '=', target_move))
-            if c.period_from:
+                domain.append(('move_id.state', '=', target_move))
+            if this.period_from:
                 compute_period_ids = period_obj.build_ctx_periods(
-                    cr, uid, c.period_from.id, c.period_to.id)
+                    cr, uid, this.period_from.id, this.period_to.id)
                 period_ids.extend(compute_period_ids)
             else:
-                if not date_from or date_from > c.date_from:
-                    date_from = c.date_from
-                if not date_to or date_to < c.date_to:
-                    date_to = c.date_to
-        if period_ids:
+                date_from = this.date_from
+                date_to = this.date_to
+            if period_ids:
+                if date_from:
+                    domain.append('|')
+                domain.append(('period_id', 'in', period_ids))
             if date_from:
-                domain_list.append('|')
-            domain_list.append(('period_id', 'in', period_ids))
-        if date_from:
-            domain_list.extend([('date', '>=', c.date_from),
-                                ('date', '<=', c.date_to)])
-        return domain_list
+                domain.extend([('date', '>=', date_from),
+                               ('date', '<=', date_to)])
+        else:
+            domain = False
+        return domain
 
     def compute_period_domain(self, cr, uid, period_report, is_solde,
                               is_initial, context=None):
