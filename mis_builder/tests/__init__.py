@@ -22,13 +22,13 @@
 #
 ##############################################################################
 
-from . import mis_builder_test
+from . import test_mis_builder
 
 fast_suite = [
 ]
 
 checks = [
-    mis_builder_test,
+    test_mis_builder,
 ]
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

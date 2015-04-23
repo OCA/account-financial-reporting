@@ -33,10 +33,10 @@ DB = common.DB
 ADMIN_USER_ID = common.ADMIN_USER_ID
 
 
-class mis_builder_test(common.TransactionCase):
+class test_mis_builder(common.TransactionCase):
 
     def setUp(self):
-        super(mis_builder_test, self).setUp()
+        super(test_mis_builder, self).setUp()
 
     def test_datetime_conversion(self):
         date_to_convert = '2014-07-05'
