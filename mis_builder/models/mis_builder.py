@@ -850,6 +850,8 @@ class mis_report_instance(orm.Model):
         period_values = {}
         lang = self.pool['res.users'].read(
             cr, uid, uid, ['lang'], context=context)['lang']
+        if not lang:
+            lang = 'en_US'
         lang_id = self.pool['res.lang'].search(
             cr, uid, [('code', '=', lang)], context=context)
 
