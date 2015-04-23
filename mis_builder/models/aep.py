@@ -141,13 +141,14 @@ class AccountingExpressionProcessor(object):
         """
         domains = []
         for mo in self.ACC_RE.finditer(expr):
-            field, mode, account_codes, domain = self._parse_mo(mo)
+            field, mode, account_codes, domain_partial = self._parse_mo(mo)
             if mode == 'i':
                 continue
             account_ids = set()
             for account_code in account_codes:
                 account_ids.update(self._account_ids_by_code[account_code])
             domain = [('account_id', 'in', tuple(account_ids))]
+            domain.extend(list(domain_partial))
             if field == 'crd':
                 domain.append(('credit', '>', 0))
             elif field == 'deb':
