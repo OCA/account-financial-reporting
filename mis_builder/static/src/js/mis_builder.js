@@ -29,7 +29,7 @@ openerp.mis_builder = function(instance) {
             var period_id = JSON.parse($(event.target).data("period-id"));
             var period_name = JSON.parse($(event.target).data("period-name"));
             var self = this;
-            if (!(val === null) && (val_c.indexOf('bal_') >=0)){
+            if (!(val === null) && (val_c.indexOf('bal') >=0)){
                 new instance.web.Model("mis.report.instance.period").call(
                     "compute_domain", 
                     [period_id, val_c],
