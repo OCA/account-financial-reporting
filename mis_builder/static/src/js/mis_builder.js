@@ -35,16 +35,18 @@ openerp.mis_builder = function(instance) {
                     [period_id, val_c],
                     {'context': new instance.web.CompoundContext()}
                 ).then(function(result){
-                    self.do_action({
-                        name: val_c + ' - ' + period_name,
-                        domain: JSON.stringify(result),
-                        type: 'ir.actions.act_window',
-                        res_model: "account.move.line",
-                        views: [[false, 'list'], [false, 'form']],
-                        view_type : "list",
-                        view_mode : "list",
-                        target: 'current',
-                    });
+                    if (result != false){
+                        self.do_action({
+                            name: val_c + ' - ' + period_name,
+                            domain: JSON.stringify(result),
+                            type: 'ir.actions.act_window',
+                            res_model: "account.move.line",
+                            views: [[false, 'list'], [false, 'form']],
+                            view_type : "list",
+                            view_mode : "list",
+                            target: 'current',
+                        });
+                    }
                 });
             }
         },
