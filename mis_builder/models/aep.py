@@ -129,6 +129,32 @@ class AccountingExpressionProcessor(object):
                 account_ids.update(self._account_ids_by_code[account_code])
             self._map[key] = list(account_ids)
 
+    def get_aml_domain_for_expr(self, expr):
+        """ Get a domain on account.move.line for an expression.
+
+        Only accounting expression in mode 'p' and 'e' are considered.
+
+        Prerequisite: done_parsing() must have been invoked.
+
+        Returns a domain that can be used to search on account.move.line.
+        """
+        def or_domains(self, domains):
+            """ convert a list of domain into one domain OR'ing the domains """
+            # TODO
+            return []
+
+        domains = []
+        for mo in self.ACC_RE.finditer(expr):
+            _, mode, account_codes, domain = self._parse_mo(mo)
+            if mode == 'i':
+                continue
+            account_ids = set()
+            for account_code in account_codes:
+                account_ids.update(self._account_ids_by_code[account_code])
+            domains.append([('account_id', 'in', tuple(account_ids))])
+            domains.append(domain)
+        return or_domains(domains)
+
     def do_queries(self, period_domain, period_domain_i, period_domain_e):
         aml_model = self.env['account.move.line']
         self._data = {}  # {(domain, mode): {account_id: (debit, credit)}}
