@@ -32,8 +32,7 @@
     'author': 'ACSONE SA/NV',
     'website': 'http://acsone.eu',
     'depends': ['account',
-                'account_partial_balance',
-                'report_xls',
+                'report_xls',  # OCA/reporting-engine
                 ],
     'data': [
         'wizard/mis_builder_dashboard.xml',
