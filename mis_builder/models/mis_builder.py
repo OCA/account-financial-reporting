@@ -36,6 +36,7 @@ from collections import OrderedDict
 from aep import AccountingExpressionProcessor
 from openerp.api import Environment
 
+
 class AutoStruct(object):
 
     def __init__(self, **kwargs):
@@ -513,7 +514,7 @@ class mis_report_instance_period(orm.Model):
             domain = False
         return domain
 
-    def compute_period_domain(self, cr, uid, period_report, is_solde,
+    def compute_period_domain(self, cr, uid, period_report, is_end,
                               is_initial, context=None):
         period_obj = self.pool['account.period']
         move_obj = self.pool['account.move']
@@ -521,7 +522,7 @@ class mis_report_instance_period(orm.Model):
         target_move = period_report.report_instance_id.target_move
         if target_move == 'posted':
             domain_list.append(('move_id.state', '=', target_move))
-        if not is_solde and not is_initial:
+        if not is_end and not is_initial:
             if period_report.period_from:
                 compute_period_ids = period_obj.build_ctx_periods(
                     cr, uid, period_report.period_from.id,
@@ -611,7 +612,7 @@ class mis_report_instance_period(orm.Model):
         }
         domain_p = self.compute_period_domain(cr, uid, c, False, False,
                                               context=context)
-        domain_s = self.compute_period_domain(cr, uid, c, True, False,
+        domain_e = self.compute_period_domain(cr, uid, c, True, False,
                                               context=context)
         domain_i = self.compute_period_domain(cr, uid, c, False, True,
                                               context=context)
