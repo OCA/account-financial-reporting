@@ -616,7 +616,7 @@ class mis_report_instance_period(orm.Model):
                                               context=context)
         domain_i = self.compute_period_domain(cr, uid, c, False, True,
                                               context=context)
-        aep.do_queries(domain_p, domain_i, domain_s)
+        aep.do_queries(domain_p, domain_i, domain_e)
         localdict.update(self._fetch_queries(cr, uid, c,
                                              context=context))
 
