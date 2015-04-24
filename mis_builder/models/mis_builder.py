@@ -36,17 +36,6 @@ from collections import OrderedDict
 from aep import AccountingExpressionProcessor
 from openerp.api import Environment
 
-
-FUNCTION = [('credit', 'crd'),
-            ('debit', 'deb'),
-            ('balance', 'bal')
-            ]
-
-FUNCTION_LIST = [x[1] for x in FUNCTION]
-
-PARAMETERS = ['s', 'i', 'e', 'p', '']
-
-
 class AutoStruct(object):
 
     def __init__(self, **kwargs):
@@ -77,10 +66,6 @@ def _python_var(var_str):
 
 
 def _is_valid_python_var(name):
-    for item in FUNCTION_LIST:
-        for param in PARAMETERS:
-            if name.startswith(item + param):
-                return False
     return re.match("[_A-Za-z][_a-zA-Z0-9]*$", name)
 
 
