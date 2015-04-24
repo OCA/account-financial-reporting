@@ -1,0 +1,54 @@
+<template>
+    <t t-name="mis_builder.MisReport">
+        <p> </p>
+        <table t-if="widget.mis_report_data" class="oe_list_content">
+            <thead>
+                <tr class="oe_list_header_columns">
+                    <th class="oe_list_header_char"></th>
+                    <t t-foreach="widget.mis_report_data.header" t-as="h">
+                    <th t-foreach="h_value.cols" t-as="header" class="oe_list_header_char rallign">
+                        <div>
+                            <t t-esc="header.name"/>
+                        </div>
+                        <div>
+                            <t t-esc="header.date"/>
+                        </div>
+                    </th>
+                    </t>
+                </tr>
+            </thead>
+            <tbody>
+                <tr t-foreach="widget.mis_report_data.content" t-as="c">
+                    <th t-att="{'style': c_value.default_style}">
+                        <div>
+                            <t t-esc="c_value.kpi_name"/>
+                        </div>
+                    </th>
+                    <t t-foreach="c_value.cols" t-as="value">
+                        <td class="rallign open_account_move" t-att="{'style': c_value.default_style + ';' + value_value.style}">
+                            <label t-att="{'title': value_value.val_c}" class=" oe_form_label_help oe_align_right">
+                                <a t-att="{'style': c_value.default_style + ';' + value_value.style}"
+                                   class="mis_builder"
+                                   href="javascript:void(0)"
+                                   t-att-data-val="JSON.stringify(value_value.val)"
+                                   t-att-data-val-c="JSON.stringify(value_value.val_c)"
+                                   t-att-data-period-id="JSON.stringify(value_value.period_id)"
+                                   t-att-data-period-name="JSON.stringify(value_value.period_name)">
+                                        <t t-esc="value_value.val_r"/>
+                                </a>
+                            </label>
+                        </td>
+                    </t>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="oe_list_footer" />
+                    <t t-foreach="widget.mis_report_data.header" t-as="f">
+                        <td t-foreach="f_value.cols" class="oe_list_footer" />
+                    </t>
+                </tr>
+            </tfoot>
+        </table>
+    </t>
+</template>

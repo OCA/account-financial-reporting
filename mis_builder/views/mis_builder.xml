@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+       <template id="assets_backend" name="mis_builder" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/mis_builder/static/src/css/custom.css"/>
+                <script type="text/javascript" src="/mis_builder/static/src/js/mis_builder.js"></script>
+            </xpath>
+        </template>
+
+        <record model="ir.ui.view" id="mis_report_view_tree">
+            <field name="name">mis.report.view.tree</field>
+            <field name="model">mis.report</field>
+            <field name="arch" type="xml">
+                <tree string="MIS Reports">
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="mis_report_view_form">
+            <field name="name">mis.report.view.form</field>
+            <field name="model">mis.report</field>
+            <field name="arch" type="xml">
+                <form string="MIS Report" version="7.0">
+                <sheet>
+                    <group col="2">
+                        <field name="name"/>
+                        <field name="description"/>
+                        <field name="query_ids">
+                            <tree string="Queries" editable="bottom">
+                                <field name="name"/>
+                                <field name="model_id"/>
+                                <field name="field_ids" domain="[('model_id', '=', model_id)]" widget="many2many_tags"
+                                                        on_change="onchange_field_ids(field_ids, context)"/>
+                                <field name="field_names"/>
+                                <field name="date_field" domain="[('model_id', '=', model_id), ('ttype', 'in', ('date', 'datetime'))]"/>
+                                <field name="domain"/>
+                            </tree>
+                        </field>
+                        <field name="kpi_ids">
+                            <tree string="KPI's" editable="bottom">
+                                <field name="sequence" widget="handle"/>
+                                <field name="description" on_change="onchange_description(description, name, context)"/>
+                                <field name="name" on_change="onchange_name(name, context)"/>
+                                <field name="expression"/>
+                                <field name="type" on_change="onchange_type(type, context)"/>
+                                <field name="dp" attrs="{'invisible': [('type', '=', 'str')]}"/>
+                                <field name="divider" attrs="{'invisible': [('type', '=', 'str')]}"/>
+                                <field name="suffix"/>
+                                <field name="compare_method" attrs="{'invisible': [('type', '=', 'str')]}"/>
+                                <field name="default_css_style"/>
+                                <field name="css_style"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="mis_report_view_action">
+            <field name="name">Mis report</field>
+            <field name="view_id" ref="mis_report_view_tree"/>
+            <field name="res_model">mis.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="mis_report_view_menu" parent="base.menu_reporting_config" name="MIS Reports" action="mis_report_view_action"/>
+
+	    <record id="xls_export" model="ir.actions.report.xml">
+	      <field name="name">Export report instance result</field>
+	      <field name="model">mis.report.instance</field>
+	      <field name="type">ir.actions.report.xml</field>
+	      <field name="report_name">mis.report.instance.xls</field>
+	      <field name="report_type">xls</field>
+	      <field name="auto" eval="False"/>
+	    </record>
+
+        <record model="ir.ui.view" id="mis_report_instance_result_view_form">
+            <field name="name">mis.report.instance.result.view.form</field>
+            <field name="model">mis.report.instance</field>
+            <field name="priority" eval="17"/>
+            <field name="arch" type="xml">
+                <form string="MIS Report Result" version="7.0">
+                    <widget type="mis_report"></widget>
+                    <button icon="gtk-execute" name="%(xls_export)d" string="Export" type="action" colspan="2"/>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="mis_report_instance_result_action">
+            <field name="name">Preview</field>
+            <field name="view_id" ref="mis_report_instance_result_view_form"/>
+            <field name="res_model">mis.report.instance</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record model="ir.ui.view" id="mis_report_instance_view_tree">
+            <field name="name">mis.report.instance.view.tree</field>
+            <field name="model">mis.report.instance</field>
+            <field name="arch" type="xml">
+                <tree string="MIS Report Instances">
+                    <field name="report_id"/>
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="target_move"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="mis_report_instance_view_form">
+            <field name="name">mis.report.instance.view.form</field>
+            <field name="model">mis.report.instance</field>
+            <field name="priority" eval="16"/>
+            <field name="arch" type="xml">
+                <form string="MIS Report Instance" version="7.0">
+                <sheet>
+                    <div class="oe_title">
+                        <div class="oe_edit_only">
+                            <label for="name"/>
+                        </div>
+                        <h1>
+                            <field name="name" placeholder="Name"/>
+                        </h1>
+                    </div>
+                    <div class="oe_right oe_button_box" name="buttons"> 
+                        <button type="action" name="%(mis_report_instance_result_action)d" string="Preview" />
+                        <button type="action" name="%(mis_report_instance_add_to_dashboard_action)d" string="Add to dashboard" />
+                    </div>
+                    <group col="2">
+                        <field name="description"/>
+                        <field name="report_id"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="target_move"/>
+                        <field name="date"/>
+                        <field name="period_ids">
+                            <tree string="KPI's" editable="bottom">
+                                <field name="sequence" widget="handle"/>
+                                <field name="name"/>
+                                <field name="type"/>
+                                <field name="offset"/>
+                                <field name="duration"/>
+                                <field name="normalize_factor"/>
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                                <field name="period_from"/>
+                                <field name="period_to"/>
+                                <field name="report_instance_id" invisible="1"/>
+                                <field name="id" invisible="1"/>
+                                <field name="comparison_column_ids" domain="[('report_instance_id', '=', report_instance_id), ('id', '!=', id)]" widget="many2many_tags"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="mis_report_instance_view_action">
+            <field name="name">Mis report instance</field>
+            <field name="view_id" ref="mis_report_instance_view_tree"/>
+            <field name="res_model">mis.report.instance</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="mis_report_instance_view_menu" parent="base.menu_reporting_config" name="MIS Report Instances" action="mis_report_instance_view_action"/>
+
+    </data>
+</openerp>
