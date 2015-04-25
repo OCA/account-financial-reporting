@@ -25,7 +25,7 @@
                         </div>
                     </td>
                     <t t-foreach="c_value.cols" t-as="value">
-                        <td class="mis_builder_ralign open_account_move" t-att="{'style': c_value.default_style}">
+                        <td class="mis_builder_ralign" t-att="{'style': c_value.default_style}">
                             <div t-att="{'style': value_value.style, 'title': value_value.val_c}">
                                 <t t-if="value_value.drilldown">
                                     <a href="javascript:void(0)"

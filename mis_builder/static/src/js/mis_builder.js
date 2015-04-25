@@ -21,9 +21,9 @@ openerp.mis_builder = function(instance) {
             });
         },
         events: {
-            "click .open_account_move a": "go_to_move",
+            "click a.mis_builder_drilldown": "drilldown",
         },
-        go_to_move : function(event) {
+        drilldown: function(event) {
             var val_c = JSON.parse($(event.target).data("val-c"));
             var val =  JSON.parse($(event.target).data("val"));
             var period_id = JSON.parse($(event.target).data("period-id"));
