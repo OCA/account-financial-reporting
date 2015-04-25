@@ -480,18 +480,16 @@ class mis_report_instance_period(orm.Model):
          'Period name should be unique by report'),
     ]
 
-    def compute_domain(self, cr, uid, ids, account_, context=None):
-        if isinstance(ids, (int, long)):
-            ids = [ids]
-        domain = []
-        this = self.browse(cr, uid, ids, context=context)[0]
+    def drilldown(self, cr, uid, id, expr, context=None):
+        this = self.browse(cr, uid, id, context=context)[0]
         env = Environment(cr, uid, {})
         aep = AccountingExpressionProcessor(env)
-        aep.parse_expr(account_)
+        aep.parse_expr(expr)
         aep.done_parsing([('company_id', '=',
                            this.report_instance_id.company_id.id)])
-        domain.extend(aep.get_aml_domain_for_expr(account_))
-        if domain != []:
+        domain = aep.get_aml_domain_for_expr(expr)
+        if domain:
+            # TODO: reuse compute_period_domain
             # compute date/period
             period_ids = []
             date_from = None
@@ -514,9 +512,18 @@ class mis_report_instance_period(orm.Model):
             if date_from:
                 domain.extend([('date', '>=', date_from),
                                ('date', '<=', date_to)])
+            return {
+                'name': expr + ' - ' + this.name,
+                'domain': domain,
+                'type': 'ir.actions.act_window',
+                'res_model': 'account.move.line',
+                'views': [[False, 'list'], [False, 'form']],
+                'view_type': 'list',
+                'view_mode': 'list',
+                'target': 'current',
+            }
         else:
-            domain = False
-        return domain
+            return False
 
     def compute_period_domain(self, cr, uid, period_report, is_end,
                               is_initial, context=None):
@@ -657,7 +664,8 @@ class mis_report_instance_period(orm.Model):
                 except:
                     kpi_style = None
 
-                drilldown = bool(aep.get_aml_domain_for_expr(kpi.expression))
+                drilldown = (kpi_val is not None and
+                             bool(aep.get_aml_domain_for_expr(kpi.expression)))
 
                 res[kpi.name] = {
                     'val': kpi_val,
@@ -669,7 +677,7 @@ class mis_report_instance_period(orm.Model):
                     'dp': kpi.dp,
                     'is_percentage': kpi.type == 'pct',
                     'period_id': c.id,
-                    'period_name': c.name,
+                    'expr': kpi.expression,
                     'drilldown': drilldown,
                 }
 
