@@ -636,7 +636,7 @@ class mis_report_instance_period(orm.Model):
         while True:
             for kpi in compute_queue:
                 try:
-                    kpi_val_comment = kpi.expression
+                    kpi_val_comment = kpi.name + " = " + kpi.expression
                     kpi_eval_expression = aep.replace_expr(kpi.expression)
                     kpi_val = safe_eval(kpi_eval_expression, localdict)
                 except ZeroDivisionError:
