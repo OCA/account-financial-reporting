@@ -30,10 +30,10 @@
                                 <t t-if="value_value.drilldown">
                                     <a href="javascript:void(0)"
                                        class="mis_builder_drilldown"
-                                       t-att-data-val="JSON.stringify(value_value.val)"
-                                       t-att-data-val-c="JSON.stringify(value_value.val_c)"
+                                       t-att-data-drilldown="JSON.stringify(value_value.drilldown)"
                                        t-att-data-period-id="JSON.stringify(value_value.period_id)"
-                                       t-att-data-period-name="JSON.stringify(value_value.period_name)">
+                                       t-att-data-expr="JSON.stringify(value_value.expr)"
+                                    >
                                         <t t-esc="value_value.val_r"/>
                                     </a>
                                 </t>

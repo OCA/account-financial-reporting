@@ -20,32 +20,24 @@ openerp.mis_builder = function(instance) {
                 self.renderElement();
             });
         },
+
         events: {
             "click a.mis_builder_drilldown": "drilldown",
         },
+
         drilldown: function(event) {
-            var val_c = JSON.parse($(event.target).data("val-c"));
-            var val =  JSON.parse($(event.target).data("val"));
-            var period_id = JSON.parse($(event.target).data("period-id"));
-            var period_name = JSON.parse($(event.target).data("period-name"));
             var self = this;
-            if (!(val === null) && (val_c.indexOf('bal') >=0)){
+            var drilldown = JSON.parse($(event.target).data("drilldown"));
+            if (drilldown) {
+                var period_id = JSON.parse($(event.target).data("period-id"));
+                var val_c = JSON.parse($(event.target).data("expr"));
                 new instance.web.Model("mis.report.instance.period").call(
-                    "compute_domain", 
+                    "drilldown",
                     [period_id, val_c],
                     {'context': new instance.web.CompoundContext()}
-                ).then(function(result){
-                    if (result != false){
-                        self.do_action({
-                            name: val_c + ' - ' + period_name,
-                            domain: JSON.stringify(result),
-                            type: 'ir.actions.act_window',
-                            res_model: "account.move.line",
-                            views: [[false, 'list'], [false, 'form']],
-                            view_type : "list",
-                            view_mode : "list",
-                            target: 'current',
-                        });
+                ).then(function(result) {
+                    if (result) {
+                        self.do_action(result);
                     }
                 });
             }
