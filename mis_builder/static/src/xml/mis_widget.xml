@@ -1,19 +1,19 @@
 <template>
     <t t-name="mis_builder.MisReport">
         <p> </p>
-        <table t-if="widget.mis_report_data" class="oe_list_content">
+        <table t-if="widget.mis_report_data" class="oe_list_content mis_builder">
             <thead>
                 <tr class="oe_list_header_columns">
                     <th class="oe_list_header_char"></th>
                     <t t-foreach="widget.mis_report_data.header" t-as="h">
-                    <th t-foreach="h_value.cols" t-as="header" class="oe_list_header_char mis_builder_ralign">
-                        <div>
-                            <t t-esc="header.name"/>
-                        </div>
-                        <div>
-                            <t t-esc="header.date"/>
-                        </div>
-                    </th>
+                        <th t-foreach="h_value.cols" t-as="col" class="oe_list_header_char mis_builder_ralign">
+                            <div>
+                                <t t-esc="col.name"/>
+                            </div>
+                            <div>
+                                <t t-esc="col.date"/>
+                            </div>
+                        </th>
                     </t>
                 </tr>
             </thead>
@@ -25,7 +25,7 @@
                         </div>
                     </td>
                     <t t-foreach="c_value.cols" t-as="value">
-                        <td class="mis_builder_ralign" t-att="{'style': c_value.default_style}">
+                        <td t-att="{'style': c_value.default_style}" class="mis_builder_ralign">
                             <div t-att="{'style': value_value.style, 'title': value_value.val_c}">
                                 <t t-if="value_value.drilldown">
                                     <a href="javascript:void(0)"
