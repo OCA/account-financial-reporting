@@ -209,7 +209,7 @@ class mis_report_kpi(orm.Model):
             divider_label = ''
         # format number following user language
         value = round(value / float(divider or 1), dp) or 0
-        return '%s %s%s' % (self.pool['res.lang'].format(
+        return u'%s\xA0%s%s' % (self.pool['res.lang'].format(
             cr, uid, lang_id,
             '%%%s.%df' % (
                 sign, dp),
