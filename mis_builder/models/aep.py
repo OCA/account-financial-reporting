@@ -1,6 +1,8 @@
 import re
 from collections import defaultdict
+
 from openerp.osv import expression
+from openerp.tools.safe_eval import safe_eval
 
 
 class AccountingExpressionProcessor(object):
@@ -107,7 +109,7 @@ class AccountingExpressionProcessor(object):
             account_codes = account_codes[1:-1]
         account_codes = [a.strip() for a in account_codes.split(',')]
         domain = domain or '[]'
-        domain = tuple(eval(domain))  # TODO: safe_eval
+        domain = tuple(safe_eval(domain))
         return field, mode, account_codes, domain
 
     def parse_expr(self, expr):
