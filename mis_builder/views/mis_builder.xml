@@ -106,10 +106,12 @@
             <field name="model">mis.report.instance</field>
             <field name="arch" type="xml">
                 <tree string="MIS Report Instances">
-                    <field name="report_id"/>
                     <field name="name"/>
                     <field name="description"/>
+                    <field name="report_id"/>
                     <field name="target_move"/>
+                    <field name="pivot_date"/>
+                    <field name="company_id"/>
                 </tree>
             </field>
         </record>
