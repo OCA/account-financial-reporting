@@ -6,7 +6,7 @@
                 <tr class="oe_list_header_columns">
                     <th class="oe_list_header_char"></th>
                     <t t-foreach="widget.mis_report_data.header" t-as="h">
-                    <th t-foreach="h_value.cols" t-as="header" class="oe_list_header_char ralign">
+                    <th t-foreach="h_value.cols" t-as="header" class="oe_list_header_char mis_builder_ralign">
                         <div>
                             <t t-esc="header.name"/>
                         </div>
@@ -25,17 +25,21 @@
                         </div>
                     </td>
                     <t t-foreach="c_value.cols" t-as="value">
-                        <td class="ralign open_account_move" t-att="{'style': c_value.default_style}">
-                            <div t-att="{'style': value_value.style}">
-                                <a t-att="{'title': value_value.val_c}"
-                                   class="mis_builder"
-                                   href="javascript:void(0)"
-                                   t-att-data-val="JSON.stringify(value_value.val)"
-                                   t-att-data-val-c="JSON.stringify(value_value.val_c)"
-                                   t-att-data-period-id="JSON.stringify(value_value.period_id)"
-                                   t-att-data-period-name="JSON.stringify(value_value.period_name)">
+                        <td class="mis_builder_ralign open_account_move" t-att="{'style': c_value.default_style}">
+                            <div t-att="{'style': value_value.style, 'title': value_value.val_c}">
+                                <t t-if="value_value.drilldown">
+                                    <a href="javascript:void(0)"
+                                       class="mis_builder_drilldown"
+                                       t-att-data-val="JSON.stringify(value_value.val)"
+                                       t-att-data-val-c="JSON.stringify(value_value.val_c)"
+                                       t-att-data-period-id="JSON.stringify(value_value.period_id)"
+                                       t-att-data-period-name="JSON.stringify(value_value.period_name)">
                                         <t t-esc="value_value.val_r"/>
-                                </a>
+                                    </a>
+                                </t>
+                                <t t-if="!value_value.drilldown">
+                                    <t t-esc="value_value.val_r"/>
+                                </t>
                             </div>
                         </td>
                     </t>
