@@ -22,19 +22,21 @@
 #
 ##############################################################################
 
+from collections import OrderedDict
 from datetime import datetime, timedelta
 from dateutil import parser
-import traceback
 import re
+import traceback
+
 import pytz
 
+from openerp.api import Environment
 from openerp.osv import orm, fields
+from openerp import tools
 from openerp.tools.safe_eval import safe_eval
 from openerp.tools.translate import _
-from openerp import tools
-from collections import OrderedDict
-from aep import AccountingExpressionProcessor
-from openerp.api import Environment
+
+from .aep import AccountingExpressionProcessor
 
 
 class AutoStruct(object):
