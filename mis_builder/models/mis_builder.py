@@ -266,7 +266,8 @@ class mis_report_query(orm.Model):
                                       domain=[('ttype', 'in',
                                                ('date', 'datetime'))]),
         'domain': fields.char(string='Domain'),
-        'report_id': fields.many2one('mis.report', string='Report'),
+        'report_id': fields.many2one('mis.report', string='Report',
+                                     ondelete='cascade'),
     }
 
     _order = 'name'
@@ -445,7 +446,8 @@ class mis_report_instance_period(orm.Model):
                                      multi="dates", string="To period"),
         'sequence': fields.integer(string='Sequence'),
         'report_instance_id': fields.many2one('mis.report.instance',
-                                              string='Report Instance'),
+                                              string='Report Instance',
+                                              ondelete='cascade'),
         'comparison_column_ids': fields.many2many(
             'mis.report.instance.period',
             'mis_report_instance_period_rel',
