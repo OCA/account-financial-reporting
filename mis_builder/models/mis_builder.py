@@ -657,6 +657,8 @@ class mis_report_instance_period(orm.Model):
                 except:
                     kpi_style = None
 
+                drilldown = bool(aep.get_aml_domain_for_expr(kpi.expression))
+
                 res[kpi.name] = {
                     'val': kpi_val,
                     'val_r': kpi_val_rendered,
@@ -668,6 +670,7 @@ class mis_report_instance_period(orm.Model):
                     'is_percentage': kpi.type == 'pct',
                     'period_id': c.id,
                     'period_name': c.name,
+                    'drilldown': drilldown,
                 }
 
             if len(recompute_queue) == 0:

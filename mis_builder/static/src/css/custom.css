@@ -1,6 +1,11 @@
-.openerp .ralign {
+.mis_builder_ralign {
   text-align: right;
 }
-.openerp a.mis_builder {
- color: #4c4c4c;
+
+a.mis_builder_drilldown {
+  color: inherit;
+}
+
+a.mis_builder_drilldown:hover {
+  text-decoration: underline;
 }
