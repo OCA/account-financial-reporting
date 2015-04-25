@@ -622,43 +622,63 @@ class mis_report_instance_period(orm.Model):
         localdict.update(self._fetch_queries(cr, uid, c,
                                              context=context))
 
-        for kpi in c.report_instance_id.report_id.kpi_ids:
-            try:
-                kpi_val_comment = kpi.expression
-                kpi_eval_expression = aep.replace_expr(kpi.expression)
-                kpi_val = safe_eval(kpi_eval_expression, localdict)
-            except ZeroDivisionError:
-                kpi_val = None
-                kpi_val_rendered = '#DIV/0'
-                kpi_val_comment += '\n\n%s' % (traceback.format_exc(),)
-            except:
-                kpi_val = None
-                kpi_val_rendered = '#ERR'
-                kpi_val_comment += '\n\n%s' % (traceback.format_exc(),)
-            else:
-                kpi_val_rendered = kpi_obj._render(
-                    cr, uid, lang_id, kpi, kpi_val, context=context)
+        compute_queue = c.report_instance_id.report_id.kpi_ids
+        recompute_queue = []
+        while True:
+            for kpi in compute_queue:
+                try:
+                    kpi_val_comment = kpi.expression
+                    kpi_eval_expression = aep.replace_expr(kpi.expression)
+                    kpi_val = safe_eval(kpi_eval_expression, localdict)
+                except ZeroDivisionError:
+                    kpi_val = None
+                    kpi_val_rendered = '#DIV/0'
+                    kpi_val_comment += '\n\n%s' % (traceback.format_exc(),)
+                except ValueError:
+                    recompute_queue.append(kpi)
+                    kpi_val = None
+                    kpi_val_rendered = '#ERR'
+                    kpi_val_comment += '\n\n%s' % (traceback.format_exc(),)
+                except:
+                    kpi_val = None
+                    kpi_val_rendered = '#ERR'
+                    kpi_val_comment += '\n\n%s' % (traceback.format_exc(),)
+                else:
+                    kpi_val_rendered = kpi_obj._render(
+                        cr, uid, lang_id, kpi, kpi_val, context=context)
 
-            localdict[kpi.name] = kpi_val
-            try:
-                kpi_style = None
-                if kpi.css_style:
-                    kpi_style = safe_eval(kpi.css_style, localdict)
-            except:
-                kpi_style = None
+                localdict[kpi.name] = kpi_val
+                try:
+                    kpi_style = None
+                    if kpi.css_style:
+                        kpi_style = safe_eval(kpi.css_style, localdict)
+                except:
+                    kpi_style = None
 
-            res[kpi.name] = {
-                'val': kpi_val,
-                'val_r': kpi_val_rendered,
-                'val_c': kpi_val_comment,
-                'style': kpi_style,
-                'default_style': kpi.default_css_style or None,
-                'suffix': kpi.suffix,
-                'dp': kpi.dp,
-                'is_percentage': kpi.type == 'pct',
-                'period_id': c.id,
-                'period_name': c.name,
-            }
+                res[kpi.name] = {
+                    'val': kpi_val,
+                    'val_r': kpi_val_rendered,
+                    'val_c': kpi_val_comment,
+                    'style': kpi_style,
+                    'default_style': kpi.default_css_style or None,
+                    'suffix': kpi.suffix,
+                    'dp': kpi.dp,
+                    'is_percentage': kpi.type == 'pct',
+                    'period_id': c.id,
+                    'period_name': c.name,
+                }
+
+            if len(recompute_queue) == 0:
+                # nothing to recompute, we are done
+                break
+            if len(recompute_queue) == len(compute_queue):
+                # could not compute anything in this iteration
+                # (ie real Value errors or cyclic dependency)
+                # so we stop trying
+                break
+            # try again
+            compute_queue = recompute_queue
+            recompute_queue = []
 
         return res
 
