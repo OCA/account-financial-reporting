@@ -1,11 +1,13 @@
-.mis_builder_ralign {
+.openerp .mis_builder_ralign {
   text-align: right;
 }
 
-a.mis_builder_drilldown {
+.openerp .mis_builder a {
+  /* we don't want the link color, to respect user styles */
   color: inherit;
 }
 
-a.mis_builder_drilldown:hover {
+.openerp .mis_builder a:hover {
+  /* underline links on hover to give a visual cue */
   text-decoration: underline;
 }
