@@ -5,6 +5,11 @@ from openerp.osv import expression
 from openerp.tools.safe_eval import safe_eval
 
 
+MODE_VARIATION = 'p'
+MODE_INITIAL = 'i'
+MODE_END = 'e'
+
+
 class AccountingExpressionProcessor(object):
     """ Processor for accounting expressions.
 
@@ -100,9 +105,9 @@ class AccountingExpressionProcessor(object):
         """
         field, mode, account_codes, domain = mo.groups()
         if not mode:
-            mode = 'p'
+            mode = MODE_VARIATION
         elif mode == 's':
-            mode = 'e'
+            mode = MODE_END
         if account_codes.startswith('_'):
             account_codes = account_codes[1:]
         else:
@@ -144,7 +149,7 @@ class AccountingExpressionProcessor(object):
         domains = []
         for mo in self.ACC_RE.finditer(expr):
             field, mode, account_codes, domain_partial = self._parse_mo(mo)
-            if mode == 'i':
+            if mode == MODE_INITIAL:
                 continue
             account_ids = set()
             for account_code in account_codes:
@@ -159,17 +164,26 @@ class AccountingExpressionProcessor(object):
             domains.append(expression.normalize_domain(domain))
         return expression.OR(domains)
 
+    def get_aml_domain_for_dates(self, date_start, date_end, mode):
+        if mode != MODE_VARIATION:
+            raise RuntimeError("")  # TODO
+        return [('date', '>=', date_start), ('date', '<=', date_end)]
+
+    def get_aml_domain_for_periods(self, period_start, period_end, mode):
+        # TODO
+        raise RuntimeError("not implemented")
+
     def do_queries(self, period_domain, period_domain_i, period_domain_e):
         aml_model = self.env['account.move.line']
         self._data = {}  # {(domain, mode): {account_id: (debit, credit)}}
         for key in self._map:
             self._data[key] = {}
             domain, mode = key
-            if mode == 'p':
+            if mode == MODE_VARIATION:
                 domain = list(domain) + period_domain
-            elif mode == 'i':
+            elif mode == MODE_INITIAL:
                 domain = list(domain) + period_domain_i
-            elif mode == 'e':
+            elif mode == MODE_END:
                 domain = list(domain) + period_domain_e
             else:
                 raise RuntimeError("unexpected mode %s" % (mode,))
