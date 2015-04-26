@@ -59,7 +59,10 @@ class AccountingExpressionProcessor(object):
 
     def __init__(self, env):
         self.env = env
-        self._map = defaultdict(set)  # {(domain, mode): set(account_ids)}
+        # before done_parsing: {(domain, mode): set(account_codes)}
+        # after done_parsing: {(domain, mode): set(account_ids)}
+        self._map_account_ids = defaultdict(set)
+        self._set_all_accounts = set()  # set((domain, mode))
         self._account_ids_by_code = defaultdict(set)
 
     def _load_account_codes(self, account_codes, account_domain):
@@ -115,7 +118,7 @@ class AccountingExpressionProcessor(object):
         if account_codes.strip():
             account_codes = [a.strip() for a in account_codes.split(',')]
         else:
-            account_codes = []
+            account_codes = None
         domain = domain or '[]'
         domain = tuple(safe_eval(domain))
         return field, mode, account_codes, domain
@@ -127,18 +130,21 @@ class AccountingExpressionProcessor(object):
         so when all expressions have been parsed, we know what to query.
         """
         for mo in self.ACC_RE.finditer(expr):
-            field, mode, account_codes, domain = self._parse_mo(mo)
+            _, mode, account_codes, domain = self._parse_mo(mo)
             key = (domain, mode)
-            self._map[key].update(account_codes)
+            if account_codes:
+                self._map_account_ids[key].update(account_codes)
+            else:
+                self._set_all_accounts.add(key)
 
     def done_parsing(self, account_domain):
         # load account codes and replace account codes by account ids in _map
-        for key, account_codes in self._map.items():
+        for key, account_codes in self._map_account_ids.items():
             self._load_account_codes(account_codes, account_domain)
             account_ids = set()
             for account_code in account_codes:
                 account_ids.update(self._account_ids_by_code[account_code])
-            self._map[key] = list(account_ids)
+            self._map_account_ids[key] = list(account_ids)
 
     def get_aml_domain_for_expr(self, expr):
         """ Get a domain on account.move.line for an expression.
@@ -149,25 +155,23 @@ class AccountingExpressionProcessor(object):
 
         Returns a domain that can be used to search on account.move.line.
         """
-        domains = []
+        aml_domains = []
         for mo in self.ACC_RE.finditer(expr):
-            field, mode, account_codes, domain_partial = self._parse_mo(mo)
+            field, mode, account_codes, domain = self._parse_mo(mo)
             if mode == MODE_INITIAL:
                 continue
-            domain = []
-            account_ids = set()
-            for account_code in account_codes:
-                account_ids.update(self._account_ids_by_code[account_code])
-            if account_ids:
-                domain.append(('account_id', 'in', tuple(account_ids)))
-            domain.extend(list(domain_partial))
+            aml_domain = list(domain)
+            if account_codes:
+                account_ids = set()
+                for account_code in account_codes:
+                    account_ids.update(self._account_ids_by_code[account_code])
+                aml_domain.append(('account_id', 'in', tuple(account_ids)))
             if field == 'crd':
-                domain.append(('credit', '>', 0))
+                aml_domain.append(('credit', '>', 0))
             elif field == 'deb':
-                domain.append(('debit', '>', 0))
-            domain.extend(domain)
-            domains.append(expression.normalize_domain(domain))
-        return expression.OR(domains)
+                aml_domain.append(('debit', '>', 0))
+            aml_domains.append(expression.normalize_domain(aml_domain))
+        return expression.OR(aml_domains)
 
     def get_aml_domain_for_dates(self, date_start, date_end, mode):
         if mode != MODE_VARIATION:
@@ -179,11 +183,11 @@ class AccountingExpressionProcessor(object):
         raise RuntimeError("not implemented")
 
     def do_queries(self, period_domain, period_domain_i, period_domain_e):
-        # TODO: handle case of expressions with no accounts
         aml_model = self.env['account.move.line']
-        self._data = {}  # {(domain, mode): {account_id: (debit, credit)}}
-        for key in self._map:
-            self._data[key] = {}
+        # {(domain, mode): {account_id: (debit, credit)}}
+        self._data = defaultdict(dict)
+        # fetch sum of debit/credit, grouped by account_id
+        for key in self._map_account_ids:
             domain, mode = key
             if mode == MODE_VARIATION:
                 domain = list(domain) + period_domain
@@ -193,13 +197,30 @@ class AccountingExpressionProcessor(object):
                 domain = list(domain) + period_domain_e
             else:
                 raise RuntimeError("unexpected mode %s" % (mode,))
-            domain = [('account_id', 'in', self._map[key])] + domain
+            domain.append(('account_id', 'in', self._map_account_ids[key]))
             accs = aml_model.read_group(domain,
                                         ['debit', 'credit', 'account_id'],
                                         ['account_id'])
             for acc in accs:
                 self._data[key][acc['account_id'][0]] = \
-                    (acc['debit'], acc['credit'])
+                    (acc['debit'] or 0.0, acc['credit'] or 0.0)
+        # fetch sum of debit/credit for expressions with no account
+        for key in self._set_all_accounts:
+            domain, mode = key
+            if mode == MODE_VARIATION:
+                domain = list(domain) + period_domain
+            elif mode == MODE_INITIAL:
+                domain = list(domain) + period_domain_i
+            elif mode == MODE_END:
+                domain = list(domain) + period_domain_e
+            else:
+                raise RuntimeError("unexpected mode %s" % (mode,))
+            accs = aml_model.read_group(domain,
+                                        ['debit', 'credit'],
+                                        [])
+            assert len(accs) == 1
+            self._data[key][None] = \
+                (accs[0]['debit'] or 0.0, accs[0]['credit'] or 0.0)
 
     def replace_expr(self, expr):
         """Replace accounting variables in an expression by their amount.
@@ -213,15 +234,19 @@ class AccountingExpressionProcessor(object):
             key = (domain, mode)
             account_ids_data = self._data[key]
             v = 0.0
-            for account_code in account_codes:
-                for account_id in self._account_ids_by_code[account_code]:
+            for account_code in account_codes or [None]:
+                if account_code:
+                    account_ids = self._account_ids_by_code[account_code]
+                else:
+                    account_ids = [None]
+                for account_id in account_ids:
                     debit, credit = \
                         account_ids_data.get(account_id, (0.0, 0.0))
-                    if field == 'deb':
+                    if field == 'bal':
+                        v += debit - credit
+                    elif field == 'deb':
                         v += debit
                     elif field == 'crd':
                         v += credit
-                    elif field == 'bal':
-                        v += debit - credit
             return '(' + repr(v) + ')'
         return self.ACC_RE.sub(f, expr)
