@@ -112,7 +112,10 @@ class AccountingExpressionProcessor(object):
             account_codes = account_codes[1:]
         else:
             account_codes = account_codes[1:-1]
-        account_codes = [a.strip() for a in account_codes.split(',')]
+        if account_codes.strip():
+            account_codes = [a.strip() for a in account_codes.split(',')]
+        else:
+            account_codes = []
         domain = domain or '[]'
         domain = tuple(safe_eval(domain))
         return field, mode, account_codes, domain
@@ -151,10 +154,12 @@ class AccountingExpressionProcessor(object):
             field, mode, account_codes, domain_partial = self._parse_mo(mo)
             if mode == MODE_INITIAL:
                 continue
+            domain = []
             account_ids = set()
             for account_code in account_codes:
                 account_ids.update(self._account_ids_by_code[account_code])
-            domain = [('account_id', 'in', tuple(account_ids))]
+            if account_ids:
+                domain.append(('account_id', 'in', tuple(account_ids)))
             domain.extend(list(domain_partial))
             if field == 'crd':
                 domain.append(('credit', '>', 0))
@@ -174,6 +179,7 @@ class AccountingExpressionProcessor(object):
         raise RuntimeError("not implemented")
 
     def do_queries(self, period_domain, period_domain_i, period_domain_e):
+        # TODO: handle case of expressions with no accounts
         aml_model = self.env['account.move.line']
         self._data = {}  # {(domain, mode): {account_id: (debit, credit)}}
         for key in self._map:
