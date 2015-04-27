@@ -137,5 +137,3 @@ class mis_builder_xls(report_xls):
 mis_builder_xls('report.mis.report.instance.xls',
                 'mis.report.instance',
                 parser=mis_builder_xls_parser)
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
