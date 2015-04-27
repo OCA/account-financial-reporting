@@ -101,7 +101,7 @@ class AccountingExpressionProcessor(object):
                 else:
                     self._account_ids_by_code[like_code].add(account.id)
 
-    def _parse_mo(self, mo):
+    def _parse_match_object(self, mo):
         """Split a match object corresponding to an accounting variable
 
         Returns field, mode, [account codes], [domain expression].
@@ -130,7 +130,7 @@ class AccountingExpressionProcessor(object):
         so when all expressions have been parsed, we know what to query.
         """
         for mo in self.ACC_RE.finditer(expr):
-            _, mode, account_codes, domain = self._parse_mo(mo)
+            _, mode, account_codes, domain = self._parse_match_object(mo)
             key = (domain, mode)
             if account_codes:
                 self._map_account_ids[key].update(account_codes)
@@ -157,7 +157,7 @@ class AccountingExpressionProcessor(object):
         """
         aml_domains = []
         for mo in self.ACC_RE.finditer(expr):
-            field, mode, account_codes, domain = self._parse_mo(mo)
+            field, mode, account_codes, domain = self._parse_match_object(mo)
             if mode == MODE_INITIAL:
                 continue
             aml_domain = list(domain)
@@ -269,7 +269,7 @@ class AccountingExpressionProcessor(object):
         This method must be executed after do_queries().
         """
         def f(mo):
-            field, mode, account_codes, domain = self._parse_mo(mo)
+            field, mode, account_codes, domain = self._parse_match_object(mo)
             key = (domain, mode)
             account_ids_data = self._data[key]
             v = 0.0
