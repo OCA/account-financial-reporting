@@ -37,6 +37,9 @@ from openerp.tools.safe_eval import safe_eval
 from openerp.tools.translate import _
 
 from .aep import AccountingExpressionProcessor
+from .aep import MODE_VARIATION
+from .aep import MODE_END
+from .aep import MODE_INITIAL
 
 
 class AutoStruct(object):
@@ -525,59 +528,25 @@ class mis_report_instance_period(orm.Model):
         else:
             return False
 
-    def compute_period_domain(self, cr, uid, period_report, is_end,
-                              is_initial, context=None):
-        period_obj = self.pool['account.period']
-        move_obj = self.pool['account.move']
-        domain_list = []
+    def compute_period_domain(self, cr, uid, period_report, aep, mode,
+                              context=None):
+        domain = []
         target_move = period_report.report_instance_id.target_move
         if target_move == 'posted':
-            domain_list.append(('move_id.state', '=', target_move))
-        if not is_end and not is_initial:
-            if period_report.period_from:
-                compute_period_ids = period_obj.build_ctx_periods(
-                    cr, uid, period_report.period_from.id,
-                    period_report.period_to.id)
-                domain_list.extend([('period_id', 'in', compute_period_ids)])
-            else:
-                domain_list.extend([('date', '>=', period_report.date_from),
-                                    ('date', '<=', period_report.date_to)])
-        elif period_report.period_from and period_report.period_to:
-            period_to = period_report.period_to
-            if is_initial:
-                move_id = move_obj.search(
-                    cr, uid, [('period_id.special', '=', False),
-                              ('period_id.date_start', '<',
-                               period_to.date_start)],
-                    order="period_id desc", limit=1, context=context)
-                if move_id:
-                    computed_period_to = move_obj.browse(
-                        cr, uid, move_id[0], context=context).period_id.id
-                else:
-                    computed_period_to = self.pool['account.period'].search(
-                        cr, uid, [('company_id', '=',
-                                   period_report.company_id.id)],
-                        order='date_start desc', limit=1)[0]
-                # Change start period to search correctly period from
-                period_to = period_obj.browse(cr, uid, [computed_period_to],
-                                              context=context)[0]
-            move_id = move_obj.search(
-                cr, uid, [('period_id.special', '=', True),
-                          ('period_id.date_start', '<=',
-                           period_to.date_start)],
-                order="period_id desc", limit=1, context=context)
-            if move_id:
-                computed_period_from = move_obj.browse(
-                    cr, uid, move_id[0], context=context).period_id.id
-            else:
-                computed_period_from = self.pool['account.period'].search(
-                    cr, uid, [('company_id', '=',
-                               period_report.company_id.id)],
-                    order='date_start', limit=1)[0]
-            compute_period_ids = period_obj.build_ctx_periods(
-                cr, uid, computed_period_from, period_to.id)
-            domain_list.extend([('period_id', 'in', compute_period_ids)])
-        return domain_list
+            domain.append(('move_id.state', '=', target_move))
+        if not period_report.period_from.id or not period_report.period_to.id:
+            aml_domain = aep\
+                .get_aml_domain_for_periods(period_report.date_from,
+                                            period_report.date_to,
+                                            mode)
+            domain.extend(aml_domain)
+        elif period_report.period_from.id and period_report.period_to.id:
+            aml_domain = aep\
+                .get_aml_domain_for_periods(period_report.period_from,
+                                            period_report.period_to,
+                                            mode)
+            domain.extend(aml_domain)
+        return domain
 
     def _fetch_queries(self, cr, uid, c, context):
         res = {}
@@ -621,11 +590,11 @@ class mis_report_instance_period(orm.Model):
             'len': len,
             'avg': lambda l: sum(l) / float(len(l)),
         }
-        domain_p = self.compute_period_domain(cr, uid, c, False, False,
+        domain_p = self.compute_period_domain(cr, uid, c, aep, MODE_VARIATION,
                                               context=context)
-        domain_e = self.compute_period_domain(cr, uid, c, True, False,
+        domain_e = self.compute_period_domain(cr, uid, c, aep, MODE_END,
                                               context=context)
-        domain_i = self.compute_period_domain(cr, uid, c, False, True,
+        domain_i = self.compute_period_domain(cr, uid, c, aep, MODE_INITIAL,
                                               context=context)
         aep.do_queries(domain_p, domain_i, domain_e)
         localdict.update(self._fetch_queries(cr, uid, c,

@@ -179,8 +179,47 @@ class AccountingExpressionProcessor(object):
         return [('date', '>=', date_start), ('date', '<=', date_end)]
 
     def get_aml_domain_for_periods(self, period_start, period_end, mode):
-        # TODO
-        raise RuntimeError("not implemented")
+        period_obj = self.env['account.period']
+        move_obj = self.env['account.move']
+        domain_list = []
+        if mode == MODE_VARIATION:
+            compute_period_ids = period_obj.build_ctx_periods(
+                period_start.id,
+                period_end.id)
+            domain_list.extend([('period_id', 'in', compute_period_ids)])
+        else:
+            period_to = period_end
+            if mode == MODE_INITIAL:
+                # Processing to get the first period which isn't special
+                # before end period
+                move = move_obj\
+                    .search([('period_id.special', '=', False),
+                             ('period_id.date_start', '<',
+                              period_to.date_start)],
+                            order="period_id desc", limit=1)
+                if move.id:
+                    computed_period_to = move.period_id
+                else:
+                    computed_period_to = period_obj.search(
+                        [('company_id', '=', period_start.company_id.id)],
+                        order='date_start desc', limit=1)
+                # Change start period to search correctly period from
+                period_to = computed_period_to
+            move = move_obj.search(
+                [('period_id.special', '=', True),
+                 ('period_id.date_start', '<=',
+                  period_to.date_start)],
+                order="period_id desc", limit=1)
+            if move.id:
+                computed_period_from = move.period_id
+            else:
+                computed_period_from = period_obj.search(
+                    [('company_id', '=', period_start.company_id.id)],
+                    order='date_start', limit=1)
+            compute_period_ids = period_obj.build_ctx_periods(
+                computed_period_from.id, period_to.id)
+            domain_list.extend([('period_id', 'in', compute_period_ids)])
+        return domain_list
 
     def do_queries(self, period_domain, period_domain_i, period_domain_e):
         aml_model = self.env['account.move.line']
