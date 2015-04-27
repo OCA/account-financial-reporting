@@ -412,8 +412,8 @@ class mis_report_instance_period(orm.Model):
             res[c.id] = {
                 'date_from': date_from,
                 'date_to': date_to,
-                'period_from': period_ids and period_ids[0],
-                'period_to': period_ids and period_ids[-1],
+                'period_from': period_ids and period_ids[0] or False,
+                'period_to': period_ids and period_ids[-1] or False,
             }
         return res
 
