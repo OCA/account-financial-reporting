@@ -30,5 +30,3 @@ fast_suite = [
 checks = [
     test_mis_builder,
 ]
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

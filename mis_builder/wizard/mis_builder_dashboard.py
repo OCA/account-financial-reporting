@@ -85,5 +85,3 @@ class add_mis_report_instance_dashboard(orm.TransientModel):
                       'arch': etree.tostring(new_arch, pretty_print=True)})
 
         return {'type': 'ir.actions.act_window_close', }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
