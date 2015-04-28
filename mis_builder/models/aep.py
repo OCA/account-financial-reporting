@@ -157,17 +157,15 @@ class AccountingExpressionProcessor(object):
     def get_aml_domain_for_expr(self, expr):
         """ Get a domain on account.move.line for an expression.
 
-        Only accounting expression in mode 'p' and 'e' are considered.
-
         Prerequisite: done_parsing() must have been invoked.
 
         Returns a domain that can be used to search on account.move.line.
+        To be meaningful, this domain must be extended with a domain
+        obtained from get_aml_domain_for_dates()
         """
         aml_domains = []
         for mo in self.ACC_RE.finditer(expr):
-            field, mode, account_codes, domain = self._parse_match_object(mo)
-            if mode == MODE_INITIAL:
-                continue
+            field, _, account_codes, domain = self._parse_match_object(mo)
             aml_domain = list(domain)
             if account_codes:
                 account_ids = set()
@@ -180,11 +178,6 @@ class AccountingExpressionProcessor(object):
                 aml_domain.append(('debit', '>', 0))
             aml_domains.append(expression.normalize_domain(aml_domain))
         return expression.OR(aml_domains)
-
-    def get_aml_domain_for_dates(self, date_start, date_end, mode):
-        if mode != MODE_VARIATION:
-            raise RuntimeError("")  # TODO
-        return [('date', '>=', date_start), ('date', '<=', date_end)]
 
     def _period_has_moves(self, period):
         move_model = self.env['account.move']
@@ -277,27 +270,36 @@ class AccountingExpressionProcessor(object):
                         period_from, period_to, company_id))
         return period_ids
 
-    def get_aml_domain_for_periods(self, period_from, period_to, mode):
-        period_ids = self._get_period_ids_for_mode(
-            period_from, period_to, mode)
-        return [('period_id', 'in', period_ids)]
+    def get_aml_domain_for_dates(self, date_from, date_to,
+                                 period_from, period_to,
+                                 mode,
+                                 target_move):
+        if period_from and period_to:
+            period_ids = self._get_period_ids_for_mode(
+                period_from, period_to, mode)
+            domain = [('period_id', 'in', period_ids)]
+        else:
+            domain = [('date', '>=', date_from), ('date', '<=', date_to)]
+        if target_move == 'posted':
+            domain.append(('move_id.state', '=', 'posted'))
+        return domain
 
-    def do_queries(self, period_domain, period_domain_i, period_domain_e):
+    def do_queries(self, date_from, date_to, period_from, period_to,
+                   target_move):
         aml_model = self.env['account.move.line']
         # {(domain, mode): {account_id: (debit, credit)}}
         self._data = defaultdict(dict)
-        # fetch sum of debit/credit, grouped by account_id
+        domain_by_mode = {}
         for key in self._map_account_ids:
             domain, mode = key
-            if mode == MODE_VARIATION:
-                domain = list(domain) + period_domain
-            elif mode == MODE_INITIAL:
-                domain = list(domain) + period_domain_i
-            elif mode == MODE_END:
-                domain = list(domain) + period_domain_e
-            else:
-                raise RuntimeError("unexpected mode %s" % (mode,))
+            if mode not in domain_by_mode:
+                domain_by_mode[mode] = \
+                    self.get_aml_domain_for_dates(date_from, date_to,
+                                                  period_from, period_to,
+                                                  mode, target_move)
+            domain = list(domain) + domain_by_mode[mode]
             domain.append(('account_id', 'in', self._map_account_ids[key]))
+            # fetch sum of debit/credit, grouped by account_id
             accs = aml_model.read_group(domain,
                                         ['debit', 'credit', 'account_id'],
                                         ['account_id'])
