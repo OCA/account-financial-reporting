@@ -155,7 +155,7 @@ class AccountingExpressionProcessor(object):
             self._map_account_ids[key] = list(account_ids)
 
     def has_account_var(self, expr):
-        return bool(self.ACC_RE.match(expr))
+        return bool(self.ACC_RE.search(expr))
 
     def get_aml_domain_for_expr(self, expr,
                                 date_from, date_to,
