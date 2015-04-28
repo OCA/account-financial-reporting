@@ -483,13 +483,12 @@ class mis_report_instance_period(orm.Model):
          'Period name should be unique by report'),
     ]
 
-    def drilldown(self, cr, uid, id, expr, context=None):
-        this = self.browse(cr, uid, id, context=context)[0]
+    def drilldown(self, cr, uid, _id, expr, context=None):
+        this = self.browse(cr, uid, _id, context=context)[0]
         env = Environment(cr, uid, {})
         aep = AccountingExpressionProcessor(env)
         aep.parse_expr(expr)
-        aep.done_parsing([('company_id', '=',
-                           this.report_instance_id.company_id.id)])
+        aep.done_parsing(this.report_instance_id.root_account)
         domain = aep.get_aml_domain_for_expr(expr)
         if domain:
             # TODO: reuse compute_period_domain
@@ -680,6 +679,19 @@ class mis_report_instance(orm.Model):
                                                       context=context)
         return res
 
+    def _get_root_account(self, cr, uid, ids, field_name, arg, context=None):
+        res = {}
+        account_obj = self.pool['account.account']
+        for r in self.browse(cr, uid, ids, context=context):
+            account_ids = account_obj.search(
+                cr, uid,
+                [('parent_id', '=', False),
+                 ('company_id', '=', r.company_id.id)],
+                context=context)
+            if len(account_ids) == 1:
+                res[r.id] = account_ids[0]
+        return res
+
     _name = 'mis.report.instance'
 
     _columns = {
@@ -704,6 +716,9 @@ class mis_report_instance(orm.Model):
                                          ('all', 'All Entries'),
                                          ], 'Target Moves', required=True),
         'company_id': fields.many2one('res.company', 'Company', required=True),
+        'root_account': fields.function(_get_root_account,
+                                        type='many2one', obj='account.account',
+                                        string="Account chart"),
     }
 
     _defaults = {
@@ -754,13 +769,11 @@ class mis_report_instance(orm.Model):
             tools.DEFAULT_SERVER_DATE_FORMAT),
             tformat)
 
-    def compute(self, cr, uid, _ids, context=None):
-        assert isinstance(_ids, (int, long))
+    def compute(self, cr, uid, _id, context=None):
+        assert isinstance(_id, (int, long))
         if context is None:
             context = {}
-        r = self.browse(cr, uid, _ids, context=context)
-        context['state'] = r.target_move
-
+        r = self.browse(cr, uid, _id, context=context)
         content = OrderedDict()
         # empty line name for header
         header = OrderedDict()
@@ -773,7 +786,7 @@ class mis_report_instance(orm.Model):
             content[kpi.name] = {'kpi_name': kpi.description,
                                  'cols': [],
                                  'default_style': ''}
-        aep.done_parsing([('company_id', '=', r.company_id.id)])
+        aep.done_parsing(r.root_account)
         report_instance_period_obj = self.pool.get(
             'mis.report.instance.period')
         kpi_obj = self.pool.get('mis.report.kpi')
