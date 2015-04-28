@@ -62,10 +62,9 @@ class AccountingExpressionProcessor(object):
         # before done_parsing: {(domain, mode): set(account_codes)}
         # after done_parsing: {(domain, mode): set(account_ids)}
         self._map_account_ids = defaultdict(set)
-        self._set_all_accounts = set()  # set((domain, mode))
         self._account_ids_by_code = defaultdict(set)
 
-    def _load_account_codes(self, account_codes, account_domain):
+    def _load_account_codes(self, account_codes, root_account):
         account_model = self.env['account.account']
         # TODO: account_obj is necessary because _get_children_and_consol
         #       does not work in new API?
@@ -75,23 +74,35 @@ class AccountingExpressionProcessor(object):
         for account_code in account_codes:
             if account_code in self._account_ids_by_code:
                 continue
-            if '%' in account_code:
+            if account_code is None:
+                # by convention the root account is keyed as
+                # None in _account_ids_by_code, so it is consistent
+                # with what _parse_match_object returns for an
+                # empty list of account codes, ie [None]
+                exact_codes.add(root_account.code)
+            elif '%' in account_code:
                 like_codes.add(account_code)
             else:
                 exact_codes.add(account_code)
         for account in account_model.\
-                search([('code', 'in', list(exact_codes))] + account_domain):
+                search([('code', 'in', list(exact_codes)),
+                        ('parent_id', 'child_of', root_account.id)]):
+            if account.code == root_account.code:
+                code = None
+            else:
+                code = account.code
             if account.type in ('view', 'consolidation'):
-                self._account_ids_by_code[account.code].update(
+                self._account_ids_by_code[code].update(
                     account_obj._get_children_and_consol(
                         self.env.cr, self.env.uid,
                         [account.id],
                         self.env.context))
             else:
-                self._account_ids_by_code[account.code].add(account.id)
+                self._account_ids_by_code[code].add(account.id)
         for like_code in like_codes:
             for account in account_model.\
-                    search([('code', 'like', like_code)] + account_domain):
+                    search([('code', 'like', like_code),
+                            ('parent_id', 'child_of', root_account.id)]):
                 if account.type in ('view', 'consolidation'):
                     self._account_ids_by_code[like_code].update(
                         account_obj._get_children_and_consol(
@@ -118,7 +129,7 @@ class AccountingExpressionProcessor(object):
         if account_codes.strip():
             account_codes = [a.strip() for a in account_codes.split(',')]
         else:
-            account_codes = None
+            account_codes = [None]
         domain = domain or '[]'
         domain = tuple(safe_eval(domain))
         return field, mode, account_codes, domain
@@ -132,15 +143,12 @@ class AccountingExpressionProcessor(object):
         for mo in self.ACC_RE.finditer(expr):
             _, mode, account_codes, domain = self._parse_match_object(mo)
             key = (domain, mode)
-            if account_codes:
-                self._map_account_ids[key].update(account_codes)
-            else:
-                self._set_all_accounts.add(key)
+            self._map_account_ids[key].update(account_codes)
 
-    def done_parsing(self, account_domain):
+    def done_parsing(self, root_account):
         # load account codes and replace account codes by account ids in _map
         for key, account_codes in self._map_account_ids.items():
-            self._load_account_codes(account_codes, account_domain)
+            self._load_account_codes(account_codes, root_account)
             account_ids = set()
             for account_code in account_codes:
                 account_ids.update(self._account_ids_by_code[account_code])
@@ -255,7 +263,7 @@ class AccountingExpressionProcessor(object):
                     if opening_period.date_start == period_from.date_start and \
                             mode == MODE_INITIAL:
                         # if the opening period has the same start date as
-                        # period_from, the we'll find the initial balance
+                        # period_from, then we'll find the initial balance
                         # in the initial period and that's it
                         period_ids.append(opening_period[0].id)
                         continue
@@ -296,23 +304,6 @@ class AccountingExpressionProcessor(object):
             for acc in accs:
                 self._data[key][acc['account_id'][0]] = \
                     (acc['debit'] or 0.0, acc['credit'] or 0.0)
-        # fetch sum of debit/credit for expressions with no account
-        for key in self._set_all_accounts:
-            domain, mode = key
-            if mode == MODE_VARIATION:
-                domain = list(domain) + period_domain
-            elif mode == MODE_INITIAL:
-                domain = list(domain) + period_domain_i
-            elif mode == MODE_END:
-                domain = list(domain) + period_domain_e
-            else:
-                raise RuntimeError("unexpected mode %s" % (mode,))
-            accs = aml_model.read_group(domain,
-                                        ['debit', 'credit'],
-                                        [])
-            assert len(accs) == 1
-            self._data[key][None] = \
-                (accs[0]['debit'] or 0.0, accs[0]['credit'] or 0.0)
 
     def replace_expr(self, expr):
         """Replace accounting variables in an expression by their amount.
@@ -326,11 +317,8 @@ class AccountingExpressionProcessor(object):
             key = (domain, mode)
             account_ids_data = self._data[key]
             v = 0.0
-            for account_code in account_codes or [None]:
-                if account_code:
-                    account_ids = self._account_ids_by_code[account_code]
-                else:
-                    account_ids = [None]
+            for account_code in account_codes:
+                account_ids = self._account_ids_by_code[account_code]
                 for account_id in account_ids:
                     debit, credit = \
                         account_ids_data.get(account_id, (0.0, 0.0))
