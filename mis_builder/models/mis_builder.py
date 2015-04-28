@@ -37,9 +37,6 @@ from openerp.tools.safe_eval import safe_eval
 from openerp.tools.translate import _
 
 from .aep import AccountingExpressionProcessor
-from .aep import MODE_VARIATION
-from .aep import MODE_END
-from .aep import MODE_INITIAL
 
 
 class AutoStruct(object):
@@ -379,7 +376,6 @@ class mis_report_instance_period(orm.Model):
                 all_period_ids = period_obj.search(
                     cr, uid,
                     [('special', '=', False),
-                     '|', ('company_id', '=', False),
                      ('company_id', '=', c.company_id.id)],
                     order='date_start',
                     context=context)
@@ -388,7 +384,6 @@ class mis_report_instance_period(orm.Model):
                     [('special', '=', False),
                      ('date_start', '<=', d),
                      ('date_stop', '>=', d),
-                     '|', ('company_id', '=', False),
                      ('company_id', '=', c.company_id.id)],
                     context=context)
                 if not current_period_ids:
@@ -527,26 +522,6 @@ class mis_report_instance_period(orm.Model):
         else:
             return False
 
-    def compute_period_domain(self, cr, uid, period_report, aep, mode,
-                              context=None):
-        domain = []
-        target_move = period_report.report_instance_id.target_move
-        if target_move == 'posted':
-            domain.append(('move_id.state', '=', target_move))
-        if not period_report.period_from.id or not period_report.period_to.id:
-            aml_domain = aep\
-                .get_aml_domain_for_periods(period_report.date_from,
-                                            period_report.date_to,
-                                            mode)
-            domain.extend(aml_domain)
-        elif period_report.period_from.id and period_report.period_to.id:
-            aml_domain = aep\
-                .get_aml_domain_for_periods(period_report.period_from,
-                                            period_report.period_to,
-                                            mode)
-            domain.extend(aml_domain)
-        return domain
-
     def _fetch_queries(self, cr, uid, c, context):
         res = {}
         report = c.report_instance_id.report_id
@@ -589,15 +564,12 @@ class mis_report_instance_period(orm.Model):
             'len': len,
             'avg': lambda l: sum(l) / float(len(l)),
         }
-        domain_p = self.compute_period_domain(cr, uid, c, aep, MODE_VARIATION,
-                                              context=context)
-        domain_e = self.compute_period_domain(cr, uid, c, aep, MODE_END,
-                                              context=context)
-        domain_i = self.compute_period_domain(cr, uid, c, aep, MODE_INITIAL,
-                                              context=context)
-        aep.do_queries(domain_p, domain_i, domain_e)
         localdict.update(self._fetch_queries(cr, uid, c,
                                              context=context))
+
+        aep.do_queries(c.date_from, c.date_to,
+                       c.period_from, c.period_to,
+                       c.report_instance_id.target_move)
 
         compute_queue = c.report_instance_id.report_id.kpi_ids
         recompute_queue = []
