@@ -482,33 +482,13 @@ class mis_report_instance_period(orm.Model):
         this = self.browse(cr, uid, _id, context=context)[0]
         env = Environment(cr, uid, {})
         aep = AccountingExpressionProcessor(env)
-        aep.parse_expr(expr)
-        aep.done_parsing(this.report_instance_id.root_account)
-        domain = aep.get_aml_domain_for_expr(expr)
-        if domain:
-            # TODO: reuse compute_period_domain
-            # compute date/period
-            period_ids = []
-            date_from = None
-            date_to = None
-            period_obj = self.pool['account.period']
-            target_move = this.report_instance_id.target_move
-            if target_move == 'posted':
-                domain.append(('move_id.state', '=', target_move))
-            if this.period_from:
-                compute_period_ids = period_obj.build_ctx_periods(
-                    cr, uid, this.period_from.id, this.period_to.id)
-                period_ids.extend(compute_period_ids)
-            else:
-                date_from = this.date_from
-                date_to = this.date_to
-            if period_ids:
-                if date_from:
-                    domain.append('|')
-                domain.append(('period_id', 'in', period_ids))
-            if date_from:
-                domain.extend([('date', '>=', date_from),
-                               ('date', '<=', date_to)])
+        if aep.has_account_var(expr):
+            aep.parse_expr(expr)
+            aep.done_parsing(this.report_instance_id.root_account)
+            domain = aep.get_aml_domain_for_expr(
+                expr, this.date_from, this.date_to,
+                this.period_from, this.period_to,
+                this.report_instance_id.target_move)
             return {
                 'name': expr + ' - ' + this.name,
                 'domain': domain,
@@ -605,7 +585,7 @@ class mis_report_instance_period(orm.Model):
                     kpi_style = None
 
                 drilldown = (kpi_val is not None and
-                             bool(aep.get_aml_domain_for_expr(kpi.expression)))
+                             aep.has_account_var(kpi.expression))
 
                 res[kpi.name] = {
                     'val': kpi_val,

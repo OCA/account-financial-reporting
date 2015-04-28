@@ -154,7 +154,13 @@ class AccountingExpressionProcessor(object):
                 account_ids.update(self._account_ids_by_code[account_code])
             self._map_account_ids[key] = list(account_ids)
 
-    def get_aml_domain_for_expr(self, expr):
+    def has_account_var(self, expr):
+        return bool(self.ACC_RE.match(expr))
+
+    def get_aml_domain_for_expr(self, expr,
+                                date_from, date_to,
+                                period_from, period_to,
+                                target_move):
         """ Get a domain on account.move.line for an expression.
 
         Prerequisite: done_parsing() must have been invoked.
@@ -164,20 +170,26 @@ class AccountingExpressionProcessor(object):
         obtained from get_aml_domain_for_dates()
         """
         aml_domains = []
+        domain_by_mode = {}
         for mo in self.ACC_RE.finditer(expr):
-            field, _, account_codes, domain = self._parse_match_object(mo)
+            field, mode, account_codes, domain = self._parse_match_object(mo)
             aml_domain = list(domain)
-            if account_codes:
-                account_ids = set()
-                for account_code in account_codes:
-                    account_ids.update(self._account_ids_by_code[account_code])
-                aml_domain.append(('account_id', 'in', tuple(account_ids)))
+            account_ids = set()
+            for account_code in account_codes:
+                account_ids.update(self._account_ids_by_code[account_code])
+            aml_domain.append(('account_id', 'in', tuple(account_ids)))
             if field == 'crd':
                 aml_domain.append(('credit', '>', 0))
             elif field == 'deb':
                 aml_domain.append(('debit', '>', 0))
             aml_domains.append(expression.normalize_domain(aml_domain))
-        return expression.OR(aml_domains)
+            if mode not in domain_by_mode:
+                domain_by_mode[mode] = \
+                    self.get_aml_domain_for_dates(date_from, date_to,
+                                                  period_from, period_to,
+                                                  mode, target_move)
+        return expression.OR(aml_domains) + \
+            expression.OR(domain_by_mode.values())
 
     def _period_has_moves(self, period):
         move_model = self.env['account.move']
@@ -282,7 +294,7 @@ class AccountingExpressionProcessor(object):
             domain = [('date', '>=', date_from), ('date', '<=', date_to)]
         if target_move == 'posted':
             domain.append(('move_id.state', '=', 'posted'))
-        return domain
+        return expression.normalize_domain(domain)
 
     def do_queries(self, date_from, date_to, period_from, period_to,
                    target_move):
