@@ -261,6 +261,11 @@ class mis_report_query(orm.Model):
                                        store={'mis.report.query':
                                               (lambda self, cr, uid, ids, c={}:
                                                ids, ['field_ids'], 20), }),
+        'groupby': fields.boolean(string="Group by"),
+        'groupby_field_ids': fields.many2many('ir.model.fields',
+                                              'ir_model_fields_'
+                                              'mis_report_query_groupby_rel',
+                                              string='Fields to group by'),
         'date_field': fields.many2one('ir.model.fields', required=True,
                                       string='Date field',
                                       domain=[('ttype', 'in',
@@ -521,11 +526,21 @@ class mis_report_instance_period(orm.Model):
             if obj._columns.get('company_id', False):
                 domain.extend(['|', ('company_id', '=', False),
                                ('company_id', '=', c.company_id.id)])
-            field_names = [field.name for field in query.field_ids]
-            obj_ids = obj.search(cr, uid, domain, context=context)
-            obj_datas = obj.read(
-                cr, uid, obj_ids, field_names, context=context)
-            res[query.name] = [AutoStruct(**d) for d in obj_datas]
+            field_names = [f.name for f in query.field_ids]
+            if not query.groupby:
+                obj_ids = obj.search(cr, uid, domain, context=context)
+                obj_datas = obj.read(
+                    cr, uid, obj_ids, field_names, context=context)
+                res[query.name] = [AutoStruct(**d) for d in obj_datas]
+            else:
+                groupby_field_names = [f.name for f in query.groupby_field_ids]
+                obj_datas = obj.read_group(
+                    cr, uid, domain, field_names, groupby_field_names,
+                    context=context)
+                if groupby_field_names or not obj_datas:
+                    res[query.name] = [AutoStruct(**d) for d in obj_datas]
+                else:
+                    res[query.name] = AutoStruct(**obj_datas[0])
         return res
 
     def _compute(self, cr, uid, lang_id, c, aep, context=None):
