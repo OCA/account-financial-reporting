@@ -36,6 +36,8 @@
                                 <field name="field_ids" domain="[('model_id', '=', model_id)]" widget="many2many_tags"
                                                         on_change="onchange_field_ids(field_ids, context)"/>
                                 <field name="field_names"/>
+                                <field name="groupby"/>
+                                <field name="groupby_field_ids" domain="[('model_id', '=', model_id)]" widget="many2many_tags"/>
                                 <field name="date_field" domain="[('model_id', '=', model_id), ('ttype', 'in', ('date', 'datetime'))]"/>
                                 <field name="domain"/>
                             </tree>
