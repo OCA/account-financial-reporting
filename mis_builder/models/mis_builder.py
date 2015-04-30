@@ -144,7 +144,7 @@ class mis_report_kpi(orm.Model):
         res = {}
         if name and not _is_valid_python_var(name):
             res['warning'] = {
-                'title': 'Invalid name',
+                'title': 'Invalid name %s' % name,
                 'message': 'The name must be a valid python identifier'}
         return res
 
@@ -578,7 +578,7 @@ class mis_report_instance_period(orm.Model):
                     kpi_val = None
                     kpi_val_rendered = '#DIV/0'
                     kpi_val_comment += '\n\n%s' % (traceback.format_exc(),)
-                except ValueError:
+                except NameError:
                     recompute_queue.append(kpi)
                     kpi_val = None
                     kpi_val_rendered = '#ERR'
