@@ -29,7 +29,6 @@ import re
 import traceback
 
 import pytz
-
 from openerp.api import Environment
 from openerp.osv import orm, fields
 from openerp import tools
@@ -578,7 +577,7 @@ class mis_report_instance_period(orm.Model):
                     kpi_val = None
                     kpi_val_rendered = '#DIV/0'
                     kpi_val_comment += '\n\n%s' % (traceback.format_exc(),)
-                except NameError:
+                except (NameError, ValueError):
                     recompute_queue.append(kpi)
                     kpi_val = None
                     kpi_val_rendered = '#ERR'
