@@ -71,7 +71,7 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem id="mis_report_view_menu" parent="base.menu_reporting_config" name="MIS Reports" action="mis_report_view_action"/>
+        <menuitem id="mis_report_view_menu" parent="account.menu_account_reports" name="MIS Templates" action="mis_report_view_action" sequence="21"/>
 
 	    <record id="xls_export" model="ir.actions.report.xml">
 	      <field name="name">Export report instance result</field>
@@ -176,7 +176,7 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem id="mis_report_instance_view_menu" parent="base.menu_reporting_config" name="MIS Report Instances" action="mis_report_instance_view_action"/>
+        <menuitem id="mis_report_instance_view_menu" parent="account.menu_account_reports" name="MIS Reports" action="mis_report_instance_view_action" sequence="20"/>
 
     </data>
 </openerp>
