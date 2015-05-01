@@ -1,9 +1,10 @@
 import re
 from collections import defaultdict
 
+from openerp.exceptions import Warning
 from openerp.osv import expression
 from openerp.tools.safe_eval import safe_eval
-
+from openerp.tools.translate import _
 
 MODE_VARIATION = 'p'
 MODE_INITIAL = 'i'
@@ -291,7 +292,11 @@ class AccountingExpressionProcessor(object):
                 period_from, period_to, mode)
             domain = [('period_id', 'in', period_ids)]
         else:
-            domain = [('date', '>=', date_from), ('date', '<=', date_to)]
+            if mode == MODE_VARIATION:
+                domain = [('date', '>=', date_from), ('date', '<=', date_to)]
+            else:
+                raise Warning(_("Modes i and e are only applicable for "
+                                "fiscal periods"))
         if target_move == 'posted':
             domain.append(('move_id.state', '=', 'posted'))
         return expression.normalize_domain(domain)
