@@ -19,18 +19,18 @@ class AccountingExpressionProcessor(object):
         * mode is i (initial balance), e (ending balance),
           p (moves over period)
         * accounts is a list of accounts, possibly containing % wildcards
-        * an optional domain on analytic lines allowing filters on eg analytic
+        * an optional domain on move lines allowing filters on eg analytic
           accounts or journal
 
     Examples:
-        * bal[70]: balance of moves on account 70 over the period
-          (it is the same as balp[70]);
+        * bal[70]: variation of the balance of moves on account 70
+          over the period (it is the same as balp[70]);
         * bali[70,60]: initial balance of accounts 70 and 60;
         * bale[1%]: balance of accounts starting with 1 at end of period.
 
     How to use:
         * repeatedly invoke parse_expr() for each expression containing
-          accounting variables as described above; this let the processor
+          accounting variables as described above; this lets the processor
           group domains and modes and accounts;
         * when all expressions have been parsed, invoke done_parsing()
           to notify the processor that it can prepare to query (mainly
@@ -41,7 +41,7 @@ class AccountingExpressionProcessor(object):
           for the given period.
 
     How it works:
-        * by accumulating the expressions before hand, it ensure to do the
+        * by accumulating the expressions before hand, it ensures to do the
           strict minimum number of queries to the database (for each period,
           one query per domain and mode);
         * it queries using the orm read_group which reduces to a query with
