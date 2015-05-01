@@ -172,7 +172,7 @@
                         <field name="target_move"/>
                         <field name="date"/>
                         <field name="period_ids">
-                            <tree string="KPI's" editable="bottom">
+                            <tree string="KPI's" editable="bottom" colors="red:valid==False">
                                 <field name="sequence" widget="handle"/>
                                 <field name="name"/>
                                 <field name="type"/>
@@ -183,6 +183,7 @@
                                 <field name="date_to"/>
                                 <field name="period_from"/>
                                 <field name="period_to"/>
+                                <field name="valid" invisible="1"/>
                                 <field name="report_instance_id" invisible="1"/>
                                 <field name="id" invisible="1"/>
                                 <field name="comparison_column_ids" domain="[('report_instance_id', '=', report_instance_id), ('id', '!=', id)]" widget="many2many_tags"/>
