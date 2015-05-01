@@ -146,9 +146,8 @@ class PartnersOpenInvoicesWebkit(report_sxw.rml_parse,
             account_ids, main_filter, target_move, start, stop, date_until,
             partner_filter=partner_ids)
         objects = []
-        for account in self.pool.get('account.account').browse(self.cursor,
-                                                               self.uid,
-                                                               account_ids):
+        for account in self.pool.get('account.account').browse(
+                self.cursor, self.uid, account_ids, self.localcontext):
             account.ledger_lines = ledger_lines_memoizer.get(account.id, {})
             account.init_balance = init_balance_memoizer.get(account.id, {})
             # we have to compute partner order based on inital balance
