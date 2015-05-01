@@ -320,30 +320,6 @@ class mis_report(orm.Model):
 
     # TODO: kpi name cannot be start with query name
 
-    def create(self, cr, uid, vals, context=None):
-        # TODO: explain this
-        if 'kpi_ids' in vals:
-            mis_report_kpi_obj = self.pool.get('mis.report.kpi')
-            for idx, line in enumerate(vals['kpi_ids']):
-                if line[0] == 0:
-                    line[2]['sequence'] = idx + 1
-                else:
-                    mis_report_kpi_obj.write(
-                        cr, uid, [line[1]], {'sequence': idx + 1},
-                        context=context)
-        return super(mis_report, self).create(cr, uid, vals, context=context)
-
-    def write(self, cr, uid, ids, vals, context=None):
-        # TODO: explain this
-        res = super(mis_report, self).write(
-            cr, uid, ids, vals, context=context)
-        mis_report_kpi_obj = self.pool.get('mis.report.kpi')
-        for report in self.browse(cr, uid, ids, context):
-            for idx, kpi in enumerate(report.kpi_ids):
-                mis_report_kpi_obj.write(
-                    cr, uid, [kpi.id], {'sequence': idx + 1}, context=context)
-        return res
-
 
 class mis_report_instance_period(orm.Model):
 
@@ -695,36 +671,6 @@ class mis_report_instance(orm.Model):
             'mis.report.instance',
             context=c)
     }
-
-    def create(self, cr, uid, vals, context=None):
-        if not vals:
-            return context.get('active_id', None)
-        # TODO: explain this
-        if 'period_ids' in vals:
-            mis_report_instance_period_obj = self.pool.get(
-                'mis.report.instance.period')
-            for idx, line in enumerate(vals['period_ids']):
-                if line[0] == 0:
-                    line[2]['sequence'] = idx + 1
-                else:
-                    mis_report_instance_period_obj.write(
-                        cr, uid, [line[1]], {'sequence': idx + 1},
-                        context=context)
-        return super(mis_report_instance, self).create(cr, uid, vals,
-                                                       context=context)
-
-    def write(self, cr, uid, ids, vals, context=None):
-        # TODO: explain this
-        res = super(mis_report_instance, self).write(
-            cr, uid, ids, vals, context=context)
-        mis_report_instance_period_obj = self.pool.get(
-            'mis.report.instance.period')
-        for instance in self.browse(cr, uid, ids, context):
-            for idx, period in enumerate(instance.period_ids):
-                mis_report_instance_period_obj.write(
-                    cr, uid, [period.id], {'sequence': idx + 1},
-                    context=context)
-        return res
 
     def _format_date(self, cr, uid, lang_id, date, context=None):
         # format date following user language
