@@ -73,15 +73,13 @@ def _is_valid_python_var(name):
 
 class mis_report_kpi(orm.Model):
 
-    """ A KPI is an element of a MIS report.
+    """ A KPI is an element (ie a line) of a MIS report.
 
     In addition to a name and description, it has an expression
     to compute it based on queries defined in the MIS report.
     It also has various informations defining how to render it
     (numeric or percentage or a string, a suffix, divider) and
     how to render comparison of two values of the KPI.
-    KPI are ordered inside the MIS report, as some KPI expressions
-    can depend on other KPI that need to be computed before.
     """
 
     _name = 'mis.report.kpi'
@@ -288,21 +286,17 @@ class mis_report_query(orm.Model):
 
 
 class mis_report(orm.Model):
-
     """ A MIS report template (without period information)
 
     The MIS report holds:
-    * an implicit query fetching all the account balances;
-      for each account, the balance is stored in a variable named
-      bal_{code} where {code} is the account code
-    * an implicit query fetching all the account balances solde;
-      for each account, the balance solde is stored in a variable named
-      bals_{code} where {code} is the account code
     * a list of explicit queries; the result of each query is
       stored in a variable with same name as a query, containing as list
-      of data structures populated with attributes for each fields to fetch
+      of data structures populated with attributes for each fields to fetch;
+      when queries have the group by flag and no fields to group, it returns
+      a data structure with the summed fields
     * a list of KPI to be evaluated based on the variables resulting
-      from the balance and queries
+      from the balance and queries (KPI expressions can references queries
+      and accounting expression - see AccoutingExpressionProcessor)
     """
 
     _name = 'mis.report'
