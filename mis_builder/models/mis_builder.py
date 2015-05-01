@@ -335,6 +335,10 @@ class mis_report_instance_period(orm.Model):
             ids = [ids]
         res = {}
         for c in self.browse(cr, uid, ids, context=context):
+            date_from = False
+            date_to = False
+            period_ids = None
+            valid = False
             d = parser.parse(c.report_instance_id.pivot_date)
             if c.type == 'd':
                 date_from = d + timedelta(days=c.offset)
@@ -342,7 +346,7 @@ class mis_report_instance_period(orm.Model):
                 date_from = date_from.strftime(
                     tools.DEFAULT_SERVER_DATE_FORMAT)
                 date_to = date_to.strftime(tools.DEFAULT_SERVER_DATE_FORMAT)
-                period_ids = None
+                valid = True
             elif c.type == 'w':
                 date_from = d - timedelta(d.weekday())
                 date_from = date_from + timedelta(days=c.offset * 7)
@@ -350,15 +354,9 @@ class mis_report_instance_period(orm.Model):
                 date_from = date_from.strftime(
                     tools.DEFAULT_SERVER_DATE_FORMAT)
                 date_to = date_to.strftime(tools.DEFAULT_SERVER_DATE_FORMAT)
-                period_ids = None
+                valid = True
             elif c.type == 'fp':
                 period_obj = self.pool['account.period']
-                all_period_ids = period_obj.search(
-                    cr, uid,
-                    [('special', '=', False),
-                     ('company_id', '=', c.company_id.id)],
-                    order='date_start',
-                    context=context)
                 current_period_ids = period_obj.search(
                     cr, uid,
                     [('special', '=', False),
@@ -366,29 +364,28 @@ class mis_report_instance_period(orm.Model):
                      ('date_stop', '>=', d),
                      ('company_id', '=', c.company_id.id)],
                     context=context)
-                if not current_period_ids:
-                    raise orm.except_orm(_("Error!"),
-                                         _("No current fiscal period for %s")
-                                         % d)
-                p = all_period_ids.index(current_period_ids[0]) + c.offset
-                if p < 0 or p >= len(all_period_ids):
-                    raise orm.except_orm(_("Error!"),
-                                         _("No such fiscal period for %s "
-                                           "with offset %d") % (d, c.offset))
-                period_ids = all_period_ids[p:p + c.duration]
-                periods = period_obj.browse(cr, uid, period_ids,
-                                            context=context)
-                date_from = periods[0].date_start
-                date_to = periods[-1].date_stop
-            else:
-                raise orm.except_orm(_("Error!"),
-                                     _("Unimplemented period type %s") %
-                                     (c.type,))
+                if current_period_ids:
+                    all_period_ids = period_obj.search(
+                        cr, uid,
+                        [('special', '=', False),
+                         ('company_id', '=', c.company_id.id)],
+                        order='date_start',
+                        context=context)
+                    p = all_period_ids.index(current_period_ids[0]) + c.offset
+                    if p >= 0 and p + c.duration <= len(all_period_ids):
+                        period_ids = all_period_ids[p:p + c.duration]
+                        periods = period_obj.browse(cr, uid, period_ids,
+                                                    context=context)
+                        date_from = periods[0].date_start
+                        date_to = periods[-1].date_stop
+                        valid = True
+
             res[c.id] = {
                 'date_from': date_from,
                 'date_to': date_to,
                 'period_from': period_ids and period_ids[0] or False,
                 'period_to': period_ids and period_ids[-1] or False,
+                'valid': valid,
             }
         return res
 
@@ -422,6 +419,9 @@ class mis_report_instance_period(orm.Model):
         'period_to': fields.function(_get_dates,
                                      type='many2one', obj='account.period',
                                      multi="dates", string="To period"),
+        'valid': fields.function(_get_dates,
+                                 type='boolean',
+                                 multi='dates', string='Valid'),
         'sequence': fields.integer(string='Sequence'),
         'report_instance_id': fields.many2one('mis.report.instance',
                                               string='Report Instance',
@@ -712,6 +712,8 @@ class mis_report_instance(orm.Model):
             cr, uid, [('code', '=', lang)], context=context)
 
         for period in r.period_ids:
+            if not period.valid:
+                continue
             # add the column header
             header['']['cols'].append(dict(
                 name=period.name,
