@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
 ##############################################################################
 #
-#    mis_builder module for OpenERP, Management Information System Builder
-#    Copyright (C) 2014 ACSONE SA/NV (<http://acsone.eu>)
+#    mis_builder module for Odoo, Management Information System Builder
+#    Copyright (C) 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
 #
 #    This file is a part of mis_builder
 #
