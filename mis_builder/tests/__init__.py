@@ -23,10 +23,3 @@
 ##############################################################################
 
 from . import test_mis_builder
-
-fast_suite = [
-]
-
-checks = [
-    test_mis_builder,
-]
