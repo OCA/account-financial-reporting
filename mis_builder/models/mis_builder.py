@@ -258,11 +258,11 @@ class mis_report_query(orm.Model):
                                        store={'mis.report.query':
                                               (lambda self, cr, uid, ids, c={}:
                                                ids, ['field_ids'], 20), }),
-        'groupby': fields.boolean(string="Group by"),
-        'groupby_field_ids': fields.many2many('ir.model.fields',
-                                              'ir_model_fields_'
-                                              'mis_report_query_groupby_rel',
-                                              string='Fields to group by'),
+        'aggregate': fields.selection([('sum', _('Sum')),
+                                       ('avg', _('Average')),
+                                       ('min', _('Min')),
+                                       ('max', _('Max'))],
+                                      string='Aggregate'),
         'date_field': fields.many2one('ir.model.fields', required=True,
                                       string='Date field',
                                       domain=[('ttype', 'in',
@@ -492,24 +492,37 @@ class mis_report_instance_period(orm.Model):
                     c.date_to, context.get('tz', 'UTC'), add_day=1)
                 domain.extend([(query.date_field.name, '>=', datetime_from),
                                (query.date_field.name, '<', datetime_to)])
-            if obj._columns.get('company_id', False):
+            if obj._columns.get('company_id'):
                 domain.extend(['|', ('company_id', '=', False),
                                ('company_id', '=', c.company_id.id)])
             field_names = [f.name for f in query.field_ids]
-            if not query.groupby:
+            if not query.aggregate:
                 obj_ids = obj.search(cr, uid, domain, context=context)
                 obj_datas = obj.read(
                     cr, uid, obj_ids, field_names, context=context)
                 res[query.name] = [AutoStruct(**d) for d in obj_datas]
-            else:
-                groupby_field_names = [f.name for f in query.groupby_field_ids]
+            elif query.aggregate == 'sum':
                 obj_datas = obj.read_group(
-                    cr, uid, domain, field_names, groupby_field_names,
-                    context=context)
-                if groupby_field_names or not obj_datas:
-                    res[query.name] = [AutoStruct(**d) for d in obj_datas]
-                else:
-                    res[query.name] = AutoStruct(**obj_datas[0])
+                    cr, uid, domain, field_names, [], context=context)
+                s = AutoStruct(count=obj_datas[0]['__count'])
+                for field_name in field_names:
+                    setattr(s, field_name, obj_datas[0][field_name])
+                res[query.name] = s
+            else:
+                obj_ids = obj.search(cr, uid, domain, context=context)
+                obj_datas = obj.read(
+                    cr, uid, obj_ids, field_names, context=context)
+                s = AutoStruct(count=len(obj_datas))
+                if query.aggregate == 'min':
+                    agg = min
+                elif query.aggregate == 'max':
+                    agg = max
+                elif query.aggregate == 'avg':
+                    agg = lambda l: sum(l) / float(len(l))
+                for field_name in field_names:
+                    setattr(s, field_name,
+                            agg([d[field_name] for d in obj_datas]))
+                res[query.name] = s
         return res
 
     def _compute(self, cr, uid, lang_id, c, aep, context=None):
