@@ -114,7 +114,8 @@ class mis_report_kpi(orm.Model):
                                            required=True,
                                            string='Comparison Method'),
         'sequence': fields.integer(string='Sequence'),
-        'report_id': fields.many2one('mis.report', string='Report'),
+        'report_id': fields.many2one('mis.report', string='Report',
+                                     ondelete='cascade'),
     }
 
     _defaults = {
