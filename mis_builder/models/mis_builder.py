@@ -454,8 +454,10 @@ class mis_report_instance_period(orm.Model):
     ]
 
     def drilldown(self, cr, uid, _id, expr, context=None):
+        if context is None:
+            context = {}
         this = self.browse(cr, uid, _id, context=context)[0]
-        env = Environment(cr, uid, {})
+        env = Environment(cr, uid, context)
         aep = AccountingExpressionProcessor(env)
         if aep.has_account_var(expr):
             aep.parse_expr(expr)
