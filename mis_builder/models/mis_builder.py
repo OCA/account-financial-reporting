@@ -126,7 +126,7 @@ class mis_report_kpi(orm.Model):
         'sequence': 100,
     }
 
-    _order = 'sequence'
+    _order = 'sequence, id'
 
     def _check_name(self, cr, uid, ids, context=None):
         for record_name in self.read(cr, uid, ids, ['name']):
@@ -442,7 +442,7 @@ class mis_report_instance_period(orm.Model):
         'normalize_factor': 1,
     }
 
-    _order = 'sequence'
+    _order = 'sequence, id'
 
     _sql_constraints = [
         ('duration', 'CHECK (duration>0)',
