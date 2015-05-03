@@ -68,13 +68,12 @@ class test_mis_builder(common.TransactionCase):
              OrderedDict([(
                  u'total_test',
                  {'kpi_name': u'total test',
-                  'default_style': None,
+                  'default_style': False,
                   'cols': [{
                          'period_id':
                          self.ref(
                              'mis_builder.mis_report_instance_period_test'),
                          'style': None,
-                         'default_style': None,
                          'suffix': False,
                          'expr': 'len(test)',
                          'val_c': 'total_test = len(test)',

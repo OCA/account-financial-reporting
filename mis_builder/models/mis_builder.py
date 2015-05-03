@@ -590,7 +590,6 @@ class mis_report_instance_period(orm.Model):
                     'val_r': kpi_val_rendered,
                     'val_c': kpi_val_comment,
                     'style': kpi_style,
-                    'default_style': kpi.default_css_style or None,
                     'suffix': kpi.suffix,
                     'dp': kpi.dp,
                     'is_percentage': kpi.type == 'pct',
@@ -693,25 +692,20 @@ class mis_report_instance(orm.Model):
         assert isinstance(_id, (int, long))
         if context is None:
             context = {}
-        r = self.browse(cr, uid, _id, context=context)
-        content = OrderedDict()
-        # empty line name for header
-        header = OrderedDict()
-        header[''] = {'kpi_name': '', 'cols': [], 'default_style': ''}
-        env = Environment(cr, uid, {})
-        aep = AccountingExpressionProcessor(env)
-        # initialize lines with kpi
-        for kpi in r.report_id.kpi_ids:
-            aep.parse_expr(kpi.expression)
-            content[kpi.name] = {'kpi_name': kpi.description,
-                                 'cols': [],
-                                 'default_style': ''}
-        aep.done_parsing(r.root_account)
-        report_instance_period_obj = self.pool.get(
-            'mis.report.instance.period')
-        kpi_obj = self.pool.get('mis.report.kpi')
 
-        period_values = {}
+        this = self.browse(cr, uid, _id, context=context)
+
+        kpi_obj = self.pool['mis.report.kpi']
+        report_instance_period_obj = self.pool['mis.report.instance.period']
+
+        # prepare AccountingExpressionProcessor
+        env = Environment(cr, uid, context)
+        aep = AccountingExpressionProcessor(env)
+        for kpi in this.report_id.kpi_ids:
+            aep.parse_expr(kpi.expression)
+        aep.done_parsing(this.root_account)
+
+        # fetch user language only once (TODO: is it necessary?)
         lang = self.pool['res.users'].read(
             cr, uid, uid, ['lang'], context=context)['lang']
         if not lang:
@@ -719,7 +713,28 @@ class mis_report_instance(orm.Model):
         lang_id = self.pool['res.lang'].search(
             cr, uid, [('code', '=', lang)], context=context)
 
-        for period in r.period_ids:
+        # compute kpi values for each period
+        kpi_values_by_period_ids = {}
+        for period in this.period_ids:
+            if not period.valid:
+                continue
+            kpi_values = report_instance_period_obj._compute(
+                cr, uid, lang_id, period, aep, context=context)
+            kpi_values_by_period_ids[period.id] = kpi_values
+
+        # prepare header and content
+        header = OrderedDict()
+        header[''] = {'kpi_name': '',
+                      'cols': [],
+                      'default_style': ''}
+        content = OrderedDict()
+        for kpi in this.report_id.kpi_ids:
+            content[kpi.name] = {'kpi_name': kpi.description,
+                                 'cols': [],
+                                 'default_style': kpi.default_css_style}
+
+        # populate header and content
+        for period in this.period_ids:
             if not period.valid:
                 continue
             # add the column header
@@ -735,35 +750,33 @@ class mis_report_instance(orm.Model):
                                         context=context)))
                 or period.period_from and period.period_from.name or
                 period.date_from))
-            # compute kpi values
-            values = report_instance_period_obj._compute(
-                cr, uid, lang_id, period, aep, context=context)
-            period_values[period.name] = values
-            for key in values:
-                content[key]['default_style'] = values[key]['default_style']
-                content[key]['cols'].append(values[key])
+            # add kpi values
+            kpi_values = kpi_values_by_period_ids[period.id]
+            for kpi_name in kpi_values:
+                content[kpi_name]['cols'].append(kpi_values[kpi_name])
 
-        # add comparison column
-        for period in r.period_ids:
+            # add comparison columns
             for compare_col in period.comparison_column_ids:
-                # add the column header
-                header['']['cols'].append(
-                    dict(name='%s - %s' % (period.name, compare_col.name),
-                         date=''))
-                column1_values = period_values[period.name]
-                column2_values = period_values[compare_col.name]
-                for kpi in r.report_id.kpi_ids:
-                    content[kpi.name]['cols'].append(
-                        {'val_r': kpi_obj._render_comparison(
-                            cr,
-                            uid,
-                            lang_id,
-                            kpi,
-                            column1_values[kpi.name]['val'],
-                            column2_values[kpi.name]['val'],
-                            period.normalize_factor,
-                            compare_col.normalize_factor,
-                            context=context)})
+                compare_kpi_values = \
+                    kpi_values_by_period_ids.get(compare_col.id)
+                if compare_kpi_values:
+                    # add the comparison column header
+                    header['']['cols'].append(
+                        dict(name='%s vs %s' % (period.name, compare_col.name),
+                             date=''))
+                    # add comparison values
+                    for kpi in this.report_id.kpi_ids:
+                        content[kpi.name]['cols'].append(
+                            {'val_r': kpi_obj._render_comparison(
+                                cr,
+                                uid,
+                                lang_id,
+                                kpi,
+                                kpi_values[kpi.name]['val'],
+                                compare_kpi_values[kpi.name]['val'],
+                                period.normalize_factor,
+                                compare_col.normalize_factor,
+                                context=context)})
 
         return {'header': header,
                 'content': content}
