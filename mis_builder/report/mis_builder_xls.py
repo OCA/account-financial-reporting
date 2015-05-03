@@ -87,7 +87,7 @@ class mis_builder_xls(report_xls):
         header_name_list = ['']
         col_specs_template = {'': {'header': [1, 30, 'text', ''],
                                    'header_date': [1, 1, 'text', '']}}
-        for col in data['header']['']['cols']:
+        for col in data['header'][0]['cols']:
             col_specs_template[col['name']] = {'header': [1, 30, 'text',
                                                           col['name']],
                                                'header_date': [1, 1, 'text',
@@ -109,8 +109,7 @@ class mis_builder_xls(report_xls):
         ws.set_horz_split_pos(row_pos)
         ws.set_vert_split_pos(1)
 
-        for key in data['content']:
-            line = data['content'][key]
+        for line in data['content']:
             col = 0
             ws.write(row_pos, col, line['kpi_name'], self.mis_rh_cell_style)
             for value in line['cols']:
