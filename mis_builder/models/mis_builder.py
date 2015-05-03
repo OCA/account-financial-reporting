@@ -22,7 +22,6 @@
 #
 ##############################################################################
 
-from collections import OrderedDict
 from datetime import datetime, timedelta
 from dateutil import parser
 import re
@@ -725,22 +724,27 @@ class mis_report_instance(orm.Model):
             kpi_values_by_period_ids[period.id] = kpi_values
 
         # prepare header and content
-        header = OrderedDict()
-        header[''] = {'kpi_name': '',
-                      'cols': [],
-                      'default_style': ''}
-        content = OrderedDict()
+        header = []
+        header.append({
+            'kpi_name': '',
+            'cols': []
+        })
+        content = []
+        rows_by_kpi_name = {}
         for kpi in this.report_id.kpi_ids:
-            content[kpi.name] = {'kpi_name': kpi.description,
-                                 'cols': [],
-                                 'default_style': kpi.default_css_style}
+            rows_by_kpi_name[kpi.name] = {
+                'kpi_name': kpi.description,
+                'cols': [],
+                'default_style': kpi.default_css_style
+            }
+            content.append(rows_by_kpi_name[kpi.name])
 
         # populate header and content
         for period in this.period_ids:
             if not period.valid:
                 continue
             # add the column header
-            header['']['cols'].append(dict(
+            header[0]['cols'].append(dict(
                 name=period.name,
                 date=(period.duration > 1 or period.type == 'w') and
                 _('from %s to %s' %
@@ -755,7 +759,7 @@ class mis_report_instance(orm.Model):
             # add kpi values
             kpi_values = kpi_values_by_period_ids[period.id]
             for kpi_name in kpi_values:
-                content[kpi_name]['cols'].append(kpi_values[kpi_name])
+                rows_by_kpi_name[kpi_name]['cols'].append(kpi_values[kpi_name])
 
             # add comparison columns
             for compare_col in period.comparison_column_ids:
@@ -763,12 +767,12 @@ class mis_report_instance(orm.Model):
                     kpi_values_by_period_ids.get(compare_col.id)
                 if compare_kpi_values:
                     # add the comparison column header
-                    header['']['cols'].append(
+                    header[0]['cols'].append(
                         dict(name='%s vs %s' % (period.name, compare_col.name),
                              date=''))
                     # add comparison values
                     for kpi in this.report_id.kpi_ids:
-                        content[kpi.name]['cols'].append(
+                        rows_by_kpi_name[kpi.name]['cols'].append(
                             {'val_r': kpi_obj._render_comparison(
                                 cr,
                                 uid,
