@@ -4,12 +4,12 @@
         <table t-if="widget.mis_report_data" class="oe_list_content mis_builder">
             <thead>
                 <tr class="oe_list_header_columns">
-                    <th class="oe_list_header_char">
-                        <div>
-                            <t t-esc="h_value.kpi_name"/>
-                        </div>
-                    </th>
                     <t t-foreach="widget.mis_report_data.header" t-as="h">
+                        <th class="oe_list_header_char">
+                            <div>
+                                <t t-esc="h_value.kpi_name"/>
+                            </div>
+                        </th>
                         <th t-foreach="h_value.cols" t-as="col" class="oe_list_header_char mis_builder_ralign">
                             <div>
                                 <t t-esc="col.name"/>
