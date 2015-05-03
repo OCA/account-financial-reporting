@@ -35,7 +35,7 @@ from openerp import tools
 from openerp.tools.safe_eval import safe_eval
 from openerp.tools.translate import _
 
-from .aep import AccountingExpressionProcessor
+from .aep import AccountingExpressionProcessor as AEP
 
 
 class AutoStruct(object):
@@ -457,9 +457,9 @@ class mis_report_instance_period(orm.Model):
         if context is None:
             context = {}
         this = self.browse(cr, uid, _id, context=context)[0]
-        env = Environment(cr, uid, context)
-        aep = AccountingExpressionProcessor(env)
-        if aep.has_account_var(expr):
+        if AEP.has_account_var(expr):
+            env = Environment(cr, uid, context)
+            aep = AEP(env)
             aep.parse_expr(expr)
             aep.done_parsing(this.report_instance_id.root_account)
             domain = aep.get_aml_domain_for_expr(
@@ -585,7 +585,7 @@ class mis_report_instance_period(orm.Model):
                     kpi_style = None
 
                 drilldown = (kpi_val is not None and
-                             aep.has_account_var(kpi.expression))
+                             AEP.has_account_var(kpi.expression))
 
                 res[kpi.name] = {
                     'val': kpi_val,
@@ -702,7 +702,7 @@ class mis_report_instance(orm.Model):
 
         # prepare AccountingExpressionProcessor
         env = Environment(cr, uid, context)
-        aep = AccountingExpressionProcessor(env)
+        aep = AEP(env)
         for kpi in this.report_id.kpi_ids:
             aep.parse_expr(kpi.expression)
         aep.done_parsing(this.root_account)

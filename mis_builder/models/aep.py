@@ -155,6 +155,7 @@ class AccountingExpressionProcessor(object):
                 account_ids.update(self._account_ids_by_code[account_code])
             self._map_account_ids[key] = list(account_ids)
 
+    @classmethod
     def has_account_var(self, expr):
         return bool(self.ACC_RE.search(expr))
 
