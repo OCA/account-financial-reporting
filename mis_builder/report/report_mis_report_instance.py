@@ -22,38 +22,29 @@
 #
 ##############################################################################
 
-{
-    'name': 'mis builder',
-    'version': '0.1',
-    'category': 'Reporting',
-    'description': """
-    Management Information System Builder
-    """,
-    'author': 'ACSONE SA/NV',
-    'website': 'http://acsone.eu',
-    'depends': ['account',
-                'report_xls',  # OCA/reporting-engine
-                ],
-    'data': [
-        'wizard/mis_builder_dashboard.xml',
-        'views/mis_builder.xml',
-        'security/ir.model.access.csv',
-        'security/mis_builder_security.xml',
-        'report/report_mis_report_instance.xml',
-    ],
-    'test': [
-    ],
-    'demo': ['tests/mis.report.kpi.csv',
-             'tests/mis.report.query.csv',
-             'tests/mis.report.csv',
-             'tests/mis.report.instance.period.csv',
-             'tests/mis.report.instance.csv',
-             ],
-    'qweb': [
-        'static/src/xml/*.xml'
-    ],
-    'installable': True,
-    'application': True,
-    'auto_install': False,
-    'license': 'AGPL-3',
-}
+import logging
+
+from openerp import api, models
+
+_logger = logging.getLogger(__name__)
+
+
+class ReportMisReportInstance(models.AbstractModel):
+
+    _name = 'report.mis_builder.report_mis_report_instance'
+
+    @api.multi
+    def render_html(self, data=None):
+        docs = self.env['mis.report.instance'].browse(self._ids)
+        docs_computed = {}
+        for doc in docs:
+            docs_computed[doc.id] = doc.compute()[0]
+        _logger.info("%s", docs_computed)
+        docargs = {
+            'doc_ids': self._ids,
+            'doc_model': 'mis.report.instance',
+            'docs': docs,
+            'docs_computed': docs_computed,
+        }
+        return self.env['report'].\
+            render('mis_builder.report_mis_report_instance', docargs)

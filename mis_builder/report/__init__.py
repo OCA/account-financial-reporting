@@ -23,3 +23,4 @@
 ##############################################################################
 
 from . import mis_builder_xls
+from . import report_mis_report_instance
