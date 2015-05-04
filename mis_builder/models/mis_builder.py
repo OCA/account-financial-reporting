@@ -28,6 +28,7 @@ import re
 import traceback
 
 import pytz
+from openerp import api
 from openerp.api import Environment
 from openerp.osv import orm, fields
 from openerp import tools
@@ -711,6 +712,7 @@ class mis_report_instance(orm.Model):
             'target': 'new',
         }
 
+    @api.cr_uid_id_context
     def compute(self, cr, uid, _id, context=None):
         assert isinstance(_id, (int, long))
         if context is None:
