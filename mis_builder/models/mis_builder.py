@@ -689,6 +689,19 @@ class mis_report_instance(orm.Model):
             tools.DEFAULT_SERVER_DATE_FORMAT),
             tformat)
 
+    def preview(self, cr, uid, _id, context=None):
+        view_id = self.pool['ir.model.data'].get_object_reference(
+            cr, uid, 'mis_builder', 'mis_report_instance_result_view_form')[1]
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'mis.report.instance',
+            'res_id': _id[0],
+            'view_mode': 'form',
+            'view_type': 'form',
+            'view_id': view_id,
+            'target': 'new',
+        }
+
     def compute(self, cr, uid, _id, context=None):
         assert isinstance(_id, (int, long))
         if context is None:
