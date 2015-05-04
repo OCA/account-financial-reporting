@@ -115,7 +115,7 @@
             <field name="arch" type="xml">
                 <form string="MIS Report Result" version="7.0">
                     <widget type="mis_report"></widget>
-                    <button icon="gtk-execute" name="%(xls_export)d" string="Export" type="action" colspan="2"/>
+                    <button icon="gtk-execute" name="%(xls_export)d" string="XLS Export" type="action" colspan="2"/>
                 </form>
             </field>
         </record>
@@ -151,8 +151,9 @@
                         </h1>
                     </div>
                     <div class="oe_right oe_button_box" name="buttons"> 
-                        <button type="object" name="preview" string="Preview" />
-                        <button type="action" name="%(mis_report_instance_add_to_dashboard_action)d" string="Add to dashboard" />
+                        <button type="object" name="preview" string="Preview" icon="gtk-print-preview" />
+                        <button type="action" name="%(xls_export)d" string="XLS Export" icon="gtk-execute" />
+                        <button type="action" name="%(mis_report_instance_add_to_dashboard_action)d" string="Add to dashboard" icon="gtk-add" />
                     </div>
                     <group col="2">
                         <field name="description"/>
