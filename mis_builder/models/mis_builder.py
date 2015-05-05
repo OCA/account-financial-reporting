@@ -206,14 +206,16 @@ class mis_report_kpi(orm.Model):
             divider_label = ''
         # format number following user language
         value = round(value / float(divider or 1), dp) or 0
-        return u'%s\xA0%s%s' % (self.pool['res.lang'].format(
+        value = self.pool['res.lang'].format(
             cr, uid, lang_id,
-            '%%%s.%df' % (
-                sign, dp),
+            '%%%s.%df' % (sign, dp),
             value,
             grouping=True,
-            context=context),
-            divider_label, suffix or '')
+            context=context)
+        value = u'%s\N{NO-BREAK SPACE}%s%s' % \
+            (value, divider_label, suffix or '')
+        value = value.replace('-', u'\N{NON-BREAKING HYPHEN}')
+        return value
 
 
 class mis_report_query(orm.Model):
