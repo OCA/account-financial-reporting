@@ -180,22 +180,28 @@ class mis_report_kpi(orm.Model):
         if value is None or base_value is None:
             return ''
         if kpi.type == 'pct':
-            return self._render_num(cr, uid, lang_id, value - base_value, 0.01,
-                                    kpi.dp, _('pp'), sign='+', context=context)
+            return self._render_num(cr, uid, lang_id,
+                                    value - base_value,
+                                    0.01, kpi.dp,
+                                    _('pp'), sign='+',
+                                    context=context)
         elif kpi.type == 'num':
             if average_value:
                 value = value / float(average_value)
             if average_base_value:
                 base_value = base_value / float(average_base_value)
             if kpi.compare_method == 'diff':
-                return self._render_num(cr, uid, lang_id, value - base_value,
-                                        kpi.divider,
-                                        kpi.dp, kpi.suffix, sign='+',
+                return self._render_num(cr, uid, lang_id,
+                                        value - base_value,
+                                        kpi.divider, kpi.dp,
+                                        kpi.suffix, sign='+',
                                         context=context)
             elif kpi.compare_method == 'pct' and base_value != 0:
                 return self._render_num(cr, uid, lang_id,
-                                        value / base_value - 1, 0.01,
-                                        kpi.dp, '%', sign='+', context=context)
+                                        value / base_value - 1,
+                                        0.01, kpi.dp,
+                                        '%', sign='+',
+                                        context=context)
         return ''
 
     def _render_num(self, cr, uid, lang_id, value, divider,
