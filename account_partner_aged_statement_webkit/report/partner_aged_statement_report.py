@@ -28,7 +28,7 @@ from dateutil.relativedelta import relativedelta
 import itertools
 
 from openerp import pooler
-from openerp.report import report_sxw
+from openerp.addons.report_webkit.webkit_report import WebKitParser
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
 
 from openerp.addons.account.report.account_aged_partner_balance import (
@@ -272,7 +272,7 @@ class PartnerAgedTrialReport(aged_trial_report):
         return res
 
 
-report_sxw.report_sxw(
+WebKitParser(
     'report.webkit.partner_aged_statement_report',
     'res.partner',
     ('addons/'

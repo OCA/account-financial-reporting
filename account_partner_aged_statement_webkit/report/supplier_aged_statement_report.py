@@ -21,7 +21,7 @@
 ###############################################################################
 
 from .partner_aged_statement_report import PartnerAgedTrialReport
-from openerp.report import report_sxw
+from openerp.addons.report_webkit.webkit_report import WebKitParser
 
 
 class SupplierAgedTrialReport(PartnerAgedTrialReport):
@@ -37,7 +37,7 @@ class SupplierAgedTrialReport(PartnerAgedTrialReport):
         self.ttype = 'payment'
 
 
-report_sxw.report_sxw(
+WebKitParser(
     'report.webkit.supplier_aged_statement_report',
     'res.partner',
     ('addons/'
