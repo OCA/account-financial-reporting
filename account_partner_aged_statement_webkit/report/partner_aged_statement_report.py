@@ -49,7 +49,7 @@ class PartnerAgedTrialReport(aged_trial_report):
             'message': self._message,
             'getLines30': self._lines_get_30,
             'getLines3060': self._lines_get_30_60,
-            'getLines60': self._lines_get60,
+            'getLines60': self._lines_get_60,
             'show_message': True,
             'get_current_invoice_lines': self._get_current_invoice_lines,
             'get_balance': self._get_balance,
@@ -129,135 +129,47 @@ class PartnerAgedTrialReport(aged_trial_report):
         :return: a list of dict containing invoice data
         {
             'date_due': the date of maturity
+            'date_original': the date of the invoice
+            'ref': the partner reference on the invoice
             'amount_original': the original date
             'amount_unreconciled': the amount left to pay
-            'currency_id': the currency of the move line
+            'currency_id': the currency of the invoice
             'currency_name': the name of the currency
-            'name': the name of the move line
+            'name': the number of the invoice
         }
         """
         # Only compute this method one time per partner
         if partner.id in self.partner_invoices_dict:
             return self.partner_invoices_dict[partner.id]
 
-        voucher_obj = pooler.get_pool(self.cr.dbname)['account.voucher']
-        journal_obj = pooler.get_pool(self.cr.dbname)['account.journal']
-        move_line_obj = pooler.get_pool(self.cr.dbname)['account.move.line']
-        currency_obj = pooler.get_pool(self.cr.dbname)['res.currency']
+        pool = pooler.get_pool(self.cr.dbname)
+        cr, uid, context = self.cr, self.uid, self.localcontext
 
-        currency = company.currency_id
+        inv_obj = pool['account.invoice']
 
-        # Get the journal with the correct currency
-        journal_ids = journal_obj.search(
-            self.cr, self.uid, [
-                ('type', 'in', ['bank', 'cash']),
-                ('currency', '=', currency.id),
-            ], context=self.localcontext)
+        invoice_ids = inv_obj.search(cr, uid, [
+            ('state', '=', 'open'),
+            ('company_id', '=', company.id),
+            ('partner_id', '=', partner.id),
+            ('type', '=', 'out_invoice'
+                if self.ttype == 'receipt' else 'in_invoice'),
+        ], context=context)
 
-        if not journal_ids:
-            journal_ids = journal_obj.search(
-                self.cr, self.uid, [('type', 'in', ['bank', 'cash'])],
-                context=self.localcontext)
+        invoices = inv_obj.browse(cr, uid, invoice_ids, context=context)
 
-        journal_id = journal_ids[0]
-
-        # Retreive every invoice in a first time
-        voucher_lines = voucher_obj.recompute_voucher_lines(
-            self.cr, self.uid, ids=False, partner_id=partner.id,
-            journal_id=journal_id, price=0, currency_id=currency.id,
-            ttype=self.ttype, date=date, context=self.localcontext)['value']
-
-        # Map the result by move line
-        line_dict = {
-            line['move_line_id']: line for line in
-            voucher_lines['line_cr_ids'] + voucher_lines['line_dr_ids']
-        }
-
-        # If some of the invoices have different currency than the currency
-        # of the company, need to get the lines in these currencies
-        other_currencies = {}
-        for move_line in move_line_obj.browse(
-            self.cr, self.uid, line_dict.keys(), context=self.localcontext
-        ):
-            invoice = move_line.invoice
-            if invoice and invoice.currency_id.id != currency.id:
-                if invoice.currency_id.id in other_currencies:
-                    other_currencies[invoice.currency_id.id]['move_line_ids'].\
-                        append(move_line.id)
-                else:
-                    # Get the journal with the correct currency
-                    journal_ids = journal_obj.search(
-                        self.cr, self.uid, [
-                            ('type', 'in', ['bank', 'cash']),
-                            ('currency', '=', invoice.currency_id.id),
-                        ], context=self.localcontext)
-
-                    if not journal_ids:
-                        journal_ids = journal_obj.search(
-                            self.cr, self.uid,
-                            [('type', 'in', ['bank', 'cash'])],
-                            context=self.localcontext)
-
-                    journal_id = journal_ids[0]
-
-                    lines_in_currency = voucher_obj.recompute_voucher_lines(
-                        self.cr, self.uid, ids=False, partner_id=partner.id,
-                        journal_id=journal_id, price=0,
-                        currency_id=invoice.currency_id.id,
-                        ttype=self.ttype, date=date,
-                        context=self.localcontext)['value']
-
-                    other_currencies[invoice.currency_id.id] = {
-                        'lines_in_currency': {
-                            line['move_line_id']: line for line in
-                            lines_in_currency['line_cr_ids']
-                            + lines_in_currency['line_dr_ids']
-                        },
-                        'move_line_ids': [move_line.id],
-                    }
-
-        for currency_id in other_currencies:
-            for move_line_id in other_currencies[currency_id]['move_line_ids']:
-                line_dict[move_line_id] = other_currencies[currency_id][
-                    'lines_in_currency'][move_line_id]
-
-        for line in line_dict:
-            move_line = move_line_obj.browse(
-                self.cr, self.uid, line_dict[line]['move_line_id'],
-                context=self.localcontext)
-            line_dict[line]['ref'] = move_line.ref
-
-            currency = currency_obj.browse(
-                self.cr, self.uid, line_dict[line]['currency_id'],
-                context=self.localcontext)
-            line_dict[line]['currency_name'] = currency.name
-
-        # Adjust the amount signs depending on the report type
-        if self.ttype == 'receipt':
-            for line in line_dict:
-                if line_dict[line]['type'] == 'dr':
-                    line_dict[line]['amount_original'] *= -1
-                    line_dict[line]['amount_unreconciled'] *= -1
-
-        elif self.ttype == 'payment':
-            for line in line_dict:
-                if line_dict[line]['type'] == 'cr':
-                    line_dict[line]['amount_original'] *= -1
-                    line_dict[line]['amount_unreconciled'] *= -1
-
-        # Order the invoices by date and check for lines with no amount
-        invoice_list = [
-            inv for inv in
-            sorted(line_dict.values(), key=lambda x: x['date_original'])
-            if inv['amount_original'] or inv['amount_unreconciled']
+        return [
+            {
+                'date_due': inv.date_due or '',
+                'date_original': inv.date_invoice or '',
+                'amount_original': inv.amount_total,
+                'amount_unreconciled': inv.residual,
+                'currency_id': inv.currency_id.id,
+                'currency_name': inv.currency_id.name,
+                'name': inv.number,
+                'ref': inv.reference or '',
+                'id': inv.id,
+            } for inv in invoices
         ]
-
-        # Order from the most recent to the older invoice.
-        invoice_list.reverse()
-
-        self.partner_invoices_dict[partner.id] = invoice_list
-
-        return self.partner_invoices_dict[partner.id]
 
     def _lines_get_30(self, partner, company):
         today = self.today
@@ -289,7 +201,7 @@ class PartnerAgedTrialReport(aged_trial_report):
         ]
         return movelines
 
-    def _lines_get60(self, partner, company):
+    def _lines_get_60(self, partner, company):
         today = self.today
         start = today - relativedelta(days=60)
 
