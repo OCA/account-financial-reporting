@@ -90,7 +90,7 @@
         </record>
 
         <record model="ir.actions.act_window" id="mis_report_view_action">
-            <field name="name">Mis report</field>
+            <field name="name">MIS Templates</field>
             <field name="view_id" ref="mis_report_view_tree"/>
             <field name="res_model">mis.report</field>
             <field name="view_type">form</field>
@@ -188,14 +188,14 @@
         </record>
 
         <record model="ir.actions.act_window" id="mis_report_instance_view_action">
-            <field name="name">Mis report instance</field>
+            <field name="name">MIS Reports</field>
             <field name="view_id" ref="mis_report_instance_view_tree"/>
             <field name="res_model">mis.report.instance</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem id="mis_report_instance_view_menu" parent="account.menu_account_reports" name="MIS Reports" action="mis_report_instance_view_action" sequence="20"/>
+        <menuitem id="mis_report_instance_view_menu" parent="account.menu_finance_reports" name="MIS Reports" action="mis_report_instance_view_action" sequence="20"/>
 
     </data>
 </openerp>
