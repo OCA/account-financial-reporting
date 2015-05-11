@@ -75,6 +75,12 @@
                 <field name="description" />
                 <field name="active"/>
             </group>
+            <group name="products" string="Products">
+                <field name="product_tmpl_ids" nolabel="1"/>
+            </group>
+            <group name="categ" string="Product Categories">
+                <field name="product_categ_ids" nolabel="1"/>
+            </group>
         </form>
     </field>
 </record>

@@ -29,6 +29,15 @@ class ReportIntrastatCode(models.Model):
     _name = "report.intrastat.code"
     _description = "H.S. Code"
     _order = "name"
+    _rec_name = "display_name"
+
+    @api.one
+    @api.depends('name', 'description')
+    def _compute_display_name(self):
+        display_name = self.name or ''
+        if self.description:
+            display_name += ' ' + self.description
+        self.display_name = display_name
 
     name = fields.Char(
         string='H.S. code',
@@ -37,6 +46,8 @@ class ReportIntrastatCode(models.Model):
         "http://www.wcoomd.org")
     description = fields.Char(
         'Description', help="Short text description of the H.S. category")
+    display_name = fields.Char(
+        compute='_compute_display_name', string="Display Name", readonly=True)
     intrastat_code = fields.Char(
         string='European Intrastat Code', size=9, required=True,
         help="Code used for the Intrastat declaration. Must be part "
@@ -49,16 +60,10 @@ class ReportIntrastatCode(models.Model):
         "this particular Intrastat Code (other than the weight in Kg). "
         "If no particular unit of measure is required, leave empty.")
     active = fields.Boolean(default=True)
-
-    @api.multi
-    def name_get(self):
-        res = []
-        for code in self:
-            name = code.name
-            if code.description:
-                name = u'%s %s' % (name, code.description)
-            res.append((code.id, name))
-        return res
+    product_categ_ids = fields.One2many(
+        'product.category', 'intrastat_id', string='Product Categories')
+    product_tmpl_ids = fields.One2many(
+        'product.template', 'intrastat_id', string='Products')
 
     @api.constrains('name', 'intrastat_code')
     def _hs_code(self):
@@ -83,6 +88,19 @@ class ReportIntrastatCode(models.Model):
         'unique(name)',
         'This H.S. code already exists in Odoo !'
         )]
+
+    @api.model
+    @api.returns('self', lambda value: value.id)
+    def create(self, vals):
+        if vals.get('intrastat_code'):
+            vals['intrastat_code'] = vals['intrastat_code'].replace(' ', '')
+        return super(ReportIntrastatCode, self).create(vals)
+
+    @api.multi
+    def write(self, vals):
+        if vals.get('intrastat_code'):
+            vals['intrastat_code'] = vals['intrastat_code'].replace(' ', '')
+        return super(ReportIntrastatCode, self).write(vals)
 
 
 class ProductTemplate(models.Model):
