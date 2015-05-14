@@ -5,7 +5,7 @@
     <template id="report_mis_report_instance">
       <t t-call="report.html_container">
         <t t-foreach="docs" t-as="o">
-          <t t-call="report.external_layout">
+          <t t-call="report.internal_layout">
             <div class="page">
               <h2 t-field="o.name"></h2>
               <table>
