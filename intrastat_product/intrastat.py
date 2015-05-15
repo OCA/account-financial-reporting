@@ -47,7 +47,8 @@ class ReportIntrastatCode(models.Model):
     description = fields.Char(
         'Description', help="Short text description of the H.S. category")
     display_name = fields.Char(
-        compute='_compute_display_name', string="Display Name", readonly=True)
+        compute='_compute_display_name', string="Display Name", readonly=True,
+        store=True)
     intrastat_code = fields.Char(
         string='European Intrastat Code', size=9, required=True,
         help="Code used for the Intrastat declaration. Must be part "
