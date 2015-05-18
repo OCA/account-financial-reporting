@@ -195,7 +195,7 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem id="mis_report_instance_view_menu" parent="account.menu_finance_reports" name="MIS Reports" action="mis_report_instance_view_action" sequence="20"/>
+        <menuitem id="mis_report_instance_view_menu" parent="account.menu_finance_reports" name="MIS Reports" action="mis_report_instance_view_action" sequence="101"/>
 
     </data>
 </openerp>
