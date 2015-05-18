@@ -311,7 +311,7 @@ class mis_report(orm.Model):
     _name = 'mis.report'
 
     _columns = {
-        'name': fields.char(size=32, required=True,
+        'name': fields.char(required=True,
                             string='Name', translate=True),
         'description': fields.char(required=False,
                                    string='Description', translate=True),
@@ -654,7 +654,7 @@ class mis_report_instance(orm.Model):
     _name = 'mis.report.instance'
 
     _columns = {
-        'name': fields.char(size=32, required=True,
+        'name': fields.char(required=True,
                             string='Name', translate=True),
         'description': fields.char(required=False,
                                    string='Description', translate=True),
