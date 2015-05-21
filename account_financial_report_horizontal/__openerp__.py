@@ -22,27 +22,20 @@
 ##############################################################################
 {
     "name": "Accounting Financial Reports Horizontal",
-    "version": "0.2",
-    "author": ["Therp BV", "Agile Business Group"],
+    "version": "0.3",
+    "author": "Therp BV,Agile Business Group,Odoo Community Association (OCA)",
     "category": 'Accounting & Finance',
-    'complexity': "normal",
-    "description": """
-This is a port to OpenERP 7.0 of the horizontal financial reports
-'Balance sheet' and 'Profit and Loss' as found in OpenERP 6.0.
-    """,
-    'website': 'https://launchpad.net/account-financial-report',
+    'website': 'https://github.com/OCA/account-financial-reporting',
     'license': 'AGPL-3',
-    'images': [],
     "depends": ["account"],
     'data': [
-        'menu.xml',
-        'account_report.xml',
+        'views/menu.xml',
+        'views/account_report.xml',
         'wizard/account_report_common_view.xml',
         'wizard/account_report_balance_sheet_view.xml',
         'wizard/account_report_profit_loss_view.xml',
     ],
     'demo': [],
     'test': [],
-    'installable': False,
     'active': False,
 }
