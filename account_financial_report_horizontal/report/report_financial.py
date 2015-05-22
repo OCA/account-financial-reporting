@@ -19,7 +19,7 @@
 #
 ##############################################################################
 import copy
-from openerp import models, fields, api
+from openerp import models
 from openerp.addons.account.report.account_financial_report import\
     report_account_common
 
