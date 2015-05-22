@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="account.action_report_financial" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="paperformat_euro_landscape" />
+        </record>
+    </data>
+</openerp>
