@@ -2,9 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    This module copyright (C) 2012 Therp BV (<http://therp.nl>),
-#    Copyright (C) 2013 Agile Business Group sagl
-#    (<http://www.agilebg.com>) (<lorenzo.battistini@agilebg.com>)
+#    This module copyright (C) 2015 Therp BV (<http://therp.nl>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -20,20 +18,4 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-{
-    "name": "Accounting Financial Reports Horizontal",
-    "version": "0.3",
-    "author": "Therp BV,Agile Business Group,Odoo Community Association (OCA)",
-    "category": 'Accounting & Finance',
-    'website': 'https://github.com/OCA/account-financial-reporting',
-    'license': 'AGPL-3',
-    "depends": ["account"],
-    'data': [
-        "data/report_paperformat.xml",
-        "data/ir_actions_report_xml.xml",
-        "report/report_financial.xml",
-    ],
-    'demo': [],
-    'test': [],
-    'active': False,
-}
+from . import account_financial_report

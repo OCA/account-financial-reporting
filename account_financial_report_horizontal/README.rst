@@ -4,13 +4,12 @@
 Accounting Financial Reports Horizontal
 =======================================
 
-This is a port of the financial reports 'Balance sheet' and
-'Profit and Loss' from OpenERP 6.0 to Odoo 8.0
+This is a rewrite of the financial reports 'Balance sheet' and 'Profit and Loss' from OpenERP 6.0 in Odoo 8.0.
 
 Usage
 =====
 
-After the module is installed, go to $TODO
+After the module is installed, the balance sheet and profit and loss reports will be in landscape mode with assets left and liabilities right.
 
 * https://www.odoo.com/forum/help-1
 

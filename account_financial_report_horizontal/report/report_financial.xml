@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <template id="report_financial" inherit_id="account.report_financial">
+            <!-- replace all tables for different selections and do it in one table /-->
+            <!-- with credit/debit  /-->
+            <xpath expr="//div[@class='page']/table" position="replace" />
+            <!-- unfiltered without credit/debit /-->
+            <xpath expr="//div[@class='page']/table" position="replace" />
+            <!-- filtered without credit/debit /-->
+            <xpath expr="//div[@class='page']/table" position="replace">
+                <div class="row">
+                    <div class="col-xs-6" t-foreach="[get_left_lines, get_right_lines]" t-as="get_lines_function">
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th class="text-right" t-if="data['form']['debit_credit'] == 1">Debit</th>
+                                    <th class="text-right" t-if="data['form']['debit_credit'] == 1">Credit</th>
+                                    <th class="text-right">Balance</th>
+                                    <th class="text-right" t-if="data['form']['enable_filter'] == 1 and not data['form']['debit_credit']"><span t-esc="data['form']['label_filter']"/></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="get_lines_function(data)" t-as="a">
+                                    <t t-if="a['level'] != 0">
+                                        <t t-if="a.get('level') &gt; 3"><t t-set="style" t-value="'font-weight: normal;'"/></t>
+                                        <t t-if="not a.get('level') &gt; 3"><t t-set="style" t-value="'font-weight: bold;'"/></t>
+
+                                        <td>
+                                            <span style="color: white;" t-esc="'..' * a.get('level', 0)"/>
+                                            <span t-att-style="style" t-esc="a.get('name')"/>
+                                        </td>
+                                        <td class="text-right" style="white-space: nowrap;" t-if="data['form']['debit_credit'] == 1">
+                                            <span t-att-style="style" t-esc="formatLang(a.get('debit'), currency_obj=res_company.currency_id)"/>
+                                        </td>
+                                        <td class="text-right" style="white-space: nowrap;" t-if="data['form']['debit_credit'] == 1">
+                                            <span t-att-style="style" t-esc="formatLang(a.get('credit'), currency_obj=res_company.currency_id)"/>
+                                        </td>
+                                        <td class="text-right"><span t-att-style="style" t-esc="formatLang(a.get('balance'), currency_obj=res_company.currency_id)"/></td>
+                                        <td class="text-right" t-if="data['form']['enable_filter'] == 1 and not data['form']['debit_credit']"><span t-att-style="style" t-esc="formatLang(a.get('balance_cmp'), currency_obj=res_company.currency_id)"/></td>
+                                    </t>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </xpath>
+        </template>
+    </data>
+</openerp>
