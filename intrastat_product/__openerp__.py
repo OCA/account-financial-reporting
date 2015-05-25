@@ -23,17 +23,11 @@
 {
     'name': 'Intrastat Product',
     'version': '1.1',
-    'category': 'Localisation/Report Intrastat',
+    'category': 'Report Intrastat',
     'license': 'AGPL-3',
     'summary': 'Base module for Intrastat Product',
-    'description': """
-This module contains the common objects for the Intrastat Product.
-This module is country-independant.
-
-This module has been written by Alexis de Lattre from Akretion
-<alexis.delattre@akretion.com>
-    """,
-    'author': 'Akretion',
+    'description': "",
+    'author': 'Akretion,Odoo Community Association (OCA)',
     'website': 'http://www.akretion.com',
     'depends': ['intrastat_base'],
     'data': [
