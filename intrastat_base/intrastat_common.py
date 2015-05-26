@@ -112,8 +112,8 @@ class ReportIntrastatCommon(models.AbstractModel):
 
     @api.multi
     def _attach_xml_file(self, xml_string, declaration_name):
-        '''Attach the XML file to the report_intrastat_product/service '''
-        '''object'''
+        '''Attach the XML file to the report_intrastat_product/service
+        object'''
         self.ensure_one()
         import base64
         filename = '%s_%s.xml' % (self.year_month, declaration_name)
@@ -127,8 +127,8 @@ class ReportIntrastatCommon(models.AbstractModel):
 
     @api.model
     def _open_attach_view(self, attach_id, title='XML file'):
-        '''Returns an action which opens the form view of the '''
-        '''corresponding attachement'''
+        '''Returns an action which opens the form view of the
+        corresponding attachement'''
         action = {
             'name': title,
             'view_type': 'form',
