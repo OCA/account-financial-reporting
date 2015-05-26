@@ -679,6 +679,7 @@ class mis_report_instance(orm.Model):
         'root_account': fields.function(_get_root_account,
                                         type='many2one', obj='account.account',
                                         string="Account chart"),
+        'landscape_pdf': fields.boolean(string='Landscape PDF'),
     }
 
     _defaults = {
