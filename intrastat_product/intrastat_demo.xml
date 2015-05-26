@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Copyright (C) 2011-2014 Akretion (http://www.akretion.com/)
+    @author Alexis de Lattre <alexis.delattre@akretion.com>
+    The licence is in the file __openerp__.py
+-->
+
+<openerp>
+<data noupdate="1">
+
+<record id="84715000" model="report.intrastat.code">
+    <field name="name">84715000</field>
+    <field name="intrastat_code">84715000</field>
+    <field name="intrastat_uom_id" ref="product.product_uom_unit"/>
+    <field name="description">Automatic data-processing machines (computers)</field>
+</record>
+
+<record id="84717050" model="report.intrastat.code">
+    <field name="name">84717050</field>
+    <field name="intrastat_code">84717050</field>
+    <field name="intrastat_uom_id" ref="product.product_uom_unit"/>
+    <field name="description">Storage units</field>
+</record>
+
+<record id="85340090" model="report.intrastat.code">
+    <field name="name">85340090</field>
+    <field name="intrastat_code">85340090</field>
+    <field name="description">Printed circuits</field>
+</record>
+
+<record id="product.product_product_3" model="product.product">
+    <field name="intrastat_id" ref="84715000" />
+    <field name="origin_country_id" ref="base.tw" />
+    <field name="weight_net">5</field>
+</record>
+
+<record id="product.product_product_4" model="product.product">
+    <field name="intrastat_id" ref="84715000" />
+    <field name="origin_country_id" ref="base.cn" />
+    <field name="weight_net">6</field>
+</record>
+
+<record id="product.product_product_5" model="product.product">
+    <field name="intrastat_id" ref="84715000" />
+    <field name="origin_country_id" ref="base.cn" />
+    <field name="weight_net">6.5</field>
+</record>
+
+<record id="product.product_product_17" model="product.product">
+    <field name="intrastat_id" ref="84717050" />
+    <field name="origin_country_id" ref="base.sg" />
+    <field name="weight_net">0.5</field>
+</record>
+
+<record id="product.product_product_18" model="product.product">
+    <field name="intrastat_id" ref="84717050" />
+    <field name="origin_country_id" ref="base.sg" />
+    <field name="weight_net">0.5</field>
+</record>
+
+<record id="product.product_product_19" model="product.product">
+    <field name="intrastat_id" ref="84717050" />
+    <field name="origin_country_id" ref="base.sg" />
+    <field name="weight_net">0.5</field>
+</record>
+
+<record id="product.product_product_20" model="product.product">
+    <field name="intrastat_id" ref="85340090" />
+    <field name="origin_country_id" ref="base.tw" />
+    <field name="weight_net">0.7</field>
+</record>
+
+<record id="product.product_product_21" model="product.product">
+    <field name="intrastat_id" ref="85340090" />
+    <field name="origin_country_id" ref="base.tw" />
+    <field name="weight_net">0.8</field>
+</record>
+
+<record id="product.product_product_25" model="product.product">
+    <field name="intrastat_id" ref="84715000" />
+    <field name="origin_country_id" ref="base.be" />
+    <field name="weight_net">2</field>
+</record>
+
+
+</data>
+</openerp>
