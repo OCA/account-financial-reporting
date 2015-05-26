@@ -168,6 +168,7 @@
                     </div>
                     <group col="2">
                         <field name="description"/>
+                        <field name="landscape_pdf" />
                         <field name="report_id"/>
                         <field name="company_id" groups="base.group_multi_company"/>
                         <field name="root_account"/>
