@@ -8,7 +8,7 @@
           <t t-call="report.internal_layout">
             <div class="page">
               <h2 t-field="o.name"></h2>
-              <table>
+              <table class="table table-condensed text-right">
                 <thead>
                   <tr>
                     <t t-foreach="docs_computed[o.id]['header']" t-as="h">
