@@ -4,7 +4,7 @@
 Accounting Financial Reports Horizontal
 =======================================
 
-This is a rewrite of the financial reports 'Balance sheet' and 'Profit and Loss' from OpenERP 6.0 in Odoo 8.0.
+This addon provides a balance sheet and profit and loss report in landscape mode with assets to the left and liabilities to the right as is common in Italy and the Netherlands.
 
 Usage
 =====
