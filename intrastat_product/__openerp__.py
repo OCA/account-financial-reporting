@@ -33,7 +33,7 @@ This module is country-independant.
 This module has been written by Alexis de Lattre from Akretion
 <alexis.delattre@akretion.com>
     """,
-    'author': 'Akretion',
+    'author': 'Akretion,Odoo Community Association (OCA)',
     'website': 'http://www.akretion.com',
     'depends': ['intrastat_base'],
     'data': [

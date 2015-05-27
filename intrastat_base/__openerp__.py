@@ -26,7 +26,7 @@
     'category': 'Localisation/Report Intrastat',
     'license': 'AGPL-3',
     'summary': 'Base module for Intrastat reporting',
-    'author': 'Akretion',
+    'author': 'Akretion,Odoo Community Association (OCA)',
     'website': 'http://www.akretion.com',
     'depends': ['base_vat'],
     'conflicts': ['report_intrastat'],

@@ -1,16 +1,13 @@
-Intrastat Base Module
+Intrastat Product Module
 =====================
 
-This module contains common functions for the Intrastat reporting and
-should be used in combination with country-specific reporting modules
+This module contains common objects and fields for the Intrastat Product reporting, such as the *H.S. codes* (if you are not familiar with H.S. codes, read `Wikipedia <http://en.wikipedia.org/wiki/Harmonized_System>`) and the *country of origin* on the products.
+
+It should be used in combination with country-specific Intrastat Product reporting modules
 such as:
 
-- *l10n_fr_intrastat_service*:
-  the module for the *Déclaration Européenne des Services* (DES) for France
 - *l10n_fr_intrastat_product*:
   the module for the *Déclaration d'Echange de Biens* (DEB) for France
-- *l10n_nl_intrastat*:
-  the module for the *Opgaaf IntraCommunautaire Prestaties* (ICP) for the Netherlands.
 
 These country-specific modules can be found in the OCA localization for those countries.
 
@@ -20,7 +17,7 @@ Installation
 WARNING:
 This module conflicts with the module *report_intrastat* from the official addons.
 If you have already installed the module *report_intrastat*,
-you should uninstall it first before installing this module.
+you should uninstall it before installing this module.
 
 Credits
 =======
