@@ -40,7 +40,7 @@ class ReportIntrastatCode(models.Model):
         self.display_name = display_name
 
     name = fields.Char(
-        string='H.S. code',
+        string='H.S. code', index=True,
         help="Full length Harmonized System code (digits only). Full list is "
         "available from the World Customs Organisation, see "
         "http://www.wcoomd.org")
@@ -50,7 +50,7 @@ class ReportIntrastatCode(models.Model):
         compute='_compute_display_name', string="Display Name", readonly=True,
         store=True)
     intrastat_code = fields.Char(
-        string='European Intrastat Code', size=9, required=True,
+        string='European Intrastat Code', size=9, required=True, index=True,
         help="Code used for the Intrastat declaration. Must be part "
         "of the 'Combined Nomenclature' (CN), cf "
         "http://en.wikipedia.org/wiki/Combined_Nomenclature"
