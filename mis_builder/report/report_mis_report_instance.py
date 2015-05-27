@@ -39,7 +39,6 @@ class ReportMisReportInstance(models.AbstractModel):
         docs_computed = {}
         for doc in docs:
             docs_computed[doc.id] = doc.compute()[0]
-        _logger.info("%s", docs_computed)
         docargs = {
             'doc_ids': self._ids,
             'doc_model': 'mis.report.instance',
