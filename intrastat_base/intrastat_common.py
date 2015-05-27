@@ -34,8 +34,7 @@ class ReportIntrastatCommon(models.AbstractModel):
     "and services"
 
     @api.one
-    @api.depends(
-        'intrastat_line_ids', 'intrastat_line_ids.amount_company_currency')
+    @api.depends('intrastat_line_ids.amount_company_currency')
     def _compute_numbers(self):
         total_amount = 0.0
         num_lines = 0
