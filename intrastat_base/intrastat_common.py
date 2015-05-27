@@ -144,9 +144,7 @@ class ReportIntrastatCommon(models.AbstractModel):
     def send_reminder_email(self, mail_template_xmlid):
         mail_template = self.env.ref(mail_template_xmlid)
         if self.company_id.intrastat_remind_user_ids:
-            self.pool['email.template'].send_mail(
-                self._cr, self._uid, mail_template.id, self.id,
-                context=self._context)
+            mail_template.send_mail(self.id)
             logger.info(
                 'Intrastat Reminder email has been sent (XMLID: %s).'
                 % mail_template_xmlid)
