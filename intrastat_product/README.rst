@@ -1,5 +1,5 @@
 Intrastat Product Module
-=====================
+========================
 
 This module contains common objects and fields for the Intrastat Product reporting, such as the *H.S. codes* (if you are not familiar with H.S. codes, read `Wikipedia <http://en.wikipedia.org/wiki/Harmonized_System>`) and the *country of origin* on the products.
 
