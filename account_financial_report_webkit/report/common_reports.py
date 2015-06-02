@@ -258,7 +258,7 @@ class CommonReportHeaderWebkit(common_report_header):
             limit=1
         )
         # Get first not special period from selected period fiscal year
-        first_period_id = period_obj.search(
+        first_period_ids = period_obj.search(
             self.cursor, self.uid,
             [('special', '!=', True),
              ('fiscalyear_id', '=', period.fiscalyear_id.id),
@@ -267,7 +267,7 @@ class CommonReportHeaderWebkit(common_report_header):
         )
         # If first period of fiscal year is equal to selected period and
         # there is a special_period we return special period else return False
-        if period.id in first_period_id and special_period_id:
+        if period.id in first_period_ids and special_period_id:
             return special_period_id
 
         return False
