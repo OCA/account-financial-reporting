@@ -72,7 +72,6 @@ def _is_valid_python_var(name):
 
 
 class mis_report_kpi(orm.Model):
-
     """ A KPI is an element (ie a line) of a MIS report.
 
     In addition to a name and description, it has an expression
@@ -80,6 +79,7 @@ class mis_report_kpi(orm.Model):
     It also has various informations defining how to render it
     (numeric or percentage or a string, a suffix, divider) and
     how to render comparison of two values of the KPI.
+    KPI's have a sequence and are ordered inside the MIS report.
     """
 
     _name = 'mis.report.kpi'
@@ -166,7 +166,9 @@ class mis_report_kpi(orm.Model):
 
     def _render(self, cr, uid, lang_id, kpi, value, context=None):
         """ render a KPI value as a unicode string, ready for display """
-        if kpi.type == 'num':
+        if value is None:
+            return '#N/A'
+        elif kpi.type == 'num':
             return self._render_num(cr, uid, lang_id, value, kpi.divider,
                                     kpi.dp, kpi.suffix, context=context)
         elif kpi.type == 'pct':
@@ -227,8 +229,7 @@ class mis_report_kpi(orm.Model):
 
 
 class mis_report_query(orm.Model):
-
-    """ A query to fetch data for a MIS report.
+    """ A query to fetch arbitrary data for a MIS report.
 
     A query works on a model and has a domain and list of fields to fetch.
     At runtime, the domain is expanded with a "and" on the date/datetime field.
@@ -302,11 +303,11 @@ class mis_report(orm.Model):
     * a list of explicit queries; the result of each query is
       stored in a variable with same name as a query, containing as list
       of data structures populated with attributes for each fields to fetch;
-      when queries have the group by flag and no fields to group, it returns
-      a data structure with the summed fields
+      when queries have an aggregate method and no fields to group, it returns
+      a data structure with the aggregated fields
     * a list of KPI to be evaluated based on the variables resulting
-      from the balance and queries (KPI expressions can references queries
-      and accounting expression - see AccoutingExpressionProcessor)
+      from the accounting data and queries (KPI expressions can references
+      queries and accounting expression - see AccoutingExpressionProcessor)
     """
 
     _name = 'mis.report'
@@ -326,7 +327,6 @@ class mis_report(orm.Model):
 
 
 class mis_report_instance_period(orm.Model):
-
     """ A MIS report instance has the logic to compute
     a report template for a given date period.
 
@@ -518,7 +518,8 @@ class mis_report_instance_period(orm.Model):
                     cr, uid, domain, field_names, [], context=context)
                 s = AutoStruct(count=obj_datas[0]['__count'])
                 for field_name in field_names:
-                    setattr(s, field_name, obj_datas[0][field_name])
+                    v = obj_datas[0][field_name]
+                    setattr(s, field_name, v)
                 res[query.name] = s
             else:
                 obj_ids = obj.search(cr, uid, domain, context=context)
@@ -625,9 +626,8 @@ class mis_report_instance_period(orm.Model):
 
 
 class mis_report_instance(orm.Model):
-
-    """ The MIS report instance combines compute and
-    display a MIS report template for a set of periods """
+    """The MIS report instance combines everything to compute
+    a MIS report template for a set of periods."""
 
     def _get_pivot_date(self, cr, uid, ids, field_name, arg, context=None):
         res = {}
