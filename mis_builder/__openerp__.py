@@ -26,14 +26,13 @@
     'name': 'mis builder',
     'version': '0.1',
     'category': 'Reporting',
-    'description': """
-    Management Information System Builder
-    """,
+    'summary': 'Management Information System Builder',
     'author': 'ACSONE SA/NV',
     'website': 'http://acsone.eu',
-    'depends': ['account',
-                'report_xls',  # OCA/reporting-engine
-                ],
+    'depends': [
+        'account',
+        'report_xls',  # OCA/reporting-engine
+    ],
     'data': [
         'wizard/mis_builder_dashboard.xml',
         'views/mis_builder.xml',
@@ -43,12 +42,13 @@
     ],
     'test': [
     ],
-    'demo': ['tests/mis.report.kpi.csv',
-             'tests/mis.report.query.csv',
-             'tests/mis.report.csv',
-             'tests/mis.report.instance.period.csv',
-             'tests/mis.report.instance.csv',
-             ],
+    'demo': [
+        'tests/mis.report.kpi.csv',
+        'tests/mis.report.query.csv',
+        'tests/mis.report.csv',
+        'tests/mis.report.instance.period.csv',
+        'tests/mis.report.instance.csv',
+    ],
     'qweb': [
         'static/src/xml/*.xml'
     ],
