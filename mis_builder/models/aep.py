@@ -50,7 +50,7 @@ class AccountingExpressionProcessor(object):
     Examples:
         * bal[70]: variation of the balance of moves on account 70
           over the period (it is the same as balp[70]);
-        * bali[70,60]: initial balance of accounts 70 and 60;
+        * bali[70,60]: balance of accounts 70 and 60 at the start of period;
         * bale[1%]: balance of accounts starting with 1 at end of period.
 
     How to use:
@@ -85,7 +85,7 @@ class AccountingExpressionProcessor(object):
     def __init__(self, env):
         self.env = env
         # before done_parsing: {(domain, mode): set(account_codes)}
-        # after done_parsing: {(domain, mode): set(account_ids)}
+        # after done_parsing: {(domain, mode): list(account_ids)}
         self._map_account_ids = defaultdict(set)
         self._account_ids_by_code = defaultdict(set)
 
@@ -140,7 +140,7 @@ class AccountingExpressionProcessor(object):
     def _parse_match_object(self, mo):
         """Split a match object corresponding to an accounting variable
 
-        Returns field, mode, [account codes], [domain expression].
+        Returns field, mode, [account codes], (domain expression).
         """
         field, mode, account_codes, domain = mo.groups()
         if not mode:
@@ -163,7 +163,8 @@ class AccountingExpressionProcessor(object):
         """Parse an expression, extracting accounting variables.
 
         Domains and accounts are extracted and stored in the map
-        so when all expressions have been parsed, we know what to query.
+        so when all expressions have been parsed, we know which
+        account codes to query for each domain and mode.
         """
         for mo in self.ACC_RE.finditer(expr):
             _, mode, account_codes, domain = self._parse_match_object(mo)
@@ -171,7 +172,8 @@ class AccountingExpressionProcessor(object):
             self._map_account_ids[key].update(account_codes)
 
     def done_parsing(self, root_account):
-        # load account codes and replace account codes by account ids in _map
+        """Load account codes and replace account codes by
+        account ids in map."""
         for key, account_codes in self._map_account_ids.items():
             self._load_account_codes(account_codes, root_account)
             account_ids = set()
@@ -180,8 +182,9 @@ class AccountingExpressionProcessor(object):
             self._map_account_ids[key] = list(account_ids)
 
     @classmethod
-    def has_account_var(self, expr):
-        return bool(self.ACC_RE.search(expr))
+    def has_account_var(cls, expr):
+        """Test if an string contains an accounting variable."""
+        return bool(cls.ACC_RE.search(expr))
 
     def get_aml_domain_for_expr(self, expr,
                                 date_from, date_to,
@@ -328,6 +331,11 @@ class AccountingExpressionProcessor(object):
 
     def do_queries(self, date_from, date_to, period_from, period_to,
                    target_move):
+        """Query sums of debit and credit for all accounts and domains
+        used in expressions.
+
+        This method must be executed after done_parsing().
+        """
         aml_model = self.env['account.move.line']
         # {(domain, mode): {account_id: (debit, credit)}}
         self._data = defaultdict(dict)
@@ -352,7 +360,7 @@ class AccountingExpressionProcessor(object):
     def replace_expr(self, expr):
         """Replace accounting variables in an expression by their amount.
 
-        Returns a new expression.
+        Returns a new expression string.
 
         This method must be executed after do_queries().
         """
