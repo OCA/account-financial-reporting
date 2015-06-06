@@ -202,7 +202,7 @@ class mis_report_kpi(orm.Model):
             elif kpi.compare_method == 'pct':
                 if round(base_value, kpi.dp) != 0:
                     return self._render_num(cr, uid, lang_id,
-                                            value / base_value - 1,
+                                            (value - base_value) / abs(base_value),
                                             0.01, kpi.dp,
                                             '%', sign='+',
                                             context=context)
