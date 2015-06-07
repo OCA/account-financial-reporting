@@ -79,7 +79,7 @@ class AccountingExpressionProcessor(object):
 
     ACC_RE = re.compile(r"(?P<field>\bbal|\bcrd|\bdeb)"
                         r"(?P<mode>[pise])?"
-                        r"(?P<accounts>_[0-9]+|\[.*?\])"
+                        r"(?P<accounts>_[a-zA-Z0-9]+|\[.*?\])"
                         r"(?P<domain>\[.*?\])?")
 
     def __init__(self, env):
