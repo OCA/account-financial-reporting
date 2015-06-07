@@ -692,9 +692,9 @@ class MisReportInstance(models.Model):
                     kpi_values_by_period_ids.get(compare_col.id)
                 if compare_kpi_values:
                     # add the comparison column header
-                    # TODO: make 'vs' translatable
                     header[0]['cols'].append(
-                        dict(name='%s vs %s' % (period.name, compare_col.name),
+                        dict(name=_('%s vs %s') % (period.name,
+                                                   compare_col.name),
                              date=''))
                     # add comparison values
                     for kpi in self.report_id.kpi_ids:
