@@ -52,9 +52,7 @@ def _get_selection_label(selection, value):
 
 
 def _utc_midnight(d, tz_name, add_day=0):
-    d = fields.Date.from_string(d)
-    if add_day:
-        d = d + timedelta(days=add_day)
+    d = fields.Datetime.from_string(d) + timedelta(days=add_day)
     utc_tz = pytz.timezone('UTC')
     context_tz = pytz.timezone(tz_name)
     local_timestamp = context_tz.localize(d, is_dst=False)
