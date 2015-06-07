@@ -206,12 +206,10 @@ class MisReportKpi(models.Model):
             divider_label = ''
         # format number following user language
         value = round(value / float(divider or 1), dp) or 0
-        value = self.env.registry['res.lang'].format(
-            self.env.cr, self.env.uid, [lang_id],
+        value = self.env['res.lang'].browse(lang_id).format(
             '%%%s.%df' % (sign, dp),
             value,
-            grouping=True,
-            context=self.env.context)
+            grouping=True)
         value = u'%s\N{NO-BREAK SPACE}%s%s' % \
             (value, divider_label, suffix or '')
         value = value.replace('-', u'\N{NON-BREAKING HYPHEN}')
