@@ -22,15 +22,9 @@
 #
 ##############################################################################
 
-from collections import OrderedDict
-
 import openerp.tests.common as common
 
 from ..models import mis_builder
-
-
-DB = common.DB
-ADMIN_USER_ID = common.ADMIN_USER_ID
 
 
 class test_mis_builder(common.TransactionCase):
