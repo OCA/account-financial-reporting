@@ -169,8 +169,8 @@
                         <field name="description"/>
                         <field name="landscape_pdf" />
                         <field name="report_id"/>
-                        <field name="company_id" groups="base.group_multi_company"/>
                         <field name="root_account"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
                         <field name="target_move"/>
                         <field name="date"/>
                         <field name="period_ids">
