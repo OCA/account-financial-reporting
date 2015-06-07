@@ -23,27 +23,30 @@
 ##############################################################################
 
 {
-    'name': 'mis builder demo',
+    'name': 'MIS Builder demo data',
     'version': '0.1',
     'category': 'Reporting',
-    'description': """
-    Management Information System Builder Demo
+    'summary': """
+        Demo data for the mis_builder module
     """,
     'author': 'ACSONE SA/NV',
     'website': 'http://acsone.eu',
-    'depends': ['mis_builder', 'crm'],
+    'depends': [
+        'account_accountant',
+        'mis_builder',
+        'crm'
+    ],
     'data': [
     ],
-    'test': [
+    'demo': [
+        'mis.report.kpi.csv',
+        'mis.report.query.csv',
+        'mis.report.csv',
+        'mis.report.instance.period.csv',
+        'mis.report.instance.csv',
     ],
-    'demo': ['mis.report.kpi.csv',
-             'mis.report.query.csv',
-             'mis.report.csv',
-             'mis.report.instance.period.csv',
-             'mis.report.instance.csv',
-             ],
     'installable': True,
-    'application': True,
+    'application': False,
     'auto_install': False,
     'license': 'AGPL-3',
 }
