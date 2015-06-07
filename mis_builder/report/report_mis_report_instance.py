@@ -38,7 +38,7 @@ class ReportMisReportInstance(models.AbstractModel):
         docs = self.env['mis.report.instance'].browse(self._ids)
         docs_computed = {}
         for doc in docs:
-            docs_computed[doc.id] = doc.compute()[0]
+            docs_computed[doc.id] = doc.compute()
         docargs = {
             'doc_ids': self._ids,
             'doc_model': 'mis.report.instance',
