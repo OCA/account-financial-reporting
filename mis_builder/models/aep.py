@@ -195,11 +195,9 @@ class AccountingExpressionProcessor(object):
         Prerequisite: done_parsing() must have been invoked.
 
         Returns a domain that can be used to search on account.move.line.
-        To be meaningful, this domain must be extended with a domain
-        obtained from get_aml_domain_for_dates()
         """
         aml_domains = []
-        domain_by_mode = {}
+        date_domain_by_mode = {}
         for mo in self.ACC_RE.finditer(expr):
             field, mode, account_codes, domain = self._parse_match_object(mo)
             aml_domain = list(domain)
@@ -212,13 +210,13 @@ class AccountingExpressionProcessor(object):
             elif field == 'deb':
                 aml_domain.append(('debit', '>', 0))
             aml_domains.append(expression.normalize_domain(aml_domain))
-            if mode not in domain_by_mode:
-                domain_by_mode[mode] = \
+            if mode not in date_domain_by_mode:
+                date_domain_by_mode[mode] = \
                     self.get_aml_domain_for_dates(date_from, date_to,
                                                   period_from, period_to,
                                                   mode, target_move)
         return expression.OR(aml_domains) + \
-            expression.OR(domain_by_mode.values())
+            expression.OR(date_domain_by_mode.values())
 
     def _period_has_moves(self, period):
         move_model = self.env['account.move']
