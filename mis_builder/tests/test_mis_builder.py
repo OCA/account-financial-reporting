@@ -65,29 +65,24 @@ class test_mis_builder(common.TransactionCase):
             self.ref('mis_builder.mis_report_instance_test'))
         self.assertDictContainsSubset(
             {'content':
-             OrderedDict([(
-                 u'total_test',
-                 {'kpi_name': u'total test',
+                [{'kpi_name': u'total test',
                   'default_style': False,
-                  'cols': [{
-                         'period_id':
-                         self.ref(
-                             'mis_builder.mis_report_instance_period_test'),
-                         'style': None,
-                         'suffix': False,
-                         'expr': 'len(test)',
-                         'val_c': 'total_test = len(test)',
-                         'val': 0,
-                         'val_r': u'0\xa0',
-                         'is_percentage': False,
-                         'dp': 0,
-                         'drilldown': False}]
-                  }
-             )]),
-             'header': OrderedDict([('',
-                                     {'kpi_name': '',
-                                      'default_style': '',
-                                      'cols': [{'date': '2014-07-31',
-                                                'name': u'today'}]
-                                      })])
+                  'cols': [{'period_id': self.ref('mis_builder.'
+                                                  'mis_report_instance_'
+                                                  'period_test'),
+                            'style': None,
+                            'suffix': False,
+                            'expr': 'len(test)',
+                            'val_c': 'total_test = len(test)',
+                            'val': 0,
+                            'val_r': u'0\xa0',
+                            'is_percentage': False,
+                            'dp': 0,
+                            'drilldown': False}]
+                  }],
+             'header':
+                 [{'kpi_name': '',
+                   'cols': [{'date': '07/31/2014',
+                             'name': u'today'}]
+                   }],
              }, data)
