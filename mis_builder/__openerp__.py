@@ -23,10 +23,12 @@
 ##############################################################################
 
 {
-    'name': 'mis builder',
+    'name': 'MIS Builder',
     'version': '0.1',
     'category': 'Reporting',
-    'summary': 'Management Information System Builder',
+    'summary': """
+        Build 'Management Information System' Reports and Dashboards
+    """,
     'author': 'ACSONE SA/NV',
     'website': 'http://acsone.eu',
     'depends': [
