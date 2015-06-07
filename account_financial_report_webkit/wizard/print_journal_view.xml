@@ -77,7 +77,6 @@
 
         <record model="ir.values" id="action_account_print_journal_values_webkit">
             <field name="model_id" ref="account.model_account_account"/>
-            <field name="object" eval="1"/>
             <field name="name">Journals</field>
             <field name="key2">client_print_multi</field>
             <field name="value"
