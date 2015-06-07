@@ -33,8 +33,7 @@
                             <tree string="Queries" editable="bottom">
                                 <field name="name"/>
                                 <field name="model_id"/>
-                                <field name="field_ids" domain="[('model_id', '=', model_id)]" widget="many2many_tags"
-                                                        on_change="onchange_field_ids(field_ids, context)"/>
+                                <field name="field_ids" domain="[('model_id', '=', model_id)]" widget="many2many_tags"/>
                                 <field name="field_names"/>
                                 <field name="aggregate"/>
                                 <field name="date_field" domain="[('model_id', '=', model_id), ('ttype', 'in', ('date', 'datetime'))]"/>
@@ -44,10 +43,10 @@
                         <field name="kpi_ids">
                             <tree string="KPI's" editable="bottom">
                                 <field name="sequence" widget="handle"/>
-                                <field name="description" on_change="onchange_description(description, name, context)"/>
-                                <field name="name" on_change="onchange_name(name, context)"/>
+                                <field name="description"/>
+                                <field name="name"/>
                                 <field name="expression"/>
-                                <field name="type" on_change="onchange_type(type, context)"/>
+                                <field name="type"/>
                                 <field name="dp" attrs="{'invisible': [('type', '=', 'str')]}"/>
                                 <field name="divider" attrs="{'invisible': [('type', '=', 'str')]}"/>
                                 <field name="suffix"/>
@@ -190,7 +189,6 @@
                                 <field name="report_instance_id" invisible="1"/>
                                 <field name="id" invisible="1"/>
                                 <field name="comparison_column_ids" domain="[('report_instance_id', '=', report_instance_id), ('id', '!=', id)]" widget="many2many_tags"/>
-                                <field name="company_id" groups="base.group_multi_company"/>
                             </tree>
                         </field>
                     </group>
