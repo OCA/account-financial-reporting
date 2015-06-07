@@ -665,17 +665,22 @@ class MisReportInstance(models.Model):
             if not period.valid:
                 continue
             # add the column header
-            # TODO: format period.date_from
-            header[0]['cols'].append(dict(
-                name=period.name,
-                date=(period.duration > 1 or period.type == 'w') and
-                _('from %s to %s' %
-                  (period.period_from and period.period_from.name
-                   or self._format_date(lang_id, period.date_from),
-                   period.period_to and period.period_to.name
-                   or self._format_date(lang_id, period.date_to)))
-                or period.period_from and period.period_from.name or
-                period.date_from))
+            if period.duration > 1 or period.type == 'w':
+                # from, to
+                if period.period_from and period.period_to:
+                    date_from = period.period_from.name
+                    date_to = period.period_to.name
+                else:
+                    date_from = self._format_date(lang_id, period.date_from)
+                    date_to = self._format_date(lang_id, period.date_to)
+                header_date = _('from %s to %s') % (date_from, date_to)
+            else:
+                # one period or one day
+                if period.period_from and period.period_to:
+                    header_date = period.period_from.name
+                else:
+                    header_date = self._format_date(lang_id, period.date_from)
+            header[0]['cols'].append(dict(name=period.name, date=header_date))
             # add kpi values
             kpi_values = kpi_values_by_period_ids[period.id]
             for kpi_name in kpi_values:
