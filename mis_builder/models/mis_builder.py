@@ -139,9 +139,14 @@ class MisReportKpi(models.Model):
 
     @api.onchange('type')
     def _onchange_type(self):
-        # TODO: change compare_method, divider and dp for all 3 types
-        if self.type == 'pct':
+        if self.type == 'num':
+            self.compare_method = 'pct'
+            self.divider = '1'
+            self.dp = 0
+        elif self.type == 'pct':
             self.compare_method = 'diff'
+            self.divider = '1'
+            self.dp = 0
         elif self.type == 'str':
             self.compare_method = 'none'
             self.divider = ''
