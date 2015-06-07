@@ -165,15 +165,15 @@
                         <button type="action" name="%(xls_export)d" string="Export" icon="gtk-execute" />
                         <button type="action" name="%(mis_report_instance_add_to_dashboard_action)d" string="Add to dashboard" icon="gtk-add" />
                     </div>
-                    <group col="2">
+                    <group col="4">
+                        <field name="report_id" colspan="4"/>
                         <field name="description"/>
                         <field name="landscape_pdf" />
-                        <field name="report_id"/>
                         <field name="root_account"/>
                         <field name="company_id" groups="base.group_multi_company"/>
-                        <field name="target_move"/>
                         <field name="date"/>
-                        <field name="period_ids">
+                        <field name="target_move"/>
+                        <field name="period_ids" colspan="4">
                             <tree string="KPI's" editable="bottom" colors="red:valid==False">
                                 <field name="sequence" widget="handle"/>
                                 <field name="name"/>
