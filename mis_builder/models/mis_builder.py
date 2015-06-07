@@ -23,6 +23,7 @@
 ##############################################################################
 
 from datetime import datetime, timedelta
+import logging
 import re
 import traceback
 
@@ -32,6 +33,8 @@ from openerp import api, fields, models, _
 from openerp.tools.safe_eval import safe_eval
 
 from .aep import AccountingExpressionProcessor as AEP
+
+_logger = logging.getLogger(__name__)
 
 
 class AutoStruct(object):
@@ -515,7 +518,8 @@ class MisReportInstancePeriod(models.Model):
                     if kpi.css_style:
                         kpi_style = safe_eval(kpi.css_style, localdict)
                 except:
-                    # TODO: log warning
+                    _logger.warning("error evaluating css stype expression %s",
+                                    kpi.css_style, exc_info=True)
                     kpi_style = None
 
                 drilldown = (kpi_val is not None and
