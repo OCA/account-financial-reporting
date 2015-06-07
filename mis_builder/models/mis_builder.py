@@ -556,16 +556,6 @@ class MisReportInstance(models.Model):
         else:
             self.pivot_date = fields.Date.context_today(self)
 
-    @api.one
-    @api.depends('company_id')
-    def _compute_root_account(self):
-        self.root_account = False
-        accounts = self.env['account.account'].search(
-            [('parent_id', '=', False),
-             ('company_id', '=', self.company_id.id)])
-        if len(accounts) == 1:
-            self.root_account = accounts[0]
-
     _name = 'mis.report.instance'
 
     name = fields.Char(required=True,
@@ -586,14 +576,18 @@ class MisReportInstance(models.Model):
                                  string='Periods')
     target_move = fields.Selection([('posted', 'All Posted Entries'),
                                     ('all', 'All Entries')],
-                                   string='Target Moves', required=True,
+                                   string='Target Moves',
+                                   required=True,
                                    default='posted')
-    company_id = fields.Many2one('res.company', 'Company', required=True,
-                                 default=lambda self: self.env['res.company'].
-                                 _company_default_get('mis.report.instance'))
-    root_account = fields.Many2one(compute='_compute_root_account',
-                                   comodel_name='account.account',
-                                   string="Account chart")
+    company_id = fields.Many2one(comodel_name='res.company',
+                                 string='Company',
+                                 readonly=True,
+                                 related='root_account.company_id',
+                                 store=True)
+    root_account = fields.Many2one(comodel_name='account.account',
+                                   domain='[("parent_id", "=", False)]',
+                                   string="Account chart",
+                                   required=True)
     landscape_pdf = fields.Boolean(string='Landscape PDF')
 
     def _format_date(self, lang_id, date):
