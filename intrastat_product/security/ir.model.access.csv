@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_report_intrastat_code_sale_manager,Full access on report.intrastat.code to sale manager,model_report_intrastat_code,base.group_sale_manager,1,1,1,1
+access_report_intrastat_code_account_manager,Full access on report.intrastat.code to finance manager,model_report_intrastat_code,account.group_account_manager,1,1,1,1
 access_report_intrastat_code_employee,Read access on report.intrastat.code to employee,model_report_intrastat_code,base.group_user,1,0,0,0
