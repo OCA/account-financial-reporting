@@ -26,6 +26,7 @@ import re
 from collections import defaultdict
 
 from openerp.exceptions import Warning
+from openerp import pooler
 from openerp.osv import expression
 from openerp.tools.safe_eval import safe_eval
 from openerp.tools.translate import _
@@ -82,18 +83,16 @@ class AccountingExpressionProcessor(object):
                         r"(?P<accounts>_[a-zA-Z0-9]+|\[.*?\])"
                         r"(?P<domain>\[.*?\])?")
 
-    def __init__(self, env):
-        self.env = env
+    def __init__(self, cursor):
+        self.pool = pooler.get_pool(cursor.dbname)
         # before done_parsing: {(domain, mode): set(account_codes)}
         # after done_parsing: {(domain, mode): list(account_ids)}
         self._map_account_ids = defaultdict(set)
         self._account_ids_by_code = defaultdict(set)
 
-    def _load_account_codes(self, account_codes, root_account):
-        account_model = self.env['account.account']
-        # TODO: account_obj is necessary because _get_children_and_consol
-        #       does not work in new API?
-        account_obj = self.env.registry('account.account')
+    def _load_account_codes(self, cr, uid, account_codes, root_account,
+                            context=None):
+        account_obj = self.pool['account.account']
         exact_codes = set()
         like_codes = set()
         for account_code in account_codes:
@@ -109,9 +108,13 @@ class AccountingExpressionProcessor(object):
                 like_codes.add(account_code)
             else:
                 exact_codes.add(account_code)
-        for account in account_model.\
-                search([('code', 'in', list(exact_codes)),
-                        ('parent_id', 'child_of', root_account.id)]):
+        account_ids = account_obj.search(
+            cr, uid,
+            [('code', 'in', list(exact_codes)),
+             ('parent_id', 'child_of', root_account.id)],
+            context=context)
+        for account in account_obj.browse(
+                cr, uid, account_ids, context=context):
             if account.code == root_account.code:
                 code = None
             else:
@@ -119,21 +122,26 @@ class AccountingExpressionProcessor(object):
             if account.type in ('view', 'consolidation'):
                 self._account_ids_by_code[code].update(
                     account_obj._get_children_and_consol(
-                        self.env.cr, self.env.uid,
+                        cr, uid,
                         [account.id],
-                        self.env.context))
+                        context=context))
             else:
                 self._account_ids_by_code[code].add(account.id)
         for like_code in like_codes:
-            for account in account_model.\
-                    search([('code', 'like', like_code),
-                            ('parent_id', 'child_of', root_account.id)]):
+            for account_id in account_obj.\
+                    search(cr, uid,
+                           [('code', 'like', like_code),
+                            ('parent_id', 'child_of', root_account.id)],
+                           context=context):
+                account = account_obj.browse(cr, uid, account_id,
+                                             context=context)
                 if account.type in ('view', 'consolidation'):
                     self._account_ids_by_code[like_code].update(
                         account_obj._get_children_and_consol(
+                            cr, uid,
                             self.env.cr, self.env.uid,
                             [account.id],
-                            self.env.context))
+                            context=context))
                 else:
                     self._account_ids_by_code[like_code].add(account.id)
 
@@ -171,11 +179,12 @@ class AccountingExpressionProcessor(object):
             key = (domain, mode)
             self._map_account_ids[key].update(account_codes)
 
-    def done_parsing(self, root_account):
+    def done_parsing(self, cr, uid, root_account, context=None):
         """Load account codes and replace account codes by
         account ids in map."""
         for key, account_codes in self._map_account_ids.items():
-            self._load_account_codes(account_codes, root_account)
+            self._load_account_codes(cr, uid, account_codes, root_account,
+                                     context=context)
             account_ids = set()
             for account_code in account_codes:
                 account_ids.update(self._account_ids_by_code[account_code])
@@ -219,78 +228,105 @@ class AccountingExpressionProcessor(object):
             expression.OR(date_domain_by_mode.values())
 
     def _period_has_moves(self, period):
-        move_model = self.env['account.move']
+        move_model = self.pool['account.move']
         return bool(move_model.search([('period_id', '=', period.id)],
                                       limit=1))
 
-    def _get_previous_opening_period(self, period, company_id):
-        period_model = self.env['account.period']
-        periods = period_model.search(
+    def _get_previous_opening_period(self, cr, uid, period, company_id,
+                                     context=None):
+        period_model = self.pool['account.period']
+        period_ids = period_model.search(
+            cr, uid,
             [('date_start', '<=', period.date_start),
              ('special', '=', True),
              ('company_id', '=', company_id)],
             order="date_start desc",
-            limit=1)
+            limit=1,
+            context=context)
+        periods = period_model.browse(cr, uid, period_ids, context=context)
         return periods and periods[0]
 
-    def _get_previous_normal_period(self, period, company_id):
-        period_model = self.env['account.period']
-        periods = period_model.search(
+    def _get_previous_normal_period(self, cr, uid, period, company_id,
+                                    context=None):
+        period_model = self.pool['account.period']
+        period_ids = period_model.search(
+            cr, uid,
             [('date_start', '<', period.date_start),
              ('special', '=', False),
              ('company_id', '=', company_id)],
             order="date_start desc",
-            limit=1)
+            limit=1,
+            context=context)
+        periods = period_model.browse(cr, uid, period_ids, context=context)
         return periods and periods[0]
 
-    def _get_first_normal_period(self, company_id):
-        period_model = self.env['account.period']
-        periods = period_model.search(
+    def _get_first_normal_period(self, cr, uid, company_id, context=None):
+        period_model = self.pool['account.period']
+        period_ids = period_model.search(
+            cr, uid,
             [('special', '=', False),
              ('company_id', '=', company_id)],
             order="date_start asc",
-            limit=1)
+            limit=1,
+            context=context)
+        periods = period_model.browse(cr, uid, period_ids, context=context)
         return periods and periods[0]
 
-    def _get_period_ids_between(self, period_from, period_to, company_id):
-        period_model = self.env['account.period']
-        periods = period_model.search(
+    def _get_period_ids_between(self, cr, uid, period_from, period_to,
+                                company_id, context=None):
+        period_model = self.pool['account.period']
+        period_ids = period_model.search(
+            cr, uid,
             [('date_start', '>=', period_from.date_start),
              ('date_stop', '<=', period_to.date_stop),
              ('special', '=', False),
-             ('company_id', '=', company_id)])
-        period_ids = [p.id for p in periods]
+             ('company_id', '=', company_id)],
+            context=context)
         if period_from.special:
             period_ids.append(period_from.id)
         return period_ids
 
-    def _get_period_company_ids(self, period_from, period_to):
-        period_model = self.env['account.period']
-        periods = period_model.search(
+    def _get_period_company_ids(self, cr, uid, period_from, period_to,
+                                context=None):
+        period_model = self.pool['account.period']
+        period_ids = period_model.search(
+            cr, uid,
             [('date_start', '>=', period_from.date_start),
              ('date_stop', '<=', period_to.date_stop),
-             ('special', '=', False)])
+             ('special', '=', False)],
+            context=context)
+        periods = period_model.browse(cr, uid, period_ids, context=context)
         return set([p.company_id.id for p in periods])
 
-    def _get_period_ids_for_mode(self, period_from, period_to, mode):
+    def _get_period_ids_for_mode(self, cr, uid, period_from, period_to, mode,
+                                 context=None):
         assert not period_from.special
         assert not period_to.special
         assert period_from.company_id == period_to.company_id
         assert period_from.date_start <= period_to.date_start
         period_ids = []
-        for company_id in self._get_period_company_ids(period_from, period_to):
+        for company_id in self._get_period_company_ids(cr, uid,
+                                                       period_from, period_to,
+                                                       context=context):
             if mode == MODE_VARIATION:
                 period_ids.extend(self._get_period_ids_between(
-                    period_from, period_to, company_id))
+                    cr, uid,
+                    period_from, period_to, company_id,
+                    context=context))
             else:
                 if mode == MODE_INITIAL:
                     period_to = self._get_previous_normal_period(
-                        period_from, company_id)
+                        cr, uid,
+                        period_from, company_id,
+                        context=context)
                 # look for opening period with moves
                 opening_period = self._get_previous_opening_period(
-                    period_from, company_id)
+                    cr, uid,
+                    period_from, company_id,
+                    context=context)
                 if opening_period and \
-                        self._period_has_moves(opening_period[0]):
+                        self._period_has_moves(cr, uid, opening_period[0],
+                                               context=context):
                     # found opening period with moves
                     if opening_period.date_start == period_from.date_start and \
                             mode == MODE_INITIAL:
@@ -303,19 +339,25 @@ class AccountingExpressionProcessor(object):
                 else:
                     # no opening period with moves,
                     # use very first normal period
-                    period_from = self._get_first_normal_period(company_id)
+                    period_from = self._get_first_normal_period(
+                        cr, uid, company_id, context=context)
                 if period_to:
                     period_ids.extend(self._get_period_ids_between(
-                        period_from, period_to, company_id))
+                        cr, uid,
+                        period_from, period_to, company_id,
+                        context=context))
         return period_ids
 
-    def get_aml_domain_for_dates(self, date_from, date_to,
+    def get_aml_domain_for_dates(self, cr, uid, date_from, date_to,
                                  period_from, period_to,
                                  mode,
-                                 target_move):
+                                 target_move,
+                                 context=None):
         if period_from and period_to:
             period_ids = self._get_period_ids_for_mode(
-                period_from, period_to, mode)
+                cr, uid,
+                period_from, period_to, mode,
+                context=context)
             domain = [('period_id', 'in', period_ids)]
         else:
             if mode == MODE_VARIATION:
@@ -327,14 +369,14 @@ class AccountingExpressionProcessor(object):
             domain.append(('move_id.state', '=', 'posted'))
         return expression.normalize_domain(domain)
 
-    def do_queries(self, date_from, date_to, period_from, period_to,
-                   target_move):
+    def do_queries(self, cr, uid, date_from, date_to, period_from, period_to,
+                   target_move, context=None):
         """Query sums of debit and credit for all accounts and domains
         used in expressions.
 
         This method must be executed after done_parsing().
         """
-        aml_model = self.env['account.move.line']
+        aml_model = self.pool['account.move.line']
         # {(domain, mode): {account_id: (debit, credit)}}
         self._data = defaultdict(dict)
         domain_by_mode = {}
@@ -342,15 +384,18 @@ class AccountingExpressionProcessor(object):
             domain, mode = key
             if mode not in domain_by_mode:
                 domain_by_mode[mode] = \
-                    self.get_aml_domain_for_dates(date_from, date_to,
+                    self.get_aml_domain_for_dates(cr, uid,
+                                                  date_from, date_to,
                                                   period_from, period_to,
-                                                  mode, target_move)
+                                                  mode, target_move,
+                                                  context=context)
             domain = list(domain) + domain_by_mode[mode]
             domain.append(('account_id', 'in', self._map_account_ids[key]))
             # fetch sum of debit/credit, grouped by account_id
-            accs = aml_model.read_group(domain,
+            accs = aml_model.read_group(cr, uid, domain,
                                         ['debit', 'credit', 'account_id'],
-                                        ['account_id'])
+                                        ['account_id'],
+                                        context=context)
             for acc in accs:
                 self._data[key][acc['account_id'][0]] = \
                     (acc['debit'] or 0.0, acc['credit'] or 0.0)

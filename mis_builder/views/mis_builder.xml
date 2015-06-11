@@ -2,13 +2,6 @@
 <openerp>
     <data>
 
-       <template id="assets_backend" name="mis_builder" inherit_id="web.assets_backend">
-            <xpath expr="." position="inside">
-                <link rel="stylesheet" href="/mis_builder/static/src/css/custom.css"/>
-                <script type="text/javascript" src="/mis_builder/static/src/js/mis_builder.js"></script>
-            </xpath>
-        </template>
-
         <record model="ir.ui.view" id="mis_report_view_tree">
             <field name="name">mis.report.view.tree</field>
             <field name="model">mis.report</field>
@@ -107,15 +100,6 @@
 	      <field name="auto" eval="False"/>
 	    </record>
 
-        <record id="qweb_pdf_export" model="ir.actions.report.xml">
-          <field name="name">MIS report instance QWEB PDF report</field>
-          <field name="model">mis.report.instance</field>
-          <field name="type">ir.actions.report.xml</field>
-          <field name="report_name">mis_builder.report_mis_report_instance</field>
-          <field name="report_type">qweb-pdf</field>
-          <field name="auto" eval="False"/>
-        </record>
-
         <record model="ir.ui.view" id="mis_report_instance_result_view_form">
             <field name="name">mis.report.instance.result.view.form</field>
             <field name="model">mis.report.instance</field>
@@ -123,7 +107,6 @@
             <field name="arch" type="xml">
                 <form string="MIS Report Result" version="7.0">
                     <widget type="mis_report"></widget>
-                    <button icon="gtk-print" name="%(qweb_pdf_export)d" string="Print" type="action" colspan="2"/>
                     <button icon="gtk-execute" name="%(xls_export)d" string="Export" type="action" colspan="2"/>
                 </form>
             </field>
@@ -161,7 +144,6 @@
                     </div>
                     <div class="oe_right oe_button_box" name="buttons"> 
                         <button type="object" name="preview" string="Preview" icon="gtk-print-preview" />
-                        <button type="action" name="%(qweb_pdf_export)d" string="Print" icon="gtk-print" />
                         <button type="action" name="%(xls_export)d" string="Export" icon="gtk-execute" />
                         <button type="action" name="%(mis_report_instance_add_to_dashboard_action)d" string="Add to dashboard" icon="gtk-add" />
                     </div>

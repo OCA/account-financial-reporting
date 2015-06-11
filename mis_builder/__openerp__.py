@@ -40,7 +40,7 @@
         'views/mis_builder.xml',
         'security/ir.model.access.csv',
         'security/mis_builder_security.xml',
-        'report/report_mis_report_instance.xml',
+        # 'report/report_mis_report_instance.xml',
     ],
     'test': [
     ],
@@ -50,6 +50,12 @@
         'tests/mis.report.csv',
         'tests/mis.report.instance.period.csv',
         'tests/mis.report.instance.csv',
+    ],
+    'js': [
+        'static/src/js/*.js'
+    ],
+    'css': [
+        'static/src/css/*.css'
     ],
     'qweb': [
         'static/src/xml/*.xml'
