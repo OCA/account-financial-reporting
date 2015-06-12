@@ -22,40 +22,20 @@
 #
 ##############################################################################
 
-{
-    'name': 'MIS Builder',
-    'version': '0.2',
-    'category': 'Reporting',
-    'summary': """
-        Build 'Management Information System' Reports and Dashboards
-    """,
-    'author': 'ACSONE SA/NV',
-    'website': 'http://acsone.eu',
-    'depends': [
-        'account',
-        'report_xls',  # OCA/reporting-engine
-    ],
-    'data': [
-        'wizard/mis_builder_dashboard.xml',
-        'views/mis_builder.xml',
-        'security/ir.model.access.csv',
-        'security/mis_builder_security.xml',
-        'report/report_mis_report_instance.xml',
-    ],
-    'test': [
-    ],
-    'demo': [
-        'tests/mis.report.kpi.csv',
-        'tests/mis.report.query.csv',
-        'tests/mis.report.csv',
-        'tests/mis.report.instance.period.csv',
-        'tests/mis.report.instance.csv',
-    ],
-    'qweb': [
-        'static/src/xml/*.xml'
-    ],
-    'installable': True,
-    'application': True,
-    'auto_install': False,
-    'license': 'AGPL-3',
-}
+def migrate(cr, version):
+    if not version:
+        return
+
+    cr.execute("""
+        ALTER TABLE mis_report_instance
+        ADD COLUMN root_account INTEGER
+        """)
+    cr.execute("""
+        UPDATE mis_report_instance
+        SET root_account = (
+            SELECT id FROM account_account
+            WHERE parent_id IS NULL
+              AND company_id = mis_report_instance.company_id
+            LIMIT 1
+        )
+        """)
