@@ -28,6 +28,13 @@ class AccountMoveLine(orm.Model):
     Last rec date is the date of the last reconciliation (full or partial)
     account move line"""
     _inherit = 'account.move.line'
+ 
+    def _auto_init(self, cr, context=None):
+        res = super(AccountMoveLine, self)._auto_init(cr, context=context)
+        for item in res:
+            if 'last_rec_date' in item[2]:
+                del res[:]
+        return res
 
     def _get_move_line_from_line_rec(self, cr, uid, ids, context=None):
         moves = []
