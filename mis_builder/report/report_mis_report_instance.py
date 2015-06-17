@@ -55,12 +55,13 @@ class Report(models.Model):
     @api.v7
     def get_pdf(self, cr, uid, ids, report_name, html=None, data=None,
                 context=None):
-        report = self._get_report_from_name(cr, uid, report_name)
-        obj = self.pool[report.model].browse(cr, uid, ids,
-                                             context=context)[0]
-        context = context.copy()
-        if hasattr(obj, 'landscape_pdf') and obj.landscape_pdf:
-            context.update({'landscape': True})
+        if ids:
+            report = self._get_report_from_name(cr, uid, report_name)
+            obj = self.pool[report.model].browse(cr, uid, ids,
+                                                 context=context)[0]
+            context = context.copy()
+            if hasattr(obj, 'landscape_pdf') and obj.landscape_pdf:
+                context.update({'landscape': True})
         return super(Report, self).get_pdf(cr, uid, ids, report_name,
                                            html=html, data=data,
                                            context=context)
