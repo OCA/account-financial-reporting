@@ -8,7 +8,7 @@
           <t t-call="report.internal_layout">
             <div class="page">
               <h2 t-field="o.name"></h2>
-              <table class="table table-condensed text-right">
+              <table class="table table-condensed">
                 <thead>
                   <tr>
                     <t t-foreach="docs_computed[o.id]['header']" t-as="h">
@@ -17,7 +17,7 @@
                           <t t-esc="h_value['kpi_name']"/>
                         </div>
                       </th>
-                      <th t-foreach="h_value['cols']" t-as="col">
+                      <th t-foreach="h_value['cols']" t-as="col" class="text-center">
                         <div>
                           <t t-esc="col['name']"/>
                         </div>
@@ -31,13 +31,13 @@
                 <tbody>
                   <tr t-foreach="docs_computed[o.id]['content']" t-as="c">
                     <td t-att-style="c_value['default_style']">
-                      <div>
+                      <div class="text-left">
                         <t t-esc="c_value['kpi_name']"/>
                       </div>
                     </td>
                     <t t-foreach="c_value['cols']" t-as="value">
                       <td t-att-style="c_value['default_style']">
-                        <div t-att-style="value_value.get('style')">
+                        <div t-att-style="value_value.get('style')" class="text-right">
                           <t t-esc="value_value['val_r']"/>
                         </div>
                       </td>
