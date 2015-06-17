@@ -47,7 +47,7 @@ class PartnerAgedTrialReport(aged_trial_report):
             self._partners = self.localcontext["active_ids"]
         self.localcontext.update({
             'message': self._message,
-            'getLines30': self._lines_get_30,
+            'getLinesCurrent': self._lines_get_current,
             'getLines3060': self._lines_get_30_60,
             'getLines60': self._lines_get_60,
             'show_message': True,
@@ -87,7 +87,7 @@ class PartnerAgedTrialReport(aged_trial_report):
         res = {}
         for currency_name, lines in grouped_movelines:
             res[currency_name] = {
-                'not_due': 0,
+                'current': 0,
                 '30': 0,
                 '3060': 0,
                 '6090': 0,
@@ -101,22 +101,22 @@ class PartnerAgedTrialReport(aged_trial_report):
             for line in lines:
                 amount = line['amount_unreconciled']
 
-                if line['date_due'] > today or not line['date_due']:
-                    current_dict['not_due'] += amount
+                if (
+                    not line['date_original'] or
+                    line['date_original'] >= date_30
+                ):
+                    current_dict['current'] += amount
 
-                elif line['date_due'] > date_30:
-                    current_dict['30'] += amount
-
-                elif line['date_due'] > date_60:
+                elif line['date_original'] > date_60:
                     current_dict['3060'] += amount
 
-                elif line['date_due'] > date_90:
+                elif line['date_original'] > date_90:
                     current_dict['6090'] += amount
 
-                elif line['date_due'] > date_120:
+                elif line['date_original'] > date_120:
                     current_dict['90120'] += amount
 
-                elif line['date_due']:
+                else:
                     current_dict['120'] += amount
 
                 current_dict['total'] += amount
@@ -157,7 +157,7 @@ class PartnerAgedTrialReport(aged_trial_report):
 
         invoices = inv_obj.browse(cr, uid, invoice_ids, context=context)
 
-        return [
+        res = sorted([
             {
                 'date_due': inv.date_due or '',
                 'date_original': inv.date_invoice or '',
@@ -169,19 +169,22 @@ class PartnerAgedTrialReport(aged_trial_report):
                 'ref': inv.reference or '',
                 'id': inv.id,
             } for inv in invoices
-        ]
+        ], key=lambda inv: inv['date_original'])
 
-    def _lines_get_30(self, partner, company):
+        res.reverse()
+
+        return res
+
+    def _lines_get_current(self, partner, company):
         today = self.today
         stop = today - relativedelta(days=30)
-
-        today = today.strftime(DEFAULT_SERVER_DATE_FORMAT)
         stop = stop.strftime(DEFAULT_SERVER_DATE_FORMAT)
 
         movelines = self._get_current_invoice_lines(partner, company, today)
         movelines = [
             line for line in movelines
-            if not line['date_due'] or stop < line['date_due'] <= today
+            if not line['date_original'] or
+            line['date_original'] >= stop
         ]
         return movelines
 
@@ -197,7 +200,8 @@ class PartnerAgedTrialReport(aged_trial_report):
         movelines = self._get_current_invoice_lines(partner, company, today)
         movelines = [
             line for line in movelines
-            if line['date_due'] and stop < line['date_due'] <= start
+            if line['date_original'] and
+            stop < line['date_original'] <= start
         ]
         return movelines
 
@@ -211,7 +215,8 @@ class PartnerAgedTrialReport(aged_trial_report):
         movelines = self._get_current_invoice_lines(partner, company, today)
         movelines = [
             line for line in movelines
-            if line['date_due'] and line['date_due'] <= start
+            if line['date_original'] and
+            line['date_original'] <= start
         ]
         return movelines
 

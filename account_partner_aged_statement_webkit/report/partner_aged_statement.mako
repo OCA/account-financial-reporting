@@ -58,8 +58,7 @@
         %if get_balance(partner, company):
             <table class="basic_table" style="width: 100%;">
                 <tr>
-                    <th>${_('Not Due')}</th>
-                    <th>${_('0-30')}</th>
+                    <th>${_('Current')}</th>
                     <th>${_('30-60')}</th>
                     <th>${_('60-90')}</th>
                     <th>${_('90-120')}</th>
@@ -69,8 +68,7 @@
                 </tr>
                 %for l in get_balance(partner, company):
                 <tr>
-                    <td>${ l['not_due'] }</td>
-                    <td>${ l['30'] }</td>
+                    <td>${ l['current'] }</td>
                     <td>${ l['3060'] }</td>
                     <td>${ l['6090'] }</td>
                     <td>${ l['90120'] }</td>
@@ -83,10 +81,10 @@
         %endif
         <br/>
         <br/>
-        <div class="title">${_('List of Due Invoices')}</div>
-        %if getLines30(partner, company):
+
+        %if getLinesCurrent(partner, company):
+            <div class="title">${_('List of current invoices')}</div>
             <br/>
-            <div class="total">${_('0-30')}</div>
             <table class="basic_table" style="width: 100%;">
                 <tr>
                     <th>${_('Date')}</th>
@@ -98,7 +96,7 @@
                     <th>${_('Total')}</th>
                     <th>${_('Currency')}</th>
                 </tr>
-                %for line in getLines30(partner, company):
+                %for line in getLinesCurrent(partner, company):
                 <tr>
                     <td>${ formatLang(line['date_original'], date=True) }</td>
                     <td>${ line['name'] }</td>
@@ -109,9 +107,13 @@
                     <td style="text-align: right;">${ formatLang(line['amount_unreconciled']) }</td>
                     <td>${ line['currency_name'] }</td>
                 </tr>
-                %endfor  ## for line in getLines30(partner, company)
+                %endfor  ## for line in getLinesCurrent(partner, company)
             </table>
-        %endif  ## if getLines30(partner, company)
+            <br/>
+            <br/>
+        %endif  ## if getLinesCurrent(partner, company)
+
+        <div class="title">${_('List of overdue invoices')}</div>
         %if getLines3060(partner, company):
             <br/>
             <div class="total">${_('30-60')}</div>
