@@ -227,10 +227,11 @@ class AccountingExpressionProcessor(object):
         return expression.OR(aml_domains) + \
             expression.OR(date_domain_by_mode.values())
 
-    def _period_has_moves(self, period):
+    def _period_has_moves(self, cr, uid, period, context=None):
         move_model = self.pool['account.move']
-        return bool(move_model.search([('period_id', '=', period.id)],
-                                      limit=1))
+        return bool(move_model.search(cr, uid,
+                                      [('period_id', '=', period.id)],
+                                      limit=1, context=context))
 
     def _get_previous_opening_period(self, cr, uid, period, company_id,
                                      context=None):
@@ -325,7 +326,7 @@ class AccountingExpressionProcessor(object):
                     period_from, company_id,
                     context=context)
                 if opening_period and \
-                        self._period_has_moves(cr, uid, opening_period[0],
+                        self._period_has_moves(cr, uid, opening_period,
                                                context=context):
                     # found opening period with moves
                     if opening_period.date_start == period_from.date_start and \
@@ -333,9 +334,9 @@ class AccountingExpressionProcessor(object):
                         # if the opening period has the same start date as
                         # period_from, then we'll find the initial balance
                         # in the initial period and that's it
-                        period_ids.append(opening_period[0].id)
+                        period_ids.append(opening_period.id)
                         continue
-                    period_from = opening_period[0]
+                    period_from = opening_period
                 else:
                     # no opening period with moves,
                     # use very first normal period
