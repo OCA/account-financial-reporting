@@ -73,7 +73,35 @@ def _is_valid_python_var(name):
     return re.match("[_A-Za-z][_a-zA-Z0-9]*$", name)
 
 
+<<<<<<< HEAD
 class MisReportKpi(orm.Model):
+=======
+def _sum(l):
+    if not l:
+        return None
+    return sum(l)
+
+
+def _avg(l):
+    if not l:
+        return None
+    return sum(l) / float(len(l))
+
+
+def _min(l):
+    if not l:
+        return None
+    return min(l)
+
+
+def _max(l):
+    if not l:
+        return None
+    return max(l)
+
+
+class MisReportKpi(models.Model):
+>>>>>>> 4cd4a14... [FIX] mis_builder: do not crash on aggregate queries with no results
     """ A KPI is an element (ie a line) of a MIS report.
 
     In addition to a name and description, it has an expression
@@ -552,11 +580,11 @@ class MisReportInstancePeriod(orm.Model):
                     cr, uid, obj_ids, field_names, context=context)
                 s = AutoStruct(count=len(data))
                 if query.aggregate == 'min':
-                    agg = min
+                    agg = _min
                 elif query.aggregate == 'max':
-                    agg = max
+                    agg = _max
                 elif query.aggregate == 'avg':
-                    agg = lambda l: sum(l) / float(len(l))
+                    agg = _avg
                 for field_name in field_names:
                     setattr(s, field_name,
                             agg([d[field_name] for d in data]))
@@ -573,11 +601,11 @@ class MisReportInstancePeriod(orm.Model):
 
         localdict = {
             'registry': self.pool,
-            'sum': sum,
-            'min': min,
-            'max': max,
+            'sum': _sum,
+            'min': _min,
+            'max': _max,
             'len': len,
-            'avg': lambda l: sum(l) / float(len(l)),
+            'avg': _avg,
         }
 
         localdict.update(self._fetch_queries(cr, uid, c, context=context))
