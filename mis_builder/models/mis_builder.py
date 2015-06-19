@@ -67,6 +67,30 @@ def _is_valid_python_var(name):
     return re.match("[_A-Za-z][_a-zA-Z0-9]*$", name)
 
 
+def _sum(l):
+    if not l:
+        return None
+    return sum(l)
+
+
+def _avg(l):
+    if not l:
+        return None
+    return sum(l) / float(len(l))
+
+
+def _min(l):
+    if not l:
+        return None
+    return min(l)
+
+
+def _max(l):
+    if not l:
+        return None
+    return max(l)
+
+
 class MisReportKpi(models.Model):
     """ A KPI is an element (ie a line) of a MIS report.
 
@@ -455,11 +479,11 @@ class MisReportInstancePeriod(models.Model):
                 data = model.search_read(domain, field_names)
                 s = AutoStruct(count=len(data))
                 if query.aggregate == 'min':
-                    agg = min
+                    agg = _min
                 elif query.aggregate == 'max':
-                    agg = max
+                    agg = _max
                 elif query.aggregate == 'avg':
-                    agg = lambda l: sum(l) / float(len(l))
+                    agg = _avg
                 for field_name in field_names:
                     setattr(s, field_name,
                             agg([d[field_name] for d in data]))
@@ -471,11 +495,11 @@ class MisReportInstancePeriod(models.Model):
 
         localdict = {
             'registry': self.pool,
-            'sum': sum,
-            'min': min,
-            'max': max,
+            'sum': _sum,
+            'min': _min,
+            'max': _max,
             'len': len,
-            'avg': lambda l: sum(l) / float(len(l)),
+            'avg': _avg,
         }
 
         localdict.update(self._fetch_queries())
