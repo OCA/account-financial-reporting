@@ -458,11 +458,6 @@ class MisReportInstancePeriod(models.Model):
                     self.date_to, self._context.get('tz', 'UTC'), add_day=1)
                 domain.extend([(query.date_field.name, '>=', datetime_from),
                                (query.date_field.name, '<', datetime_to)])
-            # TODO: we probably don't need company_id here
-            if model._columns.get('company_id'):
-                domain.extend(['|', ('company_id', '=', False),
-                               ('company_id', '=',
-                                self.report_instance_id.company_id.id)])
             field_names = [f.name for f in query.field_ids]
             if not query.aggregate:
                 data = model.search_read(domain, field_names)
