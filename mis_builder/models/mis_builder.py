@@ -557,9 +557,12 @@ class MisReportInstancePeriod(orm.Model):
                     c.date_to, context.get('tz', 'UTC'), add_day=1)
                 domain.extend([(query.date_field.name, '>=', datetime_from),
                                (query.date_field.name, '<', datetime_to)])
+<<<<<<< HEAD
             if obj._columns.get('company_id', False):
                 domain.extend(['|', ('company_id', '=', False),
                                ('company_id', '=', c.company_id.id)])
+=======
+>>>>>>> 57a9bbb... [FIX] mis_builder: do not arbitrarily filter on company in queries
             field_names = [f.name for f in query.field_ids]
             if not query.aggregate:
                 obj_ids = obj.search(cr, uid, domain, context=context)
