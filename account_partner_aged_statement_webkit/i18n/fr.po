@@ -236,6 +236,16 @@ msgid "Aged Balance"
 msgstr "Balance âgée"
 
 #. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:0
+msgid "List of current invoices"
+msgstr "Liste de factures en cours"
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:0
+msgid "List of overdue invoices"
+msgstr "Liste de factures dues"
+
+#. module: account_partner_aged_statement_webkit
 #: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:65
 msgid "+120"
 msgstr "+120"

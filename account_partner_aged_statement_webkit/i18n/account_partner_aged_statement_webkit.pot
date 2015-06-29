@@ -235,3 +235,13 @@ msgstr ""
 #: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:39
 msgid "Mail:"
 msgstr ""
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:0
+msgid "List of current invoices"
+msgstr ""
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:0
+msgid "List of overdue invoices"
+msgstr ""
