@@ -82,6 +82,12 @@
         <br/>
         <br/>
 
+        %if get_refunds_total(partner, company):
+            <div>${_('Sum of Customer Refunds') if ttype == 'receipt' else _('Sum of Supplier Refunds')} : ${ get_refunds_total(partner, company) }</div>
+        <br/>
+        <br/>
+        %endif
+
         %if getLinesCurrent(partner, company):
             <div class="title">${_('List of current invoices')}</div>
             <br/>
@@ -170,6 +176,38 @@
                 %endfor  ## for line in getLines60(partner, company)
             </table>
         %endif  ## if getLines60(partner)
+
+        %if getLinesRefunds(partner, company):
+            <br/>
+            <br/>
+            <div class="title">${_('List of Customer Refunds') if ttype == 'receipt' else _('List of Supplier Refunds')}</div>
+            <br/>
+            <table class="basic_table" style="width: 100%;">
+                <tr>
+                    <th>${_('Date')}</th>
+                    <th>${_('Description')}</th>
+                    <th>${_('Reference')}</th>
+                    <th>${_('Due date')}</th>
+                    <th>${_('Amount')}</th>
+                    <th>${_('Paid')}</th>
+                    <th>${_('Total')}</th>
+                    <th>${_('Currency')}</th>
+                </tr>
+                %for line in getLinesRefunds(partner, company):
+                <tr>
+                    <td>${ formatLang(line['date_original'], date=True) }</td>
+                    <td>${ line['name'] }</td>
+                    <td>${ line['ref'] }</td>
+                    <td>${ line['date_due'] and formatLang(line['date_due'], date=True) or '' }</td>
+                    <td style="text-align: right;">${ formatLang(line['amount_original']) }</td>
+                    <td style="text-align: right;">${ formatLang(line['amount_original'] - line['amount_unreconciled']) }</td>
+                    <td style="text-align: right;">${ formatLang(line['amount_unreconciled']) }</td>
+                    <td>${ line['currency_name'] }</td>
+                </tr>
+                %endfor  ## for line in getLinesCurrent(partner, company)
+            </table>
+        %endif  ## if getLinesRefunds(partner, company)
+
         %endif  ## if (partner.credit + partner.debit == 0
     %endfor  ## for partner in objects
     </body>

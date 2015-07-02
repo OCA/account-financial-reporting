@@ -44,18 +44,21 @@ class PartnerAgedTrialReport(aged_trial_report):
         current_user = self.localcontext["user"]
         self._company = current_user.company_id
         if self.localcontext.get("active_model", "") == "res.partner":
-            self._partners = self.localcontext["active_ids"]
+            self._partner = self.localcontext["active_id"]
+        self.ttype = 'receipt'
         self.localcontext.update({
             'message': self._message,
             'getLinesCurrent': self._lines_get_current,
             'getLines3060': self._lines_get_30_60,
             'getLines60': self._lines_get_60,
+            'getLinesRefunds': self._lines_get_refunds,
             'show_message': True,
             'get_current_invoice_lines': self._get_current_invoice_lines,
             'get_balance': self._get_balance,
+            'get_refunds_total': self._refunds_total,
+            'ttype': self.ttype,
         })
         self.partner_invoices_dict = {}
-        self.ttype = 'receipt'
         tz = self.localcontext.get('tz', False)
         tz = tz and pytz.timezone(tz) or pytz.utc
         self.today = datetime.now(tz)
@@ -76,7 +79,11 @@ class PartnerAgedTrialReport(aged_trial_report):
         date_90 = date_90.strftime(DEFAULT_SERVER_DATE_FORMAT)
         date_120 = date_120.strftime(DEFAULT_SERVER_DATE_FORMAT)
 
-        movelines = self._get_current_invoice_lines(partner, company, today)
+        movelines = [
+            line for line in
+            self._get_current_invoice_lines(partner, company, today)
+            if line['type'] in ['in_invoice', 'out_invoice']
+        ]
         movelines = sorted(movelines, key=lambda x: x['currency_name'])
 
         grouped_movelines = [
@@ -147,12 +154,15 @@ class PartnerAgedTrialReport(aged_trial_report):
 
         inv_obj = pool['account.invoice']
 
+        invoice_types = (
+            ['out_invoice', 'out_refund'] if self.ttype == 'receipt'
+            else ['in_invoice', 'in_refund'])
+
         invoice_ids = inv_obj.search(cr, uid, [
             ('state', '=', 'open'),
             ('company_id', '=', company.id),
             ('partner_id', '=', partner.id),
-            ('type', '=', 'out_invoice'
-                if self.ttype == 'receipt' else 'in_invoice'),
+            ('type', 'in', invoice_types),
         ], context=context)
 
         invoices = inv_obj.browse(cr, uid, invoice_ids, context=context)
@@ -168,6 +178,7 @@ class PartnerAgedTrialReport(aged_trial_report):
                 'name': inv.number,
                 'ref': inv.reference or '',
                 'id': inv.id,
+                'type': inv.type,
             } for inv in invoices
         ], key=lambda inv: inv['date_original'])
 
@@ -183,9 +194,13 @@ class PartnerAgedTrialReport(aged_trial_report):
         movelines = self._get_current_invoice_lines(partner, company, today)
         movelines = [
             line for line in movelines
-            if not line['date_original'] or
-            line['date_original'] >= stop
+            if ((
+                not line['date_original'] or
+                line['date_original'] >= stop
+            ) and line['type'] in ['in_invoice', 'out_invoice'])
         ]
+
+        print movelines
         return movelines
 
     def _lines_get_30_60(self, partner, company):
@@ -200,8 +215,10 @@ class PartnerAgedTrialReport(aged_trial_report):
         movelines = self._get_current_invoice_lines(partner, company, today)
         movelines = [
             line for line in movelines
-            if line['date_original'] and
-            stop < line['date_original'] <= start
+            if ((
+                line['date_original'] and
+                stop < line['date_original'] <= start
+            ) and line['type'] in ['in_invoice', 'out_invoice'])
         ]
         return movelines
 
@@ -215,8 +232,27 @@ class PartnerAgedTrialReport(aged_trial_report):
         movelines = self._get_current_invoice_lines(partner, company, today)
         movelines = [
             line for line in movelines
-            if line['date_original'] and
-            line['date_original'] <= start
+            if ((
+                line['date_original'] and
+                line['date_original'] <= start
+            ) and line['type'] in ['in_invoice', 'out_invoice'])
+        ]
+        return movelines
+
+    def _refunds_total(self, partner, company):
+        today = self.today
+        movelines = self._get_current_invoice_lines(partner, company, today)
+        return sum(
+            line['amount_unreconciled'] for line in movelines
+            if line['type'] in ['in_refund', 'out_refund']
+        )
+
+    def _lines_get_refunds(self, partner, company):
+        today = self.today
+        movelines = self._get_current_invoice_lines(partner, company, today)
+        movelines = [
+            line for line in movelines
+            if line['type'] in ['in_refund', 'out_refund']
         ]
         return movelines
 

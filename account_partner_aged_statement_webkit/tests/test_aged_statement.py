@@ -103,14 +103,17 @@ class test_aged_statement(common.TransactionCase):
                         'price_unit': invoice[1],
                         'quantity': 1,
                     })],
+                    'type': invoice[2],
                 }, context=context)
             for invoice in [
-                (self.today, 300),
-                (self.date1, 100),
-                (self.date2, 150),
-                (self.date3, 200),
-                (self.date4, 250),
-                (self.date5, 500),
+                (self.today, 300, 'out_invoice'),
+                (self.date1, 100, 'out_invoice'),
+                (self.date2, 150, 'out_invoice'),
+                (self.date3, 200, 'out_invoice'),
+                (self.date4, 250, 'out_invoice'),
+                (self.date5, 500, 'out_invoice'),
+                (self.date2, 600, 'out_refund'),
+                (self.date4, 700, 'out_refund'),
             ]
         ]
 
@@ -193,3 +196,25 @@ class test_aged_statement(common.TransactionCase):
             'amount_original': 200,
             'amount_unreconciled': 200,
         })
+
+    def test_line_get_refunds(self):
+        lines = sorted(
+            self.report._lines_get_refunds(self.partner, self.company),
+            key=lambda l: l['date_original'])
+
+        self.compare_vals(lines[0], {
+            'date_original': self.date4,
+            'amount_original': 700,
+            'amount_unreconciled': 700,
+        })
+
+        self.compare_vals(lines[1], {
+            'date_original': self.date2,
+            'amount_original': 600,
+            'amount_unreconciled': 600,
+        })
+
+    def test_refunds_total(self):
+        res = self.report._refunds_total(self.partner, self.company)
+
+        self.assertEqual(res, 1300)

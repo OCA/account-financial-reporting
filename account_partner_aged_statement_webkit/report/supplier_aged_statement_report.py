@@ -31,10 +31,11 @@ class SupplierAgedTrialReport(PartnerAgedTrialReport):
     """
     def __init__(self, cr, uid, name, context):
         super(SupplierAgedTrialReport, self).__init__(cr, uid, name, context)
+        self.ttype = 'payment'
         self.localcontext.update({
             'show_message': False,
+            'ttype': self.ttype,
         })
-        self.ttype = 'payment'
 
 
 WebKitParser(

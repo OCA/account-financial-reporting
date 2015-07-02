@@ -245,3 +245,23 @@ msgstr ""
 #: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:0
 msgid "List of overdue invoices"
 msgstr ""
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:0
+msgid "Sum of Customer Refunds"
+msgstr ""
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:0
+msgid "List of Customer Refunds"
+msgstr ""
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:0
+msgid "Sum of Supplier Refunds"
+msgstr ""
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:0
+msgid "List of Supplier Refunds"
+msgstr ""

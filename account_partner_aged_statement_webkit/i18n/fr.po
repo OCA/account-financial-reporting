@@ -297,3 +297,23 @@ msgstr "Courriel:"
 #: model:ir.actions.report.xml,name:account_partner_aged_statement_webkit.supplier_aged_statement_report
 msgid "Supplier Aged Statement"
 msgstr "Relevé de balance âgée FRS"
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:0
+msgid "Sum of Customer Refunds"
+msgstr "Somme des notes de crédit"
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:0
+msgid "List of Customer Refunds"
+msgstr "Liste des notes de crédit"
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:0
+msgid "Sum of Supplier Refunds"
+msgstr "Somme des notes de crédit"
+
+#. module: account_partner_aged_statement_webkit
+#: report:addons/account_partner_aged_statement_webkit/report/partner_aged_statement.mako:0
+msgid "List of Supplier Refunds"
+msgstr "Liste des notes de crédit"
