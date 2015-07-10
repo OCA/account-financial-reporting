@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
+#    Author: Alexis de Lattre
 #    Author: Nicolas Bessi
+#    Copyright 2015 Akretion (www.akretion.com)
 #    Copyright 2014 Camptocamp SA
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -63,21 +65,21 @@ REFUND_TYPE = ('purchase_refund', 'sale_refund')
 INV_TYPE = REC_PAY_TYPE + REFUND_TYPE
 
 
-class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
+class AccountAgedOpenInvoicesWebkit(PartnersOpenInvoicesWebkit):
 
-    """Compute Aged Partner Balance based on result of Open Invoices"""
+    """Compute Aged Open Invoices based on result of Open Invoices"""
 
     def __init__(self, cursor, uid, name, context=None):
         """Constructor,
            refer to :class:`openerp.report.report_sxw.rml_parse`"""
-        super(AccountAgedTrialBalanceWebkit, self).__init__(cursor, uid, name,
+        super(AccountAgedOpenInvoicesWebkit, self).__init__(cursor, uid, name,
                                                             context=context)
         self.pool = pooler.get_pool(self.cr.dbname)
         self.cursor = self.cr
         company = self.pool.get('res.users').browse(self.cr, uid, uid,
                                                     context=context).company_id
 
-        header_report_name = ' - '.join((_('Aged Partner Balance'),
+        header_report_name = ' - '.join((_('Aged Open Invoices'),
                                          company.currency_id.name))
 
         footer_date_time = self.formatLang(str(datetime.today()),
@@ -89,7 +91,7 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
             'company': company,
             'ranges': self._get_ranges(),
             'ranges_titles': self._get_ranges_titles(),
-            'report_name': _('Aged Partner Balance'),
+            'report_name': _('Aged Open Invoices'),
             'additional_args': [
                 ('--header-font-name', 'Helvetica'),
                 ('--footer-font-name', 'Helvetica'),
@@ -129,51 +131,63 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
 
         """
 
-        res = super(AccountAgedTrialBalanceWebkit, self).set_context(
+        res = super(AccountAgedOpenInvoicesWebkit, self).set_context(
             objects,
             data,
             ids,
             report_type=report_type
         )
 
-        agged_lines_accounts = {}
-        agged_totals_accounts = {}
-        agged_percents_accounts = {}
+        aged_open_inv = {}
+        # {account1_id: {(0, 30): 0.0,
+        #               (30, 60): -101.0,
+        #               (60, 90): 0.0,
+        #               partenaire1_id: {(0, 30): 5.0,
+        #                                (30, 60): -10,
+        #                                'lines': [line1, line2]
+        #                                },
+        #               },
+        # }
+
+        # Stupid dict that we copy in parts of the main aged_open_inv dict
+        aged_dict = {}
+        for classif in self.localcontext['ranges']:
+            aged_dict[classif] = 0.0
 
         for acc in self.objects:
-            agged_lines_accounts[acc.id] = {}
-            agged_totals_accounts[acc.id] = {}
-            agged_percents_accounts[acc.id] = {}
+            #print "acc.code=", acc.code
+            aged_open_inv[acc.id] = aged_dict.copy()
+            aged_open_inv[acc.id]['balance'] = 0.0
 
             for part_id, partner_lines in\
                     self.localcontext['ledger_lines'][acc.id].items():
-
-                aged_lines = self.compute_aged_lines(part_id,
-                                                     partner_lines,
-                                                     data)
-                if aged_lines:
-                    agged_lines_accounts[acc.id][part_id] = aged_lines
-            agged_totals_accounts[acc.id] = totals = self.compute_totals(
-                agged_lines_accounts[acc.id].values())
-            agged_percents_accounts[acc.id] = self.compute_percents(totals)
+                aged_open_inv[acc.id][part_id] = aged_dict.copy()
+                aged_open_inv[acc.id][part_id]['balance'] = 0.0
+                aged_open_inv[acc.id][part_id]['lines'] = list(partner_lines)
+                for line in aged_open_inv[acc.id][part_id]['lines']:
+                    line.update(aged_dict)
+                    self.compute_aged_line(part_id, line, data)
+                    aged_open_inv[acc.id][part_id]['balance'] +=\
+                        line['balance']
+                    aged_open_inv[acc.id]['balance'] += line['balance']
+                    for classif in self.localcontext['ranges']:
+                        aged_open_inv[acc.id][part_id][classif] +=\
+                            line[classif]
+                        aged_open_inv[acc.id][classif] +=\
+                            line[classif]
 
         self.localcontext.update({
-            'agged_lines_accounts': agged_lines_accounts,
-            'agged_totals_accounts': agged_totals_accounts,
-            'agged_percents_accounts': agged_percents_accounts,
+            'aged_open_inv': aged_open_inv,
         })
-
-        # Free some memory
-        del(self.localcontext['ledger_lines'])
         return res
 
-    def compute_aged_lines(self, partner_id, ledger_lines, data):
-        """Add property aged_lines to accounts browse records
+    def compute_aged_line(self, partner_id, ledger_line, data):
+        """Add classification to accounts browse records
 
         contained in :attr:`objects` for a given partner
 
         :param: partner_id: current partner
-        :param ledger_lines: generated by parent
+        :param ledger_line: generated by parent
                  :class:`.open_invoices.PartnersOpenInvoicesWebkit`
 
         :returns: dict of computed aged lines
@@ -181,21 +195,15 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
                        'aged_lines': {(90, 120): 0.0, ...}
 
         """
-        lines_to_age = self.filter_lines(partner_id, ledger_lines)
-        res = {}
+        #lines_to_age = self.filter_lines(partner_id, [ledger_line])
         end_date = self._get_end_date(data)
-        aged_lines = dict.fromkeys(RANGES, 0.0)
-        reconcile_lookup = self.get_reconcile_count_lookup(lines_to_age)
-        res['aged_lines'] = aged_lines
-        for line in lines_to_age:
-            compute_method = self.get_compute_method(reconcile_lookup,
-                                                     partner_id,
-                                                     line)
-            delay = compute_method(line, end_date, ledger_lines)
-            classification = self.classify_line(partner_id, delay)
-            aged_lines[classification] += line['debit'] - line['credit']
-        self.compute_balance(res, aged_lines)
-        return res
+        reconcile_lookup = self.get_reconcile_count_lookup([ledger_line])
+        compute_method = self.get_compute_method(reconcile_lookup,
+                                                 partner_id,
+                                                 ledger_line)
+        delay = compute_method(ledger_line, end_date, [ledger_line])
+        classification = self.classify_line(partner_id, delay)
+        ledger_line[classification] += ledger_line['balance']
 
     def _get_end_date(self, data):
         """Retrieve end date to be used to compute delay.
@@ -285,14 +293,10 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
 
         :returns: delta in days
         """
-        sale_lines = [
-            x for x in ledger_lines if x['jtype'] in REC_PAY_TYPE and
-            line['rec_id'] == x['rec_id']
-        ]
-        refund_lines = [
-            x for x in ledger_lines if x['jtype'] in REFUND_TYPE and
-            line['rec_id'] == x['rec_id']
-        ]
+        sale_lines = [x for x in ledger_lines if x['jtype'] in REC_PAY_TYPE
+                      and line['rec_id'] == x['rec_id']]
+        refund_lines = [x for x in ledger_lines if x['jtype'] in REFUND_TYPE
+                        and line['rec_id'] == x['rec_id']]
         if len(sale_lines) == 1:
             reference_line = sale_lines[0]
         elif len(refund_lines) == 1:
@@ -314,7 +318,7 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
         :param line: current ledger line generated by parent
                      :class:`.open_invoices.PartnersOpenInvoicesWebkit`
 
-        :returns: function bounded to :class:`.AccountAgedTrialBalanceWebkit`
+        :returns: function bounded to :class:`.AccountAgedOpenInvoicesWebkit`
 
         """
         if reconcile_lookup.get(line['rec_id'], 0.0) > 1:
@@ -388,13 +392,6 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
             totals[drange] = sum(x.get(drange, 0.0) for x in aged_ranges)
         return totals
 
-    def compute_percents(self, totals):
-        percents = {}
-        base = totals['balance'] or 1.0
-        for drange in RANGES:
-            percents[drange] = (totals[drange] / base) * 100.0
-        return percents
-
     def get_reconcile_count_lookup(self, lines):
         """Compute an lookup dict
 
@@ -421,9 +418,9 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
         return dict((x[0], x[1]) for x in res)
 
 HeaderFooterTextWebKitParser(
-    'report.account.account_aged_trial_balance_webkit',
+    'report.account.account_aged_open_invoices_webkit',
     'account.account',
     'addons/account_financial_report_webkit/report/templates/\
-                                                    aged_trial_webkit.mako',
-    parser=AccountAgedTrialBalanceWebkit,
+                                            aged_open_invoices_webkit.mako',
+    parser=AccountAgedOpenInvoicesWebkit,
 )

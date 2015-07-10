@@ -10,3 +10,4 @@ from . import partner_balance
 from . import open_invoices
 from . import print_journal
 from . import aged_partner_balance
+from . import aged_open_invoices
