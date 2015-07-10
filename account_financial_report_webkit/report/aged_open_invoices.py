@@ -155,7 +155,6 @@ class AccountAgedOpenInvoicesWebkit(PartnersOpenInvoicesWebkit):
             aged_dict[classif] = 0.0
 
         for acc in self.objects:
-            #print "acc.code=", acc.code
             aged_open_inv[acc.id] = aged_dict.copy()
             aged_open_inv[acc.id]['balance'] = 0.0
 

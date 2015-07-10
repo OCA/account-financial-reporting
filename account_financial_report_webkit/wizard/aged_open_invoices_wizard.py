@@ -33,6 +33,10 @@ class AgedOpenInvoice(orm.TransientModel):
     _name = "aged.open.invoices.webkit"
     _description = "Aged open invoices"
 
+    _defaults = {
+        'filter': 'filter_date',
+    }
+
     def onchange_fiscalyear(self, cr, uid, ids, fiscalyear=False,
                             period_id=False, date_to=False, until_date=False,
                             context=None):
@@ -43,7 +47,6 @@ class AgedOpenInvoice(orm.TransientModel):
         filters = self.onchange_filter(cr, uid, ids, filter='filter_period',
                                        fiscalyear_id=fiscalyear,
                                        context=context)
-        print "filters=", filters
         res['value'].update({
             'period_from': filters['value']['period_from'],
             'period_to': filters['value']['period_to'],
