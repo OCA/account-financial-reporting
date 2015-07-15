@@ -495,12 +495,13 @@ class MisReportInstancePeriod(orm.Model):
             aep.done_parsing(cr, uid, this.report_instance_id.root_account,
                              context=context)
             domain = aep.get_aml_domain_for_expr(
-                expr,
+                cr, uid, expr,
                 this.date_from, this.date_to,
                 this.period_from, this.period_to,
-                this.report_instance_id.target_move)
+                this.report_instance_id.target_move,
+                context=context)
             return {
-                'name': expr + ' - ' + self.name,
+                'name': expr + ' - ' + this.name,
                 'domain': domain,
                 'type': 'ir.actions.act_window',
                 'res_model': 'account.move.line',
@@ -849,7 +850,7 @@ class MisReportInstance(orm.Model):
                     # add comparison values
                     for kpi in r.report_id.kpi_ids:
                         rows_by_kpi_name[kpi.name]['cols'].append({
-                            'val_r': kpi_obj.render_comparison(
+                            'val_r': kpi_obj._render_comparison(
                                 cr,
                                 uid,
                                 lang_id,

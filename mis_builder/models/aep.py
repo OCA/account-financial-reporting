@@ -195,10 +195,10 @@ class AccountingExpressionProcessor(object):
         """Test if an string contains an accounting variable."""
         return bool(cls.ACC_RE.search(expr))
 
-    def get_aml_domain_for_expr(self, expr,
+    def get_aml_domain_for_expr(self, cr, uid, expr,
                                 date_from, date_to,
                                 period_from, period_to,
-                                target_move):
+                                target_move, context=None):
         """ Get a domain on account.move.line for an expression.
 
         Prerequisite: done_parsing() must have been invoked.
@@ -221,9 +221,11 @@ class AccountingExpressionProcessor(object):
             aml_domains.append(expression.normalize_domain(aml_domain))
             if mode not in date_domain_by_mode:
                 date_domain_by_mode[mode] = \
-                    self.get_aml_domain_for_dates(date_from, date_to,
+                    self.get_aml_domain_for_dates(cr, uid,
+                                                  date_from, date_to,
                                                   period_from, period_to,
-                                                  mode, target_move)
+                                                  mode, target_move,
+                                                  context=context)
         return expression.OR(aml_domains) + \
             expression.OR(date_domain_by_mode.values())
 
