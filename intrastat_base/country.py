@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 ##############################################################################
 #
-#    Report intrastat base module for Odoo
+#    Intrastat base module for Odoo
 #    Copyright (C) 2011-2014 Akretion (http://www.akretion.com).
 #    @author Alexis de Lattre <alexis.delattre@akretion.com>
 #

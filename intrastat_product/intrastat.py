@@ -1,10 +1,11 @@
 # -*- encoding: utf-8 -*-
 ##############################################################################
 #
-#    Intrastat Product module for OpenERP
-#    Copyright (C) 2004-2009 Tiny SPRL (http://tiny.be)
-#    Copyright (C) 2010-2014 Akretion (http://www.akretion.com)
+#    Intrastat Product module for Odoo
+#    Copyright (C) 2011-2015 Akretion (http://www.akretion.com)
+#    Copyright (C) 2015 Noviat (http://www.noviat.com)
 #    @author Alexis de Lattre <alexis.delattre@akretion.com>
+#    @author Luc de Meyer <info@noviat.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -25,108 +26,97 @@ from openerp import models, fields, api, _
 from openerp.exceptions import ValidationError
 
 
-class ReportIntrastatCode(models.Model):
-    _name = "report.intrastat.code"
-    _description = "H.S. Code"
-    _order = "name"
-    _rec_name = "display_name"
-
-    @api.one
-    @api.depends('name', 'description')
-    def _compute_display_name(self):
-        display_name = self.name or ''
-        if self.description:
-            display_name += ' ' + self.description
-        self.display_name = display_name
+class IntrastatUnit(models.Model):
+    _name = 'intrastat.unit'
+    _description = 'Intrastat Supplementary Units'
 
     name = fields.Char(
-        string='H.S. code', index=True,
-        help="Full length Harmonized System code (digits only). Full list is "
-        "available from the World Customs Organisation, see "
-        "http://www.wcoomd.org")
+        string='Name', required=True)
     description = fields.Char(
-        'Description', help="Short text description of the H.S. category")
-    display_name = fields.Char(
-        compute='_compute_display_name', string="Display Name", readonly=True,
-        store=True)
-    intrastat_code = fields.Char(
-        string='European Intrastat Code', size=9, required=True, index=True,
-        help="Code used for the Intrastat declaration. Must be part "
-        "of the 'Combined Nomenclature' (CN), cf "
-        "http://en.wikipedia.org/wiki/Combined_Nomenclature"
-        "Must have 8 digits with sometimes a 9th digit.")
-    intrastat_uom_id = fields.Many2one(
-        'product.uom', string='UoM for Intrastat Report',
-        help="Select the unit of measure if one is required for "
-        "this particular Intrastat Code (other than the weight in Kg). "
-        "If no particular unit of measure is required, leave empty.")
-    active = fields.Boolean(default=True)
-    product_categ_ids = fields.One2many(
-        'product.category', 'intrastat_id', string='Product Categories')
-    product_tmpl_ids = fields.One2many(
-        'product.template', 'intrastat_id', string='Products')
+        string='Description', required=True)
+    uom_id = fields.Many2one(
+        'product.uom', string='Regular UoM',
+        help="Select the regular Unit of Measure of Odoo that corresponds "
+        "to this Intrastat Supplementary Unit.")
+    active = fields.Boolean(
+        string='Active', default=True)
 
-    @api.constrains('name', 'intrastat_code')
+
+class HSCode(models.Model):
+    _inherit = "hs.code"
+
+    intrastat_unit_id = fields.Many2one(
+        'intrastat.unit', string='Intrastat Supplementary Unit')
+
+    @api.constrains('local_code')
     def _hs_code(self):
-        if self.name and not self.name.isdigit():
-            raise ValidationError(
-                _("H.S. codes should only contain digits. It is not the case "
-                    "of H.S. code '%s'.") % self.name)
-        if self.intrastat_code and not self.intrastat_code.isdigit():
-            raise ValidationError(
-                _("The field Intrastat Code should only contain digits. "
-                    "It is not the case of Intrastat Code '%s'.")
-                % self.intrastat_code)
-        if self.intrastat_code and len(self.intrastat_code) not in (8, 9):
-            raise ValidationError(
-                _("The field Intrastat Code should "
-                    "contain 8 or 9 digits. It is not the case of "
-                    "Intrastat Code '%s'.")
-                % self.intrastat_code)
+        if self.company_id.country_id.intrastat:
+            if not self.local_code.isdigit():
+                raise ValidationError(
+                    _("Intrastat Codes should only contain digits. "
+                      "This is not the case for code '%s'.")
+                    % self.local_code)
+            if len(self.local_code) != 8:
+                raise ValidationError(
+                    _("Intrastat Codes should "
+                      "contain 8 digits. This is not the case for "
+                      "Intrastat Code '%s' which has %d digits.")
+                    % (self.local_code, len(self.local_code)))
+
+
+class IntrastatTransaction(models.Model):
+    _name = 'intrastat.transaction'
+    _description = "Intrastat Transaction"
+    _order = 'code'
+    _rec_name = 'display_name'
+
+    @api.one
+    @api.depends('code', 'description')
+    def _compute_display_name(self):
+        display_name = self.code
+        if self.description:
+            display_name += ' ' + self.description
+        self.display_name = len(display_name) > 55 \
+            and display_name[:55] + '...' \
+            or display_name
+
+    code = fields.Char(string='Code', required=True)
+    description = fields.Text(string='Description')
+    display_name = fields.Char(
+        compute='_compute_display_name', string="Display Name", readonly=True)
+    company_id = fields.Many2one(
+        'res.company', string='Company',
+        default=lambda self: self.env['res.company']._company_default_get(
+            'intrastat.transaction'))
 
     _sql_constraints = [(
-        'hs_code_uniq',
-        'unique(name)',
-        'This H.S. code already exists in Odoo !'
-        )]
-
-    @api.model
-    @api.returns('self', lambda value: value.id)
-    def create(self, vals):
-        if vals.get('intrastat_code'):
-            vals['intrastat_code'] = vals['intrastat_code'].replace(' ', '')
-        return super(ReportIntrastatCode, self).create(vals)
-
-    @api.multi
-    def write(self, vals):
-        if vals.get('intrastat_code'):
-            vals['intrastat_code'] = vals['intrastat_code'].replace(' ', '')
-        return super(ReportIntrastatCode, self).write(vals)
+        'intrastat_transaction_code_unique',
+        'UNIQUE(code, company_id)',
+        'Code must be unique.')]
 
 
-class ProductTemplate(models.Model):
-    _inherit = "product.template"
+class IntrastatTransportMode(models.Model):
+    _name = 'intrastat.transport_mode'
+    _description = "Intrastat Transport Mode"
+    _rec_name = 'display_name'
+    _order = 'code'
 
-    intrastat_id = fields.Many2one(
-        'report.intrastat.code', string='Intrastat Code',
-        help="Code from the Harmonised System. Nomenclature is "
-        "available from the World Customs Organisation, see "
-        "http://www.wcoomd.org/. Some countries have made their own "
-        "extensions to this nomenclature.")
-    origin_country_id = fields.Many2one(
-        'res.country', string='Country of Origin',
-        help="Country of origin of the product i.e. product "
-        "'made in ____'. If you have different countries of origin "
-        "depending on the supplier from which you purchased the product, "
-        "leave this field empty and use the equivalent field on the "
-        "'product supplier info' form.")
+    @api.one
+    @api.depends('name', 'code')
+    def _display_name(self):
+        print "display_name self=", self
+        print "self.code=", self.code
+        print "self.name=", self.name
+        self.display_name = '%s. %s' % (self.code, self.name)
 
+    display_name = fields.Char(
+        string='Display Name', compute='_display_name', store=True,
+        readonly=True)
+    code = fields.Char(string='Code', required=True)
+    name = fields.Char(string='Name', required=True, translate=True)
+    description = fields.Char(string='Description', translate=True)
 
-class ProductCategory(models.Model):
-    _inherit = "product.category"
-
-    intrastat_id = fields.Many2one(
-        'report.intrastat.code', string='Intrastat Code',
-        help="Code from the Harmonised System. If this code is not "
-        "set on the product itself, it will be read here, on the "
-        "related product category.")
+    _sql_constraints = [(
+        'intrastat_transport_code_unique',
+        'UNIQUE(code)',
+        'Code must be unique.')]

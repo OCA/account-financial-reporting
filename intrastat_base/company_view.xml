@@ -16,7 +16,7 @@
     <field name="arch" type="xml">
         <notebook>
             <page position="inside" string="Intrastat Settings">
-                <group name="intrastat-common" string="Common Intrastat Settings">
+                <group name="intrastat-common" string="Intrastat Settings">
                     <field name="intrastat_remind_user_ids" widget="many2many_tags" />
                 </group>
             </page>

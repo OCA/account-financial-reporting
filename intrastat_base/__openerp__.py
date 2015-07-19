@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 ##############################################################################
 #
-#    Report intrastat base module for Odoo
+#    Intrastat base module for Odoo
 #    Copyright (C) 2011-2015 Akretion (http://www.akretion.com)
 #    @author Alexis de Lattre <alexis.delattre@akretion.com>
 #
@@ -23,7 +23,7 @@
 {
     'name': 'Intrastat Reporting Base',
     'version': '1.1',
-    'category': 'Localisation/Report Intrastat',
+    'category': 'Intrastat',
     'license': 'AGPL-3',
     'summary': 'Base module for Intrastat reporting',
     'author': 'Akretion,Odoo Community Association (OCA)',
@@ -37,7 +37,7 @@
         'country_view.xml',
         'tax_view.xml',
         'company_view.xml',
-        'intrastat_menu.xml',
+        'intrastat_view.xml',
     ],
     'demo': ['intrastat_demo.xml'],
     'installable': True,

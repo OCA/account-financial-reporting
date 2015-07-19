@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 ##############################################################################
 #
-#    Report intrastat base module for Odoo
+#    Intrastat base module for Odoo
 #    Copyright (C) 2010-2014 Akretion (http://www.akretion.com/).
 #    @author Alexis de Lattre <alexis.delattre@akretion.com>
 #
@@ -34,14 +34,14 @@ class ReportIntrastatCommon(models.AbstractModel):
     "and services"
 
     @api.one
-    @api.depends('intrastat_line_ids.amount_company_currency')
+    @api.depends('declaration_line_ids.amount_company_currency')
     def _compute_numbers(self):
         total_amount = 0.0
         num_lines = 0
-        for line in self.intrastat_line_ids:
+        for line in self.declaration_line_ids:
             total_amount += line.amount_company_currency
             num_lines += 1
-        self.num_lines = num_lines
+        self.num_decl_lines = num_lines
         self.total_amount = total_amount
 
     @api.one
@@ -162,3 +162,14 @@ class ReportIntrastatCommon(models.AbstractModel):
                     _('Cannot delete the declaration %s '
                         'because it is in Done state') % self.year_month)
         return super(ReportIntrastatCommon, self).unlink()
+
+
+class IntrastatResultView(models.TransientModel):
+    """
+    Transient Model to display Intrastat Report results
+    """
+    _name = 'intrastat.result.view'
+
+    note = fields.Text(
+        string='Notes', readonly=True,
+        default=lambda self: self._context.get('note'))

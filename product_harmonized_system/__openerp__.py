@@ -1,9 +1,10 @@
 # -*- encoding: utf-8 -*-
 ##############################################################################
 #
-#    Intrastat base module for Odoo
-#    Copyright (C) 2011-2014 Akretion (http://www.akretion.com).
+#    Copyright (C) 2011-2015 Akretion (http://www.akretion.com)
+#    Copyright (C) 2015 Noviat (http://www.noviat.com)
 #    @author Alexis de Lattre <alexis.delattre@akretion.com>
+#    @author Luc de Meyer <info@noviat.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -20,14 +21,21 @@
 #
 ##############################################################################
 
-from openerp import models, fields
-
-
-class AccountTax(models.Model):
-    _inherit = "account.tax"
-
-    exclude_from_intrastat_if_present = fields.Boolean(
-        string='Exclude invoice line from intrastat if this tax is present',
-        help="If this tax is present on an invoice line, this invoice "
-        "line will be skipped when generating Intrastat Product or "
-        "Service lines from invoices.")
+{
+    'name': 'Product Harmonized System Codes',
+    'version': '0.1',
+    'category': 'Reporting',
+    'license': 'AGPL-3',
+    'summary': 'Base module for Product Import/Export reports',
+    'author': 'Akretion, Noviat, Odoo Community Association (OCA)',
+    'depends': ['product'],
+    'conflicts': ['report_intrastat'],
+    'data': [
+        'product_view.xml',
+        'hs_view.xml',
+        'security/product_hs_security.xml',
+        'security/ir.model.access.csv',
+    ],
+    'demo': ['product_demo.xml'],
+    'installable': True,
+}

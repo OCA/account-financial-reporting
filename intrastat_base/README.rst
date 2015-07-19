@@ -9,8 +9,8 @@ such as:
   the module for the *Déclaration Européenne des Services* (DES) for France
 - *l10n_fr_intrastat_product*:
   the module for the *Déclaration d'Echange de Biens* (DEB) for France
-- *l10n_nl_intrastat*:
-  the module for the *Opgaaf IntraCommunautaire Prestaties* (ICP) for the Netherlands.
+- *l10n_be_intrastat_product*:
+  the module for the Intrastat Declaration for Belgium.
 
 These country-specific modules can be found in the OCA localization for those countries.
 

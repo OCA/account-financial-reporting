@@ -1,4 +1,10 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_report_intrastat_code_sale_manager,Full access on report.intrastat.code to sale manager,model_report_intrastat_code,base.group_sale_manager,1,1,1,1
-access_report_intrastat_code_account_manager,Full access on report.intrastat.code to finance manager,model_report_intrastat_code,account.group_account_manager,1,1,1,1
-access_report_intrastat_code_employee,Read access on report.intrastat.code to employee,model_report_intrastat_code,base.group_user,1,0,0,0
+access_intrastat_unit_read,Read access on Intrastat Supplementary Units to everybody,model_intrastat_unit,,1,0,0,0
+access_intrastat_unit_full,Full access on Intrastat Supplementary Units to Finance manager,model_intrastat_unit,account.group_account_manager,1,1,1,1
+access_intrastat_transaction_read,Read access on Intrastat Transaction Types to everybody,model_intrastat_transaction,,1,0,0,0
+access_intrastat_transaction_full,Full access on Intrastat Transaction Types to Finance manager,model_intrastat_transaction,account.group_account_manager,1,1,1,1
+access_intrastat_transport_mode_read,Read access on Intrastat Transport Modes to everybody,model_intrastat_transport_mode,,1,0,0,0
+access_intrastat_transport_mode_full,Full access on Intrastat Transport Modes to Finance manager,model_intrastat_transport_mode,account.group_account_manager,1,1,1,1
+access_intrastat_product_declaration,Full access on Intrastat Product Declarations to Accountant,model_intrastat_product_declaration,account.group_account_user,1,1,1,1
+access_intrastat_product_computation_line,Full access on Intrastat Product Computation Lines to Accountant,model_intrastat_product_computation_line,account.group_account_user,1,1,1,1
+access_intrastat_product_declaration_line,Full access on Intrastat Product Declaration Lines to Accountant,model_intrastat_product_declaration_line,account.group_account_user,1,1,1,1
