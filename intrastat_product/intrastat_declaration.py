@@ -25,8 +25,8 @@ from openerp.exceptions import Warning, RedirectWarning, ValidationError
 import openerp.addons.decimal_precision as dp
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
-from lxml import etree
 import logging
+
 _logger = logging.getLogger(__name__)
 
 
@@ -34,7 +34,7 @@ class IntrastatProductDeclaration(models.Model):
     _name = 'intrastat.product.declaration'
     _description = "Intrastat Product Report Base Object"
     _rec_name = 'year_month'
-    _inherit = ['mail.thread', 'report.intrastat.common']
+    _inherit = ['mail.thread', 'intrastat.common']
     _order = 'year_month desc, type, revision'
     _track = {
         'state': {
@@ -103,8 +103,8 @@ class IntrastatProductDeclaration(models.Model):
 
     company_id = fields.Many2one(
         'res.company', string='Company', readonly=True,
-        default=lambda self: self.env[
-            'res.company']._company_default_get('intrastat.product.declaration'))
+        default=lambda self: self.env['res.company']._company_default_get(
+            'intrastat.product.declaration'))
     year = fields.Integer(
         string='Year', required=True,
         default=_get_year)
@@ -196,7 +196,8 @@ class IntrastatProductDeclaration(models.Model):
     @api.depends('year', 'month')
     def _compute_year_month(self):
         if self.year and self.month:
-            self.year_month = '-'.join([str(self.year), format(self.month, '02')])
+            self.year_month = '-'.join(
+                [str(self.year), format(self.month, '02')])
 
     @api.one
     @api.depends('month')
@@ -209,14 +210,12 @@ class IntrastatProductDeclaration(models.Model):
     def copy(self, default=None):
         default = default or {}
         default['revision'] = self.revision + 1
-        return super(L10nBeReportIntrastatProduct, self).copy(default)
+        return super(IntrastatProductDeclaration, self).copy(default)
 
     def _company_warning(self, msg):
-        xmlid_mod = self.pool['ir.model.data']
-        action_id = xmlid_mod.xmlid_to_res_id(
-            cr, uid, 'base.action_res_company_form')
+        action = self.env.ref('base.action_res_company_form')
         raise RedirectWarning(
-            msg, action_id,
+            msg, action.id,
             _('Go to company configuration screen'))
 
     def _get_partner_country(self, inv_line):
@@ -239,14 +238,12 @@ class IntrastatProductDeclaration(models.Model):
     def _get_region(self, inv_line):
         """
         Logic copied from standard addons, l10n_be_intrastat module:
- 
         If purchase, comes from purchase order, linked to a location,
         which is linked to the warehouse.
 
         If sales, the sale order is linked to the warehouse.
         If sales, from a delivery order, linked to a location,
         which is linked to the warehouse.
-        
         If none found, get the company one.
         """
         region = False
@@ -305,7 +302,7 @@ class IntrastatProductDeclaration(models.Model):
                 note += "\n" + _(
                     "Please correct the Intrastat Supplementary Unit "
                     "settingsand regenerate the lines or adjust the lines "
-                    "with Intrastat Code 'ùs' manually"
+                    "with Intrastat Code '%s' manually"
                     ) % intrastat_code
                 self._note += note
                 return weight, suppl_unit_qty
@@ -318,8 +315,9 @@ class IntrastatProductDeclaration(models.Model):
                     "is not implemented yet."
                     ) % (source_uom.name, target_uom.name)
                 note += "\n" + _(
-                    "Please correct the unit of measure settings and regenerate "
-                    "the lines or adjust the impacted lines manually")
+                    "Please correct the unit of measure settings and "
+                    "regenerate the lines or adjust the impacted "
+                    "lines manually")
                 self._note += note
                 return weight, suppl_unit_qty
 
@@ -353,8 +351,9 @@ class IntrastatProductDeclaration(models.Model):
                     "is not implemented yet."
                     ) % source_uom.name
                 note += "\n" + _(
-                    "Please correct the unit of measure settings and regenerate "
-                    "the lines or adjust the impacted lines manually")
+                    "Please correct the unit of measure settings and "
+                    "regenerate the lines or adjust the impacted lines "
+                    "manually")
                 self._note += note
                 return weight, suppl_unit_qty
 
@@ -391,7 +390,7 @@ class IntrastatProductDeclaration(models.Model):
                     "of the Company is not set, "
                     "please configure it first.")
                 self._company_warning(msg)
-        return transport
+        return incoterm
 
     def _gather_invoices(self):
 
@@ -408,7 +407,7 @@ class IntrastatProductDeclaration(models.Model):
 
         for invoice in invoices:
 
-            if self.type == 'arrivals': 
+            if self.type == 'arrivals':
                 if invoice.type in ['out_invoice', 'in_refund']:
                     continue
             else:
@@ -432,7 +431,8 @@ class IntrastatProductDeclaration(models.Model):
 
                 region = self._get_region(inv_line)
 
-                weight, suppl_unit_qty = self._get_weight_and_supplunits(inv_line)
+                weight, suppl_unit_qty = self._get_weight_and_supplunits(
+                    inv_line)
 
                 amount_company_currency = self._get_amount(inv_line)
 
@@ -456,7 +456,7 @@ class IntrastatProductDeclaration(models.Model):
                     incoterm = self._get_incoterm(inv_line)
                     line_vals.update({
                         'transport_id': transport.id,
-                        'incoterm_id' : incoterm.id,
+                        'incoterm_id': incoterm.id,
                         })
 
                 decl_lines.append((0, 0, line_vals))
@@ -473,10 +473,11 @@ class IntrastatProductDeclaration(models.Model):
             'pce_uom_categ': self.env.ref('product.product_uom_categ_unit'),
             'pce_uom': self.env.ref('product.product_uom_unit')
             }
-        if (self.type == 'arrivals'
-                and self.company_id.intrastat_arrivals == 'extended') or (
-                self.type == 'dispatches'
-                and self.company_id.intrastat_dispatches == 'extended'):
+        if (
+                self.type == 'arrivals' and
+                self.company_id.intrastat_arrivals == 'extended') or (
+                self.type == 'dispatches' and
+                self.company_id.intrastat_dispatches == 'extended'):
             self._extended = True
         else:
             self._extended = False
@@ -515,11 +516,38 @@ class IntrastatProductDeclaration(models.Model):
 
         return True
 
+    @api.model
+    def group_line_hashcode(self, computation_line):
+        hashcode = "%s-%s-%s-%s-%s" % (
+            computation_line.src_dest_country_id.id or False,
+            computation_line.hs_code or False,
+            computation_line.intrastat_unit_id.id or False,
+            computation_line.transaction_id.id or False,
+            computation_line.transport_id.id or False
+            )
+        return hashcode
+
     @api.multi
     def generate_declaration(self):
         """ generate declaration lines """
         self.ensure_one()
-        WIP
+        assert self.valid, 'Computation lines are not valid'
+        # Delete existing declaration lines
+        self.declaration_line_ids.unlink()
+        # Regenerate declaration lines from computation lines
+        dl_group = {}
+        for cl in self.computation_line_ids:
+            hashcode = self.group_line_hashcode(cl)
+            if hashcode in dl_group:
+                dl_group[hashcode].append(cl)
+            else:
+                dl_group[hashcode] = [cl]
+        ipdlo = self.pool['intrastat.product.declaration.line']
+        for cl_lines in dl_group.values():
+            vals = ipdlo._prepare_declaration_line(cl_lines)
+            declaration_line = ipdlo.create(vals)
+            cl_lines.write({'declaration_line_id': declaration_line.id})
+        return True
 
 
 class IntrastatProductComputationLine(models.Model):
@@ -577,7 +605,7 @@ class IntrastatProductComputationLine(models.Model):
         help="Supplementary Units Quantity")
     amount_company_currency = fields.Float(
         string='Fiscal Value',
-        digits= dp.get_precision('Account'), required=True,
+        digits=dp.get_precision('Account'), required=True,
         help="Amount in company currency to write in the declaration. "
         "Amount in company currency = amount in invoice currency "
         "converted to company currency with the rate of the invoice date.")
@@ -602,8 +630,9 @@ class IntrastatProductComputationLine(models.Model):
         self.intrastat_code_id = False
         self.intrastat_unit_id = False
         if self.product_id:
-            self.intrastat_code_id = product.intrastat_id
-            self.intrastat_unit_id = product.intrastat_id.intrastat_unit_id
+            self.intrastat_code_id = self.product_id.intrastat_id
+            self.intrastat_unit_id =\
+                self.product_id.intrastat_id.intrastat_unit_id
             if not self.intrastat_unit_id:
                 self.weight = self.product_id.weight_net
 
@@ -661,3 +690,35 @@ class IntrastatProductDeclarationLine(models.Model):
     transport_id = fields.Many2one(
         'intrastat.transport_mode',
         string='Transport Mode')
+
+    @api.model
+    def _prepare_grouped_fields(computation_line, fields_to_sum):
+        vals = {
+            'src_dest_country_id': computation_line.src_dest_country_id.id,
+            'intrastat_unit_id': computation_line.intrastat_unit_id.id,
+            'hs_code': computation_line.hs_code_id.local_code,
+            'transaction_id': computation_line.transaction_id.id,
+            'transport_id': computation_line.transport_id.id,
+            'parent_id': computation_line.parent_id.id,
+            }
+        for field in fields_to_sum:
+            vals[field] = 0.0
+        return vals
+
+    def _fields_to_sum():
+        fields_to_sum = [
+            'weight',
+            'suppl_unit_qty',
+            'amount_company_currency',
+            ]
+        return fields_to_sum
+
+    @api.model
+    def _prepare_declaration_line(self, computation_lines):
+        fields_to_sum = self._fields_to_sum()
+        vals = self._prepare_grouped_fields(
+            computation_lines[0], fields_to_sum)
+        for computation_line in computation_lines:
+            for field in fields_to_sum:
+                vals[field] += computation_line[field]
+        return vals

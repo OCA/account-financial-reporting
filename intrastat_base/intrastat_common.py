@@ -28,8 +28,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class ReportIntrastatCommon(models.AbstractModel):
-    _name = "report.intrastat.common"
+class IntrastatCommon(models.AbstractModel):
+    _name = "intrastat.common"
     _description = "Common functions for intrastat reports for products "
     "and services"
 
@@ -161,7 +161,7 @@ class ReportIntrastatCommon(models.AbstractModel):
                 raise Warning(
                     _('Cannot delete the declaration %s '
                         'because it is in Done state') % self.year_month)
-        return super(ReportIntrastatCommon, self).unlink()
+        return super(IntrastatCommon, self).unlink()
 
 
 class IntrastatResultView(models.TransientModel):
