@@ -5,7 +5,6 @@
         <record id="account_csv_export_view" model="ir.ui.view">
              <field name="name">Accounting Entries CSV Export</field>
              <field name="model">account.csv.export</field>
-             <field name="type">form</field>
              <field name="arch" type="xml">
                 <form string="Accounting CSV Export" version="7.0">
                     <group colspan="4">
