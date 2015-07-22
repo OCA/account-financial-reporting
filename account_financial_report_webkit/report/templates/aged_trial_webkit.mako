@@ -45,7 +45,7 @@
         <%setLang(user.lang)%>
 
         <div class="act_as_table data_table">
-            <div class="act_as_row labels">
+            <div class="act_as_row labels" style="page-break-inside: avoid">
                 <div class="act_as_cell">${_('Chart of Account')}</div>
                 <div class="act_as_cell">${_('Fiscal Year')}</div>
                 <div class="act_as_cell">
@@ -60,7 +60,7 @@
                 <div class="act_as_cell">${_('Target Moves')}</div>
 
             </div>
-            <div class="act_as_row">
+            <div class="act_as_row" style="page-break-inside: avoid">
                 <div class="act_as_cell">${ chart_account.name }</div>
                 <div class="act_as_cell">${ fiscalyear.name if fiscalyear else '-' }</div>
                 <div class="act_as_cell">
@@ -96,7 +96,7 @@
 
                 <div class="act_as_table list_table" style="margin-top: 5px;">
                   <div class="act_as_thead">
-                    <div class="act_as_row labels">
+                    <div class="act_as_row labels" style="page-break-inside: avoid">
                       ## partner
                       <div class="act_as_cell first_column" style="width: 60px;">${_('Partner')}</div>
                       ## code
@@ -112,7 +112,7 @@
                   <div class="act_as_tbody">
                     %for partner_name, p_id, p_ref, p_name in acc.partners_order:
                        %if acc.aged_lines.get(p_id):
-                       <div class="act_as_row lines">
+                       <div class="act_as_row lines" style="page-break-inside: avoid">
                          <%line = acc.aged_lines[p_id]%>
                          <%percents = acc.aged_percents%>
                          <%totals = acc.aged_totals%>
@@ -128,7 +128,7 @@
                        </div>
                        %endif
                     %endfor
-                    <div class="act_as_row labels">
+                    <div class="act_as_row labels" style="page-break-inside: avoid">
                       <div class="act_as_cell total">${_('Total')}</div>
                       <div class="act_as_cell"></div>
                       <div class="act_as_cell amount classif total">${formatLang(totals['balance']) | amount}</div>
@@ -137,7 +137,7 @@
                       %endfor
                     </div>
 
-                    <div class="act_as_row">
+                    <div class="act_as_row" style="page-break-inside: avoid">
                       <div class="act_as_cell"><b>${_('Percents')}</b></div>
                       <div class="act_as_cell"></div>
                       <div class="act_as_cell"></div>

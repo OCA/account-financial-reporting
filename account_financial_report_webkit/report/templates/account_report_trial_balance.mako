@@ -49,7 +49,7 @@
         %>
 
         <div class="act_as_table data_table">
-            <div class="act_as_row labels">
+            <div class="act_as_row labels" style="page-break-inside: avoid">
                 <div class="act_as_cell">${_('Chart of Account')}</div>
                 <div class="act_as_cell">${_('Fiscal Year')}</div>
                 <div class="act_as_cell">
@@ -63,7 +63,7 @@
                 <div class="act_as_cell">${_('Target Moves')}</div>
                 <div class="act_as_cell">${_('Initial Balance')}</div>
             </div>
-            <div class="act_as_row">
+            <div class="act_as_row" style="page-break-inside: avoid">
                 <div class="act_as_cell">${ chart_account.name }</div>
                 <div class="act_as_cell">${ fiscalyear.name if fiscalyear else '-' }</div>
                 <div class="act_as_cell">
@@ -94,7 +94,7 @@
 
         %for index, params in enumerate(comp_params):
             <div class="act_as_table data_table">
-                <div class="act_as_row">
+                <div class="act_as_row" style="page-break-inside: avoid">
                     <div class="act_as_cell">${_('Comparison %s') % (index + 1,)} (${"C%s" % (index + 1,)})</div>
                     <div class="act_as_cell">
                         %if params['comparison_filter'] == 'filter_date':
@@ -113,7 +113,7 @@
         <div class="act_as_table list_table" style="margin-top: 20px;">
 
             <div class="act_as_thead">
-                <div class="act_as_row labels">
+                <div class="act_as_row labels" style="page-break-inside: avoid">
                     ## code
                     <div class="act_as_cell first_column" style="width: 20px;">${_('Code')}</div>
                     ## account name
@@ -177,7 +177,7 @@
                         last_child_consol_ids = [child_consol_id.id for child_consol_id in current_account.child_consol_ids]
                         last_level = current_account.level
                     %>
-                    <div class="act_as_row lines ${level_class} ${"%s_account_type" % (current_account.type,)}">
+                    <div class="act_as_row lines ${level_class} ${"%s_account_type" % (current_account.type,)}" style="page-break-inside: avoid">
                         ## code
                         <div class="act_as_cell first_column">${current_account.code}</div>
                         ## account name

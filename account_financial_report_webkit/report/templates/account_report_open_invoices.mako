@@ -44,7 +44,7 @@
                 <div class="act_as_cell">${_('Target Moves')}</div>
 
             </div>
-            <div class="act_as_row">
+            <div class="act_as_row" style="page-break-inside: avoid">
                 <div class="act_as_cell">${ chart_account.name }</div>
                 <div class="act_as_cell">${ fiscalyear.name if fiscalyear else '-' }</div>
                 <div class="act_as_cell">
