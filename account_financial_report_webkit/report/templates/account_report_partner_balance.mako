@@ -40,7 +40,7 @@
         %>
 
         <div class="act_as_table data_table">
-            <div class="act_as_row labels">
+            <div class="act_as_row labels"  style="page-break-inside: avoid">
                 <div class="act_as_cell">${_('Chart of Account')}</div>
                 <div class="act_as_cell">${_('Fiscal Year')}</div>
                 <div class="act_as_cell">
@@ -55,7 +55,7 @@
                 <div class="act_as_cell">${_('Target Moves')}</div>
                 <div class="act_as_cell">${_('Initial Balance')}</div>
             </div>
-            <div class="act_as_row">
+            <div class="act_as_row" style="page-break-inside: avoid">
                 <div class="act_as_cell">${ chart_account.name }</div>
                 <div class="act_as_cell">${ fiscalyear.name if fiscalyear else '-' }</div>
                 <div class="act_as_cell">
@@ -87,7 +87,7 @@
 
         %for index, params in enumerate(comp_params):
             <div class="act_as_table data_table">
-                <div class="act_as_row">
+                <div class="act_as_row" style="page-break-inside: avoid">
                     <div class="act_as_cell">${_('Comparison %s') % (index + 1,)} (${"C%s" % (index + 1,)})</div>
                     <div class="act_as_cell">
                         %if params['comparison_filter'] == 'filter_date':
@@ -135,10 +135,10 @@
 
             <div class="account_title bg" style="margin-top: 20px; font-size: 12px; width: 690px;">${current_account.code} - ${current_account.name}</div>
 
-            <div class="act_as_table list_table">
+            <div class="act_as_table list_table" style="page-break-inside: avoid">
 
                 <div class="act_as_thead">
-                    <div class="act_as_row labels">
+                        <div class="act_as_row labels" style="page-break-inside: avoid">
                         ## account name
                         <div class="act_as_cell" style="width: 80px;">${_('Account / Partner Name')}</div>
                         ## code
@@ -203,7 +203,7 @@
                         total_credit += partner.get('credit', 0.0)
                         total_balance += partner.get('balance', 0.0)
                         %>
-                        <div class="act_as_row lines">
+                        <div class="act_as_row lines" style="page-break-inside: avoid">
                             <div class="act_as_cell">${partner_name if partner_name else _('Unallocated') }</div>
                             <div class="act_as_cell first_column">${partner_ref if partner_ref else ''}</div>
                             %if comparison_mode == 'no_comparison':
@@ -244,7 +244,7 @@
 
                 </div>
                 <div class="act_as_tfoot" style="margin-top:5px;">
-                    <div class="act_as_row labels" style="font-weight: bold; font-size: 11x;">
+                    <div class="act_as_row labels" style="font-weight: bold; font-size: 11x; page-break-inside: avoid;">
                         ## account name
                         <div class="act_as_cell">${current_account.name}</div>
                         ## code
