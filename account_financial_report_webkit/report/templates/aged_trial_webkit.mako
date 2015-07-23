@@ -119,10 +119,10 @@
                            <div class="act_as_cell first_column">${partner_name}</div>
                            <div class="act_as_cell">${p_ref or ''}</div>
 
-                           <div class="act_as_cell amount">${formatLang(line.get('balance') or 0.0) | amount}</div>
+                           <div class="act_as_cell amount">${formatLang(line.get('balance') or 0.0, monetary=True) | amount}</div>
                             %for classif in ranges:
                               <div class="act_as_cell classif amount">
-                                ${formatLang(line['aged_lines'][classif] or 0.0) | amount}
+                                ${formatLang(line['aged_lines'][classif] or 0.0, monetary=True) | amount}
                               </div>
                             %endfor
                        </div>
@@ -131,9 +131,9 @@
                     <div class="act_as_row labels">
                       <div class="act_as_cell total">${_('Total')}</div>
                       <div class="act_as_cell"></div>
-                      <div class="act_as_cell amount classif total">${formatLang(totals['balance']) | amount}</div>
+                      <div class="act_as_cell amount classif total">${formatLang(totals['balance'], monetary=True) | amount}</div>
                       %for classif in ranges:
-                        <div class="act_as_cell amount classif total">${formatLang(totals[classif]) | amount}</div>
+                        <div class="act_as_cell amount classif total">${formatLang(totals[classif], monetary=True) | amount}</div>
                       %endfor
                     </div>
 
@@ -142,7 +142,7 @@
                       <div class="act_as_cell"></div>
                       <div class="act_as_cell"></div>
                       %for classif in ranges:
-                        <div class="act_as_cell amount percent_line  classif">${formatLang(percents[classif]) | amount}%</div>
+                        <div class="act_as_cell amount percent_line  classif">${formatLang(percents[classif], monetary=True) | amount}%</div>
                       %endfor
                     </div>
                   </div>
