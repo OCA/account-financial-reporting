@@ -5,7 +5,6 @@
             <field name="name">res.company.form.inherit</field>
             <field name="inherit_id" ref="base.view_company_form"/>
             <field name="model">res.company</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <notebook position="inside">
                     <page string="Account's Sign on Reports" position="inside">

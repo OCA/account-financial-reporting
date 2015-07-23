@@ -5,7 +5,6 @@
         <record id="wizard_report_view" model="ir.ui.view">
             <field name="name">Account Financial Report (Template)</field>
             <field name="model">wizard.report</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Account Financial Report" version="7.0">
                     <header>
