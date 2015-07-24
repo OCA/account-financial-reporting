@@ -30,9 +30,7 @@
         per account. This is useful if the customer has many lines.
     """,
     'depends': ['account_financial_report_webkit'],
-    'demo_xml': [],
-    'init_xml': [],
-    'update_xml': [
+    'data': [
         'report.xml',
         'wizard/general_ledger_wizard_view.xml',
         'wizard/partners_ledger_wizard_view.xml',
