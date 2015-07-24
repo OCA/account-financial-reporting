@@ -147,9 +147,8 @@ class PartnersLedgerWebkit(report_sxw.rml_parse,
             accounts, main_filter, target_move, start, stop,
             partner_filter=partner_ids)
         objects = []
-        for account in self.pool.get('account.account').browse(self.cursor,
-                                                               self.uid,
-                                                               accounts):
+        for account in self.pool.get('account.account').browse(
+                self.cursor, self.uid, accounts, context=self.localcontext):
             account.ledger_lines = ledger_lines.get(account.id, {})
             account.init_balance = initial_balance_lines.get(account.id, {})
             # we have to compute partner order based on inital balance

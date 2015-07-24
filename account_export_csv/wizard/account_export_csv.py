@@ -93,6 +93,13 @@ class AccountCSVExport(orm.TransientModel):
             'journal_id',
             'Journals',
             help='If empty, use all journals, only used for journal entries'),
+        'account_ids': fields.many2many(
+            'account.account',
+            'rel_wizard_account',
+            'wizard_id',
+            'account_id',
+            'Accounts',
+            help='If empty, use all accounts, only used for journal entries'),
         'export_filename': fields.char('Export CSV Filename', size=128),
     }
 
@@ -146,6 +153,7 @@ class AccountCSVExport(orm.TransientModel):
                           fiscalyear_id,
                           period_range_ids,
                           journal_ids,
+                          account_ids,
                           context=None):
         """
         Return list to generate rows of the CSV file
@@ -208,6 +216,7 @@ class AccountCSVExport(orm.TransientModel):
                            fiscalyear_id,
                            period_range_ids,
                            journal_ids,
+                           account_ids,
                            context=None):
         """
         Return list to generate rows of the CSV file
@@ -314,6 +323,7 @@ class AccountCSVExport(orm.TransientModel):
                                   fiscalyear_id,
                                   period_range_ids,
                                   journal_ids,
+                                  account_ids,
                                   context=None):
         """
         Create a generator of rows of the CSV file
@@ -372,10 +382,12 @@ class AccountCSVExport(orm.TransientModel):
             (account_bank_statement.id=account_move_line.statement_id)
         WHERE account_period.id IN %(period_ids)s
         AND account_journal.id IN %(journal_ids)s
+        AND account_account.id IN %(account_ids)s
         ORDER BY account_move_line.date
         """,
-                   {'period_ids': tuple(
-                       period_range_ids), 'journal_ids': tuple(journal_ids)}
+                   {'period_ids': tuple(period_range_ids),
+                    'journal_ids': tuple(journal_ids),
+                    'account_ids': tuple(account_ids)}
                    )
         while 1:
             # http://initd.org/psycopg/docs/cursor.html#cursor.fetchmany
@@ -407,12 +419,19 @@ class AccountCSVExport(orm.TransientModel):
         else:
             j_obj = self.pool.get("account.journal")
             journal_ids = j_obj.search(cr, uid, [], context=context)
+        account_ids = None
+        if form.account_ids:
+            account_ids = [x.id for x in form.account_ids]
+        else:
+            aa_obj = self.pool.get("account.account")
+            account_ids = aa_obj.search(cr, uid, [], context=context)
         rows = itertools.chain((get_header_func(cr, uid, ids,
                                                 context=context),),
                                get_rows_func(cr, uid, ids,
                                              fiscalyear_id,
                                              period_range_ids,
                                              journal_ids,
+                                             account_ids,
                                              context=context)
                                )
         return rows

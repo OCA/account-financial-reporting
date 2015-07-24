@@ -532,8 +532,8 @@ class open_invoices_xls(report_xls):
         credit_partner_total = 'SUM(' + credit_partner_start + \
             ':' + credit_partner_end + ')'
 
-        bal_curr_start = rowcol_to_cell(row_start_partner, start_col + 5)
-        bal_curr_end = rowcol_to_cell(row_position - 1, start_col + 5)
+        bal_curr_start = rowcol_to_cell(row_start_partner, start_col + 6)
+        bal_curr_end = rowcol_to_cell(row_position - 1, start_col + 6)
         cumul_balance_curr = 'SUM(' + bal_curr_start + ':' + bal_curr_end + ')'
 
         bal_partner_debit = rowcol_to_cell(row_position, start_col + 3)

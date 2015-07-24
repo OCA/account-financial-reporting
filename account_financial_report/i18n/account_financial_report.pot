@@ -1,0 +1,720 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* account_financial_report
+#
+# Rudolf Schnapka <schnapkar@golive-saar.de>, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-06-17 21:47+0000\n"
+"PO-Revision-Date: 2015-01-03 18:41+0100\n"
+"Last-Translator: Rudolf Schnapka <schnapkar@golive-saar.de>\n"
+"Language-Team: German <kde-i18n-de@kde.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+"Language: de\n"
+"X-Generator: Lokalize 1.5\n"
+
+#. module: account_financial_report
+#: view:res.company:0
+msgid ""
+"Reverse sign on Reports for these accounts and children accounts that are "
+"within Debitable Accounts"
+msgstr ""
+
+#. module: account_financial_report
+#: selection:afr,filter:0
+#: selection:wizard.report,filter:0
+msgid "No Filter"
+msgstr ""
+
+#. module: account_financial_report
+#: selection:afr,display_account:0
+#: selection:wizard.report,display_account:0
+msgid "With Balance / Movements"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.actions.report.xml,name:account_financial_report.4_col_report
+msgid "Balance 4 Columnas"
+msgstr ""
+
+#. module: account_financial_report
+#: view:res.company:0
+msgid ""
+"An accreditable account is one which grows in the credit and diminishes in "
+"the debit"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.1cols:0
+#: report:afr.4cols:0
+#: report:afr.analytic.ledger:0
+msgid "BALANCE"
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/parser.py:85
+#: selection:afr,inf_type:0
+#: selection:wizard.report,inf_type:0
+#, python-format
+msgid "Balance Sheet"
+msgstr ""
+
+#. module: account_financial_report
+#: field:afr,company_id:0
+#: field:wizard.report,company_id:0
+msgid "Company"
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/wizard/wizard.py:150
+#, python-format
+msgid "Write a Description for your Summary Total"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.actions.report.xml,name:account_financial_report.5_col_report
+msgid "Balance 5 Columnas"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.actions.report.xml,name:account_financial_report.qtr_col_report
+msgid "Balance QTRs Columnas"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.5cols:0
+msgid "INIT. BAL."
+msgstr ""
+
+#. module: account_financial_report
+#: selection:afr,filter:0
+#: selection:wizard.report,filter:0
+msgid "By Date and Period"
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/model/account_financial_report.py:77
+#, python-format
+msgid "Copy of %s"
+msgstr ""
+
+#. module: account_financial_report
+#: field:afr,account_ids:0
+#: field:wizard.report,account_list:0
+msgid "Root accounts"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.5cols:0
+#: report:afr.analytic.ledger:0
+msgid "PERIOD"
+msgstr ""
+
+#. module: account_financial_report
+#: selection:afr,display_account:0
+#: selection:wizard.report,display_account:0
+msgid "With Balance"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.13cols:0
+msgid "12"
+msgstr ""
+
+#. module: account_financial_report
+#: selection:afr,filter:0
+#: selection:wizard.report,filter:0
+msgid "By Date"
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/wizard/wizard.py:242
+#, python-format
+msgid "La interseccion entre el periodo y fecha es vacio"
+msgstr ""
+
+#. module: account_financial_report
+#: view:afr:0
+#: view:wizard.report:0
+msgid "Company Info"
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/parser.py:344
+#: code:addons/account_financial_report/wizard/wizard.py:189
+#: code:addons/account_financial_report/wizard/wizard.py:193
+#, python-format
+msgid "UserError"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.analytic.ledger:0
+msgid "JOURNAL ENTRY"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.2cols:0
+#: report:afr.4cols:0
+#: report:afr.5cols:0
+#: report:afr.analytic.ledger:0
+msgid "CREDIT"
+msgstr ""
+
+#. module: account_financial_report
+#: view:wizard.report:0
+msgid "_Cancel"
+msgstr ""
+
+#. module: account_financial_report
+#: view:res.company:0
+msgid "Account's Sign on Reports"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.actions.report.xml,name:account_financial_report.2_col_report
+msgid "Balance 2 Columnas"
+msgstr ""
+
+#. module: account_financial_report
+#: selection:afr,columns:0
+#: selection:wizard.report,columns:0
+msgid "Debit | Credit"
+msgstr ""
+
+#. module: account_financial_report
+#: view:afr:0
+#: view:wizard.report:0
+msgid "Please check the [ Account's Sign on Reports ] Section in the Company"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.13cols:0
+#: report:afr.1cols:0
+#: report:afr.2cols:0
+#: report:afr.4cols:0
+#: report:afr.analytic.ledger:0
+#: report:afr.qtrcols:0
+msgid "CODE"
+msgstr ""
+
+#. module: account_financial_report
+#: view:res.company:0
+msgid ""
+"A debitable account is one which grows in the debit and diminishes in the "
+"credit"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.5cols:0
+msgid "(Expressed in"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.4cols:0
+#: report:afr.analytic.ledger:0
+msgid "INITIAL"
+msgstr ""
+
+#. module: account_financial_report
+#: field:wizard.report,afr_id:0
+msgid "Custom Report"
+msgstr ""
+
+#. module: account_financial_report
+#: field:afr,date_from:0
+#: field:wizard.report,date_from:0
+msgid "Start date"
+msgstr ""
+
+#. module: account_financial_report
+#: view:afr:0
+#: view:wizard.report:0
+msgid "Accounts to Include"
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/parser.py:100
+#: code:addons/account_financial_report/report/parser.py:109
+#, python-format
+msgid " to "
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.13cols:0
+msgid "02"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.13cols:0
+msgid "03"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.13cols:0
+msgid "01"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.13cols:0
+msgid "06"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.13cols:0
+msgid "07"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.13cols:0
+msgid "04"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.13cols:0
+msgid "05"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.13cols:0
+msgid "08"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.13cols:0
+msgid "09"
+msgstr ""
+
+#. module: account_financial_report
+#: view:afr:0
+#: model:ir.ui.menu,name:account_financial_report.account_financial_report_menu
+msgid "Account Financial Report (Templates)"
+msgstr ""
+
+#. module: account_financial_report
+#: field:afr,fiscalyear_id:0
+#: field:wizard.report,fiscalyear:0
+msgid "Fiscal year"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.actions.act_window,help:account_financial_report.account_financial_report_action
+msgid ""
+"Create your own Customized Account Financial Reports, in here, you will be "
+"able to create Templates for generating Two types of Reports: Balance Sheets "
+"and Income Statements, incluiding Analytic Ledgers. Besides, you can select "
+"within a set of choices to get better detailed report, be it that you ask it "
+"by one or several periods, by months (12 Months + YTD), or by quarters "
+"(4QRT's + YTD). Even you can get your reports in currencies other than the "
+"one set on your company."
+msgstr ""
+
+#. module: account_financial_report
+#: field:res.company,credit_account_ids:0
+msgid "Creditable Accounts"
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/parser.py:344
+#, python-format
+msgid "The Selected Fiscal Year Does not have Regular Periods"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.13cols:0
+#: report:afr.5cols:0
+#: report:afr.qtrcols:0
+msgid "YTD"
+msgstr ""
+
+#. module: account_financial_report
+#: view:afr:0
+#: view:wizard.report:0
+msgid "Periods to Include"
+msgstr ""
+
+#. module: account_financial_report
+#: selection:afr,display_account:0
+#: selection:wizard.report,display_account:0
+msgid "With movements"
+msgstr ""
+
+#. module: account_financial_report
+#: field:afr,currency_id:0
+#: field:wizard.report,currency_id:0
+msgid "Currency"
+msgstr ""
+
+#. module: account_financial_report
+#: field:afr,display_account:0
+#: field:wizard.report,display_account:0
+msgid "Display accounts"
+msgstr ""
+
+#. module: account_financial_report
+#: field:afr,display_account_level:0
+#: field:wizard.report,display_account_level:0
+msgid "Up to level"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.analytic.ledger:0
+msgid "PARTNER"
+msgstr ""
+
+#. module: account_financial_report
+#: help:afr,currency_id:0
+#: help:wizard.report,currency_id:0
+msgid ""
+"Currency at which this report will be expressed. If not selected will be used "
+"the one set in the company"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.13cols:0
+#: report:afr.1cols:0
+#: report:afr.2cols:0
+#: report:afr.4cols:0
+#: report:afr.5cols:0
+#: report:afr.analytic.ledger:0
+#: report:afr.qtrcols:0
+msgid "ACCOUNT"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.analytic.ledger:0
+msgid "Pag.:"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.2cols:0
+#: report:afr.4cols:0
+#: report:afr.5cols:0
+#: report:afr.analytic.ledger:0
+msgid "DEBIT"
+msgstr ""
+
+#. module: account_financial_report
+#: field:afr,columns:0
+#: field:wizard.report,columns:0
+msgid "Columns"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.analytic.ledger:0
+msgid "REFERENCE"
+msgstr ""
+
+#. module: account_financial_report
+#: selection:afr,filter:0
+#: selection:wizard.report,filter:0
+msgid "By Period"
+msgstr ""
+
+#. module: account_financial_report
+#: selection:afr,columns:0
+#: selection:wizard.report,columns:0
+msgid "4 QTR's | YTD"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.actions.act_window,name:account_financial_report.action_wizard_report
+#: model:ir.ui.menu,name:account_financial_report.menu_wizard_report
+msgid "Account Financial Report (Multireports)"
+msgstr ""
+
+#. module: account_financial_report
+#: view:afr:0
+#: view:wizard.report:0
+msgid "Accounts Info"
+msgstr ""
+
+#. module: account_financial_report
+#: help:afr,display_account_level:0
+#: help:wizard.report,display_account_level:0
+msgid "Display accounts up to this level (0 to show all)"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_res_company
+msgid "Companies"
+msgstr ""
+
+#. module: account_financial_report
+#: help:afr,fiscalyear_id:0
+#: help:wizard.report,fiscalyear:0
+msgid "Fiscal Year for this report"
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/parser.py:87
+#: selection:afr,inf_type:0
+#: selection:wizard.report,inf_type:0
+#, python-format
+msgid "Income Statement"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.13cols:0
+#: report:afr.1cols:0
+#: report:afr.2cols:0
+#: report:afr.4cols:0
+#: report:afr.5cols:0
+#: report:afr.qtrcols:0
+msgid "/  Pág.:"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.actions.act_window,name:account_financial_report.account_financial_report_action
+#: model:res.groups,name:account_financial_report.group_afreport
+#: view:wizard.report:0
+msgid "Account Financial Report"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.13cols:0
+msgid "11"
+msgstr "11"
+
+#. module: account_financial_report
+#: report:afr.13cols:0
+msgid "10"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.5cols:0
+msgid "Code"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.actions.report.xml,name:account_financial_report.1_col_report
+msgid "Balance 1 Columna"
+msgstr ""
+
+#. module: account_financial_report
+#: view:wizard.report:0
+msgid "Print"
+msgstr ""
+
+#. module: account_financial_report
+#: field:afr,filter:0
+#: field:wizard.report,filter:0
+msgid "Date/Period Filter"
+msgstr ""
+
+#. module: account_financial_report
+#: view:afr:0
+#: view:wizard.report:0
+msgid "FiscalYear Info"
+msgstr ""
+
+#. module: account_financial_report
+#: selection:afr,columns:0
+#: selection:wizard.report,columns:0
+msgid "Initial | Debit | Credit | YTD"
+msgstr ""
+
+#. module: account_financial_report
+#: field:afr,period_ids:0
+#: field:wizard.report,periods:0
+msgid "Periods"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.qtrcols:0
+msgid "Q1"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.qtrcols:0
+msgid "Q3"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.qtrcols:0
+msgid "Q2"
+msgstr ""
+
+#. module: account_financial_report
+#: report:afr.qtrcols:0
+msgid "Q4"
+msgstr ""
+
+#. module: account_financial_report
+#: help:afr,analytic_ledger:0
+#: help:wizard.report,analytic_ledger:0
+msgid ""
+"Allows to Generate an Analytic Ledger for accounts with moves. Available when "
+"Balance Sheet and 'Initial | Debit | Credit | YTD' are selected"
+msgstr ""
+
+#. module: account_financial_report
+#: help:wizard.report,afr_id:0
+msgid "If you have already set a Custom Report, Select it Here."
+msgstr ""
+
+#. module: account_financial_report
+#: selection:afr,columns:0
+#: selection:wizard.report,columns:0
+msgid "Initial | Debit | Credit | Period | YTD"
+msgstr ""
+
+#. module: account_financial_report
+#: selection:afr,columns:0
+#: selection:wizard.report,columns:0
+msgid "End. Balance"
+msgstr "Bal. Final"
+
+#. module: account_financial_report
+#: report:afr.analytic.ledger:0
+msgid "DATE"
+msgstr ""
+
+#. module: account_financial_report
+#: view:res.company:0
+msgid ""
+"Keep sign on Reports for these accounts and children accounts that are within "
+"Accreditable Accounts"
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/parser.py:100
+#: code:addons/account_financial_report/report/parser.py:109
+#, python-format
+msgid "From "
+msgstr ""
+
+#. module: account_financial_report
+#: field:afr,inf_type:0
+#: field:wizard.report,inf_type:0
+msgid "Type"
+msgstr ""
+
+#. module: account_financial_report
+#: field:afr,date_to:0
+#: field:wizard.report,date_to:0
+msgid "End date"
+msgstr ""
+
+#. module: account_financial_report
+#: view:afr:0
+#: view:wizard.report:0
+msgid "Account's Sign Conventions"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.actions.report.xml,name:account_financial_report.13_col_report
+msgid "Balance 13 Columnas"
+msgstr ""
+
+#. module: account_financial_report
+#: view:res.company:0
+msgid "Accreditable Accounts"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_afr
+msgid "afr"
+msgstr ""
+
+#. module: account_financial_report
+#: field:afr,name:0
+msgid "Name"
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/parser.py:83
+#: field:afr,analytic_ledger:0
+#: model:ir.actions.report.xml,name:account_financial_report.analytic_ledger_report
+#: field:wizard.report,analytic_ledger:0
+#, python-format
+msgid "Analytic Ledger"
+msgstr ""
+
+#. module: account_financial_report
+#: view:res.company:0
+#: field:res.company,debit_account_ids:0
+msgid "Debitable Accounts"
+msgstr ""
+
+#. module: account_financial_report
+#: help:afr,period_ids:0
+#: help:wizard.report,periods:0
+msgid "All periods in the fiscal year if empty"
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/wizard/wizard.py:179
+#: code:addons/account_financial_report/wizard/wizard.py:242
+#, python-format
+msgid "Error !"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_wizard_report
+msgid "wizard.report"
+msgstr ""
+
+#. module: account_financial_report
+#: field:afr,lab_str:0
+#: field:wizard.report,lab_str:0
+msgid "Description"
+msgstr ""
+
+#. module: account_financial_report
+#: view:afr:0
+#: view:wizard.report:0
+msgid "Report Info"
+msgstr ""
+
+#. module: account_financial_report
+#: selection:afr,display_account:0
+#: selection:wizard.report,display_account:0
+msgid "All Accounts"
+msgstr ""
+
+#. module: account_financial_report
+#: field:afr,tot_check:0
+#: field:wizard.report,tot_check:0
+msgid "Summarize?"
+msgstr ""
+
+#. module: account_financial_report
+#: help:afr,tot_check:0
+#: help:wizard.report,tot_check:0
+msgid ""
+"Checking will add a new line at the end of the Report which will Summarize "
+"Columns in Report"
+msgstr ""
+
+#. module: account_financial_report
+#: help:afr,lab_str:0
+#: help:wizard.report,lab_str:0
+msgid "Description for the Summary"
+msgstr ""
+
+#. module: account_financial_report
+#: selection:afr,columns:0
+#: selection:wizard.report,columns:0
+msgid "12 Months | YTD"
+msgstr ""
+
+#. module: account_financial_report
+#: view:afr:0
+#: view:wizard.report:0
+msgid "Total"
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/parser.py:82
+#, python-format
+msgid ""
+"\n"
+"VAT OF COMPANY NOT AVAILABLE"
+msgstr ""
+
+

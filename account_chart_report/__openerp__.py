@@ -38,7 +38,7 @@ Contributors
 * Mathieu Benoit (mathieu.benoit@savoirfairelinux.com)
 
     """,
-    'author': 'Savoir-faire Linux',
+    'author': "Savoir-faire Linux,Odoo Community Association (OCA)",
     'website': 'http://www.savoirfairelinux.com',
     'depends': [
         'base',

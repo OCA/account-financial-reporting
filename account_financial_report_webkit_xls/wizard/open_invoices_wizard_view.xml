@@ -5,7 +5,6 @@
     <record id="open_invoices_webkit_xls_wizard_view" model="ir.ui.view">
       <field name="name">open.invoices.webkit.xls</field>
       <field name="model">open.invoices.webkit</field>
-      <field name="type">form</field>
       <field name="inherit_id" ref="account_financial_report_webkit.account_open_invoices_view_webkit"/>
       <field name="arch" type="xml">
         <data>

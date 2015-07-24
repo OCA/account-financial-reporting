@@ -30,10 +30,22 @@ from openerp.tools.translate import _
 # import logging
 # _logger = logging.getLogger(__name__)
 
+
+class GeneralLedgerWebkitSupplier(GeneralLedgerWebkit):
+    """ Extends General Ledger Parser to add the supplier invoice
+    number in the move lines """
+
+    def _get_move_line_select(self):
+        res = super(GeneralLedgerWebkitSupplier, self)._get_move_line_select()
+        return res + """
+            , i.supplier_invoice_number AS supplier_invoice_number
+        """
+
 _column_sizes = [
     ('date', 12),
     ('period', 12),
     ('move', 20),
+    ('supp_inv_no', 22),
     ('journal', 12),
     ('account_code', 12),
     ('partner', 30),
@@ -45,6 +57,17 @@ _column_sizes = [
     ('curr_bal', 15),
     ('curr_code', 7),
 ]
+
+# Header column spans
+COLS_COA = 3
+COLS_FY = 1
+COLS_DF = 3
+COLS_AF = 1
+COLS_TM = 2
+COLS_IB = 2
+
+# Full column span
+COLS_TOT = sum((COLS_COA, COLS_FY, COLS_DF, COLS_AF, COLS_TM, COLS_IB))
 
 
 class general_ledger_xls(report_xls):
@@ -74,7 +97,7 @@ class general_ledger_xls(report_xls):
                                   _p.company.partner_id.name,
                                   _p.company.currency_id.name])
         c_specs = [
-            ('report_name', 1, 0, 'text', report_name),
+            ('report_name', COLS_TOT, 0, 'text', report_name),
         ]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
         row_pos = self.xls_write_row(
@@ -93,13 +116,13 @@ class general_ledger_xls(report_xls):
         cell_style = xlwt.easyxf(cell_format)
         cell_style_center = xlwt.easyxf(cell_format + _xs['center'])
         c_specs = [
-            ('coa', 2, 0, 'text', _('Chart of Account')),
-            ('fy', 1, 0, 'text', _('Fiscal Year')),
-            ('df', 3, 0, 'text', _p.filter_form(data) ==
+            ('coa', COLS_COA, 0, 'text', _('Chart of Account')),
+            ('fy', COLS_FY, 0, 'text', _('Fiscal Year')),
+            ('df', COLS_DF, 0, 'text', _p.filter_form(data) ==
              'filter_date' and _('Dates Filter') or _('Periods Filter')),
-            ('af', 1, 0, 'text', _('Accounts Filter')),
-            ('tm', 2, 0, 'text',  _('Target Moves')),
-            ('ib', 2, 0, 'text',  _('Initial Balance')),
+            ('af', COLS_AF, 0, 'text', _('Accounts Filter')),
+            ('tm', COLS_TM, 0, 'text', _('Target Moves')),
+            ('ib', COLS_IB, 0, 'text', _('Initial Balance')),
 
         ]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
@@ -110,8 +133,9 @@ class general_ledger_xls(report_xls):
         cell_style = xlwt.easyxf(cell_format)
         cell_style_center = xlwt.easyxf(cell_format + _xs['center'])
         c_specs = [
-            ('coa', 2, 0, 'text', _p.chart_account.name),
-            ('fy', 1, 0, 'text', _p.fiscalyear.name if _p.fiscalyear else '-'),
+            ('coa', COLS_COA, 0, 'text', _p.chart_account.name),
+            ('fy', COLS_FY, 0, 'text',
+             _p.fiscalyear.name if _p.fiscalyear else '-'),
         ]
         df = _('From') + ': '
         if _p.filter_form(data) == 'filter_date':
@@ -124,11 +148,11 @@ class general_ledger_xls(report_xls):
         else:
             df += _p.stop_period.name if _p.stop_period else u''
         c_specs += [
-            ('df', 3, 0, 'text', df),
-            ('af', 1, 0, 'text', _p.accounts(data) and ', '.join(
+            ('df', COLS_DF, 0, 'text', df),
+            ('af', COLS_AF, 0, 'text', _p.accounts(data) and ', '.join(
                 [account.code for account in _p.accounts(data)]) or _('All')),
-            ('tm', 2, 0, 'text', _p.display_target_move(data)),
-            ('ib', 2, 0, 'text', initial_balance_text[
+            ('tm', COLS_TM, 0, 'text', _p.display_target_move(data)),
+            ('ib', COLS_IB, 0, 'text', initial_balance_text[
              _p.initial_balance_mode]),
         ]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
@@ -161,6 +185,8 @@ class general_ledger_xls(report_xls):
             ('date', 1, 0, 'text', _('Date'), None, c_hdr_cell_style),
             ('period', 1, 0, 'text', _('Period'), None, c_hdr_cell_style),
             ('move', 1, 0, 'text', _('Entry'), None, c_hdr_cell_style),
+            ('supp_inv_no', 1, 0, 'text', _('Supplier Invoice Number'),
+             None, c_hdr_cell_style),
             ('journal', 1, 0, 'text', _('Journal'), None, c_hdr_cell_style),
             ('account_code', 1, 0, 'text',
              _('Account'), None, c_hdr_cell_style),
@@ -212,7 +238,7 @@ class general_ledger_xls(report_xls):
                 cumul_balance = 0.0
                 cumul_balance_curr = 0.0
                 c_specs = [
-                    ('acc_title', 11, 0, 'text',
+                    ('acc_title', COLS_TOT, 0, 'text',
                      ' - '.join([account.code, account.name])),
                 ]
                 row_data = self.xls_row_template(
@@ -230,7 +256,7 @@ class general_ledger_xls(report_xls):
                     cumul_balance_curr = account.init_balance.get(
                         'init_balance_currency') or 0.0
                     c_specs = [('empty%s' % x, 1, 0, 'text', None)
-                               for x in range(6)]
+                               for x in range(7)]
                     c_specs += [
                         ('init_bal', 1, 0, 'text', _('Initial Balance')),
                         ('counterpart', 1, 0, 'text', None),
@@ -278,6 +304,8 @@ class general_ledger_xls(report_xls):
                         ('period', 1, 0, 'text',
                          line.get('period_code') or ''),
                         ('move', 1, 0, 'text', line.get('move_name') or ''),
+                        ('supp_inv_no', 1, 0, 'text',
+                         line.get('supplier_invoice_number') or ''),
                         ('journal', 1, 0, 'text', line.get('jcode') or ''),
                         ('account_code', 1, 0, 'text', account.code),
                         ('partner', 1, 0, 'text',
@@ -306,17 +334,17 @@ class general_ledger_xls(report_xls):
                     row_pos = self.xls_write_row(
                         ws, row_pos, row_data, ll_cell_style)
 
-                debit_start = rowcol_to_cell(row_start, 8)
-                debit_end = rowcol_to_cell(row_pos - 1, 8)
+                debit_start = rowcol_to_cell(row_start, 9)
+                debit_end = rowcol_to_cell(row_pos - 1, 9)
                 debit_formula = 'SUM(' + debit_start + ':' + debit_end + ')'
-                credit_start = rowcol_to_cell(row_start, 9)
-                credit_end = rowcol_to_cell(row_pos - 1, 9)
+                credit_start = rowcol_to_cell(row_start, 10)
+                credit_end = rowcol_to_cell(row_pos - 1, 10)
                 credit_formula = 'SUM(' + credit_start + ':' + credit_end + ')'
-                balance_debit = rowcol_to_cell(row_pos, 8)
-                balance_credit = rowcol_to_cell(row_pos, 9)
+                balance_debit = rowcol_to_cell(row_pos, 9)
+                balance_credit = rowcol_to_cell(row_pos, 10)
                 balance_formula = balance_debit + '-' + balance_credit
                 c_specs = [
-                    ('acc_title', 7, 0, 'text',
+                    ('acc_title', COLS_TOT - 4, 0, 'text',
                      ' - '.join([account.code, account.name])),
                     ('cum_bal', 1, 0, 'text',
                      _('Cumulated Balance on Account'),
@@ -344,4 +372,4 @@ class general_ledger_xls(report_xls):
 
 general_ledger_xls('report.account.account_report_general_ledger_xls',
                    'account.account',
-                   parser=GeneralLedgerWebkit)
+                   parser=GeneralLedgerWebkitSupplier)

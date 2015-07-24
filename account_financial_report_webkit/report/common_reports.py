@@ -492,23 +492,14 @@ class CommonReportHeaderWebkit(common_report_header):
             raise osv.except_osv(
                 _('No valid filter'), _('Please set a valid time filter'))
 
-    def _get_move_line_datas(self, move_line_ids,
-                             order='per.special DESC, l.date ASC, \
-                             per.date_start ASC, m.name ASC'):
-        # Possible bang if move_line_ids is too long
-        # We can not slice here as we have to do the sort.
-        # If slice has to be done it means that we have to reorder in python
-        # after all is finished. That quite crapy...
-        # We have a defective desing here (mea culpa) that should be fixed
-        #
-        # TODO improve that by making a better domain or if not possible
-        # by using python sort
-        if not move_line_ids:
-            return []
-        if not isinstance(move_line_ids, list):
-            move_line_ids = [move_line_ids]
-        monster = """
-SELECT l.id AS id,
+    def _get_move_line_select(self):
+        '''
+        Get the columns to put in the SQL SELECT for _get_move_line_datas
+
+        See _get_move_line_datas for available tables and aliases
+        '''
+        return """
+            l.id AS id,
             l.date AS ldate,
             j.code AS jcode ,
             j.type AS jtype,
@@ -534,18 +525,46 @@ SELECT l.id AS id,
             i.type AS invoice_type,
             i.number AS invoice_number,
             l.date_maturity
-FROM account_move_line l
-    JOIN account_move m on (l.move_id=m.id)
-    LEFT JOIN res_currency c on (l.currency_id=c.id)
-    LEFT JOIN account_move_reconcile partialrec
-        on (l.reconcile_partial_id = partialrec.id)
-    LEFT JOIN account_move_reconcile fullrec on (l.reconcile_id = fullrec.id)
-    LEFT JOIN res_partner p on (l.partner_id=p.id)
-    LEFT JOIN account_invoice i on (m.id =i.move_id)
-    LEFT JOIN account_period per on (per.id=l.period_id)
-    JOIN account_journal j on (l.journal_id=j.id)
-    WHERE l.id in %s"""
-        monster += (" ORDER BY %s" % (order,))
+        """
+
+    def _get_move_line_order(self):
+        ''' Get the default SQL ORDER statement for _get_move_line_datas '''
+        return 'per.special DESC, l.date ASC, per.date_start ASC, m.name ASC'
+
+    def _get_move_line_datas(self, move_line_ids, order=None):
+        if order is None:
+            order = self._get_move_line_order()
+        # Possible bang if move_line_ids is too long
+        # We can not slice here as we have to do the sort.
+        # If slice has to be done it means that we have to reorder in python
+        # after all is finished. That quite crapy...
+        # We have a defective desing here (mea culpa) that should be fixed
+        #
+        # TODO improve that by making a better domain or if not possible
+        # by using python sort
+        if not move_line_ids:
+            return []
+        if not isinstance(move_line_ids, list):
+            move_line_ids = [move_line_ids]
+        monster = """
+            SELECT {select}
+            FROM account_move_line l
+            JOIN account_move m on (l.move_id=m.id)
+            LEFT JOIN res_currency c on (l.currency_id=c.id)
+            LEFT JOIN account_move_reconcile partialrec
+                ON (l.reconcile_partial_id = partialrec.id)
+            LEFT JOIN account_move_reconcile fullrec
+                ON (l.reconcile_id = fullrec.id)
+            LEFT JOIN res_partner p on (l.partner_id=p.id)
+            LEFT JOIN account_invoice i on (m.id =i.move_id)
+            LEFT JOIN account_period per on (per.id=l.period_id)
+            JOIN account_journal j on (l.journal_id=j.id)
+            WHERE l.id in %s
+            ORDER BY {order}
+        """.format(
+            select=self._get_move_line_select(),
+            order=order,
+        )
         try:
             self.cursor.execute(monster, (tuple(move_line_ids),))
             res = self.cursor.dictfetchall()
