@@ -104,9 +104,6 @@ class IntrastatTransportMode(models.Model):
     @api.one
     @api.depends('name', 'code')
     def _display_name(self):
-        print "display_name self=", self
-        print "self.code=", self.code
-        print "self.name=", self.name
         self.display_name = '%s. %s' % (self.code, self.name)
 
     display_name = fields.Char(
