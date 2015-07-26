@@ -41,7 +41,7 @@ class HSCode(models.Model):
         display_name = self.local_code
         if self.description:
             display_name += ' ' + self.description
-        self.display_name = display_name > 55 \
+        self.display_name = len(display_name) > 55 \
             and display_name[:55] + '...' \
             or display_name
 
