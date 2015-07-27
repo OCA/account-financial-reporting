@@ -13,7 +13,7 @@
             <separator string="Aged Open Invoice" colspan="4"/>
             <label nolabel="1"
                    colspan="4"
-                   string="TODO This report list partner open balances and indicate when payment is (or was) supposed to be completed"/>
+                   string="This report list partner open invoices and indicate when payment is (or was) supposed to be completed"/>
           </xpath>
           <field name="chart_account_id" position='attributes'>
             <attribute name="colspan">4</attribute>
