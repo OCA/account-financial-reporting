@@ -543,10 +543,18 @@ class MisReportInstancePeriod(orm.Model):
 
     def _fetch_queries(self, cr, uid, c, context):
         res = {}
+<<<<<<< HEAD
         report = c.report_instance_id.report_id
         for query in report.query_ids:
             obj = self.pool[query.model_id.model]
             domain = query.domain and safe_eval(query.domain) or []
+=======
+        for query in self.report_instance_id.report_id.query_ids:
+            model = self.env[query.model_id.model]
+            domain = query.domain and safe_eval(
+                query.domain,
+                {'uid': self._uid, 'context': self._context}) or []
+>>>>>>> 4bc6080... Add ability to use ('user_id', '=', uid) in a domain
             if query.date_field.ttype == 'date':
                 domain.extend([(query.date_field.name, '>=', c.date_from),
                                (query.date_field.name, '<=', c.date_to)])
