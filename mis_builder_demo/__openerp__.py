@@ -29,7 +29,8 @@
     'summary': """
         Demo data for the mis_builder module
     """,
-    'author': 'ACSONE SA/NV',
+    'author': 'ACSONE SA/NV,'
+              'Odoo Community Association (OCA)',
     'website': 'http://acsone.eu',
     'depends': [
         'account_accountant',

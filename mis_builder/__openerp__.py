@@ -29,9 +29,14 @@
     'summary': """
         Build 'Management Information System' Reports and Dashboards
     """,
+<<<<<<< HEAD
     'description': """
     """,
     'author': 'ACSONE SA/NV',
+=======
+    'author': 'ACSONE SA/NV,'
+              'Odoo Community Association (OCA)',
+>>>>>>> 98a321c... [FIX] Add OCA as author
     'website': 'http://acsone.eu',
     'depends': [
         'account',
