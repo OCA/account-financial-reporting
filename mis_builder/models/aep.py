@@ -292,7 +292,7 @@ class AccountingExpressionProcessor(object):
                 if opening_period and \
                         self._period_has_moves(opening_period[0]):
                     # found opening period with moves
-                    if opening_period.date_start == period_from.date_start and \
+                    if opening_period.date_start == period_from.date_start and\
                             mode == MODE_INITIAL:
                         # if the opening period has the same start date as
                         # period_from, then we'll find the initial balance
