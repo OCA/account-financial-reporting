@@ -29,7 +29,8 @@
     'summary': """
         Build 'Management Information System' Reports and Dashboards
     """,
-    'author': 'ACSONE SA/NV',
+    'author': 'ACSONE SA/NV,'
+              'Odoo Community Association (OCA)',
     'website': 'http://acsone.eu',
     'depends': [
         'account',
