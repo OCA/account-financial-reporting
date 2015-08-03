@@ -180,16 +180,16 @@ class account_financial_xls(report_xls):
                  None, regular_cell_style_decimal),
                 ('balance', 1, 0, 'number', line.get('balance', 0.0),
                     None, regular_cell_style_decimal),
-             ]
+            ]
         if not data['form']['enable_filter'] and \
                 not data['form']['debit_credit']:
             account_span = 3
             c_specs = [
-                    ('acc_title', account_span, 0, 'text',
-                        line.get('name') if line.get('name') else
-                        _('Unallocated')),
-                    ('balance', 1, 0, 'number', line.get('balance', 0.0),
-                        None, regular_cell_style_decimal),
+                ('acc_title', account_span, 0, 'text',
+                    line.get('name') if line.get('name') else
+                    _('Unallocated')),
+                ('balance', 1, 0, 'number', line.get('balance', 0.0),
+                    None, regular_cell_style_decimal),
             ]
         if data['form']['enable_filter'] == 1 and \
                 not data['form']['debit_credit']:
