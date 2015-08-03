@@ -366,17 +366,15 @@ class partners_balance_xls(report_xls):
                              partner_ref if partner_ref else '')]
                 if _p.comparison_mode == 'no_comparison':
                     bal_formula = ''
+                    debit_col = 4
                     if _p.initial_balance_mode:
                         init_bal_cell = rowcol_to_cell(row_pos, 3)
                         bal_formula = init_bal_cell + '+'
-                        debit_col = 4
                         c_specs += [
                             ('init_bal', 1, 0, 'number', partner.get(
                                 'init_balance', 0.0), None,
                              regular_cell_style_decimal),
                         ]
-                    else:
-                        debit_col = 4
                     c_specs += [
                         ('debit', 1, 0, 'number', partner.get('debit', 0.0),
                          None, regular_cell_style_decimal),
