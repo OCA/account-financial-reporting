@@ -39,6 +39,9 @@ class account_financial_wizard(orm.TransientModel):
                     'fiscalyear_id_cmp', 'period_from_cmp', 'period_to_cmp',
                     'filter_cmp', 'account_report_id', 'enable_filter',
                     'label_filter', 'target_move'], context=context)[0])
+            # They use "data" that is required in the module method check_
+            # report account_common_report and "datas" are used to send
+            # data to py wizard that exports to excell
             return {
                 'type': 'ir.actions.report.xml',
                 'report_name': 'account.report_financial_xls',
