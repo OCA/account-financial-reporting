@@ -40,6 +40,10 @@ class AccountPartnerBalanceWizard(orm.TransientModel):
             'res.partner', string='Filter on partner',
             help="Only selected partners will be printed. \
                   Leave empty to print all partners."),
+        'exclude_null_balance': fields.boolean(
+            string='Exclude null Balance',
+            help="if matched, the report will exclude account if the balance "
+                 "is null"),
     }
 
     _defaults = {
@@ -50,7 +54,9 @@ class AccountPartnerBalanceWizard(orm.TransientModel):
         data = super(AccountPartnerBalanceWizard, self).\
             pre_print_report(cr, uid, ids, data, context)
         vals = self.read(cr, uid, ids,
-                         ['result_selection', 'partner_ids'],
+                         ['result_selection',
+                          'partner_ids',
+                          'exclude_null_balance'],
                          context=context)[0]
         data['form'].update(vals)
         return data

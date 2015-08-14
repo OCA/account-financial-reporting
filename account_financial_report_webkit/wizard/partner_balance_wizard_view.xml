@@ -39,6 +39,11 @@
                             <separator string="Print only" colspan="4"/>
                             <field name="partner_ids" colspan="4" nolabel="1"/>
                         </page>
+                        <page string="Other Filters">
+                            <group>
+                                <field name="exclude_null_balance" colspan="4"/>
+                            </group>
+                        </page>
                         <page name="placeholder"/>
                     </page>
                     <page name="journal_ids" position="attributes">

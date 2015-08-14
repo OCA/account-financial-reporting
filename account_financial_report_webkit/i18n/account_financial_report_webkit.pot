@@ -1467,3 +1467,13 @@ msgstr ""
 msgid "{'required': [('filter', '=', 'filter_opening')]}"
 msgstr ""
 
+#. module: account_financial_report_webkit
+#: field:partner.balance.webkit,exclude_null_balance:0
+msgid "Exclude null Balance"
+msgstr ""
+
+#. module: account_financial_report_webkit
+#: view:partner.balance.webkit:0
+msgid "Other Filters"
+msgstr ""
+
