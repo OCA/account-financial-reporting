@@ -91,7 +91,7 @@
                     ${account.code} - ${account.name}
                 </div>
                 <div class="act_as_thead">
-                    <div class="act_as_row labels">
+                    <div class="act_as_row labels" style="page-break-inside: avoid">
                         ## date
                         <div class="act_as_cell first_column" style="width: 50px;">${_('Date')}</div>
                         ## period
@@ -125,7 +125,7 @@
                     </div>
                 </div>
 
-                <div class="act_as_tbody">
+                <div class="act_as_tbody" style="page-break-inside: avoid">
                       %if display_initial_balance:
                         <%
                         cumul_debit = account.init_balance.get('debit') or 0.0
@@ -179,7 +179,7 @@
                         label = ' '.join(label_elements)
                         %>
 
-                      <div class="act_as_row lines">
+                      <div class="act_as_row lines" style="page-break-inside: avoid">
                           ## date
                           <div class="act_as_cell first_column">${formatLang(line.get('ldate') or '', date=True)}</div>
                           ## period
@@ -213,7 +213,7 @@
                       </div>
                       %endfor
                 </div>
-                <div class="act_as_table list_table">
+                <div class="act_as_table list_table" style="page-break-inside: avoid">
                     <div class="act_as_row labels" style="font-weight: bold;">
                         ## date
                         <div class="act_as_cell first_column" style="width: 615px;">${account.code} - ${account.name}</div>
