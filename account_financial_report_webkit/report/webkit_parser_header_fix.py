@@ -149,8 +149,29 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
         command.append(out_filename)
         stderr_fd, stderr_path = tempfile.mkstemp(text=True)
         file_to_del.append(stderr_path)
+
+        # The encoding can break subprocess in some Python versions,
+        # ensure that all args are in ASCII or Unicode.
+        encoding_parsers = [
+            lambda s: s,
+            lambda s: s.decode('utf-8-sig') if isinstance(s, str) else s,
+            lambda s: s.encode('utf-8-sig') if isinstance(s, unicode) else s,
+            lambda s: s.decode('utf-8') if isinstance(s, str) else s,
+            lambda s: s.encode('utf-8') if isinstance(s, unicode) else s,
+        ]
+
         try:
-            status = subprocess.call(command, stderr=stderr_fd)
+            for encoding_parser in encoding_parsers:
+                try:
+                    comm = [encoding_parser(c) for c in command]
+                    _logger.debug('Running command: %r', comm)
+                    status = subprocess.call(comm, stderr=stderr_fd)
+                except Exception as e:
+                    status = str(e)
+                else:
+                    _logger.debug('Success!')
+                    break
+
             os.close(stderr_fd)  # ensure flush before reading
             stderr_fd = None  # avoid closing again in finally block
             fobj = open(stderr_path, 'r')
