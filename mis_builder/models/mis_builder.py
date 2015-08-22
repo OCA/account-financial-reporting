@@ -22,9 +22,11 @@
 #
 ##############################################################################
 
-from datetime import datetime, timedelta
+import datetime
+import dateutil
 import logging
 import re
+import time
 import traceback
 
 import pytz
@@ -52,7 +54,7 @@ def _get_selection_label(selection, value):
 
 
 def _utc_midnight(d, tz_name, add_day=0):
-    d = fields.Datetime.from_string(d) + timedelta(days=add_day)
+    d = fields.Datetime.from_string(d) + datetime.timedelta(days=add_day)
     utc_tz = pytz.timezone('UTC')
     context_tz = pytz.timezone(tz_name)
     local_timestamp = context_tz.localize(d, is_dst=False)
@@ -328,15 +330,17 @@ class MisReportInstancePeriod(models.Model):
         self.valid = False
         d = fields.Date.from_string(self.report_instance_id.pivot_date)
         if self.type == 'd':
-            date_from = d + timedelta(days=self.offset)
-            date_to = date_from + timedelta(days=self.duration - 1)
+            date_from = d + datetime.timedelta(days=self.offset)
+            date_to = date_from + \
+                datetime.timedelta(days=self.duration - 1)
             self.date_from = fields.Date.to_string(date_from)
             self.date_to = fields.Date.to_string(date_to)
             self.valid = True
         elif self.type == 'w':
-            date_from = d - timedelta(d.weekday())
-            date_from = date_from + timedelta(days=self.offset * 7)
-            date_to = date_from + timedelta(days=(7 * self.duration) - 1)
+            date_from = d - datetime.timedelta(d.weekday())
+            date_from = date_from + datetime.timedelta(days=self.offset * 7)
+            date_to = date_from + \
+                datetime.timedelta(days=(7 * self.duration) - 1)
             self.date_from = fields.Date.to_string(date_from)
             self.date_to = fields.Date.to_string(date_to)
             self.valid = True
@@ -447,9 +451,17 @@ class MisReportInstancePeriod(models.Model):
         res = {}
         for query in self.report_instance_id.report_id.query_ids:
             model = self.env[query.model_id.model]
-            domain = query.domain and safe_eval(
-                query.domain,
-                {'uid': self._uid, 'context': self._context}) or []
+            eval_context = {
+                'env': self.env,
+                'time': time,
+                'datetime': datetime,
+                'dateutil': dateutil,
+                # deprecated
+                'uid': self.env.uid,
+                'context': self.env.context,
+            }
+            domain = query.domain and \
+                safe_eval(query.domain, eval_context) or []
             if query.date_field.ttype == 'date':
                 domain.extend([(query.date_field.name, '>=', self.date_from),
                                (query.date_field.name, '<=', self.date_to)])
@@ -619,7 +631,8 @@ class MisReportInstance(models.Model):
     def _format_date(self, lang_id, date):
         # format date following user language
         date_format = self.env['res.lang'].browse(lang_id).date_format
-        return datetime.strftime(fields.Date.from_string(date), date_format)
+        return datetime.datetime.strftime(
+            fields.Date.from_string(date), date_format)
 
     @api.multi
     def preview(self):
