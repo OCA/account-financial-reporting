@@ -22,10 +22,16 @@
 #
 ##############################################################################
 
+<<<<<<< HEAD
 from datetime import datetime, timedelta
 from dateutil import parser
+=======
+import datetime
+import dateutil
+>>>>>>> 09d69b9... [IMP] mis_builder: improve eval context of query domain
 import logging
 import re
+import time
 import traceback
 
 import pytz
@@ -55,7 +61,11 @@ def _get_selection_label(selection, value):
 
 
 def _utc_midnight(d, tz_name, add_day=0):
+<<<<<<< HEAD
     d = datetime.strptime(d, tools.DEFAULT_SERVER_DATE_FORMAT)
+=======
+    d = fields.Datetime.from_string(d) + datetime.timedelta(days=add_day)
+>>>>>>> 09d69b9... [IMP] mis_builder: improve eval context of query domain
     utc_tz = pytz.timezone('UTC')
     if add_day:
         d = d + timedelta(days=add_day)
@@ -392,6 +402,7 @@ class MisReportInstancePeriod(orm.Model):
     are defined as an offset relative to a pivot date.
     """
 
+<<<<<<< HEAD
     def _get_dates(self, cr, uid, ids, field_names, arg, context=None):
         if isinstance(ids, (int, long)):
             ids = [ids]
@@ -417,6 +428,41 @@ class MisReportInstancePeriod(orm.Model):
                 period_obj = self.pool['account.period']
                 current_period_ids = period_obj.search(
                     cr, uid,
+=======
+    @api.one
+    @api.depends('report_instance_id.pivot_date', 'type', 'offset', 'duration')
+    def _compute_dates(self):
+        self.date_from = False
+        self.date_to = False
+        self.period_from = False
+        self.period_to = False
+        self.valid = False
+        d = fields.Date.from_string(self.report_instance_id.pivot_date)
+        if self.type == 'd':
+            date_from = d + datetime.timedelta(days=self.offset)
+            date_to = date_from + \
+                datetime.timedelta(days=self.duration - 1)
+            self.date_from = fields.Date.to_string(date_from)
+            self.date_to = fields.Date.to_string(date_to)
+            self.valid = True
+        elif self.type == 'w':
+            date_from = d - datetime.timedelta(d.weekday())
+            date_from = date_from + datetime.timedelta(days=self.offset * 7)
+            date_to = date_from + \
+                datetime.timedelta(days=(7 * self.duration) - 1)
+            self.date_from = fields.Date.to_string(date_from)
+            self.date_to = fields.Date.to_string(date_to)
+            self.valid = True
+        elif self.type == 'fp':
+            current_periods = self.env['account.period'].search(
+                [('special', '=', False),
+                 ('date_start', '<=', d),
+                 ('date_stop', '>=', d),
+                 ('company_id', '=',
+                  self.report_instance_id.company_id.id)])
+            if current_periods:
+                all_periods = self.env['account.period'].search(
+>>>>>>> 09d69b9... [IMP] mis_builder: improve eval context of query domain
                     [('special', '=', False),
                      ('date_start', '<=', d),
                      ('date_stop', '>=', d),
@@ -551,10 +597,24 @@ class MisReportInstancePeriod(orm.Model):
 =======
         for query in self.report_instance_id.report_id.query_ids:
             model = self.env[query.model_id.model]
+<<<<<<< HEAD
             domain = query.domain and safe_eval(
                 query.domain,
                 {'uid': self._uid, 'context': self._context}) or []
 >>>>>>> 4bc6080... Add ability to use ('user_id', '=', uid) in a domain
+=======
+            eval_context = {
+                'env': self.env,
+                'time': time,
+                'datetime': datetime,
+                'dateutil': dateutil,
+                # deprecated
+                'uid': self.env.uid,
+                'context': self.env.context,
+            }
+            domain = query.domain and \
+                safe_eval(query.domain, eval_context) or []
+>>>>>>> 09d69b9... [IMP] mis_builder: improve eval context of query domain
             if query.date_field.ttype == 'date':
                 domain.extend([(query.date_field.name, '>=', c.date_from),
                                (query.date_field.name, '<=', c.date_to)])
@@ -774,11 +834,57 @@ class MisReportInstance(orm.Model):
                     context=context)
         return res
 
+<<<<<<< HEAD
     def preview(self, cr, uid, ids, context=None):
         assert len(ids) == 1
         view_id = self.pool['ir.model.data'].get_object_reference(
             cr, uid, 'mis_builder',
             'mis_report_instance_result_view_form')[1]
+=======
+    name = fields.Char(required=True,
+                       string='Name', translate=True)
+    description = fields.Char(required=False,
+                              string='Description', translate=True)
+    date = fields.Date(string='Base date',
+                       help='Report base date '
+                            '(leave empty to use current date)')
+    pivot_date = fields.Date(compute='_compute_pivot_date',
+                             string="Pivot date")
+    report_id = fields.Many2one('mis.report',
+                                required=True,
+                                string='Report')
+    period_ids = fields.One2many('mis.report.instance.period',
+                                 'report_instance_id',
+                                 required=True,
+                                 string='Periods')
+    target_move = fields.Selection([('posted', 'All Posted Entries'),
+                                    ('all', 'All Entries')],
+                                   string='Target Moves',
+                                   required=True,
+                                   default='posted')
+    company_id = fields.Many2one(comodel_name='res.company',
+                                 string='Company',
+                                 readonly=True,
+                                 related='root_account.company_id',
+                                 store=True)
+    root_account = fields.Many2one(comodel_name='account.account',
+                                   domain='[("parent_id", "=", False)]',
+                                   string="Account chart",
+                                   required=True)
+    landscape_pdf = fields.Boolean(string='Landscape PDF')
+
+    def _format_date(self, lang_id, date):
+        # format date following user language
+        date_format = self.env['res.lang'].browse(lang_id).date_format
+        return datetime.datetime.strftime(
+            fields.Date.from_string(date), date_format)
+
+    @api.multi
+    def preview(self):
+        assert len(self) == 1
+        view_id = self.env.ref('mis_builder.'
+                               'mis_report_instance_result_view_form')
+>>>>>>> 09d69b9... [IMP] mis_builder: improve eval context of query domain
         return {
             'type': 'ir.actions.act_window',
             'res_model': 'mis.report.instance',
