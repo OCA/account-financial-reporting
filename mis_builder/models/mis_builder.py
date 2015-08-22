@@ -447,7 +447,9 @@ class MisReportInstancePeriod(models.Model):
         res = {}
         for query in self.report_instance_id.report_id.query_ids:
             model = self.env[query.model_id.model]
-            domain = query.domain and safe_eval(query.domain) or []
+            domain = query.domain and safe_eval(
+                query.domain,
+                {'uid': self._uid, 'context': self._context}) or []
             if query.date_field.ttype == 'date':
                 domain.extend([(query.date_field.name, '>=', self.date_from),
                                (query.date_field.name, '<=', self.date_to)])
