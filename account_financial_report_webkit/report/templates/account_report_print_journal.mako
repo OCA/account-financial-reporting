@@ -124,12 +124,12 @@
                         ## label
                         <div class="act_as_cell overflow_ellipsis" style="width: 310px;">${line.name}</div>
                         ## debit
-                        <div class="act_as_cell amount">${formatLang(line.debit) if line.debit else ''}</div>
+                        <div class="act_as_cell amount">${formatLang(line.debit, monetary=True) if line.debit else ''}</div>
                         ## credit
-                        <div class="act_as_cell amount">${formatLang(line.credit) if line.credit else ''}</div>
+                        <div class="act_as_cell amount">${formatLang(line.credit, monetary=True) if line.credit else ''}</div>
                         %if amount_currency(data):
                             ## currency balance
-                            <div class="act_as_cell amount sep_left">${formatLang(line.amount_currency) if line.amount_currency else ''}</div>
+                            <div class="act_as_cell amount sep_left">${formatLang(line.amount_currency, monetary=True) if line.amount_currency else ''}</div>
                             ## curency code
                             <div class="act_as_cell amount" style="text-align: right;">${line.currency_id.symbol or ''}</div>
                         %endif
@@ -154,9 +154,9 @@
                 ## label
                 <div class="act_as_cell" style="width: 310px;"></div>
                 ## debit
-                <div class="act_as_cell amount">${formatLang(account_total_debit) | amount }</div>
+                <div class="act_as_cell amount">${formatLang(account_total_debit, monetary=True) | amount }</div>
                 ## credit
-                <div class="act_as_cell amount">${formatLang(account_total_credit) | amount }</div>
+                <div class="act_as_cell amount">${formatLang(account_total_credit, monetary=True) | amount }</div>
                 %if amount_currency(data):
                   ## currency balance
                   <div class="act_as_cell amount sep_left"></div>

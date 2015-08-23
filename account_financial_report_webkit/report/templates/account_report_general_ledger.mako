@@ -153,14 +153,14 @@
                           ## counterpart
                           <div class="act_as_cell"></div>
                           ## debit
-                          <div class="act_as_cell amount">${formatLang(account.init_balance.get('debit')) | amount}</div>
+                          <div class="act_as_cell amount">${formatLang(account.init_balance.get('debit'), monetary=True) | amount}</div>
                           ## credit
-                          <div class="act_as_cell amount">${formatLang(account.init_balance.get('credit')) | amount}</div>
+                          <div class="act_as_cell amount">${formatLang(account.init_balance.get('credit'), monetary=True) | amount}</div>
                           ## balance cumulated
-                          <div class="act_as_cell amount" style="padding-right: 1px;">${formatLang(cumul_balance) | amount }</div>
+                          <div class="act_as_cell amount" style="padding-right: 1px;">${formatLang(cumul_balance, monetary=True) | amount }</div>
                          %if amount_currency(data):
                               ## currency balance
-                              <div class="act_as_cell amount sep_left">${formatLang(cumul_balance_curr) | amount }</div>
+                              <div class="act_as_cell amount sep_left">${formatLang(cumul_balance_curr, monetary=True) | amount }</div>
                               ## curency code
                               <div class="act_as_cell amount"></div>
                          %endif
@@ -199,14 +199,14 @@
                           ## counterpart
                           <div class="act_as_cell">${line.get('counterparts') or ''}</div>
                           ## debit
-                          <div class="act_as_cell amount">${ formatLang(line.get('debit', 0.0)) | amount }</div>
+                          <div class="act_as_cell amount">${ formatLang(line.get('debit', 0.0), monetary=True) | amount }</div>
                           ## credit
-                          <div class="act_as_cell amount">${ formatLang(line.get('credit', 0.0)) | amount }</div>
+                          <div class="act_as_cell amount">${ formatLang(line.get('credit', 0.0), monetary=True) | amount }</div>
                           ## balance cumulated
-                          <div class="act_as_cell amount" style="padding-right: 1px;">${ formatLang(cumul_balance) | amount }</div>
+                          <div class="act_as_cell amount" style="padding-right: 1px;">${ formatLang(cumul_balance, monetary=True) | amount }</div>
                           %if amount_currency(data):
                               ## currency balance
-                              <div class="act_as_cell amount sep_left">${formatLang(line.get('amount_currency') or 0.0)  | amount }</div>
+                              <div class="act_as_cell amount sep_left">${formatLang(line.get('amount_currency') or 0.0, monetary=True)  | amount }</div>
                               ## curency code
                               <div class="act_as_cell amount" style="text-align: right;">${line.get('currency_code') or ''}</div>
                           %endif
@@ -219,15 +219,15 @@
                         <div class="act_as_cell first_column" style="width: 615px;">${account.code} - ${account.name}</div>
                         <div class="act_as_cell" style="width: 260px;">${_("Cumulated Balance on Account")}</div>
                         ## debit
-                        <div class="act_as_cell amount" style="width: 75px;">${ formatLang(cumul_debit) | amount }</div>
+                        <div class="act_as_cell amount" style="width: 75px;">${ formatLang(cumul_debit, monetary=True) | amount }</div>
                         ## credit
-                        <div class="act_as_cell amount" style="width: 75px;">${ formatLang(cumul_credit) | amount }</div>
+                        <div class="act_as_cell amount" style="width: 75px;">${ formatLang(cumul_credit, monetary=True) | amount }</div>
                         ## balance cumulated
-                        <div class="act_as_cell amount" style="width: 75px; padding-right: 1px;">${ formatLang(cumul_balance) | amount }</div>
+                        <div class="act_as_cell amount" style="width: 75px; padding-right: 1px;">${ formatLang(cumul_balance, monetary=True) | amount }</div>
                         %if amount_currency(data):
                             %if account.currency_id:
                                 ## currency balance
-                                <div class="act_as_cell amount sep_left" style="width: 75px;">${formatLang(cumul_balance_curr) | amount }</div>
+                                <div class="act_as_cell amount sep_left" style="width: 75px;">${formatLang(cumul_balance_curr, monetary=True) | amount }</div>
                             %else:
                                 <div class="act_as_cell amount sep_left" style="width: 75px;">-</div>
                             %endif

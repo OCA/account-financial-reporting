@@ -185,21 +185,21 @@
                         %if comparison_mode == 'no_comparison':
                             %if initial_balance_mode:
                                 ## opening balance
-                                <div class="act_as_cell amount">${formatLang(current_account.init_balance) | amount}</div>
+                                <div class="act_as_cell amount">${formatLang(current_account.init_balance, monetary=True) | amount}</div>
                             %endif
                             ## debit
-                            <div class="act_as_cell amount">${formatLang(current_account.debit) | amount}</div>
+                            <div class="act_as_cell amount">${formatLang(current_account.debit, monetary=True) | amount}</div>
                             ## credit
-                            <div class="act_as_cell amount">${formatLang(current_account.credit) | amount}</div>
+                            <div class="act_as_cell amount">${formatLang(current_account.credit, monetary=True) | amount}</div>
                         %endif
                         ## balance
-                        <div class="act_as_cell amount">${formatLang(current_account.balance) | amount}</div>
+                        <div class="act_as_cell amount">${formatLang(current_account.balance, monetary=True) | amount}</div>
 
                         %if comparison_mode in ('single', 'multiple'):
                             %for comp_account in comparisons:
-                                <div class="act_as_cell amount">${formatLang(comp_account['balance']) | amount}</div>
+                                <div class="act_as_cell amount">${formatLang(comp_account['balance'], monetary=True) | amount}</div>
                                 %if comparison_mode == 'single':  ## no diff in multiple comparisons because it shows too data
-                                    <div class="act_as_cell amount">${formatLang(comp_account['diff']) | amount}</div>
+                                    <div class="act_as_cell amount">${formatLang(comp_account['diff'], monetary=True) | amount}</div>
                                     <div class="act_as_cell amount"> 
                                     %if comp_account['percent_diff'] is False:
                                      ${ '-' }
