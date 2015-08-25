@@ -22,4 +22,13 @@
 #
 ##############################################################################
 
+<<<<<<< HEAD
 from . import mis_builder_xls
+=======
+try:
+    from . import mis_builder_xls
+except ImportError:
+    pass  # this module is not installed
+
+from . import report_mis_report_instance
+>>>>>>> 586ddbe... import guard for report_xls
