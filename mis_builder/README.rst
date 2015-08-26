@@ -1,7 +1,12 @@
 .. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
     :alt: License: AGPL-3
 
+<<<<<<< HEAD
 Module name
+=======
+===========
+MIS Builder
+>>>>>>> 536c616... [FIX] Heading levels
 ===========
 
 This module allows you to build Management Information Systems dashboards.
