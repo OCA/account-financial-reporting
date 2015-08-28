@@ -86,16 +86,16 @@ def _avg(l):
     return sum(l) / float(len(l))
 
 
-def _min(l):
+def _min(*l):
     if not l:
         return None
-    return min(l)
+    return min(*l)
 
 
-def _max(l):
+def _max(*l):
     if not l:
         return None
-    return max(l)
+    return max(*l)
 
 
 class MisReportKpi(orm.Model):
