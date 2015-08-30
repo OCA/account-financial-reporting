@@ -35,6 +35,7 @@ from openerp import api, fields, models, _
 from openerp.tools.safe_eval import safe_eval
 
 from .aep import AccountingExpressionProcessor as AEP
+from .aggregate import _sum, _avg, _min, _max
 
 _logger = logging.getLogger(__name__)
 
@@ -67,30 +68,6 @@ def _python_var(var_str):
 
 def _is_valid_python_var(name):
     return re.match("[_A-Za-z][_a-zA-Z0-9]*$", name)
-
-
-def _sum(l):
-    if not l:
-        return None
-    return sum(l)
-
-
-def _avg(l):
-    if not l:
-        return None
-    return sum(l) / float(len(l))
-
-
-def _min(*l):
-    if not l:
-        return None
-    return min(*l)
-
-
-def _max(*l):
-    if not l:
-        return None
-    return max(*l)
 
 
 class MisReportKpi(models.Model):
