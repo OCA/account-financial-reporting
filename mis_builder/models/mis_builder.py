@@ -38,6 +38,7 @@ from openerp.tools.safe_eval import safe_eval
 from openerp.tools.translate import _
 
 from .aep import AccountingExpressionProcessor as AEP
+from .aggregate import _sum, _avg, _min, _max
 
 _logger = logging.getLogger(__name__)
 
@@ -74,6 +75,7 @@ def _is_valid_python_var(name):
     return re.match("[_A-Za-z][_a-zA-Z0-9]*$", name)
 
 
+<<<<<<< HEAD
 def _sum(l):
     if not l:
         return None
@@ -99,6 +101,9 @@ def _max(*l):
 
 
 class MisReportKpi(orm.Model):
+=======
+class MisReportKpi(models.Model):
+>>>>>>> f4d0bb2... [FIX] mis_builder: correct implementation and doctests for _min/_max
     """ A KPI is an element (ie a line) of a MIS report.
 
     In addition to a name and description, it has an expression
