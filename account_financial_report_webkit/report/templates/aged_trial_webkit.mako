@@ -48,6 +48,7 @@
             <div class="act_as_row labels" style="page-break-inside: avoid">
                 <div class="act_as_cell">${_('Chart of Account')}</div>
                 <div class="act_as_cell">${_('Fiscal Year')}</div>
+                <div class="act_as_cell">${_('Aged From')}</div>
                 <div class="act_as_cell">
                     %if filter_form(data) == 'filter_date':
                         ${_('Dates Filter')}
@@ -63,6 +64,13 @@
             <div class="act_as_row" style="page-break-inside: avoid">
                 <div class="act_as_cell">${ chart_account.name }</div>
                 <div class="act_as_cell">${ fiscalyear.name if fiscalyear else '-' }</div>
+                <div class="act_as_cell">
+                  %if aging_method == 'due_date':
+                    ${_('Due Date')}
+                  %else:
+                    ${_('Invoice Date')}
+                  %endif
+                </div>
                 <div class="act_as_cell">
                     ${_('From:')}
                     %if filter_form(data) == 'filter_date':
@@ -101,6 +109,10 @@
                       <div class="act_as_cell first_column" style="width: 60px;">${_('Partner')}</div>
                       ## code
                       <div class="act_as_cell" style="width: 70px;">${_('code')}</div>
+                      ## invoice for detailed reports
+                      %if acc.aged_lines_by_invoice:
+                        <div class="act_as_cell" style="width: 70px;">${_('Invoice')}</div>
+                      %endif
                       ## balance
                       <div class="act_as_cell classif_title" style="width: 70px;">${_('balance')}</div>
                       ## Classifications
@@ -110,27 +122,74 @@
                     </div>
                   </div>
                   <div class="act_as_tbody">
-                    %for partner_name, p_id, p_ref, p_name in acc.partners_order:
-                       %if acc.aged_lines.get(p_id):
-                       <div class="act_as_row lines" style="page-break-inside: avoid">
-                         <%line = acc.aged_lines[p_id]%>
-                         <%percents = acc.aged_percents%>
-                         <%totals = acc.aged_totals%>
-                           <div class="act_as_cell first_column">${partner_name}</div>
-                           <div class="act_as_cell">${p_ref or ''}</div>
+                    %if not acc.aged_lines_by_invoice:
+                      %for partner_name, p_id, p_ref, p_name in acc.partners_order:
+                         %if acc.aged_lines.get(p_id):
+                         <div class="act_as_row lines" style="page-break-inside: avoid">
+                           <%line = acc.aged_lines[p_id]%>
+                           <%percents = acc.aged_percents%>
+                           <%totals = acc.aged_totals%>
+                             <div class="act_as_cell first_column">${partner_name}</div>
+                             <div class="act_as_cell">${p_ref or ''}</div>
 
-                           <div class="act_as_cell amount">${formatLang(line.get('balance') or 0.0) | amount}</div>
-                            %for classif in ranges:
-                              <div class="act_as_cell classif amount">
-                                ${formatLang(line['aged_lines'][classif] or 0.0) | amount}
-                              </div>
-                            %endfor
-                       </div>
-                       %endif
-                    %endfor
+                             <div class="act_as_cell amount">${formatLang(line.get('balance') or 0.0) | amount}</div>
+                              %for classif in ranges:
+                                <div class="act_as_cell classif amount">
+                                  ${formatLang(line['aged_lines'][classif] or 0.0) | amount}
+                                </div>
+                              %endfor
+                         </div>
+                         %endif
+                      %endfor
+                    %else:
+                      %for partner_name, p_id, p_ref, p_name in acc.partners_order:
+                        %if acc.aged_lines.get(p_id):
+                          <div class="act_as_row lines" style="page-break-inside: avoid">
+                           <%line = acc.aged_lines[p_id]%>
+                           <%percents = acc.aged_percents%>
+                           <%totals = acc.aged_totals%>
+                             <div class="act_as_cell first_column">${partner_name}</div>
+                             <div class="act_as_cell">${p_ref or ''}</div>
+                             <div class="act_as_cell"></div>
+                             <div class="act_as_cell amount"></div>
+                              %for classif in ranges:
+                                <div class="act_as_cell classif amount"></div>
+                              %endfor
+                         </div>
+                         %for invoice in acc.aged_lines_by_invoice[p_id]:
+                           <%invoice_line = acc.aged_lines_by_invoice[p_id][invoice]%>
+                           <div class="act_as_row lines" style="page-break-inside: avoid">
+                             <div class="act_as_cell first_column"></div>
+                             <div class="act_as_cell"></div>
+                             <div class="act_as_cell">${invoice}</div>
+                             <div class="act_as_cell amount">${formatLang(invoice_line.get('balance') or 0.0) | amount}</div>
+                              %for classif in ranges:
+                                <div class="act_as_cell classif amount">
+                                  ${formatLang(invoice_line['aged_lines'][classif] or 0.0) | amount}
+                                </div>
+                              %endfor
+                           </div>
+                         %endfor
+                         <div class="act_as_row lines" style="page-break-inside: avoid">
+                             <div class="act_as_cell first_column"></div>
+                             <div class="act_as_cell"></div>
+                             <div class="act_as_cell total">Total</div>
+                             <div class="act_as_cell amount total">${formatLang(line.get('balance') or 0.0) | amount}</div>
+                              %for classif in ranges:
+                                <div class="act_as_cell classif amount total">
+                                  ${formatLang(line['aged_lines'][classif] or 0.0) | amount}
+                                </div>
+                              %endfor
+                         </div>
+                        %endif
+                      %endfor
+                    %endif
                     <div class="act_as_row labels" style="page-break-inside: avoid">
                       <div class="act_as_cell total">${_('Total')}</div>
                       <div class="act_as_cell"></div>
+                      %if acc.aged_lines_by_invoice:
+                        <div class="act_as_cell"></div>
+                      %endif
                       <div class="act_as_cell amount classif total">${formatLang(totals['balance']) | amount}</div>
                       %for classif in ranges:
                         <div class="act_as_cell amount classif total">${formatLang(totals[classif]) | amount}</div>
@@ -140,6 +199,9 @@
                     <div class="act_as_row" style="page-break-inside: avoid">
                       <div class="act_as_cell"><b>${_('Percents')}</b></div>
                       <div class="act_as_cell"></div>
+                      %if acc.aged_lines_by_invoice:
+                        <div class="act_as_cell"></div>
+                      %endif
                       <div class="act_as_cell"></div>
                       %for classif in ranges:
                         <div class="act_as_cell amount percent_line  classif">${formatLang(percents[classif]) | amount}%</div>
