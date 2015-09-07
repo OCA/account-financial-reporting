@@ -23,32 +23,32 @@ msgstr ""
 #: field:partner.balance.webkit,account_ids:0
 #: field:trial.balance.webkit,account_ids:0
 msgid "Filter on accounts"
-msgstr "Filter nach Konten"
+msgstr "Nach Konten filtern"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/common_reports.py:424
 #, python-format
 msgid "Please set a valid time filter"
-msgstr "Bitte setzen Sie einen gültigen Zeitfilter"
+msgstr "Setzen Sie bitte eine gültige Zeiteingrenzung"
 
 #. module: account_financial_report_webkit
 #: view:general.ledger.webkit:0
 #: view:open.invoices.webkit:0
 #: view:partners.ledger.webkit:0
 msgid "Layout Options"
-msgstr "Layout-Optionen"
+msgstr "Layout-Einstellungen"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:203
 #: report:addons/account_financial_report_webkit/report/templates/account_report_open_invoices.mako:228
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partners_ledger.mako:258
 msgid "Cumulated Balance on Account"
-msgstr "Kumulierter Saldo beim Konto"
+msgstr "Kumulierter Saldo des Kontos"
 
 #. module: account_financial_report_webkit
 #: field:general.ledger.webkit,centralize:0
 msgid "Activate Centralization"
-msgstr "Aktiviere Zusammenfassung"
+msgstr "Aktiviere Abstimmung"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partner_balance.mako:154
@@ -63,30 +63,30 @@ msgstr "Saldo %s"
 #. module: account_financial_report_webkit
 #: view:account.move.line:0
 msgid "Misc."
-msgstr "Verschiednes"
+msgstr "Versch."
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partner_balance.mako:92
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:102
 msgid "Periods Filter:"
-msgstr "Perioden Filter"
+msgstr "Periodeneingrenzung:"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/webkit_parser_header_fix.py:170
 #, python-format
 msgid "No header defined for this Webkit report!"
-msgstr "Für diesen Webkit report ist keine 'Webkit Kopf-/Fuss-Zeile' definiert"
+msgstr "Kein Berichtskopf für diesen Webkit-Bericht ausgewählt!"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/open_invoices.py:162
 #, python-format
 msgid "Filter has to be in filter date, period, or none"
-msgstr "Filter muss einen der Werte 'Kein Filter', 'Datum' oder 'Periode' enthalten"
+msgstr "Es muss nach Datum, Periode oder gar nicht eingegrenzt sein"
 
 #. module: account_financial_report_webkit
 #: model:ir.actions.report.xml,name:account_financial_report_webkit.account_report_trial_balance_webkit
 msgid "Trial Balance Webkit"
-msgstr "Vorläufige Bilanz Webkit"
+msgstr "Stichtagssaldo Webkit-Bericht"
 
 #. module: account_financial_report_webkit
 #: field:account.common.balance.report,company_id:0
@@ -103,12 +103,14 @@ msgstr "Unternehmen"
 msgid ""
 "This report is an analysis done by a partner, It is a PDF report containing "
 "one line per partner representing the cumulative credit balance"
-msgstr "Dieser Bericht beinhaltet eine Zeile pro Partner mit dem kumulativen Saldo."
+msgstr ""
+"In diesem Bericht werden Partner untersucht. Die (PDF-)Ausgabe enthält je "
+"Partner genau eine Zeile mit den kumulierten Salden"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partner_balance.mako:138
 msgid "Account / Partner Name"
-msgstr "Konto / Partner Name"
+msgstr "Konto / Partnername"
 
 #. module: account_financial_report_webkit
 #: field:account.common.balance.report,journal_ids:0
@@ -125,7 +127,7 @@ msgstr "Journale"
 #: help:open.invoices.webkit,amount_currency:0
 #: help:partners.ledger.webkit,amount_currency:0
 msgid "It adds the currency column"
-msgstr "Fügt die Spalte Währung hinzu"
+msgstr "Fügt eine Spalte mit der Währung ein"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/common_reports.py:75
@@ -134,7 +136,7 @@ msgstr "Fügt die Spalte Währung hinzu"
 #: selection:partners.ledger.webkit,result_selection:0
 #, python-format
 msgid "Receivable and Payable Accounts"
-msgstr "Debitoren und Kreditoren"
+msgstr "Konten der Forderungen und Verbindlichkeiten"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_profit_loss.mako:104
@@ -147,7 +149,7 @@ msgstr "Konto"
 #: code:addons/account_financial_report_webkit/report/trial_balance.py:42
 #, python-format
 msgid "TRIAL BALANCE"
-msgstr "VORLAEUFIGE BILANZ"
+msgstr "SALDEN ZUM STICHTAG"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_open_invoices.mako:118
@@ -161,12 +163,12 @@ msgstr "Fälligkeit"
 #: view:partners.ledger.webkit:0
 #: view:trial.balance.webkit:0
 msgid "Print only"
-msgstr "Nur folgende drucken"
+msgstr "Nur drucken"
 
 #. module: account_financial_report_webkit
 #: model:ir.model,name:account_financial_report_webkit.model_partner_balance_webkit
 msgid "Partner Balance Report"
-msgstr "Partner-Saldenliste"
+msgstr "Bericht zu Partnersalden"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/webkit_parser_header_fix.py:194
@@ -174,7 +176,7 @@ msgstr "Partner-Saldenliste"
 #: code:addons/account_financial_report_webkit/report/webkit_parser_header_fix.py:220
 #, python-format
 msgid "Webkit render"
-msgstr "Wekbit Anzeige"
+msgstr "Webkit-Ausgabe"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/webkit_parser_header_fix.py:165
@@ -185,35 +187,35 @@ msgstr "Fehler!"
 #. module: account_financial_report_webkit
 #: model:ir.model,name:account_financial_report_webkit.model_trial_balance_webkit
 msgid "Trial Balance Report"
-msgstr "Vorläufige Bilanz"
+msgstr "Stichtagssalden"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:117
 msgid "Code"
-msgstr "Code"
+msgstr "Schlüssel"
 
 #. module: account_financial_report_webkit
 #: model:ir.actions.report.xml,name:account_financial_report_webkit.account_report_partners_ledger_webkit
 msgid "Partner Ledger Webkit"
-msgstr "Partner-Kontoauszug Webkit"
+msgstr "Partnerbuchhaltungen Webkit"
 
 #. module: account_financial_report_webkit
 #: field:account.common.balance.report,display_account:0
 #: field:partner.balance.webkit,display_account:0
 #: field:trial.balance.webkit,display_account:0
 msgid "Display Accounts"
-msgstr "Zeige Konten"
+msgstr "Konten anzeigen"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partner_balance.mako:192
 msgid "Unallocated"
-msgstr "Nicht zugewiesen"
+msgstr "Nicht zugeordnet"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/webkit_parser_header_fix.py:123
 #, python-format
 msgid "Webkit raise an error"
-msgstr "WebKit meldet einen Fehler"
+msgstr "Webkit hat einen Fehler gemeldet"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/common_reports.py:71
@@ -222,23 +224,23 @@ msgstr "WebKit meldet einen Fehler"
 #: selection:partners.ledger.webkit,result_selection:0
 #, python-format
 msgid "Receivable Accounts"
-msgstr "Debitorenkonten"
+msgstr "Forderungskonten"
 
 #. module: account_financial_report_webkit
 #: model:ir.actions.report.xml,name:account_financial_report_webkit.account_report_general_ledger_webkit
 msgid "General Ledger Webkit"
-msgstr "Hauptbuch Webkit"
+msgstr "Webkit-Hauptbuch"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_open_invoices.mako:116
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partners_ledger.mako:112
 msgid "Rec."
-msgstr "Ausgleich"
+msgstr "Ford."
 
 #. module: account_financial_report_webkit
 #: constraint:account.account:0
 msgid "Error ! You can not create recursive accounts."
-msgstr "Fehler ! Es können keine rekursiven Konten erstellt werden."
+msgstr "Fehler! Sie dürfen Konten nicht rekursiv anlegen."
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:33
@@ -247,7 +249,7 @@ msgstr "Fehler ! Es können keine rekursiven Konten erstellt werden."
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partners_ledger.mako:34
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:58
 msgid "Periods Filter"
-msgstr "Filter nach Perioden"
+msgstr "Periodeneingrenzung"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/common_reports.py:313
@@ -267,7 +269,7 @@ msgstr "Keine Periode gefunden"
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:63
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:123
 msgid "Initial Balance"
-msgstr "Startsaldo"
+msgstr "Eröffnungssaldo"
 
 #. module: account_financial_report_webkit
 #: constraint:account.move.line:0
@@ -275,20 +277,20 @@ msgid ""
 "The date of your Journal Entry is not in the defined period! You should "
 "change the date or remove this constraint from the journal."
 msgstr ""
-"Das Datum des Journaleintrages befindet sich nicht in der definierten Zeit! "
-"Sie sollten das Datum ändern oder diese Einschränkung vom Journal entfernen."
+"Das Datum gehört nicht der festgelegten Periode an! Sie sollten das Datum "
+"überprüfen oder die Periodeneingrenzung im Journal anpassen."
 
 #. module: account_financial_report_webkit
 #: model:ir.model,name:account_financial_report_webkit.model_general_ledger_webkit
 msgid "General Ledger Report"
-msgstr "Hauptbuch"
+msgstr "Bericht zum Hauptbuch"
 
 #. module: account_financial_report_webkit
 #: constraint:open.invoices.webkit:0
-msgid ""
-"Clearance date must be the very last date of the last period or later."
+msgid "Clearance date must be the very last date of the last period or later."
 msgstr ""
-"Das Abschlussdatum muss auf den letzten Tag der letzten Periode oder später gesetzt werden."
+"Das Datum der Auflösung muss das letzte Datum der letzten Periode oder "
+"danach sein."
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_profit_loss.mako:48
@@ -310,7 +312,7 @@ msgstr "Partner"
 #: help:partners.ledger.webkit,chart_account_id:0
 #: help:trial.balance.webkit,chart_account_id:0
 msgid "Select Charts of Accounts"
-msgstr "Kontenplan wählen"
+msgstr "Kontenplan auswählen"
 
 #. module: account_financial_report_webkit
 #: field:account.common.balance.report,filter:0
@@ -320,7 +322,7 @@ msgstr "Kontenplan wählen"
 #: field:partners.ledger.webkit,filter:0
 #: field:trial.balance.webkit,filter:0
 msgid "Filter by"
-msgstr "Filter nach"
+msgstr "Filtern nach"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/partners_ledger.py:48
@@ -328,21 +330,21 @@ msgstr "Filter nach"
 #: view:partners.ledger.webkit:0
 #, python-format
 msgid "Partner Ledger"
-msgstr "Partner-Kontoauszug"
+msgstr "Partnerbuchhaltungen"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:114
 #: report:addons/account_financial_report_webkit/report/templates/account_report_open_invoices.mako:129
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partners_ledger.mako:123
 msgid "Curr."
-msgstr "Währung"
+msgstr "Whrg."
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:101
 #: report:addons/account_financial_report_webkit/report/templates/account_report_open_invoices.mako:114
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partners_ledger.mako:110
 msgid "Label"
-msgstr "Text"
+msgstr "Kennzeichnung"
 
 #. module: account_financial_report_webkit
 #: help:account.common.balance.report,account_ids:0
@@ -352,7 +354,8 @@ msgstr "Text"
 msgid ""
 "Only selected accounts will be printed. Leave empty to print all accounts."
 msgstr ""
-"Nur ausgewählte Konten werden gedruckt. Leer lassen, um alle Konten zu drucken."
+"Nur ausgewählte Konten werden gedruckt. Leer lassen, um alle Konten zu "
+"erhalten."
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:105
@@ -368,7 +371,8 @@ msgstr "Soll"
 #: code:addons/account_financial_report_webkit/report/webkit_parser_header_fix.py:171
 #, python-format
 msgid "Please set a header in company settings"
-msgstr "Bitte definieren Sie den Report Kopf in der Unternehemens Konfiguration"
+msgstr ""
+"Legen Sie bitte in den Unternehmenseinstellungen einen Berichtskopf fest"
 
 #. module: account_financial_report_webkit
 #: view:general.ledger.webkit:0
@@ -377,18 +381,18 @@ msgstr "Bitte definieren Sie den Report Kopf in der Unternehemens Konfiguration"
 #: view:partners.ledger.webkit:0
 #: view:trial.balance.webkit:0
 msgid "Time Filters"
-msgstr "Zeitfilter"
+msgstr "Zeiteingrenzung"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_open_invoices.mako:193
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partners_ledger.mako:224
 msgid "Cumulated Balance on Partner"
-msgstr "Kumulierter Saldo beim Partner"
+msgstr "Kumulierte Salden der Partner"
 
 #. module: account_financial_report_webkit
 #: model:ir.actions.report.xml,name:account_financial_report_webkit.account_report_partner_balance_webkit
 msgid "Partner Balance Webkit"
-msgstr "Partner-Saldenliste"
+msgstr "Webkit-Bericht zu Partnersalden"
 
 #. module: account_financial_report_webkit
 #: help:open.invoices.webkit,until_date:0
@@ -403,21 +407,17 @@ msgid ""
 "the question : 'based on my last year end debtors open invoices, which "
 "invoices are still unpaid today (today is my clearance date)?'\n"
 msgstr ""
-"Das Abschlussdatum ist im wesentlichen ein Instrument um die Rückstellungen "
-"für die Debitoren zu berechnen.\n"
-"\n"
-"Standardmässig ist diese Datum gleich letzte Datum des Jahres(z.B. 01.01.2011"
-"wenn Sie das Finanzjahr 2011 ausgewählt habe).\n"
-"\n"
-"Durch die Änderung des Abschlussdatums, werden Sie beispielsweise in der "
-"Lage sein folgende Frage zu beantworten: 'Welche Rechnungen sind auf Grund "
-"des letzten Jahres und den offenen Rechnungen des Debitors heute immer noch offen "
-"('heute' is das gesetzte Abschlussdatum)?'\n"
+"Das Tilgungsdatum dient im Wesentlichen der Ermittelung der Raten zum "
+"Schuldausgleich. Per Vorgabe ist dieses mit dem Periodenenddatum identisch "
+"(z. B. 31. 12. 2011 wenn Sie das Geschäftsjahr 2011 ansprechen). Durch "
+"Anpassung des Tilgungsdatums können Sie z. B. diese Frage beantworten: 'Auf "
+"Grundlage der offenen Posten des letzten Jahresabschlusses sind welche "
+"Rechnungen heute noch nicht getilgt (heute ist das Tilgungsdatum)?'\n"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_open_invoices.mako:40
 msgid "Clearance Date"
-msgstr "Abschlussdatum"
+msgstr "Tilgungsdatum"
 
 #. module: account_financial_report_webkit
 #: view:partners.ledger.webkit:0
@@ -425,21 +425,21 @@ msgid ""
 "This report allows you to print or generate a pdf of your partner ledger "
 "with details of all your payable/receivable account"
 msgstr ""
-"Dieser Bericht ermöglicht es Ihnen, den Partner-Kontoauszug mit Details "
-"von allen Verbindlichkeitenskonten zu erstellen"
+"Dieser Bericht liefert Ihnen die Salden der Partnerbuchhaltung mit Details "
+"zu allen Forderungen und Verbindlichkeiten"
 
 #. module: account_financial_report_webkit
 #: selection:account.common.balance.report,display_account:0
 #: selection:partner.balance.webkit,display_account:0
 #: selection:trial.balance.webkit,display_account:0
 msgid "With balance is not equal to 0"
-msgstr "Mit Saldo ungleich 0"
+msgstr "Mit Salden ungleich 0"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partner_balance.mako:94
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:104
 msgid "Fiscal Year :"
-msgstr "Geschäftsjahr :"
+msgstr "Geschäftsjahr:"
 
 #. module: account_financial_report_webkit
 #: view:open.invoices.webkit:0
@@ -448,15 +448,15 @@ msgid ""
 "partner with details of all your payable/receivable account. Exclude full "
 "reconciled journal items."
 msgstr ""
-"Dieser Bericht ermöglicht es Ihnen, alle offenen Rechnungen mit Details pro "
-"Partner von allen Verbindlichkeitskonten zu erstellen. Ausgeschlossen sind 
-"alle ausgeglichenen Buchungen."
+"Dieser Bericht liefert Ihnen offene Posten je Partner mit Details zu "
+"Forderungen und Verbindlichkeiten, exklusive der vollständig beglichenen "
+"Journaleinträge"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/common_reports.py:416
 #, python-format
 msgid "Must be in include_opening, exclude_opening"
-msgstr "Mode muss include_opening oder exclude_opening sein"
+msgstr "Muss include_opening oder exclude_opening sein"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_profit_loss.mako:43
@@ -468,7 +468,7 @@ msgstr "Daten"
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partner_balance.mako:136
 msgid "Code / Ref"
-msgstr "Code / Ref"
+msgstr "Schlüssel"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/trial_balance.py:49
@@ -476,12 +476,12 @@ msgstr "Code / Ref"
 #: view:trial.balance.webkit:0
 #, python-format
 msgid "Trial Balance"
-msgstr "Vorläufige Bilanz"
+msgstr "Stichtagssaldo"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_profit_loss.mako:87
 msgid "Dates : "
-msgstr "Daten : "
+msgstr "Daten: "
 
 #. module: account_financial_report_webkit
 #: field:account.common.balance.report,comp0_period_to:0
@@ -500,12 +500,12 @@ msgstr "Daten : "
 #: field:trial.balance.webkit,comp2_period_to:0
 #: field:trial.balance.webkit,period_to:0
 msgid "End Period"
-msgstr "Ende der Periode"
+msgstr "Abschlussperiode"
 
 #. module: account_financial_report_webkit
 #: model:ir.model,name:account_financial_report_webkit.model_account_common_balance_report
 msgid "Common Balance Report"
-msgstr "Common Balance Report"
+msgstr "Referenzbilanz"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:36
@@ -514,7 +514,7 @@ msgstr "Common Balance Report"
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partners_ledger.mako:37
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:61
 msgid "Accounts Filter"
-msgstr "Kontenfilter"
+msgstr "Konteneingrenzung"
 
 #. module: account_financial_report_webkit
 #: selection:account.common.balance.report,comp0_filter:0
@@ -530,31 +530,31 @@ msgstr "Kontenfilter"
 #: selection:trial.balance.webkit,comp2_filter:0
 #: selection:trial.balance.webkit,filter:0
 msgid "Opening Only"
-msgstr "Nur Eröffnungsperiode"
+msgstr "Nur Eröffnung"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_open_invoices.mako:65
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partners_ledger.mako:60
 msgid "Custom Filter"
-msgstr "Benutzerspezifischer Filter"
+msgstr "Verschiedene Filter"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partner_balance.mako:90
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:100
 msgid "Dates Filter:"
-msgstr "Datumfilter:"
+msgstr "Datumseingrenzung:"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_profit_loss.mako:91
 msgid "Fiscal Year : "
-msgstr "Geschäftsjahr : "
+msgstr "Geschäftsjahr"
 
 #. module: account_financial_report_webkit
 #: selection:account.common.balance.report,display_account:0
 #: selection:partner.balance.webkit,display_account:0
 #: selection:trial.balance.webkit,display_account:0
 msgid "With movements"
-msgstr "Konten mit Buchungen"
+msgstr "Mit Buchungen"
 
 #. module: account_financial_report_webkit
 #: constraint:account.common.balance.report:0
@@ -567,15 +567,15 @@ msgid ""
 "The fiscalyear, periods or chart of account chosen have to belong to the "
 "same company."
 msgstr ""
-"Das gewählte  Geschäftsjahr, die Periode und das Konto müssen zum "
-"selben Unternehmen gehören."
+"Das Geschäftsjahr, Perioden und Kontenplan müssen zum gleichen Unternehmen "
+"gehören."
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:109
 #: report:addons/account_financial_report_webkit/report/templates/account_report_open_invoices.mako:124
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partners_ledger.mako:118
 msgid "Cumul. Bal."
-msgstr "Kumul. Saldo"
+msgstr "Kumul. Salden"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:22
@@ -604,7 +604,7 @@ msgstr "von"
 #: selection:partners.ledger.webkit,result_selection:0
 #, python-format
 msgid "Payable Accounts"
-msgstr "Kreditorenkonten"
+msgstr "Verbindlichkeiten"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/open_invoices.py:48
@@ -613,17 +613,17 @@ msgstr "Kreditorenkonten"
 #: model:ir.model,name:account_financial_report_webkit.model_open_invoices_webkit
 #, python-format
 msgid "Open Invoices Report"
-msgstr "Offene Rechnungen"
+msgstr "Offene Posten Bericht"
 
 #. module: account_financial_report_webkit
 #: field:account.account,centralized:0
 msgid "Centralized"
-msgstr "Zusammengefasst"
+msgstr "Abstimmung"
 
 #. module: account_financial_report_webkit
 #: field:general.ledger.webkit,display_account:0
 msgid "Display accounts"
-msgstr "Zeige Konten"
+msgstr "Konten anzeigen"
 
 #. module: account_financial_report_webkit
 #: constraint:account.account:0
@@ -632,9 +632,8 @@ msgid ""
 "You can not define children to an account with internal type different of "
 "\"View\"! "
 msgstr ""
-"Konfigurationsfehler ! \n"
-"Sie können keine untergeordneten Konten bei Konten "
-"zuordnen, die nicht vom Kontotyp \"View\" sind."
+"Konfigurationsfehler! Unterkonten dürfen nur Konten der internen Art \"Sicht"
+"\" untergeordnet werden."
 
 #. module: account_financial_report_webkit
 #: field:account.common.balance.report,comp0_date_from:0
@@ -653,7 +652,7 @@ msgstr ""
 #: field:trial.balance.webkit,comp2_date_from:0
 #: field:trial.balance.webkit,date_from:0
 msgid "Start Date"
-msgstr "Startdatum"
+msgstr "Anfangsdatum"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:22
@@ -673,7 +672,7 @@ msgstr "HAUPTBUCH"
 #: code:addons/account_financial_report_webkit/wizard/profit_loss_wizard.py:129
 #, python-format
 msgid "Level %s"
-msgstr "Ebene %s"
+msgstr "Stufe %s"
 
 #. module: account_financial_report_webkit
 #: help:account.account,centralized:0
@@ -681,8 +680,8 @@ msgid ""
 "If flagged, no details will be displayed in the General Ledger report (the "
 "webkit one only), only centralized amounts per period."
 msgstr ""
-"Wenn markiert, werden keine Details im Hauptbuchbericht angezeigt (nur "
-"derjenige mit Webkit), es werden nur zusammengefasste Beträge pro Periode angezeigt. "
+"Wenn gesetzt, werden im Hauptbuchbericht (nur Webkit), nur Abstimmbeträge "
+"ohne Details (aus Nebenbuch) ausgegeben."
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:22
@@ -692,40 +691,40 @@ msgstr ""
 #: report:addons/account_financial_report_webkit/report/templates/account_report_profit_loss.mako:94
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:47
 msgid "No"
-msgstr "Keine"
+msgstr "Nr"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partner_balance.mako:97
 #: report:addons/account_financial_report_webkit/report/templates/account_report_profit_loss.mako:94
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:107
 msgid "Initial Balance:"
-msgstr "Startsaldo"
+msgstr "Eröffnungsbilanz"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partner_balance.mako:163
 #: report:addons/account_financial_report_webkit/report/templates/account_report_profit_loss.mako:129
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:144
 msgid "Balance C%s"
-msgstr "Saldo C%s"
+msgstr "Saldo %s"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:95
 #: report:addons/account_financial_report_webkit/report/templates/account_report_open_invoices.mako:108
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partners_ledger.mako:104
 msgid "Entry"
-msgstr "Buchung"
+msgstr "Eintrag"
 
 #. module: account_financial_report_webkit
 #: field:account.move.line,last_rec_date:0
 msgid "Last reconciliation date"
-msgstr "Letztes Ausgleichsdatum"
+msgstr "Letzter Ausgleich"
 
 #. module: account_financial_report_webkit
 #: field:open.invoices.webkit,partner_ids:0
 #: field:partner.balance.webkit,partner_ids:0
 #: field:partners.ledger.webkit,partner_ids:0
 msgid "Filter on partner"
-msgstr "Filter für Partner"
+msgstr "Partnereingrenzung"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/general_ledger.py:47
@@ -742,24 +741,24 @@ msgid ""
 "allowing you to quickly check the balance of each of your accounts in a "
 "single report"
 msgstr ""
-"Dieser Bericht ermöglicht es Ihnen, die Vorläufige Bilanz zu erstellen um "
-"die Salden Ihrer einzelnen Konten in einem Bericht schnell zu überprüfen"
+"Dieser Bericht liefert \"Summen und Salden\" zum Stichtag und ermöglicht "
+"Ihnen einen schnellen Überblick über die Salden aller Konten in einem Bericht"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_profit_loss.mako:89
 msgid "Periods : "
-msgstr "Perioden : "
+msgstr "Perioden:"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/partner_balance.py:40
 #, python-format
 msgid "PARTNER BALANCE"
-msgstr "Partner-Saldenliste"
+msgstr "PARTNERSALDEN"
 
 #. module: account_financial_report_webkit
 #: constraint:account.move.line:0
 msgid "Company must be the same for its related account and period."
-msgstr "Das Unternehmen muss für das Konto und die Periode dieselbe sein."
+msgstr "Das Unternehmen muss für bezogene Konten und Perioden gleich sein."
 
 #. module: account_financial_report_webkit
 #: help:open.invoices.webkit,partner_ids:0
@@ -768,13 +767,14 @@ msgstr "Das Unternehmen muss für das Konto und die Periode dieselbe sein."
 msgid ""
 "Only selected partners will be printed. Leave empty to print all partners."
 msgstr ""
-"Nur ausgewählte Partner werden gedruckt. Leer lassen, um alle Partner zu drucken."
+"Nur ausgewählte Partner werden gedruckt. Leer lassen, um alle Konten zu "
+"erhalten."
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/webkit_parser_header_fix.py:165
 #, python-format
 msgid "Webkit Report template not found !"
-msgstr "Webkit Report Vorlage nicht gefunden!"
+msgstr "Webkit-Berichtsvorlage wurde nicht gefunden!"
 
 #. module: account_financial_report_webkit
 #: selection:account.common.balance.report,comp0_filter:0
@@ -801,17 +801,17 @@ msgstr "Datum"
 #. module: account_financial_report_webkit
 #: help:general.ledger.webkit,centralize:0
 msgid "Uncheck to display all the details of centralized accounts."
-msgstr "Deaktivieren Sie die Option, um alle Details der zusammengefassten Konten anzuzeigen."
+msgstr "Demarkieren, um zu den Abstimmkonten auch Details anzuzeigen."
 
 #. module: account_financial_report_webkit
 #: constraint:account.move.line:0
 msgid "You can not create journal items on an account of type view."
-msgstr "Sie können keine Buchungen auf ein Konto des Typs Ansicht erstellen."
+msgstr "Sie dürfen ein Konto der Art 'Sicht' nicht im Journal bebuchen."
 
 #. module: account_financial_report_webkit
 #: view:account.move.line:0
 msgid "Internal Note"
-msgstr "Interne Mitteilung"
+msgstr "Interne Vermerk"
 
 #. module: account_financial_report_webkit
 #: constraint:account.common.balance.report:0
@@ -824,8 +824,8 @@ msgid ""
 "When no Fiscal year is selected, you must choose to filter by periods or by "
 "date."
 msgstr ""
-"Wenn kein Geschäftsjahr ausgewählt ist, müssen Sie nach Perioden oder Datum "
-"filtern."
+"Wenn kein Geschäftsjahr ausgewählt ist, müssen Sie entweder nach Periode "
+"oder Datum eingrenzen."
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:50
@@ -840,7 +840,7 @@ msgstr "Bis:"
 #. module: account_financial_report_webkit
 #: sql_constraint:account.account:0
 msgid "The code of the account must be unique per company !"
-msgstr "Die Kurzbezeichnung muss innerhalb eines Unternehmens eindeutig sein!"
+msgstr "Der Kontoschlüssel muss je Unternehmen eindeutig sein!"
 
 #. module: account_financial_report_webkit
 #: model:ir.ui.menu,name:account_financial_report_webkit.menu_account_open_invoices
@@ -858,7 +858,7 @@ msgstr "Offene Rechnungen"
 #: selection:trial.balance.webkit,target_move:0
 #, python-format
 msgid "All Posted Entries"
-msgstr "Alle gebuchten Positionen"
+msgstr "Alle gebuchten Einträge"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partner_balance.mako:87
@@ -874,7 +874,7 @@ msgstr "Vergleich %s"
 #: code:addons/account_financial_report_webkit/report/partners_ledger.py:102
 #, python-format
 msgid "No accounts to print."
-msgstr "Keine Konten zu drucken"
+msgstr "Keine zu druckenden Konten."
 
 #. module: account_financial_report_webkit
 #: help:account.common.balance.report,fiscalyear_id:0
@@ -884,14 +884,12 @@ msgstr "Keine Konten zu drucken"
 #: help:partners.ledger.webkit,fiscalyear_id:0
 #: help:trial.balance.webkit,fiscalyear_id:0
 msgid "Keep empty for all open fiscal year"
-msgstr "Leer lassen für alle offenen Geschäftsjahre"
+msgstr "Leer lassen, um alle offenen im Geschäftsjahr zu erhalten"
 
 #. module: account_financial_report_webkit
 #: help:account.move.line,last_rec_date:0
-msgid ""
-"the date of the last reconciliation (full or partial) account move line"
-msgstr ""
-"letztes Ausgleichsdatum einer Buchung (voll- oder teilausgleich)"
+msgid "the date of the last reconciliation (full or partial) account move line"
+msgstr "Das Datum der letzten Buchung eines Teil- oder Vollausgleichs"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:107
@@ -911,7 +909,7 @@ msgstr "Haben"
 #: selection:partners.ledger.webkit,filter:0
 #: selection:trial.balance.webkit,filter:0
 msgid "No Filters"
-msgstr "Keine Filter"
+msgstr "Keine Eingrenzung"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/open_invoices.py:102
@@ -930,14 +928,14 @@ msgstr "Saldo"
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:103
 msgid "Counter part"
-msgstr "Gegenkonto"
+msgstr "Gegenbuch"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partner_balance.mako:168
 #: report:addons/account_financial_report_webkit/report/templates/account_report_profit_loss.mako:134
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:149
 msgid "% Difference"
-msgstr "% Differenz"
+msgstr "% Abweichung"
 
 #. module: account_financial_report_webkit
 #: help:account.common.balance.report,filter:0
@@ -949,8 +947,8 @@ msgid ""
 "Filter by date : no opening balance will be displayed. (opening balance can "
 "only be calculated based on period to be correct)."
 msgstr ""
-"Filter nach Datum : keine Anfangssaldo wird angezeigt. (der Anfangssaldo "
-"kann nur basierend auf den Perioden korrekt berechnet werden)"
+"Nach Datum eingrenzen: Die Eröffnungsbilanz wird nicht einbezogen. (Die "
+"Eröffnungsbilanz kann nur bei Periodeneingrenzung korrekt ermittelt werden)."
 
 #. module: account_financial_report_webkit
 #: constraint:account.account:0
@@ -959,9 +957,9 @@ msgid ""
 "You can not select an account type with a deferral method different of "
 "\"Unreconciled\" for accounts with internal type \"Payable/Receivable\"! "
 msgstr ""
-"Konfigurationsfehler! \n"
-"Forderungen und Verbindlichkeiten müssen als Vortragsmethode "
-"\"unausgegleichen\" haben !" 
+"Konfigurationsfehler! Sie dürfen für Konten der internen Art Forderungen/"
+"Verbindlichkeiten kein Konto auswählen, welches als Abgrenzungart \"Nicht "
+"Ausgleichbar\" ist."
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/partner_balance.py:47
@@ -969,13 +967,13 @@ msgstr ""
 #: view:partner.balance.webkit:0
 #, python-format
 msgid "Partner Balance"
-msgstr "Partner-Saldenliste"
+msgstr "Partnersaldo"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/general_ledger.py:146
 #, python-format
 msgid "Centralized Entries"
-msgstr "Zusammengefasste Einträge"
+msgstr "Abstimmbuchungen"
 
 #. module: account_financial_report_webkit
 #: view:general.ledger.webkit:0
@@ -991,19 +989,19 @@ msgstr "Kontenfilter"
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partners_ledger.mako:32
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:56
 msgid "Dates Filter"
-msgstr "Datumfilter"
+msgstr "Datumseingrenzung"
 
 #. module: account_financial_report_webkit
 #: constraint:account.move.line:0
 msgid "You can not create journal items on closed account."
-msgstr "Sie können keine Buchungen für geschlossene Konten erstellen."
+msgstr "Sie dürfen ein abgeschlossenes Konto im Journal nicht mehr bebuchen."
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/common_reports.py:64
 #: selection:general.ledger.webkit,display_account:0
 #, python-format
 msgid "With transactions or non zero balance"
-msgstr "Mit Buchungen oder Saldo ungleich 0"
+msgstr "Mit Bewegungen oder Saldo ungleich Null"
 
 #. module: account_financial_report_webkit
 #: selection:account.common.balance.report,comp0_filter:0
@@ -1032,12 +1030,12 @@ msgstr "Perioden"
 #: report:addons/account_financial_report_webkit/report/templates/account_report_open_invoices.mako:127
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partners_ledger.mako:121
 msgid "Curr. Balance"
-msgstr "Saldo Währung"
+msgstr "Akt. Saldo"
 
 #. module: account_financial_report_webkit
 #: model:ir.model,name:account_financial_report_webkit.model_account_move_line
 msgid "Journal Items"
-msgstr "Buchungen"
+msgstr "Journalposten"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/common_reports.py:416
@@ -1064,9 +1062,9 @@ msgid ""
 "currency. You should remove the secondary currency on the account or select "
 "a multi-currency view on the journal."
 msgstr ""
-"Das ausgewählte Konto Ihrer Buchung erzwingt die Angabe einer Alternativwährung. "
-"Sie müssen die Verwendung einer Alternativwährung in den Einstellungen des Kontos "
-"ausschalten oder aber Mehrwährungsfähigkeit im Bericht einschalten."
+"Das gewählte Konto Ihres Journaleintrags erfordert die Angabe einer "
+"Zweitwährung. Sie müssen entweder die Zweitwährung auf dem Konto entfernen "
+"oder eine mehrwährungsfähige Sicht auf das Journal wählen."
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:93
@@ -1084,7 +1082,7 @@ msgstr "Kein gültiger Filter"
 #. module: account_financial_report_webkit
 #: view:open.invoices.webkit:0
 msgid "Clearance Analysis Options"
-msgstr "Abschluss Analyse Optionen"
+msgstr "Einstellungen zur Tilgungsanalyse"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:97
@@ -1112,7 +1110,7 @@ msgstr "Gruppiere Partner nach Währung"
 #: field:partner.balance.webkit,result_selection:0
 #: field:partners.ledger.webkit,result_selection:0
 msgid "Partner's"
-msgstr "Partner"
+msgstr "Des Partners"
 
 #. module: account_financial_report_webkit
 #: view:general.ledger.webkit:0
@@ -1120,8 +1118,8 @@ msgid ""
 "This report allows you to print or generate a pdf of your general ledger "
 "with details of all your account journals"
 msgstr ""
-"Dieser Bericht ermöglicht es Ihnen, das Hauptbuch mit Details zu allen "
-"Buchungen zu erstellen"
+"Dieser Bericht liefert eine Übersicht Ihres Hauptbuchs mit Details aus allen "
+"Journalen"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/profit_loss.py:39
@@ -1150,7 +1148,7 @@ msgstr "Kontenplan"
 #: report:addons/account_financial_report_webkit/report/templates/account_report_profit_loss.mako:133
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:148
 msgid "Difference"
-msgstr "Differenz"
+msgstr "Abweichung"
 
 #. module: account_financial_report_webkit
 #: field:account.common.balance.report,target_move:0
@@ -1166,7 +1164,7 @@ msgstr "Differenz"
 #: field:partners.ledger.webkit,target_move:0
 #: field:trial.balance.webkit,target_move:0
 msgid "Target Moves"
-msgstr "Filter Buchungen"
+msgstr "Buchungsziele"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:44
@@ -1176,7 +1174,7 @@ msgstr "Filter Buchungen"
 #: report:addons/account_financial_report_webkit/report/templates/account_report_profit_loss.mako:56
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:69
 msgid "From:"
-msgstr "Von:"
+msgstr "Ab:"
 
 #. module: account_financial_report_webkit
 #: field:account.common.balance.report,comp0_date_to:0
@@ -1214,24 +1212,24 @@ msgstr "Enddatum"
 #: field:trial.balance.webkit,comp2_period_from:0
 #: field:trial.balance.webkit,period_from:0
 msgid "Start Period"
-msgstr "Start Periode"
+msgstr "Anfangsperiode"
 
 #. module: account_financial_report_webkit
 #: field:open.invoices.webkit,until_date:0
 msgid "Clearance date"
-msgstr "Abschlussdatum"
+msgstr "Tilgungsdatum"
 
 #. module: account_financial_report_webkit
 #: model:ir.model,name:account_financial_report_webkit.model_partners_ledger_webkit
 msgid "Partner Ledger Report"
-msgstr "Partner-Kontoauszug"
+msgstr "Bericht der Partnerbuchhaltung"
 
 #. module: account_financial_report_webkit
 #: view:open.invoices.webkit:0
 #: view:partner.balance.webkit:0
 #: view:partners.ledger.webkit:0
 msgid "Partners Filters"
-msgstr "Partner Filter"
+msgstr "Partnereingrenzung"
 
 #. module: account_financial_report_webkit
 #: selection:account.common.balance.report,comp0_filter:0
@@ -1301,7 +1299,7 @@ msgstr "Seite"
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partner_balance.mako:50
 msgid "Partners Filter"
-msgstr "Partner Filter"
+msgstr "Partnereingrenzung"
 
 #. module: account_financial_report_webkit
 #: selection:account.common.balance.report,display_account:0
@@ -1331,14 +1329,14 @@ msgstr "Kein Partner"
 #: code:addons/account_financial_report_webkit/report/open_invoices.py:41
 #, python-format
 msgid "OPEN INVOICES REPORT"
-msgstr "OFFENE RECHUNGEN"
+msgstr "Bericht zu Offenen Posten"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/partners_ledger.py:41
 #: code:addons/account_financial_report_webkit/report/webkit_parser_header_fix.py:58
 #, python-format
 msgid "PARTNER LEDGER"
-msgstr "PARTNER-KONTOAUSZUG"
+msgstr "PARTNERBUCHHALTUNG"
 
 #. module: account_financial_report_webkit
 #: selection:account.common.balance.report,target_move:0
@@ -1355,7 +1353,7 @@ msgstr "Alle Einträge"
 #. module: account_financial_report_webkit
 #: sql_constraint:account.move.line:0
 msgid "Wrong credit or debit value in accounting entry !"
-msgstr "Falscher Buchungsbetrag in Soll oder Haben!"
+msgstr "Falsche Soll- oder Habenbetrag in der Buchungszeile!"
 
 #. module: account_financial_report_webkit
 #: field:account.common.balance.report,comp0_filter:0
@@ -1368,7 +1366,7 @@ msgstr "Falscher Buchungsbetrag in Soll oder Haben!"
 #: field:trial.balance.webkit,comp1_filter:0
 #: field:trial.balance.webkit,comp2_filter:0
 msgid "Compare By"
-msgstr "Vergleichen mit"
+msgstr "Vergleich nach"
 
 #. module: account_financial_report_webkit
 #: view:account.aged.trial.balance.webkit:account_financial_report_webkit.account_aged_trial_balance_webkit
