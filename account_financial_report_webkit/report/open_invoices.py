@@ -145,10 +145,11 @@ class PartnersOpenInvoicesWebkit(report_sxw.rml_parse,
         ledger_lines_memoizer = self._compute_open_transactions_lines(
             account_ids, main_filter, target_move, start, stop, date_until,
             partner_filter=partner_ids)
-        objects = self.pool.get('account.account').browse(self.cursor,
-                                                          self.uid,
-                                                          account_ids,
-                                                          context=self.localcontext)
+        objects = self.pool.get('account.account').browse(
+                                                  self.cursor,
+                                                  self.uid,
+                                                  account_ids,
+                                                  context=self.localcontext)
 
         ledger_lines = {}
         init_balance = {}
