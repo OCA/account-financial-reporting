@@ -25,7 +25,7 @@
         %>
 
         <div class="act_as_table data_table">
-            <div class="act_as_row labels">
+            <div class="act_as_row labels" style="page-break-inside: avoid">
                 <div class="act_as_cell">${_('Chart of Account')}</div>
                 <div class="act_as_cell">${_('Fiscal Year')}</div>
                 <div class="act_as_cell">
@@ -39,7 +39,7 @@
                 <div class="act_as_cell">${_('Target Moves')}</div>
                 <div class="act_as_cell">${_('Initial Balance')}</div>
             </div>
-            <div class="act_as_row">
+            <div class="act_as_row" style="page-break-inside: avoid">
                 <div class="act_as_cell">${ chart_account.name }</div>
                 <div class="act_as_cell">${ fiscalyear.name if fiscalyear else '-' }</div>
                 <div class="act_as_cell">
@@ -96,7 +96,7 @@
                         ${partner_name or _('No Partner')}
                     </div>
                     <div class="act_as_thead">
-                        <div class="act_as_row labels">
+                        <div class="act_as_row labels" style="page-break-inside: avoid">
                             ## date
                             <div class="act_as_cell first_column" style="width: 50px;">${_('Date')}</div>
                             ## period
@@ -141,7 +141,7 @@
                               cumul_balance += part_cumul_balance
                               cumul_balance_curr += part_cumul_balance_curr
                             %>
-                            <div class="act_as_row initial_balance">
+                            <div class="act_as_row initial_balance" style="page-break-inside: avoid">
                               ## date
                               <div class="act_as_cell first_column"></div>
                               ## period
@@ -184,7 +184,7 @@
                             label_elements.append("(%s)" % (line['invoice_number'],))
                           label = ' '.join(label_elements)
                           %>
-                            <div class="act_as_row lines">
+                            <div class="act_as_row lines" style="page-break-inside: avoid">
                               ## date
                               <div class="act_as_cell first_column">${formatLang(line.get('ldate') or '', date=True)}</div>
                               ## period
@@ -216,7 +216,7 @@
                               %endif
                           </div>
                         %endfor
-                        <div class="act_as_row lines labels">
+                        <div class="act_as_row lines labels" style="page-break-inside: avoid">
                           ## date
                           <div class="act_as_cell first_column"></div>
                           ## period
@@ -261,7 +261,7 @@
                 %endfor
 
                 <div class="act_as_table list_table" style="margin-top:5px;">
-                    <div class="act_as_row labels" style="font-weight: bold; font-size: 12px;">
+                    <div class="act_as_row labels" style="font-weight: bold; font-size: 12px; page-break-inside: avoid">
                             <div class="act_as_cell first_column" style="width: 450px;">${account.code} - ${account.name}</div>
                             ## label
                             <div class="act_as_cell" style="width: 360px;">${_("Cumulated Balance on Account")}</div>

@@ -5,7 +5,6 @@
     <record id="partners_balance_webkit_xls_wizard_view" model="ir.ui.view">
       <field name="name">partner.balance.webkit.xls</field>
       <field name="model">partner.balance.webkit</field>
-      <field name="type">form</field>
       <field name="inherit_id" ref="account_financial_report_webkit.account_partner_balance_view_webkit"/>
       <field name="arch" type="xml">
         <data>

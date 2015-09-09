@@ -47,11 +47,14 @@ class AccountMoveLine(orm.Model):
             res[line.id] = {'last_rec_date': False}
             rec = line.reconcile_id or line.reconcile_partial_id or False
             if rec:
-                # we use cursor in order to gain some perfs
+                # we use cursor in order to gain some perfs.
+                # also, important point: LIMIT 1 is not used due to
+                # performance issues when in conjonction with "OR"
+                # (one backwards index scan instead of 2 scans and a sort)
                 cursor.execute('SELECT date from account_move_line'
                                ' WHERE reconcile_id = %s'
                                ' OR reconcile_partial_id = %s'
-                               ' ORDER BY date DESC LIMIT 1 ',
+                               ' ORDER BY date DESC',
                                (rec.id, rec.id))
                 res_set = cursor.fetchone()
                 if res_set:
