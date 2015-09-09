@@ -4,7 +4,6 @@
         <record id="account_financial_report_view" model="ir.ui.view">
             <field name="name">Account Financial Report (Template)</field>
             <field name="model">afr</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Account Financial Report (Templates)" version="7.0">
                     <h2><label for="name"/></h2> 
@@ -81,7 +80,6 @@
         <record id="account_financial_report_tree" model="ir.ui.view">
             <field name="name">Account Financial Report (Template)</field>
             <field name="model">afr</field>
-            <field name="type">tree</field>
             <field name="arch" type="xml">
             <tree string="Account Financial Report (Templates)">
                 <field name="name"/>
