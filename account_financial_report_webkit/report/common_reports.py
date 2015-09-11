@@ -424,10 +424,11 @@ class CommonReportHeaderWebkit(common_report_header):
         opening_period_selected = self.get_included_opening_period(
             start_period)
 
-        for acc in self.pool.get('account.account').browse(self.cursor,
-                                               self.uid,
-                                               account_ids,
-                                               context=self.localcontext):
+        for acc in self.pool.get('account.account').browse(
+                self.cursor,
+                self.uid,
+                account_ids,
+                context=self.localcontext):
             res[acc.id] = self._compute_init_balance(default_values=True)
             if acc.user_type.close_method == 'none':
                 # we compute the initial balance for close_method == none only
