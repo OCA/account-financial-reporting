@@ -278,10 +278,11 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
 
         to_display = dict.fromkeys(account_ids, True)
         objects = []
-        for account in self.pool.get('account.account').browse(self.cursor,
-                                                    self.uid,
-                                                    account_ids,
-                                                    context=self.localcontext):
+        for account in self.pool.get('account.account').browse(
+                self.cursor,
+                self.uid,
+                account_ids,
+                context=self.localcontext):
             if not account.parent_id:  # hide top level account
                 continue
             if account.type == 'consolidation':
