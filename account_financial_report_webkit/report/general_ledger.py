@@ -123,8 +123,9 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
             stop)
         objects = []
         for account in self.pool.get('account.account').browse(self.cursor,
-                                                               self.uid,
-                                                               accounts):
+                                                       self.uid,
+                                                       accounts,
+                                                       context=self.localcontext):
             if do_centralize and account.centralized \
                     and ledger_lines_memoizer.get(account.id):
                 account.ledger_lines = self._centralize_lines(
