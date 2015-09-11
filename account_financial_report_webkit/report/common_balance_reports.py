@@ -277,10 +277,10 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
                 comp_accounts_by_ids.append(comparison_result)
 
         objects = self.pool.get('account.account').browse(
-                                                  self.cursor,
-                                                  self.uid,
-                                                  account_ids,
-                                                  context=self.localcontext)
+            self.cursor,
+            self.uid,
+            account_ids,
+            context=self.localcontext)
 
         to_display_accounts = dict.fromkeys(account_ids, True)
         init_balance_accounts = dict.fromkeys(account_ids, False)
