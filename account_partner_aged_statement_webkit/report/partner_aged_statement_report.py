@@ -37,14 +37,14 @@ from openerp.addons.account.report.account_aged_partner_balance import (
 
 
 class PartnerAgedTrialReport(aged_trial_report):
-    _partner = None
+    _partners = None
 
     def __init__(self, cr, uid, name, context):
         super(PartnerAgedTrialReport, self).__init__(cr, uid, name, context)
         current_user = self.localcontext["user"]
         self._company = current_user.company_id
         if self.localcontext.get("active_model", "") == "res.partner":
-            self._partner = self.localcontext["active_id"]
+            self._partners = self.localcontext["active_ids"]
         self.ttype = 'receipt'
         self.localcontext.update({
             'message': self._message,
@@ -294,7 +294,7 @@ class PartnerAgedTrialReport(aged_trial_report):
         res = super(PartnerAgedTrialReport, self).set_context(
             objects, data, ids, report_type=report_type)
         self.orig_query = self.query
-        if self._partner is not None:
+        if self._partners is not None:
             self.query = "{0} AND l.partner_id = {1}".format(
                 self.query,
                 ", ".join(str(int(i)) for i in self._partners),
