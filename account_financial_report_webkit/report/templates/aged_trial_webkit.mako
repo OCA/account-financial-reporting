@@ -108,13 +108,13 @@
                       ## partner
                       <div class="act_as_cell first_column" style="width: 60px;">${_('Partner')}</div>
                       ## code
-                      <div class="act_as_cell" style="width: 70px;">${_('code')}</div>
+                      <div class="act_as_cell" style="width: 70px;">${_('Code')}</div>
                       ## invoice for detailed reports
                       %if acc.aged_lines_by_invoice:
                         <div class="act_as_cell" style="width: 70px;">${_('Invoice')}</div>
                       %endif
                       ## balance
-                      <div class="act_as_cell classif_title" style="width: 70px;">${_('balance')}</div>
+                      <div class="act_as_cell classif_title" style="width: 70px;">${_('Balance')}</div>
                       ## Classifications
                       %for title in ranges_titles:
                         <div class="act_as_cell classif classif_title">${title}</div>

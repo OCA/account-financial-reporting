@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-04 20:19+0000\n"
-"PO-Revision-Date: 2015-09-04 20:19+0000\n"
+"POT-Creation-Date: 2015-09-11 19:21+0000\n"
+"PO-Revision-Date: 2015-09-11 19:21+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -209,12 +209,6 @@ msgstr ""
 #: code:addons/account_financial_report_webkit/report/webkit_parser_header_fix.py:273
 #, python-format
 msgid "Webkit render"
-msgstr ""
-
-#. module: account_financial_report_webkit
-#: code:addons/account_financial_report_webkit/report/aged_partner_balance.py:53
-#, python-format
-msgid "Overdue ≤ %s d."
 msgstr ""
 
 #. module: account_financial_report_webkit
@@ -628,11 +622,6 @@ msgid "Cumul. Bal."
 msgstr ""
 
 #. module: account_financial_report_webkit
-#: report:addons/account_financial_report_webkit/report/templates/aged_trial_webkit.mako:117
-msgid "balance"
-msgstr ""
-
-#. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:23
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partner_balance.mako:39
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partners_ledger.mako:24
@@ -768,21 +757,10 @@ msgid "No"
 msgstr ""
 
 #. module: account_financial_report_webkit
-#: report:addons/account_financial_report_webkit/report/templates/aged_trial_webkit.mako:111
-msgid "code"
-msgstr ""
-
-#. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partner_balance.mako:101
 #: report:addons/account_financial_report_webkit/report/templates/account_report_profit_loss.mako:95
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:108
 msgid "Initial Balance:"
-msgstr ""
-
-#. module: account_financial_report_webkit
-#: code:addons/account_financial_report_webkit/report/aged_partner_balance.py:52
-#, python-format
-msgid "Due"
 msgstr ""
 
 #. module: account_financial_report_webkit
@@ -1012,6 +990,7 @@ msgstr ""
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partner_balance.mako:159
 #: report:addons/account_financial_report_webkit/report/templates/account_report_profit_loss.mako:119
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:134
+#: report:addons/account_financial_report_webkit/report/templates/aged_trial_webkit.mako:117
 msgid "Balance"
 msgstr ""
 
@@ -1029,6 +1008,7 @@ msgstr ""
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:118
+#: report:addons/account_financial_report_webkit/report/templates/aged_trial_webkit.mako:111
 msgid "Code"
 msgstr ""
 
@@ -1140,6 +1120,12 @@ msgstr ""
 #: code:addons/account_financial_report_webkit/report/common_reports.py:72
 #, python-format
 msgid "All accounts"
+msgstr ""
+
+#. module: account_financial_report_webkit
+#: code:addons/account_financial_report_webkit/report/aged_partner_balance.py:52
+#, python-format
+msgid "Current"
 msgstr ""
 
 #. module: account_financial_report_webkit
@@ -1437,6 +1423,12 @@ msgstr ""
 #. module: account_financial_report_webkit
 #: view:partner.balance.webkit:0
 msgid "This report is an analysis done by a partner, It is a PDF report containing one line per partner representing the cumulative credit balance"
+msgstr ""
+
+#. module: account_financial_report_webkit
+#: code:addons/account_financial_report_webkit/report/aged_partner_balance.py:53
+#, python-format
+msgid "Age ≤ %s d."
 msgstr ""
 
 #. module: account_financial_report_webkit
