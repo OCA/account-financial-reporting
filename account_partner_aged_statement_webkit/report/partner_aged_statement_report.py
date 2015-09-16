@@ -49,8 +49,8 @@ class PartnerAgedTrialReport(aged_trial_report):
         self.localcontext.update({
             'message': self._message,
             'getLinesCurrent': self._lines_get_current,
-            'getLines3060': self._lines_get_30_60,
-            'getLines60': self._lines_get_60,
+            'getLines3160': self._lines_get_31_60,
+            'getLines61': self._lines_get_61,
             'getLinesRefunds': self._lines_get_refunds,
             'show_message': True,
             'get_current_invoice_lines': self._get_current_invoice_lines,
@@ -96,10 +96,10 @@ class PartnerAgedTrialReport(aged_trial_report):
             res[currency_name] = {
                 'current': 0,
                 '30': 0,
-                '3060': 0,
-                '6090': 0,
-                '90120': 0,
-                '120': 0,
+                '3160': 0,
+                '6190': 0,
+                '91120': 0,
+                '121': 0,
                 'total': 0,
                 'currency_name': currency_name,
             }
@@ -114,17 +114,17 @@ class PartnerAgedTrialReport(aged_trial_report):
                 ):
                     current_dict['current'] += amount
 
-                elif line['date_original'] > date_60:
-                    current_dict['3060'] += amount
+                elif line['date_original'] >= date_60:
+                    current_dict['3160'] += amount
 
-                elif line['date_original'] > date_90:
-                    current_dict['6090'] += amount
+                elif line['date_original'] >= date_90:
+                    current_dict['6190'] += amount
 
-                elif line['date_original'] > date_120:
-                    current_dict['90120'] += amount
+                elif line['date_original'] >= date_120:
+                    current_dict['91120'] += amount
 
                 else:
-                    current_dict['120'] += amount
+                    current_dict['121'] += amount
 
                 current_dict['total'] += amount
 
@@ -203,10 +203,10 @@ class PartnerAgedTrialReport(aged_trial_report):
         print movelines
         return movelines
 
-    def _lines_get_30_60(self, partner, company):
+    def _lines_get_31_60(self, partner, company):
         today = self.today
-        start = today - relativedelta(days=30)
-        stop = start - relativedelta(days=30)
+        start = today - relativedelta(days=31)
+        stop = today - relativedelta(days=60)
 
         today = today.strftime(DEFAULT_SERVER_DATE_FORMAT)
         start = start.strftime(DEFAULT_SERVER_DATE_FORMAT)
@@ -217,14 +217,14 @@ class PartnerAgedTrialReport(aged_trial_report):
             line for line in movelines
             if ((
                 line['date_original'] and
-                stop < line['date_original'] <= start
+                stop <= line['date_original'] <= start
             ) and line['type'] in ['in_invoice', 'out_invoice'])
         ]
         return movelines
 
-    def _lines_get_60(self, partner, company):
+    def _lines_get_61(self, partner, company):
         today = self.today
-        start = today - relativedelta(days=60)
+        start = today - relativedelta(days=61)
 
         today = today.strftime(DEFAULT_SERVER_DATE_FORMAT)
         start = start.strftime(DEFAULT_SERVER_DATE_FORMAT)

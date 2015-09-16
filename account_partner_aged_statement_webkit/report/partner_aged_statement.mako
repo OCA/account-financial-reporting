@@ -59,9 +59,9 @@
             <table class="basic_table" style="width: 100%;">
                 <tr>
                     <th>${_('Current')}</th>
-                    <th>${_('30-60')}</th>
-                    <th>${_('60-90')}</th>
-                    <th>${_('90-120')}</th>
+                    <th>${_('31-60')}</th>
+                    <th>${_('61-90')}</th>
+                    <th>${_('91-120')}</th>
                     <th>${_('+120')}</th>
                     <th>${_('Total')}</th>
                     <th>${_('Currency')}</th>
@@ -69,10 +69,10 @@
                 %for l in get_balance(partner, company):
                 <tr>
                     <td>${ l['current'] }</td>
-                    <td>${ l['3060'] }</td>
-                    <td>${ l['6090'] }</td>
-                    <td>${ l['90120'] }</td>
-                    <td>${ l['120'] }</td>
+                    <td>${ l['3160'] }</td>
+                    <td>${ l['6190'] }</td>
+                    <td>${ l['91120'] }</td>
+                    <td>${ l['121'] }</td>
                     <td>${ l['total'] }</td>
                     <td>${ l['currency_name']}</td>
                 </tr>
@@ -120,9 +120,9 @@
         %endif  ## if getLinesCurrent(partner, company)
 
         <div class="title">${_('List of overdue invoices')}</div>
-        %if getLines3060(partner, company):
+        %if getLines3160(partner, company):
             <br/>
-            <div class="total">${_('30-60')}</div>
+            <div class="total">${_('31-60')}</div>
             <table class="basic_table" style="width: 100%;">
                 <tr>
                     <th>${_('Date')}</th>
@@ -134,7 +134,7 @@
                     <th>${_('Total')}</th>
                     <th>${_('Currency')}</th>
                 </tr>
-                %for line in getLines3060(partner, company):
+                %for line in getLines3160(partner, company):
                 <tr>
                     <td>${ formatLang(line['date_original'], date=True) }</td>
                     <td>${ line['name'] }</td>
@@ -145,10 +145,10 @@
                     <td style="text-align: right;">${ formatLang(line['amount_unreconciled']) }</td>
                     <td>${ line['currency_name'] }</td>
                 </tr>
-                %endfor  ## for line in getLines3060(partner, company)
+                %endfor  ## for line in getLines3160(partner, company)
             </table>
-        %endif  ## if getLines3060(partner, company)
-        %if getLines60(partner, company):
+        %endif  ## if getLines3160(partner, company)
+        %if getLines61(partner, company):
             <br/>
             <div class="total">${_('+60')}</div>
             <table class="basic_table" style="width: 100%;">
@@ -162,7 +162,7 @@
                     <th>${_('Total')}</th>
                     <th>${_('Currency')}</th>
                 </tr>
-                %for line in getLines60(partner, company):
+                %for line in getLines61(partner, company):
                 <tr>
                     <td>${ formatLang(line['date_original'], date=True) }</td>
                     <td>${ line['name'] }</td>
@@ -173,9 +173,9 @@
                     <td style="text-align: right;">${ formatLang(line['amount_unreconciled']) }</td>
                     <td>${ line['currency_name'] }</td>
                 </tr>
-                %endfor  ## for line in getLines60(partner, company)
+                %endfor  ## for line in getLines61(partner, company)
             </table>
-        %endif  ## if getLines60(partner)
+        %endif  ## if getLines61(partner)
 
         %if getLinesRefunds(partner, company):
             <br/>

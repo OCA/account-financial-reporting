@@ -137,10 +137,10 @@ class test_aged_statement(common.TransactionCase):
 
         self.assertEqual(len(balance), 1)
         self.assertEqual(balance[0]['current'], 400)
-        self.assertEqual(balance[0]['3060'], 150)
-        self.assertEqual(balance[0]['6090'], 200)
-        self.assertEqual(balance[0]['90120'], 250)
-        self.assertEqual(balance[0]['120'], 500)
+        self.assertEqual(balance[0]['3160'], 150)
+        self.assertEqual(balance[0]['6190'], 200)
+        self.assertEqual(balance[0]['91120'], 250)
+        self.assertEqual(balance[0]['121'], 500)
         self.assertEqual(balance[0]['total'], 400 + 150 + 200 + 250 + 500)
 
     def compare_vals(self, line, vals):
@@ -165,8 +165,8 @@ class test_aged_statement(common.TransactionCase):
             'amount_unreconciled': 100,
         })
 
-    def test_line_get_30_60(self):
-        lines = self.report._lines_get_30_60(self.partner, self.company)
+    def test_line_get_31_60(self):
+        lines = self.report._lines_get_31_60(self.partner, self.company)
 
         self.compare_vals(lines[0], {
             'date_original': self.date2,
@@ -174,9 +174,9 @@ class test_aged_statement(common.TransactionCase):
             'amount_unreconciled': 150,
         })
 
-    def test_line_get_60(self):
+    def test_line_get_61(self):
         lines = sorted(
-            self.report._lines_get_60(self.partner, self.company),
+            self.report._lines_get_61(self.partner, self.company),
             key=lambda l: l['date_original'])
 
         self.compare_vals(lines[0], {
