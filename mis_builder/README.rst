@@ -1,4 +1,5 @@
 .. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
+    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 
 ===========
@@ -41,12 +42,29 @@ To configure this module, you need to:
 .. figure:: static/description/ex_dashboard.png
    :alt: Sample dashboard view
 
+.. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
+   :alt: Try me on Runbot
+   :target: https://runbot.odoo-community.org/runbot/91/8.0
+
 For further information, please visit:
 
 * https://www.odoo.com/forum/help-1
 
 Known issues / Roadmap
 ======================
+
+* Add 'Fiscal Year' period type.
+
+* Allow selecting accounts by type. This is currently possible by expressing
+  a query such as balp[][('account_id.user_type.code', '=', ...)]. This will work
+  but would be more efficient if one could write balp[user_type=...], as it would
+  involve much less queries to the database.
+
+* A mechanism to have a global move line filter at the level of the report template,
+  report instance, or even column. Such a domain filter would be ANDed with the
+  other filters and would allow to easily create reports filtered on analytic axis
+  or business unit. To be complete such a mechanism should allow implementing similar
+  filters on non accounting queries.
 
 * More tests should be added. The first part is creating test data, then it will be
   easier. At the minimum, We need the following test data:
