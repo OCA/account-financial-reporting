@@ -21,7 +21,7 @@
 ##############################################################################
 
 from openerp import models, fields, api, _
-from openerp.exceptions import Warning, RedirectWarning, ValidationError
+from openerp.exceptions import RedirectWarning, ValidationError
 import openerp.addons.decimal_precision as dp
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
@@ -275,6 +275,7 @@ class IntrastatProductDeclaration(models.Model):
         product = inv_line.product_id
         invoice = inv_line.invoice_id
         intrastat_unit_id = inv_line.intrastat_id.intrastat_unit_id
+        intrastat_code = inv_line.hs_code_id.hs_code
         source_uom = inv_line.uos_id
         weight_uom_categ = self._uom_refs['weight_uom_categ']
         kg_uom = self._uom_refs['kg_uom']
