@@ -82,7 +82,7 @@ class AccountInvoiceLine(models.Model):
 
         if product:
             product = self.env['product.product'].browse(product)
-            hs_code = product.get_hs_code_recursively()
+            hs_code = product.product_tmpl_id.get_hs_code_recursively()
             if hs_code:
                 res['value']['hs_code_id'] = hs_code.id
         return res
