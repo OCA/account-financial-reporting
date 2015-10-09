@@ -22,7 +22,7 @@
 ##############################################################################
 {
     "name": "Accounting Financial Reports Horizontal",
-    "version": "0.3",
+    "version": "8.0.0.3.0",
     "author": "Therp BV,Agile Business Group,Odoo Community Association (OCA)",
     "category": 'Accounting & Finance',
     'website': 'https://github.com/OCA/account-financial-reporting',
