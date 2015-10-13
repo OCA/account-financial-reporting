@@ -33,6 +33,6 @@ Unported addons
 ---------------
 addon | version | summary
 --- | --- | ---
-[account_financial_report](__unported__/account_financial_report/) | 2.0 (unported) | Common financial reports
+[account_financial_report](account_financial_report/) | 2.0 (unported) | Common financial reports
 
 [//]: # (end addons)
