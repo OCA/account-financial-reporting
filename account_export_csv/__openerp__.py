@@ -46,6 +46,6 @@
         'wizard/account_export_csv_view.xml',
         'menu.xml',
     ],
-    'installable': True,
+    'installable': False,
     'active': False,
 }
