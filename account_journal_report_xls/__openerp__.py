@@ -40,5 +40,5 @@
         'tests/export_csv_journal_by_fiscal_year.yml',
         'tests/export_csv_journal_by_period.yml',
     ],
-    'installable': True,
+    'installable': False,
 }

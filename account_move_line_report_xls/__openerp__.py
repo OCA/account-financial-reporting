@@ -31,4 +31,5 @@
     'data': [
         'report/move_line_list_xls.xml',
     ],
+    'installable': False,
 }
