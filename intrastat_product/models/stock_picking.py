@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 ##############################################################################
 #
+#    Intrastat Product module for Odoo
 #    Copyright (C) 2011-2015 Akretion (http://www.akretion.com)
 #    Copyright (C) 2009-2015 Noviat (http://www.noviat.com)
 #    @author Alexis de Lattre <alexis.delattre@akretion.com>
@@ -21,24 +22,22 @@
 #
 ##############################################################################
 
-{
-    'name': 'Product Harmonized System Codes',
-    'version': '0.2',
-    'category': 'Reporting',
-    'license': 'AGPL-3',
-    'summary': 'Base module for Product Import/Export reports',
-    'author': 'Akretion, Noviat, Odoo Community Association (OCA)',
-    'depends': ['product'],
-    'conflicts': ['report_intrastat'],
-    'data': [
-        'security/product_hs_security.xml',
-        'security/ir.model.access.csv',
-        'views/hs_code.xml',
-        'views/product_category.xml',
-        'views/product_template.xml',
-    ],
-    'demo': [
-        'demo/product_demo.xml',
-    ],
-    'installable': True,
-}
+from openerp import models, fields, api
+
+
+class StockPicking(models.Model):
+    _inherit = "stock.picking"
+
+    intrastat_transport_id = fields.Many2one(
+        'intrastat.transport_mode', string='Transport Mode',
+        help="This information is used in Intrastat reports")
+    intrastat = fields.Char(related='company_id.intrastat')
+
+    @api.model
+    def _create_invoice_from_picking(self, picking, vals):
+        '''Copy transport and department from picking to invoice'''
+        vals['intrastat_transport_id'] = picking.intrastat_transport_id.id
+        if picking.partner_id and picking.partner_id.country_id:
+            vals['src_dest_country_id'] = picking.partner_id.country_id.id
+        return super(StockPicking, self)._create_invoice_from_picking(
+            picking, vals)

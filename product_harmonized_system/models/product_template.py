@@ -21,24 +21,31 @@
 #
 ##############################################################################
 
-{
-    'name': 'Product Harmonized System Codes',
-    'version': '0.2',
-    'category': 'Reporting',
-    'license': 'AGPL-3',
-    'summary': 'Base module for Product Import/Export reports',
-    'author': 'Akretion, Noviat, Odoo Community Association (OCA)',
-    'depends': ['product'],
-    'conflicts': ['report_intrastat'],
-    'data': [
-        'security/product_hs_security.xml',
-        'security/ir.model.access.csv',
-        'views/hs_code.xml',
-        'views/product_category.xml',
-        'views/product_template.xml',
-    ],
-    'demo': [
-        'demo/product_demo.xml',
-    ],
-    'installable': True,
-}
+from openerp import models, fields, api
+
+
+class ProductTemplate(models.Model):
+    _inherit = "product.template"
+
+    hs_code_id = fields.Many2one(
+        'hs.code', string='H.S. Code',
+        company_dependent=True, ondelete='restrict',
+        help="Harmonised System Code. Nomenclature is "
+        "available from the World Customs Organisation, see "
+        "http://www.wcoomd.org/. You can leave this field empty "
+        "and configure the H.S. code on the product category.")
+    origin_country_id = fields.Many2one(
+        'res.country', string='Country of Origin',
+        help="Country of origin of the product i.e. product "
+        "'made in ____'.")
+
+    @api.multi
+    def get_hs_code_recursively(self):
+        self.ensure_one()
+        if self.hs_code_id:
+            res = self.hs_code_id
+        elif self.categ_id:
+            res = self.categ_id.get_hs_code_recursively()
+        else:
+            res = None
+        return res

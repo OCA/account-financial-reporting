@@ -22,33 +22,35 @@
 #
 ##############################################################################
 
-{
-    'name': 'Intrastat Product',
-    'version': '1.4',
-    'category': 'Intrastat',
-    'license': 'AGPL-3',
-    'summary': 'Base module for Intrastat Product',
-    'author': 'Akretion, Noviat, Odoo Community Association (OCA)',
-    'depends': [
-        'intrastat_base',
-        'product_harmonized_system',
-        'stock',
-        ],
-    'conflicts': ['report_intrastat'],
-    'data': [
-        'views/hs_code.xml',
-        'views/intrastat_unit.xml',
-        'views/intrastat_transaction.xml',
-        'views/intrastat_transport_mode.xml',
-        'views/intrastat_product_declaration.xml',
-        'views/res_company.xml',
-        'views/account_invoice.xml',
-        'views/stock_picking.xml',
-        'security/intrastat_security.xml',
-        'security/ir.model.access.csv',
-        'data/intrastat_transport_mode.xml',
-        'data/intrastat_unit.xml',
-    ],
-    'demo': ['demo/intrastat_demo.xml'],
-    'installable': True,
-}
+from openerp import models, fields, api
+
+
+class IntrastatTransaction(models.Model):
+    _name = 'intrastat.transaction'
+    _description = "Intrastat Transaction"
+    _order = 'code'
+    _rec_name = 'display_name'
+
+    code = fields.Char(string='Code', required=True)
+    description = fields.Text(string='Description')
+    display_name = fields.Char(
+        compute='_compute_display_name', string="Display Name", readonly=True)
+    company_id = fields.Many2one(
+        'res.company', string='Company',
+        default=lambda self: self.env['res.company']._company_default_get(
+            'intrastat.transaction'))
+
+    @api.one
+    @api.depends('code', 'description')
+    def _compute_display_name(self):
+        display_name = self.code
+        if self.description:
+            display_name += ' ' + self.description
+        self.display_name = len(display_name) > 55 \
+            and display_name[:55] + '...' \
+            or display_name
+
+    _sql_constraints = [(
+        'intrastat_transaction_code_unique',
+        'UNIQUE(code, company_id)',
+        'Code must be unique.')]

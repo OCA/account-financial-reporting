@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 ##############################################################################
 #
+#    Intrastat Product module for Odoo
 #    Copyright (C) 2011-2015 Akretion (http://www.akretion.com)
 #    Copyright (C) 2009-2015 Noviat (http://www.noviat.com)
 #    @author Alexis de Lattre <alexis.delattre@akretion.com>
@@ -21,24 +22,27 @@
 #
 ##############################################################################
 
-{
-    'name': 'Product Harmonized System Codes',
-    'version': '0.2',
-    'category': 'Reporting',
-    'license': 'AGPL-3',
-    'summary': 'Base module for Product Import/Export reports',
-    'author': 'Akretion, Noviat, Odoo Community Association (OCA)',
-    'depends': ['product'],
-    'conflicts': ['report_intrastat'],
-    'data': [
-        'security/product_hs_security.xml',
-        'security/ir.model.access.csv',
-        'views/hs_code.xml',
-        'views/product_category.xml',
-        'views/product_template.xml',
-    ],
-    'demo': [
-        'demo/product_demo.xml',
-    ],
-    'installable': True,
-}
+from openerp import models, fields, api, _
+from openerp.exceptions import ValidationError
+
+
+class HSCode(models.Model):
+    _inherit = "hs.code"
+
+    intrastat_unit_id = fields.Many2one(
+        'intrastat.unit', string='Intrastat Supplementary Unit')
+
+    @api.constrains('local_code')
+    def _hs_code(self):
+        if self.company_id.country_id.intrastat:
+            if not self.local_code.isdigit():
+                raise ValidationError(
+                    _("Intrastat Codes should only contain digits. "
+                      "This is not the case for code '%s'.")
+                    % self.local_code)
+            if len(self.local_code) != 8:
+                raise ValidationError(
+                    _("Intrastat Codes should "
+                      "contain 8 digits. This is not the case for "
+                      "Intrastat Code '%s' which has %d digits.")
+                    % (self.local_code, len(self.local_code)))
