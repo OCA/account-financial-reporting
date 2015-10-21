@@ -25,7 +25,6 @@
 import re
 from collections import defaultdict
 
-from openerp.exceptions import Warning
 from openerp.osv import expression
 from openerp.tools.safe_eval import safe_eval
 from openerp.tools.translate import _
@@ -188,7 +187,6 @@ class AccountingExpressionProcessor(object):
 
     def get_aml_domain_for_expr(self, expr,
                                 date_from, date_to,
-                                period_from, period_to,
                                 target_move):
         """ Get a domain on account.move.line for an expression.
 
@@ -213,121 +211,24 @@ class AccountingExpressionProcessor(object):
             if mode not in date_domain_by_mode:
                 date_domain_by_mode[mode] = \
                     self.get_aml_domain_for_dates(date_from, date_to,
-                                                  period_from, period_to,
                                                   mode, target_move)
         return expression.OR(aml_domains) + \
             expression.OR(date_domain_by_mode.values())
 
-    def _period_has_moves(self, period):
-        move_model = self.env['account.move']
-        return bool(move_model.search([('period_id', '=', period.id)],
-                                      limit=1))
-
-    def _get_previous_opening_period(self, period, company_id):
-        period_model = self.env['account.period']
-        periods = period_model.search(
-            [('date_start', '<=', period.date_start),
-             ('special', '=', True),
-             ('company_id', '=', company_id)],
-            order="date_start desc",
-            limit=1)
-        return periods and periods[0]
-
-    def _get_previous_normal_period(self, period, company_id):
-        period_model = self.env['account.period']
-        periods = period_model.search(
-            [('date_start', '<', period.date_start),
-             ('special', '=', False),
-             ('company_id', '=', company_id)],
-            order="date_start desc",
-            limit=1)
-        return periods and periods[0]
-
-    def _get_first_normal_period(self, company_id):
-        period_model = self.env['account.period']
-        periods = period_model.search(
-            [('special', '=', False),
-             ('company_id', '=', company_id)],
-            order="date_start asc",
-            limit=1)
-        return periods and periods[0]
-
-    def _get_period_ids_between(self, period_from, period_to, company_id):
-        period_model = self.env['account.period']
-        periods = period_model.search(
-            [('date_start', '>=', period_from.date_start),
-             ('date_stop', '<=', period_to.date_stop),
-             ('special', '=', False),
-             ('company_id', '=', company_id)])
-        period_ids = [p.id for p in periods]
-        if period_from.special:
-            period_ids.append(period_from.id)
-        return period_ids
-
-    def _get_period_company_ids(self, period_from, period_to):
-        period_model = self.env['account.period']
-        periods = period_model.search(
-            [('date_start', '>=', period_from.date_start),
-             ('date_stop', '<=', period_to.date_stop),
-             ('special', '=', False)])
-        return set([p.company_id.id for p in periods])
-
-    def _get_period_ids_for_mode(self, period_from, period_to, mode):
-        assert not period_from.special
-        assert not period_to.special
-        assert period_from.company_id == period_to.company_id
-        assert period_from.date_start <= period_to.date_start
-        period_ids = []
-        for company_id in self._get_period_company_ids(period_from, period_to):
-            if mode == MODE_VARIATION:
-                period_ids.extend(self._get_period_ids_between(
-                    period_from, period_to, company_id))
-            else:
-                if mode == MODE_INITIAL:
-                    period_to = self._get_previous_normal_period(
-                        period_from, company_id)
-                # look for opening period with moves
-                opening_period = self._get_previous_opening_period(
-                    period_from, company_id)
-                if opening_period and \
-                        self._period_has_moves(opening_period[0]):
-                    # found opening period with moves
-                    if opening_period.date_start == period_from.date_start and\
-                            mode == MODE_INITIAL:
-                        # if the opening period has the same start date as
-                        # period_from, then we'll find the initial balance
-                        # in the initial period and that's it
-                        period_ids.append(opening_period[0].id)
-                        continue
-                    period_from = opening_period[0]
-                else:
-                    # no opening period with moves,
-                    # use very first normal period
-                    period_from = self._get_first_normal_period(company_id)
-                if period_to:
-                    period_ids.extend(self._get_period_ids_between(
-                        period_from, period_to, company_id))
-        return period_ids
-
     def get_aml_domain_for_dates(self, date_from, date_to,
-                                 period_from, period_to,
                                  mode,
                                  target_move):
-        if period_from and period_to:
-            period_ids = self._get_period_ids_for_mode(
-                period_from, period_to, mode)
-            domain = [('period_id', 'in', period_ids)]
-        else:
-            if mode == MODE_VARIATION:
-                domain = [('date', '>=', date_from), ('date', '<=', date_to)]
-            else:
-                raise Warning(_("Modes i and e are only applicable for "
-                                "fiscal periods"))
+        if mode == MODE_VARIATION:
+            domain = [('date', '>=', date_from), ('date', '<=', date_to)]
+        elif mode == MODE_INITIAL:
+            domain = [('date', '<', date_from)]
+        elif mode == MODE_END:
+            domain = [('date', '<=', date_to)]
         if target_move == 'posted':
             domain.append(('move_id.state', '=', 'posted'))
         return expression.normalize_domain(domain)
 
-    def do_queries(self, date_from, date_to, period_from, period_to,
+    def do_queries(self, date_from, date_to,
                    target_move, additional_move_line_filter=None):
         """Query sums of debit and credit for all accounts and domains
         used in expressions.
@@ -343,7 +244,6 @@ class AccountingExpressionProcessor(object):
             if mode not in domain_by_mode:
                 domain_by_mode[mode] = \
                     self.get_aml_domain_for_dates(date_from, date_to,
-                                                  period_from, period_to,
                                                   mode, target_move)
             domain = list(domain) + domain_by_mode[mode]
             domain.append(('account_id', 'in', self._map_account_ids[key]))
