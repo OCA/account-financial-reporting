@@ -86,55 +86,33 @@ class AccountingExpressionProcessor(object):
         # before done_parsing: {(domain, mode): set(account_codes)}
         # after done_parsing: {(domain, mode): list(account_ids)}
         self._map_account_ids = defaultdict(set)
+        # {account_code: account_id} where account_code can be
+        # - None for all accounts
+        # - NNN% for a like
+        # - NNN for a code with an exact match
         self._account_ids_by_code = defaultdict(set)
 
-    def _load_account_codes(self, account_codes, root_account):
+    def _load_account_codes(self, account_codes):
         account_model = self.env['account.account']
-        # TODO: account_obj is necessary because _get_children_and_consol
-        #       does not work in new API?
-        account_obj = self.env.registry('account.account')
         exact_codes = set()
-        like_codes = set()
         for account_code in account_codes:
             if account_code in self._account_ids_by_code:
                 continue
             if account_code is None:
-                # by convention the root account is keyed as
-                # None in _account_ids_by_code, so it is consistent
-                # with what _parse_match_object returns for an
-                # empty list of account codes, ie [None]
-                exact_codes.add(root_account.code)
+                # None means we want all accounts
+                account_ids = account_model.\
+                    search([]).mapped('id')
+                self._account_ids_by_code[account_code].update(account_ids)
             elif '%' in account_code:
-                like_codes.add(account_code)
+                account_ids = account_model.\
+                    search([('code', 'like', account_code)]).mapped('id')
+                self._account_ids_by_code[account_code].update(account_ids)
             else:
+                # search exact codes after the loop to do less queries
                 exact_codes.add(account_code)
         for account in account_model.\
-                search([('code', 'in', list(exact_codes)),
-                        ('parent_id', 'child_of', root_account.id)]):
-            if account.code == root_account.code:
-                code = None
-            else:
-                code = account.code
-            if account.type in ('view', 'consolidation'):
-                self._account_ids_by_code[code].update(
-                    account_obj._get_children_and_consol(
-                        self.env.cr, self.env.uid,
-                        [account.id],
-                        self.env.context))
-            else:
-                self._account_ids_by_code[code].add(account.id)
-        for like_code in like_codes:
-            for account in account_model.\
-                    search([('code', 'like', like_code),
-                            ('parent_id', 'child_of', root_account.id)]):
-                if account.type in ('view', 'consolidation'):
-                    self._account_ids_by_code[like_code].update(
-                        account_obj._get_children_and_consol(
-                            self.env.cr, self.env.uid,
-                            [account.id],
-                            self.env.context))
-                else:
-                    self._account_ids_by_code[like_code].add(account.id)
+                search([('code', 'in', list(exact_codes))]):
+            self._account_ids_by_code[account.code].add(account.id)
 
     def _parse_match_object(self, mo):
         """Split a match object corresponding to an accounting variable
@@ -153,7 +131,7 @@ class AccountingExpressionProcessor(object):
         if account_codes.strip():
             account_codes = [a.strip() for a in account_codes.split(',')]
         else:
-            account_codes = [None]
+            account_codes = [None]  # None means we want all accounts
         domain = domain or '[]'
         domain = tuple(safe_eval(domain))
         return field, mode, account_codes, domain
@@ -170,11 +148,13 @@ class AccountingExpressionProcessor(object):
             key = (domain, mode)
             self._map_account_ids[key].update(account_codes)
 
-    def done_parsing(self, root_account):
+    def done_parsing(self):
         """Load account codes and replace account codes by
         account ids in map."""
         for key, account_codes in self._map_account_ids.items():
-            self._load_account_codes(account_codes, root_account)
+            # TODO _load_account_codes could be done
+            # for all account_codes at once (also in v8)
+            self._load_account_codes(account_codes)
             account_ids = set()
             for account_code in account_codes:
                 account_ids.update(self._account_ids_by_code[account_code])
