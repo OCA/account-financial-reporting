@@ -63,12 +63,22 @@ analytic accounts.
 Known issues / Roadmap
 ======================
 
+* V9 thoughts:
+  * select accounts by tag (see also select accounts by type below)
+  * how to handle multi-company consolidation now that consolidation children are gone?
+  * what replaces root accounts / account charts in v9? nothing it seems, so
+    we are limited to one chart of accounts per company;
+  * for multi-company consolidation, must we replace the consolidation chart
+    of account by a list of companies?
+
 * Add 'Fiscal Year' period type.
 
 * Allow selecting accounts by type. This is currently possible by expressing
   a query such as balp[][('account_id.user_type.code', '=', ...)]. This will work
   but would be more efficient if one could write balp[user_type=...], as it would
   involve much less queries to the database.
+  Possible syntax could be balp[code:60%,70%], balp[type:...], balp[tag:...],
+  with code: being optional and the default.
 
 * More tests should be added. The first part is creating test data, then it will be
   easier. At the minimum, We need the following test data:
