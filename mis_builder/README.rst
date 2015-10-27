@@ -50,6 +50,16 @@ For further information, please visit:
 
 * https://www.odoo.com/forum/help-1
 
+Developer notes
+===============
+
+A typical extension is to provide a mechanism to filter reports on analytic dimensions
+or operational units. To implement this, you can override _get_additional_move_line_filter
+and _get_additional_filter to further filter move lines or queries based on a user
+selection. A typical use case could be to add an analytic account field on mis.report.instance,
+or even on mis.report.instance.period if you want different columns to show different
+analytic accounts.
+
 Known issues / Roadmap
 ======================
 
@@ -59,12 +69,6 @@ Known issues / Roadmap
   a query such as balp[][('account_id.user_type.code', '=', ...)]. This will work
   but would be more efficient if one could write balp[user_type=...], as it would
   involve much less queries to the database.
-
-* A mechanism to have a global move line filter at the level of the report template,
-  report instance, or even column. Such a domain filter would be ANDed with the
-  other filters and would allow to easily create reports filtered on analytic axis
-  or business unit. To be complete such a mechanism should allow implementing similar
-  filters on non accounting queries.
 
 * More tests should be added. The first part is creating test data, then it will be
   easier. At the minimum, We need the following test data:
