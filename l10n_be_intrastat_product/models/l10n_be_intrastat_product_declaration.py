@@ -21,8 +21,13 @@
 ##############################################################################
 
 from openerp import models, fields, api, _
+from openerp.exceptions import Warning
+
+from lxml import etree
 import logging
 _logger = logging.getLogger(__name__)
+
+_INTRASTAT_XMLNS = 'http://www.onegate.eu/2010-01-01'
 
 
 class L10nBeIntrastatProductDeclaration(models.Model):
@@ -102,6 +107,119 @@ class L10nBeIntrastatProductDeclaration(models.Model):
         # intrastat countries
         hashcode += '-%s' % computation_line.region_id.id or False
         return hashcode
+
+    @api.one
+    def _check_generate_xml(self):
+        res = super(
+            L10nBeIntrastatProductDeclaration, self)._check_generate_xml()
+        if not self.declaration_line_ids:
+            res = self.generate_declaration()
+        kbo_nr = False
+        if self.company_id.partner_id.registry_authority == 'kbo_bce':
+            kbo_nr = self.company_id.partner_id.registry_number
+        if not kbo_nr:
+            raise Warning(
+                _("Configuration Error."),
+                _("No KBO/BCE Number defined for your Company."))
+        return res
+
+    def _node_Admininstration(self, parent):
+        Administration = etree.SubElement(parent, 'Administration')
+        From = etree.SubElement(Administration, 'From')
+        From.text = self.company_id.partner_id.registry_number
+        From.set('declarerType', 'KBO')
+        etree.SubElement(Administration, 'To').text = "NBB"
+        etree.SubElement(Administration, 'Domain').text = "SXX"
+
+    def _node_Item(self, parent, line):
+        Item = etree.SubElement(parent, 'Item')
+        etree.SubElement(
+            Item, 'Dim',
+            attrib={'prop': 'EXTRF'}).text = self._decl_code
+        etree.SubElement(
+            Item, 'Dim',
+            attrib={'prop': 'EXCNT'}
+            ).text = line.src_dest_country_id.code
+        etree.SubElement(
+            Item, 'Dim',
+            attrib={'prop': 'EXTTA'}
+            ).text = line.transaction_id.code
+        etree.SubElement(
+            Item, 'Dim',
+            attrib={'prop': 'EXREG'}
+            ).text = line.region_id.code
+        etree.SubElement(
+            Item, 'Dim',
+            attrib={'prop': 'EXTGO'}
+            ).text = line.hs_code_id.local_code
+        etree.SubElement(
+            Item, 'Dim',
+            attrib={'prop': 'EXWEIGHT'}
+            ).text = str(line.weight)
+        etree.SubElement(
+            Item, 'Dim',
+            attrib={'prop': 'EXUNITS'}
+            ).text = str(line.suppl_unit_qty)
+        etree.SubElement(
+            Item, 'Dim',
+            attrib={'prop': 'EXTXVAL'}
+            ).text = str(line.amount_company_currency)
+        if self.reporting_level == 'extended':
+            etree.SubElement(
+                Item, 'Dim',
+                attrib={'prop': 'EXTPC'}
+                ).text = line.transport_id.code
+            etree.SubElement(
+                Item, 'Dim',
+                attrib={'prop': 'EXDELTRM'}
+                ).text = line.incoterm_id.code
+
+    def _node_Data(self, parent):
+        Data = etree.SubElement(parent, 'Data')
+        Data.set('close', 'true')
+        report_form = 'EXF' + self._decl_code
+        if self.reporting_level == 'standard':
+            report_form += 'S'
+        else:
+            report_form += 'E'
+        Data.set('form', report_form)
+        if self.action != 'nihil':
+            for line in self.declaration_line_ids:
+                self._node_Item(Data, line)
+
+    def _node_Report(self, parent):
+        Report = etree.SubElement(parent, 'Report')
+        Report.set('action', self.action)
+        Report.set('date', self.year_month)
+        report_code = 'EX' + self._decl_code
+        if self.reporting_level == 'standard':
+            report_code += 'S'
+        else:
+            report_code += 'E'
+        Report.set('code', report_code)
+        self._node_Data(Report)
+
+    @api.multi
+    def _generate_xml(self):
+
+        if self.type == 'arrivals':
+            self._decl_code = '19'
+        else:
+            self._decl_code = '29'
+
+        ns_map = {
+            None: _INTRASTAT_XMLNS,
+            'xsi': 'http://www.w3.org/2001/XMLSchema-instance',
+        }
+        root = etree.Element('DeclarationReport', nsmap=ns_map)
+        self._node_Admininstration(root)
+        self._node_Report(root)
+
+        xml_string = etree.tostring(
+            root, pretty_print=True, encoding='UTF-8', xml_declaration=True)
+        module = __name__.split('addons.')[1].split('.')[0]
+        self._check_xml_schema(xml_string, '%s/data/onegate.xsd' % module)
+        return xml_string
 
 
 class L10nBeIntrastatProductComputationLine(models.Model):

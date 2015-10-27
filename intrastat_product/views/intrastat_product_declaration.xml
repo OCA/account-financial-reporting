@@ -12,7 +12,13 @@
                     attrs="{'invisible': ['|', ('state', '!=', 'draft'), ('action', '=', 'nihil')]}"
                     string="Generate lines from invoices"
                     class="oe_highlight"/>
-            <button name="generate_declaration" string="Generate Declaration" type="object"/>
+            <button name="generate_declaration" type="object"
+                    attrs="{'invisible': ['|', ('state', '!=', 'draft'), ('action', '=', 'nihil')]}"
+                    string="Generate Declaration Lines"/>
+            <button name="generate_xml"
+                    string="Generate XML Declaration File"
+                    type="object"
+                    attrs="{'invisible': [('state', '!=', 'draft')]}"/>
             <button name="done" string="Done" type="object" class="oe_highlight" states="draft"/>
             <button name="back2draft" string="Back to draft" type="object" states="done"/>
             <field name="state" widget="statusbar"/>
@@ -34,6 +40,7 @@
                   <field name="type"/>
                   <field name="action"/>
                   <field name="revision"/>
+                  <field name="reporting_level" invisible="1"/>
                 </group>
               </group>
               <group name="properties-2">

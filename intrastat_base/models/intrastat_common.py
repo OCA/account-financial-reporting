@@ -85,14 +85,16 @@ class IntrastatCommon(models.AbstractModel):
         return True
 
     @api.model
-    def _check_xml_schema(self, xml_root, xml_string, xsd_file):
+    def _check_xml_schema(self, xml_string, xsd_file):
         '''Validate the XML file against the XSD'''
         from lxml import etree
+        from StringIO import StringIO
         xsd_etree_obj = etree.parse(
             tools.file_open(xsd_file))
         official_schema = etree.XMLSchema(xsd_etree_obj)
         try:
-            official_schema.assertValid(xml_root)
+            t = etree.parse(StringIO(xml_string))
+            official_schema.assertValid(t)
         except Exception, e:
             # if the validation of the XSD fails, we arrive here
             logger = logging.getLogger(__name__)
@@ -124,6 +126,13 @@ class IntrastatCommon(models.AbstractModel):
             'datas_fname': filename})
         return attach.id
 
+    @api.multi
+    def _unlink_attachments(self):
+        atts = self.env['ir.attachment'].search(
+            [('res_model', '=', self._name),
+             ('res_id', '=', self.id)])
+        atts.unlink()
+
     @api.model
     def _open_attach_view(self, attach_id, title='XML file'):
         '''Returns an action which opens the form view of the
@@ -139,6 +148,20 @@ class IntrastatCommon(models.AbstractModel):
             'res_id': attach_id,
             }
         return action
+
+    @api.multi
+    def _generate_xml(self):
+        """
+        Inherit this method in the localization module
+        to generate the INTRASTAT Declaration XML file
+
+        Returns:
+        string with XML data
+
+        Call the _check_xml_schema() method
+        before returning the XML string.
+        """
+        return False
 
     @api.one
     def send_reminder_email(self, mail_template_xmlid):

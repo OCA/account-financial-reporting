@@ -23,7 +23,7 @@
 ##############################################################################
 
 from openerp import models, fields, api, _
-from openerp.exceptions import RedirectWarning, ValidationError
+from openerp.exceptions import RedirectWarning, ValidationError, Warning
 import openerp.addons.decimal_precision as dp
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
@@ -438,6 +438,7 @@ class IntrastatProductDeclaration(models.Model):
     @api.multi
     def action_gather(self):
         self.ensure_one()
+        self._check_generate_lines()
         self._note = ''
         self._uom_refs = {
             'weight_uom_categ': self.env.ref('product.product_uom_categ_kgm'),
@@ -517,6 +518,22 @@ class IntrastatProductDeclaration(models.Model):
             for cl in cl_lines:
                 cl.write({'declaration_line_id': declaration_line.id})
         return True
+
+    @api.multi
+    def generate_xml(self):
+        """ generate the INTRASTAT Declaration XML file """
+        self.ensure_one()
+        self._check_generate_xml()
+        self._unlink_attachments()
+        xml_string = self._generate_xml()
+        if xml_string:
+            attach_id = self._attach_xml_file(
+                xml_string, '%s_%s' % (self.type, self.revision))
+            return self._open_attach_view(attach_id)
+        else:
+            raise Warning(
+                _("Programming Error."),
+                _("No XML File has been generated."))
 
     @api.multi
     def done(self):

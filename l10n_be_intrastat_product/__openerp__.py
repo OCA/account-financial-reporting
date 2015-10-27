@@ -29,6 +29,7 @@
     'author': 'Noviat, Odoo Community Association (OCA)',
     'depends': [
         'intrastat_product',
+        'l10n_be_partner',
         ],
     'conflicts': [
         'l10n_be_intrastat',
