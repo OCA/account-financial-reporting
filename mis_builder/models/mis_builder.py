@@ -260,20 +260,6 @@ class MisReportQuery(models.Model):
     def _check_name(self):
         return _is_valid_python_var(self.name)
 
-    @api.multi
-    def _get_additional_filter(self):
-        """ Prepare an additional filter to apply on the query
-
-        This filter is combined to the query domain with a AND
-        operator. This hook is intended
-        to be inherited, and is useful to implement filtering
-        on analytic dimensions or operational units.
-
-        Returns an Odoo domain expression (a python list)
-        compatible with the model of the query."""
-        self.ensure_one()
-        return []
-
 
 class MisReport(models.Model):
     """ A MIS report template (without period information)
@@ -427,6 +413,20 @@ class MisReportInstancePeriod(models.Model):
         return []
 
     @api.multi
+    def _get_additional_query_filter(self, query):
+        """ Prepare an additional filter to apply on the query
+
+        This filter is combined to the query domain with a AND
+        operator. This hook is intended
+        to be inherited, and is useful to implement filtering
+        on analytic dimensions or operational units.
+
+        Returns an Odoo domain expression (a python list)
+        compatible with the model of the query."""
+        self.ensure_one()
+        return []
+
+    @api.multi
     def drilldown(self, expr):
         assert len(self) == 1
         if AEP.has_account_var(expr):
@@ -468,7 +468,7 @@ class MisReportInstancePeriod(models.Model):
             }
             domain = query.domain and \
                 safe_eval(query.domain, eval_context) or []
-            domain.extend(query._get_additional_filter())
+            domain.extend(self._get_additional_query_filter(query))
             if query.date_field.ttype == 'date':
                 domain.extend([(query.date_field.name, '>=', self.date_from),
                                (query.date_field.name, '<=', self.date_to)])
