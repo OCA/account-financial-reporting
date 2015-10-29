@@ -66,6 +66,10 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
 
         :return: browse record of the first special period.
         """
+        first_special_period = \
+            self.localcontext['company'].first_special_period_id
+        if first_special_period:
+            return first_special_period
         move_line_obj = self.pool.get('account.move.line')
         first_entry_id = move_line_obj.search(
             self.cr, self.uid, [], order='date ASC', limit=1)
