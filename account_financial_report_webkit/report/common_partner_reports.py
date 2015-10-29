@@ -66,16 +66,15 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
 
         :return: browse record of the first special period.
         """
-        move_line_obj = self.pool.get('account.move.line')
-        first_entry_id = move_line_obj.search(
-            self.cr, self.uid, [], order='date ASC', limit=1)
-        # it means there is no entry at all, that's unlikely to happen, but
-        # it may so
-        if not first_entry_id:
+        self.cursor.execute("""select account_fiscalyear.id from account_fiscalyear
+            right join account_period on account_fiscalyear.id=account_period.fiscalyear_id
+            right join account_move on account_period.id=account_move.period_id
+            order by account_fiscalyear.date_start ASC limit 1""")
+        fiscalyear_id = self.cursor.fetchone()
+        if not fiscalyear_id:
             return
-        first_entry = move_line_obj.browse(
-            self.cr, self.uid, first_entry_id[0])
-        fiscalyear = first_entry.period_id.fiscalyear_id
+        fiscalyear = self.pool['account.fiscalyear'].browse(
+            self.cursor, self.uid, fiscalyear_id[0])
         special_periods = [
             period for period in fiscalyear.period_ids if period.special]
         # so, we have no opening period on the first year, nothing to return
