@@ -64,14 +64,6 @@ reports.
 * From the MIS Report view, you can preview the report, add it to and Odoo
 dashboard, and export it to Excel.
 
-.. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
-   :alt: Try me on Runbot
-   :target: https://runbot.odoo-community.org/runbot/91/7.0
-
-For further information, please visit:
-
-* https://www.odoo.com/forum/help-1
-
 Developer notes
 ===============
 
@@ -79,7 +71,8 @@ A typical extension is to provide a mechanism to filter reports on analytic
 dimensions or operational units. To implement this, you can override
 _get_additional_move_line_filter and _get_additional_filter to further
 filter move lines or queries based on a user selection. A typical use case
-could be to add an analytic account field on mis.report.instance, or even on mis.report.instance.period if you want different columns to show different
+could be to add an analytic account field on mis.report.instance, or even
+on mis.report.instance.period if you want different columns to show different
 analytic accounts.
 
 Known issues / Roadmap
