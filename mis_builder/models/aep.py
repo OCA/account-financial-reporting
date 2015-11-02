@@ -373,7 +373,8 @@ class AccountingExpressionProcessor(object):
         return expression.normalize_domain(domain)
 
     def do_queries(self, cr, uid, date_from, date_to, period_from, period_to,
-                   target_move, context=None):
+                   target_move, additional_move_line_filter=None,
+                   context=None):
         """Query sums of debit and credit for all accounts and domains
         used in expressions.
 
@@ -394,6 +395,8 @@ class AccountingExpressionProcessor(object):
                                                   context=context)
             domain = list(domain) + domain_by_mode[mode]
             domain.append(('account_id', 'in', self._map_account_ids[key]))
+            if additional_move_line_filter:
+                domain.extend(additional_move_line_filter)
             # fetch sum of debit/credit, grouped by account_id
             accs = aml_model.read_group(cr, uid, domain,
                                         ['debit', 'credit', 'account_id'],

@@ -64,7 +64,8 @@ def _utc_midnight(d, tz_name, add_day=0):
         d = d + datetime.timedelta(days=add_day)
     context_tz = pytz.timezone(tz_name)
     local_timestamp = context_tz.localize(d, is_dst=False)
-    return datetime.datetime.strftime(local_timestamp.astimezone(utc_tz))
+    return local_timestamp.astimezone(utc_tz).strftime(
+        tools.DEFAULT_SERVER_DATE_FORMAT)
 
 
 def _python_var(var_str):
@@ -73,30 +74,6 @@ def _python_var(var_str):
 
 def _is_valid_python_var(name):
     return re.match("[_A-Za-z][_a-zA-Z0-9]*$", name)
-
-
-def _sum(l):
-    if not l:
-        return None
-    return sum(l)
-
-
-def _avg(l):
-    if not l:
-        return None
-    return sum(l) / float(len(l))
-
-
-def _min(*l):
-    if not l:
-        return None
-    return min(*l)
-
-
-def _max(*l):
-    if not l:
-        return None
-    return max(*l)
 
 
 class MisReportKpi(orm.Model):
@@ -516,6 +493,28 @@ class MisReportInstancePeriod(orm.Model):
          'Period name should be unique by report'),
     ]
 
+    def _get_additional_move_line_filter(self, cr, uid, _id, context=None):
+        """ Prepare a filter to apply on all move lines
+        This filter is applied with a AND operator on all
+        accounting expression domains. This hook is intended
+        to be inherited, and is useful to implement filtering
+        on analytic dimensions or operational units.
+        Returns an Odoo domain expression (a python list)
+        compatible with account.move.line."""
+        return []
+
+    def _get_additional_query_filter(self, cr, uid, _id, query, context=None):
+        """ Prepare an additional filter to apply on the query
+
+        This filter is combined to the query domain with a AND
+        operator. This hook is intended
+        to be inherited, and is useful to implement filtering
+        on analytic dimensions or operational units.
+
+        Returns an Odoo domain expression (a python list)
+        compatible with the model of the query."""
+        return []
+
     def drilldown(self, cr, uid, _id, expr, context=None):
         this = self.browse(cr, uid, _id, context=context)
         if AEP.has_account_var(expr):
@@ -529,6 +528,8 @@ class MisReportInstancePeriod(orm.Model):
                 this.period_from, this.period_to,
                 this.report_instance_id.target_move,
                 context=context)
+            domain.extend(self._get_additional_move_line_filter(
+                cr, uid, _id, context=context))
             return {
                 'name': expr + ' - ' + this.name,
                 'domain': domain,
@@ -545,7 +546,6 @@ class MisReportInstancePeriod(orm.Model):
     def _fetch_queries(self, cr, uid, c, context):
         res = {}
         report = c.report_instance_id.report_id
-        query_obj = self.pool['mis.report.query']
         for query in report.query_ids:
             obj = self.pool[query.model_id.model]
             eval_context = {
@@ -563,9 +563,8 @@ class MisReportInstancePeriod(orm.Model):
                                        'period %s.') % c.name)
             domain = query.domain and \
                 safe_eval(query.domain, eval_context) or []
-            domain.extend(query_obj._get_additional_filter(cr, uid,
-                                                           query.id,
-                                                           context=context))
+            domain.extend(self._get_additional_query_filter(
+                cr, uid, c.id, query, context=context))
             if query.date_field.ttype == 'date':
                 domain.extend([(query.date_field.name, '>=', c.date_from),
                                (query.date_field.name, '<=', c.date_to)])
@@ -633,6 +632,8 @@ class MisReportInstancePeriod(orm.Model):
         aep.do_queries(cr, uid, c.date_from, c.date_to,
                        c.period_from, c.period_to,
                        c.report_instance_id.target_move,
+                       self._get_additional_move_line_filter(cr, uid, c.id,
+                                                             context=context),
                        context=context)
 
         compute_queue = c.report_instance_id.report_id.kpi_ids
