@@ -1,0 +1,65 @@
+-
+  In order to test the PDF General Ledger webkit wizard I will print report with default setting
+-
+    !python {model: account.account}: |
+        ctx={}
+        data_dict = {'chart_account_id':ref('account.chart0')}
+        ctx.update({'model': 'account.account','active_ids':[ref('account.chart0')],'active_id':ref('account.chart0')})
+        from openerp.tools import test_reports
+        test_reports.try_report_action(cr, uid, 'action_account_general_ledger_menu_webkit',wiz_data=data_dict, context=ctx, our_module='account_financial_report_webkit')
+
+-
+  In order to test the PDF General Ledger webkit wizard I will print report with posted move
+-
+    !python {model: account.account}: |
+        ctx={}
+        data_dict = {'chart_account_id':ref('account.chart0'), 'target_move': 'posted'}
+        ctx.update({'model': 'account.account','active_ids':[ref('account.chart0')],'active_id':ref('account.chart0')})
+        from openerp.tools import test_reports
+        test_reports.try_report_action(cr, uid, 'action_account_general_ledger_menu_webkit',wiz_data=data_dict, context=ctx, our_module='account_financial_report_webkit')
+
+-
+  In order to test the PDF General Ledger webkit wizard I will print report with transactions or non zero balance
+-
+    !python {model: account.account}: |
+        ctx={}
+        data_dict = {'chart_account_id':ref('account.chart0'), 'display_account': 'bal_mix'}
+        ctx.update({'model': 'account.account','active_ids':[ref('account.chart0')],'active_id':ref('account.chart0')})
+        from openerp.tools import test_reports
+        test_reports.try_report_action(cr, uid, 'action_account_general_ledger_menu_webkit',wiz_data=data_dict, context=ctx, our_module='account_financial_report_webkit')
+        
+-
+  In order to test the PDF General Ledger webkit wizard I will print report with inital balance and currency ammount
+-
+    !python {model: account.account}: |
+        ctx={}
+        data_dict = {'chart_account_id':ref('account.chart0'), 'amount_currency': 1}
+        ctx.update({'model': 'account.account','active_ids':[ref('account.chart0')],'active_id':ref('account.chart0')})
+        from openerp.tools import test_reports
+        test_reports.try_report_action(cr, uid, 'action_account_general_ledger_menu_webkit',wiz_data=data_dict, context=ctx, our_module='account_financial_report_webkit')
+
+#Filter by date 
+-
+  In order to test the PDF General Ledger webkit wizard I will print report with inital balance and currency ammount and I filter by date of the first tree month
+-
+    !python {model: account.account}: |
+        from datetime import datetime
+        ctx={}
+        data_dict = {'chart_account_id':ref('account.chart0'),'amount_currency': 1, 'chart_account_id': 1, 'date_from': '%s-01-01' %(datetime.now().year), 
+                     'date_to':'%s-04-01' %(datetime.now().year), 'display_account': 'bal_all', 'filter': 'filter_date',}
+        ctx.update({'model': 'account.account','active_ids':[ref('account.chart0')],'active_id':ref('account.chart0')})
+        from openerp.tools import test_reports
+        test_reports.try_report_action(cr, uid, 'action_account_general_ledger_menu_webkit',wiz_data=data_dict, context=ctx, our_module='account_financial_report_webkit')
+
+-
+    In order to test the PDF General Ledger webkit wizard I will print report with inital balance and currency ammount and I filter by date of the first tree month
+-
+    !python {model: account.account}: |
+        from datetime import datetime
+        ctx={}
+        data_dict = {'chart_account_id':ref('account.chart0'),'amount_currency': 1, 'chart_account_id': 1, 'date_from': '%s-01-01' %(datetime.now().year), 
+                     'date_to':'%s-04-01' %(datetime.now().year), 'display_account': 'bal_all', 'filter': 'filter_date',}
+        ctx.update({'model': 'account.account','active_ids':[ref('account.chart0')],'active_id':ref('account.chart0')})
+        from openerp.tools import test_reports
+        test_reports.try_report_action(cr, uid, 'action_account_general_ledger_menu_webkit',wiz_data=data_dict, context=ctx, our_module='account_financial_report_webkit')
+# I still have to parse report content but for this I need accounting data on multiple exercises and faor all fiscal year

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+
+    <menuitem name="General Ledger"
+      parent="account.menu_finance_legal_statement" action="action_account_general_ledger_menu"
+      groups="account.group_account_manager,account.group_account_user" id="account.menu_general_ledger"/>
+
+
+    </data>
+</openerp>
