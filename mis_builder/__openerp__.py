@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    mis_builder module for Odoo, Management Information System Builder
@@ -53,15 +53,16 @@ Configuration and Usage
 
 To configure this module, you need to:
 
-* Go to Accounting > Configuration > Financial Reports > MIS Report Templates where
-  you can create report templates by defining KPI's. KPI's constitute the rows of your
-  reports. Such report templates are time independent.
+* Go to Accounting > Configuration > Financial Reports > MIS Report Templates
+where you can create report templates by defining KPI's. KPI's constitute
+the rows of your reports. Such report templates are time independent.
 
-* Then in Accounting > Reporting > MIS Reports you can create report instance by
-  binding the templates to time period, hence defining the columns of your reports.
+* Then in Accounting > Reporting > MIS Reports you can create report instance
+by binding the templates to time period, hence defining the columns of your
+reports.
 
-* From the MIS Report view, you can preview the report, add it to and Odoo dashboard,
-  and export it to Excel.
+* From the MIS Report view, you can preview the report, add it to and Odoo
+dashboard, and export it to Excel.
 
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
    :alt: Try me on Runbot
@@ -74,11 +75,11 @@ For further information, please visit:
 Developer notes
 ===============
 
-A typical extension is to provide a mechanism to filter reports on analytic dimensions
-or operational units. To implement this, you can override _get_additional_move_line_filter
-and _get_additional_filter to further filter move lines or queries based on a user
-selection. A typical use case could be to add an analytic account field on mis.report.instance,
-or even on mis.report.instance.period if you want different columns to show different
+A typical extension is to provide a mechanism to filter reports on analytic
+dimensions or operational units. To implement this, you can override
+_get_additional_move_line_filter and _get_additional_filter to further
+filter move lines or queries based on a user selection. A typical use case
+could be to add an analytic account field on mis.report.instance, or even on mis.report.instance.period if you want different columns to show different
 analytic accounts.
 
 Known issues / Roadmap
@@ -87,28 +88,32 @@ Known issues / Roadmap
 * Add 'Fiscal Year' period type.
 
 * Allow selecting accounts by type. This is currently possible by expressing
-  a query such as balp[][('account_id.user_type.code', '=', ...)]. This will work
-  but would be more efficient if one could write balp[user_type=...], as it would
-  involve much less queries to the database.
+  a query such as balp[][('account_id.user_type.code', '=', ...)].
+  This will work but would be more efficient if one could write balp[
+  user_type=...], as it would involve much less queries to the database.
 
-* More tests should be added. The first part is creating test data, then it will be
-  easier. At the minimum, We need the following test data:
+* More tests should be added. The first part is creating test data, then it
+will be easier. At the minimum, We need the following test data:
 
   * one account charts with a few normal accounts and view accounts,
   * two fiscal years,
   * an opening entry in the second fiscal year,
   * to test multi-company consolidation, we need a second company with it's own
     account chart and two fiscal years, but without opening entry; we also need
-    a third company which is the parent of the other two and has a consolidation
-    chart of account.
+    a third company which is the parent of the other two and has a
+    consolidation chart of account.
 
 Bug Tracker
 ===========
 
-Bugs are tracked on `GitHub Issues <https://github.com/OCA/account-financial-reporting/issues>`_.
+Bugs are tracked on `GitHub Issues
+<https://github.com/OCA/account-financial-reporting/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
-If you spotted it first, help us smashing it by providing a detailed and welcomed feedback
-`here <https://github.com/OCA/account-financial-reporting/issues/new?body=module:%20mis_builder%0Aversion:%208.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+If you spotted it first, help us smashing it by providing a detailed and
+welcomed feedback `here <https://github.com/OCA/account-financial-reporting
+/issues/new?body=module:%20mis_builder%0Aversion:%208.0%0A%0A**Steps%20to%20
+reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior
+**>`_.
 
 Credits
 =======
