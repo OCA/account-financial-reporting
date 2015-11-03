@@ -746,8 +746,7 @@ class MisReportInstance(orm.Model):
         'root_account': fields.many2one('account.account',
                                         domain='[("parent_id", "=", False)]',
                                         string="Account chart",
-                                        required=True),
-        'landscape_pdf': fields.boolean(string='Landscape PDF')
+                                        required=True)
     }
 
     _defaults = {
