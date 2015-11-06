@@ -22,7 +22,7 @@
 
 {
     'name': 'Financial Journal reports',
-    'version': '0.2',
+    'version': '8.0.0.2.0',
     'license': 'AGPL-3',
     'author': "Noviat,Odoo Community Association (OCA)",
     'category': 'Accounting & Finance',
