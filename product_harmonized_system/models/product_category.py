@@ -21,24 +21,26 @@
 #
 ##############################################################################
 
-{
-    'name': 'Product Harmonized System Codes',
-    'version': '0.2',
-    'category': 'Reporting',
-    'license': 'AGPL-3',
-    'summary': 'Base module for Product Import/Export reports',
-    'author': 'Akretion, Noviat, Odoo Community Association (OCA)',
-    'depends': ['product'],
-    'conflicts': ['report_intrastat'],
-    'data': [
-        'security/product_hs_security.xml',
-        'security/ir.model.access.csv',
-        'views/hs_code.xml',
-        'views/product_category.xml',
-        'views/product_template.xml',
-    ],
-    'demo': [
-        'demo/product_demo.xml',
-    ],
-    'installable': True,
-}
+from openerp import models, fields, api
+
+
+class ProductCategory(models.Model):
+    _inherit = "product.category"
+
+    hs_code_id = fields.Many2one(
+        'hs.code', string='H.S. Code',
+        company_dependent=True, ondelete='restrict',
+        help="Harmonised System Code. If this code is not "
+        "set on the product itself, it will be read here, on the "
+        "related product category.")
+
+    @api.multi
+    def get_hs_code_recursively(self):
+        self.ensure_one()
+        if self.hs_code_id:
+            res = self.hs_code_id
+        elif self.parent_id:
+            res = self.parent_id.get_hs_code_recursively()
+        else:
+            res = None
+        return res

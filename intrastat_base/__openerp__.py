@@ -22,7 +22,7 @@
 
 {
     'name': 'Intrastat Reporting Base',
-    'version': '1.1',
+    'version': '1.2',
     'category': 'Intrastat',
     'license': 'AGPL-3',
     'summary': 'Base module for Intrastat reporting',
@@ -31,14 +31,16 @@
     'depends': ['base_vat'],
     'conflicts': ['report_intrastat'],
     'data': [
-        'country_data.xml',
-        'product_view.xml',
-        'partner_view.xml',
-        'country_view.xml',
-        'tax_view.xml',
-        'company_view.xml',
-        'intrastat_view.xml',
+        'data/country_data.xml',
+        'views/product_template.xml',
+        'views/res_partner.xml',
+        'views/res_country.xml',
+        'views/account_tax.xml',
+        'views/res_company.xml',
+        'views/intrastat.xml',
     ],
-    'demo': ['intrastat_demo.xml'],
+    'demo': [
+        'demo/intrastat_demo.xml',
+    ],
     'installable': True,
 }

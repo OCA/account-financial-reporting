@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Copyright (C) 2010-2015 Akretion (http://www.akretion.com/)
+    Copyright (C) 2015 Noviat (http://www.noviat.com/)
+    @author Alexis de Lattre <alexis.delattre@akretion.com>
+    @author Luc De Meyer <luc.demeyer@noviat.com>
+    The licence is in the file __openerp__.py
+-->
+
+<openerp>
+  <data>
+
+    <!-- Intrastat Supplementary Unit -->
+   <record id="intrastat_unit_form" model="ir.ui.view">
+      <field name="name">intrastat.unit.form</field>
+      <field name="model">intrastat.unit</field>
+      <field name="arch" type="xml">
+        <form string="Intrastat Supplementary Unit">
+          <group>
+            <field name="name"/>
+            <field name="uom_id" required="1"/>
+            <field name="description"/>
+            <field name="active"/>
+          </group>
+        </form>
+      </field>
+    </record>
+
+    <record id="intrastat_unit_tree" model="ir.ui.view">
+      <field name="name">intrastat.unit.tree</field>
+      <field name="model">intrastat.unit</field>
+      <field name="arch" type="xml">
+        <tree string="Intrastat Supplementary Units">
+          <field name="name"/>
+          <field name="uom_id"/>
+          <field name="description"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="intrastat_unit_search" model="ir.ui.view">
+      <field name="name">intrastat.unit.search</field>
+      <field name="model">intrastat.unit</field>
+      <field name="arch" type="xml">
+        <search string="Search Intrastat Supplementary Units">
+          <field name="name"
+              filter_domain="['|', ('name', 'ilike', self), ('description', 'ilike', self)]"/>
+            <group string="Group By" name="groupby">
+                <filter name="uom_groupby" string="Regular UoM"
+                    context="{'group_by': 'uom_id'}"/>
+            </group>
+        </search>
+      </field>
+    </record>
+
+
+    <record id="intrastat_unit_action" model="ir.actions.act_window">
+      <field name="name">Supplementary Units</field>
+      <field name="res_model">intrastat.unit</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="intrastat_unit_menu"
+        action="intrastat_unit_action"
+        parent="intrastat_base.menu_intrastat_config_root"
+        sequence="40"/>
+
+  </data>
+</openerp>

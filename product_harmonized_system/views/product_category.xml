@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Copyright (C) 2010-2014 Akretion (http://www.akretion.com/)
+    @author Alexis de Lattre <alexis.delattre@akretion.com>
+    The licence is in the file __openerp__.py
+-->
+
+<openerp>
+  <data>
+
+    <!-- Product category form view -->
+    <record id="product_category_form_view" model="ir.ui.view">
+      <field name="name">hs_code.product.category.form</field>
+      <field name="model">product.category</field>
+      <field name="inherit_id" ref="product.product_category_form_view"/>
+      <field name="arch" type="xml">
+        <xpath expr="//group[@name='parent']" position="inside">
+          <group name="hs_code" string="Import/Export Properties" colspan="2">
+            <field name="hs_code_id"/>
+          </group>
+        </xpath>
+      </field>
+    </record>
+
+  </data>
+</openerp>
