@@ -342,6 +342,39 @@ class IntrastatProductDeclaration(models.Model):
                     amount)
         return amount
 
+    def _get_region(self, inv_line):
+        """
+        Logic copied from standard addons, l10n_be_intrastat module:
+
+        If purchase, comes from purchase order, linked to a location,
+        which is linked to the warehouse.
+
+        If sales, the sale order is linked to the warehouse.
+        If sales, from a delivery order, linked to a location,
+        which is linked to the warehouse.
+
+        If none found, get the company one.
+        """
+        region = False
+        if inv_line.invoice_id.type in ('in_invoice', 'in_refund'):
+            po_lines = self.env['purchase.order.line'].search(
+                [('invoice_lines', 'in', inv_line.id)])
+            if po_lines:
+                po = po_lines.order_id
+                region = self.env['stock.warehouse'].get_region_from_location(
+                    po.location_id)
+        elif inv_line.invoice_id.type in ('out_invoice', 'out_refund'):
+            so_lines = self.env['sale.order.line'].search(
+                [('invoice_lines', 'in', inv_line.id)])
+            if so_lines:
+                so = so_lines.order_id
+                region = so.warehouse_id.region_id
+        if not region:
+            if self.company_id.intrastat_region_id:
+                region = self.company_id.intrastat_region_id
+        return region
+
+
     def _get_transport(self, inv_line):
         transport = inv_line.invoice_id.intrastat_transport_id \
             or self.company_id.intrastat_transport_id
@@ -606,6 +639,8 @@ class IntrastatProductComputationLine(models.Model):
     transaction_id = fields.Many2one(
         'intrastat.transaction',
         string='Intrastat Transaction')
+    region_id = fields.Many2one(
+        'intrastat.region', string='Intrastat Region')
     # extended declaration
     incoterm_id = fields.Many2one(
         'stock.incoterms', string='Incoterm')
