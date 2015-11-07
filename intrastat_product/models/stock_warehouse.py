@@ -20,19 +20,23 @@
 #
 ##############################################################################
 
-from openerp import models, api
+from openerp import models, fields
 
 
-class AccountInvoice(models.Model):
-    _inherit = 'account.invoice'
+class StockWarehouse(models.Model):
+    _inherit = 'stock.warehouse'
 
-    @api.model
-    def _default_intrastat_transaction(self):
-        res = super(AccountInvoice, self)._default_intrastat_transaction()
-        cpy_id = self.env[
-            'res.company']._company_default_get('account.invoice')
-        cpy = self.env['res.company'].browse(cpy_id)
-        if cpy.country_id.code.lower() == 'be':
-            res = self.env.ref(
-                'l10n_be_intrastat_product.intrastat_transaction_1')
-        return res
+    region_id = fields.Many2one(
+        'intrastat.region',
+        string='Intrastat region')
+
+    def get_region_from_location(self, location):
+        locations = location.search(
+            [('parent_left', '<=', location.parent_left),
+             ('parent_right', '>=', location.parent_right)])
+        warehouses = self.search(
+            [('lot_stock_id', 'in', [x.id for x in locations]),
+             ('region_id', '!=', False)])
+        if warehouses:
+            return warehouses[0].region_id
+        return None

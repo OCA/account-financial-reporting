@@ -37,6 +37,7 @@
     'conflicts': ['report_intrastat'],
     'data': [
         'views/hs_code.xml',
+        'views/intrastat_region.xml',
         'views/intrastat_unit.xml',
         'views/intrastat_transaction.xml',
         'views/intrastat_transport_mode.xml',
@@ -44,6 +45,7 @@
         'views/res_company.xml',
         'views/account_invoice.xml',
         'views/stock_picking.xml',
+        'views/stock_warehouse.xml',
         'security/intrastat_security.xml',
         'security/ir.model.access.csv',
         'data/intrastat_transport_mode.xml',

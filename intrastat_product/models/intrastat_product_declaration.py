@@ -520,12 +520,13 @@ class IntrastatProductDeclaration(models.Model):
 
     @api.model
     def group_line_hashcode(self, computation_line):
-        hashcode = "%s-%s-%s-%s-%s" % (
+        hashcode = "%s-%s-%s-%s-%s-%s" % (
             computation_line.src_dest_country_id.id or False,
             computation_line.hs_code_id.id or False,
             computation_line.intrastat_unit_id.id or False,
             computation_line.transaction_id.id or False,
-            computation_line.transport_id.id or False
+            computation_line.transport_id.id or False,
+            computation_line.region_id.id or False
             )
         return hashcode
 
@@ -717,7 +718,8 @@ class IntrastatProductDeclarationLine(models.Model):
     transaction_id = fields.Many2one(
         'intrastat.transaction',
         string='Intrastat Transaction')
-    # extended declaration
+    region_id = fields.Many2one(
+        'intrastat.region', string='Intrastat Region')
     # extended declaration
     incoterm_id = fields.Many2one(
         'stock.incoterms', string='Incoterm')
