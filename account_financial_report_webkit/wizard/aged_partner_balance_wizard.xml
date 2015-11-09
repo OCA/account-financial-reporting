@@ -18,9 +18,13 @@
           <field name="chart_account_id" position='attributes'>
             <attribute name="colspan">4</attribute>
           </field>
+          <field name="chart_account_id" position='after'>
+            <field name="detailed_by_invoice" colspan="4"/>
+          </field>
           <xpath expr="//field[@name='target_move']" position="after">
             <newline/>
             <field name="result_selection" colspan="4"/>
+            <field name="aging_method" colspan="4"/>
           </xpath>
           <xpath expr="/form/notebook[1]" position="after">
             <separator string="Clearance Analysis Options" colspan="4"/>

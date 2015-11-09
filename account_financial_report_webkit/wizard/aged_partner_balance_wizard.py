@@ -18,7 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import orm
+from openerp.osv import orm, fields
 
 
 class AccountAgedTrialBalance(orm.TransientModel):
@@ -30,6 +30,36 @@ class AccountAgedTrialBalance(orm.TransientModel):
     _inherit = "open.invoices.webkit"
     _name = "account.aged.trial.balance.webkit"
     _description = "Aged partner balanced"
+
+    _columns = {
+        'detailed_by_invoice': fields.boolean(
+            "Detailed by Invoice",
+            help="Provide an aged partner balance report with invoice "
+                 "details"
+        ),
+        'aging_method': fields.selection(
+            [('due_date', 'Due Date'),
+             ('invoice_date', 'Invoice Date')],
+            'Aged from',
+            required=True
+        ),
+    }
+
+    _defaults = {
+        'aging_method': 'due_date',
+    }
+
+    def pre_print_report(self, cr, uid, ids, data, context=None):
+        data = super(AccountAgedTrialBalance, self).pre_print_report(
+            cr, uid, ids, data, context)
+        # will be used to attach the report on the main account
+        data['ids'] = [data['form']['chart_account_id']]
+        vals = self.read(cr, uid, ids,
+                         ['detailed_by_invoice',
+                          'aging_method'],
+                         context=context)[0]
+        data['form'].update(vals)
+        return data
 
     def _print_report(self, cr, uid, ids, data, context=None):
         # we update form with display account value
