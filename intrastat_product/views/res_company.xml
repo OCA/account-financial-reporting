@@ -11,11 +11,10 @@
           <field name="intrastat" invisible="1"/>
           <field name="intrastat_arrivals"/>
           <field name="intrastat_dispatches"/>
-          <field name="intrastat_region_id" domain="[('country_id','=', country_id)]" invisible="1"/>
+          <field name="intrastat_region_id" domain="[('country_id','=', country_id)]" invisible="0"/>
           <field name="intrastat_transport_id"
                  attrs="{'required': [('intrastat', '=', 'extended')], 'invisible': [('intrastat', '!=', 'extended')]}"/>
-          <field name="intrastat_incoterm_id"
-                 attrs="{'required': [('intrastat', '=', 'extended')], 'invisible': [('intrastat', '!=', 'extended')]}"/>
+          <field name="intrastat_incoterm_id" invisible="1"/>
         </group>
       </field>
     </record>

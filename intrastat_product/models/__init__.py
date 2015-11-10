@@ -9,3 +9,5 @@ from . import intrastat_unit
 from . import res_company
 from . import stock_picking
 from . import stock_warehouse
+from . import account_invoice
+from . import sale_order

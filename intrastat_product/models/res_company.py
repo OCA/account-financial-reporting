@@ -30,7 +30,7 @@ class ResCompany(models.Model):
 
     intrastat_incoterm_id = fields.Many2one(
         'stock.incoterms',
-        string='Default incoterm for Intrastat',
+        string='Default Incoterm for Intrastat',
         help="International Commercial Terms are a series of "
              "predefined commercial terms used in international "
              "transactions.")
@@ -48,7 +48,7 @@ class ResCompany(models.Model):
         compute='_compute_intrastat')
     intrastat_region_id = fields.Many2one(
         'intrastat.region',
-        string='Default Intrastat region')
+        string='Default Intrastat Region')
 
     @api.model
     def _intrastat_arrivals(self):

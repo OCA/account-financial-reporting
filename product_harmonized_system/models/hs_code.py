@@ -51,6 +51,10 @@ class HSCode(models.Model):
         'res.company', string='Company', readonly=True, required=True,
         default=lambda self: self.env['res.company']._company_default_get(
             'hs.code'))
+    product_categ_ids = fields.One2many(
+        'product.category', 'hs_code_id', string='Product Categories')
+    product_tmpl_ids = fields.One2many(
+        'product.template', 'hs_code_id', string='Products')
 
     @api.one
     @api.depends('local_code')

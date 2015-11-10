@@ -129,7 +129,7 @@ class IntrastatProductDeclaration(models.Model):
         ], string='Month', required=True,
         default=_get_month)
     year_month = fields.Char(
-        compute='_compute_year_month', string='Month', readonly=True,
+        compute='_compute_year_month', string='Period', readonly=True,
         track_visibility='always', store=True,
         help="Year and month of the declaration.")
     type = fields.Selection(
@@ -293,7 +293,7 @@ class IntrastatProductDeclaration(models.Model):
                 self._note += note
                 return weight, suppl_unit_qty
 
-        else:
+        if True:
             if source_uom == kg_uom:
                 weight = line_qty
             elif source_uom.category_id == weight_uom_categ:
@@ -344,7 +344,7 @@ class IntrastatProductDeclaration(models.Model):
 
     def _get_region(self, inv_line):
         """
-        Logic copied from standard addons, l10n_be_intrastat module:
+        Logic copied from standard addons
 
         If purchase, comes from purchase order, linked to a location,
         which is linked to the warehouse.
@@ -366,12 +366,14 @@ class IntrastatProductDeclaration(models.Model):
         elif inv_line.invoice_id.type in ('out_invoice', 'out_refund'):
             so_lines = self.env['sale.order.line'].search(
                 [('invoice_lines', 'in', inv_line.id)])
+            print "so_lines=", so_lines
             if so_lines:
                 so = so_lines.order_id
                 region = so.warehouse_id.region_id
         if not region:
             if self.company_id.intrastat_region_id:
                 region = self.company_id.intrastat_region_id
+        print "region=", region
         return region
 
 
@@ -458,8 +460,10 @@ class IntrastatProductDeclaration(models.Model):
                 # extended declaration
                 if self._extended:
                     transport = self._get_transport(inv_line)
+                    region = self._get_region(inv_line)
                     line_vals.update({
                         'transport_id': transport.id,
+                        'region_id': region and region.id or False,
                         })
 
                 self._update_computation_line_vals(inv_line, line_vals)
@@ -489,6 +493,9 @@ class IntrastatProductDeclaration(models.Model):
             self._extended = False
 
         self.computation_line_ids.unlink()
+        self.declaration_line_ids.unlink()
+        # Shouldn't we delete the "notes" field
+        # when we click on "generate lines from invoices ?
         lines = self._gather_invoices()
 
         if not lines:
@@ -520,13 +527,14 @@ class IntrastatProductDeclaration(models.Model):
 
     @api.model
     def group_line_hashcode(self, computation_line):
-        hashcode = "%s-%s-%s-%s-%s-%s" % (
+        hashcode = "%s-%s-%s-%s-%s-%s-%s" % (
             computation_line.src_dest_country_id.id or False,
             computation_line.hs_code_id.id or False,
             computation_line.intrastat_unit_id.id or False,
             computation_line.transaction_id.id or False,
             computation_line.transport_id.id or False,
-            computation_line.region_id.id or False
+            computation_line.region_id.id or False,
+            computation_line.product_origin_country_id.id or False
             )
         return hashcode
 
@@ -648,6 +656,9 @@ class IntrastatProductComputationLine(models.Model):
     transport_id = fields.Many2one(
         'intrastat.transport_mode',
         string='Transport Mode')
+    product_origin_country_id = fields.Many2one(
+        'res.country', string='Country of origin of the Product',
+        help="Country of origin of the product i.e. product 'made in ____'")
 
     @api.one
     @api.depends('transport_id')
@@ -726,6 +737,9 @@ class IntrastatProductDeclarationLine(models.Model):
     transport_id = fields.Many2one(
         'intrastat.transport_mode',
         string='Transport Mode')
+    product_origin_country_id = fields.Many2one(
+        'res.country', string='Country of origin of the Product',
+        help="Country of origin of the product i.e. product 'made in ____'")
 
     @api.model
     def _prepare_grouped_fields(self, computation_line, fields_to_sum):
@@ -735,7 +749,10 @@ class IntrastatProductDeclarationLine(models.Model):
             'hs_code_id': computation_line.hs_code_id.id,
             'transaction_id': computation_line.transaction_id.id,
             'transport_id': computation_line.transport_id.id,
+            'region_id': computation_line.region_id.id,
             'parent_id': computation_line.parent_id.id,
+            'product_origin_country_id':
+            computation_line.product_origin_country_id.id,
             }
         for field in fields_to_sum:
             vals[field] = 0.0

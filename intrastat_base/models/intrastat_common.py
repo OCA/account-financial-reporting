@@ -45,22 +45,6 @@ class IntrastatCommon(models.AbstractModel):
         self.total_amount = total_amount
 
     @api.one
-    @api.depends('start_date')
-    def _compute_dates(self):
-        start_date_dt = fields.Date.from_string(self.start_date)
-        self.end_date = fields.Date.to_string(
-            start_date_dt + relativedelta(day=31))
-        self.year_month = start_date_dt.strftime('%Y-%m')
-
-    @api.one
-    def _check_start_date(self):
-        '''Check that the start date is the first day of the month'''
-        datetime_to_check = fields.Date.from_string(self.start_date)
-        if datetime_to_check.day != 1:
-            raise ValidationError(
-                _('The start date must be the first day of the month'))
-
-    @api.one
     def _check_generate_lines(self):
         """Check wether all requirements are met for generating lines."""
         if not self.company_id:

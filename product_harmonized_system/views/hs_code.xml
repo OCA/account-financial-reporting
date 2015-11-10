@@ -48,6 +48,12 @@
             <field name="company_id" groups="base.group_multi_company"/>
             <field name="active"/>
           </group>
+          <group name="product-categ" string="Product Categories">
+            <field name="product_categ_ids" nolabel="1"/>
+          </group>
+          <group name="product-tmpl" string="Products">
+            <field name="product_tmpl_ids" nolabel="1"/>
+          </group>
         </form>
       </field>
     </record>
