@@ -342,6 +342,39 @@ class IntrastatProductDeclaration(models.Model):
                     amount)
         return amount
 
+    def _get_region(self, inv_line):
+        """
+        Logic copied from standard addons, l10n_be_intrastat module:
+
+        If purchase, comes from purchase order, linked to a location,
+        which is linked to the warehouse.
+
+        If sales, the sale order is linked to the warehouse.
+        If sales, from a delivery order, linked to a location,
+        which is linked to the warehouse.
+
+        If none found, get the company one.
+        """
+        region = False
+        if inv_line.invoice_id.type in ('in_invoice', 'in_refund'):
+            po_lines = self.env['purchase.order.line'].search(
+                [('invoice_lines', 'in', inv_line.id)])
+            if po_lines:
+                po = po_lines.order_id
+                region = self.env['stock.warehouse'].get_region_from_location(
+                    po.location_id)
+        elif inv_line.invoice_id.type in ('out_invoice', 'out_refund'):
+            so_lines = self.env['sale.order.line'].search(
+                [('invoice_lines', 'in', inv_line.id)])
+            if so_lines:
+                so = so_lines.order_id
+                region = so.warehouse_id.region_id
+        if not region:
+            if self.company_id.intrastat_region_id:
+                region = self.company_id.intrastat_region_id
+        return region
+
+
     def _get_transport(self, inv_line):
         transport = inv_line.invoice_id.intrastat_transport_id \
             or self.company_id.intrastat_transport_id
@@ -487,12 +520,13 @@ class IntrastatProductDeclaration(models.Model):
 
     @api.model
     def group_line_hashcode(self, computation_line):
-        hashcode = "%s-%s-%s-%s-%s" % (
+        hashcode = "%s-%s-%s-%s-%s-%s" % (
             computation_line.src_dest_country_id.id or False,
             computation_line.hs_code_id.id or False,
             computation_line.intrastat_unit_id.id or False,
             computation_line.transaction_id.id or False,
-            computation_line.transport_id.id or False
+            computation_line.transport_id.id or False,
+            computation_line.region_id.id or False
             )
         return hashcode
 
@@ -606,6 +640,8 @@ class IntrastatProductComputationLine(models.Model):
     transaction_id = fields.Many2one(
         'intrastat.transaction',
         string='Intrastat Transaction')
+    region_id = fields.Many2one(
+        'intrastat.region', string='Intrastat Region')
     # extended declaration
     incoterm_id = fields.Many2one(
         'stock.incoterms', string='Incoterm')
@@ -682,7 +718,8 @@ class IntrastatProductDeclarationLine(models.Model):
     transaction_id = fields.Many2one(
         'intrastat.transaction',
         string='Intrastat Transaction')
-    # extended declaration
+    region_id = fields.Many2one(
+        'intrastat.region', string='Intrastat Region')
     # extended declaration
     incoterm_id = fields.Many2one(
         'stock.incoterms', string='Incoterm')

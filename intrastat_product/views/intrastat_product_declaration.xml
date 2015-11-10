@@ -78,6 +78,7 @@
                         <field name="weight"/>
                         <field name="suppl_unit_qty"/>
                         <field name="transaction_id"/>
+                        <field name="region_id" invisible="1"/>
                         <field name="invoice_id"/>
                         <field name="reporting_level" invisible="1"/>
                         <field name="transport_id"
@@ -99,6 +100,7 @@
                       <field name="weight"/>
                       <field name="suppl_unit_qty"/>
                       <field name="transaction_id"/>
+                      <field name="region_id" invisible="1"/>
                       <field name="reporting_level" invisible="1"/>
                       <field name="transport_id"
                              attrs="{'required': [('reporting_level', '=', 'extended')], 'invisible': [('reporting_level', '!=', 'extended')]}"/>

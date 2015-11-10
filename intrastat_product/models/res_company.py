@@ -46,6 +46,9 @@ class ResCompany(models.Model):
     intrastat = fields.Char(
         string='Intrastat Declaration', store=True, readonly=True,
         compute='_compute_intrastat')
+    intrastat_region_id = fields.Many2one(
+        'intrastat.region',
+        string='Default Intrastat region')
 
     @api.model
     def _intrastat_arrivals(self):
