@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Intrastat Product module for Odoo
@@ -240,7 +240,17 @@ class IntrastatProductDeclaration(models.Model):
         return country
 
     def _get_intrastat_transaction(self, inv_line):
-        return inv_line.invoice_id.intrastat_transaction_id
+        invoice = inv_line.invoice_id
+        if invoice.intrastat_transaction_id:
+            return invoice.intrastat_transaction_id
+        else:
+            company = invoice.company_id
+            if invoice.type == 'out_invoice':
+                return company.intrastat_transaction_out_invoice
+            elif invoice.type == 'out_refund':
+                return company.intrastat_transaction_out_refund
+            elif invoice.type == 'in_invoice':
+                return company.intrastat_transaction_in_invoice
 
     def _get_weight_and_supplunits(self, inv_line):
         line_qty = inv_line.quantity
@@ -333,13 +343,10 @@ class IntrastatProductDeclaration(models.Model):
 
     def _get_amount(self, inv_line):
         invoice = inv_line.invoice_id
-        amount = inv_line.price_subtotal
-        if invoice.currency_id.name != 'EUR':
-            amount = self.env['res.currency'].with_context(
-                date=invoice.date_invoice).compute(
-                    invoice.currency_id,
-                    self.company_id.currency_id,
-                    amount)
+        amount = invoice.currency_id.with_context(
+            date=invoice.date_invoice).compute(
+                inv_line.price_subtotal,
+                self.company_id.currency_id)
         return amount
 
     def _get_region(self, inv_line):
@@ -366,16 +373,13 @@ class IntrastatProductDeclaration(models.Model):
         elif inv_line.invoice_id.type in ('out_invoice', 'out_refund'):
             so_lines = self.env['sale.order.line'].search(
                 [('invoice_lines', 'in', inv_line.id)])
-            print "so_lines=", so_lines
             if so_lines:
                 so = so_lines.order_id
                 region = so.warehouse_id.region_id
         if not region:
             if self.company_id.intrastat_region_id:
                 region = self.company_id.intrastat_region_id
-        print "region=", region
         return region
-
 
     def _get_transport(self, inv_line):
         transport = inv_line.invoice_id.intrastat_transport_id \
@@ -398,6 +402,9 @@ class IntrastatProductDeclaration(models.Model):
                     "please configure it first.")
                 self._company_warning(msg)
         return incoterm
+
+    def _get_product_origin_country(self, inv_line):
+        return inv_line.product_id.origin_country_id
 
     def _update_computation_line_vals(self, inv_line, line_vals):
         """ placeholder for localization modules """
@@ -425,7 +432,21 @@ class IntrastatProductDeclaration(models.Model):
                 if invoice.type in ['in_invoice', 'out_refund']:
                     continue
 
+            lines_current_invoice = []
+            total_inv_accessory_costs_cc = 0.0  # in company currency
+            total_inv_product_cc = 0.0  # in company currency
             for inv_line in invoice.invoice_line:
+
+                if (
+                        inv_line.product_id and
+                        inv_line.product_id.is_accessory_cost):
+                    acost = invoice.currency_id.with_context(
+                        date=invoice.date_invoice).compute(
+                            inv_line.price_subtotal,
+                            self.company_id.currency_id)
+                    total_inv_accessory_costs_cc += acost
+
+                    continue
 
                 intrastat = inv_line.hs_code_id
                 if not intrastat:
@@ -444,6 +465,10 @@ class IntrastatProductDeclaration(models.Model):
                     inv_line)
 
                 amount_company_currency = self._get_amount(inv_line)
+                total_inv_product_cc += amount_company_currency
+
+                product_origin_country = self._get_product_origin_country(
+                    inv_line)
 
                 line_vals = {
                     'parent_id': self.id,
@@ -454,7 +479,10 @@ class IntrastatProductDeclaration(models.Model):
                     'weight': weight,
                     'suppl_unit_qty': suppl_unit_qty,
                     'amount_company_currency': amount_company_currency,
+                    'amount_accessory_cost_company_currency': 0.0,
                     'transaction_id': intrastat_transaction.id,
+                    'product_origin_country_id':
+                    product_origin_country.id or False,
                     }
 
                 # extended declaration
@@ -468,7 +496,17 @@ class IntrastatProductDeclaration(models.Model):
 
                 self._update_computation_line_vals(inv_line, line_vals)
 
-                lines.append((line_vals))
+                lines_current_invoice.append((line_vals))
+
+            # Affect accessory costs pro-rata of the value
+            if total_inv_accessory_costs_cc and total_inv_product_cc:
+                for ac_line_vals in lines_current_invoice:
+                    ac_line_vals['amount_accessory_cost_company_currency'] = (
+                        total_inv_accessory_costs_cc *
+                        ac_line_vals['amount_company_currency'] /
+                        total_inv_product_cc)
+
+            lines += lines_current_invoice
 
         return lines
 
@@ -645,6 +683,12 @@ class IntrastatProductComputationLine(models.Model):
         help="Amount in company currency to write in the declaration. "
         "Amount in company currency = amount in invoice currency "
         "converted to company currency with the rate of the invoice date.")
+    amount_accessory_cost_company_currency = fields.Float(
+        string='Accessory Costs',
+        digits=dp.get_precision('Account'),
+        help="Amount in company currency of the accessory costs related to "
+        "this invoice line (by default, these accessory costs are computed "
+        "at the pro-rata of the amount of each invoice line.")
     transaction_id = fields.Many2one(
         'intrastat.transaction',
         string='Intrastat Transaction')
@@ -753,6 +797,7 @@ class IntrastatProductDeclarationLine(models.Model):
             'parent_id': computation_line.parent_id.id,
             'product_origin_country_id':
             computation_line.product_origin_country_id.id,
+            'amount_company_currency': 0.0,
             }
         for field in fields_to_sum:
             vals[field] = 0.0
@@ -762,7 +807,6 @@ class IntrastatProductDeclarationLine(models.Model):
         fields_to_sum = [
             'weight',
             'suppl_unit_qty',
-            'amount_company_currency',
             ]
         return fields_to_sum
 
@@ -774,4 +818,12 @@ class IntrastatProductDeclarationLine(models.Model):
         for computation_line in computation_lines:
             for field in fields_to_sum:
                 vals[field] += computation_line[field]
+            vals['amount_company_currency'] += (
+                computation_line['amount_company_currency'] +
+                computation_line['amount_accessory_cost_company_currency'])
+        # round, otherwise odoo with truncate (6.7 -> 6... instead of 7 !)
+        for field in fields_to_sum:
+            vals[field] = int(round(vals[field]))
+        vals['amount_company_currency'] = int(round(
+            vals['amount_company_currency']))
         return vals

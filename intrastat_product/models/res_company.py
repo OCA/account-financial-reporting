@@ -49,6 +49,15 @@ class ResCompany(models.Model):
     intrastat_region_id = fields.Many2one(
         'intrastat.region',
         string='Default Intrastat Region')
+    intrastat_transaction_out_invoice = fields.Many2one(
+        'intrastat.transaction',
+        string='Default Intrastat Transaction For Customer Invoice')
+    intrastat_transaction_out_refund = fields.Many2one(
+        'intrastat.transaction',
+        string='Default Intrastat Transaction for Customer Refunds')
+    intrastat_transaction_in_invoice = fields.Many2one(
+        'intrastat.transaction',
+        string='Default Intrastat Transaction For Supplier Invoices')
 
     @api.model
     def _intrastat_arrivals(self):

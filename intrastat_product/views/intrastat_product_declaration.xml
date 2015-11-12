@@ -63,6 +63,7 @@
                       <field name="hs_code_id"/>
                       <field name="intrastat_unit_id"/>
                       <field name="amount_company_currency"/>
+                      <field name="amount_accessory_cost_company_currency"/>
                       <field name="weight"/>
                       <field name="suppl_unit_qty" attrs="{'invisible': [('intrastat_unit_id', '=', False)], 'required': [('intrastat_unit_id', '!=', False)]}"/>
                       <field name="transaction_id"/>
@@ -76,7 +77,12 @@
                         <field name="product_id"/>
                         <field name="hs_code_id"/>
                         <field name="intrastat_unit_id"/>
-                        <field name="amount_company_currency" widget="monetary" options="{'currency_field': 'company_currency_id'}"/>
+                        <field name="amount_company_currency"
+                          widget="monetary"
+                          options="{'currency_field': 'company_currency_id'}"/>
+                        <field name="amount_accessory_cost_company_currency"
+                          widget="monetary"
+                          options="{'currency_field': 'company_currency_id'}"/>
                         <field name="company_currency_id" invisible="1"/>
                         <field name="weight"/>
                         <field name="suppl_unit_qty"/>
