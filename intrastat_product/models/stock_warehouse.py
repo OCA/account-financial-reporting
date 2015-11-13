@@ -37,9 +37,9 @@ class StockLocation(models.Model):
     @api.multi
     def get_intrastat_region(self):
         self.ensure_one()
-        locations = location.search(
-            [('parent_left', '<=', location.parent_left),
-             ('parent_right', '>=', location.parent_right)])
+        locations = self.search(
+            [('parent_left', '<=', self.parent_left),
+             ('parent_right', '>=', self.parent_right)])
         warehouses = self.search(
             [('lot_stock_id', 'in', [x.id for x in locations]),
              ('region_id', '!=', False)])

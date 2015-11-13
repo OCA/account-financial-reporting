@@ -23,7 +23,8 @@
 ##############################################################################
 
 from openerp import models, fields, api, _
-from openerp.exceptions import RedirectWarning, ValidationError, Warning
+from openerp.exceptions import RedirectWarning, ValidationError
+from openerp.exceptions import Warning as UserError
 import openerp.addons.decimal_precision as dp
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
@@ -447,14 +448,37 @@ class IntrastatProductDeclaration(models.Model):
 
                     continue
 
-                intrastat = inv_line.hs_code_id
-                if not intrastat:
-                    continue
                 if not inv_line.quantity:
+                    continue
+                if not inv_line.price_subtotal:
                     continue
 
                 partner_country = self._get_partner_country(inv_line)
                 if not partner_country:
+                    continue
+
+                if any([
+                        tax.exclude_from_intrastat_if_present
+                        for tax in inv_line.invoice_line_tax_id]):
+                    continue
+
+                if inv_line.hs_code_id:
+                    intrastat = inv_line.hs_code_id
+                elif (
+                        inv_line.product_id and
+                        inv_line.product_id.type in ('product', 'consu')):
+                    intrastat = inv_line.product_id.product_tmpl_id.\
+                        get_hs_code_recursively()
+                    if not intrastat:
+                        note = "\n" + _(
+                            'Missing H.S. code on product %s (%s). '
+                            'This product is present in invoice %s.') % (
+                                inv_line.product_id.name,
+                                inv_line.product_id.default_code,
+                                inv_line.invoice_id.number)
+                        self._note += note
+
+                if not intrastat:
                     continue
 
                 intrastat_transaction = \
@@ -610,8 +634,7 @@ class IntrastatProductDeclaration(models.Model):
                 xml_string, '%s_%s' % (self.type, self.revision))
             return self._open_attach_view(attach_id)
         else:
-            raise Warning(
-                _("Programming Error."),
+            raise UserError(
                 _("No XML File has been generated."))
 
     @api.multi
@@ -823,6 +846,8 @@ class IntrastatProductDeclarationLine(models.Model):
         # round, otherwise odoo with truncate (6.7 -> 6... instead of 7 !)
         for field in fields_to_sum:
             vals[field] = int(round(vals[field]))
+        if not vals['weight']:
+            vals['weight'] = 1
         vals['amount_company_currency'] = int(round(
             vals['amount_company_currency']))
         return vals

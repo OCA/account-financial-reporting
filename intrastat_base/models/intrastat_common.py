@@ -21,8 +21,7 @@
 ##############################################################################
 
 from openerp import models, fields, api, tools, _
-from openerp.exceptions import Warning, ValidationError
-from dateutil.relativedelta import relativedelta
+from openerp.exceptions import Warning
 import logging
 
 logger = logging.getLogger(__name__)
