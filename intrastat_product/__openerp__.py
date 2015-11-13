@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Intrastat Product module for Odoo
@@ -32,7 +32,8 @@
     'depends': [
         'intrastat_base',
         'product_harmonized_system',
-        'stock',
+        'sale_stock',
+        'purchase',
         ],
     'conflicts': ['report_intrastat'],
     'data': [
