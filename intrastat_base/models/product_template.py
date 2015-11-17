@@ -27,12 +27,6 @@ from openerp.exceptions import ValidationError
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
-    exclude_from_intrastat = fields.Boolean(
-        string='Exclude from Intrastat reports',
-        help="If set to True, the product or service will not be "
-        "taken into account for Intrastat Product or Service reports. "
-        "So you should leave this field to False unless you have a "
-        "very good reason.")
     is_accessory_cost = fields.Boolean(
         string='Is accessory cost',
         help="Activate this option for shipping costs, packaging "

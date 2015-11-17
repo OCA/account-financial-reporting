@@ -693,8 +693,8 @@ class IntrastatProductComputationLine(models.Model):
         string='Suppl. Unit', readonly=True,
         help="Intrastat Supplementary Unit")
     weight = fields.Float(
-        string='Weight (Kg)',
-        digits=dp.get_precision('Stock Weight'))
+        string='Weight',
+        digits=dp.get_precision('Stock Weight'), help="Net weight in Kg")
     suppl_unit_qty = fields.Float(
         string='Suppl. Unit Qty',
         digits=dp.get_precision('Product Unit of Measure'),
@@ -723,7 +723,7 @@ class IntrastatProductComputationLine(models.Model):
         'intrastat.transport_mode',
         string='Transport Mode')
     product_origin_country_id = fields.Many2one(
-        'res.country', string='Country of origin of the Product',
+        'res.country', string='Country of Origin of the Product',
         help="Country of origin of the product i.e. product 'made in ____'")
 
     @api.one
@@ -783,7 +783,7 @@ class IntrastatProductDeclarationLine(models.Model):
         string='Suppl. Unit', readonly=True,
         help="Intrastat Supplementary Unit")
     weight = fields.Integer(
-        string='Weight (Kg)')
+        string='Weight', help="Net weight in Kg")
     suppl_unit_qty = fields.Integer(
         string='Suppl. Unit Qty',
         help="Supplementary Units Quantity")
@@ -804,7 +804,7 @@ class IntrastatProductDeclarationLine(models.Model):
         'intrastat.transport_mode',
         string='Transport Mode')
     product_origin_country_id = fields.Many2one(
-        'res.country', string='Country of origin of the Product',
+        'res.country', string='Country of Origin of the Product',
         help="Country of origin of the product i.e. product 'made in ____'")
 
     @api.model

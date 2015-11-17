@@ -11,7 +11,7 @@
 
     <!-- Menu entries for Intrastat -->
     <menuitem id="menu_intrastat_base_root"
-              name="Intrastat Reporting"
+              name="Intrastat"
               parent="account.menu_finance_legal_statement"/>
     <menuitem id="menu_intrastat_config_root" name="Intrastat"
               parent="account.menu_finance_configuration" sequence="50"/>
