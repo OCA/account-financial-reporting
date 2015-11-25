@@ -71,10 +71,10 @@ class partners_balance_xls(report_xls):
             ('df', 1, 0, 'text', _p.filter_form(data) == 'filter_date' and _(
                 'Dates Filter') or _('Periods Filter'), None,
              cell_style_center),
-            ('pf', 1, 0, 'text',  _('Partners Filter'),
+            ('pf', 1, 0, 'text', _('Partners Filter'),
              None, cell_style_center),
-            ('tm', 1, 0, 'text',  _('Target Moves'), None, cell_style_center),
-            ('ib', 1, 0, 'text',  _('Initial Balance'),
+            ('tm', 1, 0, 'text', _('Target Moves'), None, cell_style_center),
+            ('ib', 1, 0, 'text', _('Initial Balance'),
              None, cell_style_center),
             ('coa', 1, 0, 'text', _('Chart of Account'),
              None, cell_style_center),
@@ -254,10 +254,12 @@ class partners_balance_xls(report_xls):
             ws, row_position, row_data, cell_style)
         return row_position + 1
 
-    def generate_xls_report(self, _p, _xs, data, objects, wb):
-
-        # Initialisations
-        ws = wb.add_sheet(_p.report_name[:31])
+    def _new_ws_with_header(self, _p, _xs, data, wb, sheet_index=None):
+        report_name = _p.report_name[:31]
+        if sheet_index:
+            report_name = "%s %s" % (report_name[:29], sheet_index)
+            wb.active_sheet = sheet_index
+        ws = wb.add_sheet(report_name)
         ws.panes_frozen = True
         ws.remove_splits = True
         ws.portrait = 0  # Landscape
@@ -286,10 +288,21 @@ class partners_balance_xls(report_xls):
             row_pos += 1
             row_pos = self.print_comparison_header(
                 _xs, xlwt, row_pos, _p, ws, initial_balance_text)
-
         # Freeze the line
         ws.set_horz_split_pos(row_pos)
+        row_pos += 1
+        return ws, row_pos
 
+    def _get_ws_row_pos(self, _p, _xs, data, wb, ws, row_pos):
+        if row_pos >= 65500:
+            sheet_index = ws.parent.active_sheet + 1
+            ws, row_pos = self._new_ws_with_header(
+                _p, _xs, data, wb, sheet_index)
+        return ws, row_pos
+
+    def generate_xls_report(self, _p, _xs, data, objects, wb):
+
+        ws, row_pos = self._new_ws_with_header(_p, _xs, data, wb)
         # cell styles for account data
         regular_cell_format = _xs['borders_all']
         regular_cell_style = xlwt.easyxf(regular_cell_format)
@@ -297,9 +310,8 @@ class partners_balance_xls(report_xls):
             regular_cell_format + _xs['right'],
             num_format_str=report_xls.decimal_format)
 
-        row_pos += 1
         for current_account in objects:
-
+            ws, row_pos = self._get_ws_row_pos(_p, _xs, data, wb, ws, row_pos)
             partners_order = current_account.partners_order
 
             # do not display accounts without partners
@@ -335,6 +347,8 @@ class partners_balance_xls(report_xls):
 
             for (partner_code_name, partner_id, partner_ref, partner_name) \
                     in partners_order:
+                ws, row_pos = self._get_ws_row_pos(
+                    _p, _xs, data, wb, ws, row_pos)
                 partner = current_partner_amounts.get(partner_id, {})
                 # in single mode, we have to display all the partners even if
                 # their balance is 0.0 because the initial balance should match

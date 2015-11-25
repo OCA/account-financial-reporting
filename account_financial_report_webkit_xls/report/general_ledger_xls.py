@@ -73,9 +73,12 @@ COLS_TOT = sum((COLS_COA, COLS_FY, COLS_DF, COLS_AF, COLS_TM, COLS_IB))
 class general_ledger_xls(report_xls):
     column_sizes = [x[1] for x in _column_sizes]
 
-    def generate_xls_report(self, _p, _xs, data, objects, wb):
-
-        ws = wb.add_sheet(_p.report_name[:31])
+    def _new_ws_with_header(self, _p, _xs, data, wb, sheet_index=None):
+        report_name = _p.report_name[:31]
+        if sheet_index:
+            report_name = "%s %s" % (report_name[:29], sheet_index)
+            wb.active_sheet = sheet_index
+        ws = wb.add_sheet(report_name)
         ws.panes_frozen = True
         ws.remove_splits = True
         ws.portrait = 0  # Landscape
@@ -160,6 +163,18 @@ class general_ledger_xls(report_xls):
             ws, row_pos, row_data, row_style=cell_style_center)
         ws.set_horz_split_pos(row_pos)
         row_pos += 1
+        return ws, row_pos
+
+    def _get_ws_row_pos(self, _p, _xs, data, wb, ws, row_pos):
+        if row_pos >= 65500:
+            sheet_index = ws.parent.active_sheet + 1
+            ws, row_pos = self._new_ws_with_header(
+                _p, _xs, data, wb, sheet_index)
+        return ws, row_pos
+
+    def generate_xls_report(self, _p, _xs, data, objects, wb):
+
+        ws, row_pos = self._new_ws_with_header(_p, _xs, data, wb)
 
         # Column Title Row
         cell_format = _xs['bold']
@@ -222,7 +237,7 @@ class general_ledger_xls(report_xls):
 
         cnt = 0
         for account in objects:
-
+            ws, row_pos = self._get_ws_row_pos(_p, _xs, data, wb, ws, row_pos)
             display_initial_balance = account.init_balance and \
                 (account.init_balance.get(
                     'debit', 0.0) != 0.0 or account.
