@@ -188,7 +188,7 @@ class PartnersLedgerWebkit(report_sxw.rml_parse,
                                       target_move, start, stop,
                                       partner_filter=False):
         res = defaultdict(dict)
-
+        all_move_ids = []
         for acc_id in accounts_ids:
             move_line_ids = self.get_partners_move_lines_ids(
                 acc_id, main_filter, start, stop, target_move,
@@ -196,9 +196,13 @@ class PartnersLedgerWebkit(report_sxw.rml_parse,
             if not move_line_ids:
                 continue
             for partner_id in move_line_ids:
-                partner_line_ids = move_line_ids.get(partner_id, [])
-                lines = self._get_move_line_datas(list(set(partner_line_ids)))
-                res[acc_id][partner_id] = lines
+                all_move_ids += move_line_ids.get(partner_id, [])
+        all_move_ids = list(set(all_move_ids))
+        lines = self._get_move_line_datas(all_move_ids)
+        for line in lines:
+            res.setdefault(line['account_id'], {})
+            res[line['account_id']].setdefault(line['lpartner_id'], [])
+            res[line['account_id']][line['lpartner_id']].append(line)
         return res
 
 
