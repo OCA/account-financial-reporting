@@ -39,9 +39,14 @@ class CommonReportHeaderWebkit(common_report_header):
     """Define common helper for financial report"""
 
     ######################################################################
+    # context customizer                                                 #
+    ######################################################################
+    def _get_customized_context(self, data):
+        return {}
+
+    ######################################################################
     # From getter helper                                                 #
     ######################################################################
-
     def get_start_period_br(self, data):
         return self._get_info(data, 'period_from', 'account.period')
 

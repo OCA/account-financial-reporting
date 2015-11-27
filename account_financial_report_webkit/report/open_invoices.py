@@ -101,6 +101,11 @@ class PartnersOpenInvoicesWebkit(report_sxw.rml_parse,
     def set_context(self, objects, data, ids, report_type=None):
         """Populate a ledger_lines attribute on each browse record that will
            be used by mako template"""
+        lang = self.localcontext.get('lang')
+        lang_ctx = lang and {'lang': lang} or {}
+
+        lang_ctx.update(self._get_customized_context(data))
+
         new_ids = data['form']['chart_account_id']
         # Account initial balance memoizer
         init_balance_memoizer = {}
@@ -147,7 +152,8 @@ class PartnersOpenInvoicesWebkit(report_sxw.rml_parse,
             partner_filter=partner_ids)
         objects = self.pool.get('account.account').browse(self.cursor,
                                                           self.uid,
-                                                          account_ids)
+                                                          account_ids,
+                                                          context=lang_ctx)
 
         ledger_lines = {}
         init_balance = {}
