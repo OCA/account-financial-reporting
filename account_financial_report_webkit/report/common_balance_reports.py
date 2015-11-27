@@ -117,7 +117,7 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
         return accounts_by_id
 
     def _get_comparison_details(self, data, account_ids, target_move,
-                                comparison_filter, index):
+                                comparison_filter, index, context=None):
         """
 
         @param data: data of the wizard form
@@ -154,7 +154,7 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
                 and self._get_initial_balance_mode(start) or False
             accounts_by_ids = self._get_account_details(
                 account_ids, target_move, fiscalyear, details_filter,
-                start, stop, initial_balance_mode)
+                start, stop, initial_balance_mode, context=context)
             comp_params = {
                 'comparison_filter': comparison_filter,
                 'fiscalyear': fiscalyear,
@@ -230,6 +230,11 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
         return start_period, stop_period, start, stop
 
     def compute_balance_data(self, data, filter_report_type=None):
+        lang = self.localcontext.get('lang')
+        lang_ctx = lang and {'lang': lang} or {}
+
+        lang_ctx.update(self._get_customized_context(data))
+
         new_ids = data['form']['account_ids'] or data[
             'form']['chart_account_id']
         max_comparison = self._get_form_param(
@@ -265,20 +270,22 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
         # get details for each accounts, total of debit / credit / balance
         accounts_by_ids = self._get_account_details(
             account_ids, target_move, fiscalyear, main_filter, start, stop,
-            initial_balance_mode)
+            initial_balance_mode, context=lang_ctx)
 
         comparison_params = []
         comp_accounts_by_ids = []
         for index in range(max_comparison):
             if comp_filters[index] != 'filter_no':
                 comparison_result, comp_params = self._get_comparison_details(
-                    data, account_ids, target_move, comp_filters[index], index)
+                    data, account_ids, target_move, comp_filters[index], index,
+                    context=lang_ctx)
                 comparison_params.append(comp_params)
                 comp_accounts_by_ids.append(comparison_result)
 
         objects = self.pool.get('account.account').browse(self.cursor,
                                                           self.uid,
-                                                          account_ids)
+                                                          account_ids,
+                                                          context=lang_ctx)
 
         to_display_accounts = dict.fromkeys(account_ids, True)
         init_balance_accounts = dict.fromkeys(account_ids, False)
