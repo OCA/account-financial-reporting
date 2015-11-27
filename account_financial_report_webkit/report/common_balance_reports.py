@@ -232,6 +232,9 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
     def compute_balance_data(self, data, filter_report_type=None):
         lang = self.localcontext.get('lang')
         lang_ctx = lang and {'lang': lang} or {}
+
+        lang_ctx.update(self._get_customized_context(data))
+
         new_ids = data['form']['account_ids'] or data[
             'form']['chart_account_id']
         max_comparison = self._get_form_param(

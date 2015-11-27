@@ -77,6 +77,9 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
         used by mako template"""
         lang = self.localcontext.get('lang')
         lang_ctx = lang and {'lang': lang} or {}
+
+        lang_ctx.update(self._get_customized_context(data))
+
         new_ids = data['form']['account_ids'] or data[
             'form']['chart_account_id']
 

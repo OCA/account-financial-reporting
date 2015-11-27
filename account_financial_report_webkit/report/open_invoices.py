@@ -103,6 +103,9 @@ class PartnersOpenInvoicesWebkit(report_sxw.rml_parse,
            be used by mako template"""
         lang = self.localcontext.get('lang')
         lang_ctx = lang and {'lang': lang} or {}
+
+        lang_ctx.update(self._get_customized_context(data))
+
         new_ids = data['form']['chart_account_id']
         # Account initial balance memoizer
         init_balance_memoizer = {}
