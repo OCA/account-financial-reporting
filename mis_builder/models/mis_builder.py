@@ -599,11 +599,11 @@ class MisReportInstancePeriod(orm.Model):
                     cr, uid, obj_ids, field_names, context=context)
                 s = AutoStruct(count=len(data))
                 if query.aggregate == 'min':
-                    agg = min
+                    agg = _min
                 elif query.aggregate == 'max':
-                    agg = max
+                    agg = _max
                 elif query.aggregate == 'avg':
-                    agg = lambda l: sum(l) / float(len(l))
+                    agg = _avg
                 for field_name in field_names:
                     setattr(s, field_name,
                             agg([d[field_name] for d in data]))
