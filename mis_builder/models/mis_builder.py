@@ -41,6 +41,10 @@ from .aep import AccountingExpressionProcessor as AEP
 from .aggregate import _sum, _avg, _min, _max
 
 _logger = logging.getLogger(__name__)
+DATE_LENGTH = len(datetime.date.today().strftime(
+    tools.DEFAULT_SERVER_DATE_FORMAT))
+DATETIME_LENGTH = len(datetime.datetime.now().strftime(
+    tools.DEFAULT_SERVER_DATETIME_FORMAT))
 
 
 class AutoStruct(object):
@@ -58,14 +62,17 @@ def _get_selection_label(selection, value):
 
 
 def _utc_midnight(d, tz_name, add_day=0):
-    d = datetime.datetime.strptime(d, tools.DEFAULT_SERVER_DATE_FORMAT)
+    d = d[:DATETIME_LENGTH]
+    if len(d) == DATE_LENGTH:
+        d += " 00:00:00"
+    d = datetime.datetime.strptime(d, tools.DEFAULT_SERVER_DATETIME_FORMAT)
     utc_tz = pytz.timezone('UTC')
     if add_day:
         d = d + datetime.timedelta(days=add_day)
     context_tz = pytz.timezone(tz_name)
     local_timestamp = context_tz.localize(d, is_dst=False)
     return local_timestamp.astimezone(utc_tz).strftime(
-        tools.DEFAULT_SERVER_DATE_FORMAT)
+        tools.DEFAULT_SERVER_DATETIME_FORMAT)
 
 
 def _python_var(var_str):
