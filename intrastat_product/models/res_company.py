@@ -58,6 +58,8 @@ class ResCompany(models.Model):
     intrastat_transaction_in_invoice = fields.Many2one(
         'intrastat.transaction',
         string='Default Intrastat Transaction For Supplier Invoices')
+    intrastat_accessory_costs = fields.Boolean(
+        string='Include Accessory Costs in Fiscal Value of Product')
 
     @api.model
     def _intrastat_arrivals(self):

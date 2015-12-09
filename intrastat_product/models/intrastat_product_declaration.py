@@ -131,12 +131,12 @@ class IntrastatProductDeclaration(models.Model):
         default=_get_month)
     year_month = fields.Char(
         compute='_compute_year_month', string='Period', readonly=True,
-        track_visibility='always', store=True,
+        track_visibility='onchange', store=True,
         help="Year and month of the declaration.")
     type = fields.Selection(
         '_get_type', string='Type', required=True,
         states={'done': [('readonly', True)]},
-        track_visibility='always', help="Select the declaration type.")
+        track_visibility='onchange', help="Select the declaration type.")
     action = fields.Selection(
         '_get_action',
         string='Action', required=True,
@@ -253,11 +253,11 @@ class IntrastatProductDeclaration(models.Model):
             elif invoice.type == 'in_invoice':
                 return company.intrastat_transaction_in_invoice
 
-    def _get_weight_and_supplunits(self, inv_line):
+    def _get_weight_and_supplunits(self, inv_line, hs_code):
         line_qty = inv_line.quantity
         product = inv_line.product_id
         invoice = inv_line.invoice_id
-        intrastat_unit_id = inv_line.hs_code_id.intrastat_unit_id
+        intrastat_unit_id = hs_code.intrastat_unit_id
         source_uom = inv_line.uos_id
         weight_uom_categ = self._uom_refs['weight_uom_categ']
         kg_uom = self._uom_refs['kg_uom']
@@ -284,7 +284,7 @@ class IntrastatProductDeclaration(models.Model):
                     ) % intrastat_unit_id.name
                 note += "\n" + _(
                     "Please correct the Intrastat Supplementary Unit "
-                    "settingsand regenerate the lines or adjust the lines "
+                    "settings and regenerate the lines or adjust the lines "
                     "with Intrastat Code '%s' manually"
                     ) % inv_line.hs_code_id.local_code
                 self._note += note
@@ -413,6 +413,7 @@ class IntrastatProductDeclaration(models.Model):
     def _gather_invoices(self):
 
         lines = []
+        accessory_costs = self.company_id.intrastat_accessory_costs
         start_date = date(self.year, self.month, 1)
         end_date = start_date + relativedelta(day=1, months=+1, days=-1)
 
@@ -438,6 +439,7 @@ class IntrastatProductDeclaration(models.Model):
             for inv_line in invoice.invoice_line:
 
                 if (
+                        accessory_costs and
                         inv_line.product_id and
                         inv_line.product_id.is_accessory_cost):
                     acost = invoice.currency_id.with_context(
@@ -463,13 +465,13 @@ class IntrastatProductDeclaration(models.Model):
                     continue
 
                 if inv_line.hs_code_id:
-                    intrastat = inv_line.hs_code_id
+                    hs_code = inv_line.hs_code_id
                 elif (
                         inv_line.product_id and
                         inv_line.product_id.type in ('product', 'consu')):
-                    intrastat = inv_line.product_id.product_tmpl_id.\
+                    hs_code = inv_line.product_id.product_tmpl_id.\
                         get_hs_code_recursively()
-                    if not intrastat:
+                    if not hs_code:
                         note = "\n" + _(
                             'Missing H.S. code on product %s (%s). '
                             'This product is present in invoice %s.') % (
@@ -477,15 +479,15 @@ class IntrastatProductDeclaration(models.Model):
                                 inv_line.product_id.default_code,
                                 inv_line.invoice_id.number)
                         self._note += note
-
-                if not intrastat:
+                        continue
+                else:
                     continue
 
                 intrastat_transaction = \
                     self._get_intrastat_transaction(inv_line)
 
                 weight, suppl_unit_qty = self._get_weight_and_supplunits(
-                    inv_line)
+                    inv_line, hs_code)
 
                 amount_company_currency = self._get_amount(inv_line)
                 total_inv_product_cc += amount_company_currency
@@ -498,7 +500,7 @@ class IntrastatProductDeclaration(models.Model):
                     'invoice_line_id': inv_line.id,
                     'src_dest_country_id': partner_country.id,
                     'product_id': inv_line.product_id.id,
-                    'hs_code_id': intrastat.id,
+                    'hs_code_id': hs_code.id,
                     'weight': weight,
                     'suppl_unit_qty': suppl_unit_qty,
                     'amount_company_currency': amount_company_currency,
@@ -536,6 +538,7 @@ class IntrastatProductDeclaration(models.Model):
     @api.multi
     def action_gather(self):
         self.ensure_one()
+        self.message_post(_("Generate Lines from Invoices"))
         self._check_generate_lines()
         self._note = ''
         self._uom_refs = {
@@ -569,7 +572,8 @@ class IntrastatProductDeclaration(models.Model):
             self.write({'computation_line_ids': [(0, 0, x) for x in lines]})
 
         if self._note:
-            note_header = '\n\n>>> ' + str(date.today()) + '\n'
+            note_header = '\n\n>>> ' + fields.Datetime.to_string(
+                fields.Datetime.context_timestamp(self, datetime.now())) + '\n'
             self.note = note_header + self._note + (self.note or '')
             result_view = self.env.ref(
                 'intrastat_base.intrastat_result_view_form')
@@ -604,6 +608,7 @@ class IntrastatProductDeclaration(models.Model):
         """ generate declaration lines """
         self.ensure_one()
         assert self.valid, 'Computation lines are not valid'
+        self.message_post(_("Generate Declaration Lines"))
         # Delete existing declaration lines
         self.declaration_line_ids.unlink()
         # Regenerate declaration lines from computation lines
@@ -626,6 +631,7 @@ class IntrastatProductDeclaration(models.Model):
     def generate_xml(self):
         """ generate the INTRASTAT Declaration XML file """
         self.ensure_one()
+        self.message_post(_("Generate XML Declaration File"))
         self._check_generate_xml()
         self._unlink_attachments()
         xml_string = self._generate_xml()

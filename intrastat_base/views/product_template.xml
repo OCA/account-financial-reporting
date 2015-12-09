@@ -17,7 +17,8 @@
         <group name="properties" position="after">
             <group string="Intrastat Properties" name="intrastat">
                 <field name="is_accessory_cost"
-                    attrs="{'invisible': [('type', '!=', 'service')]}"/>
+                    attrs="{'invisible': [('type', '!=', 'service')]}"
+                    invisible="1"/>
             </group>
         </group>
     </field>

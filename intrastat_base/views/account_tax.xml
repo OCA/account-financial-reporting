@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-    Copyright (C) 2011-2014 Akretion (http://www.akretion.com/)
+    Copyright (C) 2011-2015 Akretion (http://www.akretion.com/)
     @author Alexis de Lattre <alexis.delattre@akretion.com>
     The licence is in the file __openerp__.py
 -->
@@ -16,7 +16,8 @@
     <field name="inherit_id" ref="account.view_tax_form"/>
     <field name="arch" type="xml">
         <field name="active" position="after">
-             <field name="exclude_from_intrastat_if_present" />
+            <!-- Will be set visible in the localisation modules that need it -->
+            <field name="exclude_from_intrastat_if_present" invisible="1"/>
         </field>
     </field>
 </record>
