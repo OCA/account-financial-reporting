@@ -1,0 +1,2 @@
+"id","compare_method","description","expression","divider","name","dp","sequence","type","suffix"
+"mis_report_kpi_test","Percentage","total test","len(test)","","total_test","","1","Numeric",""
