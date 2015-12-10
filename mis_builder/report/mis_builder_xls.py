@@ -118,8 +118,10 @@ class mis_builder_xls(report_xls):
                 if value.get('dp'):
                     num_format_str += '.'
                     num_format_str += '0' * int(value['dp'])
+                if value.get('prefix'):
+                    num_format_str = '"%s"' % value['prefix'] + num_format_str
                 if value.get('suffix'):
-                    num_format_str = num_format_str + ' "%s"' % value['suffix']
+                    num_format_str += ' "%s"' % value['suffix']
                 kpi_cell_style = xlwt.easyxf(
                     _xs['borders_all'] + _xs['right'],
                     num_format_str=num_format_str)
