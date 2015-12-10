@@ -65,6 +65,7 @@ class test_mis_builder(common.TransactionCase):
                                                   'mis_report_instance_'
                                                   'period_test'),
                             'style': None,
+                            'prefix': False,
                             'suffix': False,
                             'expr': 'len(test)',
                             'val_c': 'total_test = len(test)',
