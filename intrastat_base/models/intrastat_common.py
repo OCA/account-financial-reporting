@@ -21,7 +21,7 @@
 ##############################################################################
 
 from openerp import models, fields, api, tools, _
-from openerp.exceptions import Warning
+from openerp.exceptions import Warning as UserError
 import logging
 
 logger = logging.getLogger(__name__)
@@ -47,14 +47,14 @@ class IntrastatCommon(models.AbstractModel):
     def _check_generate_lines(self):
         """Check wether all requirements are met for generating lines."""
         if not self.company_id:
-            raise Warning(_("Company not yet set on intrastat report."))
+            raise UserError(_("Company not yet set on intrastat report."))
         company_obj = self.company_id
         if not company_obj.country_id:
-            raise Warning(
+            raise UserError(
                 _("The country is not set on the company '%s'.")
                 % company_obj.name)
         if company_obj.currency_id.name != 'EUR':
-            raise Warning(
+            raise UserError(
                 _("The company currency must be 'EUR', but is currently '%s'.")
                 % company_obj.currency_id.name)
         return True
@@ -62,7 +62,7 @@ class IntrastatCommon(models.AbstractModel):
     @api.one
     def _check_generate_xml(self):
         if not self.company_id.partner_id.vat:
-            raise Warning(
+            raise UserError(
                 _("The VAT number is not set for the partner '%s'.")
                 % self.company_id.partner_id.name)
         return True
@@ -85,7 +85,7 @@ class IntrastatCommon(models.AbstractModel):
                 "The XML file is invalid against the XML Schema Definition")
             logger.warning(xml_string)
             logger.warning(e)
-            raise Warning(
+            raise UserError(
                 _("The generated XML file is not valid against the official "
                     "XML Schema Definition. The generated XML file and the "
                     "full error have been written in the server logs. "
@@ -164,7 +164,7 @@ class IntrastatCommon(models.AbstractModel):
     def unlink(self):
         for intrastat in self:
             if intrastat.state == 'done':
-                raise Warning(
+                raise UserError(
                     _('Cannot delete the declaration %s '
                         'because it is in Done state') % self.year_month)
         return super(IntrastatCommon, self).unlink()
