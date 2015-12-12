@@ -150,11 +150,13 @@
                     <group>
                         <field name="report_id"/>
                         <field name="description"/>
+                        <newline/>
                         <field name="root_account"/>
                         <field name="company_id" groups="base.group_multi_company"/>
                         <field name="date"/>
                         <field name="target_move"/>
-                        <field name="period_ids">
+                   </group>
+                        <field name="period_ids" nolabel="1">
                             <tree string="KPI's" editable="bottom" colors="red:valid==False">
                                 <field name="sequence" widget="handle"/>
                                 <field name="name"/>
@@ -170,9 +172,9 @@
                                 <field name="report_instance_id" invisible="1"/>
                                 <field name="id" invisible="1"/>
                                 <field name="comparison_column_ids" domain="[('report_instance_id', '=', report_instance_id), ('id', '!=', id)]" widget="many2many_tags"/>
+                                 <field name="head_css_style" string="Default CSS style"/>
                             </tree>
                         </field>
-                    </group>
                 </sheet>
                 </form>
             </field>

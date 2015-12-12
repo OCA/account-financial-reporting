@@ -41,10 +41,6 @@ from .aep import AccountingExpressionProcessor as AEP
 from .aggregate import _sum, _avg, _min, _max
 
 _logger = logging.getLogger(__name__)
-DATE_LENGTH = len(datetime.date.today().strftime(
-    tools.DEFAULT_SERVER_DATE_FORMAT))
-DATETIME_LENGTH = len(datetime.datetime.now().strftime(
-    tools.DEFAULT_SERVER_DATETIME_FORMAT))
 
 
 class AutoStruct(object):
@@ -62,17 +58,14 @@ def _get_selection_label(selection, value):
 
 
 def _utc_midnight(d, tz_name, add_day=0):
-    d = d[:DATETIME_LENGTH]
-    if len(d) == DATE_LENGTH:
-        d += " 00:00:00"
-    d = datetime.datetime.strptime(d, tools.DEFAULT_SERVER_DATETIME_FORMAT)
+    d = datetime.datetime.strptime(d, tools.DEFAULT_SERVER_DATE_FORMAT)
     utc_tz = pytz.timezone('UTC')
     if add_day:
         d = d + datetime.timedelta(days=add_day)
     context_tz = pytz.timezone(tz_name)
     local_timestamp = context_tz.localize(d, is_dst=False)
     return local_timestamp.astimezone(utc_tz).strftime(
-        tools.DEFAULT_SERVER_DATETIME_FORMAT)
+        tools.DEFAULT_SERVER_DATE_FORMAT)
 
 
 def _python_var(var_str):
@@ -436,6 +429,7 @@ class MisReportInstancePeriod(orm.Model):
     _columns = {
         'name': fields.char(size=32, required=True,
                             string='Description', translate=True),
+        'head_css_style':fields.char(string='Default CSS Style'),                    
         'type': fields.selection([('d', _('Day')),
                                   ('w', _('Week')),
                                   ('fp', _('Fiscal Period')),
@@ -606,11 +600,11 @@ class MisReportInstancePeriod(orm.Model):
                     cr, uid, obj_ids, field_names, context=context)
                 s = AutoStruct(count=len(data))
                 if query.aggregate == 'min':
-                    agg = _min
+                    agg = min
                 elif query.aggregate == 'max':
-                    agg = _max
+                    agg = max
                 elif query.aggregate == 'avg':
-                    agg = _avg
+                    agg = lambda l: sum(l) / float(len(l))
                 for field_name in field_names:
                     setattr(s, field_name,
                             agg([d[field_name] for d in data]))
@@ -685,7 +679,7 @@ class MisReportInstancePeriod(orm.Model):
                     'val': kpi_val,
                     'val_r': kpi_val_rendered,
                     'val_c': kpi_val_comment,
-                    'style': kpi_style,
+                    'style': c.head_css_style or None,
                     'default_style': kpi.default_css_style or None,
                     'suffix': kpi.suffix,
                     'dp': kpi.dp,
@@ -885,7 +879,7 @@ class MisReportInstance(orm.Model):
                 else:
                     header_date = self._format_date(
                         cr, uid, lang_id, period.date_from)
-            header[0]['cols'].append(dict(name=period.name, date=header_date))
+            header[0]['cols'].append(dict(name=period.name, date=header_date, head_css_style=period.head_css_style or None))
             # add kpi values
             kpi_values = kpi_values_by_period_ids[period.id]
             for kpi_name in kpi_values:
