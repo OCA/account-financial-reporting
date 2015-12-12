@@ -160,8 +160,8 @@ class IntrastatProductDeclaration(models.Model):
         store=True, track_visibility='onchange')
     total_amount = fields.Float(
         compute='_compute_numbers', digits=dp.get_precision('Account'),
-        string='Total Amount', store=True,
-        help="Total amount in company currency of the declaration.")
+        string='Total Fiscal Amount', store=True,
+        help="Total fiscal amount in company currency of the declaration.")
     currency_id = fields.Many2one(
         'res.currency', related='company_id.currency_id', readonly=True,
         string='Currency')
@@ -410,28 +410,30 @@ class IntrastatProductDeclaration(models.Model):
         """ placeholder for localization modules """
         pass
 
-    def _gather_invoices(self):
-
-        lines = []
-        accessory_costs = self.company_id.intrastat_accessory_costs
+    def _prepare_invoice_domain(self):
         start_date = date(self.year, self.month, 1)
         end_date = start_date + relativedelta(day=1, months=+1, days=-1)
-
-        invoices = self.env['account.invoice'].search([
+        domain = [
             ('date_invoice', '>=', start_date),
             ('date_invoice', '<=', end_date),
             ('state', 'in', ['open', 'paid']),
             ('intrastat_country', '=', True),
-            ('company_id', '=', self.company_id.id)])
+            ('company_id', '=', self.company_id.id)]
+        if self.type == 'arrivals':
+            domain.append(('type', 'in', ('in_invoice', 'in_refund')))
+        elif self.type == 'dispatches':
+            domain.append(('type', 'in', ('out_invoice', 'out_refund')))
+        return domain
+
+    def _gather_invoices(self):
+
+        lines = []
+        accessory_costs = self.company_id.intrastat_accessory_costs
+
+        domain = self._prepare_invoice_domain()
+        invoices = self.env['account.invoice'].search(domain)
 
         for invoice in invoices:
-
-            if self.type == 'arrivals':
-                if invoice.type in ['out_invoice', 'in_refund']:
-                    continue
-            else:
-                if invoice.type in ['in_invoice', 'out_refund']:
-                    continue
 
             lines_current_invoice = []
             total_inv_accessory_costs_cc = 0.0  # in company currency
@@ -451,17 +453,34 @@ class IntrastatProductDeclaration(models.Model):
                     continue
 
                 if not inv_line.quantity:
+                    _logger.info(
+                        'Skipping invoice line %s qty %s '
+                        'of invoice %s. Reason: qty = 0'
+                        % (inv_line.name, inv_line.quantity, invoice.number))
                     continue
                 if not inv_line.price_subtotal:
+                    _logger.info(
+                        'Skipping invoice line %s qty %s '
+                        'of invoice %s. Reason: price_subtotal = 0'
+                        % (inv_line.name, inv_line.quantity, invoice.number))
                     continue
 
                 partner_country = self._get_partner_country(inv_line)
                 if not partner_country:
+                    _logger.info(
+                        'Skipping invoice line %s qty %s'
+                        'of invoice %s. Reason: not partner_country'
+                        % (inv_line.name, inv_line.quantity, invoice.number))
                     continue
 
                 if any([
                         tax.exclude_from_intrastat_if_present
                         for tax in inv_line.invoice_line_tax_id]):
+                    _logger.info(
+                        'Skipping invoice line %s '
+                        'qty %s of invoice %s. Reason: '
+                        'tax.exclude_from_intrastat_if_present'
+                        % (inv_line.name, inv_line.quantity, invoice.number))
                     continue
 
                 if inv_line.hs_code_id:
@@ -481,6 +500,10 @@ class IntrastatProductDeclaration(models.Model):
                         self._note += note
                         continue
                 else:
+                    _logger.info(
+                        'Skipping invoice line %s qty %s'
+                        'of invoice %s. Reason: no product nor hs_code'
+                        % (inv_line.name, inv_line.quantity, invoice.number))
                     continue
 
                 intrastat_transaction = \

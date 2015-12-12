@@ -14,6 +14,7 @@
           <field name="intrastat_transaction_out_invoice"/>
           <field name="intrastat_transaction_out_refund"/>
           <field name="intrastat_transaction_in_invoice"/>
+          <field name="intrastat_transaction_in_refund"/>
           <field name="intrastat_region_id" domain="[('country_id','=', country_id)]" invisible="1"/>
           <field name="intrastat_transport_id"
                  attrs="{'required': [('intrastat', '=', 'extended')], 'invisible': [('intrastat', '!=', 'extended')]}"/>
