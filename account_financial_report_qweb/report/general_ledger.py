@@ -148,6 +148,35 @@ class GeneralLedgerReport(models.TransientModel):
         return values
 
     @api.multi
+    def _get_centralized_move_ids(self, domain):
+        """ Get last line of each selected centralized accounts """
+        # inverse search on centralized boolean to finish the search to get the
+        # ids of last lines of centralized accounts
+        # XXX USE DISTINCT to speed up ?
+        domain = domain[:]
+        centralize_index = domain.index(('centralized', '=', False))
+        domain[centralize_index] = ('centralized', '=', True)
+
+        gl_lines = self.env['general.ledger.line'].search(domain)
+        accounts = gl_lines.mapped('account_id')
+
+        line_ids = []
+        for acc in accounts:
+            acc_lines = gl_lines.filtered(lambda rec: rec.account_id == acc)
+            line_ids.append(acc_lines[-1].id)
+        return line_ids
+
+    @api.multi
+    def _get_moves_from_dates(self):
+        domain = self._get_moves_from_dates_domain()
+        if self.centralize:
+            centralized_ids = self._get_centralized_move_ids(domain)
+            if centralized_ids:
+                domain.insert(0, '|')
+                domain.append(('id', 'in', centralized_ids))
+        return self.env['general.ledger.line'].search(domain)
+
+    @api.multi
     def render_html(self, data=None):
         report_name = 'account.report_generalledger_qweb'
         if data is None:

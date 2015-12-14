@@ -4,11 +4,10 @@
 from openerp import models, fields, api
 
 
-class FinancialReportLine(models.Model):
+class FinancialReportLine(models.AbstractModel):
     _name = 'financial.report.line'
     _description = "Project SLA report"
 
-    _auto = False
     _order = 'account_id, date'
     # TODO order by account_id.code
 
@@ -57,11 +56,6 @@ class FinancialReportLine(models.Model):
 
     centralized = fields.Boolean()
 
-    first = fields.Boolean()
-    last = fields.Boolean()
-    period_first = fields.Boolean()
-    period_last = fields.Boolean()
-
 
 class CommonFinancialReport(models.AbstractModel):
     _name = 'account.report.common'
@@ -86,13 +80,11 @@ class CommonFinancialReport(models.AbstractModel):
     )
 
     @api.multi
-    def _get_moves_from_dates(self):
+    def _get_moves_from_dates_domain(self):
+        """ Prepare domain for `_get_moves_from_dates` """
         domain = []
         if self.centralize:
-            domain = [
-                '|', ('centralized', '=', False),
-                '&', ('centralized', '=', True),
-                ('period_last', '=', True)]
+            domain = [('centralized', '=', False)]
         start_date = self.start_date
         end_date = self.end_date
         if self.fiscalyear:
@@ -110,7 +102,7 @@ class CommonFinancialReport(models.AbstractModel):
             domain += [('account_id', 'in', self.account_ids.ids)]
 
         domain += [('journal_id', 'in', self.journal_ids.ids)]
-        return self.env['financial.report.line'].search(domain)
+        return domain
 
     @api.multi
     def _get_moves_from_fiscalyear(self, account, fiscalyear,
