@@ -169,7 +169,6 @@
                         <field name="report_id" colspan="4"/>
                         <field name="description"/>
                         <field name="landscape_pdf" />
-                        <field name="root_account"/>
                         <field name="company_id" groups="base.group_multi_company"/>
                         <field name="date"/>
                         <field name="target_move"/>
@@ -183,8 +182,6 @@
                                 <field name="normalize_factor"/>
                                 <field name="date_from"/>
                                 <field name="date_to"/>
-                                <field name="period_from"/>
-                                <field name="period_to"/>
                                 <field name="valid" invisible="1"/>
                                 <field name="report_instance_id" invisible="1"/>
                                 <field name="id" invisible="1"/>
