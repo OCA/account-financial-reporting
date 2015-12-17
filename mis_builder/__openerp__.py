@@ -24,7 +24,7 @@
 
 {
     'name': 'MIS Builder',
-    'version': '8.0.0.2.0',
+    'version': '9.0.0.2.0',
     'category': 'Reporting',
     'summary': """
         Build 'Management Information System' Reports and Dashboards
@@ -55,7 +55,7 @@
     'qweb': [
         'static/src/xml/*.xml'
     ],
-    'installable': False,
+    'installable': True,
     'application': True,
     'auto_install': False,
     'license': 'AGPL-3',
