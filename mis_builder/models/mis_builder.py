@@ -399,6 +399,34 @@ class MisReportInstancePeriod(models.Model):
     ]
 
     @api.multi
+    def _get_additional_move_line_filter(self):
+        """ Prepare a filter to apply on all move lines
+
+        This filter is applied with a AND operator on all
+        accounting expression domains. This hook is intended
+        to be inherited, and is useful to implement filtering
+        on analytic dimensions or operational units.
+
+        Returns an Odoo domain expression (a python list)
+        compatible with account.move.line."""
+        self.ensure_one()
+        return []
+
+    @api.multi
+    def _get_additional_query_filter(self, query):
+        """ Prepare an additional filter to apply on the query
+
+        This filter is combined to the query domain with a AND
+        operator. This hook is intended
+        to be inherited, and is useful to implement filtering
+        on analytic dimensions or operational units.
+
+        Returns an Odoo domain expression (a python list)
+        compatible with the model of the query."""
+        self.ensure_one()
+        return []
+
+    @api.multi
     def drilldown(self, expr):
         assert len(self) == 1
         if AEP.has_account_var(expr):
@@ -410,6 +438,7 @@ class MisReportInstancePeriod(models.Model):
                 self.date_from, self.date_to,
                 self.period_from, self.period_to,
                 self.report_instance_id.target_move)
+            domain.extend(self._get_additional_move_line_filter())
             return {
                 'name': expr + ' - ' + self.name,
                 'domain': domain,
@@ -439,6 +468,7 @@ class MisReportInstancePeriod(models.Model):
             }
             domain = query.domain and \
                 safe_eval(query.domain, eval_context) or []
+            domain.extend(self._get_additional_query_filter(query))
             if query.date_field.ttype == 'date':
                 domain.extend([(query.date_field.name, '>=', self.date_from),
                                (query.date_field.name, '<=', self.date_to)])
@@ -492,7 +522,8 @@ class MisReportInstancePeriod(models.Model):
 
         aep.do_queries(self.date_from, self.date_to,
                        self.period_from, self.period_to,
-                       self.report_instance_id.target_move)
+                       self.report_instance_id.target_move,
+                       self._get_additional_move_line_filter())
 
         compute_queue = self.report_instance_id.report_id.kpi_ids
         recompute_queue = []
