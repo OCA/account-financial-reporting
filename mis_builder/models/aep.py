@@ -27,7 +27,6 @@ from collections import defaultdict
 
 from openerp.osv import expression
 from openerp.tools.safe_eval import safe_eval
-from openerp.tools.translate import _
 
 MODE_VARIATION = 'p'
 MODE_INITIAL = 'i'
