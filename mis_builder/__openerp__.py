@@ -24,7 +24,7 @@
 
 {
     'name': 'MIS Builder',
-    'version': '9.0.0.2.0',
+    'version': '9.0.1.0.0',
     'category': 'Reporting',
     'summary': """
         Build 'Management Information System' Reports and Dashboards
