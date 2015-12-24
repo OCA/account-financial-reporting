@@ -102,8 +102,8 @@
 	      <field name="name">MIS report instance XLS report</field>
 	      <field name="model">mis.report.instance</field>
 	      <field name="type">ir.actions.report.xml</field>
-	      <field name="report_name">mis.report.instance.xls</field>
-	      <field name="report_type">xls</field>
+	      <field name="report_name">mis.report.instance.xlsx</field>
+	      <field name="report_type">xlsx</field>
 	      <field name="auto" eval="False"/>
 	    </record>
 
