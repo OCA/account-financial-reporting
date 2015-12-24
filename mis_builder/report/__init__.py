@@ -23,7 +23,7 @@
 ##############################################################################
 
 try:
-    from . import mis_builder_xls
+    from . import mis_builder_xlsx
 except ImportError:
     pass  # this module is not installed
 
