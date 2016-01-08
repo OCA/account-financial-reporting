@@ -313,8 +313,8 @@ class IntrastatProductDeclaration(models.Model):
             elif source_uom.category_id == pce_uom_categ:
                 if not product.weight_net:
                     note = "\n" + _(
-                        "Missing net weight on product '%s'."
-                        ) % product.name
+                        "Missing net weight on product %s."
+                        ) % product.name_get()[0][1]
                     note += "\n" + _(
                         "Please correct the product record and regenerate "
                         "the lines or adjust the impacted lines manually")
@@ -492,10 +492,9 @@ class IntrastatProductDeclaration(models.Model):
                         get_hs_code_recursively()
                     if not hs_code:
                         note = "\n" + _(
-                            'Missing H.S. code on product %s (%s). '
-                            'This product is present in invoice %s.') % (
-                                inv_line.product_id.name,
-                                inv_line.product_id.default_code,
+                            "Missing H.S. code on product %s. "
+                            "This product is present in invoice %s.") % (
+                                inv_line.product_id.name_get()[0][1],
                                 inv_line.invoice_id.number)
                         self._note += note
                         continue
