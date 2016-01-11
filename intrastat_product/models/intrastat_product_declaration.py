@@ -409,6 +409,23 @@ class IntrastatProductDeclaration(models.Model):
         """ placeholder for localization modules """
         pass
 
+    def _handle_invoice_accessory_cost(
+            self, invoice, lines_current_invoice,
+            total_inv_accessory_costs_cc, total_inv_product_cc):
+        """
+        Affect accessory costs pro-rata of the value.
+
+        This method allows to implement a different logic
+        in the localization modules.
+        E.g. in Belgium accessory cost should not be added.
+        """
+        if total_inv_accessory_costs_cc and total_inv_product_cc:
+            for ac_line_vals in lines_current_invoice:
+                ac_line_vals['amount_accessory_cost_company_currency'] = (
+                    total_inv_accessory_costs_cc *
+                    ac_line_vals['amount_company_currency'] /
+                    total_inv_product_cc)
+
     def _prepare_invoice_domain(self):
         start_date = date(self.year, self.month, 1)
         end_date = start_date + relativedelta(day=1, months=+1, days=-1)
@@ -516,6 +533,8 @@ class IntrastatProductDeclaration(models.Model):
                 product_origin_country = self._get_product_origin_country(
                     inv_line)
 
+                region = self._get_region(inv_line)
+
                 line_vals = {
                     'parent_id': self.id,
                     'invoice_line_id': inv_line.id,
@@ -529,28 +548,23 @@ class IntrastatProductDeclaration(models.Model):
                     'transaction_id': intrastat_transaction.id,
                     'product_origin_country_id':
                     product_origin_country.id or False,
+                    'region_id': region and region.id or False,
                     }
 
                 # extended declaration
                 if self._extended:
                     transport = self._get_transport(inv_line)
-                    region = self._get_region(inv_line)
                     line_vals.update({
                         'transport_id': transport.id,
-                        'region_id': region and region.id or False,
                         })
 
                 self._update_computation_line_vals(inv_line, line_vals)
 
                 lines_current_invoice.append((line_vals))
 
-            # Affect accessory costs pro-rata of the value
-            if total_inv_accessory_costs_cc and total_inv_product_cc:
-                for ac_line_vals in lines_current_invoice:
-                    ac_line_vals['amount_accessory_cost_company_currency'] = (
-                        total_inv_accessory_costs_cc *
-                        ac_line_vals['amount_company_currency'] /
-                        total_inv_product_cc)
+            self._handle_invoice_accessory_cost(
+                invoice, lines_current_invoice,
+                total_inv_accessory_costs_cc, total_inv_product_cc)
 
             lines += lines_current_invoice
 
@@ -623,8 +637,8 @@ class IntrastatProductDeclaration(models.Model):
             }
 
     def group_line_hashcode(self, computation_line):
-        fields = self._group_line_hashcode_fields(computation_line)
-        hashcode = '-'.join([unicode(f) for f in fields.itervalues()])
+        hc_fields = self._group_line_hashcode_fields(computation_line)
+        hashcode = '-'.join([unicode(f) for f in hc_fields.itervalues()])
         return hashcode
 
     @api.multi

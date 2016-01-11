@@ -48,7 +48,7 @@ class AccountInvoice(models.Model):
         store=True, string='Intrastat Country', readonly=True)
     intrastat = fields.Char(
         string='Intrastat Declaration',
-        related='company_id.intrastat', store=True, readonly=True)
+        related='company_id.intrastat', readonly=True)
 
     @api.model
     def _default_intrastat_transaction(self):
