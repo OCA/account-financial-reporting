@@ -52,8 +52,7 @@ class test_mis_builder(common.TransactionCase):
                          'The converted date time convert must contains hour')
 
     def test_fetch_query(self):
-        # create a report on a model without company_id field :
-        # account.analytic.balance
+        # create a report on account.analytic.line
         data = self.registry('mis.report.instance').compute(
             self.cr, self.uid,
             self.ref('mis_builder.mis_report_instance_test'))
