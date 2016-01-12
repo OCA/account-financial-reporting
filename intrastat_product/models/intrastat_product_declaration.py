@@ -269,7 +269,7 @@ class IntrastatProductDeclaration(models.Model):
             note = "\n" + _(
                 "Missing unit of measure on the line with %d "
                 "product(s) '%s' on invoice '%s'."
-                ) % (line_qty, product.name, invoice.number)
+                ) % (line_qty, product.name_get()[0][1], invoice.number)
             note += "\n" + _(
                 "Please adjust this line manually.")
             self._note += note
@@ -330,8 +330,8 @@ class IntrastatProductDeclaration(models.Model):
         else:
             note = "\n" + _(
                 "Conversion from unit of measure '%s' to 'Kg' "
-                "is not implemented yet."
-                ) % source_uom.name
+                "is not implemented yet. It is needed for product '%s'."
+                ) % (source_uom.name, product.name_get()[0][1])
             note += "\n" + _(
                 "Please correct the unit of measure settings and "
                 "regenerate the lines or adjust the impacted lines "
@@ -484,8 +484,8 @@ class IntrastatProductDeclaration(models.Model):
                 partner_country = self._get_partner_country(inv_line)
                 if not partner_country:
                     _logger.info(
-                        'Skipping invoice line %s qty %s'
-                        'of invoice %s. Reason: not partner_country'
+                        'Skipping invoice line %s qty %s '
+                        'of invoice %s. Reason: no partner_country'
                         % (inv_line.name, inv_line.quantity, invoice.number))
                     continue
 
