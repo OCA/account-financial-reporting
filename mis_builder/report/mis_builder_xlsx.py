@@ -22,18 +22,9 @@
 #
 ##############################################################################
 
-from openerp.report import report_sxw
 from openerp.addons.base_report_xlsx.report.report_xlsx import ReportXlsx
 import logging
 _logger = logging.getLogger(__name__)
-
-
-class mis_builder_xlsx_parser(report_sxw.rml_parse):
-
-    def __init__(self, cr, uid, name, context):
-        super(mis_builder_xlsx_parser, self).__init__(
-            cr, uid, name, context=context)
-        self.context = context
 
 
 class mis_builder_xlsx(ReportXlsx):
@@ -98,5 +89,4 @@ class mis_builder_xlsx(ReportXlsx):
 
 
 mis_builder_xlsx('report.mis.report.instance.xlsx',
-                 'mis.report.instance',
-                 parser=mis_builder_xlsx_parser)
+                 'mis.report.instance')
