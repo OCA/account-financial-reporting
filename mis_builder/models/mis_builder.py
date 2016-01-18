@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    mis_builder module for Odoo, Management Information System Builder
@@ -31,7 +31,7 @@ import traceback
 
 import pytz
 
-from openerp import api, fields, models, _, exceptions
+from openerp import api, exceptions, fields, models, _
 from openerp.tools.safe_eval import safe_eval
 
 from .aep import AccountingExpressionProcessor as AEP
@@ -124,7 +124,8 @@ class MisReportKpi(models.Model):
     @api.constrains('name')
     def _check_name(self):
         if not _is_valid_python_var(self.name):
-            raise exception.Warning(_('The name must be a valid python identifier'))
+            raise exceptions.Warning(_('The name must be a valid '
+                                       'python identifier'))
 
     @api.onchange('name')
     def _onchange_name(self):
@@ -260,7 +261,8 @@ class MisReportQuery(models.Model):
     @api.constrains('name')
     def _check_name(self):
         if not _is_valid_python_var(self.name):
-            raise exception.Warning(_('The name must be a valid python identifier'))
+            raise exceptions.Warning(_('The name must be a valid '
+                                       'python identifier'))
 
 
 class MisReport(models.Model):
