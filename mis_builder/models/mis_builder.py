@@ -31,7 +31,7 @@ import traceback
 
 import pytz
 
-from openerp import api, fields, models, _
+from openerp import api, fields, models, _, exceptions
 from openerp.tools.safe_eval import safe_eval
 
 from .aep import AccountingExpressionProcessor as AEP
@@ -123,7 +123,8 @@ class MisReportKpi(models.Model):
     @api.one
     @api.constrains('name')
     def _check_name(self):
-        return _is_valid_python_var(self.name)
+        if not _is_valid_python_var(self.name):
+            raise exception.Warning(_('The name must be a valid python identifier'))
 
     @api.onchange('name')
     def _onchange_name(self):
@@ -258,7 +259,8 @@ class MisReportQuery(models.Model):
     @api.one
     @api.constrains('name')
     def _check_name(self):
-        return _is_valid_python_var(self.name)
+        if not _is_valid_python_var(self.name):
+            raise exception.Warning(_('The name must be a valid python identifier'))
 
 
 class MisReport(models.Model):
