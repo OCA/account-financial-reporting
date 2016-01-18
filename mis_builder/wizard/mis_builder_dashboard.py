@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    mis_builder module for Odoo, Management Information System Builder
@@ -26,7 +26,7 @@ from openerp.osv import orm, fields
 from lxml import etree
 
 
-class add_mis_report_instance_dashboard(orm.TransientModel):
+class AddMisReportInstanceDashboard(orm.TransientModel):
     _name = "add.mis.report.instance.dashboard.wizard"
 
     _columns = {'name': fields.char('Name', size=32, required=True),
@@ -40,7 +40,7 @@ class add_mis_report_instance_dashboard(orm.TransientModel):
         if context is None:
             context = {}
         if context.get('active_id'):
-            res = super(add_mis_report_instance_dashboard, self).default_get(
+            res = super(AddMisReportInstanceDashboard, self).default_get(
                 cr, uid, fields, context=context)
             # get report instance name
             res['name'] = self.pool['mis.report.instance'].read(

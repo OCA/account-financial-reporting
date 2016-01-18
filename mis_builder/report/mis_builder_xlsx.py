@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    mis_builder module for Odoo, Management Information System Builder
@@ -27,11 +27,11 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-class mis_builder_xlsx(ReportXlsx):
+class MisBuilderXslx(ReportXlsx):
 
     def __init__(self, name, table, rml=False, parser=False, header=True,
                  store=False):
-        super(mis_builder_xlsx, self).__init__(
+        super(MisBuilderXslx, self).__init__(
             name, table, rml, parser, header, store)
 
     def generate_xlsx_report(self, workbook, data, objects):
@@ -88,5 +88,5 @@ class mis_builder_xlsx(ReportXlsx):
             row_pos += 1
 
 
-mis_builder_xlsx('report.mis.report.instance.xlsx',
-                 'mis.report.instance')
+MisBuilderXslx('report.mis.report.instance.xlsx',
+               'mis.report.instance')

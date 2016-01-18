@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    mis_builder module for Odoo, Management Information System Builder
@@ -27,10 +27,10 @@ import openerp.tests.common as common
 from ..models import mis_builder
 
 
-class test_mis_builder(common.TransactionCase):
+class TestMisBuilder(common.TransactionCase):
 
     def setUp(self):
-        super(test_mis_builder, self).setUp()
+        super(TestMisBuilder, self).setUp()
 
     def test_datetime_conversion(self):
         date_to_convert = '2014-07-05'
