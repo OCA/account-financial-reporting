@@ -158,9 +158,8 @@ class IntrastatProductDeclaration(models.Model):
     num_decl_lines = fields.Integer(
         compute='_compute_numbers', string='Number of Declaration Lines',
         store=True, track_visibility='onchange')
-    total_amount = fields.Float(
-        compute='_compute_numbers', digits=dp.get_precision('Account'),
-        string='Total Fiscal Amount', store=True,
+    total_amount = fields.Integer(
+        compute='_compute_numbers', string='Total Fiscal Amount', store=True,
         help="Total fiscal amount in company currency of the declaration.")
     currency_id = fields.Many2one(
         'res.currency', related='company_id.currency_id', readonly=True,

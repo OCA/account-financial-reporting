@@ -35,7 +35,7 @@ class IntrastatCommon(models.AbstractModel):
     @api.one
     @api.depends('declaration_line_ids.amount_company_currency')
     def _compute_numbers(self):
-        total_amount = 0.0
+        total_amount = 0  # it is an integer
         num_lines = 0
         for line in self.declaration_line_ids:
             total_amount += line.amount_company_currency
