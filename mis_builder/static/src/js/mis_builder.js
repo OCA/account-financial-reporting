@@ -5,6 +5,7 @@ var core = require('web.core');
 var form_common = require('web.form_common');
 var Model = require('web.DataModel');
 var data = require('web.data');
+var ActionManager = require('web.ActionManager');
 
 var MisReport = form_common.FormWidget.extend({
     /**
@@ -16,21 +17,67 @@ var MisReport = form_common.FormWidget.extend({
     init: function() {
         this._super.apply(this, arguments);
         this.mis_report_data = null;
+        this.mis_report_instance_id = false;
     },
 
     start: function() {
         this._super.apply(this, arguments);
         var self = this;
+        self.mis_report_instance_id = self.getParent().dataset.context.active_id
+        self.getParent().dataset.context['no_destroy'] = true;
+        self.generate_content();
+    },
+    
+    get_context: function() {
+        var self = this;
+        var context = {}
+        if (this.mis_report_instance_id){
+            context['active_ids'] = [this.mis_report_instance_id];
+        }
+        return context
+    },
+    
+    print: function() {
+        var self = this
+        var context = new data.CompoundContext(self.build_context(), self.get_context()|| {})
+        new Model("mis.report.instance").call(
+            "print_pdf", 
+            [self.mis_report_instance_id], 
+            {'context': context}
+        ).then(function(result){
+            self.do_action(result);
+        });
+    },
+    export_pdf: function() {
+        var self = this
+        var context = new data.CompoundContext(self.build_context(), self.get_context()|| {})
+        new Model("mis.report.instance").call(
+            "export_xls", 
+            [self.mis_report_instance_id], 
+            {'context': context}
+        ).then(function(result){
+            self.do_action(result).done(function(result){
+            });
+        });
+    },
+    generate_content: function() {
+        var self = this
+        var context = new data.CompoundContext(self.build_context(), self.get_context()|| {}) 
         new Model("mis.report.instance").call(
             "compute", 
-            [self.getParent().dataset.context.active_id], 
-            {'context': new data.CompoundContext()}
+            [self.mis_report_instance_id], 
+            {'context': context}
         ).then(function(result){
             self.mis_report_data = result;
             self.renderElement();
         });
     },
-
+    renderElement: function() {
+        this._super();
+        var self = this;
+        self.$(".oe_mis_builder_print").click(_.bind(this.print, this));
+        self.$(".oe_mis_builder_export").click(_.bind(this.export_pdf, this));
+    },
     events: {
         "click a.mis_builder_drilldown": "drilldown",
     },
@@ -54,6 +101,18 @@ var MisReport = form_common.FormWidget.extend({
     },
 });
 
+ActionManager.include({
+    dialog_stop: function (reason) {
+        var self = this
+        if (self.dialog_widget && self.dialog_widget.dataset && self.dialog_widget.dataset.context) {
+            var context = self.dialog_widget.dataset.context
+            if (!context['no_destroy']) {
+                this._super.apply(this, arguments);
+            }
+        } else {
+            this._super.apply(this, arguments);
+        }
+    }
+});
 core.form_custom_registry.add('mis_report', MisReport);
-
 });

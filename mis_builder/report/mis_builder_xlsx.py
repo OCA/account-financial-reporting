@@ -23,6 +23,7 @@
 ##############################################################################
 
 from openerp.addons.report_xlsx.report.report_xlsx import ReportXlsx
+from openerp.report import report_sxw
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -91,4 +92,4 @@ class MisBuilderXslx(ReportXlsx):
 
 
 MisBuilderXslx('report.mis.report.instance.xlsx',
-               'mis.report.instance')
+               'mis.report.instance', parser=report_sxw.rml_parse)
