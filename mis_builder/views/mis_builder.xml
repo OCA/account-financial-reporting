@@ -99,15 +99,15 @@
 
         <menuitem id="mis_report_view_menu" parent="account.account_management_menu" name="MIS Report Templates" action="mis_report_view_action" sequence="21"/>
 
-	    <record id="xls_export" model="ir.actions.report.xml">
-	      <field name="name">MIS report instance XLS report</field>
-	      <field name="model">mis.report.instance</field>
-	      <field name="type">ir.actions.report.xml</field>
-	      <field name="report_name">mis.report.instance.xlsx</field>
-	      <field name="report_type">xlsx</field>
-	      <field name="auto" eval="False"/>
-	    </record>
-
+        <record id="xls_export" model="ir.actions.report.xml">
+          <field name="name">MIS report instance XLS report</field>
+          <field name="model">mis.report.instance</field>
+          <field name="type">ir.actions.report.xml</field>
+          <field name="report_name">mis.report.instance.xlsx</field>
+          <field name="report_type">xlsx</field>
+          <field name="auto" eval="False"/>
+        </record>
+        
         <record id="qweb_pdf_export" model="ir.actions.report.xml">
           <field name="name">MIS report instance QWEB PDF report</field>
           <field name="model">mis.report.instance</field>
@@ -124,8 +124,6 @@
             <field name="arch" type="xml">
                 <form string="MIS Report Result" version="7.0">
                     <widget type="mis_report"></widget>
-                    <button icon="gtk-print" name="%(qweb_pdf_export)d" string="Print" type="action" colspan="2"/>
-                    <button icon="gtk-execute" name="%(xls_export)d" string="Export" type="action" colspan="2"/>
                 </form>
             </field>
         </record>
@@ -162,8 +160,8 @@
                     </div>
                     <div class="oe_right oe_button_box" name="buttons"> 
                         <button type="object" name="preview" string="Preview" icon="gtk-print-preview" />
-                        <button type="action" name="%(qweb_pdf_export)d" string="Print" icon="gtk-print" />
-                        <button type="action" name="%(xls_export)d" string="Export" icon="gtk-execute" />
+                        <button type="object" name="print_pdf" string="Print" icon="gtk-print" />
+                        <button type="object" name="export_xls" string="Export" icon="gtk-execute" />
                         <button type="action" name="%(mis_report_instance_add_to_dashboard_action)d" string="Add to dashboard" icon="gtk-add" />
                     </div>
                     <group col="4">

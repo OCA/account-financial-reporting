@@ -604,6 +604,30 @@ class MisReportInstance(models.Model):
         }
 
     @api.multi
+    def print_pdf(self):
+        self.ensure_one()
+        return {
+            'name': 'MIS report instance QWEB PDF report',
+            'model': 'mis.report.instance',
+            'type': 'ir.actions.report.xml',
+            'report_name': 'mis_builder.report_mis_report_instance',
+            'report_type': 'qweb-pdf',
+            'context': self.env.context,
+        }
+
+    @api.multi
+    def export_xls(self):
+        self.ensure_one()
+        return {
+            'name': 'MIS report instance XLSX report',
+            'model': 'mis.report.instance',
+            'type': 'ir.actions.report.xml',
+            'report_name': 'mis.report.instance.xlsx',
+            'report_type': 'xlsx',
+            'context': self.env.context,
+        }
+
+    @api.multi
     def compute(self):
         assert len(self) == 1
 
