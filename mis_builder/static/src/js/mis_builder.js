@@ -88,10 +88,11 @@ var MisReport = form_common.FormWidget.extend({
         if (drilldown) {
             var period_id = JSON.parse($(event.target).data("period-id"));
             var val_c = JSON.parse($(event.target).data("expr"));
+            var context = new data.CompoundContext(self.build_context(), self.get_context()|| {}) 
             new Model("mis.report.instance.period").call(
                 "drilldown",
                 [period_id, val_c],
-                {'context': new data.CompoundContext()}
+                {'context': context}
             ).then(function(result) {
                 if (result) {
                     self.do_action(result);
