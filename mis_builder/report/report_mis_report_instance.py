@@ -35,6 +35,9 @@ class Report(models.Model):
     @api.v7
     def get_pdf(self, cr, uid, ids, report_name, html=None, data=None,
                 context=None):
+        if not ids and context.get('active_ids') and\
+                report_name == 'mis_builder.report_mis_report_instance':
+            ids = context.get('active_ids')
         if ids:
             report = self._get_report_from_name(cr, uid, report_name)
             obj = self.pool[report.model].browse(cr, uid, ids,
