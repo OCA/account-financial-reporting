@@ -77,10 +77,11 @@ openerp.mis_builder = function(instance) {
             if (drilldown) {
                 var period_id = JSON.parse($(event.target).data("period-id"));
                 var val_c = JSON.parse($(event.target).data("expr"));
+                context = new instance.web.CompoundContext(self.build_context(), self.get_context()|| {}) 
                 new instance.web.Model("mis.report.instance.period").call(
                     "drilldown",
                     [period_id, val_c],
-                    {'context': new instance.web.CompoundContext()}
+                    {'context': context}
                 ).then(function(result) {
                     if (result) {
                         self.do_action(result);
