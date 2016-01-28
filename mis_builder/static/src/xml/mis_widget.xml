@@ -1,6 +1,10 @@
 <template>
     <t t-name="mis_builder.MisReport">
         <div class="oe_mis_builder_content">
+            <div class="oe_mis_builder_buttons oe_right">
+                <button class="oe_mis_builder_print"><img src="/web/static/src/img/icons/gtk-print.png"/> Print</button>
+                <button class="oe_mis_builder_export"><img src="/web/static/src/img/icons/gtk-execute.png"/>Export</button>
+            </div>
             <table t-if="widget.mis_report_data" class="oe_list_content mis_builder">
                 <thead>
                     <tr class="oe_list_header_columns">
@@ -58,10 +62,6 @@
                     </tr>
                 </tfoot>
             </table>
-            <div class="oe_mis_builder_buttons">
-                <button class="oe_mis_builder_print"><img src="/web/static/src/img/icons/gtk-print.png"/> Print</button>
-                <button class="oe_mis_builder_export"><img src="/web/static/src/img/icons/gtk-execute.png"/>Export</button>
-            </div>
         </div>
     </t>
 </template>
