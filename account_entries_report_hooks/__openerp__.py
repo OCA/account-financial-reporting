@@ -4,7 +4,7 @@
 # © 2015 Serpent Consulting Services Pvt. Ltd. - Sudhir Arya
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 {
-    'name' : 'Account Report Entries Hooks',
+    'name' : 'Account Entries Report Hooks',
     'version' : '8.0.1.0.0',
     "author": "Eficent Business and IT Consulting Services S.L., "
               "Serpent Consulting Services Pvt. Ltd.,"
