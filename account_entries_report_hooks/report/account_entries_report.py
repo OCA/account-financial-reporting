@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # © 2015 Eficent Business and IT Consulting Services S.L. -
 # Jordi Ballester Alomar
-# © 2015 Serpent Consulting Services Pvt. Ltd. - Sudhir Arya
+# © 2015 Serpent Consulting Services Pvt. Ltd.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from openerp import tools
 from openerp import models
@@ -50,12 +50,13 @@ class account_entries_report(models.Model):
             left join account_account a on (l.account_id = a.id)
             left join account_move am on (am.id=l.move_id)
             left join account_period p on (am.period_id=p.id)
-            where l.state != 'draft'
+            
         """
         return from_str
 
     def _where(self):
         where_str = """
+        where l.state != 'draft'
         """
         return where_str
 
