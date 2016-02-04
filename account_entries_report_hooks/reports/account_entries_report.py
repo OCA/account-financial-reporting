@@ -3,12 +3,10 @@
 # Jordi Ballester Alomar
 # © 2015 Serpent Consulting Services Pvt. Ltd.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-from openerp import tools
-from openerp import models
-import openerp.addons.decimal_precision as dp
+from openerp import models, tools
 
 
-class account_entries_report(models.Model):
+class AccountEntriesReport(models.Model):
     _inherit = "account.entries.report"
 
     def _select(self):
@@ -44,7 +42,7 @@ class account_entries_report(models.Model):
         return select_str
 
     def _from(self):
-        from_str="""
+        from_str = """
         FROM
             account_move_line l
             left join account_account a on (l.account_id = a.id)

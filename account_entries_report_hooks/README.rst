@@ -2,28 +2,29 @@
    :target: https://www.gnu.org/licenses/agpl.html
    :alt: License: AGPL-3
 
-===============================
+============================
 Account Entries Report Hooks
-===============================
+============================
 
-This model extends the functionality of the "Account Entries Report"
-by overriding the standard query with a new one that will allow other
-modules to extend more flexibly.
+This model extends the functionality of the "Account Entries Report" by
+overriding the standard query with a new one that will allow other modules
+to extend more flexibly.
 
-Installation
-============
-
-No external library is used.
 
 Configuration
 =============
 
 In order to extend the Account Entries Report, you need to:
-- Include this module as dependency in your own module
-- Inherit from "account.entries.report" module
-- Add your own fields, as needed
-- Implement one of the new methods _select, _from, _where, _group_by, calling
-first to the super() method and then adding the extra string as needed.
+
+* Include this module as dependency in your own module
+
+* Inherit from "account.entries.report" module
+
+* Add your own fields, as needed
+
+* Implement one of the new methods _select, _from, _where, _group_by,
+  calling first to the super() method and then adding the extra string as
+  needed.
 
 Usage
 =====
@@ -57,6 +58,7 @@ Contributors
 
 * Eficent Business and IT Consulting Services S.L. <contact@eficent.com>
 * Serpent Consulting Services Pvt. Ltd. <support@serpentcs.com>
+* Xpansa Group <hello@xpansa.com>
 
 Maintainer
 ----------
