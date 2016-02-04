@@ -6,9 +6,9 @@
 Account Entries Report Hooks
 ============================
 
-This model extends the functionality of the "Account Entries Report" by
+This module extends the functionality of the "Account Entries Report" by
 overriding the standard query with a new one that will allow other modules
-to extend more flexibly.
+to extend it more flexibly.
 
 
 Configuration
