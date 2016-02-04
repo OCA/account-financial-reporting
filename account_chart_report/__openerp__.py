@@ -25,7 +25,7 @@
     'name': 'Print chart of accounts',
     'version': '1.0',
     'category': 'Reports/pdf',
-    'description': """Print chart of accounts.
+    'description': r"""Print chart of accounts.
 
 This module add the menu Accounting \ Charts \ Print chart of Accounts
 and allow to print the selected chart of accounts.
