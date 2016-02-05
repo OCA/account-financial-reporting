@@ -308,8 +308,9 @@ class trial_balance_xls(report_xls):
                             ('diff', 1, 0, 'number', comp_account[
                              'diff'], None, cell_style_decimal),
                             ('diff_percent', 1, 0, 'number', comp_account[
-                             'percent_diff'] and comp_account['percent_diff']
-                             or 0, None, cell_style_pct),
+                             'percent_diff'] and
+                             comp_account['percent_diff'] or 0, None,
+                             cell_style_pct),
                         ]
 
             c_specs += [('type', 1, 0, 'text',
