@@ -171,13 +171,13 @@ class MisReportKpi(models.Model):
                 return self._render_num(
                     lang_id,
                     value - base_value,
-                    self.divider, self.dp, self.suffix, sign='+')
+                    self.divider, self.dp, '', self.suffix, sign='+')
             elif self.compare_method == 'pct':
                 if round(base_value, self.dp) != 0:
                     return self._render_num(
                         lang_id,
                         (value - base_value) / abs(base_value),
-                        0.01, self.dp, self.prefix, '%', sign='+')
+                        0.01, self.dp, '', '%', sign='+')
         return ''
 
     def _render_num(self, lang_id, value, divider,
