@@ -194,6 +194,7 @@ class MisReportKpi(models.Model):
             grouping=True)
         value = u'%s\N{NARROW NO-BREAK SPACE}%s\N{NO-BREAK SPACE}%s%s' % \
             (prefix or '', value, divider_label, suffix or '')
+        value = value.replace('-', u'\N{NON-BREAKING HYPHEN}')
         return value
 
 
