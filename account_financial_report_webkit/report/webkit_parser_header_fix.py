@@ -27,6 +27,9 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 ##############################################################################
+from mako.template import Template
+from mako.lookup import TemplateLookup
+
 import os
 import subprocess
 import tempfile
@@ -75,8 +78,6 @@ _logger = logging.getLogger('financial.reports.webkit')
 
 # redefine mako_template as this is overriden by jinja since saas-1
 # from openerp.addons.report_webkit.webkit_report import mako_template
-from mako.template import Template
-from mako.lookup import TemplateLookup
 
 
 def mako_template(text):

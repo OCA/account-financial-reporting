@@ -200,8 +200,7 @@ class general_ledger_xls(report_xls):
             display_initial_balance = _p['init_balance'][account.id] and \
                 (_p['init_balance'][account.id].get(
                     'debit', 0.0) != 0.0 or
-                    _p['init_balance'][account.id].get('credit', 0.0)
-                    != 0.0)
+                    _p['init_balance'][account.id].get('credit', 0.0) != 0.0)
             display_ledger_lines = _p['ledger_lines'][account.id]
 
             if _p.display_account_raw(data) == 'all' or \
