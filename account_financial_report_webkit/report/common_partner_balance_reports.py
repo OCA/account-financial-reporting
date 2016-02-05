@@ -312,7 +312,10 @@ class CommonPartnerBalanceReportHeaderWebkit(CommonBalanceReportHeaderWebkit,
 
                 for partner_id, partner_values in \
                         values['partners_amounts'].copy().iteritems():
-                    base_partner_balance = partners_amounts_accounts[account.id][partner_id]['balance']\
+                    partners_amounts_account =\
+                        partners_amounts_accounts[account.id]
+                    base_partner_balance =\
+                        partners_amounts_account[partner_id]['balance']\
                         if partners_amounts_accounts.get(account.id)\
                         and partners_amounts_accounts.get(account.id)\
                         .get(partner_id) else 0.0

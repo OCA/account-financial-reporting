@@ -165,8 +165,8 @@ class PartnersLedgerWebkit(report_sxw.rml_parse,
                 non_null_init_balances = dict(
                     [(ib, amounts) for ib, amounts
                      in init_balance[account.id].iteritems()
-                     if amounts['init_balance']
-                     or amounts['init_balance_currency']])
+                     if amounts['init_balance'] or
+                     amounts['init_balance_currency']])
                 init_bal_lines_pids = non_null_init_balances.keys()
             else:
                 init_balance[account.id] = {}
