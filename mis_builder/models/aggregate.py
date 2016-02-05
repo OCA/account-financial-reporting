@@ -2,6 +2,7 @@
 # © 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
+
 def _sum(l):
     """ Same as stdlib sum but returns None instead of 0
     in case of empty sequence.

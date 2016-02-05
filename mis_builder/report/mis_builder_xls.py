@@ -116,5 +116,5 @@ class MisBuilderXls(report_xls):
 
 
 MisBuilderXls('report.mis.report.instance.xls',
-                'mis.report.instance',
-                parser=MisBuilderXlsParser)
+              'mis.report.instance',
+              parser=MisBuilderXlsParser)
