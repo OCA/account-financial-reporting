@@ -70,7 +70,7 @@ class test_mis_builder(common.TransactionCase):
                             'expr': 'len(test)',
                             'val_c': 'total_test = len(test)',
                             'val': 0,
-                            'val_r': u'0',
+                            'val_r': u'0\xa0',
                             'is_percentage': False,
                             'dp': 0,
                             'drilldown': False}]

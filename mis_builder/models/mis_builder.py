@@ -212,7 +212,7 @@ class MisReportKpi(models.Model):
             '%%%s.%df' % (sign, dp),
             value,
             grouping=True)
-        value = u'%s%s\N{NO-BREAK SPACE}%s%s' % \
+        value = u'%s\N{NARROW NO-BREAK SPACE}%s\N{NO-BREAK SPACE}%s%s' % \
             (prefix, value, divider_label, suffix or '')
         return value
 
