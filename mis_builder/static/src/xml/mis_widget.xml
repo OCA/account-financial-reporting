@@ -42,7 +42,7 @@
                                     </a>
                                 </t>
                                 <t t-if="!value_value.drilldown">
-                                    <t t-esc="value_value.val_r" t-field-options='{"widget": "monetary"}'/>
+                                    <t t-esc="value_value.val_r"/>
                                 </t>
                             </div>
                         </td>
