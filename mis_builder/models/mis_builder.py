@@ -212,15 +212,8 @@ class MisReportKpi(models.Model):
             '%%%s.%df' % (sign, dp),
             value,
             grouping=True)
-        if prefix:
-            if '-' in value:
-                value = value.replace('-', '-%s' % (prefix,))
-            else:
-                value = prefix + value
-
-        value = u'%s%s%s' % \
-            (value, divider_label, suffix or '')
-        value = value.replace('-', u'\N{NON-BREAKING HYPHEN}')
+        value = u'%s%s\N{NO-BREAK SPACE}%s%s' % \
+            (prefix, value, divider_label, suffix or '')
         return value
 
 
