@@ -138,10 +138,7 @@ class AccountingExpressionProcessor(object):
                 if account.type in ('view', 'consolidation'):
                     self._account_ids_by_code[like_code].update(
                         account_obj._get_children_and_consol(
-                            cr, uid,
-                            self.env.cr, self.env.uid,
-                            [account.id],
-                            context=context))
+                            cr, uid, [account.id], context=context))
                 else:
                     self._account_ids_by_code[like_code].add(account.id)
 
