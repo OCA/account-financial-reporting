@@ -44,11 +44,19 @@ class AccountInvoice(models.Model):
         'res.country', string='Origin/Destination Country',
         ondelete='restrict')
     intrastat_country = fields.Boolean(
-        related='src_dest_country_id.intrastat',
+        compute='_compute_intrastat_country',
         store=True, string='Intrastat Country', readonly=True)
     intrastat = fields.Char(
         string='Intrastat Declaration',
         related='company_id.intrastat', readonly=True)
+
+    @api.multi
+    @api.depends('src_dest_country_id', 'partner_id.country_id')
+    def _compute_intrastat_country(self):
+        for inv in self:
+            country = inv.src_dest_country_id \
+                or inv.partner_id.country_id
+            inv.intrastat_country = country.intrastat
 
     @api.model
     def _default_intrastat_transaction(self):
