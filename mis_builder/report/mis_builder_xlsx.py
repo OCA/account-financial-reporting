@@ -73,6 +73,8 @@ class MisBuilderXslx(ReportXlsx):
                 if value.get('dp'):
                     num_format_str += '.'
                     num_format_str += '0' * int(value['dp'])
+                if value.get('prefix'):
+                    num_format_str = '"%s"' % value['prefix'] + num_format_str
                 if value.get('suffix'):
                     num_format_str = num_format_str + ' "%s"' % value['suffix']
                 kpi_format = workbook.add_format({'num_format': num_format_str,

@@ -1,26 +1,6 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    mis_builder module for Odoo, Management Information System Builder
-#    Copyright (C) 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
-#
-#    This file is a part of mis_builder
-#
-#    mis_builder is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License v3 or later
-#    as published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    mis_builder is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License v3 or later for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    v3 or later along with this program.
-#    If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+# © 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 import openerp.tests.common as common
 
@@ -64,11 +44,12 @@ class TestMisBuilder(common.TransactionCase):
                                                   'mis_report_instance_'
                                                   'period_test'),
                             'style': None,
+                            'prefix': False,
                             'suffix': False,
                             'expr': 'len(test)',
                             'val_c': 'total_test = len(test)',
                             'val': 0,
-                            'val_r': u'0\xa0',
+                            'val_r': u'\u202f0\xa0',
                             'is_percentage': False,
                             'dp': 0,
                             'drilldown': False}]

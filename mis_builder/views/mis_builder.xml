@@ -49,6 +49,7 @@
                                 <field name="type"/>
                                 <field name="dp" attrs="{'invisible': [('type', '=', 'str')]}"/>
                                 <field name="divider" attrs="{'invisible': [('type', '=', 'str')]}"/>
+                                <field name="prefix"/>
                                 <field name="suffix"/>
                                 <field name="compare_method" attrs="{'invisible': [('type', '=', 'str')]}"/>
                                 <field name="default_css_style"/>
