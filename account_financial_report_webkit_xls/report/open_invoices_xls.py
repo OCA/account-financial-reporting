@@ -355,7 +355,7 @@ class open_invoices_xls(report_xls):
                      cumul_balance, style_line_decimal)]
 
         if _p.amount_currency(data):
-            if account.currency_id:
+            if line.get('amount_currency'):
                 c_specs += [
                     ('curramount', 1, 0, 'number', line.get('amount_currency')
                      or 0.0, None, style_line_decimal),
