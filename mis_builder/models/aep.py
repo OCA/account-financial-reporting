@@ -1,32 +1,12 @@
-# -*- encoding: utf-8 -*-
-##############################################################################
-#
-#    mis_builder module for Odoo, Management Information System Builder
-#    Copyright (C) 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
-#
-#    This file is a part of mis_builder
-#
-#    mis_builder is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License v3 or later
-#    as published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    mis_builder is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License v3 or later for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    v3 or later along with this program.
-#    If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+# -*- coding: utf-8 -*-
+# © 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 import re
 from collections import defaultdict
 
-from openerp.exceptions import Warning
-from openerp.osv import expression
+from openerp.exceptions import Warning as UserError
+from openerp.models import expression
 from openerp.tools.safe_eval import safe_eval
 from openerp.tools.translate import _
 
@@ -321,7 +301,7 @@ class AccountingExpressionProcessor(object):
             if mode == MODE_VARIATION:
                 domain = [('date', '>=', date_from), ('date', '<=', date_to)]
             else:
-                raise Warning(_("Modes i and e are only applicable for "
+                raise UserError(_("Modes i and e are only applicable for "
                                 "fiscal periods"))
         if target_move == 'posted':
             domain.append(('move_id.state', '=', 'posted'))
