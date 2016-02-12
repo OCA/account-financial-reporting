@@ -29,6 +29,10 @@ before_install:
 
 install:
   - git clone https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
+  - git clone https://github.com/OCA/webkit-tools.git ${HOME}/webkit-tools -b ${VERSION}
+  - sudo apt-get install xfonts-75dpi
+  - sudo wget http://sourceforge.net/projects/wkhtmltopdf/files/0.12.2.1/wkhtmltox-0.12.2.1_linux-precise-amd64.deb -P /tmp/
+  - sudo dpkg -i /tmp/wkhtmltox-0.12.2.1_linux-precise-amd64.deb
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   - travis_install_nightly
 

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+
+    <record id="partner_aged_statement_view" model="ir.ui.view">
+      <field name="inherit_id" ref="base.view_partner_form"/>
+      <field name="model">res.partner</field>
+      <field name="arch" type="xml">
+        <xpath expr="//form/*[1]" position="before">
+                <header>
+                    <button
+                            name="action_aged_statement_send"
+                            type="object" string="Send Aged Statement"
+                            class="oe_highlight"/>
+                </header>
+        </xpath>
+      </field>
+    </record>
+
+  </data>
+</openerp>
