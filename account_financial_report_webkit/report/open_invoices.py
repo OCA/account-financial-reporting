@@ -173,6 +173,8 @@ class PartnersOpenInvoicesWebkit(report_sxw.rml_parse,
             ledger_lines[account.id] = ledger_lines_memoizer.get(account.id,
                                                                  {})
             if group_by_currency:
+                account.ledger_lines = ledger_lines_memoizer.get(account.id,
+                                                                 {})
                 self._group_lines_by_currency(account)
 
         self.localcontext.update({
