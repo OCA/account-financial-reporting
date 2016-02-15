@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="view_account_analytic_entries_search" model="ir.ui.view">
+            <field name="model">analytic.entries.report</field>
+            <field name="inherit_id" ref="account.view_account_analytic_entries_search" />
+            <field name="arch" type="xml">
+                <field name="date" position="replace">
+                    <field name="period_id" type="col" />
+                </field>
+            </field>
+        </record>
+        <record id="view_analytic_entries_report_search" model="ir.ui.view">
+            <field name="model">analytic.entries.report</field>
+            <field name="inherit_id" ref="account.view_analytic_entries_report_search" />
+            <field name="arch" type="xml">
+                <xpath expr="." position="inside">
+                    <group string="Fiscal periods" name="fiscal_periods">
+                        <filter string="Fiscal year" name="filter_fiscalyear"
+                            domain="[('fiscalyear_id', 'offset', 0)]" />
+                        <filter string="Fiscal year-1" name="filter_fiscalyear-1"
+                            domain="[('fiscalyear_id', 'offset', -1)]" />
+                        <separator />
+                        <filter string="Period" name="filter_period"
+                            domain="[('period_id', 'offset', 0)]" />
+                        <filter string="Period-1" name="filter_period-1"
+                            domain="[('period_id', 'offset', -1)]" />
+                    </group>
+                </xpath>
+            </field>
+        </record>
+        <record id="account.action_analytic_entries_report" model="ir.actions.act_window">
+            <field name="context">{'search_default_filter_fiscalyear':1, 'group_by_no_leaf':1, 'search_default_Account':1}</field>
+        </record>
+    </data>
+</openerp>
