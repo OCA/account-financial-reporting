@@ -288,8 +288,6 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
         balance_accounts = dict.fromkeys(account_ids, False)
 
         for account in objects:
-            if not account.parent_id:  # hide top level account
-                continue
             if account.type == 'consolidation':
                 to_display_accounts.update(
                     dict([(a.id, False) for a in account.child_consol_ids]))
