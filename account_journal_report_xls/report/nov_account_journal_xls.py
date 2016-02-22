@@ -283,8 +283,8 @@ class AccountJournalXls(report_xls):
         cell_style = xlwt.easyxf(_xs['xls_title'])
         report_name = (10 * ' ').join([
             _p.company.name,
-            _p._('Journal Centralization') + ' - '
-            + _p.company.currency_id.name,
+            _p._('Journal Centralization') + ' - ' +
+            _p.company.currency_id.name,
         ])
         c_specs = [
             ('report_name', 1, 0, 'text', report_name),
