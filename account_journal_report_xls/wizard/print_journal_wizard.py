@@ -1,9 +1,9 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution
+#    Odoo, Open Source Management Solution
 #
-#    Copyright (c) 2014 Noviat nv/sa (www.noviat.com). All rights reserved.
+#    Copyright (c) 2009-2016 Noviat nv/sa (www.noviat.com).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -43,9 +43,16 @@ class account_print_journal_xls(orm.TransientModel):
         'group_entries': fields.boolean(
             'Group Entries',
             help="Group entries with same General Account & Tax Code."),
+        'centralization': fields.selection(
+            [('add', 'Add'),
+             ('only', 'Only')],
+            'Centralization Report',
+            help="Journal Centralization Report. "
+                 "\nThis report is only available in the Excel export."),
     }
     _defaults = {
         'group_entries': True,
+        'centralization': 'add',
     }
 
     def fields_get(self, cr, uid, fields=None, context=None):
@@ -103,7 +110,7 @@ class account_print_journal_xls(orm.TransientModel):
     def print_report(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
-        move_obj = self.pool.get('account.move')
+        aml_obj = self.pool['account.move.line']
         print_by = context.get('print_by')
         wiz_form = self.browse(cr, uid, ids)[0]
         fiscalyear_id = wiz_form.fiscalyear_id.id
@@ -138,6 +145,7 @@ class account_print_journal_xls(orm.TransientModel):
             'target_move': wiz_form.target_move,
             'display_currency': wiz_form.amount_currency,
             'group_entries': wiz_form.group_entries,
+            'centralization': wiz_form.centralization,
         }
 
         if wiz_form.target_move == 'posted':
@@ -148,11 +156,12 @@ class account_print_journal_xls(orm.TransientModel):
         if print_by == 'fiscalyear':
             journal_fy_ids = []
             for journal_id in wiz_journal_ids:
-                aml_ids = move_obj.search(cr, uid,
-                                          [('journal_id', '=', journal_id),
-                                           ('period_id', 'in', wiz_period_ids),
-                                           ('state', 'in', move_states)],
-                                          limit=1)
+                aml_ids = aml_obj.search(
+                    cr, uid,
+                    [('journal_id', '=', journal_id),
+                     ('period_id', 'in', wiz_period_ids),
+                     ('move_id.state', 'in', move_states)],
+                    limit=1)
                 if aml_ids:
                     journal_fy_ids.append((journal_id, fiscalyear_id))
             if not journal_fy_ids:
@@ -170,11 +179,12 @@ class account_print_journal_xls(orm.TransientModel):
             for journal_id in wiz_journal_ids:
                 period_ids = []
                 for period_id in wiz_period_ids:
-                    aml_ids = move_obj.search(cr, uid,
-                                              [('journal_id', '=', journal_id),
-                                               ('period_id', '=', period_id),
-                                               ('state', 'in', move_states)],
-                                              limit=1)
+                    aml_ids = aml_obj.search(
+                        cr, uid,
+                        [('journal_id', '=', journal_id),
+                         ('period_id', '=', period_id),
+                         ('move_id.state', 'in', move_states)],
+                        limit=1)
                     if aml_ids:
                         period_ids.append(period_id)
                 if period_ids:
