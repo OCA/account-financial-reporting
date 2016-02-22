@@ -31,6 +31,9 @@
         'report_xls',
     ],
     'demo': [],
+    'images': [
+        'static/description/journal_overview.png',
+    ],
     'data': [
         'wizard/print_journal_wizard.xml',
     ],

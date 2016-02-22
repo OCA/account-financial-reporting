@@ -20,10 +20,10 @@
 #
 ##############################################################################
 
-from openerp.osv import orm
+from openerp import models
 
 
-class account_journal(orm.Model):
+class AccountJournal(models.Model):
     _inherit = 'account.journal'
 
     # allow inherited modules to extend the query

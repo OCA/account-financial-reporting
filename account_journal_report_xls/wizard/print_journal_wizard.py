@@ -20,43 +20,35 @@
 #
 ##############################################################################
 
-from openerp.tools.translate import _
-from openerp.osv import orm, fields
+from openerp import fields, models, _
+from openerp.exceptions import Warning as UserError
 from openerp.addons.account.wizard.account_report_common_journal \
     import account_common_journal_report
 import logging
 _logger = logging.getLogger(__name__)
 
 
-class account_print_journal_xls(orm.TransientModel):
+class AccountPrintJournalXls(models.TransientModel):
     _inherit = 'account.print.journal'
     _name = 'account.print.journal.xls'
     _description = 'Print/Export Journal'
-    _columns = {
-        'journal_ids': fields.many2many(
-            'account.journal',
-            'account_print_journal_xls_journal_rel',
-            'journal_xls_id',
-            'journal_id',
-            string='Journals',
-            required=True),
-        'group_entries': fields.boolean(
-            'Group Entries',
-            help="Group entries with same General Account & Tax Code."),
-        'centralization': fields.selection(
-            [('add', 'Add'),
-             ('only', 'Only')],
-            'Centralization Report',
-            help="Journal Centralization Report. "
-                 "\nThis report is only available in the Excel export."),
-    }
-    _defaults = {
-        'group_entries': True,
-        'centralization': 'add',
-    }
+
+    journal_ids = fields.Many2many(
+        comodel_name='account.journal',
+        relation='account_print_journal_xls_journal_rel',
+        column1='journal_xls_id', column2='journal_id',
+        string='Journals', required=True)
+    group_entries = fields.Boolean(
+        string='Group Entries', default=True,
+        help="Group entries with same General Account & Tax Code.")
+    centralization = fields.Selection(
+        selection=[('add', 'Add'), ('only', 'Only')],
+        string='Centralization Report', default='add',
+        help="Journal Centralization Report. "
+             "\nThis report is only available in the Excel export.")
 
     def fields_get(self, cr, uid, fields=None, context=None):
-        res = super(account_print_journal_xls, self).fields_get(
+        res = super(AccountPrintJournalXls, self).fields_get(
             cr, uid, fields, context)
         if context.get('print_by') == 'fiscalyear':
             if 'fiscalyear_id' in res:
@@ -165,7 +157,7 @@ class account_print_journal_xls(orm.TransientModel):
                 if aml_ids:
                     journal_fy_ids.append((journal_id, fiscalyear_id))
             if not journal_fy_ids:
-                raise orm.except_orm(
+                raise UserError(
                     _('No Data Available'),
                     _('No records found for your selection!'))
             datas.update({
@@ -190,7 +182,7 @@ class account_print_journal_xls(orm.TransientModel):
                 if period_ids:
                     journal_period_ids.append((journal_id, period_ids))
             if not journal_period_ids:
-                raise orm.except_orm(
+                raise UserError(
                     _('No Data Available'),
                     _('No records found for your selection!'))
             datas.update({

@@ -29,12 +29,12 @@ _logger = logging.getLogger(__name__)
 _ir_translation_name = 'nov.account.journal.print'
 
 
-class nov_journal_print(report_sxw.rml_parse):
+class NovJournalPrint(report_sxw.rml_parse):
 
     def set_context(self, objects, data, ids, report_type=None):
         # _logger.warn('set_context, objects = %s, data = %s,
         # ids = %s', objects, data, ids)
-        super(nov_journal_print, self).set_context(objects, data, ids)
+        super(NovJournalPrint, self).set_context(objects, data, ids)
         j_obj = self.pool.get('account.journal')
         p_obj = self.pool.get('account.period')
         fy_obj = self.pool.get('account.fiscalyear')
@@ -69,7 +69,7 @@ class nov_journal_print(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
         if context is None:
             context = {}
-        super(nov_journal_print, self).__init__(cr, uid, name, context=context)
+        super(NovJournalPrint, self).__init__(cr, uid, name, context=context)
         self.localcontext.update({
             'time': time,
             'title': self._title,
@@ -215,7 +215,7 @@ class nov_journal_print(report_sxw.rml_parse):
             code_string = j_obj._report_xls_document_extra(
                 self.cr, self.uid, self.context)
             # _logger.warn('code_string= %s', code_string)
-            [x.update({'docname': eval(code_string) or '-'}) for x in lines]
+            [x.update({'docname': eval(code_string) or '-'}) for x in lines]  # noqa: disable W0123, safe_eval doesn't apply here since code_string comes from python module
 
         # group lines
         if self.group_entries:
@@ -348,11 +348,11 @@ class nov_journal_print(report_sxw.rml_parse):
         if isinstance(value, (float, int)) and not value:
             return ''
         else:
-            return super(nov_journal_print, self).formatLang(
+            return super(NovJournalPrint, self).formatLang(
                 value, digits,
                 date, date_time, grouping, monetary, dp, currency_obj)
 
 report_sxw.report_sxw(
     'report.nov.account.journal.print', 'account.journal',
     'addons/account_journal_report_xls/report/nov_account_journal.rml',
-    parser=nov_journal_print, header=False)
+    parser=NovJournalPrint, header=False)
