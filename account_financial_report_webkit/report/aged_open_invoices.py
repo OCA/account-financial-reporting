@@ -139,15 +139,6 @@ class AccountAgedOpenInvoicesWebkit(PartnersOpenInvoicesWebkit):
         )
 
         aged_open_inv = {}
-        # {account1_id: {(0, 30): 0.0,
-        #               (30, 60): -101.0,
-        #               (60, 90): 0.0,
-        #               partenaire1_id: {(0, 30): 5.0,
-        #                                (30, 60): -10,
-        #                                'lines': [line1, line2]
-        #                                },
-        #               },
-        # }
 
         # Stupid dict that we copy in parts of the main aged_open_inv dict
         aged_dict = {}
@@ -194,7 +185,6 @@ class AccountAgedOpenInvoicesWebkit(PartnersOpenInvoicesWebkit):
                        'aged_lines': {(90, 120): 0.0, ...}
 
         """
-        #lines_to_age = self.filter_lines(partner_id, [ledger_line])
         end_date = self._get_end_date(data)
         reconcile_lookup = self.get_reconcile_count_lookup([ledger_line])
         compute_method = self.get_compute_method(reconcile_lookup,
