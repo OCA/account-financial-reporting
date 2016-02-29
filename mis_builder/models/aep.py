@@ -8,6 +8,8 @@ from collections import defaultdict
 from openerp.exceptions import Warning as UserError
 from openerp.models import expression
 from openerp.tools.safe_eval import safe_eval
+from openerp.tools.translate import _
+from .accounting_none import AccountingNone
 
 MODE_VARIATION = 'p'
 MODE_INITIAL = 'i'
@@ -228,12 +230,13 @@ class AccountingExpressionProcessor(object):
             field, mode, account_codes, domain = self._parse_match_object(mo)
             key = (domain, mode)
             account_ids_data = self._data[key]
-            v = 0.0
+            v = AccountingNone
             for account_code in account_codes:
                 account_ids = self._account_ids_by_code[account_code]
                 for account_id in account_ids:
                     debit, credit = \
-                        account_ids_data.get(account_id, (0.0, 0.0))
+                        account_ids_data.get(account_id,
+                                             (AccountingNone, AccountingNone))
                     if field == 'bal':
                         v += debit - credit
                     elif field == 'deb':
