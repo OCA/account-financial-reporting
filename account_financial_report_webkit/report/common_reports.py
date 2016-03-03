@@ -195,8 +195,15 @@ class CommonReportHeaderWebkit(common_report_header):
         acc_obj = self.pool.get('account.account')
         for account_id in account_ids:
             accounts.append(account_id)
-            accounts += acc_obj._get_children_and_consol(
+            children_acc_ids = acc_obj._get_children_and_consol(
                 self.cursor, self.uid, account_id, context=context)
+            if context.get('account_level'):
+                domain = [('level', '<=', context['account_level']),
+                          ('id', 'in', children_acc_ids)]
+                accounts += self.pool['account.account'].search(
+                    self.cursor, self.uid, domain)
+            else:
+                accounts += children_acc_ids
         res_ids = list(set(accounts))
         res_ids = self.sort_accounts_with_structure(
             account_ids, res_ids, context=context)
