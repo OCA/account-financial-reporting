@@ -61,7 +61,7 @@ class MisBuilderXls(report_xls):
 
         # get the computed result of the report
         data = self.pool.get('mis.report.instance').compute(
-            self.cr, self.uid, objects[0].id)
+            self.cr, self.uid, objects[0].id, self.context)
 
         # Column headers
         header_name_list = ['']
