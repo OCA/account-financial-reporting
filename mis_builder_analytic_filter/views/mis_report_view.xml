@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="mis_report_instance_view_form">
+            <field name="name">mis.report.instance.view.form (mis_builder_analytic_filter)</field>
+            <field name="model">mis.report.instance</field>
+            <field name="inherit_id" ref="mis_builder.mis_report_instance_view_form" />
+            <field name="arch" type="xml">
+                <field name='target_move' position="after">
+                    <field name="account_analytic_id" />
+                </field>
+            </field>
+         </record>
+    </data>
+</openerp>
