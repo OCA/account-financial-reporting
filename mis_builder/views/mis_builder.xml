@@ -170,24 +170,31 @@
                         <field name="description"/>
                         <field name="landscape_pdf" />
                         <field name="company_id" groups="base.group_multi_company"/>
-                        <field name="date"/>
                         <field name="target_move"/>
-                        <field name="period_ids" colspan="4">
-                            <tree string="KPI's" editable="bottom" colors="red:valid==False">
-                                <field name="sequence" widget="handle"/>
-                                <field name="name"/>
-                                <field name="type"/>
-                                <field name="offset"/>
-                                <field name="duration"/>
-                                <field name="normalize_factor"/>
-                                <field name="date_from"/>
-                                <field name="date_to"/>
-                                <field name="valid" invisible="1"/>
-                                <field name="report_instance_id" invisible="1"/>
-                                <field name="id" invisible="1"/>
-                                <field name="comparison_column_ids" domain="[('report_instance_id', '=', report_instance_id), ('id', '!=', id)]" widget="many2many_tags"/>
-                            </tree>
-                        </field>
+                        </group>
+                        <group col="4" string="Periods">
+                        <group colspan="2">
+                            <field name="date"/>
+                        </group>
+                        <newline/>
+                        <group>
+                            <field name="period_ids" colspan="4" nolabel="1">
+                                <tree string="KPI's" editable="bottom" colors="red:valid==False">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="type"/>
+                                    <field name="offset"/>
+                                    <field name="duration"/>
+                                    <field name="normalize_factor"/>
+                                    <field name="date_from"/>
+                                    <field name="date_to"/>
+                                    <field name="valid" invisible="1"/>
+                                    <field name="report_instance_id" invisible="1"/>
+                                    <field name="id" invisible="1"/>
+                                    <field name="comparison_column_ids" domain="[('report_instance_id', '=', report_instance_id), ('id', '!=', id)]" widget="many2many_tags"/>
+                                </tree>
+                            </field>
+                        </group>
                     </group>
                 </sheet>
                 </form>
