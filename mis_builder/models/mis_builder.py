@@ -651,6 +651,7 @@ class MisReportInstancePeriod(orm.Model):
                     kpi_val_comment = kpi.name + " = " + kpi.expression
                     kpi_eval_expression = aep.replace_expr(kpi.expression)
                     kpi_val = safe_eval(kpi_eval_expression, localdict)
+                    localdict[kpi.name] = kpi_val
                 except ZeroDivisionError:
                     kpi_val = None
                     kpi_val_rendered = '#DIV/0'
@@ -668,7 +669,6 @@ class MisReportInstancePeriod(orm.Model):
                     kpi_val_rendered = kpi_obj.render(
                         cr, uid, lang_id, kpi, kpi_val, context=context)
 
-                localdict[kpi.name] = kpi_val
                 try:
                     kpi_style = None
                     if kpi.css_style:
