@@ -104,6 +104,7 @@
                   <% cumul_balance += line.get('balance') or 0.0 %>
                   <div class="act_as_cell amount" style="padding-right: 1px;">${formatLang(cumul_balance) | amount }</div>
                   %if amount_currency(data):
+                      <% cumul_balance_curr += line.get('amount_currency') or 0.0 %>
                       ## currency balance
                       <div class="act_as_cell sep_left amount">${formatLang(line.get('amount_currency') or 0.0) | amount }</div>
                       ## curency code
