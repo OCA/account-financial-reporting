@@ -1,4 +1,5 @@
 openerp.mis_builder_analytic_filter = function(instance) {
+    var _t = instance.web._t;
 
     instance.mis_builder.MisReport.include({
 
