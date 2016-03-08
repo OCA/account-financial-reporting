@@ -1,26 +1,6 @@
-# -*- encoding: utf-8 -*-
-##############################################################################
-#
-#    mis_builder module for Odoo, Management Information System Builder
-#    Copyright (C) 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
-#
-#    This file is a part of mis_builder
-#
-#    mis_builder is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License v3 or later
-#    as published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    mis_builder is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License v3 or later for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    v3 or later along with this program.
-#    If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+# -*- coding: utf-8 -*-
+# © 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 import xlwt
 from openerp.report import report_sxw
@@ -29,19 +9,19 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-class mis_builder_xls_parser(report_sxw.rml_parse):
+class MisBuilderXlsParser(report_sxw.rml_parse):
 
     def __init__(self, cr, uid, name, context):
-        super(mis_builder_xls_parser, self).__init__(
+        super(MisBuilderXlsParser, self).__init__(
             cr, uid, name, context=context)
         self.context = context
 
 
-class mis_builder_xls(report_xls):
+class MisBuilderXls(report_xls):
 
     def __init__(self, name, table, rml=False, parser=False, header=True,
                  store=False):
-        super(mis_builder_xls, self).__init__(
+        super(MisBuilderXls, self).__init__(
             name, table, rml, parser, header, store)
 
         # Cell Styles
@@ -81,7 +61,7 @@ class mis_builder_xls(report_xls):
 
         # get the computed result of the report
         data = self.pool.get('mis.report.instance').compute(
-            self.cr, self.uid, objects[0].id)
+            self.cr, self.uid, objects[0].id, self.context)
 
         # Column headers
         header_name_list = ['']
@@ -118,8 +98,10 @@ class mis_builder_xls(report_xls):
                 if value.get('dp'):
                     num_format_str += '.'
                     num_format_str += '0' * int(value['dp'])
+                if value.get('prefix'):
+                    num_format_str = '"%s"' % value['prefix'] + num_format_str
                 if value.get('suffix'):
-                    num_format_str = num_format_str + ' "%s"' % value['suffix']
+                    num_format_str += ' "%s"' % value['suffix']
                 kpi_cell_style = xlwt.easyxf(
                     _xs['borders_all'] + _xs['right'],
                     num_format_str=num_format_str)
@@ -133,6 +115,6 @@ class mis_builder_xls(report_xls):
             row_pos += 1
 
 
-mis_builder_xls('report.mis.report.instance.xls',
-                'mis.report.instance',
-                parser=mis_builder_xls_parser)
+MisBuilderXls('report.mis.report.instance.xls',
+              'mis.report.instance',
+              parser=MisBuilderXlsParser)

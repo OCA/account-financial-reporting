@@ -1,26 +1,6 @@
-# -*- encoding: utf-8 -*-
-##############################################################################
-#
-#    mis_builder module for Odoo, Management Information System Builder
-#    Copyright (C) 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
-#
-#    This file is a part of mis_builder
-#
-#    mis_builder is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License v3 or later
-#    as published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    mis_builder is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License v3 or later for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    v3 or later along with this program.
-#    If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+# -*- coding: utf-8 -*-
+# © 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 import datetime
 import dateutil
@@ -76,7 +56,7 @@ class MisReportKpi(models.Model):
     In addition to a name and description, it has an expression
     to compute it based on queries defined in the MIS report.
     It also has various informations defining how to render it
-    (numeric or percentage or a string, a suffix, divider) and
+    (numeric or percentage or a string, a prefix, a suffix, divider) and
     how to render comparison of two values of the KPI.
     KPI's have a sequence and are ordered inside the MIS report.
     """
@@ -106,6 +86,7 @@ class MisReportKpi(models.Model):
                                string='Factor',
                                default='1')
     dp = fields.Integer(string='Rounding', default=0)
+    prefix = fields.Char(size=16, string='Prefix')
     suffix = fields.Char(size=16, string='Suffix')
     compare_method = fields.Selection([('diff', _('Difference')),
                                        ('pct', _('Percentage')),
@@ -163,10 +144,10 @@ class MisReportKpi(models.Model):
             return '#N/A'
         elif self.type == 'num':
             return self._render_num(lang_id, value, self.divider,
-                                    self.dp, self.suffix)
+                                    self.dp, self.prefix, self.suffix)
         elif self.type == 'pct':
             return self._render_num(lang_id, value, 0.01,
-                                    self.dp, '%')
+                                    self.dp, '', '%')
         else:
             return unicode(value)
 
@@ -180,7 +161,7 @@ class MisReportKpi(models.Model):
             return self._render_num(
                 lang_id,
                 value - base_value,
-                0.01, self.dp, _('pp'), sign='+')
+                0.01, self.dp, '', _('pp'), sign='+')
         elif self.type == 'num':
             if average_value:
                 value = value / float(average_value)
@@ -190,17 +171,17 @@ class MisReportKpi(models.Model):
                 return self._render_num(
                     lang_id,
                     value - base_value,
-                    self.divider, self.dp, self.suffix, sign='+')
+                    self.divider, self.dp, self.prefix, self.suffix, sign='+')
             elif self.compare_method == 'pct':
                 if round(base_value, self.dp) != 0:
                     return self._render_num(
                         lang_id,
                         (value - base_value) / abs(base_value),
-                        0.01, self.dp, '%', sign='+')
+                        0.01, self.dp, '', '%', sign='+')
         return ''
 
     def _render_num(self, lang_id, value, divider,
-                    dp, suffix, sign='-'):
+                    dp, prefix, suffix, sign='-'):
         divider_label = _get_selection_label(
             self._columns['divider'].selection, divider)
         if divider_label == '1':
@@ -211,8 +192,8 @@ class MisReportKpi(models.Model):
             '%%%s.%df' % (sign, dp),
             value,
             grouping=True)
-        value = u'%s\N{NO-BREAK SPACE}%s%s' % \
-            (value, divider_label, suffix or '')
+        value = u'%s\N{NARROW NO-BREAK SPACE}%s\N{NO-BREAK SPACE}%s%s' % \
+            (prefix or '', value, divider_label, suffix or '')
         value = value.replace('-', u'\N{NON-BREAKING HYPHEN}')
         return value
 
@@ -259,20 +240,6 @@ class MisReportQuery(models.Model):
     @api.constrains('name')
     def _check_name(self):
         return _is_valid_python_var(self.name)
-
-    @api.multi
-    def _get_additional_filter(self):
-        """ Prepare an additional filter to apply on the query
-
-        This filter is combined to the query domain with a AND
-        operator. This hook is intended
-        to be inherited, and is useful to implement filtering
-        on analytic dimensions or operational units.
-
-        Returns an Odoo domain expression (a python list)
-        compatible with the model of the query."""
-        self.ensure_one()
-        return []
 
 
 class MisReport(models.Model):
@@ -427,6 +394,20 @@ class MisReportInstancePeriod(models.Model):
         return []
 
     @api.multi
+    def _get_additional_query_filter(self, query):
+        """ Prepare an additional filter to apply on the query
+
+        This filter is combined to the query domain with a AND
+        operator. This hook is intended
+        to be inherited, and is useful to implement filtering
+        on analytic dimensions or operational units.
+
+        Returns an Odoo domain expression (a python list)
+        compatible with the model of the query."""
+        self.ensure_one()
+        return []
+
+    @api.multi
     def drilldown(self, expr):
         assert len(self) == 1
         if AEP.has_account_var(expr):
@@ -468,7 +449,7 @@ class MisReportInstancePeriod(models.Model):
             }
             domain = query.domain and \
                 safe_eval(query.domain, eval_context) or []
-            domain.extend(query._get_additional_filter())
+            domain.extend(self._get_additional_query_filter(query))
             if query.date_field.ttype == 'date':
                 domain.extend([(query.date_field.name, '>=', self.date_from),
                                (query.date_field.name, '<=', self.date_to)])
@@ -533,6 +514,7 @@ class MisReportInstancePeriod(models.Model):
                     kpi_val_comment = kpi.name + " = " + kpi.expression
                     kpi_eval_expression = aep.replace_expr(kpi.expression)
                     kpi_val = safe_eval(kpi_eval_expression, localdict)
+                    localdict[kpi.name] = kpi_val
                 except ZeroDivisionError:
                     kpi_val = None
                     kpi_val_rendered = '#DIV/0'
@@ -549,7 +531,6 @@ class MisReportInstancePeriod(models.Model):
                 else:
                     kpi_val_rendered = kpi.render(lang_id, kpi_val)
 
-                localdict[kpi.name] = kpi_val
                 try:
                     kpi_style = None
                     if kpi.css_style:
@@ -567,6 +548,7 @@ class MisReportInstancePeriod(models.Model):
                     'val_r': kpi_val_rendered,
                     'val_c': kpi_val_comment,
                     'style': kpi_style,
+                    'prefix': kpi.prefix,
                     'suffix': kpi.suffix,
                     'dp': kpi.dp,
                     'is_percentage': kpi.type == 'pct',
@@ -655,6 +637,32 @@ class MisReportInstance(models.Model):
             'view_type': 'form',
             'view_id': view_id.id,
             'target': 'new',
+        }
+
+    @api.multi
+    def print_pdf(self):
+        self.ensure_one()
+        data = {'context': self.env.context}
+        return {
+            'name': 'MIS report instance QWEB PDF report',
+            'model': 'mis.report.instance',
+            'type': 'ir.actions.report.xml',
+            'report_name': 'mis_builder.report_mis_report_instance',
+            'report_type': 'qweb-pdf',
+            'context': self.env.context,
+            'data': data,
+        }
+
+    @api.multi
+    def export_xls(self):
+        self.ensure_one()
+        return {
+            'name': 'MIS report instance XLS report',
+            'model': 'mis.report.instance',
+            'type': 'ir.actions.report.xml',
+            'report_name': 'mis.report.instance.xls',
+            'report_type': 'xls',
+            'context': self.env.context,
         }
 
     @api.multi

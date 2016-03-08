@@ -130,9 +130,10 @@ class CommonReportHeaderWebkit(common_report_header):
         def recursive_sort_by_code(accounts, parent):
             sorted_accounts = []
             # add all accounts with same parent
-            level_accounts = [account for account in accounts
-                              if account['parent_id']
-                              and account['parent_id'][0] == parent['id']]
+            level_accounts = [
+                account for account in accounts
+                if account['parent_id'] and
+                account['parent_id'][0] == parent['id']]
             # add consolidation children of parent, as they are logically on
             # the same level
             if parent.get('child_consol_ids'):

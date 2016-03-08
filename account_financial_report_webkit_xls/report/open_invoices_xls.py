@@ -260,8 +260,9 @@ class open_invoices_xls(report_xls):
                                partner_name):
         if regroupmode == "regroup":
             c_specs = [('acc_title', self.nbr_columns, 0, 'text',
-                        ' - '.join([account.code, account.name, partner_name
-                                    or _('No partner')])), ]
+                        ' - '.join([account.code,
+                                    account.name,
+                                    partner_name or _('No partner')])), ]
         else:
             c_specs = [
                 ('acc_title', self.nbr_columns, 0, 'text', ' - '.
@@ -332,10 +333,10 @@ class open_invoices_xls(report_xls):
         else:
             c_specs += [('datedue', 1, 0, 'text', None)]
         c_specs += [
-            ('debit', 1, 0, 'number', line.get('debit')
-             or 0.0, None, style_line_decimal),
-            ('credit', 1, 0, 'number', line.get('credit')
-             or 0.0, None, style_line_decimal),
+            ('debit', 1, 0, 'number', line.get('debit') or 0.0, None,
+             style_line_decimal),
+            ('credit', 1, 0, 'number', line.get('credit') or 0.0, None,
+             style_line_decimal),
         ]
 
         # determine the formula of the cumulated balance
@@ -355,10 +356,11 @@ class open_invoices_xls(report_xls):
                      cumul_balance, style_line_decimal)]
 
         if _p.amount_currency(data):
-            if account.currency_id:
+            if line.get('currency_code'):
                 c_specs += [
-                    ('curramount', 1, 0, 'number', line.get('amount_currency')
-                     or 0.0, None, style_line_decimal),
+                    ('curramount', 1, 0, 'number',
+                     line.get('amount_currency') or 0.0, None,
+                     style_line_decimal),
                     ('currcode', 1, 0, 'text', line[
                      'currency_code'], None, style_line_right),
                 ]
@@ -428,18 +430,18 @@ class open_invoices_xls(report_xls):
         else:
             c_specs += [('datedue', 1, 0, 'text', None)]
         c_specs += [
-            ('debit', 1, 0, 'number', line.get('debit')
-             or 0.0, None, style_line_decimal),
-            ('credit', 1, 0, 'number', line.get('credit')
-             or 0.0, None, style_line_decimal),
+            ('debit', 1, 0, 'number', line.get('debit') or 0.0, None,
+             style_line_decimal),
+            ('credit', 1, 0, 'number', line.get('credit') or 0.0, None,
+             style_line_decimal),
             ('cumul', 1, 0, 'number', None, cumul_balance, style_line_decimal),
         ]
         if account.currency_id:
             c_specs += [
-                ('curramount', 1, 0, 'number', line.get('amount_currency')
-                 or 0.0, None, style_line_decimal),
-                ('currcode', 1, 0, 'text', line.get('currency_code')
-                 or '', None, style_line_right),
+                ('curramount', 1, 0, 'number',
+                 line.get('amount_currency') or 0.0, None, style_line_decimal),
+                ('currcode', 1, 0, 'text',
+                 line.get('currency_code') or '', None, style_line_right),
             ]
         else:
             c_specs += [
