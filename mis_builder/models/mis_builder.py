@@ -600,7 +600,7 @@ class MisReportInstance(models.Model):
             'view_mode': 'form',
             'view_type': 'form',
             'view_id': view_id.id,
-            'target': 'new',
+            'target': 'current',
         }
 
     @api.multi
@@ -625,6 +625,21 @@ class MisReportInstance(models.Model):
             'report_name': 'mis.report.instance.xlsx',
             'report_type': 'xlsx',
             'context': self.env.context,
+        }
+
+    @api.multi
+    def display_settings(self):
+        self.ensure_one()
+        view_id = self.env.ref('mis_builder.mis_report_instance_view_form')
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'mis.report.instance',
+            'res_id': self.id,
+            'view_mode': 'form',
+            'view_type': 'form',
+            'views': [(view_id.id, 'form')],
+            'view_id': view_id.id,
+            'target': 'current',
         }
 
     @api.multi

@@ -18,13 +18,19 @@ var MisReport = form_common.FormWidget.extend({
         this._super.apply(this, arguments);
         this.mis_report_data = null;
         this.mis_report_instance_id = false;
+        this.field_manager.on("view_content_has_changed", this, this.reload_widget);
+    },
+    
+    reload_widget: function() {
+        var self = this
+        self.mis_report_instance_id = self.getParent().datarecord.id
+        self.generate_content();
     },
 
     start: function() {
         this._super.apply(this, arguments);
         var self = this;
-        self.mis_report_instance_id = self.getParent().dataset.context.active_id
-        self.getParent().dataset.context['no_destroy'] = true;
+        self.mis_report_instance_id = self.getParent().datarecord.id
         self.generate_content();
     },
     
@@ -56,8 +62,18 @@ var MisReport = form_common.FormWidget.extend({
             [self.mis_report_instance_id], 
             {'context': context}
         ).then(function(result){
-            self.do_action(result).done(function(result){
-            });
+            self.do_action(result);
+        });
+    },
+    display_settings: function() {
+        var self = this
+        var context = new data.CompoundContext(self.build_context(), self.get_context()|| {})
+        new Model("mis.report.instance").call(
+            "display_settings", 
+            [self.mis_report_instance_id], 
+            {'context': context}
+        ).then(function(result){
+            self.do_action(result);
         });
     },
     generate_content: function() {
@@ -77,6 +93,7 @@ var MisReport = form_common.FormWidget.extend({
         var self = this;
         self.$(".oe_mis_builder_print").click(_.bind(this.print, this));
         self.$(".oe_mis_builder_export").click(_.bind(this.export_pdf, this));
+        self.$(".oe_mis_builder_settings").click(_.bind(this.display_settings, this));
     },
     events: {
         "click a.mis_builder_drilldown": "drilldown",
