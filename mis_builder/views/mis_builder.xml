@@ -120,7 +120,7 @@
         <record model="ir.ui.view" id="mis_report_instance_result_view_form">
             <field name="name">mis.report.instance.result.view.form</field>
             <field name="model">mis.report.instance</field>
-            <field name="priority" eval="17"/>
+            <field name="priority" eval="15 "/>
             <field name="arch" type="xml">
                 <form string="MIS Report Result" version="7.0">
                     <widget type="mis_report"></widget>
@@ -139,6 +139,7 @@
                     <field name="target_move"/>
                     <field name="pivot_date"/>
                     <field name="company_id"/>
+                    <button name="display_settings" type="object" icon="gtk-execute" />
                 </tree>
             </field>
         </record>
@@ -161,7 +162,7 @@
                     <div class="oe_right oe_button_box" name="buttons"> 
                         <button type="object" name="preview" string="Preview" icon="gtk-print-preview" />
                         <button type="object" name="print_pdf" string="Print" icon="gtk-print" />
-                        <button type="object" name="export_xls" string="Export" icon="gtk-execute" />
+                        <button type="object" name="export_xls" string="Export" icon="gtk-go-down" />
                         <button type="action" name="%(mis_report_instance_add_to_dashboard_action)d" string="Add to dashboard" icon="gtk-add" />
                     </div>
                     <group col="4">
