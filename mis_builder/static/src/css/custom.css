@@ -11,3 +11,7 @@
   /* underline links on hover to give a visual cue */
   text-decoration: underline;
 }
+
+.openerp .oe_mis_builder_buttons {
+  padding-bottom: 10px;
+}
