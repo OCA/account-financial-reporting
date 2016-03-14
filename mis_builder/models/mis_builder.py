@@ -158,17 +158,19 @@ class MisReportKpi(models.Model):
                           average_value, average_base_value):
         """ render the comparison of two KPI values, ready for display """
         assert len(self) == 1
-        if value is None or base_value is None:
-            return ''
+        if value is None:
+            value = AccountingNone
+        if base_value is None:
+            base_value = AccountingNone
         if self.type == 'pct':
             return self._render_num(
                 lang_id,
                 value - base_value,
                 0.01, self.dp, '', _('pp'), sign='+')
         elif self.type == 'num':
-            if average_value:
+            if value and average_value:
                 value = value / float(average_value)
-            if average_base_value:
+            if base_value and average_base_value:
                 base_value = base_value / float(average_base_value)
             if self.compare_method == 'diff':
                 return self._render_num(
@@ -176,7 +178,7 @@ class MisReportKpi(models.Model):
                     value - base_value,
                     self.divider, self.dp, self.prefix, self.suffix, sign='+')
             elif self.compare_method == 'pct':
-                if round(base_value, self.dp) != 0:
+                if base_value and round(base_value, self.dp) != 0:
                     return self._render_num(
                         lang_id,
                         (value - base_value) / abs(base_value),
