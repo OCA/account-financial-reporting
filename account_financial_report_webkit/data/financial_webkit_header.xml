@@ -73,6 +73,7 @@ body, table, td, span, div {
 }
 .act_as_row  {
     display: table-row;
+    page-break-inside: avoid;
 }
 .act_as_cell {
     display: table-cell;
@@ -252,6 +253,7 @@ body, table, td, span, div {
 }
 .act_as_row  {
     display: table-row;
+    page-break-inside: avoid;
 }
 .act_as_cell {
     display: table-cell;
