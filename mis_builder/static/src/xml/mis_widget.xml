@@ -4,7 +4,7 @@
             <div class="oe_mis_builder_buttons oe_right">
                 <button class="oe_mis_builder_print"><img src="/web/static/src/img/icons/gtk-print.png"/> Print</button>
                 <button class="oe_mis_builder_export"><img src="/web/static/src/img/icons/gtk-go-down.png"/>Export</button>
-                <button class="oe_mis_builder_settings"><img src="/web/static/src/img/icons/gtk-execute.png"/> Settings</button>
+                <button style="display: none;" class="oe_mis_builder_settings"><img src="/web/static/src/img/icons/gtk-execute.png"/> Settings</button>
             </div>
             <table t-if="widget.mis_report_data" class="oe_list_content mis_builder">
                 <thead>
