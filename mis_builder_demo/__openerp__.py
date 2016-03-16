@@ -24,7 +24,7 @@
 
 {
     'name': 'MIS Builder demo data',
-    'version': '8.0.0.1.0',
+    'version': '8.0.1.0.0',
     'category': 'Reporting',
     'summary': """
         Demo data for the mis_builder module
