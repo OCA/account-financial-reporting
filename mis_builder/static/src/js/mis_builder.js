@@ -83,6 +83,12 @@ openerp.mis_builder = function(instance) {
             self.$(".oe_mis_builder_print").click(_.bind(this.print, this));
             self.$(".oe_mis_builder_export").click(_.bind(this.export_pdf, this));
             self.$(".oe_mis_builder_settings").click(_.bind(this.display_settings, this));
+            var Users = new instance.web.Model('res.users');
+            Users.call('has_group', ['account.group_account_user']).done(function (res) {
+                if (res) {
+                    self.$(".oe_mis_builder_settings").show();
+                }
+            });
         },
         events: {
             "click a.mis_builder_drilldown": "drilldown",
