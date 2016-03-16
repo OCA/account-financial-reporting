@@ -629,12 +629,12 @@ class MisReportInstance(models.Model):
 
     @api.multi
     def display_settings(self):
-        self.ensure_one()
+        assert len(self.ids) <= 1
         view_id = self.env.ref('mis_builder.mis_report_instance_view_form')
         return {
             'type': 'ir.actions.act_window',
             'res_model': 'mis.report.instance',
-            'res_id': self.id,
+            'res_id': self.id if self.id else False,
             'view_mode': 'form',
             'view_type': 'form',
             'views': [(view_id.id, 'form')],
