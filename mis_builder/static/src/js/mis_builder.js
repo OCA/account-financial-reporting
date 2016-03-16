@@ -13,15 +13,23 @@ openerp.mis_builder = function(instance) {
         reload_widget: function() {
             var self = this
             self.mis_report_instance_id = self.getParent().datarecord.id
-            self.generate_content();
+            if (self.mis_report_instance_id) {
+                self.generate_content();
+            } else {
+                self.display_settings();
+            }
         },
         
         start: function() {
             this._super.apply(this, arguments);
             var self = this;
             self.mis_report_instance_id = self.getParent().datarecord.id
-            //self.getParent().dataset.context['no_destroy'] = true;
-            self.generate_content();
+            if (self.mis_report_instance_id) {
+                self.getParent().dataset.context['no_destroy'] = true;
+                self.generate_content();
+            } else {
+                self.display_settings();
+            }
         },
         
         get_context: function() {
