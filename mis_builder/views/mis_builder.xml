@@ -29,7 +29,9 @@
                     <group col="2">
                         <field name="name"/>
                         <field name="description"/>
-                        <field name="query_ids">
+                    </group>
+                    <group string="Queries">
+                        <field name="query_ids" nolabel="1" colspan="2">
                             <tree string="Queries" editable="bottom">
                                 <field name="name"/>
                                 <field name="model_id"/>
@@ -40,7 +42,9 @@
                                 <field name="domain"/>
                             </tree>
                         </field>
-                        <field name="kpi_ids">
+                    </group>
+                    <group string="KPI's">
+                        <field name="kpi_ids" nolabel="1" colspan="2">
                             <tree string="KPI's" editable="bottom">
                                 <field name="sequence" widget="handle"/>
                                 <field name="description"/>
@@ -57,7 +61,7 @@
                             </tree>
                         </field>
                     </group>
-                    <group col="2" string="Legend (for expression)">
+                    <group col="2" string="Legend (for kpi expressions)">
                         <group>
                             <label colspan="2" string="Expressions are of the form &lt;field&gt;&lt;mode&gt;[accounts][domain]"/>
                             <label colspan="2" string="Possible values for 'field' can be:"/>
