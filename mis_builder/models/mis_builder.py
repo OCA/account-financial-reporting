@@ -156,33 +156,45 @@ class MisReportKpi(models.Model):
 
     def render_comparison(self, lang_id, value, base_value,
                           average_value, average_base_value):
-        """ render the comparison of two KPI values, ready for display """
+        """ render the comparison of two KPI values, ready for display
+
+        If the difference is 0, an empty string is returned.
+        """
         assert len(self) == 1
         if value is None:
             value = AccountingNone
         if base_value is None:
             base_value = AccountingNone
         if self.type == 'pct':
-            return self._render_num(
-                lang_id,
-                value - base_value,
-                0.01, self.dp, '', _('pp'), sign='+')
+            delta = value - base_value
+            if delta and round(delta, self.dp) != 0:
+                return self._render_num(
+                    lang_id,
+                    delta,
+                    0.01, self.dp, '', _('pp'),
+                    sign='+')
         elif self.type == 'num':
             if value and average_value:
                 value = value / float(average_value)
             if base_value and average_base_value:
                 base_value = base_value / float(average_base_value)
             if self.compare_method == 'diff':
-                return self._render_num(
-                    lang_id,
-                    value - base_value,
-                    self.divider, self.dp, self.prefix, self.suffix, sign='+')
-            elif self.compare_method == 'pct':
-                if base_value and round(base_value, self.dp) != 0:
+                delta = value - base_value
+                if delta and round(delta, self.dp) != 0:
                     return self._render_num(
                         lang_id,
-                        (value - base_value) / abs(base_value),
-                        0.01, self.dp, '', '%', sign='+')
+                        delta,
+                        self.divider, self.dp, self.prefix, self.suffix,
+                        sign='+')
+            elif self.compare_method == 'pct':
+                if base_value and round(base_value, self.dp) != 0:
+                    delta = (value - base_value) / abs(base_value)
+                    if delta and round(delta, self.dp) != 0:
+                        return self._render_num(
+                            lang_id,
+                            delta,
+                            0.01, self.dp, '', '%',
+                            sign='+')
         return ''
 
     def _render_num(self, lang_id, value, divider,
