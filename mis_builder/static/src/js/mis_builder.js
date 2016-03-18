@@ -7,14 +7,29 @@ openerp.mis_builder = function(instance) {
             this._super.apply(this, arguments);
             this.mis_report_data = null;
             this.mis_report_instance_id = false;
+            this.field_manager.on("view_content_has_changed", this, this.reload_widget);
+        },
+
+        reload_widget: function() {
+            var self = this
+            self.mis_report_instance_id = self.getParent().datarecord.id
+            if (self.mis_report_instance_id) {
+                self.generate_content();
+            } else {
+                self.display_settings();
+            }
         },
         
         start: function() {
             this._super.apply(this, arguments);
             var self = this;
-            self.mis_report_instance_id = self.getParent().dataset.context.active_id
-            self.getParent().dataset.context['no_destroy'] = true;
-            self.generate_content();
+            self.mis_report_instance_id = self.getParent().datarecord.id
+            if (self.mis_report_instance_id) {
+                self.getParent().dataset.context['no_destroy'] = true;
+                self.generate_content();
+            } else {
+                self.display_settings();
+            }
         },
         
         get_context: function() {
@@ -44,9 +59,18 @@ openerp.mis_builder = function(instance) {
                 [self.mis_report_instance_id], 
                 {'context': context}
             ).then(function(result){
-                self.do_action(result).done(function(result){
-                    a = 2;
-                });
+                self.do_action(result);
+            });
+        },
+        display_settings: function() {
+            var self = this
+            context = new instance.web.CompoundContext(self.build_context(), self.get_context()|| {})
+            new instance.web.Model("mis.report.instance").call(
+                "display_settings", 
+                [self.mis_report_instance_id], 
+                {'context': context}
+            ).then(function(result){
+                self.do_action(result);
             });
         },
         generate_content: function() {
@@ -66,6 +90,13 @@ openerp.mis_builder = function(instance) {
             var self = this;
             self.$(".oe_mis_builder_print").click(_.bind(this.print, this));
             self.$(".oe_mis_builder_export").click(_.bind(this.export_pdf, this));
+            self.$(".oe_mis_builder_settings").click(_.bind(this.display_settings, this));
+            var Users = new instance.web.Model('res.users');
+            Users.call('has_group', ['account.group_account_user']).done(function (res) {
+                if (res) {
+                    self.$(".oe_mis_builder_settings").show();
+                }
+            });
         },
         events: {
             "click a.mis_builder_drilldown": "drilldown",
