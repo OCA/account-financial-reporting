@@ -30,7 +30,12 @@ openerp.mis_builder_analytic_filter = function(instance) {
             var self = this;
             if (self.dfm)
                 return;
-            self.$(".oe_mis_builder_analytic_axis").show();
+            var Users = new instance.web.Model('res.users');
+            Users.call('has_group', ['analytic.group_analytic_accounting']).done(function (res) {
+                if (res) {
+                    self.$(".oe_mis_builder_analytic_axis").css('visibility', 'visible');
+                }
+            });
             self.dfm = new instance.web.form.DefaultFieldManager(self);
             self.dfm.extend_field_desc({
                 account: {

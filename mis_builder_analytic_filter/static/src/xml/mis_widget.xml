@@ -4,7 +4,7 @@
             <button class="oe_mis_builder_generate_content"><img src="/web/static/src/img/icons/gtk-refresh.png"/> Refresh</button>
         </t>
         <t t-jquery=".oe_mis_builder_buttons" t-operation="after">
-            <div class="oe_mis_builder_analytic_axis" style="position: relative; display: inline-block;"></div>
+            <div class="oe_mis_builder_analytic_axis" style="visibility: hidden; position: relative; display: inline-block;"></div>
         </t>
     </t>
 </template>
