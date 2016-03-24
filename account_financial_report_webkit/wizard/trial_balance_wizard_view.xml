@@ -22,6 +22,9 @@
                     <page name="filters" position="after">
                         <page string="Accounts Filters" name="accounts">
                             <separator string="Print only" colspan="4"/>
+                            <group>
+                                <field name="account_level"/>
+                            </group>
                             <field name="account_ids" colspan="4" nolabel="1" domain="[('type', '=', 'view')]">
                                 <tree>
                                     <field name="code"/>
