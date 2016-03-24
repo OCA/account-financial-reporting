@@ -22,6 +22,7 @@
 
 import time
 from openerp.report import report_sxw
+from openerp.tools.safe_eval import safe_eval
 from openerp.tools.translate import translate
 import logging
 _logger = logging.getLogger(__name__)
@@ -217,7 +218,8 @@ class nov_journal_print(report_sxw.rml_parse):
             code_string = j_obj._report_xls_document_extra(
                 self.cr, self.uid, self.context)
             # _logger.warn('code_string= %s', code_string)
-            [x.update({'docname': eval(code_string) or '-'}) for x in lines]
+            [x.update({'docname': safe_eval(code_string) or '-'})
+             for x in lines]
 
         # group lines
         if self.group_entries:
