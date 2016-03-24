@@ -45,7 +45,9 @@ class AccountUnicodeWriter(object):
         # Redirect output to a queue
         self.queue = cStringIO.StringIO()
         # created a writer with Excel formating settings
-        self.writer = csv.writer(self.queue, dialect=dialect, **kwds)
+
+        self.writer = csv.writer(self.queue, dialect=dialect,
+                                 quoting=csv.QUOTE_ALL, **kwds)
         self.stream = f
         self.encoder = codecs.getincrementalencoder(encoding)()
 
