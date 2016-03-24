@@ -1,3 +1,7 @@
+/* © 2016 ACSONE SA/NV
+ * License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). 
+ */
+
 openerp.mis_builder_analytic_filter = function(instance) {
     var _t = instance.web._t;
 
