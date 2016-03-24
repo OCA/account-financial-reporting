@@ -1,8 +1,7 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ###########################################################################
 #    Module Writen to OpenERP, Open Source Management Solution
 #    Copyright (C) OpenERP Venezuela (<http://openerp.com.ve>).
-#    All Rights Reserved
 # Credits######################################################
 #    Coded by:   Humberto Arocha humberto@openerp.com.ve
 #                Angelica Barrios angelicaisabelb@gmail.com
@@ -207,30 +206,22 @@ class wizard_report(osv.osv_memory):
         if not afr_id:
             return res
         afr_brw = self.pool.get('afr').browse(cr, uid, afr_id, context=context)
-        res['value'].update({
-                            'currency_id': afr_brw.currency_id
-                            and afr_brw.currency_id.id
-                            or afr_brw.company_id.currency_id.id})
-        res['value'].update({'inf_type': afr_brw.inf_type or 'BS'})
-        res['value'].update({'columns': afr_brw.columns or 'five'})
-        res['value'].update({
-                            'display_account': afr_brw.display_account
-                            or 'bal_mov'})
-        res['value'].update({
-                            'display_account_level': afr_brw.
-                            display_account_level or 0})
-        res['value'].update({
-                            'fiscalyear': afr_brw.fiscalyear_id
-                            and afr_brw.fiscalyear_id.id})
-        res['value'].update({'account_list': [
-                            acc.id for acc in afr_brw.account_ids]})
-        res['value'].update({'periods': [p.id for p in afr_brw.period_ids]})
-        res['value'].update({
-                            'analytic_ledger':
-                            afr_brw.analytic_ledger or False})
-        res['value'].update({'tot_check': afr_brw.tot_check or False})
-        res['value'].update({'lab_str': afr_brw.lab_str or _(
-            'Write a Description for your Summary Total')})
+        res['value']['currency_id'] = (
+            afr_brw.currency_id and afr_brw.currency_id.id or
+            afr_brw.company_id.currency_id.id)
+        res['value']['inf_type'] = afr_brw.inf_type or 'BS'
+        res['value']['columns'] = afr_brw.columns or 'five'
+        res['value']['display_account'] = afr_brw.display_account or 'bal_mov'
+        res['value']['display_account_level'] = (
+            afr_brw.display_account_level or 0)
+        res['value']['fiscalyear'] = (
+            afr_brw.fiscalyear_id and afr_brw.fiscalyear_id.id)
+        res['value']['account_list'] = [acc.id for acc in afr_brw.account_ids]
+        res['value']['periods'] = [p.id for p in afr_brw.period_ids]
+        res['value']['analytic_ledger'] = afr_brw.analytic_ledger or False
+        res['value']['tot_check'] = afr_brw.tot_check or False
+        res['value']['lab_str'] = afr_brw.lab_str or _(
+            'Write a Description for your Summary Total')
         return res
 
     def _get_defaults(self, cr, uid, data, context=None):
@@ -270,8 +261,8 @@ class wizard_report(osv.osv_memory):
         res = cr.dictfetchall()
 
         if res:
-            if (data['form']['date_to'] > res[0]['date_stop']
-                    or data['form']['date_from'] < res[0]['date_start']):
+            if (data['form']['date_to'] > res[0]['date_stop'] or
+                    data['form']['date_from'] < res[0]['date_start']):
                 raise osv.except_osv(_('UserError'),
                                      'Las fechas deben estar entre %s y %s'
                                      % (res[0]['date_start'],
@@ -369,5 +360,3 @@ class wizard_report(osv.osv_memory):
         return {'type': 'ir.actions.report.xml',
                 'report_name': name,
                 'datas': data}
-
-wizard_report()
