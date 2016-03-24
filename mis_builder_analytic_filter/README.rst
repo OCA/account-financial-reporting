@@ -18,7 +18,7 @@ Configuration and Usage
 =======================
 
 In Accounting > Reporting > MIS Reports, there is a new field
-'Analytic Account' which can be used to filter move line on an
+'Analytic Account' which can be used to filter move lines on an
 analytic axis and it's children.
 
 This filter is also available on the MIS Report widget, so the user
@@ -31,11 +31,11 @@ can change the filter in the preview and dashboard views.
 Known issues / Roadmap
 ======================
 
-While useful as is, we are aware that such analytic filtering may need
-to be customized heavily depending on the customer context. This module can
-be extended or considered as an example.
+* While useful as is, we are aware that such analytic filtering may need
+  to be customized heavily depending on the customer context. This module can
+  be extended or considered as an example.
 
-* at the moment, no filtering is done on other queries than move lines
+* At the moment, no filtering is done on other queries than move lines.
 
 Bug Tracker
 ===========
