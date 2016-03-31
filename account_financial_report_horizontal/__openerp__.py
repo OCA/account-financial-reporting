@@ -33,6 +33,7 @@ This is a port to OpenERP 7.0 of the horizontal financial reports
     'website': 'https://launchpad.net/account-financial-report',
     'images': [],
     "depends": ["account"],
+    "license": "AGPL-3",
     'data': [
         'menu.xml',
         'account_report.xml',

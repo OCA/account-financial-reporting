@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -161,8 +161,8 @@ class report_balancesheet_horizontal(
                         'type': account.type,
                     }
                     currency = (
-                        account.currency_id and account.currency_id
-                        or account.company_id.currency_id
+                        account.currency_id and account.currency_id or
+                        account.company_id.currency_id
                     )
                     if typ == 'liability' and account.type != 'view' and (
                         account.debit != account.credit

@@ -43,8 +43,6 @@ from openerp import tools
 from openerp.addons.report_webkit import webkit_report
 from openerp.addons.report_webkit.report_helper import WebKitHelper
 
-_logger = logging.getLogger('financial.reports.webkit')
-
 # Class used only as a workaround to bug:
 # http://code.google.com/p/wkhtmltopdf/issues/detail?id=656
 
@@ -77,6 +75,9 @@ _logger = logging.getLogger('financial.reports.webkit')
 # from openerp.addons.report_webkit.webkit_report import mako_template
 from mako.template import Template
 from mako.lookup import TemplateLookup
+
+
+_logger = logging.getLogger('financial.reports.webkit')
 
 
 def mako_template(text):

@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ###############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -23,7 +23,8 @@
 {
     'name': 'Partner Aged Statement',
     "version": "1.0",
-    'author': 'Savoir-faire Linux',
+    'author': 'Savoir-faire Linux, '
+              'Odoo Community Association (OCA)',
     'website': 'http://www.savoirfairelinux.com',
     'depends': [
         'report_webkit',
@@ -31,6 +32,7 @@
         'mail',
         'account',
     ],
+    'license': 'AGPL-3',
     'category': 'Accounting',
     'description': """
 Print & Send Partner Aged Statement by email

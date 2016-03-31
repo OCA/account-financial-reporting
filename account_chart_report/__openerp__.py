@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ###############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -44,6 +44,7 @@ Contributors
         'base',
         'account',
     ],
+    "license": 'AGPL-3',
     'data': [
         'account_report.xml',
         'wizard/account_report_chart_of_account.xml',

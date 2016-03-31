@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ###############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -199,8 +199,6 @@ class PartnerAgedTrialReport(aged_trial_report):
                 line['date_original'] >= stop
             ) and line['type'] in ['in_invoice', 'out_invoice'])
         ]
-
-        print movelines
         return movelines
 
     def _lines_get_31_60(self, partner, company):
