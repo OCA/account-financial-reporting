@@ -34,7 +34,7 @@
     'website': 'http://acsone.eu',
     'depends': [
         'account',
-        'base_report_xlsx',  # OCA/reporting-engine
+        'report_xlsx',  # OCA/reporting-engine
     ],
     'data': [
         'wizard/mis_builder_dashboard.xml',
