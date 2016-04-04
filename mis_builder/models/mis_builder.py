@@ -278,9 +278,17 @@ class MisReport(models.Model):
     description = fields.Char(required=False,
                               string='Description', translate=True)
     query_ids = fields.One2many('mis.report.query', 'report_id',
-                                string='Queries')
+                                string='Queries',
+                                copy=True)
     kpi_ids = fields.One2many('mis.report.kpi', 'report_id',
-                              string='KPI\'s')
+                              string='KPI\'s',
+                              copy=True)
+
+    @api.one
+    def copy(self, default=None):
+        default = dict(default or {})
+        default['name'] = _('%s (copy)') % self.name
+        return super(MisReport, self).copy(default)
 
     # TODO: kpi name cannot be start with query name
 
