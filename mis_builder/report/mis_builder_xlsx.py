@@ -22,7 +22,7 @@
 #
 ##############################################################################
 
-from openerp.addons.base_report_xlsx.report.report_xlsx import ReportXlsx
+from openerp.addons.report_xlsx.report.report_xlsx import ReportXlsx
 import logging
 _logger = logging.getLogger(__name__)
 
