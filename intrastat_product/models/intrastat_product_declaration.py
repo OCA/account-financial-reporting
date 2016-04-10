@@ -350,30 +350,44 @@ class IntrastatProductDeclaration(models.Model):
 
     def _get_region(self, inv_line):
         """
-        Logic copied from standard addons
+        For supplier invoices/refunds: if the invoice line is linked
+        to a stock move, use the destination stock location ;
+        otherwise, get the PO (which is linked to a stock location)
+        and then get the warehouse.
+        It is important to take into account the following scenario:
+        I order a qty of 50 kg and my suppliers delivers and invoices 52 kg
+        (quite common in some industries where the order qty cannot be exact
+        due to some operational constraints) ; in this case, I have a qty of
+        2 kg which is not linked to a PO, but it is linked to a stock move.
 
-        If purchase, comes from purchase order, linked to a location,
-        which is linked to the warehouse.
+        For customer invoices/refunds: if the invoice line is linked to a
+        stock move, use the source stock location ;
+        otherwise, get the sale order, which is linked to the warehouse.
 
-        If sales, the sale order is linked to the warehouse.
-        If sales, from a delivery order, linked to a location,
-        which is linked to the warehouse.
+        If none found, get the company's default intrastat region.
 
-        If none found, get the company one.
         """
         region = False
         if inv_line.invoice_id.type in ('in_invoice', 'in_refund'):
-            po_lines = self.env['purchase.order.line'].search(
-                [('invoice_lines', 'in', inv_line.id)])
-            if po_lines:
-                po = po_lines.order_id
-                region = po.location_id.get_intrastat_region()
+            if inv_line.move_line_ids:
+                region = inv_line.move_line_ids[0].location_dest_id.\
+                    get_intrastat_region()
+            else:
+                po_lines = self.env['purchase.order.line'].search(
+                    [('invoice_lines', 'in', inv_line.id)])
+                if po_lines:
+                    po = po_lines.order_id
+                    region = po.location_id.get_intrastat_region()
         elif inv_line.invoice_id.type in ('out_invoice', 'out_refund'):
-            so_lines = self.env['sale.order.line'].search(
-                [('invoice_lines', 'in', inv_line.id)])
-            if so_lines:
-                so = so_lines.order_id
-                region = so.warehouse_id.region_id
+            if inv_line.move_line_ids:
+                region = inv_line.move_line_ids[0].location_id.\
+                    get_intrastat_region()
+            else:
+                so_lines = self.env['sale.order.line'].search(
+                    [('invoice_lines', 'in', inv_line.id)])
+                if so_lines:
+                    so = so_lines.order_id
+                    region = so.warehouse_id.region_id
         if not region:
             if self.company_id.intrastat_region_id:
                 region = self.company_id.intrastat_region_id

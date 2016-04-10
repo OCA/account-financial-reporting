@@ -32,6 +32,7 @@
     'depends': [
         'intrastat_base',
         'product_harmonized_system',
+        'stock_picking_invoice_link',
         'sale_stock',
         'purchase',
         ],
