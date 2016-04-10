@@ -40,9 +40,9 @@ class StockLocation(models.Model):
         locations = self.search(
             [('parent_left', '<=', self.parent_left),
              ('parent_right', '>=', self.parent_right)])
-        warehouses = self.search(
-            [('lot_stock_id', 'in', [x.id for x in locations]),
-             ('region_id', '!=', False)])
+        warehouses = self.env['stock.warehouse'].search([
+            ('lot_stock_id', 'in', [x.id for x in locations]),
+            ('region_id', '!=', False)])
         if warehouses:
             return warehouses[0].region_id
         return None
