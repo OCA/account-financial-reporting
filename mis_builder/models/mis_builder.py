@@ -420,6 +420,7 @@ class MisReport(models.Model):
         localdict.update(self._fetch_queries(
             date_from, date_to, get_additional_query_filter))
 
+        additional_move_line_filter = None
         if get_additional_move_line_filter:
             additional_move_line_filter = get_additional_move_line_filter()
         aep.do_queries(date_from, date_to,
