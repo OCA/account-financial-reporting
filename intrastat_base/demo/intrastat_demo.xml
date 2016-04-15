@@ -18,7 +18,7 @@
     <field name="supplier">True</field>
 </record>
 
-<record id="base.res_partner_5" model="res.partner"> <!-- Ecole de Commerce de Liege -->
+<record id="base.res_partner_24" model="res.partner"> <!-- OpenCorp -->
     <field name="vat">BE0443167858</field>
     <field name="supplier">True</field>
 </record>
