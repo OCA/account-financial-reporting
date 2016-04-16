@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+
+      <record id="partners_ledger_compressed_wizard_view" model="ir.ui.view">
+          <field name="name">partners.ledger.compressed</field>
+          <field name="model">partners.ledger.webkit</field>
+          <field name="type">form</field>
+          <field name="inherit_id" ref="account_financial_report_webkit.account_partner_ledger_view_webkit"/>
+          <field name="arch" type="xml">
+            <button string="Print" position="after">
+                <button icon="gtk-print" name="compressed_export" string="Print (multiple files)" type="object" context="{'compressed_export':1}" colspan="2"/>
+            </button>
+          </field>
+      </record>
+
+  </data>
+</openerp>
