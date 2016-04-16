@@ -454,6 +454,14 @@ class IntrastatProductDeclaration(models.Model):
             domain.append(('type', 'in', ('out_invoice', 'out_refund')))
         return domain
 
+    def _is_product(self, invoice_line):
+        if (
+                invoice_line.product_id and
+                invoice_line.product_id.type in ('product', 'consu')):
+            return True
+        else:
+            return False
+
     def _gather_invoices(self):
 
         lines = []
@@ -514,9 +522,7 @@ class IntrastatProductDeclaration(models.Model):
 
                 if inv_line.hs_code_id:
                     hs_code = inv_line.hs_code_id
-                elif (
-                        inv_line.product_id and
-                        inv_line.product_id.type in ('product', 'consu')):
+                elif inv_line.product_id and self._is_product(inv_line):
                     hs_code = inv_line.product_id.product_tmpl_id.\
                         get_hs_code_recursively()
                     if not hs_code:
