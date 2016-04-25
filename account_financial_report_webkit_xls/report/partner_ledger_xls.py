@@ -49,9 +49,12 @@ _column_sizes = [
 class partner_ledger_xls(report_xls):
     column_sizes = [x[1] for x in _column_sizes]
 
-    def generate_xls_report(self, _p, _xs, data, objects, wb):
-
-        ws = wb.add_sheet(_p.report_name[:31])
+    def _new_ws_with_header(self, _p, _xs, data, wb, sheet_index=None):
+        report_name = _p.report_name[:31]
+        if sheet_index:
+            report_name = "%s %s" % (report_name[:29], sheet_index)
+            wb.active_sheet = sheet_index
+        ws = wb.add_sheet(report_name)
         ws.panes_frozen = True
         ws.remove_splits = True
         ws.portrait = 0  # Landscape
@@ -100,8 +103,8 @@ class partner_ledger_xls(report_xls):
             ('df', 2, 0, 'text', _p.filter_form(data) ==
              'filter_date' and _('Dates Filter') or _('Periods Filter')),
             ('af', 1, 0, 'text', _('Accounts Filter')),
-            ('tm', 2, 0, 'text',  _('Target Moves')),
-            ('ib', nbr_columns - 8, 0, 'text',  _('Initial Balance')),
+            ('tm', 2, 0, 'text', _('Target Moves')),
+            ('ib', nbr_columns - 8, 0, 'text', _('Initial Balance')),
 
         ]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
@@ -138,6 +141,20 @@ class partner_ledger_xls(report_xls):
             ws, row_pos, row_data, row_style=cell_style_center)
         ws.set_horz_split_pos(row_pos)
         row_pos += 1
+        return ws, row_pos
+
+    def _get_ws_row_pos(self, _p, _xs, data, wb, ws, row_pos):
+        if row_pos >= 65500:
+            sheet_index = ws.parent.active_sheet + 1
+            ws, row_pos = self._new_ws_with_header(
+                _p, _xs, data, wb, sheet_index)
+        return ws, row_pos
+
+    def generate_xls_report(self, _p, _xs, data, objects, wb):
+        ws, row_pos = self._new_ws_with_header(_p, _xs, data, wb)
+        nbr_columns = 10
+        if _p.amount_currency(data):
+            nbr_columns = 12
 
         # Account Title Row
         cell_format = _xs['xls_title'] + _xs['bold'] + \
@@ -214,6 +231,7 @@ class partner_ledger_xls(report_xls):
 
         cnt = 0
         for account in objects:
+            ws, row_pos = self._get_ws_row_pos(_p, _xs, data, wb, ws, row_pos)
             if account.ledger_lines or account.init_balance:
                 if not account.partners_order:
                     continue
@@ -235,7 +253,8 @@ class partner_ledger_xls(report_xls):
 
                 for partner_name, p_id, p_ref, p_name in \
                         account.partners_order:
-
+                    ws, row_pos = self._get_ws_row_pos(
+                        _p, _xs, data, wb, ws, row_pos)
                     total_debit = 0.0
                     total_credit = 0.0
                     cumul_balance = 0.0
@@ -305,7 +324,8 @@ class partner_ledger_xls(report_xls):
                             ws, row_pos, row_data, c_init_cell_style)
 
                     for line in account.ledger_lines.get(p_id, []):
-
+                        ws, row_pos = self._get_ws_row_pos(
+                            _p, _xs, data, wb, ws, row_pos)
                         total_debit += line.get('debit') or 0.0
                         total_credit += line.get('credit') or 0.0
 
