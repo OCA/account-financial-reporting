@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="ledger_report_wizard_view_form" model="ir.ui.view">
+            <field name="name">Ledger</field>
+            <field name="model">ledger.report.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group name="main_info">
+                        <field name="company_id"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_ledger_report_wizard" model="ir.actions.act_window">
+            <field name="name">Ledger</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ledger.report.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="ledger_report_wizard_view_form"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem
+            parent="account.menu_finance_legal_statement"
+            action="action_ledger_report_wizard"
+            id="menu_ledger_report_wizard"/>
+       <!--  <menuitem name="Actions" id="menu_crm_action" parent="base.menu_sales" sequence="5"
+        action="action_crm_action_view"
+        groups="group_crm_action_user,group_crm_action_manager"/> -->
+
+
+    </data>
+</openerp>

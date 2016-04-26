@@ -16,6 +16,7 @@
         'account',
     ],
     'data': [
+        'wizard/ledger_report_wizard_view.xml',
     ],
     'test': [
     ],
