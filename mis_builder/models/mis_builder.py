@@ -292,6 +292,207 @@ class MisReport(models.Model):
 
     # TODO: kpi name cannot be start with query name
 
+    @api.multi
+    def _prepare_aep(self, root_account):
+        self.ensure_one()
+        aep = AEP(self.env)
+        for kpi in self.kpi_ids:
+            aep.parse_expr(kpi.expression)
+        aep.done_parsing(root_account)
+        return aep
+
+    @api.multi
+    def _fetch_queries(self, date_from, date_to,
+                       get_additional_query_filter=None):
+        self.ensure_one()
+        res = {}
+        for query in self.query_ids:
+            model = self.env[query.model_id.model]
+            eval_context = {
+                'env': self.env,
+                'time': time,
+                'datetime': datetime,
+                'dateutil': dateutil,
+                # deprecated
+                'uid': self.env.uid,
+                'context': self.env.context,
+            }
+            domain = query.domain and \
+                safe_eval(query.domain, eval_context) or []
+            if get_additional_query_filter:
+                domain.extend(get_additional_query_filter(query))
+            if query.date_field.ttype == 'date':
+                domain.extend([(query.date_field.name, '>=', date_from),
+                               (query.date_field.name, '<=', date_to)])
+            else:
+                datetime_from = _utc_midnight(
+                    date_from, self._context.get('tz', 'UTC'))
+                datetime_to = _utc_midnight(
+                    date_to, self._context.get('tz', 'UTC'), add_day=1)
+                domain.extend([(query.date_field.name, '>=', datetime_from),
+                               (query.date_field.name, '<', datetime_to)])
+            field_names = [f.name for f in query.field_ids]
+            if not query.aggregate:
+                data = model.search_read(domain, field_names)
+                res[query.name] = [AutoStruct(**d) for d in data]
+            elif query.aggregate == 'sum':
+                data = model.read_group(
+                    domain, field_names, [])
+                s = AutoStruct(count=data[0]['__count'])
+                for field_name in field_names:
+                    v = data[0][field_name]
+                    setattr(s, field_name, v)
+                res[query.name] = s
+            else:
+                data = model.search_read(domain, field_names)
+                s = AutoStruct(count=len(data))
+                if query.aggregate == 'min':
+                    agg = _min
+                elif query.aggregate == 'max':
+                    agg = _max
+                elif query.aggregate == 'avg':
+                    agg = _avg
+                for field_name in field_names:
+                    setattr(s, field_name,
+                            agg([d[field_name] for d in data]))
+                res[query.name] = s
+        return res
+
+    @api.multi
+    def _compute(self, lang_id, aep,
+                 date_from, date_to,
+                 period_from, period_to,
+                 target_move,
+                 get_additional_move_line_filter=None,
+                 get_additional_query_filter=None,
+                 period_id=None):
+        """ Evaluate a report for a given period.
+
+        It returns a dictionary keyed on kpi.name with the following values:
+            * val: the evaluated kpi, or None if there is no data or an error
+            * val_r: the rendered kpi as a string, or #ERR, #DIV
+            * val_c: a comment (explaining the error, typically)
+            * style: the css style of the kpi
+                     (may change in the future!)
+            * prefix: a prefix to display in front of the rendered value
+            * suffix: a prefix to display after rendered value
+            * dp: the decimal precision of the kpi
+            * is_percentage: true if the kpi is of percentage type
+                             (may change in the future!)
+            * expr: the kpi expression
+            * drilldown: true if the drilldown method of
+                         mis.report.instance.period is going to do something
+                         useful in this kpi
+
+        :param lang_id: id of a res.lang object
+        :param aep: an AccountingExpressionProcessor instance created
+                    using _prepare_aep()
+        :param date_from, date_to: the starting and ending date
+        :param period_from, period_to: the starting and ending accounting
+                                       period (optional, if present must
+                                       match date_from, date_to)
+        :param target_move: all|posted
+        :param get_additional_move_line_filter: a bound method that takes
+                                                no arguments and returns
+                                                a domain compatible with
+                                                account.move.line
+        :param get_additional_query_filter: a bound method that takes a single
+                                            query argument and returns a
+                                            domain compatible with the query
+                                            underlying model
+        :param period_id: an optional opaque value that is returned as
+                          query_id field in the result (may change in the
+                          future!)
+        """
+        self.ensure_one()
+        res = {}
+
+        localdict = {
+            'registry': self.pool,
+            'sum': _sum,
+            'min': _min,
+            'max': _max,
+            'len': len,
+            'avg': _avg,
+            'AccountingNone': AccountingNone,
+        }
+
+        localdict.update(self._fetch_queries(
+            date_from, date_to, get_additional_query_filter))
+
+        additional_move_line_filter = None
+        if get_additional_move_line_filter:
+            additional_move_line_filter = get_additional_move_line_filter()
+        aep.do_queries(date_from, date_to,
+                       period_from, period_to,
+                       target_move,
+                       additional_move_line_filter)
+
+        compute_queue = self.kpi_ids
+        recompute_queue = []
+        while True:
+            for kpi in compute_queue:
+                try:
+                    kpi_val_comment = kpi.name + " = " + kpi.expression
+                    kpi_eval_expression = aep.replace_expr(kpi.expression)
+                    kpi_val = safe_eval(kpi_eval_expression, localdict)
+                    localdict[kpi.name] = kpi_val
+                except ZeroDivisionError:
+                    kpi_val = None
+                    kpi_val_rendered = '#DIV/0'
+                    kpi_val_comment += '\n\n%s' % (traceback.format_exc(),)
+                except (NameError, ValueError):
+                    recompute_queue.append(kpi)
+                    kpi_val = None
+                    kpi_val_rendered = '#ERR'
+                    kpi_val_comment += '\n\n%s' % (traceback.format_exc(),)
+                except:
+                    kpi_val = None
+                    kpi_val_rendered = '#ERR'
+                    kpi_val_comment += '\n\n%s' % (traceback.format_exc(),)
+                else:
+                    kpi_val_rendered = kpi.render(lang_id, kpi_val)
+
+                try:
+                    kpi_style = None
+                    if kpi.css_style:
+                        kpi_style = safe_eval(kpi.css_style, localdict)
+                except:
+                    _logger.warning("error evaluating css stype expression %s",
+                                    kpi.css_style, exc_info=True)
+                    kpi_style = None
+
+                drilldown = (kpi_val is not None and
+                             AEP.has_account_var(kpi.expression))
+
+                res[kpi.name] = {
+                    'val': None if kpi_val is AccountingNone else kpi_val,
+                    'val_r': kpi_val_rendered,
+                    'val_c': kpi_val_comment,
+                    'style': kpi_style,
+                    'prefix': kpi.prefix,
+                    'suffix': kpi.suffix,
+                    'dp': kpi.dp,
+                    'is_percentage': kpi.type == 'pct',
+                    'period_id': period_id,
+                    'expr': kpi.expression,
+                    'drilldown': drilldown,
+                }
+
+            if len(recompute_queue) == 0:
+                # nothing to recompute, we are done
+                break
+            if len(recompute_queue) == len(compute_queue):
+                # could not compute anything in this iteration
+                # (ie real Value errors or cyclic dependency)
+                # so we stop trying
+                break
+            # try again
+            compute_queue = recompute_queue
+            recompute_queue = []
+
+        return res
+
 
 class MisReportInstancePeriod(models.Model):
     """ A MIS report instance has the logic to compute
@@ -432,7 +633,7 @@ class MisReportInstancePeriod(models.Model):
 
     @api.multi
     def drilldown(self, expr):
-        assert len(self) == 1
+        self.ensure_one()
         if AEP.has_account_var(expr):
             aep = AEP(self.env)
             aep.parse_expr(expr)
@@ -456,144 +657,18 @@ class MisReportInstancePeriod(models.Model):
         else:
             return False
 
-    def _fetch_queries(self):
-        assert len(self) == 1
-        res = {}
-        for query in self.report_instance_id.report_id.query_ids:
-            model = self.env[query.model_id.model]
-            eval_context = {
-                'env': self.env,
-                'time': time,
-                'datetime': datetime,
-                'dateutil': dateutil,
-                # deprecated
-                'uid': self.env.uid,
-                'context': self.env.context,
-            }
-            domain = query.domain and \
-                safe_eval(query.domain, eval_context) or []
-            domain.extend(self._get_additional_query_filter(query))
-            if query.date_field.ttype == 'date':
-                domain.extend([(query.date_field.name, '>=', self.date_from),
-                               (query.date_field.name, '<=', self.date_to)])
-            else:
-                datetime_from = _utc_midnight(
-                    self.date_from, self._context.get('tz', 'UTC'))
-                datetime_to = _utc_midnight(
-                    self.date_to, self._context.get('tz', 'UTC'), add_day=1)
-                domain.extend([(query.date_field.name, '>=', datetime_from),
-                               (query.date_field.name, '<', datetime_to)])
-            field_names = [f.name for f in query.field_ids]
-            if not query.aggregate:
-                data = model.search_read(domain, field_names)
-                res[query.name] = [AutoStruct(**d) for d in data]
-            elif query.aggregate == 'sum':
-                data = model.read_group(
-                    domain, field_names, [])
-                s = AutoStruct(count=data[0]['__count'])
-                for field_name in field_names:
-                    v = data[0][field_name]
-                    setattr(s, field_name, v)
-                res[query.name] = s
-            else:
-                data = model.search_read(domain, field_names)
-                s = AutoStruct(count=len(data))
-                if query.aggregate == 'min':
-                    agg = _min
-                elif query.aggregate == 'max':
-                    agg = _max
-                elif query.aggregate == 'avg':
-                    agg = _avg
-                for field_name in field_names:
-                    setattr(s, field_name,
-                            agg([d[field_name] for d in data]))
-                res[query.name] = s
-        return res
-
+    @api.multi
     def _compute(self, lang_id, aep):
-        res = {}
-
-        localdict = {
-            'registry': self.pool,
-            'sum': _sum,
-            'min': _min,
-            'max': _max,
-            'len': len,
-            'avg': _avg,
-            'AccountingNone': AccountingNone,
-        }
-
-        localdict.update(self._fetch_queries())
-
-        aep.do_queries(self.date_from, self.date_to,
-                       self.period_from, self.period_to,
-                       self.report_instance_id.target_move,
-                       self._get_additional_move_line_filter())
-
-        compute_queue = self.report_instance_id.report_id.kpi_ids
-        recompute_queue = []
-        while True:
-            for kpi in compute_queue:
-                try:
-                    kpi_val_comment = kpi.name + " = " + kpi.expression
-                    kpi_eval_expression = aep.replace_expr(kpi.expression)
-                    kpi_val = safe_eval(kpi_eval_expression, localdict)
-                    localdict[kpi.name] = kpi_val
-                except ZeroDivisionError:
-                    kpi_val = None
-                    kpi_val_rendered = '#DIV/0'
-                    kpi_val_comment += '\n\n%s' % (traceback.format_exc(),)
-                except (NameError, ValueError):
-                    recompute_queue.append(kpi)
-                    kpi_val = None
-                    kpi_val_rendered = '#ERR'
-                    kpi_val_comment += '\n\n%s' % (traceback.format_exc(),)
-                except:
-                    kpi_val = None
-                    kpi_val_rendered = '#ERR'
-                    kpi_val_comment += '\n\n%s' % (traceback.format_exc(),)
-                else:
-                    kpi_val_rendered = kpi.render(lang_id, kpi_val)
-
-                try:
-                    kpi_style = None
-                    if kpi.css_style:
-                        kpi_style = safe_eval(kpi.css_style, localdict)
-                except:
-                    _logger.warning("error evaluating css stype expression %s",
-                                    kpi.css_style, exc_info=True)
-                    kpi_style = None
-
-                drilldown = (kpi_val is not None and
-                             AEP.has_account_var(kpi.expression))
-
-                res[kpi.name] = {
-                    'val': None if kpi_val is AccountingNone else kpi_val,
-                    'val_r': kpi_val_rendered,
-                    'val_c': kpi_val_comment,
-                    'style': kpi_style,
-                    'prefix': kpi.prefix,
-                    'suffix': kpi.suffix,
-                    'dp': kpi.dp,
-                    'is_percentage': kpi.type == 'pct',
-                    'period_id': self.id,
-                    'expr': kpi.expression,
-                    'drilldown': drilldown,
-                }
-
-            if len(recompute_queue) == 0:
-                # nothing to recompute, we are done
-                break
-            if len(recompute_queue) == len(compute_queue):
-                # could not compute anything in this iteration
-                # (ie real Value errors or cyclic dependency)
-                # so we stop trying
-                break
-            # try again
-            compute_queue = recompute_queue
-            recompute_queue = []
-
-        return res
+        self.ensure_one()
+        return self.report_instance_id.report_id._compute(
+            lang_id, aep,
+            self.date_from, self.date_to,
+            self.period_from, self.period_to,
+            self.report_instance_id.target_move,
+            self._get_additional_move_line_filter,
+            self._get_additional_query_filter,
+            period_id=self.id,
+        )
 
 
 class MisReportInstance(models.Model):
@@ -713,13 +788,9 @@ class MisReportInstance(models.Model):
 
     @api.multi
     def compute(self):
-        assert len(self) == 1
+        self.ensure_one()
 
-        # prepare AccountingExpressionProcessor
-        aep = AEP(self.env)
-        for kpi in self.report_id.kpi_ids:
-            aep.parse_expr(kpi.expression)
-        aep.done_parsing(self.root_account)
+        aep = self.report_id._prepare_aep(self.root_account)
 
         # fetch user language only once
         # TODO: is this necessary?
