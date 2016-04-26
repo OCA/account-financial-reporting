@@ -166,8 +166,8 @@ class nov_journal_print(report_sxw.rml_parse):
                         "rc.symbol AS currency_symbol, "
                         "coalesce(ai.internal_number,'-') AS inv_number, "
                         "coalesce(abs.name,'-') AS st_number, "
-                        "coalesce(av.number,'-') AS voucher_number "
-                        + select_extra +
+                        "coalesce(av.number,'-') AS voucher_number " +
+                        select_extra +
                         "FROM account_move_line l "
                         "INNER JOIN account_move am ON l.move_id = am.id "
                         "INNER JOIN account_account aa "
@@ -192,11 +192,9 @@ class nov_journal_print(report_sxw.rml_parse):
                         "LEFT OUTER JOIN account_analytic_account ana "
                         "ON l.analytic_account_id = ana.id  "
                         "LEFT OUTER JOIN res_currency rc "
-                        "ON l.currency_id = rc.id  "
-                        + join_extra +
+                        "ON l.currency_id = rc.id  " + join_extra +
                         "WHERE l.period_id IN %s AND l.journal_id = %s "
-                        "AND am.state IN %s "
-                        + where_extra +
+                        "AND am.state IN %s " + where_extra +
                         "ORDER BY " + self.sort_selection +
                         ", move_date, move_id, acc_code",
                         (tuple(period_ids), journal_id,
@@ -206,12 +204,12 @@ class nov_journal_print(report_sxw.rml_parse):
         # add reference of corresponding origin document
         if journal.type in ('sale', 'sale_refund', 'purchase',
                             'purchase_refund'):
-            [x.update({'docname': (_('Invoice') + ': ' + x['inv_number'])
-                      or (_('Voucher') + ': ' + x['voucher_number']) or '-'})
+            [x.update({'docname': (_('Invoice') + ': ' + x['inv_number']) or
+                       (_('Voucher') + ': ' + x['voucher_number']) or '-'})
              for x in lines]
         elif journal.type in ('bank', 'cash'):
-            [x.update({'docname': (_('Statement') + ': ' + x['st_number'])
-                      or (_('Voucher') + ': ' + x['voucher_number']) or '-'})
+            [x.update({'docname': (_('Statement') + ': ' + x['st_number']) or
+                       (_('Voucher') + ': ' + x['voucher_number']) or '-'})
              for x in lines]
         else:
             code_string = j_obj._report_xls_document_extra(

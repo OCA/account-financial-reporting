@@ -29,7 +29,9 @@
                     <group col="2">
                         <field name="name"/>
                         <field name="description"/>
-                        <field name="query_ids">
+                    </group>
+                    <group string="Queries">
+                        <field name="query_ids" nolabel="1" colspan="2">
                             <tree string="Queries" editable="bottom">
                                 <field name="name"/>
                                 <field name="model_id"/>
@@ -40,7 +42,9 @@
                                 <field name="domain"/>
                             </tree>
                         </field>
-                        <field name="kpi_ids">
+                    </group>
+                    <group string="KPI's">
+                        <field name="kpi_ids" nolabel="1" colspan="2">
                             <tree string="KPI's" editable="bottom">
                                 <field name="sequence" widget="handle"/>
                                 <field name="description"/>
@@ -49,6 +53,7 @@
                                 <field name="type"/>
                                 <field name="dp" attrs="{'invisible': [('type', '=', 'str')]}"/>
                                 <field name="divider" attrs="{'invisible': [('type', '=', 'str')]}"/>
+                                <field name="prefix"/>
                                 <field name="suffix"/>
                                 <field name="compare_method" attrs="{'invisible': [('type', '=', 'str')]}"/>
                                 <field name="default_css_style"/>
@@ -56,7 +61,7 @@
                             </tree>
                         </field>
                     </group>
-                    <group col="2" string="Legend (for expression)">
+                    <group col="2" string="Legend (for kpi expressions)">
                         <group>
                             <label colspan="2" string="Expressions are of the form &lt;field&gt;&lt;mode&gt;[accounts][domain]"/>
                             <label colspan="2" string="Possible values for 'field' can be:"/>
@@ -96,17 +101,17 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem id="mis_report_view_menu" parent="account.menu_account_reports" name="MIS Report Templates" action="mis_report_view_action" sequence="21"/>
+        <menuitem id="mis_report_view_menu" parent="account.account_management_menu" name="MIS Report Templates" action="mis_report_view_action" sequence="21"/>
 
-	    <record id="xls_export" model="ir.actions.report.xml">
-	      <field name="name">MIS report instance XLS report</field>
-	      <field name="model">mis.report.instance</field>
-	      <field name="type">ir.actions.report.xml</field>
-	      <field name="report_name">mis.report.instance.xls</field>
-	      <field name="report_type">xls</field>
-	      <field name="auto" eval="False"/>
-	    </record>
-
+        <record id="xls_export" model="ir.actions.report.xml">
+          <field name="name">MIS report instance XLS report</field>
+          <field name="model">mis.report.instance</field>
+          <field name="type">ir.actions.report.xml</field>
+          <field name="report_name">mis.report.instance.xlsx</field>
+          <field name="report_type">xlsx</field>
+          <field name="auto" eval="False"/>
+        </record>
+        
         <record id="qweb_pdf_export" model="ir.actions.report.xml">
           <field name="name">MIS report instance QWEB PDF report</field>
           <field name="model">mis.report.instance</field>
@@ -119,12 +124,10 @@
         <record model="ir.ui.view" id="mis_report_instance_result_view_form">
             <field name="name">mis.report.instance.result.view.form</field>
             <field name="model">mis.report.instance</field>
-            <field name="priority" eval="17"/>
+            <field name="priority" eval="15 "/>
             <field name="arch" type="xml">
                 <form string="MIS Report Result" version="7.0">
                     <widget type="mis_report"></widget>
-                    <button icon="gtk-print" name="%(qweb_pdf_export)d" string="Print" type="action" colspan="2"/>
-                    <button icon="gtk-execute" name="%(xls_export)d" string="Export" type="action" colspan="2"/>
                 </form>
             </field>
         </record>
@@ -140,6 +143,7 @@
                     <field name="target_move"/>
                     <field name="pivot_date"/>
                     <field name="company_id"/>
+                    <button name="display_settings" type="object" icon="gtk-execute" />
                 </tree>
             </field>
         </record>
@@ -161,36 +165,40 @@
                     </div>
                     <div class="oe_right oe_button_box" name="buttons"> 
                         <button type="object" name="preview" string="Preview" icon="gtk-print-preview" />
-                        <button type="action" name="%(qweb_pdf_export)d" string="Print" icon="gtk-print" />
-                        <button type="action" name="%(xls_export)d" string="Export" icon="gtk-execute" />
+                        <button type="object" name="print_pdf" string="Print" icon="gtk-print" />
+                        <button type="object" name="export_xls" string="Export" icon="gtk-go-down" />
                         <button type="action" name="%(mis_report_instance_add_to_dashboard_action)d" string="Add to dashboard" icon="gtk-add" />
                     </div>
                     <group col="4">
                         <field name="report_id" colspan="4"/>
                         <field name="description"/>
                         <field name="landscape_pdf" />
-                        <field name="root_account"/>
                         <field name="company_id" groups="base.group_multi_company"/>
-                        <field name="date"/>
                         <field name="target_move"/>
-                        <field name="period_ids" colspan="4">
-                            <tree string="KPI's" editable="bottom" colors="red:valid==False">
-                                <field name="sequence" widget="handle"/>
-                                <field name="name"/>
-                                <field name="type"/>
-                                <field name="offset"/>
-                                <field name="duration"/>
-                                <field name="normalize_factor"/>
-                                <field name="date_from"/>
-                                <field name="date_to"/>
-                                <field name="period_from"/>
-                                <field name="period_to"/>
-                                <field name="valid" invisible="1"/>
-                                <field name="report_instance_id" invisible="1"/>
-                                <field name="id" invisible="1"/>
-                                <field name="comparison_column_ids" domain="[('report_instance_id', '=', report_instance_id), ('id', '!=', id)]" widget="many2many_tags"/>
-                            </tree>
-                        </field>
+                        </group>
+                        <group col="4" string="Periods">
+                        <group colspan="2">
+                            <field name="date"/>
+                        </group>
+                        <newline/>
+                        <group>
+                            <field name="period_ids" colspan="4" nolabel="1">
+                                <tree string="KPI's" editable="bottom" colors="red:valid==False">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="type"/>
+                                    <field name="offset"/>
+                                    <field name="duration"/>
+                                    <field name="normalize_factor"/>
+                                    <field name="date_from"/>
+                                    <field name="date_to"/>
+                                    <field name="valid" invisible="1"/>
+                                    <field name="report_instance_id" invisible="1"/>
+                                    <field name="id" invisible="1"/>
+                                    <field name="comparison_column_ids" domain="[('report_instance_id', '=', report_instance_id), ('id', '!=', id)]" widget="many2many_tags"/>
+                                </tree>
+                            </field>
+                        </group>
                     </group>
                 </sheet>
                 </form>

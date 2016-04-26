@@ -1,30 +1,10 @@
-# -*- encoding: utf-8 -*-
-##############################################################################
-#
-#    mis_builder module for Odoo, Management Information System Builder
-#    Copyright (C) 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
-#
-#    This file is a part of mis_builder
-#
-#    mis_builder is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License v3 or later
-#    as published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    mis_builder is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License v3 or later for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    v3 or later along with this program.
-#    If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+# -*- coding: utf-8 -*-
+# © 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 {
     'name': 'MIS Builder',
-    'version': '8.0.0.2.0',
+    'version': '9.0.1.0.0',
     'category': 'Reporting',
     'summary': """
         Build 'Management Information System' Reports and Dashboards
@@ -34,7 +14,7 @@
     'website': 'http://acsone.eu',
     'depends': [
         'account',
-        'report_xls',  # OCA/reporting-engine
+        'report_xlsx',  # OCA/reporting-engine
     ],
     'data': [
         'wizard/mis_builder_dashboard.xml',
@@ -55,7 +35,7 @@
     'qweb': [
         'static/src/xml/*.xml'
     ],
-    'installable': False,
+    'installable': True,
     'application': True,
     'auto_install': False,
     'license': 'AGPL-3',
