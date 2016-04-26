@@ -21,7 +21,6 @@ class LedgerReportWizard(models.TransientModel):
                                    default='posted')
     account_ids = fields.Many2many(
         comodel_name='account.account',
-        relation='account_account_ledger_rel',
         string='Filter accounts',
     )
     amount_currency = fields.Boolean(string='With currency',
