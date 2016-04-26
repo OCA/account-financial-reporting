@@ -5,10 +5,8 @@
 import re
 from collections import defaultdict
 
-from openerp.exceptions import Warning as UserError
 from openerp.models import expression
 from openerp.tools.safe_eval import safe_eval
-from openerp.tools.translate import _
 from .accounting_none import AccountingNone
 
 MODE_VARIATION = 'p'
