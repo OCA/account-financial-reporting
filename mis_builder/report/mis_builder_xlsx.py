@@ -23,6 +23,7 @@
 ##############################################################################
 
 from openerp.addons.report_xlsx.report.report_xlsx import ReportXlsx
+from openerp.report import report_sxw
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -73,6 +74,8 @@ class MisBuilderXslx(ReportXlsx):
                 if value.get('dp'):
                     num_format_str += '.'
                     num_format_str += '0' * int(value['dp'])
+                if value.get('prefix'):
+                    num_format_str = '"%s"' % value['prefix'] + num_format_str
                 if value.get('suffix'):
                     num_format_str = num_format_str + ' "%s"' % value['suffix']
                 kpi_format = workbook.add_format({'num_format': num_format_str,
@@ -89,4 +92,4 @@ class MisBuilderXslx(ReportXlsx):
 
 
 MisBuilderXslx('report.mis.report.instance.xlsx',
-               'mis.report.instance')
+               'mis.report.instance', parser=report_sxw.rml_parse)

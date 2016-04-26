@@ -1,32 +1,15 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    mis_builder module for Odoo, Management Information System Builder
-#    Copyright (C) 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
-#
-#    This file is a part of mis_builder
-#
-#    mis_builder is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License v3 or later
-#    as published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    mis_builder is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License v3 or later for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    v3 or later along with this program.
-#    If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+# © 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 import re
 from collections import defaultdict
 
-from openerp.osv import expression
+from openerp.exceptions import Warning as UserError
+from openerp.models import expression
 from openerp.tools.safe_eval import safe_eval
+from openerp.tools.translate import _
+from .accounting_none import AccountingNone
 
 MODE_VARIATION = 'p'
 MODE_INITIAL = 'i'
@@ -247,12 +230,13 @@ class AccountingExpressionProcessor(object):
             field, mode, account_codes, domain = self._parse_match_object(mo)
             key = (domain, mode)
             account_ids_data = self._data[key]
-            v = 0.0
+            v = AccountingNone
             for account_code in account_codes:
                 account_ids = self._account_ids_by_code[account_code]
                 for account_id in account_ids:
                     debit, credit = \
-                        account_ids_data.get(account_id, (0.0, 0.0))
+                        account_ids_data.get(account_id,
+                                             (AccountingNone, AccountingNone))
                     if field == 'bal':
                         v += debit - credit
                     elif field == 'deb':
