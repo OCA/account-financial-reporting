@@ -625,7 +625,8 @@ class MisReportInstance(models.Model):
     period_ids = fields.One2many('mis.report.instance.period',
                                  'report_instance_id',
                                  required=True,
-                                 string='Periods')
+                                 string='Periods',
+                                 copy=True)
     target_move = fields.Selection([('posted', 'All Posted Entries'),
                                     ('all', 'All Entries')],
                                    string='Target Moves',
@@ -641,6 +642,12 @@ class MisReportInstance(models.Model):
                                    string="Account chart",
                                    required=True)
     landscape_pdf = fields.Boolean(string='Landscape PDF')
+
+    @api.one
+    def copy(self, default=None):
+        default = dict(default or {})
+        default['name'] = _('%s (copy)') % self.name
+        return super(MisReportInstance, self).copy(default)
 
     def _format_date(self, lang_id, date):
         # format date following user language
