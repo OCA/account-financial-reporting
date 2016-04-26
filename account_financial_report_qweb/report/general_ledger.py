@@ -14,6 +14,18 @@ class FinancialReportLine(models.Model):
     _auto = False
     _order = 'account_id, date'
 
+    @api.depends('invoice_number', 'name')
+    def _get_label(self):
+        for rec in self:
+            invoice_number = ''
+            if rec.invoice_number:
+                invoice_number = ' (rec.invoice_number)'
+            rec.label = u'%(line_name)s%(invoice_number)s' % {
+                'line_name': rec.name,
+                'invoice_number': invoice_number}
+
+    label = fields.Char(compute='_get_label', readonly=True, store=False)
+
     def init(self, cr):
         report_name = self._name.replace('.', '_')
         tools.drop_view_if_exists(cr, report_name)
@@ -64,8 +76,7 @@ CREATE OR REPLACE VIEW %(report_name)s AS (
     SUM(debit - credit) OVER w_account - SUM(debit - credit)
         OVER w_account_centralized AS init_balance_centralized,
     SUM(amount_currency) OVER w_account - SUM(amount_currency)
-        OVER w_account_centralized
-        AS init_balance_curr_centralized,
+        OVER w_account_centralized AS init_balance_curr_centralized,
 
     m.name AS move_name,
     m.state AS move_state,

@@ -183,7 +183,7 @@
                     <!--## move reference-->
                     <div class="act_as_cell"><span t-field="line.ref"/></div>
                     <!--## label-->
-                    <div class="act_as_cell"><t t-raw="'{}'.format(line.name) + ('({})'.format(line.invoice_number) if line.invoice_number else '')"/></div>
+                    <div class="act_as_cell"><span t-field="line.label"/></div>
                     <!--## debit-->
                     <div class="act_as_cell amount"><span t-field="line.debit"/></div>
                     <!--## credit-->
