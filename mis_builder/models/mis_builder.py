@@ -298,6 +298,7 @@ class MisReportSubkpi(models.Model):
     name = fields.Char(required=True)
     expression_ids = fields.One2many('mis.report.kpi.expression', 'subkpi_id')
 
+    @api.multi
     def unlink(self):
         for subkpi in self:
             subkpi.expression_ids.unlink()
@@ -569,6 +570,9 @@ class MisReport(models.Model):
 
                 if kpi.multi:
                     vals = SimpleArray(vals)
+                else:
+                    vals = vals[0]
+
                 localdict[kpi.name] = vals
                 res[kpi] = vals
 
@@ -788,7 +792,11 @@ class MisReportInstancePeriod(models.Model):
                 else:
                     drilldown = (subkpi_val is not None and
                                  AEP.has_account_var(kpi.expression))
-                    comment = kpi.name + " = " + kpi.expression_ids[idx].name
+                    if kpi.multi:
+                        expression = kpi.expression_ids[idx].name
+                    else:
+                        expression = kpi.expression
+                    comment = kpi.name + " = " + expression
                     vals.update({
                         'val': None if subkpi_val is AccountingNone
                                else subkpi_val,
