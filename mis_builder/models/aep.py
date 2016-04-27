@@ -180,10 +180,19 @@ class AccountingExpressionProcessor(object):
                                  target_move):
         if mode == MODE_VARIATION:
             domain = [('date', '>=', date_from), ('date', '<=', date_to)]
-        elif mode == MODE_INITIAL:
-            domain = [('date', '<', date_from)]
-        elif mode == MODE_END:
-            domain = [('date', '<=', date_to)]
+        else:
+            # for income and expense account, get balance from the beginning
+            # of the current fiscal year
+            fy_date_from = \
+                self.company.compute_fiscalyear_dates(date_from)['date_from']
+            domain = ['|',
+                      ('date', '>=', fy_date_from),
+                      ('account_id.user_type_id.include_initial_balance', '=',
+                       True)]
+            if mode == MODE_INITIAL:
+                domain.append(('date', '<', date_from))
+            elif mode == MODE_END:
+                domain.append(('date', '<=', date_to))
         if target_move == 'posted':
             domain.append(('move_id.state', '=', 'posted'))
         return expression.normalize_domain(domain)
