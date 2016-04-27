@@ -4,3 +4,4 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 from . import aged_partner_balance_wizard
 from . import ledger_report_wizard
+from . import balance_common_wizard
