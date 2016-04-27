@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="account_partner_balance_wizard_view" model="ir.ui.view">
+            <field name="name">Partner Balance Wizard</field>
+            <field name="model">account.common.balance.report</field>
+            <field name="mode">primary</field>
+            <field name="inherit_id" ref="account_balance_common_wizard_view"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="company_id" position="before">
+                        <separator string="Partner Balance" colspan="4"/>
+                        <label nolabel="1" colspan="4" string="This report is an analysis done by a partner, It is a PDF report containing one line per partner representing the cumulative credit balance"/>
+                    </field>
+                    <field name="debit_credit" position="attributes">
+                        <attribute name="invisible">True</attribute>
+                    </field>
+
+                </data>
+            </field>
+        </record>
+
+        <record id="action_account_partner_balance_wizard_view" model="ir.actions.act_window">
+            <field name="name">Partner Balance</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.common.balance.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="account_partner_balance_wizard_view"/>
+            <field name="target">new</field>
+            <field name="context">{'balance_common': 'partner_balance'}</field>
+        </record>
+
+        <record model="ir.values" id="action_account_balance_common_wizard_view_values">
+            <field name="model_id" ref="account.model_account_account"/>
+            <field name="name">Partner Balance</field>
+            <field name="key2">client_print_multi</field>
+            <field name="value"
+                eval="'ir.actions.act_window,' +str(ref('action_account_partner_balance_wizard_view'))"/>
+            <field name="key">action</field>
+            <field name="model">account.account</field>
+        </record>
+
+    </data>
+</openerp>

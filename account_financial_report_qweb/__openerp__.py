@@ -23,6 +23,8 @@
         'wizard/open_invoice_wizard_view.xml',
         'report_menus.xml',
         'wizard/balance_common_wizard_view.xml',
+        'wizard/partner_balance_wizard_view.xml',
+        'wizard/trial_balance_wizard_view.xml',
         'views/report_menus.xml',
         'menuitems.xml',
         'reports.xml',
