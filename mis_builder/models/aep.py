@@ -185,7 +185,7 @@ class AccountingExpressionProcessor(object):
             # for income and expense account, get balance from the beginning
             # of the current fiscal year
             fy_date_from = \
-                self.company.compute_fiscalyear_dates(date_from)['date_from']
+                company.compute_fiscalyear_dates(date_from)['date_from']
             domain = ['|',
                       ('date', '>=', fy_date_from),
                       ('account_id.user_type_id.include_initial_balance', '=',
