@@ -17,12 +17,10 @@ class FinancialReportLine(models.Model):
     @api.depends('invoice_number', 'name')
     def _get_label(self):
         for rec in self:
-            invoice_number = ''
+            label = rec.name
             if rec.invoice_number:
-                invoice_number = ' (rec.invoice_number)'
-            rec.label = u'%(line_name)s%(invoice_number)s' % {
-                'line_name': rec.name,
-                'invoice_number': invoice_number}
+                label += u' ({})'.format(rec.invoice_number)
+            rec.label = label
 
     label = fields.Char(compute='_get_label', readonly=True, store=False)
 
