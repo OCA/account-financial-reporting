@@ -16,7 +16,7 @@
 
         <record id="action_account_aged_trial_balance_wizard"
                 model="ir.actions.act_window">
-            <field name="name">Aged partner balance</field>
+            <field name="name">Aged Partner Balance</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">account.aged.trial.balance.wizard</field>
             <field name="view_type">form</field>
