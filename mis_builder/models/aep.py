@@ -1,34 +1,13 @@
-# -*- encoding: utf-8 -*-
-##############################################################################
-#
-#    mis_builder module for Odoo, Management Information System Builder
-#    Copyright (C) 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
-#
-#    This file is a part of mis_builder
-#
-#    mis_builder is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License v3 or later
-#    as published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    mis_builder is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License v3 or later for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    v3 or later along with this program.
-#    If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+# -*- coding: utf-8 -*-
+# © 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 import re
 from collections import defaultdict
 
-from openerp.exceptions import Warning
-from openerp.osv import expression
+from openerp.models import expression
 from openerp.tools.safe_eval import safe_eval
-from openerp.tools.translate import _
+from .accounting_none import AccountingNone
 
 MODE_VARIATION = 'p'
 MODE_INITIAL = 'i'
@@ -87,55 +66,33 @@ class AccountingExpressionProcessor(object):
         # before done_parsing: {(domain, mode): set(account_codes)}
         # after done_parsing: {(domain, mode): list(account_ids)}
         self._map_account_ids = defaultdict(set)
+        # {account_code: account_id} where account_code can be
+        # - None for all accounts
+        # - NNN% for a like
+        # - NNN for a code with an exact match
         self._account_ids_by_code = defaultdict(set)
 
-    def _load_account_codes(self, account_codes, root_account):
+    def _load_account_codes(self, account_codes, company):
         account_model = self.env['account.account']
-        # TODO: account_obj is necessary because _get_children_and_consol
-        #       does not work in new API?
-        account_obj = self.env.registry('account.account')
         exact_codes = set()
-        like_codes = set()
         for account_code in account_codes:
             if account_code in self._account_ids_by_code:
                 continue
             if account_code is None:
-                # by convention the root account is keyed as
-                # None in _account_ids_by_code, so it is consistent
-                # with what _parse_match_object returns for an
-                # empty list of account codes, ie [None]
-                exact_codes.add(root_account.code)
+                # None means we want all accounts
+                account_ids = account_model.\
+                    search([]).mapped('id')
+                self._account_ids_by_code[account_code].update(account_ids)
             elif '%' in account_code:
-                like_codes.add(account_code)
+                account_ids = account_model.\
+                    search([('code', 'like', account_code), ('company_id', '=', company.id)]).mapped('id')
+                self._account_ids_by_code[account_code].update(account_ids)
             else:
+                # search exact codes after the loop to do less queries
                 exact_codes.add(account_code)
         for account in account_model.\
-                search([('code', 'in', list(exact_codes)),
-                        ('parent_id', 'child_of', root_account.id)]):
-            if account.code == root_account.code:
-                code = None
-            else:
-                code = account.code
-            if account.type in ('view', 'consolidation'):
-                self._account_ids_by_code[code].update(
-                    account_obj._get_children_and_consol(
-                        self.env.cr, self.env.uid,
-                        [account.id],
-                        self.env.context))
-            else:
-                self._account_ids_by_code[code].add(account.id)
-        for like_code in like_codes:
-            for account in account_model.\
-                    search([('code', 'like', like_code),
-                            ('parent_id', 'child_of', root_account.id)]):
-                if account.type in ('view', 'consolidation'):
-                    self._account_ids_by_code[like_code].update(
-                        account_obj._get_children_and_consol(
-                            self.env.cr, self.env.uid,
-                            [account.id],
-                            self.env.context))
-                else:
-                    self._account_ids_by_code[like_code].add(account.id)
+                search([('code', 'in', list(exact_codes)), ('company_id', '=', company.id)]):
+            self._account_ids_by_code[account.code].add(account.id)
 
     def _parse_match_object(self, mo):
         """Split a match object corresponding to an accounting variable
@@ -154,7 +111,7 @@ class AccountingExpressionProcessor(object):
         if account_codes.strip():
             account_codes = [a.strip() for a in account_codes.split(',')]
         else:
-            account_codes = [None]
+            account_codes = [None]  # None means we want all accounts
         domain = domain or '[]'
         domain = tuple(safe_eval(domain))
         return field, mode, account_codes, domain
@@ -171,11 +128,13 @@ class AccountingExpressionProcessor(object):
             key = (domain, mode)
             self._map_account_ids[key].update(account_codes)
 
-    def done_parsing(self, root_account):
+    def done_parsing(self, company):
         """Load account codes and replace account codes by
         account ids in map."""
         for key, account_codes in self._map_account_ids.items():
-            self._load_account_codes(account_codes, root_account)
+            # TODO _load_account_codes could be done
+            # for all account_codes at once (also in v8)
+            self._load_account_codes(account_codes, company)
             account_ids = set()
             for account_code in account_codes:
                 account_ids.update(self._account_ids_by_code[account_code])
@@ -188,8 +147,7 @@ class AccountingExpressionProcessor(object):
 
     def get_aml_domain_for_expr(self, expr,
                                 date_from, date_to,
-                                period_from, period_to,
-                                target_move):
+                                target_move, company):
         """ Get a domain on account.move.line for an expression.
 
         Prerequisite: done_parsing() must have been invoked.
@@ -213,122 +171,26 @@ class AccountingExpressionProcessor(object):
             if mode not in date_domain_by_mode:
                 date_domain_by_mode[mode] = \
                     self.get_aml_domain_for_dates(date_from, date_to,
-                                                  period_from, period_to,
-                                                  mode, target_move)
+                                                  mode, target_move,
+                                                  company)
         return expression.OR(aml_domains) + \
             expression.OR(date_domain_by_mode.values())
 
-    def _period_has_moves(self, period):
-        move_model = self.env['account.move']
-        return bool(move_model.search([('period_id', '=', period.id)],
-                                      limit=1))
-
-    def _get_previous_opening_period(self, period, company_id):
-        period_model = self.env['account.period']
-        periods = period_model.search(
-            [('date_start', '<=', period.date_start),
-             ('special', '=', True),
-             ('company_id', '=', company_id)],
-            order="date_start desc",
-            limit=1)
-        return periods and periods[0]
-
-    def _get_previous_normal_period(self, period, company_id):
-        period_model = self.env['account.period']
-        periods = period_model.search(
-            [('date_start', '<', period.date_start),
-             ('special', '=', False),
-             ('company_id', '=', company_id)],
-            order="date_start desc",
-            limit=1)
-        return periods and periods[0]
-
-    def _get_first_normal_period(self, company_id):
-        period_model = self.env['account.period']
-        periods = period_model.search(
-            [('special', '=', False),
-             ('company_id', '=', company_id)],
-            order="date_start asc",
-            limit=1)
-        return periods and periods[0]
-
-    def _get_period_ids_between(self, period_from, period_to, company_id):
-        period_model = self.env['account.period']
-        periods = period_model.search(
-            [('date_start', '>=', period_from.date_start),
-             ('date_stop', '<=', period_to.date_stop),
-             ('special', '=', False),
-             ('company_id', '=', company_id)])
-        period_ids = [p.id for p in periods]
-        if period_from.special:
-            period_ids.append(period_from.id)
-        return period_ids
-
-    def _get_period_company_ids(self, period_from, period_to):
-        period_model = self.env['account.period']
-        periods = period_model.search(
-            [('date_start', '>=', period_from.date_start),
-             ('date_stop', '<=', period_to.date_stop),
-             ('special', '=', False)])
-        return set([p.company_id.id for p in periods])
-
-    def _get_period_ids_for_mode(self, period_from, period_to, mode):
-        assert not period_from.special
-        assert not period_to.special
-        assert period_from.company_id == period_to.company_id
-        assert period_from.date_start <= period_to.date_start
-        period_ids = []
-        for company_id in self._get_period_company_ids(period_from, period_to):
-            if mode == MODE_VARIATION:
-                period_ids.extend(self._get_period_ids_between(
-                    period_from, period_to, company_id))
-            else:
-                if mode == MODE_INITIAL:
-                    period_to = self._get_previous_normal_period(
-                        period_from, company_id)
-                # look for opening period with moves
-                opening_period = self._get_previous_opening_period(
-                    period_from, company_id)
-                if opening_period and \
-                        self._period_has_moves(opening_period[0]):
-                    # found opening period with moves
-                    if opening_period.date_start == period_from.date_start and\
-                            mode == MODE_INITIAL:
-                        # if the opening period has the same start date as
-                        # period_from, then we'll find the initial balance
-                        # in the initial period and that's it
-                        period_ids.append(opening_period[0].id)
-                        continue
-                    period_from = opening_period[0]
-                else:
-                    # no opening period with moves,
-                    # use very first normal period
-                    period_from = self._get_first_normal_period(company_id)
-                if period_to:
-                    period_ids.extend(self._get_period_ids_between(
-                        period_from, period_to, company_id))
-        return period_ids
-
     def get_aml_domain_for_dates(self, date_from, date_to,
-                                 period_from, period_to,
                                  mode,
-                                 target_move):
-        if period_from and period_to:
-            period_ids = self._get_period_ids_for_mode(
-                period_from, period_to, mode)
-            domain = [('period_id', 'in', period_ids)]
-        else:
-            if mode == MODE_VARIATION:
-                domain = [('date', '>=', date_from), ('date', '<=', date_to)]
-            else:
-                raise Warning(_("Modes i and e are only applicable for "
-                                "fiscal periods"))
+                                 target_move, company):
+        if mode == MODE_VARIATION:
+            domain = [('date', '>=', date_from), ('date', '<=', date_to)]
+        elif mode == MODE_INITIAL:
+            domain = [('date', '<', date_from)]
+        elif mode == MODE_END:
+            domain = [('date', '<=', date_to)]
         if target_move == 'posted':
             domain.append(('move_id.state', '=', 'posted'))
         return expression.normalize_domain(domain)
 
-    def do_queries(self, date_from, date_to, period_from, period_to,
-                   target_move, additional_move_line_filter=None):
+    def do_queries(self, date_from, date_to,
+                   target_move, company, additional_move_line_filter=None):
         """Query sums of debit and credit for all accounts and domains
         used in expressions.
 
@@ -343,8 +205,7 @@ class AccountingExpressionProcessor(object):
             if mode not in domain_by_mode:
                 domain_by_mode[mode] = \
                     self.get_aml_domain_for_dates(date_from, date_to,
-                                                  period_from, period_to,
-                                                  mode, target_move)
+                                                  mode, target_move, company)
             domain = list(domain) + domain_by_mode[mode]
             domain.append(('account_id', 'in', self._map_account_ids[key]))
             if additional_move_line_filter:
@@ -368,12 +229,13 @@ class AccountingExpressionProcessor(object):
             field, mode, account_codes, domain = self._parse_match_object(mo)
             key = (domain, mode)
             account_ids_data = self._data[key]
-            v = 0.0
+            v = AccountingNone
             for account_code in account_codes:
                 account_ids = self._account_ids_by_code[account_code]
                 for account_id in account_ids:
                     debit, credit = \
-                        account_ids_data.get(account_id, (0.0, 0.0))
+                        account_ids_data.get(account_id,
+                                             (AccountingNone, AccountingNone))
                     if field == 'bal':
                         v += debit - credit
                     elif field == 'deb':

@@ -285,10 +285,14 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
 
         :returns: delta in days
         """
-        sale_lines = [x for x in ledger_lines if x['jtype'] in REC_PAY_TYPE
-                      and line['rec_id'] == x['rec_id']]
-        refund_lines = [x for x in ledger_lines if x['jtype'] in REFUND_TYPE
-                        and line['rec_id'] == x['rec_id']]
+        sale_lines = [
+            x for x in ledger_lines if x['jtype'] in REC_PAY_TYPE and
+            line['rec_id'] == x['rec_id']
+        ]
+        refund_lines = [
+            x for x in ledger_lines if x['jtype'] in REFUND_TYPE and
+            line['rec_id'] == x['rec_id']
+        ]
         if len(sale_lines) == 1:
             reference_line = sale_lines[0]
         elif len(refund_lines) == 1:
