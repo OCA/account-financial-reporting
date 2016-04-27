@@ -45,7 +45,7 @@
                     </group>
                     <group string="KPI's">
                         <field name="kpi_ids" nolabel="1" colspan="2">
-                            <tree string="KPI's" editable="bottom">
+                            <tree string="KPI's">
                                 <field name="sequence" widget="handle"/>
                                 <field name="description"/>
                                 <field name="name"/>
@@ -56,8 +56,6 @@
                                 <field name="prefix"/>
                                 <field name="suffix"/>
                                 <field name="compare_method" attrs="{'invisible': [('type', '=', 'str')]}"/>
-                                <field name="default_css_style"/>
-                                <field name="css_style"/>
                             </tree>
                         </field>
                     </group>
@@ -93,6 +91,61 @@
             </field>
         </record>
 
+        <record id="mis_report_view_kpi_form" model="ir.ui.view">
+            <field name="name">mis.report.view.kpi.form</field>
+            <field name="model">mis.report.kpi</field>
+            <field name="arch" type="xml">
+                <form string="MIS Report KPI" version="7.0">
+                    <group col="4">
+                        <field name="description"/>
+                        <field name="name"/>
+                        <field name="expression" colspan="4"/>
+                        <field name="type"/>
+                        <field name="dp"
+                               attrs="{'invisible': [('type', '=', 'str')]}"/>
+                        <field name="divider"
+                               attrs="{'invisible': [('type', '=', 'str')]}"/>
+                        <field name="compare_method"
+                               attrs="{'invisible': [('type', '=', 'str')]}"/>
+                        <field name="prefix"/>
+                        <field name="suffix"/>
+                        <field name="default_css_style" colspan="4"/>
+                        <field name="css_style" colspan="4"/>
+                        <field name="sequence" />
+                    </group>
+                    <group col="2" string="Legend (for kpi expressions)">
+                        <group>
+                            <label colspan="2" string="Expressions are of the form &lt;field&gt;&lt;mode&gt;[accounts][domain]"/>
+                            <label colspan="2" string="Possible values for 'field' can be:"/>
+                            <group>
+                                <label colspan="2" string="* bal for balance (debit - credit)"/>
+                                <label colspan="2" string="* crd for credit"/>
+                                <label colspan="2" string="* deb for debit"/>
+                            </group>
+                            <label colspan="2" string="Possible values for 'mode' are:"/>
+                            <group>
+                                <label colspan="2" string="* nothing or p: variation over the period"/>
+                                <label colspan="2" string="* i: at the beginning of the period"/>
+                                <label colspan="2" string="* e: at the end of the period"/>
+                            </group>
+                            <label colspan="2" string="'accounts' is a comma-separated list of account codes, possibly containing %% wildcards"/>
+                            <label colspan="2" string="'domain' is an optional filter on move lines (eg to filter on analytic accounts or journal)"/>
+                       </group>
+                       <group>
+                            <label colspan="2" string="Examples"/>
+                            <group>
+                                <label colspan="2" string="* bal[70]: variation of the balance of account 70 over the period (it is the same as balp[70]);"/>
+                                <label colspan="2" string="* bali[70,60]: initial balance of accounts 70 and 60;"/>
+                                <label colspan="2" string="* bale[1%%]: balance of accounts starting with 1 at end of period."/>
+                            </group>
+                        </group>
+                    </group>
+
+                </form>
+            </field>
+        </record>
+
+
         <record model="ir.actions.act_window" id="mis_report_view_action">
             <field name="name">MIS Report Templates</field>
             <field name="view_id" ref="mis_report_view_tree"/>
@@ -111,7 +164,7 @@
           <field name="report_type">xlsx</field>
           <field name="auto" eval="False"/>
         </record>
-        
+
         <record id="qweb_pdf_export" model="ir.actions.report.xml">
           <field name="name">MIS report instance QWEB PDF report</field>
           <field name="model">mis.report.instance</field>
@@ -163,7 +216,7 @@
                             <field name="name" placeholder="Name"/>
                         </h1>
                     </div>
-                    <div class="oe_right oe_button_box" name="buttons"> 
+                    <div class="oe_right oe_button_box" name="buttons">
                         <button type="object" name="preview" string="Preview" icon="gtk-print-preview" />
                         <button type="object" name="print_pdf" string="Print" icon="gtk-print" />
                         <button type="object" name="export_xls" string="Export" icon="gtk-go-down" />
