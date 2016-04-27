@@ -21,8 +21,7 @@ class OpenInvoiceWizard(models.TransientModel):
         required=True,
         default=fields.Date.to_string(datetime.today()))
     partner_ids = fields.Many2many(
-        'res.partner', comodel_name='res.partner',
-        string='Filter partners',)
+        'res.partner', string='Filter partners')
     amount_currency = fields.Boolean(
         "With Currency", help="It adds the currency column")
     group_by_currency = fields.Boolean(
