@@ -18,7 +18,6 @@
             <field name="margin_top">20</field>
             <field name="margin_bottom">20</field>
             <field name="header_spacing">20</field>
-            <field name="footer_spacing">5</field>
             <field name="orientation">Landscape</field>
         </record>
 
