@@ -6,7 +6,7 @@
             <field name="name">Balance Sheet Wizard</field>
             <field name="model">account.common.balance.report</field>
             <field name="mode">primary</field>
-            <field name="inherit_id" ref="account_balance_common_wizard_view"/>
+            <field name="inherit_id" ref="account_financial_report_qweb.account_balance_common_wizard_view"/>
             <field name="arch" type="xml">
                 <data>
                     <notebook position="attributes">

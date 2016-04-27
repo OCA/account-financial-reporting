@@ -24,7 +24,7 @@
         </record>
 
         <record id="action_account_trial_balance_wizard_view" model="ir.actions.act_window">
-            <!--field name="name">Trial Balance</field -->
+            <field name="name">Trial Balance</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">account.common.balance.report</field>
             <field name="view_type">form</field>

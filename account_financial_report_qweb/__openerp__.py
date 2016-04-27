@@ -23,7 +23,6 @@
         'wizard/general_ledger_wizard.xml',
         'wizard/open_invoice_wizard_view.xml',
         'wizard/partner_ledger_wizard.xml',
-        'wizard/partner_balance_wizard_view.xml',
         'wizard/balance_common_wizard_view.xml',
         'wizard/partner_balance_wizard_view.xml',
         'wizard/trial_balance_wizard_view.xml',
