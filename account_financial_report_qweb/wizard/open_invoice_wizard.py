@@ -5,7 +5,7 @@
 # Copyright 2016 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import models, fields, api, _
+from openerp import models, fields, api
 from openerp.exceptions import Warning as UserError
 from datetime import datetime
 
@@ -120,4 +120,3 @@ class OpenInvoiceWizard(models.TransientModel):
         return self.env['report'].get_action(
             self, 'account_financial_report_qweb.open_invoice_report_qweb',
             data={'data': datas})
-
