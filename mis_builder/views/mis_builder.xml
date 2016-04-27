@@ -58,8 +58,7 @@
                                 <field name="description"/>
                                 <field name="name"/>
                                 <field name="multi"/>
-                                <field name="expression"
-                                       attrs="{'readonly': [('multi', '=', True)]}"/>
+                                <field name="expression"/>
                                 <field name="type"/>
                                 <field name="dp" attrs="{'invisible': [('type', '=', 'str')]}"/>
                                 <field name="divider" attrs="{'invisible': [('type', '=', 'str')]}"/>
@@ -109,16 +108,6 @@
                     <group col="4">
                         <field name="description"/>
                         <field name="name"/>
-                        <field name="multi"/>
-                        <field name="expression_ids" colspan="4" nolabel="1"
-                               attrs="{'invisible': [('multi', '=', False)]}">
-                            <tree editable="bottom">
-                                <field name="subkpi_id"/>
-                                <field name="name"/>
-                            </tree>
-                        </field>
-                        <field name="expression" colspan="4" nolabel="1"
-                               attrs="{'invisible': [('multi', '=', True)]}"/>
                         <field name="type"/>
                         <field name="dp"
                                attrs="{'invisible': [('type', '=', 'str')]}"/>
@@ -131,6 +120,20 @@
                         <field name="default_css_style" colspan="4"/>
                         <field name="css_style" colspan="4"/>
                         <!--<field name="sequence" />-->
+                    </group>
+                    <group string="Expression">
+                        <field name="multi"/>
+                        <field name="expression_ids" colspan="4" nolabel="1"
+                               delete="0" create="0"
+                               attrs="{'invisible': [('multi', '=', False)]}">
+                            <tree editable="bottom">
+                                <field name="subkpi_id"/>
+                                <field name="name"/>
+                            </tree>
+                        </field>
+                        <field name="expression" colspan="4" nolabel="1"
+                               attrs="{'invisible': [('multi', '=', True)],
+                                       'readonly': [('multi', '=', True)]}"/>
                     </group>
                     <group col="2" string="Legend (for kpi expressions)">
                         <group>

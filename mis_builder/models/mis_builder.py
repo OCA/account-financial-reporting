@@ -158,38 +158,6 @@ class MisReportKpi(models.Model):
                         })]
                     })
 
-    @api.model
-    def create(self, vals):
-        kpi = super(MisReportKpi, self).create(vals)
-        if kpi.multi:
-            kpi._populate_expression()
-        return kpi
-
-    @api.multi
-    def write(self, vals):
-        res = super(MisReportKpi, self).write(vals)
-        if vals.get('multi'):
-            self._populate_expression()
-        return res
-
-    @api.multi
-    def _populate_expression(self):
-        for kpi in self:
-            if kpi.multi:
-                if kpi.expression_ids:
-                    expression = kpi.expression_ids[0].name
-                else:
-                    expression = "AccountingNone"
-                existing_subkpis = kpi.expression_ids.mapped('subkpi_id')
-                expressions = []
-                for subkpi in kpi.report_id.subkpi_ids:
-                    if not subkpi in existing_subkpis:
-                        self.env['mis.report.kpi.expression'].create({
-                            'name': expression,
-                            'kpi_id': kpi.id,
-                            'subkpi_id': subkpi.id,
-                            })
-
     @api.onchange('multi')
     def _onchange_multi(self):
         for kpi in self:
@@ -198,6 +166,14 @@ class MisReportKpi(models.Model):
                     kpi.expression = kpi.expression_ids[0].name
                 else:
                     kpi.expression = None
+            else:
+                expressions = []
+                for subkpi in kpi.report_id.subkpi_ids:
+                    expressions.append((0, 0, {
+                        'name': kpi.expression,
+                        'subkpi_id': subkpi.id,
+                        }))
+                kpi.expression_ids = expressions
 
     @api.onchange('description')
     def _onchange_description(self):
@@ -587,14 +563,14 @@ class MisReport(models.Model):
                             '#ERR',
                             '\n\n%s' % (traceback.format_exc(),)))
                     except:
-                        raise
                         vals.append(DataError(
                             '#ERR',
                             '\n\n%s' % (traceback.format_exc(),)))
 
-                #TODO escape total
-                localdict[kpi.name] = SimpleArray(vals)
-                res[kpi] = SimpleArray(vals)
+                if kpi.multi:
+                    vals = SimpleArray(vals)
+                localdict[kpi.name] = vals
+                res[kpi] = vals
 
             if len(recompute_queue) == 0:
                 # nothing to recompute, we are done
