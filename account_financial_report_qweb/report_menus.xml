@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <menuitem
+            id='account.menu_aged_partner_balance'
+            parent='account.menu_finance_legal_statement'
+            action='action_account_aged_trial_balance_wizard' />
+
+    </data>
+</openerp>

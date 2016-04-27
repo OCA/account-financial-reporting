@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="account_aged_trial_balance_wizard" model="ir.ui.view">
+            <field name="name">Aged Partner Balance Report</field>
+            <field name="model">account.aged.trial.balance.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group name="main_info">
+                        <field name="company_id"/>
+                    </group>
+                </form>
+           </field>
+        </record>
+
+        <record id="action_account_aged_trial_balance_wizard"
+                model="ir.actions.act_window">
+            <field name="name">Aged partner balance</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.aged.trial.balance.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="account_aged_trial_balance_wizard"/>
+            <field name="target">new</field>
+        </record>
+    </data>
+</openerp>
