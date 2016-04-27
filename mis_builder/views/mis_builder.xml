@@ -175,13 +175,13 @@
                         <field name="landscape_pdf" />
                         <field name="company_id" groups="base.group_multi_company"/>
                         <field name="target_move"/>
-                        </group>
-                        <group col="4" string="Periods">
+                    </group>
+                    <group col="4" string="Periods">
                         <group colspan="2">
                             <field name="date"/>
                         </group>
                         <newline/>
-                        <group>
+                        <group colspan="4">
                             <field name="period_ids" colspan="4" nolabel="1">
                                 <tree string="KPI's" editable="bottom" colors="red:valid==False">
                                     <field name="sequence" widget="handle"/>
