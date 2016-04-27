@@ -523,6 +523,25 @@ class MisReportInstancePeriod(models.Model):
             self.date_from = fields.Date.to_string(date_from)
             self.date_to = fields.Date.to_string(date_to)
             self.valid = True
+        elif self.type == 'date_range':
+            date_range_obj = self.env['date.range']
+            current_periods = date_range_obj.search(
+                [('type_id', '=', self.date_range_type_id.id),
+                 ('date_start', '<=', d),
+                 ('date_end', '>=', d),
+                 ('company_id', '=', self.report_instance_id.company_id.id)])
+            if current_periods:
+                all_periods = date_range_obj.search(
+                    [('type_id', '=', self.date_range_type_id.id),
+                     ('company_id', '=', self.report_instance_id.company_id.id)],
+                    order='date_start')
+                all_period_ids = [p.id for p in all_periods]
+                p = all_period_ids.index(current_periods[0].id) + self.offset
+                if p >= 0 and p + self.duration <= len(all_period_ids):
+                    periods = all_periods[p:p + self.duration]
+                    self.date_from = periods[0].date_start
+                    self.date_to = periods[-1].date_end
+                    self.valid = True
 
     _name = 'mis.report.instance.period'
 
@@ -530,10 +549,12 @@ class MisReportInstancePeriod(models.Model):
                        string='Description', translate=True)
     type = fields.Selection([('d', _('Day')),
                              ('w', _('Week')),
-                             # ('fy', _('Fiscal Year'))
+                             ('date_range', _('Date Range'))
                              ],
                             required=True,
                             string='Period type')
+    date_range_type_id = fields.Many2one(
+        comodel_name='date.range.type', string='Date Range Type')
     offset = fields.Integer(string='Offset',
                             help='Offset from current period',
                             default=-1)
@@ -649,6 +670,11 @@ class MisReportInstance(models.Model):
         else:
             self.pivot_date = fields.Date.context_today(self)
 
+    @api.model
+    def _default_company(self):
+        return self.env['res.company'].\
+            _company_default_get('mis.report.instance')
+
     _name = 'mis.report.instance'
 
     name = fields.Char(required=True,
@@ -674,7 +700,8 @@ class MisReportInstance(models.Model):
                                    required=True,
                                    default='posted')
     company_id = fields.Many2one(comodel_name='res.company',
-                                 string='Company')
+                                 string='Company',
+                                 default=_default_company)
     landscape_pdf = fields.Boolean(string='Landscape PDF')
 
     @api.one

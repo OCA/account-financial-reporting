@@ -187,6 +187,7 @@
                                     <field name="sequence" widget="handle"/>
                                     <field name="name"/>
                                     <field name="type"/>
+                                    <field name="date_range_type_id" attrs="{'invisible': [('type', '!=', 'date_range')], 'required': [('type', '=', 'date_range')]}"/>
                                     <field name="offset"/>
                                     <field name="duration"/>
                                     <field name="normalize_factor"/>
