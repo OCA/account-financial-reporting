@@ -3,7 +3,7 @@
     <data>
 
         <record id="account_balance_sheet_wizard_view" model="ir.ui.view">
-            <field name="name">Trial Balance Wizard</field>
+            <field name="name">Balance Sheet Wizard</field>
             <field name="model">account.common.balance.report</field>
             <field name="mode">primary</field>
             <field name="inherit_id" ref="account_balance_common_wizard_view"/>
@@ -12,9 +12,11 @@
                     <notebook position="attributes">
                         <attribute name="invisible">True</attribute>
                     </notebook>
+                    <!-- Replicate group here because hiding all tabs except Comparison
+                         does not work well. -->
                     <notebook position="before">
-                        <group>
-                            <!--<field name="comparison_date_range"/>-->
+                        <group string="Compare with other date range">
+                            <field name="comparison_date_range_id"/>
                             <field name="comparison_date_start"/>
                             <field name="comparison_date_end"/>
                         </group>
@@ -24,7 +26,7 @@
         </record>
 
         <record id="action_account_balance_sheet_wizard_view" model="ir.actions.act_window">
-            <!--field name="name">Balance Sheet </field -->
+            <field name="name">Balance Sheet</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">account.common.balance.report</field>
             <field name="view_type">form</field>

@@ -29,14 +29,14 @@ class AccountBalanceCommonWizard(models.TransientModel):
         print all accounts.",
         default=_get_account_ids
     )
-    # date_range = fields.Many2one(
-    #     comodel_name='date.range',
-    #     string='Date Range',
-    # )
-    # comparison_date_range = fields.Many2one(
-    #     comodel_name='date.range',
-    #     string='Date Range',
-    # )
+    date_range_id = fields.Many2one(
+         comodel_name='date.range',
+         string='Date Range',
+     )
+    comparison_date_range_id = fields.Many2one(
+         comodel_name='date.range',
+         string='Date Range',
+    )
     comparison_date_start = fields.Datetime(
         string='Start Date'
     )
