@@ -17,8 +17,17 @@ from openerp.tools.safe_eval import safe_eval
 from .aep import AccountingExpressionProcessor as AEP
 from .aggregate import _sum, _avg, _min, _max
 from .accounting_none import AccountingNone
+from openerp.exceptions import UserError
+from .simple_array import SimpleArray
 
 _logger = logging.getLogger(__name__)
+
+
+class DataError(Exception):
+
+    def __init__(self, name, msg):
+        self.name = name
+        self.msg = msg
 
 
 class AutoStruct(object):
@@ -69,8 +78,11 @@ class MisReportKpi(models.Model):
     description = fields.Char(required=True,
                               string='Description',
                               translate=True)
-    expression = fields.Char(required=True,
-                             string='Expression')
+    multi = fields.Boolean()
+    expression = fields.Char(
+        compute='_compute_expression',
+        inverse='_inverse_expression')
+    expression_ids = fields.One2many('mis.report.kpi.expression', 'kpi_id')
     default_css_style = fields.Char(string='Default CSS style')
     css_style = fields.Char(string='CSS style expression')
     type = fields.Selection([('num', _('Numeric')),
@@ -119,6 +131,74 @@ class MisReportKpi(models.Model):
                 }
             }
 
+    @api.multi
+    def _compute_expression(self):
+        for kpi in self:
+            kpi.expression = ''
+            for expression in kpi.expression_ids:
+                if expression.subkpi_id:
+                    kpi.expression += '%s :\n' % expression.subkpi_id.name
+                kpi.expression += '%s\n' % expression.name
+
+    @api.multi
+    def _inverse_expression(self):
+        for kpi in self:
+            if kpi.multi:
+                raise UserError('Can not update a multi kpi from the kpi line')
+            if kpi.expression_ids:
+                kpi.expression_ids[0].write({
+                    'name': kpi.expression,
+                    'subkpi_id': None})
+                for expression in kpi.expression_ids[1:]:
+                    expression.unlink()
+            else:
+                kpi.write({
+                    'expression_ids': [(0, 0, {
+                        'name': kpi.expression
+                        })]
+                    })
+
+    @api.model
+    def create(self, vals):
+        kpi = super(MisReportKpi, self).create(vals)
+        if kpi.multi:
+            kpi._populate_expression()
+        return kpi
+
+    @api.multi
+    def write(self, vals):
+        res = super(MisReportKpi, self).write(vals)
+        if vals.get('multi'):
+            self._populate_expression()
+        return res
+
+    @api.multi
+    def _populate_expression(self):
+        for kpi in self:
+            if kpi.multi:
+                if kpi.expression_ids:
+                    expression = kpi.expression_ids[0].name
+                else:
+                    expression = "AccountingNone"
+                existing_subkpis = kpi.expression_ids.mapped('subkpi_id')
+                expressions = []
+                for subkpi in kpi.report_id.subkpi_ids:
+                    if not subkpi in existing_subkpis:
+                        self.env['mis.report.kpi.expression'].create({
+                            'name': expression,
+                            'kpi_id': kpi.id,
+                            'subkpi_id': subkpi.id,
+                            })
+
+    @api.onchange('multi')
+    def _onchange_multi(self):
+        for kpi in self:
+            if not kpi.multi:
+                if kpi.expression_ids:
+                    kpi.expression = kpi.expression_ids[0].name
+                else:
+                    kpi.expression = None
+
     @api.onchange('description')
     def _onchange_description(self):
         """ construct name from description """
@@ -140,10 +220,28 @@ class MisReportKpi(models.Model):
             self.divider = ''
             self.dp = 0
 
+    @api.multi
+    def action_open_expression(self):
+        self.ensure_one()
+        view = self.env.ref('mis_builder.view_mis_report_kpi_form')
+        return {
+            'name': _('Expression'),
+            'res_model': self._name,
+            'res_id': self.id,
+            'view_id': (view.id, view.name),
+            'target': 'new',
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            }
+
+    @api.multi
+    def action_close(self):
+        return True
+
     def render(self, lang_id, value):
         """ render a KPI value as a unicode string, ready for display """
         assert len(self) == 1
-        if value is None or value is AccountingNone:
+        if value is None or value == AccountingNone:
             return ''
         elif self.type == 'num':
             return self._render_num(lang_id, value, self.divider,
@@ -213,6 +311,39 @@ class MisReportKpi(models.Model):
             (prefix or '', value, divider_label, suffix or '')
         value = value.replace('-', u'\N{NON-BREAKING HYPHEN}')
         return value
+
+
+class MisReportSubkpi(models.Model):
+    _name = 'mis.report.subkpi'
+    _order = 'sequence'
+
+    sequence = fields.Integer()
+    report_id = fields.Many2one('mis.report')
+    name = fields.Char(required=True)
+    expression_ids = fields.One2many('mis.report.kpi.expression', 'subkpi_id')
+
+    def unlink(self):
+        for subkpi in self:
+            subkpi.expression_ids.unlink()
+        return super(MisReportSubkpi, self).unlink()
+
+
+class MisReportKpiExpression(models.Model):
+    """ A KPI Expression is an expression of a line of a MIS report Kpi.
+    It's used to compute the kpi value.
+    """
+
+    _name = 'mis.report.kpi.expression'
+
+    sequence = fields.Integer(
+        related='subkpi_id.sequence',
+        store=True,
+        readonly=True)
+    name = fields.Char(string='Expression')
+    kpi_id = fields.Many2one('mis.report.kpi')
+    subkpi_id = fields.Many2one(
+        'mis.report.subkpi',
+        readonly=True)
 
 
 class MisReportQuery(models.Model):
@@ -287,6 +418,10 @@ class MisReport(models.Model):
     kpi_ids = fields.One2many('mis.report.kpi', 'report_id',
                               string='KPI\'s',
                               copy=True)
+    subkpi_ids = fields.One2many(
+        'mis.report.subkpi',
+        'report_id',
+        string="Sub KPI")
 
     @api.one
     def copy(self, default=None):
@@ -431,54 +566,35 @@ class MisReport(models.Model):
 
         compute_queue = self.kpi_ids
         recompute_queue = []
+        period = self.env['mis.report.instance.period'].browse(period_id)
         while True:
             for kpi in compute_queue:
-                try:
-                    kpi_val_comment = kpi.name + " = " + kpi.expression
-                    kpi_eval_expression = aep.replace_expr(kpi.expression)
-                    kpi_val = safe_eval(kpi_eval_expression, localdict)
-                    localdict[kpi.name] = kpi_val
-                except ZeroDivisionError:
-                    kpi_val = None
-                    kpi_val_rendered = '#DIV/0'
-                    kpi_val_comment += '\n\n%s' % (traceback.format_exc(),)
-                except (NameError, ValueError):
-                    recompute_queue.append(kpi)
-                    kpi_val = None
-                    kpi_val_rendered = '#ERR'
-                    kpi_val_comment += '\n\n%s' % (traceback.format_exc(),)
-                except:
-                    kpi_val = None
-                    kpi_val_rendered = '#ERR'
-                    kpi_val_comment += '\n\n%s' % (traceback.format_exc(),)
-                else:
-                    kpi_val_rendered = kpi.render(lang_id, kpi_val)
+                vals = []
+                for expression in kpi.expression_ids:
+                    if expression.subkpi_id \
+                            and expression.subkpi_id not in period.subkpi_ids:
+                        continue
+                    try:
+                        kpi_eval_expression = aep.replace_expr(expression.name)
+                        vals.append(safe_eval(kpi_eval_expression, localdict))
+                    except ZeroDivisionError:
+                        vals.append(DataError(
+                            '#DIV/0',
+                            '\n\n%s' % (traceback.format_exc(),)))
+                    except (NameError, ValueError):
+                        recompute_queue.append(kpi)
+                        vals.append(DataError(
+                            '#ERR',
+                            '\n\n%s' % (traceback.format_exc(),)))
+                    except:
+                        raise
+                        vals.append(DataError(
+                            '#ERR',
+                            '\n\n%s' % (traceback.format_exc(),)))
 
-                try:
-                    kpi_style = None
-                    if kpi.css_style:
-                        kpi_style = safe_eval(kpi.css_style, localdict)
-                except:
-                    _logger.warning("error evaluating css stype expression %s",
-                                    kpi.css_style, exc_info=True)
-                    kpi_style = None
-
-                drilldown = (kpi_val is not None and
-                             AEP.has_account_var(kpi.expression))
-
-                res[kpi.name] = {
-                    'val': None if kpi_val is AccountingNone else kpi_val,
-                    'val_r': kpi_val_rendered,
-                    'val_c': kpi_val_comment,
-                    'style': kpi_style,
-                    'prefix': kpi.prefix,
-                    'suffix': kpi.suffix,
-                    'dp': kpi.dp,
-                    'is_percentage': kpi.type == 'pct',
-                    'period_id': period_id,
-                    'expr': kpi.expression,
-                    'drilldown': drilldown,
-                }
+                #TODO escape total
+                localdict[kpi.name] = SimpleArray(vals)
+                res[kpi] = SimpleArray(vals)
 
             if len(recompute_queue) == 0:
                 # nothing to recompute, we are done
@@ -491,7 +607,6 @@ class MisReport(models.Model):
             # try again
             compute_queue = recompute_queue
             recompute_queue = []
-
         return res
 
 
@@ -583,6 +698,9 @@ class MisReportInstancePeriod(models.Model):
         string='Factor',
         help='Factor to use to normalize the period (used in comparison',
         default=1)
+    subkpi_ids = fields.Many2many(
+        'mis.report.subkpi',
+        string="Sub KPI")
 
     _order = 'sequence, id'
 
@@ -650,9 +768,65 @@ class MisReportInstancePeriod(models.Model):
             return False
 
     @api.multi
+    def _render(self, data, lang_id):
+        self.ensure_one()
+        res = {}
+        if self.subkpi_ids:
+            index2subkpi = {
+                idx: subkpi.name
+                for idx, subkpi in enumerate(self.subkpi_ids)
+                }
+        else:
+            index2subkpi = {0: 'default'}
+
+        for kpi, vals in data.items():
+            res[kpi.name] = []
+            # TODO FIXME localdict
+            try:
+                kpi_style = None
+                if kpi.css_style:
+                    kpi_style = safe_eval(kpi.css_style, localdict)
+            except:
+                _logger.warning("error evaluating css stype expression %s",
+                                kpi.css_style, exc_info=True)
+                kpi_style = None
+
+            default_vals = {
+                'style': kpi_style,
+                'prefix': kpi.prefix,
+                'suffix': kpi.suffix,
+                'dp': kpi.dp,
+                'is_percentage': kpi.type == 'pct',
+                'period_id': self.id,
+                'expr': kpi.expression,
+            }
+            for idx, subkpi_val in enumerate(vals):
+                vals = default_vals.copy()
+                if isinstance(subkpi_val, DataError):
+                    vals.update({
+                        'val': subkpi_val.name,
+                        'val_r': subkpi_val.name,
+                        'val_c': subkpi_val.msg,
+                        'drilldown': None,
+                        })
+                else:
+                    drilldown = (subkpi_val is not None and
+                                 AEP.has_account_var(kpi.expression))
+                    comment = kpi.name + " = " + kpi.expression_ids[idx].name
+                    vals.update({
+                        'val': None if subkpi_val is AccountingNone
+                               else subkpi_val,
+                        'val_r': kpi.render(lang_id, subkpi_val),
+                        'val_c': comment,
+                        'drilldown': drilldown,
+                        })
+                res[kpi.name].append(vals)
+        return res
+
+    @api.multi
     def _compute(self, lang_id, aep):
         self.ensure_one()
-        return self.report_instance_id.report_id._compute(
+        data = self.report_instance_id.report_id._compute(
             lang_id, aep,
             self.date_from, self.date_to,
             self.report_instance_id.target_move,
@@ -661,6 +835,7 @@ class MisReportInstancePeriod(models.Model):
             self._get_additional_query_filter,
             period_id=self.id,
         )
+        return self._render(data, lang_id)
 
 
 class MisReportInstance(models.Model):
@@ -797,11 +972,13 @@ class MisReportInstance(models.Model):
             kpi_values_by_period_ids[period.id] = kpi_values
 
         # prepare header and content
-        header = []
-        header.append({
+        header = [{
             'kpi_name': '',
             'cols': []
-        })
+            },{
+            'kpi_name': '',
+            'cols': []
+            }]
         content = []
         rows_by_kpi_name = {}
         for kpi in self.report_id.kpi_ids:
@@ -824,11 +1001,25 @@ class MisReportInstance(models.Model):
                 header_date = _('from %s to %s') % (date_from, date_to)
             else:
                 header_date = self._format_date(lang_id, period.date_from)
-            header[0]['cols'].append(dict(name=period.name, date=header_date))
+            header[0]['cols'].append(dict(
+                name=period.name,
+                date=header_date,
+                colspan = len(period.subkpi_ids) or 1,
+                ))
+            for subkpi in period.subkpi_ids:
+                header[1]['cols'].append(dict(
+                    name=subkpi.name,
+                    colspan = 1,
+                    ))
+            if not period.subkpi_ids:
+                header[1]['cols'].append(dict(
+                    name="",
+                    colspan = 1,
+                    ))
             # add kpi values
             kpi_values = kpi_values_by_period_ids[period.id]
             for kpi_name in kpi_values:
-                rows_by_kpi_name[kpi_name]['cols'].append(kpi_values[kpi_name])
+                rows_by_kpi_name[kpi_name]['cols'] += kpi_values[kpi_name]
 
             # add comparison columns
             for compare_col in period.comparison_column_ids:
@@ -850,6 +1041,7 @@ class MisReportInstance(models.Model):
                                 period.normalize_factor,
                                 compare_col.normalize_factor)
                         })
-
-        return {'header': header,
-                'content': content}
+        return {
+            'header': header,
+            'content': content,
+            }
