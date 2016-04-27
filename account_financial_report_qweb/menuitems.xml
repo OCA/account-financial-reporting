@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- TEMP main menu item -->
+        <menuitem
+            parent="account.menu_finance_reports"
+            id="menu_oca_reports"
+            name="OCA reports"
+            />
+
+        <menuitem
+            parent="menu_oca_reports"
+            action="action_ledger_report_wizard"
+            id="menu_ledger_report_wizard"
+            />
+
+        <menuitem
+            parent="menu_oca_reports"
+            id='account.menu_aged_partner_balance'
+            parent='account.menu_finance_legal_statement'
+            action='action_account_aged_trial_balance_wizard'
+            />
+
+    </data>
+</openerp>
+

@@ -8,7 +8,7 @@ from openerp import models, fields, api
 class LedgerReportWizard(models.TransientModel):
 
     _name = "ledger.report.wizard"
-    _description = "Ledger Report"
+    _description = "Ledger Report Wizard"
 
     company_id = fields.Many2one(comodel_name='res.company')
     # date_range = ??
@@ -40,5 +40,5 @@ class LedgerReportWizard(models.TransientModel):
     )
 
     @api.multi
-    def check_report(self):
+    def button_print(self):
         return True
