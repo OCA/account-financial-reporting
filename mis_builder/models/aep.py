@@ -5,6 +5,7 @@
 import re
 from collections import defaultdict
 
+from openerp import fields
 from openerp.models import expression
 from openerp.tools.safe_eval import safe_eval
 from .accounting_none import AccountingNone
@@ -81,12 +82,12 @@ class AccountingExpressionProcessor(object):
             if account_code is None:
                 # None means we want all accounts
                 account_ids = account_model.\
-                    search([]).mapped('id')
+                    search([]).ids
                 self._account_ids_by_code[account_code].update(account_ids)
             elif '%' in account_code:
                 account_ids = account_model.\
                     search([('code', 'like', account_code),
-                            ('company_id', '=', company.id)]).mapped('id')
+                            ('company_id', '=', company.id)]).ids
                 self._account_ids_by_code[account_code].update(account_ids)
             else:
                 # search exact codes after the loop to do less queries
@@ -186,8 +187,9 @@ class AccountingExpressionProcessor(object):
         else:
             # for income and expense account, get balance from the beginning
             # of the current fiscal year
+            date_from_date = fields.Date.from_string(date_from)
             fy_date_from = \
-                company.compute_fiscalyear_dates(date_from)['date_from']
+                company.compute_fiscalyear_dates(date_from_date)['date_from']
             domain = ['|',
                       ('date', '>=', fy_date_from),
                       ('account_id.user_type_id.include_initial_balance', '=',
