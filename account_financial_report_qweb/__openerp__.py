@@ -24,12 +24,13 @@
         'report_menus.xml',
         'wizard/balance_common_wizard_view.xml',
         'views/report_menus.xml',
+        'menuitems.xml',
+        'reports.xml',
+        'wizard/general_ledger_wizard.xml',
+        # 'wizard/partner_ledger_wizard.xml',
+        'report/templates/ledger_general.xml',
     ],
     'test': [
-    ],
-    'demo': [
-    ],
-    'qweb': [
     ],
     'installable': True,
     'application': True,
