@@ -15,7 +15,7 @@
                         </group>
                     </field>
                     <field name="target_move" position="after">
-                        <!--<field name="date_range"/>-->
+                        <field name="date_range_id"/>
                         <newline/>
                     </field>
                     <field name="date_to" position="after">
@@ -41,7 +41,7 @@
                             </page>
                             <page string="Comparison" name="comparison">
                                 <group>
-                                    <!--<field name="comparison_date_range"/>-->
+                                    <field name="comparison_date_range_id"/>
                                     <field name="comparison_date_start"/>
                                     <field name="comparison_date_end"/>
                                 </group>
