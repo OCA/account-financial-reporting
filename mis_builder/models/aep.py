@@ -85,13 +85,15 @@ class AccountingExpressionProcessor(object):
                 self._account_ids_by_code[account_code].update(account_ids)
             elif '%' in account_code:
                 account_ids = account_model.\
-                    search([('code', 'like', account_code), ('company_id', '=', company.id)]).mapped('id')
+                    search([('code', 'like', account_code),
+                            ('company_id', '=', company.id)]).mapped('id')
                 self._account_ids_by_code[account_code].update(account_ids)
             else:
                 # search exact codes after the loop to do less queries
                 exact_codes.add(account_code)
         for account in account_model.\
-                search([('code', 'in', list(exact_codes)), ('company_id', '=', company.id)]):
+                search([('code', 'in', list(exact_codes)),
+                        ('company_id', '=', company.id)]):
             self._account_ids_by_code[account.code].add(account.id)
 
     def _parse_match_object(self, mo):
