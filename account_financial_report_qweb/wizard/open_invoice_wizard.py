@@ -56,7 +56,7 @@ class OpenInvoiceWizard(models.TransientModel):
         if self.until_date:
             if self.until_date < self.at_date:
                 raise UserError(
-                    'Until Date must be equal or greater then At Date')
+                    'Until Date must be equal or greater than At Date')
 
     @api.multi
     def print_report(self):
