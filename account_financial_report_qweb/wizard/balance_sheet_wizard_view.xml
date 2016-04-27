@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="account_balance_sheet_wizard_view" model="ir.ui.view">
+            <field name="name">Trial Balance Wizard</field>
+            <field name="model">account.common.balance.report</field>
+            <field name="mode">primary</field>
+            <field name="inherit_id" ref="account_balance_common_wizard_view"/>
+            <field name="arch" type="xml">
+                <data>
+                    <notebook position="attributes">
+                        <attribute name="invisible">True</attribute>
+                    </notebook>
+                    <notebook position="before">
+                        <group>
+                            <!--<field name="comparison_date_range"/>-->
+                            <field name="comparison_date_start"/>
+                            <field name="comparison_date_end"/>
+                        </group>
+                    </notebook>
+                </data>
+            </field>
+        </record>
+
+        <record id="action_account_balance_sheet_wizard_view" model="ir.actions.act_window">
+            <!--field name="name">Balance Sheet </field -->
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.common.balance.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="account_balance_sheet_wizard_view"/>
+            <field name="target">new</field>
+            <field name="context">{'balance_common': 'balance_sheet'}</field>
+        </record>
+        <record id="action_account_profit_loss_wizard_view" model="ir.actions.act_window">
+            <field name="name">Profit &amp; Loss</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.common.balance.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="account_balance_sheet_wizard_view"/>
+            <field name="target">new</field>
+            <field name="context">{'balance_common': 'profit_loss'}</field>
+        </record>
+    </data>
+</openerp>
