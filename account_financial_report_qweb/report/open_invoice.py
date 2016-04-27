@@ -1,4 +1,13 @@
+# -*- coding: utf-8 -*-
+# Author: Andrea andrea4ever Gallina
+# Author: Francesco OpenCode Apruzzese
+# Author: Ciro CiroBoxHub Urselli
+# Copyright 2016 Camptocamp SA
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+
+
 from openerp import models, api
+
 
 class OpenInvoiceReport(models.AbstractModel):
 
