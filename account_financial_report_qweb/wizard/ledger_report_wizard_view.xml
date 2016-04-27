@@ -11,7 +11,7 @@
                     <group name="main_info">
                         <field name="company_id"/>
                     </group>
-                    <group name="">
+                    <group name="date_currency_filter">
                         <group name="date_ranger">
                             <!-- <field name="date_range"/> -->
                             <field name="date_from"/>
@@ -20,6 +20,11 @@
                         <group name="extra_info">
                             <field name="amount_currency"/>
                             <field name="centralize"/>
+                        </group>
+                    </group>
+                    <group name="other_filters">
+                        <group name="moves">
+                            <field name="target_move" widget="radio"/>
                         </group>
                     </group>
                     <label for="account_ids"/>
@@ -58,7 +63,7 @@
                     <group name="main_info">
                         <field name="company_id"/>
                     </group>
-                    <group name="">
+                    <group name="date_currency_filter">
                         <group name="date_ranger">
                             <!-- <field name="date_range"/> -->
                             <field name="date_from"/>
@@ -66,7 +71,14 @@
                         </group>
                         <group name="extra_info">
                             <field name="amount_currency"/>
-                            <field name="result_selection"/>
+                        </group>
+                    </group>
+                    <group name="other_filters">
+                        <group name="moves">
+                            <field name="target_move" widget="radio"/>
+                        </group>
+                        <group name="result_select">
+                            <field name="result_selection" widget="radio"/>
                         </group>
                     </group>
                     <label for="partner_ids"/>
