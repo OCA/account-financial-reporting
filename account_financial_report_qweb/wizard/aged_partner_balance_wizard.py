@@ -14,7 +14,9 @@ class AccountAgedTrialBalance(models.TransientModel):
 
     company_id = fields.Many2one(
         comodel_name='res.company',
-        string='Company')
+        string='Company',
+        required=True
+        )
     date_from = fields.Date('Date from')
     date_to = fields.Date('Date to')
     target_move = fields.Selection([('posted', 'All Posted Entries'),
