@@ -311,6 +311,7 @@ class MisReportKpiExpression(models.Model):
     """
 
     _name = 'mis.report.kpi.expression'
+    _order = 'sequence, name'
 
     sequence = fields.Integer(
         related='subkpi_id.sequence',
