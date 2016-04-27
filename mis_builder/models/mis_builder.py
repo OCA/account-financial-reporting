@@ -196,24 +196,6 @@ class MisReportKpi(models.Model):
             self.divider = ''
             self.dp = 0
 
-    @api.multi
-    def action_open_expression(self):
-        self.ensure_one()
-        view = self.env.ref('mis_builder.view_mis_report_kpi_form')
-        return {
-            'name': _('Expression'),
-            'res_model': self._name,
-            'res_id': self.id,
-            'view_id': (view.id, view.name),
-            'target': 'new',
-            'type': 'ir.actions.act_window',
-            'view_mode': 'form',
-            }
-
-    @api.multi
-    def action_close(self):
-        return True
-
     def render(self, lang_id, value):
         """ render a KPI value as a unicode string, ready for display """
         assert len(self) == 1
