@@ -111,7 +111,7 @@
                         <field name="suffix"/>
                         <field name="default_css_style" colspan="4"/>
                         <field name="css_style" colspan="4"/>
-                        <field name="sequence" />
+                        <!--<field name="sequence" />-->
                     </group>
                     <group col="2" string="Legend (for kpi expressions)">
                         <group>
