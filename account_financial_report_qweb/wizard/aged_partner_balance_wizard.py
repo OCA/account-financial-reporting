@@ -4,6 +4,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from datetime import datetime
+from openerp.exceptions import Warning as UserError
 from openerp import api, fields, models
 
 
@@ -13,12 +14,11 @@ class AccountAgedTrialBalance(models.TransientModel):
     _description = 'Aged partner balanced'
 
     company_id = fields.Many2one(
-        comodel_name='res.company',
+        'res.company',
         string='Company',
-        required=True
-        )
-    date_from = fields.Date('Date from')
-    date_to = fields.Date('Date to')
+        required=True,
+        default=lambda s: s.env.user.company_id
+    )
     target_move = fields.Selection([('posted', 'All Posted Entries'),
                                     ('all', 'All Entries')],
                                    string='Target Moves',
@@ -52,6 +52,14 @@ class AccountAgedTrialBalance(models.TransientModel):
     @api.onchange('at_date')
     def onchange_atdate(self):
         self.until_date = self.at_date
+
+    @api.onchange('until_date')
+    def onchange_untildate(self):
+        # ---- until_date must be always >= of at_date
+        if self.until_date:
+            if self.until_date < self.at_date:
+                raise UserError(
+                    'Until Date must be equal or greater than At Date')
 
     @api.multi
     def check_report(self):
