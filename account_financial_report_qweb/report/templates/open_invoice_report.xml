@@ -2,7 +2,7 @@
 <openerp>
 <data>
 
-    <template id="open_invoice_report_document">
+    <template id="open_invoice_report_qweb">
 
         <style type="text/css">
             td, th {
@@ -59,74 +59,57 @@
         <t t-call="report.html_container">
             <t t-call="report.internal_layout">
                 <div class="page">
-                    <table class="table table-bordered table-condensed">
-                        <t t-foreach="" t-as="">
-                            <td><b>ACCOUNT</b></td>
-                            <t t-foreach="" t-as="">
-                                <span><b>PARTER</b></span>
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Period</th>
-                                        <th>Entry</th>
-                                        <th>Journal</th>
-                                        <th>Partner</th>
-                                        <th>Reference</th>
-                                        <th>Label</th>
-                                        <th>Rec.</th>
-                                        <th>Due Date</th>
-                                        <th>Debit</th>
-                                        <th>Credit</th>
-                                        <th>Cumul.Bal.</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr t-foreach="" t-as="">
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-xs-3 offset col-xs-6">Comulate Balance on Partner</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
+                        <t t-foreach="data" t-as="account">
+                            <p><span t-esc="account" /></p>
+                            <t t-foreach="data[account]" t-as="partner">
+                                <p><span t-esc="partner" /></p>
+                                <table class="table table-bordered table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Period</th>
+                                            <th>Entry</th>
+                                            <th>Journal</th>
+                                            <th>Partner</th>
+                                            <th>Reference</th>
+                                            <th>Label</th>
+                                            <th>Rec.</th>
+                                            <th>Due Date</th>
+                                            <th>Debit</th>
+                                            <th>Credit</th>
+                                            <th>Cumul.Bal.</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="data[account][partner]" t-as="move">
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Comulate Balance on Partner</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </t>
-                            <tr>
-                                <h3>
-                                    <td class="col-xs-6">ACCOUNT</td>
-                                    <td class="col-xs-3">Comulate Balance</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </h3>
-                            </tr>
+                            <p>ACCOUNT Comulate Balance</p>
                         </t>
-                    </table>
                 </div>
             </t>
         </t>
 
-    </template>
-
-     <template id="open_invoice_report_qweb">
-        <t t-call="report.html_container">
-            <t t-foreach="doc_ids" t-as="doc_id">
-                <t t-raw="translate_doc(doc_id, doc_model, 'partner_id.lang',
-                'account_financial_report_qweb.open_invoice_report_document')"/>
-            </t>
-        </t>
     </template>
 
 </data>
