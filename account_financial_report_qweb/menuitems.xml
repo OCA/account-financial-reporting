@@ -17,6 +17,12 @@
 
         <menuitem
             parent="menu_oca_reports"
+            action="action_partner_ledger_report_wizard"
+            id="menu_partner_ledger_report_wizard"
+            />
+
+        <menuitem
+            parent="menu_oca_reports"
             id='account.menu_aged_partner_balance'
             action='action_account_aged_trial_balance_wizard'
             />

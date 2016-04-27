@@ -13,7 +13,7 @@
                     </group>
                     <group name="date_currency_filter">
                         <group name="date_ranger">
-                            <!-- <field name="date_range"/> -->
+                            <field name="date_range_id"/>
                             <field name="date_from"/>
                             <field name="date_to"/>
                         </group>
