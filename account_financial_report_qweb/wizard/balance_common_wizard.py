@@ -25,17 +25,17 @@ class AccountBalanceCommonWizard(models.TransientModel):
     account_ids = fields.Many2many(
         comodel_name='account.account',
         string='Filter on accounts',
-        help="Only selected accounts will be printed. Leave empty to \
-        print all accounts.",
+        help="Only selected accounts will be printed. Leave empty to "
+             "print all accounts.",
         default=_get_account_ids
     )
     date_range_id = fields.Many2one(
-         comodel_name='date.range',
-         string='Date Range',
-     )
+        comodel_name='date.range',
+        string='Date Range',
+    )
     comparison_date_range_id = fields.Many2one(
-         comodel_name='date.range',
-         string='Date Range',
+        comodel_name='date.range',
+        string='Date Range',
     )
     comparison_date_start = fields.Datetime(
         string='Start Date'
@@ -46,8 +46,8 @@ class AccountBalanceCommonWizard(models.TransientModel):
     partner_ids = fields.Many2many(
         comodel_name='res.partner',
         string='Filter on partner',
-        help="Only selected partners will be printed. \
-          Leave empty to print all partners."
+        help="Only selected partners will be printed. "
+             "Leave empty to print all partners."
     )
     debit_credit = fields.Boolean(
         string='Display Debit/Credit Columns',
