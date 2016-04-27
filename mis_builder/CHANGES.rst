@@ -9,9 +9,11 @@ Changelog
 9.0.1.0.0 (2016-??-??)
 ~~~~~~~~~~~~~~~~~~~~~~
 
-* Correctly compute the initial balance of income and expense account
+* [FIX] use =like instead of like to search for accounts, because
+  the % are added by the user in the expressions
+* [FIX] Correctly compute the initial balance of income and expense account
   based on the start of the fiscal year 
-* Support date ranges (from OCA/server-tools/date_range) as a more
+* [IMP] Support date ranges (from OCA/server-tools/date_range) as a more
   flexible alternative to fiscal periods
 * v9 migration: fiscal periods are removed, account charts are removed,
   consolidation accounts have been removed

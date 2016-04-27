@@ -86,7 +86,7 @@ class AccountingExpressionProcessor(object):
                 self._account_ids_by_code[account_code].update(account_ids)
             elif '%' in account_code:
                 account_ids = account_model.\
-                    search([('code', 'like', account_code),
+                    search([('code', '=like', account_code),
                             ('company_id', '=', company.id)]).ids
                 self._account_ids_by_code[account_code].update(account_ids)
             else:
