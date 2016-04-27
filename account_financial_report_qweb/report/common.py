@@ -103,7 +103,6 @@ class CommonFinancialReport(models.AbstractModel):
         if self.account_ids:
             domain += [('account_id', 'in', self.account_ids.ids)]
 
-        domain += [('journal_id', 'in', self.journal_ids.ids)]
         return domain
 
     @api.multi
