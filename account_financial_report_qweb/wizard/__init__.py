@@ -5,3 +5,4 @@
 from . import aged_partner_balance_wizard
 from . import ledger_report_wizard
 from . import balance_common_wizard
+from . import open_invoice_wizard

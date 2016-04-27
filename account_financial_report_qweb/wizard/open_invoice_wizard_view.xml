@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+        <record id="open_invoice_report_wizard_view" model="ir.ui.view">
+            <field name="name">Open Invoice</field>
+            <field name="model">open.invoice.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group name="main_info">
+                        <field name="company_id"/>
+                    </group>
+                    <group name="date_info">
+                        <field name="at_date"/>
+                        <field name="until_date" />
+                    </group>
+                    <group name="partner_info">
+                        <field name="partner_ids" />
+                    </group>
+                    <group name="layout_info">
+                        <field name="amount_currency" />
+                        <field name="group_by_currency" />
+                        <field name="result_selection" />
+                        <field name="target_move" />
+                    </group>
+                    <footer>
+                        <button name="print_report"
+                                string="Print Report"
+                                type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_open_invoice_report" model="ir.actions.act_window">
+            <field name="name">Open Invoice</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">open.invoice.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="open_invoice_report_wizard_view"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem
+            parent="account.menu_finance_legal_statement"
+            action="action_open_invoice_report"
+            id="menu_invoice_report_wizard"/>
+
+</data>
+</openerp>
