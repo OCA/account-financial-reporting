@@ -15,6 +15,7 @@
     'depends': [
         'account',
         'report_xlsx',  # OCA/reporting-engine
+        'date_range',  # OCA/server-tools
     ],
     'data': [
         'wizard/mis_builder_dashboard.xml',
