@@ -61,7 +61,7 @@
                 <div class="page">
                     <table class="table table-bordered table-condensed">
                         <t t-foreach="" t-as="">
-                            <td><b>JOURNAL</b></td>
+                            <td><b>ACCOUNT</b></td>
                             <t t-foreach="" t-as="">
                                 <span><b>PARTER</b></span>
                                 <thead>
@@ -95,8 +95,23 @@
                                         <td></td>
                                         <td></td>
                                     </tr>
+                                    <tr>
+                                        <td class="col-xs-3 offset col-xs-6">Comulate Balance on Partner</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
                                 </tbody>
                             </t>
+                            <tr>
+                                <h3>
+                                    <td class="col-xs-6">ACCOUNT</td>
+                                    <td class="col-xs-3">Comulate Balance</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </h3>
+                            </tr>
                         </t>
                     </table>
                 </div>
