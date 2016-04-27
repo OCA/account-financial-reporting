@@ -10,8 +10,28 @@
                     <group name="main_info">
                         <field name="company_id"/>
                     </group>
+                    <group name="date_info">
+                        <field name="at_date"/>
+                        <field name="until_date"/>
+                    </group>
+                    <group name="other_filters">
+                        <group name="moves">
+                            <field name="target_move" widget="radio"/>
+                        </group>
+                        <group name="result_select">
+                            <field name="result_selection" widget="radio"/>
+                        </group>
+                    </group>
+                    <group name="partner_info">
+                        <field name="partner_ids"/>
+                    </group>
+                    <footer>
+                        <button name="check_report" string="Print" type="object" default_focus="1" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
                 </form>
-           </field>
+            </field>
         </record>
 
         <record id="action_account_aged_trial_balance_wizard"

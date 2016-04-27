@@ -3,7 +3,7 @@
     <data>
 
         <menuitem
-            id='account.menu_aged_partner_balance'
+            id='account.menu_aged_trial_balance'
             parent='account.menu_finance_legal_statement'
             action='action_account_aged_trial_balance_wizard' />
 
