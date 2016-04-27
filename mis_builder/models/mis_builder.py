@@ -297,12 +297,12 @@ class MisReport(models.Model):
     # TODO: kpi name cannot be start with query name
 
     @api.multi
-    def _prepare_aep(self):
+    def _prepare_aep(self, company):
         self.ensure_one()
         aep = AEP(self.env)
         for kpi in self.kpi_ids:
             aep.parse_expr(kpi.expression)
-        aep.done_parsing()
+        aep.done_parsing(company)
         return aep
 
     @api.multi
@@ -366,6 +366,7 @@ class MisReport(models.Model):
     def _compute(self, lang_id, aep,
                  date_from, date_to,
                  target_move,
+                 company,
                  get_additional_move_line_filter=None,
                  get_additional_query_filter=None,
                  period_id=None):
@@ -425,6 +426,7 @@ class MisReport(models.Model):
             additional_move_line_filter = get_additional_move_line_filter()
         aep.do_queries(date_from, date_to,
                        target_move,
+                       company,
                        additional_move_line_filter)
 
         compute_queue = self.kpi_ids
@@ -630,7 +632,8 @@ class MisReportInstancePeriod(models.Model):
             domain = aep.get_aml_domain_for_expr(
                 expr,
                 self.date_from, self.date_to,
-                self.report_instance_id.target_move)
+                self.report_instance_id.target_move,
+                self.report_instance_id.company_id)
             domain.extend(self._get_additional_move_line_filter())
             return {
                 'name': expr + ' - ' + self.name,
@@ -652,6 +655,7 @@ class MisReportInstancePeriod(models.Model):
             lang_id, aep,
             self.date_from, self.date_to,
             self.report_instance_id.target_move,
+            self.report_instance_id.company_id,
             self._get_additional_move_line_filter,
             self._get_additional_query_filter,
             period_id=self.id,
@@ -701,7 +705,8 @@ class MisReportInstance(models.Model):
                                    default='posted')
     company_id = fields.Many2one(comodel_name='res.company',
                                  string='Company',
-                                 default=_default_company)
+                                 default=_default_company,
+                                 required=True)
     landscape_pdf = fields.Boolean(string='Landscape PDF')
 
     @api.one
@@ -773,7 +778,7 @@ class MisReportInstance(models.Model):
     @api.multi
     def compute(self):
         self.ensure_one()
-        aep = self.report_id._prepare_aep()
+        aep = self.report_id._prepare_aep(self.company_id)
 
         # fetch user language only once
         # TODO: is this necessary?
