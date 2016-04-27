@@ -5,19 +5,10 @@
         <record id="account_balance_common_wizard_view" model="ir.ui.view">
             <field name="name">Balance Common Wizard</field>
             <field name="model">account.common.balance.report</field>
+            <field name="mode">primary</field>
             <field name="inherit_id" ref="account.account_common_report_view"/>
             <field name="arch" type="xml">
                 <data>
-                    <field name="company_id" position="before">
-                        <separator string="Partner Balance" colspan="4"/>
-                        <label nolabel="1" colspan="4" string="This report is an analysis done by a partner, It is a PDF report containing one line per partner representing the cumulative credit balance"/>
-                    </field>
-
-                    <!--<field name="company_id" position='attributes'>
-                        <attribute name="colspan">4</attribute>
-                        <attribute name="invisible">0</attribute>
-                        <attribute name="readonly">0</attribute>
-                    </field>-->
                     <field name="company_id" position='replace'>
                         <group name="main_info">
                             <field name="company_id" readonly="0"/>
@@ -44,7 +35,7 @@
                                     </tree>
                                 </field>
                             </page>
-                            <page string="Partners Filters" name="accounts">
+                            <page string="Partners Filters" name="partners">
                                 <separator string="Print only" colspan="4"/>
                                 <field name="partner_ids" colspan="4" nolabel="1"/>
                             </page>
@@ -62,38 +53,6 @@
                     </field>
                 </data>
             </field>
-        </record>
-
-        <record id="action_account_partner_balance_wizard_view" model="ir.actions.act_window">
-            <field name="name">Partner Balance</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">account.common.balance.report</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">form</field>
-            <field name="view_id" ref="account_balance_common_wizard_view"/>
-            <field name="target">new</field>
-            <field name="context">{'balance_common': 'partner_balance'}</field>
-        </record>
-
-        <record id="action_account_trial_balance_wizard_view" model="ir.actions.act_window">
-            <field name="name">Trial Balance</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">account.common.balance.report</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">form</field>
-            <field name="view_id" ref="account_balance_common_wizard_view"/>
-            <field name="target">new</field>
-            <field name="context">{'balance_common': 'trial_balance'}</field>
-        </record>
-
-        <record model="ir.values" id="action_account_balance_common_wizard_view_values">
-            <field name="model_id" ref="account.model_account_account"/>
-            <field name="name">Partner Balance</field>
-            <field name="key2">client_print_multi</field>
-            <field name="value"
-                eval="'ir.actions.act_window,' +str(ref('action_account_partner_balance_wizard_view'))"/>
-            <field name="key">action</field>
-            <field name="model">account.account</field>
         </record>
 
     </data>
