@@ -27,6 +27,17 @@ class LedgerReportWizard(models.TransientModel):
                                      default=False)
     centralize = fields.Boolean(string='Activate centralization',
                                 default=False)
+    result_selection = fields.Selection(
+        [('customer', 'Receivable Accounts'),
+         ('supplier', 'Payable Accounts'),
+         ('customer_supplier', 'Receivable and Payable Accounts')
+         ],
+        string="Partner's",
+        default='customer')
+    partner_ids = fields.Many2many(
+        comodel_name='res.partner',
+        string='Filter partners',
+    )
 
     @api.multi
     def check_report(self):
