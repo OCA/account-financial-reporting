@@ -72,7 +72,7 @@ class AccountingExpressionProcessor(object):
         # - NNN for a code with an exact match
         self._account_ids_by_code = defaultdict(set)
 
-    def _load_account_codes(self, account_codes):
+    def _load_account_codes(self, account_codes, company):
         account_model = self.env['account.account']
         exact_codes = set()
         for account_code in account_codes:
@@ -85,13 +85,13 @@ class AccountingExpressionProcessor(object):
                 self._account_ids_by_code[account_code].update(account_ids)
             elif '%' in account_code:
                 account_ids = account_model.\
-                    search([('code', 'like', account_code)]).mapped('id')
+                    search([('code', 'like', account_code), ('company_id', '=', company.id)]).mapped('id')
                 self._account_ids_by_code[account_code].update(account_ids)
             else:
                 # search exact codes after the loop to do less queries
                 exact_codes.add(account_code)
         for account in account_model.\
-                search([('code', 'in', list(exact_codes))]):
+                search([('code', 'in', list(exact_codes)), ('company_id', '=', company.id)]):
             self._account_ids_by_code[account.code].add(account.id)
 
     def _parse_match_object(self, mo):
@@ -128,13 +128,13 @@ class AccountingExpressionProcessor(object):
             key = (domain, mode)
             self._map_account_ids[key].update(account_codes)
 
-    def done_parsing(self):
+    def done_parsing(self, company):
         """Load account codes and replace account codes by
         account ids in map."""
         for key, account_codes in self._map_account_ids.items():
             # TODO _load_account_codes could be done
             # for all account_codes at once (also in v8)
-            self._load_account_codes(account_codes)
+            self._load_account_codes(account_codes, company)
             account_ids = set()
             for account_code in account_codes:
                 account_ids.update(self._account_ids_by_code[account_code])
@@ -147,7 +147,7 @@ class AccountingExpressionProcessor(object):
 
     def get_aml_domain_for_expr(self, expr,
                                 date_from, date_to,
-                                target_move):
+                                target_move, company):
         """ Get a domain on account.move.line for an expression.
 
         Prerequisite: done_parsing() must have been invoked.
@@ -171,13 +171,14 @@ class AccountingExpressionProcessor(object):
             if mode not in date_domain_by_mode:
                 date_domain_by_mode[mode] = \
                     self.get_aml_domain_for_dates(date_from, date_to,
-                                                  mode, target_move)
+                                                  mode, target_move,
+                                                  company)
         return expression.OR(aml_domains) + \
             expression.OR(date_domain_by_mode.values())
 
     def get_aml_domain_for_dates(self, date_from, date_to,
                                  mode,
-                                 target_move):
+                                 target_move, company):
         if mode == MODE_VARIATION:
             domain = [('date', '>=', date_from), ('date', '<=', date_to)]
         else:
@@ -198,7 +199,7 @@ class AccountingExpressionProcessor(object):
         return expression.normalize_domain(domain)
 
     def do_queries(self, date_from, date_to,
-                   target_move, additional_move_line_filter=None):
+                   target_move, company, additional_move_line_filter=None):
         """Query sums of debit and credit for all accounts and domains
         used in expressions.
 
@@ -213,7 +214,7 @@ class AccountingExpressionProcessor(object):
             if mode not in domain_by_mode:
                 domain_by_mode[mode] = \
                     self.get_aml_domain_for_dates(date_from, date_to,
-                                                  mode, target_move)
+                                                  mode, target_move, company)
             domain = list(domain) + domain_by_mode[mode]
             domain.append(('account_id', 'in', self._map_account_ids[key]))
             if additional_move_line_filter:
