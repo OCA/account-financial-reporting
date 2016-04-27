@@ -34,7 +34,11 @@
                 <div class="act_as_cell">Target Moves</div>
               </div>
               <div class="act_as_row">
-                <div class="act_as_cell"><span t-field="o.fiscalyear.name"/></div>
+                <div class="act_as_cell">
+                  <t t-if="o.fiscalyear">
+                    <span t-field="o.fiscalyear.name"/>
+                  </t>
+                </div>
                 <t t-if="o.fiscalyear or o.start_date or o.end_date">
                   <div class="act_as_cell">
                     From:
