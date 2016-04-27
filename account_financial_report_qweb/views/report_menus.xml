@@ -11,6 +11,11 @@
         <menuitem icon="STOCK_PRINT" name="Trial Balance"
             parent="menu_account_balance_common" action="action_account_trial_balance_wizard_view"
             groups="account.group_account_manager,account.group_account_user" id="menu_account_trial_balance_report"/>
-
+        <menuitem icon="STOCK_PRINT" name="Balance Sheet"
+            parent="menu_account_balance_common" action="action_account_balance_sheet_wizard_view"
+            groups="account.group_account_manager,account.group_account_user" id="menu_account_sheet_balance_report"/>
+        <menuitem icon="STOCK_PRINT" name="Profit &amp; Loss"
+              parent="menu_account_balance_common" action="action_account_profit_loss_wizard_view"
+              groups="account.group_account_manager,account.group_account_user" id="menu_account_profit_loss_report"/>
     </data>
 </openerp>

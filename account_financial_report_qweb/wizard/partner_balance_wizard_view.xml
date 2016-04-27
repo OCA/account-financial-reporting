@@ -10,7 +10,6 @@
             <field name="arch" type="xml">
                 <data>
                     <field name="company_id" position="before">
-                        <separator string="Partner Balance" colspan="4"/>
                         <label nolabel="1" colspan="4" string="This report is an analysis done by a partner, It is a PDF report containing one line per partner representing the cumulative credit balance"/>
                     </field>
                     <field name="debit_credit" position="attributes">
