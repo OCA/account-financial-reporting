@@ -629,7 +629,7 @@ class MisReportInstancePeriod(models.Model):
         if AEP.has_account_var(expr):
             aep = AEP(self.env)
             aep.parse_expr(expr)
-            aep.done_parsing()
+            aep.done_parsing(self.report_instance_id.company_id)
             domain = aep.get_aml_domain_for_expr(
                 expr,
                 self.date_from, self.date_to,
