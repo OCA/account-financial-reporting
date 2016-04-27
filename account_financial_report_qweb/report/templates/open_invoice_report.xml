@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <template id="open_invoice_report_document">
+
+        <style type="text/css">
+            td, th {
+                font-size: 10px;
+            }
+
+            npage {
+                font-size: 10px
+            }
+        </style>
+
+        <div class="header">
+            <div class="row">
+                <div class="col-xs-4 text-left">
+                    <h6><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/></h6>
+                </div>
+                <div class="col-xs-4 text-center">
+                    <img t-if="res_company.logo" t-att-src="'data:image/png;base64,%s' % res_company.logo" style="max-height: 50px;"/>
+                </div>
+                <div class="col-xs-4 text-right">
+                    <npage>
+                        <ul class="list-inline">
+                            <li><span class="page"/></li>
+                            <li>/</li>
+                            <li><span class="topage"/></li>
+                        </ul>
+                    </npage>
+                </div>
+            </div>
+            <div class="row">
+                <table class="table table-bordered table-condensed" style="text-align: center;">
+                    <thead>
+                        <tr>
+                            <th>Chart of Account</th>
+                            <th>Fiscal Year</th>
+                            <th>Period Filters</th>
+                            <th>Accounts Filter</th>
+                            <th>Target Moves</th>
+                            <th>Initial Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <t t-call="report.html_container">
+            <t t-call="report.internal_layout">
+                <div class="page">
+                    <table class="table table-bordered table-condensed">
+                        <t t-foreach="" t-as="">
+                            <td><b>JOURNAL</b></td>
+                            <t t-foreach="" t-as="">
+                                <span><b>PARTER</b></span>
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Period</th>
+                                        <th>Entry</th>
+                                        <th>Journal</th>
+                                        <th>Partner</th>
+                                        <th>Reference</th>
+                                        <th>Label</th>
+                                        <th>Rec.</th>
+                                        <th>Due Date</th>
+                                        <th>Debit</th>
+                                        <th>Credit</th>
+                                        <th>Cumul.Bal.</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="" t-as="">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </t>
+                        </t>
+                    </table>
+                </div>
+            </t>
+        </t>
+
+    </template>
+
+     <template id="open_invoice_report_qweb">
+        <t t-call="report.html_container">
+            <t t-foreach="doc_ids" t-as="doc_id">
+                <t t-raw="translate_doc(doc_id, doc_model, 'partner_id.lang',
+                'account_financial_report_qweb.open_invoice_report_document')"/>
+            </t>
+        </t>
+    </template>
+
+</data>
+</openerp>
