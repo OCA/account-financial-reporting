@@ -36,28 +36,32 @@
                         <table class="table table-bordered table-condensed" style="text-align: center;">
                             <thead>
                                 <tr style="background-color:#e3e3e3;">
-                                    <th>Chart of Account</th>
+                                    <th>Company</th>
                                     <th>Fiscal Year</th>
-                                    <th>Period Filters</th>
+                                    <th>At Date</th>
                                     <th>Accounts Filter</th>
                                     <th>Target Moves</th>
-                                    <th>Initial Balance</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td><span t-esc="general['company']"/></td>
+                                <td><span t-esc="general['fiscal_year']"/></td>
+                                <td><span t-esc="general['at_date']"/></td>
+                                <td><span t-esc="general['account_filters']"/></td>
+                                <td><span t-esc="general['target_moves']"/></td>
                             </tbody>
                         </table>
                         <br/>
                      </div>
                      <t t-foreach="data" t-as="account">
-                        <p><strong><span t-esc="account"/></strong></p>
-                        <t t-foreach="data[account]" t-as="partner">
+                         <t t-set="account_debit" t-value="0.0" />
+                         <t t-set="account_credit" t-value="0.0" />
+                         <t t-set="account_balance" t-value="0.0" />
+                         <p><strong><span t-esc="account"/></strong></p>
+                         <t t-foreach="data[account]" t-as="partner">
+                            <t t-set="partner_debit" t-value="0.0" />
+                            <t t-set="partner_credit" t-value="0.0" />
+                            <t t-set="partner_balance" t-value="0.0" />
                             <p><strong><span t-esc="partner"/></strong></p>
                             <table class="table table-bordered table-condensed">
                                 <thead>
@@ -87,26 +91,32 @@
                                         <td><span t-esc="move['label']"/></td>
                                         <td><span t-esc="move['rec']"/></td>
                                         <td><span t-esc="move['due_date']"/></td>
+                                        <t t-set="account_debit" t-value="account_debit + move['debit']" />
+                                        <t t-set="account_credit" t-value="account_credit + move['credit']" />
+                                        <t t-set="account_balance" t-value="account_balance - move['credit'] + move['debit']" />
+                                        <t t-set="partner_debit" t-value="partner_debit + move['debit']" />
+                                        <t t-set="partner_credit" t-value="partner_credit + move['credit']" />
+                                        <t t-set="partner_balance" t-value="partner_balance - move['credit'] + move['debit']" />
                                         <td class="text-right"><span t-esc="move['debit']"/></td>
                                         <td class="text-right"><span t-esc="move['credit']"/></td>
-                                        <td class="text-right"><span t-esc="move['balance']"/></td>
+                                        <td class="text-right"><span t-esc="partner_balance" /></td>
                                     </tr>
                                     <tr>
                                         <td colspan="6"></td>
                                         <td colspan="3">Comulate Balance on Partner</td>
-                                        <td class="text-right">0</td>
-                                        <td class="text-right">0</td>
-                                        <td class="text-right">0</td>
+                                        <td class="text-right"><span t-esc="partner_debit" /></td>
+                                        <td class="text-right"><span t-esc="partner_credit" /></td>
+                                        <td class="text-right"><span t-esc="partner_balance" /></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </t>
                          <table class="table table-bordered table-condensed">
-                             <tbody><tr><h2>
+                             <tbody><tr>
                                 <td colspan="9"><strong><span t-esc="account"/> Comulate Balance</strong></td>
-                                <td class="text-right" style="width:8%">0</td>
-                                <td class="text-right" style="width:8%">0</td>
-                                <td class="text-right" style="width:8%">0</td></h2></tr>
+                                <td class="text-right" style="width:8%"><span t-esc="account_debit" /></td>
+                                <td class="text-right" style="width:8%"><span t-esc="account_credit" /></td>
+                                <td class="text-right" style="width:8%"><span t-esc="account_balance" /></td></tr>
                              </tbody>
                          </table>
                          <br/>
