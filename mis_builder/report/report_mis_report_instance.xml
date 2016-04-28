@@ -10,23 +10,27 @@
               <h2 t-field="o.name"></h2>
               <table class="table table-condensed">
                 <thead>
-                  <tr>
-                    <t t-foreach="docs_computed[o.id]['header']" t-as="h">
+                  <t t-foreach="docs_computed[o.id]['header']" t-as="h">
+                    <tr>
                       <th>
                         <div>
                           <t t-esc="h_value['kpi_name']"/>
                         </div>
                       </th>
-                      <th t-foreach="h_value['cols']" t-as="col" class="text-center">
-                        <div>
-                          <t t-esc="col['name']"/>
-                        </div>
-                        <div>
-                          <t t-esc="col['date']"/>
-                        </div>
-                      </th>
-                    </t>
-                  </tr>
+                      <t t-foreach="h_value['cols']" t-as="col">
+                        <th class="text-center" t-att-colspan="col.get('colspan', 1)">
+                          <div>
+                            <t t-esc="col['name']"/>
+                          </div>
+                          <t t-if="col.get('date')">
+                            <div>
+                              <t t-esc="col['date']"/>
+                            </div>
+                          </t>
+                        </th>
+                      </t>
+                    </tr>
+                  </t>
                 </thead>
                 <tbody>
                   <tr t-foreach="docs_computed[o.id]['content']" t-as="c">
