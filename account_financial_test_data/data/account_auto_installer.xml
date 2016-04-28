@@ -24,26 +24,6 @@ if config.get('type') not in ('ir.actions.act_window_close',):
             <field name="state">open</field>
         </record>
 
-        <!-- Disable standard Configure Accounting Data wizard -->
-        <!--<record id="account.account_configuration_installer_todo" model="ir.actions.todo">-->
-            <!--<field name="state">done</field>-->
-        <!--</record>-->
-
-        <!-- Disable standard Set Accounting Options wizard -->
-        <!--<record id="account.action_wizard_multi_chart_todo" model="ir.actions.todo">-->
-            <!--<field name="state">done</field>-->
-        <!--</record>-->
-
-         <!--Main Company -->
-
-        <!--<record id="ai-1" model="account.installer">-->
-            <!--<field name="company_id" ref="base.main_company"/>-->
-            <!--<field name="charts">l10n_fr</field>-->
-            <!--<field name="period">month</field>-->
-            <!--<field name="has_default_company" eval="1"/>-->
-        <!--</record>-->
-
-
         <record id="wmca-1" model="wizard.multi.charts.accounts">
             <field name="company_id" ref="base.main_company"/>
             <field name="only_one_chart_template" eval="1"/>
