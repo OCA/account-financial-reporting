@@ -19,4 +19,7 @@
         "wizard/open_tax_balances_view.xml",
         "views/account_tax_view.xml",
     ],
+    "images": [
+        'images/tax_balance.png',
+    ]
 }
