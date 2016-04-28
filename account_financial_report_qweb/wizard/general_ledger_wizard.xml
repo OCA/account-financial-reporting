@@ -16,6 +16,7 @@
                             <field name="date_range_id"/>
                             <field name="date_from"/>
                             <field name="date_to"/>
+                            <field name="fy_start_date"/>
                         </group>
                         <group name="extra_info">
                             <field name="amount_currency"/>
@@ -30,11 +31,30 @@
                     <label for="account_ids"/>
                     <field name="account_ids" nolabel="1"/>
                     <footer>
-                        <button name="check_report" string="Print" type="object" default_focus="1" class="oe_highlight"/>
+                        <button name="button_view" string="View" type="object" default_focus="1" class="oe_highlight"/>
                         or
                         <button string="Cancel" class="oe_link" special="cancel" />
                     </footer>
                 </form>
+            </field>
+        </record>
+
+        <record id="ledger_report_wizard_line_tree_view"
+                model="ir.ui.view">
+            <field name="name">General Ledger Line</field>
+            <field name="model">ledger.report.wizard.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                 <tree string="General Ledger">
+                     <field name="date"/>
+                     <field name="account_id"/>
+                     <field name="debit"/>
+                     <field name="credit"/>
+                     <field name="init_debit"/>
+                     <field name="init_credit"/>
+                     <field name="init_balance"/>
+                     <field name="cumul_balance"/>
+                </tree>
             </field>
         </record>
 
