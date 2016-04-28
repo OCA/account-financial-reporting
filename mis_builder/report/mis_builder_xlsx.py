@@ -46,11 +46,7 @@ class MisBuilderXslx(ReportXlsx):
         bold = workbook.add_format({'bold': True})
         header_format = workbook.add_format({'bold': True,
                                              'align': 'center',
-                                             'border': True,
-                                             'bg_color': '#FFFFCC'})
-        kpi_name_format = workbook.add_format({'bold': True,
-                                               'border': True,
-                                               'bg_color': '#FFFFCC'})
+                                             'bg_color': '#F0EEEE'})
         sheet.write(row_pos, 0, report_name, bold)
         row_pos += 1
         col_pos += 1
@@ -86,8 +82,10 @@ class MisBuilderXslx(ReportXlsx):
             if has_col_date:
                 row_pos += 1
         for line in data['content']:
+            row_xlsx_syle = line.get('default_xlsx_style', {})
+            row_format = workbook.add_format(row_xlsx_syle)
             col = 0
-            sheet.write(row_pos, col, line['kpi_name'], kpi_name_format)
+            sheet.write(row_pos, col, line['kpi_name'], row_format)
             for value in line['cols']:
                 col += 1
                 num_format_str = '#'
@@ -98,9 +96,12 @@ class MisBuilderXslx(ReportXlsx):
                     num_format_str = '"%s"' % value['prefix'] + num_format_str
                 if value.get('suffix'):
                     num_format_str = num_format_str + ' "%s"' % value['suffix']
-                kpi_format = workbook.add_format({'num_format': num_format_str,
-                                                  'border': 1,
-                                                  'align': 'right'})
+                kpi_xlsx_syle = value.get('xlsx_style', {}) or row_xlsx_syle
+                kpi_xlsx_syle.update({
+                    'num_format': num_format_str,
+                    'align': 'right'
+                })
+                kpi_format = workbook.add_format(kpi_xlsx_syle)
                 if value.get('val'):
                     val = value['val']
                     if value.get('is_percentage'):

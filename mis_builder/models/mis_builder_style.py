@@ -24,35 +24,6 @@
 
 from openerp import api, fields, models, exceptions
 
-class MisReportKpi(models.Model):
-
-    _inherit='mis.report.kpi'
-
-    @api.depends('kpi_style')
-    def calc_css_style(self):
-        css_attributes = [
-            ('font-style', self.kpi_style.font_style),
-            ('font-weight', self.kpi_style.font_weight),
-            ('font-size',  self.kpi_style.font_size),
-            ('color', self.kpi_style.color),
-            ('background-color', self.kpi_style.background_color),
-            ('indent-level', str(self.kpi_style.indent_level))
-        ]
-
-        css_list = [
-            x[0] + ':' + x[1]  for x in css_attributes if x[1]
-        ]
-        self.default_css_style = ';'.join(css_item for css_item in css_list)
-
-
-    # Adding Attributes to default_css_style
-    default_css_style = fields.Char(compute=calc_css_style, store=True)
-    kpi_style = fields.Many2one(
-        string="Default CSS style for KPI",
-        comodel_name="mis.report.kpi.style",
-        required=True
-    )
-
 
 class MisReportKpiStyle(models.Model):
 
@@ -61,11 +32,9 @@ class MisReportKpiStyle(models.Model):
     # TODO use WEB WIdget color picker
     name = fields.Char(string='style name', required=True)
 
-
     @api.depends('indent_level')
     def check_positive_val(self):
         return self.indent_level > 0
-
 
     _font_style_selection = [
         ('normal', 'Normal'),
@@ -87,6 +56,15 @@ class MisReportKpiStyle(models.Model):
         ('xx-large', 'xx-large'),
     ]
 
+    _font_size_to_size = {
+        'medium': 11,
+        'xx-small': 5,
+        'x-small': 7,
+        'small': 9,
+        'large': 13,
+        'x-large': 15,
+        'xx-large': 17
+    }
 
     color = fields.Char(
         required=True,
@@ -106,3 +84,38 @@ class MisReportKpiStyle(models.Model):
         selection=_font_size_selection
     )
     indent_level = fields.Integer()
+
+    @api.multi
+    def font_size_to_size(self):
+        self.ensure_one()
+        return self._font_size_to_size.get(self.font_size, 11)
+
+    @api.multi
+    def to_xlsx_format_properties(self):
+        self.ensure_one()
+        props = {
+            'italic': self.font_style == 'italic',
+            'bold': self.font_weight == 'bold',
+            'font_color': self.color,
+            'bg_color': self.background_color,
+            'indent': self.indent_level,
+            'size': self.font_size_to_size()
+        }
+        return props
+
+    @api.multi
+    def to_css_style(self):
+        self.ensure_one()
+        css_attributes = [
+            ('font-style', self.font_style),
+            ('font-weight', self.font_weight),
+            ('font-size',  self.font_size),
+            ('color', self.color),
+            ('background-color', self.background_color),
+            ('indent-level', str(self.indent_level))
+        ]
+
+        css_list = [
+            x[0] + ':' + x[1] for x in css_attributes if x[1]
+        ]
+        return ';'.join(css_item for css_item in css_list)

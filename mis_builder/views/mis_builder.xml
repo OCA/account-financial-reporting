@@ -135,11 +135,8 @@
                                attrs="{'invisible': [('type', '=', 'str')]}"/>
                         <field name="prefix"/>
                         <field name="suffix"/>
-                        <field name="default_css_style"
-                            colspan="4"
-                            readonly="1"
-                        />
-                        <field name="css_style" colspan="4"/>
+                        <field name="style" colspan="4"/>
+                        <field name="style_expression" colspan="4"/>
                         <!--<field name="sequence" />-->
                     </group>
                     <group string="Expression">
@@ -155,7 +152,6 @@
                         <field name="expression" colspan="4" nolabel="1"
                                attrs="{'invisible': [('multi', '=', True)],
                                        'readonly': [('multi', '=', True)]}"/>
-                        <field name="kpi_style"/>
                     </group>
 		    <group string="Auto expand">
 			<field name="auto_expand_accounts"/>

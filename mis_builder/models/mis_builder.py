@@ -194,8 +194,14 @@ class MisReportKpi(models.Model):
         inverse='_inverse_expression')
     expression_ids = fields.One2many('mis.report.kpi.expression', 'kpi_id')
     auto_expand_accounts = fields.Boolean(string='Display details by account')
-    default_css_style = fields.Char(string='Default CSS style')
-    css_style = fields.Char(string='CSS style expression')
+    style = fields.Many2one(
+        string="Default style for KPI",
+        comodel_name="mis.report.kpi.style",
+        required=False
+    )
+    style_expression = fields.Char(
+        string='Style expression',
+        help='An expression that returns a style name for the kpi style')
     type = fields.Selection([('num', _('Numeric')),
                              ('pct', _('Percentage')),
                              ('str', _('String'))],
@@ -950,28 +956,38 @@ class MisReportInstancePeriod(models.Model):
         )
         # second, render it to something that can be used by the widget
         res = {}
+        mis_report_kpi_style = self.env['mis.report.kpi.style']
         for kpi_name, kpi, vals in kpi_matrix.iter_kpi_vals(self):
             res[kpi_name] = []
             try:
-                # TODO FIXME check css_style evaluation wrt subkpis
+                # TODO FIXME check style_expression evaluation wrt subkpis
                 kpi_style = None
-                if kpi.css_style:
-                    kpi_style = safe_eval(kpi.css_style,
-                                          kpi_matrix.get_localdict(self))
+                if kpi.style_expression:
+                    style_name = safe_eval(kpi.style_expression,
+                                           kpi_matrix.get_localdict(self))
+                    styles = mis_report_kpi_style.search(
+                        [('name', '=', style_name)])
+                    kpi_style = styles and styles[0]
             except:
                 _logger.warning("error evaluating css stype expression %s",
-                                kpi.css_style, exc_info=True)
-                kpi_style = None
+                                kpi.style, exc_info=True)
 
             default_vals = {
-                'style': kpi_style,
                 'prefix': kpi.prefix,
                 'suffix': kpi.suffix,
                 'dp': kpi.dp,
                 'is_percentage': kpi.type == 'pct',
                 'period_id': self.id,
                 'expr': kpi.expression,  # TODO FIXME
+                'style': '',
+                'xlsx_style': {},
             }
+            if kpi_style:
+                default_vals.update({
+                    'style': kpi_style.to_css_style(),
+                    'xlsx_style': kpi_style.to_xlsx_forma_properties(),
+                })
+
             for idx, subkpi_val in enumerate(vals):
                 vals = default_vals.copy()
                 if isinstance(subkpi_val, DataError):
@@ -1203,11 +1219,19 @@ class MisReportInstance(models.Model):
         content = []
         rows_by_kpi_name = {}
         for kpi_name, kpi_description, kpi in kpi_matrix.iter_kpis():
-            rows_by_kpi_name[kpi_name] = {
+            props = {
                 'kpi_name': kpi_description,
                 'cols': [],
-                'default_style': kpi.default_css_style
+                'default_style': '',
+                'default_xlsx_style': {},
             }
+            rows_by_kpi_name[kpi_name] = props
+            if kpi.style:
+                props.update({
+                    'default_style': kpi.style.to_css_style(),
+                    'default_xlsx_style': kpi.style.to_xlsx_format_properties()
+                })
+
             content.append(rows_by_kpi_name[kpi_name])
 
         # populate header and content
