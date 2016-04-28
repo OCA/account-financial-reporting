@@ -95,10 +95,12 @@ class LedgerReportWizard(models.TransientModel):
               cumul_balance,
 
               %(wizard_id)s as wizard_id
-              from view_q where date >= %(fy_date)s
+              from view_q
+              where date between %(date_from)s and %(date_to)s
             """
 
-        params = dict(fy_date=self.fy_start_date, wizard_id=self.id)
+        params = dict(fy_date=self.fy_start_date, wizard_id=self.id,
+                      date_from=self.date_from, date_to=self.date_to)
         self.env.cr.execute(query, params)
         return True
 
