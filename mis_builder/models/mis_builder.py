@@ -2,6 +2,7 @@
 # © 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
+from collections import defaultdict, OrderedDict
 import datetime
 import dateutil
 import logging
@@ -35,6 +36,56 @@ class AutoStruct(object):
     def __init__(self, **kwargs):
         for k, v in kwargs.items():
             setattr(self, k, v)
+
+
+class ExplodedKpiItem(object):
+
+    def __init__(self, account_id):
+        pass
+
+
+class KpiMatrix(object):
+
+    def __init__(self):
+        # { period: {kpi: vals}
+        self._kpi_vals = defaultdict(dict)
+        # { period: {kpi: {account_id: vals}}}
+        self._kpi_exploded_vals = defaultdict(dict)
+        # { period: localdict }
+        self._localdict = {}
+        # { kpi: set(account_ids) }
+        self._kpis = OrderedDict()
+
+    def set_kpi_vals(self, period, kpi, vals):
+        self._kpi_vals[period][kpi] = vals
+        if kpi not in self._kpis:
+            self._kpis[kpi] = set()
+
+    def set_kpi_exploded_vals(self, period, kpi, account_id, vals):
+        exploded_vals = self._kpi_exploded_vals[period]
+        if kpi not in exploded_vals:
+            exploded_vals[kpi] = {}
+        exploded_vals[kpi][account_id] = vals
+        self._kpis[kpi].add(account_id)
+
+    def set_localdict(self, period, localdict):
+        self._localdict[period] = localdict
+
+    def iter_kpi_vals(self, period):
+        for kpi, vals in self._kpi_vals[period].iteritems():
+            yield kpi.name, kpi, vals
+            kpi_exploded_vals = self._kpi_exploded_vals[period]
+            if kpi not in kpi_exploded_vals:
+                continue
+            for account_id, account_id_vals in \
+                    kpi_exploded_vals[kpi].iteritems():
+                yield "%s:%s" % (kpi.name, account_id), kpi, account_id_vals
+
+    def iter_kpis(self):
+        for kpi, account_ids in self._kpis.iteritems():
+            yield kpi.name, kpi
+            for account_id in account_ids:
+                yield "%s:%s" % (kpi.name, account_id), kpi
 
 
 def _get_selection_label(selection, value):
@@ -458,14 +509,19 @@ class MisReport(models.Model):
         return res
 
     @api.multi
-    def _compute(self, lang_id, aep,
+    def _compute(self, kpi_matrix, period_key,
+                 lang_id, aep,
                  date_from, date_to,
                  target_move,
                  company,
-                 subkpi_ids,
+                 subkpis_filter,
                  get_additional_move_line_filter=None,
                  get_additional_query_filter=None):
-        """ Compute
+        """ Evaluate a report for a given period, populating a KpiMatrix.
+
+        :param kpi_matrix: the KpiMatrix object to be populated
+        :param kpi_matrix_period: the period key to use when populating
+                                  the KpiMatrix
         :param lang_id: id of a res.lang object
         :param aep: an AccountingExpressionProcessor instance created
                     using _prepare_aep()
@@ -480,9 +536,16 @@ class MisReport(models.Model):
                                             query argument and returns a
                                             domain compatible with the query
                                             underlying model
+
+        For each kpi, it calls set_kpi_vals and set_kpi_exploded_vals
+        with vals being a tuple with the evaluation
+        result for sub-kpis, or a DataError object if the evaluation failed.
+
+        When done, it also calls set_localdict to store the local values
+        that served for the computation of the period.
+
         """
         self.ensure_one()
-        res = {}
 
         localdict = {
             'registry': self.pool,
@@ -512,8 +575,9 @@ class MisReport(models.Model):
                 vals = []
                 has_error = False
                 for expression in kpi.expression_ids:
-                    if expression.subkpi_id \
-                            and expression.subkpi_id not in subkpi_ids:
+                    if expression.subkpi_id and \
+                            subkpis_filter and \
+                            expression.subkpi_id not in subkpis_filter:
                         continue
                     try:
                         kpi_eval_expression = aep.replace_expr(expression.name)
@@ -540,9 +604,35 @@ class MisReport(models.Model):
                 else:
                     vals = SimpleArray(vals)
 
-                if not has_error:
-                    localdict[kpi.name] = vals
-                res[kpi] = vals
+                kpi_matrix.set_kpi_vals(period_key, kpi, vals)
+
+                if has_error:
+                    continue
+
+                # no error, set it in localdict so it can be used
+                # in computing other kpis
+                localdict[kpi.name] = vals
+
+                # let's compute the exploded values by account
+                # we assume there will be no errors, because it is a
+                # the same as the kpi, just filtered on one account;
+                # I'd say if we have an exception in this part, it's bug...
+                # TODO FIXME: do this only if requested for this KPI
+                for account_id in aep.get_accounts_in_expr(kpi.expression):
+                    account_id_vals = []
+                    for expression in kpi.expression_ids:
+                        if expression.subkpi_id and \
+                                subkpis_filter and \
+                                expression.subkpi_id not in subkpis_filter:
+                            continue
+                        kpi_eval_expression = \
+                            aep.replace_expr(expression.name,
+                                             account_ids_filter=[account_id])
+                        account_id_vals.\
+                            append(safe_eval(kpi_eval_expression, localdict))
+                    kpi_matrix.set_kpi_exploded_vals(period_key, kpi,
+                                                     account_id,
+                                                     account_id_vals)
 
             if len(recompute_queue) == 0:
                 # nothing to recompute, we are done
@@ -555,7 +645,8 @@ class MisReport(models.Model):
             # try again
             compute_queue = recompute_queue
             recompute_queue = []
-        return res, localdict
+
+        kpi_matrix.set_localdict(period_key, localdict)
 
 
 class MisReportInstancePeriod(models.Model):
@@ -692,6 +783,7 @@ class MisReportInstancePeriod(models.Model):
     @api.multi
     def drilldown(self, expr):
         self.ensure_one()
+        # TODO FIXME: drilldown by account
         if AEP.has_account_var(expr):
             aep = AEP(self.env)
             aep.parse_expr(expr)
@@ -716,7 +808,7 @@ class MisReportInstancePeriod(models.Model):
             return False
 
     @api.multi
-    def _compute(self, lang_id, aep):
+    def _compute(self, kpi_matrix, lang_id, aep):
         """ Compute and render a mis report instance period
 
         It returns a dictionary keyed on kpi.name with a list of dictionaries
@@ -739,7 +831,8 @@ class MisReportInstancePeriod(models.Model):
         self.ensure_one()
         # first invoke the compute method on the mis report template
         # passing it all the information regarding period and filters
-        data, localdict = self.report_instance_id.report_id._compute(
+        self.report_instance_id.report_id._compute(
+            kpi_matrix, self,
             lang_id, aep,
             self.date_from, self.date_to,
             self.report_instance_id.target_move,
@@ -750,12 +843,14 @@ class MisReportInstancePeriod(models.Model):
         )
         # second, render it to something that can be used by the widget
         res = {}
-        for kpi, vals in data.items():
-            res[kpi.name] = []
+        for kpi_name, kpi, vals in kpi_matrix.iter_kpi_vals(self):
+            res[kpi_name] = []
             try:
+                # TODO FIXME check css_style evaluation wrt subkpis
                 kpi_style = None
                 if kpi.css_style:
-                    kpi_style = safe_eval(kpi.css_style, localdict)
+                    kpi_style = safe_eval(kpi.css_style,
+                                          kpi_matrix.get_localdict(self))
             except:
                 _logger.warning("error evaluating css stype expression %s",
                                 kpi.css_style, exc_info=True)
@@ -768,7 +863,7 @@ class MisReportInstancePeriod(models.Model):
                 'dp': kpi.dp,
                 'is_percentage': kpi.type == 'pct',
                 'period_id': self.id,
-                'expr': kpi.expression,
+                'expr': kpi.expression,  # TODO FIXME
             }
             for idx, subkpi_val in enumerate(vals):
                 vals = default_vals.copy()
@@ -787,7 +882,9 @@ class MisReportInstancePeriod(models.Model):
                         expression = kpi.expression_ids[idx].name
                     else:
                         expression = kpi.expression
-                    comment = kpi.name + " = " + expression
+                    # TODO FIXME: check we have meaningfulname for exploded
+                    # kpis
+                    comment = kpi_name + " = " + expression
                     vals.update({
                         'val': (None
                                 if subkpi_val is AccountingNone
@@ -796,7 +893,7 @@ class MisReportInstancePeriod(models.Model):
                         'val_c': comment,
                         'drilldown': drilldown,
                         })
-                res[kpi.name].append(vals)
+                res[kpi_name].append(vals)
         return res
 
 
@@ -927,10 +1024,11 @@ class MisReportInstance(models.Model):
 
         # compute kpi values for each period
         kpi_values_by_period_ids = {}
+        kpi_matrix = KpiMatrix()
         for period in self.period_ids:
             if not period.valid:
                 continue
-            kpi_values = period._compute(lang_id, aep)
+            kpi_values = period._compute(kpi_matrix, lang_id, aep)
             kpi_values_by_period_ids[period.id] = kpi_values
 
         # prepare header and content
@@ -943,13 +1041,14 @@ class MisReportInstance(models.Model):
         }]
         content = []
         rows_by_kpi_name = {}
-        for kpi in self.report_id.kpi_ids:
-            rows_by_kpi_name[kpi.name] = {
-                'kpi_name': kpi.description,
+        for kpi_name, kpi in kpi_matrix.iter_kpis():
+            rows_by_kpi_name[kpi_name] = {
+                # TODO FIXME
+                'kpi_name': kpi.description if ':' not in kpi_name else kpi_name,
                 'cols': [],
                 'default_style': kpi.default_css_style
             }
-            content.append(rows_by_kpi_name[kpi.name])
+            content.append(rows_by_kpi_name[kpi_name])
 
         # populate header and content
         for period in self.period_ids:
@@ -963,17 +1062,20 @@ class MisReportInstance(models.Model):
                 header_date = _('from %s to %s') % (date_from, date_to)
             else:
                 header_date = self._format_date(lang_id, period.date_from)
+            subkpis = period.subkpi_ids or \
+                period.report_instance_id.report_id.subkpi_ids
             header[0]['cols'].append(dict(
                 name=period.name,
                 date=header_date,
-                colspan=len(period.subkpi_ids) or 1,
+                colspan=len(subkpis) or 1,
                 ))
-            for subkpi in period.subkpi_ids:
-                header[1]['cols'].append(dict(
-                    name=subkpi.name,
-                    colspan=1,
-                    ))
-            if not period.subkpi_ids:
+            if subkpis:
+                for subkpi in subkpis:
+                    header[1]['cols'].append(dict(
+                        name=subkpi.name,
+                        colspan=1,
+                        ))
+            else:
                 header[1]['cols'].append(dict(
                     name="",
                     colspan=1,
@@ -1006,4 +1108,4 @@ class MisReportInstance(models.Model):
         return {
             'header': header,
             'content': content,
-            }
+        }

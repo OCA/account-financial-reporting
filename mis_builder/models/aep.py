@@ -192,8 +192,7 @@ class AccountingExpressionProcessor(object):
                 company.compute_fiscalyear_dates(date_from_date)['date_from']
             domain = ['|',
                       ('date', '>=', fy_date_from),
-                      ('account_id.user_type_id.include_initial_balance', '=',
-                       True)]
+                      ('user_type_id.include_initial_balance', '=', True)]
             if mode == MODE_INITIAL:
                 domain.append(('date', '<', date_from))
             elif mode == MODE_END:
@@ -231,7 +230,7 @@ class AccountingExpressionProcessor(object):
                 self._data[key][acc['account_id'][0]] = \
                     (acc['debit'] or 0.0, acc['credit'] or 0.0)
 
-    def replace_expr(self, expr):
+    def replace_expr(self, expr, account_ids_filter=None):
         """Replace accounting variables in an expression by their amount.
 
         Returns a new expression string.
@@ -246,6 +245,9 @@ class AccountingExpressionProcessor(object):
             for account_code in account_codes:
                 account_ids = self._account_ids_by_code[account_code]
                 for account_id in account_ids:
+                    if account_ids_filter and \
+                            account_id not in account_ids_filter:
+                        continue
                     debit, credit = \
                         account_ids_data.get(account_id,
                                              (AccountingNone, AccountingNone))
@@ -257,3 +259,23 @@ class AccountingExpressionProcessor(object):
                         v += credit
             return '(' + repr(v) + ')'
         return self.ACC_RE.sub(f, expr)
+
+    def get_accounts_in_expr(self, expr):
+        """Get the ids of all accounts involved in an expression.
+        This means only accounts for which contribute data to the expression.
+
+        Returns a set of account ids.
+
+        This method must be executed after do_queries().
+        """
+        res = set()
+        for mo in self.ACC_RE.finditer(expr):
+            _, mode, account_codes, domain = self._parse_match_object(mo)
+            key = (domain, mode)
+            account_ids_data = self._data[key]
+            for account_code in account_codes:
+                account_ids = self._account_ids_by_code[account_code]
+                for account_id in account_ids:
+                    if account_id in account_ids_data:
+                        res.add(account_id)
+        return res
