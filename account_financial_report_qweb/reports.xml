@@ -36,5 +36,14 @@
         </record>
 
 
+        <record id="general_ledger_xls_export" model="ir.actions.report.xml">
+          <field name="name">General Ledger XLSX report</field>
+          <field name="model">ledger.report.wizard</field>
+          <field name="type">ir.actions.report.xml</field>
+          <field name="report_name">ledger.report.wizard.xlsx</field>
+          <field name="report_type">xlsx</field>
+          <field name="auto" eval="False"/>
+        </record>
+
     </data>
 </openerp>
