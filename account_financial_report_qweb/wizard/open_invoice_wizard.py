@@ -87,7 +87,6 @@ class OpenInvoiceWizard(models.TransientModel):
                 label=label, inv_nummber=move.invoice_id.number)
         return {
             'date': move.date,
-            'period': '',
             'entry': move.move_id.name,
             'journal': move.move_id.journal_id.code,
             'reference': move.ref,
@@ -106,11 +105,15 @@ class OpenInvoiceWizard(models.TransientModel):
             return True  # ----- Show a message here
         datas = {}
         for move in moves:
-            if move.account_id.name not in datas:
-                datas[move.account_id.name] = {}
-            if move.partner_id.name not in datas[move.account_id.name]:
-                datas[move.account_id.name][move.partner_id.name] = []
-            datas[move.account_id.name][move.partner_id.name].append(
+            account = '{code} - {name}'.format(
+                code=move.account_id.code,
+                name=move.account_id.name)
+            partner = move.partner_id.name
+            if account not in datas:
+                datas[account] = {}
+            if partner not in datas[account]:
+                datas[account][partner] = []
+            datas[account][partner].append(
                 self._get_move_line_data(move))
         generals = {
             'company': self.company_id.name,
@@ -122,6 +125,6 @@ class OpenInvoiceWizard(models.TransientModel):
             'target_moves': dict(
                 self._columns['target_move'].selection)[self.target_move],
             }
-        return self.env['report'].with_context(landscape=True).get_action(
+        return self.env['report'].get_action(
             self, 'account_financial_report_qweb.open_invoice_report_qweb',
             data={'data': datas, 'general': generals})

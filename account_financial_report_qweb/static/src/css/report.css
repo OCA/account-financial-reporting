@@ -18,11 +18,8 @@ body, table, td, span, div {
 .act_as_tbody {
     display: table-row-group !important;
 }
-.act_as_caption {
-    display: table-caption !important;
-}
 .list_table, .data_table {
-    width: 690px !important;
+    width: 100% !important;
     table-layout: fixed !important;
 }
 .act_as_row.labels {
