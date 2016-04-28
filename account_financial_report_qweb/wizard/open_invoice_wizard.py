@@ -5,7 +5,7 @@
 # Copyright 2016 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import models, fields, api
+from openerp import models, fields, api, _
 from openerp.exceptions import Warning as UserError
 from datetime import datetime
 
@@ -36,7 +36,7 @@ class OpenInvoiceWizard(models.TransientModel):
         ('all', 'All Entries')], 'Target Moves',
         required=True, default='all')
     until_date = fields.Date(
-        "Clearance date", required=True,
+        "Clearance date",
         help="""The clearance date is essentially a tool used for debtors
         provisionning calculation.
         By default, this date is equal to the the end date (
@@ -67,8 +67,7 @@ class OpenInvoiceWizard(models.TransientModel):
             account_type = ('payable', )
         domain = [
             ('company_id', '=', data['company_id'].id),
-            ('move_id.date', '>=', data['at_date']),
-            ('move_id.date', '<=', data['until_date']),
+            ('move_id.date', '<=', data['at_date']),
             ('account_id.user_type_id.type', 'in', account_type)
             ]
         if data['target_move'] != 'all':
@@ -81,25 +80,18 @@ class OpenInvoiceWizard(models.TransientModel):
 
     @staticmethod
     def _get_moves_data(move):
-        # return {
-        #     'date': data.date,
-        #     'period': data.invoice_id.period_id.name,
-        #     'journal': data.move_id.journal_id.name,
-        #     'reference': data.,
-        #     '': data.,
-        #     '': data.,
-        #     }
         return {
-            'date': '',
+            'date': move.date,
             'period': '',
-            'entry': '',
-            'journal': '',
-            'reference': '',
-            'label': '',
-            'rec': '',
-            'due_date': '',
-            'debit': '',
-            'credit': '',
+            'entry': move.move_id.name,
+            'journal': move.move_id.journal_id.code,
+            'reference': move.ref,
+            'label': '{move_line_name} ({move_ref})'.format(
+                move_line_name=move.name, move_ref=move.move_id.ref),
+            'rec': move.full_reconcile_id.name,
+            'due_date': move.date_maturity,
+            'debit': move.debit or '',
+            'credit': move.credit or '',
             'balance': '',
             }
 
@@ -117,6 +109,6 @@ class OpenInvoiceWizard(models.TransientModel):
                 datas[move.account_id.name][move.partner_id.name] = []
             datas[move.account_id.name][move.partner_id.name].append(
                 self._get_moves_data(move))
-        return self.env['report'].get_action(
+        return self.env['report'].with_context(landscape=True).get_action(
             self, 'account_financial_report_qweb.open_invoice_report_qweb',
             data={'data': datas})
