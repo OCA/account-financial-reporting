@@ -15,9 +15,10 @@
 
         <record id="open_invoice_report_format_a4_horizontal" model="report.paperformat">
             <field name="name">Open Invoice Report Internal A4 Horizontal</field>
-            <field name="margin_top">20</field>
-            <field name="margin_bottom">20</field>
-            <field name="header_spacing">20</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">10</field>
+            <field name="header_line" eval="True"/>
+            <field name="header_spacing">10</field>
             <field name="orientation">Landscape</field>
         </record>
 
