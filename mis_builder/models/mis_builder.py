@@ -555,12 +555,10 @@ class MisReport(models.Model):
                             '#ERR',
                             '\n\n%s' % (traceback.format_exc(),)))
 
-                if kpi.multi:
-                    vals = SimpleArray(vals)
-                elif isinstance(vals[0], SimpleArray):
+                if len(vals) == 1 and isinstance(vals[0], SimpleArray):
                     vals = vals[0]
                 else:
-                    vals = SimpleArray(vals[0])
+                    vals = SimpleArray(vals)
 
                 if not has_error:
                     localdict[kpi.name] = vals
