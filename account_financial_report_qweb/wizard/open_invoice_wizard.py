@@ -66,7 +66,6 @@ class OpenInvoiceWizard(models.TransientModel):
         elif data['result_selection'] == 'supplier':
             account_type = ('payable', )
         domain = [
-            ('reconciled', '=', False),
             ('company_id', '=', data['company_id'].id),
             ('move_id.date', '<=', data['at_date']),
             ('account_id.user_type_id.type', 'in', account_type)
@@ -100,7 +99,8 @@ class OpenInvoiceWizard(models.TransientModel):
     @api.multi
     def print_report(self):
         self.ensure_one()
-        moves = self.env['account.move.line'].search(self._get_domain(self))
+        moves = self.env['account.move.line'].search(
+            self._get_domain(self), order='date asc')
         if not moves:
             return True  # ----- Show a message here
         datas = {}
