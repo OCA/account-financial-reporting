@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        <!--Partner a-->
+        <record id="data_partner_a" model="res.partner"
+                context="{'default_company_type': 'person'}">
+            <field name="name">PARTNER A</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="customer" eval="True"/>
+            <field name="supplier" eval="False"/>
+            <field name="notify_email">always</field>
+            <field name="currency_id" ref="base.EUR"/>
+        </record>
+
+        <!--Partner b-->
+        <record id="data_partner_b" model="res.partner"
+                context="{'default_company_type': 'person'}">
+            <field name="name">PARTNER B</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="customer" eval="True"/>
+            <field name="supplier" eval="False"/>
+            <field name="notify_email">always</field>
+            <field name="currency_id" ref="base.EUR"/>
+        </record>
+
+        <record id="data_partner_c" model="res.partner"
+                context="{'default_company_type': 'person'}">
+            <field name="name">PARTNER C</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="customer" eval="True"/>
+            <field name="supplier" eval="False"/>
+            <field name="notify_email">always</field>
+            <field name="currency_id" ref="base.EUR"/>
+        </record>
+
+        <record id="data_partner_d" model="res.partner"
+                context="{'default_company_type': 'person'}">
+            <field name="name">PARTNER D</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="customer" eval="True"/>
+            <field name="supplier" eval="False"/>
+            <field name="notify_email">always</field>
+            <field name="currency_id" ref="base.EUR"/>
+        </record>
+
+        <record id="data_partner_e" model="res.partner"
+                context="{'default_company_type': 'person'}">
+            <field name="name">PARTNER E</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="customer" eval="True"/>
+            <field name="supplier" eval="False"/>
+            <field name="notify_email">always</field>
+            <field name="currency_id" ref="base.EUR"/>
+        </record>
+
+        <record id="data_partner_f" model="res.partner"
+                context="{'default_company_type': 'person'}">
+            <field name="name">PARTNER F</field>
+              <field name="company_id" ref="base.main_company"/>
+            <field name="customer" eval="True"/>
+            <field name="supplier" eval="False"/>
+            <field name="notify_email">always</field>
+            <field name="currency_id" ref="base.EUR"/>
+        </record>
+
+        <record id="data_partner_g" model="res.partner"
+                context="{'default_company_type': 'person'}">
+            <field name="name">PARTNER G</field>
+              <field name="company_id" ref="base.main_company"/>
+            <field name="customer" eval="True"/>
+            <field name="supplier" eval="False"/>
+            <field name="notify_email">always</field>
+            <field name="currency_id" ref="base.EUR"/>
+        </record>
+    </data>
+</openerp>

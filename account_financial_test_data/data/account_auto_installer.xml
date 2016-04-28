@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <!-- Add a server action and a todo action to set accounting options for all companies without popup window -->
+        <record id="auto_config_charts_action_server" model="ir.actions.server">
+            <field name="name">Set Accounting Options for all Companies</field>
+            <field name="condition">True</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="account.model_wizard_multi_charts_accounts"/>
+            <field name="state">code</field>
+            <field name="code">
+self.auto_execute(cr, uid, context=context)
+config = self.next(cr, uid, [], context=context) or {}
+if config.get('type') not in ('ir.actions.act_window_close',):
+    action = config
+            </field>
+        </record>
+
+        <record id="auto_config_charts_action_todo" model="ir.actions.todo">
+            <field name="action_id" ref="auto_config_charts_action_server"/>
+            <field name="sequence">10</field>
+            <field name="type">automatic</field>
+            <field name="state">open</field>
+        </record>
+
+        <!-- Disable standard Configure Accounting Data wizard -->
+        <!--<record id="account.account_configuration_installer_todo" model="ir.actions.todo">-->
+            <!--<field name="state">done</field>-->
+        <!--</record>-->
+
+        <!-- Disable standard Set Accounting Options wizard -->
+        <!--<record id="account.action_wizard_multi_chart_todo" model="ir.actions.todo">-->
+            <!--<field name="state">done</field>-->
+        <!--</record>-->
+
+         <!--Main Company -->
+
+        <!--<record id="ai-1" model="account.installer">-->
+            <!--<field name="company_id" ref="base.main_company"/>-->
+            <!--<field name="charts">l10n_fr</field>-->
+            <!--<field name="period">month</field>-->
+            <!--<field name="has_default_company" eval="1"/>-->
+        <!--</record>-->
+
+
+        <record id="wmca-1" model="wizard.multi.charts.accounts">
+            <field name="company_id" ref="base.main_company"/>
+            <field name="only_one_chart_template" eval="1"/>
+            <field name="complete_tax_set" eval="1"/>
+            <field name="currency_id" ref="base.EUR"/>
+            <field name="chart_template_id" ref="l10n_fr.l10n_fr_pcg_chart_template"/>
+            <field name="sale_tax" ref="l10n_fr.tva_normale"/>
+            <field name="purchase_tax" ref="l10n_fr.tva_acq_normale"/>
+            <field name="transfer_account_id" ref="l10n_fr.pcg_58"/>
+            <field name="code_digits" eval="6"/>
+        </record>
+
+        <!-- Execute wizard multi charts accounts -->
+        <function model="wizard.multi.charts.accounts" name="auto_execute"/>
+
+    </data>
+</openerp>
