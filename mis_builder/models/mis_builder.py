@@ -553,8 +553,10 @@ class MisReport(models.Model):
 
                 if kpi.multi:
                     vals = SimpleArray(vals)
-                else:
+                elif isinstance(vals[0], SimpleArray):
                     vals = vals[0]
+                else:
+                    vals = SimpleArray(vals[0])
 
                 localdict[kpi.name] = vals
                 res[kpi] = vals
