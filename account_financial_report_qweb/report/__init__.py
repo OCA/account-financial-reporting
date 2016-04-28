@@ -5,3 +5,4 @@
 from . import common
 from . import general_ledger
 from . import open_invoice
+from . import general_ledger_xlsx

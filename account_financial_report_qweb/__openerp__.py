@@ -17,6 +17,7 @@
         'account_full_reconcile',
         'date_range',
         'account_fiscal_year',
+        'report_xlsx',
     ],
     'data': [
         'wizard/aged_partner_balance_wizard_view.xml',
