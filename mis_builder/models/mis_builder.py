@@ -659,13 +659,23 @@ class MisReportInstancePeriod(models.Model):
     """
 
     @api.one
-    @api.depends('report_instance_id.pivot_date', 'type', 'offset', 'duration')
+    @api.depends('report_instance_id.pivot_date', 'type', 'offset',
+                 'duration',  'report_instance_id.comparison_mode')
     def _compute_dates(self):
         self.date_from = False
         self.date_to = False
         self.valid = False
-        d = fields.Date.from_string(self.report_instance_id.pivot_date)
-        if self.type == 'd':
+        report = self.report_instance_id
+        d = fields.Date.from_string(report.pivot_date)
+        if not report.comparison_mode:
+            self.date_from = report.date_from
+            self.date_to = report.date_to
+            self.valid = True
+        elif self.mode == 'fix':
+            self.date_from = self.manual_date_from
+            self.date_to = self.manual_date_to
+            self.valid = True
+        elif self.type == 'd':
             date_from = d + datetime.timedelta(days=self.offset)
             date_to = date_from + \
                 datetime.timedelta(days=self.duration - 1)
@@ -705,6 +715,10 @@ class MisReportInstancePeriod(models.Model):
 
     name = fields.Char(size=32, required=True,
                        string='Description', translate=True)
+    mode = fields.Selection([('fix', 'Fix'),
+                             ('relative', 'Relative'),
+                             ], required=True,
+                             default='fix')
     type = fields.Selection([('d', _('Day')),
                              ('w', _('Week')),
                              ('date_range', _('Date Range'))
@@ -721,6 +735,11 @@ class MisReportInstancePeriod(models.Model):
                               default=1)
     date_from = fields.Date(compute='_compute_dates', string="From")
     date_to = fields.Date(compute='_compute_dates', string="To")
+    manual_date_from = fields.Date(string="From")
+    manual_date_to = fields.Date(string="To")
+    date_range_id = fields.Many2one(
+        comodel_name='date.range',
+        string='Date Range')
     valid = fields.Boolean(compute='_compute_dates',
                            type='boolean',
                            string='Valid')
@@ -740,7 +759,7 @@ class MisReportInstancePeriod(models.Model):
         default=1)
     subkpi_ids = fields.Many2many(
         'mis.report.subkpi',
-        string="Sub KPI")
+        string="Sub KPI Filter")
 
     _order = 'sequence, id'
 
@@ -752,6 +771,12 @@ class MisReportInstancePeriod(models.Model):
         ('name_unique', 'unique(name, report_instance_id)',
          'Period name should be unique by report'),
     ]
+
+    @api.onchange('date_range_id')
+    def onchange_date_range(self):
+        for record in self:
+            record.manual_date_from = record.date_range_id.date_start
+            record.manual_date_to = record.date_range_id.date_end
 
     @api.multi
     def _get_additional_move_line_filter(self):
@@ -944,6 +969,14 @@ class MisReportInstance(models.Model):
                                  default=_default_company,
                                  required=True)
     landscape_pdf = fields.Boolean(string='Landscape PDF')
+    comparison_mode = fields.Boolean(
+        compute="_compute_comparison_mode",
+        inverse="_inverse_comparison_mode")
+    date_range_id = fields.Many2one(
+        comodel_name='date.range',
+        string='Date Range')
+    date_from = fields.Date(string="From")
+    date_to = fields.Date(string="To")
 
     @api.one
     def copy(self, default=None):
@@ -956,6 +989,37 @@ class MisReportInstance(models.Model):
         date_format = self.env['res.lang'].browse(lang_id).date_format
         return datetime.datetime.strftime(
             fields.Date.from_string(date), date_format)
+
+    @api.multi
+    @api.depends('date_from')
+    def _compute_comparison_mode(self):
+        for instance in self:
+            instance.advanced_mode = not bool(instance.date_from)
+
+    @api.multi
+    def _inverse_comparison_mode(self):
+        for record in self:
+            if not record.comparison_mode:
+                if not record.date_from:
+                    record.date_from = datetime.now()
+                if not record.date_to:
+                    record.date_to = datetime.now()
+                record.period_ids.unlink()
+                record.write({'period_ids': [
+                    (0, 0, {
+                        'name': 'Default',
+                        'type': 'd',
+                        })
+                    ]})
+            else:
+                record.date_from = None
+                record.date_to = None
+
+    @api.onchange('date_range_id')
+    def onchange_date_range(self):
+        for record in self:
+            record.date_from = record.date_range_id.date_start
+            record.date_to = record.date_range_id.date_end
 
     @api.multi
     def preview(self):
