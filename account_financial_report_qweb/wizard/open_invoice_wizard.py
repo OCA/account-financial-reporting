@@ -66,6 +66,7 @@ class OpenInvoiceWizard(models.TransientModel):
         elif data['result_selection'] == 'supplier':
             account_type = ('payable', )
         domain = [
+            ('reconciled', '=', False),
             ('company_id', '=', data['company_id'].id),
             ('move_id.date', '<=', data['at_date']),
             ('account_id.user_type_id.type', 'in', account_type)
@@ -79,20 +80,22 @@ class OpenInvoiceWizard(models.TransientModel):
         return domain
 
     @staticmethod
-    def _get_moves_data(move):
+    def _get_move_line_data(move):
+        label = move.name
+        if move.invoice_id:
+            label = '{label} ({inv_nummber})'.format(
+                label=label, inv_nummber=move.invoice_id.number)
         return {
             'date': move.date,
             'period': '',
             'entry': move.move_id.name,
             'journal': move.move_id.journal_id.code,
             'reference': move.ref,
-            'label': '{move_line_name} ({move_ref})'.format(
-                move_line_name=move.name, move_ref=move.move_id.ref),
+            'label': label,
             'rec': move.full_reconcile_id.name,
             'due_date': move.date_maturity,
-            'debit': move.debit or '',
-            'credit': move.credit or '',
-            'balance': '',
+            'debit': move.debit,
+            'credit': move.credit,
             }
 
     @api.multi
@@ -108,7 +111,17 @@ class OpenInvoiceWizard(models.TransientModel):
             if move.partner_id.name not in datas[move.account_id.name]:
                 datas[move.account_id.name][move.partner_id.name] = []
             datas[move.account_id.name][move.partner_id.name].append(
-                self._get_moves_data(move))
+                self._get_move_line_data(move))
+        generals = {
+            'company': self.company_id.name,
+            'fiscal_year': '',
+            'at_date': self.at_date,
+            'account_filters': dict(
+                self._columns['result_selection'].selection)[
+                self.result_selection],
+            'target_moves': dict(
+                self._columns['target_move'].selection)[self.target_move],
+            }
         return self.env['report'].with_context(landscape=True).get_action(
             self, 'account_financial_report_qweb.open_invoice_report_qweb',
-            data={'data': datas})
+            data={'data': datas, 'general': generals})
