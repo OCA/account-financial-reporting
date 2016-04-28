@@ -573,7 +573,7 @@ class MisReport(models.Model):
         return res
 
     @api.multi
-    def _compute(self, kpi_matrix, period_key,
+    def _compute(self, kpi_matrix, kpi_matrix_period,
                  lang_id, aep,
                  date_from, date_to,
                  target_move,
@@ -668,7 +668,7 @@ class MisReport(models.Model):
                 else:
                     vals = SimpleArray(vals)
 
-                kpi_matrix.set_kpi_vals(period_key, kpi, vals)
+                kpi_matrix.set_kpi_vals(kpi_matrix_period, kpi, vals)
 
                 if has_error:
                     continue
@@ -695,7 +695,7 @@ class MisReport(models.Model):
                                              account_ids_filter=[account_id])
                         account_id_vals.\
                             append(safe_eval(kpi_eval_expression, localdict))
-                    kpi_matrix.set_kpi_exploded_vals(period_key, kpi,
+                    kpi_matrix.set_kpi_exploded_vals(kpi_matrix_period, kpi,
                                                      account_id,
                                                      account_id_vals)
 
@@ -711,7 +711,7 @@ class MisReport(models.Model):
             compute_queue = recompute_queue
             recompute_queue = []
 
-        kpi_matrix.set_localdict(period_key, localdict)
+        kpi_matrix.set_localdict(kpi_matrix_period, localdict)
 
 
 class MisReportInstancePeriod(models.Model):
