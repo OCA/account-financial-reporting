@@ -16,6 +16,7 @@
     'website': 'http://www.camptocamp.com',
     'depends': [
         'account',
+        'account_full_reconcile',
         'date_range',
     ],
     'data': [
