@@ -127,8 +127,9 @@
                          </t>
                          <div class="act_as_table data_table">
                              <div class="act_as_tbody">
-                                 <div class="act_as_row">
-                                     <div class="act_as_cell first_column"><strong><span t-esc="account"/> Comulate Balance</strong></div>
+                                 <div class="act_as_row labels">
+                                     <div class="act_as_cell first_column"><span t-esc="account"/></div>
+                                     <div class="act_as_cell cell"><strong>Comulate Balance</strong></div>
                                      <div class="act_as_cell amount"><span t-esc="account_debit" /></div>
                                      <div class="act_as_cell amount"><span t-esc="account_credit" /></div>
                                      <div class="act_as_cell amount"><span t-esc="account_balance" /></div>
