@@ -498,6 +498,23 @@ class MisReport(models.Model):
         'report_id',
         string="Sub KPI")
 
+    @api.multi
+    def get_wizard_report_action(self):
+        action = self.env.ref('mis_builder.mis_report_instance_view_action')
+        res = action.read()[0]
+        view = self.env.ref('mis_builder.wizard_mis_report_instance_view_form')
+        res.update({
+            'view_id': view.id,
+            'views': [(view.id, 'form')],
+            'target':'new',
+            'context': {
+                'default_report_id': self.id,
+                'default_name': self.name,
+                'default_temporary': True,
+                }
+            })
+        return res
+
     @api.one
     def copy(self, default=None):
         default = dict(default or {})
@@ -1041,6 +1058,20 @@ class MisReportInstance(models.Model):
         string='Date Range')
     date_from = fields.Date(string="From")
     date_to = fields.Date(string="To")
+    temporary = fields.Boolean()
+
+    @api.multi
+    def save_report(self):
+        self.ensure_one()
+        self.write({'temporary': False})
+        action = self.env.ref('mis_builder.mis_report_instance_view_action')
+        res = action.read()[0]
+        view = self.env.ref('mis_builder.mis_report_instance_view_form')
+        res.update({
+            'views': [(view.id, 'form')],
+            'res_id': self.id,
+            })
+        return res
 
     @api.one
     def copy(self, default=None):

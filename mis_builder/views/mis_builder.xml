@@ -233,11 +233,13 @@
             <field name="arch" type="xml">
                 <form string="MIS Report Instance" version="7.0">
                 <sheet>
+                    <field name="temporary" invisible="1"/>
                     <div class="oe_right oe_button_box" name="buttons">
                         <button type="object" name="preview" string="Preview" icon="gtk-print-preview" />
                         <button type="object" name="print_pdf" string="Print" icon="gtk-print" />
                         <button type="object" name="export_xls" string="Export" icon="gtk-go-down" />
-                        <button type="action" name="%(mis_report_instance_add_to_dashboard_action)d" string="Add to dashboard" icon="gtk-add" />
+                        <button type="action" name="%(mis_report_instance_add_to_dashboard_action)d" string="Add to dashboard" icon="gtk-add" attrs="{'invisible': [('temporary', '=', True)]}"/>
+                        <button type="object" name="save_report" string="Save" icon="gtk-floppy" attrs="{'invisible': [('temporary', '=', False)]}"/>
                     </div>
                     <div class="oe_title">
                         <div class="oe_edit_only">
@@ -301,6 +303,51 @@
         </record>
 
         <menuitem id="mis_report_instance_view_menu" parent="account.menu_finance_reports" name="MIS Reports" action="mis_report_instance_view_action" sequence="101"/>
+
+        <record id="wizard_mis_report_instance_view_form" model="ir.ui.view">
+            <field name="model">mis.report.instance</field>
+            <field name="inherit_id" ref="mis_builder.mis_report_instance_view_form"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <field name="name" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+                <label for="name" position="replace"/>
+                <field name="description" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="report_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <div name="buttons" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </div>
+                <sheet position="after">
+                    <footer>
+                        <button type="object" name="save_report" string="Save" icon="gtk-floppy"/>
+                        <button type="object" name="preview" string="Preview" icon="gtk-print-preview" />
+                        <button type="object" name="print_pdf" string="Print" icon="gtk-print" />
+                        <button type="object" name="export_xls" string="Export" icon="gtk-go-down" />
+                        or <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </sheet>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="mis_report_instance_view_action">
+            <field name="name">Last Reports Generated</field>
+            <field name="view_id" ref="mis_report_instance_view_tree"/>
+            <field name="res_model">mis.report.instance</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('temporary', '=', True)]</field>
+        </record>
+
+        <menuitem id="last_wizard_mis_report_instance_view_menu"
+                  parent="account.menu_finance_reports"
+                  name="Last Reports Generated"
+                  action="mis_report_instance_view_action"
+                  sequence="102"/>
 
         <record model="ir.ui.view" id="mis_report_instance_period_view_form">
             <field name="model">mis.report.instance.period</field>
