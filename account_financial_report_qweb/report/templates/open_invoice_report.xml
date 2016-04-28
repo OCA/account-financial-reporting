@@ -32,80 +32,90 @@
                     </npage>
                 </div>
             </div>
-            <div class="row">
-                <table class="table table-bordered table-condensed" style="text-align: center;">
-                    <thead>
-                        <tr>
-                            <th>Chart of Account</th>
-                            <th>Fiscal Year</th>
-                            <th>Period Filters</th>
-                            <th>Accounts Filter</th>
-                            <th>Target Moves</th>
-                            <th>Initial Balance</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tbody>
-                </table>
-            </div>
         </div>
 
         <t t-call="report.html_container">
             <t t-call="report.internal_layout">
                 <div class="page">
-                        <t t-foreach="data" t-as="account">
-                            <p><span t-esc="account" /></p>
-                            <t t-foreach="data[account]" t-as="partner">
-                                <p><span t-esc="partner" /></p>
-                                <table class="table table-bordered table-condensed">
-                                    <thead>
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Period</th>
-                                            <th>Entry</th>
-                                            <th>Journal</th>
-                                            <th>Partner</th>
-                                            <th>Reference</th>
-                                            <th>Label</th>
-                                            <th>Rec.</th>
-                                            <th>Due Date</th>
-                                            <th>Debit</th>
-                                            <th>Credit</th>
-                                            <th>Cumul.Bal.</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr t-foreach="data[account][partner]" t-as="move">
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Comulate Balance on Partner</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </t>
-                            <p>ACCOUNT Comulate Balance</p>
+                     <div class="row">
+                        <table class="table table-bordered table-condensed" style="text-align: center;">
+                            <thead>
+                                <tr>
+                                    <th>Chart of Account</th>
+                                    <th>Fiscal Year</th>
+                                    <th>Period Filters</th>
+                                    <th>Accounts Filter</th>
+                                    <th>Target Moves</th>
+                                    <th>Initial Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tbody>
+                        </table>
+                        <br/>
+                     </div>
+                     <t t-foreach="data" t-as="account">
+                        <p><strong><span t-esc="account"/></strong></p>
+                        <t t-foreach="data[account]" t-as="partner">
+                            <p><strong><span t-esc="partner"/></strong></p>
+                            <table class="table table-bordered table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Period</th>
+                                        <th>Entry</th>
+                                        <th>Journal</th>
+                                        <th>Partner</th>
+                                        <th>Reference</th>
+                                        <th>Label</th>
+                                        <th>Rec.</th>
+                                        <th>Due Date</th>
+                                        <th>Debit</th>
+                                        <th>Credit</th>
+                                        <th>Cumul.Bal.</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="data[account][partner]" t-as="move">
+                                        <td><span t-esc="move['date']"/></td>
+                                        <td><span t-esc="move['period']"/></td>
+                                        <td><span t-esc="move['entry']"/></td>
+                                        <td><span t-esc="move['journal']"/></td>
+                                        <td><span t-esc="partner"/></td>
+                                        <td><span t-esc="move['reference']"/></td>
+                                        <td><span t-esc="move['label']"/></td>
+                                        <td><span t-esc="move['rec']"/></td>
+                                        <td><span t-esc="move['due_date']"/></td>
+                                        <td class="text-right"><span t-esc="move['debit']"/></td>
+                                        <td class="text-right"><span t-esc="move['credit']"/></td>
+                                        <td class="text-right"><span t-esc="move['balance']"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6"></td>
+                                        <td colspan="3">Comulate Balance on Partner</td>
+                                        <td class="text-right">0</td>
+                                        <td class="text-right">0</td>
+                                        <td class="text-right">0</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </t>
+                         <table>
+                             <tbody><tr><h2>
+                                <td colspan="9"><strong><span t-esc="account"/> Comulate Balance</strong></td>
+                                <td class="text-right">0</td>
+                                <td class="text-right">0</td>
+                                <td class="text-right">0</td></h2></tr>
+                             </tbody>
+                         </table>
+                         <br/>
+                     </t>
                 </div>
             </t>
         </t>
