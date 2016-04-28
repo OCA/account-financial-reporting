@@ -530,6 +530,7 @@ class MisReport(models.Model):
         while True:
             for kpi in compute_queue:
                 vals = []
+                has_error = False
                 for expression in kpi.expression_ids:
                     if expression.subkpi_id \
                             and expression.subkpi_id not in period.subkpi_ids:
@@ -538,15 +539,18 @@ class MisReport(models.Model):
                         kpi_eval_expression = aep.replace_expr(expression.name)
                         vals.append(safe_eval(kpi_eval_expression, localdict))
                     except ZeroDivisionError:
+                        has_error = True
                         vals.append(DataError(
                             '#DIV/0',
                             '\n\n%s' % (traceback.format_exc(),)))
                     except (NameError, ValueError):
+                        has_error = True
                         recompute_queue.append(kpi)
                         vals.append(DataError(
                             '#ERR',
                             '\n\n%s' % (traceback.format_exc(),)))
                     except:
+                        has_error = True
                         vals.append(DataError(
                             '#ERR',
                             '\n\n%s' % (traceback.format_exc(),)))
@@ -558,7 +562,8 @@ class MisReport(models.Model):
                 else:
                     vals = SimpleArray(vals[0])
 
-                localdict[kpi.name] = vals
+                if not has_error:
+                    localdict[kpi.name] = vals
                 res[kpi] = vals
 
             if len(recompute_queue) == 0:
