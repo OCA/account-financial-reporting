@@ -12,7 +12,6 @@
                     </group>
                     <group name="date_info">
                         <field name="at_date"/>
-                        <field name="until_date" />
                     </group>
                     <group name="partner_info">
                         <field name="partner_ids" />
