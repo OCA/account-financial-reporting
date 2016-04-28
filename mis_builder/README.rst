@@ -108,6 +108,7 @@ Contributors
 * Stéphane Bidoul <stephane.bidoul@acsone.eu>
 * Laetitia Gangloff <laetitia.gangloff@acsone.eu>
 * Adrien Peiffer <adrien.peiffer@acsone.eu>
+* Giovanni Capalbo <giovanni@therp.nl>
 
 Maintainer
 ----------
