@@ -141,7 +141,7 @@ class LedgerReportWizard(models.TransientModel):
             'view_mode': 'tree',
             'res_model': 'ledger.report.wizard.line',
             'view_id': False,
-            'context': {'group_by': ['account_id']},
+            'context': {'group_by': ['account_id', 'date:month']},
             'type': 'ir.actions.act_window'
         }
 
