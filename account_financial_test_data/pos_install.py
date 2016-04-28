@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import date, datetime
 from openerp import SUPERUSER_ID, api, tools, _
 
 
@@ -100,22 +101,102 @@ def post_init_hook(cr, registry):
         return True
 
     def create_invoices():
+        """
+        Creates all necessary invoices
+        """
+        now = datetime.now()
+        this_year = now.year
+        last_year = now.year - 1
 
         invoice_obj = env['account.invoice']
-        invoice_line_obj = env['account.invoice.line']
-        invoice_line_values = {
 
-        }
-
-        invoice_values = {
+        invoice_a = invoice_obj.create({
             'partner_id': env.ref(
                 'account_financial_test_data.data_partner_c').id,
-            'date_invoice': '05/01/2015',
-            'user_id': env.ref('base.user_root').id,
-            'currency_id': env.ref('base.EUR').id,
-            'invoice_line_ids': [],
+            'account_id': env.ref(
+                'account_financial_test_data.data_partner_c'
+            ).property_account_receivable_id.id,
+            'type': 'out_invoice',
+            'date_invoice': date(last_year, 1, 5),
+            'date_due': date(last_year, 1, 31),
+        })
 
-        }
+        invoice_b = invoice_obj.create({
+            'partner_id': env.ref(
+                'account_financial_test_data.data_partner_a').id,
+            'type': 'out_invoice',
+            'account_id': env.ref(
+                'account_financial_test_data.data_partner_a'
+            ).property_account_receivable_id.id,
+            'date_invoice': date(last_year, 1, 5),
+            'date_due': date(last_year, 2, 4),
+        })
+
+        invoice_c = invoice_obj.create({
+            'partner_id': env.ref(
+                'account_financial_test_data.data_partner_d').id,
+            'type': 'out_invoice',
+            'account_id': env.ref(
+                'account_financial_test_data.data_partner_d'
+            ).property_account_receivable_id.id,
+            'date_invoice': date(last_year, 12, 11),
+            'date_due': date(this_year, 3, 10),
+        })
+
+        invoice_d = invoice_obj.create({
+            'partner_id': env.ref(
+                'account_financial_test_data.data_partner_g').id,
+            'type': 'out_refund',
+            'account_id': env.ref(
+                'account_financial_test_data.data_partner_g'
+            ).property_account_receivable_id.id,
+            'date_invoice': date(this_year, 1, 3),
+            'date_due': date(this_year, 4, 15),
+        })
+
+        invoice_e = invoice_obj.create({
+            'partner_id': env.ref(
+                'account_financial_test_data.data_partner_b').id,
+            'type': 'out_invoice',
+            'account_id': env.ref(
+                'account_financial_test_data.data_partner_b'
+            ).property_account_receivable_id.id,
+            'date_invoice': date(this_year, 2, 3),
+            'date_due': date(this_year, 2, 15),
+        })
+
+        invoice_f = invoice_obj.create({
+            'partner_id': env.ref(
+                'account_financial_test_data.data_partner_a').id,
+            'type': 'out_invoice',
+            'account_id': env.ref(
+                'account_financial_test_data.data_partner_a'
+            ).property_account_receivable_id.id,
+            'date_invoice': date(this_year, 2, 23),
+            'date_due': date(this_year, 3, 24),
+        })
+
+        invoice_g = invoice_obj.create({
+            'partner_id': env.ref(
+                'account_financial_test_data.data_partner_g').id,
+            'type': 'out_invoice',
+            'account_id': env.ref(
+                'account_financial_test_data.data_partner_g'
+            ).property_account_receivable_id.id,
+            'date_invoice': date(this_year, 3, 17),
+            'date_due': date(this_year, 4, 15),
+        })
+
+        invoice_h = invoice_obj.create({
+            'partner_id': env.ref(
+                'account_financial_test_data.data_partner_f').id,
+            'type': 'out_invoice',
+            'account_id': env.ref(
+                'account_financial_test_data.data_partner_f'
+            ).property_account_receivable_id.id,
+            'date_invoice': date(this_year, 3, 17),
+            'date_due': date(this_year, 4, 15),
+        })
 
         return True
 
@@ -124,4 +205,4 @@ def post_init_hook(cr, registry):
     update_account_settings()
     update_account()
     update_product()
-    # create_invoices()
+    create_invoices()
