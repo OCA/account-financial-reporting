@@ -48,6 +48,7 @@
                  <tree string="General Ledger">
                      <field name="date"/>
                      <field name="account_id"/>
+                     <field name="move_name"/>
                      <field name="debit"/>
                      <field name="credit"/>
                      <field name="init_debit"/>

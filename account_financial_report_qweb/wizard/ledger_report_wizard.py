@@ -49,6 +49,10 @@ class LedgerReportWizard(models.TransientModel):
                 acc.id AS account_id,
                 ml.debit,
                 ml.credit,
+                ml.name as name,
+                ml.ref,
+                ml.journal_id,
+                ml.partner_id,
                 SUM(debit) OVER w_account - debit AS init_debit,
                 SUM(credit) OVER w_account - credit AS init_credit,
                 SUM(debit - credit) OVER w_account - (debit - credit)
@@ -62,13 +66,41 @@ class LedgerReportWizard(models.TransientModel):
               WINDOW w_account AS (
                   PARTITION BY acc.code ORDER BY ml.date, ml.id)
               ORDER BY acc.id, ml.date)
-              SELECT * from view_q where date >= %s
+              INSERT INTO ledger_report_wizard_line
+              (
+              date,
+              name,
+              journal_id,
+              account_id,
+              partner_id,
+              ref,
+              label,
+              --counterpart
+              debit,
+              credit,
+              cumul_balance,
+              wizard_id
+              )
+              SELECT
+              date,
+              name,
+              journal_id,
+              account_id,
+              partner_id,
+              ref,
+              ' TODO label ' as label,
+              --counterpart
+              debit,
+              credit,
+              cumul_balance,
+
+              %(wizard_id)s as wizard_id
+              from view_q where date >= %(fy_date)s
             """
 
-        params = (self.fy_start_date,)
+        params = dict(fy_date=self.fy_start_date, wizard_id=self.id)
         self.env.cr.execute(query, params)
-
-        return self.env.cr.fetchall()
+        return True
 
     @api.multi
     def _print_report(self, data):
@@ -100,23 +132,7 @@ class LedgerReportWizard(models.TransientModel):
 
     @api.multi
     def process(self):
-        ledger_line_obj = self.env['ledger.report.wizard.line']
-        rows = self._query()
-        res = []
-        for row in rows:
-            data = {
-                'wizard_id': self.id,
-                'date': row[0],
-                'account_id': row[1],
-                'debit': row[2],
-                'credit': row[3],
-                'init_debit': row[4],
-                'init_credit': row[5],
-                'init_balance': row[6],
-                'cumul_balance': row[7]
-            }
-            gll = ledger_line_obj.create(data)
-            res.append(gll.id)
+        self._query()
 
         return {
             'domain': [('wizard_id', '=', self.id)],
@@ -125,7 +141,7 @@ class LedgerReportWizard(models.TransientModel):
             'view_mode': 'tree',
             'res_model': 'ledger.report.wizard.line',
             'view_id': False,
-            'context': False,
+            'context': {'group_by': ['account_id']},
             'type': 'ir.actions.act_window'
         }
 
@@ -141,6 +157,7 @@ class LedgerReportWizardLine(models.TransientModel):
     wizard_id = fields.Many2one(comodel_name='ledger.report.wizard')
 
     name = fields.Char()
+    label = fields.Char()
     ref = fields.Char()
     date = fields.Date()
     month = fields.Char()
@@ -149,6 +166,7 @@ class LedgerReportWizardLine(models.TransientModel):
     account_id = fields.Many2one('account.account')
     account_code = fields.Char()
     journal_id = fields.Many2one('account.journal')
+    partner_id = fields.Many2one('res.partner')
 
     init_credit = fields.Float()
     init_debit = fields.Float()
