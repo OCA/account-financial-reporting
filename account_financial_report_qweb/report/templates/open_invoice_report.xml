@@ -2,12 +2,14 @@
 <openerp>
 <data>
 
-    <template id="open_invoice_report_qweb">
+    <template id="open_invoice_specific" inherit_id="report.assets_common">
+        <xpath expr="." position="inside">
+            <link href="/account_financial_report_qweb/static/src/css/report.css" rel="stylesheet"/>
+        </xpath>
+    </template>
 
-        <style type="text/css">
-            td, th {font-size: 10px;}
-            npage {font-size: 10px;}
-        </style>
+
+    <template id="open_invoice_report_qweb">
 
         <div class="header">
             <div class="row">
@@ -28,99 +30,118 @@
                 </div>
             </div>
         </div>
-
+        
         <t t-call="report.html_container">
             <t t-call="report.internal_layout">
                 <div class="page">
-                     <div class="row">
-                        <table class="table table-bordered table-condensed" style="text-align: center;">
-                            <thead>
-                                <tr style="background-color:#e3e3e3;">
-                                    <th>Company</th>
-                                    <th>Fiscal Year</th>
-                                    <th>At Date</th>
-                                    <th>Accounts Filter</th>
-                                    <th>Target Moves</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <td><span t-esc="general['company']"/></td>
-                                <td><span t-esc="general['fiscal_year']"/></td>
-                                <td><span t-esc="general['at_date']"/></td>
-                                <td><span t-esc="general['account_filters']"/></td>
-                                <td><span t-esc="general['target_moves']"/></td>
-                            </tbody>
-                        </table>
-                        <br/>
-                     </div>
-                     <t t-foreach="data" t-as="account">
-                         <t t-set="account_debit" t-value="0.0" />
-                         <t t-set="account_credit" t-value="0.0" />
-                         <t t-set="account_balance" t-value="0.0" />
-                         <p><strong><span t-esc="account"/></strong></p>
-                         <t t-foreach="data[account]" t-as="partner">
+
+                    <!-- Generic information -->
+                    <div class="act_as_table data_table" style="width: 100%">
+                        <div class="act_as_thead">
+                            <div class="act_as_row labels">
+                                <div class="act_as_cell first_column">Company</div>
+                                <div class="act_as_cell">Fiscal Year</div>
+                                <div class="act_as_cell">At Date</div>
+                                <div class="act_as_cell">Accounts Filter</div>
+                                <div class="act_as_cell">Target Moves</div>
+                            </div>
+                        </div>
+                        <div class="act_as_tbody">
+                            <div class="act_as_row">
+                                <div class="act_as_cell first_column"><span t-esc="general['company']"/></div>
+                                <div class="act_as_cell"><span t-esc="general['fiscal_year']"/></div>
+                                <div class="act_as_cell"><span t-esc="general['at_date']"/></div>
+                                <div class="act_as_cell"><span t-esc="general['account_filters']"/></div>
+                                <div class="act_as_cell"><span t-esc="general['target_moves']"/></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Informations group by account -->
+                    <t t-foreach="data" t-as="account">
+                        <t t-set="account_debit" t-value="0.0" />
+                        <t t-set="account_credit" t-value="0.0" />
+                        <t t-set="account_balance" t-value="0.0" />
+                        <div class="act_as_caption account_title">
+                            <span t-esc="account"/>
+                        </div>
+                        <!-- Informations group by partner -->
+                        <t t-foreach="data[account]" t-as="partner">
                             <t t-set="partner_debit" t-value="0.0" />
                             <t t-set="partner_credit" t-value="0.0" />
                             <t t-set="partner_balance" t-value="0.0" />
-                            <p><strong><span t-esc="partner"/></strong></p>
-                            <table class="table table-bordered table-condensed">
-                                <thead>
-                                    <tr style="background-color:#e3e3e3;">
-                                        <th>Date</th>
-                                        <th>Period</th>
-                                        <th>Entry</th>
-                                        <th>Journal</th>
-                                        <th>Partner</th>
-                                        <th>Reference</th>
-                                        <th>Label</th>
-                                        <th>Rec.</th>
-                                        <th>Due Date</th>
-                                        <th style="width:8%">Debit</th>
-                                        <th style="width:8%">Credit</th>
-                                        <th style="width:8%">Cumul.Bal.</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr t-foreach="data[account][partner]" t-as="move">
-                                        <td><span t-esc="move['date']"/></td>
-                                        <td><span t-esc="move['period']"/></td>
-                                        <td><span t-esc="move['entry']"/></td>
-                                        <td><span t-esc="move['journal']"/></td>
-                                        <td><span t-esc="partner"/></td>
-                                        <td><span t-esc="move['reference']"/></td>
-                                        <td><span t-esc="move['label']"/></td>
-                                        <td><span t-esc="move['rec']"/></td>
-                                        <td><span t-esc="move['due_date']"/></td>
-                                        <t t-set="account_debit" t-value="account_debit + move['debit']" />
-                                        <t t-set="account_credit" t-value="account_credit + move['credit']" />
-                                        <t t-set="account_balance" t-value="account_balance - move['credit'] + move['debit']" />
-                                        <t t-set="partner_debit" t-value="partner_debit + move['debit']" />
-                                        <t t-set="partner_credit" t-value="partner_credit + move['credit']" />
-                                        <t t-set="partner_balance" t-value="partner_balance - move['credit'] + move['debit']" />
-                                        <td class="text-right"><span t-esc="move['debit']"/></td>
-                                        <td class="text-right"><span t-esc="move['credit']"/></td>
-                                        <td class="text-right"><span t-esc="partner_balance" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="6"></td>
-                                        <td colspan="3">Comulate Balance on Partner</td>
-                                        <td class="text-right"><span t-esc="partner_debit" /></td>
-                                        <td class="text-right"><span t-esc="partner_credit" /></td>
-                                        <td class="text-right"><span t-esc="partner_balance" /></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </t>
-                         <table class="table table-bordered table-condensed">
-                             <tbody><tr>
-                                <td colspan="9"><strong><span t-esc="account"/> Comulate Balance</strong></td>
-                                <td class="text-right" style="width:8%"><span t-esc="account_debit" /></td>
-                                <td class="text-right" style="width:8%"><span t-esc="account_credit" /></td>
-                                <td class="text-right" style="width:8%"><span t-esc="account_balance" /></td></tr>
-                             </tbody>
-                         </table>
-                         <br/>
-                     </t>
+                            <div class="act_as_caption account_title">
+                                <span t-esc="partner"/>
+                            </div>
+                            <div class="act_as_table data_table" style="width:100%;">
+                                <div class="act_as_thead">
+                                    <div class="act_as_row labels">
+                                        <div class="act_as_cell first_column">Date</div>
+                                        <div class="act_as_cell">Period</div>
+                                        <div class="act_as_cell">Entry</div>
+                                        <div class="act_as_cell">Journal</div>
+                                        <div class="act_as_cell">Partner</div>
+                                        <div class="act_as_cell">Reference</div>
+                                        <div class="act_as_cell">Label</div>
+                                        <div class="act_as_cell">Rec.</div>
+                                        <div class="act_as_cell">Due Date</div>
+                                        <div class="act_as_cell">Debit</div>
+                                        <div class="act_as_cell">Credit</div>
+                                        <div class="act_as_cell">Cumul.Bal.</div>
+                                    </div>
+                                </div>
+                                <div class="act_as_tbody">
+                                    <t t-foreach="data[account][partner]" t-as="move">
+                                        <div class="act_as_row">
+                                            <div class="act_as_cell first_column"><span t-esc="move['date']"/></div>
+                                            <div class="act_as_cell"><span t-esc="move['period']"/></div>
+                                            <div class="act_as_cell"><span t-esc="move['entry']"/></div>
+                                            <div class="act_as_cell"><span t-esc="move['journal']"/></div>
+                                            <div class="act_as_cell"><span t-esc="partner"/></div>
+                                            <div class="act_as_cell"><span t-esc="move['reference']"/></div>
+                                            <div class="act_as_cell"><span t-esc="move['label']"/></div>
+                                            <div class="act_as_cell"><span t-esc="move['rec']"/></div>
+                                            <div class="act_as_cell"><span t-esc="move['due_date']"/></div>
+                                            <t t-set="account_debit" t-value="account_debit + move['debit']" />
+                                            <t t-set="account_credit" t-value="account_credit + move['credit']" />
+                                            <t t-set="account_balance" t-value="account_balance - move['credit'] + move['debit']" />
+                                            <t t-set="partner_debit" t-value="partner_debit + move['debit']" />
+                                            <t t-set="partner_credit" t-value="partner_credit + move['credit']" />
+                                            <t t-set="partner_balance" t-value="partner_balance - move['credit'] + move['debit']" />
+                                            <div class="act_as_cell"><span t-esc="move['debit']"/></div>
+                                            <div class="act_as_cell"><span t-esc="move['credit']"/></div>
+                                            <div class="act_as_cell"><span t-esc="partner_balance" /></div>
+                                        </div>
+                                     </t>
+                                     <div class="act_as_row">
+                                         <div class="act_as_cell first_column"></div>
+                                         <div class="act_as_cell"></div>
+                                         <div class="act_as_cell"></div>
+                                         <div class="act_as_cell"></div>
+                                         <div class="act_as_cell"></div>
+                                         <div class="act_as_cell"></div>
+                                         <div class="act_as_cell"></div>
+                                         <div class="act_as_cell"></div>
+                                         <div class="act_as_cell">Comulate Balance on Partner</div>
+                                         <div class="act_as_cell"><span t-esc="partner_debit" /></div>
+                                         <div class="act_as_cell"><span t-esc="partner_credit" /></div>
+                                         <div class="act_as_cell"><span t-esc="partner_balance" /></div>
+                                     </div>
+                                 </div>
+                             </div>
+                         </t>
+                         <div class="act_as_table data_table" style="width: 1205px">
+                             <div class="act_as_tbody">
+                                 <div class="act_as_row">
+                                     <div class="act_as_cell first_column"><strong><span t-esc="account"/> Comulate Balance</strong></div>
+                                     <div class="act_as_cell"><span t-esc="account_debit" /></div>
+                                     <div class="act_as_cell"><span t-esc="account_credit" /></div>
+                                     <div class="act_as_cell"><span t-esc="account_balance" /></div>
+                                 </div>
+                             </div>
+                         </div>
+                    </t>
+
                 </div>
             </t>
         </t>
