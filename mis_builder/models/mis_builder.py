@@ -134,6 +134,7 @@ class MisReportKpi(models.Model):
         compute='_compute_expression',
         inverse='_inverse_expression')
     expression_ids = fields.One2many('mis.report.kpi.expression', 'kpi_id')
+    auto_expand_accounts = fields.Boolean(string='Display details by account')
     default_css_style = fields.Char(string='Default CSS style')
     css_style = fields.Char(string='CSS style expression')
     type = fields.Selection([('num', _('Numeric')),
@@ -617,8 +618,8 @@ class MisReport(models.Model):
                 # we assume there will be no errors, because it is a
                 # the same as the kpi, just filtered on one account;
                 # I'd say if we have an exception in this part, it's bug...
-                # TODO FIXME: do this only if requested for this KPI
-                continue
+                if not kpi.auto_expand_accounts:
+                    continue
                 for account_id in aep.get_accounts_in_expr(kpi.expression):
                     account_id_vals = []
                     for expression in kpi.expression_ids:

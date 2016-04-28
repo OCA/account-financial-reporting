@@ -135,6 +135,9 @@
                                attrs="{'invisible': [('multi', '=', True)],
                                        'readonly': [('multi', '=', True)]}"/>
                     </group>
+		    <group string="Auto expand">
+			<field name="auto_expand_accounts"/>
+		    </group>
                     <group col="2" string="Legend (for kpi expressions)">
                         <group>
                             <label colspan="2" string="Expressions are of the form &lt;field&gt;&lt;mode&gt;[accounts][domain]"/>
