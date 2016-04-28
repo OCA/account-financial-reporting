@@ -618,6 +618,7 @@ class MisReport(models.Model):
                 # the same as the kpi, just filtered on one account;
                 # I'd say if we have an exception in this part, it's bug...
                 # TODO FIXME: do this only if requested for this KPI
+                continue
                 for account_id in aep.get_accounts_in_expr(kpi.expression):
                     account_id_vals = []
                     for expression in kpi.expression_ids:
