@@ -41,7 +41,7 @@
 
         <record id="ledger_report_wizard_line_tree_view"
                 model="ir.ui.view">
-            <field name="name">General Ledger Line</field>
+            <field name="name">General Ledger Line tree</field>
             <field name="model">ledger.report.wizard.line</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
@@ -56,6 +56,30 @@
                      <field name="init_balance"/>
                      <field name="cumul_balance"/>
                 </tree>
+            </field>
+        </record>
+
+        <record id="ledger_report_wizard_line_search_view"
+                model="ir.ui.view">
+            <field name="name">General Ledger Line search</field>
+            <field name="model">ledger.report.wizard.line</field>
+            <field name="arch" type="xml">
+                <search string="Line search">
+                    <group expand="1" string="Group By">
+                        <filter
+                            name="group_by_account_id"
+                            string="Account"
+                            domain="[]"
+                            context="{'group_by' : 'account_id'}"
+                            />
+                        <filter
+                            name="group_by_date"
+                            string="Month"
+                            domain="[]"
+                            context="{'group_by' : 'date:month'}"
+                            />
+                    </group>
+               </search>
             </field>
         </record>
 
