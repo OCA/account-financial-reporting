@@ -59,12 +59,32 @@ class MisBuilderXslx(ReportXlsx):
         data = objects.compute()
 
         # Column headers
-        for col in data['header'][0]['cols']:
-            sheet.set_column(col_pos, col_pos, 30)
-            sheet.write(row_pos, col_pos, col['name'], header_format)
-            sheet.write(row_pos+1, col_pos, col['date'], header_format)
-            col_pos += 1
-        row_pos += 2
+        for header in data['header']:
+            has_col_date = False
+            for col in header['cols']:
+                colspan = col['colspan']
+                col_date = col.get('date')
+                col_name = col['name']
+                has_col_date = has_col_date or col_date
+                if colspan > 1:
+                    sheet.merge_range(
+                        row_pos, col_pos, row_pos, col_pos + colspan-1,
+                        col_name, header_format)
+                    if col_date:
+                        sheet.merge_range(
+                            row_pos+1, col_pos, row_pos+1, col_pos + colspan-1,
+                            col_date, header_format)
+                    col_pos += colspan
+                else:
+                    sheet.write(row_pos, col_pos, col['name'], header_format)
+                    if col_date:
+                        sheet.write(
+                            row_pos+1, col_pos, col.get('date'), header_format)
+                    col_pos += 1
+            col_pos = 1
+            row_pos += 1
+            if has_col_date:
+                row_pos += 1
         for line in data['content']:
             col = 0
             sheet.write(row_pos, col, line['kpi_name'], kpi_name_format)
