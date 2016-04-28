@@ -36,11 +36,10 @@
                 <div class="page">
 
                     <!-- Generic information -->
-                    <div class="act_as_table data_table" style="width: 100%">
+                    <div class="act_as_table data_table">
                         <div class="act_as_thead">
                             <div class="act_as_row labels">
                                 <div class="act_as_cell first_column">Company</div>
-                                <div class="act_as_cell">Fiscal Year</div>
                                 <div class="act_as_cell">At Date</div>
                                 <div class="act_as_cell">Accounts Filter</div>
                                 <div class="act_as_cell">Target Moves</div>
@@ -49,7 +48,6 @@
                         <div class="act_as_tbody">
                             <div class="act_as_row">
                                 <div class="act_as_cell first_column"><span t-esc="general['company']"/></div>
-                                <div class="act_as_cell"><span t-esc="general['fiscal_year']"/></div>
                                 <div class="act_as_cell"><span t-esc="general['at_date']"/></div>
                                 <div class="act_as_cell"><span t-esc="general['account_filters']"/></div>
                                 <div class="act_as_cell"><span t-esc="general['target_moves']"/></div>
@@ -73,11 +71,10 @@
                             <div class="act_as_caption account_title">
                                 <span t-esc="partner"/>
                             </div>
-                            <div class="act_as_table data_table" style="width:100%;">
+                            <div class="act_as_table data_table">
                                 <div class="act_as_thead">
                                     <div class="act_as_row labels">
                                         <div class="act_as_cell first_column">Date</div>
-                                        <div class="act_as_cell">Period</div>
                                         <div class="act_as_cell">Entry</div>
                                         <div class="act_as_cell">Journal</div>
                                         <div class="act_as_cell">Partner</div>
@@ -94,7 +91,6 @@
                                     <t t-foreach="data[account][partner]" t-as="move">
                                         <div class="act_as_row">
                                             <div class="act_as_cell first_column"><span t-esc="move['date']"/></div>
-                                            <div class="act_as_cell"><span t-esc="move['period']"/></div>
                                             <div class="act_as_cell"><span t-esc="move['entry']"/></div>
                                             <div class="act_as_cell"><span t-esc="move['journal']"/></div>
                                             <div class="act_as_cell"><span t-esc="partner"/></div>
@@ -108,9 +104,9 @@
                                             <t t-set="partner_debit" t-value="partner_debit + move['debit']" />
                                             <t t-set="partner_credit" t-value="partner_credit + move['credit']" />
                                             <t t-set="partner_balance" t-value="partner_balance - move['credit'] + move['debit']" />
-                                            <div class="act_as_cell"><span t-esc="move['debit']"/></div>
-                                            <div class="act_as_cell"><span t-esc="move['credit']"/></div>
-                                            <div class="act_as_cell"><span t-esc="partner_balance" /></div>
+                                            <div class="act_as_cell amount"><span t-esc="move['debit']"/></div>
+                                            <div class="act_as_cell amount"><span t-esc="move['credit']"/></div>
+                                            <div class="act_as_cell amount"><span t-esc="partner_balance" /></div>
                                         </div>
                                      </t>
                                      <div class="act_as_row">
@@ -121,22 +117,21 @@
                                          <div class="act_as_cell"></div>
                                          <div class="act_as_cell"></div>
                                          <div class="act_as_cell"></div>
-                                         <div class="act_as_cell"></div>
                                          <div class="act_as_cell">Comulate Balance on Partner</div>
-                                         <div class="act_as_cell"><span t-esc="partner_debit" /></div>
-                                         <div class="act_as_cell"><span t-esc="partner_credit" /></div>
-                                         <div class="act_as_cell"><span t-esc="partner_balance" /></div>
+                                         <div class="act_as_cell amount"><span t-esc="partner_debit" /></div>
+                                         <div class="act_as_cell amount"><span t-esc="partner_credit" /></div>
+                                         <div class="act_as_cell amount"><span t-esc="partner_balance" /></div>
                                      </div>
                                  </div>
                              </div>
                          </t>
-                         <div class="act_as_table data_table" style="width: 1205px">
+                         <div class="act_as_table data_table">
                              <div class="act_as_tbody">
                                  <div class="act_as_row">
                                      <div class="act_as_cell first_column"><strong><span t-esc="account"/> Comulate Balance</strong></div>
-                                     <div class="act_as_cell"><span t-esc="account_debit" /></div>
-                                     <div class="act_as_cell"><span t-esc="account_credit" /></div>
-                                     <div class="act_as_cell"><span t-esc="account_balance" /></div>
+                                     <div class="act_as_cell amount"><span t-esc="account_debit" /></div>
+                                     <div class="act_as_cell amount"><span t-esc="account_credit" /></div>
+                                     <div class="act_as_cell amount"><span t-esc="account_balance" /></div>
                                  </div>
                              </div>
                          </div>
