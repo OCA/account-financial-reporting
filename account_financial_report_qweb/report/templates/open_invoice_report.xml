@@ -5,13 +5,8 @@
     <template id="open_invoice_report_qweb">
 
         <style type="text/css">
-            td, th {
-                font-size: 10px;
-            }
-
-            npage {
-                font-size: 10px
-            }
+            td, th {font-size: 10px;}
+            npage {font-size: 10px;}
         </style>
 
         <div class="header">
@@ -40,7 +35,7 @@
                      <div class="row">
                         <table class="table table-bordered table-condensed" style="text-align: center;">
                             <thead>
-                                <tr>
+                                <tr style="background-color:#e3e3e3;">
                                     <th>Chart of Account</th>
                                     <th>Fiscal Year</th>
                                     <th>Period Filters</th>
@@ -66,7 +61,7 @@
                             <p><strong><span t-esc="partner"/></strong></p>
                             <table class="table table-bordered table-condensed">
                                 <thead>
-                                    <tr>
+                                    <tr style="background-color:#e3e3e3;">
                                         <th>Date</th>
                                         <th>Period</th>
                                         <th>Entry</th>
@@ -76,9 +71,9 @@
                                         <th>Label</th>
                                         <th>Rec.</th>
                                         <th>Due Date</th>
-                                        <th>Debit</th>
-                                        <th>Credit</th>
-                                        <th>Cumul.Bal.</th>
+                                        <th style="width:8%">Debit</th>
+                                        <th style="width:8%">Credit</th>
+                                        <th style="width:8%">Cumul.Bal.</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -109,9 +104,9 @@
                          <table class="table table-bordered table-condensed">
                              <tbody><tr><h2>
                                 <td colspan="9"><strong><span t-esc="account"/> Comulate Balance</strong></td>
-                                <td class="text-right">0</td>
-                                <td class="text-right">0</td>
-                                <td class="text-right">0</td></h2></tr>
+                                <td class="text-right" style="width:8%">0</td>
+                                <td class="text-right" style="width:8%">0</td>
+                                <td class="text-right" style="width:8%">0</td></h2></tr>
                              </tbody>
                          </table>
                          <br/>
