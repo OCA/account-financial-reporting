@@ -38,13 +38,9 @@ class AutoStruct(object):
             setattr(self, k, v)
 
 
-class ExplodedKpiItem(object):
-
-    def __init__(self, account_id):
-        pass
-
-
 class KpiMatrix(object):
+    """ This object holds the computation results in a way
+    that can be browsed easily for rendering """
 
     def __init__(self):
         # { period: {kpi: vals}
@@ -55,13 +51,25 @@ class KpiMatrix(object):
         self._localdict = {}
         # { kpi: set(account_ids) }
         self._kpis = OrderedDict()
+        # { account_id: account name }
+        self._account_names_by_id = {}
 
     def set_kpi_vals(self, period, kpi, vals):
+        """ Set the values for a kpi in a period
+
+        vals is a list of sub-kpi values.
+        """
         self._kpi_vals[period][kpi] = vals
         if kpi not in self._kpis:
             self._kpis[kpi] = set()
 
     def set_kpi_exploded_vals(self, period, kpi, account_id, vals):
+        """ Set the detail values for a kpi in a period for a GL account
+
+        This is used by the automatic details mechanism.
+
+        vals is a list of sub-kpi values.
+        """
         exploded_vals = self._kpi_exploded_vals[period]
         if kpi not in exploded_vals:
             exploded_vals[kpi] = {}
@@ -69,9 +77,21 @@ class KpiMatrix(object):
         self._kpis[kpi].add(account_id)
 
     def set_localdict(self, period, localdict):
+        # TODO FIXME to be removed when we have styles
         self._localdict[period] = localdict
 
+    def get_localdict(self, period):
+        # TODO FIXME to be removed when we have styles
+        return self._localdict[period]
+
     def iter_kpi_vals(self, period):
+        """ Iterate kpi values, including auto-expanded details by account
+
+        It yields, in no specific order:
+            * kpi technical name
+            * kpi object
+            * subkpi values tuple
+        """
         for kpi, vals in self._kpi_vals[period].iteritems():
             yield kpi.name, kpi, vals
             kpi_exploded_vals = self._kpi_exploded_vals[period]
@@ -82,10 +102,49 @@ class KpiMatrix(object):
                 yield "%s:%s" % (kpi.name, account_id), kpi, account_id_vals
 
     def iter_kpis(self):
+        """ Iterate kpis, including auto-expanded details by accounts
+
+        It yields, in display order:
+            * kpi technical name
+            * kpi display name
+            * kpi object
+        """
         for kpi, account_ids in self._kpis.iteritems():
-            yield kpi.name, kpi
-            for account_id in account_ids:
-                yield "%s:%s" % (kpi.name, account_id), kpi
+            yield kpi.name, kpi.description, kpi
+            for account_id in sorted(account_ids, key=self.get_account_name):
+                yield "%s:%s" % (kpi.name, account_id), \
+                    self.get_account_name(account_id), kpi
+
+    def get_exploded_account_ids(self):
+        """ Get the list of auto-expanded account ids
+
+        It returns the complete list, across all periods and kpis.
+        This method must be called after setting all kpi values
+        using set_kpi_vals and set_exploded_kpi_vals.
+        """
+        res = set()
+        for kpi, account_ids in self._kpis.iteritems():
+            res.update(account_ids)
+        return list(res)
+
+    def load_account_names(self, account_obj):
+        """ Load account names for all exploded account ids
+
+        This method must be called after setting all kpi values
+        using set_kpi_vals and set_exploded_kpi_vals, and before
+        calling get_account_name().
+        """
+        account_data = account_obj.browse(self.get_exploded_account_ids())
+        self._account_names_by_id = {a.id: u"{} {}".format(a.code, a.name)
+                                     for a in account_data}
+
+    def get_account_name(self, account_id):
+        """ Get account display name from it's id
+
+        This method must be called after loading account names with
+        load_account_names().
+        """
+        return self._account_names_by_id.get(account_id, account_id)
 
 
 def _get_selection_label(selection, value):
@@ -186,11 +245,15 @@ class MisReportKpi(models.Model):
     @api.multi
     def _compute_expression(self):
         for kpi in self:
-            kpi.expression = ''
+            l = []
             for expression in kpi.expression_ids:
                 if expression.subkpi_id:
-                    kpi.expression += '%s :\n' % expression.subkpi_id.name
-                kpi.expression += '%s\n' % expression.name
+                    l.append('{}={}'.format(
+                        expression.subkpi_id.name, expression.name))
+                else:
+                    l.append(
+                        expression.name)
+            kpi.expression = ',\n'.join(l)
 
     @api.multi
     def _inverse_expression(self):
@@ -911,7 +974,7 @@ class MisReportInstancePeriod(models.Model):
                         expression = kpi.expression
                     # TODO FIXME: check we have meaningfulname for exploded
                     # kpis
-                    comment = kpi_name + " = " + expression
+                    comment = kpi.name + " = " + expression
                     vals.update({
                         'val': (None
                                 if subkpi_val is AccountingNone
@@ -1096,6 +1159,7 @@ class MisReportInstance(models.Model):
                 continue
             kpi_values = period._compute(kpi_matrix, lang_id, aep)
             kpi_values_by_period_ids[period.id] = kpi_values
+        kpi_matrix.load_account_names(self.env['account.account'])
 
         # prepare header and content
         header = [{
@@ -1107,10 +1171,9 @@ class MisReportInstance(models.Model):
         }]
         content = []
         rows_by_kpi_name = {}
-        for kpi_name, kpi in kpi_matrix.iter_kpis():
+        for kpi_name, kpi_description, kpi in kpi_matrix.iter_kpis():
             rows_by_kpi_name[kpi_name] = {
-                # TODO FIXME
-                'kpi_name': kpi.description if ':' not in kpi_name else kpi_name,
+                'kpi_name': kpi_description,
                 'cols': [],
                 'default_style': kpi.default_css_style
             }
