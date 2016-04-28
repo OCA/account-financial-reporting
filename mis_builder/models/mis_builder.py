@@ -462,32 +462,16 @@ class MisReport(models.Model):
                  date_from, date_to,
                  target_move,
                  company,
+                 subkpi_ids,
                  get_additional_move_line_filter=None,
-                 get_additional_query_filter=None,
-                 period_id=None):
-        """ Evaluate a report for a given period.
-
-        It returns a dictionary keyed on kpi.name with the following values:
-            * val: the evaluated kpi, or None if there is no data or an error
-            * val_r: the rendered kpi as a string, or #ERR, #DIV
-            * val_c: a comment (explaining the error, typically)
-            * style: the css style of the kpi
-                     (may change in the future!)
-            * prefix: a prefix to display in front of the rendered value
-            * suffix: a prefix to display after rendered value
-            * dp: the decimal precision of the kpi
-            * is_percentage: true if the kpi is of percentage type
-                             (may change in the future!)
-            * expr: the kpi expression
-            * drilldown: true if the drilldown method of
-                         mis.report.instance.period is going to do something
-                         useful in this kpi
-
+                 get_additional_query_filter=None):
+        """ Compute
         :param lang_id: id of a res.lang object
         :param aep: an AccountingExpressionProcessor instance created
                     using _prepare_aep()
         :param date_from, date_to: the starting and ending date
         :param target_move: all|posted
+        :param company:
         :param get_additional_move_line_filter: a bound method that takes
                                                 no arguments and returns
                                                 a domain compatible with
@@ -496,9 +480,6 @@ class MisReport(models.Model):
                                             query argument and returns a
                                             domain compatible with the query
                                             underlying model
-        :param period_id: an optional opaque value that is returned as
-                          query_id field in the result (may change in the
-                          future!)
         """
         self.ensure_one()
         res = {}
@@ -526,14 +507,13 @@ class MisReport(models.Model):
 
         compute_queue = self.kpi_ids
         recompute_queue = []
-        period = self.env['mis.report.instance.period'].browse(period_id)
         while True:
             for kpi in compute_queue:
                 vals = []
                 has_error = False
                 for expression in kpi.expression_ids:
                     if expression.subkpi_id \
-                            and expression.subkpi_id not in period.subkpi_ids:
+                            and expression.subkpi_id not in subkpi_ids:
                         continue
                     try:
                         kpi_eval_expression = aep.replace_expr(expression.name)
@@ -575,7 +555,7 @@ class MisReport(models.Model):
             # try again
             compute_queue = recompute_queue
             recompute_queue = []
-        return res
+        return res, localdict
 
 
 class MisReportInstancePeriod(models.Model):
@@ -736,20 +716,42 @@ class MisReportInstancePeriod(models.Model):
             return False
 
     @api.multi
-    def _render(self, data, lang_id):
-        self.ensure_one()
-        res = {}
-        if self.subkpi_ids:
-            index2subkpi = {
-                idx: subkpi.name
-                for idx, subkpi in enumerate(self.subkpi_ids)
-                }
-        else:
-            index2subkpi = {0: 'default'}
+    def _compute(self, lang_id, aep):
+        """ Compute and render a mis report instance period
 
+        It returns a dictionary keyed on kpi.name with a list of dictionaries
+        with the following values (one item in the list for each subkpi):
+            * val: the evaluated kpi, or None if there is no data or an error
+            * val_r: the rendered kpi as a string, or #ERR, #DIV
+            * val_c: a comment (explaining the error, typically)
+            * style: the css style of the kpi
+                     (may change in the future!)
+            * prefix: a prefix to display in front of the rendered value
+            * suffix: a prefix to display after rendered value
+            * dp: the decimal precision of the kpi
+            * is_percentage: true if the kpi is of percentage type
+                             (may change in the future!)
+            * expr: the kpi expression
+            * drilldown: true if the drilldown method of
+                         mis.report.instance.period is going to do something
+                         useful in this kpi
+        """
+        self.ensure_one()
+        # first invoke the compute method on the mis report template
+        # passing it all the information regarding period and filters
+        data, localdict = self.report_instance_id.report_id._compute(
+            lang_id, aep,
+            self.date_from, self.date_to,
+            self.report_instance_id.target_move,
+            self.report_instance_id.company_id,
+            self.subkpi_ids,
+            self._get_additional_move_line_filter,
+            self._get_additional_query_filter,
+        )
+        # second, render it to something that can be used by the widget
+        res = {}
         for kpi, vals in data.items():
             res[kpi.name] = []
-            # TODO FIXME localdict
             try:
                 kpi_style = None
                 if kpi.css_style:
@@ -775,10 +777,11 @@ class MisReportInstancePeriod(models.Model):
                         'val': subkpi_val.name,
                         'val_r': subkpi_val.name,
                         'val_c': subkpi_val.msg,
-                        'drilldown': None,
+                        'drilldown': False,
                         })
                 else:
-                    drilldown = (subkpi_val is not None and
+                    # TODO FIXME: has_account_var on each subkpi expression?
+                    drilldown = (subkpi_val is not AccountingNone and
                                  AEP.has_account_var(kpi.expression))
                     if kpi.multi:
                         expression = kpi.expression_ids[idx].name
@@ -786,28 +789,15 @@ class MisReportInstancePeriod(models.Model):
                         expression = kpi.expression
                     comment = kpi.name + " = " + expression
                     vals.update({
-                        'val': None if subkpi_val is AccountingNone
-                               else subkpi_val,
+                        'val': (None
+                                if subkpi_val is AccountingNone
+                                else subkpi_val),
                         'val_r': kpi.render(lang_id, subkpi_val),
                         'val_c': comment,
                         'drilldown': drilldown,
                         })
                 res[kpi.name].append(vals)
         return res
-
-    @api.multi
-    def _compute(self, lang_id, aep):
-        self.ensure_one()
-        data = self.report_instance_id.report_id._compute(
-            lang_id, aep,
-            self.date_from, self.date_to,
-            self.report_instance_id.target_move,
-            self.report_instance_id.company_id,
-            self._get_additional_move_line_filter,
-            self._get_additional_query_filter,
-            period_id=self.id,
-        )
-        return self._render(data, lang_id)
 
 
 class MisReportInstance(models.Model):
@@ -947,10 +937,10 @@ class MisReportInstance(models.Model):
         header = [{
             'kpi_name': '',
             'cols': []
-            },{
+            }, {
             'kpi_name': '',
             'cols': []
-            }]
+        }]
         content = []
         rows_by_kpi_name = {}
         for kpi in self.report_id.kpi_ids:
@@ -976,17 +966,17 @@ class MisReportInstance(models.Model):
             header[0]['cols'].append(dict(
                 name=period.name,
                 date=header_date,
-                colspan = len(period.subkpi_ids) or 1,
+                colspan=len(period.subkpi_ids) or 1,
                 ))
             for subkpi in period.subkpi_ids:
                 header[1]['cols'].append(dict(
                     name=subkpi.name,
-                    colspan = 1,
+                    colspan=1,
                     ))
             if not period.subkpi_ids:
                 header[1]['cols'].append(dict(
                     name="",
-                    colspan = 1,
+                    colspan=1,
                     ))
             # add kpi values
             kpi_values = kpi_values_by_period_ids[period.id]
