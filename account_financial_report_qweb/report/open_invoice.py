@@ -20,6 +20,7 @@ class OpenInvoiceReport(models.AbstractModel):
         docargs = {
             'doc_model': 'account.move.line',
             'doc_ids': doc_ids,
+            'sorted': sorted,
             }
         if data:
             docargs.update(data)

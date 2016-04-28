@@ -56,7 +56,7 @@
                     </div>
 
                     <!-- Informations group by account -->
-                    <t t-foreach="data" t-as="account">
+                    <t t-foreach="sorted(data.keys())" t-as="account">
                         <t t-set="account_debit" t-value="0.0" />
                         <t t-set="account_credit" t-value="0.0" />
                         <t t-set="account_balance" t-value="0.0" />
@@ -64,7 +64,7 @@
                             <span t-esc="account"/>
                         </div>
                         <!-- Informations group by partner -->
-                        <t t-foreach="data[account]" t-as="partner">
+                        <t t-foreach="sorted(data[account].keys())" t-as="partner">
                             <t t-set="partner_debit" t-value="0.0" />
                             <t t-set="partner_credit" t-value="0.0" />
                             <t t-set="partner_balance" t-value="0.0" />
