@@ -20,7 +20,7 @@
                     <h6><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/></h6>
                 </div>
                 <div class="col-xs-4 text-center">
-                    <img t-if="res_company.logo" t-att-src="'data:image/png;base64,%s' % res_company.logo" style="max-height: 50px;"/>
+                    <img t-if="res_company.logo" t-att-src="'data:image/png;base64,%s' % res_company.logo" style="max-height: 40px;"/>
                 </div>
                 <div class="col-xs-4 text-right">
                     <npage>
@@ -106,7 +106,7 @@
                                 </tbody>
                             </table>
                         </t>
-                         <table>
+                         <table class="table table-bordered table-condensed">
                              <tbody><tr><h2>
                                 <td colspan="9"><strong><span t-esc="account"/> Comulate Balance</strong></td>
                                 <td class="text-right">0</td>
