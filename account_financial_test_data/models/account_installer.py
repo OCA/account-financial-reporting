@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from openerp.osv import orm
 import logging
+from openerp.osv import orm
 from openerp import models, fields, api, _, exceptions
 
 _logger = logging.getLogger(__name__)
