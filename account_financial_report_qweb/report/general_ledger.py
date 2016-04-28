@@ -3,13 +3,12 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp import models, fields, api
-from openerp import tools
 
 
 class FinancialReportLine(models.Model):
     _inherit = 'financial.report.line'
     _name = 'general.ledger.line'
-    _description = "General Ledger report"
+    _description = "General Ledger report line"
 
     _auto = False
     _order = 'account_id, date'
@@ -23,80 +22,6 @@ class FinancialReportLine(models.Model):
             rec.label = label
 
     label = fields.Char(compute='_get_label', readonly=True, store=False)
-
-    def init(self, cr):
-        report_name = self._name.replace('.', '_')
-        tools.drop_view_if_exists(cr, report_name)
-        query = """
-CREATE OR REPLACE VIEW %(report_name)s AS (
-  SELECT
-    acc.id AS account_id,
-    acc.code AS account_code,
-    acc.centralized,
-    ml.id,
-    ml.name,
-    ml.ref,
-    ml.date,
-    date_part('year', ml.date) || '-' || date_part('month', ml.date)
-        AS month,
-    part.ref AS partner_ref,
-    part.name AS partner_name,
-    ml.journal_id,
-    ml.currency_id,
-    cur.name AS currency_code,
-    ml.debit,
-    ml.credit,
-    ml.debit - ml.credit AS balance,
-    ml.amount_currency,
-
-    SUM(amount_currency) OVER w_account AS balance_curr,
-    SUM(debit) OVER w_account AS cumul_debit,
-    SUM(credit) OVER w_account AS cumul_credit,
-    SUM(debit - credit) OVER w_account AS cumul_balance,
-    SUM(amount_currency) OVER w_account AS cumul_balance_curr,
-
-    SUM(debit) OVER w_account - debit AS init_debit,
-    SUM(credit) OVER w_account - credit AS init_credit,
-    SUM(debit - credit) OVER w_account - (debit - credit) AS init_balance,
-    SUM(amount_currency) OVER w_account - (amount_currency)
-        AS init_balance_curr,
-
-    SUM(debit) OVER w_account_centralized AS debit_centralized,
-    SUM(credit) OVER w_account_centralized AS credit_centralized,
-    SUM(debit - credit) OVER w_account_centralized AS balance_centralized,
-    SUM(amount_currency) OVER w_account_centralized
-        AS balance_curr_centralized,
-
-    SUM(debit) OVER w_account - SUM(debit)
-        OVER w_account_centralized AS init_debit_centralized,
-    SUM(credit) OVER w_account - SUM(credit)
-        OVER w_account_centralized AS init_credit_centralized,
-    SUM(debit - credit) OVER w_account - SUM(debit - credit)
-        OVER w_account_centralized AS init_balance_centralized,
-    SUM(amount_currency) OVER w_account - SUM(amount_currency)
-        OVER w_account_centralized AS init_balance_curr_centralized,
-
-    m.name AS move_name,
-    m.state AS move_state,
-    i.number AS invoice_number
-  FROM
-    account_account AS acc
-    LEFT JOIN account_move_line AS ml ON (ml.account_id = acc.id)
-    INNER JOIN res_partner AS part ON (ml.partner_id = part.id)
-    INNER JOIN account_move AS m ON (ml.move_id = m.id)
-    LEFT JOIN account_invoice AS i ON (m.id = i.move_id)
-    LEFT JOIN res_currency AS cur ON (ml.currency_id = cur.id)
-  WINDOW w_account AS (PARTITION BY acc.code ORDER BY ml.date, ml.id),
-         w_account_centralized AS (
-           PARTITION BY acc.code,
-                        date_part('year', ml.date),
-                        date_part('month', ml.date),
-                        ml.journal_id,
-                        ml.partner_id
-           ORDER BY ml.date, ml.journal_id, ml.id)
-)
-        """ % {'report_name': report_name}
-        cr.execute(query)
 
 
 class GeneralLedgerReport(models.TransientModel):
