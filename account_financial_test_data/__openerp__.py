@@ -35,6 +35,8 @@
         "data/settings_data.xml",
         "data/account_auto_installer.xml",
         "data/partners_data.xml",
+        "data/products_data.xml",
     ],
+    'post_init_hook': 'post_init_hook',
     'installable': True,
 }

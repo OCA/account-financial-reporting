@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+        <record id="data_product_a" model="product.product">
+            <field name="name">SALES</field>
+            <field name="sale_ok">1</field>
+        </record>
+    </data>
+</openerp>
