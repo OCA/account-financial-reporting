@@ -1,0 +1,47 @@
+.mis_table {
+    display: table ;
+    width: 100%;
+    table-layout: fixed ;
+}
+.mis_row  {
+    display: table-row ;
+    page-break-inside: avoid;
+}
+.mis_cell {
+    display: table-cell ;
+    page-break-inside: avoid;
+}
+.mis_thead {
+    display: table-header-group ;
+}
+.mis_tbody {
+    display: table-row-group ;
+}
+.mis_row.labels {
+    background-color:#F0F0F0 ;
+}
+.mis_table, .mis_table .mis_row {
+    border-left:0px;
+    border-right:0px;
+    text-align:left;
+    padding-right:3px;
+    padding-left:3px;
+    padding-top:2px;
+    padding-bottom:2px;
+    border-collapse:collapse;
+}
+.mis_table .mis_row.labels, .mis_table .mis_row.lines {
+    border-color:grey ;
+    border-bottom:1px solid lightGrey ;
+}
+.mis_table .mis_cell {
+    word-wrap: break-word;
+}
+.mis_cell.amount {
+    word-wrap:normal;
+    text-align:right;
+}
+.mis_table .mis_cell{
+    padding-left: 5px;
+/*    border-right:1px solid lightGrey;  uncomment to active column lines */
+}

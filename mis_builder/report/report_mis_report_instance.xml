@@ -4,21 +4,23 @@
 
     <template id="report_mis_report_instance">
       <t t-call="report.html_container">
+        <t t-set="data_report_margin_top" t-value="12"/>
+        <t t-set="data_report_header_spacing" t-value="9"/>
+        <t t-set="data_report_dpi" t-value="110"/>
         <t t-foreach="docs" t-as="o">
-          <t t-call="report.internal_layout">
             <div class="page">
-              <h2 t-field="o.name"></h2>
-              <table class="table table-condensed">
-                <thead>
+              <h2><span t-field="o.name" /> - <span t-field="o.company_id.name" /></h2>
+              <div class="mis_table">
+                <div class="mis_thead">
                   <t t-foreach="docs_computed[o.id]['header']" t-as="h">
-                    <tr>
-                      <th>
+                    <div class="mis_row labels">
+                      <div class="mis_cell">
                         <div>
                           <t t-esc="h_value['kpi_name']"/>
                         </div>
-                      </th>
+                      </div>
                       <t t-foreach="h_value['cols']" t-as="col">
-                        <th class="text-center" t-att-colspan="col.get('colspan', 1)">
+                        <div class="mis_cell amount" t-att-colspan="col.get('colspan', 1)">
                           <div>
                             <t t-esc="col['name']"/>
                           </div>
@@ -27,31 +29,47 @@
                               <t t-esc="col['date']"/>
                             </div>
                           </t>
-                        </th>
+                        </div>
                       </t>
-                    </tr>
+                    </div>
                   </t>
-                </thead>
-                <tbody>
-                  <tr t-foreach="docs_computed[o.id]['content']" t-as="c">
-                    <td t-att-style="c_value['default_style']">
+                </div>
+                <div class="mis_tbody">
+                  <div t-foreach="docs_computed[o.id]['content']" t-as="c" class="mis_row lines">
+                    <div t-att-style="c_value['default_style']" class="mis_cell">
                       <div class="text-left">
                         <t t-esc="c_value['kpi_name']"/>
                       </div>
-                    </td>
+                    </div>
                     <t t-foreach="c_value['cols']" t-as="value">
-                      <td t-att-style="c_value['default_style']">
+                      <div t-att-style="c_value['default_style']" class="mis_cell">
                         <div t-att-style="value_value.get('style')" class="text-right">
                           <t t-esc="value_value['val_r']"/>
                         </div>
-                      </td>
+                      </div>
                     </t>
-                  </tr>
-                </tbody>
-              </table>
+                  </div>
+                </div>
+              </div>
             </div>
           </t>
-        </t>
+          <div class="footer">
+            <div style="border-top: 1px solid black;">
+                <div class="col-xs-3">
+                    <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
+                </div>
+                <div class="col-xs-2 col-xs-offset-2 text-center">
+                </div>
+                <div class="col-xs-2 col-xs-offset-3 text-right">
+                    <ul class="list-inline">
+                        Page
+                        <li><span class="page"/></li>
+                        <li>of</li>
+                        <li><span class="topage"/></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
       </t>
     </template>
 

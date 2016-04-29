@@ -8,6 +8,11 @@
                 <script type="text/javascript" src="/mis_builder/static/src/js/mis_builder.js"></script>
             </xpath>
         </template>
+        <template id="assets_report" inherit_id="report.assets_common">
+            <xpath expr="." position="inside">
+              <link href="/mis_builder/static/src/css/report.css" rel="stylesheet"/>
+            </xpath>
+        </template>
 
         <record model="ir.ui.view" id="mis_report_view_tree">
             <field name="name">mis.report.view.tree</field>
