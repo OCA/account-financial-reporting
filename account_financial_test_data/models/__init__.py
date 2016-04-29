@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-import account_installer
+from . import account_installer
