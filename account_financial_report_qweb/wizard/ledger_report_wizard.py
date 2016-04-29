@@ -6,6 +6,7 @@ from openerp import models, fields, api, _
 
 
 class LedgerReportWizard(models.TransientModel):
+    """Base ledger report wizard."""
 
     _name = "ledger.report.wizard"
     _description = "Ledger Report Wizard"
@@ -29,10 +30,11 @@ class LedgerReportWizard(models.TransientModel):
     centralize = fields.Boolean(string='Activate centralization',
                                 default=False)
     result_selection = fields.Selection(
-        [('customer', 'Receivable Accounts'),
-         ('supplier', 'Payable Accounts'),
-         ('customer_supplier', 'Receivable and Payable Accounts')
-         ],
+        [
+            ('customer', 'Receivable Accounts'),
+            ('supplier', 'Payable Accounts'),
+            ('customer_supplier', 'Receivable and Payable Accounts'),
+        ],
         string="Partner's",
         default='customer')
     partner_ids = fields.Many2many(
@@ -43,8 +45,22 @@ class LedgerReportWizard(models.TransientModel):
                                inverse_name='wizard_id')
 
     def _query(self):
+        """Execute query.
+
+        Short summary:
+        Prepare all lines for report
+        by calculating debit/credit amounts
+        plus the cumulative one.
+
+        Narrow the search by using PG windows.
+
+        Insert all the rows in `ledger_report_wizard_line`
+        at once, so that we have real model objects
+        and we can filter/group them in the tree view.
+
+        """
         query = """
-              WITH view_q as (SELECT
+            WITH view_q as (SELECT
                 ml.date,
                 acc.id AS account_id,
                 ml.debit,
@@ -58,45 +74,42 @@ class LedgerReportWizard(models.TransientModel):
                 SUM(debit - credit) OVER w_account - (debit - credit)
                     AS init_balance,
                 SUM(debit - credit) OVER w_account AS cumul_balance
-              FROM
+            FROM
                 account_account AS acc
                 LEFT JOIN account_move_line AS ml ON (ml.account_id = acc.id)
                 --INNER JOIN res_partner AS part ON (ml.partner_id = part.id)
-              INNER JOIN account_move AS m ON (ml.move_id = m.id)
-              WINDOW w_account AS (
-                  PARTITION BY acc.code ORDER BY ml.date, ml.id)
-              ORDER BY acc.id, ml.date)
-              INSERT INTO ledger_report_wizard_line
-              (
-              date,
-              name,
-              journal_id,
-              account_id,
-              partner_id,
-              ref,
-              label,
-              --counterpart
-              debit,
-              credit,
-              cumul_balance,
-              wizard_id
-              )
-              SELECT
-              date,
-              name,
-              journal_id,
-              account_id,
-              partner_id,
-              ref,
-              ' TODO label ' as label,
-              --counterpart
-              debit,
-              credit,
-              cumul_balance,
-
-              %(wizard_id)s as wizard_id
-              from view_q
-              where date between %(date_from)s and %(date_to)s
+            INNER JOIN account_move AS m ON (ml.move_id = m.id)
+            WINDOW w_account AS (PARTITION BY acc.code ORDER BY ml.date, ml.id)
+            ORDER BY acc.id, ml.date)
+            INSERT INTO ledger_report_wizard_line (
+                date,
+                name,
+                journal_id,
+                account_id,
+                partner_id,
+                ref,
+                label,
+                --counterpart
+                debit,
+                credit,
+                cumul_balance,
+                wizard_id
+            )
+            SELECT
+                date,
+                name,
+                journal_id,
+                account_id,
+                partner_id,
+                ref,
+                ' TODO label ' as label,
+                --counterpart
+                debit,
+                credit,
+                cumul_balance,
+                %(wizard_id)s as wizard_id
+            FROM view_q
+            WHERE date BETWEEN %(date_from)s AND %(date_to)s
             """
 
         params = dict(fy_date=self.fy_start_date, wizard_id=self.id,
@@ -130,10 +143,12 @@ class LedgerReportWizard(models.TransientModel):
 
     @api.multi
     def button_view(self):
+        """Open tree view w/ results."""
         return self.process()
 
     @api.multi
     def process(self):
+        """Process data and return window action."""
         self._query()
 
         return {
@@ -152,6 +167,7 @@ class LedgerReportWizard(models.TransientModel):
 
     @api.onchange('date_range_id')
     def onchange_date_range_id(self):
+        """Handle date range change."""
         self.date_from = self.date_range_id.date_start
         self.date_to = self.date_range_id.date_end
         if self.date_from:
@@ -160,6 +176,10 @@ class LedgerReportWizard(models.TransientModel):
 
 
 class LedgerReportWizardLine(models.TransientModel):
+    """A wizard line.
+
+    Lines are populated on the fly when submitting the wizard.
+    """
     _name = 'ledger.report.wizard.line'
 
     wizard_id = fields.Many2one(comodel_name='ledger.report.wizard')
