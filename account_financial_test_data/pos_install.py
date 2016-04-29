@@ -3,6 +3,10 @@ from datetime import date, datetime
 from openerp import SUPERUSER_ID, api
 
 
+# -*- coding: utf-8 -*-
+# © 2016 Taktik
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+
 def post_init_hook(cr, registry):
 
     def update_partners():
