@@ -318,6 +318,7 @@
             <field name="res_model">mis.report.instance</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
+            <field name="domain"></field>
         </record>
 
         <menuitem id="mis_report_instance_view_menu" parent="account.menu_finance_reports" name="MIS Reports" action="mis_report_instance_view_action" sequence="101"/>
@@ -349,7 +350,7 @@
             </field>
         </record>
 
-        <record model="ir.actions.act_window" id="mis_report_instance_view_action">
+        <record model="ir.actions.act_window" id="last_mis_report_instance_view_action">
             <field name="name">Last Reports Generated</field>
             <field name="view_id" ref="mis_report_instance_view_tree"/>
             <field name="res_model">mis.report.instance</field>
@@ -361,7 +362,7 @@
         <menuitem id="last_wizard_mis_report_instance_view_menu"
                   parent="account.menu_finance_reports"
                   name="Last Reports Generated"
-                  action="mis_report_instance_view_action"
+                  action="last_mis_report_instance_view_action"
                   sequence="102"/>
 
         <record model="ir.ui.view" id="mis_report_instance_period_view_form">
