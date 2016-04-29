@@ -7,7 +7,8 @@
     "version": "9.0.1.0.0",
     "category": "Accounting & Finance",
     "website": "https://www.agilebg.com/",
-    "author": "Agile Business Group, Odoo Community Association (OCA)",
+    "author": "Agile Business Group, Therp BV, "
+              "Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "application": False,
     "installable": True,
