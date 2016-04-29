@@ -20,6 +20,7 @@
     'data': [
         'wizard/mis_builder_dashboard.xml',
         'views/mis_builder.xml',
+        'datas/ir_cron.xml',
         'security/ir.model.access.csv',
         'security/mis_builder_security.xml',
         'report/report_mis_report_instance.xml',

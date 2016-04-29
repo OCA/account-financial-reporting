@@ -810,7 +810,6 @@ class MisReportInstancePeriod(models.Model):
                              ('w', _('Week')),
                              ('date_range', _('Date Range'))
                              ],
-                            required=True,
                             string='Period type')
     date_range_type_id = fields.Many2one(
         comodel_name='date.range.type', string='Date Range Type')
@@ -864,6 +863,7 @@ class MisReportInstancePeriod(models.Model):
         for record in self:
             record.manual_date_from = record.date_range_id.date_start
             record.manual_date_to = record.date_range_id.date_end
+            record.name = record.date_range_id.name
 
     @api.multi
     def _get_additional_move_line_filter(self):
@@ -1088,6 +1088,17 @@ class MisReportInstance(models.Model):
             'res_id': self.id,
             })
         return res
+
+    @api.model
+    def _vacuum_report(self, hours=24):
+        clear_date = fields.Datetime.to_string(
+            datetime.datetime.now() - datetime.timedelta(hours=hours))
+        reports = self.search([
+            ('write_date', '<', clear_date),
+            ('temporary', '=', True),
+            ])
+        _logger.debug('Vacuum %s Temporary MIS Builder Report', len(reports))
+        return reports.unlink()
 
     @api.one
     def copy(self, default=None):

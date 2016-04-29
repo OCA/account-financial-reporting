@@ -296,9 +296,6 @@
                             <tree string="KPI's" colors="red:valid==False">
                                 <field name="sequence" widget="handle"/>
                                 <field name="name"/>
-                                <field name="type"/>
-                                <field name="date_range_type_id"
-                                       attrs="{'invisible': [('type', '!=', 'date_range')], 'required': [('type', '=', 'date_range')]}"/>
                                 <field name="date_from"/>
                                 <field name="date_to"/>
                                 <field name="valid" invisible="1"/>
@@ -323,7 +320,7 @@
             <field name="res_model">mis.report.instance</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
-            <field name="domain"></field>
+            <field name="domain">[('temporary', '=', False)]</field>
         </record>
 
         <menuitem id="mis_report_instance_view_menu" parent="account.menu_finance_reports" name="MIS Reports" action="mis_report_instance_view_action" sequence="101"/>
@@ -376,19 +373,12 @@
             <field name="arch" type="xml">
                 <form string="KPI's">
                     <sheet>
-                        <div class="oe_title">
-                            <div class="oe_edit_only">
-                                <label for="name"/>
-                            </div>
-                            <h1>
-                                <field name="name" placeholder="Name"/>
-                            </h1>
-                        </div>
                         <group>
                             <field name="mode" widget="radio"/>
+                            <field name="valid" invisible="1"/>
                             <group name="relative" attrs="{'invisible': [('mode', '!=', 'relative')]}" colspan="4">
                                 <group>
-                                    <field name="type"/>
+                                    <field name="type" attrs="{'required': [('mode', '=', 'relative')]}"/>
                                     <field name="date_range_type_id"
                                            attrs="{'invisible': [('type', '!=', 'date_range')], 'required': [('type', '=', 'date_range')]}"/>
                                     <field name="offset"/>
@@ -406,6 +396,7 @@
                                 <field name="manual_date_to"
                                        attrs="{'required': [('mode', '=', 'fix')]}"/>
                             </group>
+                            <field name="name" placeholder="Name"/>
                             <field name="normalize_factor"/>
                             <field name="report_instance_id" invisible="1"/>
                             <field name="id" invisible="1"/>
