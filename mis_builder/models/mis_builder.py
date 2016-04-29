@@ -320,7 +320,7 @@ class MisReportKpi(models.Model):
     def render(self, lang_id, value):
         """ render a KPI value as a unicode string, ready for display """
         assert len(self) == 1
-        if value is None or value == AccountingNone:
+        if value is None or value is AccountingNone:
             return ''
         elif self.type == 'num':
             return self._render_num(lang_id, value, self.divider,

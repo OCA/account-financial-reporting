@@ -39,15 +39,17 @@ class TestMisBuilder(common.TransactionCase):
         self.assertDictContainsSubset(
             {'content':
                 [{'kpi_name': u'total test',
-                  'default_style': False,
+                  'default_style': '',
+                  'default_xlsx_style': {},
                   'cols': [{'period_id': self.ref('mis_builder.'
                                                   'mis_report_instance_'
                                                   'period_test'),
-                            'style': None,
+                            'style': '',
+                            'xlsx_style': {},
                             'prefix': False,
                             'suffix': False,
-                            'expr': 'len(test)',
-                            'val_c': 'total_test = len(test)',
+                            'expr': u'len(test)',
+                            'val_c': u'total_test = len(test)',
                             'val': 0,
                             'val_r': u'\u202f0\xa0',
                             'is_percentage': False,
@@ -57,6 +59,14 @@ class TestMisBuilder(common.TransactionCase):
              'header':
                  [{'kpi_name': '',
                    'cols': [{'date': '07/31/2014',
-                             'name': u'today'}]
-                   }],
+                             'colspan': 1,
+                             'name': u'today',
+                             }],
+                   },
+                   {'kpi_name': '',
+                    'cols': [{'colspan': 1,
+                              'name': '',
+                              }],
+                   },
+                  ],
              }, data)
