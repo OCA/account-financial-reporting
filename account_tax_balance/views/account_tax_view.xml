@@ -13,6 +13,8 @@
                     <field name="account_id"/>
                     <field name="balance" sum="Total"></field>
                     <field name="base_balance" sum="Base Total"></field>
+                    <button type="object" name="view_tax_lines" string="View tax lines" icon="gtk-find"></button>
+                    <button type="object" name="view_base_lines" string="View base lines" icon="gtk-copy"></button>
                 </tree>
             </field>
          </record>
@@ -36,7 +38,7 @@
             </field>
          </record>
         <record id="action_tax_balances_tree" model="ir.actions.act_window">
-            <field name="name">Tax Balances</field>
+            <field name="name">Taxes Balance</field>
             <field name="res_model">account.tax</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree</field>
