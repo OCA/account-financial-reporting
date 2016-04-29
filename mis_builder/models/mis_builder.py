@@ -1116,7 +1116,8 @@ class MisReportInstance(models.Model):
     @api.depends('date_from')
     def _compute_comparison_mode(self):
         for instance in self:
-            instance.comparison_mode = not bool(instance.date_from)
+            instance.comparison_mode = bool(instance.period_ids) and\
+                not bool(instance.date_from)
 
     @api.multi
     def _inverse_comparison_mode(self):
