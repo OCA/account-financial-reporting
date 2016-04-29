@@ -42,6 +42,7 @@ Contributors
 ------------
 
 * Lorenzo Battistini <lorenzo.battistini@agilebg.com>
+* Giovanni Capalbo <giovanni@therp.nl>
 
 Maintainer
 ----------
