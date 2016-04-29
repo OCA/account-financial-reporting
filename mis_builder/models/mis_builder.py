@@ -1025,8 +1025,8 @@ class MisReportInstance(models.Model):
 
     name = fields.Char(required=True,
                        string='Name', translate=True)
-    description = fields.Char(required=False,
-                              string='Description', translate=True)
+    description = fields.Char(related='report_id.description',
+                              readonly=True)
     date = fields.Date(string='Base date',
                        help='Report base date '
                             '(leave empty to use current date)')

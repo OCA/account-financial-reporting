@@ -313,9 +313,6 @@
                     <attribute name="readonly">1</attribute>
                 </field>
                 <label for="name" position="replace"/>
-                <field name="description" position="attributes">
-                    <attribute name="invisible">1</attribute>
-                </field>
                 <field name="report_id" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </field>
