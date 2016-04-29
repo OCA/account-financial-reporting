@@ -109,6 +109,7 @@ Contributors
 * Laetitia Gangloff <laetitia.gangloff@acsone.eu>
 * Adrien Peiffer <adrien.peiffer@acsone.eu>
 * Giovanni Capalbo <giovanni@therp.nl>
+* Sébastien Beau <sebastien.beau@akretion.com>
 
 Maintainer
 ----------

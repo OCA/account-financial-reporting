@@ -512,7 +512,7 @@ class MisReport(models.Model):
         res.update({
             'view_id': view.id,
             'views': [(view.id, 'form')],
-            'target':'new',
+            'target': 'new',
             'context': {
                 'default_report_id': self.id,
                 'default_name': self.name,
@@ -805,7 +805,7 @@ class MisReportInstancePeriod(models.Model):
     mode = fields.Selection([('fix', 'Fix'),
                              ('relative', 'Relative'),
                              ], required=True,
-                             default='fix')
+                            default='fix')
     type = fields.Selection([('d', _('Day')),
                              ('w', _('Week')),
                              ('date_range', _('Date Range'))
@@ -1074,7 +1074,7 @@ class MisReportInstance(models.Model):
         string='Date Range')
     date_from = fields.Date(string="From")
     date_to = fields.Date(string="To")
-    temporary = fields.Boolean()
+    temporary = fields.Boolean(default=False)
 
     @api.multi
     def save_report(self):
@@ -1105,7 +1105,7 @@ class MisReportInstance(models.Model):
     @api.depends('date_from')
     def _compute_comparison_mode(self):
         for instance in self:
-            instance.advanced_mode = not bool(instance.date_from)
+            instance.comparison_mode = not bool(instance.date_from)
 
     @api.multi
     def _inverse_comparison_mode(self):
