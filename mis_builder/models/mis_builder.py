@@ -978,7 +978,6 @@ class MisReportInstancePeriod(models.Model):
                 'dp': kpi.dp,
                 'is_percentage': kpi.type == 'pct',
                 'period_id': self.id,
-                'expr': kpi.expression,  # TODO FIXME
                 'style': '',
                 'xlsx_style': {},
             }
@@ -998,24 +997,28 @@ class MisReportInstancePeriod(models.Model):
                         'drilldown': False,
                         })
                 else:
-                    # TODO FIXME: has_account_var on each subkpi expression?
-                    drilldown = (subkpi_val is not AccountingNone and
-                                 AEP.has_account_var(kpi.expression))
                     if kpi.multi:
                         expression = kpi.expression_ids[idx].name
+                        comment = '{}.{} = {}'.format(
+                            kpi.name,
+                            kpi.expression_ids[idx].subkpi_id.name,
+                            expression)
                     else:
                         expression = kpi.expression
-                    # TODO FIXME: check we have meaningfulname for exploded
-                    # kpis
-                    comment = kpi.name + " = " + expression
+                        comment = '{} = {}'.format(
+                            kpi.name,
+                            expression)
+                    drilldown = (subkpi_val is not AccountingNone and
+                                 AEP.has_account_var(expression))
                     vals.update({
                         'val': (None
                                 if subkpi_val is AccountingNone
                                 else subkpi_val),
                         'val_r': kpi.render(lang_id, subkpi_val),
                         'val_c': comment,
+                        'expr': expression,
                         'drilldown': drilldown,
-                        })
+                    })
                 res[kpi_name].append(vals)
         return res
 

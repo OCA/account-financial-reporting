@@ -191,7 +191,7 @@ class AccountingExpressionProcessor(object):
             fy_date_from = \
                 company.compute_fiscalyear_dates(date_from_date)['date_from']
             domain = ['|',
-                      ('date', '>=', fy_date_from),
+                      ('date', '>=', fields.Date.to_string(fy_date_from)),
                       ('user_type_id.include_initial_balance', '=', True)]
             if mode == MODE_INITIAL:
                 domain.append(('date', '<', date_from))
