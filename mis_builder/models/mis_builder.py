@@ -1251,7 +1251,7 @@ class MisReportInstance(models.Model):
             if not period.valid:
                 continue
             # add the column header
-            if period.duration > 1 or period.type == 'w':
+            if period.duration > 1 or period.type in ('w', 'date_range'):
                 # from, to
                 date_from = self._format_date(lang_id, period.date_from)
                 date_to = self._format_date(lang_id, period.date_to)
