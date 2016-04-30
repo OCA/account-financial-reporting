@@ -212,7 +212,8 @@ class AccountingExpressionProcessor(object):
             date_from_date = fields.Date.from_string(date_from)
             fy_date_from = \
                 company.compute_fiscalyear_dates(date_from_date)['date_from']
-            domain = [('date', '<', fields.Date.to_string(fy_date_from))]
+            domain = [('date', '<', fields.Date.to_string(fy_date_from)),
+                      ('user_type_id.include_initial_balance', '=', False)]
         if target_move == 'posted':
             domain.append(('move_id.state', '=', 'posted'))
         return expression.normalize_domain(domain)
