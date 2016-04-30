@@ -13,6 +13,7 @@ from .accounting_none import AccountingNone
 MODE_VARIATION = 'p'
 MODE_INITIAL = 'i'
 MODE_END = 'e'
+MODE_UNALLOCATED = 'u'
 
 
 class AccountingExpressionProcessor(object):
@@ -23,6 +24,9 @@ class AccountingExpressionProcessor(object):
         * field is bal, crd, deb
         * mode is i (initial balance), e (ending balance),
           p (moves over period)
+        * there is also a special u mode (unallocated P&L) which computes
+          the sum from the beginning until the beginning of the fiscal year
+          of the period; it is only meaningful for P&L accounts
         * accounts is a list of accounts, possibly containing % wildcards
         * an optional domain on move lines allowing filters on eg analytic
           accounts or journal
@@ -58,7 +62,7 @@ class AccountingExpressionProcessor(object):
     """
 
     ACC_RE = re.compile(r"(?P<field>\bbal|\bcrd|\bdeb)"
-                        r"(?P<mode>[pise])?"
+                        r"(?P<mode>[piseu])?"
                         r"(?P<accounts>_[a-zA-Z0-9]+|\[.*?\])"
                         r"(?P<domain>\[.*?\])?")
 
@@ -184,9 +188,10 @@ class AccountingExpressionProcessor(object):
                                  target_move, company):
         if mode == MODE_VARIATION:
             domain = [('date', '>=', date_from), ('date', '<=', date_to)]
-        else:
-            # for income and expense account, get balance from the beginning
-            # of the current fiscal year
+        elif mode in (MODE_INITIAL, MODE_END):
+            # for income and expense account, sum from the beginning
+            # of the current fiscal year only, for balance sheet accounts
+            # sum from the beginning of time
             date_from_date = fields.Date.from_string(date_from)
             fy_date_from = \
                 company.compute_fiscalyear_dates(date_from_date)['date_from']
@@ -197,6 +202,11 @@ class AccountingExpressionProcessor(object):
                 domain.append(('date', '<', date_from))
             elif mode == MODE_END:
                 domain.append(('date', '<=', date_to))
+        elif mode == MODE_UNALLOCATED:
+            date_from_date = fields.Date.from_string(date_from)
+            fy_date_from = \
+                company.compute_fiscalyear_dates(date_from_date)['date_from']
+            domain = [('date', '<', fields.Date.to_string(fy_date_from))]
         if target_move == 'posted':
             domain.append(('move_id.state', '=', 'posted'))
         return expression.normalize_domain(domain)
