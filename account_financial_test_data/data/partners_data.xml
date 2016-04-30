@@ -23,6 +23,7 @@
             <field name="currency_id" ref="base.EUR"/>
         </record>
 
+        <!--Partner c-->
         <record id="data_partner_c" model="res.partner"
                 context="{'default_company_type': 'person'}">
             <field name="name">PARTNER C</field>
@@ -33,6 +34,7 @@
             <field name="currency_id" ref="base.EUR"/>
         </record>
 
+        <!--Partner d-->
         <record id="data_partner_d" model="res.partner"
                 context="{'default_company_type': 'person'}">
             <field name="name">PARTNER D</field>
@@ -43,6 +45,7 @@
             <field name="currency_id" ref="base.EUR"/>
         </record>
 
+        <!--Partner e-->
         <record id="data_partner_e" model="res.partner"
                 context="{'default_company_type': 'person'}">
             <field name="name">PARTNER E</field>
@@ -53,6 +56,7 @@
             <field name="currency_id" ref="base.EUR"/>
         </record>
 
+        <!--Partner f-->
         <record id="data_partner_f" model="res.partner"
                 context="{'default_company_type': 'person'}">
             <field name="name">PARTNER F</field>
@@ -63,6 +67,7 @@
             <field name="currency_id" ref="base.EUR"/>
         </record>
 
+        <!--Partner g-->
         <record id="data_partner_g" model="res.partner"
                 context="{'default_company_type': 'person'}">
             <field name="name">PARTNER G</field>

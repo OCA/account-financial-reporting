@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 from datetime import date, datetime
-from openerp import SUPERUSER_ID, api, tools, _
+from openerp import SUPERUSER_ID, api
 
+
+# -*- coding: utf-8 -*-
+# © 2016 Taktik
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 def post_init_hook(cr, registry):
 
@@ -56,7 +60,8 @@ def post_init_hook(cr, registry):
         account_setting = account_setting_obj.create({})
         account_setting.group_multi_currency = True
         account_setting.default_sale_tax_id = env.ref('l10n_fr.tva_normale').id
-        account_setting.default_purchase_tax_id = env.ref('l10n_fr.tva_normale').id
+        account_setting.default_purchase_tax_id = env.ref(
+            'l10n_fr.tva_normale').id
         account_setting.execute()
 
         return True
@@ -110,7 +115,8 @@ def post_init_hook(cr, registry):
 
         invoice_obj = env['account.invoice']
 
-        invoice_a = invoice_obj.create({
+        # invoice_a
+        invoice_obj.create({
             'partner_id': env.ref(
                 'account_financial_test_data.data_partner_c').id,
             'account_id': env.ref(
@@ -121,7 +127,8 @@ def post_init_hook(cr, registry):
             'date_due': date(last_year, 1, 31),
         })
 
-        invoice_b = invoice_obj.create({
+        # invoice_b
+        invoice_obj.create({
             'partner_id': env.ref(
                 'account_financial_test_data.data_partner_a').id,
             'type': 'out_invoice',
@@ -132,7 +139,8 @@ def post_init_hook(cr, registry):
             'date_due': date(last_year, 2, 4),
         })
 
-        invoice_c = invoice_obj.create({
+        # invoice_c
+        invoice_obj.create({
             'partner_id': env.ref(
                 'account_financial_test_data.data_partner_d').id,
             'type': 'out_invoice',
@@ -143,7 +151,8 @@ def post_init_hook(cr, registry):
             'date_due': date(this_year, 3, 10),
         })
 
-        invoice_d = invoice_obj.create({
+        # invoice_d
+        invoice_obj.create({
             'partner_id': env.ref(
                 'account_financial_test_data.data_partner_g').id,
             'type': 'out_refund',
@@ -154,7 +163,8 @@ def post_init_hook(cr, registry):
             'date_due': date(this_year, 4, 15),
         })
 
-        invoice_e = invoice_obj.create({
+        # invoice_e
+        invoice_obj.create({
             'partner_id': env.ref(
                 'account_financial_test_data.data_partner_b').id,
             'type': 'out_invoice',
@@ -165,7 +175,8 @@ def post_init_hook(cr, registry):
             'date_due': date(this_year, 2, 15),
         })
 
-        invoice_f = invoice_obj.create({
+        # invoice_f
+        invoice_obj.create({
             'partner_id': env.ref(
                 'account_financial_test_data.data_partner_a').id,
             'type': 'out_invoice',
@@ -176,7 +187,8 @@ def post_init_hook(cr, registry):
             'date_due': date(this_year, 3, 24),
         })
 
-        invoice_g = invoice_obj.create({
+        # invoice_g
+        invoice_obj.create({
             'partner_id': env.ref(
                 'account_financial_test_data.data_partner_g').id,
             'type': 'out_invoice',
@@ -187,7 +199,8 @@ def post_init_hook(cr, registry):
             'date_due': date(this_year, 4, 15),
         })
 
-        invoice_h = invoice_obj.create({
+        # invoice_h
+        invoice_obj.create({
             'partner_id': env.ref(
                 'account_financial_test_data.data_partner_f').id,
             'type': 'out_invoice',
