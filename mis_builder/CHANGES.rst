@@ -9,6 +9,24 @@ Changelog
 9.0.1.0.0 (2016-??-??)
 ~~~~~~~~~~~~~~~~~~~~~~
 
+Most of the work for this release has been done at the Sorrento sprint
+April 26-29, 2016.
+
+* [IMP] there is now an auto-expand feature to automatically display
+  a by account detail for some kpis
+* [IMP] the kpi and period lists are now manipulated through forms instead
+  of directly in the tree views, this improves usability
+* [IMP] it is now possible to create a report through a wizard, such
+  reports are deemed temporary and available through a "Last Reports Generated"
+  menu, they are garbaged collected automatically, unless saved permanently,
+  which can be done using a Save button
+* [IMP] there is now a beginner mode to configure simple reports with
+  only one period
+* [IMP] it is now easier to configure periods with fixed start/end dates
+* [IMP] the new sub-kpi mechanism allows the creation of columns
+  with multiple values, or columns with different values
+* [IMP] thanks to the new style model, the Excel export is now styled
+* [IMP] a new style model is now used to centralize style configuration
 * [FIX] use =like instead of like to search for accounts, because
   the % are added by the user in the expressions
 * [FIX] Correctly compute the initial balance of income and expense account
