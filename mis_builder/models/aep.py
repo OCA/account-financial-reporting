@@ -266,6 +266,7 @@ class AccountingExpressionProcessor(object):
             for account_code in account_codes:
                 account_ids = self._account_ids_by_code[account_code]
                 for account_id in account_ids:
+                    # TODO FIXME: improve perf with sets
                     if account_ids_filter and \
                             account_id not in account_ids_filter:
                         continue
@@ -314,6 +315,7 @@ class AccountingExpressionProcessor(object):
             account_ids_data = self._data[key]
             for account_code in account_codes:
                 account_ids = self._account_ids_by_code[account_code]
+                # TODO FIXME: improve perf with sets
                 for account_id in account_ids:
                     if account_id in account_ids_data:
                         res.add(account_id)
