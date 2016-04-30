@@ -8,6 +8,7 @@ from collections import defaultdict
 from openerp import fields
 from openerp.models import expression
 from openerp.tools.safe_eval import safe_eval
+from openerp.tools.float_utils import float_is_zero
 from .accounting_none import AccountingNone
 
 MODE_VARIATION = 'p'
@@ -132,8 +133,13 @@ class AccountingExpressionProcessor(object):
         """
         for mo in self.ACC_RE.finditer(expr):
             _, mode, account_codes, domain = self._parse_match_object(mo)
-            key = (domain, mode)
-            self._map_account_ids[key].update(account_codes)
+            if mode == MODE_END:
+                modes = (MODE_INITIAL, MODE_VARIATION)
+            else:
+                modes = (mode, )
+            for mode in modes:
+                key = (domain, mode)
+                self._map_account_ids[key].update(account_codes)
 
     def done_parsing(self, company):
         """Load account codes and replace account codes by
@@ -247,8 +253,7 @@ class AccountingExpressionProcessor(object):
 
         This method must be executed after do_queries().
         """
-        def f(mo):
-            field, mode, account_codes, domain = self._parse_match_object(mo)
+        def s(field, mode, account_codes, domain):
             key = (domain, mode)
             account_ids_data = self._data[key]
             v = AccountingNone
@@ -267,12 +272,30 @@ class AccountingExpressionProcessor(object):
                         v += debit
                     elif field == 'crd':
                         v += credit
+            # in initial balance mode, assume 0 is None
+            # as it does not make sense to distinguish 0 from "no data"
+            if v is not AccountingNone and \
+                    mode == MODE_INITIAL and \
+                    float_is_zero(v, precision_rounding=2):
+                v = AccountingNone
+            return v
+
+        def f(mo):
+            field, mode, account_codes, domain = self._parse_match_object(mo)
+            if mode == MODE_END:
+                # split ending balance in initial+variation, so
+                # if there is no data in period, we end up with AccountingNone
+                v = s(field, MODE_INITIAL, account_codes, domain) + \
+                    s(field, MODE_VARIATION, account_codes, domain)
+            else:
+                v = s(field, mode, account_codes, domain)
             return '(' + repr(v) + ')'
+
         return self.ACC_RE.sub(f, expr)
 
     def get_accounts_in_expr(self, expr):
         """Get the ids of all accounts involved in an expression.
-        This means only accounts for which contribute data to the expression.
+        This means only accounts which contribute data to the expression.
 
         Returns a set of account ids.
 
