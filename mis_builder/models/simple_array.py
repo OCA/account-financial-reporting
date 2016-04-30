@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+# © 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 """ A trivial immutable array that supports basic arithmetic operations.
 
 >>> a = SimpleArray((1.0, 2.0, 3.0))
@@ -37,6 +40,12 @@ SimpleArray((4.0, 2.5, 2.0))
 SimpleArray((0.25, 0.4, 0.5))
 >>> t / a
 SimpleArray((4.0, 2.5, 2.0))
+>>> b / 2
+SimpleArray((2.0, 2.5, 3.0))
+>>> 2 * b
+SimpleArray((8.0, 10.0, 12.0))
+>>> b += 2 ; b
+SimpleArray((6.0, 7.0, 8.0))
 """
 
 import operator
@@ -52,7 +61,8 @@ class SimpleArray(tuple):
             if len(other) != len(self):
                 raise TypeError("tuples must have same length for %s" % op)
             return SimpleArray(map(op, self, other))
-        return NotImplemented
+        else:
+            return SimpleArray(map(lambda x: op(x, other), self))
 
     def __add__(self, other):
         return self._op(operator.add, other)
