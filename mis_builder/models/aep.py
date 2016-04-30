@@ -243,8 +243,13 @@ class AccountingExpressionProcessor(object):
                                         ['debit', 'credit', 'account_id'],
                                         ['account_id'])
             for acc in accs:
-                self._data[key][acc['account_id'][0]] = \
-                    (acc['debit'] or 0.0, acc['credit'] or 0.0)
+                debit = acc['debit'] or 0.0
+                credit = acc['credit'] or 0.0
+                if mode in (MODE_INITIAL, MODE_UNALLOCATED) and \
+                        float_is_zero(debit-credit, precision_rounding=2):
+                    # in initial mode, ignore accounts with 0 balance
+                    continue
+                self._data[key][acc['account_id'][0]] = (debit, credit)
 
     def replace_expr(self, expr, account_ids_filter=None):
         """Replace accounting variables in an expression by their amount.
@@ -275,7 +280,7 @@ class AccountingExpressionProcessor(object):
             # in initial balance mode, assume 0 is None
             # as it does not make sense to distinguish 0 from "no data"
             if v is not AccountingNone and \
-                    mode == MODE_INITIAL and \
+                    mode in (MODE_INITIAL, MODE_UNALLOCATED) and \
                     float_is_zero(v, precision_rounding=2):
                 v = AccountingNone
             return v
@@ -284,7 +289,7 @@ class AccountingExpressionProcessor(object):
             field, mode, account_codes, domain = self._parse_match_object(mo)
             if mode == MODE_END:
                 # split ending balance in initial+variation, so
-                # if there is no data in period, we end up with AccountingNone
+                # if there is no move in period, we end up with AccountingNone
                 v = s(field, MODE_INITIAL, account_codes, domain) + \
                     s(field, MODE_VARIATION, account_codes, domain)
             else:
