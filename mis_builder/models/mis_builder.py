@@ -1302,6 +1302,7 @@ class MisReportInstance(models.Model):
                                 compare_col.normalize_factor)
                         })
         return {
+            'report_name': self.name,
             'header': header,
             'content': content,
         }
