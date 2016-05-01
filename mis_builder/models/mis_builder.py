@@ -398,8 +398,35 @@ class MisReportSubkpi(models.Model):
 
     sequence = fields.Integer()
     report_id = fields.Many2one('mis.report')
-    name = fields.Char(required=True)
+    name = fields.Char(size=32, required=True,
+                       string='Name')
+    description = fields.Char(required=True,
+                              string='Description',
+                              translate=True)
     expression_ids = fields.One2many('mis.report.kpi.expression', 'subkpi_id')
+
+    @api.one
+    @api.constrains('name')
+    def _check_name(self):
+        if not _is_valid_python_var(self.name):
+            raise exceptions.Warning(_('The name must be a valid '
+                                       'python identifier'))
+
+    @api.onchange('name')
+    def _onchange_name(self):
+        if self.name and not _is_valid_python_var(self.name):
+            return {
+                'warning': {
+                    'title': 'Invalid name %s' % self.name,
+                    'message': 'The name must be a valid python identifier'
+                }
+            }
+
+    @api.onchange('description')
+    def _onchange_description(self):
+        """ construct name from description """
+        if self.description and not self.name:
+            self.name = _python_var(self.description)
 
     @api.multi
     def unlink(self):
@@ -1271,7 +1298,7 @@ class MisReportInstance(models.Model):
             if subkpis:
                 for subkpi in subkpis:
                     header[1]['cols'].append(dict(
-                        name=subkpi.name,
+                        name=subkpi.description,
                         colspan=1,
                         ))
             else:

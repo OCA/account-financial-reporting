@@ -39,6 +39,7 @@
                          <field name="subkpi_ids" nolabel="1" colspan="2">
                             <tree string="Sub KPI's" editable="bottom">
                                 <field name="sequence" widget="handle"/>
+                                <field name="description"/>
                                 <field name="name"/>
                             </tree>
                         </field>
