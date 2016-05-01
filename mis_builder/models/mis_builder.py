@@ -727,24 +727,20 @@ class MisReport(models.Model):
                 # in computing other kpis
                 localdict[kpi.name] = vals
 
-                # let's compute the exploded values by account
-                # we assume there will be no errors, because it is a
-                # the same as the kpi, just filtered on one account;
-                # I'd say if we have an exception in this part, it's bug...
+                # TODO FIXME handle exceptions
                 if not kpi.auto_expand_accounts:
                     continue
-                for account_id in aep.get_accounts_in_expr(kpi.expression):
-                    account_id_vals = []
-                    for expression in kpi.expression_ids:
-                        if expression.subkpi_id and \
-                                subkpis_filter and \
-                                expression.subkpi_id not in subkpis_filter:
-                            continue
-                        kpi_eval_expression = \
-                            aep.replace_expr(expression.name,
-                                             account_ids_filter=[account_id])
-                        account_id_vals.\
-                            append(safe_eval(kpi_eval_expression, localdict))
+                expr = []
+                for expression in kpi.expression_ids:
+                    if expression.subkpi_id and \
+                            subkpis_filter and \
+                            expression.subkpi_id not in subkpis_filter:
+                        continue
+                    expr.append(expression.name)
+                expr = ', '.join(expr)  # tuple
+                for account_id, replaced_expr in \
+                        aep.replace_expr_by_account_id(expr):
+                    account_id_vals = safe_eval(replaced_expr, localdict)
                     kpi_matrix.set_kpi_exploded_vals(kpi_matrix_period, kpi,
                                                      account_id,
                                                      account_id_vals)
