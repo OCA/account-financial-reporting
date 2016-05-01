@@ -2,7 +2,7 @@
 # © 2016 Taktik
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from . import model_nameimport logging
+import logging
 from openerp.osv import orm
 from openerp import models, api
 
