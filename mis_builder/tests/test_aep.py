@@ -77,6 +77,10 @@ class TestAEP(common.TransactionCase):
         self.aep.parse_expr("bali[400AR]")
         self.aep.parse_expr("bale[400AR]")
         self.aep.parse_expr("balp[400AR]")
+        self.aep.parse_expr("debp[400A%]")
+        self.aep.parse_expr("crdp[700I%]")
+        self.aep.parse_expr("bal_700IN")  # deprecated
+        self.aep.parse_expr("bals[700IN]")  # deprecated
         self.aep.done_parsing(self.company)
 
     def _create_move(self, date, amount, debit_acc, credit_acc):
@@ -160,6 +164,11 @@ class TestAEP(common.TransactionCase):
         # check ending balance
         self.assertEquals(self._eval('bale[400AR]'), 900)
         self.assertEquals(self._eval('bale[700IN]'), -800)
+        # check some variant expressions, for coverage
+        self.assertEquals(self._eval('crdp[700I%]'), 500)
+        self.assertEquals(self._eval('debp[400A%]'), 500)
+        self.assertEquals(self._eval('bal_700IN'), -500)
+        self.assertEquals(self._eval('bals[700IN]'), -800)
 
         # unallocated p&l from previous year
         self.assertEquals(self._eval('balu[]'), -100)
