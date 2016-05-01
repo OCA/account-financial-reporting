@@ -42,7 +42,8 @@ class KpiMatrix(object):
     """ This object holds the computation results in a way
     that can be browsed easily for rendering """
 
-    def __init__(self):
+    def __init__(self, env):
+        self.env = env
         # { period: {kpi: vals}
         self._kpi_vals = defaultdict(dict)
         # { period: {kpi: {account_id: vals}}}
@@ -53,6 +54,61 @@ class KpiMatrix(object):
         self._kpis = OrderedDict()
         # { account_id: account name }
         self._account_names_by_id = {}
+
+    def _get_row_id(self, kpi, account_id=None):
+        r = kpi.name
+        if account_id:
+            r += ':' + str(account_id)
+        return r
+
+    def declare_kpi(self, kpi):
+        raise RuntimeError("not implemented")
+
+    def declare_period(self, period_key, localdict, subkpis,
+                       description, comment):
+        raise RuntimeError("not implemented")
+
+    def set_values(self, kpi, period_key, vals):
+        raise RuntimeError("not implemented")
+
+    def set_values_detail_account(self, kpi, period_key, account_id, vals):
+        raise RuntimeError("not implemented")
+
+    def add_comparison(self, period_key_1, period_key_2,
+                       description, comment,
+                       after_period_key):
+        raise RuntimeError("not implemented")
+
+    def iter_row_headers(self):
+        """ Iterate rows headers, top down
+
+        yields row_id, parent_row_id=None, row_description, row_comment, kpi
+        """
+        raise RuntimeError("not implemented")
+
+    def iter_col_headers(self):
+        """ Iterate column headers, left to right
+
+        yields col_id, col_description, col_comment, col_span, period_key
+        """
+        raise RuntimeError("not implemented")
+
+    def iter_subcol_headers(self):
+        """ Iterate sub columns headers, left to right
+
+        yields subcol_id, col_id, subcol_description, subcol_comment
+        """
+        raise RuntimeError("not implemented")
+
+    def iter_row_values(self):
+        """ Iterate row values, left to right
+
+        yields row_id, col_id, val, val_rendered, val_comment, \
+            subkpi, period_key
+        """
+        raise RuntimeError("not implemented")
+
+    ####
 
     def set_kpi_vals(self, period, kpi, vals):
         """ Set the values for a kpi in a period
@@ -329,7 +385,7 @@ class MisReportKpi(models.Model):
             return self._render_num(lang_id, value, 0.01,
                                     self.dp, '', '%')
         else:
-            return unicode(value)
+            return unicode(value)  # noqa - silence python3 error
 
     def render_comparison(self, lang_id, value, base_value,
                           average_value, average_base_value):
@@ -557,6 +613,14 @@ class MisReport(models.Model):
     # TODO: kpi name cannot be start with query name
 
     @api.multi
+    def _prepare_kpi_matrix(self):
+        self.ensure_one()
+        kpi_matrix = KpiMatrix(self.env)
+        for kpi in self.kpi_ids:
+            kpi_matrix.declare_kpi(kpi)
+        return kpi_matrix
+
+    @api.multi
     def _prepare_aep(self, company):
         self.ensure_one()
         aep = AEP(self.env)
@@ -623,19 +687,18 @@ class MisReport(models.Model):
         return res
 
     @api.multi
-    def _compute(self, kpi_matrix, kpi_matrix_period,
-                 lang_id, aep,
-                 date_from, date_to,
-                 target_move,
-                 company,
-                 subkpis_filter,
-                 get_additional_move_line_filter=None,
-                 get_additional_query_filter=None):
+    def _compute_period(self, kpi_matrix, period_key,
+                        lang_id, aep,
+                        date_from, date_to,
+                        target_move,
+                        company,
+                        subkpis_filter=None,
+                        get_additional_move_line_filter=None,
+                        get_additional_query_filter=None):
         """ Evaluate a report for a given period, populating a KpiMatrix.
 
         :param kpi_matrix: the KpiMatrix object to be populated
-        :param kpi_matrix_period: the period key to use when populating
-                                  the KpiMatrix
+        :param period_key: the period key to use when populating the KpiMatrix
         :param lang_id: id of a res.lang object
         :param aep: an AccountingExpressionProcessor instance created
                     using _prepare_aep()
@@ -662,7 +725,6 @@ class MisReport(models.Model):
         self.ensure_one()
 
         localdict = {
-            'registry': self.pool,
             'sum': _sum,
             'min': _min,
             'max': _max,
@@ -671,9 +733,14 @@ class MisReport(models.Model):
             'AccountingNone': AccountingNone,
         }
 
+        # fetch non-accounting queries
         localdict.update(self._fetch_queries(
             date_from, date_to, get_additional_query_filter))
 
+        # prepare the period in the kpi matrix
+        kpi_matrix.declare_period(period_key, localdict)
+
+        # use AEP to do the accounting queries
         additional_move_line_filter = None
         if get_additional_move_line_filter:
             additional_move_line_filter = get_additional_move_line_filter()
@@ -718,7 +785,7 @@ class MisReport(models.Model):
                 else:
                     vals = SimpleArray(vals)
 
-                kpi_matrix.set_kpi_vals(kpi_matrix_period, kpi, vals)
+                kpi_matrix.set_kpi_vals(period_key, kpi, vals)
 
                 if has_error:
                     continue
@@ -757,7 +824,7 @@ class MisReport(models.Model):
             compute_queue = recompute_queue
             recompute_queue = []
 
-        kpi_matrix.set_localdict(kpi_matrix_period, localdict)
+        kpi_matrix.set_localdict(period_key, localdict)
 
 
 class MisReportInstancePeriod(models.Model):
@@ -944,7 +1011,7 @@ class MisReportInstancePeriod(models.Model):
             return False
 
     @api.multi
-    def _compute(self, kpi_matrix, lang_id, aep):
+    def _render_period(self, kpi_matrix, lang_id, aep):
         """ Compute and render a mis report instance period
 
         It returns a dictionary keyed on kpi.name with a list of dictionaries
@@ -967,7 +1034,7 @@ class MisReportInstancePeriod(models.Model):
         self.ensure_one()
         # first invoke the compute method on the mis report template
         # passing it all the information regarding period and filters
-        self.report_instance_id.report_id._compute(
+        self.report_instance_id.report_id._compute_period(
             kpi_matrix, self,
             lang_id, aep,
             self.date_from, self.date_to,
@@ -1238,11 +1305,11 @@ class MisReportInstance(models.Model):
 
         # compute kpi values for each period
         kpi_values_by_period_ids = {}
-        kpi_matrix = KpiMatrix()
+        kpi_matrix = KpiMatrix(lang_id)
         for period in self.period_ids:
             if not period.valid:
                 continue
-            kpi_values = period._compute(kpi_matrix, lang_id, aep)
+            kpi_values = period._render_period(kpi_matrix, lang_id, aep)
             kpi_values_by_period_ids[period.id] = kpi_values
         kpi_matrix.load_account_names(self.env['account.account'])
 
