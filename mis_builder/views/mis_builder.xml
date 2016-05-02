@@ -228,7 +228,7 @@
             <field name="model">mis.report.instance</field>
             <field name="priority" eval="20 "/>
             <field name="arch" type="xml">
-                <form string="MIS Report Result" version="7.0">
+                <form string="MIS Report Result" version="7.0" edit="false" create="false" delete="false" >
                     <widget type="mis_report"></widget>
                 </form>
             </field>
