@@ -226,7 +226,7 @@
         <record model="ir.ui.view" id="mis_report_instance_result_view_form">
             <field name="name">mis.report.instance.result.view.form</field>
             <field name="model">mis.report.instance</field>
-            <field name="priority" eval="15 "/>
+            <field name="priority" eval="20 "/>
             <field name="arch" type="xml">
                 <form string="MIS Report Result" version="7.0">
                     <widget type="mis_report"></widget>
@@ -239,13 +239,15 @@
             <field name="model">mis.report.instance</field>
             <field name="arch" type="xml">
                 <tree string="MIS Report Instances">
+                    <button name="preview" type="object" icon="gtk-print-preview" />
+                    <button type="object" name="print_pdf" string="Print" icon="gtk-print" />
+                    <button type="object" name="export_xls" string="Export" icon="gtk-go-down" />
                     <field name="name"/>
                     <field name="description"/>
                     <field name="report_id"/>
                     <field name="target_move"/>
                     <field name="pivot_date"/>
                     <field name="company_id"/>
-                    <button name="display_settings" type="object" icon="gtk-execute" />
                 </tree>
             </field>
         </record>
@@ -253,7 +255,7 @@
         <record model="ir.ui.view" id="mis_report_instance_view_form">
             <field name="name">mis.report.instance.view.form</field>
             <field name="model">mis.report.instance</field>
-            <field name="priority" eval="16"/>
+            <field name="priority" eval="15"/>
             <field name="arch" type="xml">
                 <form string="MIS Report Instance" version="7.0">
                 <sheet>
