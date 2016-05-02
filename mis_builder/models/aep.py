@@ -223,8 +223,8 @@ class AccountingExpressionProcessor(object):
             domain.append(('move_id.state', '=', 'posted'))
         return expression.normalize_domain(domain)
 
-    def do_queries(self, date_from, date_to,
-                   target_move, company, additional_move_line_filter=None):
+    def do_queries(self, company, date_from, date_to,
+                   target_move='posted', additional_move_line_filter=None):
         """Query sums of debit and credit for all accounts and domains
         used in expressions.
 
@@ -354,18 +354,8 @@ class AccountingExpressionProcessor(object):
             yield account_id, self._ACC_RE.sub(f, expr)
 
     @classmethod
-    def get_balances(cls, mode, date_from, date_to, target_move, company):
-        """ A convenience method to obtain the balances of all accounts
-
-        :param mode: MODE_INITIAL|MODE_END|MODE_VARIATION
-        :param date_from:
-        :param date_to:
-        :param target_move: if 'posted', consider only posted moves
-        :param company:
-
-        Returns a dictionary: {account_id, (debit, credit)}
-        """
-        assert mode in (cls.MODE_INITIAL, cls.MODE_END, cls.MODE_VARIATION)
+    def _get_balances(cls, mode, company, date_from, date_to,
+                      target_move='posted'):
         expr = 'deb{mode}[], crd{mode}[]'.format(mode=mode)
         aep = AccountingExpressionProcessor(company.env)
         # disable smart_end to have the data at once, instead
@@ -373,24 +363,69 @@ class AccountingExpressionProcessor(object):
         aep.smart_end = False
         aep.parse_expr(expr)
         aep.done_parsing(company)
-        aep.do_queries(date_from, date_to, target_move, company)
+        aep.do_queries(company, date_from, date_to, target_move)
         return aep._data[((), mode)]
 
     @classmethod
-    def get_unallocated_pl(cls, date, target_move, company):
-        """ A convenience method to obtain the unallocated profit/loss
-        of the previous fiscal years
+    def get_balances_initial(cls, company, date, target_move='posted'):
+        """ A convenience method to obtain the initial balances of all accounts
+        at a given date.
 
+        It is the same as get_balances_end(date-1).
+
+        :param company:
         :param date:
         :param target_move: if 'posted', consider only posted moves
+
+        Returns a dictionary: {account_id, (debit, credit)}
+        """
+        return cls._get_balances(cls.MODE_INITIAL, company,
+                                 date, date, target_move)
+
+    @classmethod
+    def get_balances_end(cls, company, date, target_move='posted'):
+        """ A convenience method to obtain the ending balances of all accounts
+        at a given date.
+
+        It is the same as get_balances_init(date+1).
+
         :param company:
+        :param date:
+        :param target_move: if 'posted', consider only posted moves
+
+        Returns a dictionary: {account_id, (debit, credit)}
+        """
+        return cls._get_balances(cls.MODE_END, company,
+                                 date, date, target_move)
+
+    @classmethod
+    def get_balances_variation(cls, company, date_from, date_to,
+                               target_move='posted'):
+        """ A convenience method to obtain the variantion of the
+        balances of all accounts over a period.
+
+        :param company:
+        :param date:
+        :param target_move: if 'posted', consider only posted moves
+
+        Returns a dictionary: {account_id, (debit, credit)}
+        """
+        return cls._get_balances(cls.MODE_VARIATION, company,
+                                 date_from, date_to, target_move)
+
+    @classmethod
+    def get_unallocated_pl(cls, company, date, target_move='posted'):
+        """ A convenience method to obtain the unallocated profit/loss
+        of the previous fiscal years at a given date.
+
+        :param company:
+        :param date:
+        :param target_move: if 'posted', consider only posted moves
 
         Returns a tuple (debit, credit)
         """
-        aep = AccountingExpressionProcessor(company.env)
-        expr = 'deb{mode}[], crd{mode}[]'.format(mode=cls.MODE_UNALLOCATED)
-        aep.parse_expr(expr)
-        aep.done_parsing(company)
-        aep.do_queries(date, date, target_move, company)
-        values = aep._data[((), cls.MODE_UNALLOCATED)].values()
-        return tuple(map(sum, izip(*values)))
+        # TODO shoud we include here the accounts of type "unaffected"
+        # or leave that to the caller?
+        bals = cls._get_balances(cls.MODE_UNALLOCATED, company,
+                                 date, date, target_move)
+        return tuple(map(sum, izip(*bals.values())))

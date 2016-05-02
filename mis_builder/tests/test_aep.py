@@ -190,38 +190,33 @@ class TestAEP(common.TransactionCase):
         })
 
     def test_aep_convenience_methods(self):
-        initial = AEP.get_balances(
-            AEP.MODE_INITIAL,
+        initial = AEP.get_balances_initial(
+            self.company,
             time.strftime('%Y') + '-03-01',
-            time.strftime('%Y') + '-03-31',
-            'posted',
-            self.company)
+            'posted')
         self.assertEquals(initial, {
             self.account_ar.id: (400, 0),
             self.account_in.id: (0, 300),
         })
-        variation = AEP.get_balances(
-            AEP.MODE_VARIATION,
+        variation = AEP.get_balances_variation(
+            self.company,
             time.strftime('%Y') + '-03-01',
             time.strftime('%Y') + '-03-31',
-            'posted',
-            self.company)
+            'posted')
         self.assertEquals(variation, {
             self.account_ar.id: (500, 0),
             self.account_in.id: (0, 500),
         })
-        end = AEP.get_balances(
-            AEP.MODE_END,
-            time.strftime('%Y') + '-03-01',
+        end = AEP.get_balances_end(
+            self.company,
             time.strftime('%Y') + '-03-31',
-            'posted',
-            self.company)
+            'posted')
         self.assertEquals(end, {
             self.account_ar.id: (900, 0),
             self.account_in.id: (0, 800),
         })
         unallocated = AEP.get_unallocated_pl(
-            time.strftime('%Y') + '-03-01',
-            'posted',
-            self.company)
+            self.company,
+            time.strftime('%Y') + '-03-15',
+            'posted')
         self.assertEquals(unallocated, (0, 100))

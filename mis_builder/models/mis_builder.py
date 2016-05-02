@@ -677,9 +677,9 @@ class MisReport(models.Model):
         additional_move_line_filter = None
         if get_additional_move_line_filter:
             additional_move_line_filter = get_additional_move_line_filter()
-        aep.do_queries(date_from, date_to,
+        aep.do_queries(company,
+                       date_from, date_to,
                        target_move,
-                       company,
                        additional_move_line_filter)
 
         compute_queue = self.kpi_ids
