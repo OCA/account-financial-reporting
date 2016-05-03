@@ -2,31 +2,35 @@
 <openerp>
     <data>
 
-        <menuitem icon="STOCK_PRINT" name="General Ledger"
+        <menuitem name="General Ledger"
             parent="account.final_accounting_reports" action="action_account_general_ledger_menu_webkit"
             groups="account.group_account_manager,account.group_account_user" id="account.menu_general_ledger"/>
 
-        <menuitem icon="STOCK_PRINT" name="Trial Balance"
+        <menuitem name="Trial Balance"
             parent="account.final_accounting_reports" action="action_account_trial_balance_menu_webkit"
             groups="account.group_account_manager,account.group_account_user" id="account.menu_general_Balance_report"/>
 
-        <menuitem icon="STOCK_PRINT" name="Partner Ledger"
+        <menuitem name="Partner Ledger"
             parent="account.next_id_22" action="action_account_partners_ledger_menu_webkit"
             groups="account.group_account_manager,account.group_account_user" id="account.menu_account_partner_ledger"/>
 
-        <menuitem icon="STOCK_PRINT" name="Partner Balance"
+        <menuitem name="Partner Balance"
             parent="account.next_id_22" action="action_account_partner_balance_menu_webkit"
             groups="account.group_account_manager,account.group_account_user" id="account.menu_account_partner_balance_report"/>
 
-        <menuitem icon="STOCK_PRINT" name="Aged Partner Balance"
+        <menuitem name="Aged Partner Balance"
             parent="account.next_id_22" action="action_account_aged_trial_balance_menu_webkit"
             groups="account.group_account_manager,account.group_account_user" id="account.menu_aged_trial_balance"/>
 
-        <menuitem icon="STOCK_PRINT" name="Open Invoices"
+        <menuitem name="Open Invoices"
             parent="account.next_id_22" action="action_account_open_invoices_menu_webkit"
             groups="account.group_account_manager,account.group_account_user" id="menu_account_open_invoices"/>
 
-        <menuitem icon="STOCK_PRINT" name="Journals"
+        <menuitem name="Aged Open Invoices"
+            parent="account.next_id_22" action="action_account_aged_open_invoice_menu_webkit"
+            groups="account.group_account_manager,account.group_account_user" id="menu_account_aged_open_invoices"/>
+
+        <menuitem name="Journals"
             parent="account.menu_journals_report" action="action_account_print_journal_menu_webkit"
             groups="account.group_account_manager,account.group_account_user" id="account.menu_account_print_journal"/>
 
