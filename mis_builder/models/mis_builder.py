@@ -82,7 +82,8 @@ class KpiMatrix(object):
     def iter_row_headers(self):
         """ Iterate rows headers, top down
 
-        yields row_id, parent_row_id=None, row_description, row_comment, kpi
+        yields row_id, parent_row_id=None, row_description, row_comment, \
+            row_style, kpi
         """
         raise RuntimeError("not implemented")
 
@@ -103,12 +104,18 @@ class KpiMatrix(object):
     def iter_row_values(self):
         """ Iterate row values, left to right
 
-        yields row_id, col_id, val, val_rendered, val_comment, \
-            subkpi, period_key
+        yields row_id, col_id, val, val_rendered, val_comment,
+            val_style, subkpi, period_key
         """
         raise RuntimeError("not implemented")
 
-    ####
+    def iter_kpi_values(self, period_key):
+        """
+        yields kpi, kpi_values
+        """
+        raise RuntimeError("not implemented")
+
+    # TODO FIXME old methods to be removed
 
     def set_kpi_vals(self, period, kpi, vals):
         """ Set the values for a kpi in a period
