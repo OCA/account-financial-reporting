@@ -203,7 +203,7 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem id="mis_report_view_menu" parent="account.account_management_menu" name="MIS Report Templates" action="mis_report_view_action" sequence="21"/>
+        <menuitem id="mis_report_view_menu" parent="account.menu_account_reports" name="MIS Report Templates" action="mis_report_view_action" sequence="21"/>
 
         <record id="xls_export" model="ir.actions.report.xml">
           <field name="name">MIS report instance XLS report</field>
