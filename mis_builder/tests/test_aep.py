@@ -113,9 +113,9 @@ class TestAEP(common.TransactionCase):
     def _eval_by_account_id(self, expr):
         res = {}
         eval_dict = {'AccountingNone': AccountingNone}
-        for account_id, replaced_expr in \
-                self.aep.replace_expr_by_account_id(expr):
-            res[account_id] = safe_eval(replaced_expr, eval_dict)
+        for account_id, replaced_exprs in \
+                self.aep.replace_exprs_by_account_id([expr]):
+            res[account_id] = safe_eval(replaced_exprs[0], eval_dict)
         return res
 
     def test_sanity_check(self):

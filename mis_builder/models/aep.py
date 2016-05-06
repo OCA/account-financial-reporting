@@ -301,9 +301,9 @@ class AccountingExpressionProcessor(object):
 
         return self._ACC_RE.sub(f, expr)
 
-    def replace_expr_by_account_id(self, expr):
-        """Replace accounting variables in an expression by their amount,
-        iterating by accounts involved in the expression.
+    def replace_exprs_by_account_id(self, exprs):
+        """Replace accounting variables in a list of expression
+        by their amount, iterating by accounts involved in the expression.
 
         yields account_id, replaced_expr
 
@@ -341,17 +341,19 @@ class AccountingExpressionProcessor(object):
             return '(' + repr(v) + ')'
 
         account_ids = set()
-        for mo in self._ACC_RE.finditer(expr):
-            field, mode, account_codes, domain = self._parse_match_object(mo)
-            key = (domain, mode)
-            account_ids_data = self._data[key]
-            for account_code in account_codes:
-                for account_id in self._account_ids_by_code[account_code]:
-                    if account_id in account_ids_data:
-                        account_ids.add(account_id)
+        for expr in exprs:
+            for mo in self._ACC_RE.finditer(expr):
+                field, mode, account_codes, domain = \
+                    self._parse_match_object(mo)
+                key = (domain, mode)
+                account_ids_data = self._data[key]
+                for account_code in account_codes:
+                    for account_id in self._account_ids_by_code[account_code]:
+                        if account_id in account_ids_data:
+                            account_ids.add(account_id)
 
         for account_id in account_ids:
-            yield account_id, self._ACC_RE.sub(f, expr)
+            yield account_id, [self._ACC_RE.sub(f, expr) for expr in exprs]
 
     @classmethod
     def _get_balances(cls, mode, company, date_from, date_to,
