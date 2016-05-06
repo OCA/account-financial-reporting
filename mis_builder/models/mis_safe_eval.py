@@ -31,8 +31,3 @@ def mis_safe_eval(expr, locals_dict):
     except:
         val = DataError('#ERR', traceback.format_exc())
     return val
-
-
-if __name__ == '__main__':
-    import doctest
-    doctest.testmod()
