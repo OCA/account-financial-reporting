@@ -46,9 +46,16 @@ SimpleArray((2.0, 2.5, 3.0))
 SimpleArray((8.0, 10.0, 12.0))
 >>> b += 2 ; b
 SimpleArray((6.0, 7.0, 8.0))
+>>> a / ((1.0, 0.0, 1.0))
+SimpleArray((1.0, DataError(), 3.0))
+>>> a / 0.0
+SimpleArray((DataError(), DataError(), DataError()))
 """
 
 import operator
+import traceback
+
+from .data_error import DataError
 
 
 __all__ = ['SimpleArray']
@@ -57,12 +64,20 @@ __all__ = ['SimpleArray']
 class SimpleArray(tuple):
 
     def _op(self, op, other):
+        def _o2(x, y):
+            try:
+                return op(x, y)
+            except ZeroDivisionError:
+                return DataError('#DIV/0', traceback.format_exc())
+            except:
+                return DataError('#ERR', traceback.format_exc())
+
         if isinstance(other, tuple):
             if len(other) != len(self):
                 raise TypeError("tuples must have same length for %s" % op)
-            return SimpleArray(map(op, self, other))
+            return SimpleArray(map(_o2, self, other))
         else:
-            return SimpleArray(map(lambda x: op(x, other), self))
+            return SimpleArray(map(lambda z: _o2(z, other), self))
 
     def __add__(self, other):
         return self._op(operator.add, other)

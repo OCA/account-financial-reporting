@@ -6,4 +6,5 @@ from . import test_accounting_none
 from . import test_aep
 from . import test_aggregate
 from . import test_mis_builder
+from . import test_mis_safe_eval
 from . import test_simple_array
