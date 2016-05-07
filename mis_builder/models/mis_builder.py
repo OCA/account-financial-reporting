@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
-# © 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
+# © 2014-2016 ACSONE SA/NV (<http://acsone.eu>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from collections import defaultdict, OrderedDict
+from collections import OrderedDict
 import datetime
 import dateutil
+from itertools import izip
 import logging
 import re
 import time
-import traceback
 
 import pytz
 
@@ -20,15 +20,9 @@ from .aggregate import _sum, _avg, _min, _max
 from .accounting_none import AccountingNone
 from openerp.exceptions import UserError
 from .simple_array import SimpleArray
+from .mis_safe_eval import mis_safe_eval, DataError
 
 _logger = logging.getLogger(__name__)
-
-
-class DataError(Exception):
-
-    def __init__(self, name, msg):
-        self.name = name
-        self.msg = msg
 
 
 class AutoStruct(object):
@@ -38,133 +32,153 @@ class AutoStruct(object):
             setattr(self, k, v)
 
 
+class KpiMatrixRow(object):
+
+    def __init__(self, kpi, account_id=None, parent_row=None):
+        self.kpi = kpi
+        self.account_id = account_id
+        self.description = kpi.description
+        self.comment = ''
+        self.parent_row = parent_row
+
+    @property
+    def style(self):
+        return self.kpi.style
+
+    def iter_cell_tuples(self, cols):
+        for col in cols:
+            yield col.get_cell_tuple_for_row(self)
+
+    def iter_cells(self, subcols):
+        for subcol in subcols:
+            yield subcol.get_cell_for_row(self)
+
+
+class KpiMatrixCol(object):
+
+    def __init__(self, description, comment, locals_dict, subkpis):
+        self.description = description
+        self.comment = comment
+        self.locals_dict = locals_dict
+        self.colspan = subkpis and len(subkpis) or 1
+        self._subcols = []
+        if not subkpis:
+            subcol = KpiMatrixSubCol(self, '', '', 0)
+            self._subcols.append(subcol)
+        else:
+            for i, subkpi in enumerate(subkpis):
+                subcol = KpiMatrixSubCol(self, subkpi.description, '', i)
+                self._subcols.append(subcol)
+        self._cell_tuples_by_row = {}  # {row: (cells tuple)}
+
+    def _set_cell_tuple(self, row, cell_tuple):
+        self._cell_tuples_by_row[row] = cell_tuple
+
+    def iter_subcols(self):
+        return self._subcols
+
+    def iter_cell_tuples(self):
+        return self._cells_by_row.values()
+
+    def get_cell_tuple_for_row(self, row):
+        return self._cell_tuples_by_row.get(row)
+
+
+class KpiMatrixSubCol(object):
+
+    def __init__(self, col, description, comment, index=0):
+        self.col = col
+        self.description = description
+        self.comment = comment
+        self.index = index
+
+    def iter_cells(self):
+        for cells in self.col.iter_cell_tuples():
+            yield cells[self.index]
+
+    def get_cell_for_row(self, row):
+        cell_tuple = self.col.get_cell_tuple_for_row(row)
+        return cell_tuple[self.index]
+
+
+class KpiMatrixCell(object):
+
+    def __init__(self, row, subcol,
+                 val, val_rendered, val_comment,
+                 style=None, drilldown_key=None):
+        self.row = row
+        self.subcol = subcol
+        self.val = val
+        self.val_rendered = val_rendered
+        self.val_comment = val_comment
+        self.drilldown_key = None
+
+
 class KpiMatrix(object):
-    """ This object holds the computation results in a way
-    that can be browsed easily for rendering """
 
     def __init__(self, env):
-        self.env = env
-        # { period: {kpi: vals}
-        self._kpi_vals = defaultdict(dict)
-        # { period: {kpi: {account_id: vals}}}
-        self._kpi_exploded_vals = defaultdict(dict)
-        # { period: localdict }
-        self._localdict = {}
-        # { kpi: set(account_ids) }
-        self._kpis = OrderedDict()
-        # { account_id: account name }
-        self._account_names_by_id = {}
-
-    def _get_row_id(self, kpi, account_id=None):
-        r = kpi.name
-        if account_id:
-            r += ':' + str(account_id)
-        return r
+        # cache language id for faster rendering
+        lang = env.user.lang or 'en_US'
+        self.lang = env['res.lang'].search([('code', '=', lang)])
+        # data structures
+        self._kpi_rows = OrderedDict()  # { kpi: KpiMatrixRow }
+        self._detail_rows = {}  # { kpi: {account_id: KpiMatrixRow} }
+        self._cols = OrderedDict()  # { period_key: KpiMatrixCol }
 
     def declare_kpi(self, kpi):
-        raise RuntimeError("not implemented")
+        self._kpi_rows[kpi] = KpiMatrixRow(kpi)
+        self._detail_rows[kpi] = {}
 
-    def declare_period(self, period_key, localdict, subkpis,
-                       description, comment):
-        raise RuntimeError("not implemented")
+    def declare_period(self, period_key, description, comment,
+                       locals_dict, subkpis):
+        self._cols[period_key] = KpiMatrixCol(description, comment,
+                                              locals_dict, subkpis)
 
     def set_values(self, kpi, period_key, vals):
-        raise RuntimeError("not implemented")
+        self.set_values_detail_account(kpi, period_key, None, vals)
 
     def set_values_detail_account(self, kpi, period_key, account_id, vals):
-        raise RuntimeError("not implemented")
+        if not account_id:
+            row = self._kpi_rows[kpi]
+        else:
+            kpi_row = self._kpi_rows[kpi]
+            row = KpiMatrixRow(kpi, account_id, parent_row=kpi_row)
+            self._detail_rows[kpi][account_id] = row
+        col = self._cols[period_key]
+        cell_tuple = []
+        assert len(vals) == col.colspan
+        for val, subcol in izip(vals, col.iter_subcols()):
+            if isinstance(val, DataError):
+                val_rendered = val.name
+                val_comment = val.msg
+            else:
+                val_rendered = kpi.render(self.lang, val)
+                val_comment = ''  # TODO FIXME get subkpi expression
+            # TODO style
+            # TODO drilldown_key
+            cell = KpiMatrixCell(row, subcol, val, val_rendered, val_comment)
+            cell_tuple.append(cell)
+        col._set_cell_tuple(row, cell_tuple)
 
-    def add_comparison(self, period_key_1, period_key_2,
-                       description, comment,
-                       after_period_key):
-        raise RuntimeError("not implemented")
+    def iter_rows(self):
+        for kpi_row in self._kpi_rows.values():
+            yield kpi_row
+            # TODO FIXME sort detail rows
+            for detail_row in self._detail_rows[kpi_row.kpi].values():
+                yield detail_row
 
-    def iter_row_headers(self):
-        """ Iterate rows headers, top down
+    def iter_cols(self):
+        return self._cols.values()
 
-        yields row_id, parent_row_id=None, row_description, row_comment, \
-            row_style, kpi
-        """
-        raise RuntimeError("not implemented")
+    def iter_subcols(self):
+        for col in self.iter_cols():
+            for subcol in col.iter_subcols():
+                yield subcol
 
-    def iter_col_headers(self):
-        """ Iterate column headers, left to right
 
-        yields col_id, col_description, col_comment, col_span, period_key
-        """
-        raise RuntimeError("not implemented")
+class old_KpiMatrix(object):
 
-    def iter_subcol_headers(self):
-        """ Iterate sub columns headers, left to right
-
-        yields subcol_id, col_id, subcol_description, subcol_comment
-        """
-        raise RuntimeError("not implemented")
-
-    def iter_row_values(self):
-        """ Iterate row values, left to right
-
-        yields row_id, col_id, val, val_rendered, val_comment,
-            val_style, subkpi, period_key
-        """
-        raise RuntimeError("not implemented")
-
-    def iter_kpi_values(self, period_key):
-        """
-        yields kpi, kpi_values
-        """
-        raise RuntimeError("not implemented")
-
-    # TODO FIXME old methods to be removed
-
-    def set_kpi_vals(self, period, kpi, vals):
-        """ Set the values for a kpi in a period
-
-        vals is a list of sub-kpi values.
-        """
-        self._kpi_vals[period][kpi] = vals
-        if kpi not in self._kpis:
-            self._kpis[kpi] = set()
-
-    def set_kpi_exploded_vals(self, period, kpi, account_id, vals):
-        """ Set the detail values for a kpi in a period for a GL account
-
-        This is used by the automatic details mechanism.
-
-        vals is a list of sub-kpi values.
-        """
-        exploded_vals = self._kpi_exploded_vals[period]
-        if kpi not in exploded_vals:
-            exploded_vals[kpi] = {}
-        exploded_vals[kpi][account_id] = vals
-        self._kpis[kpi].add(account_id)
-
-    def set_localdict(self, period, localdict):
-        # TODO FIXME to be removed when we have styles
-        self._localdict[period] = localdict
-
-    def get_localdict(self, period):
-        # TODO FIXME to be removed when we have styles
-        return self._localdict[period]
-
-    def iter_kpi_vals(self, period):
-        """ Iterate kpi values, including auto-expanded details by account
-
-        It yields, in no specific order:
-            * kpi technical name
-            * kpi object
-            * subkpi values tuple
-        """
-        for kpi, vals in self._kpi_vals[period].iteritems():
-            yield kpi.name, kpi, vals
-            kpi_exploded_vals = self._kpi_exploded_vals[period]
-            if kpi not in kpi_exploded_vals:
-                continue
-            for account_id, account_id_vals in \
-                    kpi_exploded_vals[kpi].iteritems():
-                yield "%s:%s" % (kpi.name, account_id), kpi, account_id_vals
-
-    def iter_kpis(self):
+    def __iter_kpis(self):
         """ Iterate kpis, including auto-expanded details by accounts
 
         It yields, in display order:
@@ -178,7 +192,7 @@ class KpiMatrix(object):
                 yield "%s:%s" % (kpi.name, account_id), \
                     self.get_account_name(account_id), kpi
 
-    def get_exploded_account_ids(self):
+    def __get_exploded_account_ids(self):
         """ Get the list of auto-expanded account ids
 
         It returns the complete list, across all periods and kpis.
@@ -190,7 +204,7 @@ class KpiMatrix(object):
             res.update(account_ids)
         return list(res)
 
-    def load_account_names(self, account_obj):
+    def __load_account_names(self, account_obj):
         """ Load account names for all exploded account ids
 
         This method must be called after setting all kpi values
@@ -201,7 +215,7 @@ class KpiMatrix(object):
         self._account_names_by_id = {a.id: u"{} {}".format(a.code, a.name)
                                      for a in account_data}
 
-    def get_account_name(self, account_id):
+    def __get_account_name(self, account_id):
         """ Get account display name from it's id
 
         This method must be called after loading account names with
@@ -321,7 +335,7 @@ class MisReportKpi(models.Model):
                         expression.subkpi_id.name, expression.name))
                 else:
                     l.append(
-                        expression.name)
+                        expression.name or 'AccountingNone')
             kpi.expression = ',\n'.join(l)
 
     @api.multi
@@ -380,21 +394,21 @@ class MisReportKpi(models.Model):
             self.divider = ''
             self.dp = 0
 
-    def render(self, lang_id, value):
+    def render(self, lang, value):
         """ render a KPI value as a unicode string, ready for display """
         assert len(self) == 1
         if value is None or value is AccountingNone:
             return ''
         elif self.type == 'num':
-            return self._render_num(lang_id, value, self.divider,
+            return self._render_num(lang, value, self.divider,
                                     self.dp, self.prefix, self.suffix)
         elif self.type == 'pct':
-            return self._render_num(lang_id, value, 0.01,
+            return self._render_num(lang, value, 0.01,
                                     self.dp, '', '%')
         else:
             return unicode(value)  # noqa - silence python3 error
 
-    def render_comparison(self, lang_id, value, base_value,
+    def render_comparison(self, lang, value, base_value,
                           average_value, average_base_value):
         """ render the comparison of two KPI values, ready for display
 
@@ -409,7 +423,7 @@ class MisReportKpi(models.Model):
             delta = value - base_value
             if delta and round(delta, self.dp) != 0:
                 return self._render_num(
-                    lang_id,
+                    lang,
                     delta,
                     0.01, self.dp, '', _('pp'),
                     sign='+')
@@ -422,7 +436,7 @@ class MisReportKpi(models.Model):
                 delta = value - base_value
                 if delta and round(delta, self.dp) != 0:
                     return self._render_num(
-                        lang_id,
+                        lang,
                         delta,
                         self.divider, self.dp, self.prefix, self.suffix,
                         sign='+')
@@ -431,13 +445,13 @@ class MisReportKpi(models.Model):
                     delta = (value - base_value) / abs(base_value)
                     if delta and round(delta, self.dp) != 0:
                         return self._render_num(
-                            lang_id,
+                            lang,
                             delta,
                             0.01, self.dp, '', '%',
                             sign='+')
         return ''
 
-    def _render_num(self, lang_id, value, divider,
+    def _render_num(self, lang, value, divider,
                     dp, prefix, suffix, sign='-'):
         divider_label = _get_selection_label(
             self._columns['divider'].selection, divider)
@@ -445,11 +459,11 @@ class MisReportKpi(models.Model):
             divider_label = ''
         # format number following user language
         value = round(value / float(divider or 1), dp) or 0
-        value = self.env['res.lang'].browse(lang_id).format(
+        value = lang.format(
             '%%%s.%df' % (sign, dp),
             value,
             grouping=True)
-        value = u'%s\N{NARROW NO-BREAK SPACE}%s\N{NO-BREAK SPACE}%s%s' % \
+        value = u'%s\N{NO-BREAK SPACE}%s\N{NO-BREAK SPACE}%s%s' % \
             (prefix or '', value, divider_label, suffix or '')
         value = value.replace('-', u'\N{NON-BREAKING HYPHEN}')
         return value
@@ -512,9 +526,15 @@ class MisReportKpiExpression(models.Model):
         readonly=True)
     name = fields.Char(string='Expression')
     kpi_id = fields.Many2one('mis.report.kpi')
+    # TODO FIXME set readonly=True when onchange('subkpi_ids') below works
     subkpi_id = fields.Many2one(
         'mis.report.subkpi',
-        readonly=True)
+        readonly=False)
+
+    _sql_constraints = [
+        ('subkpi_kpi_unique', 'unique(subkpi_id, kpi_id)',
+         'Sub KPI must be used once and only once for each KPI'),
+    ]
 
 
 class MisReportQuery(models.Model):
@@ -589,10 +609,33 @@ class MisReport(models.Model):
     kpi_ids = fields.One2many('mis.report.kpi', 'report_id',
                               string='KPI\'s',
                               copy=True)
-    subkpi_ids = fields.One2many(
-        'mis.report.subkpi',
-        'report_id',
-        string="Sub KPI")
+    subkpi_ids = fields.One2many('mis.report.subkpi', 'report_id',
+                                 string="Sub KPI",
+                                 copy=True)
+
+    @api.onchange('subkpi_ids')
+    def _on_change_subkpi_ids(self):
+        """ Update kpi expressions when subkpis change on the report,
+        so the list of kpi expressions is always up-to-date """
+        for kpi in self.kpi_ids:
+            if not kpi.multi:
+                continue
+            new_subkpis = set([subkpi for subkpi in self.subkpi_ids])
+            expressions = []
+            for expression in kpi.expression_ids:
+                assert expression.subkpi_id  # must be true if kpi is multi
+                if expression.subkpi_id not in self.subkpi_ids:
+                    expressions.append((2, expression.id, None))  # remove
+                else:
+                    new_subkpis.remove(expression.subkpi_id)  # no change
+            for subkpi in new_subkpis:
+                # TODO FIXME this does not work, while the remove above works
+                expressions.append((0, None, {
+                    'name': False,
+                    'subkpi_id': subkpi.id,
+                }))  # add empty expressions for new subkpis
+            if expressions:
+                kpi.expressions_ids = expressions
 
     @api.multi
     def get_wizard_report_action(self):
@@ -632,7 +675,8 @@ class MisReport(models.Model):
         self.ensure_one()
         aep = AEP(self.env)
         for kpi in self.kpi_ids:
-            aep.parse_expr(kpi.expression)
+            for expression in kpi.expression_ids:
+                aep.parse_expr(expression.name)
         aep.done_parsing(company)
         return aep
 
@@ -694,8 +738,9 @@ class MisReport(models.Model):
         return res
 
     @api.multi
-    def _compute_period(self, kpi_matrix, period_key,
-                        lang_id, aep,
+    def _compute_period(self, kpi_matrix,
+                        period_key, period_description, period_comment,
+                        aep,
                         date_from, date_to,
                         target_move,
                         company,
@@ -706,7 +751,6 @@ class MisReport(models.Model):
 
         :param kpi_matrix: the KpiMatrix object to be populated
         :param period_key: the period key to use when populating the KpiMatrix
-        :param lang_id: id of a res.lang object
         :param aep: an AccountingExpressionProcessor instance created
                     using _prepare_aep()
         :param date_from, date_to: the starting and ending date
@@ -720,32 +764,22 @@ class MisReport(models.Model):
                                             query argument and returns a
                                             domain compatible with the query
                                             underlying model
-
-        For each kpi, it calls set_kpi_vals and set_kpi_exploded_vals
-        with vals being a tuple with the evaluation
-        result for sub-kpis, or a DataError object if the evaluation failed.
-
-        When done, it also calls set_localdict to store the local values
-        that served for the computation of the period.
-
         """
         self.ensure_one()
 
-        localdict = {
+        locals_dict = {
             'sum': _sum,
             'min': _min,
             'max': _max,
             'len': len,
             'avg': _avg,
             'AccountingNone': AccountingNone,
+            'SimpleArray': SimpleArray,
         }
 
         # fetch non-accounting queries
-        localdict.update(self._fetch_queries(
+        locals_dict.update(self._fetch_queries(
             date_from, date_to, get_additional_query_filter))
-
-        # prepare the period in the kpi matrix
-        kpi_matrix.declare_period(period_key, localdict)
 
         # use AEP to do the accounting queries
         additional_move_line_filter = None
@@ -756,82 +790,70 @@ class MisReport(models.Model):
                        target_move,
                        additional_move_line_filter)
 
+        if subkpis_filter:
+            subkpis = [subkpi for subkpi in self.subkpi_ids
+                       if subkpi in subkpis_filter]
+        else:
+            subkpis = self.subkpi_ids
+        kpi_matrix.declare_period(period_key,
+                                  period_description, period_comment,
+                                  locals_dict, subkpis)
+
         compute_queue = self.kpi_ids
         recompute_queue = []
         while True:
             for kpi in compute_queue:
-                vals = []
-                has_error = False
+                # build the list of expressions for this kpi
+                expressions = []
                 for expression in kpi.expression_ids:
                     if expression.subkpi_id and \
                             subkpis_filter and \
                             expression.subkpi_id not in subkpis_filter:
                         continue
-                    try:
-                        kpi_eval_expression = aep.replace_expr(expression.name)
-                        vals.append(safe_eval(kpi_eval_expression, localdict))
-                    except ZeroDivisionError:
-                        has_error = True
-                        vals.append(DataError(
-                            '#DIV/0',
-                            '\n\n%s' % (traceback.format_exc(),)))
-                    except (NameError, ValueError):
-                        has_error = True
-                        recompute_queue.append(kpi)
-                        vals.append(DataError(
-                            '#ERR',
-                            '\n\n%s' % (traceback.format_exc(),)))
-                    except:
-                        has_error = True
-                        vals.append(DataError(
-                            '#ERR',
-                            '\n\n%s' % (traceback.format_exc(),)))
+                    expressions.append(expression.name)
 
-                if len(vals) == 1 and isinstance(vals[0], SimpleArray):
-                    vals = vals[0]
+                vals = []
+                try:
+                    for expression in expressions:
+                        replaced_expr = aep.replace_expr(expression)
+                        vals.append(
+                            mis_safe_eval(replaced_expr, locals_dict))
+                except NameError:
+                    recompute_queue.append(kpi)
+                    break
                 else:
-                    vals = SimpleArray(vals)
+                    # no error, set it in locals_dict so it can be used
+                    # in computing other kpis
+                    if len(expressions) == 1:
+                        locals_dict[kpi.name] = vals[0]
+                    else:
+                        locals_dict[kpi.name] = SimpleArray(vals)
 
-                kpi_matrix.set_kpi_vals(period_key, kpi, vals)
+                kpi_matrix.set_values(kpi, period_key, vals)
 
-                if has_error:
-                    continue
-
-                # no error, set it in localdict so it can be used
-                # in computing other kpis
-                localdict[kpi.name] = vals
-
-                # TODO FIXME handle exceptions
                 if not kpi.auto_expand_accounts:
                     continue
-                expr = []
-                for expression in kpi.expression_ids:
-                    if expression.subkpi_id and \
-                            subkpis_filter and \
-                            expression.subkpi_id not in subkpis_filter:
-                        continue
-                    expr.append(expression.name)
-                expr = ', '.join(expr)  # tuple
-                for account_id, replaced_expr in \
-                        aep.replace_expr_by_account_id(expr):
-                    account_id_vals = safe_eval(replaced_expr, localdict)
-                    kpi_matrix.set_kpi_exploded_vals(kpi_matrix_period, kpi,
-                                                     account_id,
-                                                     account_id_vals)
+
+                for account_id, replaced_exprs in \
+                        aep.replace_exprs_by_account_id(expressions):
+                    account_id_vals = []
+                    for replaced_expr in replaced_exprs:
+                        account_id_vals.append(
+                            mis_safe_eval(replaced_expr, locals_dict))
+                    kpi_matrix.set_values_detail_account(
+                        kpi, period_key, account_id, account_id_vals)
 
             if len(recompute_queue) == 0:
                 # nothing to recompute, we are done
                 break
             if len(recompute_queue) == len(compute_queue):
                 # could not compute anything in this iteration
-                # (ie real Value errors or cyclic dependency)
+                # (ie real Name errors or cyclic dependency)
                 # so we stop trying
                 break
             # try again
             compute_queue = recompute_queue
             recompute_queue = []
-
-        kpi_matrix.set_localdict(period_key, localdict)
 
 
 class MisReportInstancePeriod(models.Model):
@@ -1038,12 +1060,13 @@ class MisReportInstancePeriod(models.Model):
                          mis.report.instance.period is going to do something
                          useful in this kpi
         """
+        # TODO FIXME remove this method
         self.ensure_one()
         # first invoke the compute method on the mis report template
         # passing it all the information regarding period and filters
         self.report_instance_id.report_id._compute_period(
             kpi_matrix, self,
-            lang_id, aep,
+            aep,
             self.date_from, self.date_to,
             self.report_instance_id.target_move,
             self.report_instance_id.company_id,
@@ -1061,7 +1084,7 @@ class MisReportInstancePeriod(models.Model):
                 kpi_style = None
                 if kpi.style_expression:
                     style_name = safe_eval(kpi.style_expression,
-                                           kpi_matrix.get_localdict(self))
+                                           kpi_matrix.get_locals_dict(self))
                     styles = mis_report_kpi_style.search(
                         [('name', '=', style_name)])
                     kpi_style = styles and styles[0]
@@ -1300,6 +1323,66 @@ class MisReportInstance(models.Model):
 
     @api.multi
     def compute(self):
+        self.ensure_one()
+        aep = self.report_id._prepare_aep(self.company_id)
+        kpi_matrix = self.report_id._prepare_kpi_matrix()
+        for period in self.period_ids:
+            self.report_id._compute_period(
+                kpi_matrix,
+                period.id,
+                'period name',  # TODO FIXME
+                'period comment',  # TODO FIXME
+                aep,
+                period.date_from,
+                period.date_to,
+                self.target_move,
+                self.company_id,
+                period.subkpi_ids,
+                period._get_additional_move_line_filter,
+                period._get_additional_query_filter)
+
+        header = [{'cols': []}, {'cols': []}]
+        for col in kpi_matrix.iter_cols():
+            header[0]['cols'].append({
+                'description': col.description,
+                'comment': col.comment,
+                'colspan': col.colspan,
+            })
+            for subcol in col.iter_subcols():
+                header[1]['cols'].append({
+                    'description': subcol.description,
+                    'comment': subcol.comment,
+                    'colspan': 1,
+                })
+
+        content = []
+        for row in kpi_matrix.iter_rows():
+            row_data = {
+                'row_id': id(row),
+                'parent_row_id': row.parent_row and id(row.parent_row) or None,
+                'description': row.description,
+                'comment': row.comment,
+                'style': row.style and row.style.to_css_style() or '',
+                'cols': []
+            }
+            for cell in row.iter_cells(kpi_matrix.iter_subcols()):
+                row_data['cols'].append({
+                    'val': (cell.val
+                            if cell.val is not AccountingNone else None),
+                    'val_r': cell.val_rendered,
+                    'val_c': cell.val_comment,
+                    # TODO FIXME style
+                    # TODO FIXME drilldown
+                })
+            content.append(row_data)
+
+        return {
+            'header': header,
+            'content': content,
+        }
+
+    @api.multi
+    def old_compute(self):
         self.ensure_one()
         aep = self.report_id._prepare_aep(self.company_id)
 

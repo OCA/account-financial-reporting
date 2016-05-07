@@ -13,16 +13,10 @@
                         <t t-foreach="widget.mis_report_data.header" t-as="h">
                             <tr class="oe_list_header_columns">
                                 <th class="oe_list_header_char">
-                                    <div>
-                                        <t t-esc="h_value.kpi_name"/>
-                                    </div>
                                 </th>
                                 <th t-foreach="h_value.cols" t-as="col" class="oe_list_header_char mis_builder_ralign" t-att-colspan="col.colspan">
                                     <div>
-                                        <t t-esc="col.name"/>
-                                    </div>
-                                    <div>
-                                        <t t-esc="col.date"/>
+                                        <t t-esc="col.description"/>
                                     </div>
                                 </th>
                             </tr>
@@ -32,7 +26,7 @@
                         <tr t-foreach="widget.mis_report_data.content" t-as="c">
                             <td t-att="{'style': c_value.default_style}">
                                 <div>
-                                    <t t-esc="c_value.kpi_name"/>
+                                    <t t-esc="c_value.description"/>
                                 </div>
                             </td>
                             <t t-foreach="c_value.cols" t-as="value">
