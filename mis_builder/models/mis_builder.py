@@ -157,8 +157,11 @@ class KpiMatrix(object):
             row = self._kpi_rows[kpi]
         else:
             kpi_row = self._kpi_rows[kpi]
-            row = KpiMatrixRow(self, kpi, account_id, parent_row=kpi_row)
-            self._detail_rows[kpi][account_id] = row
+            if account_id in self._detail_rows[kpi]:
+                row = self._detail_rows[kpi][account_id]
+            else:
+                row = KpiMatrixRow(self, kpi, account_id, parent_row=kpi_row)
+                self._detail_rows[kpi][account_id] = row
         col = self._cols[period_key]
         cell_tuple = []
         assert len(vals) == col.colspan
