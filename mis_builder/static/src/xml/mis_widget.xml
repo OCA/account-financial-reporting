@@ -55,12 +55,7 @@
                         </tr>
                     </tbody>
                     <tfoot>
-                        <tr>
-                            <td class="oe_list_footer" />
-                            <t t-foreach="widget.mis_report_data.header" t-as="f">
-                                <td t-foreach="f_value.cols" class="oe_list_footer" />
-                            </t>
-                        </tr>
+		      <tr></tr>
                     </tfoot>
                 </table>
             </t>
