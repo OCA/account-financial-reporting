@@ -34,16 +34,26 @@ class AutoStruct(object):
 
 class KpiMatrixRow(object):
 
-    def __init__(self, kpi, account_id=None, parent_row=None):
+    def __init__(self, matrix, kpi, account_id=None, parent_row=None):
+        self._matrix = matrix
         self.kpi = kpi
         self.account_id = account_id
-        self.description = kpi.description
         self.comment = ''
         self.parent_row = parent_row
 
     @property
+    def description(self):
+        if not self.account_id:
+            return self.kpi.description
+        else:
+            return self._matrix.get_account_name(self.account_id)
+
+    @property
     def style(self):
-        return self.kpi.style
+        if not self.account_id:
+            return self.kpi.style
+        else:
+            return None  # TODO style for expanded accounts
 
     def iter_cell_tuples(self, cols):
         for col in cols:
@@ -98,6 +108,8 @@ class KpiMatrixSubCol(object):
 
     def get_cell_for_row(self, row):
         cell_tuple = self.col.get_cell_tuple_for_row(row)
+        if cell_tuple is None:
+            return None
         return cell_tuple[self.index]
 
 
@@ -124,9 +136,11 @@ class KpiMatrix(object):
         self._kpi_rows = OrderedDict()  # { kpi: KpiMatrixRow }
         self._detail_rows = {}  # { kpi: {account_id: KpiMatrixRow} }
         self._cols = OrderedDict()  # { period_key: KpiMatrixCol }
+        self._account_model = env['account.account']
+        self._account_names = {}  # { account_id: account_name }
 
     def declare_kpi(self, kpi):
-        self._kpi_rows[kpi] = KpiMatrixRow(kpi)
+        self._kpi_rows[kpi] = KpiMatrixRow(self, kpi)
         self._detail_rows[kpi] = {}
 
     def declare_period(self, period_key, description, comment,
@@ -142,7 +156,7 @@ class KpiMatrix(object):
             row = self._kpi_rows[kpi]
         else:
             kpi_row = self._kpi_rows[kpi]
-            row = KpiMatrixRow(kpi, account_id, parent_row=kpi_row)
+            row = KpiMatrixRow(self, kpi, account_id, parent_row=kpi_row)
             self._detail_rows[kpi][account_id] = row
         col = self._cols[period_key]
         cell_tuple = []
@@ -163,8 +177,9 @@ class KpiMatrix(object):
     def iter_rows(self):
         for kpi_row in self._kpi_rows.values():
             yield kpi_row
-            # TODO FIXME sort detail rows
-            for detail_row in self._detail_rows[kpi_row.kpi].values():
+            detail_rows = self._detail_rows[kpi_row.kpi].values()
+            detail_rows = sorted(detail_rows, key=KpiMatrixRow.description)
+            for detail_row in detail_rows:
                 yield detail_row
 
     def iter_cols(self):
@@ -175,53 +190,19 @@ class KpiMatrix(object):
             for subcol in col.iter_subcols():
                 yield subcol
 
+    def _load_account_names(self):
+        account_ids = set()
+        for detail_rows in self._detail_rows.values():
+            account_ids.update(detail_rows.keys())
+        account_ids = list(account_ids)
+        accounts = self._account_model.search([('id', 'in', account_ids)])
+        self._account_names = {a.id: u'{} {}'.format(a.code, a.name)
+                               for a in accounts}
 
-class old_KpiMatrix(object):
-
-    def __iter_kpis(self):
-        """ Iterate kpis, including auto-expanded details by accounts
-
-        It yields, in display order:
-            * kpi technical name
-            * kpi display name
-            * kpi object
-        """
-        for kpi, account_ids in self._kpis.iteritems():
-            yield kpi.name, kpi.description, kpi
-            for account_id in sorted(account_ids, key=self.get_account_name):
-                yield "%s:%s" % (kpi.name, account_id), \
-                    self.get_account_name(account_id), kpi
-
-    def __get_exploded_account_ids(self):
-        """ Get the list of auto-expanded account ids
-
-        It returns the complete list, across all periods and kpis.
-        This method must be called after setting all kpi values
-        using set_kpi_vals and set_exploded_kpi_vals.
-        """
-        res = set()
-        for kpi, account_ids in self._kpis.iteritems():
-            res.update(account_ids)
-        return list(res)
-
-    def __load_account_names(self, account_obj):
-        """ Load account names for all exploded account ids
-
-        This method must be called after setting all kpi values
-        using set_kpi_vals and set_exploded_kpi_vals, and before
-        calling get_account_name().
-        """
-        account_data = account_obj.browse(self.get_exploded_account_ids())
-        self._account_names_by_id = {a.id: u"{} {}".format(a.code, a.name)
-                                     for a in account_data}
-
-    def __get_account_name(self, account_id):
-        """ Get account display name from it's id
-
-        This method must be called after loading account names with
-        load_account_names().
-        """
-        return self._account_names_by_id.get(account_id, account_id)
+    def get_account_name(self, account_id):
+        if account_id not in self._account_names:
+            self._load_account_names()
+        return self._account_names[account_id]
 
 
 def _get_selection_label(selection, value):
@@ -1366,14 +1347,17 @@ class MisReportInstance(models.Model):
                 'cols': []
             }
             for cell in row.iter_cells(kpi_matrix.iter_subcols()):
-                row_data['cols'].append({
-                    'val': (cell.val
-                            if cell.val is not AccountingNone else None),
-                    'val_r': cell.val_rendered,
-                    'val_c': cell.val_comment,
-                    # TODO FIXME style
-                    # TODO FIXME drilldown
-                })
+                if cell is None:
+                    row_data['cols'].append({})
+                else:
+                    row_data['cols'].append({
+                        'val': (cell.val
+                                if cell.val is not AccountingNone else None),
+                        'val_r': cell.val_rendered,
+                        'val_c': cell.val_comment,
+                        # TODO FIXME style
+                        # TODO FIXME drilldown
+                    })
             content.append(row_data)
 
         return {
