@@ -17,6 +17,10 @@
                                 <th t-foreach="h_value.cols" t-as="col" class="oe_list_header_char mis_builder_ralign" t-att-colspan="col.colspan">
                                     <div>
                                         <t t-esc="col.description"/>
+					<t t-if="col.comment">
+					  <br/>
+					  <t t-esc="col.comment"/>
+					</t>
                                     </div>
                                 </th>
                             </tr>

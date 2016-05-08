@@ -130,8 +130,9 @@ class KpiMatrix(object):
 
     def __init__(self, env):
         # cache language id for faster rendering
-        lang = env.user.lang or 'en_US'
-        self.lang = env['res.lang'].search([('code', '=', lang)])
+        lang_model = env['res.lang']
+        lang_id = lang_model._lang_get(env.user.lang)
+        self.lang = lang_model.browse(lang_id)
         # data structures
         self._kpi_rows = OrderedDict()  # { kpi: KpiMatrixRow }
         self._detail_rows = {}  # { kpi: {account_id: KpiMatrixRow} }
@@ -178,7 +179,7 @@ class KpiMatrix(object):
         for kpi_row in self._kpi_rows.values():
             yield kpi_row
             detail_rows = self._detail_rows[kpi_row.kpi].values()
-            detail_rows = sorted(detail_rows, key=KpiMatrixRow.description)
+            detail_rows = sorted(detail_rows, key=lambda r: r.description)
             for detail_row in detail_rows:
                 yield detail_row
 
@@ -387,7 +388,7 @@ class MisReportKpi(models.Model):
             return self._render_num(lang, value, 0.01,
                                     self.dp, '', '%')
         else:
-            return unicode(value)  # noqa - silence python3 error
+            return unicode(value)
 
     def render_comparison(self, lang, value, base_value,
                           average_value, average_base_value):
@@ -1210,9 +1211,11 @@ class MisReportInstance(models.Model):
         default['name'] = _('%s (copy)') % self.name
         return super(MisReportInstance, self).copy(default)
 
-    def _format_date(self, lang_id, date):
+    def _format_date(self, date):
         # format date following user language
-        date_format = self.env['res.lang'].browse(lang_id).date_format
+        lang_model = self.env['res.lang']
+        lang_id = lang_model._lang_get(self.env.user.lang)
+        date_format = lang_model.browse(lang_id).date_format
         return datetime.datetime.strftime(
             fields.Date.from_string(date), date_format)
 
@@ -1308,11 +1311,19 @@ class MisReportInstance(models.Model):
         aep = self.report_id._prepare_aep(self.company_id)
         kpi_matrix = self.report_id._prepare_kpi_matrix()
         for period in self.period_ids:
+            # add the column header
+            if period.duration == 1 and period.type == 'd':
+                comment = self._format_date(period.date_from)
+            else:
+                # from, to
+                date_from = self._format_date(period.date_from)
+                date_to = self._format_date(period.date_to)
+                comment = _('from %s to %s') % (date_from, date_to)
             self.report_id._compute_period(
                 kpi_matrix,
                 period.id,
-                'period name',  # TODO FIXME
-                'period comment',  # TODO FIXME
+                period.name,
+                comment,
                 aep,
                 period.date_from,
                 period.date_to,
