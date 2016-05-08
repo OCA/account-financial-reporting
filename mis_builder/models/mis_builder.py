@@ -850,8 +850,9 @@ class MisReportInstancePeriod(models.Model):
     """
 
     @api.one
-    @api.depends('report_instance_id.pivot_date', 'type', 'offset',
-                 'duration',  'report_instance_id.comparison_mode')
+    @api.depends('report_instance_id.pivot_date',
+                 'report_instance_id.comparison_mode',
+                 'type', 'offset', 'duration', 'mode')
     def _compute_dates(self):
         self.date_from = False
         self.date_to = False
@@ -1315,7 +1316,7 @@ class MisReportInstance(models.Model):
         kpi_matrix = self.report_id._prepare_kpi_matrix()
         for period in self.period_ids:
             # add the column header
-            if period.duration == 1 and period.type == 'd':
+            if period.date_from == period.date_to:
                 comment = self._format_date(period.date_from)
             else:
                 # from, to
@@ -1335,6 +1336,7 @@ class MisReportInstance(models.Model):
                 period.subkpi_ids,
                 period._get_additional_move_line_filter,
                 period._get_additional_query_filter)
+            # TODO FIXME comparison columns
 
         header = [{'cols': []}, {'cols': []}]
         for col in kpi_matrix.iter_cols():
