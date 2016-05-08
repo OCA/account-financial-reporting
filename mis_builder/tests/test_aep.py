@@ -188,6 +188,11 @@ class TestAEP(common.TransactionCase):
         self.assertEquals(variation, {
             self.account_in.id: -500,
         })
+        end = self._eval_by_account_id('bale[]')
+        self.assertEquals(end, {
+            self.account_ar.id: 900,
+            self.account_in.id: -800,
+        })
 
     def test_aep_convenience_methods(self):
         initial = AEP.get_balances_initial(

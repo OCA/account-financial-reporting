@@ -139,7 +139,7 @@ class AccountingExpressionProcessor(object):
         for mo in self._ACC_RE.finditer(expr):
             _, mode, account_codes, domain = self._parse_match_object(mo)
             if mode == self.MODE_END and self.smart_end:
-                modes = (self.MODE_INITIAL, self.MODE_VARIATION)
+                modes = (self.MODE_INITIAL, self.MODE_VARIATION, self.MODE_END)
             else:
                 modes = (mode, )
             for mode in modes:
@@ -234,8 +234,13 @@ class AccountingExpressionProcessor(object):
         # {(domain, mode): {account_id: (debit, credit)}}
         self._data = defaultdict(dict)
         domain_by_mode = {}
+        ends = []
         for key in self._map_account_ids:
             domain, mode = key
+            if mode == self.MODE_END and self.smart_end:
+                # postpone computation of ending balance
+                ends.append((domain, mode))
+                continue
             if mode not in domain_by_mode:
                 domain_by_mode[mode] = \
                     self.get_aml_domain_for_dates(date_from, date_to,
@@ -256,6 +261,18 @@ class AccountingExpressionProcessor(object):
                     # in initial mode, ignore accounts with 0 balance
                     continue
                 self._data[key][acc['account_id'][0]] = (debit, credit)
+        # compute ending balances by summing initial and variation
+        for key in ends:
+            domain, mode = key
+            initial_data = self._data[(domain, self.MODE_INITIAL)]
+            variation_data = self._data[(domain, self.MODE_VARIATION)]
+            account_ids = set(initial_data.keys()) | set(variation_data.keys())
+            for account_id in account_ids:
+                di, ci = initial_data.get(account_id,
+                                          (AccountingNone, AccountingNone))
+                dv, cv = variation_data.get(account_id,
+                                            (AccountingNone, AccountingNone))
+                self._data[key][account_id] = (di + dv, ci + cv)
 
     def replace_expr(self, expr):
         """Replace accounting variables in an expression by their amount.
@@ -264,7 +281,8 @@ class AccountingExpressionProcessor(object):
 
         This method must be executed after do_queries().
         """
-        def s(field, mode, account_codes, domain):
+        def f(mo):
+            field, mode, account_codes, domain = self._parse_match_object(mo)
             key = (domain, mode)
             account_ids_data = self._data[key]
             v = AccountingNone
@@ -286,17 +304,6 @@ class AccountingExpressionProcessor(object):
                     mode in (self.MODE_INITIAL, self.MODE_UNALLOCATED) and \
                     float_is_zero(v, precision_rounding=2):
                 v = AccountingNone
-            return v
-
-        def f(mo):
-            field, mode, account_codes, domain = self._parse_match_object(mo)
-            if mode == self.MODE_END and self.smart_end:
-                # split ending balance in initial+variation, so
-                # if there is no move in period, we end up with AccountingNone
-                v = s(field, self.MODE_INITIAL, account_codes, domain) + \
-                    s(field, self.MODE_VARIATION, account_codes, domain)
-            else:
-                v = s(field, mode, account_codes, domain)
             return '(' + repr(v) + ')'
 
         return self._ACC_RE.sub(f, expr)
@@ -309,7 +316,8 @@ class AccountingExpressionProcessor(object):
 
         This method must be executed after do_queries().
         """
-        def s(field, mode, account_codes, domain):
+        def f(mo):
+            field, mode, account_codes, domain = self._parse_match_object(mo)
             key = (domain, mode)
             account_ids_data = self._data[key]
             debit, credit = \
@@ -327,17 +335,6 @@ class AccountingExpressionProcessor(object):
                     mode in (self.MODE_INITIAL, self.MODE_UNALLOCATED) and \
                     float_is_zero(v, precision_rounding=2):
                 v = AccountingNone
-            return v
-
-        def f(mo):
-            field, mode, account_codes, domain = self._parse_match_object(mo)
-            if mode == self.MODE_END and self.smart_end:
-                # split ending balance in initial+variation, so
-                # if there is no move in period, we end up with AccountingNone
-                v = s(field, self.MODE_INITIAL, account_codes, domain) + \
-                    s(field, self.MODE_VARIATION, account_codes, domain)
-            else:
-                v = s(field, mode, account_codes, domain)
             return '(' + repr(v) + ')'
 
         account_ids = set()
