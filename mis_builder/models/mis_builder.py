@@ -55,11 +55,15 @@ class KpiMatrixRow(object):
         else:
             return None  # TODO style for expanded accounts
 
-    def iter_cell_tuples(self, cols):
+    def iter_cell_tuples(self, cols=None):
+        if cols is None:
+            cols = self._matrix.iter_cols()
         for col in cols:
             yield col.get_cell_tuple_for_row(self)
 
-    def iter_cells(self, subcols):
+    def iter_cells(self, subcols=None):
+        if subcols is None:
+            subcols = self._matrix.iter_subcols()
         for subcol in subcols:
             yield subcol.get_cell_for_row(self)
 
@@ -306,6 +310,50 @@ class KpiMatrix(object):
         if account_id not in self._account_names:
             self._load_account_names()
         return self._account_names[account_id]
+
+    def as_dict(self):
+        header = [{'cols': []}, {'cols': []}]
+        for col in self.iter_cols():
+            header[0]['cols'].append({
+                'description': col.description,
+                'comment': col.comment,
+                'colspan': col.colspan,
+            })
+            for subcol in col.iter_subcols():
+                header[1]['cols'].append({
+                    'description': subcol.description,
+                    'comment': subcol.comment,
+                    'colspan': 1,
+                })
+
+        content = []
+        for row in self.iter_rows():
+            row_data = {
+                'row_id': id(row),
+                'parent_row_id': row.parent_row and id(row.parent_row) or None,
+                'description': row.description,
+                'comment': row.comment,
+                'style': row.style and row.style.to_css_style() or '',
+                'cols': []
+            }
+            for cell in row.iter_cells():
+                if cell is None:
+                    row_data['cols'].append({})
+                else:
+                    row_data['cols'].append({
+                        'val': (cell.val
+                                if cell.val is not AccountingNone else None),
+                        'val_r': cell.val_rendered,
+                        'val_c': cell.val_comment,
+                        # TODO FIXME style
+                        # TODO FIXME drilldown
+                    })
+            content.append(row_data)
+
+        return {
+            'header': header,
+            'content': content,
+        }
 
 
 def _get_selection_label(selection, value):
@@ -1336,46 +1384,4 @@ class MisReportInstance(models.Model):
             for comparison_column in period.comparison_column_ids:
                 kpi_matrix.declare_comparison(period.id, comparison_column.id)
         kpi_matrix.compute_comparisons()
-
-        header = [{'cols': []}, {'cols': []}]
-        for col in kpi_matrix.iter_cols():
-            header[0]['cols'].append({
-                'description': col.description,
-                'comment': col.comment,
-                'colspan': col.colspan,
-            })
-            for subcol in col.iter_subcols():
-                header[1]['cols'].append({
-                    'description': subcol.description,
-                    'comment': subcol.comment,
-                    'colspan': 1,
-                })
-
-        content = []
-        for row in kpi_matrix.iter_rows():
-            row_data = {
-                'row_id': id(row),
-                'parent_row_id': row.parent_row and id(row.parent_row) or None,
-                'description': row.description,
-                'comment': row.comment,
-                'style': row.style and row.style.to_css_style() or '',
-                'cols': []
-            }
-            for cell in row.iter_cells(kpi_matrix.iter_subcols()):
-                if cell is None:
-                    row_data['cols'].append({})
-                else:
-                    row_data['cols'].append({
-                        'val': (cell.val
-                                if cell.val is not AccountingNone else None),
-                        'val_r': cell.val_rendered,
-                        'val_c': cell.val_comment,
-                        # TODO FIXME style
-                        # TODO FIXME drilldown
-                    })
-            content.append(row_data)
-
-        return {
-            'header': header,
-            'content': content,
-        }
+        return kpi_matrix.as_dict()
