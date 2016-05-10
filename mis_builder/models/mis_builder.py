@@ -2,7 +2,7 @@
 # © 2014-2016 ACSONE SA/NV (<http://acsone.eu>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from collections import OrderedDict
+from collections import defaultdict, OrderedDict
 import datetime
 import dateutil
 from itertools import izip
@@ -12,13 +12,13 @@ import time
 
 import pytz
 
-from openerp import api, exceptions, fields, models, _
+from openerp import api, fields, models, _
+from openerp.exceptions import UserError
 from openerp.tools.safe_eval import safe_eval
 
 from .aep import AccountingExpressionProcessor as AEP
 from .aggregate import _sum, _avg, _min, _max
 from .accounting_none import AccountingNone
-from openerp.exceptions import UserError
 from .simple_array import SimpleArray
 from .mis_safe_eval import mis_safe_eval, DataError
 
@@ -72,6 +72,7 @@ class KpiMatrixCol(object):
         self.locals_dict = locals_dict
         self.colspan = subkpis and len(subkpis) or 1
         self._subcols = []
+        self.subkpis = subkpis
         if not subkpis:
             subcol = KpiMatrixSubCol(self, '', '', 0)
             self._subcols.append(subcol)
@@ -101,6 +102,10 @@ class KpiMatrixSubCol(object):
         self.description = description
         self.comment = comment
         self.index = index
+
+    @property
+    def subkpi(self):
+        return self.col.subkpis[self.index]
 
     def iter_cells(self):
         for cells in self.col.iter_cell_tuples():
@@ -133,26 +138,58 @@ class KpiMatrix(object):
         lang_model = env['res.lang']
         lang_id = lang_model._lang_get(env.user.lang)
         self.lang = lang_model.browse(lang_id)
-        # data structures
-        self._kpi_rows = OrderedDict()  # { kpi: KpiMatrixRow }
-        self._detail_rows = {}  # { kpi: {account_id: KpiMatrixRow} }
-        self._cols = OrderedDict()  # { period_key: KpiMatrixCol }
         self._account_model = env['account.account']
-        self._account_names = {}  # { account_id: account_name }
+        # data structures
+        # { kpi: KpiMatrixRow }
+        self._kpi_rows = OrderedDict()
+        # { kpi: {account_id: KpiMatrixRow} }
+        self._detail_rows = {}
+        # { period_key: KpiMatrixCol }
+        self._cols = OrderedDict()
+        # { period_key (left of comparison): [(period_key, base_period_key)] }
+        self._comparison_todo = defaultdict(list)
+        self._comparison_cols = defaultdict(list)
+        # { account_id: account_name }
+        self._account_names = {}
 
     def declare_kpi(self, kpi):
+        """ Declare a new kpi (row) in the matrix.
+
+        Invoke this first for all kpi, in display order.
+        """
         self._kpi_rows[kpi] = KpiMatrixRow(self, kpi)
         self._detail_rows[kpi] = {}
 
     def declare_period(self, period_key, description, comment,
                        locals_dict, subkpis):
+        """ Declare a new period (column), giving it an identifier (key).
+
+        Invoke this and declare_comparison in display order.
+        """
         self._cols[period_key] = KpiMatrixCol(description, comment,
                                               locals_dict, subkpis)
 
+    def declare_comparison(self, period_key, base_period_key):
+        """ Declare a new comparison column.
+
+        Invoke this and declare_period in display order.
+        """
+        last_period_key = list(self._cols.keys())[-1]
+        self._comparison_todo[last_period_key].append(
+            (period_key, base_period_key))
+
     def set_values(self, kpi, period_key, vals):
+        """ Set values for a kpi and a period.
+
+        Invoke this after declaring the kpi and the period.
+        """
         self.set_values_detail_account(kpi, period_key, None, vals)
 
     def set_values_detail_account(self, kpi, period_key, account_id, vals):
+        """ Set values for a kpi and a period and a detail account.
+
+        Invoke this after declaring the kpi and the period.
+        """
         if not account_id:
             row = self._kpi_rows[kpi]
         else:
@@ -178,7 +215,57 @@ class KpiMatrix(object):
             cell_tuple.append(cell)
         col._set_cell_tuple(row, cell_tuple)
 
+    def compute_comparisons(self):
+        """ Compute comparisons.
+
+        Invoke this after setting all values.
+        """
+        for pos_period_key, comparisons in self._comparison_todo.items():
+            for period_key, base_period_key in comparisons:
+                col = self._cols[period_key]
+                base_col = self._cols[base_period_key]
+                common_subkpis = set(col.subkpis) & set(base_col.subkpis)
+                if not common_subkpis:
+                    raise UserError('Columns {} and {} are not comparable'.
+                                    format(col.description,
+                                           base_col.description))
+                description = u'{} vs {}'.\
+                    format(col.description, base_col.description)
+                comparison_col = KpiMatrixCol(description, None,
+                                              {}, col.subkpis)
+                for row in self.iter_rows():
+                    cell_tuple = col.get_cell_tuple_for_row(row)
+                    base_cell_tuple = base_col.get_cell_tuple_for_row(row)
+                    if cell_tuple is None and base_cell_tuple is None:
+                        continue
+                    if cell_tuple is None:
+                        vals = [AccountingNone] * len(common_subkpis)
+                    else:
+                        vals = [cell.val for cell in cell_tuple
+                                if cell.subcol.subkpi in common_subkpis]
+                    if base_cell_tuple is None:
+                        base_vals = [AccountingNone] * len(common_subkpis)
+                    else:
+                        base_vals = [cell.val for cell in base_cell_tuple
+                                     if cell.subcol.subkpi in common_subkpis]
+                    comparison_cell_tuple = []
+                    for val, base_val, comparison_subcol in \
+                            izip(vals,
+                                 base_vals,
+                                 comparison_col.iter_subcols()):
+                        # TODO FIXME average factors
+                        delta, delta_r = row.kpi.compare_and_render(
+                            self.lang, val, base_val, 1, 1)
+                        comparison_cell_tuple.append(KpiMatrixCell(
+                            row, comparison_subcol, delta, delta_r, None))
+                    comparison_col._set_cell_tuple(row, comparison_cell_tuple)
+                self._comparison_cols[pos_period_key].append(comparison_col)
+
     def iter_rows(self):
+        """ Iterate rows in display order.
+
+        yields KpiMatrixRow.
+        """
         for kpi_row in self._kpi_rows.values():
             yield kpi_row
             detail_rows = self._detail_rows[kpi_row.kpi].values()
@@ -187,9 +274,21 @@ class KpiMatrix(object):
                 yield detail_row
 
     def iter_cols(self):
-        return self._cols.values()
+        """ Iterate columns in display order.
+
+        yields KpiMatrixCol: one for each period or comparison.
+        """
+        for period_key, col in self._cols.items():
+            yield col
+            for comparison_col in self._comparison_cols[period_key]:
+                yield comparison_col
 
     def iter_subcols(self):
+        """ Iterate sub columns in display order.
+
+        yields KpiMatrixSubCol: one for each subkpi in each period
+        and comparison.
+        """
         for col in self.iter_cols():
             for subcol in col.iter_subcols():
                 yield subcol
@@ -297,8 +396,7 @@ class MisReportKpi(models.Model):
     @api.constrains('name')
     def _check_name(self):
         if not _is_valid_python_var(self.name):
-            raise exceptions.Warning(_('The name must be a valid '
-                                       'python identifier'))
+            raise UserError(_('The name must be a valid python identifier'))
 
     @api.onchange('name')
     def _onchange_name(self):
@@ -393,9 +491,11 @@ class MisReportKpi(models.Model):
         else:
             return unicode(value)
 
-    def render_comparison(self, lang, value, base_value,
-                          average_value, average_base_value):
+    def compare_and_render(self, lang, value, base_value,
+                           average_value, average_base_value):
         """ render the comparison of two KPI values, ready for display
+
+        Returns a tuple, with the numeric comparison and its string rendering.
 
         If the difference is 0, an empty string is returned.
         """
@@ -407,7 +507,7 @@ class MisReportKpi(models.Model):
         if self.type == 'pct':
             delta = value - base_value
             if delta and round(delta, self.dp) != 0:
-                return self._render_num(
+                return delta, self._render_num(
                     lang,
                     delta,
                     0.01, self.dp, '', _('pp'),
@@ -420,7 +520,7 @@ class MisReportKpi(models.Model):
             if self.compare_method == 'diff':
                 delta = value - base_value
                 if delta and round(delta, self.dp) != 0:
-                    return self._render_num(
+                    return delta, self._render_num(
                         lang,
                         delta,
                         self.divider, self.dp, self.prefix, self.suffix,
@@ -429,12 +529,12 @@ class MisReportKpi(models.Model):
                 if base_value and round(base_value, self.dp) != 0:
                     delta = (value - base_value) / abs(base_value)
                     if delta and round(delta, self.dp) != 0:
-                        return self._render_num(
+                        return delta, self._render_num(
                             lang,
                             delta,
                             0.01, self.dp, '', '%',
                             sign='+')
-        return ''
+        return 0, ''
 
     def _render_num(self, lang, value, divider,
                     dp, prefix, suffix, sign='-'):
@@ -471,8 +571,7 @@ class MisReportSubkpi(models.Model):
     @api.constrains('name')
     def _check_name(self):
         if not _is_valid_python_var(self.name):
-            raise exceptions.Warning(_('The name must be a valid '
-                                       'python identifier'))
+            raise UserError(_('The name must be a valid python identifier'))
 
     @api.onchange('name')
     def _onchange_name(self):
@@ -564,8 +663,7 @@ class MisReportQuery(models.Model):
     @api.constrains('name')
     def _check_name(self):
         if not _is_valid_python_var(self.name):
-            raise exceptions.Warning(_('The name must be a valid '
-                                       'python identifier'))
+            raise UserError(_('The name must be a valid python identifier'))
 
 
 class MisReport(models.Model):
@@ -723,15 +821,17 @@ class MisReport(models.Model):
         return res
 
     @api.multi
-    def _compute_period(self, kpi_matrix,
-                        period_key, period_description, period_comment,
-                        aep,
-                        date_from, date_to,
-                        target_move,
-                        company,
-                        subkpis_filter=None,
-                        get_additional_move_line_filter=None,
-                        get_additional_query_filter=None):
+    def _declare_and_compute_period(self, kpi_matrix,
+                                    period_key,
+                                    period_description,
+                                    period_comment,
+                                    aep,
+                                    date_from, date_to,
+                                    target_move,
+                                    company,
+                                    subkpis_filter=None,
+                                    get_additional_move_line_filter=None,
+                                    get_additional_query_filter=None):
         """ Evaluate a report for a given period, populating a KpiMatrix.
 
         :param kpi_matrix: the KpiMatrix object to be populated
@@ -1220,7 +1320,7 @@ class MisReportInstance(models.Model):
                 date_from = self._format_date(period.date_from)
                 date_to = self._format_date(period.date_to)
                 comment = _('from %s to %s') % (date_from, date_to)
-            self.report_id._compute_period(
+            self.report_id._declare_and_compute_period(
                 kpi_matrix,
                 period.id,
                 period.name,
@@ -1233,7 +1333,9 @@ class MisReportInstance(models.Model):
                 period.subkpi_ids,
                 period._get_additional_move_line_filter,
                 period._get_additional_query_filter)
-            # TODO FIXME comparison columns
+            for comparison_column in period.comparison_column_ids:
+                kpi_matrix.declare_comparison(period.id, comparison_column.id)
+        kpi_matrix.compute_comparisons()
 
         header = [{'cols': []}, {'cols': []}]
         for col in kpi_matrix.iter_cols():
