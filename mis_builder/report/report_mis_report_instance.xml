@@ -4,72 +4,69 @@
 
     <template id="report_mis_report_instance">
       <t t-call="report.html_container">
-        <t t-set="data_report_margin_top" t-value="12"/>
-        <t t-set="data_report_header_spacing" t-value="9"/>
-        <t t-set="data_report_dpi" t-value="110"/>
         <t t-foreach="docs" t-as="o">
+	  <t t-call="report.internal_layout">
+	    <t t-set="matrix" t-value="o._compute_matrix()"/>
             <div class="page">
               <h2><span t-field="o.name" /> - <span t-field="o.company_id.name" /></h2>
               <div class="mis_table">
                 <div class="mis_thead">
-                  <t t-foreach="docs_computed[o.id]['header']" t-as="h">
-                    <div class="mis_row labels">
-                      <div class="mis_cell">
-                        <div>
-                          <t t-esc="h_value['kpi_name']"/>
-                        </div>
+		  <div class="mis_row">
+		    <div class="mis_cell mis_collabel"></div>
+		    <t t-foreach="matrix.iter_cols()" t-as="col">
+                      <div class="mis_cell mis_collabel">
+			<t t-esc="col.description"/>
+			<t t-if="col.comment">
+			  <br/>
+			  <t t-esc="col.comment"/>
+			</t>
                       </div>
-                      <t t-foreach="h_value['cols']" t-as="col">
-                        <div class="mis_cell amount" t-att-colspan="col.get('colspan', 1)">
-                          <div>
-                            <t t-esc="col['name']"/>
-                          </div>
-                          <t t-if="col.get('date')">
-                            <div>
-                              <t t-esc="col['date']"/>
-                            </div>
-                          </t>
-                        </div>
-                      </t>
-                    </div>
-                  </t>
+		      <!-- add empty cells because we have no colspan with css tables -->
+		      <t t-foreach="list(col.iter_subcols())[1:]" t-as="subcol">
+			<div class="mis_cell mis_collabel"></div>
+		      </t>
+		    </t>
+		  </div>
+		  <div class="mis_row">
+		    <div class="mis_cell mis_collabel"></div>
+		    <t t-foreach="matrix.iter_subcols()" t-as="subcol">
+		      <div class="mis_cell mis_collabel">
+			<t t-esc="subcol.description"/>
+			<t t-if="subcol.comment">
+			  <br/>
+			  <t t-esc="subcol.comment"/>
+			</t>
+		      </div>
+		    </t>
+		  </div>
                 </div>
                 <div class="mis_tbody">
-                  <div t-foreach="docs_computed[o.id]['content']" t-as="c" class="mis_row lines">
-                    <div t-att-style="c_value['default_style']" class="mis_cell">
-                      <div class="text-left">
-                        <t t-esc="c_value['kpi_name']"/>
-                      </div>
+                  <div t-foreach="matrix.iter_rows()" t-as="row" class="mis_row">
+                    <div t-att-style="row.style and row.style.to_css_style() or ''" class="mis_cell mis_rowlabel">
+		      <t t-esc="row.description"/>
+		      <t t-if="row.comment">
+			<br/>
+			<t t-esc="row.comment"/>
+		      </t>
                     </div>
-                    <t t-foreach="c_value['cols']" t-as="value">
-                      <div t-att-style="c_value['default_style']" class="mis_cell">
-                        <div t-att-style="value_value.get('style')" class="text-right">
-                          <t t-esc="value_value['val_r']"/>
-                        </div>
-                      </div>
+                    <t t-foreach="row.iter_cells()" t-as="cell">
+		      <t t-if="cell">
+			<div t-att-style="cell.row.style and cell.row.style.to_css_style() or ''" class="mis_cell mis_amount">
+			  <div t-att-style="cell.style and cell.style.to_css_style() or ''">
+			    <t t-esc="cell.val_rendered"/>
+			  </div>
+			</div>
+		      </t>
+		      <t t-if="not cell">
+			<div class="mis_cell mis_amount"></div>
+		      </t>
                     </t>
                   </div>
                 </div>
               </div>
             </div>
           </t>
-          <div class="footer">
-            <div style="border-top: 1px solid black;">
-                <div class="col-xs-3">
-                    <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
-                </div>
-                <div class="col-xs-2 col-xs-offset-2 text-center">
-                </div>
-                <div class="col-xs-2 col-xs-offset-3 text-right">
-                    <ul class="list-inline">
-                        Page
-                        <li><span class="page"/></li>
-                        <li>of</li>
-                        <li><span class="topage"/></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+	</t>
       </t>
     </template>
 

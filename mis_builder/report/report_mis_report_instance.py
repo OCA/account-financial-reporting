@@ -9,26 +9,6 @@ from openerp import api, models
 _logger = logging.getLogger(__name__)
 
 
-class ReportMisReportInstance(models.AbstractModel):
-
-    _name = 'report.mis_builder.report_mis_report_instance'
-
-    @api.multi
-    def render_html(self, data=None):
-        docs = self.env['mis.report.instance'].browse(self._ids)
-        docs_computed = {}
-        for doc in docs:
-            docs_computed[doc.id] = doc.compute()
-        docargs = {
-            'doc_ids': self._ids,
-            'doc_model': 'mis.report.instance',
-            'docs': docs,
-            'docs_computed': docs_computed,
-        }
-        return self.env['report'].\
-            render('mis_builder.report_mis_report_instance', docargs)
-
-
 class Report(models.Model):
     _inherit = "report"
 
