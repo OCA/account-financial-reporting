@@ -109,11 +109,12 @@ class KpiMatrixSubCol(object):
 
     @property
     def subkpi(self):
-        return self.col.subkpis[self.index]
+        if self.col.subkpis:
+            return self.col.subkpis[self.index]
 
     def iter_cells(self):
-        for cells in self.col.iter_cell_tuples():
-            yield cells[self.index]
+        for cell_tuple in self.col.iter_cell_tuples():
+            yield cell_tuple[self.index]
 
     def get_cell_for_row(self, row):
         cell_tuple = self.col.get_cell_tuple_for_row(row)
@@ -132,6 +133,7 @@ class KpiMatrixCell(object):
         self.val = val
         self.val_rendered = val_rendered
         self.val_comment = val_comment
+        self.style = style
         self.drilldown_key = None
 
 
@@ -212,7 +214,15 @@ class KpiMatrix(object):
                 val_comment = val.msg
             else:
                 val_rendered = kpi.render(self.lang, val)
-                val_comment = ''  # TODO FIXME get subkpi expression
+                if subcol.subkpi:
+                    val_comment = "{}.{} = {}".format(
+                        row.kpi.name,
+                        subcol.subkpi.name,
+                        row.kpi.get_expression_for_subkpi(subcol.subkpi))
+                else:
+                    val_comment = "{} = {}".format(
+                        row.kpi.name,
+                        row.kpi.expression)
             # TODO style
             # TODO drilldown_key
             cell = KpiMatrixCell(row, subcol, val, val_rendered, val_comment)
@@ -524,6 +534,11 @@ class MisReportKpi(models.Model):
             self.compare_method = 'none'
             self.divider = ''
             self.dp = 0
+
+    def get_expression_for_subkpi(self, subkpi):
+        for expression in self.expression_ids:
+            if expression.subkpi_id == subkpi:
+                return expression.name
 
     def render(self, lang, value):
         """ render a KPI value as a unicode string, ready for display """
