@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# © 2016 Therp BV SA/NV (<http://therp.nl>)
+# © 2016 Therp BV (<http://therp.nl>)
+# © 2016 ACSONE SA/NV (<http://acsone.eu>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from openerp import api, fields, models
@@ -47,11 +48,9 @@ class MisReportKpiStyle(models.Model):
     }
 
     color = fields.Char(
-        required=True,
         help='Line color in valid RGB code (from #000000 to #FFFFFF)',
     )
     background_color = fields.Char(
-        required=True,
         help='Line color in valid RGB code (from #000000 to #FFFFFF)'
     )
     font_style = fields.Selection(
@@ -92,10 +91,10 @@ class MisReportKpiStyle(models.Model):
             ('font-size',  self.font_size),
             ('color', self.color),
             ('background-color', self.background_color),
-            ('indent-level', str(self.indent_level))
+            ('indent-level', self.indent_level)
         ]
 
         css_list = [
-            x[0] + ':' + x[1] for x in css_attributes if x[1]
+            '%s:%s' % x for x in css_attributes if x[1]
         ]
         return ';'.join(css_item for css_item in css_list)
