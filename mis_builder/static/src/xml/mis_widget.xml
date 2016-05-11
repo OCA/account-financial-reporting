@@ -14,27 +14,23 @@
                             <tr class="oe_list_header_columns">
                                 <th class="oe_list_header_char">
                                 </th>
-                                <th t-foreach="h_value.cols" t-as="col" class="oe_list_header_char mis_builder_ralign" t-att-colspan="col.colspan">
-                                    <div>
-                                        <t t-esc="col.description"/>
-					<t t-if="col.comment">
-					  <br/>
-					  <t t-esc="col.comment"/>
-					</t>
-                                    </div>
+                                <th t-foreach="h_value.cols" t-as="col" class="oe_list_header_char mis_builder_collabel" t-att-colspan="col.colspan">
+				      <t t-esc="col.description"/>
+				      <t t-if="col.comment">
+					<br/>
+					<t t-esc="col.comment"/>
+				      </t>
                                 </th>
                             </tr>
                         </t>
                     </thead>
                     <tbody>
                         <tr t-foreach="widget.mis_report_data.content" t-as="c">
-                            <td t-att="{'style': c_value.default_style}">
-                                <div>
-                                    <t t-esc="c_value.description"/>
-                                </div>
+                            <td t-att="{'style': c_value.style}">
+				<t t-esc="c_value.description"/>
                             </td>
                             <t t-foreach="c_value.cols" t-as="value">
-                                <td t-att="{'style': c_value.default_style}" class="mis_builder_ralign">
+                                <td t-att="{'style': c_value.style}" class="mis_builder_amount">
                                     <div t-att="{'style': value_value.style, 'title': value_value.val_c}">
                                         <t t-if="value_value.drilldown">
                                             <a href="javascript:void(0)"

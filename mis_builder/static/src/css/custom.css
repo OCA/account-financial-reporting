@@ -1,5 +1,13 @@
-.openerp .mis_builder_ralign {
+.openerp .mis_builder_amount {
   text-align: right;
+}
+
+.openerp .mis_builder_collabel {
+  text-align: center;
+}
+
+.openerp .mis_builder_rowlabel {
+  text-align: left;
 }
 
 .openerp .mis_builder a {
