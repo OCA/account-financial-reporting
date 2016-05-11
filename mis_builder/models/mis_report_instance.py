@@ -378,7 +378,7 @@ class MisReportInstance(models.Model):
         }
 
     @api.multi
-    def compute(self):
+    def _compute_matrix(self):
         self.ensure_one()
         aep = self.report_id._prepare_aep(self.company_id)
         kpi_matrix = self.report_id._prepare_kpi_matrix()
@@ -407,4 +407,10 @@ class MisReportInstance(models.Model):
             for comparison_column in period.comparison_column_ids:
                 kpi_matrix.declare_comparison(period.id, comparison_column.id)
         kpi_matrix.compute_comparisons()
+        return kpi_matrix
+
+    @api.multi
+    def compute(self):
+        self.ensure_one()
+        kpi_matrix = self._compute_matrix()
         return kpi_matrix.as_dict()
