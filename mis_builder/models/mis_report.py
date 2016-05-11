@@ -343,7 +343,7 @@ class KpiMatrix(object):
                 'parent_row_id': row.parent_row and id(row.parent_row) or None,
                 'description': row.description,
                 'comment': row.comment,
-                'style': row.style and row.style.to_css_style() or '',
+                'style': row.style and row.style.to_css_style() or None,
                 'cols': []
             }
             for cell in row.iter_cells():
