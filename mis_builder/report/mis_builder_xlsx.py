@@ -1,31 +1,22 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    mis_builder module for Odoo, Management Information System Builder
-#    Copyright (C) 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
-#
-#    This file is a part of mis_builder
-#
-#    mis_builder is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License v3 or later
-#    as published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    mis_builder is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License v3 or later for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    v3 or later along with this program.
-#    If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+# © 2014-2016 ACSONE SA/NV (<http://acsone.eu>)
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
+
+from collections import defaultdict
+import logging
 
 from openerp.addons.report_xlsx.report.report_xlsx import ReportXlsx
 from openerp.report import report_sxw
-import logging
+
+from ..models.accounting_none import AccountingNone
+
 _logger = logging.getLogger(__name__)
+
+
+ROW_HEIGHT = 15  # xlsxwriter units
+COL_WIDTH = 0.9  # xlsxwriter units
+MIN_COL_WIDTH = 10  # characters
+MAX_COL_WIDTH = 50  # characters
 
 
 class MisBuilderXslx(ReportXlsx):
@@ -35,81 +26,109 @@ class MisBuilderXslx(ReportXlsx):
         super(MisBuilderXslx, self).__init__(
             name, table, rml, parser, header, store)
 
+    def make_number_format(self, kpi, comparison=False):
+        # TODO FIXME comparison
+        number_format = '#'
+        if kpi.dp:
+            number_format += '.'
+            number_format += '0' * kpi.dp
+        # TODO FIXME factor
+        if kpi.prefix:
+            number_format = u'"{} "{}'.format(kpi.prefix, number_format)
+        if kpi.suffix:
+            number_format = u'{}" {}"'.format(number_format, kpi.suffix)
+        return number_format
+
     def generate_xlsx_report(self, workbook, data, objects):
 
-        report_name = objects[0].name
+        # get the computed result of the report
+        matrix = objects._compute_matrix()
+
+        # create worksheet
+        report_name = '{} - {}'.format(
+            objects[0].name, objects[0].company_id.name)
         sheet = workbook.add_worksheet(report_name[:31])
         row_pos = 0
         col_pos = 0
+        # width of the labels column
+        label_col_width = MIN_COL_WIDTH
+        # {col_pos: max width in characters}
+        col_width = defaultdict(lambda: MIN_COL_WIDTH)
 
-        sheet.set_column(col_pos, col_pos, 30)
+        # document title
         bold = workbook.add_format({'bold': True})
-        header_format = workbook.add_format({'bold': True,
-                                             'align': 'center',
-                                             'bg_color': '#F0EEEE'})
+        header_format = workbook.add_format({
+            'bold': True, 'align': 'center', 'bg_color': '#F0EEEE'})
         sheet.write(row_pos, 0, report_name, bold)
+        row_pos += 2
+
+        # column headers
+        sheet.write(row_pos, 0, '', header_format)
+        col_pos = 1
+        for col in matrix.iter_cols():
+            label = col.description
+            if col.comment:
+                label += '\n' + col.comment
+                sheet.set_row(row_pos, ROW_HEIGHT * 2)
+            sheet.merge_range(
+                row_pos, col_pos, row_pos,
+                col_pos + col.colspan-1,
+                label, header_format)
+            col_pos += col.colspan
         row_pos += 1
-        col_pos += 1
 
-        # get the computed result of the report
-        data = objects.compute()
+        # sub column headers
+        sheet.write(row_pos, 0, '', header_format)
+        col_pos = 1
+        for subcol in matrix.iter_subcols():
+            label = subcol.description
+            if subcol.comment:
+                label += '\n' + subcol.comment
+                sheet.set_row(row_pos, ROW_HEIGHT * 2)
+            sheet.write(row_pos, col_pos, label, header_format)
+            col_width[col_pos] = max(col_width[col_pos],
+                                     len(subcol.description or ''),
+                                     len(subcol.comment or ''))
+            col_pos += 1
+        row_pos += 1
 
-        # Column headers
-        for header in data['header']:
-            has_col_date = False
-            for col in header['cols']:
-                colspan = col['colspan']
-                col_date = col.get('date')
-                col_name = col['name']
-                has_col_date = has_col_date or col_date
-                if colspan > 1:
-                    sheet.merge_range(
-                        row_pos, col_pos, row_pos, col_pos + colspan-1,
-                        col_name, header_format)
-                    if col_date:
-                        sheet.merge_range(
-                            row_pos+1, col_pos, row_pos+1, col_pos + colspan-1,
-                            col_date, header_format)
-                    col_pos += colspan
-                else:
-                    sheet.write(row_pos, col_pos, col['name'], header_format)
-                    if col_date:
-                        sheet.write(
-                            row_pos+1, col_pos, col.get('date'), header_format)
-                    col_pos += 1
-            col_pos = 1
-            row_pos += 1
-            if has_col_date:
-                row_pos += 1
-        for line in data['content']:
-            row_xlsx_syle = line.get('default_xlsx_style', {})
-            row_format = workbook.add_format(row_xlsx_syle)
-            col = 0
-            sheet.write(row_pos, col, line['kpi_name'], row_format)
-            for value in line['cols']:
-                col += 1
-                num_format_str = '#'
-                if value.get('dp'):
-                    num_format_str += '.'
-                    num_format_str += '0' * int(value['dp'])
-                if value.get('prefix'):
-                    num_format_str = '"%s"' % value['prefix'] + num_format_str
-                if value.get('suffix'):
-                    num_format_str = num_format_str + ' "%s"' % value['suffix']
-                kpi_xlsx_syle = value.get('xlsx_style', {}) or row_xlsx_syle
-                kpi_xlsx_syle.update({
-                    'num_format': num_format_str,
+        # rows
+        for row in matrix.iter_rows():
+            if row.style:
+                row_xlsx_style = row.style.to_xlsx_format_properties()
+            else:
+                row_xlsx_style = {}
+            row_format = workbook.add_format(row_xlsx_style)
+            col_pos = 0
+            sheet.write(row_pos, col_pos, row.description, row_format)
+            label_col_width = max(label_col_width, len(row.description or ''))
+            for cell in row.iter_cells():
+                col_pos += 1
+                if not cell or cell.val is AccountingNone:
+                    sheet.write(row_pos, col_pos, '', row_format)
+                    continue
+                kpi_xlsx_style = dict(row_xlsx_style)
+                kpi_xlsx_style.update({
+                    'num_format': self.make_number_format(row.kpi),
                     'align': 'right'
                 })
-                kpi_format = workbook.add_format(kpi_xlsx_syle)
-                if value.get('val'):
-                    val = value['val']
-                    if value.get('is_percentage'):
-                        val = val / 0.01
-                    sheet.write(row_pos, col, val, kpi_format)
-                else:
-                    sheet.write(row_pos, col, value['val_r'], kpi_format)
+                kpi_format = workbook.add_format(kpi_xlsx_style)
+                # TODO FIXME kpi computed style
+                # TODO FIXME pct in comparision columns
+                val = cell.val
+                if row.kpi.type == 'pct':
+                    val = val / 0.01
+                sheet.write(row_pos, col_pos, val, kpi_format)
+                col_width[col_pos] = max(col_width[col_pos],
+                                         len(cell.val_rendered or ''))
             row_pos += 1
+
+        # adjust col widths
+        sheet.set_column(0, 0, min(label_col_width, MAX_COL_WIDTH) * COL_WIDTH)
+        data_col_width = min(MAX_COL_WIDTH, max(*col_width.values()))
+        min_col_pos = min(*col_width.keys())
+        max_col_pos = max(*col_width.keys())
+        sheet.set_column(min_col_pos, max_col_pos, data_col_width * COL_WIDTH)
 
 
 MisBuilderXslx('report.mis.report.instance.xlsx',
