@@ -55,6 +55,13 @@ class KpiMatrixRow(object):
         else:
             return None  # TODO style for expanded accounts
 
+    @property
+    def row_id(self):
+        if not self.account_id:
+            return self.kpi.name
+        else:
+            return '{}:{}'.format(self.kpi.name, self.account_id)
+
     def iter_cell_tuples(self, cols=None):
         if cols is None:
             cols = self._matrix.iter_cols()
@@ -215,12 +222,12 @@ class KpiMatrix(object):
             else:
                 val_rendered = kpi.render(self.lang, val)
                 if subcol.subkpi:
-                    val_comment = "{}.{} = {}".format(
+                    val_comment = u'{}.{} = {}'.format(
                         row.kpi.name,
                         subcol.subkpi.name,
                         row.kpi.get_expression_for_subkpi(subcol.subkpi))
                 else:
-                    val_comment = "{} = {}".format(
+                    val_comment = u'{} = {}'.format(
                         row.kpi.name,
                         row.kpi.expression)
             # TODO style
@@ -339,8 +346,9 @@ class KpiMatrix(object):
         content = []
         for row in self.iter_rows():
             row_data = {
-                'row_id': id(row),
-                'parent_row_id': row.parent_row and id(row.parent_row) or None,
+                'row_id': row.row_id,
+                'parent_row_id': (row.parent_row and
+                                  row.parent_row.row_id or None),
                 'description': row.description,
                 'comment': row.comment,
                 'style': row.style and row.style.to_css_style() or None,
@@ -472,7 +480,7 @@ class MisReportKpi(models.Model):
             l = []
             for expression in kpi.expression_ids:
                 if expression.subkpi_id:
-                    l.append('{}={}'.format(
+                    l.append(u'{} = {}'.format(
                         expression.subkpi_id.name, expression.name))
                 else:
                     l.append(
