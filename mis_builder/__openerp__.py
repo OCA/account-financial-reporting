@@ -16,6 +16,7 @@
         'account',
         'report_xlsx',  # OCA/reporting-engine
         'date_range',  # OCA/server-tools
+        'web_widget_color',  # OCA/web
     ],
     'data': [
         'wizard/mis_builder_dashboard.xml',
