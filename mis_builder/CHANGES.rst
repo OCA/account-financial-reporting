@@ -9,13 +9,20 @@ Changelog
 9.0.1.0.0 (2016-??-??)
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Most of the work for this release has been done at the Sorrento sprint
-April 26-29, 2016.
+Part of the work for this release has been done at the Sorrento sprint
+April 26-29, 2016. The rest (ie a major refactoring) has been done in
+the weeks after.
 
+* [IMP] AccountingExpressionProcessor now supports 'balu' expressions
+  to obtain the unallocated profit/loss of previous fiscal years;
+  get_unallocated_pl is the corresponding convenience method
+* [IMP] AccountingExpressionProcessor now has easy methods to obtain
+  balances by account: get_balances_initial, get_balances_end,
+  get_balances_veriation
 * [IMP] there is now an auto-expand feature to automatically display
   a by account detail for some kpis
 * [IMP] the kpi and period lists are now manipulated through forms instead
-  of directly in the tree views, this improves usability
+  of directly in the tree views
 * [IMP] it is now possible to create a report through a wizard, such
   reports are deemed temporary and available through a "Last Reports Generated"
   menu, they are garbaged collected automatically, unless saved permanently,
