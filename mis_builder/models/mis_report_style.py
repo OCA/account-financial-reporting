@@ -8,7 +8,7 @@ from openerp import api, fields, models
 
 class MisReportKpiStyle(models.Model):
 
-    _name = 'mis.report.kpi.style'
+    _name = 'mis.report.style'
 
     @api.depends('indent_level')
     def check_positive_val(self):

@@ -423,12 +423,12 @@ class MisReportKpi(models.Model):
     auto_expand_accounts = fields.Boolean(string='Display details by account')
     auto_expand_accounts_style = fields.Many2one(
         string="Style for account detail rows",
-        comodel_name="mis.report.kpi.style",
+        comodel_name="mis.report.style",
         required=False
     )
     style = fields.Many2one(
         string="Row style",
-        comodel_name="mis.report.kpi.style",
+        comodel_name="mis.report.style",
         required=False
     )
     style_expression = fields.Char(

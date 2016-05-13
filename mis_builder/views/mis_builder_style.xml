@@ -2,11 +2,27 @@
 <openerp>
     <data>
 
+        <record model="ir.ui.view" id="mis_report_style_view_tree">
+            <field name="name">mis.report.style.view.tree</field>
+            <field name="model">mis.report.style</field>
+            <field name="arch" type="xml">
+                <tree string="MIS Report Styles">
+                    <field name="name"/>
+                    <field name="color"/>
+                    <field name="background_color"/>
+                    <field name="font_style"/>
+                    <field name="font_weight"/>
+                    <field name="font_size"/>
+                    <field name="indent_level"/>
+                </tree>
+            </field>
+        </record>
+
         <record id="mis_report_style_view_form" model="ir.ui.view">
             <field name="name">mis.report.style.view.form</field>
-            <field name="model">mis.report.kpi.style</field>
+            <field name="model">mis.report.style</field>
             <field name="arch" type="xml">
-                <form>
+                <form string="MIS Report Style" version="7.0">
                 <sheet>
                     <group string="Style" col="2">
                         <field name="name" />
@@ -27,6 +43,16 @@
                 </form>
             </field>
         </record>
+
+        <record model="ir.actions.act_window" id="mis_report_style_view_action">
+            <field name="name">MIS Report Styles</field>
+            <field name="view_id" ref="mis_report_style_view_tree"/>
+            <field name="res_model">mis.report.style</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="mis_report_style_view_menu" parent="account.menu_account_reports" name="MIS Report Styles" action="mis_report_style_view_action" sequence="22"/>
 
     </data>
 </openerp>
