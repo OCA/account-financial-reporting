@@ -77,10 +77,16 @@ class MisBuilderXslx(ReportXlsx):
             if col.comment:
                 label += '\n' + col.comment
                 sheet.set_row(row_pos, ROW_HEIGHT * 2)
-            sheet.merge_range(
-                row_pos, col_pos, row_pos,
-                col_pos + col.colspan-1,
-                label, header_format)
+            if col.colspan > 1:
+                sheet.merge_range(
+                    row_pos, col_pos, row_pos,
+                    col_pos + col.colspan-1,
+                    label, header_format)
+            else:
+                sheet.write(row_pos, col_pos, label, header_format)
+                col_width[col_pos] = max(col_width[col_pos],
+                                         len(col.description or ''),
+                                         len(col.comment or ''))
             col_pos += col.colspan
         row_pos += 1
 
