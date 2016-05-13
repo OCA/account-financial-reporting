@@ -113,8 +113,8 @@
                 <form>
                     <group>
                         <field name="name" />
-                        <field name="color" widget="color" />
-                        <field name="background_color" widget="color" />
+                        <field name="color" />
+                        <field name="background_color" />
                         <field name="font_style" />
                         <field name="font_weight" />
                         <field name="font_size" />
