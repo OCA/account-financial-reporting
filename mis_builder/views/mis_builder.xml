@@ -141,8 +141,8 @@
                                attrs="{'invisible': [('type', '=', 'str')]}"/>
                         <field name="prefix"/>
                         <field name="suffix"/>
-                        <field name="style" colspan="4"/>
-                        <field name="style_expression" colspan="4"/>
+                        <field name="style"/>
+                        <field name="style_expression"/>
                         <!--<field name="sequence" />-->
                     </group>
                     <group string="Expression">
@@ -159,8 +159,9 @@
                                attrs="{'invisible': [('multi', '=', True)],
                                        'readonly': [('multi', '=', True)]}"/>
                     </group>
-		    <group string="Auto expand">
+		    <group col="4" string="Auto expand">
 			<field name="auto_expand_accounts"/>
+			<field name="auto_expand_accounts_style"/>
 		    </group>
                     <group col="2" string="Legend (for kpi expressions)">
                         <group>

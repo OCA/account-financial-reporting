@@ -53,7 +53,7 @@ class KpiMatrixRow(object):
         if not self.account_id:
             return self.kpi.style
         else:
-            return None  # TODO style for expanded accounts
+            return self.kpi.auto_expand_accounts_style
 
     @property
     def row_id(self):
@@ -421,14 +421,20 @@ class MisReportKpi(models.Model):
         inverse='_inverse_expression')
     expression_ids = fields.One2many('mis.report.kpi.expression', 'kpi_id')
     auto_expand_accounts = fields.Boolean(string='Display details by account')
+    auto_expand_accounts_style = fields.Many2one(
+        string="Style for account detail rows",
+        comodel_name="mis.report.kpi.style",
+        required=False
+    )
     style = fields.Many2one(
-        string="Default style for KPI",
+        string="Row style",
         comodel_name="mis.report.kpi.style",
         required=False
     )
     style_expression = fields.Char(
         string='Style expression',
-        help='An expression that returns a style name for the kpi style')
+        help='An expression that returns a style depending on the KPI value. '
+             'Such style is applied on top of the row style.')
     type = fields.Selection([('num', _('Numeric')),
                              ('pct', _('Percentage')),
                              ('str', _('String'))],
