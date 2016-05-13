@@ -10,9 +10,6 @@ class MisReportKpiStyle(models.Model):
 
     _name = 'mis.report.kpi.style'
 
-    # TODO use WEB WIdget color picker
-    name = fields.Char(string='style name', required=True)
-
     @api.depends('indent_level')
     def check_positive_val(self):
         return self.indent_level > 0
@@ -47,11 +44,14 @@ class MisReportKpiStyle(models.Model):
         'xx-large': 17
     }
 
+    name = fields.Char(string='Style name', required=True)
+
     color = fields.Char(
-        help='Line color in valid RGB code (from #000000 to #FFFFFF)',
+        string='Text color',
+        help='Text color in valid RGB code (from #000000 to #FFFFFF)',
     )
     background_color = fields.Char(
-        help='Line color in valid RGB code (from #000000 to #FFFFFF)'
+        help='Background color in valid RGB code (from #000000 to #FFFFFF)'
     )
     font_style = fields.Selection(
         selection=_font_style_selection,

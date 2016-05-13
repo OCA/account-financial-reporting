@@ -111,15 +111,23 @@
             <field name="model">mis.report.kpi.style</field>
             <field name="arch" type="xml">
                 <form>
-                    <group>
+                <sheet>
+                    <group string="Style" col="2">
                         <field name="name" />
+		    </group>
+		    <group string="Color" col="2">
                         <field name="color" />
                         <field name="background_color" />
+		    </group>
+		    <group string="Font" col="2">
                         <field name="font_style" />
                         <field name="font_weight" />
                         <field name="font_size" />
+		    </group>
+		    <group string="Indent">
                         <field name="indent_level" />
                     </group>
+		</sheet>
                 </form>
             </field>
         </record>
@@ -161,7 +169,8 @@
                     </group>
 		    <group col="4" string="Auto expand">
 			<field name="auto_expand_accounts"/>
-			<field name="auto_expand_accounts_style"/>
+			<field name="auto_expand_accounts_style"
+                               attrs="{'invisible': [('auto_expand_accounts', '!=', True)]}"/>
 		    </group>
                     <group col="2" string="Legend (for kpi expressions)">
                         <group>
