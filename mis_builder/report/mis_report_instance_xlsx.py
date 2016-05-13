@@ -5,12 +5,19 @@
 from collections import defaultdict
 import logging
 
-from openerp.addons.report_xlsx.report.report_xlsx import ReportXlsx
 from openerp.report import report_sxw
 
 from ..models.accounting_none import AccountingNone
 
 _logger = logging.getLogger(__name__)
+
+try:
+    from openerp.addons.report_xlsx.report.report_xlsx import ReportXlsx
+except ImportError:
+    _logger.debug("report_xslx not installed, Excel export non functional")
+
+    class ReportXslx:
+        pass
 
 
 ROW_HEIGHT = 15  # xlsxwriter units

@@ -2,6 +2,21 @@
 <openerp>
   <data>
 
+    <record id="qweb_pdf_export" model="ir.actions.report.xml">
+      <field name="name">MIS report instance QWEB PDF report</field>
+      <field name="model">mis.report.instance</field>
+      <field name="type">ir.actions.report.xml</field>
+      <field name="report_name">mis_builder.report_mis_report_instance</field>
+      <field name="report_type">qweb-pdf</field>
+      <field name="auto" eval="False"/>
+    </record>
+
+    <template id="assets_report" inherit_id="report.assets_common">
+	<xpath expr="." position="inside">
+	  <link href="/mis_builder/static/src/css/report.css" rel="stylesheet"/>
+	</xpath>
+    </template>
+
     <template id="report_mis_report_instance">
       <t t-call="report.html_container">
         <t t-foreach="docs" t-as="o">

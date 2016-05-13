@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="mis_report_style_view_form" model="ir.ui.view">
+            <field name="name">mis.report.style.view.form</field>
+            <field name="model">mis.report.kpi.style</field>
+            <field name="arch" type="xml">
+                <form>
+                <sheet>
+                    <group string="Style" col="2">
+                        <field name="name" />
+		    </group>
+		    <group string="Color" col="2">
+                        <field name="color" />
+                        <field name="background_color" />
+		    </group>
+		    <group string="Font" col="2">
+                        <field name="font_style" />
+                        <field name="font_weight" />
+                        <field name="font_size" />
+		    </group>
+		    <group string="Indent">
+                        <field name="indent_level" />
+                    </group>
+		</sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</openerp>
