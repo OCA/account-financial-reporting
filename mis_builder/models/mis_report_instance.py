@@ -169,33 +169,6 @@ class MisReportInstancePeriod(models.Model):
         self.ensure_one()
         return []
 
-    @api.multi
-    def drilldown(self, expr):
-        self.ensure_one()
-        # TODO FIXME: drilldown by account
-        if AEP.has_account_var(expr):
-            aep = AEP(self.env)
-            aep.parse_expr(expr)
-            aep.done_parsing(self.report_instance_id.company_id)
-            domain = aep.get_aml_domain_for_expr(
-                expr,
-                self.date_from, self.date_to,
-                self.report_instance_id.target_move,
-                self.report_instance_id.company_id)
-            domain.extend(self._get_additional_move_line_filter())
-            return {
-                'name': expr + ' - ' + self.name,
-                'domain': domain,
-                'type': 'ir.actions.act_window',
-                'res_model': 'account.move.line',
-                'views': [[False, 'list'], [False, 'form']],
-                'view_type': 'list',
-                'view_mode': 'list',
-                'target': 'current',
-            }
-        else:
-            return False
-
 
 class MisReportInstance(models.Model):
     """The MIS report instance combines everything to compute
@@ -383,11 +356,9 @@ class MisReportInstance(models.Model):
         aep = self.report_id._prepare_aep(self.company_id)
         kpi_matrix = self.report_id._prepare_kpi_matrix()
         for period in self.period_ids:
-            # add the column header
             if period.date_from == period.date_to:
                 comment = self._format_date(period.date_from)
             else:
-                # from, to
                 date_from = self._format_date(period.date_from)
                 date_to = self._format_date(period.date_to)
                 comment = _('from %s to %s') % (date_from, date_to)
@@ -414,3 +385,34 @@ class MisReportInstance(models.Model):
         self.ensure_one()
         kpi_matrix = self._compute_matrix()
         return kpi_matrix.as_dict()
+
+    @api.multi
+    def drilldown(self, arg):
+        self.ensure_one()
+        period_id = arg.get('period_id')
+        expr = arg.get('expr')
+        account_id = arg.get('account_id')
+        if period_id and expr and AEP.has_account_var(expr):
+            period = self.env['mis.report.instance.period'].browse(period_id)
+            aep = AEP(self.env)
+            aep.parse_expr(expr)
+            aep.done_parsing(self.company_id)
+            domain = aep.get_aml_domain_for_expr(
+                expr,
+                period.date_from, period.date_to,
+                self.target_move,
+                self.company_id,
+                account_id)
+            domain.extend(period._get_additional_move_line_filter())
+            return {
+                'name': u'{} - {}'.format(expr, period.name),
+                'domain': domain,
+                'type': 'ir.actions.act_window',
+                'res_model': 'account.move.line',
+                'views': [[False, 'list'], [False, 'form']],
+                'view_type': 'list',
+                'view_mode': 'list',
+                'target': 'current',
+            }
+        else:
+            return False

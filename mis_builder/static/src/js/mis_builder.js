@@ -116,15 +116,11 @@ var MisReport = form_common.FormWidget.extend({
 
     drilldown: function(event) {
         var self = this;
-        var drilldown = JSON.parse($(event.target).data("drilldown"));
+        var drilldown = $(event.target).data("drilldown");
         if (drilldown) {
-            var period_id = JSON.parse($(event.target).data("period-id"));
-            var val_c = JSON.parse($(event.target).data("expr"));
-            var context = new data.CompoundContext(self.build_context(), self.get_context()|| {}) 
-            new Model("mis.report.instance.period").call(
+            new Model("mis.report.instance").call(
                 "drilldown",
-                [period_id, val_c],
-                {'context': context}
+                [self.mis_report_instance_id, drilldown]
             ).then(function(result) {
                 if (result) {
                     self.do_action(result);

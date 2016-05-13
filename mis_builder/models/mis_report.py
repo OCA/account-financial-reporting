@@ -134,14 +134,14 @@ class KpiMatrixCell(object):
 
     def __init__(self, row, subcol,
                  val, val_rendered, val_comment,
-                 style=None, drilldown_key=None):
+                 style=None, drilldown_arg=None):
         self.row = row
         self.subcol = subcol
         self.val = val
         self.val_rendered = val_rendered
         self.val_comment = val_comment
         self.style = style
-        self.drilldown_key = None
+        self.drilldown_arg = drilldown_arg
 
 
 class KpiMatrix(object):
@@ -191,14 +191,17 @@ class KpiMatrix(object):
         self._comparison_todo[last_period_key].append(
             (period_key, base_period_key))
 
-    def set_values(self, kpi, period_key, vals):
+    def set_values(self, kpi, period_key, vals,
+                   drilldown_args):
         """ Set values for a kpi and a period.
 
         Invoke this after declaring the kpi and the period.
         """
-        self.set_values_detail_account(kpi, period_key, None, vals)
+        self.set_values_detail_account(kpi, period_key, None, vals,
+                                       drilldown_args)
 
-    def set_values_detail_account(self, kpi, period_key, account_id, vals):
+    def set_values_detail_account(self, kpi, period_key, account_id, vals,
+                                  drilldown_args):
         """ Set values for a kpi and a period and a detail account.
 
         Invoke this after declaring the kpi and the period.
@@ -215,7 +218,8 @@ class KpiMatrix(object):
         col = self._cols[period_key]
         cell_tuple = []
         assert len(vals) == col.colspan
-        for val, subcol in izip(vals, col.iter_subcols()):
+        for val, drilldown_arg, subcol in \
+                izip(vals, drilldown_args, col.iter_subcols()):
             if isinstance(val, DataError):
                 val_rendered = val.name
                 val_comment = val.msg
@@ -231,8 +235,8 @@ class KpiMatrix(object):
                         row.kpi.name,
                         row.kpi.expression)
             # TODO style
-            # TODO drilldown_key
-            cell = KpiMatrixCell(row, subcol, val, val_rendered, val_comment)
+            cell = KpiMatrixCell(row, subcol, val, val_rendered, val_comment,
+                                 None, drilldown_arg)
             cell_tuple.append(cell)
         col._set_cell_tuple(row, cell_tuple)
 
@@ -358,14 +362,16 @@ class KpiMatrix(object):
                 if cell is None:
                     row_data['cols'].append({})
                 else:
-                    row_data['cols'].append({
+                    col_data = {
                         'val': (cell.val
                                 if cell.val is not AccountingNone else None),
                         'val_r': cell.val_rendered,
                         'val_c': cell.val_comment,
                         # TODO FIXME style
-                        # TODO FIXME drilldown
-                    })
+                    }
+                    if cell.drilldown_arg:
+                        col_data['drilldown_arg'] = cell.drilldown_arg
+                    row_data['cols'].append(col_data)
             content.append(row_data)
 
         return {
@@ -975,11 +981,19 @@ class MisReport(models.Model):
                     expressions.append(expression.name)
 
                 vals = []
+                drilldown_args = []
                 try:
                     for expression in expressions:
                         replaced_expr = aep.replace_expr(expression)
                         vals.append(
                             mis_safe_eval(replaced_expr, locals_dict))
+                        if replaced_expr != expression:
+                            drilldown_args.append({
+                                'period_id': period_key,
+                                'expr': expression,
+                            })
+                        else:
+                            drilldown_args.append(None)
                 except NameError:
                     recompute_queue.append(kpi)
                     break
@@ -991,19 +1005,29 @@ class MisReport(models.Model):
                     else:
                         locals_dict[kpi.name] = SimpleArray(vals)
 
-                kpi_matrix.set_values(kpi, period_key, vals)
+                kpi_matrix.set_values(
+                    kpi, period_key, vals, drilldown_args)
 
                 if not kpi.auto_expand_accounts:
                     continue
 
                 for account_id, replaced_exprs in \
                         aep.replace_exprs_by_account_id(expressions):
-                    account_id_vals = []
-                    for replaced_expr in replaced_exprs:
-                        account_id_vals.append(
-                            mis_safe_eval(replaced_expr, locals_dict))
+                    vals = []
+                    drilldown_args = []
+                    for expression, replaced_expr in \
+                            izip(expressions, replaced_exprs):
+                        vals.append(mis_safe_eval(replaced_expr, locals_dict))
+                        if replaced_expr != expression:
+                            drilldown_args.append({
+                                'period_id': period_key,
+                                'expr': expression,
+                                'account_id': account_id
+                            })
+                        else:
+                            drilldown_args.append(None)
                     kpi_matrix.set_values_detail_account(
-                        kpi, period_key, account_id, account_id_vals)
+                        kpi, period_key, account_id, vals, drilldown_args)
 
             if len(recompute_queue) == 0:
                 # nothing to recompute, we are done

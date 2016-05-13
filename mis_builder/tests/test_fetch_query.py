@@ -12,6 +12,7 @@ class TestFetchQuery(common.TransactionCase):
         data = self.registry('mis.report.instance').compute(
             self.cr, self.uid,
             self.ref('mis_builder.mis_report_instance_test'))
+        self.maxDiff = None
         self.assertEquals(
             {'content':
                 [{'description': u'total test',

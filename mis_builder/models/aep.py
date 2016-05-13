@@ -165,7 +165,8 @@ class AccountingExpressionProcessor(object):
 
     def get_aml_domain_for_expr(self, expr,
                                 date_from, date_to,
-                                target_move, company):
+                                target_move, company,
+                                account_id=None):
         """ Get a domain on account.move.line for an expression.
 
         Prerequisite: done_parsing() must have been invoked.
@@ -180,7 +181,14 @@ class AccountingExpressionProcessor(object):
             account_ids = set()
             for account_code in account_codes:
                 account_ids.update(self._account_ids_by_code[account_code])
-            aml_domain.append(('account_id', 'in', tuple(account_ids)))
+            if not account_id:
+                aml_domain.append(('account_id', 'in', tuple(account_ids)))
+            else:
+                # filter on account_id
+                if account_id in account_ids:
+                    aml_domain.append(('account_id', '=', account_id))
+                else:
+                    continue
             if field == 'crd':
                 aml_domain.append(('credit', '>', 0))
             elif field == 'deb':
@@ -191,6 +199,7 @@ class AccountingExpressionProcessor(object):
                     self.get_aml_domain_for_dates(date_from, date_to,
                                                   mode, target_move,
                                                   company)
+        assert aml_domains
         return expression.OR(aml_domains) + \
             expression.OR(date_domain_by_mode.values())
 
