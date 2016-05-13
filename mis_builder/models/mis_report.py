@@ -486,7 +486,7 @@ class MisReportKpi(models.Model):
             l = []
             for expression in kpi.expression_ids:
                 if expression.subkpi_id:
-                    l.append(u'{} = {}'.format(
+                    l.append(u'{}\xa0=\xa0{}'.format(
                         expression.subkpi_id.name, expression.name))
                 else:
                     l.append(
