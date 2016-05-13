@@ -106,8 +106,14 @@ Contributors
 * Stéphane Bidoul <stephane.bidoul@acsone.eu>
 * Laetitia Gangloff <laetitia.gangloff@acsone.eu>
 * Adrien Peiffer <adrien.peiffer@acsone.eu>
+* Alexis de Lattre <alexis.delattre@akretion.com>
+* Alexandre Fayolle <alexandre.fayolle@camptocamp.com>
+* Jordi Ballester <jordi.ballester@eficent.com>
+* Thomas Binsfeld <thomas.binsfeld@gmail.com>
 * Giovanni Capalbo <giovanni@therp.nl>
+* Marco Calcagni <mcalcagni@dinamicheaziendali.it>
 * Sébastien Beau <sebastien.beau@akretion.com>
+* Laurent Mignon <laurent.mignon@acsone.eu>
 
 Maintainer
 ----------
