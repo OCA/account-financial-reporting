@@ -23,7 +23,7 @@ def mis_safe_eval(expr, locals_dict):
     try:
         c = test_expr(expr, _SAFE_OPCODES, mode='eval')
         globals_dict = {'__builtins__': _BUILTINS}
-        val = eval(c, globals_dict, locals_dict)
+        val = eval(c, globals_dict, locals_dict)  # noqa
     except NameError:
         raise
     except ZeroDivisionError:
