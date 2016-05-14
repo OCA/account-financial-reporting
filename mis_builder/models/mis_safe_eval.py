@@ -12,6 +12,9 @@ from .data_error import DataError
 __all__ = ['mis_safe_eval']
 
 
+std_eval = eval
+
+
 def mis_safe_eval(expr, locals_dict):
     """ Evaluate an expression using safe_eval
 
@@ -23,7 +26,7 @@ def mis_safe_eval(expr, locals_dict):
     try:
         c = test_expr(expr, _SAFE_OPCODES, mode='eval')
         globals_dict = {'__builtins__': _BUILTINS}
-        val = eval(c, globals_dict, locals_dict)  # noqa
+        val = std_eval(c, globals_dict, locals_dict)  # noqa
     except NameError:
         raise
     except ZeroDivisionError:
