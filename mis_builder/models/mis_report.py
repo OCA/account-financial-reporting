@@ -575,7 +575,7 @@ class MisReportKpi(models.Model):
             return unicode(value)
 
     def compare_and_render(self, lang, value, base_value,
-                           average_value, average_base_value):
+                           average_value=1, average_base_value=1):
         """ render the comparison of two KPI values, ready for display
 
         Returns a tuple, with the numeric comparison and its string rendering.
@@ -589,7 +589,7 @@ class MisReportKpi(models.Model):
             base_value = AccountingNone
         if self.type == 'pct':
             delta = value - base_value
-            if delta and round(delta, self.dp) != 0:
+            if delta and round(delta, self.dp + 2) != 0:
                 return delta, self._render_num(
                     lang,
                     delta,
@@ -615,8 +615,10 @@ class MisReportKpi(models.Model):
                         return delta, self._render_num(
                             lang,
                             delta,
-                            0.01, self.dp, '', '%',
+                            0.01, 1, '', '%',
                             sign='+')
+                else:
+                    return AccountingNone, ''
         return 0, ''
 
     def _render_num(self, lang, value, divider,

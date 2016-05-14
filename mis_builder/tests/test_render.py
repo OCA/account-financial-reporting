@@ -79,3 +79,64 @@ class TestRendering(common.TransactionCase):
         self.assertEquals(u'', self.kpi.render(self.lang, ''))
         self.assertEquals(u'', self.kpi.render(self.lang, None))
         self.assertEquals(u'abcdé', self.kpi.render(self.lang, u'abcdé'))
+
+    def test_compare_num_pct(self):
+        self.assertEquals('pct', self.kpi.compare_method)
+        self.assertEquals((1.0, u'+100.0\xa0%'),
+                          self.kpi.compare_and_render(self.lang, 100, 50))
+        self.assertEquals((0.5, u'+50.0\xa0%'),
+                          self.kpi.compare_and_render(self.lang, 75, 50))
+        self.assertEquals((0.5, u'+50.0\xa0%'),
+                          self.kpi.compare_and_render(self.lang, -25, -50))
+        self.assertEquals((1.0, u'+100.0\xa0%'),
+                          self.kpi.compare_and_render(self.lang, 0, -50))
+        self.assertEquals((2.0, u'+200.0\xa0%'),
+                          self.kpi.compare_and_render(self.lang, 50, -50))
+        self.assertEquals((-0.5, u'\u201150.0\xa0%'),
+                          self.kpi.compare_and_render(self.lang, 25, 50))
+        self.assertEquals((-1.0, u'\u2011100.0\xa0%'),
+                          self.kpi.compare_and_render(self.lang, 0, 50))
+        self.assertEquals((-2.0, u'\u2011200.0\xa0%'),
+                          self.kpi.compare_and_render(self.lang, -50, 50))
+        self.assertEquals((-0.5, u'\u201150.0\xa0%'),
+                          self.kpi.compare_and_render(self.lang, -75, -50))
+        self.assertEquals((AccountingNone, u''),
+                          self.kpi.compare_and_render(
+                              self.lang, 50, AccountingNone))
+        self.assertEquals((AccountingNone, u''),
+                          self.kpi.compare_and_render(
+                              self.lang, 50, None))
+        self.assertEquals((-1.0, u'\u2011100.0\xa0%'),
+                          self.kpi.compare_and_render(
+                              self.lang, AccountingNone, 50))
+        self.assertEquals((-1.0, u'\u2011100.0\xa0%'),
+                          self.kpi.compare_and_render(
+                              self.lang, None, 50))
+
+    def test_compare_num_diff(self):
+        self.kpi.compare_method = 'diff'
+        self.assertEquals((25, u'+25'),
+                          self.kpi.compare_and_render(self.lang, 75, 50))
+        self.assertEquals((-25, u'\u201125'),
+                          self.kpi.compare_and_render(self.lang, 25, 50))
+        self.kpi.suffix = u'€'
+        self.assertEquals((-25, u'\u201125\xa0€'),
+                          self.kpi.compare_and_render(self.lang, 25, 50))
+        self.kpi.suffix = u''
+        self.assertEquals((50.0, u'+50'),
+                          self.kpi.compare_and_render(
+                              self.lang, 50, AccountingNone))
+        self.assertEquals((50.0, u'+50'),
+                          self.kpi.compare_and_render(
+                              self.lang, 50, None))
+        self.assertEquals((-50.0, u'\u201150'),
+                          self.kpi.compare_and_render(
+                              self.lang, AccountingNone, 50))
+        self.assertEquals((-50.0, u'\u201150'),
+                          self.kpi.compare_and_render(
+                              self.lang, None, 50))
+
+    def test_compare_pct(self):
+        self.kpi.type = 'pct'
+        self.assertEquals((0.25, u'+25\xa0pp'),
+                          self.kpi.compare_and_render(self.lang, 0.75, 0.50))

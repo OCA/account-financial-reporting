@@ -13,6 +13,8 @@ Part of the work for this release has been done at the Sorrento sprint
 April 26-29, 2016. The rest (ie a major refactoring) has been done in
 the weeks after.
 
+* [CHG] Percentage difference are rounded to 1 digit instead of the kpi's
+  rounding, as the KPI rounding does not make sense in this case
 * [CHG] The divider suffix (k, M, etc) is not inserted automatically anymore
   because it is inconsistent when working with prefixes; you need to add it
   manually in the suffix
