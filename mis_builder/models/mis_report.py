@@ -621,20 +621,22 @@ class MisReportKpi(models.Model):
 
     def _render_num(self, lang, value, divider,
                     dp, prefix, suffix, sign='-'):
-        divider_label = _get_selection_label(
-            self._columns['divider'].selection, divider)
-        if divider_label == '1':
-            divider_label = ''
         # format number following user language
         value = round(value / float(divider or 1), dp) or 0
         value = lang.format(
             '%%%s.%df' % (sign, dp),
             value,
             grouping=True)
-        value = u'%s\N{NO-BREAK SPACE}%s\N{NO-BREAK SPACE}%s%s' % \
-            (prefix or '', value, divider_label, suffix or '')
         value = value.replace('-', u'\N{NON-BREAKING HYPHEN}')
-        return value
+        if prefix:
+            prefix = prefix + u'\N{NO-BREAK SPACE}'
+        else:
+            prefix = ''
+        if suffix:
+            suffix = u'\N{NO-BREAK SPACE}' + suffix
+        else:
+            suffix = ''
+        return prefix + value + suffix
 
 
 class MisReportSubkpi(models.Model):

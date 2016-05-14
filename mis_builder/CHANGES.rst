@@ -13,6 +13,9 @@ Part of the work for this release has been done at the Sorrento sprint
 April 26-29, 2016. The rest (ie a major refactoring) has been done in
 the weeks after.
 
+* [CHG] The divider suffix (k, M, etc) is not inserted automatically anymore
+  because it is inconsistent when working with prefixes; you need to add it
+  manually in the suffix
 * [IMP] AccountingExpressionProcessor now supports 'balu' expressions
   to obtain the unallocated profit/loss of previous fiscal years;
   get_unallocated_pl is the corresponding convenience method

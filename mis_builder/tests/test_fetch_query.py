@@ -21,7 +21,7 @@ class TestFetchQuery(common.TransactionCase):
                   'parent_row_id': None,
                   'row_id': u'total_test',
                   'cols': [{'val': 0,
-                            'val_r': u'\xa00\xa0',
+                            'val_r': u'0',
                             'val_c': u'total_test = len(test)',
                             }]
                   }],

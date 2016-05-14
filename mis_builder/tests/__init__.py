@@ -7,5 +7,6 @@ from . import test_aep
 from . import test_aggregate
 from . import test_fetch_query
 from . import test_mis_safe_eval
+from . import test_render
 from . import test_simple_array
 from . import test_utc_midnight
