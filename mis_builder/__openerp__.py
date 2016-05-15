@@ -16,19 +16,19 @@
         'account',
         'report_xlsx',  # OCA/reporting-engine
         'date_range',  # OCA/server-tools
+        # TODO uncomment when https://github.com/OCA/web/pull/270 is merged
+        # 'web_widget_color',  # OCA/web
     ],
     'data': [
         'wizard/mis_builder_dashboard.xml',
         'views/mis_report.xml',
         'views/mis_report_instance.xml',
-        'views/mis_builder_style.xml',
+        'views/mis_report_style.xml',
         'datas/ir_cron.xml',
         'security/ir.model.access.csv',
         'security/mis_builder_security.xml',
         'report/mis_report_instance_qweb.xml',
         'report/mis_report_instance_xlsx.xml',
-    ],
-    'test': [
     ],
     'demo': [
         'tests/mis.report.kpi.csv',
@@ -42,6 +42,5 @@
     ],
     'installable': True,
     'application': True,
-    'auto_install': False,
     'license': 'AGPL-3',
 }
