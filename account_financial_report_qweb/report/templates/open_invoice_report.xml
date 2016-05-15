@@ -47,97 +47,163 @@
                         </div>
                         <div class="act_as_tbody">
                             <div class="act_as_row">
-                                <div class="act_as_cell first_column"><span t-esc="general['company']"/></div>
-                                <div class="act_as_cell"><span t-esc="general['at_date']"/></div>
-                                <div class="act_as_cell"><span t-esc="general['account_filters']"/></div>
-                                <div class="act_as_cell"><span t-esc="general['target_moves']"/></div>
+                                <div class="act_as_cell first_column"><span t-esc="header['company']"/></div>
+                                <div class="act_as_cell"><span t-esc="header['at_date']"/></div>
+                                <div class="act_as_cell"><span t-esc="header['account_filters']"/></div>
+                                <div class="act_as_cell"><span t-esc="header['target_moves']"/></div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Informations group by account -->
-                    <t t-foreach="sorted(data.keys())" t-as="account">
+                    <!-- Group by account -->
+                    <t t-foreach="docs.read_group([('id', 'in', docs.ids)],['account_id'],['account_id'])" t-as="acc">
+                        <t t-set="account"
+                           t-value="account_obj.browse(acc['account_id'][0])"/>
                         <t t-set="account_debit" t-value="0.0" />
                         <t t-set="account_credit" t-value="0.0" />
                         <t t-set="account_balance" t-value="0.0" />
                         <div class="act_as_caption account_title">
-                            <span t-esc="account"/>
+                            <span t-esc="account.code"/> - <span
+                                t-esc="account.name"/>
                         </div>
-                        <!-- Informations group by partner -->
-                        <t t-foreach="sorted(data[account].keys())" t-as="partner">
+                        <!-- Group by partner -->
+                        <t t-foreach="docs.read_group([('id', 'in', docs.ids), ('account_id', '=', account.id)],['partner_id'],['partner_id'])" t-as="part">
+                            <t t-set="partner"
+                               t-value="partner_obj.browse(part['partner_id'][0])"/>
                             <t t-set="partner_debit" t-value="0.0" />
                             <t t-set="partner_credit" t-value="0.0" />
                             <t t-set="partner_balance" t-value="0.0" />
                             <div class="act_as_caption account_title">
-                                <span t-esc="partner"/>
+                                <span t-esc="partner.name"/>
                             </div>
-                            <div class="act_as_table data_table">
-                                <div class="act_as_thead">
-                                    <div class="act_as_row labels">
-                                        <div class="act_as_cell first_column">Date</div>
-                                        <div class="act_as_cell">Entry</div>
-                                        <div class="act_as_cell">Journal</div>
-                                        <div class="act_as_cell">Partner</div>
-                                        <div class="act_as_cell">Reference</div>
-                                        <div class="act_as_cell">Label</div>
-                                        <div class="act_as_cell">Rec.</div>
-                                        <div class="act_as_cell">Due Date</div>
-                                        <div class="act_as_cell">Debit</div>
-                                        <div class="act_as_cell">Credit</div>
-                                        <div class="act_as_cell">Cumul.Bal.</div>
+                            <!-- Group by currency -->
+                            <t t-foreach="docs.read_group([('id', 'in', docs.ids), ('account_id', '=', account.id), ('partner_id', '=', partner.id)],['currency_id'],['currency_id'])" t-as="curr">
+                                <t t-set="currency_id" t-value="False" />
+                                <t t-if="curr['currency_id']">
+                                    <t t-set="currency"
+                                       t-value="currency_obj.browse(curr['currency_id'][0])"/>
+                                    <t t-set="currency_id"
+                                       t-value="currency.id"/>
+                                </t>
+                                <t t-set="currency_debit" t-value="0.0" />
+                                <t t-set="currency_credit" t-value="0.0" />
+                                <t t-set="currency_balance" t-value="0.0" />
+                                <t t-set="currency_amount_balance" t-value="0.0"/>
+                                <t t-if="currency_id">
+                                    <div class="act_as_caption account_title">
+                                        <span t-esc="currency.name"/>
+                                    </div>
+                                </t>
+                                <div class="act_as_table data_table">
+                                    <div class="act_as_thead">
+                                        <div class="act_as_row labels">
+                                            <div class="act_as_cell first_column">Date</div>
+                                            <div class="act_as_cell">Entry</div>
+                                            <div class="act_as_cell">Journal</div>
+                                            <div class="act_as_cell">Partner</div>
+                                            <div class="act_as_cell">Reference</div>
+                                            <div class="act_as_cell">Label</div>
+                                            <div class="act_as_cell">Rec.</div>
+                                            <div class="act_as_cell">Due Date</div>
+                                            <div class="act_as_cell">Debit</div>
+                                            <div class="act_as_cell">Credit</div>
+                                            <div class="act_as_cell">Cum. Balance</div>
+                                            <t t-if="curr['currency_id']">
+                                                <div class="act_as_cell">Curr. amount</div>
+                                                <div class="act_as_cell">Cum. Curr. Bal.</div>
+                                            </t>
+                                        </div>
+                                    </div>
+                                    <div class="act_as_tbody">
+                                        <t t-set="moves" t-value="docs.search(
+                                        [('id', 'in', docs.ids),
+                                        ('account_id', '=', account.id),
+                                        ('partner_id', '=', partner.id),
+                                        ('currency_id', '=', currency_id)])"/>
+                                        <t t-foreach="moves" t-as="move">
+                                            <div class="act_as_row">
+                                                <div class="act_as_cell first_column"><span t-esc="move.date"/></div>
+                                                <div class="act_as_cell"><span t-esc="move.name"/></div>
+                                                <div class="act_as_cell"><span t-esc="move.journal_id.code"/></div>
+                                                <div class="act_as_cell"><span t-esc="partner.name"/></div>
+                                                <div class="act_as_cell"><span
+                                                        t-esc="move.ref"/></div>
+                                                <div class="act_as_cell"><span
+                                                        t-esc="move.name"/>
+                                                    <t t-if="move.invoice_id"> - <span t-esc="move.invoice_id.number"/></t>
+                                                </div>
+                                                <div class="act_as_cell"><span t-esc="move.full_reconcile_id.name"/></div>
+                                                <div class="act_as_cell"><span t-esc="move.date_maturity"/></div>
+                                                <t t-set="account_debit" t-value="account_debit + move.debit" />
+                                                <t t-set="account_credit" t-value="account_credit + move.credit" />
+                                                <t t-set="account_balance" t-value="account_balance - move.credit + move.debit" />
+                                                <t t-set="partner_debit" t-value="partner_debit + move.debit" />
+                                                <t t-set="partner_credit" t-value="partner_credit + move.credit" />
+                                                <t t-set="partner_balance" t-value="partner_balance - move.credit + move.debit" />
+                                                <t t-set="currency_balance" t-value="currency_balance + move.amount_currency" />
+                                                <div class="act_as_cell amount"><span t-esc="move.debit"/></div>
+                                                <div class="act_as_cell amount"><span t-esc="move.credit"/></div>
+                                                <div class="act_as_cell amount"><span t-esc="partner_balance"/></div>
+                                                <t t-if="currency_id">
+                                                    <div class="act_as_cell amount"><span t-esc="move.amount_currency"/></div>
+                                                    <div class="act_as_cell amount"><span t-esc="currency_balance"/></div>
+                                                </t>
+                                            </div>
+                                        </t>
                                     </div>
                                 </div>
-                                <div class="act_as_tbody">
-                                    <t t-foreach="data[account][partner]" t-as="move">
+                                <t t-if="currency_id">
+                                    <div class="act_as_table totals_table">
                                         <div class="act_as_row">
-                                            <div class="act_as_cell first_column"><span t-esc="move['date']"/></div>
-                                            <div class="act_as_cell"><span t-esc="move['entry']"/></div>
-                                            <div class="act_as_cell"><span t-esc="move['journal']"/></div>
-                                            <div class="act_as_cell"><span t-esc="partner"/></div>
-                                            <div class="act_as_cell"><span t-esc="move['reference']"/></div>
-                                            <div class="act_as_cell"><span t-esc="move['label']"/></div>
-                                            <div class="act_as_cell"><span t-esc="move['rec']"/></div>
-                                            <div class="act_as_cell"><span t-esc="move['due_date']"/></div>
-                                            <t t-set="account_debit" t-value="account_debit + move['debit']" />
-                                            <t t-set="account_credit" t-value="account_credit + move['credit']" />
-                                            <t t-set="account_balance" t-value="account_balance - move['credit'] + move['debit']" />
-                                            <t t-set="partner_debit" t-value="partner_debit + move['debit']" />
-                                            <t t-set="partner_credit" t-value="partner_credit + move['credit']" />
-                                            <t t-set="partner_balance" t-value="partner_balance - move['credit'] + move['debit']" />
-                                            <div class="act_as_cell amount"><span t-esc="move['debit']"/></div>
-                                            <div class="act_as_cell amount"><span t-esc="move['credit']"/></div>
-                                            <div class="act_as_cell amount"><span t-esc="partner_balance" /></div>
+                                             <div class="act_as_cell first_column"/>
+                                             <div class="act_as_cell"/>
+                                             <div class="act_as_cell"/>
+                                             <div class="act_as_cell"/>
+                                             <div class="act_as_cell"/>
+                                             <div class="act_as_cell"/>
+                                             <div class="act_as_cell"/>
+                                             <div class="act_as_cell"/>
+                                             <div class="act_as_cell"/>
+                                             <div class="act_as_cell"/>
+                                             <div class="act_as_cell"/>
+                                             <div class="act_as_cell account_title"><span t-esc="currency.name"/> Total</div>
+                                             <div class="act_as_cell amount"><strong><span t-esc="currency_balance" /></strong></div>
                                         </div>
-                                     </t>
-                                     <div class="act_as_row">
-                                         <div class="act_as_cell first_column"></div>
-                                         <div class="act_as_cell"></div>
-                                         <div class="act_as_cell"></div>
-                                         <div class="act_as_cell"></div>
-                                         <div class="act_as_cell"></div>
-                                         <div class="act_as_cell"></div>
-                                         <div class="act_as_cell"></div>
-                                         <div class="act_as_cell">Comulate Balance on Partner</div>
-                                         <div class="act_as_cell amount"><span t-esc="partner_debit" /></div>
-                                         <div class="act_as_cell amount"><span t-esc="partner_credit" /></div>
-                                         <div class="act_as_cell amount"><span t-esc="partner_balance" /></div>
-                                     </div>
-                                 </div>
-                             </div>
-                         </t>
-                         <div class="act_as_table data_table">
-                             <div class="act_as_tbody">
-                                 <div class="act_as_row labels">
-                                     <div class="act_as_cell first_column"><span t-esc="account"/></div>
-                                     <div class="act_as_cell cell"><strong>Comulate Balance</strong></div>
-                                     <div class="act_as_cell amount"><span t-esc="account_debit" /></div>
-                                     <div class="act_as_cell amount"><span t-esc="account_credit" /></div>
-                                     <div class="act_as_cell amount"><span t-esc="account_balance" /></div>
-                                 </div>
-                             </div>
-                         </div>
+                                    </div>
+                                </t>
+                            </t>
+                            <div class="act_as_table totals_table">
+                                <div class="act_as_row">
+                                     <div class="act_as_cell first_column"/>
+                                     <div class="act_as_cell"/>
+                                     <div class="act_as_cell"/>
+                                     <div class="act_as_cell"/>
+                                     <div class="act_as_cell"/>
+                                     <div class="act_as_cell"/>
+                                     <div class="act_as_cell"/>
+                                     <div class="act_as_cell account_title"><span t-esc="partner.name"/> Total</div>
+                                     <div class="act_as_cell amount"><strong><span t-esc="partner_debit" /></strong></div>
+                                     <div class="act_as_cell amount"><strong><span t-esc="partner_credit" /></strong></div>
+                                     <div class="act_as_cell amount"><strong><span t-esc="partner_balance" /></strong></div>
+                                </div>
+                            </div>
+                        </t>
+                        <div class="act_as_table totals_table">
+                            <div class="act_as_row">
+                                <div class="act_as_cell first_column"/>
+                                <div class="act_as_cell"/>
+                                <div class="act_as_cell"/>
+                                <div class="act_as_cell"/>
+                                <div class="act_as_cell"/>
+                                <div class="act_as_cell"/>
+                                <div class="act_as_cell"/>
+                                <div class="act_as_cell account_title"><span t-esc="account.name"/> Total</div>
+                                <div class="act_as_cell amount"><span t-esc="account_debit" /></div>
+                                <div class="act_as_cell amount"><span t-esc="account_credit" /></div>
+                                <div class="act_as_cell amount"><span t-esc="account_balance" /></div>
+                            </div>
+                        </div>
                     </t>
-
                 </div>
             </t>
         </t>
