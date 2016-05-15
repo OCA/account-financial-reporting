@@ -108,9 +108,9 @@ class MisBuilderXslx(ReportXlsx):
                     continue
                 cell_xlsx_style = style_obj.to_xlsx_style(cell.style_props)
                 cell_xlsx_style['align'] = 'right'
-                kpi_format = workbook.add_format(cell_xlsx_style)
+                cell_format = workbook.add_format(cell_xlsx_style)
                 val = cell.val / float(cell.style_props.get('divider', 1))
-                sheet.write(row_pos, col_pos, val, kpi_format)
+                sheet.write(row_pos, col_pos, val, cell_format)
                 col_width[col_pos] = max(col_width[col_pos],
                                          len(cell.val_rendered or ''))
             row_pos += 1
