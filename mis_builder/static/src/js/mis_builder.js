@@ -37,7 +37,6 @@ var MisReport = form_common.FormWidget.extend({
         self.mis_report_instance_id = self.getParent().datarecord.id
         if (self.mis_report_instance_id) {
             self.getParent().dataset.context['no_destroy'] = true;
-            self.generate_content();
         } else {
             self.display_settings();
         }
