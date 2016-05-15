@@ -259,8 +259,9 @@ class KpiMatrix(object):
                                            base_col.description))
                 description = u'{} vs {}'.\
                     format(col.description, base_col.description)
-                comparison_col = KpiMatrixCol(description, None,
-                                              {}, col.subkpis)
+                comparison_col = KpiMatrixCol(description, None, {},
+                                              sorted(common_subkpis,
+                                                     key=lambda s: s.sequence))
                 for row in self.iter_rows():
                     cell_tuple = col.get_cell_tuple_for_row(row)
                     base_cell_tuple = base_col.get_cell_tuple_for_row(row)
