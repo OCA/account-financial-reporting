@@ -30,20 +30,18 @@
 				<t t-esc="c_value.description"/>
                             </td>
                             <t t-foreach="c_value.cols" t-as="value">
-                                <td t-att="{'style': c_value.style}" class="mis_builder_amount">
-                                    <div t-att="{'style': value_value.style, 'title': value_value.val_c}">
-                                        <t t-if="value_value.drilldown_arg">
-                                            <a href="javascript:void(0)"
-                                               class="mis_builder_drilldown"
-                                               t-att-data-drilldown="JSON.stringify(value_value.drilldown_arg)"
-                                            >
-                                                <t t-esc="value_value.val_r"/>
-                                            </a>
-                                        </t>
-                                        <t t-if="!value_value.drilldown_arg">
-                                            <t t-esc="value_value.val_r"/>
-                                        </t>
-                                    </div>
+                                <td t-att="{'style': value_value.style, 'title': value_value.val_c}" class="mis_builder_amount">
+                                      <t t-if="value_value.drilldown_arg">
+                                          <a href="javascript:void(0)"
+                                              class="mis_builder_drilldown"
+                                              t-att-data-drilldown="JSON.stringify(value_value.drilldown_arg)"
+                                          >
+                                              <t t-esc="value_value.val_r"/>
+                                          </a>
+                                      </t>
+                                      <t t-if="!value_value.drilldown_arg">
+                                          <t t-esc="value_value.val_r"/>
+                                      </t>
                                 </td>
                             </t>
                         </tr>
