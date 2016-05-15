@@ -14,7 +14,7 @@ _logger = logging.getLogger(__name__)
 try:
     from openerp.addons.report_xlsx.report.report_xlsx import ReportXlsx
 except ImportError:
-    _logger.debug("report_xslx not installed, Excel export non functional")
+    _logger.debug("report_xlsx not installed, Excel export non functional")
 
     class ReportXslx:
         pass
@@ -33,23 +33,11 @@ class MisBuilderXslx(ReportXlsx):
         super(MisBuilderXslx, self).__init__(
             name, table, rml, parser, header, store)
 
-    def make_number_format(self, kpi, comparison=False):
-        # TODO FIXME comparison
-        number_format = '#'
-        if kpi.dp:
-            number_format += '.'
-            number_format += '0' * kpi.dp
-        # TODO FIXME factor
-        if kpi.prefix:
-            number_format = u'"{} "{}'.format(kpi.prefix, number_format)
-        if kpi.suffix:
-            number_format = u'{}" {}"'.format(number_format, kpi.suffix)
-        return number_format
-
     def generate_xlsx_report(self, workbook, data, objects):
 
         # get the computed result of the report
         matrix = objects._compute_matrix()
+        style_obj = self.env['mis.report.style']
 
         # create worksheet
         report_name = '{} - {}'.format(
@@ -107,10 +95,7 @@ class MisBuilderXslx(ReportXlsx):
 
         # rows
         for row in matrix.iter_rows():
-            if row.style:
-                row_xlsx_style = row.style.to_xlsx_format_properties()
-            else:
-                row_xlsx_style = {}
+            row_xlsx_style = style_obj.to_xlsx_style(row.style_props)
             row_format = workbook.add_format(row_xlsx_style)
             col_pos = 0
             sheet.write(row_pos, col_pos, row.description, row_format)
@@ -118,19 +103,13 @@ class MisBuilderXslx(ReportXlsx):
             for cell in row.iter_cells():
                 col_pos += 1
                 if not cell or cell.val is AccountingNone:
+                    # TODO col/subcol format
                     sheet.write(row_pos, col_pos, '', row_format)
                     continue
-                kpi_xlsx_style = dict(row_xlsx_style)
-                kpi_xlsx_style.update({
-                    'num_format': self.make_number_format(row.kpi),
-                    'align': 'right'
-                })
-                kpi_format = workbook.add_format(kpi_xlsx_style)
-                # TODO FIXME kpi computed style
-                # TODO FIXME pct in comparision columns
-                val = cell.val
-                if row.kpi.type == 'pct':
-                    val = val / 0.01
+                cell_xlsx_style = style_obj.to_xlsx_style(cell.style_props)
+                cell_xlsx_style['align'] = 'right'
+                kpi_format = workbook.add_format(cell_xlsx_style)
+                val = cell.val / float(cell.style_props.get('divider', 1))
                 sheet.write(row_pos, col_pos, val, kpi_format)
                 col_width[col_pos] = max(col_width[col_pos],
                                          len(cell.val_rendered or ''))

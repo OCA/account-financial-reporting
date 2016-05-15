@@ -40,6 +40,14 @@ class KpiMatrixRow(object):
         self.account_id = account_id
         self.comment = ''
         self.parent_row = parent_row
+        if not self.account_id:
+            self.style_props = self._matrix._style_model.merge([
+                self.kpi.report_id.style_id,
+                self.kpi.style_id])
+        else:
+            self.style_props = self._matrix._style_model.merge([
+                self.kpi.report_id.style_id,
+                self.kpi.auto_expand_accounts_style_id])
 
     @property
     def description(self):
@@ -47,13 +55,6 @@ class KpiMatrixRow(object):
             return self.kpi.description
         else:
             return self._matrix.get_account_name(self.account_id)
-
-    @property
-    def style(self):
-        if not self.account_id:
-            return self.kpi.style
-        else:
-            return self.kpi.auto_expand_accounts_style
 
     @property
     def row_id(self):
@@ -134,13 +135,14 @@ class KpiMatrixCell(object):
 
     def __init__(self, row, subcol,
                  val, val_rendered, val_comment,
-                 style=None, drilldown_arg=None):
+                 style_props,
+                 drilldown_arg):
         self.row = row
         self.subcol = subcol
         self.val = val
         self.val_rendered = val_rendered
         self.val_comment = val_comment
-        self.style = style
+        self.style_props = style_props
         self.drilldown_arg = drilldown_arg
 
 
@@ -151,6 +153,7 @@ class KpiMatrix(object):
         lang_model = env['res.lang']
         lang_id = lang_model._lang_get(env.user.lang)
         self.lang = lang_model.browse(lang_id)
+        self._style_model = env['mis.report.style']
         self._account_model = env['account.account']
         # data structures
         # { kpi: KpiMatrixRow }
@@ -224,7 +227,7 @@ class KpiMatrix(object):
                 val_rendered = val.name
                 val_comment = val.msg
             else:
-                val_rendered = kpi.render(self.lang, val)
+                val_rendered = kpi.render(self.lang, row.style_props, val)
                 if subcol.subkpi:
                     val_comment = u'{}.{} = {}'.format(
                         row.kpi.name,
@@ -234,9 +237,9 @@ class KpiMatrix(object):
                     val_comment = u'{} = {}'.format(
                         row.kpi.name,
                         row.kpi.expression)
-            # TODO style
+            # TODO FIXME style expression
             cell = KpiMatrixCell(row, subcol, val, val_rendered, val_comment,
-                                 None, drilldown_arg)
+                                 row.style_props, drilldown_arg)
             cell_tuple.append(cell)
         col._set_cell_tuple(row, cell_tuple)
 
@@ -279,10 +282,11 @@ class KpiMatrix(object):
                                  base_vals,
                                  comparison_col.iter_subcols()):
                         # TODO FIXME average factors
-                        delta, delta_r = row.kpi.compare_and_render(
-                            self.lang, val, base_val, 1, 1)
+                        delta, delta_r, style_r = row.kpi.compare_and_render(
+                            self.lang, row.style_props, val, base_val, 1, 1)
                         comparison_cell_tuple.append(KpiMatrixCell(
-                            row, comparison_subcol, delta, delta_r, None))
+                            row, comparison_subcol, delta, delta_r, None,
+                            style_r, None))
                     comparison_col._set_cell_tuple(row, comparison_cell_tuple)
                 self._comparison_cols[pos_period_key].append(comparison_col)
 
@@ -355,11 +359,13 @@ class KpiMatrix(object):
                                   row.parent_row.row_id or None),
                 'description': row.description,
                 'comment': row.comment,
-                'style': row.style and row.style.to_css_style() or None,
+                'style': self._style_model.to_css_style(
+                    row.style_props),
                 'cols': []
             }
             for cell in row.iter_cells():
                 if cell is None:
+                    # TODO use subcol style here
                     row_data['cols'].append({})
                 else:
                     col_data = {
@@ -367,7 +373,8 @@ class KpiMatrix(object):
                                 if cell.val is not AccountingNone else None),
                         'val_r': cell.val_rendered,
                         'val_c': cell.val_comment,
-                        # TODO FIXME style
+                        'style': self._style_model.to_css_style(
+                            cell.style_props),
                     }
                     if cell.drilldown_arg:
                         col_data['drilldown_arg'] = cell.drilldown_arg
@@ -378,13 +385,6 @@ class KpiMatrix(object):
             'header': header,
             'content': content,
         }
-
-
-def _get_selection_label(selection, value):
-    for v, l in selection:
-        if v == value:
-            return l
-    return ''
 
 
 def _utc_midnight(d, tz_name, add_day=0):
@@ -427,13 +427,13 @@ class MisReportKpi(models.Model):
         inverse='_inverse_expression')
     expression_ids = fields.One2many('mis.report.kpi.expression', 'kpi_id')
     auto_expand_accounts = fields.Boolean(string='Display details by account')
-    auto_expand_accounts_style = fields.Many2one(
+    auto_expand_accounts_style_id = fields.Many2one(
         string="Style for account detail rows",
         comodel_name="mis.report.style",
         required=False
     )
-    style = fields.Many2one(
-        string="Row style",
+    style_id = fields.Many2one(
+        string="Style",
         comodel_name="mis.report.style",
         required=False
     )
@@ -445,18 +445,8 @@ class MisReportKpi(models.Model):
                              ('pct', _('Percentage')),
                              ('str', _('String'))],
                             required=True,
-                            string='Type',
+                            string='Value type',
                             default='num')
-    divider = fields.Selection([('1e-6', _('µ')),
-                                ('1e-3', _('m')),
-                                ('1', _('1')),
-                                ('1e3', _('k')),
-                                ('1e6', _('M'))],
-                               string='Factor',
-                               default='1')
-    dp = fields.Integer(string='Rounding', default=0)
-    prefix = fields.Char(size=16, string='Prefix')
-    suffix = fields.Char(size=16, string='Suffix')
     compare_method = fields.Selection([('diff', _('Difference')),
                                        ('pct', _('Percentage')),
                                        ('none', _('None'))],
@@ -544,57 +534,57 @@ class MisReportKpi(models.Model):
     def _onchange_type(self):
         if self.type == 'num':
             self.compare_method = 'pct'
-            self.divider = '1'
-            self.dp = 0
         elif self.type == 'pct':
             self.compare_method = 'diff'
-            self.divider = '1'
-            self.dp = 0
         elif self.type == 'str':
             self.compare_method = 'none'
-            self.divider = ''
-            self.dp = 0
 
     def get_expression_for_subkpi(self, subkpi):
         for expression in self.expression_ids:
             if expression.subkpi_id == subkpi:
                 return expression.name
 
-    def render(self, lang, value):
+    @api.multi
+    def render(self, lang, style_props, value):
         """ render a KPI value as a unicode string, ready for display """
-        assert len(self) == 1
-        if value is None or value is AccountingNone:
-            return ''
-        elif self.type == 'num':
-            return self._render_num(lang, value, self.divider,
-                                    self.dp, self.prefix, self.suffix)
+        self.ensure_one()
+        style_obj = self.env['mis.report.style']
+        if self.type == 'num':
+            return style_obj.render_num(lang, value, style_props.divider,
+                                        style_props.dp,
+                                        style_props.prefix, style_props.suffix)
         elif self.type == 'pct':
-            return self._render_num(lang, value, 0.01,
-                                    self.dp, '', '%')
+            return style_obj.render_pct(lang, value, style_props.dp)
         else:
-            return unicode(value)
+            return style_obj.render_str(lang, value)
 
-    def compare_and_render(self, lang, value, base_value,
+    @api.multi
+    def compare_and_render(self, lang, style_props, value, base_value,
                            average_value=1, average_base_value=1):
         """ render the comparison of two KPI values, ready for display
 
-        Returns a tuple, with the numeric comparison and its string rendering.
+        Returns a triple, with
+        * the numeric comparison
+        * its string rendering
+        * the update style properties
 
         If the difference is 0, an empty string is returned.
         """
-        assert len(self) == 1
+        self.ensure_one()
+        style_obj = self.env['mis.report.style']
+        delta = AccountingNone
+        style_r = style_props.copy()
         if value is None:
             value = AccountingNone
         if base_value is None:
             base_value = AccountingNone
         if self.type == 'pct':
             delta = value - base_value
-            if delta and round(delta, self.dp + 2) != 0:
-                return delta, self._render_num(
-                    lang,
-                    delta,
-                    0.01, self.dp, '', _('pp'),
-                    sign='+')
+            if delta and round(delta, (style_props.dp or 0) + 2) != 0:
+                style_r.update(dict(
+                    divider=0.01, prefix='', suffix=_('pp')))
+            else:
+                delta = AccountingNone
         elif self.type == 'num':
             if value and average_value:
                 value = value / float(average_value)
@@ -602,43 +592,27 @@ class MisReportKpi(models.Model):
                 base_value = base_value / float(average_base_value)
             if self.compare_method == 'diff':
                 delta = value - base_value
-                if delta and round(delta, self.dp) != 0:
-                    return delta, self._render_num(
-                        lang,
-                        delta,
-                        self.divider, self.dp, self.prefix, self.suffix,
-                        sign='+')
-            elif self.compare_method == 'pct':
-                if base_value and round(base_value, self.dp) != 0:
-                    delta = (value - base_value) / abs(base_value)
-                    if delta and round(delta, self.dp) != 0:
-                        return delta, self._render_num(
-                            lang,
-                            delta,
-                            0.01, 1, '', '%',
-                            sign='+')
+                if delta and round(delta, style_props.dp or 0) != 0:
+                    pass
                 else:
-                    return AccountingNone, ''
-        return 0, ''
-
-    def _render_num(self, lang, value, divider,
-                    dp, prefix, suffix, sign='-'):
-        # format number following user language
-        value = round(value / float(divider or 1), dp) or 0
-        value = lang.format(
-            '%%%s.%df' % (sign, dp),
-            value,
-            grouping=True)
-        value = value.replace('-', u'\N{NON-BREAKING HYPHEN}')
-        if prefix:
-            prefix = prefix + u'\N{NO-BREAK SPACE}'
+                    delta = AccountingNone
+            elif self.compare_method == 'pct':
+                if base_value and round(base_value, style_props.dp or 0) != 0:
+                    delta = (value - base_value) / abs(base_value)
+                    if delta and round(delta, 1) != 0:
+                        style_r.update(dict(
+                            divider=0.01, dp=1, prefix='', suffix='%'))
+                    else:
+                        delta = AccountingNone
+        if delta is not AccountingNone:
+            delta_r = style_obj.render_num(
+                lang, delta,
+                style_r.divider, style_r.dp,
+                style_r.prefix, style_r.suffix,
+                sign='+')
+            return delta, delta_r, style_r
         else:
-            prefix = ''
-        if suffix:
-            suffix = u'\N{NO-BREAK SPACE}' + suffix
-        else:
-            suffix = ''
-        return prefix + value + suffix
+            return AccountingNone, '', style_r
 
 
 class MisReportSubkpi(models.Model):
@@ -773,6 +747,8 @@ class MisReport(models.Model):
                        string='Name', translate=True)
     description = fields.Char(required=False,
                               string='Description', translate=True)
+    style_id = fields.Many2one(string="Style",
+                               comodel_name="mis.report.style")
     query_ids = fields.One2many('mis.report.query', 'report_id',
                                 string='Queries',
                                 copy=True)

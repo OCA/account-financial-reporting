@@ -23,6 +23,7 @@ class TestFetchQuery(common.TransactionCase):
                   'cols': [{'val': 0,
                             'val_r': u'0',
                             'val_c': u'total_test = len(test)',
+                            'style': None,
                             }]
                   }],
              'header':

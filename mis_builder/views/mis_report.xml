@@ -22,6 +22,7 @@
                     <group col="2">
                         <field name="name"/>
                         <field name="description"/>
+                        <field name="style_id"/>
                     </group>
                     <group string="Sub KPI's">
                          <field name="subkpi_ids" nolabel="1" colspan="2">
@@ -51,14 +52,10 @@
                                 <field name="sequence" widget="handle"/>
                                 <field name="description"/>
                                 <field name="name"/>
+                                <field name="type"/>
+                                <field name="compare_method" attrs="{'invisible': [('type', '=', 'str')]}"/>
                                 <field name="multi"/>
                                 <field name="expression"/>
-                                <field name="type"/>
-                                <field name="dp" attrs="{'invisible': [('type', '=', 'str')]}"/>
-                                <field name="divider" attrs="{'invisible': [('type', '=', 'str')]}"/>
-                                <field name="prefix"/>
-                                <field name="suffix"/>
-                                <field name="compare_method" attrs="{'invisible': [('type', '=', 'str')]}"/>
                             </tree>
                         </field>
                     </group>
@@ -103,15 +100,8 @@
                         <field name="description"/>
                         <field name="name"/>
                         <field name="type"/>
-                        <field name="dp"
-                               attrs="{'invisible': [('type', '=', 'str')]}"/>
-                        <field name="divider"
-                               attrs="{'invisible': [('type', '=', 'str')]}"/>
-                        <field name="compare_method"
-                               attrs="{'invisible': [('type', '=', 'str')]}"/>
-                        <field name="prefix"/>
-                        <field name="suffix"/>
-                        <field name="style"/>
+                        <field name="compare_method"/>
+                        <field name="style_id"/>
                         <field name="style_expression"/>
                         <!--<field name="sequence" />-->
                     </group>
@@ -131,7 +121,7 @@
                     </group>
                     <group col="4" string="Auto expand">
                         <field name="auto_expand_accounts"/>
-                        <field name="auto_expand_accounts_style"
+                        <field name="auto_expand_accounts_style_id"
                                attrs="{'invisible': [('auto_expand_accounts', '!=', True)]}"/>
                     </group>
                     <group col="2" string="Legend (for kpi expressions)">

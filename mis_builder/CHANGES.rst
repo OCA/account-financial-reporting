@@ -3,8 +3,8 @@ Changelog
 
 .. Future (?)
 .. ~~~~~~~~~~
-.. 
-.. * 
+..
+.. *
 
 9.0.1.0.0 (2016-??-??)
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -13,6 +13,9 @@ Part of the work for this release has been done at the Sorrento sprint
 April 26-29, 2016. The rest (ie a major refactoring) has been done in
 the weeks after.
 
+* [IMP] There is now a default style at the report level
+* [CHG] Number display properties (rounding, prefix, suffix, factor) are
+  now defined in styles
 * [CHG] Percentage difference are rounded to 1 digit instead of the kpi's
   rounding, as the KPI rounding does not make sense in this case
 * [CHG] The divider suffix (k, M, etc) is not inserted automatically anymore
@@ -42,7 +45,7 @@ the weeks after.
 * [FIX] use =like instead of like to search for accounts, because
   the % are added by the user in the expressions
 * [FIX] Correctly compute the initial balance of income and expense account
-  based on the start of the fiscal year 
+  based on the start of the fiscal year
 * [IMP] Support date ranges (from OCA/server-tools/date_range) as a more
   flexible alternative to fiscal periods
 * v9 migration: fiscal periods are removed, account charts are removed,
