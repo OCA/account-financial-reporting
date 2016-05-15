@@ -29,11 +29,10 @@
                     <button type="object" name="print_pdf" string="Print" icon="gtk-print" />
                     <button type="object" name="export_xls" string="Export" icon="gtk-go-down" />
                     <field name="name"/>
-                    <field name="description"/>
-                    <field name="report_id"/>
+                    <field name="report_id" string="Template"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
                     <field name="target_move"/>
                     <field name="pivot_date"/>
-                    <field name="company_id"/>
                 </tree>
             </field>
         </record>
@@ -64,11 +63,11 @@
                     </div>
                     <group>
                         <group>
-                            <field name="report_id"/>
+                            <field name="report_id" string="Template"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
                             <field name="target_move" widget="radio"/>
                             <field name="landscape_pdf"/>
                             <field name="comparison_mode"/>
-                            <field name="company_id" groups="base.group_multi_company"/>
                         </group>
                         <group>
                             <group name="simple_mode"
