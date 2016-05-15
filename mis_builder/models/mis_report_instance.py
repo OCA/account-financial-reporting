@@ -353,8 +353,8 @@ class MisReportInstance(models.Model):
     @api.multi
     def _compute_matrix(self):
         self.ensure_one()
-        aep = self.report_id._prepare_aep(self.company_id)
-        kpi_matrix = self.report_id._prepare_kpi_matrix()
+        aep = self.report_id.prepare_aep(self.company_id)
+        kpi_matrix = self.report_id.prepare_kpi_matrix()
         for period in self.period_ids:
             if period.date_from == period.date_to:
                 comment = self._format_date(period.date_from)
@@ -362,7 +362,7 @@ class MisReportInstance(models.Model):
                 date_from = self._format_date(period.date_from)
                 date_to = self._format_date(period.date_to)
                 comment = _('from %s to %s') % (date_from, date_to)
-            self.report_id._declare_and_compute_period(
+            self.report_id.declare_and_compute_period(
                 kpi_matrix,
                 period.id,
                 period.name,

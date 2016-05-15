@@ -768,7 +768,7 @@ class MisReport(models.Model):
     # TODO: kpi name cannot be start with query name
 
     @api.multi
-    def _prepare_kpi_matrix(self):
+    def prepare_kpi_matrix(self):
         self.ensure_one()
         kpi_matrix = KpiMatrix(self.env)
         for kpi in self.kpi_ids:
@@ -776,7 +776,7 @@ class MisReport(models.Model):
         return kpi_matrix
 
     @api.multi
-    def _prepare_aep(self, company):
+    def prepare_aep(self, company):
         self.ensure_one()
         aep = AEP(self.env)
         for kpi in self.kpi_ids:
@@ -853,20 +853,21 @@ class MisReport(models.Model):
         return res
 
     @api.multi
-    def _declare_and_compute_period(self, kpi_matrix,
-                                    col_key,
-                                    col_description,
-                                    col_comment,
-                                    aep,
-                                    date_from, date_to,
-                                    target_move,
-                                    company,
-                                    subkpis_filter=None,
-                                    get_additional_move_line_filter=None,
-                                    get_additional_query_filter=None):
+    def declare_and_compute_period(self, kpi_matrix,
+                                   col_key,
+                                   col_description,
+                                   col_comment,
+                                   aep,
+                                   date_from, date_to,
+                                   target_move,
+                                   company,
+                                   subkpis_filter=None,
+                                   get_additional_move_line_filter=None,
+                                   get_additional_query_filter=None):
         """ Evaluate a report for a given period, populating a KpiMatrix.
 
-        :param kpi_matrix: the KpiMatrix object to be populated
+        :param kpi_matrix: the KpiMatrix object to be populated created
+                           with prepare_kpi_matrix()
         :param col_key: the period key to use when populating the KpiMatrix
         :param aep: an AccountingExpressionProcessor instance created
                     using _prepare_aep()
