@@ -246,9 +246,25 @@ class KpiMatrix(object):
                     val_comment = u'{} = {}'.format(
                         row.kpi.name,
                         row.kpi.expression)
-            # TODO FIXME style expression
+            cell_style_props = row.style_props
+            if row.kpi.style_expression:
+                # evaluate style expression
+                try:
+                    style_name = mis_safe_eval(row.kpi.style_expression,
+                                               col.locals_dict)
+                except:
+                    _logger.error("Error evaluating style expression <%s>",
+                                  row.kpi.style_expression, exc_info=True)
+                if style_name:
+                    style = self._style_model.search(
+                        [('name', '=', style_name)])
+                    if style:
+                        cell_style_props = self._style_model.merge(
+                            [row.style_props, style[0]])
+                    else:
+                        _logger.error("Style '%s' not found.", style_name)
             cell = KpiMatrixCell(row, subcol, val, val_rendered, val_comment,
-                                 row.style_props, drilldown_arg)
+                                 cell_style_props, drilldown_arg)
             cell_tuple.append(cell)
         col._set_cell_tuple(row, cell_tuple)
 
