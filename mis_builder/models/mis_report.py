@@ -37,6 +37,11 @@ class AutoStruct(object):
 
 class KpiMatrixRow(object):
 
+    # TODO: ultimately, the kpi matrix will become ignorant of KPI's and
+    #       accounts and know about rows, columns, sub columns and styles only.
+    #       It is already ignorant of period and only knowns about columns.
+    #       This will require a correct abstraction for expanding row details.
+
     def __init__(self, matrix, kpi, account_id=None, parent_row=None):
         self._matrix = matrix
         self.kpi = kpi
@@ -163,9 +168,9 @@ class KpiMatrix(object):
         self._kpi_rows = OrderedDict()
         # { kpi: {account_id: KpiMatrixRow} }
         self._detail_rows = {}
-        # { period_key: KpiMatrixCol }
+        # { col_key: KpiMatrixCol }
         self._cols = OrderedDict()
-        # { period_key (left of comparison): [(period_key, base_period_key)] }
+        # { col_key (left of comparison): [(col_key, base_col_key)] }
         self._comparison_todo = defaultdict(list)
         self._comparison_cols = defaultdict(list)
         # { account_id: account_name }
@@ -179,38 +184,38 @@ class KpiMatrix(object):
         self._kpi_rows[kpi] = KpiMatrixRow(self, kpi)
         self._detail_rows[kpi] = {}
 
-    def declare_period(self, period_key, description, comment,
-                       locals_dict, subkpis):
-        """ Declare a new period (column), giving it an identifier (key).
+    def declare_col(self, col_key, description, comment,
+                    locals_dict, subkpis):
+        """ Declare a new column, giving it an identifier (key).
 
         Invoke this and declare_comparison in display order.
         """
-        self._cols[period_key] = KpiMatrixCol(description, comment,
-                                              locals_dict, subkpis)
+        self._cols[col_key] = KpiMatrixCol(description, comment,
+                                           locals_dict, subkpis)
 
-    def declare_comparison(self, period_key, base_period_key):
+    def declare_comparison(self, col_key, base_col_key):
         """ Declare a new comparison column.
 
-        Invoke this and declare_period in display order.
+        Invoke this and declare_col in display order.
         """
-        last_period_key = list(self._cols.keys())[-1]
-        self._comparison_todo[last_period_key].append(
-            (period_key, base_period_key))
+        last_col_key = list(self._cols.keys())[-1]
+        self._comparison_todo[last_col_key].append(
+            (col_key, base_col_key))
 
-    def set_values(self, kpi, period_key, vals,
+    def set_values(self, kpi, col_key, vals,
                    drilldown_args):
-        """ Set values for a kpi and a period.
+        """ Set values for a kpi and a colum.
 
-        Invoke this after declaring the kpi and the period.
+        Invoke this after declaring the kpi and the column.
         """
-        self.set_values_detail_account(kpi, period_key, None, vals,
+        self.set_values_detail_account(kpi, col_key, None, vals,
                                        drilldown_args)
 
-    def set_values_detail_account(self, kpi, period_key, account_id, vals,
+    def set_values_detail_account(self, kpi, col_key, account_id, vals,
                                   drilldown_args):
-        """ Set values for a kpi and a period and a detail account.
+        """ Set values for a kpi and a column and a detail account.
 
-        Invoke this after declaring the kpi and the period.
+        Invoke this after declaring the kpi and the column.
         """
         if not account_id:
             row = self._kpi_rows[kpi]
@@ -221,7 +226,7 @@ class KpiMatrix(object):
             else:
                 row = KpiMatrixRow(self, kpi, account_id, parent_row=kpi_row)
                 self._detail_rows[kpi][account_id] = row
-        col = self._cols[period_key]
+        col = self._cols[col_key]
         cell_tuple = []
         assert len(vals) == col.colspan
         for val, drilldown_arg, subcol in \
@@ -252,10 +257,10 @@ class KpiMatrix(object):
 
         Invoke this after setting all values.
         """
-        for pos_period_key, comparisons in self._comparison_todo.items():
-            for period_key, base_period_key in comparisons:
-                col = self._cols[period_key]
-                base_col = self._cols[base_period_key]
+        for pos_col_key, comparisons in self._comparison_todo.items():
+            for col_key, base_col_key in comparisons:
+                col = self._cols[col_key]
+                base_col = self._cols[base_col_key]
                 common_subkpis = set(col.subkpis) & set(base_col.subkpis)
                 if not common_subkpis:
                     raise UserError('Columns {} and {} are not comparable'.
@@ -296,7 +301,7 @@ class KpiMatrix(object):
                             row, comparison_subcol, delta, delta_r, None,
                             style_r, None))
                     comparison_col._set_cell_tuple(row, comparison_cell_tuple)
-                self._comparison_cols[pos_period_key].append(comparison_col)
+                self._comparison_cols[pos_col_key].append(comparison_col)
 
     def iter_rows(self):
         """ Iterate rows in display order.
@@ -313,17 +318,17 @@ class KpiMatrix(object):
     def iter_cols(self):
         """ Iterate columns in display order.
 
-        yields KpiMatrixCol: one for each period or comparison.
+        yields KpiMatrixCol: one for each column or comparison.
         """
-        for period_key, col in self._cols.items():
+        for col_key, col in self._cols.items():
             yield col
-            for comparison_col in self._comparison_cols[period_key]:
+            for comparison_col in self._comparison_cols[col_key]:
                 yield comparison_col
 
     def iter_subcols(self):
         """ Iterate sub columns in display order.
 
-        yields KpiMatrixSubCol: one for each subkpi in each period
+        yields KpiMatrixSubCol: one for each subkpi in each column
         and comparison.
         """
         for col in self.iter_cols():
@@ -823,9 +828,9 @@ class MisReport(models.Model):
 
     @api.multi
     def _declare_and_compute_period(self, kpi_matrix,
-                                    period_key,
-                                    period_description,
-                                    period_comment,
+                                    col_key,
+                                    col_description,
+                                    col_comment,
                                     aep,
                                     date_from, date_to,
                                     target_move,
@@ -836,7 +841,7 @@ class MisReport(models.Model):
         """ Evaluate a report for a given period, populating a KpiMatrix.
 
         :param kpi_matrix: the KpiMatrix object to be populated
-        :param period_key: the period key to use when populating the KpiMatrix
+        :param col_key: the period key to use when populating the KpiMatrix
         :param aep: an AccountingExpressionProcessor instance created
                     using _prepare_aep()
         :param date_from, date_to: the starting and ending date
@@ -881,9 +886,9 @@ class MisReport(models.Model):
                        if subkpi in subkpis_filter]
         else:
             subkpis = self.subkpi_ids
-        kpi_matrix.declare_period(period_key,
-                                  period_description, period_comment,
-                                  locals_dict, subkpis)
+        kpi_matrix.declare_col(col_key,
+                               col_description, col_comment,
+                               locals_dict, subkpis)
 
         compute_queue = self.kpi_ids
         recompute_queue = []
@@ -907,7 +912,7 @@ class MisReport(models.Model):
                             mis_safe_eval(replaced_expr, locals_dict))
                         if replaced_expr != expression:
                             drilldown_args.append({
-                                'period_id': period_key,
+                                'period_id': col_key,
                                 'expr': expression,
                             })
                         else:
@@ -924,7 +929,7 @@ class MisReport(models.Model):
                         locals_dict[kpi.name] = SimpleArray(vals)
 
                 kpi_matrix.set_values(
-                    kpi, period_key, vals, drilldown_args)
+                    kpi, col_key, vals, drilldown_args)
 
                 if not kpi.auto_expand_accounts:
                     continue
@@ -938,14 +943,14 @@ class MisReport(models.Model):
                         vals.append(mis_safe_eval(replaced_expr, locals_dict))
                         if replaced_expr != expression:
                             drilldown_args.append({
-                                'period_id': period_key,
+                                'period_id': col_key,
                                 'expr': expression,
                                 'account_id': account_id
                             })
                         else:
                             drilldown_args.append(None)
                     kpi_matrix.set_values_detail_account(
-                        kpi, period_key, account_id, vals, drilldown_args)
+                        kpi, col_key, account_id, vals, drilldown_args)
 
             if len(recompute_queue) == 0:
                 # nothing to recompute, we are done
