@@ -6,13 +6,14 @@ Changelog
 ..
 .. *
 
-9.0.1.0.0 (2016-??-??)
+9.0.2.0.0 (2016-??-??)
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Part of the work for this release has been done at the Sorrento sprint
 April 26-29, 2016. The rest (ie a major refactoring) has been done in
 the weeks after.
 
+* [FIX] Fix sum aggregation of non-stored fields (issue #178)
 * [IMP] There is now a default style at the report level
 * [CHG] Number display properties (rounding, prefix, suffix, factor) are
   now defined in styles
