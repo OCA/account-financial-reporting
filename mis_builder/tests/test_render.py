@@ -5,6 +5,9 @@
 import openerp.tests.common as common
 
 from ..models.accounting_none import AccountingNone
+from ..models.mis_report_style import (
+    TYPE_NUM, TYPE_PCT, TYPE_STR, CMP_DIFF, CMP_PCT
+)
 
 
 class TestRendering(common.TransactionCase):
@@ -16,22 +19,18 @@ class TestRendering(common.TransactionCase):
         self.style = self.style_obj.create(dict(
             name='teststyle',
         ))
-        self.kpi = self.kpi_obj.create(dict(
-            name='testkpi',
-            description='test kpi',
-            type='num',
-            style_id=self.style.id,
-        ))
         self.lang = self.env['res.lang'].search([('code', '=', 'en_US')])[0]
 
-    def _render(self, value):
+    def _render(self, value, type=TYPE_NUM):
         style_props = self.style_obj.merge([self.style])
-        return self.kpi.render(self.lang, style_props, value)
+        return self.style_obj.render(self.lang, style_props, type, value)
 
-    def _compare_and_render(self, value, base_value):
+    def _compare_and_render(self, value, base_value,
+                            type=TYPE_NUM, compare_method=CMP_PCT):
         style_props = self.style_obj.merge([self.style])
-        return self.kpi.compare_and_render(self.lang, style_props,
-                                           value, base_value)[:2]
+        return self.style_obj.compare_and_render(self.lang, style_props,
+                                                 type, compare_method,
+                                                 value, base_value)[:2]
 
     def test_render(self):
         self.assertEquals(u'1', self._render(1))
@@ -89,21 +88,18 @@ class TestRendering(common.TransactionCase):
         self.assertEquals(u'1,000,000', self._render(1))
 
     def test_render_pct(self):
-        self.kpi.type = 'pct'
-        self.assertEquals(u'100\xa0%', self._render(1))
-        self.assertEquals(u'50\xa0%', self._render(0.5))
+        self.assertEquals(u'100\xa0%', self._render(1, TYPE_PCT))
+        self.assertEquals(u'50\xa0%', self._render(0.5, TYPE_PCT))
         self.style.dp_inherit = False
         self.style.dp = 2
-        self.assertEquals(u'51.23\xa0%', self._render(0.5123))
+        self.assertEquals(u'51.23\xa0%', self._render(0.5123, TYPE_PCT))
 
     def test_render_string(self):
-        self.kpi.type = 'str'
-        self.assertEquals(u'', self._render(''))
-        self.assertEquals(u'', self._render(None))
-        self.assertEquals(u'abcdé', self._render(u'abcdé'))
+        self.assertEquals(u'', self._render('', TYPE_STR))
+        self.assertEquals(u'', self._render(None, TYPE_STR))
+        self.assertEquals(u'abcdé', self._render(u'abcdé', TYPE_STR))
 
     def test_compare_num_pct(self):
-        self.assertEquals('pct', self.kpi.compare_method)
         self.assertEquals((1.0, u'+100.0\xa0%'),
                           self._compare_and_render(100, 50))
         self.assertEquals((0.5, u'+50.0\xa0%'),
@@ -132,26 +128,31 @@ class TestRendering(common.TransactionCase):
                           self._compare_and_render(None, 50))
 
     def test_compare_num_diff(self):
-        self.kpi.compare_method = 'diff'
         self.assertEquals((25, u'+25'),
-                          self._compare_and_render(75, 50))
+                          self._compare_and_render(75, 50,
+                                                   TYPE_NUM, CMP_DIFF))
         self.assertEquals((-25, u'\u201125'),
-                          self._compare_and_render(25, 50))
+                          self._compare_and_render(25, 50,
+                                                   TYPE_NUM, CMP_DIFF))
         self.style.suffix_inherit = False
         self.style.suffix = u'€'
         self.assertEquals((-25, u'\u201125\xa0€'),
-                          self._compare_and_render(25, 50))
+                          self._compare_and_render(25, 50,
+                                                   TYPE_NUM, CMP_DIFF))
         self.style.suffix = u''
         self.assertEquals((50.0, u'+50'),
-                          self._compare_and_render(50, AccountingNone))
+                          self._compare_and_render(50, AccountingNone,
+                                                   TYPE_NUM, CMP_DIFF))
         self.assertEquals((50.0, u'+50'),
-                          self._compare_and_render(50, None))
+                          self._compare_and_render(50, None,
+                                                   TYPE_NUM, CMP_DIFF))
         self.assertEquals((-50.0, u'\u201150'),
-                          self._compare_and_render(AccountingNone, 50))
+                          self._compare_and_render(AccountingNone, 50,
+                                                   TYPE_NUM, CMP_DIFF))
         self.assertEquals((-50.0, u'\u201150'),
-                          self._compare_and_render(None, 50))
+                          self._compare_and_render(None, 50,
+                                                   TYPE_NUM, CMP_DIFF))
 
     def test_compare_pct(self):
-        self.kpi.type = 'pct'
         self.assertEquals((0.25, u'+25\xa0pp'),
-                          self._compare_and_render(0.75, 0.50))
+                          self._compare_and_render(0.75, 0.50, TYPE_PCT))
