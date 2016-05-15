@@ -103,7 +103,6 @@
                                             <div class="act_as_cell">Partner</div>
                                             <div class="act_as_cell">Reference</div>
                                             <div class="act_as_cell">Label</div>
-                                            <div class="act_as_cell">Rec.</div>
                                             <div class="act_as_cell">Due Date</div>
                                             <div class="act_as_cell">Debit</div>
                                             <div class="act_as_cell">Credit</div>
@@ -123,7 +122,8 @@
                                         <t t-foreach="moves" t-as="move">
                                             <div class="act_as_row">
                                                 <div class="act_as_cell first_column"><span t-esc="move.date"/></div>
-                                                <div class="act_as_cell"><span t-esc="move.name"/></div>
+                                                <div
+                                                        class="act_as_cell"><span t-esc="move.move_id.name"/></div>
                                                 <div class="act_as_cell"><span t-esc="move.journal_id.code"/></div>
                                                 <div class="act_as_cell"><span t-esc="partner.name"/></div>
                                                 <div class="act_as_cell"><span
@@ -132,7 +132,6 @@
                                                         t-esc="move.name"/>
                                                     <t t-if="move.invoice_id"> - <span t-esc="move.invoice_id.number"/></t>
                                                 </div>
-                                                <div class="act_as_cell"><span t-esc="move.full_reconcile_id.name"/></div>
                                                 <div class="act_as_cell"><span t-esc="move.date_maturity"/></div>
                                                 <t t-set="account_debit" t-value="account_debit + move.debit" />
                                                 <t t-set="account_credit" t-value="account_credit + move.credit" />
@@ -165,7 +164,6 @@
                                              <div class="act_as_cell"/>
                                              <div class="act_as_cell"/>
                                              <div class="act_as_cell"/>
-                                             <div class="act_as_cell"/>
                                              <div class="act_as_cell account_title"><span t-esc="currency.name"/> Total</div>
                                              <div class="act_as_cell amount"><strong><span t-esc="currency_balance" /></strong></div>
                                         </div>
@@ -175,7 +173,6 @@
                             <div class="act_as_table totals_table">
                                 <div class="act_as_row">
                                      <div class="act_as_cell first_column"/>
-                                     <div class="act_as_cell"/>
                                      <div class="act_as_cell"/>
                                      <div class="act_as_cell"/>
                                      <div class="act_as_cell"/>
@@ -191,7 +188,6 @@
                         <div class="act_as_table totals_table">
                             <div class="act_as_row">
                                 <div class="act_as_cell first_column"/>
-                                <div class="act_as_cell"/>
                                 <div class="act_as_cell"/>
                                 <div class="act_as_cell"/>
                                 <div class="act_as_cell"/>
