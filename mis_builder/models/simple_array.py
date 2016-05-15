@@ -61,6 +61,9 @@ from .data_error import DataError
 __all__ = ['SimpleArray']
 
 
+# TODO named tuple-like behaviour, so expressions can work on subkpis
+
+
 class SimpleArray(tuple):
 
     def _op(self, op, other):
