@@ -61,9 +61,9 @@ class MisBuilderXslx(ReportXlsx):
         sheet.write(row_pos, 0, '', header_format)
         col_pos = 1
         for col in matrix.iter_cols():
-            label = col.description
-            if col.comment:
-                label += '\n' + col.comment
+            label = col.label
+            if col.description:
+                label += '\n' + col.description
                 sheet.set_row(row_pos, ROW_HEIGHT * 2)
             if col.colspan > 1:
                 sheet.merge_range(
@@ -73,8 +73,8 @@ class MisBuilderXslx(ReportXlsx):
             else:
                 sheet.write(row_pos, col_pos, label, header_format)
                 col_width[col_pos] = max(col_width[col_pos],
-                                         len(col.description or ''),
-                                         len(col.comment or ''))
+                                         len(col.label or ''),
+                                         len(col.description or ''))
             col_pos += col.colspan
         row_pos += 1
 
@@ -82,14 +82,14 @@ class MisBuilderXslx(ReportXlsx):
         sheet.write(row_pos, 0, '', header_format)
         col_pos = 1
         for subcol in matrix.iter_subcols():
-            label = subcol.description
-            if subcol.comment:
-                label += '\n' + subcol.comment
+            label = subcol.label
+            if subcol.description:
+                label += '\n' + subcol.description
                 sheet.set_row(row_pos, ROW_HEIGHT * 2)
             sheet.write(row_pos, col_pos, label, header_format)
             col_width[col_pos] = max(col_width[col_pos],
-                                     len(subcol.description or ''),
-                                     len(subcol.comment or ''))
+                                     len(subcol.label or ''),
+                                     len(subcol.description or ''))
             col_pos += 1
         row_pos += 1
 
@@ -98,8 +98,14 @@ class MisBuilderXslx(ReportXlsx):
             row_xlsx_style = style_obj.to_xlsx_style(row.style_props)
             row_format = workbook.add_format(row_xlsx_style)
             col_pos = 0
-            sheet.write(row_pos, col_pos, row.description, row_format)
-            label_col_width = max(label_col_width, len(row.description or ''))
+            label = row.label
+            if row.description:
+                label += '\n' + row.description
+                sheet.set_row(row_pos, ROW_HEIGHT * 2)
+            sheet.write(row_pos, col_pos, label, row_format)
+            label_col_width = max(label_col_width,
+                                  len(row.label or ''),
+                                  len(row.description or ''))
             for cell in row.iter_cells():
                 col_pos += 1
                 if not cell or cell.val is AccountingNone:

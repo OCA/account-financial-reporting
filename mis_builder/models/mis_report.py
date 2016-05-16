@@ -46,7 +46,7 @@ class KpiMatrixRow(object):
         self._matrix = matrix
         self.kpi = kpi
         self.account_id = account_id
-        self.comment = ''
+        self.description = ''
         self.parent_row = parent_row
         if not self.account_id:
             self.style_props = self._matrix._style_model.merge([
@@ -58,7 +58,7 @@ class KpiMatrixRow(object):
                 self.kpi.auto_expand_accounts_style_id])
 
     @property
-    def description(self):
+    def label(self):
         if not self.account_id:
             return self.kpi.description
         else:
@@ -86,9 +86,9 @@ class KpiMatrixRow(object):
 
 class KpiMatrixCol(object):
 
-    def __init__(self, description, comment, locals_dict, subkpis):
+    def __init__(self, label, description, locals_dict, subkpis):
+        self.label = label
         self.description = description
-        self.comment = comment
         self.locals_dict = locals_dict
         self.colspan = subkpis and len(subkpis) or 1
         self._subcols = []
@@ -117,10 +117,10 @@ class KpiMatrixCol(object):
 
 class KpiMatrixSubCol(object):
 
-    def __init__(self, col, description, comment, index=0):
+    def __init__(self, col, label, description, index=0):
         self.col = col
+        self.label = label
         self.description = description
-        self.comment = comment
         self.index = index
 
     @property
@@ -184,13 +184,13 @@ class KpiMatrix(object):
         self._kpi_rows[kpi] = KpiMatrixRow(self, kpi)
         self._detail_rows[kpi] = {}
 
-    def declare_col(self, col_key, description, comment,
+    def declare_col(self, col_key, label, description,
                     locals_dict, subkpis):
         """ Declare a new column, giving it an identifier (key).
 
         Invoke this and declare_comparison in display order.
         """
-        self._cols[col_key] = KpiMatrixCol(description, comment,
+        self._cols[col_key] = KpiMatrixCol(label, description,
                                            locals_dict, subkpis)
 
     def declare_comparison(self, col_key, base_col_key):
@@ -282,9 +282,9 @@ class KpiMatrix(object):
                     raise UserError('Columns {} and {} are not comparable'.
                                     format(col.description,
                                            base_col.description))
-                description = u'{} vs {}'.\
-                    format(col.description, base_col.description)
-                comparison_col = KpiMatrixCol(description, None, {},
+                label = u'{} vs {}'.\
+                    format(col.label, base_col.label)
+                comparison_col = KpiMatrixCol(label, None, {},
                                               sorted(common_subkpis,
                                                      key=lambda s: s.sequence))
                 for row in self.iter_rows():
@@ -369,14 +369,14 @@ class KpiMatrix(object):
         header = [{'cols': []}, {'cols': []}]
         for col in self.iter_cols():
             header[0]['cols'].append({
-                'label': col.description,
-                'description': col.comment,
+                'label': col.label,
+                'description': col.description,
                 'colspan': col.colspan,
             })
             for subcol in col.iter_subcols():
                 header[1]['cols'].append({
+                    'label': subcol.label,
                     'description': subcol.description,
-                    'comment': subcol.comment,
                     'colspan': 1,
                 })
 
@@ -386,8 +386,8 @@ class KpiMatrix(object):
                 'row_id': row.row_id,
                 'parent_row_id': (row.parent_row and
                                   row.parent_row.row_id or None),
-                'label': row.description,
-                'description': row.comment,
+                'label': row.label,
+                'description': row.description,
                 'style': self._style_model.to_css_style(
                     row.style_props),
                 'cells': []
@@ -855,8 +855,8 @@ class MisReport(models.Model):
     @api.multi
     def declare_and_compute_period(self, kpi_matrix,
                                    col_key,
+                                   col_label,
                                    col_description,
-                                   col_comment,
                                    aep,
                                    date_from, date_to,
                                    target_move,
@@ -914,7 +914,7 @@ class MisReport(models.Model):
         else:
             subkpis = self.subkpi_ids
         kpi_matrix.declare_col(col_key,
-                               col_description, col_comment,
+                               col_label, col_description,
                                locals_dict, subkpis)
 
         compute_queue = self.kpi_ids
