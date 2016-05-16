@@ -45,7 +45,7 @@
                 <form string="MIS Report Instance" version="7.0">
                 <sheet>
                     <field name="temporary" invisible="1"/>
-                    <div class="oe_right oe_button_box" name="buttons">
+                    <div class="oe_read_only oe_right oe_button_box" name="buttons">
                         <button type="object" name="preview" string="Preview" icon="gtk-print-preview" />
                         <button type="object" name="print_pdf" string="Print" icon="gtk-print" />
                         <button type="object" name="export_xls" string="Export" icon="gtk-go-down" />

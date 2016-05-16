@@ -13,6 +13,7 @@ Part of the work for this release has been done at the Sorrento sprint
 April 26-29, 2016. The rest (ie a major refactoring) has been done in
 the weeks after.
 
+* [IMP] hide button box in edit mode on the report instance settings form
 * [FIX] Fix sum aggregation of non-stored fields (issue #178)
 * [IMP] There is now a default style at the report level
 * [CHG] Number display properties (rounding, prefix, suffix, factor) are
