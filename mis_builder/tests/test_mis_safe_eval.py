@@ -4,7 +4,7 @@
 
 import openerp.tests.common as common
 
-from ..models.mis_safe_eval import mis_safe_eval, DataError
+from ..models.mis_safe_eval import mis_safe_eval, DataError, NameDataError
 
 
 class TestMisSafeEval(common.TransactionCase):
@@ -22,5 +22,6 @@ class TestMisSafeEval(common.TransactionCase):
         self.assertEqual(val.name, '#ERR')
 
     def test_name_error(self):
-        with self.assertRaises(NameError):
-            mis_safe_eval('a + 1', {})
+        val = mis_safe_eval('a + 1', {})
+        self.assertTrue(isinstance(val, NameDataError))
+        self.assertEqual(val.name, '#NAME')

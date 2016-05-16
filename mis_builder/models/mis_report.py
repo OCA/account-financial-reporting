@@ -20,7 +20,7 @@ from .aep import AccountingExpressionProcessor as AEP
 from .aggregate import _sum, _avg, _min, _max
 from .accounting_none import AccountingNone
 from .simple_array import SimpleArray
-from .mis_safe_eval import mis_safe_eval, DataError
+from .mis_safe_eval import mis_safe_eval, DataError, NameDataError
 from .mis_report_style import (
     TYPE_NUM, TYPE_PCT, TYPE_STR, CMP_DIFF, CMP_PCT, CMP_NONE
 )
@@ -190,8 +190,9 @@ class KpiMatrix(object):
 
         Invoke this and declare_comparison in display order.
         """
-        self._cols[col_key] = KpiMatrixCol(label, description,
-                                           locals_dict, subkpis)
+        col = KpiMatrixCol(label, description, locals_dict, subkpis)
+        self._cols[col_key] = col
+        return col
 
     def declare_comparison(self, col_key, base_col_key):
         """ Declare a new comparison column.
@@ -235,6 +236,7 @@ class KpiMatrix(object):
             if isinstance(val, DataError):
                 val_rendered = val.name
                 val_comment = val.msg
+                val = None
             else:
                 val_rendered = self._style_model.render(
                     self.lang, row.style_props, kpi.type, val)
@@ -915,9 +917,9 @@ class MisReport(models.Model):
                        if subkpi in subkpis_filter]
         else:
             subkpis = self.subkpi_ids
-        kpi_matrix.declare_col(col_key,
-                               col_label, col_description,
-                               locals_dict, subkpis)
+        col = kpi_matrix.declare_col(col_key,
+                                     col_label, col_description,
+                                     locals_dict, subkpis)
 
         compute_queue = self.kpi_ids
         recompute_queue = []
@@ -934,21 +936,22 @@ class MisReport(models.Model):
 
                 vals = []
                 drilldown_args = []
-                try:
-                    for expression in expressions:
-                        replaced_expr = aep.replace_expr(expression)
-                        vals.append(
-                            mis_safe_eval(replaced_expr, locals_dict))
-                        if replaced_expr != expression:
-                            drilldown_args.append({
-                                'period_id': col_key,
-                                'expr': expression,
-                            })
-                        else:
-                            drilldown_args.append(None)
-                except NameError:
+                name_error = False
+                for expression in expressions:
+                    replaced_expr = aep.replace_expr(expression)
+                    vals.append(
+                        mis_safe_eval(replaced_expr, locals_dict))
+                    if isinstance(vals[-1], NameDataError):
+                        name_error = True
+                    if replaced_expr != expression:
+                        drilldown_args.append({
+                            'period_id': col_key,
+                            'expr': expression,
+                        })
+                    else:
+                        drilldown_args.append(None)
+                if name_error:
                     recompute_queue.append(kpi)
-                    break
                 else:
                     # no error, set it in locals_dict so it can be used
                     # in computing other kpis
@@ -957,10 +960,26 @@ class MisReport(models.Model):
                     else:
                         locals_dict[kpi.name] = SimpleArray(vals)
 
+                # even in case of name error we set the result in the matrix
+                # so the name error will be displayed if it cannot be
+                # resolved by recomputing later
+                if len(expressions) == 1 and col.colspan > 1:
+                    if isinstance(vals[0], tuple):
+                        vals = vals[0]
+                        assert len(vals) == col.colspan
+                    elif isinstance(vals[0], NameDataError):
+                        vals = (vals[0],) * col.colspan
+                    else:
+                        raise UserError("Probably not your fault... but I'm "
+                                        "really curious to know how you "
+                                        "managed to raise this error so "
+                                        "I can handle one more corner case!")
+                if len(drilldown_args) != len(vals):
+                    drilldown_args = [None] * len(vals)
                 kpi_matrix.set_values(
                     kpi, col_key, vals, drilldown_args)
 
-                if not kpi.auto_expand_accounts:
+                if not kpi.auto_expand_accounts or name_error:
                     continue
 
                 for account_id, replaced_exprs in \
