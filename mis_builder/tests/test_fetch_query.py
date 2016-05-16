@@ -14,27 +14,27 @@ class TestFetchQuery(common.TransactionCase):
             self.ref('mis_builder.mis_report_instance_test'))
         self.maxDiff = None
         self.assertEquals(
-            {'content':
-                [{'description': u'total test',
-                  'comment': '',
+            {'body':
+                [{'label': u'total test',
+                  'description': '',
                   'style': None,
                   'parent_row_id': None,
                   'row_id': u'total_test',
-                  'cols': [{'val': 0,
-                            'val_r': u'0',
-                            'val_c': u'total_test = len(test)',
-                            'style': None,
-                            }]
+                  'cells': [{'val': 0,
+                             'val_r': u'0',
+                             'val_c': u'total_test = len(test)',
+                             'style': None,
+                             }]
                   }],
              'header':
-                 [{'cols': [{'comment': '07/31/2014',
+                 [{'cols': [{'description': '07/31/2014',
+                             'label': u'today',
                              'colspan': 1,
-                             'description': u'today',
                              }],
                    },
-                  {'cols': [{'colspan': 1,
+                  {'cols': [{'label': '',
                              'description': '',
-                             'comment': '',
+                             'colspan': 1,
                              }],
                    },
                   ],
