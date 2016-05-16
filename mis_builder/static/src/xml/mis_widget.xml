@@ -10,40 +10,40 @@
                 </div>
                 <table class="oe_list_content mis_builder">
                     <thead>
-                        <t t-foreach="widget.mis_report_data.header" t-as="h">
-                            <tr class="oe_list_header_columns">
-                                <th class="oe_list_header_char">
-                                </th>
-                                <th t-foreach="h_value.cols" t-as="col" class="oe_list_header_char mis_builder_collabel" t-att-colspan="col.colspan">
-				      <t t-esc="col.description"/>
-				      <t t-if="col.comment">
-					<br/>
-					<t t-esc="col.comment"/>
-				      </t>
-                                </th>
-                            </tr>
-                        </t>
+                        <tr t-foreach="widget.mis_report_data.header" t-as="row" class="oe_list_header_columns">
+                            <th class="oe_list_header_char">
+                            </th>
+                            <th t-foreach="row.cols" t-as="col" class="oe_list_header_char mis_builder_collabel" t-att-colspan="col.colspan">
+                                  <t t-esc="col.label"/>
+                                  <t t-if="col.description">
+                                    <br/>
+                                    <t t-esc="col.description"/>
+                                  </t>
+                            </th>
+                        </tr>
                     </thead>
                     <tbody>
-                        <tr t-foreach="widget.mis_report_data.content" t-as="c">
-                            <td t-att="{'style': c_value.style}">
-				<t t-esc="c_value.description"/>
+                        <tr t-foreach="widget.mis_report_data.body" t-as="row">
+                            <td t-att="{'style': row.style}">
+				<t t-esc="row.label"/>
+                                <t t-if="row.description">
+                                  <br/>
+                                  <t t-esc="row.description"/>
+                                </t>
                             </td>
-                            <t t-foreach="c_value.cols" t-as="value">
-                                <td t-att="{'style': value_value.style, 'title': value_value.val_c}" class="mis_builder_amount">
-                                      <t t-if="value_value.drilldown_arg">
-                                          <a href="javascript:void(0)"
-                                              class="mis_builder_drilldown"
-                                              t-att-data-drilldown="JSON.stringify(value_value.drilldown_arg)"
-                                          >
-                                              <t t-esc="value_value.val_r"/>
-                                          </a>
-                                      </t>
-                                      <t t-if="!value_value.drilldown_arg">
-                                          <t t-esc="value_value.val_r"/>
-                                      </t>
-                                </td>
-                            </t>
+                            <td t-foreach="row.cells" t-as="cell" t-att="{'style': cell.style, 'title': cell.val_c}" class="mis_builder_amount">
+                                  <t t-if="cell.drilldown_arg">
+                                      <a href="javascript:void(0)"
+                                          class="mis_builder_drilldown"
+                                          t-att-data-drilldown="JSON.stringify(cell.drilldown_arg)"
+                                      >
+                                          <t t-esc="cell.val_r"/>
+                                      </a>
+                                  </t>
+                                  <t t-if="!cell.drilldown_arg">
+                                      <t t-esc="cell.val_r"/>
+                                  </t>
+                            </td>
                         </tr>
                     </tbody>
                     <tfoot>

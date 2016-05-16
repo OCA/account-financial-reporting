@@ -369,8 +369,8 @@ class KpiMatrix(object):
         header = [{'cols': []}, {'cols': []}]
         for col in self.iter_cols():
             header[0]['cols'].append({
-                'description': col.description,
-                'comment': col.comment,
+                'label': col.description,
+                'description': col.comment,
                 'colspan': col.colspan,
             })
             for subcol in col.iter_subcols():
@@ -380,22 +380,22 @@ class KpiMatrix(object):
                     'colspan': 1,
                 })
 
-        content = []
+        body = []
         for row in self.iter_rows():
             row_data = {
                 'row_id': row.row_id,
                 'parent_row_id': (row.parent_row and
                                   row.parent_row.row_id or None),
-                'description': row.description,
-                'comment': row.comment,
+                'label': row.description,
+                'description': row.comment,
                 'style': self._style_model.to_css_style(
                     row.style_props),
-                'cols': []
+                'cells': []
             }
             for cell in row.iter_cells():
                 if cell is None:
                     # TODO use subcol style here
-                    row_data['cols'].append({})
+                    row_data['cells'].append({})
                 else:
                     col_data = {
                         'val': (cell.val
@@ -407,12 +407,12 @@ class KpiMatrix(object):
                     }
                     if cell.drilldown_arg:
                         col_data['drilldown_arg'] = cell.drilldown_arg
-                    row_data['cols'].append(col_data)
-            content.append(row_data)
+                    row_data['cells'].append(col_data)
+            body.append(row_data)
 
         return {
             'header': header,
-            'content': content,
+            'body': body,
         }
 
 
