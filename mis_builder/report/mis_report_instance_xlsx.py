@@ -115,7 +115,10 @@ class MisBuilderXslx(ReportXlsx):
                 cell_xlsx_style = style_obj.to_xlsx_style(cell.style_props)
                 cell_xlsx_style['align'] = 'right'
                 cell_format = workbook.add_format(cell_xlsx_style)
-                val = cell.val / float(cell.style_props.get('divider', 1))
+                if cell.val is None or cell.val is AccountingNone:
+                    val = ''
+                else:
+                    val = cell.val / float(cell.style_props.get('divider', 1))
                 sheet.write(row_pos, col_pos, val, cell_format)
                 col_width[col_pos] = max(col_width[col_pos],
                                          len(cell.val_rendered or ''))

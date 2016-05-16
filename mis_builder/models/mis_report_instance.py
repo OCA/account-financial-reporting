@@ -298,7 +298,7 @@ class MisReportInstance(models.Model):
 
     @api.multi
     def preview(self):
-        assert len(self) == 1
+        self.ensure_one()
         view_id = self.env.ref('mis_builder.'
                                'mis_report_instance_result_view_form')
         return {

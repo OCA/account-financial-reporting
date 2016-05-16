@@ -229,6 +229,7 @@ class KpiMatrix(object):
         col = self._cols[col_key]
         cell_tuple = []
         assert len(vals) == col.colspan
+        assert len(drilldown_args) == col.colspan
         for val, drilldown_arg, subcol in \
                 izip(vals, drilldown_args, col.iter_subcols()):
             if isinstance(val, DataError):
@@ -266,6 +267,7 @@ class KpiMatrix(object):
             cell = KpiMatrixCell(row, subcol, val, val_rendered, val_comment,
                                  cell_style_props, drilldown_arg)
             cell_tuple.append(cell)
+        assert len(cell_tuple) == col.colspan
         col._set_cell_tuple(row, cell_tuple)
 
     def compute_comparisons(self):
