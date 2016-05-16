@@ -73,6 +73,14 @@ class TestMisReportInstance(common.TransactionCase):
                 )),
             ],
         ))
+        # kpi with a simple expression summing other multi-valued kpis
+        self.env['mis.report.kpi'].create(dict(
+            report_id=self.report.id,
+            description='kpi 4',
+            name='k4',
+            multi=False,
+            expression='k1 + k2 + k3',
+        ))
         # kpi with 2 constants
         self.env['mis.report.kpi'].create(dict(
             report_id=self.report.id,
@@ -88,13 +96,20 @@ class TestMisReportInstance(common.TransactionCase):
                 )),
             ],
         ))
-        # kpi with a simple expression summing other multi-valued kpis
+        # kpi with a NameError (x not defined)
         self.env['mis.report.kpi'].create(dict(
             report_id=self.report.id,
-            description='kpi 4',
-            name='k4',
-            multi=False,
-            expression='k1 + k2 + k3',
+            description='kpi 5',
+            name='k5',
+            multi=True,
+            expression_ids=[(0, 0, dict(
+                    name='x',
+                    subkpi_id=self.report.subkpi_ids[0].id,
+                )), (0, 0, dict(
+                    name='1.0',
+                    subkpi_id=self.report.subkpi_ids[1].id,
+                )),
+            ],
         ))
         # create a report instance
         self.report_instance = self.env['mis.report.instance'].create(dict(
@@ -114,6 +129,8 @@ class TestMisReportInstance(common.TransactionCase):
                 )),
             ],
         ))
+        self.report_instance.period_ids[1].comparison_column_ids = \
+            [(4, self.report_instance.period_ids[0].id, None)]
 
     def test_json(self):
         self.report_instance.compute()

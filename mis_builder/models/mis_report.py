@@ -236,7 +236,6 @@ class KpiMatrix(object):
             if isinstance(val, DataError):
                 val_rendered = val.name
                 val_comment = val.msg
-                val = None
             else:
                 val_rendered = self._style_model.render(
                     self.lang, row.style_props, kpi.type, val)
@@ -401,9 +400,13 @@ class KpiMatrix(object):
                     # TODO use subcol style here
                     row_data['cells'].append({})
                 else:
+                    if cell.val is AccountingNone or \
+                            isinstance(cell.val, DataError):
+                        val = None
+                    else:
+                        val = cell.val
                     col_data = {
-                        'val': (cell.val
-                                if cell.val is not AccountingNone else None),
+                        'val': val,
                         'val_r': cell.val_rendered,
                         'val_c': cell.val_comment,
                         'style': self._style_model.to_css_style(
@@ -967,15 +970,15 @@ class MisReport(models.Model):
                     if isinstance(vals[0], tuple):
                         vals = vals[0]
                         assert len(vals) == col.colspan
-                    elif isinstance(vals[0], NameDataError):
+                    elif isinstance(vals[0], DataError):
                         vals = (vals[0],) * col.colspan
                     else:
                         raise UserError("Probably not your fault... but I'm "
                                         "really curious to know how you "
                                         "managed to raise this error so "
                                         "I can handle one more corner case!")
-                if len(drilldown_args) != len(vals):
-                    drilldown_args = [None] * len(vals)
+                if len(drilldown_args) != col.colspan:
+                    drilldown_args = [None] * col.colspan
                 kpi_matrix.set_values(
                     kpi, col_key, vals, drilldown_args)
 

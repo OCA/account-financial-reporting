@@ -8,6 +8,7 @@ import logging
 from openerp.report import report_sxw
 
 from ..models.accounting_none import AccountingNone
+from ..models.data_error import DataError
 
 _logger = logging.getLogger(__name__)
 
@@ -115,9 +116,14 @@ class MisBuilderXslx(ReportXlsx):
                 cell_xlsx_style = style_obj.to_xlsx_style(cell.style_props)
                 cell_xlsx_style['align'] = 'right'
                 cell_format = workbook.add_format(cell_xlsx_style)
-                if cell.val is None or cell.val is AccountingNone:
+                if isinstance(cell.val, DataError):
+                    val = cell.val.name
+                    # TODO display cell.val.msg as Excel comment?
+                elif cell.val is None or cell.val is AccountingNone:
                     val = ''
                 else:
+                    _logger.info("*** %s %s %s", cell.row.label,
+                                 cell.subcol.label, cell.val)
                     val = cell.val / float(cell.style_props.get('divider', 1))
                 sheet.write(row_pos, col_pos, val, cell_format)
                 col_width[col_pos] = max(col_width[col_pos],
