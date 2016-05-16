@@ -28,9 +28,9 @@ the weeks after.
   get_unallocated_pl is the corresponding convenience method
 * [IMP] AccountingExpressionProcessor now has easy methods to obtain
   balances by account: get_balances_initial, get_balances_end,
-  get_balances_veriation
+  get_balances_variation
 * [IMP] there is now an auto-expand feature to automatically display
-  a by account detail for some kpis
+  a detail by account for selected kpis
 * [IMP] the kpi and period lists are now manipulated through forms instead
   of directly in the tree views
 * [IMP] it is now possible to create a report through a wizard, such
