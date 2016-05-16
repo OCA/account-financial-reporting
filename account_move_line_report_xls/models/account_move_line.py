@@ -1,9 +1,9 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution
+#    Odoo, Open Source Management Solution
 #
-#    Copyright (c) 2014 Noviat nv/sa (www.noviat.com). All rights reserved.
+#    Copyright (c) 2009-2016 Noviat nv/sa (www.noviat.com).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -20,19 +20,20 @@
 #
 ##############################################################################
 
-from openerp import models, api
+from openerp import api, models
 
 
-class account_move_line(models.Model):
+class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
-    # override list in custom module to add/drop columns or change order
+    # Change list in custom module e.g. to add/drop columns or change order
     @api.model
     def _report_xls_fields(self):
         return [
             'move', 'name', 'date', 'journal', 'period', 'partner', 'account',
             'date_maturity', 'debit', 'credit', 'balance',
             'reconcile', 'reconcile_partial', 'analytic_account',
+            # 'analytic_account_name',
             # 'ref', 'partner_ref', 'tax_code', 'tax_amount',
             # 'amount_residual', 'amount_currency', 'currency_name',
             # 'company_currency', 'amount_residual_currency',

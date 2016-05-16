@@ -1,9 +1,9 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution
+#    Odoo, Open Source Management Solution
 #
-#    Copyright (c) 2014 Noviat nv/sa (www.noviat.com). All rights reserved.
+#    Copyright (c) 2009-2016 Noviat nv/sa (www.noviat.com).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -20,17 +20,19 @@
 #
 ##############################################################################
 
-import xlwt
 from datetime import datetime
-from openerp.osv import orm
+import xlwt
+import logging
+
+from openerp.exceptions import Warning as UserError
+from openerp.tools.translate import translate, _
 from openerp.report import report_sxw
 from openerp.addons.report_xls.report_xls import report_xls
 from openerp.addons.report_xls.utils import rowcol_to_cell, _render
-from openerp.tools.translate import translate, _
-import logging
+
 _logger = logging.getLogger(__name__)
 
-_ir_translation_name = 'move.line.list.xls'
+IR_TRANSLATION_NAME = 'move.line.list.xls'
 
 
 class move_line_xls_parser(report_sxw.rml_parse):
@@ -51,7 +53,7 @@ class move_line_xls_parser(report_sxw.rml_parse):
 
     def _(self, src):
         lang = self.context.get('lang', 'en_US')
-        return translate(self.cr, _ir_translation_name, 'report', lang, src) \
+        return translate(self.cr, IR_TRANSLATION_NAME, 'report', lang, src) \
             or src
 
 
@@ -216,9 +218,15 @@ class move_line_xls(report_xls):
                           None, self.aml_cell_style_center],
                 'totals': [1, 0, 'text', None]},
             'analytic_account': {
-                'header': [1, 36, 'text', _render("_('Analytic Account')")],
+                'header': [1, 36, 'text', _render("_('Analytic Account Reference')")],
                 'lines': [1, 0, 'text',
                           _render("line.analytic_account_id.code or ''")],
+                'totals': [1, 0, 'text', None]},
+            'analytic_account_name': {
+                'header': [1, 36, 'text',
+                           _render("_('Analytic Account')")],
+                'lines': [1, 0, 'text',
+                          _render("line.analytic_account_id.name or ''")],
                 'totals': [1, 0, 'text', None]},
             'product': {
                 'header': [1, 36, 'text', _render("_('Product')")],
@@ -296,7 +304,7 @@ class move_line_xls(report_xls):
         debit_pos = 'debit' in wanted_list and wanted_list.index('debit')
         credit_pos = 'credit' in wanted_list and wanted_list.index('credit')
         if not (credit_pos and debit_pos) and 'balance' in wanted_list:
-            raise orm.except_orm(
+            raise UserError(
                 _('Customisation Error!'),
                 _("The 'Balance' field is a calculated XLS field requiring \
                 the presence of the 'Debit' and 'Credit' fields !"))

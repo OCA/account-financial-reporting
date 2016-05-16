@@ -20,4 +20,4 @@
 #
 ##############################################################################
 
-from . import move_line_list_xls
+from . import account_move_line
