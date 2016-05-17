@@ -34,7 +34,7 @@ var MisReport = form_common.FormWidget.extend({
         var self = this;
         self.mis_report_instance_id = self.getParent().datarecord.id;
         if (self.mis_report_instance_id) {
-            self.getParent().dataset.context['no_destroy'] = true;
+            self.getParent().dataset.context.no_destroy = true;
         }
     },
     
@@ -42,9 +42,9 @@ var MisReport = form_common.FormWidget.extend({
         var self = this;
         var context = {};
         if (this.mis_report_instance_id){
-            context['active_ids'] = [this.mis_report_instance_id];
+            context.active_ids = [this.mis_report_instance_id];
         }
-        return context
+        return context;
     },
     
     print: function() {
@@ -135,7 +135,7 @@ ActionManager.include({
         var self = this;
         if (self.dialog_widget && self.dialog_widget.dataset && self.dialog_widget.dataset.context) {
             var context = self.dialog_widget.dataset.context;
-            if (!context['no_destroy']) {
+            if (!context.no_destroy) {
                 this._super.apply(this, arguments);
             }
         } else {
