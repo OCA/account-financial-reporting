@@ -25,7 +25,7 @@
                     <tbody>
                         <tr t-foreach="widget.mis_report_data.body" t-as="row">
                             <td t-att="{'style': row.style}">
-				<t t-esc="row.label"/>
+                                <t t-esc="row.label"/>
                                 <t t-if="row.description">
                                   <br/>
                                   <t t-esc="row.description"/>
@@ -47,7 +47,7 @@
                         </tr>
                     </tbody>
                     <tfoot>
-		      <tr></tr>
+                      <tr></tr>
                     </tfoot>
                 </table>
             </t>

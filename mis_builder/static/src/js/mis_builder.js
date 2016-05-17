@@ -22,8 +22,8 @@ var MisReport = form_common.FormWidget.extend({
     },
     
     reload_widget: function() {
-        var self = this
-        self.mis_report_instance_id = self.getParent().datarecord.id
+        var self = this;
+        self.mis_report_instance_id = self.getParent().datarecord.id;
         if (self.mis_report_instance_id) {
             self.generate_content();
         }
@@ -32,7 +32,7 @@ var MisReport = form_common.FormWidget.extend({
     start: function() {
         this._super.apply(this, arguments);
         var self = this;
-        self.mis_report_instance_id = self.getParent().datarecord.id
+        self.mis_report_instance_id = self.getParent().datarecord.id;
         if (self.mis_report_instance_id) {
             self.getParent().dataset.context['no_destroy'] = true;
         }
@@ -40,7 +40,7 @@ var MisReport = form_common.FormWidget.extend({
     
     get_context: function() {
         var self = this;
-        var context = {}
+        var context = {};
         if (this.mis_report_instance_id){
             context['active_ids'] = [this.mis_report_instance_id];
         }
@@ -48,8 +48,8 @@ var MisReport = form_common.FormWidget.extend({
     },
     
     print: function() {
-        var self = this
-        var context = new data.CompoundContext(self.build_context(), self.get_context()|| {})
+        var self = this;
+        var context = new data.CompoundContext(self.build_context(), self.get_context()|| {});
         new Model("mis.report.instance").call(
             "print_pdf", 
             [self.mis_report_instance_id], 
@@ -59,8 +59,8 @@ var MisReport = form_common.FormWidget.extend({
         });
     },
     export_pdf: function() {
-        var self = this
-        var context = new data.CompoundContext(self.build_context(), self.get_context()|| {})
+        var self = this;
+        var context = new data.CompoundContext(self.build_context(), self.get_context()|| {});
         new Model("mis.report.instance").call(
             "export_xls", 
             [self.mis_report_instance_id], 
@@ -70,8 +70,8 @@ var MisReport = form_common.FormWidget.extend({
         });
     },
     display_settings: function() {
-        var self = this
-        var context = new data.CompoundContext(self.build_context(), self.get_context()|| {})
+        var self = this;
+        var context = new data.CompoundContext(self.build_context(), self.get_context()|| {});
         new Model("mis.report.instance").call(
             "display_settings", 
             [self.mis_report_instance_id], 
@@ -81,8 +81,8 @@ var MisReport = form_common.FormWidget.extend({
         });
     },
     generate_content: function() {
-        var self = this
-        var context = new data.CompoundContext(self.build_context(), self.get_context()|| {}) 
+        var self = this;
+        var context = new data.CompoundContext(self.build_context(), self.get_context()|| {});
         new Model("mis.report.instance").call(
             "compute", 
             [self.mis_report_instance_id], 
@@ -132,9 +132,9 @@ ActionManager.include({
      * export, ...
      */
     dialog_stop: function (reason) {
-        var self = this
+        var self = this;
         if (self.dialog_widget && self.dialog_widget.dataset && self.dialog_widget.dataset.context) {
-            var context = self.dialog_widget.dataset.context
+            var context = self.dialog_widget.dataset.context;
             if (!context['no_destroy']) {
                 this._super.apply(this, arguments);
             }

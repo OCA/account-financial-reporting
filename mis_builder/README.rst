@@ -64,6 +64,7 @@ Known issues / Roadmap
 ======================
 
 * V9 thoughts:
+
   * select accounts by tag (see also select accounts by type below)
   * how to handle multi-company consolidation now that consolidation children are gone?
   * what replaces root accounts / account charts in v9? nothing it seems, so

@@ -529,7 +529,8 @@ class MisReportKpi(models.Model):
     def _inverse_expression(self):
         for kpi in self:
             if kpi.multi:
-                raise UserError('Can not update a multi kpi from the kpi line')
+                raise UserError(_('Can not update a multi kpi from '
+                                  'the kpi line'))
             if kpi.expression_ids:
                 kpi.expression_ids[0].write({
                     'name': kpi.expression,
@@ -973,10 +974,11 @@ class MisReport(models.Model):
                     elif isinstance(vals[0], DataError):
                         vals = (vals[0],) * col.colspan
                     else:
-                        raise UserError("Probably not your fault... but I'm "
-                                        "really curious to know how you "
-                                        "managed to raise this error so "
-                                        "I can handle one more corner case!")
+                        raise UserError(_("Probably not your fault... but I'm "
+                                          "really curious to know how you "
+                                          "managed to raise this error so "
+                                          "I can handle one more corner "
+                                          "case!"))
                 if len(drilldown_args) != col.colspan:
                     drilldown_args = [None] * col.colspan
                 kpi_matrix.set_values(
