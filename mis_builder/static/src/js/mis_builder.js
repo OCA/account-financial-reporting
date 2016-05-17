@@ -26,8 +26,6 @@ var MisReport = form_common.FormWidget.extend({
         self.mis_report_instance_id = self.getParent().datarecord.id
         if (self.mis_report_instance_id) {
             self.generate_content();
-        } else {
-            self.display_settings();
         }
     },
 
@@ -37,8 +35,6 @@ var MisReport = form_common.FormWidget.extend({
         self.mis_report_instance_id = self.getParent().datarecord.id
         if (self.mis_report_instance_id) {
             self.getParent().dataset.context['no_destroy'] = true;
-        } else {
-            self.display_settings();
         }
     },
     
@@ -130,6 +126,11 @@ var MisReport = form_common.FormWidget.extend({
 });
 
 ActionManager.include({
+    /*
+     * In the case where we would be open in modal view, this is
+     * necessary to avoid to close the popup on click on button like print,
+     * export, ...
+     */
     dialog_stop: function (reason) {
         var self = this
         if (self.dialog_widget && self.dialog_widget.dataset && self.dialog_widget.dataset.context) {
