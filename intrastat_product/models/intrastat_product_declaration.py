@@ -424,20 +424,32 @@ class IntrastatProductDeclaration(models.Model):
 
     def _handle_invoice_accessory_cost(
             self, invoice, lines_current_invoice,
-            total_inv_accessory_costs_cc, total_inv_product_cc):
+            total_inv_accessory_costs_cc, total_inv_product_cc,
+            total_inv_weight):
         """
-        Affect accessory costs pro-rata of the value.
+        Affect accessory costs pro-rata of the value
+        (or pro-rata of the weight is the goods of the invoice
+        have no value)
 
         This method allows to implement a different logic
         in the localization modules.
         E.g. in Belgium accessory cost should not be added.
         """
-        if total_inv_accessory_costs_cc and total_inv_product_cc:
-            for ac_line_vals in lines_current_invoice:
-                ac_line_vals['amount_accessory_cost_company_currency'] = (
-                    total_inv_accessory_costs_cc *
-                    ac_line_vals['amount_company_currency'] /
-                    total_inv_product_cc)
+        if total_inv_accessory_costs_cc:
+            if total_inv_product_cc:
+                # pro-rata of the value
+                for ac_line_vals in lines_current_invoice:
+                    ac_line_vals['amount_accessory_cost_company_currency'] = (
+                        total_inv_accessory_costs_cc *
+                        ac_line_vals['amount_company_currency'] /
+                        total_inv_product_cc)
+            else:
+                # pro-rata of the weight
+                for ac_line_vals in lines_current_invoice:
+                    ac_line_vals['amount_accessory_cost_company_currency'] = (
+                        total_inv_accessory_costs_cc *
+                        ac_line_vals['weight'] /
+                        total_inv_weight)
 
     def _prepare_invoice_domain(self):
         start_date = date(self.year, self.month, 1)
@@ -475,6 +487,7 @@ class IntrastatProductDeclaration(models.Model):
             lines_current_invoice = []
             total_inv_accessory_costs_cc = 0.0  # in company currency
             total_inv_product_cc = 0.0  # in company currency
+            total_inv_weight = 0.0
             for inv_line in invoice.invoice_line:
 
                 if (
@@ -493,12 +506,6 @@ class IntrastatProductDeclaration(models.Model):
                     _logger.info(
                         'Skipping invoice line %s qty %s '
                         'of invoice %s. Reason: qty = 0'
-                        % (inv_line.name, inv_line.quantity, invoice.number))
-                    continue
-                if not inv_line.price_subtotal:
-                    _logger.info(
-                        'Skipping invoice line %s qty %s '
-                        'of invoice %s. Reason: price_subtotal = 0'
                         % (inv_line.name, inv_line.quantity, invoice.number))
                     continue
 
@@ -545,6 +552,7 @@ class IntrastatProductDeclaration(models.Model):
 
                 weight, suppl_unit_qty = self._get_weight_and_supplunits(
                     inv_line, hs_code)
+                total_inv_weight += weight
 
                 amount_company_currency = self._get_amount(inv_line)
                 total_inv_product_cc += amount_company_currency
@@ -583,9 +591,24 @@ class IntrastatProductDeclaration(models.Model):
 
             self._handle_invoice_accessory_cost(
                 invoice, lines_current_invoice,
-                total_inv_accessory_costs_cc, total_inv_product_cc)
+                total_inv_accessory_costs_cc, total_inv_product_cc,
+                total_inv_weight)
 
-            lines += lines_current_invoice
+            for line_vals in lines_current_invoice:
+                if (
+                        not line_vals['amount_company_currency'] and
+                        not
+                        line_vals['amount_accessory_cost_company_currency']):
+                    inv_line = self.env['account.invoice.line'].browse(
+                        line_vals['invoice_line_id'])
+                    _logger.info(
+                        'Skipping invoice line %s qty %s '
+                        'of invoice %s. Reason: price_subtotal = 0 '
+                        'and accessory costs = 0'
+                        % (inv_line.name, inv_line.quantity,
+                           inv_line.invoice_id.number))
+                    continue
+                lines.append(line_vals)
 
         return lines
 
