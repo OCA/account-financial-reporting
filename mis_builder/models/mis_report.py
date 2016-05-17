@@ -496,11 +496,12 @@ class MisReportKpi(models.Model):
 
     _order = 'sequence, id'
 
-    @api.one
     @api.constrains('name')
     def _check_name(self):
-        if not _is_valid_python_var(self.name):
-            raise UserError(_('The name must be a valid python identifier'))
+        for record in self:
+            if not _is_valid_python_var(record.name):
+                raise UserError(_('The name must be a valid python '
+                                  'identifier'))
 
     @api.onchange('name')
     def _onchange_name(self):
@@ -595,11 +596,12 @@ class MisReportSubkpi(models.Model):
                               translate=True)
     expression_ids = fields.One2many('mis.report.kpi.expression', 'subkpi_id')
 
-    @api.one
     @api.constrains('name')
     def _check_name(self):
-        if not _is_valid_python_var(self.name):
-            raise UserError(_('The name must be a valid python identifier'))
+        for record in self:
+            if not _is_valid_python_var(record.name):
+                raise UserError(_('The name must be a valid python '
+                                  'identifier'))
 
     @api.onchange('name')
     def _onchange_name(self):
@@ -658,11 +660,11 @@ class MisReportQuery(models.Model):
 
     _name = 'mis.report.query'
 
-    @api.one
     @api.depends('field_ids')
     def _compute_field_names(self):
-        field_names = [field.name for field in self.field_ids]
-        self.field_names = ', '.join(field_names)
+        for record in self:
+            field_names = [field.name for field in record.field_ids]
+            record.field_names = ', '.join(field_names)
 
     name = fields.Char(size=32, required=True,
                        string='Name')
@@ -687,11 +689,12 @@ class MisReportQuery(models.Model):
 
     _order = 'name'
 
-    @api.one
     @api.constrains('name')
     def _check_name(self):
-        if not _is_valid_python_var(self.name):
-            raise UserError(_('The name must be a valid python identifier'))
+        for record in self:
+            if not _is_valid_python_var(record.name):
+                raise UserError(_('The name must be a valid python '
+                                  'identifier'))
 
 
 class MisReport(models.Model):
@@ -767,8 +770,9 @@ class MisReport(models.Model):
             })
         return res
 
-    @api.one
+    @api.multi
     def copy(self, default=None):
+        self.ensure_one()
         default = dict(default or {})
         default['name'] = _('%s (copy)') % self.name
         return super(MisReport, self).copy(default)

@@ -20,59 +20,63 @@ class MisReportInstancePeriod(models.Model):
     are defined as an offset relative to a pivot date.
     """
 
-    @api.one
+    @api.multi
     @api.depends('report_instance_id.pivot_date',
                  'report_instance_id.comparison_mode',
                  'type', 'offset', 'duration', 'mode')
     def _compute_dates(self):
-        self.date_from = False
-        self.date_to = False
-        self.valid = False
-        report = self.report_instance_id
-        d = fields.Date.from_string(report.pivot_date)
-        if not report.comparison_mode:
-            self.date_from = report.date_from
-            self.date_to = report.date_to
-            self.valid = True
-        elif self.mode == 'fix':
-            self.date_from = self.manual_date_from
-            self.date_to = self.manual_date_to
-            self.valid = True
-        elif self.type == 'd':
-            date_from = d + datetime.timedelta(days=self.offset)
-            date_to = date_from + \
-                datetime.timedelta(days=self.duration - 1)
-            self.date_from = fields.Date.to_string(date_from)
-            self.date_to = fields.Date.to_string(date_to)
-            self.valid = True
-        elif self.type == 'w':
-            date_from = d - datetime.timedelta(d.weekday())
-            date_from = date_from + datetime.timedelta(days=self.offset * 7)
-            date_to = date_from + \
-                datetime.timedelta(days=(7 * self.duration) - 1)
-            self.date_from = fields.Date.to_string(date_from)
-            self.date_to = fields.Date.to_string(date_to)
-            self.valid = True
-        elif self.type == 'date_range':
-            date_range_obj = self.env['date.range']
-            current_periods = date_range_obj.search(
-                [('type_id', '=', self.date_range_type_id.id),
-                 ('date_start', '<=', d),
-                 ('date_end', '>=', d),
-                 ('company_id', '=', self.report_instance_id.company_id.id)])
-            if current_periods:
-                all_periods = date_range_obj.search(
-                    [('type_id', '=', self.date_range_type_id.id),
+        for record in self:
+            record.date_from = False
+            record.date_to = False
+            record.valid = False
+            report = record.report_instance_id
+            d = fields.Date.from_string(report.pivot_date)
+            if not report.comparison_mode:
+                record.date_from = report.date_from
+                record.date_to = report.date_to
+                record.valid = True
+            elif record.mode == 'fix':
+                record.date_from = record.manual_date_from
+                record.date_to = record.manual_date_to
+                record.valid = True
+            elif record.type == 'd':
+                date_from = d + datetime.timedelta(days=record.offset)
+                date_to = date_from + \
+                    datetime.timedelta(days=record.duration - 1)
+                record.date_from = fields.Date.to_string(date_from)
+                record.date_to = fields.Date.to_string(date_to)
+                record.valid = True
+            elif record.type == 'w':
+                date_from = d - datetime.timedelta(d.weekday())
+                date_from = date_from + \
+                    datetime.timedelta(days=record.offset * 7)
+                date_to = date_from + \
+                    datetime.timedelta(days=(7 * record.duration) - 1)
+                record.date_from = fields.Date.to_string(date_from)
+                record.date_to = fields.Date.to_string(date_to)
+                record.valid = True
+            elif record.type == 'date_range':
+                date_range_obj = record.env['date.range']
+                current_periods = date_range_obj.search(
+                    [('type_id', '=', record.date_range_type_id.id),
+                     ('date_start', '<=', d),
+                     ('date_end', '>=', d),
                      ('company_id', '=',
-                      self.report_instance_id.company_id.id)],
-                    order='date_start')
-                all_period_ids = [p.id for p in all_periods]
-                p = all_period_ids.index(current_periods[0].id) + self.offset
-                if p >= 0 and p + self.duration <= len(all_period_ids):
-                    periods = all_periods[p:p + self.duration]
-                    self.date_from = periods[0].date_start
-                    self.date_to = periods[-1].date_end
-                    self.valid = True
+                      record.report_instance_id.company_id.id)])
+                if current_periods:
+                    all_periods = date_range_obj.search(
+                        [('type_id', '=', record.date_range_type_id.id),
+                         ('company_id', '=',
+                          record.report_instance_id.company_id.id)],
+                        order='date_start')
+                    all_period_ids = [p.id for p in all_periods]
+                    p = all_period_ids.index(current_periods[0].id) + \
+                        record.offset
+                    if p >= 0 and p + record.duration <= len(all_period_ids):
+                        periods = all_periods[p:p + record.duration]
+                        record.date_from = periods[0].date_start
+                        record.date_to = periods[-1].date_end
+                        record.valid = True
 
     _name = 'mis.report.instance.period'
 
@@ -174,13 +178,13 @@ class MisReportInstance(models.Model):
     """The MIS report instance combines everything to compute
     a MIS report template for a set of periods."""
 
-    @api.one
     @api.depends('date')
     def _compute_pivot_date(self):
-        if self.date:
-            self.pivot_date = self.date
-        else:
-            self.pivot_date = fields.Date.context_today(self)
+        for record in self:
+            if record.date:
+                record.pivot_date = record.date
+            else:
+                record.pivot_date = fields.Date.context_today(record)
 
     @api.model
     def _default_company(self):
@@ -250,8 +254,9 @@ class MisReportInstance(models.Model):
         _logger.debug('Vacuum %s Temporary MIS Builder Report', len(reports))
         return reports.unlink()
 
-    @api.one
+    @api.multi
     def copy(self, default=None):
+        self.ensure_one()
         default = dict(default or {})
         default['name'] = _('%s (copy)') % self.name
         return super(MisReportInstance, self).copy(default)
