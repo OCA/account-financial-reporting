@@ -25,23 +25,21 @@ class TestMisReportInstance(common.TransactionCase):
         self.report = self.env['mis.report'].create(dict(
             name='test report',
             subkpi_ids=[(0, 0, dict(
-                   name='sk1',
-                   description='subkpi 1',
-                   sequence=1,
-                )), (0, 0, dict(
-                   name='sk2',
-                   description='subkpi 2',
-                   sequence=2,
-                )),
-            ],
+                name='sk1',
+                description='subkpi 1',
+                sequence=1,
+            )), (0, 0, dict(
+                name='sk2',
+                description='subkpi 2',
+                sequence=2,
+            ))],
             query_ids=[(0, 0, dict(
-                    name='partner',
-                    model_id=partner_model_id,
-                    field_ids=[(4, partner_debit_field_id, None)],
-                    date_field=partner_create_date_field_id,
-                    aggregate='sum',
-                )),
-            ],
+                name='partner',
+                model_id=partner_model_id,
+                field_ids=[(4, partner_debit_field_id, None)],
+                date_field=partner_create_date_field_id,
+                aggregate='sum',
+            ))],
         ))
         # kpi with accounting formulas
         self.env['mis.report.kpi'].create(dict(
@@ -50,13 +48,12 @@ class TestMisReportInstance(common.TransactionCase):
             name='k1',
             multi=True,
             expression_ids=[(0, 0, dict(
-                    name='bale[200%]',
-                    subkpi_id=self.report.subkpi_ids[0].id,
-                )), (0, 0, dict(
-                    name='balp[200%]',
-                    subkpi_id=self.report.subkpi_ids[1].id,
-                )),
-            ],
+                name='bale[200%]',
+                subkpi_id=self.report.subkpi_ids[0].id,
+            )), (0, 0, dict(
+                name='balp[200%]',
+                subkpi_id=self.report.subkpi_ids[1].id,
+            ))],
         ))
         # kpi with accounting formula and query
         self.env['mis.report.kpi'].create(dict(
@@ -65,13 +62,12 @@ class TestMisReportInstance(common.TransactionCase):
             name='k2',
             multi=True,
             expression_ids=[(0, 0, dict(
-                    name='balp[200%]',
-                    subkpi_id=self.report.subkpi_ids[0].id,
-                )), (0, 0, dict(
-                    name='partner.debit',
-                    subkpi_id=self.report.subkpi_ids[1].id,
-                )),
-            ],
+                name='balp[200%]',
+                subkpi_id=self.report.subkpi_ids[0].id,
+            )), (0, 0, dict(
+                name='partner.debit',
+                subkpi_id=self.report.subkpi_ids[1].id,
+            ))],
         ))
         # kpi with a simple expression summing other multi-valued kpis
         self.env['mis.report.kpi'].create(dict(
@@ -88,13 +84,12 @@ class TestMisReportInstance(common.TransactionCase):
             name='k3',
             multi=True,
             expression_ids=[(0, 0, dict(
-                    name='AccountingNone',
-                    subkpi_id=self.report.subkpi_ids[0].id,
-                )), (0, 0, dict(
-                    name='1.0',
-                    subkpi_id=self.report.subkpi_ids[1].id,
-                )),
-            ],
+                name='AccountingNone',
+                subkpi_id=self.report.subkpi_ids[0].id,
+            )), (0, 0, dict(
+                name='1.0',
+                subkpi_id=self.report.subkpi_ids[1].id,
+            ))],
         ))
         # kpi with a NameError (x not defined)
         self.env['mis.report.kpi'].create(dict(
@@ -103,13 +98,12 @@ class TestMisReportInstance(common.TransactionCase):
             name='k5',
             multi=True,
             expression_ids=[(0, 0, dict(
-                    name='x',
-                    subkpi_id=self.report.subkpi_ids[0].id,
-                )), (0, 0, dict(
-                    name='1.0',
-                    subkpi_id=self.report.subkpi_ids[1].id,
-                )),
-            ],
+                name='x',
+                subkpi_id=self.report.subkpi_ids[0].id,
+            )), (0, 0, dict(
+                name='1.0',
+                subkpi_id=self.report.subkpi_ids[1].id,
+            ))],
         ))
         # create a report instance
         self.report_instance = self.env['mis.report.instance'].create(dict(
@@ -117,17 +111,16 @@ class TestMisReportInstance(common.TransactionCase):
             report_id=self.report.id,
             company_id=self.env.ref('base.main_company').id,
             period_ids=[(0, 0, dict(
-                   name='p1',
-                   mode='relative',
-                   type='d',
-                   subkpi_ids=[(4, self.report.subkpi_ids[0].id, None)],
-                )), (0, 0, dict(
-                   name='p2',
-                   mode='fix',
-                   manual_date_from='2014-01-01',
-                   manual_date_to='2014-12-31',
-                )),
-            ],
+                name='p1',
+                mode='relative',
+                type='d',
+                subkpi_ids=[(4, self.report.subkpi_ids[0].id, None)],
+            )), (0, 0, dict(
+                name='p2',
+                mode='fix',
+                manual_date_from='2014-01-01',
+                manual_date_to='2014-12-31',
+            ))],
         ))
         self.report_instance.period_ids[1].comparison_column_ids = \
             [(4, self.report_instance.period_ids[0].id, None)]

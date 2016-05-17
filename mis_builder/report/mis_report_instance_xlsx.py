@@ -122,8 +122,6 @@ class MisBuilderXslx(ReportXlsx):
                 elif cell.val is None or cell.val is AccountingNone:
                     val = ''
                 else:
-                    _logger.info("*** %s %s %s", cell.row.label,
-                                 cell.subcol.label, cell.val)
                     val = cell.val / float(cell.style_props.get('divider', 1))
                 sheet.write(row_pos, col_pos, val, cell_format)
                 col_width[col_pos] = max(col_width[col_pos],
