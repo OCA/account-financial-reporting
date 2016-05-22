@@ -13,6 +13,8 @@
                     <field name="account_id"/>
                     <field name="balance" sum="Total"></field>
                     <field name="base_balance" sum="Base Total"></field>
+                    <button type="object" name="view_tax_lines" string="View tax lines" icon="gtk-find"></button>
+                    <button type="object" name="view_base_lines" string="View base lines" icon="gtk-copy"></button>
                 </tree>
             </field>
          </record>
