@@ -3,40 +3,9 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import logging
-from openerp.osv import orm
 from openerp import models, api
 
 _logger = logging.getLogger(__name__)
-
-
-class WizardMultiChartsAccounts(orm.TransientModel):
-    """
-    Execute wizard automatically without showing the wizard popup window
-    """
-    _inherit = 'wizard.multi.charts.accounts'
-
-    def auto_execute(self, cr, uid, ids=False, context=None):
-        if not context:
-            context = {}
-        context['lang'] = 'en_US'
-        if not ids:
-            ids = self.search(cr, uid, [], context=context)
-        account_obj = self.pool.get('account.account')
-        for wz in self.browse(cr, uid, ids, context=context):
-            account_id = account_obj.search(
-                cr,
-                uid,
-                [('company_id', '=', wz.company_id.id)],
-                limit=1,
-                context=context
-            )
-            if not account_id:
-                # execute original wizard method
-                _logger.info(
-                    'Configure Accounting Data for Company: %s' %
-                    wz.company_id.name
-                )
-                self.execute(cr, uid, [wz.id], context=context)
 
 
 class AccountAccountTemplate(models.Model):
