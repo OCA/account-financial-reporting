@@ -266,7 +266,7 @@ class AccountingExpressionProcessor(object):
                 debit = acc['debit'] or 0.0
                 credit = acc['credit'] or 0.0
                 if mode in (self.MODE_INITIAL, self.MODE_UNALLOCATED) and \
-                        float_is_zero(debit-credit, precision_rounding=2):
+                        float_is_zero(debit-credit, precision_rounding=4):
                     # in initial mode, ignore accounts with 0 balance
                     continue
                 self._data[key][acc['account_id'][0]] = (debit, credit)
@@ -311,7 +311,7 @@ class AccountingExpressionProcessor(object):
             # as it does not make sense to distinguish 0 from "no data"
             if v is not AccountingNone and \
                     mode in (self.MODE_INITIAL, self.MODE_UNALLOCATED) and \
-                    float_is_zero(v, precision_rounding=2):
+                    float_is_zero(v, precision_rounding=4):
                 v = AccountingNone
             return '(' + repr(v) + ')'
 
@@ -342,7 +342,7 @@ class AccountingExpressionProcessor(object):
             # as it does not make sense to distinguish 0 from "no data"
             if v is not AccountingNone and \
                     mode in (self.MODE_INITIAL, self.MODE_UNALLOCATED) and \
-                    float_is_zero(v, precision_rounding=2):
+                    float_is_zero(v, precision_rounding=4):
                 v = AccountingNone
             return '(' + repr(v) + ')'
 
