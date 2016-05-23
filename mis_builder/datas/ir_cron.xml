@@ -2,8 +2,8 @@
 <openerp>
     <data noupdate="1">
 
-        <record id="ir_cron_crm_action" model="ir.cron">
-            <field name="name">Vaccum temporary report</field>
+        <record id="ir_cron_vacuum_temp_reports" model="ir.cron">
+            <field name="name">Vacuum temporary reports</field>
             <field name="interval_number">4</field>
             <field name="interval_type">hours</field>
             <field name="numbercall">-1</field>
