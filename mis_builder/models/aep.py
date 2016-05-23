@@ -409,7 +409,7 @@ class AccountingExpressionProcessor(object):
     @classmethod
     def get_balances_variation(cls, company, date_from, date_to,
                                target_move='posted'):
-        """ A convenience method to obtain the variantion of the
+        """ A convenience method to obtain the variation of the
         balances of all accounts over a period.
 
         :param company:
