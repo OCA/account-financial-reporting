@@ -399,14 +399,13 @@ class MisReportInstance(models.Model):
         account_id = arg.get('account_id')
         if period_id and expr and AEP.has_account_var(expr):
             period = self.env['mis.report.instance.period'].browse(period_id)
-            aep = AEP(self.env)
+            aep = AEP(self.company_id)
             aep.parse_expr(expr)
-            aep.done_parsing(self.company_id)
+            aep.done_parsing()
             domain = aep.get_aml_domain_for_expr(
                 expr,
                 period.date_from, period.date_to,
                 self.target_move,
-                self.company_id,
                 account_id)
             domain.extend(period._get_additional_move_line_filter())
             return {

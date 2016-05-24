@@ -790,11 +790,11 @@ class MisReport(models.Model):
     @api.multi
     def prepare_aep(self, company):
         self.ensure_one()
-        aep = AEP(self.env)
+        aep = AEP(company)
         for kpi in self.kpi_ids:
             for expression in kpi.expression_ids:
                 aep.parse_expr(expression.name)
-        aep.done_parsing(company)
+        aep.done_parsing()
         return aep
 
     @api.multi
@@ -915,8 +915,7 @@ class MisReport(models.Model):
         additional_move_line_filter = None
         if get_additional_move_line_filter:
             additional_move_line_filter = get_additional_move_line_filter()
-        aep.do_queries(company,
-                       date_from, date_to,
+        aep.do_queries(date_from, date_to,
                        target_move,
                        additional_move_line_filter)
 

@@ -66,7 +66,7 @@ class TestAEP(common.TransactionCase):
             debit_acc=self.account_ar,
             credit_acc=self.account_in)
         # create the AEP, and prepare the expressions we'll need
-        self.aep = AEP(self.env)
+        self.aep = AEP(self.company)
         self.aep.parse_expr("bali[]")
         self.aep.parse_expr("bale[]")
         self.aep.parse_expr("balp[]")
@@ -81,7 +81,7 @@ class TestAEP(common.TransactionCase):
         self.aep.parse_expr("crdp[700I%]")
         self.aep.parse_expr("bal_700IN")  # deprecated
         self.aep.parse_expr("bals[700IN]")  # deprecated
-        self.aep.done_parsing(self.company)
+        self.aep.done_parsing()
 
     def _create_move(self, date, amount, debit_acc, credit_acc):
         move = self.move_model.create({
@@ -103,8 +103,7 @@ class TestAEP(common.TransactionCase):
         self.aep.do_queries(
             date_from=fields.Date.to_string(date_from),
             date_to=fields.Date.to_string(date_to),
-            target_move='posted',
-            company=self.company)
+            target_move='posted')
 
     def _eval(self, expr):
         eval_dict = {'AccountingNone': AccountingNone}
