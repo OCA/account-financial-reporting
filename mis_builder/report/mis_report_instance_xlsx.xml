@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+  <data>
+
+    <record id="xls_export" model="ir.actions.report.xml">
+      <field name="name">MIS report instance XLS report</field>
+      <field name="model">mis.report.instance</field>
+      <field name="type">ir.actions.report.xml</field>
+      <field name="report_name">mis.report.instance.xlsx</field>
+      <field name="report_type">xlsx</field>
+      <field name="auto" eval="False"/>
+    </record>
+
+  </data>
+</openerp>

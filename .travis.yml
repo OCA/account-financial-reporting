@@ -2,6 +2,7 @@ sudo: false
 cache: pip
 
 addons:
+  postgresql: "9.2" # minimal postgresql version for the daterange method
   apt:
    sources:
       - pov-wkhtmltopdf

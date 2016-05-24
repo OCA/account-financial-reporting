@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <template id="assets_backend" name="mis_builder" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/mis_builder/static/src/css/custom.css"/>
+                <script type="text/javascript" src="/mis_builder/static/src/js/mis_builder.js"></script>
+            </xpath>
+        </template>
+
+        <record model="ir.ui.view" id="mis_report_instance_result_view_form">
+            <field name="name">mis.report.instance.result.view.form</field>
+            <field name="model">mis.report.instance</field>
+            <field name="priority" eval="20 "/>
+            <field name="arch" type="xml">
+                <form string="MIS Report Result" version="7.0" edit="false" create="false" delete="false" >
+                    <widget type="mis_report"></widget>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="mis_report_instance_view_tree">
+            <field name="name">mis.report.instance.view.tree</field>
+            <field name="model">mis.report.instance</field>
+            <field name="arch" type="xml">
+                <tree string="MIS Report Instances">
+                    <button name="preview" type="object" icon="gtk-print-preview" />
+                    <button type="object" name="print_pdf" string="Print" icon="gtk-print" />
+                    <button type="object" name="export_xls" string="Export" icon="gtk-go-down" />
+                    <field name="name"/>
+                    <field name="report_id" string="Template"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="target_move"/>
+                    <field name="pivot_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="mis_report_instance_view_form">
+            <field name="name">mis.report.instance.view.form</field>
+            <field name="model">mis.report.instance</field>
+            <field name="priority" eval="15"/>
+            <field name="arch" type="xml">
+                <form string="MIS Report Instance" version="7.0">
+                <sheet>
+                    <field name="temporary" invisible="1"/>
+                    <div class="oe_read_only oe_right oe_button_box" name="buttons">
+                        <button type="object" name="preview" string="Preview" icon="gtk-print-preview" />
+                        <button type="object" name="print_pdf" string="Print" icon="gtk-print" />
+                        <button type="object" name="export_xls" string="Export" icon="gtk-go-down" />
+                        <button type="action" name="%(mis_report_instance_add_to_dashboard_action)d" string="Add to dashboard" icon="gtk-add" attrs="{'invisible': [('temporary', '=', True)]}"/>
+                        <button type="object" name="save_report" string="Save" icon="gtk-floppy" attrs="{'invisible': [('temporary', '=', False)]}"/>
+                    </div>
+                    <div class="oe_title">
+                        <div class="oe_edit_only">
+                            <label for="name"/>
+                        </div>
+                        <h1>
+                            <field name="name" placeholder="Name"/>
+                        </h1>
+                        <field name="description"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="report_id" string="Template"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="target_move" widget="radio"/>
+                            <field name="landscape_pdf"/>
+                            <field name="comparison_mode"/>
+                        </group>
+                        <group>
+                            <group name="simple_mode"
+                                   attrs="{'invisible': [('comparison_mode', '=', True)]}" colspan="4">
+                                <field name="date_range_id"/>
+                                <field name="date_from" attrs="{'required': [('comparison_mode', '=', False)]}"/>
+                                <field name="date_to" attrs="{'required': [('comparison_mode', '=', False)]}"/>
+                            </group>
+                        </group>
+                    </group>
+                    <group name="comparison_mode" string="Comparison"
+                           attrs="{'invisible': [('comparison_mode', '=', False)]}" colspan="4">
+                        <field name="period_ids" colspan="4" nolabel="1" attrs="{'required': [('comparison_mode', '=', True)]}">
+                            <tree string="KPI's" colors="red:valid==False">
+                                <field name="sequence" widget="handle"/>
+                                <field name="name"/>
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                                <field name="valid" invisible="1"/>
+                                <field name="report_instance_id" invisible="1"/>
+                                <field name="id" invisible="1"/>
+                                <field name="subkpi_ids"
+                                       domain="[('report_id', '=', parent.report_id)]"
+                                       widget="many2many_tags"/>
+                                <field name="comparison_column_ids" domain="[('report_instance_id', '=', report_instance_id), ('id', '!=', id)]" widget="many2many_tags"/>
+                            </tree>
+                        </field>
+                        <field name="date"/>
+                    </group>
+                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="mis_report_instance_view_action">
+            <field name="name">MIS Reports</field>
+            <field name="view_id" ref="mis_report_instance_view_tree"/>
+            <field name="res_model">mis.report.instance</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('temporary', '=', False)]</field>
+        </record>
+
+        <menuitem id="mis_report_instance_view_menu" parent="account.menu_finance_reports" name="MIS Reports" action="mis_report_instance_view_action" sequence="101"/>
+
+        <record id="wizard_mis_report_instance_view_form" model="ir.ui.view">
+            <field name="model">mis.report.instance</field>
+            <field name="inherit_id" ref="mis_builder.mis_report_instance_view_form"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <field name="name" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+                <label for="name" position="replace"/>
+                <field name="report_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <div name="buttons" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </div>
+                <sheet position="after">
+                    <footer>
+                        <button type="object" name="save_report" string="Save" icon="gtk-floppy"/>
+                        <button type="object" name="preview" string="Preview" icon="gtk-print-preview" />
+                        <button type="object" name="print_pdf" string="Print" icon="gtk-print" />
+                        <button type="object" name="export_xls" string="Export" icon="gtk-go-down" />
+                        or <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </sheet>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="last_mis_report_instance_view_action">
+            <field name="name">Last Reports Generated</field>
+            <field name="view_id" ref="mis_report_instance_view_tree"/>
+            <field name="res_model">mis.report.instance</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('temporary', '=', True)]</field>
+        </record>
+
+        <menuitem id="last_wizard_mis_report_instance_view_menu"
+                  parent="account.menu_finance_reports"
+                  name="Last Reports Generated"
+                  action="last_mis_report_instance_view_action"
+                  sequence="102"/>
+
+        <record model="ir.ui.view" id="mis_report_instance_period_view_form">
+            <field name="model">mis.report.instance.period</field>
+            <field name="priority" eval="16"/>
+            <field name="arch" type="xml">
+                <form string="KPI's">
+                    <sheet>
+                        <group>
+                            <field name="mode" widget="radio"/>
+                            <field name="valid" invisible="1"/>
+                            <group name="relative" attrs="{'invisible': [('mode', '!=', 'relative')]}" colspan="4">
+                                <group>
+                                    <field name="type" attrs="{'required': [('mode', '=', 'relative')]}"/>
+                                    <field name="date_range_type_id"
+                                           attrs="{'invisible': [('type', '!=', 'date_range')], 'required': [('type', '=', 'date_range')]}"/>
+                                    <field name="offset"/>
+                                    <field name="duration"/>
+                                </group>
+                                <group>
+                                    <field name="date_from"/>
+                                    <field name="date_to"/>
+                                </group>
+                            </group>
+                            <group name="fix" attrs="{'invisible': [('mode', '!=', 'fix')]}" colspan="4">
+                                <field name="date_range_id"/>
+                                <field name="manual_date_from"
+                                       attrs="{'required': [('mode', '=', 'fix')]}"/>
+                                <field name="manual_date_to"
+                                       attrs="{'required': [('mode', '=', 'fix')]}"/>
+                            </group>
+                            <field name="name" placeholder="Name"/>
+                            <field name="normalize_factor"/>
+                            <field name="report_instance_id" invisible="1"/>
+                            <field name="id" invisible="1"/>
+                            <field name="subkpi_ids"
+                                   domain="[('report_id', '=', parent.report_id)]"
+                                   widget="many2many_tags"/>
+                            <field name="comparison_column_ids"
+                                   domain="[('report_instance_id', '=', report_instance_id), ('id', '!=', id)]"
+                                   widget="many2many_tags"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</openerp>

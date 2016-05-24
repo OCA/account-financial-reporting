@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+  <data>
+
+    <record id="qweb_pdf_export" model="ir.actions.report.xml">
+      <field name="name">MIS report instance QWEB PDF report</field>
+      <field name="model">mis.report.instance</field>
+      <field name="type">ir.actions.report.xml</field>
+      <field name="report_name">mis_builder.report_mis_report_instance</field>
+      <field name="report_type">qweb-pdf</field>
+      <field name="auto" eval="False"/>
+    </record>
+
+    <template id="assets_report" inherit_id="report.assets_common">
+        <xpath expr="." position="inside">
+          <link href="/mis_builder/static/src/css/report.css" rel="stylesheet"/>
+        </xpath>
+    </template>
+
+    <!--
+        TODO we use divs with css table layout, but this has drawbacks:
+             (bad layout of first column, no colspan for first header row),
+             consider getting back to a plain HTML table.
+    -->
+
+    <template id="report_mis_report_instance">
+      <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="o">
+          <t t-call="report.internal_layout">
+            <t t-set="matrix" t-value="o._compute_matrix()"/>
+            <t t-set="style_obj" t-value="o.env['mis.report.style']"/>
+            <div class="page">
+              <h2><span t-field="o.name" /> - <span t-field="o.company_id.name" /></h2>
+              <div class="mis_table">
+                <div class="mis_thead">
+                  <div class="mis_row">
+                    <div class="mis_cell mis_collabel"></div>
+                    <t t-foreach="matrix.iter_cols()" t-as="col">
+                      <div class="mis_cell mis_collabel">
+                        <t t-esc="col.label"/>
+                        <t t-if="col.description">
+                          <br/>
+                          <t t-esc="col.description"/>
+                        </t>
+                      </div>
+                      <!-- add empty cells because we have no colspan with css tables -->
+                      <t t-foreach="list(col.iter_subcols())[1:]" t-as="subcol">
+                        <div class="mis_cell mis_collabel"></div>
+                      </t>
+                    </t>
+                  </div>
+                  <div class="mis_row">
+                    <div class="mis_cell mis_collabel"></div>
+                    <t t-foreach="matrix.iter_subcols()" t-as="subcol">
+                      <div class="mis_cell mis_collabel">
+                        <t t-esc="subcol.label"/>
+                        <t t-if="subcol.description">
+                          <br/>
+                          <t t-esc="subcol.description"/>
+                        </t>
+                      </div>
+                    </t>
+                  </div>
+                </div>
+                <div class="mis_tbody">
+                  <div t-foreach="matrix.iter_rows()" t-as="row" class="mis_row">
+                    <div t-att-style="style_obj.to_css_style(row.style_props)" class="mis_cell mis_rowlabel">
+                      <t t-esc="row.label"/>
+                      <t t-if="row.description">
+                        <br/>
+                        <t t-esc="row.description"/>
+                      </t>
+                    </div>
+                    <t t-foreach="row.iter_cells()" t-as="cell">
+                      <div t-att-style="cell and style_obj.to_css_style(cell.style_props) or ''" class="mis_cell mis_amount">
+                        <t t-esc="cell and cell.val_rendered or ''"/>
+                      </div>
+                    </t>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </t>
+        </t>
+      </t>
+    </template>
+
+  </data>
+</openerp>

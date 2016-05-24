@@ -1,5 +1,13 @@
-.openerp .mis_builder_ralign {
+.openerp .mis_builder_amount {
   text-align: right;
+}
+
+.openerp .mis_builder_collabel {
+  text-align: center;
+}
+
+.openerp .mis_builder_rowlabel {
+  text-align: left;
 }
 
 .openerp .mis_builder a {
@@ -10,4 +18,13 @@
 .openerp .mis_builder a:hover {
   /* underline links on hover to give a visual cue */
   text-decoration: underline;
+}
+
+.openerp .oe_mis_builder_buttons {
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+.oe_mis_builder_content {
+  padding: 20px;
 }
