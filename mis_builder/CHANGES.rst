@@ -6,7 +6,7 @@ Changelog
 ..
 .. *
 
-9.0.2.0.0 (2016-??-??)
+9.0.2.0.0 (2016-05-24)
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Part of the work for this release has been done at the Sorrento sprint
