@@ -18,7 +18,8 @@ except ImportError:
     _logger.debug("report_xlsx not installed, Excel export non functional")
 
     class ReportXlsx(object):
-        pass
+        def __init__(self, *args, **kwargs):
+            pass
 
 
 ROW_HEIGHT = 15  # xlsxwriter units
