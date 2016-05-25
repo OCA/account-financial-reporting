@@ -27,11 +27,11 @@ MIN_COL_WIDTH = 10  # characters
 MAX_COL_WIDTH = 50  # characters
 
 
-class MisBuilderXslx(ReportXlsx):
+class MisBuilderXlsx(ReportXlsx):
 
     def __init__(self, name, table, rml=False, parser=False, header=True,
                  store=False):
-        super(MisBuilderXslx, self).__init__(
+        super(MisBuilderXlsx, self).__init__(
             name, table, rml, parser, header, store)
 
     def generate_xlsx_report(self, workbook, data, objects):
@@ -136,5 +136,5 @@ class MisBuilderXslx(ReportXlsx):
         sheet.set_column(min_col_pos, max_col_pos, data_col_width * COL_WIDTH)
 
 
-MisBuilderXslx('report.mis.report.instance.xlsx',
+MisBuilderXlsx('report.mis.report.instance.xlsx',
                'mis.report.instance', parser=report_sxw.rml_parse)
