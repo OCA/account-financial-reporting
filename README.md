@@ -14,6 +14,12 @@ others:
 
 
 [//]: # (addons)
+Available addons
+----------------
+addon | version | summary
+--- | --- | ---
+[mis_builder](mis_builder/) | 9.0.2.0.0 | Build 'Management Information System' Reports and Dashboards
+
 Unported addons
 ---------------
 addon | version | summary
@@ -26,7 +32,6 @@ addon | version | summary
 [account_financial_report_webkit_xls](account_financial_report_webkit_xls/) | 8.0.0.4.0 (unported) | Add XLS export to accounting reports
 [account_journal_report_xls](account_journal_report_xls/) | 8.0.0.2.0 (unported) | Financial Journal reports
 [account_move_line_report_xls](account_move_line_report_xls/) | 8.0.0.6.0 (unported) | Journal Items Excel export
-[mis_builder](mis_builder/) | 8.0.0.2.0 (unported) | Build 'Management Information System' Reports and Dashboards
-[mis_builder_demo](mis_builder_demo/) | 8.0.0.1.0 (unported) | Demo data for the mis_builder module
+[mis_builder_demo](mis_builder_demo/) | 9.0.1.0.0 (unported) | Demo data for the mis_builder module
 
 [//]: # (end addons)
