@@ -17,7 +17,7 @@ try:
 except ImportError:
     _logger.debug("report_xlsx not installed, Excel export non functional")
 
-    class ReportXslx:
+    class ReportXlsx:
         pass
 
 
