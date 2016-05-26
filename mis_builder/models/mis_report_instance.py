@@ -376,7 +376,6 @@ class MisReportInstance(models.Model):
                 period.date_from,
                 period.date_to,
                 self.target_move,
-                self.company_id,
                 period.subkpi_ids,
                 period._get_additional_move_line_filter,
                 period._get_additional_query_filter)
