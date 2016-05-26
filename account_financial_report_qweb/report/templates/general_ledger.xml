@@ -19,14 +19,9 @@
               <div class="act_as_row labels">
                 <!--<div class="act_as_cell">Chart of Account</div>-->
                 <div class="act_as_cell">Fiscal Year</div>
-                <t t-if="o.fiscalyear or o.start_date or o.end_date">
+                <t t-if="o.start_date or o.end_date">
                   <div class="act_as_cell">
-                    <t t-if="not o.fiscalyear">
-                      Dates Filter
-                    </t>
-                    <t t-if="o.fiscalyear">
-                      Fiscal Year Filter
-                    </t>
+                  Dates Filter
                   </div>
                 </t>
                 <div class="act_as_cell">Accounts Filter</div>
@@ -34,12 +29,7 @@
                 <div class="act_as_cell">Target Moves</div>
               </div>
               <div class="act_as_row">
-                <div class="act_as_cell">
-                  <t t-if="o.fiscalyear">
-                    <span t-field="o.fiscalyear.name"/>
-                  </t>
-                </div>
-                <t t-if="o.fiscalyear or o.start_date or o.end_date">
+                <t t-if="o.start_date or o.end_date">
                   <div class="act_as_cell">
                     From:
                     <span t-field="o.start_date"/>
