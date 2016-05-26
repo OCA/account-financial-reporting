@@ -28,7 +28,6 @@
         'wizard/partner_balance_wizard_view.xml',
         'wizard/trial_balance_wizard_view.xml',
         'wizard/balance_sheet_wizard_view.xml',
-        # 'wizard/profit_loss_wizard_view.xml',
         'menuitems.xml',
         'reports.xml',
         'report/templates/general_ledger.xml',
