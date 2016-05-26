@@ -2,45 +2,25 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-==============
-{module_title}
-==============
+=============================
+account_financial_report_qweb
+=============================
 
-This module extends the functionality of ... to support ...
-and allow you to ...
+This module adds a set of financial reports. They are accessible under
+Accunting / Reporting / PDF Reports.
 
-Installation
-============
-
-To install this module, you need to:
-
-#. Do this ...
-
-Configuration
-=============
-
-To configure this module, you need to:
-
-#. Go to ...
-
-Usage
-=====
-
-To use this module, you need to:
-
-#. Go to ...
+- General ledger
 
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
    :alt: Try me on Runbot
-   :target: https://runbot.odoo-community.org/runbot/{repo_id}/{branch}
-
-.. repo_id is available in https://github.com/OCA/maintainer-tools/blob/master/tools/repos_with_ids.txt
-.. branch is "8.0" for example
+   :target: https://runbot.odoo-community.org/runbot/91/9.0
 
 Known issues / Roadmap
 ======================
 
-* ...
+Some reports are being worked on and will be available at some point:
+
+- Aged parter report
 
 Bug Tracker
 ===========
@@ -61,8 +41,14 @@ Images
 Contributors
 ------------
 
-* Firstname Lastname <email.address@example.org>
-* Second Person <second.person@example.org>
+* Jordi Ballestrer <jordi.ballestrer@eficient.com>
+* Yannick Vaucher <yannick.vaucher@camptocamp.com>
+* Simone Orsi <simone.orsi@abstract.com>
+* Leonardo Pistone <leonardo.pistone@camptocamp.com>
+* Damien Crier <damien.crier@camptocamp.com>
+
+Much of the work in this module was done at a sprint in Sorrento, Italy in
+April 2016.
 
 Maintainer
 ----------
