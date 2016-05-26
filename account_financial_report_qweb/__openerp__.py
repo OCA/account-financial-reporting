@@ -11,7 +11,7 @@
               'initOS GmbH,'
               'redCOR AG,'
               'Odoo Community Association (OCA)',
-    'website': 'http://www.camptocamp.com',
+    "website": "https://odoo-community.org/",
     'depends': [
         'account',
         'account_full_reconcile',
