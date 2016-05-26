@@ -31,10 +31,7 @@
         # 'wizard/profit_loss_wizard_view.xml',
         'menuitems.xml',
         'reports.xml',
-        # 'wizard/partner_ledger_wizard.xml',
         'report/templates/ledger_general.xml',
-        'wizard/partner_ledger_wizard.xml',
-        'menuitems.xml',
         'reports.xml',
         'report/templates/general_ledger.xml',
         'report/templates/open_invoice_report.xml'
