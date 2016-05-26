@@ -2,7 +2,6 @@
 <openerp>
     <data>
 
-        <!-- TEMP main menu item -->
         <menuitem
             parent="account.menu_finance_reports"
             id="menu_oca_reports"
