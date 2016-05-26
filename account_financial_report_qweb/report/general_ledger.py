@@ -71,9 +71,6 @@ class GeneralLedgerReport(models.TransientModel):
         for key, val in data.iteritems():
             if key in self.MAPPING:
                 values[self.MAPPING[key]] = val
-            elif key == 'fiscalyear':
-                if val:
-                    values[key] = val[0]
             elif key == 'journal_ids':
                 if val:
                     values[key] = [(6, 0, val)]

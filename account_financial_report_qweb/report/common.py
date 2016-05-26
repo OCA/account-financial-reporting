@@ -65,8 +65,6 @@ class CommonFinancialReport(models.AbstractModel):
     start_date = fields.Date()
     end_date = fields.Date()
 
-    fiscalyear = fields.Many2one('account.fiscalyear')
-
     centralize = fields.Boolean()
     target_move = fields.Char()
 
@@ -89,9 +87,6 @@ class CommonFinancialReport(models.AbstractModel):
             domain = [('centralized', '=', False)]
         start_date = self.start_date
         end_date = self.end_date
-        if self.fiscalyear:
-            start_date = self.fiscalyear.start_date
-            end_date = self.fiscalyear.end_date
         if start_date:
             domain += [('date', '>=', start_date)]
         if end_date:
@@ -104,9 +99,3 @@ class CommonFinancialReport(models.AbstractModel):
             domain += [('account_id', 'in', self.account_ids.ids)]
 
         return domain
-
-    @api.multi
-    def _get_moves_from_fiscalyear(self, account, fiscalyear,
-                                   target_move):
-        return self._get_moves_from_dates(
-            account, fiscalyear.date_start, fiscalyear.date_end, target_move)
