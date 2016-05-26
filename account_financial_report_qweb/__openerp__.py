@@ -6,9 +6,7 @@
     'name': 'QWeb Financial Reports',
     'version': '9.0.0.1.0',
     'category': 'Reporting',
-    'summary': """
-        OCA Financial Reports
-    """,
+    'summary': 'OCA Financial Reports',
     'author': 'Camptocamp SA,'
               'initOS GmbH,'
               'redCOR AG,'
