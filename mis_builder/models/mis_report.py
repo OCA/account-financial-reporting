@@ -797,6 +797,17 @@ class MisReport(models.Model):
         aep.done_parsing()
         return aep
 
+    def prepare_localsdict(self):
+        return {
+            'sum': _sum,
+            'min': _min,
+            'max': _max,
+            'len': len,
+            'avg': _avg,
+            'AccountingNone': AccountingNone,
+            'SimpleArray': SimpleArray,
+        }
+
     @api.multi
     def _fetch_queries(self, date_from, date_to,
                        get_additional_query_filter=None):
@@ -875,7 +886,7 @@ class MisReport(models.Model):
                                    subkpis_filter=None,
                                    get_additional_move_line_filter=None,
                                    get_additional_query_filter=None,
-                                   locals_dict_update=None):
+                                   locals_dict=None):
         """ Evaluate a report for a given period, populating a KpiMatrix.
 
         :param kpi_matrix: the KpiMatrix object to be populated created
@@ -893,24 +904,14 @@ class MisReport(models.Model):
                                             query argument and returns a
                                             domain compatible with the query
                                             underlying model
-        :param locals_dict_update: a dictionary intended to update
-                                   the localsdict
+        :param locals_dict: personalized localsdict
         """
         self.ensure_one()
 
-        locals_dict = {
-            'sum': _sum,
-            'min': _min,
-            'max': _max,
-            'len': len,
-            'avg': _avg,
-            'AccountingNone': AccountingNone,
-            'SimpleArray': SimpleArray,
-        }
-
-        # update the locals_dict customized values
-        if locals_dict_update is not None:
-            locals_dict.update(locals_dict_update)
+        # prepare the localsdict
+        if locals_dict is None:
+            locals_dict = {}
+            locals_dict.update(self.prepare_localsdict())
 
         # fetch non-accounting queries
         locals_dict.update(self._fetch_queries(
