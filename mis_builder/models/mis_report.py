@@ -874,7 +874,8 @@ class MisReport(models.Model):
                                    target_move,
                                    subkpis_filter=None,
                                    get_additional_move_line_filter=None,
-                                   get_additional_query_filter=None):
+                                   get_additional_query_filter=None,
+                                   locals_dict_update=None):
         """ Evaluate a report for a given period, populating a KpiMatrix.
 
         :param kpi_matrix: the KpiMatrix object to be populated created
@@ -892,6 +893,8 @@ class MisReport(models.Model):
                                             query argument and returns a
                                             domain compatible with the query
                                             underlying model
+        :param locals_dict_update: a dictionary intended to update
+                                   the localsdict
         """
         self.ensure_one()
 
@@ -904,6 +907,10 @@ class MisReport(models.Model):
             'AccountingNone': AccountingNone,
             'SimpleArray': SimpleArray,
         }
+
+        # update the locals_dict customized values
+        if locals_dict_update is not None:
+            locals_dict.update(locals_dict_update)
 
         # fetch non-accounting queries
         locals_dict.update(self._fetch_queries(
