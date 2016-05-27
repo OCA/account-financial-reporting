@@ -109,7 +109,7 @@ class KpiMatrixCol(object):
         return self._subcols
 
     def iter_cell_tuples(self):
-        return self._cells_by_row.values()
+        return self._cell_tuples_by_row.values()
 
     def get_cell_tuple_for_row(self, row):
         return self._cell_tuples_by_row.get(row)
