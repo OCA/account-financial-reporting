@@ -872,7 +872,6 @@ class MisReport(models.Model):
                                    aep,
                                    date_from, date_to,
                                    target_move,
-                                   company,
                                    subkpis_filter=None,
                                    get_additional_move_line_filter=None,
                                    get_additional_query_filter=None):
@@ -885,7 +884,6 @@ class MisReport(models.Model):
                     using _prepare_aep()
         :param date_from, date_to: the starting and ending date
         :param target_move: all|posted
-        :param company:
         :param get_additional_move_line_filter: a bound method that takes
                                                 no arguments and returns
                                                 a domain compatible with

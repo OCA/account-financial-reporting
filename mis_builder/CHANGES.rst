@@ -6,6 +6,13 @@ Changelog
 ..
 .. *
 
+9.0.2.0.1 (2016-05-26)
+~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] remove unused argument in declare_and_compute_period()
+  for a cleaner API. This is a breaking API changing merged in
+  urgency before it is used by other modules.
+
 9.0.2.0.0 (2016-05-24)
 ~~~~~~~~~~~~~~~~~~~~~~
 
