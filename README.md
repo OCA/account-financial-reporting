@@ -18,7 +18,7 @@ Available addons
 ----------------
 addon | version | summary
 --- | --- | ---
-[mis_builder](mis_builder/) | 9.0.2.0.0 | Build 'Management Information System' Reports and Dashboards
+[mis_builder](mis_builder/) | 9.0.2.0.1 | Build 'Management Information System' Reports and Dashboards
 
 Unported addons
 ---------------
