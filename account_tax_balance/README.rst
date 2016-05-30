@@ -12,7 +12,7 @@ It depends on date_range module and exposes 'compute' methods that can be called
 Usage
 =====
 
-Accounting --> Reporting --> Open Tax Balances
+Accounting --> Reporting --> Taxes Balance
 
 Select the company, the date range, the target moves and 'open taxes'
 
