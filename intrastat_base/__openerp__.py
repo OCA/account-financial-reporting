@@ -22,7 +22,7 @@
 
 {
     'name': 'Intrastat Reporting Base',
-    'version': '1.2',
+    'version': '8.0.1.2.0',
     'category': 'Intrastat',
     'license': 'AGPL-3',
     'summary': 'Base module for Intrastat reporting',

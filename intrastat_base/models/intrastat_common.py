@@ -32,39 +32,43 @@ class IntrastatCommon(models.AbstractModel):
     _description = "Common functions for intrastat reports for products "
     "and services"
 
-    @api.one
+    @api.multi
     @api.depends('declaration_line_ids.amount_company_currency')
     def _compute_numbers(self):
-        total_amount = 0  # it is an integer
-        num_lines = 0
-        for line in self.declaration_line_ids:
-            total_amount += line.amount_company_currency
-            num_lines += 1
-        self.num_decl_lines = num_lines
-        self.total_amount = total_amount
+        for this in self:
+            total_amount = 0  # it is an integer
+            num_lines = 0
+            for line in this.declaration_line_ids:
+                total_amount += line.amount_company_currency
+                num_lines += 1
+            this.num_decl_lines = num_lines
+            this.total_amount = total_amount
 
-    @api.one
+    @api.multi
     def _check_generate_lines(self):
         """Check wether all requirements are met for generating lines."""
-        if not self.company_id:
-            raise UserError(_("Company not yet set on intrastat report."))
-        company_obj = self.company_id
-        if not company_obj.country_id:
-            raise UserError(
-                _("The country is not set on the company '%s'.")
-                % company_obj.name)
-        if company_obj.currency_id.name != 'EUR':
-            raise UserError(
-                _("The company currency must be 'EUR', but is currently '%s'.")
-                % company_obj.currency_id.name)
+        for this in self:
+            if not this.company_id:
+                raise UserError(_("Company not yet set on intrastat report."))
+            company = this.company_id
+            if not company.country_id:
+                raise UserError(
+                    _("The country is not set on the company '%s'.")
+                    % company.name)
+            if company.currency_id.name != 'EUR':
+                raise UserError(
+                    _("The company currency must be 'EUR', but is currently "
+                      "'%s'.")
+                    % company.currency_id.name)
         return True
 
-    @api.one
+    @api.multi
     def _check_generate_xml(self):
-        if not self.company_id.partner_id.vat:
-            raise UserError(
-                _("The VAT number is not set for the partner '%s'.")
-                % self.company_id.partner_id.name)
+        for this in self:
+            if not this.company_id.partner_id.vat:
+                raise UserError(
+                    _("The VAT number is not set for the partner '%s'.")
+                    % this.company_id.partner_id.name)
         return True
 
     @api.model
@@ -146,18 +150,19 @@ class IntrastatCommon(models.AbstractModel):
         """
         return False
 
-    @api.one
+    @api.multi
     def send_reminder_email(self, mail_template_xmlid):
         mail_template = self.env.ref(mail_template_xmlid)
-        if self.company_id.intrastat_remind_user_ids:
-            mail_template.send_mail(self.id)
-            logger.info(
-                'Intrastat Reminder email has been sent (XMLID: %s).'
-                % mail_template_xmlid)
-        else:
-            logger.warning(
-                'The list of users receiving the Intrastat Reminder is empty '
-                'on company %s' % self.company_id.name)
+        for this in self:
+            if this.company_id.intrastat_remind_user_ids:
+                mail_template.send_mail(this.id)
+                logger.info(
+                    'Intrastat Reminder email has been sent (XMLID: %s).'
+                    % mail_template_xmlid)
+            else:
+                logger.warning(
+                    'The list of users receiving the Intrastat Reminder is '
+                    'empty on company %s' % this.company_id.name)
         return True
 
     @api.multi

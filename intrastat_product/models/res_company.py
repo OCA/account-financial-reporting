@@ -78,14 +78,15 @@ class ResCompany(models.Model):
             ('standard', 'Standard'),
             ('extended', 'Extended')]
 
-    @api.one
+    @api.multi
     @api.depends('intrastat_arrivals', 'intrastat_dispatches')
     def _compute_intrastat(self):
-        if self.intrastat_arrivals == 'exempt' \
-                and self.intrastat_dispatches == 'exempt':
-            self.intrastat = 'exempt'
-        elif self.intrastat_arrivals == 'extended' \
-                or self.intrastat_dispatches == 'extended':
-            self.intrastat = 'extended'
-        else:
-            self.intrastat = 'standard'
+        for this in self:
+            if this.intrastat_arrivals == 'exempt' \
+                    and this.intrastat_dispatches == 'exempt':
+                this.intrastat = 'exempt'
+            elif this.intrastat_arrivals == 'extended' \
+                    or this.intrastat_dispatches == 'extended':
+                this.intrastat = 'extended'
+            else:
+                this.intrastat = 'standard'
