@@ -904,14 +904,16 @@ class MisReport(models.Model):
                                             query argument and returns a
                                             domain compatible with the query
                                             underlying model
-        :param locals_dict: personalized localsdict
+        :param locals_dict: personalized locals dictionary used as evaluation
+                            context for the KPI expressions
         """
         self.ensure_one()
 
         # prepare the localsdict
         if locals_dict is None:
             locals_dict = {}
-            locals_dict.update(self.prepare_localsdict())
+
+        locals_dict.update(self.prepare_localsdict())
 
         # fetch non-accounting queries
         locals_dict.update(self._fetch_queries(
