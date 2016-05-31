@@ -14,21 +14,31 @@ class AccountPartnerBalanceWizard(models.TransientModel):
     _description = "Partner Balance Report"
 
     result_selection = fields.Selection(
-            [('customer', 'Receivable Accounts'),
-             ('supplier', 'Payable Accounts'),
-             ('customer_supplier', 'Receivable and Payable Accounts')],
-            "Partner's", required=True, default='customer_supplier')
+        [
+            ('customer', 'Receivable Accounts'),
+            ('supplier', 'Payable Accounts'),
+            ('customer_supplier', 'Receivable and Payable Accounts')
+        ],
+        "Partner's", required=True, default='customer_supplier')
     partner_ids = fields.Many2many(
-            'res.partner', string='Filter on partner',
-            help="Only selected partners will be printed. "
-                 "Leave empty to print all partners.")
+        'res.partner', string='Filter on partner',
+        help="Only selected partners will be printed. "
+        "Leave empty to print all partners.")
+
+    # same field in the module account
+    display_partner = fields.Selection(
+        [
+            ('non-zero_balance', 'With balance is not equal to 0'),
+            ('all', 'All Partners')
+        ], 'Display Partners', default='all')
 
     @api.multi
     def pre_print_report(self, data):
         self.ensure_one()
 
         data = super(AccountPartnerBalanceWizard, self).pre_print_report(data)
-        vals = self.read(['result_selection', 'partner_ids'])[0]
+        vals = self.read(['result_selection', 'partner_ids',
+                          'display_partner'])[0]
         data['form'].update(vals)
         return data
 

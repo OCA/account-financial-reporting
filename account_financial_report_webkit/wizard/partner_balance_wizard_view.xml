@@ -22,6 +22,8 @@
                     <field name="target_move" position="after">
                         <newline/>
                         <field name="result_selection" colspan="4"/>
+                        <newline/>
+                        <field name="display_partner" colspan="4"/>
                     </field>
                     <page name="filters" position="after">
                         <page string="Accounts Filters" name="accounts">
