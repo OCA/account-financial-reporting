@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="account_bank_reconcile_form_view" model="ir.ui.view">
+            <field name="name">wiz.bank.unreconcile.form</field>
+            <field name="model">wiz.bank.unreconcile</field>
+            <field name="arch" type="xml">
+                <form string="Import">
+                    <field name="line_ids"
+                    context="{'currency':True}"/>
+                    <footer>
+                        <button name="process_wiz" string="Import" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window name="Unreconcile Journal Items"
+            res_model="wiz.bank.unreconcile"
+            src_model="account.bank.statement"
+            view_mode="form"
+            view_type="form"
+            target="new"
+            id="bank_statement_reconcile_action"/>
+
+    </data>
+</openerp>

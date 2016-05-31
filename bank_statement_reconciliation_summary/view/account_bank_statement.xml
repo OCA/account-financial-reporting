@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+            <record id="unreconcile_bank_statement_form_view" model="ir.ui.view">
+            <field name="name">account.bank.statement.form.view</field>
+            <field name="model">account.bank.statement</field>
+            <field name="inherit_id" ref="account.view_bank_statement_form"/>
+            <field name="arch" type="xml">
+                <button string="Import Invoice" position="before">
+                    <button type="action"
+                        class="oe_inline oe_stat_button"
+                        id="wiz_unreconcile"
+                        icon="fa-pencil-square-o"
+                        name="%(bank_statement_reconcile_action)d"
+                        attrs="{'invisible': [('state', '!=', 'draft')]}"
+                        style="width: 180px !important;">
+                        <div>Import<br/>Payments and Receipts</div>
+                    </button>
+                    <button type="object"
+                        class="oe_inline oe_stat_button"
+                        id="wiz_unreconcile"
+                        icon="fa-strikethrough"
+                        name="delete_unreconciled"
+                        attrs="{'invisible': [('state', '=', 'confirm')]}"
+                        style="width: 180px !important;">
+                        <div>Remove Unreconciled</div>
+                    </button>
+                </button>
+            </field>
+        </record>
+
+    </data>
+</openerp>

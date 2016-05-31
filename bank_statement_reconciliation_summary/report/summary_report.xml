@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <template id="summary_report">
+            <link rel='stylesheet' href='/web/static/lib/bootstrap/css/bootstrap.css'/>
+            <style>
+                .lines {
+                    border-top: solid;
+                    border-top-width: 2px;
+                    border-top-color: #edf3f8;
+                    color: #5993c0;
+                }
+            </style>
+            <t t-call="report.html_container">
+                <div class="page">
+                    <div class='row' style='background-color: #e6ffe6;box-shadow: 0px 2px 2px #cccccc;'>
+                        <div style='padding:5px;'>
+                            <div class='col-xs-3'><h4>Date</h4></div>
+                            <div class='col-xs-3'><h4>Description</h4></div>
+                            <div class='col-xs-3'><h4>Reference</h4></div>
+                            <div class='col-xs-3 text-right'><h4>Amount</h4></div>
+                        </div>
+                    </div>
+                    <t t-foreach="docs" t-as="o">
+                        <div class='row mt16'>
+                            <div class='col-xs-12'><h5><b><t t-esc='o.journal_id.name'/> - Balance in Odoo</b></h5>
+                            </div>
+                        </div>
+                        <t t-set='total_bank_odoo' t-value='0.00'/>
+                        <div class='row lines'>
+                            <div class='col-xs-12'>
+                                <div class='col-xs-3'><t t-esc='o.date'/></div>
+                                <div class='col-xs-3'><t
+                                        t-esc='o.journal_id.default_credit_account_id.code'/>-<t t-esc='o.journal_id.default_credit_account_id.name'/></div>
+                                <div class='col-xs-3'/>
+                                <t t-set='total_bank_odoo'
+                                   t-value='o.journal_id.default_credit_account_id.balance'/>
+                                <div class='col-xs-3 text-right'><t
+                                        t-esc='total_bank_odoo'
+                                        t-esc-options='{"widget": "monetary", "display_currency": "o.currency"}'/></div>
+                            </div>
+                        </div>
+                        <t t-set='total_clearing_odoo' t-value='0.00'/>
+                        <div class='row lines'>
+                            <div class='col-xs-12'>
+                                <div class='col-xs-3'><t t-esc='o.date'/></div>
+                                <div class='col-xs-3'>
+                                    <t t-esc='o.journal_id.default_credit_account_id.clearing_account_id.code'/>-<t t-esc='o.journal_id.default_credit_account_id.clearing_account_id.name'/></div>
+                                <div class='col-xs-3'/>
+                                <t t-set='total_clearing_odoo'
+                                   t-value='o.journal_id.default_credit_account_id.clearing_account_id.balance'/>
+                                <div class='col-xs-3 text-right'>
+                                    <t t-esc='total_clearing_odoo'
+                                       t-esc-options='{"widget": "monetary", "display_currency": "o.currency"}'/></div>
+                            </div>
+                        </div>
+                        <t t-set='total_bank_clearing_odoo' t-value='0.00'/>
+                        <div class='row' style='border-top: groove;'>
+                            <div class='col-xs-12'>
+                                <div class='col-xs-6'><h5><b>Total Balance in Odoo</b></h5></div>
+                                <div class='col-xs-3'/>
+                                <t t-set='total_bank_clearing_odoo'
+                               t-value='o.journal_id.default_credit_account_id.balance + o.journal_id.default_credit_account_id.clearing_account_id.balance'/>
+                                <div class='col-xs-3 text-right'>
+                                    <h5><b>
+                                    <t t-esc='total_bank_clearing_odoo'
+                                    t-esc-options='{"widget": "monetary", "display_currency": "o.currency"}'/>
+                                    </b></h5></div>
+                            </div>
+                        </div>
+                        <t t-set='total_payment' t-value='0.00'/>
+                        <t t-if='plus_outstanding_payments(o.journal_id)'>
+                            <div class='row mt16'>
+                                <div class='col-xs-12'><h5><b>Plus Outstanding Payments</b></h5></div>
+                            </div>
+                                <t t-foreach='plus_outstanding_payments(o.journal_id)' t-as='payment'>
+                                    <div class='row lines'>
+                                        <div class='col-xs-12'>
+                                            <div class='col-xs-3'><t t-esc='payment.date'/></div>
+                                            <div class='col-xs-3'><t t-esc='payment.name'/></div>
+                                            <div class='col-xs-3'><t t-esc='payment.ref'/></div>
+                                            <div class='col-xs-3 text-right'><t t-esc='payment.credit'/></div>
+                                            <t t-set='total_payment' t-value='total_payment + payment.credit'
+                                            t-esc-options='{"widget": "monetary", "display_currency": "o.currency"}'/>
+                                        </div>
+                                    </div>
+                                </t>
+
+                                <div class='row' style='border-top: groove;'>
+                                    <div class='col-xs-12'>
+                                        <div class='col-xs-6'><h5><b>Total Outstanding Payments</b></h5></div>
+                                        <div class='col-xs-3 col-xs-offset-3 text-right'><h5><b><t t-esc='total_payment'
+                                        t-esc-options='{"widget": "monetary", "display_currency": "o.currency"}'/></b></h5></div>
+                                    </div>
+                                </div>
+                        </t>
+                        <t t-set='total_receipt' t-value='0.00'/>
+                        <t t-if='less_outstanding_receipts(o.journal_id)'>
+                            <div class='row'>
+                                <div class='col-xs-12'><h5><b>Less Outstanding Receipts</b></h5></div>
+                            </div>
+                            <t t-foreach='less_outstanding_receipts(o.journal_id)' t-as='receipt'>
+                                <div class='row lines'>
+                                    <div class='col-xs-12'>
+                                        <div class='col-xs-3'><t t-esc='receipt.date'/></div>
+                                        <div class='col-xs-3'><t t-esc='receipt.name'/></div>
+                                        <div class='col-xs-3'><t t-esc='receipt.ref'/></div>
+                                        <div class='col-xs-3 text-right'><t t-esc='receipt.debit'/></div>
+                                        <t t-set='total_receipt' t-value='total_receipt + receipt.debit'
+                                        t-esc-options='{"widget": "monetary", "display_currency": "o.currency"}'/>
+                                    </div>
+                                </div>
+                            </t>
+                            <div class='row' style='border-top: groove;'>
+                                <div class='col-xs-12'>
+                                    <div class='col-xs-6'><h5><b>Total Outstanding Receipts</b></h5></div>
+                                    <div class='col-xs-3 col-xs-offset-3 text-right'><h5><b><t t-esc='total_receipt'
+                                    t-esc-options='{"widget": "monetary", "display_currency": "o.currency"}'/></b></h5></div>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-set='bank_stmt_line_total' t-value='0.00'/>
+                        <t t-if='plus_unreconciled_statement_lines(o)'>
+                            <div class='row'>
+                                <div class='col-xs-12'><h5><b>Plus Un-Reconciled Bank Statement Lines</b></h5></div>
+                            </div>
+                            <t t-foreach='plus_unreconciled_statement_lines(o)' t-as='line'>
+                                <div class='row lines'>
+                                    <div class='col-xs-12'>
+                                        <div class='col-xs-3'><t t-esc='line.date'/></div>
+                                        <div class='col-xs-3'><t t-esc='line.name'/></div>
+                                        <div class='col-xs-3'><t t-esc='line.ref'/></div>
+                                        <div class='col-xs-3 text-right'><t t-esc='line.amount'
+                                        t-esc-options='{"widget": "monetary", "display_currency": "o.currency"}'/></div>
+                                        <t t-set='bank_stmt_line_total' t-value='bank_stmt_line_total + line.amount'
+                                        t-esc-options='{"widget": "monetary", "display_currency": "o.currency"}'/>
+                                    </div>
+                                </div>
+                            </t>
+                            <div class='row' style='border-top: groove;'>
+                                <div class='col-xs-12'>
+                                    <div class='col-xs-6'><h5><b>Total Un-Reconciled Bank Statement Lines</b></h5></div>
+                                    <div class='col-xs-3 col-xs-offset-3 text-right'><h5><b><t t-esc='bank_stmt_line_total'
+                                    t-esc-options='{"widget": "monetary", "display_currency": "o.currency"}'/></b></h5></div>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-set='computed_statement_balance' t-value='total_bank_clearing_odoo + total_payment - total_receipt + bank_stmt_line_total'/>
+                        <t t-if='(o.balance_end_real - computed_statement_balance) == 0.0'>
+                            <div class='row mt8' style='border-top: solid;border-bottom: solid;'>
+                                <div class='col-xs-3'><t t-esc='o.date'/></div>
+                                <div class='col-xs-3'><h5><b>Statement Balance</b></h5></div>
+                                <div class='col-xs-3'/>
+                                <div class='col-xs-3 text-right'>
+                                    <t t-esc='computed_statement_balance'
+                                    t-esc-options='{"widget": "monetary", "display_currency": "o.currency"}'/></div>
+                            </div>
+                        </t>
+                        <t t-if='(o.balance_end_real - computed_statement_balance) != 0.0'>
+                            <div class='row mt16'>
+                                <div class='col-xs-12'><h5><b>Statement Balance</b></h5>
+                                </div>
+                            </div>
+                            <div class='row lines'>
+                                <div class='col-xs-12'>
+                                    <div class='col-xs-3'><t t-esc='o.date'/></div>
+                                    <div class='col-xs-3'>Computed</div>
+                                    <div class='col-xs-3'/>
+                                    <div class='col-xs-3 text-right'>
+                                        <t t-esc='computed_statement_balance'
+                                        t-esc-options='{"widget": "monetary", "display_currency": "o.currency"}'/></div>
+                                </div>
+                            </div>
+                            <div class='row lines'>
+                                <div class='col-xs-12'>
+                                    <div class='col-xs-3'><t t-esc='o.date'/></div>
+                                    <div class='col-xs-3'>Actual</div>
+                                    <div class='col-xs-3'/>
+                                    <div class='col-xs-3 text-right'>
+                                        <t t-esc='o.balance_end_real'
+                                        t-esc-options='{"widget": "monetary", "display_currency": "o.currency"}'/></div>
+                                </div>
+                            </div>
+                            <div class='row lines'>
+                                <div class='col-xs-12'>
+                                    <div class='col-xs-3'><t t-esc='o.date'/></div>
+                                    <div class='col-xs-3'>Unencoded Statement Amount</div>
+                                    <div class='col-xs-3'/>
+                                    <div class='col-xs-3 text-right'>
+                                        <t t-esc='o.balance_end_real - computed_statement_balance'
+                                        t-esc-options='{"widget": "monetary", "display_currency": "o.currency"}'/></div>
+                                </div>
+                            </div>
+                        </t>
+                    </t>
+                </div>
+            </t>
+        </template>
+
+    </data>
+</openerp>
