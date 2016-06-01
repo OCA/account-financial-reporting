@@ -23,6 +23,8 @@
 from collections import defaultdict
 from operator import add
 
+from openerp.tools.float_utils import float_is_zero
+
 from .common_balance_reports import CommonBalanceReportHeaderWebkit
 from .common_partner_reports import CommonPartnersReportHeaderWebkit
 
@@ -83,9 +85,11 @@ class CommonPartnerBalanceReportHeaderWebkit(CommonBalanceReportHeaderWebkit,
                     details[partner_id].get('credit', 0.0)
 
             if display_partner == 'non-zero_balance':
-                details = {k: v
-                           for k, v in details.iteritems()
-                           if abs(v['balance']) > 0.0001}
+                details = {
+                    k: v
+                    for k, v in details.iteritems()
+                    if not float_is_zero(v['balance'], precision_digits=5)
+                }
             res[account_id] = details
 
         return res
