@@ -28,7 +28,7 @@ class AccountPartnerBalanceWizard(models.TransientModel):
     # same field in the module account
     display_partner = fields.Selection(
         [
-            ('non-zero_balance', 'With balance is not equal to 0'),
+            ('non-zero_balance', 'With non-zero balance'),
             ('all', 'All Partners')
         ], 'Display Partners', default='all')
 
