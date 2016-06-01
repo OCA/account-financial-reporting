@@ -797,7 +797,7 @@ class MisReport(models.Model):
         aep.done_parsing()
         return aep
 
-    def prepare_localsdict(self):
+    def prepare_locals_dict(self):
         return {
             'sum': _sum,
             'min': _min,
