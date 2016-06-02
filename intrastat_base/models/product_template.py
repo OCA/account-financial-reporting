@@ -43,4 +43,4 @@ class ProductTemplate(models.Model):
                         "activated on 'Service' products. You have activated "
                         "this option for the product '%s' which is of type "
                         "'%s'") %
-                    (self.name, self.type))
+                    (this.name, this.type))
