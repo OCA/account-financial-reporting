@@ -203,7 +203,7 @@ class IntrastatProductDeclaration(models.Model):
         for this in self:
             if this.company_id:
                 this.company_country_code = \
-                    self.company_id.country_id.code.lower()
+                    this.company_id.country_id.code.lower()
 
     @api.multi
     @api.depends('year', 'month')
