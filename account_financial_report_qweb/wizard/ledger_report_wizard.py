@@ -192,8 +192,9 @@ class LedgerReportWizard(models.TransientModel):
         self.date_from = self.date_range_id.date_start
         self.date_to = self.date_range_id.date_end
         if self.date_from:
-            self.fy_start_date = self.date_range_id.find_daterange_fy_start(
-                fields.Date.from_string(self.date_range_id.date_start))
+            self.fy_start_date = self.env.user.company_id.find_daterange_fy(
+                fields.Date.from_string(self.date_range_id.date_start)
+            ).date_start
 
 
 class LedgerReportWizardLine(models.TransientModel):
