@@ -6,7 +6,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp import models, fields, api
-from openerp.exceptions import Warning as UserError
 from datetime import datetime
 
 
@@ -35,14 +34,6 @@ class OpenInvoiceWizard(models.TransientModel):
     @api.onchange('at_date')
     def onchange_atdate(self):
         self.until_date = self.at_date
-
-    @api.onchange('until_date')
-    def onchange_untildate(self):
-        # ---- until_date must be always >= of at_date
-        if self.until_date:
-            if self.until_date < self.at_date:
-                raise UserError(
-                    'Until Date must be equal or greater than At Date')
 
     def _build_contexts(self, data):
         result = {}
