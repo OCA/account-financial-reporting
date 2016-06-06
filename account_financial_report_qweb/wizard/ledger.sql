@@ -15,7 +15,6 @@ WITH view_q as (
   FROM
     account_account AS acc
     LEFT JOIN account_move_line AS ml ON (ml.account_id = acc.id)
-    --INNER JOIN res_partner AS part ON (ml.partner_id = part.id)
     INNER JOIN account_move AS m ON (ml.move_id = m.id)
     WINDOW w_account AS (
       PARTITION BY acc.code 
