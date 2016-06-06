@@ -12,15 +12,16 @@ WITH view_q as (
     SUM(credit) OVER w_account - credit AS init_credit,
     SUM(debit - credit) OVER w_account - (debit - credit) AS init_balance,
     SUM(debit - credit) OVER w_account AS cumul_balance
-  FROM
-    account_account AS acc
+  FROM account_account AS acc
     LEFT JOIN account_move_line AS ml ON (ml.account_id = acc.id)
     INNER JOIN account_move AS m ON (ml.move_id = m.id)
-    WINDOW w_account AS (
-      PARTITION BY acc.code 
-      ORDER BY ml.date, ml.id
-    )
-    ORDER BY acc.id, ml.date
+    INNER JOIN account_account_type aat ON (acc.user_type_id = aat.id)
+  WHERE ml.date >= %(fy_date)s OR aat.include_initial_balance IS TRUE
+  WINDOW w_account AS (
+    PARTITION BY acc.code
+    ORDER BY ml.date, ml.id
+  )
+  ORDER BY acc.id, ml.date
 )
 INSERT INTO ledger_report_wizard_line (
   date,
@@ -51,4 +52,3 @@ SELECT
   %(wizard_id)s as wizard_id
 FROM view_q
 WHERE date BETWEEN %(date_from)s AND %(date_to)s;
--- WHERE date >= %(fy_date)s
