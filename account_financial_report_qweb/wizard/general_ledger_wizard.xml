@@ -16,7 +16,7 @@
                             <field name="date_range_id"/>
                             <field name="date_from"/>
                             <field name="date_to"/>
-                            <field name="fy_start_date"/>
+                            <field name="fy_start_date" invisible="1"/>
                         </group>
                         <group name="extra_info">
                             <field name="amount_currency"/>
