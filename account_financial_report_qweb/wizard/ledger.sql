@@ -4,7 +4,7 @@ WITH view_q as (
     acc.id AS account_id,
     ml.debit,
     ml.credit,
-    ml.name as name,
+    ml.name AS name,
     ml.ref,
     ml.journal_id,
     ml.partner_id,
@@ -44,11 +44,11 @@ SELECT
   account_id,
   partner_id,
   ref,
-  ' TODO label ' as label,
+  ' TODO label ' AS label,
   --counterpart
   debit,
   credit,
   cumul_balance,
-  %(wizard_id)s as wizard_id
+  %(wizard_id)s AS wizard_id
 FROM view_q
 WHERE date BETWEEN %(date_from)s AND %(date_to)s;
