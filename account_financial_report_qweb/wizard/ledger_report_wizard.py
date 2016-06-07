@@ -177,8 +177,6 @@ class LedgerReportWizardLine(models.TransientModel):
     cumul_debit = fields.Float()
     cumul_balance = fields.Float()
 
-    init_credit = fields.Float()
-    init_debit = fields.Float()
     init_balance = fields.Float()
 
     move_name = fields.Char()

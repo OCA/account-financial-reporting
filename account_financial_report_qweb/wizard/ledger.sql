@@ -8,8 +8,6 @@ WITH view_q as (
     ml.ref,
     ml.journal_id,
     ml.partner_id,
-    SUM(debit) OVER w_account - debit AS init_debit,
-    SUM(credit) OVER w_account - credit AS init_credit,
     SUM(debit - credit) OVER w_account - (debit - credit) AS init_balance,
     SUM(debit - credit) OVER w_account AS cumul_balance
   FROM account_account AS acc
@@ -32,6 +30,7 @@ INSERT INTO ledger_report_wizard_line (
   ref,
   label,
   --counterpart
+  init_balance,
   debit,
   credit,
   cumul_balance,
@@ -46,6 +45,7 @@ SELECT
   ref,
   ' TODO label ' AS label,
   --counterpart
+  init_balance,
   debit,
   credit,
   cumul_balance,
