@@ -51,11 +51,9 @@
                      <field name="date"/>
                      <field name="account_id"/>
                      <field name="move_name"/>
+                     <field name="init_balance"/>
                      <field name="debit"/>
                      <field name="credit"/>
-                     <field name="init_debit"/>
-                     <field name="init_credit"/>
-                     <field name="init_balance"/>
                      <field name="cumul_balance"/>
                 </tree>
             </field>
