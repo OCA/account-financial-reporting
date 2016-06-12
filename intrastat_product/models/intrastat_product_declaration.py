@@ -285,7 +285,7 @@ class IntrastatProductDeclaration(models.Model):
                     "Please correct the Intrastat Supplementary Unit "
                     "settings and regenerate the lines or adjust the lines "
                     "with Intrastat Code '%s' manually"
-                    ) % inv_line.hs_code_id.local_code
+                    ) % hs_code.display_name
                 self._note += note
                 return weight, suppl_unit_qty
             if target_uom.category_id == source_uom.category_id:
