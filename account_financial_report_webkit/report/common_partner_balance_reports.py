@@ -23,6 +23,8 @@
 from collections import defaultdict
 from operator import add
 
+from openerp.tools.float_utils import float_is_zero
+
 from .common_balance_reports import CommonBalanceReportHeaderWebkit
 from .common_partner_reports import CommonPartnersReportHeaderWebkit
 
@@ -36,7 +38,8 @@ class CommonPartnerBalanceReportHeaderWebkit(CommonBalanceReportHeaderWebkit,
     def _get_account_partners_details(self, account_by_ids, main_filter,
                                       target_move, start, stop,
                                       initial_balance_mode,
-                                      partner_filter_ids=False):
+                                      partner_filter_ids=False,
+                                      display_partner='all'):
         res = {}
         filter_from = False
         if main_filter in ('filter_period', 'filter_no', 'filter_opening'):
@@ -80,6 +83,13 @@ class CommonPartnerBalanceReportHeaderWebkit(CommonBalanceReportHeaderWebkit,
                     get('init_balance', 0.0) + \
                     details[partner_id].get('debit', 0.0) - \
                     details[partner_id].get('credit', 0.0)
+
+            if display_partner == 'non-zero_balance':
+                details = {
+                    k: v
+                    for k, v in details.iteritems()
+                    if not float_is_zero(v['balance'], precision_digits=5)
+                }
             res[account_id] = details
 
         return res
@@ -201,7 +211,9 @@ class CommonPartnerBalanceReportHeaderWebkit(CommonBalanceReportHeaderWebkit,
             partner_details_by_ids = self._get_account_partners_details(
                 accounts_by_ids, details_filter,
                 target_move, start, stop, initial_balance_mode,
-                partner_filter_ids=partner_filter_ids)
+                partner_filter_ids=partner_filter_ids,
+                display_partner=data['form']['display_partner']
+            )
 
             for account_id in account_ids:
                 accounts_details_by_ids[account_id][
@@ -263,7 +275,8 @@ class CommonPartnerBalanceReportHeaderWebkit(CommonBalanceReportHeaderWebkit,
 
         partner_details_by_ids = self._get_account_partners_details(
             accounts_by_ids, main_filter, target_move, start, stop,
-            initial_balance_mode, partner_filter_ids=partner_ids)
+            initial_balance_mode, partner_filter_ids=partner_ids,
+            display_partner=data['form']['display_partner'])
 
         comparison_params = []
         comp_accounts_by_ids = []
