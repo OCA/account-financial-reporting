@@ -14,8 +14,8 @@
     <field name="model">res.company</field>
     <field name="inherit_id" ref="base.view_company_form" />
     <field name="arch" type="xml">
-        <notebook>
-            <page position="inside" string="Intrastat Settings">
+        <notebook position="inside">
+            <page name="intrastat" string="Intrastat">
                 <group name="intrastat-common" string="Intrastat Settings">
                     <field name="intrastat_remind_user_ids" widget="many2many_tags" />
                 </group>
