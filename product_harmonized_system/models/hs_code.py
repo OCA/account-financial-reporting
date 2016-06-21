@@ -56,20 +56,22 @@ class HSCode(models.Model):
     product_tmpl_ids = fields.One2many(
         'product.template', 'hs_code_id', string='Products')
 
-    @api.one
+    @api.multi
     @api.depends('local_code')
     def _compute_hs_code(self):
-        self.hs_code = self.local_code and self.local_code[:6]
+        for this in self:
+            this.hs_code = this.local_code and this.local_code[:6]
 
-    @api.one
+    @api.multi
     @api.depends('local_code', 'description')
     def _compute_display_name(self):
-        display_name = self.local_code
-        if self.description:
-            display_name += ' ' + self.description
-        self.display_name = len(display_name) > 55 \
-            and display_name[:55] + '...' \
-            or display_name
+        for this in self:
+            display_name = this.local_code
+            if this.description:
+                display_name += ' ' + this.description
+            this.display_name = len(display_name) > 55 \
+                and display_name[:55] + '...' \
+                or display_name
 
     _sql_constraints = [
         ('local_code_company_uniq', 'unique(local_code, company_id)',

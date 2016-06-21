@@ -181,13 +181,13 @@ class IntrastatProductDeclaration(models.Model):
         compute='_check_validity',
         string='Valid')
 
-    @api.one
+    @api.model
     @api.constrains('year')
     def _check_year(self):
-        s = str(self.year)
-        if len(s) != 4 or s[0] != '2':
-            raise ValidationError(
-                _("Invalid Year !"))
+        for this in self:
+            s = str(this.year)
+            if len(s) != 4 or s[0] != '2':
+                raise ValidationError(_("Invalid Year !"))
 
     _sql_constraints = [
         ('date_uniq',
@@ -197,29 +197,32 @@ class IntrastatProductDeclaration(models.Model):
          "or change the revision number of this one."),
     ]
 
-    @api.one
+    @api.multi
     @api.depends('company_id')
     def _compute_company_country_code(self):
-        if self.company_id:
-            self.company_country_code = \
-                self.company_id.country_id.code.lower()
+        for this in self:
+            if this.company_id:
+                this.company_country_code = \
+                    this.company_id.country_id.code.lower()
 
-    @api.one
+    @api.multi
     @api.depends('year', 'month')
     def _compute_year_month(self):
-        if self.year and self.month:
-            self.year_month = '-'.join(
-                [str(self.year), format(self.month, '02')])
+        for this in self:
+            if this.year and this.month:
+                this.year_month = '-'.join(
+                    [str(this.year), format(this.month, '02')])
 
-    @api.one
+    @api.multi
     @api.depends('month')
     def _check_validity(self):
         """ TO DO: logic based upon computation lines """
-        self.valid = True
+        for this in self:
+            this.valid = True
 
-    @api.one
-    @api.returns('self', lambda value: value.id)
+    @api.multi
     def copy(self, default=None):
+        self.ensure_one()
         default = default or {}
         default['revision'] = self.revision + 1
         return super(IntrastatProductDeclaration, self).copy(default)
@@ -812,11 +815,12 @@ class IntrastatProductComputationLine(models.Model):
         'res.country', string='Country of Origin of the Product',
         help="Country of origin of the product i.e. product 'made in ____'")
 
-    @api.one
+    @api.multi
     @api.depends('transport_id')
     def _check_validity(self):
         """ TO DO: logic based upon fields """
-        self.valid = True
+        for this in self:
+            this.valid = True
 
     @api.onchange('product_id')
     def _onchange_product(self):

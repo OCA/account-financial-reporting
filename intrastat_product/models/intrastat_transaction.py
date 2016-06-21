@@ -41,15 +41,16 @@ class IntrastatTransaction(models.Model):
         default=lambda self: self.env['res.company']._company_default_get(
             'intrastat.transaction'))
 
-    @api.one
+    @api.multi
     @api.depends('code', 'description')
     def _compute_display_name(self):
-        display_name = self.code
-        if self.description:
-            display_name += ' ' + self.description
-        self.display_name = len(display_name) > 55 \
-            and display_name[:55] + '...' \
-            or display_name
+        for this in self:
+            display_name = this.code
+            if this.description:
+                display_name += ' ' + this.description
+            this.display_name = len(display_name) > 55 \
+                and display_name[:55] + '...' \
+                or display_name
 
     _sql_constraints = [(
         'intrastat_transaction_code_unique',

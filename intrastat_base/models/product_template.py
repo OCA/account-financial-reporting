@@ -33,13 +33,14 @@ class ProductTemplate(models.Model):
         "costs and all services related to the sale of products. "
         "This option is used for Intrastat reports.")
 
-    @api.one
+    @api.multi
     @api.constrains('type', 'is_accessory_cost')
     def _check_accessory_cost(self):
-        if self.is_accessory_cost and self.type != 'service':
-            raise ValidationError(
-                _("The option 'Is accessory cost?' should only be "
-                    "activated on 'Service' products. You have activated "
-                    "this option for the product '%s' which is of type "
-                    "'%s'"
-                    % (self.name, self.type)))
+        for this in self:
+            if this.is_accessory_cost and this.type != 'service':
+                raise ValidationError(
+                    _("The option 'Is accessory cost?' should only be "
+                        "activated on 'Service' products. You have activated "
+                        "this option for the product '%s' which is of type "
+                        "'%s'") %
+                    (this.name, this.type))

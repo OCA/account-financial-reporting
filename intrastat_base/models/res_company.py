@@ -36,21 +36,23 @@ class ResCompany(models.Model):
         compute='_compute_intrastat_email_list',
         string='List of emails of Users Receiving the Intrastat Reminder')
 
-    @api.one
+    @api.multi
     @api.depends(
         'intrastat_remind_user_ids', 'intrastat_remind_user_ids.email')
     def _compute_intrastat_email_list(self):
-        emails = []
-        for user in self.intrastat_remind_user_ids:
-            if user.email:
-                emails.append(user.email)
-        self.intrastat_email_list = ','.join(emails)
+        for this in self:
+            emails = []
+            for user in this.intrastat_remind_user_ids:
+                if user.email:
+                    emails.append(user.email)
+            this.intrastat_email_list = ','.join(emails)
 
-    @api.one
+    @api.multi
     @api.constrains('intrastat_remind_user_ids')
     def _check_intrastat_remind_users(self):
-        for user in self.intrastat_remind_user_ids:
-            if not user.email:
-                raise ValidationError(
-                    _("Missing e-mail address on user '%s'.")
-                    % (user.name))
+        for this in self:
+            for user in this.intrastat_remind_user_ids:
+                if not user.email:
+                    raise ValidationError(
+                        _("Missing e-mail address on user '%s'.") %
+                        (user.name))
