@@ -21,9 +21,8 @@
     ],
     'data': [
         'wizard/aged_partner_balance_wizard_view.xml',
-        'wizard/general_ledger_wizard.xml',
+        'wizard/general_ledger_wizard_view.xml',
         'wizard/open_invoice_wizard_view.xml',
-        'wizard/partner_ledger_wizard.xml',
         'wizard/balance_common_wizard_view.xml',
         'wizard/partner_balance_wizard_view.xml',
         'wizard/trial_balance_wizard_view.xml',
@@ -31,7 +30,9 @@
         'menuitems.xml',
         'reports.xml',
         'report/templates/general_ledger.xml',
-        'report/templates/open_invoice_report.xml'
+        'report/templates/layouts.xml',
+        'report/templates/open_invoice_report.xml',
+        'view/account_view.xml'
     ],
     'test': [
     ],

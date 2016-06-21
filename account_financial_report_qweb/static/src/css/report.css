@@ -29,7 +29,7 @@ body, table, td, span, div {
     border-left:0px;
     border-right:0px;
     text-align:left;
-    font-size:9px;
+    font-size:10px;
     padding-right:3px;
     padding-left:3px;
     padding-top:2px;
@@ -58,12 +58,20 @@ body, table, td, span, div {
     font-style:italic;
 }
 .account_title {
-    font-size:10px;
+    font-size:11px;
     font-weight:bold;
-    page-break-after: avoid;
+}
+.account_title.labels {
+    background-color:#F0F0F0 !important;
 }
 .act_as_cell.amount {
     word-wrap:normal;
+    text-align:right;
+}
+.act_as_cell.left {
+    text-align:left;
+}
+.act_as_cell.right {
     text-align:right;
 }
 .list_table .act_as_cell{
@@ -78,4 +86,10 @@ body, table, td, span, div {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+}
+.custom_footer {
+    font-size:7px !important;
+}
+.page_break {
+    page-break-inside: avoid;
 }

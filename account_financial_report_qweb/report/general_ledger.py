@@ -1,130 +1,802 @@
 # -*- coding: utf-8 -*-
-# © 2015 Yannick Vaucher (Camptocamp)
+# © 2016 Julien Coux (Camptocamp)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp import models, fields, api
 
 
-class FinancialReportLine(models.Model):
-    _inherit = 'financial.report.line'
-    _name = 'general.ledger.line'
-    _description = "General Ledger report line"
-
-    _auto = False
-    _order = 'account_id, date'
-
-    @api.depends('invoice_number', 'name')
-    def _get_label(self):
-        for rec in self:
-            label = rec.name
-            if rec.invoice_number:
-                label += u' ({})'.format(rec.invoice_number)
-            rec.label = label
-
-    label = fields.Char(compute='_get_label', readonly=True, store=False)
-
-
 class GeneralLedgerReport(models.TransientModel):
+    """ Here, we just define class fields.
+    For methods, go more bottom at this file.
+    """
 
-    _name = 'report.account.report_generalledger_qweb'
-    _inherit = 'account.report.common'
+    _name = 'report_general_ledger_qweb'
 
-    @api.multi
-    def _get_account_ids(self):
-        res = False
-        context = self.env.context
-        if (context.get('active_model') == 'account.account' and
-                context.get('active_ids')):
-            res = context['active_ids']
-        return res
-
-    name = fields.Char()
-    initial_balance = fields.Integer()
-    account_ids = fields.Many2many(
-        'account.account',
-        string='Filter on accounts',
-        default=_get_account_ids,
-        help="Only selected accounts will be printed. Leave empty to "
-             "print all accounts.")
-    journal_ids = fields.Many2many(
-        'account.journal',
-        string='Filter on jourvals',
-        help="Only selected journals will be printed. Leave empty to "
-             "print all journals.")
-    balance_mode = fields.Selection(
-        [('initial_balance', 'Initial balance'),
-         ('opening_balance', 'Opening balance')]
+    date_from = fields.Date()
+    date_to = fields.Date()
+    fy_start_date = fields.Date()
+    only_posted_moves = fields.Boolean()
+    hide_account_balance_at_0 = fields.Boolean()
+    company_id = fields.Many2one(comodel_name='res.company')
+    filter_account_ids = fields.Many2many(comodel_name='account.account')
+    filter_partner_ids = fields.Many2many(comodel_name='res.partner')
+    has_second_currency = fields.Boolean()
+    centralize = fields.Boolean()
+    show_cost_center = fields.Boolean(
+        default=lambda self: self.env.user.has_group(
+            'analytic.group_analytic_accounting'
+        )
     )
-    display_account = fields.Char()
-    display_ledger_lines = fields.Boolean()
-    display_initial_balance = fields.Boolean()
 
-    MAPPING = {
-        'date_from': 'start_date',
-        'date_to': 'end_date',
-    }
+    account_ids = fields.One2many(
+        comodel_name='report_general_ledger_qweb_account',
+        inverse_name='report_id'
+    )
+
+
+class GeneralLedgerReportAccount(models.TransientModel):
+
+    _name = 'report_general_ledger_qweb_account'
+    _order = 'code ASC'
+
+    report_id = fields.Many2one(
+        comodel_name='report_general_ledger_qweb',
+        ondelete='cascade',
+        index=True
+    )
+    account_id = fields.Many2one(
+        'account.account',
+        index=True
+    )
+    code = fields.Char()
+    name = fields.Char()
+    initial_debit = fields.Float(digits=(16, 2))
+    initial_credit = fields.Float(digits=(16, 2))
+    initial_balance = fields.Float(digits=(16, 2))
+    final_debit = fields.Float(digits=(16, 2))
+    final_credit = fields.Float(digits=(16, 2))
+    final_balance = fields.Float(digits=(16, 2))
+    is_partner_account = fields.Boolean()
+
+    move_line_ids = fields.One2many(
+        comodel_name='report_general_ledger_qweb_move_line',
+        inverse_name='report_account_id'
+    )
+    partner_ids = fields.One2many(
+        comodel_name='report_general_ledger_qweb_partner',
+        inverse_name='report_account_id'
+    )
+
+
+class GeneralLedgerReportPartner(models.TransientModel):
+
+    _name = 'report_general_ledger_qweb_partner'
+
+    report_account_id = fields.Many2one(
+        comodel_name='report_general_ledger_qweb_account',
+        ondelete='cascade',
+        index=True
+    )
+    partner_id = fields.Many2one(
+        'res.partner',
+        index=True
+    )
+    name = fields.Char()
+    initial_debit = fields.Float(digits=(16, 2))
+    initial_credit = fields.Float(digits=(16, 2))
+    initial_balance = fields.Float(digits=(16, 2))
+    final_debit = fields.Float(digits=(16, 2))
+    final_credit = fields.Float(digits=(16, 2))
+    final_balance = fields.Float(digits=(16, 2))
+
+    move_line_ids = fields.One2many(
+        comodel_name='report_general_ledger_qweb_move_line',
+        inverse_name='report_partner_id'
+    )
 
     @api.model
-    def _get_values_from_wizard(self, data):
-        """ Get values from wizard """
-        values = {}
-        for key, val in data.iteritems():
-            if key in self.MAPPING:
-                values[self.MAPPING[key]] = val
-            elif key == 'journal_ids':
-                if val:
-                    values[key] = [(6, 0, val)]
-            else:
-                values[key] = val
-        return values
+    def _generate_order_by(self, order_spec, query):
+        return """
+ORDER BY
+CASE
+    WHEN "report_general_ledger_qweb_partner"."partner_id" IS NOT NULL
+    THEN 0
+    ELSE 1
+    END,
+"report_general_ledger_qweb_partner"."name"
+        """
 
-    @api.multi
-    def _get_centralized_move_ids(self, domain):
-        """ Get last line of each selected centralized accounts """
-        # inverse search on centralized boolean to finish the search to get the
-        # ids of last lines of centralized accounts
-        # XXX USE DISTINCT to speed up ?
-        domain = domain[:]
-        centralize_index = domain.index(('centralized', '=', False))
-        domain[centralize_index] = ('centralized', '=', True)
 
-        gl_lines = self.env['general.ledger.line'].search(domain)
-        accounts = gl_lines.mapped('account_id')
+class GeneralLedgerReportMoveLine(models.TransientModel):
 
-        line_ids = []
-        for acc in accounts:
-            acc_lines = gl_lines.filtered(lambda rec: rec.account_id == acc)
-            line_ids.append(acc_lines[-1].id)
-        return line_ids
+    _name = 'report_general_ledger_qweb_move_line'
 
-    @api.multi
-    def _get_moves_from_dates(self):
-        domain = self._get_moves_from_dates_domain()
-        if self.centralize:
-            centralized_ids = self._get_centralized_move_ids(domain)
-            if centralized_ids:
-                domain.insert(0, '|')
-                domain.append(('id', 'in', centralized_ids))
-        return self.env['general.ledger.line'].search(domain)
+    report_account_id = fields.Many2one(
+        comodel_name='report_general_ledger_qweb_account',
+        ondelete='cascade',
+        index=True
+    )
+    report_partner_id = fields.Many2one(
+        comodel_name='report_general_ledger_qweb_partner',
+        ondelete='cascade',
+        index=True
+    )
+    move_line_id = fields.Many2one('account.move.line')
+    date = fields.Date()
+    entry = fields.Char()
+    journal = fields.Char()
+    account = fields.Char()
+    partner = fields.Char()
+    label = fields.Char()
+    cost_center = fields.Char()
+    matching_number = fields.Char()
+    debit = fields.Float(digits=(16, 2))
+    credit = fields.Float(digits=(16, 2))
+    cumul_balance = fields.Float(digits=(16, 2))
+    currency_name = fields.Char()
+    amount_currency = fields.Float(digits=(16, 2))
 
-    @api.multi
-    def render_html(self, data=None):
-        report_name = 'account.report_generalledger_qweb'
-        if data is None:
-            return
-        values = self._get_values_from_wizard(data['form'])
-        report = self.create(values)
 
-        report_lines = report._get_moves_from_dates()
-        # TODO warning if no report_lines
-        self.env['report']._get_report_from_name(report_name)
+class GeneralLedgerReportCompute(models.TransientModel):
 
-        docargs = {
-            'doc_ids': report.ids,
-            'doc_model': self._name,
-            'report_lines': report_lines,
-            'docs': report,
-            # XXX
-            'has_currency': True
+    _inherit = 'report_general_ledger_qweb'
+
+    @api.model
+    def print_report(self):
+        self.ensure_one()
+        self.compute_data_for_report()
+        return {
+            'type': 'ir.actions.report.xml',
+            'report_name':
+                'account_financial_report_qweb.report_general_ledger_qweb',
+            'datas': {'ids': [self.id]},
         }
-        return self.env['report'].render(report_name, docargs)
+
+    @api.model
+    def compute_data_for_report(self):
+        self.ensure_one()
+
+        self.inject_account_values()
+        self.inject_partner_values()
+        self.inject_line_not_centralized_values()
+        self.inject_line_not_centralized_values(is_account_line=False,
+                                                is_partner_line=True)
+        self.inject_line_not_centralized_values(is_account_line=False,
+                                                is_partner_line=True,
+                                                only_empty_partner_line=True)
+        if self.centralize:
+            self.inject_line_centralized_values()
+        self.compute_has_second_currency()
+
+    def inject_account_values(self):
+        subquery_sum_amounts = """
+        SELECT
+            a.id AS account_id,
+            SUM(ml.debit) AS debit,
+            SUM(ml.credit) AS credit,
+            SUM(ml.balance) AS balance
+        FROM
+            accounts a
+        INNER JOIN
+            account_account_type at ON a.user_type_id = at.id
+        INNER JOIN
+            account_move_line ml
+                ON a.id = ml.account_id
+                AND ml.date <= %s
+                AND
+                    (
+                        at.include_initial_balance != TRUE AND ml.date >= %s
+                        OR at.include_initial_balance = TRUE
+                    )
+        """
+        if self.only_posted_moves:
+            subquery_sum_amounts += """
+        INNER JOIN
+            account_move m ON ml.move_id = m.id AND m.state = 'posted'
+            """
+        subquery_sum_amounts += """
+        GROUP BY
+            a.id
+        """
+        query_inject_account = """
+WITH
+    accounts AS
+        (
+            SELECT
+                a.id,
+                a.code,
+                a.name,
+                a.internal_type IN ('payable', 'receivable')
+                    AS is_partner_account,
+                a.user_type_id
+            FROM
+                account_account a
+            """
+        if self.filter_partner_ids:
+            query_inject_account += """
+            INNER JOIN
+                account_move_line ml ON a.id = ml.account_id
+            INNER JOIN
+                res_partner p ON ml.partner_id = p.id
+            """
+        query_inject_account += """
+            WHERE
+                a.company_id = %s
+                    """
+        if self.filter_account_ids:
+            query_inject_account += """
+            AND
+                a.id IN %s
+            """
+        if self.filter_partner_ids:
+            query_inject_account += """
+            AND
+                p.id IN %s
+            GROUP BY
+                a.id
+            """
+        query_inject_account += """
+        ),
+    initial_sum_amounts AS ( """ + subquery_sum_amounts + """ ),
+    final_sum_amounts AS ( """ + subquery_sum_amounts + """ )
+INSERT INTO
+    report_general_ledger_qweb_account
+    (
+    report_id,
+    create_uid,
+    create_date,
+    account_id,
+    code,
+    name,
+    initial_debit,
+    initial_credit,
+    initial_balance,
+    final_debit,
+    final_credit,
+    final_balance,
+    is_partner_account
+    )
+SELECT
+    %s AS report_id,
+    %s AS create_uid,
+    NOW() AS create_date,
+    a.id AS account_id,
+    a.code,
+    a.name,
+    COALESCE(i.debit, 0.0) AS initial_debit,
+    COALESCE(i.credit, 0.0) AS initial_credit,
+    COALESCE(i.balance, 0.0) AS initial_balance,
+    COALESCE(f.debit, 0.0) AS final_debit,
+    COALESCE(f.credit, 0.0) AS final_credit,
+    COALESCE(f.balance, 0.0) AS final_balance,
+    a.is_partner_account
+FROM
+    accounts a
+LEFT JOIN
+    initial_sum_amounts i ON a.id = i.account_id
+LEFT JOIN
+    final_sum_amounts f ON a.id = f.account_id
+WHERE
+    (
+        i.debit IS NOT NULL AND i.debit != 0
+        OR i.credit IS NOT NULL AND i.credit != 0
+        OR i.balance IS NOT NULL AND i.balance != 0
+        OR f.debit IS NOT NULL AND f.debit != 0
+        OR f.credit IS NOT NULL AND f.credit != 0
+        OR f.balance IS NOT NULL AND f.balance != 0
+    )
+        """
+        if self.hide_account_balance_at_0:
+            query_inject_account += """
+AND
+    f.balance IS NOT NULL AND f.balance != 0
+            """
+        query_inject_account_params = (
+            self.company_id.id,
+        )
+        if self.filter_account_ids:
+            query_inject_account_params += (
+                tuple(self.filter_account_ids.ids),
+            )
+        if self.filter_partner_ids:
+            query_inject_account_params += (
+                tuple(self.filter_partner_ids.ids),
+            )
+        query_inject_account_params += (
+            self.date_from,
+            self.fy_start_date,
+            self.date_to,
+            self.fy_start_date,
+            self.id,
+            self.env.uid,
+        )
+        self.env.cr.execute(query_inject_account, query_inject_account_params)
+
+    def inject_partner_values(self):
+        subquery_sum_amounts = """
+            SELECT
+                ap.account_id AS account_id,
+                ap.partner_id AS partner_id,
+                SUM(ml.debit) AS debit,
+                SUM(ml.credit) AS credit,
+                SUM(ml.balance) AS balance
+            FROM
+                accounts_partners ap
+            INNER JOIN
+                account_move_line ml
+                    ON ap.account_id = ml.account_id
+                    AND (
+                        ap.partner_id = ml.partner_id
+                        OR ap.partner_id IS NULL AND ml.partner_id IS NULL
+                        )
+                    AND ml.date <= %s
+                    AND (
+                        ap.include_initial_balance != TRUE AND ml.date >= %s
+                        OR ap.include_initial_balance = TRUE
+                        )
+        """
+        if self.only_posted_moves:
+            subquery_sum_amounts += """
+            INNER JOIN
+                account_move m ON ml.move_id = m.id AND m.state = 'posted'
+            """
+        subquery_sum_amounts += """
+            GROUP BY
+                ap.account_id, ap.partner_id
+        """
+        query_inject_partner = """
+WITH
+    accounts_partners AS
+        (
+            SELECT
+                ra.id AS report_account_id,
+                a.id AS account_id,
+                at.include_initial_balance AS include_initial_balance,
+                p.id AS partner_id,
+                COALESCE(
+                    CASE
+                        WHEN
+                            NULLIF(p.name, '') IS NOT NULL
+                            AND NULLIF(p.ref, '') IS NOT NULL
+                        THEN p.name || ' (' || p.ref || ')'
+                        ELSE p.name
+                    END,
+                    'No partner allocated'
+                ) AS partner_name
+            FROM
+                report_general_ledger_qweb_account ra
+            INNER JOIN
+                account_account a ON ra.account_id = a.id
+            INNER JOIN
+                account_account_type at ON a.user_type_id = at.id
+            INNER JOIN
+                account_move_line ml ON a.id = ml.account_id
+            LEFT JOIN
+                res_partner p ON ml.partner_id = p.id
+            WHERE
+                ra.report_id = %s
+            AND
+                ra.is_partner_account = TRUE
+                        """
+        if self.centralize:
+            query_inject_partner += """
+            AND
+                (a.centralized IS NULL OR a.centralized != TRUE)
+                    """
+        if self.filter_partner_ids:
+            query_inject_partner += """
+            AND
+                p.id IN %s
+            """
+        query_inject_partner += """
+            GROUP BY
+                ra.id,
+                a.id,
+                p.id,
+                at.include_initial_balance
+        ),
+    initial_sum_amounts AS ( """ + subquery_sum_amounts + """ ),
+    final_sum_amounts AS ( """ + subquery_sum_amounts + """ )
+INSERT INTO
+    report_general_ledger_qweb_partner
+    (
+    report_account_id,
+    create_uid,
+    create_date,
+    partner_id,
+    name,
+    initial_debit,
+    initial_credit,
+    initial_balance,
+    final_debit,
+    final_credit,
+    final_balance
+    )
+SELECT
+    ap.report_account_id,
+    %s AS create_uid,
+    NOW() AS create_date,
+    ap.partner_id,
+    ap.partner_name,
+    COALESCE(i.debit, 0.0) AS initial_debit,
+    COALESCE(i.credit, 0.0) AS initial_credit,
+    COALESCE(i.balance, 0.0) AS initial_balance,
+    COALESCE(f.debit, 0.0) AS final_debit,
+    COALESCE(f.credit, 0.0) AS final_credit,
+    COALESCE(f.balance, 0.0) AS final_balance
+FROM
+    accounts_partners ap
+LEFT JOIN
+    initial_sum_amounts i
+        ON
+            (
+                ap.partner_id = i.partner_id
+                OR ap.partner_id IS NULL AND i.partner_id IS NULL
+            )
+            AND ap.account_id = i.account_id
+LEFT JOIN
+    final_sum_amounts f
+        ON
+            (
+                ap.partner_id = f.partner_id
+                OR ap.partner_id IS NULL AND f.partner_id IS NULL
+            )
+            AND ap.account_id = f.account_id
+WHERE
+    (
+        i.debit IS NOT NULL AND i.debit != 0
+        OR i.credit IS NOT NULL AND i.credit != 0
+        OR i.balance IS NOT NULL AND i.balance != 0
+        OR f.debit IS NOT NULL AND f.debit != 0
+        OR f.credit IS NOT NULL AND f.credit != 0
+        OR f.balance IS NOT NULL AND f.balance != 0
+    )
+        """
+        if self.hide_account_balance_at_0:
+            query_inject_partner += """
+AND
+    f.balance IS NOT NULL AND f.balance != 0
+            """
+        query_inject_partner_params = (
+            self.id,
+        )
+        if self.filter_partner_ids:
+            query_inject_partner_params += (
+                tuple(self.filter_partner_ids.ids),
+            )
+        query_inject_partner_params += (
+            self.date_from,
+            self.fy_start_date,
+            self.date_to,
+            self.fy_start_date,
+            self.env.uid,
+        )
+        print query_inject_partner_params
+        self.env.cr.execute(query_inject_partner, query_inject_partner_params)
+
+    def inject_line_not_centralized_values(self,
+                                           is_account_line=True,
+                                           is_partner_line=False,
+                                           only_empty_partner_line=False):
+        query_inject_move_line = """
+INSERT INTO
+    report_general_ledger_qweb_move_line
+    (
+        """
+        if is_account_line:
+            query_inject_move_line += """
+    report_account_id,
+            """
+        elif is_partner_line:
+            query_inject_move_line += """
+    report_partner_id,
+            """
+        query_inject_move_line += """
+    create_uid,
+    create_date,
+    move_line_id,
+    date,
+    entry,
+    journal,
+    account,
+    partner,
+    label,
+    cost_center,
+    matching_number,
+    debit,
+    credit,
+    cumul_balance,
+    currency_name,
+    amount_currency
+    )
+SELECT
+        """
+        if is_account_line:
+            query_inject_move_line += """
+    ra.id AS report_account_id,
+            """
+        elif is_partner_line:
+            query_inject_move_line += """
+    rp.id AS report_partner_id,
+            """
+        query_inject_move_line += """
+    %s AS create_uid,
+    NOW() AS create_date,
+    ml.id AS move_line_id,
+    ml.date,
+    m.name AS entry,
+    j.code AS journal,
+    a.code AS account,
+        """
+        if not only_empty_partner_line:
+            query_inject_move_line += """
+    CASE
+        WHEN
+            NULLIF(p.name, '') IS NOT NULL
+            AND NULLIF(p.ref, '') IS NOT NULL
+        THEN p.name || ' (' || p.ref || ')'
+        ELSE p.name
+    END AS partner,
+            """
+        elif only_empty_partner_line:
+            query_inject_move_line += """
+    'No partner allocated' AS partner,
+            """
+        query_inject_move_line += """
+    CONCAT_WS(' - ', NULLIF(ml.ref, ''), NULLIF(ml.name, '')) AS label,
+    aa.name AS cost_center,
+    fr.name AS matching_number,
+    ml.debit,
+    ml.credit,
+        """
+        if is_account_line:
+            query_inject_move_line += """
+    ra.initial_balance + (
+        SUM(ml.balance)
+        OVER (PARTITION BY a.code
+              ORDER BY a.code, ml.date, ml.id)
+    ) AS cumul_balance,
+            """
+        elif is_partner_line and not only_empty_partner_line:
+            query_inject_move_line += """
+    rp.initial_balance + (
+        SUM(ml.balance)
+        OVER (PARTITION BY a.code, p.name
+              ORDER BY a.code, p.name, ml.date, ml.id)
+    ) AS cumul_balance,
+            """
+        elif is_partner_line and only_empty_partner_line:
+            query_inject_move_line += """
+    rp.initial_balance + (
+        SUM(ml.balance)
+        OVER (PARTITION BY a.code
+              ORDER BY a.code, ml.date, ml.id)
+    ) AS cumul_balance,
+            """
+        query_inject_move_line += """
+    c.name AS currency_name,
+    ml.amount_currency
+FROM
+        """
+        if is_account_line:
+            query_inject_move_line += """
+    report_general_ledger_qweb_account ra
+            """
+        elif is_partner_line:
+            query_inject_move_line += """
+    report_general_ledger_qweb_partner rp
+INNER JOIN
+    report_general_ledger_qweb_account ra ON rp.report_account_id = ra.id
+            """
+        query_inject_move_line += """
+INNER JOIN
+    account_move_line ml ON ra.account_id = ml.account_id
+INNER JOIN
+    account_move m ON ml.move_id = m.id
+INNER JOIN
+    account_journal j ON ml.journal_id = j.id
+INNER JOIN
+    account_account a ON ml.account_id = a.id
+        """
+        if is_account_line:
+            query_inject_move_line += """
+LEFT JOIN
+    res_partner p ON ml.partner_id = p.id
+            """
+        elif is_partner_line and not only_empty_partner_line:
+            query_inject_move_line += """
+INNER JOIN
+    res_partner p
+        ON ml.partner_id = p.id AND rp.partner_id = p.id
+            """
+        query_inject_move_line += """
+LEFT JOIN
+    account_full_reconcile fr ON ml.full_reconcile_id = fr.id
+LEFT JOIN
+    res_currency c ON a.currency_id = c.id
+LEFT JOIN
+    account_analytic_account aa ON ml.analytic_account_id = aa.id
+WHERE
+    ra.report_id = %s
+AND
+        """
+        if is_account_line:
+            query_inject_move_line += """
+    (ra.is_partner_account IS NULL OR ra.is_partner_account != TRUE)
+            """
+        elif is_partner_line:
+            query_inject_move_line += """
+    ra.is_partner_account = TRUE
+            """
+        if self.centralize:
+            query_inject_move_line += """
+AND
+    (a.centralized IS NULL OR a.centralized != TRUE)
+            """
+        query_inject_move_line += """
+AND
+    ml.date BETWEEN %s AND %s
+        """
+        if self.only_posted_moves:
+            query_inject_move_line += """
+AND
+    m.state = 'posted'
+        """
+        if only_empty_partner_line:
+            query_inject_move_line += """
+AND
+    ml.partner_id IS NULL
+AND
+    rp.partner_id IS NULL
+        """
+        if is_account_line:
+            query_inject_move_line += """
+ORDER BY
+    a.code, ml.date, ml.id
+            """
+        elif is_partner_line and not only_empty_partner_line:
+            query_inject_move_line += """
+ORDER BY
+    a.code, p.name, ml.date, ml.id
+            """
+        elif is_partner_line and only_empty_partner_line:
+            query_inject_move_line += """
+ORDER BY
+    a.code, ml.date, ml.id
+            """
+        self.env.cr.execute(
+            query_inject_move_line,
+            (self.env.uid,
+             self.id,
+             self.date_from,
+             self.date_to,)
+        )
+
+    def inject_line_centralized_values(self):
+        query_inject_move_line_centralized = """
+WITH
+    move_lines AS
+        (
+            SELECT
+                ml.account_id,
+                (
+                    DATE_TRUNC('month', ml.date) + interval '1 month'
+                                                 - interval '1 day'
+                )::date AS date,
+                SUM(ml.debit) AS debit,
+                SUM(ml.credit) AS credit,
+                SUM(ml.balance) AS balance
+            FROM
+                report_general_ledger_qweb_account ra
+            INNER JOIN
+                account_move_line ml ON ra.account_id = ml.account_id
+            INNER JOIN
+                account_move m ON ml.move_id = m.id
+            INNER JOIN
+                account_account a ON ml.account_id = a.id
+            WHERE
+                ra.report_id = %s
+            AND
+                a.centralized = TRUE
+            AND
+                ml.date BETWEEN %s AND %s
+        """
+        if self.only_posted_moves:
+            query_inject_move_line_centralized += """
+            AND
+                m.state = 'posted'
+            """
+        query_inject_move_line_centralized += """
+            GROUP BY
+                ra.id, ml.account_id, a.code, 2
+        )
+INSERT INTO
+    report_general_ledger_qweb_move_line
+    (
+    report_account_id,
+    create_uid,
+    create_date,
+    date,
+    account,
+    label,
+    debit,
+    credit,
+    cumul_balance
+    )
+SELECT
+    ra.id AS report_account_id,
+    %s AS create_uid,
+    NOW() AS create_date,
+    ml.date,
+    a.code AS account,
+    'Centralized Entries' AS label,
+    ml.debit AS debit,
+    ml.credit AS credit,
+    ra.initial_balance + (
+        SUM(ml.balance)
+        OVER (PARTITION BY a.code ORDER BY ml.date)
+    ) AS cumul_balance
+FROM
+    report_general_ledger_qweb_account ra
+INNER JOIN
+    move_lines ml ON ra.account_id = ml.account_id
+INNER JOIN
+    account_account a ON ml.account_id = a.id
+LEFT JOIN
+    res_currency c ON a.currency_id = c.id
+WHERE
+    ra.report_id = %s
+AND
+    (a.centralized IS NOT NULL AND a.centralized = TRUE)
+ORDER BY
+    a.code, ml.date
+        """
+        self.env.cr.execute(
+            query_inject_move_line_centralized,
+            (self.id,
+             self.date_from,
+             self.date_to,
+             self.env.uid,
+             self.id,)
+        )
+
+    def compute_has_second_currency(self):
+        query_update_has_second_currency = """
+UPDATE
+    report_general_ledger_qweb
+SET
+    has_second_currency =
+        (
+            SELECT
+                TRUE
+            FROM
+                report_general_ledger_qweb_move_line l
+            INNER JOIN
+                report_general_ledger_qweb_account a
+                    ON l.report_account_id = a.id
+            WHERE
+                a.report_id = %s
+            AND l.currency_name IS NOT NULL
+            LIMIT 1
+        )
+        OR
+        (
+            SELECT
+                TRUE
+            FROM
+                report_general_ledger_qweb_move_line l
+            INNER JOIN
+                report_general_ledger_qweb_partner p
+                    ON l.report_partner_id = p.id
+            INNER JOIN
+                report_general_ledger_qweb_account a
+                    ON p.report_account_id = a.id
+            WHERE
+                a.report_id = %s
+            AND l.currency_name IS NOT NULL
+            LIMIT 1
+        )
+WHERE id = %s
+        """
+        params = (self.id,) * 3
+        self.env.cr.execute(query_update_has_second_currency, params)

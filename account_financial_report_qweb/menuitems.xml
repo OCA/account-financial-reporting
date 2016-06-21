@@ -6,18 +6,13 @@
             parent="account.menu_finance_reports"
             id="menu_oca_reports"
             name="OCA reports"
+            groups="account.group_account_manager,account.group_account_user"
             />
 
         <menuitem
             parent="menu_oca_reports"
-            action="action_ledger_report_wizard"
-            id="menu_ledger_report_wizard"
-            />
-
-        <menuitem
-            parent="menu_oca_reports"
-            action="action_partner_ledger_report_wizard"
-            id="menu_partner_ledger_report_wizard"
+            action="action_general_ledger_wizard"
+            id="menu_general_ledger_wizard"
             />
 
         <menuitem
