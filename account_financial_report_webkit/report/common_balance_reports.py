@@ -314,7 +314,8 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
             for comp_account_by_id in comp_accounts_by_ids:
                 values = comp_account_by_id.get(account.id)
                 values.update(
-                    self._get_diff(account.balance, values['balance']))
+                    self._get_diff(balance_accounts[account.id],
+                                   values['balance']))
                 display_account = any((values.get('credit', 0.0),
                                        values.get('debit', 0.0),
                                        values.get('balance', 0.0),

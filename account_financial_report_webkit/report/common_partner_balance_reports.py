@@ -319,7 +319,7 @@ class CommonPartnerBalanceReportHeaderWebkit(CommonBalanceReportHeaderWebkit,
                 values = comp_account_by_id.get(account.id)
 
                 values['account'].update(
-                    self._get_diff(account.balance,
+                    self._get_diff(balance_accounts[account.id],
                                    values['account'].get('balance', 0.0)))
                 comp_accounts.append(values)
 
