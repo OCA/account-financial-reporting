@@ -33,9 +33,12 @@
         <menuitem icon="STOCK_PRINT" name="Profit &amp; Loss"
               parent="menu_oca_reports" action="action_account_profit_loss_wizard_view"
               groups="account.group_account_manager,account.group_account_user" id="menu_account_profit_loss_report"/>
-        <menuitem icon="STOCK_PRINT" name="Open Invoices"
-              parent="menu_oca_reports" action="action_open_invoice_report"
-              groups="account.group_account_manager,account.group_account_user" id="menu_invoice_report_wizard"/>
+
+        <menuitem
+            parent="menu_oca_reports"
+            action='action_open_invoice_wizard'
+            id='menu_open_invoice_wizard'
+            />
 
     </data>
 </openerp>
