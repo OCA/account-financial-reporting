@@ -1,66 +1,75 @@
 # -*- coding: utf-8 -*-
 # Author: Damien Crier, Andrea Stirpe, Kevin Graveman, Dennis Sluijk
+# Author: Julien Coux
 # Copyright 2016 Camptocamp SA, Onestein B.V.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from datetime import datetime
-from openerp.exceptions import Warning as UserError
 from openerp import api, fields, models
 
 
-class AccountAgedTrialBalance(models.TransientModel):
+class AgedPartnerBalance(models.TransientModel):
+    """Aged partner balance report wizard."""
 
-    _name = 'account.aged.trial.balance.wizard'
-    _description = 'Aged partner balanced'
+    _name = 'aged.partner.balance.wizard'
+    _description = 'Aged Partner Balance Wizard'
 
     company_id = fields.Many2one(
-        'res.company',
-        string='Company',
-        required=True,
-        default=lambda s: s.env.user.company_id
+        comodel_name='res.company',
+        default=lambda self: self.env.user.company_id
     )
+    date_at = fields.Date(required=True,
+                          default=fields.Date.to_string(datetime.today()))
     target_move = fields.Selection([('posted', 'All Posted Entries'),
                                     ('all', 'All Entries')],
                                    string='Target Moves',
                                    required=True,
-                                   default='posted')
-    result_selection = fields.Selection(
-        [('customer', 'Receivable Accounts'),
-         ('supplier', 'Payable Accounts'),
-         ('customer_supplier', 'Receivable and Payable Accounts')
-         ],
-        string="Partner's",
-        default='customer')
+                                   default='all')
+    account_ids = fields.Many2many(
+        comodel_name='account.account',
+        string='Filter accounts',
+    )
+    receivable_accounts_only = fields.Boolean()
+    payable_accounts_only = fields.Boolean()
     partner_ids = fields.Many2many(
-        'res.partner',
+        comodel_name='res.partner',
         string='Filter partners',
     )
-    at_date = fields.Date(
-        required=True,
-        default=fields.Date.to_string(datetime.today()))
-    until_date = fields.Date(
-        "Clearance date", required=True,
-        help="""The clearance date is essentially a tool used for debtors
-        provisionning calculation.
-        By default, this date is equal to the the end date (
-        ie: 31/12/2011 if you select fy 2011).
-        By amending the clearance date, you will be, for instance,
-        able to answer the question : 'based on my last
-        year end debtors open invoices, which invoices are still
-        unpaid today (today is my clearance date)?'""")
+    show_move_line_details = fields.Boolean()
 
-    @api.onchange('at_date')
-    def onchange_atdate(self):
-        self.until_date = self.at_date
+    @api.onchange('date_range_id')
+    def onchange_date_range_id(self):
+        """Handle date range change."""
+        self.date_at = self.date_range_id.date_end
+        if self.date_range_id.date_start:
+            self.fy_start_date = self.env.user.company_id.find_daterange_fy(
+                fields.Date.from_string(self.date_range_id.date_start)
+            ).date_start
 
-    @api.onchange('until_date')
-    def onchange_untildate(self):
-        # ---- until_date must be always >= of at_date
-        if self.until_date:
-            if self.until_date < self.at_date:
-                raise UserError(
-                    'Until Date must be equal or greater than At Date')
+    @api.onchange('receivable_accounts_only', 'payable_accounts_only')
+    def onchange_type_accounts_only(self):
+        """Handle receivable/payable accounts only change."""
+        if self.receivable_accounts_only or self.payable_accounts_only:
+            domain = []
+            if self.receivable_accounts_only and self.payable_accounts_only:
+                domain += [('internal_type', 'in', ('receivable', 'payable'))]
+            elif self.receivable_accounts_only:
+                domain += [('internal_type', '=', 'receivable')]
+            elif self.payable_accounts_only:
+                domain += [('internal_type', '=', 'payable')]
+            self.account_ids = self.env['account.account'].search(domain)
+        else:
+            self.account_ids = None
 
     @api.multi
-    def check_report(self):
-        return True
+    def button_export_pdf(self):
+        model = self.env['report_aged_partner_balance_qweb']
+        report = model.create({
+            'date_at': self.date_at,
+            'only_posted_moves': self.target_move == 'posted',
+            'company_id': self.company_id.id,
+            'filter_account_ids': [(6, 0, self.account_ids.ids)],
+            'filter_partner_ids': [(6, 0, self.partner_ids.ids)],
+            'show_move_line_details': self.show_move_line_details,
+        })
+        return report.print_report()

@@ -29,6 +29,7 @@
         'wizard/balance_sheet_wizard_view.xml',
         'menuitems.xml',
         'reports.xml',
+        'report/templates/aged_partner_balance.xml',
         'report/templates/general_ledger.xml',
         'report/templates/layouts.xml',
         'report/templates/open_invoice_report.xml',
