@@ -2,31 +2,35 @@
 <openerp>
     <data>
 
-        <record id="account_aged_trial_balance_wizard" model="ir.ui.view">
-            <field name="name">Aged Partner Balance Report</field>
-            <field name="model">account.aged.trial.balance.wizard</field>
+        <!-- AGED PARTNER BALANCE -->
+        <record id="aged_partner_balance_wizard" model="ir.ui.view">
+            <field name="name">Aged Partner Balance</field>
+            <field name="model">aged.partner.balance.wizard</field>
             <field name="arch" type="xml">
                 <form>
                     <group name="main_info">
-                        <field name="company_id"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
                     </group>
-                    <group name="date_info">
-                        <field name="at_date"/>
-                        <field name="until_date"/>
-                    </group>
-                    <group name="other_filters">
-                        <group name="moves">
+                    <group name="filters">
+                        <group name="date_ranger">
+                            <field name="date_at"/>
+                        </group>
+                        <group name="other_filters">
                             <field name="target_move" widget="radio"/>
-                        </group>
-                        <group name="result_select">
-                            <field name="result_selection" widget="radio"/>
+                            <field name="show_move_line_details"/>
                         </group>
                     </group>
-                    <group name="partner_info">
-                        <field name="partner_ids"/>
+                    <label for="partner_ids"/>
+                    <field name="partner_ids" nolabel="1"/>
+                    <group/>
+                    <label for="account_ids"/>
+                    <group col="4">
+                        <field name="receivable_accounts_only"/>
+                        <field name="payable_accounts_only"/>
                     </group>
+                    <field name="account_ids" nolabel="1"/>
                     <footer>
-                        <button name="check_report" string="Print" type="object" default_focus="1" class="oe_highlight"/>
+                        <button name="button_export_pdf" string="Export PDF" type="object" default_focus="1" class="oe_highlight"/>
                         or
                         <button string="Cancel" class="oe_link" special="cancel" />
                     </footer>
@@ -34,15 +38,15 @@
             </field>
         </record>
 
-        <record id="action_account_aged_trial_balance_wizard"
-                model="ir.actions.act_window">
+        <record id="action_aged_partner_balance_wizard" model="ir.actions.act_window">
             <field name="name">Aged Partner Balance</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">account.aged.trial.balance.wizard</field>
+            <field name="res_model">aged.partner.balance.wizard</field>
             <field name="view_type">form</field>
             <field name="view_mode">form</field>
-            <field name="view_id" ref="account_aged_trial_balance_wizard"/>
+            <field name="view_id" ref="aged_partner_balance_wizard"/>
             <field name="target">new</field>
         </record>
+
     </data>
 </openerp>
