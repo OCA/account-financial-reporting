@@ -94,3 +94,19 @@ class GeneralLedgerReportWizard(models.TransientModel):
             'fy_start_date': self.fy_start_date,
         })
         return report.print_report()
+
+    @api.multi
+    def button_export_xlsx(self):
+        model = self.env['report_general_ledger_qweb']
+        report = model.create({
+            'date_from': self.date_from,
+            'date_to': self.date_to,
+            'only_posted_moves': self.target_move == 'posted',
+            'hide_account_balance_at_0': self.hide_account_balance_at_0,
+            'company_id': self.company_id.id,
+            'filter_account_ids': [(6, 0, self.account_ids.ids)],
+            'filter_partner_ids': [(6, 0, self.partner_ids.ids)],
+            'centralize': self.centralize,
+            'fy_start_date': self.fy_start_date,
+        })
+        return report.print_report_xlsx()

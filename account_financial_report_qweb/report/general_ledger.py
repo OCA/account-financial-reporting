@@ -153,6 +153,26 @@ class GeneralLedgerReportCompute(models.TransientModel):
         }
 
     @api.model
+    def print_report_xlsx(self):
+        self.ensure_one()
+        self.compute_data_for_report()
+
+        return {
+            'type': 'ir.actions.report.xml',
+            'name': 'export xlsx general ledger',
+            'model': self._name,
+            'report_name': 'ledger.report.wizard.xlsx',
+            'report_type': 'xlsx',
+            'context': self.env.context,
+            'datas': {'ids': [self.id]},
+        }
+
+    @api.multi
+    def _print_report_xlsx(self, data):
+        return
+
+
+    @api.model
     def compute_data_for_report(self):
         self.ensure_one()
 
