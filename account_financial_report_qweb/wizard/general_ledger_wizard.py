@@ -81,22 +81,16 @@ class GeneralLedgerReportWizard(models.TransientModel):
 
     @api.multi
     def button_export_pdf(self):
-        model = self.env['report_general_ledger_qweb']
-        report = model.create({
-            'date_from': self.date_from,
-            'date_to': self.date_to,
-            'only_posted_moves': self.target_move == 'posted',
-            'hide_account_balance_at_0': self.hide_account_balance_at_0,
-            'company_id': self.company_id.id,
-            'filter_account_ids': [(6, 0, self.account_ids.ids)],
-            'filter_partner_ids': [(6, 0, self.partner_ids.ids)],
-            'centralize': self.centralize,
-            'fy_start_date': self.fy_start_date,
-        })
-        return report.print_report()
+        self.ensure_one()
+        return self._export()
 
     @api.multi
     def button_export_xlsx(self):
+        self.ensure_one()
+        return self._export(xlsx_report=True)
+
+    def _export(self, xlsx_report=False):
+        """Default export is PDF."""
         model = self.env['report_general_ledger_qweb']
         report = model.create({
             'date_from': self.date_from,
@@ -109,4 +103,4 @@ class GeneralLedgerReportWizard(models.TransientModel):
             'centralize': self.centralize,
             'fy_start_date': self.fy_start_date,
         })
-        return report.print_report_xlsx()
+        return report.print_report(xlsx_report)
