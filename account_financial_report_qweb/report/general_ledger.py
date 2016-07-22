@@ -8,10 +8,22 @@ from openerp import models, fields, api
 class GeneralLedgerReport(models.TransientModel):
     """ Here, we just define class fields.
     For methods, go more bottom at this file.
+
+    The class hierarchy is :
+    * GeneralLedgerReport
+    ** GeneralLedgerReportAccount
+    *** GeneralLedgerReportMoveLine
+            For non receivable/payable accounts
+            For receivable/payable centralized accounts
+    *** GeneralLedgerReportPartner
+            For receivable/payable and not centralized accounts
+    **** GeneralLedgerReportMoveLine
+            For receivable/payable and not centralized accounts
     """
 
     _name = 'report_general_ledger_qweb'
 
+    # Filters fields, used for data computation
     date_from = fields.Date()
     date_to = fields.Date()
     fy_start_date = fields.Date()
@@ -20,14 +32,17 @@ class GeneralLedgerReport(models.TransientModel):
     company_id = fields.Many2one(comodel_name='res.company')
     filter_account_ids = fields.Many2many(comodel_name='account.account')
     filter_partner_ids = fields.Many2many(comodel_name='res.partner')
-    has_second_currency = fields.Boolean()
     centralize = fields.Boolean()
+
+    # Flag fields, used for report display
+    has_second_currency = fields.Boolean()
     show_cost_center = fields.Boolean(
         default=lambda self: self.env.user.has_group(
             'analytic.group_analytic_accounting'
         )
     )
 
+    # Data fields, used to browse report data
     account_ids = fields.One2many(
         comodel_name='report_general_ledger_qweb_account',
         inverse_name='report_id'
@@ -44,10 +59,14 @@ class GeneralLedgerReportAccount(models.TransientModel):
         ondelete='cascade',
         index=True
     )
+
+    # Data fields, used to keep link with real object
     account_id = fields.Many2one(
         'account.account',
         index=True
     )
+
+    # Data fields, used for report display
     code = fields.Char()
     name = fields.Char()
     initial_debit = fields.Float(digits=(16, 2))
@@ -56,8 +75,11 @@ class GeneralLedgerReportAccount(models.TransientModel):
     final_debit = fields.Float(digits=(16, 2))
     final_credit = fields.Float(digits=(16, 2))
     final_balance = fields.Float(digits=(16, 2))
+
+    # Flag fields, used for report display and for data computation
     is_partner_account = fields.Boolean()
 
+    # Data fields, used to browse report data
     move_line_ids = fields.One2many(
         comodel_name='report_general_ledger_qweb_move_line',
         inverse_name='report_account_id'
@@ -77,10 +99,14 @@ class GeneralLedgerReportPartner(models.TransientModel):
         ondelete='cascade',
         index=True
     )
+
+    # Data fields, used to keep link with real object
     partner_id = fields.Many2one(
         'res.partner',
         index=True
     )
+
+    # Data fields, used for report display
     name = fields.Char()
     initial_debit = fields.Float(digits=(16, 2))
     initial_credit = fields.Float(digits=(16, 2))
@@ -89,6 +115,7 @@ class GeneralLedgerReportPartner(models.TransientModel):
     final_credit = fields.Float(digits=(16, 2))
     final_balance = fields.Float(digits=(16, 2))
 
+    # Data fields, used to browse report data
     move_line_ids = fields.One2many(
         comodel_name='report_general_ledger_qweb_move_line',
         inverse_name='report_partner_id'
@@ -96,14 +123,15 @@ class GeneralLedgerReportPartner(models.TransientModel):
 
     @api.model
     def _generate_order_by(self, order_spec, query):
+        """Custom order to display "No partner allocated" at last position."""
         return """
 ORDER BY
-CASE
-    WHEN "report_general_ledger_qweb_partner"."partner_id" IS NOT NULL
-    THEN 0
-    ELSE 1
+    CASE
+        WHEN "report_general_ledger_qweb_partner"."partner_id" IS NOT NULL
+        THEN 0
+        ELSE 1
     END,
-"report_general_ledger_qweb_partner"."name"
+    "report_general_ledger_qweb_partner"."name"
         """
 
 
@@ -121,7 +149,11 @@ class GeneralLedgerReportMoveLine(models.TransientModel):
         ondelete='cascade',
         index=True
     )
+
+    # Data fields, used to keep link with real object
     move_line_id = fields.Many2one('account.move.line')
+
+    # Data fields, used for report display
     date = fields.Date()
     entry = fields.Char()
     journal = fields.Char()
@@ -138,57 +170,46 @@ class GeneralLedgerReportMoveLine(models.TransientModel):
 
 
 class GeneralLedgerReportCompute(models.TransientModel):
+    """ Here, we just define methods.
+    For class fields, go more top at this file.
+    """
 
     _inherit = 'report_general_ledger_qweb'
 
-    @api.model
-    def print_report(self):
+    @api.multi
+    def print_report(self, xlsx_report=False):
         self.ensure_one()
         self.compute_data_for_report()
+        if xlsx_report:
+            report_name = 'ledger.report.wizard.xlsx'
+        else:
+            report_name = 'account_financial_report_qweb.' \
+                          'report_general_ledger_qweb'
         return {
             'type': 'ir.actions.report.xml',
-            'report_name':
-                'account_financial_report_qweb.report_general_ledger_qweb',
-            'datas': {'ids': [self.id]},
-        }
-
-    @api.model
-    def print_report_xlsx(self):
-        self.ensure_one()
-        self.compute_data_for_report()
-
-        return {
-            'type': 'ir.actions.report.xml',
-            'name': 'export xlsx general ledger',
-            'model': self._name,
-            'report_name': 'ledger.report.wizard.xlsx',
-            'report_type': 'xlsx',
-            'context': self.env.context,
+            'report_name': report_name,
             'datas': {'ids': [self.id]},
         }
 
     @api.multi
-    def _print_report_xlsx(self, data):
-        return
-
-
-    @api.model
     def compute_data_for_report(self):
         self.ensure_one()
-
-        self.inject_account_values()
-        self.inject_partner_values()
-        self.inject_line_not_centralized_values()
-        self.inject_line_not_centralized_values(is_account_line=False,
-                                                is_partner_line=True)
-        self.inject_line_not_centralized_values(is_account_line=False,
-                                                is_partner_line=True,
-                                                only_empty_partner_line=True)
+        # Compute report data
+        self._inject_account_values()
+        self._inject_partner_values()
+        self._inject_line_not_centralized_values()
+        self._inject_line_not_centralized_values(is_account_line=False,
+                                                 is_partner_line=True)
+        self._inject_line_not_centralized_values(is_account_line=False,
+                                                 is_partner_line=True,
+                                                 only_empty_partner_line=True)
         if self.centralize:
-            self.inject_line_centralized_values()
-        self.compute_has_second_currency()
+            self._inject_line_centralized_values()
+        # Compute display flag
+        self._compute_has_second_currency()
 
-    def inject_account_values(self):
+    def _inject_account_values(self):
+        """Inject report values for report_general_ledger_qweb_account."""
         subquery_sum_amounts = """
         SELECT
             a.id AS account_id,
@@ -332,7 +353,11 @@ AND
         )
         self.env.cr.execute(query_inject_account, query_inject_account_params)
 
-    def inject_partner_values(self):
+    def _inject_partner_values(self):
+        """ Inject report values for report_general_ledger_qweb_partner.
+
+        Only for "partner" accounts (payable and receivable).
+        """
         subquery_sum_amounts = """
             SELECT
                 ap.account_id AS account_id,
@@ -494,10 +519,21 @@ AND
         print query_inject_partner_params
         self.env.cr.execute(query_inject_partner, query_inject_partner_params)
 
-    def inject_line_not_centralized_values(self,
-                                           is_account_line=True,
-                                           is_partner_line=False,
-                                           only_empty_partner_line=False):
+    def _inject_line_not_centralized_values(self,
+                                            is_account_line=True,
+                                            is_partner_line=False,
+                                            only_empty_partner_line=False):
+        """ Inject report values for report_general_ledger_qweb_move_line.
+
+        If centralized option have been chosen,
+        only non centralized accounts are computed.
+
+        In function of `is_account_line` and `is_partner_line` values,
+        the move_line link is made either with account or either with partner.
+
+        The "only_empty_partner_line" value is used
+        to compute data without partner.
+        """
         query_inject_move_line = """
 INSERT INTO
     report_general_ledger_qweb_move_line
@@ -692,7 +728,11 @@ ORDER BY
              self.date_to,)
         )
 
-    def inject_line_centralized_values(self):
+    def _inject_line_centralized_values(self):
+        """ Inject report values for report_general_ledger_qweb_move_line.
+
+        Only centralized accounts are computed.
+        """
         query_inject_move_line_centralized = """
 WITH
     move_lines AS
@@ -780,7 +820,8 @@ ORDER BY
              self.id,)
         )
 
-    def compute_has_second_currency(self):
+    def _compute_has_second_currency(self):
+        """ Compute "has_second_currency" flag which will used for display."""
         query_update_has_second_currency = """
 UPDATE
     report_general_ledger_qweb
