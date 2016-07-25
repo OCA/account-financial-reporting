@@ -1,31 +1,30 @@
 # -*- coding: utf-8 -*-
 # Author: Damien Crier
+# Author: Julien Coux
 # Copyright 2016 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp.addons.report_xlsx.report.report_xlsx import ReportXlsx
+from . import abstract_report_xlsx
 from openerp.report import report_sxw
 
 
-class GeneralLedgerXslx(ReportXlsx):
+class GeneralLedgerXslx(abstract_report_xlsx.AbstractReportXslx):
 
     def __init__(self, name, table, rml=False, parser=False, header=True,
                  store=False):
         super(GeneralLedgerXslx, self).__init__(
             name, table, rml, parser, header, store)
 
-        # Initialisé à None car on ne peut pas les setter pour le moment
-        self.row_pos = None
-        self.format_right = None
-        self.format_blod = None
-        self.format_header_left = None
-        self.format_header_center = None
-        self.format_header_right = None
-        self.format_header_amount = None
-        self.format_amount = None
-        self.sheet = None
+        # Custom values needed to generate report
+        self.col_pos_initial_balance_label = 5
+        self.col_count_final_balance_name = 5
+        self.col_pos_final_balance_label = 5
 
-        self.columns = {
+    def _get_report_name(self):
+        return 'General Ledger'
+
+    def _get_report_columns(self):
+        return {
             0: {'header': 'Date', 'field': 'date', 'width': 11},
             1: {'header': 'Entry', 'field': 'entry', 'width': 18},
             2: {'header': 'Journal', 'field': 'journal', 'width': 8},
@@ -59,22 +58,8 @@ class GeneralLedgerXslx(ReportXlsx):
                  'width': 14},
         }
 
-        self.col_pos_initial_balance_label = 5
-        self.col_count_final_balance_name = 5
-
-        self.col_pos_final_balance_label = 5
-
-        self.col_count_filter_name = 2
-        self.col_count_filter_value = 2
-
-        self.column_count = len(self.columns)
-
-    def generate_xlsx_report(self, workbook, data, objects):
-        report = objects
-
-        report_name = 'General Ledger'
-
-        filters = [
+    def _get_report_filters(self, report):
+        return [
             ['Date range filter',
                 'From: '+report.date_from+' To: '+report.date_to],
             ['Target moves filter',
@@ -86,120 +71,59 @@ class GeneralLedgerXslx(ReportXlsx):
                 'Yes' if report.centralize else 'No'],
         ]
 
-        self.row_pos = 0
+    def _get_col_count_filter_name(self):
+        return 2
 
-        self.format_blod = workbook.add_format({'bold': True})
-        self.format_right = workbook.add_format({'align': 'right'})
-        self.format_header_left = workbook.add_format(
-            {'bold': True,
-             'border': True,
-             'bg_color': '#FFFFCC'})
-        self.format_header_center = workbook.add_format(
-            {'bold': True,
-             'align': 'center',
-             'border': True,
-             'bg_color': '#FFFFCC'})
-        self.format_header_right = workbook.add_format(
-            {'bold': True,
-             'align': 'right',
-             'border': True,
-             'bg_color': '#FFFFCC'})
-        self.format_header_amount = workbook.add_format(
-            {'bold': True,
-             'border': True,
-             'bg_color': '#FFFFCC'})
-        self.format_header_amount.set_num_format('#,##0.00')
-        self.format_amount = workbook.add_format()
-        self.format_amount.set_num_format('#,##0.00')
-        std_cell_format = workbook.add_format({'bold': False,
-                                               'align': 'left',
-                                               'border': False,
-                                               'bg_color': '#FFFFFF'})
+    def _get_col_count_filter_value(self):
+        return 2
 
-        self.sheet = workbook.add_worksheet(report_name[:31])
-
-        self.set_column_width()
-
-        self.write_report_title(report_name)
-
-        self.write_filters(filters)
-
+    def _generate_report_content(self, workbook, report):
+        # For each account
         for account in report.account_ids:
+            # Write account title
             self.write_array_title(account.code + ' - ' + account.name)
 
             if account.move_line_ids:
-                self.write_header()
+                # Display array header for move lines
+                self.write_array_header()
+
+                # Display initial balance line for account
                 self.write_initial_balance(account)
+
+                # Display account move lines
                 for line in account.move_line_ids:
                     self.write_line(line)
 
             elif account.is_partner_account:
+                # For each partner
                 for partner in account.partner_ids:
+                    # Write partner title
                     self.write_array_title(partner.name)
 
-                    self.write_header()
+                    # Display array header for move lines
+                    self.write_array_header()
+
+                    # Display initial balance line for partner
                     self.write_initial_balance(partner)
+
+                    # Display account move lines
                     for line in partner.move_line_ids:
                         self.write_line(line)
 
+                    # Display ending balance line for partner
                     self.write_ending_balance(partner, 'partner')
+
+                    # Line break
                     self.row_pos += 1
 
+            # Display ending balance line for account
             self.write_ending_balance(account, 'account')
+
+            # 2 lines break
             self.row_pos += 2
 
-    def set_column_width(self):
-        for position, column in self.columns.iteritems():
-            self.sheet.set_column(position, position, column['width'])
-
-    def write_report_title(self, title):
-        self.sheet.merge_range(
-            self.row_pos, 0, self.row_pos, self.column_count - 1,
-            title, self.format_blod
-        )
-        self.row_pos += 3
-
-    def write_filters(self, filters):
-        col_name = 1
-        col_value = col_name + self.col_count_filter_name + 1
-        for title, value in filters:
-            self.sheet.merge_range(
-                self.row_pos, col_name,
-                self.row_pos, col_name + self.col_count_filter_name - 1,
-                title, self.format_header_left)
-            self.sheet.merge_range(
-                self.row_pos, col_value,
-                self.row_pos, col_value + self.col_count_filter_value - 1,
-                value)
-            self.row_pos += 1
-        self.row_pos += 2
-
-    def write_array_title(self, title):
-        self.sheet.merge_range(
-            self.row_pos, 0, self.row_pos, self.column_count - 1,
-            title, self.format_blod
-        )
-        self.row_pos += 1
-
-    def write_line(self, line_object):
-        for col_pos, column in self.columns.iteritems():
-            value = getattr(line_object, column['field'])
-            cell_type = column.get('type', 'string')
-            if cell_type == 'string':
-                self.sheet.write_string(self.row_pos, col_pos, value or '')
-            elif cell_type == 'amount':
-                self.sheet.write_number(
-                    self.row_pos, col_pos, float(value), self.format_amount
-                )
-        self.row_pos += 1
-
-    def write_header(self):
-        for col_pos, column in self.columns.iteritems():
-            self.sheet.write(self.row_pos, col_pos, column['header'],
-                             self.format_header_center)
-        self.row_pos += 1
-
     def write_initial_balance(self, my_object):
+        """Specific function to write initial balance for General Ledger"""
         col_pos_label = self.col_pos_initial_balance_label
         self.sheet.write(self.row_pos, col_pos_label, 'Initial balance',
                          self.format_right)
@@ -216,13 +140,14 @@ class GeneralLedgerXslx(ReportXlsx):
         self.row_pos += 1
 
     def write_ending_balance(self, my_object, type_object):
+        """Specific function to write ending balance for General Ledger"""
         if type_object == 'partner':
             name = my_object.name
             label = 'Partner ending balance'
         elif type_object == 'account':
             name = my_object.code + ' - ' + my_object.name
             label = 'Ending balance'
-        for i in range(0, self.column_count):
+        for i in range(0, len(self.columns)):
             self.sheet.write(self.row_pos, i, '', self.format_header_right)
         row_count_name = self.col_count_final_balance_name
         row_pos = self.row_pos
