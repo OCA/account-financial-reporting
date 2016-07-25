@@ -63,6 +63,11 @@ class AgedPartnerBalance(models.TransientModel):
 
     @api.multi
     def button_export_pdf(self):
+        self.ensure_one()
+        return self._export()
+
+    def _export(self):
+        """Default export is PDF."""
         model = self.env['report_aged_partner_balance_qweb']
         report = model.create({
             'date_at': self.date_at,
