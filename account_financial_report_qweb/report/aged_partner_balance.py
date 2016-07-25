@@ -8,10 +8,19 @@ from openerp import models, fields, api
 class AgedPartnerBalanceReport(models.TransientModel):
     """ Here, we just define class fields.
     For methods, go more bottom at this file.
+
+    The class hierarchy is :
+    * AgedPartnerBalanceReport
+    ** AgedPartnerBalanceAccount
+    *** AgedPartnerBalancePartner
+    **** AgedPartnerBalanceLine
+    **** AgedPartnerBalanceMoveLine
+            If "show_move_line_details" is selected
     """
 
     _name = 'report_aged_partner_balance_qweb'
 
+    # Filters fields, used for data computation
     date_at = fields.Date()
     only_posted_moves = fields.Boolean()
     company_id = fields.Many2one(comodel_name='res.company')
@@ -19,8 +28,10 @@ class AgedPartnerBalanceReport(models.TransientModel):
     filter_partner_ids = fields.Many2many(comodel_name='res.partner')
     show_move_line_details = fields.Boolean()
 
+    # Open Items Report Data fields, used as base for compute the data reports
     open_items_id = fields.Many2one(comodel_name='report_open_items_qweb')
 
+    # Data fields, used to browse report data
     account_ids = fields.One2many(
         comodel_name='report_aged_partner_balance_qweb_account',
         inverse_name='report_id'
@@ -37,10 +48,14 @@ class AgedPartnerBalanceAccount(models.TransientModel):
         ondelete='cascade',
         index=True
     )
+
+    # Data fields, used to keep link with real object
     account_id = fields.Many2one(
         'account.account',
         index=True
     )
+
+    # Data fields, used for report display
     code = fields.Char()
     name = fields.Char()
 
@@ -59,6 +74,7 @@ class AgedPartnerBalanceAccount(models.TransientModel):
     percent_age_120_days = fields.Float(digits=(16, 2))
     percent_older = fields.Float(digits=(16, 2))
 
+    # Data fields, used to browse report data
     partner_ids = fields.One2many(
         comodel_name='report_aged_partner_balance_qweb_partner',
         inverse_name='report_account_id'
@@ -74,17 +90,21 @@ class AgedPartnerBalancePartner(models.TransientModel):
         ondelete='cascade',
         index=True
     )
+
+    # Data fields, used to keep link with real object
     partner_id = fields.Many2one(
         'res.partner',
         index=True
     )
+
+    # Data fields, used for report display
     name = fields.Char()
 
+    # Data fields, used to browse report data
     move_line_ids = fields.One2many(
         comodel_name='report_aged_partner_balance_qweb_move_line',
         inverse_name='report_partner_id'
     )
-
     line_ids = fields.One2many(
         comodel_name='report_aged_partner_balance_qweb_line',
         inverse_name='report_partner_id'
@@ -92,14 +112,16 @@ class AgedPartnerBalancePartner(models.TransientModel):
 
     @api.model
     def _generate_order_by(self, order_spec, query):
+        """Custom order to display "No partner allocated" at last position."""
         return """
 ORDER BY
-CASE
-    WHEN "report_aged_partner_balance_qweb_partner"."partner_id" IS NOT NULL
-    THEN 0
-    ELSE 1
+    CASE
+        WHEN
+            "report_aged_partner_balance_qweb_partner"."partner_id" IS NOT NULL
+        THEN 0
+        ELSE 1
     END,
-"report_aged_partner_balance_qweb_partner"."name"
+    "report_aged_partner_balance_qweb_partner"."name"
         """
 
 
@@ -112,6 +134,8 @@ class AgedPartnerBalanceLine(models.TransientModel):
         ondelete='cascade',
         index=True
     )
+
+    # Data fields, used for report display
     partner = fields.Char()
     amount_residual = fields.Float(digits=(16, 2))
     current = fields.Float(digits=(16, 2))
@@ -131,7 +155,11 @@ class AgedPartnerBalanceMoveLine(models.TransientModel):
         ondelete='cascade',
         index=True
     )
+
+    # Data fields, used to keep link with real object
     move_line_id = fields.Many2one('account.move.line')
+
+    # Data fields, used for report display
     date = fields.Date()
     date_due = fields.Date()
     entry = fields.Char()
@@ -150,24 +178,30 @@ class AgedPartnerBalanceMoveLine(models.TransientModel):
 
 
 class AgedPartnerBalanceReportCompute(models.TransientModel):
+    """ Here, we just define methods.
+    For class fields, go more top at this file.
+    """
 
     _inherit = 'report_aged_partner_balance_qweb'
 
-    @api.model
+    @api.multi
     def print_report(self):
         self.ensure_one()
         self.compute_data_for_report()
+        report_name = 'account_financial_report_qweb.' \
+                      'report_aged_partner_balance_qweb'
         return {
             'type': 'ir.actions.report.xml',
-            'report_name':
-                'account_financial_report_qweb.'
-                'report_aged_partner_balance_qweb',
+            'report_name': report_name,
             'datas': {'ids': [self.id]},
         }
 
-    @api.model
+    @api.multi
     def compute_data_for_report(self):
         self.ensure_one()
+        # Compute Open Items Report Data.
+        # The data of Aged Partner Balance Report
+        # are based on Open Items Report data.
         model = self.env['report_open_items_qweb']
         self.open_items_id = model.create({
             'date_at': self.date_at,
@@ -178,16 +212,18 @@ class AgedPartnerBalanceReportCompute(models.TransientModel):
         })
         self.open_items_id.compute_data_for_report()
 
-        self.inject_account_values()
-        self.inject_partner_values()
-        self.inject_line_values()
-        self.inject_line_values(only_empty_partner_line=True)
+        # Compute report data
+        self._inject_account_values()
+        self._inject_partner_values()
+        self._inject_line_values()
+        self._inject_line_values(only_empty_partner_line=True)
         if self.show_move_line_details:
-            self.inject_move_line_values()
-            self.inject_move_line_values(only_empty_partner_line=True)
-        self.compute_accounts_cumul()
+            self._inject_move_line_values()
+            self._inject_move_line_values(only_empty_partner_line=True)
+        self._compute_accounts_cumul()
 
-    def inject_account_values(self):
+    def _inject_account_values(self):
+        """Inject report values for report_aged_partner_balance_qweb_account"""
         query_inject_account = """
 INSERT INTO
     report_aged_partner_balance_qweb_account
@@ -218,7 +254,8 @@ WHERE
         )
         self.env.cr.execute(query_inject_account, query_inject_account_params)
 
-    def inject_partner_values(self):
+    def _inject_partner_values(self):
+        """Inject report values for report_aged_partner_balance_qweb_partner"""
         query_inject_partner = """
 INSERT INTO
     report_aged_partner_balance_qweb_partner
@@ -252,7 +289,12 @@ AND ra.report_id = %s
         )
         self.env.cr.execute(query_inject_partner, query_inject_partner_params)
 
-    def inject_line_values(self, only_empty_partner_line=False):
+    def _inject_line_values(self, only_empty_partner_line=False):
+        """ Inject report values for report_aged_partner_balance_qweb_line.
+
+        The "only_empty_partner_line" value is used
+        to compute data without partner.
+        """
         query_inject_line = """
 WITH
     date_range AS
@@ -363,7 +405,12 @@ GROUP BY
         )
         self.env.cr.execute(query_inject_line, query_inject_line_params)
 
-    def inject_move_line_values(self, only_empty_partner_line=False):
+    def _inject_move_line_values(self, only_empty_partner_line=False):
+        """ Inject report values for report_aged_partner_balance_qweb_move_line
+
+        The "only_empty_partner_line" value is used
+        to compute data without partner.
+        """
         query_inject_move_line = """
 WITH
     date_range AS
@@ -473,7 +520,10 @@ AND ra.report_id = %s
         self.env.cr.execute(query_inject_move_line,
                             query_inject_move_line_params)
 
-    def compute_accounts_cumul(self):
+    def _compute_accounts_cumul(self):
+        """ Compute cumulative amount for
+        report_aged_partner_balance_qweb_account.
+        """
         query_compute_accounts_cumul = """
 WITH
     cumuls AS
