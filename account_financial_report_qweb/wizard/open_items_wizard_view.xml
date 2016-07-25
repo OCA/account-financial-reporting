@@ -2,10 +2,10 @@
 <openerp>
     <data>
 
-        <!-- OPEN INVOICE -->
-        <record id="open_invoice_wizard" model="ir.ui.view">
-            <field name="name">Open Invoice</field>
-            <field name="model">open.invoice.report.wizard</field>
+        <!-- OPEN ITEMS -->
+        <record id="open_items_wizard" model="ir.ui.view">
+            <field name="name">Open Items</field>
+            <field name="model">open.items.report.wizard</field>
             <field name="arch" type="xml">
                 <form>
                     <group name="main_info">
@@ -38,13 +38,13 @@
             </field>
         </record>
 
-        <record id="action_open_invoice_wizard" model="ir.actions.act_window">
-            <field name="name">Open Invoice</field>
+        <record id="action_open_items_wizard" model="ir.actions.act_window">
+            <field name="name">Open Items</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">open.invoice.report.wizard</field>
+            <field name="res_model">open.items.report.wizard</field>
             <field name="view_type">form</field>
             <field name="view_mode">form</field>
-            <field name="view_id" ref="open_invoice_wizard"/>
+            <field name="view_id" ref="open_items_wizard"/>
             <field name="target">new</field>
         </record>
 

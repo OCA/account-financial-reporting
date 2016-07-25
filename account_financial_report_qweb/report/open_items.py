@@ -5,95 +5,120 @@
 from openerp import models, fields, api
 
 
-class OpenInvoiceReport(models.TransientModel):
+class OpenItemsReport(models.TransientModel):
     """ Here, we just define class fields.
     For methods, go more bottom at this file.
+
+    The class hierarchy is :
+    * OpenItemsReport
+    ** OpenItemsReportAccount
+    *** OpenItemsReportPartner
+    **** OpenItemsReportMoveLine
     """
 
-    _name = 'report_open_invoice_qweb'
+    _name = 'report_open_items_qweb'
 
+    # Filters fields, used for data computation
     date_at = fields.Date()
     only_posted_moves = fields.Boolean()
     hide_account_balance_at_0 = fields.Boolean()
     company_id = fields.Many2one(comodel_name='res.company')
     filter_account_ids = fields.Many2many(comodel_name='account.account')
     filter_partner_ids = fields.Many2many(comodel_name='res.partner')
+
+    # Flag fields, used for report display
     has_second_currency = fields.Boolean()
 
+    # Data fields, used to browse report data
     account_ids = fields.One2many(
-        comodel_name='report_open_invoice_qweb_account',
+        comodel_name='report_open_items_qweb_account',
         inverse_name='report_id'
     )
 
 
-class OpenInvoiceReportAccount(models.TransientModel):
+class OpenItemsReportAccount(models.TransientModel):
 
-    _name = 'report_open_invoice_qweb_account'
+    _name = 'report_open_items_qweb_account'
     _order = 'code ASC'
 
     report_id = fields.Many2one(
-        comodel_name='report_open_invoice_qweb',
+        comodel_name='report_open_items_qweb',
         ondelete='cascade',
         index=True
     )
+
+    # Data fields, used to keep link with real object
     account_id = fields.Many2one(
         'account.account',
         index=True
     )
+
+    # Data fields, used for report display
     code = fields.Char()
     name = fields.Char()
     final_amount_residual = fields.Float(digits=(16, 2))
 
+    # Data fields, used to browse report data
     partner_ids = fields.One2many(
-        comodel_name='report_open_invoice_qweb_partner',
+        comodel_name='report_open_items_qweb_partner',
         inverse_name='report_account_id'
     )
 
 
-class OpenInvoiceReportPartner(models.TransientModel):
+class OpenItemsReportPartner(models.TransientModel):
 
-    _name = 'report_open_invoice_qweb_partner'
+    _name = 'report_open_items_qweb_partner'
 
     report_account_id = fields.Many2one(
-        comodel_name='report_open_invoice_qweb_account',
+        comodel_name='report_open_items_qweb_account',
         ondelete='cascade',
         index=True
     )
+
+    # Data fields, used to keep link with real object
     partner_id = fields.Many2one(
         'res.partner',
         index=True
     )
+
+    # Data fields, used for report display
     name = fields.Char()
     final_amount_residual = fields.Float(digits=(16, 2))
 
+    # Data fields, used to browse report data
     move_line_ids = fields.One2many(
-        comodel_name='report_open_invoice_qweb_move_line',
+        comodel_name='report_open_items_qweb_move_line',
         inverse_name='report_partner_id'
     )
 
     @api.model
     def _generate_order_by(self, order_spec, query):
+        """Custom order to display "No partner allocated" at last position."""
         return """
 ORDER BY
-CASE
-    WHEN "report_open_invoice_qweb_partner"."partner_id" IS NOT NULL
-    THEN 0
-    ELSE 1
+    CASE
+        WHEN "report_open_items_qweb_partner"."partner_id" IS NOT NULL
+        THEN 0
+        ELSE 1
     END,
-"report_open_invoice_qweb_partner"."name"
+    "report_open_items_qweb_partner"."name"
         """
 
 
-class OpenInvoiceReportMoveLine(models.TransientModel):
+class OpenItemsReportMoveLine(models.TransientModel):
 
-    _name = 'report_open_invoice_qweb_move_line'
+    _name = 'report_open_items_qweb_move_line'
 
     report_partner_id = fields.Many2one(
-        comodel_name='report_open_invoice_qweb_partner',
+        comodel_name='report_open_items_qweb_partner',
         ondelete='cascade',
         index=True
     )
+
+    # Data fields, used to keep link with real object
     move_line_id = fields.Many2one('account.move.line')
+
+    # Data fields, used for report display
     date = fields.Date()
     date_due = fields.Date()
     entry = fields.Char()
@@ -108,38 +133,43 @@ class OpenInvoiceReportMoveLine(models.TransientModel):
     amount_residual_currency = fields.Float(digits=(16, 2))
 
 
-class OpenInvoiceReportCompute(models.TransientModel):
+class OpenItemsReportCompute(models.TransientModel):
+    """ Here, we just define methods.
+    For class fields, go more top at this file.
+    """
 
-    _inherit = 'report_open_invoice_qweb'
+    _inherit = 'report_open_items_qweb'
 
-    @api.model
+    @api.multi
     def print_report(self):
         self.ensure_one()
         self.compute_data_for_report()
+        report_name = 'account_financial_report_qweb.report_open_items_qweb'
         return {
             'type': 'ir.actions.report.xml',
-            'report_name':
-                'account_financial_report_qweb.report_open_invoice_qweb',
+            'report_name': report_name,
             'datas': {'ids': [self.id]},
         }
 
-    @api.model
+    @api.multi
     def compute_data_for_report(self):
         self.ensure_one()
-
-        self.inject_account_values()
-        self.inject_partner_values()
-        self.inject_line_values()
-        self.inject_line_values(only_empty_partner_line=True)
-        self.clean_partners_and_accounts()
-        self.compute_partners_and_accounts_cumul()
+        # Compute report data
+        self._inject_account_values()
+        self._inject_partner_values()
+        self._inject_line_values()
+        self._inject_line_values(only_empty_partner_line=True)
+        self._clean_partners_and_accounts()
+        self._compute_partners_and_accounts_cumul()
         if self.hide_account_balance_at_0:
-            self.clean_partners_and_accounts(
+            self._clean_partners_and_accounts(
                 only_delete_account_balance_at_0=True
             )
-        self.compute_has_second_currency()
+        # Compute display flag
+        self._compute_has_second_currency()
 
-    def inject_account_values(self):
+    def _inject_account_values(self):
+        """Inject report values for report_open_items_qweb_account."""
         query_inject_account = """
 WITH
     accounts AS
@@ -184,7 +214,7 @@ WITH
                 a.id
         )
 INSERT INTO
-    report_open_invoice_qweb_account
+    report_open_items_qweb_account
     (
     report_id,
     create_uid,
@@ -221,7 +251,8 @@ FROM
         )
         self.env.cr.execute(query_inject_account, query_inject_account_params)
 
-    def inject_partner_values(self):
+    def _inject_partner_values(self):
+        """ Inject report values for report_open_items_qweb_partner. """
         query_inject_partner = """
 WITH
     accounts_partners AS
@@ -242,7 +273,7 @@ WITH
                     'No partner allocated'
                 ) AS partner_name
             FROM
-                report_open_invoice_qweb_account ra
+                report_open_items_qweb_account ra
             INNER JOIN
                 account_account a ON ra.account_id = a.id
             INNER JOIN
@@ -274,7 +305,7 @@ WITH
                 at.include_initial_balance
         )
 INSERT INTO
-    report_open_invoice_qweb_partner
+    report_open_items_qweb_partner
     (
     report_account_id,
     create_uid,
@@ -304,7 +335,12 @@ FROM
         )
         self.env.cr.execute(query_inject_partner, query_inject_partner_params)
 
-    def inject_line_values(self, only_empty_partner_line=False):
+    def _inject_line_values(self, only_empty_partner_line=False):
+        """ Inject report values for report_open_items_qweb_move_line.
+
+        The "only_empty_partner_line" value is used
+        to compute data without partner.
+        """
         query_inject_move_line = """
 WITH
     move_lines_amount AS
@@ -328,9 +364,9 @@ WITH
                     END
                 ) AS partial_amount_currency
             FROM
-                report_open_invoice_qweb_partner rp
+                report_open_items_qweb_partner rp
             INNER JOIN
-                report_open_invoice_qweb_account ra
+                report_open_items_qweb_account ra
                     ON rp.report_account_id = ra.id
             INNER JOIN
                 account_move_line ml
@@ -408,7 +444,7 @@ WITH
                 amount_currency
         )
 INSERT INTO
-    report_open_invoice_qweb_move_line
+    report_open_items_qweb_move_line
     (
     report_partner_id,
     create_uid,
@@ -460,9 +496,9 @@ SELECT
     ml.amount_currency,
     ml2.amount_residual_currency
 FROM
-    report_open_invoice_qweb_partner rp
+    report_open_items_qweb_partner rp
 INNER JOIN
-    report_open_invoice_qweb_account ra ON rp.report_account_id = ra.id
+    report_open_items_qweb_account ra ON rp.report_account_id = ra.id
 INNER JOIN
     account_move_line ml ON ra.account_id = ml.account_id
 INNER JOIN
@@ -525,19 +561,22 @@ ORDER BY
              self.date_at,)
         )
 
-    def compute_partners_and_accounts_cumul(self):
+    def _compute_partners_and_accounts_cumul(self):
+        """ Compute cumulative amount for
+        report_open_items_qweb_partner and report_open_items_qweb_account.
+        """
         query_compute_partners_cumul = """
 UPDATE
-    report_open_invoice_qweb_partner
+    report_open_items_qweb_partner
 SET
     final_amount_residual =
         (
             SELECT
                 SUM(rml.amount_residual) AS final_amount_residual
             FROM
-                report_open_invoice_qweb_move_line rml
+                report_open_items_qweb_move_line rml
             WHERE
-                rml.report_partner_id = report_open_invoice_qweb_partner.id
+                rml.report_partner_id = report_open_items_qweb_partner.id
         )
 WHERE
     id IN
@@ -545,9 +584,9 @@ WHERE
             SELECT
                 rp.id
             FROM
-                report_open_invoice_qweb_account ra
+                report_open_items_qweb_account ra
             INNER JOIN
-                report_open_invoice_qweb_partner rp
+                report_open_items_qweb_partner rp
                     ON ra.id = rp.report_account_id
             WHERE
                 ra.report_id = %s
@@ -558,16 +597,16 @@ WHERE
                             params_compute_partners_cumul)
         query_compute_accounts_cumul = """
 UPDATE
-    report_open_invoice_qweb_account
+    report_open_items_qweb_account
 SET
     final_amount_residual =
         (
             SELECT
                 SUM(rp.final_amount_residual) AS final_amount_residual
             FROM
-                report_open_invoice_qweb_partner rp
+                report_open_items_qweb_partner rp
             WHERE
-                rp.report_account_id = report_open_invoice_qweb_account.id
+                rp.report_account_id = report_open_items_qweb_account.id
         )
 WHERE
     report_id  = %s
@@ -576,23 +615,29 @@ WHERE
         self.env.cr.execute(query_compute_accounts_cumul,
                             params_compute_accounts_cumul)
 
-    def clean_partners_and_accounts(self,
-                                    only_delete_account_balance_at_0=False):
+    def _clean_partners_and_accounts(self,
+                                     only_delete_account_balance_at_0=False):
+        """ Delete empty data for
+        report_open_items_qweb_partner and report_open_items_qweb_account.
+
+        The "only_delete_account_balance_at_0" value is used
+        to delete also the data with cumulative amounts at 0.
+        """
         query_clean_partners = """
 DELETE FROM
-    report_open_invoice_qweb_partner
+    report_open_items_qweb_partner
 WHERE
     id IN
         (
             SELECT
                 DISTINCT rp.id
             FROM
-                report_open_invoice_qweb_account ra
+                report_open_items_qweb_account ra
             INNER JOIN
-                report_open_invoice_qweb_partner rp
+                report_open_items_qweb_partner rp
                     ON ra.id = rp.report_account_id
             LEFT JOIN
-                report_open_invoice_qweb_move_line rml
+                report_open_items_qweb_move_line rml
                     ON rp.id = rml.report_partner_id
             WHERE
                 ra.report_id = %s
@@ -615,16 +660,16 @@ WHERE
         self.env.cr.execute(query_clean_partners, params_clean_partners)
         query_clean_accounts = """
 DELETE FROM
-    report_open_invoice_qweb_account
+    report_open_items_qweb_account
 WHERE
     id IN
         (
             SELECT
                 DISTINCT ra.id
             FROM
-                report_open_invoice_qweb_account ra
+                report_open_items_qweb_account ra
             LEFT JOIN
-                report_open_invoice_qweb_partner rp
+                report_open_items_qweb_partner rp
                     ON ra.id = rp.report_account_id
             WHERE
                 ra.report_id = %s
@@ -646,22 +691,23 @@ WHERE
         params_clean_accounts = (self.id,)
         self.env.cr.execute(query_clean_accounts, params_clean_accounts)
 
-    def compute_has_second_currency(self):
+    def _compute_has_second_currency(self):
+        """ Compute "has_second_currency" flag which will used for display."""
         query_update_has_second_currency = """
 UPDATE
-    report_open_invoice_qweb
+    report_open_items_qweb
 SET
     has_second_currency =
         (
             SELECT
                 TRUE
             FROM
-                report_open_invoice_qweb_move_line l
+                report_open_items_qweb_move_line l
             INNER JOIN
-                report_open_invoice_qweb_partner p
+                report_open_items_qweb_partner p
                     ON l.report_partner_id = p.id
             INNER JOIN
-                report_open_invoice_qweb_account a
+                report_open_items_qweb_account a
                     ON p.report_account_id = a.id
             WHERE
                 a.report_id = %s

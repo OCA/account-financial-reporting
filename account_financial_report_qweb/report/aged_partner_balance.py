@@ -19,7 +19,7 @@ class AgedPartnerBalanceReport(models.TransientModel):
     filter_partner_ids = fields.Many2many(comodel_name='res.partner')
     show_move_line_details = fields.Boolean()
 
-    open_invoice_id = fields.Many2one(comodel_name='report_open_invoice_qweb')
+    open_items_id = fields.Many2one(comodel_name='report_open_items_qweb')
 
     account_ids = fields.One2many(
         comodel_name='report_aged_partner_balance_qweb_account',
@@ -168,15 +168,15 @@ class AgedPartnerBalanceReportCompute(models.TransientModel):
     @api.model
     def compute_data_for_report(self):
         self.ensure_one()
-        model = self.env['report_open_invoice_qweb']
-        self.open_invoice_id = model.create({
+        model = self.env['report_open_items_qweb']
+        self.open_items_id = model.create({
             'date_at': self.date_at,
             'only_posted_moves': self.only_posted_moves,
             'company_id': self.company_id.id,
             'filter_account_ids': [(6, 0, self.filter_account_ids.ids)],
             'filter_partner_ids': [(6, 0, self.filter_partner_ids.ids)],
         })
-        self.open_invoice_id.compute_data_for_report()
+        self.open_items_id.compute_data_for_report()
 
         self.inject_account_values()
         self.inject_partner_values()
@@ -207,14 +207,14 @@ SELECT
     rao.code,
     rao.name
 FROM
-    report_open_invoice_qweb_account rao
+    report_open_items_qweb_account rao
 WHERE
     rao.report_id = %s
         """
         query_inject_account_params = (
             self.id,
             self.env.uid,
-            self.open_invoice_id.id,
+            self.open_items_id.id,
         )
         self.env.cr.execute(query_inject_account, query_inject_account_params)
 
@@ -236,9 +236,9 @@ SELECT
     rpo.partner_id,
     rpo.name
 FROM
-    report_open_invoice_qweb_partner rpo
+    report_open_items_qweb_partner rpo
 INNER JOIN
-    report_open_invoice_qweb_account rao ON rpo.report_account_id = rao.id
+    report_open_items_qweb_account rao ON rpo.report_account_id = rao.id
 INNER JOIN
     report_aged_partner_balance_qweb_account ra ON rao.code = ra.code
 WHERE
@@ -247,7 +247,7 @@ AND ra.report_id = %s
         """
         query_inject_partner_params = (
             self.env.uid,
-            self.open_invoice_id.id,
+            self.open_items_id.id,
             self.id,
         )
         self.env.cr.execute(query_inject_partner, query_inject_partner_params)
@@ -328,11 +328,11 @@ SELECT
     ) AS older
 FROM
     date_range,
-    report_open_invoice_qweb_move_line rlo
+    report_open_items_qweb_move_line rlo
 INNER JOIN
-    report_open_invoice_qweb_partner rpo ON rlo.report_partner_id = rpo.id
+    report_open_items_qweb_partner rpo ON rlo.report_partner_id = rpo.id
 INNER JOIN
-    report_open_invoice_qweb_account rao ON rpo.report_account_id = rao.id
+    report_open_items_qweb_account rao ON rpo.report_account_id = rao.id
 INNER JOIN
     report_aged_partner_balance_qweb_account ra ON rao.code = ra.code
 INNER JOIN
@@ -358,7 +358,7 @@ GROUP BY
         """
         query_inject_line_params = (self.date_at,) * 6
         query_inject_line_params += (
-            self.open_invoice_id.id,
+            self.open_items_id.id,
             self.id,
         )
         self.env.cr.execute(query_inject_line, query_inject_line_params)
@@ -439,11 +439,11 @@ SELECT
     END AS older
 FROM
     date_range,
-    report_open_invoice_qweb_move_line rlo
+    report_open_items_qweb_move_line rlo
 INNER JOIN
-    report_open_invoice_qweb_partner rpo ON rlo.report_partner_id = rpo.id
+    report_open_items_qweb_partner rpo ON rlo.report_partner_id = rpo.id
 INNER JOIN
-    report_open_invoice_qweb_account rao ON rpo.report_account_id = rao.id
+    report_open_items_qweb_account rao ON rpo.report_account_id = rao.id
 INNER JOIN
     report_aged_partner_balance_qweb_account ra ON rao.code = ra.code
 INNER JOIN
@@ -467,7 +467,7 @@ AND ra.report_id = %s
         """
         query_inject_move_line_params = (self.date_at,) * 6
         query_inject_move_line_params += (
-            self.open_invoice_id.id,
+            self.open_items_id.id,
             self.id,
         )
         self.env.cr.execute(query_inject_move_line,

@@ -36,8 +36,8 @@
 
         <menuitem
             parent="menu_oca_reports"
-            action='action_open_invoice_wizard'
-            id='menu_open_invoice_wizard'
+            action='action_open_items_wizard'
+            id='menu_open_items_wizard'
             />
 
     </data>
