@@ -8,11 +8,11 @@ from datetime import datetime
 from openerp import models, fields, api
 
 
-class OpenInvoiceReportWizard(models.TransientModel):
-    """Open invoice report wizard."""
+class OpenItemsReportWizard(models.TransientModel):
+    """Open items report wizard."""
 
-    _name = "open.invoice.report.wizard"
-    _description = "Open Invoice Report Wizard"
+    _name = "open.items.report.wizard"
+    _description = "Open Items Report Wizard"
 
     company_id = fields.Many2one(
         comodel_name='res.company',
@@ -69,7 +69,12 @@ class OpenInvoiceReportWizard(models.TransientModel):
 
     @api.multi
     def button_export_pdf(self):
-        model = self.env['report_open_invoice_qweb']
+        self.ensure_one()
+        return self._export()
+
+    def _export(self):
+        """Default export is PDF."""
+        model = self.env['report_open_items_qweb']
         report = model.create({
             'date_at': self.date_at,
             'only_posted_moves': self.target_move == 'posted',

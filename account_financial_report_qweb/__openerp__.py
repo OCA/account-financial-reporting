@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # Author: Damien Crier
+# Author: Julien Coux
 # Copyright 2016 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
@@ -22,7 +23,7 @@
     'data': [
         'wizard/aged_partner_balance_wizard_view.xml',
         'wizard/general_ledger_wizard_view.xml',
-        'wizard/open_invoice_wizard_view.xml',
+        'wizard/open_items_wizard_view.xml',
         'wizard/balance_common_wizard_view.xml',
         'wizard/partner_balance_wizard_view.xml',
         'wizard/trial_balance_wizard_view.xml',
@@ -32,7 +33,7 @@
         'report/templates/aged_partner_balance.xml',
         'report/templates/general_ledger.xml',
         'report/templates/layouts.xml',
-        'report/templates/open_invoice_report.xml',
+        'report/templates/open_items_report.xml',
         'view/account_view.xml'
     ],
     'test': [

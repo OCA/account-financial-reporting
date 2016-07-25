@@ -1,54 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <template id="account_financial_report_qweb.report_open_invoice_qweb">
+    <template id="account_financial_report_qweb.report_open_items_qweb">
         <t t-call="report.html_container">
             <t t-foreach="docs" t-as="o">
+                <!-- Saved flag fields into variables, used to define columns display -->
                 <t t-set="has_second_currency" t-value="o.has_second_currency"/>
 
                 <t t-call="account_financial_report_qweb.internal_layout">
+                    <!-- Defines global variables used by internal layout -->
                     <t t-set="title" t-value='"Open Items Report"'/>
                     <t t-set="company_name" t-value="o.company_id.name"/>
+
                     <div class="page">
-                        <div class="act_as_table data_table" style="width: 1140px !important;">
-                            <div class="act_as_row labels">
-                                <div class="act_as_cell">Date at filter</div>
-                                <div class="act_as_cell">Target moves filter</div>
-                                <div class="act_as_cell">Account balance at 0 filter</div>
-                            </div>
-                            <div class="act_as_row">
-                                <div class="act_as_cell">
-                                    <span t-field="o.date_at"/>
-                                </div>
-                                <div class="act_as_cell">
-                                    <t t-if="o.only_posted_moves">All posted entries</t>
-                                    <t t-if="not o.only_posted_moves">All entries</t>
-                                </div>
-                                <div class="act_as_cell">
-                                    <t t-if="o.hide_account_balance_at_0">Hide</t>
-                                    <t t-if="not o.hide_account_balance_at_0">Show</t>
-                                </div>
-                            </div>
-                        </div>
+                        <!-- Display filters -->
+                        <t t-call="account_financial_report_qweb.report_open_items_qweb_filters"/>
+
                         <t t-foreach="o.account_ids" t-as="account">
                             <div class="page_break">
+                                <!-- Display account header -->
                                 <div class="act_as_table list_table" style="margin-top: 10px;"/>
                                 <div class="act_as_caption account_title" style="width: 1141px !important;">
                                     <span t-field="account.code"/> - <span t-field="account.name"/>
                                 </div>
+
+                                <!-- Display account partners -->
                                 <t t-foreach="account.partner_ids" t-as="partner">
                                     <div class="page_break">
+                                        <!-- Display partner header -->
                                         <div class="act_as_caption account_title">
                                             <span t-field="partner.name"/>
                                         </div>
-                                        <t t-call="account_financial_report_qweb.report_open_invoice_qweb_lines"/>
-                                        <t t-call="account_financial_report_qweb.report_open_invoice_qweb_ending_cumul">
+
+                                        <!-- Display partner move lines -->
+                                        <t t-call="account_financial_report_qweb.report_open_items_qweb_lines"/>
+
+                                        <!-- Display partner footer -->
+                                        <t t-call="account_financial_report_qweb.report_open_items_qweb_ending_cumul">
                                             <t t-set="account_or_partner_object" t-value="partner"/>
                                             <t t-set="type" t-value='"partner_type"'/>
                                         </t>
                                     </div>
                                 </t>
-                                <t t-call="account_financial_report_qweb.report_open_invoice_qweb_ending_cumul">
+
+                                <!-- Display account footer -->
+                                <t t-call="account_financial_report_qweb.report_open_items_qweb_ending_cumul">
                                     <t t-set="account_or_partner_object" t-value="account"/>
                                     <t t-set="type" t-value='"account_type"'/>
                                 </t>
@@ -60,8 +56,33 @@
         </t>
     </template>
 
-    <template id="account_financial_report_qweb.report_open_invoice_qweb_lines">
+
+    <template id="account_financial_report_qweb.report_open_items_qweb_filters">
         <div class="act_as_table data_table" style="width: 1140px !important;">
+            <div class="act_as_row labels">
+                <div class="act_as_cell">Date at filter</div>
+                <div class="act_as_cell">Target moves filter</div>
+                <div class="act_as_cell">Account balance at 0 filter</div>
+            </div>
+            <div class="act_as_row">
+                <div class="act_as_cell">
+                    <span t-field="o.date_at"/>
+                </div>
+                <div class="act_as_cell">
+                    <t t-if="o.only_posted_moves">All posted entries</t>
+                    <t t-if="not o.only_posted_moves">All entries</t>
+                </div>
+                <div class="act_as_cell">
+                    <t t-if="o.hide_account_balance_at_0">Hide</t>
+                    <t t-if="not o.hide_account_balance_at_0">Show</t>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="account_financial_report_qweb.report_open_items_qweb_lines">
+        <div class="act_as_table data_table" style="width: 1140px !important;">
+            <!-- Display table headers for lines -->
             <div class="act_as_thead">
                 <div class="act_as_row labels">
                     <!--## date-->
@@ -92,6 +113,8 @@
                     </t>
                 </div>
             </div>
+
+            <!-- Display each lines -->
             <t t-foreach="partner.move_line_ids" t-as="line">
                 <!-- # lines or centralized lines -->
                 <div class="act_as_row lines">
@@ -134,7 +157,8 @@
         </div>
     </template>
 
-    <template id="account_financial_report_qweb.report_open_invoice_qweb_ending_cumul">
+    <template id="account_financial_report_qweb.report_open_items_qweb_ending_cumul">
+        <!-- Display ending balance line for account or partner -->
         <div class="act_as_table list_table" style="width: 1141px !important;">
             <div class="act_as_row labels" style="font-weight: bold;">
                 <!--## date-->

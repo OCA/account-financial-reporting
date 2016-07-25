@@ -7,4 +7,4 @@
 from . import aged_partner_balance
 from . import general_ledger
 from . import general_ledger_xlsx
-from . import open_invoice
+from . import open_items
