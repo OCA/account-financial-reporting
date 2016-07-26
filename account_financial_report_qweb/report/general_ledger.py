@@ -594,7 +594,6 @@ AND
         query_inject_partner_params += (
             self.env.uid,
         )
-        print query_inject_partner_params
         self.env.cr.execute(query_inject_partner, query_inject_partner_params)
 
     def _inject_line_not_centralized_values(self,
@@ -820,9 +819,9 @@ ORDER BY
                 tuple(self.filter_cost_center_ids.ids),
             )
         query_inject_move_line_params += (
-             self.id,
-             self.date_from,
-             self.date_to,
+            self.id,
+            self.date_from,
+            self.date_to,
         )
         self.env.cr.execute(
             query_inject_move_line,

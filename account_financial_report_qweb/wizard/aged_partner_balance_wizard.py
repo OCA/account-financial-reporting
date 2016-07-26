@@ -37,15 +37,6 @@ class AgedPartnerBalance(models.TransientModel):
     )
     show_move_line_details = fields.Boolean()
 
-    @api.onchange('date_range_id')
-    def onchange_date_range_id(self):
-        """Handle date range change."""
-        self.date_at = self.date_range_id.date_end
-        if self.date_range_id.date_start:
-            self.fy_start_date = self.env.user.company_id.find_daterange_fy(
-                fields.Date.from_string(self.date_range_id.date_start)
-            ).date_start
-
     @api.onchange('receivable_accounts_only', 'payable_accounts_only')
     def onchange_type_accounts_only(self):
         """Handle receivable/payable accounts only change."""

@@ -1,38 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
 
-        <record id="account_trial_balance_wizard_view" model="ir.ui.view">
-            <field name="name">Trial Balance Wizard</field>
-            <field name="model">account.common.balance.report</field>
-            <field name="mode">primary</field>
-            <field name="inherit_id" ref="account_balance_common_wizard_view"/>
-            <field name="arch" type="xml">
-                <data>
-                    <field name="company_id" position="before">
-                        <label nolabel="1" colspan="4" string="This report allows you to print or generate a pdf of your trial balance allowing you to quickly check the balance of each of your accounts in a single report"/>
-                    </field>
-                    <field name="debit_credit" position="attributes">
-                        <attribute name="invisible">True</attribute>
-                    </field>
-                    <page name="partners" position="attributes">
-                        <attribute name="invisible">True</attribute>
-                    </page>
+    <record id="account_trial_balance_wizard_view" model="ir.ui.view">
+        <field name="name">Trial Balance Wizard</field>
+        <field name="model">account.common.balance.report</field>
+        <field name="mode">primary</field>
+        <field name="inherit_id" ref="account_balance_common_wizard_view"/>
+        <field name="arch" type="xml">
+            <data>
+                <field name="company_id" position="before">
+                    <label nolabel="1" colspan="4" string="This report allows you to print or generate a pdf of your trial balance allowing you to quickly check the balance of each of your accounts in a single report"/>
+                </field>
+                <field name="debit_credit" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <page name="partners" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </page>
 
-                </data>
-            </field>
-        </record>
+            </data>
+        </field>
+    </record>
 
-        <record id="action_account_trial_balance_wizard_view" model="ir.actions.act_window">
-            <field name="name">Trial Balance</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">account.common.balance.report</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">form</field>
-            <field name="view_id" ref="account_trial_balance_wizard_view"/>
-            <field name="target">new</field>
-            <field name="context">{'balance_common': 'trial_balance'}</field>
-        </record>
+    <record id="action_account_trial_balance_wizard_view" model="ir.actions.act_window">
+        <field name="name">Trial Balance</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.common.balance.report</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="account_trial_balance_wizard_view"/>
+        <field name="target">new</field>
+        <field name="context">{'balance_common': 'trial_balance'}</field>
+    </record>
 
-    </data>
-</openerp>
+</odoo>

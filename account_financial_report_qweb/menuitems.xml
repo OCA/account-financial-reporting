@@ -1,42 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
 
-        <menuitem
-            parent="account.menu_finance_reports"
-            id="menu_oca_reports"
-            name="OCA Reports"
-            groups="account.group_account_manager,account.group_account_user"
-            />
+    <menuitem
+        parent="account.menu_finance_reports"
+        id="menu_oca_reports"
+        name="OCA Reports"
+        groups="account.group_account_manager,account.group_account_user"
+        />
 
-        <menuitem
-            parent="menu_oca_reports"
-            action="action_general_ledger_wizard"
-            id="menu_general_ledger_wizard"
-            sequence="10"
-            />
+    <menuitem
+        parent="menu_oca_reports"
+        action="action_general_ledger_wizard"
+        id="menu_general_ledger_wizard"
+        sequence="10"
+        />
 
-        <menuitem
-            parent="menu_oca_reports"
-            action="action_account_trial_balance_wizard_view"
-            id="menu_account_trial_balance_report"
-            sequence="20"
-            />
+    <menuitem
+        parent="menu_oca_reports"
+        action="action_account_trial_balance_wizard_view"
+        id="menu_account_trial_balance_report"
+        sequence="20"
+        />
 
-        <menuitem
-            parent="menu_oca_reports"
-            action="action_open_items_wizard"
-            id="menu_open_items_wizard"
-            sequence="30"
-            />
+    <menuitem
+        parent="menu_oca_reports"
+        action="action_open_items_wizard"
+        id="menu_open_items_wizard"
+        sequence="30"
+        />
 
-        <menuitem
-            parent="menu_oca_reports"
-            action="action_aged_partner_balance_wizard"
-            id="menu_aged_partner_balance_wizard"
-            sequence="40"
-            />
+    <menuitem
+        parent="menu_oca_reports"
+        action="action_aged_partner_balance_wizard"
+        id="menu_aged_partner_balance_wizard"
+        sequence="40"
+        />
 
-    </data>
-</openerp>
-
+</odoo>
