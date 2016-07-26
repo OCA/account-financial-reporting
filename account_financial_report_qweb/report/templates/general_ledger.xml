@@ -10,7 +10,7 @@
 
                 <t t-call="account_financial_report_qweb.internal_layout">
                     <!-- Defines global variables used by internal layout -->
-                    <t t-set="title" t-value='"General Ledger"'/>
+                    <t t-set="title">General Ledger</t>
                     <t t-set="company_name" t-value="o.company_id.name"/>
 
                     <div class="page">
@@ -25,36 +25,33 @@
                                     <span t-field="account.code"/> - <span t-field="account.name"/>
                                 </div>
 
-                                <!-- Display account move lines -->
-                                <t t-if="account.move_line_ids">
+                                <t t-if="not account.partner_ids">
+                                    <!-- Display account move lines without partner regroup -->
                                     <t t-call="account_financial_report_qweb.report_general_ledger_qweb_lines">
                                         <t t-set="account_or_partner_object" t-value="account"/>
                                     </t>
                                 </t>
 
-                                <t t-if="not account.move_line_ids">
-
+                                <t t-if="account.partner_ids">
                                     <!-- Display account partners -->
-                                    <t t-if="account.is_partner_account">
-                                        <t t-foreach="account.partner_ids" t-as="partner">
-                                            <div class="page_break">
-                                                <!-- Display partner header -->
-                                                <div class="act_as_caption account_title">
-                                                    <span t-field="partner.name"/>
-                                                </div>
-
-                                                <!-- Display partner move lines -->
-                                                <t t-call="account_financial_report_qweb.report_general_ledger_qweb_lines">
-                                                    <t t-set="account_or_partner_object" t-value="partner"/>
-                                                </t>
-
-                                                <!-- Display partner footer -->
-                                                <t t-call="account_financial_report_qweb.report_general_ledger_qweb_ending_cumul">
-                                                    <t t-set="account_or_partner_object" t-value="partner"/>
-                                                    <t t-set="type" t-value='"partner_type"'/>
-                                                </t>
+                                    <t t-foreach="account.partner_ids" t-as="partner">
+                                        <div class="page_break">
+                                            <!-- Display partner header -->
+                                            <div class="act_as_caption account_title">
+                                                <span t-field="partner.name"/>
                                             </div>
-                                        </t>
+
+                                            <!-- Display partner move lines -->
+                                            <t t-call="account_financial_report_qweb.report_general_ledger_qweb_lines">
+                                                <t t-set="account_or_partner_object" t-value="partner"/>
+                                            </t>
+
+                                            <!-- Display partner footer -->
+                                            <t t-call="account_financial_report_qweb.report_general_ledger_qweb_ending_cumul">
+                                                <t t-set="account_or_partner_object" t-value="partner"/>
+                                                <t t-set="type" t-value='"partner_type"'/>
+                                            </t>
+                                        </div>
                                     </t>
                                 </t>
 

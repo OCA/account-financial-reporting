@@ -31,7 +31,7 @@
         'report/templates/aged_partner_balance.xml',
         'report/templates/general_ledger.xml',
         'report/templates/layouts.xml',
-        'report/templates/open_items_report.xml',
+        'report/templates/open_items.xml',
         'view/account_view.xml'
     ],
     'test': [

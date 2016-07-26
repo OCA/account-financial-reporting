@@ -181,7 +181,8 @@ class GeneralLedgerReportCompute(models.TransientModel):
         self.ensure_one()
         self.compute_data_for_report()
         if xlsx_report:
-            report_name = 'ledger.report.wizard.xlsx'
+            report_name = 'account_financial_report_qweb.' \
+                          'report_general_ledger_xlsx'
         else:
             report_name = 'account_financial_report_qweb.' \
                           'report_general_ledger_qweb'

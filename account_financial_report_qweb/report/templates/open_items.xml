@@ -9,7 +9,7 @@
 
                 <t t-call="account_financial_report_qweb.internal_layout">
                     <!-- Defines global variables used by internal layout -->
-                    <t t-set="title" t-value='"Open Items Report"'/>
+                    <t t-set="title">Open Items</t>
                     <t t-set="company_name" t-value="o.company_id.name"/>
 
                     <div class="page">
