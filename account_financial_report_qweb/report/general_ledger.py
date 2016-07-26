@@ -32,6 +32,9 @@ class GeneralLedgerReport(models.TransientModel):
     company_id = fields.Many2one(comodel_name='res.company')
     filter_account_ids = fields.Many2many(comodel_name='account.account')
     filter_partner_ids = fields.Many2many(comodel_name='res.partner')
+    filter_cost_center_ids = fields.Many2many(
+        comodel_name='account.analytic.account'
+    )
     centralize = fields.Boolean()
 
     # Flag fields, used for report display
@@ -236,6 +239,14 @@ class GeneralLedgerReportCompute(models.TransientModel):
         INNER JOIN
             account_move m ON ml.move_id = m.id AND m.state = 'posted'
             """
+        if self.filter_cost_center_ids:
+            subquery_sum_amounts += """
+        INNER JOIN
+            account_analytic_account aa
+                ON
+                    ml.analytic_account_id = aa.id
+                    AND aa.id IN %s
+            """
         subquery_sum_amounts += """
         GROUP BY
             a.id
@@ -254,12 +265,23 @@ WITH
             FROM
                 account_account a
             """
-        if self.filter_partner_ids:
+        if self.filter_partner_ids or self.filter_cost_center_ids:
             query_inject_account += """
             INNER JOIN
                 account_move_line ml ON a.id = ml.account_id
+            """
+        if self.filter_partner_ids:
+            query_inject_account += """
             INNER JOIN
                 res_partner p ON ml.partner_id = p.id
+            """
+        if self.filter_cost_center_ids:
+            query_inject_account += """
+            INNER JOIN
+                account_analytic_account aa
+                    ON
+                        ml.analytic_account_id = aa.id
+                        AND aa.id IN %s
             """
         query_inject_account += """
             WHERE
@@ -274,6 +296,9 @@ WITH
             query_inject_account += """
             AND
                 p.id IN %s
+            """
+        if self.filter_partner_ids or self.filter_cost_center_ids:
+            query_inject_account += """
             GROUP BY
                 a.id
             """
@@ -333,7 +358,12 @@ WHERE
 AND
     f.balance IS NOT NULL AND f.balance != 0
             """
-        query_inject_account_params = (
+        query_inject_account_params = ()
+        if self.filter_cost_center_ids:
+            query_inject_account_params += (
+                tuple(self.filter_cost_center_ids.ids),
+            )
+        query_inject_account_params += (
             self.company_id.id,
         )
         if self.filter_account_ids:
@@ -347,8 +377,20 @@ AND
         query_inject_account_params += (
             self.date_from,
             self.fy_start_date,
+        )
+        if self.filter_cost_center_ids:
+            query_inject_account_params += (
+                tuple(self.filter_cost_center_ids.ids),
+            )
+        query_inject_account_params += (
             self.date_to,
             self.fy_start_date,
+        )
+        if self.filter_cost_center_ids:
+            query_inject_account_params += (
+                tuple(self.filter_cost_center_ids.ids),
+            )
+        query_inject_account_params += (
             self.id,
             self.env.uid,
         )
@@ -386,6 +428,14 @@ AND
             INNER JOIN
                 account_move m ON ml.move_id = m.id AND m.state = 'posted'
             """
+        if self.filter_cost_center_ids:
+            subquery_sum_amounts += """
+        INNER JOIN
+            account_analytic_account aa
+                ON
+                    ml.analytic_account_id = aa.id
+                    AND aa.id IN %s
+            """
         subquery_sum_amounts += """
             GROUP BY
                 ap.account_id, ap.partner_id
@@ -419,6 +469,16 @@ WITH
                 account_move_line ml ON a.id = ml.account_id
             LEFT JOIN
                 res_partner p ON ml.partner_id = p.id
+                    """
+        if self.filter_cost_center_ids:
+            query_inject_partner += """
+            INNER JOIN
+                account_analytic_account aa
+                    ON
+                        ml.analytic_account_id = aa.id
+                        AND aa.id IN %s
+            """
+        query_inject_partner += """
             WHERE
                 ra.report_id = %s
             AND
@@ -503,7 +563,12 @@ WHERE
 AND
     f.balance IS NOT NULL AND f.balance != 0
             """
-        query_inject_partner_params = (
+        query_inject_partner_params = ()
+        if self.filter_cost_center_ids:
+            query_inject_partner_params += (
+                tuple(self.filter_cost_center_ids.ids),
+            )
+        query_inject_partner_params += (
             self.id,
         )
         if self.filter_partner_ids:
@@ -513,8 +578,20 @@ AND
         query_inject_partner_params += (
             self.date_from,
             self.fy_start_date,
+        )
+        if self.filter_cost_center_ids:
+            query_inject_partner_params += (
+                tuple(self.filter_cost_center_ids.ids),
+            )
+        query_inject_partner_params += (
             self.date_to,
             self.fy_start_date,
+        )
+        if self.filter_cost_center_ids:
+            query_inject_partner_params += (
+                tuple(self.filter_cost_center_ids.ids),
+            )
+        query_inject_partner_params += (
             self.env.uid,
         )
         print query_inject_partner_params
@@ -671,8 +748,21 @@ LEFT JOIN
     account_full_reconcile fr ON ml.full_reconcile_id = fr.id
 LEFT JOIN
     res_currency c ON a.currency_id = c.id
+                    """
+        if self.filter_cost_center_ids:
+            query_inject_move_line += """
+INNER JOIN
+    account_analytic_account aa
+        ON
+            ml.analytic_account_id = aa.id
+            AND aa.id IN %s
+            """
+        else:
+            query_inject_move_line += """
 LEFT JOIN
     account_analytic_account aa ON ml.analytic_account_id = aa.id
+            """
+        query_inject_move_line += """
 WHERE
     ra.report_id = %s
 AND
@@ -721,12 +811,22 @@ ORDER BY
 ORDER BY
     a.code, ml.date, ml.id
             """
-        self.env.cr.execute(
-            query_inject_move_line,
-            (self.env.uid,
+
+        query_inject_move_line_params = (
+            self.env.uid,
+        )
+        if self.filter_cost_center_ids:
+            query_inject_move_line_params += (
+                tuple(self.filter_cost_center_ids.ids),
+            )
+        query_inject_move_line_params += (
              self.id,
              self.date_from,
-             self.date_to,)
+             self.date_to,
+        )
+        self.env.cr.execute(
+            query_inject_move_line,
+            query_inject_move_line_params
         )
 
     def _inject_line_centralized_values(self):
@@ -755,6 +855,16 @@ WITH
                 account_move m ON ml.move_id = m.id
             INNER JOIN
                 account_account a ON ml.account_id = a.id
+        """
+        if self.filter_cost_center_ids:
+            query_inject_move_line_centralized += """
+            INNER JOIN
+                account_analytic_account aa
+                    ON
+                        ml.analytic_account_id = aa.id
+                        AND aa.id IN %s
+            """
+        query_inject_move_line_centralized += """
             WHERE
                 ra.report_id = %s
             AND
@@ -812,13 +922,22 @@ AND
 ORDER BY
     a.code, ml.date
         """
+
+        query_inject_move_line_centralized_params = ()
+        if self.filter_cost_center_ids:
+            query_inject_move_line_centralized_params += (
+                tuple(self.filter_cost_center_ids.ids),
+            )
+        query_inject_move_line_centralized_params += (
+            self.id,
+            self.date_from,
+            self.date_to,
+            self.env.uid,
+            self.id,
+        )
         self.env.cr.execute(
             query_inject_move_line_centralized,
-            (self.id,
-             self.date_from,
-             self.date_to,
-             self.env.uid,
-             self.id,)
+            query_inject_move_line_centralized_params
         )
 
     def _compute_has_second_currency(self):

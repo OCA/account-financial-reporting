@@ -24,6 +24,9 @@
                             <field name="hide_account_balance_at_0"/>
                         </group>
                     </group>
+                    <label for="cost_center_ids" groups="analytic.group_analytic_accounting"/>
+                    <field name="cost_center_ids" nolabel="1" groups="analytic.group_analytic_accounting"/>
+                    <group/>
                     <label for="partner_ids"/>
                     <field name="partner_ids" nolabel="1"/>
                     <group/>
