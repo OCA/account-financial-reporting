@@ -13,31 +13,28 @@
             parent="menu_oca_reports"
             action="action_general_ledger_wizard"
             id="menu_general_ledger_wizard"
-            />
-
-        <menuitem icon="STOCK_PRINT" name="Partner Balance"
-            parent="menu_oca_reports" action="action_account_partner_balance_wizard_view"
-            groups="account.group_account_manager,account.group_account_user" id="menu_account_partner_balance_report"/>
-        <menuitem icon="STOCK_PRINT" name="Trial Balance"
-            parent="menu_oca_reports" action="action_account_trial_balance_wizard_view"
-            groups="account.group_account_manager,account.group_account_user" id="menu_account_trial_balance_report"/>
-        <menuitem icon="STOCK_PRINT" name="Balance Sheet"
-            parent="menu_oca_reports" action="action_account_balance_sheet_wizard_view"
-            groups="account.group_account_manager,account.group_account_user" id="menu_account_sheet_balance_report"/>
-        <menuitem icon="STOCK_PRINT" name="Profit &amp; Loss"
-              parent="menu_oca_reports" action="action_account_profit_loss_wizard_view"
-              groups="account.group_account_manager,account.group_account_user" id="menu_account_profit_loss_report"/>
-
-        <menuitem
-            parent="menu_oca_reports"
-            action='action_open_items_wizard'
-            id='menu_open_items_wizard'
+            sequence="10"
             />
 
         <menuitem
             parent="menu_oca_reports"
-            action='action_aged_partner_balance_wizard'
-            id='menu_aged_partner_balance_wizard'
+            action="action_account_trial_balance_wizard_view"
+            id="menu_account_trial_balance_report"
+            sequence="20"
+            />
+
+        <menuitem
+            parent="menu_oca_reports"
+            action="action_open_items_wizard"
+            id="menu_open_items_wizard"
+            sequence="30"
+            />
+
+        <menuitem
+            parent="menu_oca_reports"
+            action="action_aged_partner_balance_wizard"
+            id="menu_aged_partner_balance_wizard"
+            sequence="40"
             />
 
     </data>

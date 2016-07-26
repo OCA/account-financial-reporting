@@ -7,9 +7,12 @@ account_financial_report_qweb
 =============================
 
 This module adds a set of financial reports. They are accessible under
-Accunting / Reporting / PDF Reports.
+Accunting / Reporting / OCA Reports.
 
 - General ledger
+- Trial Balance
+- Open Items
+- Aged Partner Balance
 
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
    :alt: Try me on Runbot
@@ -20,13 +23,13 @@ Known issues / Roadmap
 
 Some reports are being worked on and will be available at some point:
 
-- Aged parter report
+- Trial Balance
 
 Bug Tracker
 ===========
 
 Bugs are tracked on `GitHub Issues
-<https://github.com/OCA/{project_repo}/issues>`_. In case of trouble, please
+<https://github.com/OCA/account-financial-reporting/issues>`_. In case of trouble, please
 check there if your issue has already been reported. If you spotted it first,
 help us smashing it by providing a detailed and welcomed feedback.
 
@@ -53,6 +56,7 @@ Contributors
 * Ciro Urselli <c.urselli@apuliasoftware.it>
 * Francesco Apruzzese <opencode@e-ware.org>
 * Lorenzo Battistini <lorenzo.battistini@agilebg.com>
+* Julien Coux <julien.coux@camptocamp.com>
 
 Much of the work in this module was done at a sprint in Sorrento, Italy in
 April 2016.
