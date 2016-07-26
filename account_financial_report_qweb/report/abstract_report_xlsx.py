@@ -20,7 +20,7 @@ class AbstractReportXslx(ReportXlsx):
         self.columns = None
 
         # row_pos must be incremented at each writing lines
-        self.row_pos = 0
+        self.row_pos = None
 
         # Formats
         self.format_right = None
@@ -33,6 +33,8 @@ class AbstractReportXslx(ReportXlsx):
 
     def generate_xlsx_report(self, workbook, data, objects):
         report = objects
+
+        self.row_pos = 0
 
         self._define_formats(workbook)
 
