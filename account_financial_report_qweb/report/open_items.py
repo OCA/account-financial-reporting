@@ -145,11 +145,8 @@ class OpenItemsReportCompute(models.TransientModel):
         self.ensure_one()
         self.compute_data_for_report()
         report_name = 'account_financial_report_qweb.report_open_items_qweb'
-        return {
-            'type': 'ir.actions.report.xml',
-            'report_name': report_name,
-            'datas': {'ids': [self.id]},
-        }
+        return self.env['report'].get_action(records=self,
+                                             report_name=report_name)
 
     @api.multi
     def compute_data_for_report(self):

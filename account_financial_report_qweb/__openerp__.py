@@ -19,6 +19,7 @@
         'date_range',
         'account_fiscal_year',
         'report_xlsx',
+        'report',
     ],
     'data': [
         'wizard/aged_partner_balance_wizard_view.xml',
