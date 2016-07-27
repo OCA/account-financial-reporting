@@ -17,8 +17,8 @@
 
     <menuitem
         parent="menu_oca_reports"
-        action="action_account_trial_balance_wizard_view"
-        id="menu_account_trial_balance_report"
+        action="action_trial_balance_wizard"
+        id="menu_trial_balance_wizard"
         sequence="20"
         />
 

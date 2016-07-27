@@ -40,7 +40,7 @@ class AbstractReportXslx(ReportXlsx):
 
         report_name = self._get_report_name()
         filters = self._get_report_filters(report)
-        self.columns = self._get_report_columns()
+        self.columns = self._get_report_columns(report)
 
         self.sheet = workbook.add_worksheet(report_name[:31])
 
@@ -175,7 +175,7 @@ class AbstractReportXslx(ReportXlsx):
         """
         raise NotImplementedError()
 
-    def _get_report_columns(self):
+    def _get_report_columns(self, report):
         """
             Allow to define the report columns
             which will be used to generate report.
