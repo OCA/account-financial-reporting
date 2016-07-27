@@ -25,7 +25,6 @@
         'wizard/aged_partner_balance_wizard_view.xml',
         'wizard/general_ledger_wizard_view.xml',
         'wizard/open_items_wizard_view.xml',
-        'wizard/balance_common_wizard_view.xml',
         'wizard/trial_balance_wizard_view.xml',
         'menuitems.xml',
         'reports.xml',
@@ -33,6 +32,7 @@
         'report/templates/general_ledger.xml',
         'report/templates/layouts.xml',
         'report/templates/open_items.xml',
+        'report/templates/trial_balance.xml',
         'view/account_view.xml'
     ],
     'test': [

@@ -24,7 +24,7 @@ class GeneralLedgerXslx(abstract_report_xlsx.AbstractReportXslx):
     def _get_report_name(self):
         return _('General Ledger')
 
-    def _get_report_columns(self):
+    def _get_report_columns(self, report):
         return {
             0: {'header': _('Date'), 'field': 'date', 'width': 11},
             1: {'header': _('Entry'), 'field': 'entry', 'width': 18},

@@ -23,7 +23,8 @@ Known issues / Roadmap
 
 Some reports are being worked on and will be available at some point:
 
-- Trial Balance
+- Open Items (XLSX)
+- Aged Partner Balance (XLSX)
 
 Bug Tracker
 ===========

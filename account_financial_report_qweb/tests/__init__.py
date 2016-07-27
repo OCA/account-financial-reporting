@@ -5,3 +5,4 @@
 from . import test_aged_partner_balance
 from . import test_general_ledger
 from . import test_open_items
+from . import test_trial_balance
