@@ -141,10 +141,15 @@ class OpenItemsReportCompute(models.TransientModel):
     _inherit = 'report_open_items_qweb'
 
     @api.multi
-    def print_report(self):
+    def print_report(self, xlsx_report=False):
         self.ensure_one()
         self.compute_data_for_report()
-        report_name = 'account_financial_report_qweb.report_open_items_qweb'
+        if xlsx_report:
+            report_name = 'account_financial_report_qweb.' \
+                          'report_open_items_xlsx'
+        else:
+            report_name = 'account_financial_report_qweb.' \
+                          'report_open_items_qweb'
         return self.env['report'].get_action(records=self,
                                              report_name=report_name)
 
