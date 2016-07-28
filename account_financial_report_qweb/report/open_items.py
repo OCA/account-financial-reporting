@@ -2,7 +2,7 @@
 # © 2016 Julien Coux (Camptocamp)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import models, fields, api
+from openerp import models, fields, api, _
 
 
 class OpenItemsReport(models.TransientModel):
@@ -267,7 +267,7 @@ WITH
                         THEN p.name || ' (' || p.ref || ')'
                         ELSE p.name
                     END,
-                    'No partner allocated'
+                    '""" + _('No partner allocated') + """'
                 ) AS partner_name
             FROM
                 report_open_items_qweb_account ra
@@ -483,7 +483,7 @@ SELECT
             """
         elif only_empty_partner_line:
             query_inject_move_line += """
-    'No partner allocated' AS partner,
+    '""" + _('No partner allocated') + """' AS partner,
             """
         query_inject_move_line += """
     CONCAT_WS(' - ', NULLIF(ml.ref, ''), NULLIF(ml.name, '')) AS label,
