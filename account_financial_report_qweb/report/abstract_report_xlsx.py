@@ -163,6 +163,56 @@ class AbstractReportXslx(ReportXlsx):
                 )
         self.row_pos += 1
 
+    def write_initial_balance(self, my_object, label):
+        """Write a specific initial balance line on current line
+        using defined columns field_initial_balance name.
+
+        Columns are defined with `_get_report_columns` method.
+        """
+        col_pos_label = self._get_col_pos_initial_balance_label()
+        self.sheet.write(self.row_pos, col_pos_label, label, self.format_right)
+        for col_pos, column in self.columns.iteritems():
+            if column.get('field_initial_balance'):
+                value = getattr(my_object, column['field_initial_balance'])
+                cell_type = column.get('type', 'string')
+                if cell_type == 'string':
+                    self.sheet.write_string(self.row_pos, col_pos, value or '')
+                elif cell_type == 'amount':
+                    self.sheet.write_number(
+                        self.row_pos, col_pos, float(value), self.format_amount
+                    )
+        self.row_pos += 1
+
+    def write_ending_balance(self, my_object, name, label):
+        """Write a specific ending balance line on current line
+        using defined columns field_final_balance name.
+
+        Columns are defined with `_get_report_columns` method.
+        """
+        for i in range(0, len(self.columns)):
+            self.sheet.write(self.row_pos, i, '', self.format_header_right)
+        row_count_name = self._get_col_count_final_balance_name()
+        col_pos_label = self._get_col_pos_final_balance_label()
+        self.sheet.merge_range(
+            self.row_pos, 0, self.row_pos, row_count_name - 1, name,
+            self.format_header_left
+        )
+        self.sheet.write(self.row_pos, col_pos_label, label,
+                         self.format_header_right)
+        for col_pos, column in self.columns.iteritems():
+            if column.get('field_final_balance'):
+                value = getattr(my_object, column['field_final_balance'])
+                cell_type = column.get('type', 'string')
+                if cell_type == 'string':
+                    self.sheet.write_string(self.row_pos, col_pos, value or '',
+                                            self.format_header_right)
+                elif cell_type == 'amount':
+                    self.sheet.write_number(
+                        self.row_pos, col_pos, float(value),
+                        self.format_header_amount
+                    )
+        self.row_pos += 1
+
     def _generate_report_content(self, workbook, report):
         pass
 
@@ -218,5 +268,23 @@ class AbstractReportXslx(ReportXlsx):
     def _get_col_count_filter_value(self):
         """
             :return: the columns number used for filter values.
+        """
+        raise NotImplementedError()
+
+    def _get_col_pos_initial_balance_label(self):
+        """
+            :return: the columns position used for initial balance label.
+        """
+        raise NotImplementedError()
+
+    def _get_col_count_final_balance_name(self):
+        """
+            :return: the columns number used for final balance name.
+        """
+        raise NotImplementedError()
+
+    def _get_col_pos_final_balance_label(self):
+        """
+            :return: the columns position used for final balance label.
         """
         raise NotImplementedError()

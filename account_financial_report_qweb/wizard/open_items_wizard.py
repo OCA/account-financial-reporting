@@ -63,7 +63,12 @@ class OpenItemsReportWizard(models.TransientModel):
         self.ensure_one()
         return self._export()
 
-    def _export(self):
+    @api.multi
+    def button_export_xlsx(self):
+        self.ensure_one()
+        return self._export(xlsx_report=True)
+
+    def _export(self, xlsx_report=False):
         """Default export is PDF."""
         model = self.env['report_open_items_qweb']
         report = model.create({
@@ -74,4 +79,4 @@ class OpenItemsReportWizard(models.TransientModel):
             'filter_account_ids': [(6, 0, self.account_ids.ids)],
             'filter_partner_ids': [(6, 0, self.partner_ids.ids)],
         })
-        return report.print_report()
+        return report.print_report(xlsx_report)

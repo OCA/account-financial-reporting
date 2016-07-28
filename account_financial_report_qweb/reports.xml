@@ -93,4 +93,13 @@
       <field name="auto" eval="False"/>
     </record>
 
+    <record id="action_report_open_items_xlsx" model="ir.actions.report.xml">
+      <field name="name">Open Items XLSX</field>
+      <field name="model">report_open_items_qweb</field>
+      <field name="type">ir.actions.report.xml</field>
+      <field name="report_name">account_financial_report_qweb.report_open_items_xlsx</field>
+      <field name="report_type">xlsx</field>
+      <field name="auto" eval="False"/>
+    </record>
+
 </odoo>
