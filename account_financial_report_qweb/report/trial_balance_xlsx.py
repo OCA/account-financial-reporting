@@ -15,11 +15,6 @@ class TrialBalanceXslx(abstract_report_xlsx.AbstractReportXslx):
         super(TrialBalanceXslx, self).__init__(
             name, table, rml, parser, header, store)
 
-        # Custom values needed to generate report
-        self.col_pos_initial_balance_label = 5
-        self.col_count_final_balance_name = 5
-        self.col_pos_final_balance_label = 5
-
     def _get_report_name(self):
         return _('Trial Balance')
 
