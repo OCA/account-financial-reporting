@@ -57,7 +57,12 @@ class AgedPartnerBalance(models.TransientModel):
         self.ensure_one()
         return self._export()
 
-    def _export(self):
+    @api.multi
+    def button_export_xlsx(self):
+        self.ensure_one()
+        return self._export(xlsx_report=True)
+
+    def _export(self, xlsx_report=False):
         """Default export is PDF."""
         model = self.env['report_aged_partner_balance_qweb']
         report = model.create({
@@ -68,4 +73,4 @@ class AgedPartnerBalance(models.TransientModel):
             'filter_partner_ids': [(6, 0, self.partner_ids.ids)],
             'show_move_line_details': self.show_move_line_details,
         })
-        return report.print_report()
+        return report.print_report(xlsx_report)
