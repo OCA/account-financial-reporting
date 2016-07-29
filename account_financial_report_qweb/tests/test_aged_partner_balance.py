@@ -45,3 +45,30 @@ class TestAgedPartnerBalance(TransactionCase):
         report_html = self.env['report'].get_html(self.report, report_name)
         self.assertRegexpMatches(report_html, 'Aged Partner Balance')
         self.assertRegexpMatches(report_html, self.report.account_ids[0].name)
+
+    def test_03_generation_report_xlsx(self):
+        """Check if report XLSX is correctly generated"""
+
+        report_name = 'account_financial_report_qweb.' \
+                      'report_aged_partner_balance_xlsx'
+        # Check if returned report action is correct
+        report_action = self.report.print_report(xlsx_report=True)
+        self.assertDictContainsSubset(
+            {
+                'type': 'ir.actions.report.xml',
+                'report_name': report_name,
+                'report_type': 'xlsx',
+            },
+            report_action
+        )
+
+        # Check if report template is correct
+        action_name = 'account_financial_report_qweb.' \
+                      'action_report_aged_partner_balance_xlsx'
+        report_xlsx = self.env.ref(action_name).render_report(
+            self.report.ids,
+            report_name,
+            {'report_type': u'xlsx'}
+        )
+        self.assertGreaterEqual(len(report_xlsx[0]), 1)
+        self.assertEqual(report_xlsx[1], 'xlsx')

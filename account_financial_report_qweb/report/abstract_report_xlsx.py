@@ -24,12 +24,14 @@ class AbstractReportXslx(ReportXlsx):
 
         # Formats
         self.format_right = None
+        self.format_right_bold_italic = None
         self.format_bold = None
         self.format_header_left = None
         self.format_header_center = None
         self.format_header_right = None
         self.format_header_amount = None
         self.format_amount = None
+        self.format_percent_bold_italic = None
 
     def generate_xlsx_report(self, workbook, data, objects):
         report = objects
@@ -59,14 +61,19 @@ class AbstractReportXslx(ReportXlsx):
         Available formats are :
          * format_bold
          * format_right
+         * format_right_bold_italic
          * format_header_left
          * format_header_center
          * format_header_right
          * format_header_amount
          * format_amount
+         * format_percent_bold_italic
         """
         self.format_bold = workbook.add_format({'bold': True})
         self.format_right = workbook.add_format({'align': 'right'})
+        self.format_right_bold_italic = workbook.add_format(
+            {'align': 'right', 'bold': True, 'italic': True}
+        )
         self.format_header_left = workbook.add_format(
             {'bold': True,
              'border': True,
@@ -88,6 +95,10 @@ class AbstractReportXslx(ReportXlsx):
         self.format_header_amount.set_num_format('#,##0.00')
         self.format_amount = workbook.add_format()
         self.format_amount.set_num_format('#,##0.00')
+        self.format_percent_bold_italic = workbook.add_format(
+            {'bold': True, 'italic': True}
+        )
+        self.format_percent_bold_italic.set_num_format('#,##0.00%')
 
     def _set_column_width(self):
         """Set width for all defined columns.

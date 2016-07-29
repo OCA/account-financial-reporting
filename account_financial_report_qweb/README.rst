@@ -21,10 +21,6 @@ Accunting / Reporting / OCA Reports.
 Known issues / Roadmap
 ======================
 
-Some reports are being worked on and will be available at some point:
-
-- Aged Partner Balance (XLSX)
-
 Bug Tracker
 ===========
 

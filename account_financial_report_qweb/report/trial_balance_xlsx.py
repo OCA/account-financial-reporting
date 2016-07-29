@@ -102,7 +102,7 @@ class TrialBalanceXslx(abstract_report_xlsx.AbstractReportXslx):
                     # Display partner lines
                     self.write_line(partner)
 
-                # Display account lines
+                # Display account footer line
                 self.write_account_footer(account,
                                           account.code + ' - ' + account.name)
 
