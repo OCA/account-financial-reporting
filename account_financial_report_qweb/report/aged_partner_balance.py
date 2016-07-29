@@ -11,10 +11,10 @@ class AgedPartnerBalanceReport(models.TransientModel):
 
     The class hierarchy is :
     * AgedPartnerBalanceReport
-    ** AgedPartnerBalanceAccount
-    *** AgedPartnerBalancePartner
-    **** AgedPartnerBalanceLine
-    **** AgedPartnerBalanceMoveLine
+    ** AgedPartnerBalanceReportAccount
+    *** AgedPartnerBalanceReportPartner
+    **** AgedPartnerBalanceReportLine
+    **** AgedPartnerBalanceReportMoveLine
             If "show_move_line_details" is selected
     """
 
@@ -38,7 +38,7 @@ class AgedPartnerBalanceReport(models.TransientModel):
     )
 
 
-class AgedPartnerBalanceAccount(models.TransientModel):
+class AgedPartnerBalanceReportAccount(models.TransientModel):
 
     _name = 'report_aged_partner_balance_qweb_account'
     _order = 'code ASC'
@@ -81,7 +81,7 @@ class AgedPartnerBalanceAccount(models.TransientModel):
     )
 
 
-class AgedPartnerBalancePartner(models.TransientModel):
+class AgedPartnerBalanceReportPartner(models.TransientModel):
 
     _name = 'report_aged_partner_balance_qweb_partner'
 
@@ -125,7 +125,7 @@ ORDER BY
         """
 
 
-class AgedPartnerBalanceLine(models.TransientModel):
+class AgedPartnerBalanceReportLine(models.TransientModel):
 
     _name = 'report_aged_partner_balance_qweb_line'
 
@@ -146,7 +146,7 @@ class AgedPartnerBalanceLine(models.TransientModel):
     older = fields.Float(digits=(16, 2))
 
 
-class AgedPartnerBalanceMoveLine(models.TransientModel):
+class AgedPartnerBalanceReportMoveLine(models.TransientModel):
 
     _name = 'report_aged_partner_balance_qweb_move_line'
 
@@ -222,6 +222,8 @@ class AgedPartnerBalanceReportCompute(models.TransientModel):
             self._inject_move_line_values()
             self._inject_move_line_values(only_empty_partner_line=True)
         self._compute_accounts_cumul()
+        # Refresh cache because all data are computed with SQL requests
+        self.refresh()
 
     def _inject_account_values(self):
         """Inject report values for report_aged_partner_balance_qweb_account"""

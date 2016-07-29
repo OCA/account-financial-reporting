@@ -14,9 +14,14 @@ class TrialBalanceReportWizard(models.TransientModel):
 
     company_id = fields.Many2one(
         comodel_name='res.company',
-        default=lambda self: self.env.user.company_id
+        default=lambda self: self.env.user.company_id,
+        string='Company'
     )
-    date_range_id = fields.Many2one(comodel_name='date.range', required=True)
+    date_range_id = fields.Many2one(
+        comodel_name='date.range',
+        required=True,
+        string='Date range'
+    )
     date_from = fields.Date(required=True)
     date_to = fields.Date(required=True)
     fy_start_date = fields.Date(required=True)
