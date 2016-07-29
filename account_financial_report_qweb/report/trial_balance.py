@@ -11,8 +11,8 @@ class TrialBalanceReport(models.TransientModel):
 
     The class hierarchy is :
     * TrialBalanceReport
-    ** TrialBalanceAccount
-    *** TrialBalancePartner
+    ** TrialBalanceReportAccount
+    *** TrialBalanceReportPartner
             If "show_partner_details" is selected
     """
 
@@ -42,7 +42,7 @@ class TrialBalanceReport(models.TransientModel):
     )
 
 
-class TrialBalanceAccount(models.TransientModel):
+class TrialBalanceReportAccount(models.TransientModel):
 
     _name = 'report_trial_balance_qweb_account'
     _order = 'code ASC'
@@ -75,7 +75,7 @@ class TrialBalanceAccount(models.TransientModel):
     )
 
 
-class TrialPartnerAccount(models.TransientModel):
+class TrialBalanceReportPartner(models.TransientModel):
 
     _name = 'report_trial_balance_qweb_partner'
 
@@ -156,6 +156,8 @@ class TrialBalanceReportCompute(models.TransientModel):
         self._inject_account_values()
         if self.show_partner_details:
             self._inject_partner_values()
+        # Refresh cache because all data are computed with SQL requests
+        self.refresh()
 
     def _inject_account_values(self):
         """Inject report values for report_trial_balance_qweb_account"""

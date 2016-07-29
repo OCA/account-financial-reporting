@@ -8,10 +8,10 @@
         <field name="arch" type="xml">
             <form>
                 <group name="main_info">
-                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
                 </group>
                 <group name="filters">
-                    <group name="date_ranger">
+                    <group name="date_range">
                         <field name="date_range_id" domain="[('company_id','=',company_id)]"/>
                         <field name="date_from"/>
                         <field name="date_to"/>
@@ -24,14 +24,14 @@
                     </group>
                 </group>
                 <label for="partner_ids" attrs="{'invisible':[('show_partner_details','!=',True)]}"/>
-                <field name="partner_ids" nolabel="1" attrs="{'invisible':[('show_partner_details','!=',True)]}"/>
+                <field name="partner_ids" nolabel="1" options="{'no_create': True}" attrs="{'invisible':[('show_partner_details','!=',True)]}"/>
                 <group attrs="{'invisible':[('show_partner_details','!=',True)]}"/>
                 <label for="account_ids"/>
                 <group col="4">
                     <field name="receivable_accounts_only"/>
                     <field name="payable_accounts_only"/>
                 </group>
-                <field name="account_ids" nolabel="1"/>
+                <field name="account_ids" nolabel="1" options="{'no_create': True}"/>
                 <footer>
                     <button name="button_export_pdf" string="Export PDF" type="object" default_focus="1" class="oe_highlight"/>
                     or
@@ -43,14 +43,12 @@
         </field>
     </record>
 
-    <record id="action_trial_balance_wizard" model="ir.actions.act_window">
-        <field name="name">Trial Balance</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="res_model">trial.balance.report.wizard</field>
-        <field name="view_type">form</field>
-        <field name="view_mode">form</field>
-        <field name="view_id" ref="trial_balance_wizard"/>
-        <field name="target">new</field>
-    </record>
+    <act_window id="action_trial_balance_wizard"
+                name="Trial Balance"
+                res_model="trial.balance.report.wizard"
+                view_type="form"
+                view_mode="form"
+                view_id="trial_balance_wizard"
+                target="new" />
 
 </odoo>

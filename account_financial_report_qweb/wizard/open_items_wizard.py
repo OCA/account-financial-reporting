@@ -16,7 +16,8 @@ class OpenItemsReportWizard(models.TransientModel):
 
     company_id = fields.Many2one(
         comodel_name='res.company',
-        default=lambda self: self.env.user.company_id
+        default=lambda self: self.env.user.company_id,
+        string='Company'
     )
     date_at = fields.Date(required=True,
                           default=fields.Date.to_string(datetime.today()))

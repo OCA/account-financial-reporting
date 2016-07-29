@@ -169,6 +169,8 @@ class OpenItemsReportCompute(models.TransientModel):
             )
         # Compute display flag
         self._compute_has_second_currency()
+        # Refresh cache because all data are computed with SQL requests
+        self.refresh()
 
     def _inject_account_values(self):
         """Inject report values for report_open_items_qweb_account."""

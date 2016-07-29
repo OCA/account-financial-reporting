@@ -208,6 +208,8 @@ class GeneralLedgerReportCompute(models.TransientModel):
             self._inject_line_centralized_values()
         # Compute display flag
         self._compute_has_second_currency()
+        # Refresh cache because all data are computed with SQL requests
+        self.refresh()
 
     def _inject_account_values(self):
         """Inject report values for report_general_ledger_qweb_account."""
@@ -896,7 +898,7 @@ SELECT
     NOW() AS create_date,
     ml.date,
     a.code AS account,
-    'Centralized Entries' AS label,
+    '""" + _('Centralized Entries') + """' AS label,
     ml.debit AS debit,
     ml.credit AS credit,
     ra.initial_balance + (
