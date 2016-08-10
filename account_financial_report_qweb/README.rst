@@ -18,9 +18,6 @@ Accunting / Reporting / OCA Reports.
    :alt: Try me on Runbot
    :target: https://runbot.odoo-community.org/runbot/91/9.0
 
-Known issues / Roadmap
-======================
-
 Bug Tracker
 ===========
 
