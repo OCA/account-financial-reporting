@@ -98,10 +98,9 @@ class GeneralLedgerReportWizard(models.TransientModel):
         self.ensure_one()
         return self._export(xlsx_report=True)
 
-    def _export(self, xlsx_report=False):
-        """Default export is PDF."""
-        model = self.env['report_general_ledger_qweb']
-        report = model.create({
+    def _prepare_report_general_ledger(self):
+        self.ensure_one()
+        return {
             'date_from': self.date_from,
             'date_to': self.date_to,
             'only_posted_moves': self.target_move == 'posted',
@@ -112,5 +111,10 @@ class GeneralLedgerReportWizard(models.TransientModel):
             'filter_cost_center_ids': [(6, 0, self.cost_center_ids.ids)],
             'centralize': self.centralize,
             'fy_start_date': self.fy_start_date,
-        })
+        }
+
+    def _export(self, xlsx_report=False):
+        """Default export is PDF."""
+        model = self.env['report_general_ledger_qweb']
+        report = model.create(self._prepare_report_general_ledger())
         return report.print_report(xlsx_report)
