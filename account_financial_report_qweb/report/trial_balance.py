@@ -133,14 +133,9 @@ class TrialBalanceReportCompute(models.TransientModel):
         return self.env['report'].get_action(records=self,
                                              report_name=report_name)
 
-    @api.multi
-    def compute_data_for_report(self):
+    def _prepare_report_general_ledger(self):
         self.ensure_one()
-        # Compute General Ledger Report Data.
-        # The data of Trial Balance Report
-        # are based on General Ledger Report data.
-        model = self.env['report_general_ledger_qweb']
-        self.general_ledger_id = model.create({
+        return {
             'date_from': self.date_from,
             'date_to': self.date_to,
             'only_posted_moves': self.only_posted_moves,
@@ -149,7 +144,18 @@ class TrialBalanceReportCompute(models.TransientModel):
             'filter_account_ids': [(6, 0, self.filter_account_ids.ids)],
             'filter_partner_ids': [(6, 0, self.filter_partner_ids.ids)],
             'fy_start_date': self.fy_start_date,
-        })
+        }
+
+    @api.multi
+    def compute_data_for_report(self):
+        self.ensure_one()
+        # Compute General Ledger Report Data.
+        # The data of Trial Balance Report
+        # are based on General Ledger Report data.
+        model = self.env['report_general_ledger_qweb']
+        self.general_ledger_id = model.create(
+            self._prepare_report_general_ledger()
+        )
         self.general_ledger_id.compute_data_for_report()
 
         # Compute report data

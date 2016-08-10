@@ -197,6 +197,16 @@ class AgedPartnerBalanceReportCompute(models.TransientModel):
         return self.env['report'].get_action(records=self,
                                              report_name=report_name)
 
+    def _prepare_report_open_items(self):
+        self.ensure_one()
+        return {
+            'date_at': self.date_at,
+            'only_posted_moves': self.only_posted_moves,
+            'company_id': self.company_id.id,
+            'filter_account_ids': [(6, 0, self.filter_account_ids.ids)],
+            'filter_partner_ids': [(6, 0, self.filter_partner_ids.ids)],
+        }
+
     @api.multi
     def compute_data_for_report(self):
         self.ensure_one()
@@ -204,13 +214,7 @@ class AgedPartnerBalanceReportCompute(models.TransientModel):
         # The data of Aged Partner Balance Report
         # are based on Open Items Report data.
         model = self.env['report_open_items_qweb']
-        self.open_items_id = model.create({
-            'date_at': self.date_at,
-            'only_posted_moves': self.only_posted_moves,
-            'company_id': self.company_id.id,
-            'filter_account_ids': [(6, 0, self.filter_account_ids.ids)],
-            'filter_partner_ids': [(6, 0, self.filter_partner_ids.ids)],
-        })
+        self.open_items_id = model.create(self._prepare_report_open_items())
         self.open_items_id.compute_data_for_report()
 
         # Compute report data

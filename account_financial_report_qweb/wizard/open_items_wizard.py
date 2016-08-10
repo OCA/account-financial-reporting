@@ -69,15 +69,19 @@ class OpenItemsReportWizard(models.TransientModel):
         self.ensure_one()
         return self._export(xlsx_report=True)
 
-    def _export(self, xlsx_report=False):
-        """Default export is PDF."""
-        model = self.env['report_open_items_qweb']
-        report = model.create({
+    def _prepare_report_open_items(self):
+        self.ensure_one()
+        return {
             'date_at': self.date_at,
             'only_posted_moves': self.target_move == 'posted',
             'hide_account_balance_at_0': self.hide_account_balance_at_0,
             'company_id': self.company_id.id,
             'filter_account_ids': [(6, 0, self.account_ids.ids)],
             'filter_partner_ids': [(6, 0, self.partner_ids.ids)],
-        })
+        }
+
+    def _export(self, xlsx_report=False):
+        """Default export is PDF."""
+        model = self.env['report_open_items_qweb']
+        report = model.create(self._prepare_report_open_items())
         return report.print_report(xlsx_report)
