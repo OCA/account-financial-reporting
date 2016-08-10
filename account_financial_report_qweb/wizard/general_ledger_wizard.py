@@ -42,8 +42,8 @@ class GeneralLedgerReportWizard(models.TransientModel):
         help='Use this filter to hide an account or a partner '
              'with an ending balance at 0. '
              'If partners are filtered, '
-             'debits and credits totals will not match the trial balance.',
-        default=False)
+             'debits and credits totals will not match the trial balance.'
+    )
     receivable_accounts_only = fields.Boolean()
     payable_accounts_only = fields.Boolean()
     partner_ids = fields.Many2many(
