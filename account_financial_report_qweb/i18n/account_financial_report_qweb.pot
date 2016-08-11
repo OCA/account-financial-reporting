@@ -928,7 +928,7 @@ msgstr ""
 
 #. module: account_financial_report_qweb
 #: model:ir.ui.menu,name:account_financial_report_qweb.menu_oca_reports
-msgid "OCA Reports"
+msgid "OCA accounting reports"
 msgstr ""
 
 #. module: account_financial_report_qweb

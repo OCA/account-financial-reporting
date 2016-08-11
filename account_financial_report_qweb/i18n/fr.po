@@ -936,8 +936,8 @@ msgstr "Écritures sans partenaire"
 
 #. module: account_financial_report_qweb
 #: model:ir.ui.menu,name:account_financial_report_qweb.menu_oca_reports
-msgid "OCA Reports"
-msgstr "Rapports OCA"
+msgid "OCA accounting reports"
+msgstr "Rapports financiers OCA"
 
 #. module: account_financial_report_qweb
 #: code:addons/account_financial_report_qweb/report/aged_partner_balance_xlsx.py:60
