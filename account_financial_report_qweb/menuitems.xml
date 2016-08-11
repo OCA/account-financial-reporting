@@ -4,7 +4,7 @@
     <menuitem
         parent="account.menu_finance_reports"
         id="menu_oca_reports"
-        name="OCA Reports"
+        name="OCA accounting reports"
         groups="account.group_account_manager,account.group_account_user"
         />
 
@@ -35,5 +35,26 @@
         id="menu_aged_partner_balance_wizard"
         sequence="40"
         />
+
+    <!-- Hide odoo PDF reports menu -->
+    <record id="account.menu_general_ledger" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_erp_manager')])]"/>
+    </record>
+
+    <record id="account.menu_general_Balance_report" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_erp_manager')])]"/>
+    </record>
+
+    <record id="account.menu_account_report_bs" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_erp_manager')])]"/>
+    </record>
+
+    <record id="account.menu_account_report_pl" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_erp_manager')])]"/>
+    </record>
+
+    <record id="account.menu_aged_trial_balance" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_erp_manager')])]"/>
+    </record>
 
 </odoo>
