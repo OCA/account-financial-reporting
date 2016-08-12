@@ -49,6 +49,22 @@ class TrialBalanceReportWizard(models.TransientModel):
         string='Filter partners',
     )
 
+    not_only_one_unaffected_earnings_account = fields.Boolean(
+        readonly=True,
+        string='Not only one unaffected earnings account'
+    )
+
+    @api.onchange('company_id')
+    def onchange_company_id(self):
+        """Handle company change."""
+        account_type = self.env.ref('account.data_unaffected_earnings')
+        count = self.env['account.account'].search_count(
+            [
+                ('user_type_id', '=', account_type.id),
+                ('company_id', '=', self.company_id.id)
+            ])
+        self.not_only_one_unaffected_earnings_account = count != 1
+
     @api.onchange('date_range_id')
     def onchange_date_range_id(self):
         """Handle date range change."""

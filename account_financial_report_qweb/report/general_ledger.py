@@ -51,6 +51,22 @@ class GeneralLedgerReport(models.TransientModel):
         inverse_name='report_id'
     )
 
+    # Compute of unaffected earnings account
+    @api.depends('company_id')
+    def _compute_unaffected_earnings_account(self):
+        account_type = self.env.ref('account.data_unaffected_earnings')
+        self.unaffected_earnings_account = self.env['account.account'].search(
+            [
+                ('user_type_id', '=', account_type.id),
+                ('company_id', '=', self.company_id.id)
+            ])
+
+    unaffected_earnings_account = fields.Many2one(
+        comodel_name='account.account',
+        compute='_compute_unaffected_earnings_account',
+        store=True
+    )
+
 
 class GeneralLedgerReportAccount(models.TransientModel):
 
@@ -198,6 +214,13 @@ class GeneralLedgerReportCompute(models.TransientModel):
         # Compute report data
         self._inject_account_values()
         self._inject_partner_values()
+
+        # Add unaffected earnings account
+        if (not self.filter_account_ids or
+                self.unaffected_earnings_account.id in
+                self.filter_account_ids.ids):
+            self._inject_unaffected_earnings_account_values()
+
         self._inject_line_not_centralized_values()
         self._inject_line_not_centralized_values(is_account_line=False,
                                                  is_partner_line=True)
@@ -206,6 +229,13 @@ class GeneralLedgerReportCompute(models.TransientModel):
                                                  only_empty_partner_line=True)
         if self.centralize:
             self._inject_line_centralized_values()
+
+        # Complete unaffected earnings account
+        if (not self.filter_account_ids or
+                self.unaffected_earnings_account.id in
+                self.filter_account_ids.ids):
+            self._complete_unaffected_earnings_account_values()
+
         # Compute display flag
         self._compute_has_second_currency()
         # Refresh cache because all data are computed with SQL requests
@@ -285,6 +315,7 @@ WITH
         query_inject_account += """
             WHERE
                 a.company_id = %s
+            AND a.id != %s
                     """
         if self.filter_account_ids:
             query_inject_account += """
@@ -364,6 +395,7 @@ AND
             )
         query_inject_account_params += (
             self.company_id.id,
+            self.unaffected_earnings_account.id,
         )
         if self.filter_account_ids:
             query_inject_account_params += (
@@ -979,3 +1011,141 @@ WHERE id = %s
         """
         params = (self.id,) * 3
         self.env.cr.execute(query_update_has_second_currency, params)
+
+    def _inject_unaffected_earnings_account_values(self):
+        """Inject the report values of the unaffected earnings account
+        for report_general_ledger_qweb_account."""
+        subquery_sum_amounts = """
+        SELECT
+            SUM(ml.balance) AS balance
+        FROM
+            account_account a
+        INNER JOIN
+            account_account_type at ON a.user_type_id = at.id
+        INNER JOIN
+            account_move_line ml
+                ON a.id = ml.account_id
+                AND ml.date <= %s
+                AND
+                    NOT(
+                        at.include_initial_balance != TRUE AND ml.date >= %s
+                        OR at.include_initial_balance = TRUE
+                    )
+        """
+        if self.only_posted_moves:
+            subquery_sum_amounts += """
+        INNER JOIN
+            account_move m ON ml.move_id = m.id AND m.state = 'posted'
+            """
+        if self.filter_cost_center_ids:
+            subquery_sum_amounts += """
+        INNER JOIN
+            account_analytic_account aa
+                ON
+                    ml.analytic_account_id = aa.id
+                    AND aa.id IN %s
+            """
+        subquery_sum_amounts += """
+        WHERE
+            a.company_id =%s
+        AND a.id != %s
+        """
+        query_inject_account = """
+        WITH
+            initial_sum_amounts AS ( """ + subquery_sum_amounts + """ )
+        INSERT INTO
+            report_general_ledger_qweb_account
+            (
+            report_id,
+            create_uid,
+            create_date,
+            account_id,
+            code,
+            name,
+            is_partner_account,
+            initial_balance
+            )
+        SELECT
+            %s AS report_id,
+            %s AS create_uid,
+            NOW() AS create_date,
+            a.id AS account_id,
+            a.code,
+            a.name,
+            False AS is_partner_account,
+            COALESCE(i.balance, 0.0) AS initial_balance
+        FROM
+            account_account a,
+            initial_sum_amounts i
+        WHERE
+            a.company_id = %s
+        AND a.id = %s
+                """
+        query_inject_account_params = (
+            self.date_from,
+            self.fy_start_date,
+        )
+        if self.filter_cost_center_ids:
+            query_inject_account_params += (
+                tuple(self.filter_cost_center_ids.ids),
+            )
+        query_inject_account_params += (
+            self.company_id.id,
+            self.unaffected_earnings_account.id,
+            self.id,
+            self.env.uid,
+            self.company_id.id,
+            self.unaffected_earnings_account.id,
+        )
+        self.env.cr.execute(query_inject_account,
+                            query_inject_account_params)
+
+    def _complete_unaffected_earnings_account_values(self):
+        """Complete the report values of the unaffected earnings account
+        for report_general_ledger_qweb_account."""
+        query_update_unaffected_earnings_account_values = """
+        WITH
+            sum_amounts AS
+                (
+                    SELECT
+                        SUM(COALESCE(rml.debit, 0.0)) AS debit,
+                        SUM(COALESCE(rml.credit, 0.0)) AS credit,
+                        SUM(
+                            COALESCE(rml.debit, 0.0) -
+                            COALESCE(rml.credit, 0.0)
+                        ) + ra.initial_balance AS balance
+                    FROM
+                        report_general_ledger_qweb_account ra
+                    LEFT JOIN
+                        report_general_ledger_qweb_move_line rml
+                            ON ra.id = rml.report_account_id
+                    WHERE
+                        ra.report_id = %s
+                    AND ra.account_id = %s
+                    GROUP BY
+                        ra.id
+                )
+        UPDATE
+            report_general_ledger_qweb_account ra
+        SET
+            initial_debit = 0.0,
+            initial_credit = 0.0,
+            final_debit = sum_amounts.debit,
+            final_credit = sum_amounts.credit,
+            final_balance = sum_amounts.balance
+        FROM
+            sum_amounts
+        WHERE
+            ra.report_id = %s
+        AND ra.account_id = %s
+        """
+        params = (
+            self.id,
+            self.unaffected_earnings_account.id,
+            self.id,
+            self.unaffected_earnings_account.id,
+        )
+        self.env.cr.execute(
+            query_update_unaffected_earnings_account_values,
+            params
+        )
