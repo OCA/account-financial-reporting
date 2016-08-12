@@ -43,8 +43,10 @@ class AbstractTest(TransactionCase):
         report_html = self.env['report'].get_html(
             self.report, self.qweb_report_name
         )
-        self.assertRegexpMatches(report_html, self.report_title)
-        self.assertRegexpMatches(report_html, self.report.account_ids[0].name)
+        self.assertTrue(self.report_title.encode('utf8') in report_html)
+        self.assertTrue(
+            self.report.account_ids[0].name.encode('utf8') in report_html
+        )
 
     def test_02_generation_report_xlsx(self):
         """Check if report XLSX is correctly generated"""
