@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-11 09:11+0000\n"
-"PO-Revision-Date: 2016-08-11 09:11+0000\n"
+"POT-Creation-Date: 2016-08-12 12:18+0000\n"
+"PO-Revision-Date: 2016-08-12 12:18+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -246,7 +246,7 @@ msgid "Centralized"
 msgstr "Centralisé"
 
 #. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:901
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:933
 #, python-format
 msgid "Centralized Entries"
 msgstr "Écritures centralisées"
@@ -268,6 +268,14 @@ msgstr "Code"
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_open_items_report_wizard_company_id
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_trial_balance_report_wizard_company_id
 msgid "Company"
+msgstr "Société"
+
+#. module: account_financial_report_qweb
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_aged_partner_balance_qweb_company_id
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_company_id
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_open_items_qweb_company_id
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_company_id
+msgid "Company id"
 msgstr "Société"
 
 #. module: account_financial_report_qweb
@@ -529,7 +537,7 @@ msgstr "Débit"
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_partner_display_name
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_trial_balance_report_wizard_display_name
 msgid "Display Name"
-msgstr "Afficher le nom"
+msgstr "Nom affiché"
 
 #. module: account_financial_report_qweb
 #: code:addons/account_financial_report_qweb/report/aged_partner_balance_xlsx.py:75
@@ -690,6 +698,11 @@ msgstr "General Ledger Report Wizard"
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_general_ledger_xlsx
 msgid "General Ledger XLSX"
 msgstr "Grand livre en XLSX"
+
+#. module: account_financial_report_qweb
+#: model:ir.ui.view,arch_db:account_financial_report_qweb.general_ledger_wizard
+msgid "General Ledger can be computed only if selected company have only one unaffected earnings account."
+msgstr "Le Grand Livre ne peut être calculé que si la société sélectionnée a un seul compte de résultat non affecté."
 
 #. module: account_financial_report_qweb
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_general_ledger_id
@@ -926,13 +939,19 @@ msgid "No"
 msgstr "Non"
 
 #. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:459
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:675
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:491
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:707
 #: code:addons/account_financial_report_qweb/report/open_items.py:277
 #: code:addons/account_financial_report_qweb/report/open_items.py:493
 #, python-format
 msgid "No partner allocated"
 msgstr "Écritures sans partenaire"
+
+#. module: account_financial_report_qweb
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_general_ledger_report_wizard_not_only_one_unaffected_earnings_account
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_trial_balance_report_wizard_not_only_one_unaffected_earnings_account
+msgid "Not only one unaffected earnings account"
+msgstr "Pas un seul compte de résultat non affecté"
 
 #. module: account_financial_report_qweb
 #: model:ir.ui.menu,name:account_financial_report_qweb.menu_oca_reports
@@ -1233,6 +1252,16 @@ msgid "Trial Balance XLSX"
 msgstr "Balance générale XLSX"
 
 #. module: account_financial_report_qweb
+#: model:ir.ui.view,arch_db:account_financial_report_qweb.trial_balance_wizard
+msgid "Trial Balance can be computed only if selected company have only one unaffected earnings account."
+msgstr "La Balance Générale ne peut être calculée que si la société sélectionnée a un seul compte de résultat non affecté."
+
+#. module: account_financial_report_qweb
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_unaffected_earnings_account
+msgid "Unaffected earnings account"
+msgstr "Compte de résultat non affecté"
+
+#. module: account_financial_report_qweb
 #: model:ir.model.fields,help:account_financial_report_qweb.field_general_ledger_report_wizard_hide_account_balance_at_0
 #: model:ir.model.fields,help:account_financial_report_qweb.field_open_items_report_wizard_hide_account_balance_at_0
 #: model:ir.model.fields,help:account_financial_report_qweb.field_trial_balance_report_wizard_hide_account_balance_at_0
@@ -1333,3 +1362,4 @@ msgstr "report_trial_balance_qweb_account"
 #: model:ir.model,name:account_financial_report_qweb.model_report_trial_balance_qweb_partner
 msgid "report_trial_balance_qweb_partner"
 msgstr "report_trial_balance_qweb_partner"
+

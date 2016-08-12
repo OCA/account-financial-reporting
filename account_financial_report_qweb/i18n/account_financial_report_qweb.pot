@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-29 07:38+0000\n"
-"PO-Revision-Date: 2016-07-29 07:38+0000\n"
+"POT-Creation-Date: 2016-08-12 12:17+0000\n"
+"PO-Revision-Date: 2016-08-12 12:17+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -263,6 +263,22 @@ msgid "Code"
 msgstr ""
 
 #. module: account_financial_report_qweb
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_aged_partner_balance_wizard_company_id
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_general_ledger_report_wizard_company_id
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_open_items_report_wizard_company_id
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_trial_balance_report_wizard_company_id
+msgid "Company"
+msgstr ""
+
+#. module: account_financial_report_qweb
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_aged_partner_balance_qweb_company_id
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_company_id
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_open_items_qweb_company_id
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_company_id
+msgid "Company id"
+msgstr ""
+
+#. module: account_financial_report_qweb
 #: code:addons/account_financial_report_qweb/report/general_ledger_xlsx.py:30
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_move_line_cost_center
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_general_ledger_qweb_lines
@@ -464,18 +480,18 @@ msgid "Date from"
 msgstr ""
 
 #. module: account_financial_report_qweb
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_general_ledger_report_wizard_date_range_id
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_trial_balance_report_wizard_date_range_id
+msgid "Date range"
+msgstr ""
+
+#. module: account_financial_report_qweb
 #: code:addons/account_financial_report_qweb/report/general_ledger_xlsx.py:61
 #: code:addons/account_financial_report_qweb/report/trial_balance_xlsx.py:66
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_general_ledger_qweb_filters
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_trial_balance_qweb_filters
 #, python-format
 msgid "Date range filter"
-msgstr ""
-
-#. module: account_financial_report_qweb
-#: model:ir.model.fields,field_description:account_financial_report_qweb.field_general_ledger_report_wizard_date_range_id
-#: model:ir.model.fields,field_description:account_financial_report_qweb.field_trial_balance_report_wizard_date_range_id
-msgid "Date range id"
 msgstr ""
 
 #. module: account_financial_report_qweb
@@ -681,6 +697,11 @@ msgstr ""
 #. module: account_financial_report_qweb
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_general_ledger_xlsx
 msgid "General Ledger XLSX"
+msgstr ""
+
+#. module: account_financial_report_qweb
+#: model:ir.ui.view,arch_db:account_financial_report_qweb.general_ledger_wizard
+msgid "General Ledger can be computed only if selected company have only one unaffected earnings account."
 msgstr ""
 
 #. module: account_financial_report_qweb
@@ -918,12 +939,18 @@ msgid "No"
 msgstr ""
 
 #. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:457
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:673
-#: code:addons/account_financial_report_qweb/report/open_items.py:275
-#: code:addons/account_financial_report_qweb/report/open_items.py:491
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:491
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:707
+#: code:addons/account_financial_report_qweb/report/open_items.py:277
+#: code:addons/account_financial_report_qweb/report/open_items.py:493
 #, python-format
 msgid "No partner allocated"
+msgstr ""
+
+#. module: account_financial_report_qweb
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_general_ledger_report_wizard_not_only_one_unaffected_earnings_account
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_trial_balance_report_wizard_not_only_one_unaffected_earnings_account
+msgid "Not only one unaffected earnings account"
 msgstr ""
 
 #. module: account_financial_report_qweb
@@ -1222,6 +1249,16 @@ msgstr ""
 #. module: account_financial_report_qweb
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_trial_balance_xlsx
 msgid "Trial Balance XLSX"
+msgstr ""
+
+#. module: account_financial_report_qweb
+#: model:ir.ui.view,arch_db:account_financial_report_qweb.trial_balance_wizard
+msgid "Trial Balance can be computed only if selected company have only one unaffected earnings account."
+msgstr ""
+
+#. module: account_financial_report_qweb
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_unaffected_earnings_account
+msgid "Unaffected earnings account"
 msgstr ""
 
 #. module: account_financial_report_qweb
