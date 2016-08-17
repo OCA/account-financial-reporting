@@ -37,24 +37,51 @@
         />
 
     <!-- Hide odoo PDF reports menu -->
-    <record id="account.menu_general_ledger" model="ir.ui.menu">
-        <field name="groups_id" eval="[(6, 0, [ref('base.group_erp_manager')])]"/>
-    </record>
+    <menuitem
+        id="account.menu_finance_legal_statement"
+        name="PDF Reports"
+        parent="account.menu_finance_reports"
+        groups="base.group_erp_manager"
+        />
 
-    <record id="account.menu_general_Balance_report" model="ir.ui.menu">
-        <field name="groups_id" eval="[(6, 0, [ref('base.group_erp_manager')])]"/>
-    </record>
+    <menuitem
+        id="account.menu_general_ledger"
+        name="General Ledger"
+        parent="account.menu_finance_legal_statement"
+        action="account.action_account_general_ledger_menu"
+        groups="base.group_erp_manager"
+        />
 
-    <record id="account.menu_account_report_bs" model="ir.ui.menu">
-        <field name="groups_id" eval="[(6, 0, [ref('base.group_erp_manager')])]"/>
-    </record>
+    <menuitem
+        id="account.menu_general_Balance_report"
+        name="Trial Balance"
+        parent="account.menu_finance_legal_statement"
+        action="account.action_account_balance_menu"
+        groups="base.group_erp_manager"
+        />
 
-    <record id="account.menu_account_report_pl" model="ir.ui.menu">
-        <field name="groups_id" eval="[(6, 0, [ref('base.group_erp_manager')])]"/>
-    </record>
+    <menuitem
+        id="account.menu_account_report_bs"
+        name="Balance Sheet"
+        action="account.action_account_report_bs"
+        parent="account.menu_finance_legal_statement"
+        groups="base.group_erp_manager"
+        />
 
-    <record id="account.menu_aged_trial_balance" model="ir.ui.menu">
-        <field name="groups_id" eval="[(6, 0, [ref('base.group_erp_manager')])]"/>
-    </record>
+    <menuitem
+        id="account.menu_account_report_pl"
+        name="Profit and Loss"
+        action="account.action_account_report_pl"
+        parent="account.menu_finance_legal_statement"
+        groups="base.group_erp_manager"
+        />
+
+    <menuitem
+        id="account.menu_aged_trial_balance"
+        name="Aged Partner Balance"
+        action="account.action_account_aged_balance_view"
+        parent="account.menu_finance_legal_statement"
+        groups="base.group_erp_manager"
+        />
 
 </odoo>
