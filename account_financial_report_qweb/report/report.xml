@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+
+    <report
+      id="action_report_general_ledger_qweb"
+      model="report.account.report_generalledger_qweb"
+      string="General Ledger"
+      report_type="qweb-pdf"
+      name="account.report_generalledger_qweb"
+      file="account.report_generalledger_qweb"
+      />
+
+  </data>
+</openerp>

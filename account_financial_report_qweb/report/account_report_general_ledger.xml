@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="assets_specific" inherit_id="report.assets_common">
+    <xpath expr="." position="inside">
+      <link href="/account_financial_report_qweb/static/src/css/report.css" rel="stylesheet"/>
+    </xpath>
+  </template>
+
+  <template id="account.report_generalledger_qweb">
+    <t t-call="report.html_container">
+      <t t-set="data_report_margin_top" t-value="12"/>
+      <t t-set="data_report_header_spacing" t-value="9"/>
+      <t t-set="data_report_dpi" t-value="110"/>
+      <t t-foreach="docs" t-as="o">
+
+        <t t-call="report.internal_layout">
+          <div class="page">
+            <div class="act_as_table data_table" style="width: 1205px">
+              <div class="act_as_row labels">
+                <!--<div class="act_as_cell">Chart of Account</div>-->
+                <div class="act_as_cell">Fiscal Year</div>
+                <t t-if="o.fiscalyear or o.start_date or o.end_date">
+                  <div class="act_as_cell">
+                    <t t-if="not o.fiscalyear">
+                      Dates Filter
+                    </t>
+                    <t t-if="o.fiscalyear">
+                      Fiscal Year Filter
+                    </t>
+                  </div>
+                </t>
+                <div class="act_as_cell">Accounts Filter</div>
+                <div class="act_as_cell">Journal Filter</div>
+                <div class="act_as_cell">Target Moves</div>
+              </div>
+              <div class="act_as_row">
+                <div class="act_as_cell"><span t-field="o.fiscalyear.name"/></div>
+                <t t-if="o.fiscalyear or o.start_date or o.end_date">
+                  <div class="act_as_cell">
+                    From:
+                    <span t-field="o.start_date"/>
+                    To:
+                    <span t-field="o.end_date"/>
+                  </div>
+                </t>
+                <div class="act_as_cell">
+                  <t t-if="o.account_ids">
+                    <t t-raw="', '.join(o.account_ids.mapped('code'))"/>
+                  </t>
+                  <t t-if="not o.account_ids">
+                    All
+                  </t>
+                </div>
+                <div class="act_as_cell">
+                  <t t-if="o.journal_ids">
+                    <t t-raw="', '.join(o.journal_ids.mapped('code'))"/>
+                  </t>
+                  <t t-if="not o.journal_ids">
+                    All
+                  </t>
+                </div>
+                <div class="act_as_cell"><span t-field="o.target_move"/></div>
+              </div>
+              <t t-set="account" t-value="False"/>
+              <!-- we use div with css instead of table for tabular data because div do not cut rows at half at page breaks -->
+              <t t-foreach="report_lines" t-as="line">
+                <t t-if="account != line.account_id">
+                  <t t-set="account" t-value="line.account_id"/>
+                  &lt;div class="act_as_table list_table" style="margin-top: 10px;"&gt;
+                  <div class="act_as_caption account_title">
+                    <span t-field="account.code"/> - <span t-field="account.name"/>
+                  </div>
+                  <div class="act_as_thead">
+                    <div class="act_as_row labels">
+                      <!--## date-->
+                      <div class="act_as_cell first_column" style="width: 50px;">Date</div>
+                      <!--## move-->
+                      <div class="act_as_cell" style="width: 100px;">Entry</div>
+                      <!--## journal-->
+                      <div class="act_as_cell" style="width: 70px;">Journal</div>
+                      <!--## account code-->
+                      <div class="act_as_cell" style="width: 65px;">Account</div>
+                      <!--## partner-->
+                      <div class="act_as_cell" style="width: 140px;">Partner</div>
+                      <!--## move reference-->
+                      <div class="act_as_cell" style="width: 140px;">Reference</div>
+                      <!--## label-->
+                      <div class="act_as_cell" style="width: 160px;">Label</div>
+                      <!--## debit-->
+                      <div class="act_as_cell amount" style="width: 75px;">Debit</div>
+                      <!--## credit-->
+                      <div class="act_as_cell amount" style="width: 75px;">Credit</div>
+                      <!--## balance cumulated-->
+                      <div class="act_as_cell amount" style="width: 75px;">Cumul. Bal.</div>
+                      <t t-if="has_currency">
+                        <!--## currency balance-->
+                        <div class="act_as_cell amount sep_left" style="width: 75px;">Curr. Balance</div>
+                        <!--## curency code-->
+                        <div class="act_as_cell amount" style="width: 30px; text-align: right;">Curr.</div>
+                      </t>
+                    </div>
+                  </div>
+                  <t t-if="not account.user_type_id.include_initial_balance">
+                    <t t-set="cumul_debit" t-value="0"/>
+                    <t t-set="cumul_credit" t-value="0"/>
+                    <t t-set="cumul_balance" t-value="0"/>
+                  </t>
+                  <!-- # init balance -->
+                  <t t-if="account.user_type_id.include_initial_balance">
+                    <div class="act_as_tbody">
+                      <div class="act_as_row initial_balance">
+                        <!--## date-->
+                        <div class="act_as_cell first_column"></div>
+                        <!--## move-->
+                        <div class="act_as_cell"></div>
+                        <!--## journal-->
+                        <div class="act_as_cell"></div>
+                        <!--## account code-->
+                        <div class="act_as_cell"></div>
+                        <!--## partner-->
+                        <div class="act_as_cell"></div>
+                        <!--## move reference-->
+                        <div class="act_as_cell"></div>
+                        <!--## label-->
+                        <div class="act_as_cell">Initial Balance</div>
+                        <!--## debit-->
+                        <div class="act_as_cell amount">
+                          <t t-if="not line.centralized">
+                            <span t-field="line.init_debit"/>
+                          </t>
+                          <t t-if="line.centralized">
+                            <span t-field="line.init_debit_centralized"/>
+                          </t>
+                        </div>
+                        <!--## credit-->
+                        <div class="act_as_cell amount">
+                          <t t-if="not line.centralized">
+                            <span t-field="line.init_credit"/>
+                          </t>
+                          <t t-if="line.centralized">
+                            <span t-field="line.init_credit_centralized"/>
+                          </t>
+                        </div>
+                        <!--## balance cumulated-->
+                        <div class="act_as_cell amount" style="padding-right: 1px;">
+                          <t t-if="not line.centralized">
+                            <span t-field="line.init_balance"/>
+                          </t>
+                          <t t-if="line.centralized">
+                            <span t-field="line.init_balance"/>
+                          </t>
+                        </div>
+                        <t t-if="has_currency">
+                          <!--## currency balance-->
+                          <div class="act_as_cell amount sep_left">
+                            <t t-if="not line.centralized and account.currency_id">
+                              <span t-field="line.init_balance_curr"/>
+                            </t>
+                            <t t-if="line.centralized and account.currency_id">
+                              <span t-raw="line.init_balance_curr_centralized"/>
+                            </t>
+                          </div>
+                          <!--## curency code-->
+                          <div class="act_as_cell amount"></div>
+                        </t>
+                      </div>
+                    </div>
+                  </t>
+                </t>
+                <!-- # lines or centralized lines -->
+                <div class="act_as_row lines">
+                  <t t-if="not line.centralized">
+                    <!--## date-->
+                    <div class="act_as_cell first_column"><span t-field="line.date"/></div>
+                    <!--## move-->
+                    <div class="act_as_cell"><span t-raw="line.move_name or ''"/></div>
+                    <!--## journal-->
+                    <div class="act_as_cell"><span t-field="line.journal_id.code"/></div>
+                    <!--## account code-->
+                    <div class="act_as_cell"><span t-field="account.code"/></div>
+                    <!--## partner-->
+                    <div class="act_as_cell overflow_ellipsis"><span t-field="line.partner_name"/></div>
+                    <!--## move reference-->
+                    <div class="act_as_cell"><span t-field="line.ref"/></div>
+                    <!--## label-->
+                    <div class="act_as_cell"><span t-field="line.label"/></div>
+                    <!--## debit-->
+                    <div class="act_as_cell amount"><span t-field="line.debit"/></div>
+                    <!--## credit-->
+                    <div class="act_as_cell amount"><span t-field="line.credit"/></div>
+                    <!--## balance cumulated-->
+                    <div class="act_as_cell amount" style="padding-right: 1px;">
+                      <t t-if="not account.user_type_id.include_initial_balance">
+                        <t t-set="cumul_debit" t-value="cumul_debit + line.debit"/>
+                        <t t-set="cumul_credit" t-value="cumul_credit + line.credit"/>
+                        <t t-set="cumul_balance" t-value="cumul_balance + line.balance"/>
+                        <span t-raw="cumul_balance"/>
+                      </t>
+                      <t t-if="account.user_type_id.include_initial_balance">
+                        <span t-field="line.cumul_balance"/>
+                      </t>
+                    </div>
+                    <t t-if="has_currency">
+                      <!--## currency balance-->
+                      <div class="act_as_cell amount" style="padding-right: 1px;">
+                        <span t-field="line.amount_currency"/>
+                      </div>
+                      <!--## curency code-->
+                      <div class="act_as_cell amount" style="text-align: right;"><span t-field="line.currency_code"/></div>
+                    </t>
+                  </t>
+                  <t t-if="line.centralized and line.period_last">
+                    <!--## date-->
+                    <div class="act_as_cell first_column"><span t-field="line.month"/></div>
+                    <!--## move-->
+                    <div class="act_as_cell">Month centralization</div>
+                    <!--## journal-->
+                    <div class="act_as_cell"><span t-field="line.journal_id.code"/></div>
+                    <!--## account code-->
+                    <div class="act_as_cell"><span t-field="account.code"/></div>
+                    <!--## partner-->
+                    <div class="act_as_cell overflow_ellipsis"><span t-field="line.partner_name"/> <span t-if="line.partner_ref" t-field="line.partner_ref"/></div>
+                    <!--## move reference-->
+                    <div class="act_as_cell"></div>
+                    <!--## label-->
+                    <div class="act_as_cell"></div>
+                    <!--## debit-->
+                    <div class="act_as_cell amount"><span t-field="line.debit_centralized"/></div>
+                    <!--## credit-->
+                    <div class="act_as_cell amount"><span t-field="line.credit_centralized"/></div>
+                    <!--## balance cumulated-->
+                    <div class="act_as_cell amount" style="padding-right: 1px;"><span t-field="line.cumul_balance"/></div>
+                    <t t-if="has_currency">
+                      <!--## currency balance-->
+                      <div class="act_as_cell amount sep_left"><span t-if="account.currency_id" t-field="line.balance_curr_centralized"/></div>
+                      <!--## curency code-->
+                      <div class="act_as_cell amount" style="text-align: right;"><span t-field="line.currency_code"/></div>
+                    </t>
+                  </t>
+                </div>
+                <!-- # Total -->
+
+                <t t-if="(line_index + 1) == len(report_lines) or line.account_id != report_lines[line_index + 1].account_id">
+                  <div class="act_as_table list_table">
+                    <div class="act_as_row labels" style="font-weight: bold;">
+                      <!--## date-->
+                      <div class="act_as_cell first_column" style="width: 425;"><span t-field="account.code"/> - <span t-field="account.name"/></div>
+                      <div class="act_as_cell" style="width: 300px;">Cumulated Balance on Account</div>
+                      <!--## debit-->
+                      <div class="act_as_cell amount" style="width: 75px;">
+                        <t t-if="account.user_type_id.include_initial_balance">
+                          <span t-field="line.cumul_debit"/>
+                        </t>
+                        <t t-if="not account.user_type_id.include_initial_balance">
+                          <span t-raw="cumul_debit"/>
+                        </t>
+                      </div>
+                      <!--## credit-->
+                      <div class="act_as_cell amount" style="width: 75px;">
+                        <t t-if="account.user_type_id.include_initial_balance">
+                          <span t-field="line.cumul_credit"/>
+                        </t>
+                        <t t-if="not account.user_type_id.include_initial_balance">
+                          <span t-raw="cumul_credit"/>
+                        </t>
+                      </div>
+                      <!--## balance cumulated-->
+                      <div class="act_as_cell amount" style="width: 75px; padding-right: 1px;">
+                        <t t-if="account.user_type_id.include_initial_balance">
+                          <span t-field="line.cumul_balance"/>
+                        </t>
+                        <t t-if="not account.user_type_id.include_initial_balance">
+                          <span t-raw="cumul_balance"/>
+                        </t>
+                      </div>
+                      <t t-if="has_currency">
+                        <!--## currency balance-->
+                        <div class="act_as_cell amount sep_left" style="width: 75px;"><t t-if="account.currency_id"><span t-field="line.cumul_balance_curr"/></t></div>
+                        <!--## curency code-->
+                        <div class="act_as_cell amount" style="width: 30px; text-align: right;"></div>
+                      </t>
+                    </div>
+                    &lt;/div&gt;
+                  </div>
+                </t>
+              </t>
+            </div>
+          </div>
+        </t>
+      </t>
+    </t>
+  </template>
+</odoo>
