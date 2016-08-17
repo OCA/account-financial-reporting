@@ -164,7 +164,8 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem id="mis_report_view_menu" parent="account.menu_account_reports" name="MIS Report Templates" action="mis_report_view_action" sequence="21"/>
+        <menuitem id="mis_report_conf_menu" parent="account.menu_finance_configuration" name="MIS Reporting" sequence="90"/>
+        <menuitem id="mis_report_view_menu" parent="mis_report_conf_menu" name="MIS Report Templates" action="mis_report_view_action" sequence="21"/>
 
     </data>
 </openerp>
