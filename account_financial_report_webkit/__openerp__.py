@@ -169,7 +169,7 @@ an issue in wkhtmltopdf
 the header and footer are created as text with arguments passed to
 wkhtmltopdf. The texts are defined inside the report classes.
 """,
-    'version': '8.0.1.1.0',
+    'version': '8.0.1.2.0',
     'author': "Camptocamp,Odoo Community Association (OCA)",
     'license': 'AGPL-3',
     'category': 'Finance',
@@ -180,6 +180,7 @@ wkhtmltopdf. The texts are defined inside the report classes.
                 'report_webkit'],
     'demo': [],
     'data': ['account_view.xml',
+             'res_company_view.xml',
              'data/financial_webkit_header.xml',
              'report/report.xml',
              'wizard/wizard.xml',
