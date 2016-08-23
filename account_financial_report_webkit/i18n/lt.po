@@ -1519,7 +1519,7 @@ msgstr "onchange_period_to(fiscalyear_id, period_to, date_to, until_date)"
 
 #. module: account_financial_report_webkit
 #: help:account.move.line,last_rec_date:0
-msgid "the date of the last reconciliation (full or partial)                   account move line"
+msgid "The date of the last reconciliation (full or partial) account move line."
 msgstr "paskutinio sąskaitos sujungimo (pilno ar dalinio) data                   sąskaitos eilutė"
 
 #. module: account_financial_report_webkit

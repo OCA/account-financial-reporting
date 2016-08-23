@@ -169,8 +169,12 @@ an issue in wkhtmltopdf
 the header and footer are created as text with arguments passed to
 wkhtmltopdf. The texts are defined inside the report classes.
 """,
-    'version': '8.0.1.1.0',
-    'author': "Camptocamp,Odoo Community Association (OCA)",
+    'version': '8.0.1.2.0',
+    'author': (
+        "Camptocamp,"
+        "Savoir-faire Linux,"
+        "Odoo Community Association (OCA)"
+    ),
     'license': 'AGPL-3',
     'category': 'Finance',
     'website': 'http://www.camptocamp.com',
@@ -195,12 +199,12 @@ wkhtmltopdf. The texts are defined inside the report classes.
              'report_menus.xml',
              ],
     # tests order matter
-    'test': ['tests/general_ledger.yml',
-             'tests/partner_ledger.yml',
-             'tests/trial_balance.yml',
-             'tests/partner_balance.yml',
-             'tests/open_invoices.yml',
-             'tests/aged_trial_balance.yml'],
+    'test': ['test/general_ledger.yml',
+             'test/partner_ledger.yml',
+             'test/trial_balance.yml',
+             'test/partner_balance.yml',
+             'test/open_invoices.yml',
+             'test/aged_trial_balance.yml'],
     # 'tests/account_move_line.yml'
     'active': False,
     'installable': True,
