@@ -21,7 +21,7 @@ addon | version | summary
 [account_chart_report](account_chart_report/) | 8.0.1.0.0 | Print chart of accounts
 [account_export_csv](account_export_csv/) | 8.0.1.1.0 | Account Export CSV
 [account_financial_report_horizontal](account_financial_report_horizontal/) | 8.0.0.3.0 | Accounting Financial Reports Horizontal
-[account_financial_report_webkit](account_financial_report_webkit/) | 8.0.1.1.0 | Financial Reports - Webkit
+[account_financial_report_webkit](account_financial_report_webkit/) | 8.0.1.2.0 | Financial Reports - Webkit
 [account_financial_report_webkit_xls](account_financial_report_webkit_xls/) | 8.0.0.4.0 | Add XLS export to accounting reports
 [account_journal_report_xls](account_journal_report_xls/) | 8.0.0.2.0 | Financial Journal reports
 [account_move_line_report_xls](account_move_line_report_xls/) | 8.0.0.6.0 | Journal Items Excel export
