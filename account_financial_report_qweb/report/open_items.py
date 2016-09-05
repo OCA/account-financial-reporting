@@ -339,16 +339,11 @@ FROM
         )
         self.env.cr.execute(query_inject_partner, query_inject_partner_params)
 
-    def _inject_line_values(self, only_empty_partner_line=False):
-        """ Inject report values for report_open_items_qweb_move_line.
-
-        The "only_empty_partner_line" value is used
-        to compute data without partner.
-        """
-        query_inject_move_line = """
-WITH
-    move_lines_amount AS
-        (
+    def _get_line_sub_query_move_lines(self,
+                                       only_empty_partner_line=False,
+                                       positive_balance=True):
+        """ Return subquery used to compute sum amounts on lines """
+        sub_query = """
             SELECT
                 ml.id,
                 ml.balance,
@@ -377,32 +372,42 @@ WITH
                     ON ra.account_id = ml.account_id
         """
         if not only_empty_partner_line:
-            query_inject_move_line += """
+            sub_query += """
                     AND rp.partner_id = ml.partner_id
             """
         elif only_empty_partner_line:
-            query_inject_move_line += """
+            sub_query += """
                     AND ml.partner_id IS NULL
             """
-        query_inject_move_line += """
+        if not positive_balance:
+            sub_query += """
             LEFT JOIN
                 account_partial_reconcile pr
                     ON ml.balance < 0 AND pr.credit_move_id = ml.id
-                    OR ml.balance > 0 AND pr.debit_move_id = ml.id
             LEFT JOIN
                 account_move_line ml_future
-                    ON (
-                        ml.balance < 0 AND pr.debit_move_id = ml_future.id
-                        OR ml.balance > 0 AND pr.credit_move_id = ml_future.id
-                        )
-                        AND ml_future.date >= %s
+                    ON ml.balance < 0 AND pr.debit_move_id = ml_future.id
+                    AND ml_future.date >= %s
             LEFT JOIN
                 account_move_line ml_past
-                    ON (
-                        ml.balance < 0 AND pr.debit_move_id = ml_past.id
-                        OR ml.balance > 0 AND pr.credit_move_id = ml_past.id
-                        )
-                        AND ml_past.date < %s
+                    ON ml.balance < 0 AND pr.debit_move_id = ml_past.id
+                    AND ml_past.date < %s
+            """
+        else:
+            sub_query += """
+            LEFT JOIN
+                account_partial_reconcile pr
+                    ON ml.balance > 0 AND pr.debit_move_id = ml.id
+            LEFT JOIN
+                account_move_line ml_future
+                    ON ml.balance > 0 AND pr.credit_move_id = ml_future.id
+                    AND ml_future.date >= %s
+            LEFT JOIN
+                account_move_line ml_past
+                    ON ml.balance > 0 AND pr.credit_move_id = ml_past.id
+                    AND ml_past.date < %s
+        """
+        sub_query += """
             WHERE
                 ra.report_id = %s
             GROUP BY
@@ -414,7 +419,32 @@ WITH
                     ml.full_reconcile_id IS NULL
                     OR MAX(ml_future.id) IS NOT NULL
                 )
+        """
+        return sub_query
 
+    def _inject_line_values(self, only_empty_partner_line=False):
+        """ Inject report values for report_open_items_qweb_move_line.
+
+        The "only_empty_partner_line" value is used
+        to compute data without partner.
+        """
+        query_inject_move_line = """
+WITH
+    move_lines_amount AS
+        (
+        """
+        query_inject_move_line += self._get_line_sub_query_move_lines(
+            only_empty_partner_line=only_empty_partner_line,
+            positive_balance=True
+        )
+        query_inject_move_line += """
+            UNION
+        """
+        query_inject_move_line += self._get_line_sub_query_move_lines(
+            only_empty_partner_line=only_empty_partner_line,
+            positive_balance=False
+        )
+        query_inject_move_line += """
         ),
     move_lines AS
         (
@@ -558,6 +588,9 @@ ORDER BY
         self.env.cr.execute(
             query_inject_move_line,
             (self.date_at,
+             self.date_at,
+             self.id,
+             self.date_at,
              self.date_at,
              self.id,
              self.env.uid,

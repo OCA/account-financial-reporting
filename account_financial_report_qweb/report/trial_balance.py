@@ -156,7 +156,9 @@ class TrialBalanceReportCompute(models.TransientModel):
         self.general_ledger_id = model.create(
             self._prepare_report_general_ledger()
         )
-        self.general_ledger_id.compute_data_for_report()
+        self.general_ledger_id.compute_data_for_report(
+            with_line_details=False, with_partners=self.show_partner_details
+        )
 
         # Compute report data
         self._inject_account_values()
