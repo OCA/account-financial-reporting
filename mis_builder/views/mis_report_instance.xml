@@ -111,7 +111,8 @@
             <field name="domain">[('temporary', '=', False)]</field>
         </record>
 
-        <menuitem id="mis_report_instance_view_menu" parent="account.menu_finance_reports" name="MIS Reports" action="mis_report_instance_view_action" sequence="101"/>
+        <menuitem id="mis_report_finance_menu" parent="account.menu_finance_reports" name="MIS Reporting" sequence="101"/>
+        <menuitem id="mis_report_instance_view_menu" parent="mis_report_finance_menu" name="MIS Reports" action="mis_report_instance_view_action" sequence="10"/>
 
         <record id="wizard_mis_report_instance_view_form" model="ir.ui.view">
             <field name="model">mis.report.instance</field>
@@ -150,10 +151,10 @@
         </record>
 
         <menuitem id="last_wizard_mis_report_instance_view_menu"
-                  parent="account.menu_finance_reports"
+                  parent="mis_report_finance_menu"
                   name="Last Reports Generated"
                   action="last_mis_report_instance_view_action"
-                  sequence="102"/>
+                  sequence="20"/>
 
         <record model="ir.ui.view" id="mis_report_instance_period_view_form">
             <field name="model">mis.report.instance.period</field>
