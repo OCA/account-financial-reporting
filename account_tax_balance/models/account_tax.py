@@ -45,7 +45,10 @@ class AccountTax(models.Model):
     def compute_balance(self, tax_or_base='tax'):
         self.ensure_one()
         move_lines = self.get_move_lines_domain(tax_or_base=tax_or_base)
-        total = sum([l.balance for l in move_lines])
+        # balance is debit - credit whereas on tax return you want to see what
+        # vat has to be paid so:
+        # VAT on sales (credit) - VAT on purchases (debit).
+        total = -sum([l.balance for l in move_lines])
         return total
 
     def get_balance_domain(self, state_list):

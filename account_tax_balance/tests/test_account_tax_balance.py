@@ -46,5 +46,5 @@ class TestAccountTaxBalance(TransactionCase):
         # change the state of invoice to open by clicking Validate button
         invoice.signal_workflow('invoice_open')
 
-        self.assertEquals(tax.base_balance, -100)
-        self.assertEquals(tax.balance, -10)
+        self.assertEquals(tax.base_balance, 100)
+        self.assertEquals(tax.balance, 10)
