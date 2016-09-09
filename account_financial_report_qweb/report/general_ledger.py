@@ -177,6 +177,7 @@ class GeneralLedgerReportMoveLine(models.TransientModel):
     entry = fields.Char()
     journal = fields.Char()
     account = fields.Char()
+    counterpart_accounts = fields.Char()
     partner = fields.Char()
     label = fields.Char()
     cost_center = fields.Char()
@@ -262,6 +263,9 @@ class GeneralLedgerReportCompute(models.TransientModel):
 
         # Refresh cache because all data are computed with SQL requests
         self.refresh()
+
+        # This one does use the ORM
+        self._compute_counterpart_accounts()
 
     def _get_account_sub_subquery_sum_amounts(self, include_initial_balance):
         """ Return subquery used to compute sum amounts on accounts """
@@ -1174,6 +1178,16 @@ WHERE id = %s
         """
         params = (self.id,) * 3
         self.env.cr.execute(query_update_has_second_currency, params)
+
+    def _compute_counterpart_accounts(self):
+        src1 = self.account_ids.mapped('move_line_ids')
+        src2 = self.account_ids.mapped('partner_ids.move_line_ids')
+        for ln in src1 + src2:
+            codes = ln.move_line_id.move_id._get_account_codes()
+            codes.discard(ln.account)
+            codes = list(codes)
+            codes.sort()
+            ln.counterpart_accounts = ', '.join(codes)
 
     def _get_unaffected_earnings_account_sub_subquery_sum_amounts(
             self, include_initial_balance
