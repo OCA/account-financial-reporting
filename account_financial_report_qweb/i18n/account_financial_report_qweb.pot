@@ -6,14 +6,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-12 12:17+0000\n"
-"PO-Revision-Date: 2016-08-12 12:17+0000\n"
+"POT-Creation-Date: 2016-09-09 14:15+0000\n"
+"PO-Revision-Date: 2016-09-09 14:15+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: account_financial_report_qweb
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_account_move__account_codes_cache
+msgid " account codes cache"
+msgstr ""
 
 #. module: account_financial_report_qweb
 #: code:addons/account_financial_report_qweb/report/aged_partner_balance_xlsx.py:72
@@ -30,6 +35,11 @@ msgstr ""
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_trial_balance_qweb_lines_header
 #, python-format
 msgid "Account"
+msgstr ""
+
+#. module: account_financial_report_qweb
+#: model:ir.model,name:account_financial_report_qweb.model_account_move
+msgid "Account Entry"
 msgstr ""
 
 #. module: account_financial_report_qweb
@@ -246,7 +256,7 @@ msgid "Centralized"
 msgstr ""
 
 #. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:899
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:937
 #, python-format
 msgid "Centralized Entries"
 msgstr ""
@@ -284,6 +294,16 @@ msgstr ""
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_general_ledger_qweb_lines
 #, python-format
 msgid "Cost center"
+msgstr ""
+
+#. module: account_financial_report_qweb
+#: model:ir.ui.view,arch_db:account_financial_report_qweb.report_general_ledger_qweb_lines
+msgid "Counterpart Accounts"
+msgstr ""
+
+#. module: account_financial_report_qweb
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_move_line_counterpart_accounts
+msgid "Counterpart accounts"
 msgstr ""
 
 #. module: account_financial_report_qweb
@@ -939,8 +959,8 @@ msgid "No"
 msgstr ""
 
 #. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:491
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:707
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:495
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:711
 #: code:addons/account_financial_report_qweb/report/open_items.py:277
 #: code:addons/account_financial_report_qweb/report/open_items.py:493
 #, python-format
