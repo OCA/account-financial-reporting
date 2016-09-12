@@ -11,6 +11,7 @@
     'author': 'Camptocamp SA,'
               'initOS GmbH,'
               'redCOR AG,'
+              'Open Net Sàrl,'
               'Odoo Community Association (OCA)',
     "website": "https://odoo-community.org/",
     'depends': [
