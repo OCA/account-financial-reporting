@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="view_account_entries_report_search" model="ir.ui.view">
+            <field name="model">account.entries.report</field>
+            <field name="inherit_id" ref="account.view_account_entries_report_search" />
+            <field name="arch" type="xml">
+                <field name="company_id" position="after">
+                    <field name="analytics_id" />
+                </field>
+                <filter name="group_journal" position="before">
+                    <filter name="group_analytics" string="Analytic Distribution" context="{'group_by': 'analytics_id'}" />
+                </filter>
+            </field>
+        </record>
+    </data>
+</openerp>
