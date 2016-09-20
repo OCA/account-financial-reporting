@@ -28,6 +28,7 @@ from openerp.osv import osv
 from openerp.tools.translate import _
 from openerp.addons.account.report.common_report_header \
     import common_report_header
+from collections import OrderedDict
 
 _logger = logging.getLogger('financial.reports.webkit')
 
@@ -204,7 +205,11 @@ class CommonReportHeaderWebkit(common_report_header):
                     self.cursor, self.uid, domain)
             else:
                 accounts += children_acc_ids
-        res_ids = list(set(accounts))
+        # remove duplicate account IDs in accounts
+        # We don't use list(set(accounts)) to keep the order
+        # cf http://stackoverflow.com/questions/7961363/
+        # removing-duplicates-in-lists
+        res_ids = list(OrderedDict.fromkeys(accounts))
         res_ids = self.sort_accounts_with_structure(
             account_ids, res_ids, context=context)
 
