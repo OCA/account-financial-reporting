@@ -40,6 +40,8 @@
                     %endif
                 </div>
                 <div class="act_as_cell">${_('Clearance Date')}</div>
+                <div class="act_as_cell">${_('Account Types Filter')}</div>
+                <div class="act_as_cell">${_('Partners Filter')}</div>
                 <div class="act_as_cell">${_('Accounts Filter')}</div>
                 <div class="act_as_cell">${_('Target Moves')}</div>
 
@@ -62,11 +64,19 @@
                     %endif
                 </div>
                 <div class="act_as_cell">${ formatLang(date_until, date=True) }</div>
+                <div class="act_as_cell">${ display_partner_account(data) }</div>
                 <div class="act_as_cell">
                     %if partner_ids:
-                        ${_('Custom Filter')}
+                        ${_('Selected Partners')}
                     %else:
-                        ${ display_partner_account(data) }
+                        ${_('All Partners')}
+                    %endif
+                </div>
+                <div class="act_as_cell">
+                    %if accounts(data):
+                        ${', '.join([account.code for account in accounts(data)])}
+                    %else:
+                        ${_('All')}
                     %endif
                 </div>
                 <div class="act_as_cell">${ display_target_move(data) }</div>

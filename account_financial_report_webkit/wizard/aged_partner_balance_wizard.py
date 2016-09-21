@@ -23,14 +23,14 @@ from openerp.osv import orm, fields
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT as DATE_FORMAT
 
 
-class AccountAgedTrialBalance(orm.TransientModel):
+class AgedTrialBalance(orm.TransientModel):
     """Will launch age partner balance report.
     This report is based on Open Invoice Report
     and share a lot of knowledge with him
     """
 
     _inherit = "open.invoices.webkit"
-    _name = "account.aged.trial.balance.webkit"
+    _name = "aged.trial.balance.webkit"
     _description = "Aged partner balanced"
 
     def _get_current_fiscalyear(self, cr, uid, context=None):
@@ -69,7 +69,7 @@ class AccountAgedTrialBalance(orm.TransientModel):
     def onchange_fiscalyear(self, cr, uid, ids, fiscalyear=False,
                             period_id=False, date_to=False, until_date=False,
                             context=None):
-        res = super(AccountAgedTrialBalance, self).onchange_fiscalyear(
+        res = super(AgedTrialBalance, self).onchange_fiscalyear(
             cr, uid, ids, fiscalyear=fiscalyear, period_id=period_id,
             date_to=date_to, until_date=until_date, context=context
         )
@@ -86,5 +86,5 @@ class AccountAgedTrialBalance(orm.TransientModel):
         # we update form with display account value
         data = self.pre_print_report(cr, uid, ids, data, context=context)
         return {'type': 'ir.actions.report.xml',
-                'report_name': 'account.account_aged_trial_balance_webkit',
+                'report_name': 'account.aged_trial_balance_webkit',
                 'datas': data}

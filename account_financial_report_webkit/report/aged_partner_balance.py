@@ -421,7 +421,7 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
         return dict((x[0], x[1]) for x in res)
 
 HeaderFooterTextWebKitParser(
-    'report.account.account_aged_trial_balance_webkit',
+    'report.account.aged_trial_balance_webkit',
     'account.account',
     'addons/account_financial_report_webkit/report/templates/\
                                                     aged_trial_webkit.mako',

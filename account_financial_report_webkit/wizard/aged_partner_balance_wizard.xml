@@ -2,9 +2,9 @@
 <openerp>
   <data>
 
-    <record id="account_aged_trial_balance_webkit" model="ir.ui.view">
+    <record id="aged_trial_balance_webkit" model="ir.ui.view">
       <field name="name">Aged Partner Balance Report</field>
-      <field name="model">account.aged.trial.balance.webkit</field>
+      <field name="model">aged.trial.balance.webkit</field>
       <field name="inherit_id" ref="account.account_common_report_view"/>
       <field name="arch" type="xml">
         <data>
@@ -65,10 +65,10 @@
             model="ir.actions.act_window">
       <field name="name">Aged partner balance</field>
       <field name="type">ir.actions.act_window</field>
-      <field name="res_model">account.aged.trial.balance.webkit</field>
+      <field name="res_model">aged.trial.balance.webkit</field>
       <field name="view_type">form</field>
       <field name="view_mode">form</field>
-      <field name="view_id" ref="account_aged_trial_balance_webkit"/>
+      <field name="view_id" ref="aged_trial_balance_webkit"/>
       <field name="target">new</field>
     </record>
   </data>

@@ -31,14 +31,26 @@ class AccountReportPartnersLedgerWizard(orm.TransientModel):
     _name = "partners.ledger.webkit"
     _description = "Partner Ledger Report"
 
+    def _get_account_ids(self, cr, uid, context=None):
+        res = False
+        if context.get('active_model', False) == 'account.account' \
+                and context.get('active_ids', False):
+            res = context['active_ids']
+        return res
+
     _columns = {
         'amount_currency': fields.boolean("With Currency",
                                           help="It adds the currency column"),
         'partner_ids': fields.many2many(
             'res.partner',
-            string='Filter on partner',
+            string='Filter on Partners',
             help="Only selected partners will be printed. "
             "Leave empty to print all partners."),
+        'account_ids': fields.many2many(
+            'account.account',
+            string='Filter on accounts',
+            help="""Only selected accounts will be printed. Leave empty to
+                    print all accounts."""),
         'filter': fields.selection(
             [('filter_no', 'No Filters'),
              ('filter_date', 'Date'),
@@ -46,10 +58,17 @@ class AccountReportPartnersLedgerWizard(orm.TransientModel):
             help='Filter by date: no opening balance will be displayed. '
             '(opening balance can only be computed based on period to be \
             correct).'),
+        'result_selection': fields.selection([
+            ('customer', 'Receivable Accounts'),
+            ('supplier', 'Payable Accounts'),
+            ('customer_supplier', 'Receivable and Payable Accounts'),
+            ('all', 'All Account Types'),
+            ], "Account Types", required=True),
     }
     _defaults = {
         'amount_currency': False,
         'result_selection': 'customer_supplier',
+        'account_ids': _get_account_ids,
     }
 
     def _check_fiscalyear(self, cr, uid, ids, context=None):
@@ -127,7 +146,7 @@ class AccountReportPartnersLedgerWizard(orm.TransientModel):
         # will be used to attach the report on the main account
         data['ids'] = [data['form']['chart_account_id']]
         vals = self.read(cr, uid, ids,
-                         ['amount_currency', 'partner_ids'],
+                         ['amount_currency', 'partner_ids', 'account_ids'],
                          context=context)[0]
         data['form'].update(vals)
         return data

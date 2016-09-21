@@ -24,6 +24,17 @@
                             <separator string="Print only" colspan="4"/>
                             <field name="partner_ids" colspan="4" nolabel="1"/>
                         </page>
+                        <page string="Accounts Filters" name="accounts">
+                            <separator string="Print only" colspan="4"/>
+                            <field name="account_ids" colspan="4" nolabel="1">
+                                <tree>
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="type"/>
+                                    <field name="company_id"/>
+                                </tree>
+                            </field>
+                        </page>
                         <page string="Layout Options" name="layout_options">
                             <group colspan="4" col="2">
                                 <field name="amount_currency"/>

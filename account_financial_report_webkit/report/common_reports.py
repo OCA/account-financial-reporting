@@ -84,6 +84,8 @@ class CommonReportHeaderWebkit(common_report_header):
             return _('Payable Accounts')
         elif val == 'customer_supplier':
             return _('Receivable and Payable Accounts')
+        elif val == 'all':
+            return _('All Account Types')
         else:
             return val
 

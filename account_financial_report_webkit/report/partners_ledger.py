@@ -59,6 +59,7 @@ class PartnersLedgerWebkit(report_sxw.rml_parse,
             'amount_currency': self._get_amount_currency,
             'display_partner_account': self._get_display_partner_account,
             'display_target_move': self._get_display_target_move,
+            'accounts': self._get_accounts_br,
             'additional_args': [
                 ('--header-font-name', 'Helvetica'),
                 ('--footer-font-name', 'Helvetica'),
@@ -86,7 +87,8 @@ class PartnersLedgerWebkit(report_sxw.rml_parse,
     def set_context(self, objects, data, ids, report_type=None):
         """Populate a ledger_lines attribute on each browse record that will
            be used by mako template"""
-        new_ids = data['form']['chart_account_id']
+        new_ids = data['form']['account_ids'] or\
+            data['form']['chart_account_id']
 
         # account partner memoizer
         # Reading form
@@ -106,11 +108,13 @@ class PartnersLedgerWebkit(report_sxw.rml_parse,
             stop_period = self.get_last_fiscalyear_period(fiscalyear)
 
         # Retrieving accounts
-        filter_type = ('payable', 'receivable')
+        filter_type = None
         if result_selection == 'customer':
             filter_type = ('receivable',)
-        if result_selection == 'supplier':
+        elif result_selection == 'supplier':
             filter_type = ('payable',)
+        elif result_selection == 'customer_supplier':
+            filter_type = ('payable', 'receivable')
 
         accounts = self.get_all_accounts(new_ids, exclude_type=['view'],
                                          only_type=filter_type)
