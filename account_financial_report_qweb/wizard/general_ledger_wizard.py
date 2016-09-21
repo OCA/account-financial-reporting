@@ -44,6 +44,11 @@ class GeneralLedgerReportWizard(models.TransientModel):
              'If partners are filtered, '
              'debits and credits totals will not match the trial balance.'
     )
+    enable_counterpart_accounts = fields.Boolean(
+        string='Show counterpart accounts column',
+        help='Each line will show the codes of the other accounts in the '
+             'move. Disabled on centralized lines.',
+        default=True)
     receivable_accounts_only = fields.Boolean()
     payable_accounts_only = fields.Boolean()
     partner_ids = fields.Many2many(
@@ -121,6 +126,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
             'date_to': self.date_to,
             'only_posted_moves': self.target_move == 'posted',
             'hide_account_balance_at_0': self.hide_account_balance_at_0,
+            'enable_counterpart_accounts': self.enable_counterpart_accounts,
             'company_id': self.company_id.id,
             'filter_account_ids': [(6, 0, self.account_ids.ids)],
             'filter_partner_ids': [(6, 0, self.partner_ids.ids)],
