@@ -34,8 +34,11 @@
         'report/templates/trial_balance.xml',
         'view/account_view.xml'
     ],
-    'test': [
-    ],
+    'external_dependencies': {
+        "python": [
+            "xlsxwriter",
+        ],
+    },
     'installable': True,
     'application': True,
     'auto_install': False,
