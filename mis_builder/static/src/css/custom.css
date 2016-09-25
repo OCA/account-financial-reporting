@@ -1,21 +1,21 @@
-.openerp .mis_builder_amount {
+.o_web_client .mis_builder_amount {
   text-align: right;
 }
 
-.openerp .mis_builder_collabel {
+.o_web_client .mis_builder_collabel {
   text-align: center;
 }
 
-.openerp .mis_builder_rowlabel {
+.o_web_client .mis_builder_rowlabel {
   text-align: left;
 }
 
-.openerp .mis_builder a {
+.o_web_client .mis_builder a {
   /* we don't want the link color, to respect user styles */
   color: inherit;
 }
 
-.openerp .mis_builder a:hover {
+.o_web_client .mis_builder a:hover {
   /* underline links on hover to give a visual cue */
   text-decoration: underline;
 }
@@ -26,53 +26,5 @@
 }
 
 .oe_mis_builder_content {
-  padding: 20px;
-}
-
-/* 9e */
-
-.mis_builder_amount {
-  text-align: right;
-}
-
-.mis_builder_collabel {
-  text-align: center;
-}
-
-.mis_builder_rowlabel {
-  text-align: left;
-}
-
-.mis_builder a {
-  /* we don't want the link color, to respect user styles */
-  color: inherit;
-}
-
-.mis_builder a:hover {
-  /* underline links on hover to give a visual cue */
-  text-decoration: underline;
-}
-
-/* Table of contents for 9e */
-
-.mis_builder{
-  width:100%;
-}
-
-.mis_builder tbody{
-  border-top: 2px solid #D3D3D3;
-  border-bottom: 2px solid #D3D3D3;
-}
-
-.mis_builder thead>tr{
-  border: 0;
-}
-
-.mis_builder tr{
-  border-top: 1px solid #D3D3D3;
-}
-
-.mis_builder td{
-  padding-left:10px;
-  padding-right:10px;
+  padding: 10px;
 }
