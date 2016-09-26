@@ -4,7 +4,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 try:
     import xlsxwriter
-except ImportError:
+except ImportError:  # pragma: no cover
     import logging
     _logger = logging.getLogger(__name__)
     _logger.info("Missing dependency: xlsxwriter.")
