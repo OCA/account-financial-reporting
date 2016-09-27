@@ -8,7 +8,7 @@
                     <button class="oe_mis_builder_export btn btn-sm oe_button"><img src="/web/static/src/img/icons/gtk-go-down.png"/>Export</button>
                     <button style="display: none;" class="oe_mis_builder_settings btn btn-sm oe_button"><img src="/web/static/src/img/icons/gtk-execute.png"/> Settings</button>
                 </div>
-                <table class="oe_list_content mis_builder">
+                <table class="oe_list_content o_list_view table table-condensed table-striped mis_builder">
                     <thead>
                         <tr t-foreach="widget.mis_report_data.header" t-as="row" class="oe_list_header_columns">
                             <th class="oe_list_header_char">

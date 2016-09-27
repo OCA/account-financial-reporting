@@ -1,21 +1,21 @@
-.openerp .mis_builder_amount {
+.o_web_client .mis_builder_amount {
   text-align: right;
 }
 
-.openerp .mis_builder_collabel {
+.o_web_client .mis_builder_collabel {
   text-align: center;
 }
 
-.openerp .mis_builder_rowlabel {
+.o_web_client .mis_builder_rowlabel {
   text-align: left;
 }
 
-.openerp .mis_builder a {
+.o_web_client .mis_builder a {
   /* we don't want the link color, to respect user styles */
   color: inherit;
 }
 
-.openerp .mis_builder a:hover {
+.o_web_client .mis_builder a:hover {
   /* underline links on hover to give a visual cue */
   text-decoration: underline;
 }
@@ -26,5 +26,5 @@
 }
 
 .oe_mis_builder_content {
-  padding: 20px;
+  padding: 10px;
 }
