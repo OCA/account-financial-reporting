@@ -104,6 +104,7 @@
                         <field name="style_id"/>
                         <field name="style_expression"/>
                         <!--<field name="sequence" />-->
+                        <field name="report_id" invisible="1"/>
                     </group>
                     <group string="Expression">
                         <field name="multi"/>
@@ -111,7 +112,7 @@
                                delete="0" create="0"
                                attrs="{'invisible': [('multi', '=', False)]}">
                             <tree editable="bottom">
-                                <field name="subkpi_id"/>
+                                <field name="subkpi_id" domain="[('report_id', '=', parent.report_id)]"/>
                                 <field name="name"/>
                             </tree>
                         </field>
