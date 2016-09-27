@@ -1,0 +1,7 @@
+<template>
+    <t t-extend="mis_builder.MisReport">
+        <t t-jquery=".oe_mis_builder_buttons" t-operation="after">
+            <div class="oe_mis_builder_analytic_account" style="visibility: hidden; position: relative; display: inline-block;"></div>
+        </t>
+    </t>
+</template>
