@@ -16,8 +16,7 @@
         'account',
         'report_xlsx',  # OCA/reporting-engine
         'date_range',  # OCA/server-tools
-        # TODO uncomment when https://github.com/OCA/web/pull/270 is merged
-        # 'web_widget_color',  # OCA/web
+        'web_widget_color',  # OCA/web
     ],
     'data': [
         'wizard/mis_builder_dashboard.xml',
