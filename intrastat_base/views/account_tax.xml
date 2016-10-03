@@ -16,8 +16,7 @@
     <field name="inherit_id" ref="account.view_tax_form"/>
     <field name="arch" type="xml">
         <field name="active" position="after">
-            <!-- Will be set visible in the localisation modules that need it -->
-            <field name="exclude_from_intrastat_if_present" invisible="1"/>
+            <field name="exclude_from_intrastat_if_present"/>
         </field>
     </field>
 </record>
