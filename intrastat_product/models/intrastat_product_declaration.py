@@ -254,6 +254,8 @@ class IntrastatProductDeclaration(models.Model):
                 return company.intrastat_transaction_out_refund
             elif invoice.type == 'in_invoice':
                 return company.intrastat_transaction_in_invoice
+            elif invoice.type == 'in_refund':
+                return company.intrastat_transaction_in_refund
 
     def _get_weight_and_supplunits(self, inv_line, hs_code):
         line_qty = inv_line.quantity
@@ -261,10 +263,10 @@ class IntrastatProductDeclaration(models.Model):
         invoice = inv_line.invoice_id
         intrastat_unit_id = hs_code.intrastat_unit_id
         source_uom = inv_line.uos_id
-        weight_uom_categ = self._uom_refs['weight_uom_categ']
-        kg_uom = self._uom_refs['kg_uom']
-        pce_uom_categ = self._uom_refs['pce_uom_categ']
-        pce_uom = self._uom_refs['pce_uom']
+        weight_uom_categ = self._get_uom_refs('weight_uom_categ')
+        kg_uom = self._get_uom_refs('kg_uom')
+        pce_uom_categ = self._get_uom_refs('pce_uom_categ')
+        pce_uom = self._get_uom_refs('pce_uom')
         weight = suppl_unit_qty = 0.0
 
         if not source_uom:
@@ -371,26 +373,26 @@ class IntrastatProductDeclaration(models.Model):
 
         """
         region = False
-        if inv_line.invoice_id.type in ('in_invoice', 'in_refund'):
-            if inv_line.move_line_ids:
-                region = inv_line.move_line_ids[0].location_dest_id.\
-                    get_intrastat_region()
-            else:
-                po_lines = self.env['purchase.order.line'].search(
-                    [('invoice_lines', 'in', inv_line.id)])
-                if po_lines:
-                    po = po_lines.order_id
-                    region = po.location_id.get_intrastat_region()
-        elif inv_line.invoice_id.type in ('out_invoice', 'out_refund'):
-            if inv_line.move_line_ids:
+        inv_type = inv_line.invoice_id.type
+        if inv_line.move_line_ids:
+            if inv_type in ('in_invoice', 'out_refund'):
                 region = inv_line.move_line_ids[0].location_id.\
                     get_intrastat_region()
             else:
-                so_lines = self.env['sale.order.line'].search(
-                    [('invoice_lines', 'in', inv_line.id)])
-                if so_lines:
-                    so = so_lines.order_id
-                    region = so.warehouse_id.region_id
+                region = inv_line.move_line_ids[0].location_dest_id.\
+                    get_intrastat_region()
+        elif inv_type in ('in_invoice', 'in_refund'):
+            po_lines = self.env['purchase.order.line'].search(
+                [('invoice_lines', 'in', inv_line.id)])
+            if po_lines:
+                po = po_lines.order_id
+                region = po.location_id.get_intrastat_region()
+        elif inv_line.invoice_id.type in ('out_invoice', 'out_refund'):
+            so_lines = self.env['sale.order.line'].search(
+                [('invoice_lines', 'in', inv_line.id)])
+            if so_lines:
+                so = so_lines.order_id
+                region = so.warehouse_id.region_id
         if not region:
             if self.company_id.intrastat_region_id:
                 region = self.company_id.intrastat_region_id
@@ -431,7 +433,7 @@ class IntrastatProductDeclaration(models.Model):
             total_inv_weight):
         """
         Affect accessory costs pro-rata of the value
-        (or pro-rata of the weight is the goods of the invoice
+        (or pro-rata of the weight if the goods of the invoice
         have no value)
 
         This method allows to implement a different logic
@@ -455,6 +457,11 @@ class IntrastatProductDeclaration(models.Model):
                         total_inv_weight)
 
     def _prepare_invoice_domain(self):
+        """
+        Complete this method in the localization module
+        with the country-specific logic for arrivals and dispatches.
+        Cf. l10n_be_intrastat_product_declaration for an example
+        """
         start_date = date(self.year, self.month, 1)
         end_date = start_date + relativedelta(day=1, months=+1, days=-1)
         domain = [
@@ -463,10 +470,6 @@ class IntrastatProductDeclaration(models.Model):
             ('state', 'in', ['open', 'paid']),
             ('intrastat_country', '=', True),
             ('company_id', '=', self.company_id.id)]
-        if self.type == 'arrivals':
-            domain.append(('type', 'in', ('in_invoice', 'in_refund')))
-        elif self.type == 'dispatches':
-            domain.append(('type', 'in', ('out_invoice', 'out_refund')))
         return domain
 
     def _is_product(self, invoice_line):
@@ -477,11 +480,16 @@ class IntrastatProductDeclaration(models.Model):
         else:
             return False
 
+    def _gather_invoices_init(self):
+        """ placeholder for localization modules """
+        pass
+
     def _gather_invoices(self):
 
         lines = []
         accessory_costs = self.company_id.intrastat_accessory_costs
 
+        self._gather_invoices_init()
         domain = self._prepare_invoice_domain()
         invoices = self.env['account.invoice'].search(domain)
 
@@ -590,7 +598,8 @@ class IntrastatProductDeclaration(models.Model):
 
                 self._update_computation_line_vals(inv_line, line_vals)
 
-                lines_current_invoice.append((line_vals))
+                if line_vals:
+                    lines_current_invoice.append((line_vals))
 
             self._handle_invoice_accessory_cost(
                 invoice, lines_current_invoice,
@@ -615,18 +624,21 @@ class IntrastatProductDeclaration(models.Model):
 
         return lines
 
+    def _get_uom_refs(self, ref):
+        uom_refs = {
+            'weight_uom_categ': self.env.ref('product.product_uom_categ_kgm'),
+            'kg_uom': self.env.ref('product.product_uom_kgm'),
+            'pce_uom_categ': self.env.ref('product.product_uom_categ_unit'),
+            'pce_uom': self.env.ref('product.product_uom_unit')
+            }
+        return uom_refs[ref]
+
     @api.multi
     def action_gather(self):
         self.ensure_one()
         self.message_post(_("Generate Lines from Invoices"))
         self._check_generate_lines()
         self._note = ''
-        self._uom_refs = {
-            'weight_uom_categ': self.env.ref('product.product_uom_categ_kgm'),
-            'kg_uom': self.env.ref('product.product_uom_kgm'),
-            'pce_uom_categ': self.env.ref('product.product_uom_categ_unit'),
-            'pce_uom': self.env.ref('product.product_uom_unit')
-            }
         if (
                 self.type == 'arrivals' and
                 self.company_id.intrastat_arrivals == 'extended') or (
