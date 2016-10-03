@@ -35,9 +35,12 @@ class StockPicking(models.Model):
 
     @api.model
     def _create_invoice_from_picking(self, picking, vals):
-        '''Copy transport and department from picking to invoice'''
+        """ Copy data from picking to invoice. """
         vals['intrastat_transport_id'] = picking.intrastat_transport_id.id
         if picking.partner_id and picking.partner_id.country_id:
             vals['src_dest_country_id'] = picking.partner_id.country_id.id
+        region = picking.location_id.get_intrastat_region()
+        if region:
+            vals['src_dest_region_id'] = region.id
         return super(StockPicking, self)._create_invoice_from_picking(
             picking, vals)
