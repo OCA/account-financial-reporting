@@ -104,8 +104,8 @@
       <field name="model">intrastat.product.declaration</field>
       <field name="arch" type="xml">
         <search string="Search Intrastat Product Declarations">
-          <filter name="arrivals" string="Arrivals" domain="[('type', 'like', 'EX19')]" />
-          <filter name="dispatches" string="Dispatches" domain="[('type', 'like', 'EX29')]" />
+          <filter name="arrivals" string="Arrivals" domain="[('type', '=', 'arrivals')]"/>
+          <filter name="dispatches" string="Dispatches" domain="[('type', '=', 'dispatches')]"/>
           <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]" />
           <filter name="done" string="Done" domain="[('state', '=', 'done')]" />
           <group string="Group By" name="group_by">

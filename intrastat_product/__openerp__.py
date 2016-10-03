@@ -24,7 +24,7 @@
 
 {
     'name': 'Intrastat Product',
-    'version': '8.0.1.4.0',
+    'version': '8.0.1.4.1',
     'category': 'Intrastat',
     'license': 'AGPL-3',
     'summary': 'Base module for Intrastat Product',
