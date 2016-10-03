@@ -83,9 +83,9 @@ class AccountInvoice(models.Model):
 
     @api.model
     def _default_src_dest_region_id(self):
-        company = self.env['res.company']
-        company_id = company._company_default_get('account.invoice')
-        company = company.browse(company_id)
+        rco = self.env['res.company']
+        company_id = rco._company_default_get('account.invoice')
+        company = rco.browse(company_id)
         return company.intrastat_region_id
 
     @api.multi

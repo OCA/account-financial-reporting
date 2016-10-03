@@ -2,9 +2,9 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-========================
-Intrastat Product Module
-========================
+=================
+Intrastat Product
+=================
 
 This module contains common objects and fields for the Intrastat Product reporting, such as the *H.S. codes* (if you are not familiar with H.S. codes, read `Wikipedia <http://en.wikipedia.org/wiki/Harmonized_System>`) and the *country of origin* on the products.
 
@@ -26,7 +26,6 @@ WARNING:
 This module conflicts with the module *report_intrastat* from the official addons.
 If you have already installed the module *report_intrastat*,
 you should uninstall it before installing this module.
-
 
 Usage
 =====
@@ -71,24 +70,14 @@ and adapt the code for the specific needs of your country.
    :alt: Try me on Runbot
    :target: https://runbot.odoo-community.org/runbot/91/8.0
 
-
-Known issues / Roadmap
-======================
-
-Work is in progress to migrate the existing l10n_fr_intrastat_product module
-to this new reporting framework, cf. Alexis de Lattre, Akretion <alexis.delattre@akretion.com>.
-
-
 Bug Tracker
 ===========
 
-Bugs are tracked on `GitHub Issues <https://github.com/OCA/account-financial-reporting/issues>`_.
-In case of trouble, please check there if your issue has already been reported.
-If you spotted it first, help us smashing it by providing a detailed and welcomed feedback `here <https://github.com/OCA/
-account-financial-reporting/issues/new?body=module:%20
-intrastat_product%0Aversion:%20
-8.0.1.4%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
-
+Bugs are tracked on `GitHub Issues
+<https://github.com/OCA/account-financial-reporting/issues>`_. In case
+of trouble, please check there if your issue has already been reported.
+If you spotted it first, help us smashing it by providing a detailed
+and welcomed feedback.
 
 Credits
 =======
@@ -98,7 +87,6 @@ Contributors
 
 * Alexis de Lattre, Akretion <alexis.delattre@akretion.com>
 * Luc De Meyer, Noviat <info@noviat.com>
-
 
 Maintainer
 ----------
@@ -113,4 +101,4 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
-To contribute to this module, please visit http://odoo-community.org.
+To contribute to this module, please visit https://odoo-community.org.
