@@ -131,9 +131,9 @@ class MisBuilderXlsx(ReportXlsx):
 
         # adjust col widths
         sheet.set_column(0, 0, min(label_col_width, MAX_COL_WIDTH) * COL_WIDTH)
-        data_col_width = min(MAX_COL_WIDTH, max(*col_width.values()))
-        min_col_pos = min(*col_width.keys())
-        max_col_pos = max(*col_width.keys())
+        data_col_width = min(MAX_COL_WIDTH, max(col_width.values()))
+        min_col_pos = min(col_width.keys())
+        max_col_pos = max(col_width.keys())
         sheet.set_column(min_col_pos, max_col_pos, data_col_width * COL_WIDTH)
 
 
