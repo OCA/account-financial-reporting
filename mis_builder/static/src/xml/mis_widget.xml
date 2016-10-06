@@ -4,6 +4,7 @@
             <t t-if="widget.mis_report_data">
                 <h2><t t-esc="widget.mis_report_data.report_name" /></h2>
                 <div class="oe_mis_builder_buttons oe_right oe_button_box">
+                    <button class="oe_mis_builder_generate_content btn btn-sm oe_button"><img src="/web/static/src/img/icons/gtk-refresh.png"/> Refresh</button>
                     <button class="oe_mis_builder_print btn btn-sm oe_button"><img src="/web/static/src/img/icons/gtk-print.png"/> Print</button>
                     <button class="oe_mis_builder_export btn btn-sm oe_button"><img src="/web/static/src/img/icons/gtk-go-down.png"/>Export</button>
                     <button style="display: none;" class="oe_mis_builder_settings btn btn-sm oe_button"><img src="/web/static/src/img/icons/gtk-execute.png"/> Settings</button>
