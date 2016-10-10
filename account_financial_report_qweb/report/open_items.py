@@ -233,9 +233,14 @@ SELECT
     NOW() AS create_date,
     a.id AS account_id,
     a.code,
-    a.name
+    COALESCE(tr.value, a.name) AS name
 FROM
     accounts a
+LEFT JOIN
+    ir_translation tr ON a.id = tr.res_id
+        AND tr.lang = %s
+        AND tr.type = 'model'
+        AND tr.name = 'account.account,name'
         """
         query_inject_account_params = (
             self.date_at,
@@ -252,6 +257,7 @@ FROM
         query_inject_account_params += (
             self.id,
             self.env.uid,
+            self.env.lang,
         )
         self.env.cr.execute(query_inject_account, query_inject_account_params)
 
