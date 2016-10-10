@@ -985,7 +985,7 @@ msgstr "Écritures comptabilisées seulement"
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_open_items_qweb
 #, python-format
 msgid "Open Items"
-msgstr "Écritures non léttrées"
+msgstr "Écritures non lettrées"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_open_items_report_wizard
@@ -995,7 +995,7 @@ msgstr "Open Items Report Wizard"
 #. module: account_financial_report_qweb
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_open_items_xlsx
 msgid "Open Items XLSX"
-msgstr "Écritures non léttrées XLSX"
+msgstr "Écritures non lettrées XLSX"
 
 #. module: account_financial_report_qweb
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_aged_partner_balance_qweb_open_items_id
