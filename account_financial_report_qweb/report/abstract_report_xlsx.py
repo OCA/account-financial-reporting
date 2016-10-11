@@ -5,7 +5,7 @@
 
 from cStringIO import StringIO
 import xlsxwriter
-from openerp.addons.report_xlsx.report.report_xlsx import ReportXlsx
+from odoo.addons.report_xlsx.report.report_xlsx import ReportXlsx
 
 
 class AbstractReportXslx(ReportXlsx):

@@ -5,8 +5,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from . import abstract_report_xlsx
-from openerp.report import report_sxw
-from openerp import _
+from odoo.report import report_sxw
+from odoo import _
 
 
 class GeneralLedgerXslx(abstract_report_xlsx.AbstractReportXslx):
