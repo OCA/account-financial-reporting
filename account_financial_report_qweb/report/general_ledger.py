@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# © 2016 Julien Coux (Camptocamp)
+# Copyright 2016 Julien Coux (Camptocamp)
+# Copyright 2016 Open Net Sàrl
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp import models, fields, api, _
@@ -29,6 +30,7 @@ class GeneralLedgerReport(models.TransientModel):
     fy_start_date = fields.Date()
     only_posted_moves = fields.Boolean()
     hide_account_balance_at_0 = fields.Boolean()
+    enable_counterpart_accounts = fields.Boolean()
     company_id = fields.Many2one(comodel_name='res.company')
     filter_account_ids = fields.Many2many(comodel_name='account.account')
     filter_partner_ids = fields.Many2many(comodel_name='res.partner')
@@ -177,6 +179,7 @@ class GeneralLedgerReportMoveLine(models.TransientModel):
     entry = fields.Char()
     journal = fields.Char()
     account = fields.Char()
+    counterpart_accounts = fields.Char()
     partner = fields.Char()
     label = fields.Char()
     cost_center = fields.Char()
@@ -815,6 +818,12 @@ INSERT INTO
     entry,
     journal,
     account,
+            """
+        if self.enable_counterpart_accounts:
+            query_inject_move_line += """
+    counterpart_accounts,
+            """
+        query_inject_move_line += """
     partner,
     label,
     cost_center,
@@ -844,6 +853,10 @@ SELECT
     j.code AS journal,
     a.code AS account,
         """
+        if self.enable_counterpart_accounts:
+            query_inject_move_line += """
+    ca.counterpart_accounts,
+            """
         if not only_empty_partner_line:
             query_inject_move_line += """
     CASE
@@ -914,6 +927,13 @@ INNER JOIN
 INNER JOIN
     account_account a ON ml.account_id = a.id
         """
+        if self.enable_counterpart_accounts:
+            query_inject_move_line += """
+INNER JOIN
+    (
+            """ + self._get_move_line_subquery_counterpart() + """
+    ) ca ON ca.move_line_id = ml.id
+            """
         if is_account_line:
             query_inject_move_line += """
 LEFT JOIN
@@ -1174,6 +1194,34 @@ WHERE id = %s
         """
         params = (self.id,) * 3
         self.env.cr.execute(query_update_has_second_currency, params)
+
+    def _get_move_line_subquery_counterpart(self):
+        """ Return subquery used to generate comma-separated counterpart
+        accounts list """
+        aux = """
+SELECT DISTINCT ON (ml.move_id, a.id)
+    ml.id AS move_line_id,
+    ml.move_id,
+    a.code
+FROM
+    account_move_line ml
+INNER JOIN
+    account_account a
+        ON ml.account_id = a.id"""
+        account_subquery_counterpart = """
+SELECT
+    move_line_id,
+    ARRAY_TO_STRING(
+        ARRAY_AGG(aux.code) OVER (current_move
+                ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING)
+        ||
+        ARRAY_AGG(aux.code) OVER (current_move
+                ROWS BETWEEN 1 FOLLOWING AND UNBOUNDED FOLLOWING)
+        , ', ')
+            AS counterpart_accounts
+FROM (""" + aux + """) aux
+WINDOW current_move AS (PARTITION BY aux.move_id ORDER BY aux.code)"""
+        return account_subquery_counterpart
 
     def _get_unaffected_earnings_account_sub_subquery_sum_amounts(
             self, include_initial_balance

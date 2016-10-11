@@ -49,4 +49,5 @@ class TestGeneralLedger(abstract_test.AbstractTest):
                 'hide_account_balance_at_0': True,
                 'centralize': True
             },
+            {'enable_counterpart_accounts': True},
         ]
