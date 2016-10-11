@@ -4,7 +4,7 @@
 
 {
     'name': 'MIS Builder',
-    'version': '9.0.2.0.2',
+    'version': '10.0.2.0.2',
     'category': 'Reporting',
     'summary': """
         Build 'Management Information System' Reports and Dashboards
@@ -14,6 +14,7 @@
     'website': 'http://acsone.eu',
     'depends': [
         'account',
+        'board',
         'report_xlsx',  # OCA/reporting-engine
         'date_range',  # OCA/server-tools
         # TODO uncomment when https://github.com/OCA/web/pull/270 is merged
@@ -40,7 +41,7 @@
     'qweb': [
         'static/src/xml/*.xml'
     ],
-    'installable': False,
+    'installable': True,
     'application': True,
     'license': 'AGPL-3',
 }

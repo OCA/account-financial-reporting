@@ -12,9 +12,9 @@ import time
 
 import pytz
 
-from openerp import api, fields, models, _
-from openerp.exceptions import UserError
-from openerp.tools.safe_eval import safe_eval
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError
+from odoo.tools.safe_eval import safe_eval
 
 from .aep import AccountingExpressionProcessor as AEP
 from .aggregate import _sum, _avg, _min, _max
@@ -159,8 +159,7 @@ class KpiMatrix(object):
     def __init__(self, env):
         # cache language id for faster rendering
         lang_model = env['res.lang']
-        lang_id = lang_model._lang_get(env.user.lang)
-        self.lang = lang_model.browse(lang_id)
+        self.lang = lang_model._lang_get(env.user.lang)
         self._style_model = env['mis.report.style']
         self._account_model = env['account.account']
         # data structures

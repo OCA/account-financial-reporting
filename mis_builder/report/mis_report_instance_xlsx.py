@@ -5,7 +5,7 @@
 from collections import defaultdict
 import logging
 
-from openerp.report import report_sxw
+from odoo.report import report_sxw
 
 from ..models.accounting_none import AccountingNone
 from ..models.data_error import DataError
@@ -13,7 +13,7 @@ from ..models.data_error import DataError
 _logger = logging.getLogger(__name__)
 
 try:
-    from openerp.addons.report_xlsx.report.report_xlsx import ReportXlsx
+    from odoo.addons.report_xlsx.report.report_xlsx import ReportXlsx
 except ImportError:
     _logger.debug("report_xlsx not installed, Excel export non functional")
 

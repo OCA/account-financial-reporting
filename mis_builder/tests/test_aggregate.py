@@ -4,7 +4,7 @@
 
 import doctest
 
-from openerp.addons.mis_builder.models import aggregate
+from odoo.addons.mis_builder.models import aggregate
 
 
 def load_tests(loader, tests, ignore):

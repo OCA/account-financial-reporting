@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
+<odoo>
     <data>
 
         <template id="assets_backend" name="mis_builder" inherit_id="web.assets_backend">
@@ -25,9 +25,9 @@
             <field name="model">mis.report.instance</field>
             <field name="arch" type="xml">
                 <tree string="MIS Report Instances">
-                    <button name="preview" type="object" icon="gtk-print-preview" />
-                    <button type="object" name="print_pdf" string="Print" icon="gtk-print" />
-                    <button type="object" name="export_xls" string="Export" icon="gtk-go-down" />
+                    <button name="preview" type="object" icon="fa-search" />
+                    <button type="object" name="print_pdf" string="Print" icon="fa-print" />
+                    <button type="object" name="export_xls" string="Export" icon="fa-download" />
                     <field name="name"/>
                     <field name="report_id" string="Template"/>
                     <field name="company_id" groups="base.group_multi_company"/>
@@ -46,11 +46,11 @@
                 <sheet>
                     <field name="temporary" invisible="1"/>
                     <div class="oe_read_only oe_right oe_button_box" name="buttons">
-                        <button type="object" name="preview" string="Preview" icon="gtk-print-preview" />
-                        <button type="object" name="print_pdf" string="Print" icon="gtk-print" />
-                        <button type="object" name="export_xls" string="Export" icon="gtk-go-down" />
-                        <button type="action" name="%(mis_report_instance_add_to_dashboard_action)d" string="Add to dashboard" icon="gtk-add" attrs="{'invisible': [('temporary', '=', True)]}"/>
-                        <button type="object" name="save_report" string="Save" icon="gtk-floppy" attrs="{'invisible': [('temporary', '=', False)]}"/>
+                        <button type="object" name="preview" string="Preview" icon="fa-search" />
+                        <button type="object" name="print_pdf" string="Print" icon="fa-print" />
+                        <button type="object" name="export_xls" string="Export" icon="fa-download" />
+                        <button type="action" name="%(mis_report_instance_add_to_dashboard_action)d" string="Add to dashboard" icon="fa-plus" attrs="{'invisible': [('temporary', '=', True)]}"/>
+                        <button type="object" name="save_report" string="Save" icon="fa-save" attrs="{'invisible': [('temporary', '=', False)]}"/>
                     </div>
                     <div class="oe_title">
                         <div class="oe_edit_only">
@@ -202,4 +202,4 @@
         </record>
 
     </data>
-</openerp>
+</odoo>

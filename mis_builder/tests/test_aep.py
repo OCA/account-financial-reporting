@@ -5,9 +5,9 @@
 import datetime
 import time
 
-from openerp import fields
-import openerp.tests.common as common
-from openerp.tools.safe_eval import safe_eval
+from odoo import fields
+import odoo.tests.common as common
+from odoo.tools.safe_eval import safe_eval
 
 from ..models.aep import AccountingExpressionProcessor as AEP
 from ..models.accounting_none import AccountingNone

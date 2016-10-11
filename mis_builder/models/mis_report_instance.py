@@ -2,7 +2,7 @@
 # © 2014-2016 ACSONE SA/NV (<http://acsone.eu>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from openerp import api, fields, models, _
+from odoo import api, fields, models, _
 
 import datetime
 import logging
@@ -264,8 +264,8 @@ class MisReportInstance(models.Model):
     def _format_date(self, date):
         # format date following user language
         lang_model = self.env['res.lang']
-        lang_id = lang_model._lang_get(self.env.user.lang)
-        date_format = lang_model.browse(lang_id).date_format
+        lang = lang_model._lang_get(self.env.user.lang)
+        date_format = lang.date_format
         return datetime.datetime.strftime(
             fields.Date.from_string(date), date_format)
 
