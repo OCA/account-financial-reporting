@@ -281,7 +281,7 @@ class KpiMatrix(object):
                 col = self._cols[col_key]
                 base_col = self._cols[base_col_key]
                 common_subkpis = set(col.subkpis) & set(base_col.subkpis)
-                if not common_subkpis:
+                if (col.subkpis or base_col.subkpis) and not common_subkpis:
                     raise UserError('Columns {} and {} are not comparable'.
                                     format(col.description,
                                            base_col.description))
@@ -296,15 +296,19 @@ class KpiMatrix(object):
                     if cell_tuple is None and base_cell_tuple is None:
                         continue
                     if cell_tuple is None:
-                        vals = [AccountingNone] * len(common_subkpis)
+                        vals = [AccountingNone] * \
+                            (len(common_subkpis) or 1)
                     else:
                         vals = [cell.val for cell in cell_tuple
-                                if cell.subcol.subkpi in common_subkpis]
+                                if not common_subkpis or
+                                cell.subcol.subkpi in common_subkpis]
                     if base_cell_tuple is None:
-                        base_vals = [AccountingNone] * len(common_subkpis)
+                        base_vals = [AccountingNone] * \
+                            (len(common_subkpis) or 1)
                     else:
                         base_vals = [cell.val for cell in base_cell_tuple
-                                     if cell.subcol.subkpi in common_subkpis]
+                                     if not common_subkpis or
+                                     cell.subcol.subkpi in common_subkpis]
                     comparison_cell_tuple = []
                     for val, base_val, comparison_subcol in \
                             izip(vals,
