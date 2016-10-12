@@ -2,9 +2,16 @@
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+try:
+    import xlsxwriter
+except ImportError:  # pragma: no cover
+    import logging
+    _logger = logging.getLogger(__name__)
+    _logger.info("Missing dependency: xlsxwriter.")
+    _logger.debug("ImportError details:", exc_info=True)
 
 from cStringIO import StringIO
-import xlsxwriter
+
 from openerp.addons.report_xlsx.report.report_xlsx import ReportXlsx
 
 
