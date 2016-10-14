@@ -2,15 +2,6 @@
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
-try:
-    import xlsxwriter
-except ImportError:  # pragma: no cover
-    import logging
-    _logger = logging.getLogger(__name__)
-    _logger.info("Missing dependency: xlsxwriter.")
-    _logger.debug("ImportError details:", exc_info=True)
-
-from cStringIO import StringIO
 
 from openerp.addons.report_xlsx.report.report_xlsx import ReportXlsx
 
@@ -42,20 +33,8 @@ class AbstractReportXslx(ReportXlsx):
         self.format_amount = None
         self.format_percent_bold_italic = None
 
-    def create_xlsx_report(self, ids, data, report):
-        """ Overrides method to add constant_memory option used for large files
-        """
-        self.parser_instance = self.parser(
-            self.env.cr, self.env.uid, self.name2, self.env.context)
-        objs = self.getObjects(
-            self.env.cr, self.env.uid, ids, self.env.context)
-        self.parser_instance.set_context(objs, data, ids, 'xlsx')
-        file_data = StringIO()
-        workbook = xlsxwriter.Workbook(file_data, {'constant_memory': True})
-        self.generate_xlsx_report(workbook, data, objs)
-        workbook.close()
-        file_data.seek(0)
-        return (file_data.read(), 'xlsx')
+    def get_workbook_options(self):
+        return {'constant_memory': True}
 
     def generate_xlsx_report(self, workbook, data, objects):
         report = objects
