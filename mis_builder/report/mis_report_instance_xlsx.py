@@ -42,7 +42,7 @@ class MisBuilderXlsx(ReportXlsx):
         style_obj = self.env['mis.report.style']
 
         # create worksheet
-        report_name = '{} - {}'.format(
+        report_name = u'{} - {}'.format(
             objects[0].name, objects[0].company_id.name)
         sheet = workbook.add_worksheet(report_name[:31])
         row_pos = 0
