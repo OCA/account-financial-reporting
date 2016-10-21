@@ -33,9 +33,9 @@ class TestAccountTaxBalance(TransactionCase):
         tax_account_id = self.env['account.account'].search(
             [('name', '=', 'Tax Paid')], limit=1).id
         tax = self.env['account.tax'].create({
-            'name': 'Tax 10.0',
+            'name': 'Tax 10.0%',
             'amount': 10.0,
-            'amount_type': 'fixed',
+            'amount_type': 'percent',
             'account_id': tax_account_id,
         })
         invoice_account_id = self.env['account.account'].search(
@@ -67,8 +67,12 @@ class TestAccountTaxBalance(TransactionCase):
         # change the state of invoice to open by clicking Validate button
         invoice.signal_workflow('invoice_open')
 
-        self.assertEquals(tax.base_balance, 100)
-        self.assertEquals(tax.balance, 10)
+        self.assertEquals(tax.base_balance, 100.)
+        self.assertEquals(tax.balance, 10.)
+        self.assertEquals(tax.base_balance_regular, 100.)
+        self.assertEquals(tax.balance_regular, 10.)
+        self.assertEquals(tax.base_balance_refund, 0.)
+        self.assertEquals(tax.balance_refund, 0.)
 
         # testing wizard
         current_range = self.range.search([
@@ -110,3 +114,32 @@ class TestAccountTaxBalance(TransactionCase):
         self.assertEqual(state_list, ['posted', 'draft'])
         state_list = tax.get_target_state_list(target_move='whatever')
         self.assertEqual(state_list, [])
+
+        refund = self.env['account.invoice'].create({
+            'partner_id': self.env.ref('base.res_partner_2').id,
+            'account_id': invoice_account_id,
+            'type': 'out_refund',
+        })
+
+        self.env['account.invoice.line'].create({
+            'product_id': self.env.ref('product.product_product_2').id,
+            'quantity': 1.0,
+            'price_unit': 25.0,
+            'invoice_id': refund.id,
+            'name': 'returned product that cost 25',
+            'account_id': invoice_line_account_id,
+            'invoice_line_tax_ids': [(6, 0, [tax.id])],
+        })
+        refund._onchange_invoice_line_ids()
+        refund._convert_to_write(invoice._cache)
+        self.assertEqual(refund.state, 'draft')
+
+        # change the state of refund to open by clicking Validate button
+        refund.signal_workflow('invoice_open')
+
+        self.assertEquals(tax.base_balance, 75.)
+        self.assertEquals(tax.balance, 7.5)
+        self.assertEquals(tax.base_balance_regular, 100.)
+        self.assertEquals(tax.balance_regular, 10.)
+        self.assertEquals(tax.base_balance_refund, -25.)
+        self.assertEquals(tax.balance_refund, -2.5)
