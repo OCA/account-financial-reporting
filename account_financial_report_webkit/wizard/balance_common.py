@@ -175,7 +175,7 @@ class AccountBalanceCommonWizard(orm.TransientModel):
                 page.append(group)
 
                 def modifiers_and_append(elem):
-                    orm.setup_modifiers(elem)
+                    orm.setup_modifiers(elem, context=context)
                     group.append(elem)
 
                 modifiers_and_append(etree.Element(
