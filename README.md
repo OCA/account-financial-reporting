@@ -19,6 +19,7 @@ Available addons
 addon | version | summary
 --- | --- | ---
 [account_financial_report_qweb](account_financial_report_qweb/) | 9.0.1.0.2 | OCA Financial Reports
+[account_tax_balance](account_tax_balance/) | 9.0.1.0.0 | Compute tax balances based on date range
 [mis_builder](mis_builder/) | 9.0.2.0.2 | Build 'Management Information System' Reports and Dashboards
 
 Unported addons
