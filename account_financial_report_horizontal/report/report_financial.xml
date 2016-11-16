@@ -10,15 +10,15 @@
             <!-- filtered without credit/debit /-->
             <xpath expr="//div[@class='page']/table" position="replace">
                 <div class="row">
-                    <div class="col-xs-6" t-foreach="[get_left_lines, get_right_lines]" t-as="get_lines_function">
+                    <div class="col-xs-6" t-foreach="[data['get_left_lines'], data['get_right_lines']]" t-as="get_lines_function">
                         <table class="table table-condensed">
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th class="text-right" t-if="data['form']['debit_credit'] == 1">Debit</th>
-                                    <th class="text-right" t-if="data['form']['debit_credit'] == 1">Credit</th>
+                                    <th class="text-right" t-if="data['debit_credit'] == 1">Debit</th>
+                                    <th class="text-right" t-if="data['debit_credit'] == 1">Credit</th>
                                     <th class="text-right">Balance</th>
-                                    <th class="text-right" t-if="data['form']['enable_filter'] == 1 and not data['form']['debit_credit']"><span t-esc="data['form']['label_filter']"/></th>
+                                    <th class="text-right" t-if="data['enable_filter'] == 1 and not data['debit_credit']"><span t-esc="data['label_filter']"/></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -31,14 +31,14 @@
                                             <span style="color: white;" t-esc="'..' * a.get('level', 0)"/>
                                             <span t-att-style="style" t-esc="a.get('name')"/>
                                         </td>
-                                        <td class="text-right" style="white-space: nowrap;" t-if="data['form']['debit_credit'] == 1">
-                                            <span t-att-style="style" t-esc="formatLang(a.get('debit'), currency_obj=res_company.currency_id)"/>
+                                        <td class="text-right" style="white-space: nowrap;" t-if="['debit_credit'] == 1">
+                                            <span t-att-style="style" t-esc="a.get('debit')" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
                                         </td>
-                                        <td class="text-right" style="white-space: nowrap;" t-if="data['form']['debit_credit'] == 1">
-                                            <span t-att-style="style" t-esc="formatLang(a.get('credit'), currency_obj=res_company.currency_id)"/>
+                                        <td class="text-right" style="white-space: nowrap;" t-if="data['debit_credit'] == 1">
+                                            <span t-att-style="style" t-esc="a.get('credit')" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/>
                                         </td>
-                                        <td class="text-right"><span t-att-style="style" t-esc="formatLang(a.get('balance'), currency_obj=res_company.currency_id)"/></td>
-                                        <td class="text-right" t-if="data['form']['enable_filter'] == 1 and not data['form']['debit_credit']"><span t-att-style="style" t-esc="formatLang(a.get('balance_cmp'), currency_obj=res_company.currency_id)"/></td>
+                                        <td class="text-right"><span t-att-style="style" t-esc="a.get('balance')" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/></td>
+                                        <td class="text-right" t-if="data['enable_filter'] == 1 and not data['debit_credit']"><span t-att-style="style" t-esc="a.get('balance_cmp')" t-esc-options='{"widget": "monetary", "display_currency": "res_company.currency_id"}'/></td>
                                     </t>
                                 </tr>
                             </tbody>
