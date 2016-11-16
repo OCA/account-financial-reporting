@@ -11,8 +11,6 @@ Usage
 
 After the module is installed, the balance sheet and profit and loss reports will be in landscape mode with assets left and liabilities right.
 
-* https://www.odoo.com/forum/help-1
-
 Credits
 =======
 
