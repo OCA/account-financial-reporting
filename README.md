@@ -18,6 +18,7 @@ Available addons
 ----------------
 addon | version | summary
 --- | --- | ---
+[account_financial_report_horizontal](account_financial_report_horizontal/) | 9.0.0.0.0 | Accounting Financial Reports Horizontal
 [account_financial_report_qweb](account_financial_report_qweb/) | 9.0.1.0.2 | OCA Financial Reports
 [account_tax_balance](account_tax_balance/) | 9.0.1.0.0 | Compute tax balances based on date range
 [mis_builder](mis_builder/) | 9.0.2.0.2 | Build 'Management Information System' Reports and Dashboards
@@ -29,7 +30,6 @@ addon | version | summary
 [account_chart_report](account_chart_report/) | 8.0.1.0.0 (unported) | Print chart of accounts
 [account_export_csv](account_export_csv/) | 8.0.1.1.0 (unported) | Account Export CSV
 [account_financial_report](account_financial_report/) | 2.0 (unported) | Common financial reports
-[account_financial_report_horizontal](account_financial_report_horizontal/) | 8.0.0.3.0 (unported) | Accounting Financial Reports Horizontal
 [account_journal_report_xls](account_journal_report_xls/) | 8.0.0.2.0 (unported) | Financial Journal reports
 [account_move_line_report_xls](account_move_line_report_xls/) | 8.0.0.6.0 (unported) | Journal Items Excel export
 [mis_builder_demo](mis_builder_demo/) | 9.0.1.0.0 (unported) | Demo data for the mis_builder module
