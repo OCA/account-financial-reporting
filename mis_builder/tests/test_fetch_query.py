@@ -9,9 +9,8 @@ class TestFetchQuery(common.TransactionCase):
 
     def test_fetch_query(self):
         # create a report on account.analytic.line
-        data = self.registry('mis.report.instance').compute(
-            self.cr, self.uid,
-            self.ref('mis_builder.mis_report_instance_test'))
+        report = self.env.ref('mis_builder.mis_report_instance_test')
+        data = report.compute()
         self.maxDiff = None
         self.assertEquals(
             {'body':
