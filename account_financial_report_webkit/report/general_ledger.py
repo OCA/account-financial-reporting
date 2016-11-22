@@ -37,6 +37,7 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
             cursor, uid, name, context=context)
         self.pool = pooler.get_pool(self.cr.dbname)
         self.cursor = self.cr
+        self.context = context
 
         company = self.pool.get('res.users').browse(
             self.cr, uid, uid, context=context).company_id
@@ -121,7 +122,8 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
             stop)
         objects = self.pool.get('account.account').browse(self.cursor,
                                                           self.uid,
-                                                          accounts)
+                                                          accounts,
+                                                          context=self.context)
 
         init_balance = {}
         ledger_lines = {}
