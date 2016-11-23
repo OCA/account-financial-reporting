@@ -7,7 +7,7 @@ account_financial_report_qweb
 =============================
 
 This module adds a set of financial reports. They are accessible under
-Accunting / Reporting / OCA Reports.
+Accounting / Reporting / OCA Reports.
 
 - General ledger
 - Trial Balance
