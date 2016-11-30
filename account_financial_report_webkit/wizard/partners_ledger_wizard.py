@@ -121,7 +121,7 @@ class AccountReportPartnersLedgerWizard(orm.TransientModel):
 
     def pre_print_report(self, cr, uid, ids, data, context=None):
         data = super(AccountReportPartnersLedgerWizard, self).pre_print_report(
-            cr, uid, ids, data, context)
+            cr, uid, ids, data, context=context)
         if context is None:
             context = {}
         # will be used to attach the report on the main account

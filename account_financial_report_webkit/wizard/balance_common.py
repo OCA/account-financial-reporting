@@ -392,7 +392,7 @@ class AccountBalanceCommonWizard(orm.TransientModel):
 
     def pre_print_report(self, cr, uid, ids, data, context=None):
         data = super(AccountBalanceCommonWizard, self).pre_print_report(
-            cr, uid, ids, data, context)
+            cr, uid, ids, data, context=context)
         if context is None:
             context = {}
 

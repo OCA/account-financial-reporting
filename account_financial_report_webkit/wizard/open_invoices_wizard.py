@@ -133,7 +133,7 @@ are still unpaid today (today is my clearance date)?'
 
     def pre_print_report(self, cr, uid, ids, data, context=None):
         data = super(AccountReportOpenInvoicesWizard, self).pre_print_report(
-            cr, uid, ids, data, context)
+            cr, uid, ids, data, context=context)
         vals = self.read(cr, uid, ids,
                          ['until_date', 'group_by_currency'],
                          context=context)[0]
