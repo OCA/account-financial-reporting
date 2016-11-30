@@ -99,7 +99,7 @@ like the trial balance but add an extra information :
 
   * Total balance (all figures must match with same date partner balance
     report).
-     This column equals the sum of all following columns)
+    This column equals the sum of all following columns)
 
    * Due
    * Overdue <= 30 days
