@@ -158,6 +158,7 @@ class PrintJournalWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
         return super(PrintJournalWebkit, self).set_context(
             objects, data, new_ids, report_type=report_type)
 
+
 HeaderFooterTextWebKitParser(
     'report.account.account_report_print_journal_webkit',
     'account.journal.period',

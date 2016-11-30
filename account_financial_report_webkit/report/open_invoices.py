@@ -40,6 +40,7 @@ def get_mako_template(obj, *args):
     template_path = get_module_resource(*args)
     return Template(filename=template_path, input_encoding='utf-8')
 
+
 report_helper.WebKitHelper.get_mako_template = get_mako_template
 
 
