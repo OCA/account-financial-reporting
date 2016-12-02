@@ -197,7 +197,7 @@ class nov_journal_print(report_sxw.rml_parse):
             code_string = j_obj._report_xls_document_extra(
                 self.cr, self.uid, self.context)
             # _logger.warn('code_string= %s', code_string)
-            [x.update({'docname': eval(code_string) or '-'}) for x in lines]  # pylint: disable=W0123
+            [x.update({'docname': eval(code_string) or '-'}) for x in lines]  # pylint: disable=W0123 # noqa: disable E501, safe_eval doesn't apply here since code_string comes from python module
 
         # group lines
         if self.group_entries:
