@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-12 12:18+0000\n"
-"PO-Revision-Date: 2016-08-12 12:18+0000\n"
+"POT-Creation-Date: 2016-09-09 14:16+0000\n"
+"PO-Revision-Date: 2016-09-09 14:16+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -246,7 +246,7 @@ msgid "Centralized"
 msgstr "Centralisé"
 
 #. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:933
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:937
 #, python-format
 msgid "Centralized Entries"
 msgstr "Écritures centralisées"
@@ -285,6 +285,16 @@ msgstr "Société"
 #, python-format
 msgid "Cost center"
 msgstr "Centre de coût"
+
+#. module: account_financial_report_qweb
+#: model:ir.ui.view,arch_db:account_financial_report_qweb.report_general_ledger_qweb_lines
+msgid "Counterpart Accounts"
+msgstr "Comptes de contrepartie"
+
+#. module: account_financial_report_qweb
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_move_line_counterpart_accounts
+msgid "Counterpart accounts"
+msgstr "Comptes de contrepartie"
 
 #. module: account_financial_report_qweb
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_aged_partner_balance_wizard_create_uid
@@ -939,8 +949,8 @@ msgid "No"
 msgstr "Non"
 
 #. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:491
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:707
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:495
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:711
 #: code:addons/account_financial_report_qweb/report/open_items.py:277
 #: code:addons/account_financial_report_qweb/report/open_items.py:493
 #, python-format

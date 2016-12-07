@@ -110,6 +110,8 @@
                     <div class="act_as_cell" style="width: 40px;">Journal</div>
                     <!--## account code-->
                     <div class="act_as_cell" style="width: 50px;">Account</div>
+                    <!--## counterpart account codes-->
+                    <div class="act_as_cell">Counterpart Accounts</div>
                     <!--## partner-->
                     <div class="act_as_cell" style="width: 140px;">Partner</div>
                     <!--## ref - label-->
@@ -144,6 +146,8 @@
                 <!--## journal-->
                 <div class="act_as_cell"></div>
                 <!--## account code-->
+                <div class="act_as_cell"></div>
+                <!--## counterpart account codes-->
                 <div class="act_as_cell"></div>
                 <!--## partner-->
                 <div class="act_as_cell"></div>
@@ -181,6 +185,8 @@
                     <div class="act_as_cell left"><span t-field="line.journal"/></div>
                     <!--## account code-->
                     <div class="act_as_cell left"><span t-field="line.account"/></div>
+                    <!--## counterpart account codes-->
+                    <div class="act_as_cell left"><span t-field="line.counterpart_accounts"/></div>
                     <!--## partner-->
                     <div class="act_as_cell left"><span t-field="line.partner"/></div>
                     <!--## ref - label-->
