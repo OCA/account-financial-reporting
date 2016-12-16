@@ -1,0 +1,49 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * account_financial_report_horizontal
+# 
+# Translators:
+# Marc Tormo i Bochaca <mtbochaca@gmail.com>, 2017
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 9.0c\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-04-26 02:44+0000\n"
+"PO-Revision-Date: 2017-04-26 02:44+0000\n"
+"Last-Translator: Marc Tormo i Bochaca <mtbochaca@gmail.com>, 2017\n"
+"Language-Team: Catalan (https://www.transifex.com/oca/teams/23907/ca/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: ca\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: account_financial_report_horizontal
+#: model:ir.model,name:account_financial_report_horizontal.model_account_financial_report
+msgid "Account Report"
+msgstr "Informe Comptable "
+
+#. module: account_financial_report_horizontal
+#: model:ir.ui.view,arch_db:account_financial_report_horizontal.report_financial
+msgid "Balance"
+msgstr "Balanç "
+
+#. module: account_financial_report_horizontal
+#: model:ir.ui.view,arch_db:account_financial_report_horizontal.report_financial
+msgid "Credit"
+msgstr "Crèdit "
+
+#. module: account_financial_report_horizontal
+#: model:ir.ui.view,arch_db:account_financial_report_horizontal.report_financial
+msgid "Debit"
+msgstr "Dèbit "
+
+#. module: account_financial_report_horizontal
+#: model:ir.ui.view,arch_db:account_financial_report_horizontal.report_financial
+msgid "Name"
+msgstr "Nom"
+
+#. module: account_financial_report_horizontal
+#: model:ir.model,name:account_financial_report_horizontal.model_report_account_report_financial
+msgid "report.account.report_financial"
+msgstr "report.account.report_financial"
