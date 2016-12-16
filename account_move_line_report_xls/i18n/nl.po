@@ -1,176 +1,51 @@
-# Dutch translation of OpenERP Server 7.0.
+# Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* account_move_line_report_xls
-#
+# * account_move_line_report_xls
+# 
+# Translators:
+# OCA Transbot <transbot@odoo-community.org>, 2016
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 7.0\n"
-"Report-Msgid-Bugs-To: support@noviat.com\n"
-"POT-Creation-Date: 2014-01-08 23:46:06.564000\n"
-"PO-Revision-Date: 2014-01-08 23:46:06.564000\n"
-"Last-Translator: Luc De Meyer (Noviat nv/sa)\n"
-"Language-Team: \n"
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-12-16 12:25+0000\n"
+"PO-Revision-Date: 2016-12-16 12:25+0000\n"
+"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2016\n"
+"Language-Team: Dutch (https://www.transifex.com/oca/teams/23907/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: \n"
+"Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
+#: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:300
+#, python-format
+msgid "Customisation Error!"
+msgstr ""
+
+#. module: account_move_line_report_xls
+#: model:ir.actions.report.xml,name:account_move_line_report_xls.action_move_line_list_xls
+msgid "Export Selected Lines"
+msgstr ""
+
+#. module: account_move_line_report_xls
+#: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:305
+#: model:ir.model,name:account_move_line_report_xls.model_account_move_line
+#, python-format
 msgid "Journal Items"
 msgstr "Boekingsregels"
 
 #. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Entry"
-msgstr "Boeking"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Name"
-msgstr "Naam"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Reference"
-msgstr "Referentie"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Effective Date"
-msgstr "Datum"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Period"
-msgstr "Periode"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Partner"
-msgstr "Partner"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Partner Reference"
-msgstr "Ref. Partner"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Account"
-msgstr "Rekening"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Maturity Date"
-msgstr "Vervaldatum"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Debit"
-msgstr "Debet"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Credit"
-msgstr "Credit"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Balance"
-msgstr "Saldo"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Rec."
-msgstr "Rec."
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Part. Rec."
-msgstr "Rec. Part."
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Tax Code"
-msgstr "BTW vak"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Tax/Base Amount"
-msgstr "Bedrag BTW/Mvh"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Am. Currency"
-msgstr "Bedrag valuta"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Curr."
-msgstr "Val."
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Journal"
-msgstr "Dagboek"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Comp. Curr."
-msgstr "Bedr. Val."
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Analytic Account"
-msgstr "Kostenplaats"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Product"
-msgstr "Product"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Product Reference"
-msgstr "Ref. Product"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Unit of Measure"
-msgstr "Maateenheid"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Qty"
-msgstr "HvH"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Statement"
-msgstr "Uitreksel"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Invoice"
-msgstr "Factuur"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Residual Amount"
-msgstr "Restbedrag"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Res. Am. in Curr."
-msgstr "Restbedrag in val."
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
-msgid "Notes"
-msgstr "Notities"
-
-#. module: account_move_line_report_xls
-#: report:move.line.list.xls:0
+#: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:283
+#, python-format
 msgid "Lit."
 msgstr "Lit."
 
+#. module: account_move_line_report_xls
+#: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:301
+#, python-format
+msgid ""
+"The 'Balance' field is a calculated XLS field requiring                 the "
+"presence of the 'Debit' and 'Credit' fields !"
+msgstr ""
