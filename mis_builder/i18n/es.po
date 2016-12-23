@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-16 12:30+0000\n"
-"PO-Revision-Date: 2016-12-16 12:30+0000\n"
+"POT-Creation-Date: 2016-12-19 15:02+0000\n"
+"PO-Revision-Date: 2016-12-19 15:02+0000\n"
 "Last-Translator: Pedro M. Baeza <pedro.baeza@gmail.com>, 2016\n"
 "Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr ""
 #: code:addons/mis_builder/models/mis_report_instance.py:261
 #, python-format
 msgid "%s (copy)"
-msgstr ""
+msgstr "%s (copia)"
 
 #. module: mis_builder
 #: model:ir.ui.view,arch_db:mis_builder.mis_report_view_form
