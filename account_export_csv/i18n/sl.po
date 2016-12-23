@@ -1,0 +1,312 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * account_export_csv
+# 
+# Translators:
+# Matjaž Mozetič <m.mozetic@matmoz.si>, 2016
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-12-16 23:11+0000\n"
+"PO-Revision-Date: 2016-12-16 23:11+0000\n"
+"Last-Translator: Matjaž Mozetič <m.mozetic@matmoz.si>, 2016\n"
+"Language-Team: Slovenian (https://www.transifex.com/oca/teams/23907/sl/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: sl\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:287
+#, python-format
+msgid "ACCOUNT CODE"
+msgstr "KODA KONTA"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:201
+#: code:addons/account_export_csv/wizard/account_export_csv.py:299
+#, python-format
+msgid "ACCOUNT NAME"
+msgstr "NAZIV KONTA"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:301
+#, python-format
+msgid "AMOUNT CURRENCY"
+msgstr "VALUTA ZNESKA"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:295
+#, python-format
+msgid "ANALYTIC ACCOUNT CODE"
+msgstr "KODA ANALITIČNEGA KONTA"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:303
+#, python-format
+msgid "ANALYTIC ACCOUNT NAME"
+msgstr "NAZIV ANALITIČNEGA KONTA"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:198
+#, python-format
+msgid "ANALYTIC CODE"
+msgstr "ANALITIČNA KODA"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:199
+#, python-format
+msgid "ANALYTIC NAME"
+msgstr "ANALITIČNI NAZIV"
+
+#. module: account_export_csv
+#: view:account.csv.export:account_export_csv.account_csv_export_view
+#: model:ir.actions.act_window,name:account_export_csv.action_account_csv_export
+#: model:ir.ui.menu,name:account_export_csv.menu_account_csv_export
+msgid "Accounting CSV Export"
+msgstr "Knjigovodski CSV izvoz"
+
+#. module: account_export_csv
+#: help:account.csv.export,periods:0
+msgid "All periods in the fiscal year if empty"
+msgstr "Če prazno, vsa obdobja v fiskalnem letu"
+
+#. module: account_export_csv
+#: view:account.csv.export:account_export_csv.account_csv_export_view
+msgid "Analytic Balance (with accounts)"
+msgstr "Analitična bilanca (s konti)"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:142
+#: code:addons/account_export_csv/wizard/account_export_csv.py:204
+#: code:addons/account_export_csv/wizard/account_export_csv.py:300
+#, python-format
+msgid "BALANCE"
+msgstr "BILANCA"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:310
+#, python-format
+msgid "BANK STATEMENT"
+msgstr "BANČNI IZPISEK"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:138
+#: code:addons/account_export_csv/wizard/account_export_csv.py:200
+#, python-format
+msgid "CODE"
+msgstr "KODA"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:141
+#: code:addons/account_export_csv/wizard/account_export_csv.py:203
+#: code:addons/account_export_csv/wizard/account_export_csv.py:292
+#, python-format
+msgid "CREDIT"
+msgstr "TERJATEV"
+
+#. module: account_export_csv
+#: field:account.csv.export,data:0
+msgid "CSV"
+msgstr "CSV"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:302
+#, python-format
+msgid "CURRENCY"
+msgstr "VALUTA"
+
+#. module: account_export_csv
+#: view:account.csv.export:account_export_csv.account_csv_export_view
+msgid "Close"
+msgstr "Zapri"
+
+#. module: account_export_csv
+#: field:account.csv.export,company_id:0
+msgid "Company"
+msgstr "Družba"
+
+#. module: account_export_csv
+#: field:account.csv.export,create_uid:0
+msgid "Created by"
+msgstr "Ustvaril"
+
+#. module: account_export_csv
+#: field:account.csv.export,create_date:0
+msgid "Created on"
+msgstr "Ustvarjeno"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:285
+#, python-format
+msgid "DATE"
+msgstr "DATUM"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:140
+#: code:addons/account_export_csv/wizard/account_export_csv.py:202
+#: code:addons/account_export_csv/wizard/account_export_csv.py:291
+#, python-format
+msgid "DEBIT"
+msgstr "OBVEZNOST"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:290
+#, python-format
+msgid "DESCRIPTION"
+msgstr "OPIS"
+
+#. module: account_export_csv
+#: field:account.csv.export,display_name:0
+msgid "Display Name"
+msgstr "Prikazni naziv"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:298
+#, python-format
+msgid "ENTRY NUMBER"
+msgstr "ŠTEVILKA VNOSA"
+
+#. module: account_export_csv
+#: model:ir.model,name:account_export_csv.model_account_csv_export
+msgid "Export Accounting"
+msgstr "Izvoz knjigovodstva"
+
+#. module: account_export_csv
+#: field:account.csv.export,export_filename:0
+msgid "Export CSV Filename"
+msgstr "Naziv izvozne CSV datoteke"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:306
+#, python-format
+msgid "FISCAL YEAR"
+msgstr "FISKALNO LETO"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:293
+#, python-format
+msgid "FULL RECONCILE"
+msgstr "POLNA USKLADITEV"
+
+#. module: account_export_csv
+#: field:account.csv.export,fiscalyear_id:0
+msgid "Fiscalyear"
+msgstr "Fiskalno leto"
+
+#. module: account_export_csv
+#: field:account.csv.export,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: account_export_csv
+#: help:account.csv.export,journal_ids:0
+msgid "If empty, use all journals, only used for journal entries"
+msgstr "Če prazno, uporabi vse dnevnike. Uporablja se le za dnevniške vnose"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:304
+#, python-format
+msgid "JOURNAL"
+msgstr "DNEVNIK"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:286
+#, python-format
+msgid "JOURNAL CODE"
+msgstr "KODA DNEVNIKA"
+
+#. module: account_export_csv
+#: view:account.csv.export:account_export_csv.account_csv_export_view
+msgid "Journal Entries"
+msgstr "Dnevniški vnosi"
+
+#. module: account_export_csv
+#: field:account.csv.export,journal_ids:0
+msgid "Journals"
+msgstr "Dnevniki"
+
+#. module: account_export_csv
+#: field:account.csv.export,__last_update:0
+msgid "Last Modified on"
+msgstr "Zadnja sprememba"
+
+#. module: account_export_csv
+#: field:account.csv.export,write_uid:0
+msgid "Last Updated by"
+msgstr "Zadnji posodobil"
+
+#. module: account_export_csv
+#: field:account.csv.export,write_date:0
+msgid "Last Updated on"
+msgstr "Zadnjič posodobljeno"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:305
+#, python-format
+msgid "MONTH"
+msgstr "MESEC"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:139
+#, python-format
+msgid "NAME"
+msgstr "NAZIV"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:294
+#, python-format
+msgid "PARTIAL RECONCILE"
+msgstr "DELNA USKLADITEV"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:288
+#, python-format
+msgid "PARTNER NAME"
+msgstr "NAZIV PARTNERJA"
+
+#. module: account_export_csv
+#: field:account.csv.export,periods:0
+msgid "Periods"
+msgstr "Obdobja"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:289
+#, python-format
+msgid "REF"
+msgstr "SKLIC"
+
+#. module: account_export_csv
+#: view:account.csv.export:account_export_csv.account_csv_export_view
+msgid "Report"
+msgstr "Poročilo"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:309
+#, python-format
+msgid "TAX AMOUNT"
+msgstr "ZNESEK DAVKA"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:307
+#, python-format
+msgid "TAX CODE CODE"
+msgstr "KODA DAVČNE KODE"
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:308
+#, python-format
+msgid "TAX CODE NAME"
+msgstr "NAZIV DAVČNE KODE"
+
+#. module: account_export_csv
+#: view:account.csv.export:account_export_csv.account_csv_export_view
+msgid "Trial Balance"
+msgstr "Poskusna bilanca"
+
+#. module: account_export_csv
+#: view:account.csv.export:account_export_csv.account_csv_export_view
+msgid "or"
+msgstr "ali"
