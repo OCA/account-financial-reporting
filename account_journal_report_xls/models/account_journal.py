@@ -1,9 +1,9 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution
+#    Odoo, Open Source Management Solution
 #
-#    Copyright (c) 2013 Noviat nv/sa (www.noviat.com). All rights reserved.
+#    Copyright (c) 2009-2016 Noviat nv/sa (www.noviat.com).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -12,18 +12,18 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU Affero General Public License for more details.
 #
 #    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
 
-from openerp.osv import orm
+from openerp import models
 
 
-class account_journal(orm.Model):
+class AccountJournal(models.Model):
     _inherit = 'account.journal'
 
     # allow inherited modules to extend the query
@@ -36,6 +36,17 @@ class account_journal(orm.Model):
     # allow inherited modules to add document references
     def _report_xls_document_extra(self, cr, uid, context):
         return "''"
+
+    # allow inherited modules to extend the render namespace
+    def _report_xls_render_space_extra(self, cr, uid, context=None):
+        """
+        extend render namespace for use in the template 'lines', e.g.
+        space_extra = {
+            'partner_obj': self.pool['res.partner'],
+        }
+        return space_extra
+        """
+        return None
 
     # override list in inherited module to add/drop columns or change order
     def _report_xls_fields(self, cr, uid, context=None):

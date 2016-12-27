@@ -1,9 +1,9 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution
+#    Odoo, Open Source Management Solution
 #
-#    Copyright (c) 2014 Noviat nv/sa (www.noviat.com). All rights reserved.
+#    Copyright (c) 2009-2016 Noviat nv/sa (www.noviat.com).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -20,36 +20,35 @@
 #
 ##############################################################################
 
-from openerp.tools.translate import _
-from openerp.osv import orm, fields
+from openerp import fields, models, _
+from openerp.exceptions import Warning as UserError
 from openerp.addons.account.wizard.account_report_common_journal \
     import account_common_journal_report
 import logging
 _logger = logging.getLogger(__name__)
 
 
-class account_print_journal_xls(orm.TransientModel):
+class AccountPrintJournalXls(models.TransientModel):
     _inherit = 'account.print.journal'
     _name = 'account.print.journal.xls'
     _description = 'Print/Export Journal'
-    _columns = {
-        'journal_ids': fields.many2many(
-            'account.journal',
-            'account_print_journal_xls_journal_rel',
-            'journal_xls_id',
-            'journal_id',
-            string='Journals',
-            required=True),
-        'group_entries': fields.boolean(
-            'Group Entries',
-            help="Group entries with same General Account & Tax Code."),
-    }
-    _defaults = {
-        'group_entries': True,
-    }
+
+    journal_ids = fields.Many2many(
+        comodel_name='account.journal',
+        relation='account_print_journal_xls_journal_rel',
+        column1='journal_xls_id', column2='journal_id',
+        string='Journals', required=True)
+    group_entries = fields.Boolean(
+        string='Group Entries', default=True,
+        help="Group entries with same General Account & Tax Code.")
+    centralization = fields.Selection(
+        selection=[('add', 'Add'), ('only', 'Only')],
+        string='Centralization Report', default='add',
+        help="Journal Centralization Report. "
+             "\nThis report is only available in the Excel export.")
 
     def fields_get(self, cr, uid, fields=None, context=None):
-        res = super(account_print_journal_xls, self).fields_get(
+        res = super(AccountPrintJournalXls, self).fields_get(
             cr, uid, fields, context)
         if context.get('print_by') == 'fiscalyear':
             if 'fiscalyear_id' in res:
@@ -103,7 +102,7 @@ class account_print_journal_xls(orm.TransientModel):
     def print_report(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
-        move_obj = self.pool.get('account.move')
+        aml_obj = self.pool['account.move.line']
         print_by = context.get('print_by')
         wiz_form = self.browse(cr, uid, ids)[0]
         fiscalyear_id = wiz_form.fiscalyear_id.id
@@ -138,6 +137,7 @@ class account_print_journal_xls(orm.TransientModel):
             'target_move': wiz_form.target_move,
             'display_currency': wiz_form.amount_currency,
             'group_entries': wiz_form.group_entries,
+            'centralization': wiz_form.centralization,
         }
 
         if wiz_form.target_move == 'posted':
@@ -148,15 +148,16 @@ class account_print_journal_xls(orm.TransientModel):
         if print_by == 'fiscalyear':
             journal_fy_ids = []
             for journal_id in wiz_journal_ids:
-                aml_ids = move_obj.search(cr, uid,
-                                          [('journal_id', '=', journal_id),
-                                           ('period_id', 'in', wiz_period_ids),
-                                           ('state', 'in', move_states)],
-                                          limit=1)
+                aml_ids = aml_obj.search(
+                    cr, uid,
+                    [('journal_id', '=', journal_id),
+                     ('period_id', 'in', wiz_period_ids),
+                     ('move_id.state', 'in', move_states)],
+                    limit=1)
                 if aml_ids:
                     journal_fy_ids.append((journal_id, fiscalyear_id))
             if not journal_fy_ids:
-                raise orm.except_orm(
+                raise UserError(
                     _('No Data Available'),
                     _('No records found for your selection!'))
             datas.update({
@@ -170,17 +171,18 @@ class account_print_journal_xls(orm.TransientModel):
             for journal_id in wiz_journal_ids:
                 period_ids = []
                 for period_id in wiz_period_ids:
-                    aml_ids = move_obj.search(cr, uid,
-                                              [('journal_id', '=', journal_id),
-                                               ('period_id', '=', period_id),
-                                               ('state', 'in', move_states)],
-                                              limit=1)
+                    aml_ids = aml_obj.search(
+                        cr, uid,
+                        [('journal_id', '=', journal_id),
+                         ('period_id', '=', period_id),
+                         ('move_id.state', 'in', move_states)],
+                        limit=1)
                     if aml_ids:
                         period_ids.append(period_id)
                 if period_ids:
                     journal_period_ids.append((journal_id, period_ids))
             if not journal_period_ids:
-                raise orm.except_orm(
+                raise UserError(
                     _('No Data Available'),
                     _('No records found for your selection!'))
             datas.update({

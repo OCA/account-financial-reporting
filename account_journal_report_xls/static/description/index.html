@@ -1,0 +1,126 @@
+<section class="oe_container">
+    <div class="oe_row oe_spaced">
+        <div class="oe_span12">
+            <h2 class="oe_slogan">Journal Reports</h2>
+        </div>
+        <div class="oe_span6">
+            <br>
+            <div class="oe_demo oe_picture oe_screenshot">
+                <img src="journal_overview.png">
+            </div>
+        </div>
+        <div class="oe_span6">
+            <p class="oe_mt32">
+              This module adds journal reports by period and by fiscal year with
+              <ul>
+                <li>entries printed per move</li>
+                <li>option to group entries with same general account & VAT case</li>
+                <li>vat info per entry</li>
+                <li>vat summary</li>
+              </ul>
+              These reports are available in PDF and XLS format.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="oe_spaced oe_container oe_dark">
+    <div class="oe_row">
+        <h2 class="oe_slogan">Report customisation</h2>
+        <p class="oe_mt32">
+          The Excel export can be tailored to your exact needs via the following methods of the 'account.journal' object:
+          <ul>
+            <li>
+              <b>_report_xls_fields</b>
+              <div style="padding-top:10px">
+                Add/drop columns or change order from the list of columns that are defined in the Excel template.
+                <br>The following fields are available:
+                <div style="margin-left:40px">
+                  <code>
+                    <table width="600px">
+                      <tr><td>move_name</td><td>account.move,name</td></tr>
+                      <tr><td>move_date</td><td>account.move,date</td></tr>
+                      <tr><td>acc_code</td><td>account.account,code</td></tr>
+                      <tr><td>period</td><td>account.period,code or name</td></tr>
+                      <tr><td>partner_name</td><td>res.partner,name</td></tr>
+                      <tr><td>aml_name</td><td>account.move.line,name</td></tr>
+                      <tr><td>tax_code</td><td>account.tax.code,code</td></tr>
+                      <tr><td>tax_amount</td><td>account.move.line,tax_amount</td></tr>
+                      <tr><td>debit</td><td>account.move.line,debit</td></tr>
+                      <tr><td>credit</td><td>account.move.line,credit</td></tr>
+                      <tr><td>balance</td><td>debit-credit</td></tr>
+                      <tr><td>docname</td><td>dorigin document if any</td></tr>
+                      <tr><td>date_maturity</td><td>account.move.line,date_maturity</td></tr>
+                      <tr><td>reconcile</td><td>account.move.line,reconcile_id.name</td></tr>
+                      <tr><td>reconcile_partial</td><td>account.move.line,reconcile_partial_id.name</td></tr>
+                      <tr><td>partner_ref</td><td>res.partner,ref</td></tr>
+                      <tr><td>move_ref</td><td>account.move,ref</td></tr>
+                      <tr><td>move_id</td><td>account.move,id</td></tr>
+                      <tr><td>acc_name</td><td>account.account,name</td></tr>
+                      <tr><td>journal</td><td>account.journal,name</td></tr>
+                      <tr><td>journal_code</td><td>aaccount.journal,code</td></tr>
+                      <tr><td>analytic_account</td><td>account.analytic.account,name</td></tr>
+                      <tr><td>analytic_account_code</td><td>account.analytic.account,code</td></tr>
+                    </table>
+                  </code>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </p>
+        <p class="oe_mt32">
+          <ul>
+            <li>
+              <b>_report_xls_template</b>
+              <div style="padding-top:10px">
+                Change/extend the Excel template.
+              </div>
+            </li>
+          </ul>
+        </p>
+    </div>
+</section>
+
+  <section class="oe_container">
+    <div class="oe_row oe_spaced">
+      <h2 class="oe_slogan">Credits</h2>
+      <div class="oe_span6">
+        <p class="oe_mt32">
+          Author:
+          <ul>
+            <li>
+              <a href="mailto:info@noviat.com">Luc De Meyer (Noviat)</a>
+            </li>
+          </ul>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="oe_container oe_dark">
+    <div class="oe_row oe_spaced">
+      <div class="oe_span12">
+        <h2 class="oe_slogan">Maintainer</h2>
+      </div>
+      <div class="oe_span8">
+        <p class="oe_mt32">
+          This module is maintained by the OCA.
+        </p>
+        <p>
+          OCA, or the Odoo Community Association, is a nonprofit organization whose mission is to support the collaborative development
+          of Odoo features and promote its widespread use.
+        </p>
+        <p>
+          To contribute to this module, please visit <a href="http://odoo-community.org">http://odoo-community.org.</a>
+        </p>
+      </div>
+      <div class="oe_span4">
+        <a href="http://odoo-community.org">
+          <div class="oe_picture">
+            <img src="oca_logo.png"/>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+

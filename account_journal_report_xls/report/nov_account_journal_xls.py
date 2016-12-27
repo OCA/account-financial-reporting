@@ -1,9 +1,9 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution
+#    Odoo, Open Source Management Solution
 #
-#    Copyright (c) 2013 Noviat nv/sa (www.noviat.com). All rights reserved.
+#    Copyright (c) 2009-2016 Noviat nv/sa (www.noviat.com).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -12,46 +12,52 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU Affero General Public License for more details.
 #
 #    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
 
 import xlwt
 from datetime import datetime
-from openerp.osv import orm
+from openerp.exceptions import except_orm
 from openerp.addons.report_xls.report_xls import report_xls
 from openerp.addons.report_xls.utils import rowcol_to_cell, _render
-from .nov_account_journal import nov_journal_print
+from .nov_account_journal import NovJournalPrint
 from openerp.tools.translate import _
 import logging
 _logger = logging.getLogger(__name__)
 
+CENTRALIZATION_WANTED_LIST = [
+    'period', 'journal_code', 'journal_name', 'debit', 'credit']
 
-class account_journal_xls_parser(nov_journal_print):
+
+class AccountJournalXlsParser(NovJournalPrint):
 
     def __init__(self, cr, uid, name, context):
-        super(account_journal_xls_parser, self).__init__(cr, uid, name,
-                                                         context=context)
+        super(AccountJournalXlsParser, self).__init__(cr, uid, name,
+                                                      context=context)
         journal_obj = self.pool.get('account.journal')
         self.context = context
         wanted_list = journal_obj._report_xls_fields(cr, uid, context)
         template_changes = journal_obj._report_xls_template(cr, uid, context)
+        space_extra = journal_obj._report_xls_render_space_extra(
+            cr, uid, context)
         self.localcontext.update({
             'datetime': datetime,
             'wanted_list': wanted_list,
             'template_changes': template_changes,
+            'space_extra': space_extra,
         })
 
 
-class account_journal_xls(report_xls):
+class AccountJournalXls(report_xls):
 
     def __init__(self, name, table, rml=False, parser=False, header=True,
                  store=False):
-        super(account_journal_xls, self).__init__(
+        super(AccountJournalXls, self).__init__(
             name, table, rml, parser, header, store)
 
         # Cell Styles
@@ -79,6 +85,44 @@ class account_journal_xls(report_xls):
         self.rt_cell_style_decimal = xlwt.easyxf(
             rt_cell_format + _xs['right'],
             num_format_str=report_xls.decimal_format)
+
+        # XLS Template Centralization
+        self.col_specs_centralization_template = {
+            'period': {
+                'header': [1, 15, 'text', _render("_('Period')")],
+                'lines':
+                [1, 0, 'text',
+                 _render("l['period_code']")],
+                'totals': [1, 0, 'text', None]},
+            'journal_code': {
+                'header': [1, 10, 'text', _render("_('Code')")],
+                'lines':
+                [1, 0, 'text',
+                 _render("l['journal_code']")],
+                'totals': [1, 0, 'text', None]},
+            'journal_name': {
+                'header': [1, 45, 'text', _render("_('Journal')")],
+                'lines':
+                [1, 0, 'text',
+                 _render("l['journal_name']")],
+                'totals': [1, 0, 'text', None]},
+            'debit': {
+                'header': [1, 18, 'text', _render("_('Total Debit')"), None,
+                           self.rh_cell_style_right],
+                'lines': [1, 0, 'number', _render("l['debit']"), None,
+                          self.aml_cell_style_decimal],
+                'totals': [1, 0, 'number', None,
+                           _render("total_debit_formula"),
+                           self.rt_cell_style_decimal]},
+            'credit': {
+                'header': [1, 18, 'text', _render("_('Total Credit')"), None,
+                           self.rh_cell_style_right],
+                'lines': [1, 0, 'number', _render("l['credit']"), None,
+                          self.aml_cell_style_decimal],
+                'totals': [1, 0, 'number', None,
+                           _render("total_credit_formula"),
+                           self.rt_cell_style_decimal]},
+        }
 
         # XLS Template Journal Items
         self.col_specs_lines_template = {
@@ -235,6 +279,126 @@ class account_journal_xls(report_xls):
                                self.aml_cell_style_decimal]},
         }
 
+    def _centralization_title(self, objects, ws, _p, row_pos, _xs):
+        cell_style = xlwt.easyxf(_xs['xls_title'])
+        report_name = (10 * ' ').join([
+            _p.company.name,
+            _p._('Journal Centralization') + ' - ' +
+            _p.company.currency_id.name,
+        ])
+        c_specs = [
+            ('report_name', 1, 0, 'text', report_name),
+        ]
+        row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
+        row_pos = self.xls_write_row(
+            ws, row_pos, row_data, row_style=cell_style)
+        return row_pos + 1
+
+    def _centralization_lines_write(
+            self, lines, start_pos, ws, _p, row_pos, _xs):
+        lines = filter(lambda x: x['debit'] + x['credit'] > 0.0, lines)
+        if not lines:
+            return row_pos
+        wanted_list = CENTRALIZATION_WANTED_LIST
+        debit_pos = wanted_list.index('debit')
+        credit_pos = wanted_list.index('credit')
+        # Column headers
+        c_specs = map(
+            lambda x: self.render(
+                x, self.col_specs_centralization_template, 'header',
+                render_space={'_': _p._}),
+            wanted_list)
+        row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
+        row_pos = self.xls_write_row(
+            ws, row_pos, row_data, row_style=self.rh_cell_style,
+            set_column_size=True)
+        # Centralization lines
+        for l in lines:
+            c_specs = map(
+                lambda x: self.render(
+                    x, self.col_specs_centralization_template, 'lines'),
+                wanted_list)
+            row_data = self.xls_row_template(
+                c_specs, [x[0] for x in c_specs])
+            row_pos = self.xls_write_row(
+                ws, row_pos, row_data, row_style=self.aml_cell_style)
+        # Totals
+        debit_start = rowcol_to_cell(start_pos, debit_pos)
+        debit_stop = rowcol_to_cell(row_pos - 1, debit_pos)
+        total_debit_formula = 'SUM(%s:%s)' % (debit_start, debit_stop)  # noqa: disable F841, report_xls namespace trick
+        credit_start = rowcol_to_cell(start_pos, credit_pos)
+        credit_stop = rowcol_to_cell(row_pos - 1, credit_pos)
+        total_credit_formula = 'SUM(%s:%s)' % (credit_start, credit_stop)  # noqa: disable F841, report_xls namespace trick
+        c_specs = map(
+            lambda x: self.render(
+                x, self.col_specs_centralization_template, 'totals'),
+            wanted_list)
+        row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
+        row_pos = self.xls_write_row(
+            ws, row_pos, row_data, row_style=self.rt_cell_style_right)
+        return row_pos
+
+    def _centralization_lines(self, objects, ws, _p, row_pos, _xs):
+        if _p.data['print_by'] == 'period':
+            sorted_by_period = sorted(objects, key=lambda o: o[1].date_stop)
+        else:
+            periods = objects[0][1].period_ids
+            periods_sorted = sorted(periods, key=lambda p: p.date_stop)
+            sorted_by_period = []
+            for p in periods_sorted:
+                sorted_by_period.extend([(o[0], p) for o in objects])
+        lines = []
+        previous_period = sorted_by_period[0][1]
+        start_pos = row_pos + 1
+        last_i = len(sorted_by_period) - 1
+        for i, entry in enumerate(sorted_by_period):
+            journal = entry[0]
+            period = entry[1]
+            self.cr.execute(
+                "SELECT COALESCE(SUM(debit), 0.0), "
+                "COALESCE(sum(credit), 0.0) "
+                "FROM account_move_line "
+                "WHERE period_id=%s AND journal_id=%s",
+                (period.id, journal.id))
+            debit, credit = self.cr.fetchone()
+            line = {
+                'period_code': period.code,
+                'journal_code': journal.code,
+                'journal_name': journal.name,
+                'debit': debit,
+                'credit': credit}
+            if period != previous_period:
+                row_pos = self._centralization_lines_write(
+                    lines, start_pos, ws, _p, row_pos, _xs)
+                # initialize parameters for next period
+                row_pos += 1
+                lines = [line]
+                start_pos = row_pos + 1
+                previous_period = period
+            else:
+                lines.append(line)
+            if i == last_i:
+                row_pos = self._centralization_lines_write(
+                    lines, start_pos, ws, _p, row_pos, _xs)
+
+        return row_pos
+
+    def _centralization(self, _p, _xs, data, objects, wb):
+        ws = wb.add_sheet('Centralization')
+        ws.panes_frozen = True
+        ws.remove_splits = True
+        ws.portrait = 0  # Landscape
+        ws.fit_width_to_pages = 1
+        row_pos = 0
+
+        # set print header/footer
+        ws.header_str = self.xls_headers['standard']
+        ws.footer_str = self.xls_footers['standard']
+
+        # Data
+        row_pos = self._centralization_title(objects, ws, _p, row_pos, _xs)
+        row_pos = self._centralization_lines(objects, ws, _p, row_pos, _xs)
+
     def _journal_title(self, o, ws, _p, row_pos, _xs):
         cell_style = xlwt.easyxf(_xs['xls_title'])
         report_name = (10 * ' ').join([
@@ -253,6 +417,8 @@ class account_journal_xls(report_xls):
 
     def _journal_lines(self, o, ws, _p, row_pos, _xs):
 
+        if _p.space_extra:
+            locals().update(_p.space_extra)
         wanted_list = self.wanted_list
         debit_pos = self.debit_pos
         credit_pos = self.credit_pos
@@ -323,7 +489,7 @@ class account_journal_xls(report_xls):
         cols_number = len(wanted_list)
         vat_summary_cols_number = len(vat_summary_wanted_list)
         if vat_summary_cols_number > cols_number:
-            raise orm.except_orm(
+            raise except_orm(
                 _('Programming Error!'),
                 _("vat_summary_cols_number should be < cols_number !"))
         index = 0
@@ -378,10 +544,15 @@ class account_journal_xls(report_xls):
             'credit')
         if not (self.credit_pos and self.debit_pos) and 'balance' \
                 in wanted_list:
-            raise orm.except_orm(_('Customisation Error!'),
-                                 _("The 'Balance' field is a calculated XLS \
-                                    field requiring the presence of the \
-                                    'Debit' and 'Credit' fields !"))
+            raise except_orm(_('Customisation Error!'),
+                             _("The 'Balance' field is a calculated XLS \
+                                field requiring the presence of the \
+                                'Debit' and 'Credit' fields !"))
+
+        if _p.data['centralization']:
+            self._centralization(_p, _xs, data, objects, wb)
+            if _p.data['centralization'] == 'only':
+                return True
 
         for o in objects:
 
@@ -404,5 +575,5 @@ class account_journal_xls(report_xls):
             row_pos = self._journal_lines(o, ws, _p, row_pos, _xs)
             row_pos = self._journal_vat_summary(o, ws, _p, row_pos, _xs)
 
-account_journal_xls('report.nov.account.journal.xls', 'account.journal.period',
-                    parser=account_journal_xls_parser)
+AccountJournalXls('report.nov.account.journal.xls', 'account.journal.period',
+                  parser=AccountJournalXlsParser)
