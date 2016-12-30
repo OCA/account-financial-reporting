@@ -4,7 +4,7 @@
 from openerp import models
 
 
-class AccountTrialBalanceWizard(orm.TransientModel):
+class AccountTrialBalanceWizard(models.TransientModel):
     _inherit = 'trial.balance.webkit'
 
     def xls_export(self, cr, uid, ids, context=None):
