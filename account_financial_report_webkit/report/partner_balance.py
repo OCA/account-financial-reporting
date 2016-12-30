@@ -93,6 +93,7 @@ class PartnerBalanceWebkit(report_sxw.rml_parse,
         return super(PartnerBalanceWebkit, self).set_context(
             objects, data, new_ids, report_type=report_type)
 
+
 HeaderFooterTextWebKitParser(
     'report.account.account_report_partner_balance_webkit',
     'account.account',

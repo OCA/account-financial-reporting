@@ -1,24 +1,6 @@
-# -*- encoding: utf-8 -*-
-##############################################################################
-#
-#    OpenERP, Open Source Management Solution
-#
-#    Copyright (c) 2014 Noviat nv/sa (www.noviat.com). All rights reserved.
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program. If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+# -*- coding: utf-8 -*-
+# Copyright 2009-2016 Noviat
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import time
 from openerp.report import report_sxw
@@ -215,7 +197,11 @@ class nov_journal_print(report_sxw.rml_parse):
             code_string = j_obj._report_xls_document_extra(
                 self.cr, self.uid, self.context)
             # _logger.warn('code_string= %s', code_string)
-            [x.update({'docname': eval(code_string) or '-'}) for x in lines]
+            # disable=W0123, safe_eval doesn't apply here since
+            # code_string comes from python module
+            [x.update(
+             {'docname': eval(code_string) or '-'})  # pylint: disable=W0123
+             for x in lines]
 
         # group lines
         if self.group_entries:
@@ -351,6 +337,7 @@ class nov_journal_print(report_sxw.rml_parse):
             return super(nov_journal_print, self).formatLang(
                 value, digits,
                 date, date_time, grouping, monetary, dp, currency_obj)
+
 
 report_sxw.report_sxw(
     'report.nov.account.journal.print', 'account.journal',

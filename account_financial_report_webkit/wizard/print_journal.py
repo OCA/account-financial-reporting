@@ -59,7 +59,7 @@ class AccountReportPrintJournalWizard(orm.TransientModel):
 
     def pre_print_report(self, cr, uid, ids, data, context=None):
         data = super(AccountReportPrintJournalWizard, self).\
-            pre_print_report(cr, uid, ids, data, context)
+            pre_print_report(cr, uid, ids, data, context=context)
         # will be used to attach the report on the main account
         data['ids'] = [data['form']['chart_account_id']]
         vals = self.read(cr, uid, ids,

@@ -85,6 +85,7 @@ class TrialBalanceWebkit(report_sxw.rml_parse,
         return super(TrialBalanceWebkit, self).set_context(
             objects, data, new_ids, report_type=report_type)
 
+
 HeaderFooterTextWebKitParser(
     'report.account.account_report_trial_balance_webkit',
     'account.account',
