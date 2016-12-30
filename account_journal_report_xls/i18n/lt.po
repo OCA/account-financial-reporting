@@ -11,22 +11,22 @@ msgstr ""
 "POT-Creation-Date: 2016-12-16 12:25+0000\n"
 "PO-Revision-Date: 2016-12-16 12:25+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2016\n"
-"Language-Team: Dutch (https://www.transifex.com/oca/teams/23907/nl/)\n"
+"Language-Team: Lithuanian (https://www.transifex.com/oca/teams/23907/lt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: nl\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: lt\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #. module: account_journal_report_xls
 #: selection:account.print.journal.xls,target_move:0
 msgid "All Entries"
-msgstr ""
+msgstr "Visi įrašai"
 
 #. module: account_journal_report_xls
 #: selection:account.print.journal.xls,target_move:0
 msgid "All Posted Entries"
-msgstr ""
+msgstr "Visi paskelbti įrašai"
 
 #. module: account_journal_report_xls
 #: code:addons/account_journal_report_xls/report/nov_account_journal.py:97
@@ -37,28 +37,28 @@ msgstr ""
 #. module: account_journal_report_xls
 #: field:account.print.journal.xls,chart_account_id:0
 msgid "Chart of Account"
-msgstr ""
+msgstr "Sąskaitų planas"
 
 #. module: account_journal_report_xls
 #: field:account.print.journal.xls,company_id:0
 msgid "Company"
-msgstr "Bedrijf"
+msgstr "Įmonė"
 
 #. module: account_journal_report_xls
 #: field:account.print.journal.xls,create_uid:0
 msgid "Created by"
-msgstr ""
+msgstr "Sukūrė"
 
 #. module: account_journal_report_xls
 #: field:account.print.journal.xls,create_date:0
 msgid "Created on"
-msgstr ""
+msgstr "Sukurta"
 
 #. module: account_journal_report_xls
 #: code:addons/account_journal_report_xls/report/nov_account_journal.py:98
 #, python-format
 msgid "Credit"
-msgstr ""
+msgstr "Kreditas"
 
 #. module: account_journal_report_xls
 #: code:addons/account_journal_report_xls/report/nov_account_journal.py:97
@@ -76,13 +76,13 @@ msgstr ""
 #: selection:account.print.journal.xls,filter:0
 #: selection:account.print.journal.xls,sort_selection:0
 msgid "Date"
-msgstr ""
+msgstr "Data"
 
 #. module: account_journal_report_xls
 #: code:addons/account_journal_report_xls/report/nov_account_journal.py:98
 #, python-format
 msgid "Debit"
-msgstr ""
+msgstr "Debetas"
 
 #. module: account_journal_report_xls
 #: field:account.print.journal.xls,display_name:0
@@ -92,12 +92,12 @@ msgstr ""
 #. module: account_journal_report_xls
 #: field:account.print.journal.xls,date_to:0
 msgid "End Date"
-msgstr ""
+msgstr "Pabaigos data"
 
 #. module: account_journal_report_xls
 #: field:account.print.journal.xls,period_to:0
 msgid "End Period"
-msgstr ""
+msgstr "Periodo pabaiga"
 
 #. module: account_journal_report_xls
 #: field:account.print.journal.xls,sort_selection:0
@@ -112,14 +112,14 @@ msgstr ""
 #. module: account_journal_report_xls
 #: field:account.print.journal.xls,filter:0
 msgid "Filter by"
-msgstr ""
+msgstr "Filtruoti pagal"
 
 #. module: account_journal_report_xls
 #: field:account.print.journal.xls,fiscalyear_id:0
 #: code:addons/account_journal_report_xls/report/nov_account_journal.py:93
 #, python-format
 msgid "Fiscal Year"
-msgstr ""
+msgstr "Fiskaliniai Metai"
 
 #. module: account_journal_report_xls
 #: field:account.print.journal.xls,group_entries:0
@@ -140,7 +140,7 @@ msgstr ""
 #. module: account_journal_report_xls
 #: field:account.print.journal.xls,id:0
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: account_journal_report_xls
 #: code:addons/account_journal_report_xls/report/nov_account_journal.py:207
@@ -151,7 +151,7 @@ msgstr ""
 #. module: account_journal_report_xls
 #: model:ir.model,name:account_journal_report_xls.model_account_journal
 msgid "Journal"
-msgstr ""
+msgstr "Žurnalas"
 
 #. module: account_journal_report_xls
 #: selection:account.print.journal.xls,sort_selection:0
@@ -180,12 +180,12 @@ msgstr ""
 #: view:account.print.journal.xls:account_journal_report_xls.view_print_journal_xls
 #: field:account.print.journal.xls,journal_ids:0
 msgid "Journals"
-msgstr ""
+msgstr "Žurnalai"
 
 #. module: account_journal_report_xls
 #: help:account.print.journal.xls,fiscalyear_id:0
 msgid "Keep empty for all open fiscal year"
-msgstr ""
+msgstr "Palikti tuščią atidarytiems fiskaliniams metams"
 
 #. module: account_journal_report_xls
 #: field:account.print.journal.xls,__last_update:0
@@ -195,12 +195,12 @@ msgstr ""
 #. module: account_journal_report_xls
 #: field:account.print.journal.xls,write_uid:0
 msgid "Last Updated by"
-msgstr ""
+msgstr "Paskutinį kartą atnaujino"
 
 #. module: account_journal_report_xls
 #: field:account.print.journal.xls,write_date:0
 msgid "Last Updated on"
-msgstr ""
+msgstr "Paskutinį kartą atnaujinta"
 
 #. module: account_journal_report_xls
 #: code:addons/account_journal_report_xls/wizard/print_journal_wizard.py:160
@@ -212,7 +212,7 @@ msgstr ""
 #. module: account_journal_report_xls
 #: selection:account.print.journal.xls,filter:0
 msgid "No Filters"
-msgstr ""
+msgstr "Nėra filtrų"
 
 #. module: account_journal_report_xls
 #: code:addons/account_journal_report_xls/wizard/print_journal_wizard.py:161
@@ -225,13 +225,13 @@ msgstr ""
 #: code:addons/account_journal_report_xls/report/nov_account_journal.py:92
 #, python-format
 msgid "Period"
-msgstr ""
+msgstr "Periodas"
 
 #. module: account_journal_report_xls
 #: view:account.print.journal.xls:account_journal_report_xls.view_print_journal_xls
 #: selection:account.print.journal.xls,filter:0
 msgid "Periods"
-msgstr "Periodes"
+msgstr "Periodai"
 
 #. module: account_journal_report_xls
 #: view:account.print.journal.xls:account_journal_report_xls.view_print_journal_xls
@@ -259,17 +259,17 @@ msgstr ""
 #. module: account_journal_report_xls
 #: help:account.print.journal.xls,chart_account_id:0
 msgid "Select Charts of Accounts"
-msgstr ""
+msgstr "Pasirinkite sąskaitų planą"
 
 #. module: account_journal_report_xls
 #: field:account.print.journal.xls,date_from:0
 msgid "Start Date"
-msgstr ""
+msgstr "Pradžios data"
 
 #. module: account_journal_report_xls
 #: field:account.print.journal.xls,period_from:0
 msgid "Start Period"
-msgstr ""
+msgstr "Periodo pradžia"
 
 #. module: account_journal_report_xls
 #: code:addons/account_journal_report_xls/report/nov_account_journal.py:211
@@ -280,7 +280,7 @@ msgstr ""
 #. module: account_journal_report_xls
 #: field:account.print.journal.xls,target_move:0
 msgid "Target Moves"
-msgstr ""
+msgstr "Judėjimas"
 
 #. module: account_journal_report_xls
 #: code:addons/account_journal_report_xls/report/nov_account_journal_xls.py:382
@@ -312,7 +312,7 @@ msgstr ""
 #. module: account_journal_report_xls
 #: field:account.print.journal.xls,amount_currency:0
 msgid "With Currency"
-msgstr ""
+msgstr "Su valiuta"
 
 #. module: account_journal_report_xls
 #: view:account.print.journal.xls:account_journal_report_xls.view_print_journal_xls

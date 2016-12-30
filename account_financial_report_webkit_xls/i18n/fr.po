@@ -1,0 +1,516 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * account_financial_report_webkit_xls
+# 
+# Translators:
+# OCA Transbot <transbot@odoo-community.org>, 2016
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-12-16 12:25+0000\n"
+"PO-Revision-Date: 2016-12-16 12:25+0000\n"
+"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2016\n"
+"Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:104
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:106
+#, python-format
+msgid ""
+"\n"
+"To"
+msgstr ""
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:207
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:209
+#, python-format
+msgid "% Difference"
+msgstr "% Différence"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:167
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:174
+#, python-format
+msgid "Account"
+msgstr "Comptes"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:171
+#, python-format
+msgid "Account / Partner Name"
+msgstr "Compte / Partenaire"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:101
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:166
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:102
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:69
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:80
+#, python-format
+msgid "Accounts Filter"
+msgstr "Filtre par compte"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:130
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:96
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:99
+#, python-format
+msgid "All"
+msgstr "Tous"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:185
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:187
+#, python-format
+msgid "Balance"
+msgstr "Solde"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:187
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:195
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:189
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:197
+#, python-format
+msgid "Balance %s"
+msgstr "Solde %s"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:200
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:202
+#, python-format
+msgid "Balance C%s"
+msgstr "Solde C%s"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:97
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:157
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:98
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:79
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:86
+#, python-format
+msgid "Chart of Account"
+msgstr "Plan comptable"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:165
+#, python-format
+msgid "Clearance Date"
+msgstr "Date d'apurement"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:173
+#, python-format
+msgid "Code"
+msgstr "Code"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:172
+#, python-format
+msgid "Code / Ref"
+msgstr "Compte / Réf."
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:137
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:137
+#, python-format
+msgid "Comparison"
+msgstr ""
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:129
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:130
+#, python-format
+msgid "Comparisons"
+msgstr ""
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:68
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:66
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:280
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:50
+#, python-format
+msgid "Computed"
+msgstr "Calculé"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:172
+#, python-format
+msgid "Counterpart"
+msgstr ""
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:174
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:232
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:190
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:180
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:182
+#, python-format
+msgid "Credit"
+msgstr "Crédit"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:176
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:234
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:192
+#, python-format
+msgid "Cumul. Bal."
+msgstr "Solde Cumul."
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:325
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:626
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:700
+#, python-format
+msgid "Cumulated Balance on Account"
+msgstr "Solde cumulé"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:487
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:550
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:604
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:678
+#, python-format
+msgid "Cumulated Balance on Partner"
+msgstr "Totaux"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:432
+#, python-format
+msgid "Cumulated balance on Account"
+msgstr ""
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:396
+#, python-format
+msgid "Cumulated balance on Partner"
+msgstr ""
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:183
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:241
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:249
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:199
+#, python-format
+msgid "Curr."
+msgstr "Dev."
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:181
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:197
+#, python-format
+msgid "Curr. Bal."
+msgstr ""
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:239
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:247
+#, python-format
+msgid "Curr. Balance"
+msgstr "Solde Devise"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:200
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:130
+#, python-format
+msgid "Custom Filter"
+msgstr "Filtre personalisé"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:162
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:215
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:182
+#, python-format
+msgid "Date"
+msgstr "Date"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:100
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:161
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:101
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:71
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:142
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:82
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:140
+#, python-format
+msgid "Dates Filter"
+msgstr "Filtre par date"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:173
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:230
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:189
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:179
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:181
+#, python-format
+msgid "Debit"
+msgstr "Débit"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:204
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:206
+#, python-format
+msgid "Difference"
+msgstr "Différence"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:228
+#, python-format
+msgid "Due Date"
+msgstr "Date dûe"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:164
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:218
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:184
+#, python-format
+msgid "Entry"
+msgstr "Écriture"
+
+#. module: account_financial_report_webkit_xls
+#: view:general.ledger.webkit:account_financial_report_webkit_xls.general_ledger_webkit_xls_wizard_view
+#: view:open.invoices.webkit:account_financial_report_webkit_xls.open_invoices_webkit_xls_wizard_view
+#: view:partner.balance.webkit:account_financial_report_webkit_xls.partners_balance_webkit_xls_wizard_view
+#: view:partners.ledger.webkit:account_financial_report_webkit_xls.partner_ledger_webkit_xls_wizard_view
+#: view:trial.balance.webkit:account_financial_report_webkit_xls.trial_balance_webkit_xls_wizard_view
+msgid "Export"
+msgstr ""
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:98
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:159
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:99
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:68
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:150
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:79
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:149
+#, python-format
+msgid "Fiscal Year"
+msgstr "Exercice comptable"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:117
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:186
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:118
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:99
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:101
+#, python-format
+msgid "From"
+msgstr ""
+
+#. module: account_financial_report_webkit_xls
+#: model:ir.model,name:account_financial_report_webkit_xls.model_general_ledger_webkit
+msgid "General Ledger Report"
+msgstr "Grand livre"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:103
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:237
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:104
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:289
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:77
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:152
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:177
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:84
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:151
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:179
+#, python-format
+msgid "Initial Balance"
+msgstr "Solde à nouveau"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:165
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:219
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:185
+#, python-format
+msgid "Journal"
+msgstr "Journal"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:170
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:226
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:187
+#, python-format
+msgid "Label"
+msgstr "Description"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:70
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:68
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:282
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:52
+#, python-format
+msgid "No"
+msgstr "Non"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:248
+#, python-format
+msgid "No Partner"
+msgstr "Pas de partenaire"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:265
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:278
+#, python-format
+msgid "No partner"
+msgstr ""
+
+#. module: account_financial_report_webkit_xls
+#: model:ir.model,name:account_financial_report_webkit_xls.model_open_invoices_webkit
+msgid "Open Invoices Report"
+msgstr "Etat des factures ouvertes"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:69
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:67
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:281
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:51
+#, python-format
+msgid "Opening Entries"
+msgstr "Basé sur l'écriture d'ouverture"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:168
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:223
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:186
+#, python-format
+msgid "Partner"
+msgstr "Partenaire"
+
+#. module: account_financial_report_webkit_xls
+#: model:ir.model,name:account_financial_report_webkit_xls.model_partner_balance_webkit
+msgid "Partner Balance Report"
+msgstr "Rapport de balance des tiers"
+
+#. module: account_financial_report_webkit_xls
+#: model:ir.model,name:account_financial_report_webkit_xls.model_partners_ledger_webkit
+msgid "Partner Ledger Report"
+msgstr "Rapport de livre des tiers"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:74
+#, python-format
+msgid "Partners Filter"
+msgstr "Filtre Partenaire"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:163
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:216
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:183
+#, python-format
+msgid "Period"
+msgstr "Période"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:100
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:162
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:101
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:72
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:146
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:82
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:145
+#, python-format
+msgid "Periods Filter"
+msgstr "Filtre par période"
+
+#. module: account_financial_report_webkit_xls
+#: view:general.ledger.webkit:account_financial_report_webkit_xls.general_ledger_webkit_xls_wizard_view
+#: view:open.invoices.webkit:account_financial_report_webkit_xls.open_invoices_webkit_xls_wizard_view
+#: view:partner.balance.webkit:account_financial_report_webkit_xls.partners_balance_webkit_xls_wizard_view
+#: view:partners.ledger.webkit:account_financial_report_webkit_xls.partner_ledger_webkit_xls_wizard_view
+#: view:trial.balance.webkit:account_financial_report_webkit_xls.trial_balance_webkit_xls_wizard_view
+msgid "Print"
+msgstr "Imprimer"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:227
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:188
+#, python-format
+msgid "Rec."
+msgstr "Let."
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:169
+#, python-format
+msgid "Reference"
+msgstr "Référence"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:102
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:169
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:103
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:76
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:83
+#, python-format
+msgid "Target Moves"
+msgstr "Filtre d'écritures"
+
+#. module: account_financial_report_webkit_xls
+#: view:general.ledger.webkit:account_financial_report_webkit_xls.general_ledger_webkit_xls_wizard_view
+msgid ""
+"This report allows you to generate a pdf or xls of your general ledger with "
+"details of all your account journals"
+msgstr ""
+
+#. module: account_financial_report_webkit_xls
+#: view:open.invoices.webkit:account_financial_report_webkit_xls.open_invoices_webkit_xls_wizard_view
+msgid ""
+"This report allows you to generate a pdf or xls of your open invoices per "
+"partner with details of all your payable/receivable account. Exclude full "
+"reconciled journal items."
+msgstr ""
+
+#. module: account_financial_report_webkit_xls
+#: view:partner.balance.webkit:account_financial_report_webkit_xls.partners_balance_webkit_xls_wizard_view
+msgid ""
+"This report allows you to generate a pdf or xls of your partner balance "
+"allowing you to quickly check the balance of each of your accounts in a "
+"single report"
+msgstr ""
+
+#. module: account_financial_report_webkit_xls
+#: view:partners.ledger.webkit:account_financial_report_webkit_xls.partner_ledger_webkit_xls_wizard_view
+msgid ""
+"This report allows you to generate a pdf or xls of your partner ledger with "
+"details of all your account journals"
+msgstr ""
+
+#. module: account_financial_report_webkit_xls
+#: view:trial.balance.webkit:account_financial_report_webkit_xls.trial_balance_webkit_xls_wizard_view
+msgid ""
+"This report allows you to generate a pdf or xls of your trial balance "
+"allowing you to quickly check the balance of each of your accounts in a "
+"single report"
+msgstr ""
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:122
+#: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:191
+#: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:123
+#, python-format
+msgid "To"
+msgstr ""
+
+#. module: account_financial_report_webkit_xls
+#: model:ir.model,name:account_financial_report_webkit_xls.model_trial_balance_webkit
+msgid "Trial Balance Report"
+msgstr "Balance générale"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:211
+#, python-format
+msgid "Type"
+msgstr ""
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:366
+#, python-format
+msgid "Unallocated"
+msgstr "Non-alloué"

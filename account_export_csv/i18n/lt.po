@@ -11,12 +11,12 @@ msgstr ""
 "POT-Creation-Date: 2016-12-16 12:25+0000\n"
 "PO-Revision-Date: 2016-12-16 12:25+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2016\n"
-"Language-Team: Dutch (https://www.transifex.com/oca/teams/23907/nl/)\n"
+"Language-Team: Lithuanian (https://www.transifex.com/oca/teams/23907/lt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: nl\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: lt\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #. module: account_export_csv
 #: code:addons/account_export_csv/wizard/account_export_csv.py:287
@@ -66,17 +66,17 @@ msgstr ""
 #: model:ir.actions.act_window,name:account_export_csv.action_account_csv_export
 #: model:ir.ui.menu,name:account_export_csv.menu_account_csv_export
 msgid "Accounting CSV Export"
-msgstr "CSV export financiën"
+msgstr ""
 
 #. module: account_export_csv
 #: help:account.csv.export,periods:0
 msgid "All periods in the fiscal year if empty"
-msgstr "Alle periodes van het boekjaar indien leeg"
+msgstr ""
 
 #. module: account_export_csv
 #: view:account.csv.export:account_export_csv.account_csv_export_view
 msgid "Analytic Balance (with accounts)"
-msgstr "Kostenplaatsenbalans (met rekeningen)"
+msgstr ""
 
 #. module: account_export_csv
 #: code:addons/account_export_csv/wizard/account_export_csv.py:142
@@ -110,7 +110,7 @@ msgstr ""
 #. module: account_export_csv
 #: field:account.csv.export,data:0
 msgid "CSV"
-msgstr "CSV"
+msgstr ""
 
 #. module: account_export_csv
 #: code:addons/account_export_csv/wizard/account_export_csv.py:302
@@ -121,22 +121,22 @@ msgstr ""
 #. module: account_export_csv
 #: view:account.csv.export:account_export_csv.account_csv_export_view
 msgid "Close"
-msgstr "Sluiten"
+msgstr ""
 
 #. module: account_export_csv
 #: field:account.csv.export,company_id:0
 msgid "Company"
-msgstr "Bedrijf"
+msgstr "Įmonė"
 
 #. module: account_export_csv
 #: field:account.csv.export,create_uid:0
 msgid "Created by"
-msgstr ""
+msgstr "Sukūrė"
 
 #. module: account_export_csv
 #: field:account.csv.export,create_date:0
 msgid "Created on"
-msgstr ""
+msgstr "Sukurta"
 
 #. module: account_export_csv
 #: code:addons/account_export_csv/wizard/account_export_csv.py:285
@@ -172,12 +172,12 @@ msgstr ""
 #. module: account_export_csv
 #: model:ir.model,name:account_export_csv.model_account_csv_export
 msgid "Export Accounting"
-msgstr "Export Financiën"
+msgstr ""
 
 #. module: account_export_csv
 #: field:account.csv.export,export_filename:0
 msgid "Export CSV Filename"
-msgstr "Export CSV bestandsnaam"
+msgstr ""
 
 #. module: account_export_csv
 #: code:addons/account_export_csv/wizard/account_export_csv.py:306
@@ -194,12 +194,12 @@ msgstr ""
 #. module: account_export_csv
 #: field:account.csv.export,fiscalyear_id:0
 msgid "Fiscalyear"
-msgstr "Boekjaar"
+msgstr ""
 
 #. module: account_export_csv
 #: field:account.csv.export,id:0
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: account_export_csv
 #: help:account.csv.export,journal_ids:0
@@ -226,7 +226,7 @@ msgstr ""
 #. module: account_export_csv
 #: field:account.csv.export,journal_ids:0
 msgid "Journals"
-msgstr ""
+msgstr "Žurnalai"
 
 #. module: account_export_csv
 #: field:account.csv.export,__last_update:0
@@ -236,12 +236,12 @@ msgstr ""
 #. module: account_export_csv
 #: field:account.csv.export,write_uid:0
 msgid "Last Updated by"
-msgstr ""
+msgstr "Paskutinį kartą atnaujino"
 
 #. module: account_export_csv
 #: field:account.csv.export,write_date:0
 msgid "Last Updated on"
-msgstr ""
+msgstr "Paskutinį kartą atnaujinta"
 
 #. module: account_export_csv
 #: code:addons/account_export_csv/wizard/account_export_csv.py:305
@@ -270,7 +270,7 @@ msgstr ""
 #. module: account_export_csv
 #: field:account.csv.export,periods:0
 msgid "Periods"
-msgstr "Periodes"
+msgstr "Periodai"
 
 #. module: account_export_csv
 #: code:addons/account_export_csv/wizard/account_export_csv.py:289
@@ -304,7 +304,7 @@ msgstr ""
 #. module: account_export_csv
 #: view:account.csv.export:account_export_csv.account_csv_export_view
 msgid "Trial Balance"
-msgstr "Proefbalans"
+msgstr "Bandomasis balansas"
 
 #. module: account_export_csv
 #: view:account.csv.export:account_export_csv.account_csv_export_view

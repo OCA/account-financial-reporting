@@ -3,27 +3,27 @@
 # * account_financial_report_webkit
 # 
 # Translators:
-# OCA Transbot <transbot@odoo-community.org>, 2016
+# Matjaž Mozetič <m.mozetic@matmoz.si>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-16 12:25+0000\n"
-"PO-Revision-Date: 2016-12-16 12:25+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2016\n"
-"Language-Team: Dutch (https://www.transifex.com/oca/teams/23907/nl/)\n"
+"POT-Creation-Date: 2016-12-16 23:11+0000\n"
+"PO-Revision-Date: 2016-12-16 23:11+0000\n"
+"Last-Translator: Matjaž Mozetič <m.mozetic@matmoz.si>, 2016\n"
+"Language-Team: Slovenian (https://www.transifex.com/oca/teams/23907/sl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: nl\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: sl\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partner_balance.mako:175
 #: report:addons/account_financial_report_webkit/report/templates/account_report_profit_loss.mako:135
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:150
 msgid "% Difference"
-msgstr ""
+msgstr "% razlike"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:104
@@ -32,7 +32,7 @@ msgstr ""
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:120
 #: model:ir.model,name:account_financial_report_webkit.model_account_account
 msgid "Account"
-msgstr ""
+msgstr "Konto"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partner_balance.mako:143
@@ -183,7 +183,7 @@ msgstr ""
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:134
 #: report:addons/account_financial_report_webkit/report/templates/aged_trial_webkit.mako:105
 msgid "Balance"
-msgstr ""
+msgstr "Bilanca"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partner_balance.mako:161
@@ -268,7 +268,7 @@ msgstr ""
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:118
 #: report:addons/account_financial_report_webkit/report/templates/aged_trial_webkit.mako:103
 msgid "Code"
-msgstr ""
+msgstr "Koda"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partner_balance.mako:145
@@ -291,7 +291,7 @@ msgstr ""
 #: field:print.journal.webkit,company_id:0
 #: field:trial.balance.webkit,company_id:0
 msgid "Company"
-msgstr "Bedrijf"
+msgstr "Družba"
 
 #. module: account_financial_report_webkit
 #: field:account.common.balance.report,comp0_filter:0
@@ -339,7 +339,7 @@ msgstr ""
 #: field:print.journal.webkit,create_uid:0
 #: field:trial.balance.webkit,create_uid:0
 msgid "Created by"
-msgstr ""
+msgstr "Ustvaril"
 
 #. module: account_financial_report_webkit
 #: field:account.aged.trial.balance.webkit,create_date:0
@@ -352,7 +352,7 @@ msgstr ""
 #: field:print.journal.webkit,create_date:0
 #: field:trial.balance.webkit,create_date:0
 msgid "Created on"
-msgstr ""
+msgstr "Ustvarjeno"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:116
@@ -362,7 +362,7 @@ msgstr ""
 #: report:addons/account_financial_report_webkit/report/templates/account_report_profit_loss.mako:114
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:129
 msgid "Credit"
-msgstr ""
+msgstr "Terjatve"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:118
@@ -466,7 +466,7 @@ msgstr ""
 #: report:addons/account_financial_report_webkit/report/templates/account_report_profit_loss.mako:112
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:127
 msgid "Debit"
-msgstr ""
+msgstr "Obveznosti"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partner_balance.mako:174
@@ -494,7 +494,7 @@ msgstr ""
 #: field:print.journal.webkit,display_name:0
 #: field:trial.balance.webkit,display_name:0
 msgid "Display Name"
-msgstr ""
+msgstr "Prikazni naziv"
 
 #. module: account_financial_report_webkit
 #: field:partner.balance.webkit,display_partner:0
@@ -729,7 +729,7 @@ msgstr ""
 #: field:partners.ledger.webkit,id:0 field:print.journal.webkit,id:0
 #: field:trial.balance.webkit,id:0
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: account_financial_report_webkit
 #: help:account.account,centralized:0
@@ -796,7 +796,7 @@ msgstr ""
 #. module: account_financial_report_webkit
 #: model:ir.model,name:account_financial_report_webkit.model_account_move_line
 msgid "Journal Items"
-msgstr "Boekingsregels"
+msgstr "Dnevniške postavke"
 
 #. module: account_financial_report_webkit
 #: field:account.aged.trial.balance.webkit,journal_ids:0
@@ -814,7 +814,7 @@ msgstr "Boekingsregels"
 #: field:trial.balance.webkit,journal_ids:0
 #, python-format
 msgid "Journals"
-msgstr ""
+msgstr "Dnevniki"
 
 #. module: account_financial_report_webkit
 #: model:ir.model,name:account_financial_report_webkit.model_print_journal_webkit
@@ -852,7 +852,7 @@ msgstr ""
 #: field:print.journal.webkit,__last_update:0
 #: field:trial.balance.webkit,__last_update:0
 msgid "Last Modified on"
-msgstr ""
+msgstr "Zadnja sprememba"
 
 #. module: account_financial_report_webkit
 #: field:account.aged.trial.balance.webkit,write_uid:0
@@ -865,7 +865,7 @@ msgstr ""
 #: field:print.journal.webkit,write_uid:0
 #: field:trial.balance.webkit,write_uid:0
 msgid "Last Updated by"
-msgstr ""
+msgstr "Zadnji posodobil"
 
 #. module: account_financial_report_webkit
 #: field:account.aged.trial.balance.webkit,write_date:0
@@ -878,7 +878,7 @@ msgstr ""
 #: field:print.journal.webkit,write_date:0
 #: field:trial.balance.webkit,write_date:0
 msgid "Last Updated on"
-msgstr ""
+msgstr "Zadnjič posodobljeno"
 
 #. module: account_financial_report_webkit
 #: field:account.move.line,last_rec_date:0
@@ -1208,7 +1208,7 @@ msgstr ""
 #: selection:trial.balance.webkit,filter:0
 #, python-format
 msgid "Periods"
-msgstr "Periodes"
+msgstr "Obdobja"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_profit_loss.mako:90
@@ -1301,7 +1301,7 @@ msgstr ""
 #: help:print.journal.webkit,chart_account_id:0
 #: help:trial.balance.webkit,chart_account_id:0
 msgid "Select Charts of Accounts"
-msgstr ""
+msgstr "Izberi kontni plan"
 
 #. module: account_financial_report_webkit
 #: field:account.aged.trial.balance.webkit,date_from:0
@@ -1510,7 +1510,7 @@ msgstr ""
 #: view:trial.balance.webkit:account_financial_report_webkit.account_trial_balance_view_webkit
 #, python-format
 msgid "Trial Balance"
-msgstr "Proefbalans"
+msgstr "Poskusna bilanca"
 
 #. module: account_financial_report_webkit
 #: model:ir.model,name:account_financial_report_webkit.model_trial_balance_webkit
