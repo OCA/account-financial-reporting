@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-16 12:25+0000\n"
-"PO-Revision-Date: 2016-12-16 12:25+0000\n"
+"POT-Creation-Date: 2016-12-30 13:02+0000\n"
+"PO-Revision-Date: 2016-12-30 13:02+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2016\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -76,8 +76,8 @@ msgid "Aged Open Invoice"
 msgstr ""
 
 #. module: account_financial_report_webkit
-#: code:addons/account_financial_report_webkit/report/aged_open_invoices.py:82
-#: code:addons/account_financial_report_webkit/report/aged_open_invoices.py:94
+#: code:addons/account_financial_report_webkit/report/aged_open_invoices.py:84
+#: code:addons/account_financial_report_webkit/report/aged_open_invoices.py:96
 #: model:ir.ui.menu,name:account_financial_report_webkit.menu_account_aged_open_invoices
 #, python-format
 msgid "Aged Open Invoices"
@@ -90,8 +90,8 @@ msgstr ""
 
 #. module: account_financial_report_webkit
 #: view:account.aged.trial.balance.webkit:account_financial_report_webkit.account_aged_trial_balance_webkit
-#: code:addons/account_financial_report_webkit/report/aged_partner_balance.py:80
-#: code:addons/account_financial_report_webkit/report/aged_partner_balance.py:92
+#: code:addons/account_financial_report_webkit/report/aged_partner_balance.py:82
+#: code:addons/account_financial_report_webkit/report/aged_partner_balance.py:94
 #: model:ir.actions.report.xml,name:account_financial_report_webkit.account_report_aged_trial_blanance_webkit
 #, python-format
 msgid "Aged Partner Balance"
@@ -570,7 +570,7 @@ msgstr "Écriture"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/common_reports.py:408
-#: code:addons/account_financial_report_webkit/report/open_invoices.py:136
+#: code:addons/account_financial_report_webkit/report/open_invoices.py:137
 #: code:addons/account_financial_report_webkit/report/partners_ledger.py:119
 #, python-format
 msgid "Error"
@@ -603,7 +603,7 @@ msgid ""
 msgstr ""
 
 #. module: account_financial_report_webkit
-#: code:addons/account_financial_report_webkit/report/open_invoices.py:212
+#: code:addons/account_financial_report_webkit/report/open_invoices.py:213
 #, python-format
 msgid ""
 "Filter has to be in filter date, period,                                  or"
@@ -941,7 +941,7 @@ msgid "No Partner"
 msgstr "Pas de partenaire"
 
 #. module: account_financial_report_webkit
-#: code:addons/account_financial_report_webkit/report/open_invoices.py:136
+#: code:addons/account_financial_report_webkit/report/open_invoices.py:137
 #: code:addons/account_financial_report_webkit/report/partners_ledger.py:119
 #, python-format
 msgid "No accounts to print."
@@ -980,14 +980,14 @@ msgid "No valid filter"
 msgstr "Pas de filtre valide"
 
 #. module: account_financial_report_webkit
-#: code:addons/account_financial_report_webkit/report/aged_open_invoices.py:54
-#: code:addons/account_financial_report_webkit/report/aged_partner_balance.py:52
+#: code:addons/account_financial_report_webkit/report/aged_open_invoices.py:55
+#: code:addons/account_financial_report_webkit/report/aged_partner_balance.py:53
 #, python-format
 msgid "Not Due"
 msgstr ""
 
 #. module: account_financial_report_webkit
-#: code:addons/account_financial_report_webkit/report/open_invoices.py:57
+#: code:addons/account_financial_report_webkit/report/open_invoices.py:58
 #, python-format
 msgid "OPEN INVOICES REPORT"
 msgstr "ETAT DES FACTURES OUVERTES"
@@ -1031,7 +1031,7 @@ msgid "Open Invoices"
 msgstr "Etat des factures ouvertes"
 
 #. module: account_financial_report_webkit
-#: code:addons/account_financial_report_webkit/report/open_invoices.py:67
+#: code:addons/account_financial_report_webkit/report/open_invoices.py:68
 #: model:ir.actions.act_window,name:account_financial_report_webkit.action_account_open_invoices_menu_webkit
 #: model:ir.actions.report.xml,name:account_financial_report_webkit.account_report_open_invoices_webkit
 #: model:ir.model,name:account_financial_report_webkit.model_open_invoices_webkit
@@ -1064,15 +1064,15 @@ msgid "Opening Only"
 msgstr "Balance d'ouverture"
 
 #. module: account_financial_report_webkit
-#: code:addons/account_financial_report_webkit/report/aged_open_invoices.py:56
-#: code:addons/account_financial_report_webkit/report/aged_partner_balance.py:54
+#: code:addons/account_financial_report_webkit/report/aged_open_invoices.py:57
+#: code:addons/account_financial_report_webkit/report/aged_partner_balance.py:55
 #, python-format
 msgid "Overdue > %s d."
 msgstr ""
 
 #. module: account_financial_report_webkit
-#: code:addons/account_financial_report_webkit/report/aged_open_invoices.py:55
-#: code:addons/account_financial_report_webkit/report/aged_partner_balance.py:53
+#: code:addons/account_financial_report_webkit/report/aged_open_invoices.py:56
+#: code:addons/account_financial_report_webkit/report/aged_partner_balance.py:54
 #, python-format
 msgid "Overdue ≤ %s d."
 msgstr "Dépassé ≤ %s j."
@@ -1090,10 +1090,10 @@ msgid "PARTNER LEDGER"
 msgstr "LIVRE DES TIERS"
 
 #. module: account_financial_report_webkit
-#: code:addons/account_financial_report_webkit/report/aged_open_invoices.py:104
-#: code:addons/account_financial_report_webkit/report/aged_partner_balance.py:102
+#: code:addons/account_financial_report_webkit/report/aged_open_invoices.py:106
+#: code:addons/account_financial_report_webkit/report/aged_partner_balance.py:104
 #: code:addons/account_financial_report_webkit/report/general_ledger.py:70
-#: code:addons/account_financial_report_webkit/report/open_invoices.py:83
+#: code:addons/account_financial_report_webkit/report/open_invoices.py:84
 #: code:addons/account_financial_report_webkit/report/partner_balance.py:71
 #: code:addons/account_financial_report_webkit/report/partners_ledger.py:71
 #: code:addons/account_financial_report_webkit/report/print_journal.py:75
@@ -1566,7 +1566,7 @@ msgid "Uncheck to display all the details of centralized accounts."
 msgstr "Décocher pour afficher ne pas activer la centralisation des comptes."
 
 #. module: account_financial_report_webkit
-#: code:addons/account_financial_report_webkit/report/open_invoices.py:211
+#: code:addons/account_financial_report_webkit/report/open_invoices.py:212
 #, python-format
 msgid "Unsuported filter"
 msgstr "Filtre non supporté"
@@ -1678,10 +1678,10 @@ msgid "[('fiscalyear_id', '=', fiscalyear_id), ('special', '=', False)]"
 msgstr ""
 
 #. module: account_financial_report_webkit
-#: code:addons/account_financial_report_webkit/report/aged_open_invoices.py:104
-#: code:addons/account_financial_report_webkit/report/aged_partner_balance.py:102
+#: code:addons/account_financial_report_webkit/report/aged_open_invoices.py:106
+#: code:addons/account_financial_report_webkit/report/aged_partner_balance.py:104
 #: code:addons/account_financial_report_webkit/report/general_ledger.py:70
-#: code:addons/account_financial_report_webkit/report/open_invoices.py:83
+#: code:addons/account_financial_report_webkit/report/open_invoices.py:84
 #: code:addons/account_financial_report_webkit/report/partner_balance.py:71
 #: code:addons/account_financial_report_webkit/report/partners_ledger.py:71
 #: code:addons/account_financial_report_webkit/report/print_journal.py:75

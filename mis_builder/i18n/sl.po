@@ -3,13 +3,14 @@
 # * mis_builder
 # 
 # Translators:
+# OCA Transbot <transbot@odoo-community.org>, 2016
 # Matjaž Mozetič <m.mozetic@matmoz.si>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-16 23:11+0000\n"
-"PO-Revision-Date: 2016-12-16 23:11+0000\n"
+"POT-Creation-Date: 2016-12-30 13:03+0000\n"
+"PO-Revision-Date: 2016-12-30 13:03+0000\n"
 "Last-Translator: Matjaž Mozetič <m.mozetic@matmoz.si>, 2016\n"
 "Language-Team: Slovenian (https://www.transifex.com/oca/teams/23907/sl/)\n"
 "MIME-Version: 1.0\n"
@@ -23,13 +24,13 @@ msgstr ""
 #: code:addons/mis_builder/models/mis_builder.py:724
 #, python-format
 msgid "%s (copy)"
-msgstr ""
+msgstr "%s (kopija)"
 
 #. module: mis_builder
 #: code:addons/mis_builder/models/mis_builder.py:859
 #, python-format
 msgid "%s vs %s"
-msgstr ""
+msgstr "%s proti %s"
 
 #. module: mis_builder
 #: view:mis.report:mis_builder.mis_report_view_form
@@ -37,6 +38,8 @@ msgid ""
 "'accounts' is a comma-separated list of account codes, possibly containing %"
 " wildcards"
 msgstr ""
+"'accounts' je seznam z vejico ločenih kontnih kod, ki lahko vsebujejo % "
+"nadomestne znake"
 
 #. module: mis_builder
 #: view:mis.report:mis_builder.mis_report_view_form
@@ -44,97 +47,99 @@ msgid ""
 "'domain' is an optional filter on move lines (eg to filter on analytic "
 "accounts or journal)"
 msgstr ""
+"'domain' je opcijski filter na postavkah premikov (npr. za filtriranje na "
+"analitičnih kontih ali dnevniku)"
 
 #. module: mis_builder
 #: view:mis.report:mis_builder.mis_report_view_form
 msgid "* bal for balance (debit - credit)"
-msgstr ""
+msgstr "* bal za bilanco (obveznosti - terjatve)"
 
 #. module: mis_builder
 #: view:mis.report:mis_builder.mis_report_view_form
 msgid ""
 "* bal[70]: variation of the balance of account 70 over the period (it is the"
 " same as balp[70]);"
-msgstr ""
+msgstr "* bal[70]: variacija bilance konta 70 v obdobju (isto kot balp[70]);"
 
 #. module: mis_builder
 #: view:mis.report:mis_builder.mis_report_view_form
 msgid "* bale[1%]: balance of accounts starting with 1 at end of period."
-msgstr ""
+msgstr "* bale[1%]: bilanca kontov ob koncu obdobja začenši z 1."
 
 #. module: mis_builder
 #: view:mis.report:mis_builder.mis_report_view_form
 msgid "* bali[70,60]: initial balance of accounts 70 and 60;"
-msgstr ""
+msgstr "* bali[70,60]: začetna bilanca kontov 70 in 60;"
 
 #. module: mis_builder
 #: view:mis.report:mis_builder.mis_report_view_form
 msgid "* crd for credit"
-msgstr ""
+msgstr "* crd za terjatve"
 
 #. module: mis_builder
 #: view:mis.report:mis_builder.mis_report_view_form
 msgid "* deb for debit"
-msgstr ""
+msgstr "* deb za obveznosti"
 
 #. module: mis_builder
 #: view:mis.report:mis_builder.mis_report_view_form
 msgid "* e: at the end of the period"
-msgstr ""
+msgstr "* e: ob koncu obdobja"
 
 #. module: mis_builder
 #: view:mis.report:mis_builder.mis_report_view_form
 msgid "* i: at the beginning of the period"
-msgstr ""
+msgstr "* i: na začetku obdobja"
 
 #. module: mis_builder
 #: view:mis.report:mis_builder.mis_report_view_form
 msgid "* nothing or p: variation over the period"
-msgstr ""
+msgstr "* nothing ali p: variacija v obdobju"
 
 #. module: mis_builder
 #: field:mis.report.instance,root_account:0
 msgid "Account chart"
-msgstr ""
+msgstr "Kontni plan"
 
 #. module: mis_builder
 #: view:add.mis.report.instance.dashboard.wizard:mis_builder.mis_report_instance_add_to_dashboard_form_view
 #: model:ir.actions.act_window,name:mis_builder.mis_report_instance_add_to_dashboard_action
 #: view:mis.report.instance:mis_builder.mis_report_instance_view_form
 msgid "Add to dashboard"
-msgstr ""
+msgstr "Dodaj na nadzorno ploščo"
 
 #. module: mis_builder
 #: field:mis.report.query,aggregate:0
 msgid "Aggregate"
-msgstr ""
+msgstr "Skupek"
 
 #. module: mis_builder
 #: selection:mis.report.instance,target_move:0
 msgid "All Entries"
-msgstr ""
+msgstr "Vsi vnosi"
 
 #. module: mis_builder
 #: selection:mis.report.instance,target_move:0
 msgid "All Posted Entries"
-msgstr ""
+msgstr "Vsi knjiženi vnosi"
 
 #. module: mis_builder
 #: code:addons/mis_builder/models/mis_builder.py:240
 #: selection:mis.report.query,aggregate:0
 #, python-format
 msgid "Average"
-msgstr ""
+msgstr "Povprečje"
 
 #. module: mis_builder
 #: field:mis.report.instance,date:0
 msgid "Base date"
-msgstr ""
+msgstr "Osnovni datum"
 
 #. module: mis_builder
 #: field:mis.report.kpi,css_style:0
 msgid "CSS style expression"
-msgstr ""
+msgstr "Izraz v CSS slogu"
 
 #. module: mis_builder
 #: view:add.mis.report.instance.dashboard.wizard:mis_builder.mis_report_instance_add_to_dashboard_form_view
@@ -149,12 +154,12 @@ msgstr "Družba"
 #. module: mis_builder
 #: field:mis.report.instance.period,comparison_column_ids:0
 msgid "Compare with"
-msgstr ""
+msgstr "Primerjaj z"
 
 #. module: mis_builder
 #: field:mis.report.kpi,compare_method:0
 msgid "Comparison Method"
-msgstr ""
+msgstr "Primerjalna metoda"
 
 #. module: mis_builder
 #: field:add.mis.report.instance.dashboard.wizard,create_uid:0
@@ -175,37 +180,37 @@ msgstr "Ustvarjeno"
 #. module: mis_builder
 #: field:add.mis.report.instance.dashboard.wizard,dashboard_id:0
 msgid "Dashboard"
-msgstr ""
+msgstr "Nadzorna plošča"
 
 #. module: mis_builder
 #: field:mis.report.query,date_field:0
 msgid "Date field"
-msgstr ""
+msgstr "Polje datuma"
 
 #. module: mis_builder
 #: code:addons/mis_builder/models/mis_builder.py:556
 #: selection:mis.report.instance.period,type:0
 #, python-format
 msgid "Day"
-msgstr ""
+msgstr "Dan"
 
 #. module: mis_builder
 #: field:mis.report.kpi,default_css_style:0
 msgid "Default CSS style"
-msgstr ""
+msgstr "Privzeti CSS slog"
 
 #. module: mis_builder
 #: field:mis.report,description:0 field:mis.report.instance,description:0
 #: field:mis.report.instance.period,name:0 field:mis.report.kpi,description:0
 msgid "Description"
-msgstr ""
+msgstr "Opis"
 
 #. module: mis_builder
 #: code:addons/mis_builder/models/mis_builder.py:92
 #: selection:mis.report.kpi,compare_method:0
 #, python-format
 msgid "Difference"
-msgstr ""
+msgstr "Razlika"
 
 #. module: mis_builder
 #: field:add.mis.report.instance.dashboard.wizard,display_name:0
@@ -219,17 +224,17 @@ msgstr "Prikazni naziv"
 #. module: mis_builder
 #: field:mis.report.query,domain:0
 msgid "Domain"
-msgstr ""
+msgstr "Domena"
 
 #. module: mis_builder
 #: field:mis.report.instance.period,duration:0
 msgid "Duration"
-msgstr ""
+msgstr "Trajanje"
 
 #. module: mis_builder
 #: view:mis.report:mis_builder.mis_report_view_form
 msgid "Examples"
-msgstr ""
+msgstr "Primeri"
 
 #. module: mis_builder
 #. openerp-web
@@ -237,55 +242,55 @@ msgstr ""
 #: view:mis.report.instance:mis_builder.mis_report_instance_view_form
 #, python-format
 msgid "Export"
-msgstr ""
+msgstr "Izvoz"
 
 #. module: mis_builder
 #: field:mis.report.kpi,expression:0
 msgid "Expression"
-msgstr ""
+msgstr "Izraz"
 
 #. module: mis_builder
 #: view:mis.report:mis_builder.mis_report_view_form
 msgid "Expressions are of the form <field><mode>[accounts][domain]"
-msgstr ""
+msgstr "Izrazi obrazca <field><mode>[accounts][domain]"
 
 #. module: mis_builder
 #: field:mis.report.instance.period,normalize_factor:0
 #: field:mis.report.kpi,divider:0
 msgid "Factor"
-msgstr ""
+msgstr "Faktor"
 
 #. module: mis_builder
 #: help:mis.report.instance.period,normalize_factor:0
 msgid "Factor to use to normalize the period (used in comparison"
-msgstr ""
+msgstr "Faktor za normalizacijo obdobja (uporaba pri primerjavi"
 
 #. module: mis_builder
 #: field:mis.report.query,field_names:0
 msgid "Fetched fields name"
-msgstr ""
+msgstr "Prenešeni nazivi polj"
 
 #. module: mis_builder
 #: field:mis.report.query,field_ids:0
 msgid "Fields to fetch"
-msgstr ""
+msgstr "Polja za prenos"
 
 #. module: mis_builder
 #: code:addons/mis_builder/models/mis_builder.py:558
 #: selection:mis.report.instance.period,type:0
 #, python-format
 msgid "Fiscal Period"
-msgstr ""
+msgstr "Fiskalno obdobje"
 
 #. module: mis_builder
 #: field:mis.report.instance.period,date_from:0
 msgid "From"
-msgstr ""
+msgstr "Od"
 
 #. module: mis_builder
 #: field:mis.report.instance.period,period_from:0
 msgid "From period"
-msgstr ""
+msgstr "Od obdobja"
 
 #. module: mis_builder
 #: field:add.mis.report.instance.dashboard.wizard,id:0 field:mis.report,id:0
@@ -299,12 +304,12 @@ msgstr "ID"
 #: view:mis.report:mis_builder.mis_report_view_form field:mis.report,kpi_ids:0
 #: view:mis.report.instance:mis_builder.mis_report_instance_view_form
 msgid "KPI's"
-msgstr ""
+msgstr "KPI-ji"
 
 #. module: mis_builder
 #: field:mis.report.instance,landscape_pdf:0
 msgid "Landscape PDF"
-msgstr ""
+msgstr "PDF ležeče"
 
 #. module: mis_builder
 #: field:add.mis.report.instance.dashboard.wizard,__last_update:0
@@ -334,75 +339,75 @@ msgstr "Zadnjič posodobljeno"
 #. module: mis_builder
 #: view:mis.report:mis_builder.mis_report_view_form
 msgid "Legend (for kpi expressions)"
-msgstr ""
+msgstr "Legenda (za kpi izraze - ključni indikatorji uspešnosti)"
 
 #. module: mis_builder
 #: view:mis.report:mis_builder.mis_report_view_form
 msgid "MIS Report"
-msgstr ""
+msgstr "MIS poročilo"
 
 #. module: mis_builder
 #: view:mis.report.instance:mis_builder.mis_report_instance_view_form
 msgid "MIS Report Instance"
-msgstr ""
+msgstr "Instanca MIS poročila"
 
 #. module: mis_builder
 #: view:mis.report.instance:mis_builder.mis_report_instance_view_tree
 msgid "MIS Report Instances"
-msgstr ""
+msgstr "Instance MIS poročila"
 
 #. module: mis_builder
 #: view:mis.report.instance:mis_builder.mis_report_instance_result_view_form
 msgid "MIS Report Result"
-msgstr ""
+msgstr "Rezultati MIS poročila"
 
 #. module: mis_builder
 #: model:ir.actions.act_window,name:mis_builder.mis_report_view_action
 #: model:ir.ui.menu,name:mis_builder.mis_report_view_menu
 msgid "MIS Report Templates"
-msgstr ""
+msgstr "Predloge MIS poročil"
 
 #. module: mis_builder
 #: model:ir.actions.act_window,name:mis_builder.mis_report_instance_view_action
 #: model:ir.ui.menu,name:mis_builder.mis_report_instance_view_menu
 #: view:mis.report:mis_builder.mis_report_view_tree
 msgid "MIS Reports"
-msgstr ""
+msgstr "MIS poročila"
 
 #. module: mis_builder
 #: model:ir.actions.report.xml,name:mis_builder.qweb_pdf_export
 msgid "MIS report instance QWEB PDF report"
-msgstr ""
+msgstr "Instanca MIS poročila QWEB PDF poročilo"
 
 #. module: mis_builder
 #: model:ir.actions.report.xml,name:mis_builder.xls_export
 msgid "MIS report instance XLS report"
-msgstr ""
+msgstr "Instanca MIS poročila XLS poročilo"
 
 #. module: mis_builder
 #: code:addons/mis_builder/models/mis_builder.py:242
 #: selection:mis.report.query,aggregate:0
 #, python-format
 msgid "Max"
-msgstr ""
+msgstr "Maks."
 
 #. module: mis_builder
 #: code:addons/mis_builder/models/mis_builder.py:241
 #: selection:mis.report.query,aggregate:0
 #, python-format
 msgid "Min"
-msgstr ""
+msgstr "Min."
 
 #. module: mis_builder
 #: field:mis.report.query,model_id:0
 msgid "Model"
-msgstr ""
+msgstr "Model"
 
 #. module: mis_builder
 #: code:addons/mis_builder/models/aep.py:305
 #, python-format
 msgid "Modes i and e are only applicable for fiscal periods"
-msgstr ""
+msgstr "Načina i in e se aplicirata le pri fiskalnih obdobjih"
 
 #. module: mis_builder
 #: field:add.mis.report.instance.dashboard.wizard,name:0
@@ -418,29 +423,29 @@ msgstr "Naziv"
 #: selection:mis.report.kpi,compare_method:0
 #, python-format
 msgid "None"
-msgstr ""
+msgstr "Brez"
 
 #. module: mis_builder
 #: help:mis.report.instance.period,duration:0
 msgid "Number of periods"
-msgstr ""
+msgstr "Število obdobij"
 
 #. module: mis_builder
 #: code:addons/mis_builder/models/mis_builder.py:76
 #: selection:mis.report.kpi,type:0
 #, python-format
 msgid "Numeric"
-msgstr ""
+msgstr "Numerično"
 
 #. module: mis_builder
 #: field:mis.report.instance.period,offset:0
 msgid "Offset"
-msgstr ""
+msgstr "Odmik"
 
 #. module: mis_builder
 #: help:mis.report.instance.period,offset:0
 msgid "Offset from current period"
-msgstr ""
+msgstr "Odmik tekočega obdobja"
 
 #. module: mis_builder
 #: code:addons/mis_builder/models/mis_builder.py:77
@@ -448,17 +453,17 @@ msgstr ""
 #: selection:mis.report.kpi,compare_method:0 selection:mis.report.kpi,type:0
 #, python-format
 msgid "Percentage"
-msgstr ""
+msgstr "Odstotek"
 
 #. module: mis_builder
 #: sql_constraint:mis.report.instance.period:0
 msgid "Period name should be unique by report"
-msgstr ""
+msgstr "Naziv obdobja bi moral biti unikaten za vsako poročilo"
 
 #. module: mis_builder
 #: field:mis.report.instance.period,type:0
 msgid "Period type"
-msgstr ""
+msgstr "Tip obdobja"
 
 #. module: mis_builder
 #: view:mis.report.instance:mis_builder.mis_report_instance_view_form
@@ -469,27 +474,27 @@ msgstr "Obdobja"
 #. module: mis_builder
 #: field:mis.report.instance,pivot_date:0
 msgid "Pivot date"
-msgstr ""
+msgstr "Pivot datum"
 
 #. module: mis_builder
 #: view:mis.report:mis_builder.mis_report_view_form
 msgid "Possible values for 'field' can be:"
-msgstr ""
+msgstr "Možne vrednosti za 'polje' so:"
 
 #. module: mis_builder
 #: view:mis.report:mis_builder.mis_report_view_form
 msgid "Possible values for 'mode' are:"
-msgstr ""
+msgstr "Možne vrednosti za 'način' so:"
 
 #. module: mis_builder
 #: field:mis.report.kpi,prefix:0
 msgid "Prefix"
-msgstr ""
+msgstr "Predpona"
 
 #. module: mis_builder
 #: view:mis.report.instance:mis_builder.mis_report_instance_view_form
 msgid "Preview"
-msgstr ""
+msgstr "Predogled"
 
 #. module: mis_builder
 #. openerp-web
@@ -503,7 +508,7 @@ msgstr "Natisni"
 #: view:mis.report:mis_builder.mis_report_view_form
 #: field:mis.report,query_ids:0
 msgid "Queries"
-msgstr ""
+msgstr "Poizvedbe"
 
 #. module: mis_builder
 #: model:ir.model,name:mis_builder.model_report
@@ -515,106 +520,106 @@ msgstr "Poročilo"
 #. module: mis_builder
 #: field:mis.report.instance.period,report_instance_id:0
 msgid "Report Instance"
-msgstr ""
+msgstr "Instanca poročila"
 
 #. module: mis_builder
 #: help:mis.report.instance,date:0
 msgid "Report base date (leave empty to use current date)"
-msgstr ""
+msgstr "Osnovni datum poročila (pustita prazno za uporabo tekočega datuma)"
 
 #. module: mis_builder
 #: field:mis.report.kpi,dp:0
 msgid "Rounding"
-msgstr ""
+msgstr "Zaokroževanje"
 
 #. module: mis_builder
 #: field:mis.report.instance.period,sequence:0 field:mis.report.kpi,sequence:0
 msgid "Sequence"
-msgstr ""
+msgstr "Zaporedje"
 
 #. module: mis_builder
 #. openerp-web
 #: code:addons/mis_builder/static/src/xml/mis_widget.xml:7
 #, python-format
 msgid "Settings"
-msgstr ""
+msgstr "Nastavitve"
 
 #. module: mis_builder
 #: code:addons/mis_builder/models/mis_builder.py:78
 #: selection:mis.report.kpi,type:0
 #, python-format
 msgid "String"
-msgstr ""
+msgstr "Niz"
 
 #. module: mis_builder
 #: field:mis.report.kpi,suffix:0
 msgid "Suffix"
-msgstr ""
+msgstr "Pripona"
 
 #. module: mis_builder
 #: code:addons/mis_builder/models/mis_builder.py:239
 #: selection:mis.report.query,aggregate:0
 #, python-format
 msgid "Sum"
-msgstr ""
+msgstr "Vsota"
 
 #. module: mis_builder
 #: field:mis.report.instance,target_move:0
 msgid "Target Moves"
-msgstr ""
+msgstr "Ciljni premiki"
 
 #. module: mis_builder
 #: model:mis.report,name:mis_builder.mis_report_test
 msgid "Test report"
-msgstr ""
+msgstr "Testno poročilo"
 
 #. module: mis_builder
 #: model:mis.report.instance,name:mis_builder.mis_report_instance_test
 msgid "Test-report-instance without company"
-msgstr ""
+msgstr "Instanca testnega poročila brez družbe"
 
 #. module: mis_builder
 #: field:mis.report.instance.period,date_to:0
 msgid "To"
-msgstr ""
+msgstr "Do"
 
 #. module: mis_builder
 #: field:mis.report.instance.period,period_to:0
 msgid "To period"
-msgstr ""
+msgstr "Do obdobja"
 
 #. module: mis_builder
 #: field:mis.report.kpi,type:0
 msgid "Type"
-msgstr ""
+msgstr "Tip"
 
 #. module: mis_builder
 #: field:mis.report.instance.period,valid:0
 msgid "Valid"
-msgstr ""
+msgstr "Veljavno"
 
 #. module: mis_builder
 #: code:addons/mis_builder/models/mis_builder.py:557
 #: selection:mis.report.instance.period,type:0
 #, python-format
 msgid "Week"
-msgstr ""
+msgstr "Teden"
 
 #. module: mis_builder
 #: sql_constraint:mis.report.instance.period:0
 msgid "Wrong duration, it must be positive!"
-msgstr ""
+msgstr "Napačno trajanje, biti mora pozitivno!"
 
 #. module: mis_builder
 #: sql_constraint:mis.report.instance.period:0
 msgid "Wrong normalize factor, it must be positive!"
-msgstr ""
+msgstr "Napačen faktor normalizacije, biti mora pozitiven!"
 
 #. module: mis_builder
 #: code:addons/mis_builder/models/mis_builder.py:839
 #, python-format
 msgid "from %s to %s"
-msgstr ""
+msgstr "od %s do %s"
 
 #. module: mis_builder
 #: view:add.mis.report.instance.dashboard.wizard:mis_builder.mis_report_instance_add_to_dashboard_form_view
@@ -625,21 +630,21 @@ msgstr "ali"
 #: code:addons/mis_builder/models/mis_builder.py:172
 #, python-format
 msgid "pp"
-msgstr ""
+msgstr "pp"
 
 #. module: mis_builder
 #: model:mis.report.instance.period,name:mis_builder.mis_report_instance_period_test
 msgid "today"
-msgstr ""
+msgstr "danes"
 
 #. module: mis_builder
 #: model:mis.report.kpi,description:mis_builder.mis_report_kpi_test
 msgid "total test"
-msgstr ""
+msgstr "skupaj test"
 
 #. module: mis_builder
 #: code:addons/mis_builder/models/mis_builder.py:82
 #: selection:mis.report.kpi,divider:0
 #, python-format
 msgid "µ"
-msgstr ""
+msgstr "µ"
