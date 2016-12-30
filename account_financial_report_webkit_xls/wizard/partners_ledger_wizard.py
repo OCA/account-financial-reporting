@@ -4,7 +4,7 @@
 from openerp import models
 
 
-class AccountReportPartnersLedgerWizard(orm.TransientModel):
+class AccountReportPartnersLedgerWizard(models.TransientModel):
     _inherit = 'partners.ledger.webkit'
 
     def xls_export(self, cr, uid, ids, context=None):
@@ -15,9 +15,11 @@ class AccountReportPartnersLedgerWizard(orm.TransientModel):
         if context.get('xls_export'):
             # we update form with display account value
             data = self.pre_print_report(cr, uid, ids, data, context=context)
-            return {'type': 'ir.actions.report.xml',
-                    'report_name': 'account.account_report_partner_ledger_xls',
-                    'datas': data}
+            return {
+                'type': 'ir.actions.report.xml',
+                'report_name': 'account.account_report_partner_ledger_xls',
+                'datas': data}
         else:
-            return super(AccountReportPartnersLedgerWizard, self)._print_report(
+            return super(
+                AccountReportPartnersLedgerWizard, self)._print_report(
                 cr, uid, ids, data, context=context)

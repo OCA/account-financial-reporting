@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     'name': 'Add XLS export to accounting reports',
-    'version': '8.0.0.4.0',
+    'version': '8.0.0.5.0',
     'license': 'AGPL-3',
     'author': "Noviat,Odoo Community Association (OCA)",
     'category': 'Generic Modules/Accounting',
