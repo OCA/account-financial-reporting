@@ -4,8 +4,8 @@
 from openerp import models
 
 
-class AccountPartnerBalanceWizard(models.TransientModel):
-    _inherit = 'partner.balance.webkit'
+class AccountAgedTrialBalance(models.TransientModel):
+    _inherit = 'account.aged.trial.balance.webkit'
 
     def xls_export(self, cr, uid, ids, context=None):
         return self.check_report(cr, uid, ids, context=context)
@@ -17,8 +17,9 @@ class AccountPartnerBalanceWizard(models.TransientModel):
             data = self.pre_print_report(cr, uid, ids, data, context=context)
             return {
                 'type': 'ir.actions.report.xml',
-                'report_name': 'account.account_report_partner_balance_xls',
+                'report_name':
+                    'account.account_report_aged_partner_balance_xls',
                 'datas': data}
         else:
-            return super(AccountPartnerBalanceWizard, self)._print_report(
+            return super(AccountAgedTrialBalance, self)._print_report(
                 cr, uid, ids, data, context=context)
