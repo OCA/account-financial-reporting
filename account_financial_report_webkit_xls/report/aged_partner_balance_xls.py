@@ -73,7 +73,7 @@ class AccountAgedTrialBalanceWebkitXls(report_xls):
             ('report_name', 1, 0, 'text', report_name),
             ]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
-        return self.xls_write_row(
+        row_pos = self.xls_write_row(
             self.ws, row_pos, row_data, row_style=self._style_title)
         return row_pos
 
