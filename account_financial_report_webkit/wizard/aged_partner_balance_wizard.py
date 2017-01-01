@@ -1,26 +1,7 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Author: Nicolas Bessi
-#    Copyright 2014 Camptocamp SA
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
-from datetime import date
+# Copyright 2014 Camptocamp SA, Nicolas Bessi.
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from openerp.osv import orm, fields
-from openerp.tools import DEFAULT_SERVER_DATE_FORMAT as DATE_FORMAT
 
 
 class AccountAgedTrialBalance(orm.TransientModel):
@@ -34,19 +15,7 @@ class AccountAgedTrialBalance(orm.TransientModel):
     _description = "Aged partner balanced"
 
     def _get_current_fiscalyear(self, cr, uid, context=None):
-        user_obj = self.pool['res.users']
-        company = user_obj.browse(cr, uid, uid, context=context).company_id
-        fyear_obj = self.pool['account.period']
-        today = date.today().strftime(DATE_FORMAT)
-        fyear_ids = fyear_obj.search(
-            cr, uid,
-            [('date_start', '>=', today),
-             ('date_stop', '<=', today),
-             ('company_id', '=', company.id)],
-            limit=1,
-            context=context)
-        if fyear_ids:
-            return fyear_ids[0]
+        return self.pool['account.fiscalyear'].find(cr, uid, context=context)
 
     _columns = {
         'filter': fields.selection(
