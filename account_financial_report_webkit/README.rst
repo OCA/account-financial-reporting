@@ -165,6 +165,7 @@ Contributors
 * Nicolas Bessi
 * Guewen Baconnier
 * David Dufresne <david.dufresne@savoirfairelinux.com>
+* Luc De Meyer <luc.demeyer@noviat.com>
 
 Maintainer
 ----------
