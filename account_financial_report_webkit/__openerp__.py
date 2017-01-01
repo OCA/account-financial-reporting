@@ -20,7 +20,7 @@
 ##############################################################################
 {
     'name': 'Financial Reports - Webkit',
-    'version': '8.0.1.2.0',
+    'version': '8.0.1.2.1',
     'author': (
         "Camptocamp,"
         "Savoir-faire Linux,"
