@@ -4,13 +4,13 @@
 from .test_common_xls import TestCommonXls
 
 
-class TestGeneralLedgerXls(TestCommonXls):
+class TestPartnerLedgerXls(TestCommonXls):
 
     def _getReportModel(self):
-        return 'general.ledger.webkit'
+        return 'partners.ledger.webkit'
 
     def _getXlsReportName(self):
-        return 'account.account_report_general_ledger_xls'
+        return 'account.account_report_partner_ledger_xls'
 
     def _getBaseFilters(self):
         return {}
