@@ -20,7 +20,7 @@ class TestAgedPartnerBalanceXls(TestCommonXls):
 
     def test_common(self):
         common_tests = [
-            x for x in dir(self) if callable(getattr(self, x))
-            and x.startswith('common_test_')]
+            x for x in dir(self)
+            if callable(getattr(self, x)) and x.startswith('common_test_')]
         for test in common_tests:
             getattr(self, test)()
