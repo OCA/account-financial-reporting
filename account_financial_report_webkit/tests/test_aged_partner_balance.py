@@ -4,16 +4,19 @@
 from .test_common import TestCommon
 
 
-class TestPartnerLedger(TestCommon):
+class TestAgedPartnerBalance(TestCommon):
 
     def _getReportModel(self):
-        return 'partners.ledger.webkit'
+        return 'account.aged.trial.balance.webkit'
 
     def _getReportName(self):
-        return 'account.account_report_partners_ledger_webkit'
+        return 'account.account_aged_trial_balance_webkit'
 
     def _getBaseFilters(self):
-        return {}
+        fy_id = self.model._get_current_fiscalyear()
+        vals = self.model.onchange_fiscalyear(fiscalyear=fy_id)['value']
+        vals.update({'fiscalyear_id': fy_id})
+        return vals
 
     def test_common(self):
         common_tests = [

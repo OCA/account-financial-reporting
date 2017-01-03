@@ -4,13 +4,13 @@
 from .test_common import TestCommon
 
 
-class TestPartnerLedger(TestCommon):
+class TestPartnerBalance(TestCommon):
 
     def _getReportModel(self):
-        return 'partners.ledger.webkit'
+        return 'partner.balance.webkit'
 
     def _getReportName(self):
-        return 'account.account_report_partners_ledger_webkit'
+        return 'account.account_report_partner_balance_webkit'
 
     def _getBaseFilters(self):
         return {}
