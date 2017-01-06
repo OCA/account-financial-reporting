@@ -119,9 +119,11 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
         ledger_lines_memoizer = self._compute_account_ledger_lines(
             accounts, init_balance_memoizer, main_filter, target_move, start,
             stop)
-        objects = self.pool.get('account.account').browse(self.cursor,
-                                                          self.uid,
-                                                          accounts)
+        objects = self.pool.get('account.account').browse(
+            self.cursor,
+            self.uid,
+            accounts,
+            context=self.localcontext)
 
         init_balance = {}
         ledger_lines = {}
