@@ -41,7 +41,7 @@ class AbstractTest(TransactionCase):
 
         # Check if report template is correct
         report_html = self.env['report'].get_html(
-            self.report, self.qweb_report_name
+            self.report.id, self.qweb_report_name
         )
         self.assertTrue(self.report_title.encode('utf8') in report_html)
         self.assertTrue(
