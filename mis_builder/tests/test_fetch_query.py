@@ -2,16 +2,15 @@
 # © 2014-2016 ACSONE SA/NV (<http://acsone.eu>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-import openerp.tests.common as common
+import odoo.tests.common as common
 
 
 class TestFetchQuery(common.TransactionCase):
 
     def test_fetch_query(self):
         # create a report on account.analytic.line
-        data = self.registry('mis.report.instance').compute(
-            self.cr, self.uid,
-            self.ref('mis_builder.mis_report_instance_test'))
+        report = self.env.ref('mis_builder.mis_report_instance_test')
+        data = report.compute()
         self.maxDiff = None
         self.assertEquals(
             {'body':

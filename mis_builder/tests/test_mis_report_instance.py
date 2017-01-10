@@ -2,8 +2,8 @@
 # © 2016 ACSONE SA/NV (<http://acsone.eu>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-import openerp.tests.common as common
-from openerp.tools import test_reports
+import odoo.tests.common as common
+from odoo.tools import test_reports
 
 
 class TestMisReportInstance(common.TransactionCase):

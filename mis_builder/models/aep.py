@@ -6,10 +6,10 @@ import re
 from collections import defaultdict
 from itertools import izip
 
-from openerp import fields
-from openerp.models import expression
-from openerp.tools.safe_eval import safe_eval
-from openerp.tools.float_utils import float_is_zero
+from odoo import fields
+from odoo.models import expression
+from odoo.tools.safe_eval import safe_eval
+from odoo.tools.float_utils import float_is_zero
 from .accounting_none import AccountingNone
 
 

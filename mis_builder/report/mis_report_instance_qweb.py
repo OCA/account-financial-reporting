@@ -4,7 +4,7 @@
 
 import logging
 
-from openerp import api, models
+from odoo import api, models
 
 _logger = logging.getLogger(__name__)
 
@@ -12,16 +12,13 @@ _logger = logging.getLogger(__name__)
 class Report(models.Model):
     _inherit = "report"
 
-    @api.v7
-    def get_pdf(self, cr, uid, ids, report_name, html=None, data=None,
-                context=None):
-        if ids:
-            report = self._get_report_from_name(cr, uid, report_name)
-            obj = self.pool[report.model].browse(cr, uid, ids,
-                                                 context=context)[0]
-            context = context.copy()
+    @api.model
+    def get_pdf(self, docids, report_name, html=None, data=None):
+        if docids:
+            report = self._get_report_from_name(report_name)
+            obj = self.env[report.model].browse(docids)[0]
+            ctx = self.env.context.copy()
             if hasattr(obj, 'landscape_pdf') and obj.landscape_pdf:
-                context.update({'landscape': True})
-        return super(Report, self).get_pdf(cr, uid, ids, report_name,
-                                           html=html, data=data,
-                                           context=context)
+                ctx.update({'landscape': True})
+        return super(Report, self.with_context(ctx)).get_pdf(
+            docids, report_name, html=html, data=data)

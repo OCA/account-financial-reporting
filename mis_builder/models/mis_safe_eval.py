@@ -4,7 +4,7 @@
 
 import traceback
 
-from openerp.tools.safe_eval import test_expr, _SAFE_OPCODES, _BUILTINS
+from odoo.tools.safe_eval import test_expr, _SAFE_OPCODES, _BUILTINS
 
 from .data_error import DataError, NameDataError
 

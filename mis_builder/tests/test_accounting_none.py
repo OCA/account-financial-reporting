@@ -4,7 +4,7 @@
 
 import doctest
 
-from openerp.addons.mis_builder.models import accounting_none
+from odoo.addons.mis_builder.models import accounting_none
 
 
 def load_tests(loader, tests, ignore):

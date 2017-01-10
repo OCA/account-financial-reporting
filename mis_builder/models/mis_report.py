@@ -12,9 +12,9 @@ import time
 
 import pytz
 
-from openerp import api, fields, models, _
-from openerp.exceptions import UserError
-from openerp.tools.safe_eval import safe_eval
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError
+from odoo.tools.safe_eval import safe_eval
 
 from .aep import AccountingExpressionProcessor as AEP
 from .aggregate import _sum, _avg, _min, _max
@@ -159,8 +159,7 @@ class KpiMatrix(object):
     def __init__(self, env):
         # cache language id for faster rendering
         lang_model = env['res.lang']
-        lang_id = lang_model._lang_get(env.user.lang)
-        self.lang = lang_model.browse(lang_id)
+        self.lang = lang_model._lang_get(env.user.lang)
         self._style_model = env['mis.report.style']
         self._account_model = env['account.account']
         # data structures
@@ -281,7 +280,7 @@ class KpiMatrix(object):
                 col = self._cols[col_key]
                 base_col = self._cols[base_col_key]
                 common_subkpis = set(col.subkpis) & set(base_col.subkpis)
-                if not common_subkpis:
+                if (col.subkpis or base_col.subkpis) and not common_subkpis:
                     raise UserError('Columns {} and {} are not comparable'.
                                     format(col.description,
                                            base_col.description))
@@ -296,15 +295,19 @@ class KpiMatrix(object):
                     if cell_tuple is None and base_cell_tuple is None:
                         continue
                     if cell_tuple is None:
-                        vals = [AccountingNone] * len(common_subkpis)
+                        vals = [AccountingNone] * \
+                            (len(common_subkpis) or 1)
                     else:
                         vals = [cell.val for cell in cell_tuple
-                                if cell.subcol.subkpi in common_subkpis]
+                                if not common_subkpis or
+                                cell.subcol.subkpi in common_subkpis]
                     if base_cell_tuple is None:
-                        base_vals = [AccountingNone] * len(common_subkpis)
+                        base_vals = [AccountingNone] * \
+                            (len(common_subkpis) or 1)
                     else:
                         base_vals = [cell.val for cell in base_cell_tuple
-                                     if cell.subcol.subkpi in common_subkpis]
+                                     if not common_subkpis or
+                                     cell.subcol.subkpi in common_subkpis]
                     comparison_cell_tuple = []
                     for val, base_val, comparison_subcol in \
                             izip(vals,

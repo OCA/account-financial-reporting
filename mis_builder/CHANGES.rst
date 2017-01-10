@@ -6,11 +6,17 @@ Changelog
 ..
 .. *
 
+10.0.2.0.3 (2017-01-10)
+~~~~~~~~~~~~~~~~~~~~~~
+
+* [IMP] use fontawesome icons
+* [MIG] migrate to 10.0
+
 9.0.2.0.2 (2016-09-27)
 ~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Add refresh button in mis report preview.
-   Widget code changes to allow to add fields in the widget easier
+  Widget code changes to allow to add fields in the widget easier
 
 9.0.2.0.1 (2016-05-26)
 ~~~~~~~~~~~~~~~~~~~~~~
