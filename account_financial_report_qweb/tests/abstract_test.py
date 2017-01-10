@@ -3,7 +3,7 @@
 # Copyright 2016 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp.tests.common import TransactionCase
+from odoo.tests.common import TransactionCase
 
 
 class AbstractTest(TransactionCase):
@@ -41,7 +41,7 @@ class AbstractTest(TransactionCase):
 
         # Check if report template is correct
         report_html = self.env['report'].get_html(
-            self.report, self.qweb_report_name
+            self.report.id, self.qweb_report_name
         )
         self.assertTrue(self.report_title.encode('utf8') in report_html)
         self.assertTrue(

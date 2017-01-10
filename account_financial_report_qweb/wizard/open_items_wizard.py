@@ -5,7 +5,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from datetime import datetime
-from openerp import models, fields, api
+from odoo import models, fields, api
 
 
 class OpenItemsReportWizard(models.TransientModel):

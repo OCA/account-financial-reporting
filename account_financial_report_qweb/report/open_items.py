@@ -2,7 +2,7 @@
 # © 2016 Julien Coux (Camptocamp)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import models, fields, api, _
+from odoo import models, fields, api, _
 
 
 class OpenItemsReport(models.TransientModel):
@@ -150,7 +150,7 @@ class OpenItemsReportCompute(models.TransientModel):
         else:
             report_name = 'account_financial_report_qweb.' \
                           'report_open_items_qweb'
-        return self.env['report'].get_action(records=self,
+        return self.env['report'].get_action(docids=self.ids,
                                              report_name=report_name)
 
     @api.multi
