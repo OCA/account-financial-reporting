@@ -4,14 +4,14 @@
 # 
 # Translators:
 # OCA Transbot <transbot@odoo-community.org>, 2016
-# Matjaž Mozetič <m.mozetic@matmoz.si>, 2016
+# Matjaž Mozetič <m.mozetic@matmoz.si>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-30 13:02+0000\n"
-"PO-Revision-Date: 2016-12-30 13:02+0000\n"
-"Last-Translator: Matjaž Mozetič <m.mozetic@matmoz.si>, 2016\n"
+"POT-Creation-Date: 2016-12-30 23:14+0000\n"
+"PO-Revision-Date: 2016-12-30 23:14+0000\n"
+"Last-Translator: Matjaž Mozetič <m.mozetic@matmoz.si>, 2017\n"
 "Language-Team: Slovenian (https://www.transifex.com/oca/teams/23907/sl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -38,14 +38,14 @@ msgstr "Konto"
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partner_balance.mako:143
 msgid "Account / Partner Name"
-msgstr ""
+msgstr "Konto / naziv partnerja"
 
 #. module: account_financial_report_webkit
 #: field:account.common.balance.report,account_level:0
 #: field:partner.balance.webkit,account_level:0
 #: field:trial.balance.webkit,account_level:0
 msgid "Account level"
-msgstr ""
+msgstr "Kontni nivo"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:41
@@ -56,19 +56,19 @@ msgstr ""
 #: report:addons/account_financial_report_webkit/report/templates/aged_open_invoices.mako:59
 #: report:addons/account_financial_report_webkit/report/templates/aged_trial_webkit.mako:59
 msgid "Accounts Filter"
-msgstr ""
+msgstr "Kontni filter"
 
 #. module: account_financial_report_webkit
 #: view:general.ledger.webkit:account_financial_report_webkit.account_report_general_ledger_view_webkit
 #: view:partner.balance.webkit:account_financial_report_webkit.account_partner_balance_view_webkit
 #: view:trial.balance.webkit:account_financial_report_webkit.account_trial_balance_view_webkit
 msgid "Accounts Filters"
-msgstr ""
+msgstr "Kontni filtri"
 
 #. module: account_financial_report_webkit
 #: field:general.ledger.webkit,centralize:0
 msgid "Activate Centralization"
-msgstr ""
+msgstr "Aktiviraj centralizacijo"
 
 #. module: account_financial_report_webkit
 #: view:aged.open.invoices.webkit:account_financial_report_webkit.aged_open_invoice_webkit
@@ -125,7 +125,7 @@ msgstr ""
 #: selection:print.journal.webkit,display_account:0
 #: selection:trial.balance.webkit,display_account:0
 msgid "All"
-msgstr ""
+msgstr "Vse"
 
 #. module: account_financial_report_webkit
 #: selection:account.aged.trial.balance.webkit,target_move:0
@@ -145,7 +145,7 @@ msgstr "Vsi vnosi"
 #. module: account_financial_report_webkit
 #: selection:partner.balance.webkit,display_partner:0
 msgid "All Partners"
-msgstr ""
+msgstr "Vsi partnerji"
 
 #. module: account_financial_report_webkit
 #: selection:account.aged.trial.balance.webkit,target_move:0
