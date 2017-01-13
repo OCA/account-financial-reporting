@@ -1,19 +1,22 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* account_financial_report_qweb
-#
+# * account_financial_report_qweb
+# 
+# Translators:
+# OCA Transbot <transbot@odoo-community.org>, 2017
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 9.0c\n"
+"Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-12 12:18+0000\n"
-"PO-Revision-Date: 2016-08-12 12:18+0000\n"
-"Last-Translator: <>\n"
-"Language-Team: \n"
+"POT-Creation-Date: 2017-01-11 01:36+0000\n"
+"PO-Revision-Date: 2017-01-11 01:36+0000\n"
+"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2017\n"
+"Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: \n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #. module: account_financial_report_qweb
 #: code:addons/account_financial_report_qweb/report/aged_partner_balance_xlsx.py:72
@@ -246,7 +249,7 @@ msgid "Centralized"
 msgstr "Centralisé"
 
 #. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:933
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:1096
 #, python-format
 msgid "Centralized Entries"
 msgstr "Écritures centralisées"
@@ -701,8 +704,12 @@ msgstr "Grand livre en XLSX"
 
 #. module: account_financial_report_qweb
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.general_ledger_wizard
-msgid "General Ledger can be computed only if selected company have only one unaffected earnings account."
-msgstr "Le Grand Livre ne peut être calculé que si la société sélectionnée a un seul compte de résultat non affecté."
+msgid ""
+"General Ledger can be computed only if selected company have only one "
+"unaffected earnings account."
+msgstr ""
+"Le Grand Livre ne peut être calculé que si la société sélectionnée a un seul"
+" compte de résultat non affecté."
 
 #. module: account_financial_report_qweb
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_general_ledger_id
@@ -766,8 +773,12 @@ msgstr "ID"
 
 #. module: account_financial_report_qweb
 #: model:ir.model.fields,help:account_financial_report_qweb.field_account_account_centralized
-msgid "If flagged, no details will be displayed in the General Ledger report (the webkit one only), only centralized amounts per period."
-msgstr "Si coché, le dédails des écritures ne sera pas affiché dans le grand livre, seulement des groupement par mois."
+msgid ""
+"If flagged, no details will be displayed in the General Ledger report (the "
+"webkit one only), only centralized amounts per period."
+msgstr ""
+"Si coché, le dédails des écritures ne sera pas affiché dans le grand livre, "
+"seulement des groupement par mois."
 
 #. module: account_financial_report_qweb
 #: code:addons/account_financial_report_qweb/report/general_ledger_xlsx.py:98
@@ -939,10 +950,10 @@ msgid "No"
 msgstr "Non"
 
 #. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:491
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:707
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:600
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:859
 #: code:addons/account_financial_report_qweb/report/open_items.py:277
-#: code:addons/account_financial_report_qweb/report/open_items.py:493
+#: code:addons/account_financial_report_qweb/report/open_items.py:523
 #, python-format
 msgid "No partner allocated"
 msgstr "Écritures sans partenaire"
@@ -1253,8 +1264,12 @@ msgstr "Balance générale XLSX"
 
 #. module: account_financial_report_qweb
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.trial_balance_wizard
-msgid "Trial Balance can be computed only if selected company have only one unaffected earnings account."
-msgstr "La Balance Générale ne peut être calculée que si la société sélectionnée a un seul compte de résultat non affecté."
+msgid ""
+"Trial Balance can be computed only if selected company have only one "
+"unaffected earnings account."
+msgstr ""
+"La Balance Générale ne peut être calculée que si la société sélectionnée a "
+"un seul compte de résultat non affecté."
 
 #. module: account_financial_report_qweb
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_unaffected_earnings_account
@@ -1265,8 +1280,15 @@ msgstr "Compte de résultat non affecté"
 #: model:ir.model.fields,help:account_financial_report_qweb.field_general_ledger_report_wizard_hide_account_balance_at_0
 #: model:ir.model.fields,help:account_financial_report_qweb.field_open_items_report_wizard_hide_account_balance_at_0
 #: model:ir.model.fields,help:account_financial_report_qweb.field_trial_balance_report_wizard_hide_account_balance_at_0
-msgid "Use this filter to hide an account or a partner with an ending balance at 0. If partners are filtered, debits and credits totals will not match the trial balance."
-msgstr "Utilisez ce filtre pour masquer les comptes ou partenaires avec soldes finaux à 0. Attention : les totaux des colonnes débit et crédit ne correspondront plus avec ceux de la balance générale (le total des soldes finaux sera correct)."
+msgid ""
+"Use this filter to hide an account or a partner with an ending balance at 0."
+" If partners are filtered, debits and credits totals will not match the "
+"trial balance."
+msgstr ""
+"Utilisez ce filtre pour masquer les comptes ou partenaires avec soldes "
+"finaux à 0. Attention : les totaux des colonnes débit et crédit ne "
+"correspondront plus avec ceux de la balance générale (le total des soldes "
+"finaux sera correct)."
 
 #. module: account_financial_report_qweb
 #: code:addons/account_financial_report_qweb/report/general_ledger_xlsx.py:69
@@ -1362,4 +1384,3 @@ msgstr "report_trial_balance_qweb_account"
 #: model:ir.model,name:account_financial_report_qweb.model_report_trial_balance_qweb_partner
 msgid "report_trial_balance_qweb_partner"
 msgstr "report_trial_balance_qweb_partner"
-
