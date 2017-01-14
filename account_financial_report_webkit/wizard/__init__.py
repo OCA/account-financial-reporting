@@ -8,8 +8,6 @@ from . import open_invoices_wizard
 from . import aged_open_invoices_wizard
 from . import print_journal
 from . import aged_partner_balance_wizard
-"""
-uncomment import infra when running Odoo without
-PR https://github.com/odoo/odoo/pull/14891
-"""
+# uncomment import infra when running Odoo without
+# PR https://github.com/odoo/odoo/pull/14891
 # from . import account_common_report_fix
