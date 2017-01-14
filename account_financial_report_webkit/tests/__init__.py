@@ -5,4 +5,6 @@ from . import test_partner_ledger
 from . import test_trial_balance
 from . import test_partner_balance
 from . import test_open_invoices
+from . import test_aged_open_invoices
 from . import test_aged_partner_balance
+from . import test_journal
