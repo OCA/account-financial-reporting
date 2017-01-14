@@ -12,6 +12,11 @@ class TestAgedPartnerBalanceXls(TestCommonXls):
     def _getXlsReportName(self):
         return 'account.account_report_aged_partner_balance_xls'
 
+    def _getXlsReportActionName(self):
+        module = 'account_financial_report_webkit'
+        action = 'account_report_aged_trial_blanance_webkit'
+        return '%s.%s' % (module, action)
+
     def _getBaseFilters(self):
         fy_id = self.model._get_current_fiscalyear()
         vals = self.model.onchange_fiscalyear(fiscalyear=fy_id)['value']

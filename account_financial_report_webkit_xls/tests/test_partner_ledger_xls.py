@@ -12,6 +12,11 @@ class TestPartnerLedgerXls(TestCommonXls):
     def _getXlsReportName(self):
         return 'account.account_report_partner_ledger_xls'
 
+    def _getXlsReportActionName(self):
+        module = 'account_financial_report_webkit'
+        action = 'account_report_partners_ledger_webkit'
+        return '%s.%s' % (module, action)
+
     def _getBaseFilters(self):
         return {}
 

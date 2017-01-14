@@ -12,6 +12,11 @@ class TestTrialBalanceXls(TestCommonXls):
     def _getXlsReportName(self):
         return 'account.account_report_trial_balance_xls'
 
+    def _getXlsReportActionName(self):
+        module = 'account_financial_report_webkit'
+        action = 'account_report_trial_balance_webkit'
+        return '%s.%s' % (module, action)
+
     def _getBaseFilters(self):
         return {}
 

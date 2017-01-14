@@ -13,6 +13,11 @@ class TestOpenInvoicesXls(TestCommonXls):
     def _getXlsReportName(self):
         return 'account.account_report_open_invoices_xls'
 
+    def _getXlsReportActionName(self):
+        module = 'account_financial_report_webkit'
+        action = 'account_report_open_invoices_webkit'
+        return '%s.%s' % (module, action)
+
     def _getBaseFilters(self):
         return {'until_date': '%s-12-31' % (datetime.now().year)}
 
