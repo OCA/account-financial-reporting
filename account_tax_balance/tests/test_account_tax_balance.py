@@ -65,7 +65,7 @@ class TestAccountTaxBalance(TransactionCase):
         self.assertEqual(invoice.state, 'draft')
 
         # change the state of invoice to open by clicking Validate button
-        invoice.signal_workflow('invoice_open')
+        invoice.action_invoice_open()
 
         self.assertEquals(tax.base_balance, 100.)
         self.assertEquals(tax.balance, 10.)
@@ -135,7 +135,7 @@ class TestAccountTaxBalance(TransactionCase):
         self.assertEqual(refund.state, 'draft')
 
         # change the state of refund to open by clicking Validate button
-        refund.signal_workflow('invoice_open')
+        refund.action_invoice_open()
 
         self.assertEquals(tax.base_balance, 75.)
         self.assertEquals(tax.balance, 7.5)

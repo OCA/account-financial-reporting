@@ -34,9 +34,15 @@
 </record>
 
 <menuitem
+    id="menu_tax_balances"
+    name="Taxes Balance"
+    parent="account.menu_finance_reports"
+    groups="account.group_account_user,account.group_account_manager"/>
+
+<menuitem
     action="action_open_tax_balances"
     id="menu_action_open_tax_balances"
-    parent="account.menu_finance_reports"
+    parent="menu_tax_balances"
     groups="account.group_account_user,account.group_account_manager"/>
 
 </odoo>
