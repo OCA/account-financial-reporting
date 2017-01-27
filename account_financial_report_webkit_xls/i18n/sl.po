@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-30 23:14+0000\n"
-"PO-Revision-Date: 2016-12-30 23:14+0000\n"
+"POT-Creation-Date: 2017-01-13 23:18+0000\n"
+"PO-Revision-Date: 2017-01-13 23:18+0000\n"
 "Last-Translator: Matjaž Mozetič <m.mozetic@matmoz.si>, 2017\n"
 "Language-Team: Slovenian (https://www.transifex.com/oca/teams/23907/sl/)\n"
 "MIME-Version: 1.0\n"
@@ -80,14 +80,14 @@ msgstr "Bilanca"
 #: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:178
 #, python-format
 msgid "Balance %s"
-msgstr ""
+msgstr "Bilanca %s"
 
 #. module: account_financial_report_webkit_xls
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:181
 #: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:183
 #, python-format
 msgid "Balance C%s"
-msgstr ""
+msgstr "Bilanca C%s"
 
 #. module: account_financial_report_webkit_xls
 #: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:78
@@ -115,7 +115,7 @@ msgstr "Koda"
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:153
 #, python-format
 msgid "Code / Ref"
-msgstr ""
+msgstr "Koda/sklic"
 
 #. module: account_financial_report_webkit_xls
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:118
