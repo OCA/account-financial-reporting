@@ -439,6 +439,8 @@ INSERT INTO
     report_aged_partner_balance_qweb_move_line
     (
         report_partner_id,
+        create_uid,
+        create_date,
         date,
         date_due,
         entry,
@@ -456,6 +458,8 @@ INSERT INTO
     )
 SELECT
     rp.id AS report_partner_id,
+    %s AS create_uid,
+    NOW() AS create_date,
     rlo.date,
     rlo.date_due,
     rlo.entry,
@@ -526,6 +530,7 @@ AND ra.report_id = %s
         """
         query_inject_move_line_params = (self.date_at,) * 6
         query_inject_move_line_params += (
+            self.env.uid,
             self.open_items_id.id,
             self.id,
         )
