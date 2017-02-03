@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-11 01:36+0000\n"
-"PO-Revision-Date: 2017-01-11 01:36+0000\n"
+"POT-Creation-Date: 2017-02-02 12:43+0000\n"
+"PO-Revision-Date: 2017-02-02 12:43+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2017\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -249,7 +249,7 @@ msgid "Centralized"
 msgstr "Centralisé"
 
 #. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:1096
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:1143
 #, python-format
 msgid "Centralized Entries"
 msgstr "Écritures centralisées"
@@ -950,8 +950,8 @@ msgid "No"
 msgstr "Non"
 
 #. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:600
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:859
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:637
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:906
 #: code:addons/account_financial_report_qweb/report/open_items.py:277
 #: code:addons/account_financial_report_qweb/report/open_items.py:523
 #, python-format
