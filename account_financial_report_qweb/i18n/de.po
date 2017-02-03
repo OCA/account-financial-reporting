@@ -1,21 +1,22 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* account_financial_report_qweb
-#
+# * account_financial_report_qweb
+# 
+# Translators:
+# OCA Transbot <transbot@odoo-community.org>, 2017
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 9.0e\n"
+"Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-15 15:24+0000\n"
-"PO-Revision-Date: 2016-12-16 11:37+0100\n"
-"Last-Translator: <>\n"
-"Language-Team: \n"
+"POT-Creation-Date: 2017-02-01 16:44+0000\n"
+"PO-Revision-Date: 2017-02-01 16:44+0000\n"
+"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2017\n"
+"Language-Team: German (https://www.transifex.com/oca/teams/23907/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: \n"
+"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: de_DE\n"
-"X-Generator: Poedit 1.8.7.1\n"
 
 #. module: account_financial_report_qweb
 #: code:addons/account_financial_report_qweb/report/aged_partner_balance_xlsx.py:72
@@ -248,7 +249,7 @@ msgid "Centralized"
 msgstr "Zentralisiert"
 
 #. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:1102
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:1147
 #, python-format
 msgid "Centralized Entries"
 msgstr "Zentralisierte Einträge"
@@ -703,8 +704,12 @@ msgstr "Hauptbuch XLSX"
 
 #. module: account_financial_report_qweb
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.general_ledger_wizard
-msgid "General Ledger can be computed only if selected company have only one unaffected earnings account."
-msgstr "Hauptbuch kann nur berechnet werden, wenn ausgewählte Unternehmen nur ein unbeeinflusstes Ertragskonto haben."
+msgid ""
+"General Ledger can be computed only if selected company have only one "
+"unaffected earnings account."
+msgstr ""
+"Hauptbuch kann nur berechnet werden, wenn ausgewählte Unternehmen nur ein "
+"unbeeinflusstes Ertragskonto haben."
 
 #. module: account_financial_report_qweb
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_general_ledger_id
@@ -768,8 +773,12 @@ msgstr "ID"
 
 #. module: account_financial_report_qweb
 #: model:ir.model.fields,help:account_financial_report_qweb.field_account_account_centralized
-msgid "If flagged, no details will be displayed in the General Ledger report (the webkit one only), only centralized amounts per period."
-msgstr "Falls markiert, werden keine Einzelheiten im Hauptbuchbericht (nur das Webkit), sondern nur zentrale Beträge pro Periode angezeigt."
+msgid ""
+"If flagged, no details will be displayed in the General Ledger report (the "
+"webkit one only), only centralized amounts per period."
+msgstr ""
+"Falls markiert, werden keine Einzelheiten im Hauptbuchbericht (nur das "
+"Webkit), sondern nur zentrale Beträge pro Periode angezeigt."
 
 #. module: account_financial_report_qweb
 #: code:addons/account_financial_report_qweb/report/general_ledger_xlsx.py:98
@@ -941,8 +950,8 @@ msgid "No"
 msgstr "Nein"
 
 #. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:606
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:865
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:641
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:910
 #: code:addons/account_financial_report_qweb/report/open_items.py:283
 #: code:addons/account_financial_report_qweb/report/open_items.py:529
 #, python-format
@@ -1255,8 +1264,12 @@ msgstr "Vorläufige Bilanz XLSX"
 
 #. module: account_financial_report_qweb
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.trial_balance_wizard
-msgid "Trial Balance can be computed only if selected company have only one unaffected earnings account."
-msgstr "Probebilanz kann nur berechnet werden, wenn ausgewählte Unternehmen nur ein unbeeinflusstes Ertragskonto haben."
+msgid ""
+"Trial Balance can be computed only if selected company have only one "
+"unaffected earnings account."
+msgstr ""
+"Probebilanz kann nur berechnet werden, wenn ausgewählte Unternehmen nur ein "
+"unbeeinflusstes Ertragskonto haben."
 
 #. module: account_financial_report_qweb
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_unaffected_earnings_account
@@ -1267,8 +1280,14 @@ msgstr "Unbeeinflusst Ertragskonto"
 #: model:ir.model.fields,help:account_financial_report_qweb.field_general_ledger_report_wizard_hide_account_balance_at_0
 #: model:ir.model.fields,help:account_financial_report_qweb.field_open_items_report_wizard_hide_account_balance_at_0
 #: model:ir.model.fields,help:account_financial_report_qweb.field_trial_balance_report_wizard_hide_account_balance_at_0
-msgid "Use this filter to hide an account or a partner with an ending balance at 0. If partners are filtered, debits and credits totals will not match the trial balance."
-msgstr "Verwenden Sie diesen Filter, um ein Konto oder einen Partner mit einem Endbestand bei 0 auszublenden. Wenn Partner gefiltert werden, stimmen die Belastungen und Gutschriften nicht mit dem Stammsaldo überein."
+msgid ""
+"Use this filter to hide an account or a partner with an ending balance at 0."
+" If partners are filtered, debits and credits totals will not match the "
+"trial balance."
+msgstr ""
+"Verwenden Sie diesen Filter, um ein Konto oder einen Partner mit einem "
+"Endbestand bei 0 auszublenden. Wenn Partner gefiltert werden, stimmen die "
+"Belastungen und Gutschriften nicht mit dem Stammsaldo überein."
 
 #. module: account_financial_report_qweb
 #: code:addons/account_financial_report_qweb/report/general_ledger_xlsx.py:69
