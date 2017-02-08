@@ -57,7 +57,8 @@ class TestGeneralLedgerReport(TransactionCase):
 
     def setUp(self):
         super(TestGeneralLedgerReport, self).setUp()
-
+        self.before_previous_fy_year = '2014-05-05'
+        self.previous_fy_date_start = '2015-01-01'
         self.previous_fy_date_end = '2015-12-31'
         self.fy_date_start = '2016-01-01'
         self.fy_date_end = '2016-12-31'
@@ -395,3 +396,71 @@ class TestGeneralLedgerReport(TransactionCase):
         self.assertEqual(lines['unaffected'].final_debit, 1000)
         self.assertEqual(lines['unaffected'].final_credit, 3000)
         self.assertEqual(lines['unaffected'].final_balance, -3000)
+
+    def test_04_unaffected_account_balance_2_years(self):
+        # Generate the general ledger line
+        lines = self._get_report_lines()
+        self.assertEqual(len(lines['unaffected']), 1)
+
+        # Check the initial and final balance
+        self.assertEqual(lines['unaffected'].initial_debit, 0)
+        self.assertEqual(lines['unaffected'].initial_credit, 0)
+        self.assertEqual(lines['unaffected'].initial_balance, 0)
+        self.assertEqual(lines['unaffected'].final_debit, 0)
+        self.assertEqual(lines['unaffected'].final_credit, 0)
+        self.assertEqual(lines['unaffected'].final_balance, 0)
+
+        # Add a move at any date 2 years before the balance
+        # (to create an historic)
+        self._add_move(
+            date=self.before_previous_fy_year,
+            receivable_debit=0,
+            receivable_credit=1000,
+            income_debit=1000,
+            income_credit=0
+        )
+
+        # Re Generate the general ledger line
+        lines = self._get_report_lines()
+        self.assertEqual(len(lines['unaffected']), 1)
+
+        # Check the initial and final balance
+        self.assertEqual(lines['unaffected'].initial_debit, 0)
+        self.assertEqual(lines['unaffected'].initial_credit, 0)
+        self.assertEqual(lines['unaffected'].initial_balance, 1000)
+        self.assertEqual(lines['unaffected'].final_debit, 0)
+        self.assertEqual(lines['unaffected'].final_credit, 0)
+        self.assertEqual(lines['unaffected'].final_balance, 1000)
+
+        # Affect the company's result last year
+        self._add_move(
+            date=self.previous_fy_date_start,
+            receivable_debit=1000,
+            receivable_credit=0,
+            income_debit=0,
+            income_credit=0,
+            unaffected_debit=0,
+            unaffected_credit=1000
+        )
+
+        # Add another move last year to test the initial balance this year
+        self._add_move(
+            date=self.previous_fy_date_start,
+            receivable_debit=0,
+            receivable_credit=500,
+            income_debit=500,
+            income_credit=0,
+            unaffected_debit=0,
+            unaffected_credit=0
+        )
+        # Re Generate the general ledger line
+        lines = self._get_report_lines()
+        self.assertEqual(len(lines['unaffected']), 1)
+
+        # Check the initial and final balance
+        self.assertEqual(lines['unaffected'].initial_debit, 0)
+        self.assertEqual(lines['unaffected'].initial_credit, 0)
+        self.assertEqual(lines['unaffected'].initial_balance, 500)
+        self.assertEqual(lines['unaffected'].final_debit, 0)
+        self.assertEqual(lines['unaffected'].final_credit, 0)
+        self.assertEqual(lines['unaffected'].final_balance, 500)
