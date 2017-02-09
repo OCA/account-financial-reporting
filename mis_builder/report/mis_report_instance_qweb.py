@@ -14,10 +14,10 @@ class Report(models.Model):
 
     @api.model
     def get_pdf(self, docids, report_name, html=None, data=None):
+        ctx = self.env.context.copy()
         if docids:
             report = self._get_report_from_name(report_name)
             obj = self.env[report.model].browse(docids)[0]
-            ctx = self.env.context.copy()
             if hasattr(obj, 'landscape_pdf') and obj.landscape_pdf:
                 ctx.update({'landscape': True})
         return super(Report, self.with_context(ctx)).get_pdf(
