@@ -9,17 +9,18 @@ Changelog
 10.0.2.0.3 (unreleased)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-* [FIX] unicode error when exporting to Excel
 * [FIX] local variable 'ctx' referenced before assignment when generating
   reports with no objects
 * [IMP] use fontawesome icons
 * [MIG] migrate to 10.0
+* [FIX] unicode error when exporting to Excel
+* [IMP] provide full access to mis builder style for group Adviser.
 
 9.0.2.0.2 (2016-09-27)
 ~~~~~~~~~~~~~~~~~~~~~~
 
 * [IMP] Add refresh button in mis report preview.
-  Widget code changes to allow to add fields in the widget easier
+* [IMP] Widget code changes to allow to add fields in the widget more easily.
 
 9.0.2.0.1 (2016-05-26)
 ~~~~~~~~~~~~~~~~~~~~~~
