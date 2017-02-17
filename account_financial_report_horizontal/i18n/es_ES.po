@@ -1,0 +1,44 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * account_financial_report_horizontal
+# 
+# Translators:
+# Hugo Santos <hugo.santos@factorlibre.com>, 2017
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-02-17 12:52+0000\n"
+"PO-Revision-Date: 2017-02-17 12:52+0000\n"
+"Last-Translator: Hugo Santos <hugo.santos@factorlibre.com>, 2017\n"
+"Language-Team: Spanish (Spain) (https://www.transifex.com/oca/teams/23907/es_ES/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: es_ES\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: account_financial_report_horizontal
+#: model:ir.model,name:account_financial_report_horizontal.model_account_financial_report
+msgid "Account Report"
+msgstr ""
+
+#. module: account_financial_report_horizontal
+#: view:website:account.report_financial
+msgid "Balance"
+msgstr ""
+
+#. module: account_financial_report_horizontal
+#: view:website:account.report_financial
+msgid "Credit"
+msgstr "Haber"
+
+#. module: account_financial_report_horizontal
+#: view:website:account.report_financial
+msgid "Debit"
+msgstr "Debe"
+
+#. module: account_financial_report_horizontal
+#: view:website:account.report_financial
+msgid "Name"
+msgstr ""
