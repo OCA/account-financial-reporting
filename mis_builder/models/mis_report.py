@@ -413,7 +413,7 @@ class KpiMatrix(object):
                         'val_r': cell.val_rendered,
                         'val_c': cell.val_comment,
                         'style': self._style_model.to_css_style(
-                            cell.style_props),
+                            cell.style_props, no_indent=True),
                     }
                     if cell.drilldown_arg:
                         col_data['drilldown_arg'] = cell.drilldown_arg
