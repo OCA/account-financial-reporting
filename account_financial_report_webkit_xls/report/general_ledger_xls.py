@@ -213,7 +213,7 @@ class general_ledger_xls(report_xls):
                     cumul_balance_curr = init_balance.get(
                         'init_balance_currency') or 0.0
                     c_specs = [('empty%s' % x, 1, 0, 'text', None)
-                               for x in range(6)]
+                               for x in range(7)]
                     c_specs += [
                         ('init_bal', 1, 0, 'text', _('Initial Balance')),
                         ('counterpart', 1, 0, 'text', None),
