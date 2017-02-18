@@ -242,7 +242,7 @@ class KpiMatrix(object):
                     val_comment = u'{}.{} = {}'.format(
                         row.kpi.name,
                         subcol.subkpi.name,
-                        row.kpi.get_expression_for_subkpi(subcol.subkpi))
+                        row.kpi._get_expression_for_subkpi(subcol.subkpi))
                 else:
                     val_comment = u'{} = {}'.format(
                         row.kpi.name,
@@ -581,7 +581,7 @@ class MisReportKpi(models.Model):
         elif self.type == TYPE_STR:
             self.compare_method = CMP_NONE
 
-    def get_expression_for_subkpi(self, subkpi):
+    def _get_expression_for_subkpi(self, subkpi):
         for expression in self.expression_ids:
             if expression.subkpi_id == subkpi:
                 return expression.name or 'AccountingNone'
@@ -807,7 +807,7 @@ class MisReport(models.Model):
         return kpi_matrix
 
     @api.multi
-    def prepare_aep(self, company):
+    def _prepare_aep(self, company):
         self.ensure_one()
         aep = AEP(company)
         for kpi in self.kpi_ids:

@@ -140,7 +140,7 @@ class MisReportInstancePeriod(models.Model):
     ]
 
     @api.onchange('date_range_id')
-    def onchange_date_range(self):
+    def _onchange_date_range(self):
         for record in self:
             record.manual_date_from = record.date_range_id.date_start
             record.manual_date_to = record.date_range_id.date_end
@@ -297,7 +297,7 @@ class MisReportInstance(models.Model):
                 record.date_to = None
 
     @api.onchange('date_range_id')
-    def onchange_date_range(self):
+    def _onchange_date_range(self):
         for record in self:
             record.date_from = record.date_range_id.date_start
             record.date_to = record.date_range_id.date_end
@@ -359,7 +359,7 @@ class MisReportInstance(models.Model):
     @api.multi
     def _compute_matrix(self):
         self.ensure_one()
-        aep = self.report_id.prepare_aep(self.company_id)
+        aep = self.report_id._prepare_aep(self.company_id)
         kpi_matrix = self.report_id.prepare_kpi_matrix()
         for period in self.period_ids:
             if period.date_from == period.date_to:
