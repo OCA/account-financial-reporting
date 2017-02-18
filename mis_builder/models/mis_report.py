@@ -517,6 +517,7 @@ class MisReportKpi(models.Model):
             }
 
     @api.multi
+    @api.depends('expression_ids.subkpi_id.name', 'expression_ids.name')
     def _compute_expression(self):
         for kpi in self:
             l = []
