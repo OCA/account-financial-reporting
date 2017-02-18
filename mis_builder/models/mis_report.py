@@ -584,7 +584,22 @@ class MisReportKpi(models.Model):
     def get_expression_for_subkpi(self, subkpi):
         for expression in self.expression_ids:
             if expression.subkpi_id == subkpi:
-                return expression.name
+                return expression.name or 'AccountingNone'
+        return 'AccountingNone'
+
+    def _get_expressions(self, subkpis):
+        if subkpis and self.multi:
+            return [
+                self._get_expression_for_subkpi(subkpi)
+                for subkpi in subkpis
+            ]
+        else:
+            if self.expression_ids:
+                assert len(self.expression_ids) == 1
+                assert not self.expression_ids[0].subkpi_id
+                return [self.expression_ids[0].name or 'AccountingNone']
+            else:
+                return ['AccountingNone']
 
 
 class MisReportSubkpi(models.Model):
@@ -797,7 +812,8 @@ class MisReport(models.Model):
         aep = AEP(company)
         for kpi in self.kpi_ids:
             for expression in kpi.expression_ids:
-                aep.parse_expr(expression.name)
+                if expression.name:
+                    aep.parse_expr(expression.name)
         aep.done_parsing()
         return aep
 
@@ -945,13 +961,7 @@ class MisReport(models.Model):
         while True:
             for kpi in compute_queue:
                 # build the list of expressions for this kpi
-                expressions = []
-                for expression in kpi.expression_ids:
-                    if expression.subkpi_id and \
-                            subkpis_filter and \
-                            expression.subkpi_id not in subkpis_filter:
-                        continue
-                    expressions.append(expression.name)
+                expressions = kpi._get_expressions(subkpis)
 
                 vals = []
                 drilldown_args = []
