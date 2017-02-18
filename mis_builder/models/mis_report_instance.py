@@ -129,6 +129,25 @@ class MisReportInstancePeriod(models.Model):
         'mis.report.subkpi',
         string="Sub KPI Filter")
 
+    source = fields.Selection(
+        [('actuals', 'Actuals'),
+         ('actuals_alt', 'Actuals (alternative)')],
+        default='actuals',
+        required=True,
+        help="Actuals: current data, from accounting and other queries.\n"
+             "Actuals (alternative): current data from an "
+             "alternative source (eg a database view providing look-alike "
+             "account move lines).\n"
+    )
+    source_aml_model_id = fields.Many2one(
+        comodel_name='ir.model',
+        string='Move lines source',
+        domain=[('field_id.name', '=', 'debit'),
+                ('field_id.name', '=', 'credit'),
+                ('field_id.name', '=', 'account_id')],
+        help="A 'move line like' model, ie having at least debit, credit and "
+             "account_id fields.")
+
     _order = 'sequence, id'
 
     _sql_constraints = [
@@ -371,6 +390,45 @@ class MisReportInstance(models.Model):
             'target': 'current',
         }
 
+    def _add_column_actuals(
+            self, aep, kpi_matrix, period, title, subtitle):
+        self.report_id.declare_and_compute_period(
+            kpi_matrix,
+            period.id,
+            title,
+            subtitle,
+            aep,
+            period.date_from,
+            period.date_to,
+            self.target_move,
+            period.subkpi_ids,
+            period._get_additional_move_line_filter,
+            period._get_additional_query_filter)
+
+    def _add_column_actuals_alt(
+            self, aep, kpi_matrix, period, title, subtitle):
+        self.report_id.declare_and_compute_period(
+            kpi_matrix,
+            period.id,
+            title,
+            subtitle,
+            aep,
+            period.date_from,
+            period.date_to,
+            None,
+            period.subkpi_ids,
+            period._get_additional_move_line_filter,
+            period._get_additional_query_filter,
+            aml_model=period.source_aml_model_id)
+
+    def _add_column(self, aep, kpi_matrix, period, title, subtitle):
+        if period.source == 'actuals':
+            return self._add_column_actuals(
+                aep, kpi_matrix, period, title, subtitle)
+        elif period.source == 'actuals_alt':
+            return self._add_column_actuals_alt(
+                aep, kpi_matrix, period, title, subtitle)
+
     @api.multi
     def _compute_matrix(self):
         self.ensure_one()
@@ -383,18 +441,7 @@ class MisReportInstance(models.Model):
                 date_from = self._format_date(period.date_from)
                 date_to = self._format_date(period.date_to)
                 comment = _('from %s to %s') % (date_from, date_to)
-            self.report_id.declare_and_compute_period(
-                kpi_matrix,
-                period.id,
-                period.name,
-                comment,
-                aep,
-                period.date_from,
-                period.date_to,
-                self.target_move,
-                period.subkpi_ids,
-                period._get_additional_move_line_filter,
-                period._get_additional_query_filter)
+            self._add_column(aep, kpi_matrix, period, period.name, comment)
             for comparison_column in period.comparison_column_ids:
                 kpi_matrix.declare_comparison(period.id, comparison_column.id)
         kpi_matrix.compute_comparisons()
@@ -423,11 +470,15 @@ class MisReportInstance(models.Model):
                 self.target_move,
                 account_id)
             domain.extend(period._get_additional_move_line_filter())
+            if period.source == 'source_alt':
+                aml_model_name = period.source_aml_model_id.name
+            else:
+                aml_model_name = 'account.move.line'
             return {
                 'name': u'{} - {}'.format(expr, period.name),
                 'domain': domain,
                 'type': 'ir.actions.act_window',
-                'res_model': 'account.move.line',
+                'res_model': aml_model_name,
                 'views': [[False, 'list'], [False, 'form']],
                 'view_type': 'list',
                 'view_mode': 'list',

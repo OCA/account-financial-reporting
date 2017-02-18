@@ -1042,7 +1042,8 @@ class MisReport(models.Model):
             additional_move_line_filter = get_additional_move_line_filter()
         aep.do_queries(date_from, date_to,
                        target_move,
-                       additional_move_line_filter)
+                       additional_move_line_filter,
+                       aml_model)
 
         def eval_expressions(expressions, locals_dict):
             expressions = [e and e.name or 'AccountingNone'

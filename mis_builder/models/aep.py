@@ -235,13 +235,15 @@ class AccountingExpressionProcessor(object):
         return expression.normalize_domain(domain)
 
     def do_queries(self, date_from, date_to,
-                   target_move='posted', additional_move_line_filter=None):
+                   target_move='posted', additional_move_line_filter=None,
+                   aml_model=None):
         """Query sums of debit and credit for all accounts and domains
         used in expressions.
 
         This method must be executed after done_parsing().
         """
-        aml_model = self.company.env['account.move.line']
+        if not aml_model:
+            aml_model = self.company.env['account.move.line']
         # {(domain, mode): {account_id: (debit, credit)}}
         self._data = defaultdict(dict)
         domain_by_mode = {}

@@ -93,6 +93,7 @@
                                        domain="[('report_id', '=', parent.report_id)]"
                                        widget="many2many_tags"/>
                                 <field name="comparison_column_ids" domain="[('report_instance_id', '=', report_instance_id), ('id', '!=', id)]" widget="many2many_tags"/>
+                                <field name="source"/>
                             </tree>
                         </field>
                         <field name="date"/>
@@ -191,6 +192,13 @@
                                        attrs="{'required': [('mode', '=', 'fix')]}"/>
                                 <field name="manual_date_to"
                                        attrs="{'required': [('mode', '=', 'fix')]}"/>
+                            </group>
+                        </page>
+                        <page string="Source">
+                            <group>
+                                <field name="source"/>
+                                <field name="source_aml_model_id"
+                                    attrs="{'invisible': [('source', '!=', 'actuals_alt')]}"/>
                             </group>
                         </page>
                         <page string="Advanced">
