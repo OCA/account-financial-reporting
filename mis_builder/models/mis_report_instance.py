@@ -2,14 +2,52 @@
 # © 2014-2016 ACSONE SA/NV (<http://acsone.eu>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models, _
-
 import datetime
 import logging
+
+from odoo import api, fields, models, _
+from odoo.exceptions import ValidationError
 
 from .aep import AccountingExpressionProcessor as AEP
 
 _logger = logging.getLogger(__name__)
+
+
+SRC_ACTUALS = 'actuals'
+SRC_ACTUALS_ALT = 'actuals_alt'
+SRC_CMPCOL = 'cmpcol'
+SRC_SUMCOL = 'sumcol'
+
+
+class MisReportInstancePeriodSum(models.Model):
+
+    _name = "mis.report.instance.period.sum"
+
+    period_id = fields.Many2one(
+        comodel_name='mis.report.instance.period',
+        string="Parent column",
+        ondelete='cascade',
+        required=True,
+    )
+    period_to_sum_id = fields.Many2one(
+        comodel_name='mis.report.instance.period',
+        string="Column",
+        ondelete='restrict',
+        required=True,
+    )
+    sign = fields.Selection(
+        [('+', '+'),
+         ('-', '-')],
+        required=True,
+        default='+',
+    )
+
+    @api.constrains('period_id', 'period_to_sum_id')
+    def _check_period_to_sum(self):
+        if self.period_id == self.period_to_sum_id:
+            raise ValidationError(
+                _("You cannot sum period %s with itself.") %
+                self.period_id.name)
 
 
 class MisReportInstancePeriod(models.Model):
@@ -35,6 +73,10 @@ class MisReportInstancePeriod(models.Model):
             if not report.comparison_mode:
                 record.date_from = report.date_from
                 record.date_to = report.date_to
+                record.valid = True
+            elif record.mode == 'none':
+                record.date_from = False
+                record.date_to = False
                 record.valid = True
             elif record.mode == 'fix':
                 record.date_from = record.manual_date_from
@@ -82,9 +124,10 @@ class MisReportInstancePeriod(models.Model):
     _name = 'mis.report.instance.period'
 
     name = fields.Char(size=32, required=True,
-                       string='Description', translate=True)
+                       string='Label', translate=True)
     mode = fields.Selection([('fix', 'Fixed dates'),
                              ('relative', 'Relative to report base date'),
+                             ('none', 'No date filter'),
                              ], required=True,
                             default='fix')
     type = fields.Selection([('d', _('Day')),
@@ -111,16 +154,19 @@ class MisReportInstancePeriod(models.Model):
                            type='boolean',
                            string='Valid')
     sequence = fields.Integer(string='Sequence', default=100)
-    report_instance_id = fields.Many2one('mis.report.instance',
+    report_instance_id = fields.Many2one(comodel_name='mis.report.instance',
                                          string='Report Instance',
                                          required=True,
                                          ondelete='cascade')
+    report_id = fields.Many2one(
+        related='report_instance_id.report_id'
+    )
     comparison_column_ids = fields.Many2many(
         comodel_name='mis.report.instance.period',
         relation='mis_report_instance_period_rel',
         column1='period_id',
         column2='compare_period_id',
-        string='Compare with')
+        string='Compare with (deprecated)')
     normalize_factor = fields.Integer(
         string='Factor',
         help='Factor to use to normalize the period (used in comparison',
@@ -130,14 +176,18 @@ class MisReportInstancePeriod(models.Model):
         string="Sub KPI Filter")
 
     source = fields.Selection(
-        [('actuals', 'Actuals'),
-         ('actuals_alt', 'Actuals (alternative)')],
-        default='actuals',
+        [(SRC_ACTUALS, 'Actuals'),
+         (SRC_ACTUALS_ALT, 'Actuals (alternative)'),
+         (SRC_SUMCOL, 'Sum columns'),
+         (SRC_CMPCOL, 'Compare columns')],
+        default=SRC_ACTUALS,
         required=True,
         help="Actuals: current data, from accounting and other queries.\n"
              "Actuals (alternative): current data from an "
              "alternative source (eg a database view providing look-alike "
              "account move lines).\n"
+             "Sum columns: summation (+/-) of other columns.\n"
+             "Compare to column: compare to other column.\n",
     )
     source_aml_model_id = fields.Many2one(
         comodel_name='ir.model',
@@ -146,7 +196,21 @@ class MisReportInstancePeriod(models.Model):
                 ('field_id.name', '=', 'credit'),
                 ('field_id.name', '=', 'account_id')],
         help="A 'move line like' model, ie having at least debit, credit and "
-             "account_id fields.")
+             "account_id fields.",
+    )
+    source_sumcol_ids = fields.One2many(
+        comodel_name='mis.report.instance.period.sum',
+        inverse_name='period_id',
+        string='Columns to sum',
+    )
+    source_cmpcol_from_id = fields.Many2one(
+        comodel_name='mis.report.instance.period',
+        string='versus',
+    )
+    source_cmpcol_to_id = fields.Many2one(
+        comodel_name='mis.report.instance.period',
+        string='Compare',
+    )
 
     _order = 'sequence, id'
 
@@ -172,6 +236,11 @@ class MisReportInstancePeriod(models.Model):
             if self.manual_date_from != self.date_range_id.date_start or \
                     self.manual_date_to != self.date_range_id.date_end:
                 self.date_range_id = False
+
+    @api.onchange('source')
+    def _onchange_source(self):
+        if self.source in ('sumcol', 'cmpcol'):
+            self.mode = 'none'
 
     @api.multi
     def _get_additional_move_line_filter(self):
@@ -200,6 +269,40 @@ class MisReportInstancePeriod(models.Model):
         compatible with the model of the query."""
         self.ensure_one()
         return []
+
+    @api.constrains('mode', 'source')
+    def _check_mode_source(self):
+        if self.source in (SRC_ACTUALS, SRC_ACTUALS_ALT):
+            if self.mode == 'none':
+                raise ValidationError(
+                    _("A date filter is mandatory for this source "
+                      "in column %s.") % self.name)
+        elif self.source in ('sumcol', 'cmpcol'):
+            if self.mode != 'none':
+                raise ValidationError(
+                    _("No date filter is allowed for this source "
+                      "in column %s.") % self.name)
+
+    @api.constrains('source', 'source_cmpcol_from_id', 'source_cmpcol_to_id')
+    def _check_source_cmpcol(self):
+        if self.source == 'cmpcol':
+            if not self.source_cmpcol_from_id or \
+                    not self.source_cmpcol_to_id:
+                raise ValidationError(
+                    _("Please provide both columns to compare in %s.") %
+                    self.name)
+            if self.source_cmpcol_from_id == self.id or \
+                    self.source_cmpcol_to_id == self.id:
+                raise ValidationError(
+                    _("Column %s cannot be compared to itself.") %
+                    self.name)
+            if self.source_cmpcol_from_id.report_instance_id != \
+                    self.report_instance_id or \
+                    self.source_cmpcol_to_id.report_instance_id != \
+                    self.report_instance_id:
+                raise ValidationError(
+                    _("Columns to compare must belong to the same report "
+                      "in %s") % self.name)
 
 
 class MisReportInstance(models.Model):
@@ -233,8 +336,8 @@ class MisReportInstance(models.Model):
     report_id = fields.Many2one('mis.report',
                                 required=True,
                                 string='Report')
-    period_ids = fields.One2many('mis.report.instance.period',
-                                 'report_instance_id',
+    period_ids = fields.One2many(comodel_name='mis.report.instance.period',
+                                 inverse_name='report_instance_id',
                                  required=True,
                                  string='Periods',
                                  copy=True)
@@ -391,12 +494,12 @@ class MisReportInstance(models.Model):
         }
 
     def _add_column_actuals(
-            self, aep, kpi_matrix, period, title, subtitle):
+            self, aep, kpi_matrix, period, label, description):
         self.report_id.declare_and_compute_period(
             kpi_matrix,
             period.id,
-            title,
-            subtitle,
+            label,
+            description,
             aep,
             period.date_from,
             period.date_to,
@@ -406,12 +509,12 @@ class MisReportInstance(models.Model):
             period._get_additional_query_filter)
 
     def _add_column_actuals_alt(
-            self, aep, kpi_matrix, period, title, subtitle):
+            self, aep, kpi_matrix, period, label, description):
         self.report_id.declare_and_compute_period(
             kpi_matrix,
             period.id,
-            title,
-            subtitle,
+            label,
+            description,
             aep,
             period.date_from,
             period.date_to,
@@ -421,13 +524,29 @@ class MisReportInstance(models.Model):
             period._get_additional_query_filter,
             aml_model=period.source_aml_model_id)
 
-    def _add_column(self, aep, kpi_matrix, period, title, subtitle):
-        if period.source == 'actuals':
+    def _add_column_sumcol(
+            self, aep, kpi_matrix, period, label, description):
+        pass
+
+    def _add_column_cmpcol(
+            self, aep, kpi_matrix, period, label, description):
+        kpi_matrix.declare_comparison(
+            period.source_cmpcol_to_id.id, period.source_cmpcol_from_id.id,
+            label, description)
+
+    def _add_column(self, aep, kpi_matrix, period, label, description):
+        if period.source == SRC_ACTUALS:
             return self._add_column_actuals(
-                aep, kpi_matrix, period, title, subtitle)
-        elif period.source == 'actuals_alt':
+                aep, kpi_matrix, period, label, description)
+        elif period.source == SRC_ACTUALS_ALT:
             return self._add_column_actuals_alt(
-                aep, kpi_matrix, period, title, subtitle)
+                aep, kpi_matrix, period, label, description)
+        elif period.source == SRC_SUMCOL:
+            return self._add_column_sumcol(
+                aep, kpi_matrix, period, label, description)
+        elif period.source == SRC_CMPCOL:
+            return self._add_column_cmpcol(
+                aep, kpi_matrix, period, label, description)
 
     @api.multi
     def _compute_matrix(self):
@@ -435,13 +554,15 @@ class MisReportInstance(models.Model):
         aep = self.report_id._prepare_aep(self.company_id)
         kpi_matrix = self.report_id.prepare_kpi_matrix()
         for period in self.period_ids:
-            if period.date_from == period.date_to:
-                comment = self._format_date(period.date_from)
+            if period.mode == 'none':
+                description = None
+            elif period.date_from == period.date_to:
+                description = self._format_date(period.date_from)
             else:
                 date_from = self._format_date(period.date_from)
                 date_to = self._format_date(period.date_to)
-                comment = _('from %s to %s') % (date_from, date_to)
-            self._add_column(aep, kpi_matrix, period, period.name, comment)
+                description = _('from %s to %s') % (date_from, date_to)
+            self._add_column(aep, kpi_matrix, period, period.name, description)
             for comparison_column in period.comparison_column_ids:
                 kpi_matrix.declare_comparison(period.id, comparison_column.id)
         kpi_matrix.compute_comparisons()
@@ -467,11 +588,11 @@ class MisReportInstance(models.Model):
             domain = aep.get_aml_domain_for_expr(
                 expr,
                 period.date_from, period.date_to,
-                self.target_move,
+                self.target_move if period.source == SRC_ACTUALS else None,
                 account_id)
             domain.extend(period._get_additional_move_line_filter())
-            if period.source == 'source_alt':
-                aml_model_name = period.source_aml_model_id.name
+            if period.source == SRC_ACTUALS_ALT:
+                aml_model_name = period.source_aml_model_id.model
             else:
                 aml_model_name = 'account.move.line'
             return {

@@ -193,14 +193,15 @@ class KpiMatrix(object):
         self._cols[col_key] = col
         return col
 
-    def declare_comparison(self, col_key, base_col_key):
+    def declare_comparison(self, col_key, base_col_key,
+                           label=None, description=None):
         """ Declare a new comparison column.
 
         Invoke this and declare_col in display order.
         """
         last_col_key = list(self._cols.keys())[-1]
         self._comparison_todo[last_col_key].append(
-            (col_key, base_col_key))
+            (col_key, base_col_key, label, description))
 
     def set_values(self, kpi, col_key, vals,
                    drilldown_args):
@@ -276,17 +277,18 @@ class KpiMatrix(object):
         Invoke this after setting all values.
         """
         for pos_col_key, comparisons in self._comparison_todo.items():
-            for col_key, base_col_key in comparisons:
+            for col_key, base_col_key, label, description in comparisons:
                 col = self._cols[col_key]
                 base_col = self._cols[base_col_key]
                 common_subkpis = set(col.subkpis) & set(base_col.subkpis)
                 if (col.subkpis or base_col.subkpis) and not common_subkpis:
-                    raise UserError('Columns {} and {} are not comparable'.
+                    raise UserError(_('Columns {} and {} are not comparable').
                                     format(col.description,
                                            base_col.description))
-                label = u'{} vs {}'.\
-                    format(col.label, base_col.label)
-                comparison_col = KpiMatrixCol(label, None, {},
+                if not label:
+                    label = u'{} vs {}'.\
+                        format(col.label, base_col.label)
+                comparison_col = KpiMatrixCol(label, description, {},
                                               sorted(common_subkpis,
                                                      key=lambda s: s.sequence))
                 for row in self.iter_rows():
