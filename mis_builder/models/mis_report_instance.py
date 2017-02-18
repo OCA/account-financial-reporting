@@ -83,8 +83,8 @@ class MisReportInstancePeriod(models.Model):
 
     name = fields.Char(size=32, required=True,
                        string='Description', translate=True)
-    mode = fields.Selection([('fix', 'Fix'),
-                             ('relative', 'Relative'),
+    mode = fields.Selection([('fix', 'Fixed dates'),
+                             ('relative', 'Relative to report base date'),
                              ], required=True,
                             default='fix')
     type = fields.Selection([('d', _('Day')),
