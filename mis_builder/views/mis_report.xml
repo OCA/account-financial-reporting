@@ -54,6 +54,7 @@
                                 <field name="name"/>
                                 <field name="type"/>
                                 <field name="compare_method" attrs="{'invisible': [('type', '=', 'str')]}"/>
+                                <field name="accumulation_method" attrs="{'invisible': [('type', '=', 'str')]}"/>
                                 <field name="expression"/>
                             </tree>
                         </field>
@@ -99,7 +100,9 @@
                         <field name="description"/>
                         <field name="name"/>
                         <field name="type"/>
+                        <newline/>
                         <field name="compare_method"/>
+                        <field name="accumulation_method"/>
                         <field name="style_id"/>
                         <field name="style_expression"/>
                         <field name="report_id" invisible="1"/>

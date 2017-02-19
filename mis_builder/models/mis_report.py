@@ -24,6 +24,9 @@ from .mis_safe_eval import mis_safe_eval, DataError, NameDataError
 from .mis_report_style import (
     TYPE_NUM, TYPE_PCT, TYPE_STR, CMP_DIFF, CMP_PCT, CMP_NONE
 )
+from .mis_kpi_data import (
+    ACC_SUM, ACC_AVG, ACC_NONE
+)
 
 _logger = logging.getLogger(__name__)
 
@@ -494,6 +497,21 @@ class MisReportKpi(models.Model):
                                       required=True,
                                       string='Comparison Method',
                                       default=CMP_PCT)
+    accumulation_method = fields.Selection(
+        [(ACC_SUM, _('Sum')),
+         (ACC_AVG, _('Average')),
+         (ACC_NONE, _('None'))],
+        required=True,
+        string="Accumulation Method",
+        default=ACC_SUM,
+        help="Determines how values of this kpi spanning over a "
+             "time period are transformed to match the reporting period. "
+             "Sum: values of shorter period are added, "
+             "values of longest or partially overlapping periods are "
+             "adjusted pro-rata temporis.\n"
+             "Average: values of included period are averaged "
+             "with a pro-rata temporis weight.",
+    )
     sequence = fields.Integer(string='Sequence', default=100)
     report_id = fields.Many2one('mis.report',
                                 string='Report',
@@ -579,10 +597,13 @@ class MisReportKpi(models.Model):
     def _onchange_type(self):
         if self.type == TYPE_NUM:
             self.compare_method = CMP_PCT
+            self.accumulation_method = ACC_SUM
         elif self.type == TYPE_PCT:
             self.compare_method = CMP_DIFF
+            self.accumulation_method = ACC_AVG
         elif self.type == TYPE_STR:
             self.compare_method = CMP_NONE
+            self.accumulation_method = ACC_NONE
 
     def _get_expression_for_subkpi(self, subkpi):
         for expression in self.expression_ids:
