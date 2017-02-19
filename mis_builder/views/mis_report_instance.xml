@@ -78,7 +78,7 @@
                             </group>
                         </group>
                     </group>
-                    <group name="comparison_mode" string="Comparison"
+                    <group name="comparison_mode" string="Columns"
                            attrs="{'invisible': [('comparison_mode', '=', False)]}" colspan="4">
                         <field name="period_ids" colspan="4" nolabel="1" attrs="{'required': [('comparison_mode', '=', True)]}">
                             <tree string="KPI's" colors="red:valid==False">
@@ -160,11 +160,18 @@
             <field name="model">mis.report.instance.period</field>
             <field name="priority" eval="16"/>
             <field name="arch" type="xml">
-                <form string="KPI's">
-                    <sheet>
-                        <group>
-                            <field name="mode" widget="radio"/>
-                            <field name="valid" invisible="1"/>
+                <form>
+                    <group>
+                        <field name="name" placeholder="Name"/>
+                        <field name="valid" invisible="1"/>
+                        <field name="report_instance_id" invisible="1"/>
+                        <field name="id" invisible="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Dates">
+                            <group>
+                                <field name="mode" widget="radio"/>
+                            </group>
                             <group name="relative" attrs="{'invisible': [('mode', '!=', 'relative')]}" colspan="4">
                                 <group>
                                     <field name="type" attrs="{'required': [('mode', '=', 'relative')]}"/>
@@ -185,18 +192,19 @@
                                 <field name="manual_date_to"
                                        attrs="{'required': [('mode', '=', 'fix')]}"/>
                             </group>
-                            <field name="name" placeholder="Name"/>
-                            <field name="normalize_factor"/>
-                            <field name="report_instance_id" invisible="1"/>
-                            <field name="id" invisible="1"/>
-                            <field name="subkpi_ids"
-                                   domain="[('report_id', '=', parent.report_id)]"
-                                   widget="many2many_tags"/>
-                            <field name="comparison_column_ids"
-                                   domain="[('report_instance_id', '=', report_instance_id), ('id', '!=', id)]"
-                                   widget="many2many_tags"/>
-                        </group>
-                    </sheet>
+                        </page>
+                        <page string="Advanced">
+                            <group>
+                                <field name="subkpi_ids"
+                                       domain="[('report_id', '=', parent.report_id)]"
+                                       widget="many2many_tags"/>
+                                <field name="normalize_factor"/>
+                                <field name="comparison_column_ids"
+                                       domain="[('report_instance_id', '=', report_instance_id), ('id', '!=', id)]"
+                                       widget="many2many_tags"/>
+                            </group>
+                        </page>
+                    </notebook>
                 </form>
             </field>
         </record>

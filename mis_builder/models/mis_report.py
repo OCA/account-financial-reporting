@@ -242,7 +242,7 @@ class KpiMatrix(object):
                     val_comment = u'{}.{} = {}'.format(
                         row.kpi.name,
                         subcol.subkpi.name,
-                        row.kpi.get_expression_for_subkpi(subcol.subkpi))
+                        row.kpi._get_expression_for_subkpi(subcol.subkpi))
                 else:
                     val_comment = u'{} = {}'.format(
                         row.kpi.name,
@@ -413,7 +413,7 @@ class KpiMatrix(object):
                         'val_r': cell.val_rendered,
                         'val_c': cell.val_comment,
                         'style': self._style_model.to_css_style(
-                            cell.style_props),
+                            cell.style_props, no_indent=True),
                     }
                     if cell.drilldown_arg:
                         col_data['drilldown_arg'] = cell.drilldown_arg
@@ -517,6 +517,7 @@ class MisReportKpi(models.Model):
             }
 
     @api.multi
+    @api.depends('expression_ids.subkpi_id.name', 'expression_ids.name')
     def _compute_expression(self):
         for kpi in self:
             l = []
@@ -580,10 +581,25 @@ class MisReportKpi(models.Model):
         elif self.type == TYPE_STR:
             self.compare_method = CMP_NONE
 
-    def get_expression_for_subkpi(self, subkpi):
+    def _get_expression_for_subkpi(self, subkpi):
         for expression in self.expression_ids:
             if expression.subkpi_id == subkpi:
-                return expression.name
+                return expression.name or 'AccountingNone'
+        return 'AccountingNone'
+
+    def _get_expressions(self, subkpis):
+        if subkpis and self.multi:
+            return [
+                self._get_expression_for_subkpi(subkpi)
+                for subkpi in subkpis
+            ]
+        else:
+            if self.expression_ids:
+                assert len(self.expression_ids) == 1
+                assert not self.expression_ids[0].subkpi_id
+                return [self.expression_ids[0].name or 'AccountingNone']
+            else:
+                return ['AccountingNone']
 
 
 class MisReportSubkpi(models.Model):
@@ -642,7 +658,7 @@ class MisReportKpiExpression(models.Model):
         store=True,
         readonly=True)
     name = fields.Char(string='Expression')
-    kpi_id = fields.Many2one('mis.report.kpi')
+    kpi_id = fields.Many2one('mis.report.kpi', required=True)
     # TODO FIXME set readonly=True when onchange('subkpi_ids') below works
     subkpi_id = fields.Many2one(
         'mis.report.subkpi',
@@ -791,12 +807,13 @@ class MisReport(models.Model):
         return kpi_matrix
 
     @api.multi
-    def prepare_aep(self, company):
+    def _prepare_aep(self, company):
         self.ensure_one()
         aep = AEP(company)
         for kpi in self.kpi_ids:
             for expression in kpi.expression_ids:
-                aep.parse_expr(expression.name)
+                if expression.name:
+                    aep.parse_expr(expression.name)
         aep.done_parsing()
         return aep
 
@@ -944,13 +961,7 @@ class MisReport(models.Model):
         while True:
             for kpi in compute_queue:
                 # build the list of expressions for this kpi
-                expressions = []
-                for expression in kpi.expression_ids:
-                    if expression.subkpi_id and \
-                            subkpis_filter and \
-                            expression.subkpi_id not in subkpis_filter:
-                        continue
-                    expressions.append(expression.name)
+                expressions = kpi._get_expressions(subkpis)
 
                 vals = []
                 drilldown_args = []

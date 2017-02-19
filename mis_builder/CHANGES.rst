@@ -9,6 +9,8 @@ Changelog
 10.0.2.0.3 (unreleased)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
+* [IMP] more robust behaviour in presence of missing expressions
+* [FIX] indent style
 * [FIX] local variable 'ctx' referenced before assignment when generating
   reports with no objects
 * [IMP] use fontawesome icons
