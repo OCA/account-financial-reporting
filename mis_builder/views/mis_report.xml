@@ -54,7 +54,6 @@
                                 <field name="name"/>
                                 <field name="type"/>
                                 <field name="compare_method" attrs="{'invisible': [('type', '=', 'str')]}"/>
-                                <field name="multi"/>
                                 <field name="expression"/>
                             </tree>
                         </field>
@@ -103,20 +102,19 @@
                         <field name="compare_method"/>
                         <field name="style_id"/>
                         <field name="style_expression"/>
-                        <!--<field name="sequence" />-->
                         <field name="report_id" invisible="1"/>
                     </group>
-                    <group string="Expression">
+                    <group string="Expression" col="2">
                         <field name="multi"/>
-                        <field name="expression_ids" colspan="4" nolabel="1"
-                               delete="0" create="0"
+                        <newline/>
+                        <field name="expression_ids" colspan="2" nolabel="1"
                                attrs="{'invisible': [('multi', '=', False)]}">
                             <tree editable="bottom">
                                 <field name="subkpi_id" domain="[('report_id', '=', parent.report_id)]"/>
                                 <field name="name"/>
                             </tree>
                         </field>
-                        <field name="expression" colspan="4" nolabel="1"
+                        <field name="expression" colspan="2" nolabel="1"
                                attrs="{'invisible': [('multi', '=', True)],
                                        'readonly': [('multi', '=', True)]}"/>
                     </group>
