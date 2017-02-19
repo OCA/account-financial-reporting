@@ -672,6 +672,20 @@ class MisReportKpiExpression(models.Model):
          'Sub KPI must be used once and only once for each KPI'),
     ]
 
+    @api.multi
+    def name_get(self):
+        res = []
+        for rec in self:
+            if rec.subkpi_id:
+                name = u'{}.{}'.format(
+                    rec.kpi_id.name, rec.subkpi_id.name)
+            else:
+                name = rec.kpi_id.name
+            res.append((rec.id, name))
+        return res
+
+    # TODO name_search so import can work
+
 
 class MisReportQuery(models.Model):
     """ A query to fetch arbitrary data for a MIS report.
