@@ -113,6 +113,7 @@ class MisReportInstancePeriod(models.Model):
     sequence = fields.Integer(string='Sequence', default=100)
     report_instance_id = fields.Many2one('mis.report.instance',
                                          string='Report Instance',
+                                         required=True,
                                          ondelete='cascade')
     comparison_column_ids = fields.Many2many(
         comodel_name='mis.report.instance.period',

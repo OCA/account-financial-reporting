@@ -34,7 +34,7 @@
                         </field>
                     </group>
                     <group string="Queries">
-                        <field name="query_ids" nolabel="1" colspan="2">
+                        <field name="query_ids" nolabel="1" colspan="2" context="{'default_report_id': id}">
                             <tree string="Queries" editable="bottom">
                                 <field name="name"/>
                                 <field name="model_id"/>
@@ -47,7 +47,7 @@
                         </field>
                     </group>
                     <group string="KPI's">
-                        <field name="kpi_ids" nolabel="1" colspan="2">
+                        <field name="kpi_ids" nolabel="1" colspan="2" context="{'default_report_id': id}">
                             <tree string="KPI's">
                                 <field name="sequence" widget="handle"/>
                                 <field name="description"/>

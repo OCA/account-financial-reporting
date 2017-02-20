@@ -31,11 +31,11 @@
         'report/mis_report_instance_xlsx.xml',
     ],
     'demo': [
+        'tests/mis.report.csv',
         'tests/mis.report.kpi.csv',
         'tests/mis.report.query.csv',
-        'tests/mis.report.csv',
-        'tests/mis.report.instance.period.csv',
         'tests/mis.report.instance.csv',
+        'tests/mis.report.instance.period.csv',
     ],
     'qweb': [
         'static/src/xml/*.xml'
