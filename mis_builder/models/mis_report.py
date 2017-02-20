@@ -585,8 +585,8 @@ class MisReportKpi(models.Model):
     def _get_expression_for_subkpi(self, subkpi):
         for expression in self.expression_ids:
             if expression.subkpi_id == subkpi:
-                return expression.name or 'AccountingNone'
-        return 'AccountingNone'
+                return expression
+        return None
 
     def _get_expressions(self, subkpis):
         if subkpis and self.multi:
@@ -598,9 +598,9 @@ class MisReportKpi(models.Model):
             if self.expression_ids:
                 assert len(self.expression_ids) == 1
                 assert not self.expression_ids[0].subkpi_id
-                return [self.expression_ids[0].name or 'AccountingNone']
+                return self.expression_ids
             else:
-                return ['AccountingNone']
+                return [None]
 
 
 class MisReportSubkpi(models.Model):
@@ -897,6 +897,100 @@ class MisReport(models.Model):
                 res[query.name] = s
         return res
 
+    def _declare_and_compute_col(self,
+                                 kpi_matrix,
+                                 col_key,
+                                 col_label,
+                                 col_description,
+                                 subkpis_filter,
+                                 locals_dict,
+                                 eval_expressions,
+                                 eval_expressions_by_account):
+        """This is the main computation loop.
+
+        It evaluates the kpis and puts the results in the KpiMatrix.
+        Evaluation is done through callback methods so data sources
+        can provide their own mean of obtaining the data (eg preset
+        kpi values for budget, or alternative move line sources).
+        """
+
+        if subkpis_filter:
+            subkpis = [subkpi for subkpi in self.subkpi_ids
+                       if subkpi in subkpis_filter]
+        else:
+            subkpis = self.subkpi_ids
+
+        col = kpi_matrix.declare_col(col_key,
+                                     col_label, col_description,
+                                     locals_dict, subkpis)
+
+        compute_queue = self.kpi_ids
+        recompute_queue = []
+        while True:
+            for kpi in compute_queue:
+                # build the list of expressions for this kpi
+                expressions = kpi._get_expressions(subkpis)
+
+                vals, drilldown_args, name_error = \
+                    eval_expressions(expressions, locals_dict)
+
+                if name_error:
+                    recompute_queue.append(kpi)
+                else:
+                    # no error, set it in locals_dict so it can be used
+                    # in computing other kpis
+                    if len(expressions) == 1:
+                        locals_dict[kpi.name] = vals[0]
+                    else:
+                        locals_dict[kpi.name] = SimpleArray(vals)
+
+                # even in case of name error we set the result in the matrix
+                # so the name error will be displayed if it cannot be
+                # resolved by recomputing later
+
+                if len(expressions) == 1 and col.colspan > 1:
+                    # here we have one expression for this kpi, but
+                    # multiple subkpis (so this kpi is most probably
+                    # a sum or other operation on multi-valued kpis)
+                    if isinstance(vals[0], tuple):
+                        vals = vals[0]
+                        assert len(vals) == col.colspan
+                    elif isinstance(vals[0], DataError):
+                        vals = (vals[0],) * col.colspan
+                    else:
+                        raise UserError(_("Probably not your fault... but I'm "
+                                          "really curious to know how you "
+                                          "managed to raise this error so "
+                                          "I can handle one more corner "
+                                          "case!"))
+                if len(drilldown_args) != col.colspan:
+                    drilldown_args = [None] * col.colspan
+
+                kpi_matrix.set_values(
+                    kpi, col_key, vals, drilldown_args)
+
+                if name_error or \
+                        not kpi.auto_expand_accounts or \
+                        not eval_expressions_by_account:
+                    continue
+
+                for account_id, vals, drilldown_args, name_error in \
+                        eval_expressions_by_account(expressions, locals_dict):
+                    kpi_matrix.set_values_detail_account(
+                        kpi, col_key, account_id, vals, drilldown_args)
+
+            if len(recompute_queue) == 0:
+                # nothing to recompute, we are done
+                break
+            if len(recompute_queue) == len(compute_queue):
+                # could not compute anything in this iteration
+                # (ie real Name errors or cyclic dependency)
+                # so we stop trying
+                break
+            # try again
+            compute_queue = recompute_queue
+            recompute_queue = []
+
     @api.multi
     def declare_and_compute_period(self, kpi_matrix,
                                    col_key,
@@ -908,7 +1002,8 @@ class MisReport(models.Model):
                                    subkpis_filter=None,
                                    get_additional_move_line_filter=None,
                                    get_additional_query_filter=None,
-                                   locals_dict=None):
+                                   locals_dict=None,
+                                   aml_model=None):
         """ Evaluate a report for a given period, populating a KpiMatrix.
 
         :param kpi_matrix: the KpiMatrix object to be populated created
@@ -949,97 +1044,50 @@ class MisReport(models.Model):
                        target_move,
                        additional_move_line_filter)
 
-        if subkpis_filter:
-            subkpis = [subkpi for subkpi in self.subkpi_ids
-                       if subkpi in subkpis_filter]
-        else:
-            subkpis = self.subkpi_ids
-        col = kpi_matrix.declare_col(col_key,
-                                     col_label, col_description,
-                                     locals_dict, subkpis)
+        def eval_expressions(expressions, locals_dict):
+            expressions = [e and e.name or 'AccountingNone'
+                           for e in expressions]
+            vals = []
+            drilldown_args = []
+            name_error = False
+            for expression in expressions:
+                val = AccountingNone
+                drilldown_arg = None
+                if expression:
+                    replaced_expr = aep.replace_expr(expression)
+                    val = mis_safe_eval(replaced_expr, locals_dict)
+                    if isinstance(val, NameDataError):
+                        name_error = True
+                    if replaced_expr != expression:
+                        drilldown_arg = {
+                            'period_id': col_key,
+                            'expr': expression,
+                        }
+                vals.append(val)
+                drilldown_args.append(drilldown_arg)
+            return vals, drilldown_args, name_error
 
-        compute_queue = self.kpi_ids
-        recompute_queue = []
-        while True:
-            for kpi in compute_queue:
-                # build the list of expressions for this kpi
-                expressions = kpi._get_expressions(subkpis)
-
+        def eval_expressions_by_account(expressions, locals_dict):
+            expressions = [e and e.name or 'AccountingNone'
+                           for e in expressions]
+            for account_id, replaced_exprs in \
+                    aep.replace_exprs_by_account_id(expressions):
                 vals = []
                 drilldown_args = []
                 name_error = False
-                for expression in expressions:
-                    replaced_expr = aep.replace_expr(expression)
-                    vals.append(
-                        mis_safe_eval(replaced_expr, locals_dict))
-                    if isinstance(vals[-1], NameDataError):
-                        name_error = True
+                for expression, replaced_expr in \
+                        izip(expressions, replaced_exprs):
+                    vals.append(mis_safe_eval(replaced_expr, locals_dict))
                     if replaced_expr != expression:
                         drilldown_args.append({
                             'period_id': col_key,
                             'expr': expression,
+                            'account_id': account_id,
                         })
                     else:
                         drilldown_args.append(None)
-                if name_error:
-                    recompute_queue.append(kpi)
-                else:
-                    # no error, set it in locals_dict so it can be used
-                    # in computing other kpis
-                    if len(expressions) == 1:
-                        locals_dict[kpi.name] = vals[0]
-                    else:
-                        locals_dict[kpi.name] = SimpleArray(vals)
+                yield account_id, vals, drilldown_args, name_error
 
-                # even in case of name error we set the result in the matrix
-                # so the name error will be displayed if it cannot be
-                # resolved by recomputing later
-                if len(expressions) == 1 and col.colspan > 1:
-                    if isinstance(vals[0], tuple):
-                        vals = vals[0]
-                        assert len(vals) == col.colspan
-                    elif isinstance(vals[0], DataError):
-                        vals = (vals[0],) * col.colspan
-                    else:
-                        raise UserError(_("Probably not your fault... but I'm "
-                                          "really curious to know how you "
-                                          "managed to raise this error so "
-                                          "I can handle one more corner "
-                                          "case!"))
-                if len(drilldown_args) != col.colspan:
-                    drilldown_args = [None] * col.colspan
-                kpi_matrix.set_values(
-                    kpi, col_key, vals, drilldown_args)
-
-                if not kpi.auto_expand_accounts or name_error:
-                    continue
-
-                for account_id, replaced_exprs in \
-                        aep.replace_exprs_by_account_id(expressions):
-                    vals = []
-                    drilldown_args = []
-                    for expression, replaced_expr in \
-                            izip(expressions, replaced_exprs):
-                        vals.append(mis_safe_eval(replaced_expr, locals_dict))
-                        if replaced_expr != expression:
-                            drilldown_args.append({
-                                'period_id': col_key,
-                                'expr': expression,
-                                'account_id': account_id
-                            })
-                        else:
-                            drilldown_args.append(None)
-                    kpi_matrix.set_values_detail_account(
-                        kpi, col_key, account_id, vals, drilldown_args)
-
-            if len(recompute_queue) == 0:
-                # nothing to recompute, we are done
-                break
-            if len(recompute_queue) == len(compute_queue):
-                # could not compute anything in this iteration
-                # (ie real Name errors or cyclic dependency)
-                # so we stop trying
-                break
-            # try again
-            compute_queue = recompute_queue
-            recompute_queue = []
+        self._declare_and_compute_col(
+            kpi_matrix, col_key, col_label, col_description, subkpis_filter,
+            locals_dict, eval_expressions, eval_expressions_by_account)
