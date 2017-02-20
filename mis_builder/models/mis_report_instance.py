@@ -142,10 +142,17 @@ class MisReportInstancePeriod(models.Model):
 
     @api.onchange('date_range_id')
     def _onchange_date_range(self):
-        for record in self:
-            record.manual_date_from = record.date_range_id.date_start
-            record.manual_date_to = record.date_range_id.date_end
-            record.name = record.date_range_id.name
+        if self.date_range_id:
+            self.manual_date_from = self.date_range_id.date_start
+            self.manual_date_to = self.date_range_id.date_end
+            self.name = self.date_range_id.name
+
+    @api.onchange('manual_date_from', 'manual_date_to')
+    def _onchange_dates(self):
+        if self.date_range_id:
+            if self.manual_date_from != self.date_range_id.date_start or \
+                    self.manual_date_to != self.date_range_id.date_end:
+                self.date_range_id = False
 
     @api.multi
     def _get_additional_move_line_filter(self):
@@ -299,9 +306,16 @@ class MisReportInstance(models.Model):
 
     @api.onchange('date_range_id')
     def _onchange_date_range(self):
-        for record in self:
-            record.date_from = record.date_range_id.date_start
-            record.date_to = record.date_range_id.date_end
+        if self.date_range_id:
+            self.date_from = self.date_range_id.date_start
+            self.date_to = self.date_range_id.date_end
+
+    @api.onchange('date_from', 'date_to')
+    def _onchange_dates(self):
+        if self.date_range_id:
+            if self.date_from != self.date_range_id.date_start or \
+                    self.date_to != self.date_range_id.date_end:
+                self.date_range_id = False
 
     @api.multi
     def preview(self):
