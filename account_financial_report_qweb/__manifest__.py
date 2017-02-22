@@ -5,7 +5,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     'name': 'QWeb Financial Reports',
-    'version': '10.0.1.0.0',
+    'version': '10.0.1.0.1',
     'category': 'Reporting',
     'summary': 'OCA Financial Reports',
     'author': 'Camptocamp SA,'
@@ -33,8 +33,6 @@
         'report/templates/open_items.xml',
         'report/templates/trial_balance.xml',
         'view/account_view.xml'
-    ],
-    'test': [
     ],
     'installable': True,
     'application': True,
