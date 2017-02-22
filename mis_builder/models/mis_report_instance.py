@@ -194,9 +194,10 @@ class MisReportInstancePeriod(models.Model):
         string='Move lines source',
         domain=[('field_id.name', '=', 'debit'),
                 ('field_id.name', '=', 'credit'),
-                ('field_id.name', '=', 'account_id')],
-        help="A 'move line like' model, ie having at least debit, credit and "
-             "account_id fields.",
+                ('field_id.name', '=', 'account_id'),
+                ('field_id.name', '=', 'date')],
+        help="A 'move line like' model, ie having at least debit, credit, "
+             "date and account_id fields.",
     )
     source_sumcol_ids = fields.One2many(
         comodel_name='mis.report.instance.period.sum',
