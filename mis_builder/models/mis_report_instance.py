@@ -161,12 +161,6 @@ class MisReportInstancePeriod(models.Model):
     report_id = fields.Many2one(
         related='report_instance_id.report_id'
     )
-    comparison_column_ids = fields.Many2many(
-        comodel_name='mis.report.instance.period',
-        relation='mis_report_instance_period_rel',
-        column1='period_id',
-        column2='compare_period_id',
-        string='Compare with (deprecated)')
     normalize_factor = fields.Integer(
         string='Factor',
         help='Factor to use to normalize the period (used in comparison',
@@ -527,11 +521,16 @@ class MisReportInstance(models.Model):
 
     def _add_column_sumcol(
             self, aep, kpi_matrix, period, label, description):
-        pass
+        kpi_matrix.declare_sum(
+            period.id,
+            [(c.sign, c.period_to_sum_id.id)
+             for c in period.source_sumcol_ids],
+            label, description)
 
     def _add_column_cmpcol(
             self, aep, kpi_matrix, period, label, description):
         kpi_matrix.declare_comparison(
+            period.id,
             period.source_cmpcol_to_id.id, period.source_cmpcol_from_id.id,
             label, description)
 
@@ -564,9 +563,8 @@ class MisReportInstance(models.Model):
                 date_to = self._format_date(period.date_to)
                 description = _('from %s to %s') % (date_from, date_to)
             self._add_column(aep, kpi_matrix, period, period.name, description)
-            for comparison_column in period.comparison_column_ids:
-                kpi_matrix.declare_comparison(period.id, comparison_column.id)
         kpi_matrix.compute_comparisons()
+        kpi_matrix.compute_sums()
         return kpi_matrix
 
     @api.multi

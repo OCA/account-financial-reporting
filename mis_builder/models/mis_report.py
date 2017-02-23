@@ -174,7 +174,8 @@ class KpiMatrix(object):
         self._cols = OrderedDict()
         # { col_key (left of comparison): [(col_key, base_col_key)] }
         self._comparison_todo = defaultdict(list)
-        self._comparison_cols = defaultdict(list)
+        # { col_key (left of sum): (col_key, [(sign, sum_col_key)])
+        self._sum_todo = {}
         # { account_id: account_name }
         self._account_names = {}
 
@@ -190,33 +191,44 @@ class KpiMatrix(object):
                     locals_dict, subkpis):
         """ Declare a new column, giving it an identifier (key).
 
-        Invoke this and declare_comparison in display order.
+        Invoke the declare_* methods in display order.
         """
         col = KpiMatrixCol(label, description, locals_dict, subkpis)
         self._cols[col_key] = col
         return col
 
-    def declare_comparison(self, col_key, base_col_key,
-                           label=None, description=None):
+    def declare_comparison(self, cmpcol_key, col_key, base_col_key,
+                           label, description=None):
         """ Declare a new comparison column.
 
-        Invoke this and declare_col in display order.
+        Invoke the declare_* methods in display order.
         """
-        last_col_key = list(self._cols.keys())[-1]
-        self._comparison_todo[last_col_key].append(
-            (col_key, base_col_key, label, description))
+        self._comparison_todo[cmpcol_key] = \
+            (col_key, base_col_key, label, description)
+        self._cols[cmpcol_key] = None  # reserve slot in insertion order
+
+    def declare_sum(self, sumcol_key, col_to_sum_keys,
+                    label, description=None):
+        """ Declare a new summation column.
+
+        Invoke the declare_* methods in display order.
+        :param col_to_sum_keys: [(sign, col_key)]
+        """
+        self._sum_todo[sumcol_key] = \
+            (col_to_sum_keys, label, description)
+        self._cols[sumcol_key] = None  # reserve slot in insertion order
 
     def set_values(self, kpi, col_key, vals,
-                   drilldown_args):
+                   drilldown_args, tooltips=True):
         """ Set values for a kpi and a colum.
 
         Invoke this after declaring the kpi and the column.
         """
         self.set_values_detail_account(kpi, col_key, None, vals,
-                                       drilldown_args)
+                                       drilldown_args, tooltips)
 
     def set_values_detail_account(self, kpi, col_key, account_id, vals,
-                                  drilldown_args):
+                                  drilldown_args, tooltips=True):
         """ Set values for a kpi and a column and a detail account.
 
         Invoke this after declaring the kpi and the column.
@@ -242,11 +254,11 @@ class KpiMatrix(object):
             else:
                 val_rendered = self._style_model.render(
                     self.lang, row.style_props, kpi.type, val)
-                if subcol.subkpi:
+                if row.kpi.multi and subcol.subkpi:
                     val_comment = u'{}.{} = {}'.format(
                         row.kpi.name,
                         subcol.subkpi.name,
-                        row.kpi._get_expression_for_subkpi(subcol.subkpi))
+                        row.kpi._get_expression_str_for_subkpi(subcol.subkpi))
                 else:
                     val_comment = u'{} = {}'.format(
                         row.kpi.name,
@@ -268,67 +280,126 @@ class KpiMatrix(object):
                             [row.style_props, style[0]])
                     else:
                         _logger.error("Style '%s' not found.", style_name)
-            cell = KpiMatrixCell(row, subcol, val, val_rendered, val_comment,
+            cell = KpiMatrixCell(row, subcol, val, val_rendered,
+                                 tooltips and val_comment or None,
                                  cell_style_props, drilldown_arg)
             cell_tuple.append(cell)
         assert len(cell_tuple) == col.colspan
         col._set_cell_tuple(row, cell_tuple)
+
+    def _common_subkpis(self, cols):
+        if not cols:
+            return set()
+        common_subkpis = set(cols[0].subkpis)
+        for col in cols[1:]:
+            common_subkpis = common_subkpis & set(col.subkpis)
+        return common_subkpis
 
     def compute_comparisons(self):
         """ Compute comparisons.
 
         Invoke this after setting all values.
         """
-        for pos_col_key, comparisons in self._comparison_todo.items():
-            for col_key, base_col_key, label, description in comparisons:
-                col = self._cols[col_key]
-                base_col = self._cols[base_col_key]
-                common_subkpis = set(col.subkpis) & set(base_col.subkpis)
-                if (col.subkpis or base_col.subkpis) and not common_subkpis:
-                    raise UserError(_('Columns {} and {} are not comparable').
-                                    format(col.description,
-                                           base_col.description))
-                if not label:
-                    label = u'{} vs {}'.\
-                        format(col.label, base_col.label)
-                comparison_col = KpiMatrixCol(label, description, {},
-                                              sorted(common_subkpis,
-                                                     key=lambda s: s.sequence))
-                for row in self.iter_rows():
-                    cell_tuple = col.get_cell_tuple_for_row(row)
-                    base_cell_tuple = base_col.get_cell_tuple_for_row(row)
-                    if cell_tuple is None and base_cell_tuple is None:
-                        continue
+        for cmpcol_key, (col_key, base_col_key, label, description) in \
+                self._comparison_todo.items():
+            col = self._cols[col_key]
+            base_col = self._cols[base_col_key]
+            common_subkpis = self._common_subkpis([col, base_col])
+            if (col.subkpis or base_col.subkpis) and not common_subkpis:
+                raise UserError(_('Columns {} and {} are not comparable').
+                                format(col.description,
+                                       base_col.description))
+            if not label:
+                label = u'{} vs {}'.\
+                    format(col.label, base_col.label)
+            comparison_col = KpiMatrixCol(label, description, {},
+                                          sorted(common_subkpis,
+                                                 key=lambda s: s.sequence))
+            self._cols[cmpcol_key] = comparison_col
+            for row in self.iter_rows():
+                cell_tuple = col.get_cell_tuple_for_row(row)
+                base_cell_tuple = base_col.get_cell_tuple_for_row(row)
+                if cell_tuple is None and base_cell_tuple is None:
+                    continue
+                if cell_tuple is None:
+                    vals = [AccountingNone] * \
+                        (len(common_subkpis) or 1)
+                else:
+                    vals = [cell.val for cell in cell_tuple
+                            if not common_subkpis or
+                            cell.subcol.subkpi in common_subkpis]
+                if base_cell_tuple is None:
+                    base_vals = [AccountingNone] * \
+                        (len(common_subkpis) or 1)
+                else:
+                    base_vals = [cell.val for cell in base_cell_tuple
+                                 if not common_subkpis or
+                                 cell.subcol.subkpi in common_subkpis]
+                comparison_cell_tuple = []
+                for val, base_val, comparison_subcol in \
+                        izip(vals,
+                             base_vals,
+                             comparison_col.iter_subcols()):
+                    # TODO FIXME average factors
+                    delta, delta_r, style_r = \
+                        self._style_model.compare_and_render(
+                            self.lang, row.style_props,
+                            row.kpi.type, row.kpi.compare_method,
+                            val, base_val, 1, 1)
+                    comparison_cell_tuple.append(KpiMatrixCell(
+                        row, comparison_subcol, delta, delta_r, None,
+                        style_r, None))
+                comparison_col._set_cell_tuple(row, comparison_cell_tuple)
+
+    def compute_sums(self):
+        """ Compute comparisons.
+
+        Invoke this after setting all values.
+        """
+        for sumcol_key, (col_to_sum_keys, label, description) in \
+                self._sum_todo.items():
+            sumcols = [self._cols[k] for (sign, k) in col_to_sum_keys]
+            # TODO check all sumcols are resolved; we need a kind of
+            #      recompute queue here so we don't depend on insertion
+            #      order
+            common_subkpis = self._common_subkpis(sumcols)
+            if any(c.subkpis for c in sumcols) and not common_subkpis:
+                raise UserError(_('Sum cannot be computed in column {} '
+                                  'because the columns to sum have no '
+                                  'common subkpis').format(label))
+            sum_col = KpiMatrixCol(label, description, {},
+                                   sorted(common_subkpis,
+                                          key=lambda s: s.sequence))
+            self._cols[sumcol_key] = sum_col
+            for row in self.iter_rows():
+                if row.kpi.accumulation_method != ACC_SUM:
+                    continue
+                if row.account_id:
+                    # skip account detail rows, because it makes
+                    # no sense when we do sums like budget minus actuals,
+                    # where budget has no data on account detail rows
+                    # TODO we could be smarter here but it will do for now
+                    continue
+                acc = SimpleArray(
+                    [AccountingNone] * (len(common_subkpis) or 1))
+                for sign, col_to_sum in col_to_sum_keys:
+                    cell_tuple = self._cols[col_to_sum].\
+                        get_cell_tuple_for_row(row)
                     if cell_tuple is None:
-                        vals = [AccountingNone] * \
-                            (len(common_subkpis) or 1)
+                        vals = \
+                            [AccountingNone] * (len(common_subkpis) or 1)
                     else:
                         vals = [cell.val for cell in cell_tuple
                                 if not common_subkpis or
                                 cell.subcol.subkpi in common_subkpis]
-                    if base_cell_tuple is None:
-                        base_vals = [AccountingNone] * \
-                            (len(common_subkpis) or 1)
+                    if sign == '+':
+                        acc += SimpleArray(vals)
                     else:
-                        base_vals = [cell.val for cell in base_cell_tuple
-                                     if not common_subkpis or
-                                     cell.subcol.subkpi in common_subkpis]
-                    comparison_cell_tuple = []
-                    for val, base_val, comparison_subcol in \
-                            izip(vals,
-                                 base_vals,
-                                 comparison_col.iter_subcols()):
-                        # TODO FIXME average factors
-                        delta, delta_r, style_r = \
-                            self._style_model.compare_and_render(
-                                self.lang, row.style_props,
-                                row.kpi.type, row.kpi.compare_method,
-                                val, base_val, 1, 1)
-                        comparison_cell_tuple.append(KpiMatrixCell(
-                            row, comparison_subcol, delta, delta_r, None,
-                            style_r, None))
-                    comparison_col._set_cell_tuple(row, comparison_cell_tuple)
-                self._comparison_cols[pos_col_key].append(comparison_col)
+                        acc -= SimpleArray(vals)
+                self.set_values_detail_account(
+                    row.kpi, sumcol_key, row.account_id, acc,
+                    [None] * (len(common_subkpis) or 1),
+                    tooltips=False)
 
     def iter_rows(self):
         """ Iterate rows in display order.
@@ -349,8 +420,6 @@ class KpiMatrix(object):
         """
         for col_key, col in self._cols.items():
             yield col
-            for comparison_col in self._comparison_cols[col_key]:
-                yield comparison_col
 
     def iter_subcols(self):
         """ Iterate sub columns in display order.
@@ -604,6 +673,10 @@ class MisReportKpi(models.Model):
         elif self.type == TYPE_STR:
             self.compare_method = CMP_NONE
             self.accumulation_method = ACC_NONE
+
+    def _get_expression_str_for_subkpi(self, subkpi):
+        e = self._get_expression_for_subkpi(subkpi)
+        return e and e.name or ''
 
     def _get_expression_for_subkpi(self, subkpi):
         for expression in self.expression_ids:

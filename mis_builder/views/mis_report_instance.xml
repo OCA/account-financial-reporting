@@ -219,9 +219,6 @@
                                        domain="[('report_id', '=', parent.report_id)]"
                                        widget="many2many_tags"/>
                                 <field name="normalize_factor"/>
-                                <field name="comparison_column_ids"
-                                       domain="[('report_instance_id', '=', report_instance_id), ('id', '!=', id)]"
-                                       widget="many2many_tags"/>
                             </group>
                         </page>
                     </notebook>
