@@ -5,13 +5,16 @@
 from odoo import api, fields, models
 
 
+SRC_MIS_BUDGET = 'mis_budget'
+
+
 class MisReportInstancePeriod(models.Model):
 
     _inherit = 'mis.report.instance.period'
 
     source = fields.Selection(
         selection_add=[
-            ('mis_budget', 'MIS Budget'),
+            (SRC_MIS_BUDGET, 'MIS Budget'),
         ],
     )
     source_mis_budget = fields.Many2one(

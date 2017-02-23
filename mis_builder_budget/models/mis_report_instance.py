@@ -2,11 +2,12 @@
 # Copyright 2017 ACSONE SA/NV
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import models
+from odoo import api, models
 from odoo.osv import expression
 
 from odoo.addons.mis_builder.models.accounting_none import AccountingNone
 from odoo.addons.mis_builder.models.mis_safe_eval import mis_safe_eval
+from .mis_report_instance_period import SRC_MIS_BUDGET
 
 
 class MisReportInstance(models.Model):
@@ -37,7 +38,10 @@ class MisReportInstance(models.Model):
                 if expr:
                     if expr.kpi_id.budgetable:
                         val = kpi_data.get(expr, AccountingNone)
-                        # TODO drilldown
+                        drilldown_arg = {
+                            'period_id': period.id,
+                            'expr_id': expr.id,
+                        }
                     elif expr.name:
                         val = mis_safe_eval(expr.name, locals_dict)
                 vals.append(val)
@@ -49,9 +53,37 @@ class MisReportInstance(models.Model):
             locals_dict, eval_expressions, None)
 
     def _add_column(self, aep, kpi_matrix, period, label, description):
-        if period.source == 'mis_budget':
+        if period.source == SRC_MIS_BUDGET:
             return self._add_column_mis_budget(
                 aep, kpi_matrix, period, label, description)
         else:
             return super(MisReportInstance, self)._add_column(
                 aep, kpi_matrix, period, label, description)
+
+    @api.multi
+    def drilldown(self, arg):
+        self.ensure_one()
+        period_id = arg.get('period_id')
+        if period_id:
+            period = self.env['mis.report.instance.period'].browse(period_id)
+            if period.source == SRC_MIS_BUDGET:
+                expr_id = arg.get('expr_id')
+                if not expr_id:
+                    return False
+                domain = [
+                    ('date_from', '<=', period.date_to),
+                    ('date_to', '>=', period.date_from),
+                    ('kpi_expression_id', '=', expr_id),
+                ]
+                domain.extend(period._get_additional_budget_item_filter())
+                return {
+                    'name': period.name,
+                    'domain': domain,
+                    'type': 'ir.actions.act_window',
+                    'res_model': 'mis.budget.item',
+                    'views': [[False, 'list'], [False, 'form']],
+                    'view_type': 'list',
+                    'view_mode': 'list',
+                    'target': 'current',
+                }
+        return super(MisReportInstance, self).drilldown(arg)
