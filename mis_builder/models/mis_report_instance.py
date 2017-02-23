@@ -223,7 +223,6 @@ class MisReportInstancePeriod(models.Model):
         if self.date_range_id:
             self.manual_date_from = self.date_range_id.date_start
             self.manual_date_to = self.date_range_id.date_end
-            self.name = self.date_range_id.name
 
     @api.onchange('manual_date_from', 'manual_date_to')
     def _onchange_dates(self):

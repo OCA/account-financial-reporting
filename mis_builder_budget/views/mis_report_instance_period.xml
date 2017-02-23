@@ -10,11 +10,11 @@
         <field name="model">mis.report.instance.period</field>
         <field name="inherit_id" ref="mis_builder.mis_report_instance_period_view_form"/>
         <field name="arch" type="xml">
-            <field name="source" position="after">
+            <group name="source_data" position="inside">
                 <field name="source_mis_budget"
                        attrs="{'invisible': [('source', '!=', 'mis_budget')], 'required': [('source', '=', 'mis_budget')]}"
-                       domain="[('report_id', '=', report_id), ('id', '!=', id)]"/>
-            </field>
+                       domain="[('report_id', '=', report_id)]"/>
+            </group>
         </field>
     </record>
 
