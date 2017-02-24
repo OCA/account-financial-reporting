@@ -244,6 +244,8 @@ class AccountingExpressionProcessor(object):
         """
         if not aml_model:
             aml_model = self.company.env['account.move.line']
+        else:
+            aml_model = self.company.env[aml_model]
         # {(domain, mode): {account_id: (debit, credit)}}
         self._data = defaultdict(dict)
         domain_by_mode = {}

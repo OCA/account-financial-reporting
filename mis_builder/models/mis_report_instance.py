@@ -516,7 +516,7 @@ class MisReportInstance(models.Model):
             period.subkpi_ids,
             period._get_additional_move_line_filter,
             period._get_additional_query_filter,
-            aml_model=period.source_aml_model_id)
+            aml_model=period.source_aml_model_id.model)
 
     def _add_column_sumcol(
             self, aep, kpi_matrix, period, label, description):
