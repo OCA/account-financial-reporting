@@ -61,6 +61,19 @@ class MisBudgetItem(models.Model):
                         rec.date_to != rec.date_range_id.date_end:
                     rec.date_range_id = False
 
+    @api.multi
+    def _prepare_overlap_domain(self):
+        """Prepare a domain to check for overlapping budget items."""
+        self.ensure_one()
+        return [
+            ('date_from', '<=', self.date_to),
+            ('date_to', '>=', self.date_from),
+            ('budget_id', '=', self.budget_id.id),
+            ('kpi_expression_id', '=', self.kpi_expression_id.id),
+            ('analytic_account_id', '=', self.analytic_account_id.id),
+            ('id', '!=', self.id),
+        ]
+
     @api.constrains('date_range_id', 'date_from', 'date_to',
                     'budget_id', 'kpi_expression_id')
     def _check_dates(self):
@@ -77,25 +90,9 @@ class MisBudgetItem(models.Model):
                     _("%s is not within budget %s date range.") %
                     (rec.name, rec.budget_id.name))
             # overlaps
-            sql = """
-                SELECT
-                    id
-                FROM
-                    mis_budget_item bi
-                WHERE
-                    DATERANGE(bi.date_from, bi.date_to, '[]') &&
-                        DATERANGE(%s::date, %s::date, '[]')
-                    AND bi.id != %s
-                    AND bi.budget_id = %s
-                    AND bi.kpi_expression_id = %s
-                LIMIT 1
-            """
-            self.env.cr.execute(sql, (rec.date_from, rec.date_to, rec.id,
-                                      rec.budget_id.id,
-                                      rec.kpi_expression_id.id))
-            res = self.env.cr.fetchall()
+            domain = rec._prepare_overlap_domain()
+            res = self.search(domain, limit=1)
             if res:
-                bi = self.browse(res[0][0])
                 raise ValidationError(
                     _("%s overlaps %s in budget %s") %
-                    (rec.name, bi.name, rec.budget_id.name))
+                    (rec.name, res.name, rec.budget_id.name))
