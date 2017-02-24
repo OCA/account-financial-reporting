@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-17 12:52+0000\n"
-"PO-Revision-Date: 2017-02-17 12:52+0000\n"
+"POT-Creation-Date: 2017-02-17 23:12+0000\n"
+"PO-Revision-Date: 2017-02-17 23:12+0000\n"
 "Last-Translator: Matjaž Mozetič <m.mozetic@matmoz.si>, 2017\n"
 "Language-Team: Slovenian (https://www.transifex.com/oca/teams/23907/sl/)\n"
 "MIME-Version: 1.0\n"
@@ -387,14 +387,14 @@ msgstr "Kumulativni saldo partnerja"
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partners_ledger.mako:126
 #: report:addons/account_financial_report_webkit/report/templates/account_report_print_journal.mako:98
 msgid "Curr."
-msgstr ""
+msgstr "Tekoč."
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:121
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partners_ledger.mako:124
 #: report:addons/account_financial_report_webkit/report/templates/account_report_print_journal.mako:96
 msgid "Curr. Balance"
-msgstr ""
+msgstr "Tekoča bilanca"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_open_invoices.mako:67
@@ -1033,7 +1033,7 @@ msgstr ""
 #: model:ir.ui.menu,name:account_financial_report_webkit.menu_account_open_invoices
 #: view:open.invoices.webkit:account_financial_report_webkit.account_open_invoices_view_webkit
 msgid "Open Invoices"
-msgstr ""
+msgstr "Odprti računi"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/open_invoices.py:68
@@ -1066,33 +1066,33 @@ msgstr "Otvoritveni vnosi"
 #: selection:trial.balance.webkit,comp2_filter:0
 #: selection:trial.balance.webkit,filter:0
 msgid "Opening Only"
-msgstr ""
+msgstr "Samo otvoritev"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/aged_open_invoices.py:57
 #: code:addons/account_financial_report_webkit/report/aged_partner_balance.py:55
 #, python-format
 msgid "Overdue > %s d."
-msgstr ""
+msgstr "Zapade > %s d."
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/aged_open_invoices.py:56
 #: code:addons/account_financial_report_webkit/report/aged_partner_balance.py:54
 #, python-format
 msgid "Overdue ≤ %s d."
-msgstr ""
+msgstr "Zapade ≤ %s d."
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/partner_balance.py:44
 #, python-format
 msgid "PARTNER BALANCE"
-msgstr ""
+msgstr "BILANCA PARTNERJA"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/partners_ledger.py:44
 #, python-format
 msgid "PARTNER LEDGER"
-msgstr ""
+msgstr "GLAVNA KNJIGA PARTNERJA"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/aged_open_invoices.py:106
@@ -1105,7 +1105,7 @@ msgstr ""
 #: code:addons/account_financial_report_webkit/report/trial_balance.py:71
 #, python-format
 msgid "Page"
-msgstr ""
+msgstr "Stran"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:106
@@ -1121,7 +1121,7 @@ msgstr "Partner"
 #: view:partner.balance.webkit:account_financial_report_webkit.account_partner_balance_view_webkit
 #, python-format
 msgid "Partner Balance"
-msgstr ""
+msgstr "Bilanca partnerja"
 
 #. module: account_financial_report_webkit
 #: model:ir.model,name:account_financial_report_webkit.model_partner_balance_webkit
@@ -1131,7 +1131,7 @@ msgstr "Izpis bilance partnerja"
 #. module: account_financial_report_webkit
 #: model:ir.actions.report.xml,name:account_financial_report_webkit.account_report_partner_balance_webkit
 msgid "Partner Balance Webkit"
-msgstr ""
+msgstr "Webkit bilanca partnerja"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/partners_ledger.py:54
@@ -1139,7 +1139,7 @@ msgstr ""
 #: view:partners.ledger.webkit:account_financial_report_webkit.account_partner_ledger_view_webkit
 #, python-format
 msgid "Partner Ledger"
-msgstr ""
+msgstr "Glavna knjiga partnerja"
 
 #. module: account_financial_report_webkit
 #: model:ir.model,name:account_financial_report_webkit.model_partners_ledger_webkit
@@ -1149,7 +1149,7 @@ msgstr "Saldakonti partnerja"
 #. module: account_financial_report_webkit
 #: model:ir.actions.report.xml,name:account_financial_report_webkit.account_report_partners_ledger_webkit
 msgid "Partner Ledger Webkit"
-msgstr ""
+msgstr "Webkit glavna knjiga partnerja"
 
 #. module: account_financial_report_webkit
 #: field:account.aged.trial.balance.webkit,result_selection:0
@@ -1158,7 +1158,7 @@ msgstr ""
 #: field:partner.balance.webkit,result_selection:0
 #: field:partners.ledger.webkit,result_selection:0
 msgid "Partner's"
-msgstr ""
+msgstr "Partnerjevo"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partner_balance.mako:54
@@ -1172,7 +1172,7 @@ msgstr "Filtriranje partnerjev"
 #: view:partner.balance.webkit:account_financial_report_webkit.account_partner_balance_view_webkit
 #: view:partners.ledger.webkit:account_financial_report_webkit.account_partner_ledger_view_webkit
 msgid "Partners Filters"
-msgstr ""
+msgstr "Filtriranje partnerjev"
 
 #. module: account_financial_report_webkit
 #: selection:account.aged.trial.balance.webkit,result_selection:0
@@ -1183,12 +1183,12 @@ msgstr ""
 #: selection:partners.ledger.webkit,result_selection:0
 #, python-format
 msgid "Payable Accounts"
-msgstr ""
+msgstr "Konti obveznosti"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/aged_trial_webkit.mako:141
 msgid "Percents"
-msgstr ""
+msgstr "Odstotki"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:98
@@ -1225,7 +1225,7 @@ msgstr "Obdobja"
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_profit_loss.mako:90
 msgid "Periods : "
-msgstr ""
+msgstr "Obdobja :"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:38
@@ -1243,19 +1243,19 @@ msgstr "Filtriranje obdobij"
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partner_balance.mako:96
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:103
 msgid "Periods Filter:"
-msgstr ""
+msgstr "Filtriranje obdobij:"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/webkit_parser_header_fix.py:223
 #, python-format
 msgid "Please set a header in company settings."
-msgstr ""
+msgstr "Nastavite glavo v nastavitvah družbe."
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/common_reports.py:506
 #, python-format
 msgid "Please set a valid time filter"
-msgstr ""
+msgstr "Nastavite veljaven časovni filter"
 
 #. module: account_financial_report_webkit
 #: view:account.aged.trial.balance.webkit:account_financial_report_webkit.account_aged_trial_balance_webkit
@@ -1266,13 +1266,13 @@ msgstr ""
 #: view:partners.ledger.webkit:account_financial_report_webkit.account_partner_ledger_view_webkit
 #: view:trial.balance.webkit:account_financial_report_webkit.account_trial_balance_view_webkit
 msgid "Print only"
-msgstr ""
+msgstr "Samo natisni"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partners_ledger.mako:115
 #: report:addons/account_financial_report_webkit/report/templates/aged_open_invoices.mako:112
 msgid "Rec."
-msgstr ""
+msgstr "Terj."
 
 #. module: account_financial_report_webkit
 #: selection:account.aged.trial.balance.webkit,result_selection:0
@@ -1283,7 +1283,7 @@ msgstr ""
 #: selection:partners.ledger.webkit,result_selection:0
 #, python-format
 msgid "Receivable Accounts"
-msgstr ""
+msgstr "Konti terjatev"
 
 #. module: account_financial_report_webkit
 #: selection:account.aged.trial.balance.webkit,result_selection:0
@@ -1294,7 +1294,7 @@ msgstr ""
 #: selection:partners.ledger.webkit,result_selection:0
 #, python-format
 msgid "Receivable and Payable Accounts"
-msgstr ""
+msgstr "Konti terjatev in obveznosti"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:108
@@ -1490,7 +1490,7 @@ msgstr ""
 #: view:partners.ledger.webkit:account_financial_report_webkit.account_partner_ledger_view_webkit
 #: view:trial.balance.webkit:account_financial_report_webkit.account_trial_balance_view_webkit
 msgid "Time Filters"
-msgstr ""
+msgstr "Časovni filtri"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_general_ledger.mako:55
@@ -1503,18 +1503,18 @@ msgstr ""
 #: report:addons/account_financial_report_webkit/report/templates/aged_open_invoices.mako:73
 #: report:addons/account_financial_report_webkit/report/templates/aged_trial_webkit.mako:73
 msgid "To:"
-msgstr ""
+msgstr "Za:"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/aged_open_invoices.mako:163
 #: report:addons/account_financial_report_webkit/report/templates/aged_trial_webkit.mako:132
 msgid "Total"
-msgstr ""
+msgstr "Skupaj"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/aged_open_invoices.mako:149
 msgid "Total Partner"
-msgstr ""
+msgstr "Partner skupaj"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/trial_balance.py:56
@@ -1532,7 +1532,7 @@ msgstr "Izpis poskusne bilance"
 #. module: account_financial_report_webkit
 #: model:ir.actions.report.xml,name:account_financial_report_webkit.account_report_trial_balance_webkit
 msgid "Trial Balance Webkit"
-msgstr ""
+msgstr "Webkit poskusna bilanca"
 
 #. module: account_financial_report_webkit
 #: view:account.aged.trial.balance.webkit:account_financial_report_webkit.account_aged_trial_balance_webkit
@@ -1543,7 +1543,7 @@ msgstr ""
 #: view:partners.ledger.webkit:account_financial_report_webkit.account_partner_ledger_view_webkit
 #: view:trial.balance.webkit:account_financial_report_webkit.account_trial_balance_view_webkit
 msgid "True"
-msgstr ""
+msgstr "Pravilno"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_partner_balance.mako:207
@@ -1559,7 +1559,7 @@ msgstr ""
 #: code:addons/account_financial_report_webkit/report/open_invoices.py:212
 #, python-format
 msgid "Unsuported filter"
-msgstr ""
+msgstr "Nepodprt filter"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/webkit_parser_header_fix.py:217
