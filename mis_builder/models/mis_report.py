@@ -778,7 +778,20 @@ class MisReportKpiExpression(models.Model):
             res.append((rec.id, name))
         return res
 
-    # TODO name_search so import can work
+    @api.model
+    def name_search(self, name='', args=None, operator='ilike', limit=100):
+        domain = args or []
+        if '.' in name:
+            kpi_name, subkpi_name = name.split('.', 2)
+            domain += [
+                ('kpi_id.name', '=', kpi_name),
+                ('subkpi_id.name', operator, subkpi_name),
+            ]
+        else:
+            domain += [
+                ('kpi_id.name', operator, name),
+            ]
+        return self.search(domain, limit=limit).name_get()
 
 
 class MisReportQuery(models.Model):
