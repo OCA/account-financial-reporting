@@ -759,7 +759,8 @@ class MisReportKpiExpression(models.Model):
         store=True,
         readonly=True)
     name = fields.Char(string='Expression')
-    kpi_id = fields.Many2one('mis.report.kpi', required=True)
+    kpi_id = fields.Many2one(
+        'mis.report.kpi', required=True, ondelete='cascade')
     # TODO FIXME set readonly=True when onchange('subkpi_ids') below works
     subkpi_id = fields.Many2one(
         'mis.report.subkpi',
