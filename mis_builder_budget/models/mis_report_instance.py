@@ -74,6 +74,7 @@ class MisReportInstance(models.Model):
                     ('date_from', '<=', period.date_to),
                     ('date_to', '>=', period.date_from),
                     ('kpi_expression_id', '=', expr_id),
+                    ('budget_id', '=', period.source_mis_budget.id),
                 ]
                 domain.extend(period._get_additional_budget_item_filter())
                 return {
