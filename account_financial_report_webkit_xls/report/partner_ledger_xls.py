@@ -32,10 +32,11 @@ from openerp.tools.translate import _
 
 _column_sizes = [
     ('date', 12),
-    ('period', 12),
+    ('period', 8),
     ('move', 20),
-    ('journal', 12),
+    ('journal', 8),
     ('partner', 30),
+    ('reference', 15),
     ('label', 58),
     ('rec', 12),
     ('debit', 15),
@@ -88,9 +89,9 @@ class partner_ledger_xls(report_xls):
             ws, row_pos, row_data, set_column_size=True)
 
         # Header Table
-        nbr_columns = 10
+        nbr_columns = 11
         if _p.amount_currency(data):
-            nbr_columns = 12
+            nbr_columns = 13
         cell_format = _xs['bold'] + _xs['fill_blue'] + _xs['borders_all']
         cell_style = xlwt.easyxf(cell_format)
         cell_style_center = xlwt.easyxf(cell_format + _xs['center'])
@@ -184,6 +185,7 @@ class partner_ledger_xls(report_xls):
             ('move', 1, 0, 'text', _('Entry'), None, c_hdr_cell_style),
             ('journal', 1, 0, 'text', _('Journal'), None, c_hdr_cell_style),
             ('partner', 1, 0, 'text', _('Partner'), None, c_hdr_cell_style),
+            ('reference', 1, 0, 'text', _('Reference'), None, c_hdr_cell_style),
             ('label', 1, 0, 'text', _('Label'), None, c_hdr_cell_style),
             ('rec', 1, 0, 'text', _('Rec.'), None, c_hdr_cell_style),
             ('debit', 1, 0, 'text', _('Debit'), None, c_hdr_cell_style_right),
@@ -284,7 +286,7 @@ class partner_ledger_xls(report_xls):
 
                         # Print row 'Initial Balance' by partn
                         c_specs = [('empty%s' % x, 1, 0, 'text', None)
-                                   for x in range(5)]
+                                   for x in range(6)]
                         c_specs += [
                             ('init_bal', 1, 0, 'text', _('Initial Balance')),
                             ('rec', 1, 0, 'text', None),
@@ -322,11 +324,11 @@ class partner_ledger_xls(report_xls):
 
                         if init_line or row_pos > row_start_partner:
                             cumbal_formula = rowcol_to_cell(
-                                row_pos - 1, 9) + '+'
+                                row_pos - 1, 10) + '+'
                         else:
                             cumbal_formula = ''
-                        debit_cell = rowcol_to_cell(row_pos, 7)
-                        credit_cell = rowcol_to_cell(row_pos, 8)
+                        debit_cell = rowcol_to_cell(row_pos, 8)
+                        credit_cell = rowcol_to_cell(row_pos, 9)
                         cumbal_formula += debit_cell + '-' + credit_cell
                         # Print row ledger line data #
 
@@ -348,6 +350,7 @@ class partner_ledger_xls(report_xls):
                             ('journal', 1, 0, 'text', line.get('jcode') or ''),
                             ('partner', 1, 0, 'text',
                              line.get('partner_name') or ''),
+                            ('reference', 1, 0, 'text', line.get('lref') or ''),
                             ('label', 1, 0, 'text', label),
                             ('rec_name', 1, 0, 'text',
                              line.get('rec_name') or ''),
@@ -390,7 +393,7 @@ class partner_ledger_xls(report_xls):
                         '-' + bal_partner_credit
 
                     c_specs = [('empty%s' % x, 1, 0, 'text', None)
-                               for x in range(5)]
+                               for x in range(6)]
                     c_specs += [
                         ('init_bal', 1, 0, 'text',
                          _('Cumulated balance on Partner')),
@@ -426,7 +429,7 @@ class partner_ledger_xls(report_xls):
 
                 #  Print row Cumulated Balance by account #
                 c_specs = [
-                    ('acc_title', 5, 0, 'text', ' - '.
+                    ('acc_title', 6, 0, 'text', ' - '.
                      join([account.code, account.name])), ]
                 c_specs += [
                     ('label', 1, 0, 'text', _('Cumulated balance on Account')),
