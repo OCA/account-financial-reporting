@@ -18,6 +18,7 @@ MisReport.include({
         this._super.apply(this, arguments);
         this.account_analytic_id = false;
         this.analytic_account_initialized = false;
+        this.analytic_account_placeholder = _t("Analytic Account");
     },
 
     get_context: function() {
@@ -43,7 +44,7 @@ MisReport.include({
         });
         self.account_m2o = new FieldMany2One(self.dfm, {
             attrs: {
-                placeholder: _t("Analytic Account"),
+                placeholder: self.analytic_account_placeholder,
                 name: "account",
                 type: "many2one",
                 domain: [],
