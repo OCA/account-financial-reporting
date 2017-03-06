@@ -19,6 +19,7 @@ MisReport.include({
         this.account_analytic_id = false;
         this.analytic_account_initialized = false;
         this.analytic_account_placeholder = _t("Analytic Account");
+        this.analytic_account_domain = [];
     },
 
     get_context: function() {
@@ -26,6 +27,11 @@ MisReport.include({
         var context = this._super.apply(this, arguments);
         context['account_analytic_id'] = this.account_analytic_id;
         return context
+    },
+
+    set_account_analytic_id: function() {
+        var self = this;
+        self.account_analytic_id = self.account_m2o.get_value();
     },
 
     init_fields: function() {
@@ -47,7 +53,7 @@ MisReport.include({
                 placeholder: self.analytic_account_placeholder,
                 name: "account",
                 type: "many2one",
-                domain: [],
+                domain: self.analytic_account_domain,
                 context: {},
                 modifiers: '{}',
             },
@@ -64,7 +70,7 @@ MisReport.include({
         }
         self.account_m2o.prependTo(self.$(".oe_mis_builder_analytic_account"));
         self.account_m2o.$input.focusout(function(){
-            self.account_analytic_id = self.account_m2o.get_value();
+            self.set_account_analytic_id()
         });
     }
 });
