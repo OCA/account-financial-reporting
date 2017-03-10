@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-17 23:12+0000\n"
-"PO-Revision-Date: 2017-02-17 23:12+0000\n"
+"POT-Creation-Date: 2017-02-24 23:14+0000\n"
+"PO-Revision-Date: 2017-02-24 23:14+0000\n"
 "Last-Translator: Matjaž Mozetič <m.mozetic@matmoz.si>, 2017\n"
 "Language-Team: Slovenian (https://www.transifex.com/oca/teams/23907/sl/)\n"
 "MIME-Version: 1.0\n"
@@ -74,7 +74,7 @@ msgstr "Aktiviraj centralizacijo"
 #: view:aged.open.invoices.webkit:account_financial_report_webkit.aged_open_invoice_webkit
 #: model:ir.actions.act_window,name:account_financial_report_webkit.action_account_aged_open_invoice_menu_webkit
 msgid "Aged Open Invoice"
-msgstr ""
+msgstr "Zapadli odprti račun"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/aged_open_invoices.py:84
@@ -82,12 +82,12 @@ msgstr ""
 #: model:ir.ui.menu,name:account_financial_report_webkit.menu_account_aged_open_invoices
 #, python-format
 msgid "Aged Open Invoices"
-msgstr ""
+msgstr "Zapadli odprti računi"
 
 #. module: account_financial_report_webkit
 #: model:ir.actions.report.xml,name:account_financial_report_webkit.account_report_aged_open_invoices_webkit
 msgid "Aged Open Invoices Report"
-msgstr ""
+msgstr "Poročilo o zapadlih odprtih postavkah"
 
 #. module: account_financial_report_webkit
 #: view:account.aged.trial.balance.webkit:account_financial_report_webkit.account_aged_trial_balance_webkit
@@ -96,22 +96,22 @@ msgstr ""
 #: model:ir.actions.report.xml,name:account_financial_report_webkit.account_report_aged_trial_blanance_webkit
 #, python-format
 msgid "Aged Partner Balance"
-msgstr ""
+msgstr "Bilanca zapadlih odprtih postavk"
 
 #. module: account_financial_report_webkit
 #: model:ir.model,name:account_financial_report_webkit.model_aged_open_invoices_webkit
 msgid "Aged open invoices"
-msgstr ""
+msgstr "Zapadli odprti računi"
 
 #. module: account_financial_report_webkit
 #: model:ir.actions.act_window,name:account_financial_report_webkit.action_account_aged_trial_balance_menu_webkit
 msgid "Aged partner balance"
-msgstr ""
+msgstr "Bilanca zapadlih postavk partnerja"
 
 #. module: account_financial_report_webkit
 #: model:ir.model,name:account_financial_report_webkit.model_account_aged_trial_balance_webkit
 msgid "Aged partner balanced"
-msgstr ""
+msgstr "Zapadlosti partnerja usklajene"
 
 #. module: account_financial_report_webkit
 #: selection:account.common.balance.report,display_account:0
@@ -1363,7 +1363,7 @@ msgstr "Začetno obdobje"
 #: code:addons/account_financial_report_webkit/report/trial_balance.py:47
 #, python-format
 msgid "TRIAL BALANCE"
-msgstr ""
+msgstr "POSKUSNA BILANCA"
 
 #. module: account_financial_report_webkit
 #: field:account.aged.trial.balance.webkit,target_move:0
@@ -1410,18 +1410,20 @@ msgid ""
 "The command 'wkhtmltopdf' failed with                                  error"
 " code = %s. Message: %s"
 msgstr ""
+"Ukaz 'wkhtmltopdf' ni uspel s                                  kodo napake ="
+" %s. Sporočilo: %s"
 
 #. module: account_financial_report_webkit
 #: help:account.move.line,last_rec_date:0
 msgid ""
 "The date of the last reconciliation (full or partial) account move line."
-msgstr ""
+msgstr "Datum zadnje uskladitve (polne ali delne) postavke kontnega premika."
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/webkit_parser_header_fix.py:163
 #, python-format
 msgid "The following diagnosis message was provided:\n"
-msgstr ""
+msgstr "Podano je naslednje diagnostično sporočilo:\n"
 
 #. module: account_financial_report_webkit
 #: view:general.ledger.webkit:account_financial_report_webkit.account_report_general_ledger_view_webkit
@@ -1429,6 +1431,8 @@ msgid ""
 "This report allows you to print or generate a pdf of your general ledger "
 "with details of all your account journals"
 msgstr ""
+"To poročilo omogoča ustvarjanje pdf glavne knjige s podrobnostmi vseh "
+"kontnih dnevnikov"
 
 #. module: account_financial_report_webkit
 #: view:open.invoices.webkit:account_financial_report_webkit.account_open_invoices_view_webkit
@@ -1437,6 +1441,9 @@ msgid ""
 "partner with details of all your payable/receivable account. Exclude full "
 "reconciled journal items."
 msgstr ""
+"To poročilo omogoči ustvarjanje pdf odprtih računov po partnerju s "
+"podrobnostmi konta obveznosti/terjatev. Izključene so polno usklajene "
+"dnevniške postavke."
 
 #. module: account_financial_report_webkit
 #: view:partners.ledger.webkit:account_financial_report_webkit.account_partner_ledger_view_webkit
@@ -1444,6 +1451,8 @@ msgid ""
 "This report allows you to print or generate a pdf of your partner ledger "
 "with details of all your payable/receivable account"
 msgstr ""
+"To poročilo omogoča ustvarjanje pdf glavne knjige s podrobnostmi vseh kontov"
+" obveznosti/terjatev"
 
 #. module: account_financial_report_webkit
 #: view:print.journal.webkit:account_financial_report_webkit.account_report_print_journal_view_webkit
@@ -1451,6 +1460,8 @@ msgid ""
 "This report allows you to print or generate a pdf of your print journal with"
 " details of all your account journals"
 msgstr ""
+"To poročilo omogoča ustvarjanje pdf dnevnika tiskanja s podrobnostmi vseh "
+"kontnih dnevnikov"
 
 #. module: account_financial_report_webkit
 #: view:trial.balance.webkit:account_financial_report_webkit.account_trial_balance_view_webkit
@@ -1553,7 +1564,7 @@ msgstr "Ne razporejeno"
 #. module: account_financial_report_webkit
 #: help:general.ledger.webkit,centralize:0
 msgid "Uncheck to display all the details of centralized accounts."
-msgstr ""
+msgstr "Odstrani oznako za prikaz vseh podrobnosti centraliziranih kontov."
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/open_invoices.py:212
@@ -1565,13 +1576,13 @@ msgstr "Nepodprt filter"
 #: code:addons/account_financial_report_webkit/report/webkit_parser_header_fix.py:217
 #, python-format
 msgid "Webkit Report template not found !"
-msgstr ""
+msgstr "Predloga Webkit poročila ni najdena !"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/webkit_parser_header_fix.py:167
 #, python-format
 msgid "Webkit error"
-msgstr ""
+msgstr "Webkit napaka"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/webkit_parser_header_fix.py:247
@@ -1579,7 +1590,7 @@ msgstr ""
 #: code:addons/account_financial_report_webkit/report/webkit_parser_header_fix.py:274
 #, python-format
 msgid "Webkit render"
-msgstr ""
+msgstr "Webkit upodobitev"
 
 #. module: account_financial_report_webkit
 #: constraint:print.journal.webkit:0
@@ -1587,6 +1598,8 @@ msgid ""
 "When no Fiscal year is selected, you must choose"
 "                              to filter by periods or by date."
 msgstr ""
+"Če ni izbranega fiskalnega leta, je potrebno izbrati filter po obdobjih ali "
+"po datumih."
 
 #. module: account_financial_report_webkit
 #: constraint:account.common.balance.report:0
@@ -1596,6 +1609,8 @@ msgid ""
 "When no Fiscal year is selected, you must choose to filter by          "
 "periods or by date."
 msgstr ""
+"Če ni izbranega fiskalnega leta, je potrebno izbrati filter po obdobjih ali "
+"po datumih."
 
 #. module: account_financial_report_webkit
 #: constraint:account.aged.trial.balance.webkit:0
@@ -1605,6 +1620,8 @@ msgid ""
 "When no Fiscal year is selected, you must choose to filter by periods or by "
 "date."
 msgstr ""
+"Če ni izbranega fiskalnega leta, je potrebno izbrati filter po obdobjih ali "
+"po datumih."
 
 #. module: account_financial_report_webkit
 #: field:account.aged.trial.balance.webkit,amount_currency:0
@@ -1622,7 +1639,7 @@ msgstr "Z valuto"
 #: selection:print.journal.webkit,display_account:0
 #: selection:trial.balance.webkit,display_account:0
 msgid "With balance is not equal to 0"
-msgstr ""
+msgstr "Z bilanca je različna od 0"
 
 #. module: account_financial_report_webkit
 #: selection:account.common.balance.report,display_account:0
@@ -1630,25 +1647,25 @@ msgstr ""
 #: selection:print.journal.webkit,display_account:0
 #: selection:trial.balance.webkit,display_account:0
 msgid "With movements"
-msgstr ""
+msgstr "S premiki"
 
 #. module: account_financial_report_webkit
 #: selection:partner.balance.webkit,display_partner:0
 msgid "With non-zero balance"
-msgstr ""
+msgstr "Z bilanca ni 0"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/common_reports.py:75
 #: selection:general.ledger.webkit,display_account:0
 #, python-format
 msgid "With transactions or non zero balance"
-msgstr ""
+msgstr "S transakcijami ali bilanco različno od 0"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_profit_loss.mako:78
 #: report:addons/account_financial_report_webkit/report/templates/account_report_profit_loss.mako:95
 msgid "Yes"
-msgstr ""
+msgstr "Da"
 
 #. module: account_financial_report_webkit
 #: view:account.aged.trial.balance.webkit:account_financial_report_webkit.account_aged_trial_balance_webkit
@@ -1659,7 +1676,7 @@ msgstr ""
 #: view:partners.ledger.webkit:account_financial_report_webkit.account_partner_ledger_view_webkit
 #: view:trial.balance.webkit:account_financial_report_webkit.account_trial_balance_view_webkit
 msgid "[('fiscalyear_id', '=', fiscalyear_id), ('special', '=', False)]"
-msgstr ""
+msgstr "[('fiscalyear_id', '=', fiscalyear_id), ('special', '=', False)]"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/aged_open_invoices.py:106
@@ -1672,30 +1689,30 @@ msgstr ""
 #: code:addons/account_financial_report_webkit/report/trial_balance.py:71
 #, python-format
 msgid "of"
-msgstr ""
+msgstr "od"
 
 #. module: account_financial_report_webkit
 #: view:aged.open.invoices.webkit:account_financial_report_webkit.aged_open_invoice_webkit
 #: view:open.invoices.webkit:account_financial_report_webkit.account_open_invoices_view_webkit
 msgid "onchange_date_to(fiscalyear_id, period_to, date_to, until_date)"
-msgstr ""
+msgstr "onchange_date_to(fiscalyear_id, period_to, date_to, until_date)"
 
 #. module: account_financial_report_webkit
 #: view:account.aged.trial.balance.webkit:account_financial_report_webkit.account_aged_trial_balance_webkit
 #: view:aged.open.invoices.webkit:account_financial_report_webkit.aged_open_invoice_webkit
 #: view:open.invoices.webkit:account_financial_report_webkit.account_open_invoices_view_webkit
 msgid "onchange_fiscalyear(fiscalyear_id, period_to, date_to, until_date)"
-msgstr ""
+msgstr "onchange_fiscalyear(fiscalyear_id, period_to, date_to, until_date)"
 
 #. module: account_financial_report_webkit
 #: view:account.aged.trial.balance.webkit:account_financial_report_webkit.account_aged_trial_balance_webkit
 #: view:aged.open.invoices.webkit:account_financial_report_webkit.aged_open_invoice_webkit
 #: view:open.invoices.webkit:account_financial_report_webkit.account_open_invoices_view_webkit
 msgid "onchange_period_to(fiscalyear_id, period_to, date_to, until_date)"
-msgstr ""
+msgstr "onchange_period_to(fiscalyear_id, period_to, date_to, until_date)"
 
 #. module: account_financial_report_webkit
 #: view:partner.balance.webkit:account_financial_report_webkit.account_partner_balance_view_webkit
 #: view:trial.balance.webkit:account_financial_report_webkit.account_trial_balance_view_webkit
 msgid "{'required': [('filter', '=', 'filter_opening')]}"
-msgstr ""
+msgstr "{'required': [('filter', '=', 'filter_opening')]}"
