@@ -86,6 +86,12 @@ class KpiMatrixRow(object):
         for subcol in subcols:
             yield subcol.get_cell_for_row(self)
 
+    def is_empty(self):
+        for cell in self.iter_cells():
+            if cell and cell.val not in (AccountingNone, None):
+                return False
+        return True
+
 
 class KpiMatrixCol(object):
 
@@ -458,6 +464,8 @@ class KpiMatrix(object):
 
         body = []
         for row in self.iter_rows():
+            if row.style_props.hide_empty and row.is_empty():
+                continue
             row_data = {
                 'row_id': row.row_id,
                 'parent_row_id': (row.parent_row and

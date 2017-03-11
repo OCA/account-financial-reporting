@@ -63,20 +63,22 @@
                   </div>
                 </div>
                 <div class="mis_tbody">
-                  <div t-foreach="matrix.iter_rows()" t-as="row" class="mis_row">
-                    <div t-att-style="style_obj.to_css_style(row.style_props)" class="mis_cell mis_rowlabel">
-                      <t t-esc="row.label"/>
-                      <t t-if="row.description">
-                        <br/>
-                        <t t-esc="row.description"/>
+                  <t t-foreach="matrix.iter_rows()" t-as="row">
+                    <div t-if="not row.style_props.hide_empty or not row.is_empty()" class="mis_row">
+                      <div t-att-style="style_obj.to_css_style(row.style_props)" class="mis_cell mis_rowlabel">
+                        <t t-esc="row.label"/>
+                        <t t-if="row.description">
+                          <br/>
+                          <t t-esc="row.description"/>
+                        </t>
+                      </div>
+                      <t t-foreach="row.iter_cells()" t-as="cell">
+                        <div t-att-style="cell and style_obj.to_css_style(cell.style_props) or ''" class="mis_cell mis_amount">
+                          <t t-esc="cell and cell.val_rendered or ''"/>
+                        </div>
                       </t>
                     </div>
-                    <t t-foreach="row.iter_cells()" t-as="cell">
-                      <div t-att-style="cell and style_obj.to_css_style(cell.style_props) or ''" class="mis_cell mis_amount">
-                        <t t-esc="cell and cell.val_rendered or ''"/>
-                      </div>
-                    </t>
-                  </div>
+                  </t>
                 </div>
               </div>
             </div>
