@@ -184,6 +184,8 @@
                                            options="{'no_create': True, 'no_open': True}"/>
                                 </tree>
                             </field>
+                            <field name="source_sumcol_accdet"
+                                   attrs="{'invisible': [('source', '!=', 'sumcol')]}"/>
                             <field name="source_cmpcol_to_id"
                                    attrs="{'invisible': [('source', '!=', 'cmpcol')], 'required': [('source', '=', 'cmpcol')]}"
                                    domain="[('report_instance_id', '=', report_instance_id), ('id', '!=', id)]"

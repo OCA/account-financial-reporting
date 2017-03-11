@@ -198,6 +198,9 @@ class MisReportInstancePeriod(models.Model):
         inverse_name='period_id',
         string='Columns to sum',
     )
+    source_sumcol_accdet = fields.Boolean(
+        string='Sum account details',
+    )
     source_cmpcol_from_id = fields.Many2one(
         comodel_name='mis.report.instance.period',
         string='versus',
@@ -524,7 +527,7 @@ class MisReportInstance(models.Model):
             period.id,
             [(c.sign, c.period_to_sum_id.id)
              for c in period.source_sumcol_ids],
-            label, description)
+            label, description, period.source_sumcol_accdet)
 
     def _add_column_cmpcol(
             self, aep, kpi_matrix, period, label, description):

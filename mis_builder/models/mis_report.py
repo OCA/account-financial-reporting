@@ -208,14 +208,14 @@ class KpiMatrix(object):
         self._cols[cmpcol_key] = None  # reserve slot in insertion order
 
     def declare_sum(self, sumcol_key, col_to_sum_keys,
-                    label, description=None):
+                    label, description=None, sum_accdet=False):
         """ Declare a new summation column.
 
         Invoke the declare_* methods in display order.
         :param col_to_sum_keys: [(sign, col_key)]
         """
         self._sum_todo[sumcol_key] = \
-            (col_to_sum_keys, label, description)
+            (col_to_sum_keys, label, description, sum_accdet)
         self._cols[sumcol_key] = None  # reserve slot in insertion order
 
     def set_values(self, kpi, col_key, vals,
@@ -356,7 +356,7 @@ class KpiMatrix(object):
 
         Invoke this after setting all values.
         """
-        for sumcol_key, (col_to_sum_keys, label, description) in \
+        for sumcol_key, (col_to_sum_keys, label, description, sum_accdet) in \
                 self._sum_todo.items():
             sumcols = [self._cols[k] for (sign, k) in col_to_sum_keys]
             # TODO check all sumcols are resolved; we need a kind of
@@ -374,11 +374,7 @@ class KpiMatrix(object):
             for row in self.iter_rows():
                 if row.kpi.accumulation_method != ACC_SUM:
                     continue
-                if row.account_id:
-                    # skip account detail rows, because it makes
-                    # no sense when we do sums like budget minus actuals,
-                    # where budget has no data on account detail rows
-                    # TODO we could be smarter here but it will do for now
+                if row.account_id and not sum_accdet:
                     continue
                 acc = SimpleArray(
                     [AccountingNone] * (len(common_subkpis) or 1))
