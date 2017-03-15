@@ -86,11 +86,11 @@ class PartnersOpenInvoicesWebkit(report_sxw.rml_parse,
             ],
         })
 
-    def _group_lines_by_currency(self, account_br):
+    def _group_lines_by_currency(self, account_br, ledger_lines):
         account_br.grouped_ledger_lines = {}
-        if not account_br.ledger_lines:
+        if not ledger_lines:
             return
-        for part_id, plane_lines in account_br.ledger_lines.items():
+        for part_id, plane_lines in ledger_lines.items():
             account_br.grouped_ledger_lines[part_id] = []
             plane_lines.sort(key=itemgetter('currency_code'))
             for curr, lines in groupby(plane_lines,
@@ -174,7 +174,8 @@ class PartnersOpenInvoicesWebkit(report_sxw.rml_parse,
             ledger_lines[account.id] = ledger_lines_memoizer.get(account.id,
                                                                  {})
             if group_by_currency:
-                self._group_lines_by_currency(account)
+                self._group_lines_by_currency(
+                    account, ledger_lines[account.id])
 
         self.localcontext.update({
             'fiscalyear': fiscalyear,
