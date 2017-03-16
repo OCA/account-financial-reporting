@@ -6,7 +6,7 @@ import datetime
 import logging
 
 from odoo import api, fields, models, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, UserError
 
 from .aep import AccountingExpressionProcessor as AEP
 
@@ -78,7 +78,7 @@ class MisReportInstancePeriod(models.Model):
             if not report.comparison_mode:
                 record.date_from = report.date_from
                 record.date_to = report.date_to
-                record.valid = True
+                record.valid = record.date_from and record.date_to
             elif record.mode == MODE_NONE:
                 record.date_from = False
                 record.date_to = False
@@ -86,7 +86,7 @@ class MisReportInstancePeriod(models.Model):
             elif record.mode == MODE_FIX:
                 record.date_from = record.manual_date_from
                 record.date_to = record.manual_date_to
-                record.valid = True
+                record.valid = record.date_from and record.date_to
             elif record.type == 'd':
                 date_from = d + datetime.timedelta(days=record.offset)
                 date_to = date_from + \
@@ -497,6 +497,10 @@ class MisReportInstance(models.Model):
 
     def _add_column_actuals(
             self, aep, kpi_matrix, period, label, description):
+        if not period.date_from or not period.date_to:
+            raise UserError(_("Column %s with actuals source "
+                              "must have from/to dates." %
+                            (period.name,)))
         self.report_id.declare_and_compute_period(
             kpi_matrix,
             period.id,
@@ -512,6 +516,10 @@ class MisReportInstance(models.Model):
 
     def _add_column_actuals_alt(
             self, aep, kpi_matrix, period, label, description):
+        if not period.date_from or not period.date_to:
+            raise UserError(_("Column %s with actuals source "
+                              "must have from/to dates." %
+                            (period.name,)))
         self.report_id.declare_and_compute_period(
             kpi_matrix,
             period.id,
@@ -561,11 +569,12 @@ class MisReportInstance(models.Model):
         aep = self.report_id._prepare_aep(self.company_id)
         kpi_matrix = self.report_id.prepare_kpi_matrix()
         for period in self.period_ids:
-            if period.mode == 'none':
-                description = None
-            elif period.date_from == period.date_to:
+            description = None
+            if period.mode == MODE_NONE:
+                pass
+            elif period.date_from == period.date_to and period.date_from:
                 description = self._format_date(period.date_from)
-            else:
+            elif period.date_from and period.date_to:
                 date_from = self._format_date(period.date_from)
                 date_to = self._format_date(period.date_to)
                 description = _('from %s to %s') % (date_from, date_to)
