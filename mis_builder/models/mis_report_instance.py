@@ -66,7 +66,8 @@ class MisReportInstancePeriod(models.Model):
     @api.depends('report_instance_id.pivot_date',
                  'report_instance_id.comparison_mode',
                  'date_range_type_id',
-                 'type', 'offset', 'duration', 'mode')
+                 'type', 'offset', 'duration', 'mode',
+                 'manual_date_from', 'manual_date_to')
     def _compute_dates(self):
         for record in self:
             record.date_from = False
