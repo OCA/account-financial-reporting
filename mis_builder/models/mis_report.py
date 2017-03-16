@@ -708,7 +708,11 @@ class MisReportSubkpi(models.Model):
     _order = 'sequence'
 
     sequence = fields.Integer()
-    report_id = fields.Many2one('mis.report', required=True, ondelete='cascade')
+    report_id = fields.Many2one(
+        comodel_name='mis.report',
+        required=True,
+        ondelete='cascade',
+    )
     name = fields.Char(size=32, required=True,
                        string='Name')
     description = fields.Char(required=True,
@@ -812,7 +816,8 @@ class MisReportQuery(models.Model):
     name = fields.Char(size=32, required=True,
                        string='Name')
     model_id = fields.Many2one('ir.model', required=True,
-                               string='Model')
+                               string='Model',
+                               ondelete='restrict')
     field_ids = fields.Many2many('ir.model.fields', required=True,
                                  string='Fields to fetch')
     field_names = fields.Char(compute='_compute_field_names',
@@ -825,7 +830,8 @@ class MisReportQuery(models.Model):
     date_field = fields.Many2one('ir.model.fields', required=True,
                                  string='Date field',
                                  domain=[('ttype', 'in',
-                                         ('date', 'datetime'))])
+                                         ('date', 'datetime'))],
+                                 ondelete='restrict')
     domain = fields.Char(string='Domain')
     report_id = fields.Many2one('mis.report', string='Report',
                                 required=True,
