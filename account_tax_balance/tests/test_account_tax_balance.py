@@ -3,6 +3,7 @@
 # © 2016 Giovanni Capalbo <giovanni@therp.nl>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from openerp.fields import Date
 from openerp.tests.common import TransactionCase
 from datetime import datetime
 from dateutil.rrule import MONTHLY
@@ -143,3 +144,34 @@ class TestAccountTaxBalance(TransactionCase):
         self.assertEquals(tax.balance_regular, 10.)
         self.assertEquals(tax.base_balance_refund, -25.)
         self.assertEquals(tax.balance_refund, -2.5)
+
+        # Taxes on liquidity type moves are included
+        liquidity_account_id = self.env['account.account'].search(
+            [('internal_type', '=', 'liquidity')], limit=1).id
+        self.env['account.move'].create({
+            'date': Date.context_today(self.env.user),
+            'journal_id': self.env['account.journal'].search(
+                [('type', '=', 'bank')], limit=1).id,
+            'name': 'Test move',
+            'line_ids': [(0, 0, {
+                'account_id': liquidity_account_id,
+                'debit': 110,
+                'credit': 0,
+                'name': 'Bank Fees',
+            }), (0, 0, {
+                'account_id': invoice_line_account_id,
+                'debit': 0,
+                'credit': 100,
+                'name': 'Bank Fees',
+                'tax_ids': [(4, tax.id)]
+            }), (0, 0, {
+                'account_id': tax.account_id.id,
+                'debit': 0,
+                'credit': 10,
+                'name': 'Bank Fees',
+                'tax_line_id': tax.id,
+            })],
+        }).post()
+        tax.refresh()
+        self.assertEquals(tax.base_balance, 175.)
+        self.assertEquals(tax.balance, 17.5)
