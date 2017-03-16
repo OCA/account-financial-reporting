@@ -18,6 +18,10 @@ SRC_ACTUALS_ALT = 'actuals_alt'
 SRC_CMPCOL = 'cmpcol'
 SRC_SUMCOL = 'sumcol'
 
+MODE_NONE = 'none'
+MODE_FIX = 'fix'
+MODE_REL = 'relative'
+
 
 class MisReportInstancePeriodSum(models.Model):
 
@@ -74,11 +78,11 @@ class MisReportInstancePeriod(models.Model):
                 record.date_from = report.date_from
                 record.date_to = report.date_to
                 record.valid = True
-            elif record.mode == 'none':
+            elif record.mode == MODE_NONE:
                 record.date_from = False
                 record.date_to = False
                 record.valid = True
-            elif record.mode == 'fix':
+            elif record.mode == MODE_FIX:
                 record.date_from = record.manual_date_from
                 record.date_to = record.manual_date_to
                 record.valid = True
@@ -125,11 +129,11 @@ class MisReportInstancePeriod(models.Model):
 
     name = fields.Char(size=32, required=True,
                        string='Label', translate=True)
-    mode = fields.Selection([('fix', 'Fixed dates'),
-                             ('relative', 'Relative to report base date'),
-                             ('none', 'No date filter'),
+    mode = fields.Selection([(MODE_FIX, 'Fixed dates'),
+                             (MODE_REL, 'Relative to report base date'),
+                             (MODE_NONE, 'No date filter'),
                              ], required=True,
-                            default='fix')
+                            default=MODE_FIX)
     type = fields.Selection([('d', _('Day')),
                              ('w', _('Week')),
                              ('date_range', _('Date Range'))
@@ -236,8 +240,8 @@ class MisReportInstancePeriod(models.Model):
 
     @api.onchange('source')
     def _onchange_source(self):
-        if self.source in ('sumcol', 'cmpcol'):
-            self.mode = 'none'
+        if self.source in (SRC_SUMCOL, SRC_CMPCOL):
+            self.mode = MODE_NONE
 
     @api.multi
     def _get_additional_move_line_filter(self):
@@ -270,19 +274,19 @@ class MisReportInstancePeriod(models.Model):
     @api.constrains('mode', 'source')
     def _check_mode_source(self):
         if self.source in (SRC_ACTUALS, SRC_ACTUALS_ALT):
-            if self.mode == 'none':
+            if self.mode == MODE_NONE:
                 raise ValidationError(
                     _("A date filter is mandatory for this source "
                       "in column %s.") % self.name)
-        elif self.source in ('sumcol', 'cmpcol'):
-            if self.mode != 'none':
+        elif self.source in (SRC_SUMCOL, SRC_CMPCOL):
+            if self.mode != MODE_NONE:
                 raise ValidationError(
                     _("No date filter is allowed for this source "
                       "in column %s.") % self.name)
 
     @api.constrains('source', 'source_cmpcol_from_id', 'source_cmpcol_to_id')
     def _check_source_cmpcol(self):
-        if self.source == 'cmpcol':
+        if self.source == SRC_CMPCOL:
             if not self.source_cmpcol_from_id or \
                     not self.source_cmpcol_to_id:
                 raise ValidationError(
