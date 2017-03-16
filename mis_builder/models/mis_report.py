@@ -708,7 +708,7 @@ class MisReportSubkpi(models.Model):
     _order = 'sequence'
 
     sequence = fields.Integer()
-    report_id = fields.Many2one('mis.report', required=True)
+    report_id = fields.Many2one('mis.report', required=True, ondelete='cascade')
     name = fields.Char(size=32, required=True,
                        string='Name')
     description = fields.Char(required=True,
@@ -739,12 +739,6 @@ class MisReportSubkpi(models.Model):
         if self.description and not self.name:
             self.name = _python_var(self.description)
 
-    @api.multi
-    def unlink(self):
-        for subkpi in self:
-            subkpi.expression_ids.unlink()
-        return super(MisReportSubkpi, self).unlink()
-
 
 class MisReportKpiExpression(models.Model):
     """ A KPI Expression is an expression of a line of a MIS report Kpi.
@@ -764,7 +758,8 @@ class MisReportKpiExpression(models.Model):
     # TODO FIXME set readonly=True when onchange('subkpi_ids') below works
     subkpi_id = fields.Many2one(
         'mis.report.subkpi',
-        readonly=False)
+        readonly=False,
+        ondelete='cascade')
 
     _sql_constraints = [
         ('subkpi_kpi_unique', 'unique(subkpi_id, kpi_id)',
