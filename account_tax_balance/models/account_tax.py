@@ -91,7 +91,7 @@ class AccountTax(models.Model):
         if move_type == 'refund':
             return ['receivable_refund', 'payable_refund']
         elif move_type == 'regular':
-            return ['receivable', 'payable']
+            return ['receivable', 'payable', 'liquidity', 'other']
         return []
 
     def get_target_state_list(self, target_move="posted"):
