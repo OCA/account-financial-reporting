@@ -542,7 +542,11 @@ class MisReportKpi(models.Model):
     expression = fields.Char(
         compute='_compute_expression',
         inverse='_inverse_expression')
-    expression_ids = fields.One2many('mis.report.kpi.expression', 'kpi_id')
+    expression_ids = fields.One2many(
+        comodel_name='mis.report.kpi.expression',
+        inverse_name='kpi_id',
+        copy=True,
+    )
     auto_expand_accounts = fields.Boolean(string='Display details by account')
     auto_expand_accounts_style_id = fields.Many2one(
         string="Style for account detail rows",
@@ -923,9 +927,21 @@ class MisReport(models.Model):
     @api.multi
     def copy(self, default=None):
         self.ensure_one()
-        default = dict(default or {})
+        default = dict(default or [])
         default['name'] = _('%s (copy)') % self.name
-        return super(MisReport, self).copy(default)
+        new = super(MisReport, self).copy(default)
+        # after a copy, we have new subkpis, but the expressions
+        # subkpi_id fields still point to the original one, so
+        # we patch them after copying
+        subkpis_by_name = dict((sk.name, sk) for sk in new.subkpi_ids)
+        for subkpi in self.subkpi_ids:
+            # search expressions linked to subkpis of the original report
+            exprs = self.env['mis.report.kpi.expression'].search([
+                ('kpi_id.report_id', '=', new.id),
+                ('subkpi_id', '=', subkpi.id)])
+            # and replace them with references to subkpis of the new report
+            exprs.write({'subkpi_id': subkpis_by_name[subkpi.name].id})
+        return new
 
     # TODO: kpi name cannot be start with query name
 
