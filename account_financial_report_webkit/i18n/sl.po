@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-24 23:14+0000\n"
-"PO-Revision-Date: 2017-02-24 23:14+0000\n"
+"POT-Creation-Date: 2017-03-10 23:14+0000\n"
+"PO-Revision-Date: 2017-03-10 23:14+0000\n"
 "Last-Translator: Matjaž Mozetič <m.mozetic@matmoz.si>, 2017\n"
 "Language-Team: Slovenian (https://www.transifex.com/oca/teams/23907/sl/)\n"
 "MIME-Version: 1.0\n"
@@ -241,21 +241,21 @@ msgstr "Kontni plan"
 #: view:aged.open.invoices.webkit:account_financial_report_webkit.aged_open_invoice_webkit
 #: view:open.invoices.webkit:account_financial_report_webkit.account_open_invoices_view_webkit
 msgid "Clearance Analysis Options"
-msgstr "Opcije analize potrjevanja"
+msgstr "Opcije analize izbrisov"
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_open_invoices.mako:42
 #: report:addons/account_financial_report_webkit/report/templates/aged_open_invoices.mako:58
 #: report:addons/account_financial_report_webkit/report/templates/aged_trial_webkit.mako:58
 msgid "Clearance Date"
-msgstr "Datum potrditve"
+msgstr "Datum izbrisa"
 
 #. module: account_financial_report_webkit
 #: field:account.aged.trial.balance.webkit,until_date:0
 #: field:aged.open.invoices.webkit,until_date:0
 #: field:open.invoices.webkit,until_date:0
 msgid "Clearance date"
-msgstr "Datum potrditve"
+msgstr "Datum izbrisa"
 
 #. module: account_financial_report_webkit
 #: constraint:account.aged.trial.balance.webkit:0
@@ -263,7 +263,7 @@ msgstr "Datum potrditve"
 msgid ""
 "Clearance date must be the very last date of the         last period or "
 "later."
-msgstr "Datum potrditve mora biti zadnji datum zadnjega obdobja ali kasnejši."
+msgstr "Datum izbrisa mora biti zadnji datum zadnjega obdobja ali kasnejši."
 
 #. module: account_financial_report_webkit
 #: report:addons/account_financial_report_webkit/report/templates/account_report_trial_balance.mako:118
@@ -1402,6 +1402,15 @@ msgid ""
 "question : 'based on my last year end debtors open invoices, which invoices\n"
 "are still unpaid today (today is my clearance date)?'\n"
 msgstr ""
+"Datum izbrisa je v bistvu orodje, ki se uporablja za izračun\n"
+"            obresti dolžnikov.\n"
+"\n"
+"Privzeto je ta datum enak končnemu datumu (npr: 31/12/2011 če izberete\n"
+"fiskalno leto fy 2011).\n"
+"\n"
+"S spremembo datuma izbrisa bo npr. mogoče odgovoriti na\n"
+"vprašanje: 'glede na odprte postavke dolžnikov prejšnjega leta, kateri računi\n"
+"do danes še niso bili poravnani (danes je moj datum izbrisa)?'\n"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/webkit_parser_header_fix.py:168
@@ -1470,6 +1479,8 @@ msgid ""
 "allowing you to quickly check the balance of each of your accounts in a "
 "single report"
 msgstr ""
+"To poročilo omogoči ustvarjanje pdf poskusne bilance, da lahko hitro "
+"preverite stanja vseh kontov v enem samem poročilu."
 
 #. module: account_financial_report_webkit
 #: view:partner.balance.webkit:account_financial_report_webkit.account_partner_balance_view_webkit
@@ -1477,6 +1488,8 @@ msgid ""
 "This report is an analysis done by a partner, It is a PDF report containing "
 "one line per partner representing the cumulative credit balance"
 msgstr ""
+"To poročilo je analiza po partnerju. Je PDF poročilo, ki vsebuje po eno "
+"postavko po partnerju, ki predstavlja skupno bilanco terjatev"
 
 #. module: account_financial_report_webkit
 #: view:account.aged.trial.balance.webkit:account_financial_report_webkit.account_aged_trial_balance_webkit
@@ -1484,6 +1497,8 @@ msgid ""
 "This report list partner open balances and indicate when payment is (or was)"
 " supposed to be completed"
 msgstr ""
+"To poročilo je seznam otvoritvenih bilanc partnerja in prikazuje, kdaj je "
+"(naj bi) bilo plačilo izvedeno"
 
 #. module: account_financial_report_webkit
 #: view:aged.open.invoices.webkit:account_financial_report_webkit.aged_open_invoice_webkit
@@ -1491,6 +1506,8 @@ msgid ""
 "This report list partner open invoices and indicate when payment is (or was)"
 " supposed to be completed"
 msgstr ""
+"To poročilo je seznam odprtih postavk in prikazuje kdaj je (naj bi) bilo "
+"plačilo izvedeno"
 
 #. module: account_financial_report_webkit
 #: view:account.aged.trial.balance.webkit:account_financial_report_webkit.account_aged_trial_balance_webkit
