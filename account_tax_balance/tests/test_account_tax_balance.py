@@ -164,12 +164,6 @@ class TestAccountTaxBalance(TransactionCase):
                 'credit': 100,
                 'name': 'Bank Fees',
                 'tax_ids': [(4, tax.id)]
-            }), (0, 0, {
-                'account_id': tax.account_id.id,
-                'debit': 0,
-                'credit': 10,
-                'name': 'Bank Fees',
-                'tax_line_id': tax.id,
             })],
         }).post()
         tax.refresh()
