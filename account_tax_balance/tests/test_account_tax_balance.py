@@ -99,14 +99,14 @@ class TestAccountTaxBalance(TransactionCase):
         # testing buttons
         tax_action = tax.view_tax_lines()
         base_action = tax.view_base_lines()
-        self.assertTrue(
-            tax_action['domain'][0][2][0] in
-            [l.id for l in invoice.move_id.line_ids])
+        tax_action_move_lines = self.env['account.move.line'].\
+            search(tax_action['domain'])
+        self.assertTrue(invoice.move_id.line_ids & tax_action_move_lines)
         self.assertEqual(
             tax_action['xml_id'], 'account.action_account_moves_all_tree')
-        self.assertTrue(
-            base_action['domain'][0][2][0] in
-            [l.id for l in invoice.move_id.line_ids])
+        base_action_move_lines = self.env['account.move.line'].\
+            search(base_action['domain'])
+        self.assertTrue(invoice.move_id.line_ids & base_action_move_lines)
         self.assertEqual(
             base_action['xml_id'], 'account.action_account_moves_all_tree')
 
