@@ -112,13 +112,14 @@ class AccountTax(models.Model):
 
     def compute_balance(self, tax_or_base='tax', move_type=None):
         self.ensure_one()
-        move_lines = self.get_move_lines_domain(
+        domain = self.get_move_lines_domain(
             tax_or_base=tax_or_base, move_type=move_type)
         # balance is debit - credit whereas on tax return you want to see what
         # vat has to be paid so:
         # VAT on sales (credit) - VAT on purchases (debit).
-        total = -sum([l.balance for l in move_lines])
-        return total
+        balance = self.env['account.move.line'].\
+            read_group(domain, ['balance'], [])[0]['balance']
+        return balance and -balance or 0
 
     def get_balance_domain(self, state_list, type_list):
         domain = [
@@ -139,7 +140,6 @@ class AccountTax(models.Model):
         return domain
 
     def get_move_lines_domain(self, tax_or_base='tax', move_type=None):
-        move_line_model = self.env['account.move.line']
         from_date, to_date, company_id, target_move = self.get_context_values()
         state_list = self.get_target_state_list(target_move)
         type_list = self.get_target_type_list(move_type)
@@ -152,16 +152,15 @@ class AccountTax(models.Model):
             balance_domain = self.get_base_balance_domain(
                 state_list, type_list)
         domain.extend(balance_domain)
-        return move_line_model.search(domain)
+        return domain
 
     def get_lines_action(self, tax_or_base='tax', move_type=None):
-        move_lines = self.get_move_lines_domain(
+        domain = self.get_move_lines_domain(
             tax_or_base=tax_or_base, move_type=move_type)
-        move_line_ids = [l.id for l in move_lines]
         action = self.env.ref('account.action_account_moves_all_tree')
         vals = action.read()[0]
         vals['context'] = {}
-        vals['domain'] = [('id', 'in', move_line_ids)]
+        vals['domain'] = domain
         return vals
 
     @api.multi
