@@ -204,7 +204,7 @@
                             <group>
                                 <field name="type" attrs="{'required': [('mode', '=', 'relative')]}"/>
                                 <field name="date_range_type_id"
-                                       attrs="{'invisible': [('type', '!=', 'date_range')], 'required': [('type', '=', 'date_range')]}"/>
+                                       attrs="{'invisible': [('type', '!=', 'date_range')], 'required': [('type', '=', 'date_range'), ('mode', '=', 'relative')]}"/>
                                 <field name="offset"/>
                                 <field name="duration"/>
                             </group>
