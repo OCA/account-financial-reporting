@@ -8,3 +8,10 @@ def migrate(cr, version):
         ALTER TABLE mis_report_kpi
         RENAME COLUMN expression TO old_expression
     """)
+    # this migration to date_range type is partial,
+    # actual date ranges needs to be created manually
+    cr.execute("""
+        UPDATE mis_report_instance_period
+        SET type='date_range'
+        WHERE type='fp'
+    """)
