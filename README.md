@@ -23,6 +23,7 @@ addon | version | summary
 [account_tax_balance](account_tax_balance/) | 10.0.1.0.1 | Compute tax balances based on date range
 [mis_builder](mis_builder/) | 10.0.2.0.2 | Build 'Management Information System' Reports and Dashboards
 
+
 Unported addons
 ---------------
 addon | version | summary
