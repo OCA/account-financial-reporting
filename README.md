@@ -30,6 +30,7 @@ addon | version | summary
 [mis_builder](mis_builder/) | 8.0.1.0.0 | Build 'Management Information System' Reports and Dashboards
 [mis_builder_demo](mis_builder_demo/) | 8.0.1.0.0 | Demo data for the mis_builder module
 
+
 Unported addons
 ---------------
 addon | version | summary
