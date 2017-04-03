@@ -96,6 +96,11 @@ class TestAccountTaxBalance(TransactionCase):
         self.assertEqual(
             action['xml_id'], 'account_tax_balance.action_tax_balances_tree')
 
+        # exercise search has_moves = True
+        taxes = self.env['account.tax'].search([('has_moves', '=', True)])
+        self.assertEqual(len(taxes), 1)
+        self.assertEqual(taxes[0].name, u"Tax 10.0%")
+
         # testing buttons
         tax_action = tax.view_tax_lines()
         base_action = tax.view_base_lines()
