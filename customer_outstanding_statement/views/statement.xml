@@ -9,14 +9,16 @@
                         <span t-raw="o._address_display(None, None)[o.id].replace('\n\n', '\n').replace('\n', '&lt;br&gt;')"/>
                         <span t-field="o.vat"/>
                     </div>
+                    <h4 style="padding-left:20em">
+                        Outstanding Statement
+                    </h4>
                     <p>
-                        Document: Customer outstanding statement<br/>
                         Date: <span t-esc="Date[o.id]" /><br/>
                         <t t-if="o.ref">Partner ref: <span t-field="o.ref"/></t>
                     </p>
 
                     <t t-if="Lines[o.id]">
-                        <br/> <br/>
+                        <br/>
                         <t t-foreach="Lines[o.id]" t-as="currency">
                             <br t-if="not currency_first" />
                             <p>
