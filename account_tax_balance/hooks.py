@@ -56,7 +56,8 @@ def store_field_move_type(cr):
         ON acc.id = aml.account_id
         where aml.move_id = am.id
         and acc.internal_type ='payable' 
-        and aml.balance < 0)
+        group by aml.move_id
+        having sum(aml.balance) < 0)
         and am.move_type is null;
         """
     )
@@ -70,8 +71,9 @@ def store_field_move_type(cr):
         INNER JOIN account_account acc
         ON acc.id = aml.account_id
         where aml.move_id = am.id
-        and acc.internal_type ='payable' 
-        and aml.balance >= 0)
+        and acc.internal_type ='payable'
+        group by aml.move_id
+        having sum(aml.balance) >= 0)
         and am.move_type is null;
         """
     )
@@ -86,7 +88,8 @@ def store_field_move_type(cr):
         ON acc.id = aml.account_id
         where aml.move_id = am.id
         and acc.internal_type ='receivable' 
-        and aml.balance > 0)
+        group by aml.move_id
+        having sum(aml.balance) > 0)
         and am.move_type is null;
         """
     )
@@ -101,7 +104,8 @@ def store_field_move_type(cr):
         ON acc.id = aml.account_id
         where aml.move_id = am.id
         and acc.internal_type ='receivable' 
-        and aml.balance <= 0)
+        group by aml.move_id
+        having sum(aml.balance) <= 0)
         and am.move_type is null;
         """
     )
