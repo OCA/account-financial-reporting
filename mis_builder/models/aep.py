@@ -107,7 +107,7 @@ class AccountingExpressionProcessor(object):
                 self._account_ids_by_code[code].add(account.id)
         for like_code in like_codes:
             for account in account_model.\
-                    search([('code', 'like', like_code),
+                    search([('code', '=like', like_code),
                             ('parent_id', 'child_of', root_account.id)]):
                 if account.type in ('view', 'consolidation'):
                     self._account_ids_by_code[like_code].update(

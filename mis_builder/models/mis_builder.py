@@ -332,15 +332,23 @@ class MisReport(models.Model):
                 domain.extend([(query.date_field.name, '>=', datetime_from),
                                (query.date_field.name, '<', datetime_to)])
             field_names = [f.name for f in query.field_ids]
+            all_stored = all([model._fields[f].store for f in field_names])
             if not query.aggregate:
                 data = model.search_read(domain, field_names)
                 res[query.name] = [AutoStruct(**d) for d in data]
-            elif query.aggregate == 'sum':
+            elif query.aggregate == 'sum' and all_stored:
+                # use read_group to sum stored fields
                 data = model.read_group(
                     domain, field_names, [])
                 s = AutoStruct(count=data[0]['__count'])
                 for field_name in field_names:
-                    v = data[0][field_name]
+                    try:
+                        v = data[0][field_name]
+                    except KeyError:
+                        _logger.error('field %s not found in read_group '
+                                      'for %s; not summable?',
+                                      field_name, model._name)
+                        v = AccountingNone
                     setattr(s, field_name, v)
                 res[query.name] = s
             else:
@@ -352,6 +360,8 @@ class MisReport(models.Model):
                     agg = _max
                 elif query.aggregate == 'avg':
                     agg = _avg
+                elif query.aggregate == 'sum':
+                    agg = _sum
                 for field_name in field_names:
                     setattr(s, field_name,
                             agg([d[field_name] for d in data]))
