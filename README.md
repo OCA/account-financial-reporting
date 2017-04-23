@@ -22,6 +22,7 @@ addon | version | summary
 [account_financial_report_horizontal](account_financial_report_horizontal/) | 9.0.0.0.0 | Accounting Financial Reports Horizontal
 [account_financial_report_qweb](account_financial_report_qweb/) | 9.0.1.0.2 | OCA Financial Reports
 [account_tax_balance](account_tax_balance/) | 9.0.1.1.0 | Compute tax balances based on date range
+[customer_outstanding_statement](customer_outstanding_statement/) | 9.0.1.0.0 | OCA Financial Reports
 [mis_builder](mis_builder/) | 9.0.2.0.2 | Build 'Management Information System' Reports and Dashboards
 
 
