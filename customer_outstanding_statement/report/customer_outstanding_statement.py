@@ -107,9 +107,14 @@ class CustomerOutstandingStatement(models.AbstractModel):
     def _show_buckets_sql_q1(self, partners, date_end):
         return """
             SELECT l.partner_id, l.currency_id, l.company_id, l.move_id,
-            l.balance - sum(coalesce(pr.amount, 0.0)) as open_due,
-            l.amount_currency - sum(coalesce(pr.amount_currency, 0.0))
-                                AS open_due_currency,
+            CASE WHEN l.balance > 0.0
+                THEN l.balance - sum(coalesce(pd.amount, 0.0))
+                ELSE l.balance + sum(coalesce(pc.amount, 0.0))
+            END AS open_due,
+            CASE WHEN l.balance > 0.0
+                THEN l.amount_currency - sum(coalesce(pd.amount_currency, 0.0))
+                ELSE l.amount_currency + sum(coalesce(pc.amount_currency, 0.0))
+            END AS open_due_currency,
             CASE WHEN l.date_maturity is null
                 THEN l.date
                 ELSE l.date_maturity
@@ -117,21 +122,24 @@ class CustomerOutstandingStatement(models.AbstractModel):
             FROM account_move_line l
             JOIN account_account_type at ON (at.id = l.user_type_id)
             JOIN account_move m ON (l.move_id = m.id)
-            LEFT JOIN (
-                SELECT pr.*
+            LEFT JOIN (SELECT pr.*
                 FROM account_partial_reconcile pr
                 INNER JOIN account_move_line l2
                 ON pr.credit_move_id = l2.id
                 WHERE l2.date <= '%s'
-            ) as pr
-            ON pr.debit_move_id = l.id
+            ) as pd ON pd.debit_move_id = l.id
+            LEFT JOIN (SELECT pr.*
+                FROM account_partial_reconcile pr
+                INNER JOIN account_move_line l2
+                ON pr.debit_move_id = l2.id
+                WHERE l2.date <= '%s'
+            ) as pc ON pc.credit_move_id = l.id
             WHERE l.partner_id IN (%s) AND at.type = 'receivable'
                                 AND not l.reconciled AND not l.blocked
-                                AND l.balance > 0.0
             GROUP BY l.partner_id, l.currency_id, l.date, l.date_maturity,
                                 l.amount_currency, l.balance, l.move_id,
                                 l.company_id
-        """ % (date_end, partners)
+        """ % (date_end, date_end, partners)
 
     def _show_buckets_sql_q2(self, today, minus_30, minus_60, minus_90,
                              minus_120):
