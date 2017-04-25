@@ -6,7 +6,7 @@
 {
     'name': 'Customer Outstanding Statement',
     'version': '9.0.1.0.0',
-    'category': 'Reports/pdf',
+    'category': 'Accounting & Finance',
     'summary': 'OCA Financial Reports',
     'author': "Eficent, Odoo Community Association (OCA)",
     'website': 'https://github.com/OCA/account-financial-reporting',
