@@ -34,7 +34,7 @@
                 ],
     "category": "Accounting",
     "description": """
-Multiporpuse Accounting report generator.
+Multipurpose Accounting report generator.
 =========================================
 
 From the wizard you will be asked to provide information needed to create your
