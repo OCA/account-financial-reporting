@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-30 13:02+0000\n"
-"PO-Revision-Date: 2016-12-30 13:02+0000\n"
+"POT-Creation-Date: 2017-04-27 17:33+0000\n"
+"PO-Revision-Date: 2017-04-27 17:33+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2016\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -603,7 +603,7 @@ msgid ""
 msgstr ""
 
 #. module: account_financial_report_webkit
-#: code:addons/account_financial_report_webkit/report/open_invoices.py:213
+#: code:addons/account_financial_report_webkit/report/open_invoices.py:214
 #, python-format
 msgid ""
 "Filter has to be in filter date, period,                                  or"
@@ -1566,7 +1566,7 @@ msgid "Uncheck to display all the details of centralized accounts."
 msgstr "Décocher pour afficher ne pas activer la centralisation des comptes."
 
 #. module: account_financial_report_webkit
-#: code:addons/account_financial_report_webkit/report/open_invoices.py:212
+#: code:addons/account_financial_report_webkit/report/open_invoices.py:213
 #, python-format
 msgid "Unsuported filter"
 msgstr "Filtre non supporté"

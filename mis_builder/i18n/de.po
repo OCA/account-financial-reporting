@@ -3,14 +3,14 @@
 # * mis_builder
 # 
 # Translators:
-# Rudolf Schnapka <rs@techno-flex.de>, 2017
+# OCA Transbot <transbot@odoo-community.org>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-13 23:18+0000\n"
-"PO-Revision-Date: 2017-01-13 23:18+0000\n"
-"Last-Translator: Rudolf Schnapka <rs@techno-flex.de>, 2017\n"
+"POT-Creation-Date: 2017-04-27 17:33+0000\n"
+"PO-Revision-Date: 2017-04-27 17:33+0000\n"
+"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2017\n"
 "Language-Team: German (https://www.transifex.com/oca/teams/23907/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,13 +20,13 @@ msgstr ""
 
 #. module: mis_builder
 #: code:addons/mis_builder/models/mis_builder.py:290
-#: code:addons/mis_builder/models/mis_builder.py:724
+#: code:addons/mis_builder/models/mis_builder.py:734
 #, python-format
 msgid "%s (copy)"
 msgstr "%s (Kopie)"
 
 #. module: mis_builder
-#: code:addons/mis_builder/models/mis_builder.py:859
+#: code:addons/mis_builder/models/mis_builder.py:869
 #, python-format
 msgid "%s vs %s"
 msgstr "%s vs. %s"
@@ -189,7 +189,7 @@ msgid "Date field"
 msgstr ""
 
 #. module: mis_builder
-#: code:addons/mis_builder/models/mis_builder.py:556
+#: code:addons/mis_builder/models/mis_builder.py:566
 #: selection:mis.report.instance.period,type:0
 #, python-format
 msgid "Day"
@@ -277,7 +277,7 @@ msgid "Fields to fetch"
 msgstr ""
 
 #. module: mis_builder
-#: code:addons/mis_builder/models/mis_builder.py:558
+#: code:addons/mis_builder/models/mis_builder.py:568
 #: selection:mis.report.instance.period,type:0
 #, python-format
 msgid "Fiscal Period"
@@ -600,7 +600,7 @@ msgid "Valid"
 msgstr ""
 
 #. module: mis_builder
-#: code:addons/mis_builder/models/mis_builder.py:557
+#: code:addons/mis_builder/models/mis_builder.py:567
 #: selection:mis.report.instance.period,type:0
 #, python-format
 msgid "Week"
@@ -617,7 +617,7 @@ msgid "Wrong normalize factor, it must be positive!"
 msgstr ""
 
 #. module: mis_builder
-#: code:addons/mis_builder/models/mis_builder.py:839
+#: code:addons/mis_builder/models/mis_builder.py:849
 #, python-format
 msgid "from %s to %s"
 msgstr ""
