@@ -95,7 +95,8 @@ class KpiMatrixRow(object):
 
 class KpiMatrixCol(object):
 
-    def __init__(self, label, description, locals_dict, subkpis):
+    def __init__(self, key, label, description, locals_dict, subkpis):
+        self.key = key
         self.label = label
         self.description = description
         self.locals_dict = locals_dict
@@ -199,7 +200,7 @@ class KpiMatrix(object):
 
         Invoke the declare_* methods in display order.
         """
-        col = KpiMatrixCol(label, description, locals_dict, subkpis)
+        col = KpiMatrixCol(col_key, label, description, locals_dict, subkpis)
         self._cols[col_key] = col
         return col
 
@@ -318,7 +319,7 @@ class KpiMatrix(object):
             if not label:
                 label = u'{} vs {}'.\
                     format(col.label, base_col.label)
-            comparison_col = KpiMatrixCol(label, description, {},
+            comparison_col = KpiMatrixCol(cmpcol_key, label, description, {},
                                           sorted(common_subkpis,
                                                  key=lambda s: s.sequence))
             self._cols[cmpcol_key] = comparison_col
@@ -373,7 +374,7 @@ class KpiMatrix(object):
                 raise UserError(_('Sum cannot be computed in column {} '
                                   'because the columns to sum have no '
                                   'common subkpis').format(label))
-            sum_col = KpiMatrixCol(label, description, {},
+            sum_col = KpiMatrixCol(sumcol_key, label, description, {},
                                    sorted(common_subkpis,
                                           key=lambda s: s.sequence))
             self._cols[sumcol_key] = sum_col

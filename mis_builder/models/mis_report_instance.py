@@ -565,6 +565,11 @@ class MisReportInstance(models.Model):
 
     @api.multi
     def _compute_matrix(self):
+        """ Compute a report and return a KpiMatrix.
+
+        The key attribute of the matrix columns (KpiMatrixCol)
+        is guaranteed to be the id of the mis.report.instance.period.
+        """
         self.ensure_one()
         aep = self.report_id._prepare_aep(self.company_id)
         kpi_matrix = self.report_id.prepare_kpi_matrix()
