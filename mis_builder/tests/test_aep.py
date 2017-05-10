@@ -79,6 +79,8 @@ class TestAEP(common.TransactionCase):
         self.aep.parse_expr("balp[400AR]")
         self.aep.parse_expr("debp[400A%]")
         self.aep.parse_expr("crdp[700I%]")
+        self.aep.parse_expr("bali[400%]")
+        self.aep.parse_expr("bale[700%]")
         self.aep.parse_expr("bal_700IN")  # deprecated
         self.aep.parse_expr("bals[700IN]")  # deprecated
         self.aep.done_parsing()
@@ -224,3 +226,17 @@ class TestAEP(common.TransactionCase):
             time.strftime('%Y') + '-03-15',
             'posted')
         self.assertEquals(unallocated, (0, 100))
+
+    def test_get_account_ids_for_expr(self):
+        expr = 'balp[700IN]'
+        account_ids = self.aep.get_account_ids_for_expr(expr)
+        self.assertEquals(
+            account_ids, set([self.account_in.id]))
+        expr = 'balp[700%]'
+        account_ids = self.aep.get_account_ids_for_expr(expr)
+        self.assertEquals(
+            account_ids, set([self.account_in.id]))
+        expr = 'bali[400%], bale[700%]'  # subkpis combined expression
+        account_ids = self.aep.get_account_ids_for_expr(expr)
+        self.assertEquals(
+            account_ids, set([self.account_in.id, self.account_ar.id]))

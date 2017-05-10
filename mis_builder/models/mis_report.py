@@ -1237,3 +1237,16 @@ class MisReport(models.Model):
         self._declare_and_compute_col(
             kpi_matrix, col_key, col_label, col_description, subkpis_filter,
             locals_dict, eval_expressions, eval_expressions_by_account)
+
+    def get_kpis_by_account_id(self, company):
+        """ Return { account_id: set(kpi) } """
+        aep = self._prepare_aep(company)
+        res = defaultdict(set)
+        for kpi in self.kpi_ids:
+            for expression in kpi.expression_ids:
+                if not expression.name:
+                    continue
+                account_ids = aep.get_account_ids_for_expr(expression.name)
+                for account_id in account_ids:
+                    res[account_id].add(kpi)
+        return res

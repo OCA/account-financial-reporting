@@ -164,6 +164,18 @@ class AccountingExpressionProcessor(object):
         """Test if an string contains an accounting variable."""
         return bool(cls._ACC_RE.search(expr))
 
+    def get_account_ids_for_expr(self, expr):
+        """ Get a set of account ids that are involved in an expression.
+
+        Prerequisite: done_parsing() must have been invoked.
+        """
+        account_ids = set()
+        for mo in self._ACC_RE.finditer(expr):
+            field, mode, account_codes, domain = self._parse_match_object(mo)
+            for account_code in account_codes:
+                account_ids.update(self._account_ids_by_code[account_code])
+        return account_ids
+
     def get_aml_domain_for_expr(self, expr,
                                 date_from, date_to,
                                 target_move,

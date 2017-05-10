@@ -42,7 +42,7 @@ class TestMisReportInstance(common.TransactionCase):
             ))],
         ))
         # kpi with accounting formulas
-        self.env['mis.report.kpi'].create(dict(
+        self.kpi1 = self.env['mis.report.kpi'].create(dict(
             report_id=self.report.id,
             description='kpi 1',
             name='k1',
@@ -56,7 +56,7 @@ class TestMisReportInstance(common.TransactionCase):
             ))],
         ))
         # kpi with accounting formula and query
-        self.env['mis.report.kpi'].create(dict(
+        self.kpi2 = self.env['mis.report.kpi'].create(dict(
             report_id=self.report.id,
             description='kpi 2',
             name='k2',
@@ -139,3 +139,14 @@ class TestMisReportInstance(common.TransactionCase):
                                 'mis.report.instance.xlsx',
                                 [self.report_instance.id],
                                 report_type='xlsx')
+
+    def test_get_kpis_by_account_id(self):
+        account_ids = self.env['account.account'].\
+            search([('code', '=like', '200%')]).\
+            mapped('id')
+        kpi200 = set([self.kpi1, self.kpi2])
+        res = self.report.get_kpis_by_account_id(
+            self.env.ref('base.main_company'))
+        for account_id in account_ids:
+            self.assertTrue(account_id in res)
+            self.assertEquals(res[account_id], kpi200)
