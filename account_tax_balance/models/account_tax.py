@@ -132,6 +132,7 @@ class AccountTax(models.Model):
         # balance is debit - credit whereas on tax return you want to see what
         # vat has to be paid so:
         # VAT on sales (credit) - VAT on purchases (debit).
+
         balance = self.env['account.move.line'].\
             read_group(domain, ['balance'], [])[0]['balance']
         return balance and -balance or 0
@@ -140,6 +141,7 @@ class AccountTax(models.Model):
         domain = [
             ('move_id.state', 'in', state_list),
             ('tax_line_id', '=', self.id),
+            ('tax_exigible', '=', True)
         ]
         if type_list:
             domain.append(('move_id.move_type', 'in', type_list))
@@ -149,6 +151,7 @@ class AccountTax(models.Model):
         domain = [
             ('move_id.state', 'in', state_list),
             ('tax_ids', 'in', self.id),
+            ('tax_exigible', '=', True)
         ]
         if type_list:
             domain.append(('move_id.move_type', 'in', type_list))
