@@ -32,7 +32,7 @@
                         <field name="receivable_accounts_only"/>
                         <field name="payable_accounts_only"/>
                     </group>
-                    <field name="account_ids" nolabel="1" options="{'no_create': True}"/>
+                    <field name="account_ids" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
                 </div>
                 <div attrs="{'invisible': [('not_only_one_unaffected_earnings_account', '=', False)]}">
                     <field name="not_only_one_unaffected_earnings_account" invisible="1"/>
