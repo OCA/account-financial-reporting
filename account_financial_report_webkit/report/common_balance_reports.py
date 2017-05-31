@@ -23,6 +23,7 @@
 from operator import add
 
 from .common_reports import CommonReportHeaderWebkit
+from openerp import tools
 
 
 class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
@@ -87,6 +88,12 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
         elif main_filter == 'filter_date':
             ctx.update({'date_from': start,
                         'date_to': stop})
+
+        # in tests (when installing and testing at the same time),
+        # the read below might fail because it relies on the order
+        # given by parent_store
+        if tools.config['test_enable']:
+            account_obj._parent_store_compute(self.cursor)
 
         accounts = account_obj.read(
             self.cursor,
