@@ -111,12 +111,13 @@ class AccountCSVExport(models.TransientModel):
         }
 
     def _get_header_account(self):
-        return [_(u'CODE'),
-                _(u'NAME'),
-                _(u'DEBIT'),
-                _(u'CREDIT'),
-                _(u'BALANCE'),
-                ]
+        return [
+            _(u'CODE'),
+            _(u'NAME'),
+            _(u'DEBIT'),
+            _(u'CREDIT'),
+            _(u'BALANCE'),
+        ]
 
     def _get_rows_account(self, journal_ids):
         """
@@ -165,14 +166,15 @@ class AccountCSVExport(models.TransientModel):
         }
 
     def _get_header_analytic(self):
-        return [_(u'ANALYTIC CODE'),
-                _(u'ANALYTIC NAME'),
-                _(u'CODE'),
-                _(u'ACCOUNT NAME'),
-                _(u'DEBIT'),
-                _(u'CREDIT'),
-                _(u'BALANCE'),
-                ]
+        return [
+            _(u'ANALYTIC CODE'),
+            _(u'ANALYTIC NAME'),
+            _(u'CODE'),
+            _(u'ACCOUNT NAME'),
+            _(u'DEBIT'),
+            _(u'CREDIT'),
+            _(u'BALANCE'),
+        ]
 
     def _get_rows_analytic(self, journal_ids):
         """
@@ -348,6 +350,5 @@ class AccountCSVExport(models.TransientModel):
             j_obj = self.env["account.journal"]
             journal_ids = j_obj.search([]).ids
         rows = itertools.chain((get_header_func(),),
-                               get_rows_func(journal_ids)
-                               )
+                               get_rows_func(journal_ids))
         return rows
