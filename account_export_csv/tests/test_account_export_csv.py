@@ -39,4 +39,3 @@ class TestAccountExportCsv(TransactionCase):
             'date_end': self.report_date_end
         })
         report_wizard.action_manual_export_journal_entries()
-
