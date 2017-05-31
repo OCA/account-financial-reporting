@@ -3,7 +3,7 @@
 -
     !python {model: account.account}: |
         ctx = {}
-        fiscalyear_id = self.pool['account.fiscalyear'].search(cr, uid, [])[0]
+        fiscalyear_id = ref('account.data_fiscalyear')
         wizard = self.pool['account.print.journal.xls']
         period_ids = wizard.fy_period_ids(cr, uid, fiscalyear_id)
         data_dict = {'chart_account_id': ref('account.chart0'),
@@ -29,7 +29,7 @@
 -
     !python {model: account.account}: |
         ctx = {}
-        fiscalyear_id = self.pool['account.fiscalyear'].search(cr, uid, [])[0]
+        fiscalyear_id = ref('account.data_fiscalyear')
         wizard = self.pool['account.print.journal.xls']
         period_ids = wizard.fy_period_ids(cr, uid, fiscalyear_id)
         data_dict = {'chart_account_id': ref('account.chart0'),
@@ -56,7 +56,7 @@
 -
     !python {model: account.account}: |
         ctx = {}
-        fiscalyear_id = self.pool['account.fiscalyear'].search(cr, uid, [])[0]
+        fiscalyear_id = ref('account.data_fiscalyear')
         wizard = self.pool['account.print.journal.xls']
         period_ids = wizard.fy_period_ids(cr, uid, fiscalyear_id)
         data_dict = {'chart_account_id': ref('account.chart0'),
@@ -83,7 +83,7 @@
 -
     !python {model: account.account}: |
         ctx = {}
-        fiscalyear_id = self.pool['account.fiscalyear'].search(cr, uid, [])[0]
+        fiscalyear_id = ref('account.data_fiscalyear')
         wizard = self.pool['account.print.journal.xls']
         period_ids = wizard.fy_period_ids(cr, uid, fiscalyear_id)
         data_dict = {'chart_account_id': ref('account.chart0'),
