@@ -165,6 +165,7 @@ Contributors
 * Nicolas Bessi
 * Guewen Baconnier
 * David Dufresne <david.dufresne@savoirfairelinux.com>
+* Daniel Rodriguez <drl.9319@gmail.com>
 
 Maintainer
 ----------

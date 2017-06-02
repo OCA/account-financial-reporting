@@ -254,7 +254,9 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
         target_move = self._get_form_param('target_move', data, default='all')
         start_date = self._get_form_param('date_from', data)
         stop_date = self._get_form_param('date_to', data)
+        breakdown_partner = self._get_form_param('breakdown_partner', data)
         chart_account = self._get_chart_account_id_br(data)
+
 
         start_period, stop_period, start, stop = \
             self._get_start_stop_for_filter(main_filter, fiscalyear,
@@ -298,6 +300,7 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
         credit_accounts = dict.fromkeys(account_ids, False)
         balance_accounts = dict.fromkeys(account_ids, False)
 
+        accounts_partner = {}
         for account in objects:
             if account.type == 'consolidation':
                 to_display_accounts.update(
@@ -342,6 +345,50 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
                 {account.id: display_account and
                  to_display_accounts[account.id]})
 
+        if breakdown_partner:
+             if len(account.code) > 1 and account.code[:2] in ['40', '41', '43']:
+                if target_move == 'all':
+                    query = """SELECT SUM(l.credit) AS CREDIT, SUM(l.debit)
+                                AS DEBIT, SUM(l.debit-l.credit) AS BALANCE,
+                                  (SELECT p.name
+                                   FROM res_partner p
+                                   WHERE p.id = l.partner_id)AS PARTNER,
+                                  (SELECT SUM(aml.debit-aml.credit)
+                                   FROM account_move_line aml
+                                   WHERE aml.account_id = """ + str(account.id) +"""
+                                   AND aml.date < '"""+str(start)+"""'::date
+                                   AND aml.partner_id = l.partner_id) AS INITIAL_BALANCE
+                                  FROM account_move_line l
+                                  WHERE (l.date <= '"""+str(stop)+"""'::date AND l.date >= '"""+str(start)+"""'::date)
+                                  AND l.partner_id IS NOT NULL
+                                  AND l.account_id = """ + str(account.id) +"""
+                                  GROUP BY l.partner_id
+                                  """
+
+                else:
+                    query = """SELECT SUM(l.credit) AS CREDIT, SUM(l.debit) AS DEBIT, SUM(l.debit-l.credit) AS BALANCE,
+                                  (SELECT p.name
+                                   FROM res_partner p
+                                   WHERE p.id = l.partner_id)AS PARTNER,
+                                  (SELECT SUM(aml.debit-aml.credit)
+                                   FROM account_move_line aml
+                                   WHERE aml.account_id = """ + str(account.id) +"""
+                                   AND aml.date < '"""+str(start)+"""'::date
+                                   AND aml.partner_id = l.partner_id) AS INITIAL_BALANCE
+                                  FROM account_move_line l
+                                  WHERE (l.date <= '"""+str(stop)+"""'::date AND l.date >= '"""+str(start)+"""'::date)
+                                  AND (SELECT am.state
+                                       FROM account_move am
+                                       WHERE am.id = l.move_id) = 'posted'
+                                  AND l.partner_id IS NOT NULL
+                                  AND l.account_id = """ + str(account.id) +"""
+                                  GROUP BY l.partner_id
+                                  """
+
+                self.cursor.execute(query)
+                account_partner_group = self.cursor.fetchall()
+                accounts_partner.update({account.id: account_partner_group})
+
         context_report_values = {
             'fiscalyear': fiscalyear,
             'start_date': start_date,
@@ -360,6 +407,7 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
             'debit_accounts': debit_accounts,
             'credit_accounts': credit_accounts,
             'balance_accounts': balance_accounts,
+            'accounts_partner': accounts_partner,
         }
 
         return objects, new_ids, context_report_values

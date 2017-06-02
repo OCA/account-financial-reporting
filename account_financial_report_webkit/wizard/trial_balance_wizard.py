@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from openerp.osv import orm
+from openerp.osv import orm, fields
 
 
 class AccountTrialBalanceWizard(orm.TransientModel):
@@ -28,6 +28,21 @@ class AccountTrialBalanceWizard(orm.TransientModel):
     _inherit = "account.common.balance.report"
     _name = "trial.balance.webkit"
     _description = "Trial Balance Report"
+
+    _columns = {
+        'breakdown_partner': fields.boolean('Breakdown for partner',
+            help="If you select this option in Trial balance report the "
+            "account 43.., 40... and 41.. is breakdown for Partner"),
+    }
+
+    def pre_print_report(self, cr, uid, ids, data, context=None):
+        vals = {}
+        data = super(AccountTrialBalanceWizard, self).pre_print_report(
+            cr, uid, ids, data, context=context)
+        report_data = self.browse(cr, uid, ids)
+        vals['breakdown_partner'] = report_data.breakdown_partner
+        data['form'].update(vals)
+        return data
 
     def _print_report(self, cursor, uid, ids, data, context=None):
         context = context or {}
