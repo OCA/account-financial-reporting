@@ -200,7 +200,7 @@
                                 <div class="act_as_cell amount">${formatLang(comp_account['balance']) | amount}</div>
                                 %if comparison_mode == 'single':  ## no diff in multiple comparisons because it shows too data
                                     <div class="act_as_cell amount">${formatLang(comp_account['diff']) | amount}</div>
-                                    <div class="act_as_cell amount"> 
+                                    <div class="act_as_cell amount">
                                     %if comp_account['percent_diff'] is False:
                                      ${ '-' }
                                     %else:
@@ -211,6 +211,30 @@
                             %endfor
                         %endif
                     </div>
+                    ## view partner details
+                    %if current_account.id in accounts_partner:
+                        %for partner in accounts_partner[current_account.id]:
+                          <div class="act_as_row">
+                              ## code
+                              <div class="act_as_cell first_column"> </div>
+                              ## account name
+                              <div class="act_as_cell"> ${partner[3]}</div>
+                              %if comparison_mode == 'no_comparison':
+                                  %if initial_balance_mode:
+                                      ## opening balance
+                                      <div class="act_as_cell amount">${formatLang(partner[4])}</div>
+                                  %endif
+                                  ## debit
+                                  <div class="act_as_cell amount">${formatLang(partner[1])}</div>
+                                  ## credit
+                                  <div class="act_as_cell amount">${formatLang(partner[0])}</div>
+                              %endif
+                              ## balance
+                              <div class="act_as_cell amount">${formatLang(partner[2])}</div>
+                          </div>
+                        %endfor
+                    %endif
+                    ## End partner details
                 %endfor
             </div>
         </div>
