@@ -222,7 +222,7 @@
                               %if comparison_mode == 'no_comparison':
                                   %if initial_balance_mode:
                                       ## opening balance
-                                      <div class="act_as_cell amount">${formatLang(partner[4])}</div>
+                                      <div class="act_as_cell amount"></div>
                                   %endif
                                   ## debit
                                   <div class="act_as_cell amount">${formatLang(partner[1])}</div>

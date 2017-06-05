@@ -347,6 +347,15 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
             if breakdown_partner:
                 if len(account.code) > 1 and \
                         account.code[:2] in ['40', '41', '43']:
+
+                    # If the filter is period
+                    if main_filter != 'filter_date':
+                        partner_start_date = start.date_start
+                        partner_stop_date = stop.date_stop
+                    else:
+                        partner_start_date = start
+                        partner_stop_date = stop
+
                     if target_move == 'all':
                         query = """SELECT SUM(l.credit) AS CREDIT, SUM(l.debit)
                                     AS DEBIT, SUM(l.debit-l.credit) AS BALANCE,
@@ -357,13 +366,15 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
                                        FROM account_move_line aml
                                        WHERE aml.account_id =
                                        """ + str(account.id) + """
-                                       AND aml.date < '"""+str(start)+"""'::date
+                                       AND aml.date < '"""\
+                                        + str(partner_start_date)+"""'::date
                                        AND aml.partner_id = l.partner_id)
                                        AS INITIAL_BALANCE
                                       FROM account_move_line l
                                       WHERE (l.date <=
-                                        '"""+str(stop)+"""'::date AND
-                                        l.date >= '"""+str(start)+"""'::date)
+                                     '"""+str(partner_stop_date)+"""'::date AND
+                                        l.date >= '"""\
+                                        + str(partner_start_date)+"""'::date)
                                       AND l.partner_id IS NOT NULL
                                       AND l.account_id =
                                         """ + str(account.id) + """
@@ -380,12 +391,15 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
                                        FROM account_move_line aml
                                        WHERE aml.account_id =
                                             """ + str(account.id) + """
-                                       AND aml.date < '"""+str(start)+"""'::date
+                                       AND aml.date < '"""\
+                                       + str(partner_start_date)+"""'::date
                                        AND aml.partner_id = l.partner_id)
                                             AS INITIAL_BALANCE
                                       FROM account_move_line l
-                                      WHERE (l.date <= '"""+str(stop)+"""'::date
-                                       AND l.date >= '"""+str(start)+"""'::date)
+                                      WHERE (l.date <= '"""\
+                                      + str(partner_stop_date)+"""'::date
+                                       AND l.date >= '"""\
+                                       + str(partner_start_date)+"""'::date)
                                       AND (SELECT am.state
                                            FROM account_move am
                                            WHERE am.id = l.move_id) = 'posted'
