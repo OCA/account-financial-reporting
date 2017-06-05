@@ -31,8 +31,10 @@ class AccountTrialBalanceWizard(orm.TransientModel):
 
     _columns = {
         'breakdown_partner': fields.boolean('Breakdown for partner',
-            help="If you select this option in Trial balance report the "
-            "account 43.., 40... and 41.. is breakdown for Partner"),
+                                            help="If you select this option "
+                                            "in Trial balance report the "
+                                            "account 43.., 40... and 41.. is "
+                                            "breakdown for Partner"),
     }
 
     def pre_print_report(self, cr, uid, ids, data, context=None):
