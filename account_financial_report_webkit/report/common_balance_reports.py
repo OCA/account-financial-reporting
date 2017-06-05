@@ -257,7 +257,6 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
         breakdown_partner = self._get_form_param('breakdown_partner', data)
         chart_account = self._get_chart_account_id_br(data)
 
-
         start_period, stop_period, start, stop = \
             self._get_start_stop_for_filter(main_filter, fiscalyear,
                                             start_date, stop_date,
@@ -357,7 +356,7 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
                                       (SELECT SUM(aml.debit-aml.credit)
                                        FROM account_move_line aml
                                        WHERE aml.account_id =
-                                       """ + str(account.id) +"""
+                                       """ + str(account.id) + """
                                        AND aml.date < '"""+str(start)+"""'::date
                                        AND aml.partner_id = l.partner_id)
                                        AS INITIAL_BALANCE
@@ -367,7 +366,7 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
                                         l.date >= '"""+str(start)+"""'::date)
                                       AND l.partner_id IS NOT NULL
                                       AND l.account_id =
-                                        """ + str(account.id) +"""
+                                        """ + str(account.id) + """
                                       GROUP BY l.partner_id
                                       """
 
@@ -380,7 +379,7 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
                                       (SELECT SUM(aml.debit-aml.credit)
                                        FROM account_move_line aml
                                        WHERE aml.account_id =
-                                            """ + str(account.id) +"""
+                                            """ + str(account.id) + """
                                        AND aml.date < '"""+str(start)+"""'::date
                                        AND aml.partner_id = l.partner_id)
                                             AS INITIAL_BALANCE
@@ -392,12 +391,14 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
                                            WHERE am.id = l.move_id) = 'posted'
                                       AND l.partner_id IS NOT NULL
                                       AND l.account_id =
-                                            """ + str(account.id) +"""
+                                            """ + str(account.id) + """
                                       GROUP BY l.partner_id
                                       """
                     self.cursor.execute(query)
                     account_partner_group = self.cursor.fetchall()
-                    accounts_partner.update({account.id: account_partner_group})
+                    accounts_partner.update({
+                        account.id: account_partner_group
+                        })
         context_report_values = {
             'fiscalyear': fiscalyear,
             'start_date': start_date,
