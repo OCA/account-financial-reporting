@@ -91,6 +91,7 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
         stop_period = self.get_end_period_br(data)
         fiscalyear = self.get_fiscalyear_br(data)
         chart_account = self._get_chart_account_id_br(data)
+        group_by_partner = self._get_form_param('group_by_partner', data)
 
         if main_filter == 'filter_no':
             start_period = self.get_first_fiscalyear_period(fiscalyear)
@@ -125,6 +126,7 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
 
         init_balance = {}
         ledger_lines = {}
+        clients_dict = {}
         for account in objects:
             if do_centralize and account.centralized \
                     and ledger_lines_memoizer.get(account.id):
@@ -135,6 +137,30 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
                     account.id, [])
             init_balance[account.id] = init_balance_memoizer.get(account.id,
                                                                  {})
+        if group_by_partner:
+            partner_account_ids = self.pool.get('account.account').search(
+                self.cursor,
+                self.uid,
+                ['|', ('code', 'like', '40'),
+                 '|', ('code', 'like', '41'),
+                 ('code', 'like', '43')])
+            partner_account_ids = self.pool.get('account.account').browse(
+                self.cursor,
+                self.uid,
+                partner_account_ids)
+            for partner_account_id in partner_account_ids:
+                clients_dict[partner_account_id.id] = {}
+                if partner_account_id.id in ledger_lines:
+                    for move_line in ledger_lines[partner_account_id.id]:
+                        if move_line['partner_name'] not in\
+                                clients_dict[partner_account_id.id]:
+                            clients_dict[
+                                partner_account_id.id][
+                                move_line['partner_name']] = [move_line]
+                        else:
+                            clients_dict[
+                                partner_account_id.id][
+                                move_line['partner_name']].append(move_line)
 
         self.localcontext.update({
             'fiscalyear': fiscalyear,
@@ -146,6 +172,7 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
             'initial_balance_mode': initial_balance_mode,
             'init_balance': init_balance,
             'ledger_lines': ledger_lines,
+            'clients_dict': clients_dict,
         })
 
         return super(GeneralLedgerWebkit, self).set_context(

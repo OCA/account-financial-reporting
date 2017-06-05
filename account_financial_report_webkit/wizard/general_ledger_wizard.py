@@ -54,7 +54,14 @@ class AccountReportGeneralLedgerWizard(orm.TransientModel):
                     print all accounts."""),
         'centralize': fields.boolean(
             'Activate Centralization',
-            help='Uncheck to display all the details of centralized accounts.')
+            help='Uncheck to display all the details '
+            'of centralized accounts.'),
+
+        'group_by_partner': fields.boolean('Group by partner',
+                                           help="If you select this option "
+                                           "in General ledger report the "
+                                           "account 43.., 40... and 41.. is "
+                                           "group by Partner"),
     }
     _defaults = {
         'amount_currency': False,
@@ -85,7 +92,8 @@ class AccountReportGeneralLedgerWizard(orm.TransientModel):
                          ['amount_currency',
                           'display_account',
                           'account_ids',
-                          'centralize'],
+                          'centralize',
+                          'group_by_partner'],
                          context=context)[0]
         data['form'].update(vals)
         return data
