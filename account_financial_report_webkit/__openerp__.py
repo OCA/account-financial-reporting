@@ -24,6 +24,7 @@
     'author': (
         "Camptocamp,"
         "Savoir-faire Linux,"
+        "Praxya,"
         "Odoo Community Association (OCA)"
     ),
     'license': 'AGPL-3',
