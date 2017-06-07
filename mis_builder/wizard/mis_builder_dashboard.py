@@ -35,7 +35,7 @@ class AddMisReportInstanceDashboard(models.TransientModel):
         self.env.ref('mis_builder.mis_report_instance_result_view_form')
         view = self.env.ref(
             'mis_builder.mis_report_instance_result_view_form')
-        report_result = self.env['ir.actions.act_window'].create(
+        report_result = self.env['ir.actions.act_window'].sudo().create(
             {'name': 'mis.report.instance.result.view.action.%d'
              % self.env.context['active_id'],
              'res_model': 'mis.report.instance',
