@@ -137,8 +137,18 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
 
         if parser_instance.localcontext.get('additional_args', False):
             for arg in parser_instance.localcontext['additional_args']:
-                command.extend(arg)
-
+                if isinstance(arg, tuple):
+                    new_arg = tuple()
+                    for i in arg:
+                        if isinstance(i, unicode):
+                            i = i.encode('ascii', 'replace')
+                            i = (str(i), )
+                            new_arg += i
+                        else:
+                            new_arg += (i, )
+                    command.extend(new_arg)
+                else:
+                    command.extend(arg)
         count = 0
         for html in html_list:
             with tempfile.NamedTemporaryFile(suffix="%d.body.html" % count,
