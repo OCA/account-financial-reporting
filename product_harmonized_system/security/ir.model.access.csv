@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hs_code_sale_manager,Full access on hs.code to sale manager,model_hs_code,base.group_sale_manager,1,1,1,1
+access_hs_code_read,Read access on hs.code to everybody,model_hs_code,,1,0,0,0
