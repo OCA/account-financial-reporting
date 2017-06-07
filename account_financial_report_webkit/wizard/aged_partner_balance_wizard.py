@@ -34,19 +34,7 @@ class AccountAgedTrialBalance(orm.TransientModel):
     _description = "Aged partner balanced"
 
     def _get_current_fiscalyear(self, cr, uid, context=None):
-        user_obj = self.pool['res.users']
-        company = user_obj.browse(cr, uid, uid, context=context).company_id
-        fyear_obj = self.pool['account.period']
-        today = date.today().strftime(DATE_FORMAT)
-        fyear_ids = fyear_obj.search(
-            cr, uid,
-            [('date_start', '>=', today),
-             ('date_stop', '<=', today),
-             ('company_id', '=', company.id)],
-            limit=1,
-            context=context)
-        if fyear_ids:
-            return fyear_ids[0]
+        return self.pool['account.fiscalyear'].find(cr, uid, context=context)
 
     _columns = {
         'filter': fields.selection(
