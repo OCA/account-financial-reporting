@@ -44,11 +44,12 @@ class BankReconciliationXlsx(ReportXlsx):
                 'num_format': xls_date_format,
                 'font_size': 10,
                 'align': 'left'})
-            cur_format = u'#%s##0%s00 %s' % (
-                lang.thousands_sep or '',
-                lang.decimal_point or '',
+            cur_format = u'#,##0.00 %s' % (
                 o.company_id.currency_id.symbol or
                 o.company_id.currency_id.name)
+            # It seems that Excel replaces automatically the decimal
+            # and thousand separator by those of the language under which
+            # Excel runs
             regular_currency = workbook.add_format(
                 {'num_format': cur_format, 'font_size': 10})
             regular_currency_bg = workbook.add_format({
