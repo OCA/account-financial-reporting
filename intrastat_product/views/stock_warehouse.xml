@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<openerp>
+  <data>
+
+    <record id="view_warehouse" model="ir.ui.view">
+      <field name="name">intrastat.stock.warehouse.form</field>
+      <field name="model">stock.warehouse</field>
+      <field name="inherit_id" ref="stock.view_warehouse"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='partner_id']" position="after">
+          <field name="region_id"/>
+        </xpath>
+      </field>
+    </record>
+
+  </data>
+</openerp>

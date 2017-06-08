@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Copyright (C) 2010-2015 Akretion (http://www.akretion.com/)
+    Copyright (C) 2015 Noviat (http://www.noviat.com/)
+    @author Alexis de Lattre <alexis.delattre@akretion.com>
+    @author Luc De Meyer <luc.demeyer@noviat.com>
+    The licence is in the file __openerp__.py
+-->
+
+<openerp>
+  <data>
+
+    <!-- Intrastat Transaction Type -->
+    <record id="intrastat_transaction_form" model="ir.ui.view">
+      <field name="name">intrastat.transaction_form</field>
+      <field name="model">intrastat.transaction</field>
+      <field name="arch" type="xml">
+        <form string="Intrastat Transaction Type">
+          <group>
+            <field name="code"/>
+            <field name="description"/>
+            <field name="company_id" groups="base.group_multi_company"/>
+          </group>
+        </form>
+      </field>
+    </record>
+
+    <record id="intrastat_transaction_tree" model="ir.ui.view">
+      <field name="name">intrastat.transaction_tree</field>
+      <field name="model">intrastat.transaction</field>
+      <field name="arch" type="xml">
+        <tree string="Intrastat Transaction Types">
+          <field name="code"/>
+          <field name="description"/>
+          <field name="company_id" groups="base.group_multi_company"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="intrastat_transaction_mode_search" model="ir.ui.view">
+      <field name="name">intrastat.transaction.mode.search</field>
+      <field name="model">intrastat.transaction</field>
+      <field name="arch" type="xml">
+        <search string="Search Intrastat Transaction Types">
+          <field name="description" string="Code or Description"
+            filter_domain="['|', ('code', 'ilike', self), ('description', 'ilike', self)]"/>
+            <group string="Group By" name="groupby">
+                <filter name="company_groupby" string="Company"
+                    context="{'group_by': 'company_id'}"/>
+            </group>
+        </search>
+      </field>
+    </record>
+
+    <record id="intrastat_transaction_action" model="ir.actions.act_window">
+      <field name="name">Transaction Types</field>
+      <field name="res_model">intrastat.transaction</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="intrastat_transaction_menu"
+        action="intrastat_transaction_action"
+        parent="intrastat_base.menu_intrastat_config_root"
+        sequence="20"/>
+
+  </data>
+</openerp>

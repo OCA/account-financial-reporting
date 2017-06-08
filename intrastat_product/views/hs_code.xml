@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Copyright (C) 2010-2015 Akretion (http://www.akretion.com/)
+    Copyright (C) 2015 Noviat (http://www.noviat.com/)
+    @author Alexis de Lattre <alexis.delattre@akretion.com>
+    @author Luc De Meyer <luc.demeyer@noviat.com>
+    The licence is in the file __openerp__.py
+-->
+
+<openerp>
+  <data>
+
+    <!-- Add the H.S. code menu under the Intrastat Config menu -->
+    <menuitem id="intrastat_code_menu"
+        action="product_harmonized_system.hs_code_action"
+        parent="intrastat_base.menu_intrastat_config_root"
+        sequence="10"/>
+
+    <!-- Inherit tree view of H.S. code -->
+    <record id="hs_code_tree" model="ir.ui.view">
+      <field name="name">intrastat.hs.code.tree</field>
+      <field name="model">hs.code</field>
+      <field name="inherit_id" ref="product_harmonized_system.hs_code_view_tree"/>
+      <field name="arch" type="xml">
+        <field name="local_code" position="after">
+          <field name="intrastat_unit_id"/>
+        </field>
+      </field>
+    </record>
+
+    <!-- Inherit form view for H.S. code -->
+    <record id="hs_code_form" model="ir.ui.view">
+      <field name="name">intrastat.hs.code.form</field>
+      <field name="model">hs.code</field>
+      <field name="inherit_id" ref="product_harmonized_system.hs_code_view_form"/>
+      <field name="arch" type="xml">
+        <field name="local_code" position="after">
+          <field name="intrastat_unit_id"/>
+        </field>
+      </field>
+    </record>
+
+  </data>
+</openerp>

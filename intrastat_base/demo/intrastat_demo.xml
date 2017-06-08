@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Copyright (C) 2011-2014 Akretion (http://www.akretion.com/)
+    @author Alexis de Lattre <alexis.delattre@akretion.com>
+    The licence is in the file __openerp__.py
+-->
+
+<openerp>
+<data noupdate="1">
+
+<record id="base.main_partner" model="res.partner">
+    <field name="vat">FR58441019213</field>
+</record>
+
+<record id="base.res_partner_8" model="res.partner"> <!-- MediaPole -->
+    <field name="vat">BE0828696437</field>
+    <field name="supplier">True</field>
+</record>
+
+<record id="base.res_partner_24" model="res.partner"> <!-- OpenCorp -->
+    <field name="vat">BE0443167858</field>
+    <field name="supplier">True</field>
+</record>
+
+<record id="base.res_partner_2" model="res.partner"> <!-- Agrolait -->
+    <field name="vat">BE0884025633</field>
+    <field name="supplier">True</field>
+</record>
+
+<record id="account.sales_journal" model="account.journal">
+    <field name="update_posted">True</field>
+</record>
+
+<record id="account.refund_sales_journal" model="account.journal">
+    <field name="update_posted">True</field>
+</record>
+
+<record id="account.expenses_journal" model="account.journal">
+    <field name="update_posted">True</field>
+</record>
+
+<record id="account.refund_expenses_journal" model="account.journal">
+    <field name="update_posted">True</field>
+</record>
+
+<record id="shipping_costs_exclude" model="product.product">
+    <field name="name">Shipping costs</field>
+    <field name="code">SHIP</field>
+    <field name="type">service</field>
+    <field name="categ_id" ref="product.product_category_all"/>
+    <field name="list_price">30</field>
+    <field name="is_accessory_cost">True</field>
+</record>
+
+</data>
+</openerp>

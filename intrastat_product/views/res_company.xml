@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<openerp>
+  <data>
+
+    <record id="view_company_form" model="ir.ui.view">
+      <field name="name">intrastat.company.form</field>
+      <field name="model">res.company</field>
+      <field name="inherit_id" ref="intrastat_base.view_company_form"/>
+      <field name="arch" type="xml">
+        <group name="intrastat-common" position="inside">
+          <field name="intrastat" invisible="1"/>
+          <field name="intrastat_arrivals"/>
+          <field name="intrastat_dispatches"/>
+          <field name="intrastat_transaction_out_invoice"/>
+          <field name="intrastat_transaction_out_refund"/>
+          <field name="intrastat_transaction_in_invoice"/>
+          <field name="intrastat_transaction_in_refund"/>
+          <field name="intrastat_region_id" domain="[('country_id','=', country_id)]" invisible="1"/>
+          <field name="intrastat_transport_id"
+                 attrs="{'required': [('intrastat', '=', 'extended')], 'invisible': [('intrastat', '!=', 'extended')]}"/>
+          <field name="intrastat_incoterm_id" invisible="1"/>
+          <field name="intrastat_accessory_costs" invisible="1"/>
+        </group>
+      </field>
+    </record>
+
+  </data>
+</openerp>

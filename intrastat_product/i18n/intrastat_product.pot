@@ -1,0 +1,186 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* intrastat_product
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-05-27 18:43+0000\n"
+"PO-Revision-Date: 2015-05-27 18:43+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: intrastat_product
+#: field:report.intrastat.code,active:0
+msgid "Active"
+msgstr ""
+
+#. module: intrastat_product
+#: help:product.category,intrastat_id:0
+msgid "Code from the Harmonised System. If this code is not set on the product itself, it will be read here, on the related product category."
+msgstr ""
+
+#. module: intrastat_product
+#: help:product.template,intrastat_id:0
+msgid "Code from the Harmonised System. Nomenclature is available from the World Customs Organisation, see http://www.wcoomd.org/. Some countries have made their own extensions to this nomenclature."
+msgstr ""
+
+#. module: intrastat_product
+#: help:report.intrastat.code,intrastat_code:0
+msgid "Code used for the Intrastat declaration. Must be part of the 'Combined Nomenclature' (CN), cf http://en.wikipedia.org/wiki/Combined_NomenclatureMust have 8 digits with sometimes a 9th digit."
+msgstr ""
+
+#. module: intrastat_product
+#: field:product.template,origin_country_id:0
+msgid "Country of Origin"
+msgstr ""
+
+#. module: intrastat_product
+#: help:product.template,origin_country_id:0
+msgid "Country of origin of the product i.e. product 'made in ____'. If you have different countries of origin depending on the supplier from which you purchased the product, leave this field empty and use the equivalent field on the 'product supplier info' form."
+msgstr ""
+
+#. module: intrastat_product
+#: field:report.intrastat.code,create_uid:0
+msgid "Created by"
+msgstr ""
+
+#. module: intrastat_product
+#: field:report.intrastat.code,create_date:0
+msgid "Created on"
+msgstr ""
+
+#. module: intrastat_product
+#: field:report.intrastat.code,description:0
+msgid "Description"
+msgstr ""
+
+#. module: intrastat_product
+#: field:report.intrastat.code,display_name:0
+msgid "Display Name"
+msgstr ""
+
+#. module: intrastat_product
+#: field:report.intrastat.code,intrastat_code:0
+msgid "European Intrastat Code"
+msgstr ""
+
+#. module: intrastat_product
+#: help:report.intrastat.code,name:0
+msgid "Full length Harmonized System code (digits only). Full list is available from the World Customs Organisation, see http://www.wcoomd.org"
+msgstr ""
+
+#. module: intrastat_product
+#: model:ir.model,name:intrastat_product.model_report_intrastat_code
+msgid "H.S. Code"
+msgstr ""
+
+#. module: intrastat_product
+#: field:report.intrastat.code,name:0
+msgid "H.S. code"
+msgstr ""
+
+#. module: intrastat_product
+#: code:addons/intrastat_product/intrastat.py:73
+#, python-format
+msgid "H.S. codes should only contain digits. It is not the case of H.S. code '%s'."
+msgstr ""
+
+#. module: intrastat_product
+#: field:report.intrastat.code,id:0
+msgid "ID"
+msgstr ""
+
+#. module: intrastat_product
+#: model:ir.actions.act_window,name:intrastat_product.product_intrastat_code_act
+#: model:ir.ui.menu,name:intrastat_product.product_intrastat_code_menu
+#: field:product.category,intrastat_id:0
+#: field:product.template,intrastat_id:0
+#: view:report.intrastat.code:intrastat_product.product_intrastat_code_form
+msgid "Intrastat Code"
+msgstr ""
+
+#. module: intrastat_product
+#: view:report.intrastat.code:intrastat_product.product_intrastat_code_tree
+msgid "Intrastat Codes"
+msgstr ""
+
+#. module: intrastat_product
+#: view:product.category:intrastat_product.product_category_form_view
+msgid "Intrastat Properties"
+msgstr ""
+
+#. module: intrastat_product
+#: field:report.intrastat.code,write_uid:0
+msgid "Last Updated by"
+msgstr ""
+
+#. module: intrastat_product
+#: field:report.intrastat.code,write_date:0
+msgid "Last Updated on"
+msgstr ""
+
+#. module: intrastat_product
+#: view:report.intrastat.code:intrastat_product.product_intrastat_code_form
+#: field:report.intrastat.code,product_categ_ids:0
+msgid "Product Categories"
+msgstr ""
+
+#. module: intrastat_product
+#: model:ir.model,name:intrastat_product.model_product_category
+msgid "Product Category"
+msgstr ""
+
+#. module: intrastat_product
+#: model:ir.model,name:intrastat_product.model_product_template
+msgid "Product Template"
+msgstr ""
+
+#. module: intrastat_product
+#: view:report.intrastat.code:intrastat_product.product_intrastat_code_form
+#: field:report.intrastat.code,product_tmpl_ids:0
+msgid "Products"
+msgstr ""
+
+#. module: intrastat_product
+#: view:report.intrastat.code:intrastat_product.product_intrastat_code_search
+msgid "Search Intrastat Codes"
+msgstr ""
+
+#. module: intrastat_product
+#: help:report.intrastat.code,intrastat_uom_id:0
+msgid "Select the unit of measure if one is required for this particular Intrastat Code (other than the weight in Kg). If no particular unit of measure is required, leave empty."
+msgstr ""
+
+#. module: intrastat_product
+#: help:report.intrastat.code,description:0
+msgid "Short text description of the H.S. category"
+msgstr ""
+
+#. module: intrastat_product
+#: code:addons/intrastat_product/intrastat.py:82
+#, python-format
+msgid "The field Intrastat Code should contain 8 or 9 digits. It is not the case of Intrastat Code '%s'."
+msgstr ""
+
+#. module: intrastat_product
+#: code:addons/intrastat_product/intrastat.py:77
+#, python-format
+msgid "The field Intrastat Code should only contain digits. It is not the case of Intrastat Code '%s'."
+msgstr ""
+
+#. module: intrastat_product
+#: sql_constraint:report.intrastat.code:0
+msgid "This H.S. code already exists in Odoo !"
+msgstr ""
+
+#. module: intrastat_product
+#: field:report.intrastat.code,intrastat_uom_id:0
+msgid "UoM for Intrastat Report"
+msgstr ""
+

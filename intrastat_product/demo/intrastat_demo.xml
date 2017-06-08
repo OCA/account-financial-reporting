@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Copyright (C) 2011-2015 Akretion (http://www.akretion.com/)
+    @author Alexis de Lattre <alexis.delattre@akretion.com>
+    The licence is in the file __openerp__.py
+-->
+
+<openerp>
+<data noupdate="1">
+
+<record id="product_harmonized_system.84715000" model="hs.code">
+    <field name="intrastat_unit_id" ref="intrastat_unit_pce"/>
+</record>
+
+<record id="product_harmonized_system.84717050" model="hs.code">
+    <field name="intrastat_unit_id" ref="intrastat_unit_pce"/>
+</record>
+
+<record id="base.main_company" model="res.company">
+    <field name="intrastat_arrivals">extended</field>
+    <field name="intrastat_dispatches">extended</field>
+    <field name="intrastat_incoterm_id" ref="stock.incoterm_DDU"/>
+    <field name="intrastat_transport_id" ref="intrastat_transport_3"/>
+</record>
+
+</data>
+</openerp>

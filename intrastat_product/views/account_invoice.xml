@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+
+    <record id="invoice_form" model="ir.ui.view">
+      <field name="name">intrastat.invoice.form</field>
+      <field name="model">account.invoice</field>
+      <field name="inherit_id" ref="account.invoice_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='date_due']" position="after">
+          <field name="incoterm_id"
+                 attrs="{'invisible': [('intrastat', '!=', 'extended')]}"/>
+        </xpath>
+        <xpath expr="//field[@name='move_id']" position="after">
+          <field name="intrastat_transaction_id"/>
+          <field name="intrastat" invisible="1"/>
+          <field name="intrastat_transport_id"
+                 attrs="{'invisible': [('intrastat', '!=', 'extended')]}"
+                 widget="selection"/>
+          <field name="src_dest_country_id" string="Destination Country"/>
+          <field name="src_dest_region_id" string="Origin Region" invisible="1"/>
+        </xpath>
+        <xpath expr="//field[@name='invoice_line']//field[@name='account_id']" position="after">
+          <field name="hs_code_id"/>
+        </xpath>
+      </field>
+    </record>
+
+    <record id="invoice_supplier_form" model="ir.ui.view">
+      <field name="name">intrastat.invoice.supplier.form</field>
+      <field name="model">account.invoice</field>
+      <field name="inherit_id" ref="account.invoice_supplier_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='payment_term']" position="after">
+          <field name="incoterm_id"
+                 attrs="{'invisible': [('intrastat', '!=', 'extended')]}"/>
+        </xpath>
+        <xpath expr="//field[@name='period_id']" position="after">
+          <field name="intrastat_transaction_id"/>
+          <field name="intrastat" invisible="1"/>
+          <field name="intrastat_transport_id"
+                 attrs="{'invisible': [('intrastat', '!=', 'extended')]}"
+                 widget="selection"/>
+          <field name="src_dest_country_id" string="Origin/Destination Country"/>
+          <field name="src_dest_region_id" string="Origin/Destination Region" invisible="1"/>
+        </xpath>
+        <xpath expr="//field[@name='invoice_line']//field[@name='account_id']" position="after">
+          <field name="hs_code_id"/>
+        </xpath>
+      </field>
+    </record>
+
+  </data>
+</openerp>

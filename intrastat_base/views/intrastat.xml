@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Copyright (C) 2011-2015 Akretion (http://www.akretion.com/)
+    Copyright (C) 2015 Noviat (http://www.noviat.com/)
+    The licence is in the file __openerp__.py
+-->
+
+<openerp>
+  <data>
+
+    <!-- Menu entries for Intrastat -->
+    <menuitem id="menu_intrastat_base_root"
+              name="Intrastat"
+              parent="account.menu_finance_legal_statement"/>
+    <menuitem id="menu_intrastat_config_root" name="Intrastat"
+              parent="account.menu_finance_configuration" sequence="50"/>
+
+
+    <record id="intrastat_result_view_form" model="ir.ui.view">
+      <field name="name">intrastat.result_view_form</field>
+      <field name="model">intrastat.result.view</field>
+      <field name="arch" type="xml">
+        <form string="Intrastat Result View">
+          <group name="main">
+            <field name="note" nolabel="1"/>
+          </group>
+          <footer>
+            <button string="Ok" class="oe_highlight" special="cancel"/>
+          </footer>
+        </form>
+      </field>
+    </record>
+
+  </data>
+</openerp>

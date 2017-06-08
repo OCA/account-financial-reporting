@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data noupdate="1">
+
+    <!-- Extracted from the Official Journal of the European Union -->
+
+    <record id="intrastat_unit_c_k" model="intrastat.unit">
+      <field name="name">c/k</field>
+      <field name="description">Carats - 1 metric carat = 2 × 10exp(–4) kg</field>
+    </record>
+    <record id="intrastat_unit_ce_el" model="intrastat.unit">
+      <field name="name">ce/el</field>
+      <field name="description">Number of cells</field>
+    </record>
+    <record id="intrastat_unit_ct_l" model="intrastat.unit">
+      <field name="name">ct/l</field>
+      <field name="description">Carrying capacity in tonnes</field>
+    </record>
+    <record id="intrastat_unit_g" model="intrastat.unit">
+      <field name="name">g</field>
+      <field name="description">Gram</field>
+      <field name="uom_id" ref="product.product_uom_gram"/>
+    </record>
+    <record id="intrastat_unit_gi_FS" model="intrastat.unit">
+      <field name="name">gi F/S</field>
+      <field name="description">Gram of fissile isotopes</field>
+    </record>
+    <record id="intrastat_unit_kg_H2O2" model="intrastat.unit">
+      <field name="name">kg H2O2</field>
+      <field name="description">Kilogram of hydrogen peroxide</field>
+    </record>
+    <record id="intrastat_unit_kg_K2O" model="intrastat.unit">
+      <field name="name">kg K2O</field>
+      <field name="description">Kilogram of potassium oxide</field>
+    </record>
+    <record id="intrastat_unit_kg_KOH" model="intrastat.unit">
+      <field name="name">kg KOH</field>
+      <field name="description">Kilogram of potassium hydroxide (caustic potash)</field>
+    </record>
+    <record id="intrastat_unit_kg_ma" model="intrastat.unit">
+      <field name="name">kg met.am.</field>
+      <field name="description">Kilogram of methylamines</field>
+    </record>
+    <record id="intrastat_unit_kg_N" model="intrastat.unit">
+      <field name="name">kg N</field>
+      <field name="description">Kilogram of nitrogen</field>
+    </record>
+    <record id="intrastat_unit_kg_NaOH" model="intrastat.unit">
+      <field name="name">kg NaOH</field>
+      <field name="description">Kilogram of sodium hydroxide (caustic soda)</field>
+    </record>
+    <record id="intrastat_unit_kg_net_eda" model="intrastat.unit">
+      <field name="name">kg/net eda</field>
+      <field name="description">Kilogram drained net weight</field>
+    </record>
+    <record id="intrastat_unit_kg_P2O5" model="intrastat.unit">
+      <field name="name">kg P2O5</field>
+      <field name="description">Kilogram of diphosphorus pentaoxide</field>
+    </record>
+    <record id="intrastat_unit_kg_90_pct_sdt" model="intrastat.unit">
+      <field name="name">kg 90 pct sdt</field>
+      <field name="description">Kilogram of substance 90 % dry</field>
+    </record>
+    <record id="intrastat_unit_kg_U" model="intrastat.unit">
+      <field name="name">kg U</field>
+      <field name="description">Kilogram of uranium</field>
+    </record>
+    <record id="intrastat_unit_1000_kWh" model="intrastat.unit">
+      <field name="name">1000 kWh</field>
+      <field name="description">Thousand kilowatt hours</field>
+    </record>
+    <record id="intrastat_unit_l" model="intrastat.unit">
+      <field name="name">l</field>
+      <field name="description">Litre</field>
+      <field name="uom_id" ref="product.product_uom_litre"/>
+    </record>
+    <record id="intrastat_unit_1000l" model="intrastat.unit">
+      <field name="name">1000 l</field>
+      <field name="description">Thousand litres</field>
+    </record>
+    <record id="intrastat_unit_l_alc_100_pct" model="intrastat.unit">
+      <field name="name">l alc. 100 pct</field>
+      <field name="description">Litre pure (100 %) alcohol</field>
+    </record>
+    <record id="intrastat_unit_m" model="intrastat.unit">
+      <field name="name">m</field>
+      <field name="description">Metre</field>
+      <field name="uom_id" ref="product.product_uom_meter"/>
+    </record>
+    <record id="intrastat_unit_m2" model="intrastat.unit">
+      <field name="name">m2</field>
+      <field name="description">Square metre</field>
+    </record>
+    <record id="intrastat_unit_m3" model="intrastat.unit">
+      <field name="name">m3</field>
+      <field name="description">Cubic metre</field>
+    </record>
+    <record id="intrastat_unit_1000m3" model="intrastat.unit">
+      <field name="name">1000 m3</field>
+      <field name="description">Thousand cubic metres</field>
+    </record>
+    <record id="intrastat_unit_pa" model="intrastat.unit">
+      <field name="name">pa</field>
+      <field name="description">Number of pairs</field>
+    </record>
+    <record id="intrastat_unit_pce" model="intrastat.unit">
+      <field name="name">items</field>
+      <field name="description">Number of items</field>
+      <field name="uom_id" ref="product.product_uom_unit"/>
+    </record>
+    <record id="intrastat_unit_100pce" model="intrastat.unit">
+      <field name="name">100 items</field>
+      <field name="description">Hundred items</field>
+    </record>
+    <record id="intrastat_unit_1000pce" model="intrastat.unit">
+      <field name="name">1000 items</field>
+      <field name="description">Thousand items</field>
+    </record>
+    <record id="intrastat_unit_TJ" model="intrastat.unit">
+      <field name="name">TJ</field>
+      <field name="description">Terajoule (gross calorific value)</field>
+    </record>
+
+  </data>
+</openerp>

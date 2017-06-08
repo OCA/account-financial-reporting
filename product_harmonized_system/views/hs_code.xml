@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Copyright (C) 2010-2015 Akretion (http://www.akretion.com/)
+    @author Alexis de Lattre <alexis.delattre@akretion.com>
+    The licence is in the file __openerp__.py
+-->
+
+<openerp>
+  <data>
+
+    <!-- Search view for H.S. code -->
+    <record id="hs_code_view_search" model="ir.ui.view">
+      <field name="name">hs.code.search</field>
+      <field name="model">hs.code</field>
+      <field name="arch" type="xml">
+        <search string="Search H.S. Codes">
+          <field name="local_code"
+                 filter_domain="['|', ('local_code', 'like', self), ('description', 'ilike', self)]"/>
+        </search>
+      </field>
+    </record>
+
+    <!-- Tree view for H.S. code -->
+    <record id="hs_code_view_tree" model="ir.ui.view">
+      <field name="name">hs.code.tree</field>
+      <field name="model">hs.code</field>
+      <field name="arch" type="xml">
+        <tree string="H.S. Codes">
+          <field name="hs_code"/>
+          <field name="local_code"/>
+          <field name="description"/>
+          <field name="company_id" groups="base.group_multi_company"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- Form view for H.S. code -->
+    <record id="hs_code_view_form" model="ir.ui.view">
+      <field name="name">hs.code.form</field>
+      <field name="model">hs.code</field>
+      <field name="arch" type="xml">
+        <form string="H.S. Code">
+          <group name="main">
+            <field name="local_code" />
+            <field name="hs_code"/>
+            <field name="description"/>
+            <field name="company_id" groups="base.group_multi_company"/>
+            <field name="active"/>
+          </group>
+          <group name="product-categ" string="Product Categories">
+            <field name="product_categ_ids" nolabel="1"/>
+          </group>
+          <group name="product-tmpl" string="Products">
+            <field name="product_tmpl_ids" nolabel="1"/>
+          </group>
+        </form>
+      </field>
+    </record>
+
+    <!-- Action for H.S. code -->
+    <record id="hs_code_action" model="ir.actions.act_window">
+      <field name="name">H.S. Codes</field>
+      <field name="res_model">hs.code</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu entry for H.S. code -->
+    <menuitem id="hs_code_menu" action="hs_code_action"
+        parent="product.prod_config_main" sequence="60"/>
+
+  </data>
+</openerp>

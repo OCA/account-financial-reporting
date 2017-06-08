@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data noupdate="1">
+
+    <record id="intrastat_transport_1" model="intrastat.transport_mode">
+      <field name="code">1</field>
+      <field name="name">Sea</field>
+      <field name="description">Sea Transport (including wagons, motor vehicles, trailers, semi-trailers and lighters on board of a ship)</field>
+    </record>
+    <record id="intrastat_transport_2" model="intrastat.transport_mode">
+      <field name="code">2</field>
+      <field name="name">Rail</field>
+      <field name="description">Railway transport (including lorries on railway wagons)</field>
+    </record>
+    <record id="intrastat_transport_3" model="intrastat.transport_mode">
+      <field name="code">3</field>
+      <field name="name">Road</field>
+      <field name="description">Road Transport</field>
+    </record>
+    <record id="intrastat_transport_4" model="intrastat.transport_mode">
+      <field name="code">4</field>
+      <field name="name">Air</field>
+      <field name="description">Air Transport</field>
+    </record>
+    <record id="intrastat_transport_5" model="intrastat.transport_mode">
+      <field name="code">5</field>
+      <field name="name">Post</field>
+      <field name="description">Postal consignments</field>
+    </record>
+    <record id="intrastat_transport_7" model="intrastat.transport_mode">
+      <field name="code">7</field>
+      <field name="name">Fixed installations</field>
+      <field name="description">Fixed transport installations (e.g. pipelines, high-tension cables)</field>
+      <field name="description"></field>
+    </record>
+    <record id="intrastat_transport_8" model="intrastat.transport_mode">
+      <field name="code">8</field>
+      <field name="name">Inland waterway</field>
+      <field name="description">Inland waterway transport</field>
+    </record>
+    <record id="intrastat_transport_9" model="intrastat.transport_mode">
+      <field name="code">9</field>
+      <field name="name">Own propulsion</field>
+      <field name="description">Own propulsion (imported or exported means of transport crossing the border under their own power, e.g. aircraft, lorries, boats, etc.)</field>
+    </record>
+
+    <!-- Set default value to Road trp on main company -->
+    <record id="base.main_company" model="res.company">
+        <field name="intrastat_transport_id" ref="intrastat_transport_3"/>
+    </record>
+
+  </data>
+</openerp>
