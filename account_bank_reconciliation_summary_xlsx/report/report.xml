@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  © 2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+
+<odoo>
+
+<report
+    id="bank_reconciliation_xlsx"
+    model="account.journal"
+    string="Bank Reconciliation XLSX"
+    report_type="xlsx"
+    name="bank.reconciliation.xlsx"
+    file="bank.reconciliation.xlsx"
+/>
+
+</odoo>
