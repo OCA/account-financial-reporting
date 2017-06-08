@@ -3,12 +3,12 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
-    'name': 'Account Bank Statement Reconciliation Summary',
+    'name': 'Bank Reconciliation Report',
     'version': '10.0.1.0.0',
     'license': 'AGPL-3',
     'author': "Akretion,Odoo Community Association (OCA)",
     'website': 'http://www.akretion.com',
-    'summary': 'Adds an XLSX report to help on bank statement reconciliation',
+    'summary': 'Adds an XLSX report to help on bank reconciliation',
     'depends': ['account', 'report_xlsx'],
     'data': [
         'report/report.xml',
