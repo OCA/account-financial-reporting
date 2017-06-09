@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Account Journal Ledger Report -->
+    <report id="account_journal_ledger_report"
+            string="Journal Ledger"
+            model="account.journal"
+            report_type="qweb-pdf"
+            name="account_journal_report.journal_ledger"
+            file="account_journal_report.journal_ledger"/>
+
+    <record id="action_account_journal_ledger_xlsx" model="ir.actions.report.xml">
+      <field name="name">Journal Ledger</field>
+      <field name="model">account.journal</field>
+      <field name="type">ir.actions.report.xml</field>
+      <field name="report_name">account_journal_report.journal_ledger_xlsx</field>
+      <field name="report_type">xlsx</field>
+      <field name="auto" eval="False"/>
+    </record>
+
+    <record id="account_journal_ledger_paperformat"
+            model="report.paperformat">
+        <field name="name">Account Journal Ledger</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation"/>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_spacing">0</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="account_journal_ledger_report"
+            model="ir.actions.report.xml">
+        <field name="paperformat_id"
+               ref="account_journal_ledger_paperformat"/>
+    </record>
+
+</odoo>
