@@ -3,14 +3,14 @@
 # * mis_builder
 # 
 # Translators:
-# Pedro Castro Silva <pedrocs@sossia.pt>, 2017
+# OCA Transbot <transbot@odoo-community.org>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-01 13:13+0000\n"
-"PO-Revision-Date: 2017-05-01 13:13+0000\n"
-"Last-Translator: Pedro Castro Silva <pedrocs@sossia.pt>, 2017\n"
+"POT-Creation-Date: 2017-06-09 14:34+0000\n"
+"PO-Revision-Date: 2017-06-09 14:34+0000\n"
+"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2017\n"
 "Language-Team: Portuguese (https://www.transifex.com/oca/teams/23907/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -850,7 +850,7 @@ msgstr ""
 
 #. module: mis_builder
 #: model:ir.model.fields,field_description:mis_builder.field_mis_report_kpi_style_id
-#: model:ir.model.fields,field_description:mis_builder.field_mis_report_style_id_3686
+#: model:ir.model.fields,field_description:mis_builder.field_mis_report_style_id_3701
 #: model:ir.ui.view,arch_db:mis_builder.mis_report_style_view_form
 msgid "Style"
 msgstr "Estilo"
