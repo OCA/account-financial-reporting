@@ -347,6 +347,16 @@ class AccountingExpressionProcessor(object):
         def f(mo):
             field, mode, account_codes, domain = self._parse_match_object(mo)
             key = (domain, mode)
+            # first check if account_id is involved in
+            # the current expression part
+            found = False
+            for account_code in account_codes:
+                if account_id in self._account_ids_by_code[account_code]:
+                    found = True
+                    break
+            if not found:
+                return '(AccountingNone)'
+            # here we know account_id is involved in account_codes
             account_ids_data = self._data[key]
             debit, credit = \
                 account_ids_data.get(account_id,
