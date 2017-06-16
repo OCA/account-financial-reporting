@@ -3,7 +3,7 @@
 #   (http://www.eficent.com)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from openerp.tests.common import TransactionCase
+from odoo.tests.common import TransactionCase
 
 
 class TestCustomerActivityStatement(TransactionCase):
@@ -60,7 +60,8 @@ class TestCustomerActivityStatement(TransactionCase):
         )
 
         data = wiz_id._prepare_activity_statement()
-        report = self.statement_model.render_html(data)
+        docids = data['partner_ids']
+        report = self.statement_model.render_html(docids, data)
         self.assertIsInstance(report, str,
                               "There was an error while compiling the report.")
         self.assertIn("<!DOCTYPE html>", report,
