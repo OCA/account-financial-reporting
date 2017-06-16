@@ -4,8 +4,8 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from datetime import datetime, timedelta
-from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
-from openerp import api, fields, models
+from odoo.tools.misc import DEFAULT_SERVER_DATE_FORMAT
+from odoo import api, fields, models
 
 
 class CustomerOutstandingStatement(models.AbstractModel):
@@ -15,8 +15,7 @@ class CustomerOutstandingStatement(models.AbstractModel):
 
     def _format_date_to_partner_lang(self, str_date, partner_id):
         lang_code = self.env['res.partner'].browse(partner_id).lang
-        lang_id = self.env['res.lang']._lang_get(lang_code)
-        lang = self.env['res.lang'].browse(lang_id)
+        lang = self.env['res.lang']._lang_get(lang_code)
         date = datetime.strptime(str_date, DEFAULT_SERVER_DATE_FORMAT).date()
         return date.strftime(lang.date_format)
 
@@ -258,7 +257,7 @@ class CustomerOutstandingStatement(models.AbstractModel):
         return res
 
     @api.multi
-    def render_html(self, data):
+    def render_html(self, docids, data):
         company_id = data['company_id']
         partner_ids = data['partner_ids']
         date_end = data['date_end']

@@ -3,21 +3,19 @@
 # * customer_outstanding_statement
 # 
 # Translators:
-# OCA Transbot <transbot@odoo-community.org>, 2017
-# Gelo Joga Landoo <gj@landoo.es>, 2017
-# Pedro M. Baeza <pedro.baeza@gmail.com>, 2017
+# Stefano <stefano.sforzi@agilebg.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-22 16:14+0000\n"
-"PO-Revision-Date: 2017-12-22 16:14+0000\n"
-"Last-Translator: Pedro M. Baeza <pedro.baeza@gmail.com>, 2017\n"
-"Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
+"POT-Creation-Date: 2017-12-22 23:13+0000\n"
+"PO-Revision-Date: 2017-12-22 23:13+0000\n"
+"Last-Translator: Stefano <stefano.sforzi@agilebg.com>, 2017\n"
+"Language-Team: Italian (https://www.transifex.com/oca/teams/23907/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: es\n"
+"Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: customer_outstanding_statement
@@ -61,7 +59,7 @@ msgstr ""
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Balance"
-msgstr "Cuota"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
@@ -71,22 +69,22 @@ msgstr ""
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
 msgid "Cancel"
-msgstr "Cancelar"
+msgstr "Cancellare"
 
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_company_id
 msgid "Company"
-msgstr "Compañía"
+msgstr "Azienda"
 
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_create_uid
 msgid "Created by"
-msgstr "Creado por"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_create_date
 msgid "Created on"
-msgstr "Creado en"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
@@ -106,7 +104,7 @@ msgstr ""
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Date"
-msgstr "Fecha"
+msgstr "Data"
 
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_date_end
@@ -121,13 +119,13 @@ msgstr ""
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Description"
-msgstr "Descripción"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_display_name
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_report_customer_outstanding_statement_statement_display_name
 msgid "Display Name"
-msgstr "Nombre a mostrar"
+msgstr "Nome mostrato"
 
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_filter_partners_non_due
@@ -147,13 +145,13 @@ msgstr ""
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
 msgid "Export PDF"
-msgstr "Exportar a PDF"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_id
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_report_customer_outstanding_statement_statement_id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_show_aging_buckets
@@ -164,17 +162,17 @@ msgstr ""
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard___last_update
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_report_customer_outstanding_statement_statement___last_update
 msgid "Last Modified on"
-msgstr "Última modificación en"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_write_uid
 msgid "Last Updated by"
-msgstr "Última modificación por"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_write_date
 msgid "Last Updated on"
-msgstr "Última actualización en"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_number_partner_ids
