@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-  <data>
 
     <record id="qweb_pdf_export" model="ir.actions.report.xml">
       <field name="name">MIS report instance QWEB PDF report</field>
@@ -87,5 +86,4 @@
       </t>
     </template>
 
-  </data>
 </odoo>

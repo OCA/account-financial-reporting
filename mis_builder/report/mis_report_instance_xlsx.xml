@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-  <data>
 
     <record id="xls_export" model="ir.actions.report.xml">
       <field name="name">MIS report instance XLS report</field>
@@ -11,5 +10,4 @@
       <field name="auto" eval="False"/>
     </record>
 
-  </data>
 </odoo>

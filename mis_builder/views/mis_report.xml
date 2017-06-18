@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <data>
 
         <record model="ir.ui.view" id="mis_report_view_tree">
             <field name="name">mis.report.view.tree</field>
@@ -169,5 +168,4 @@
         <menuitem id="mis_report_conf_menu" parent="account.menu_finance_configuration" name="MIS Reporting" sequence="90"/>
         <menuitem id="mis_report_view_menu" parent="mis_report_conf_menu" name="MIS Report Templates" action="mis_report_view_action" sequence="21"/>
 
-    </data>
 </odoo>
