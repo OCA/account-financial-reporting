@@ -50,6 +50,19 @@ SimpleArray((6.0, 7.0, 8.0))
 SimpleArray((1.0, DataError(), 3.0))
 >>> a / 0.0
 SimpleArray((DataError(), DataError(), DataError()))
+>>> Vector = named_simple_array('Vector', ('x', 'y'))
+>>> p1 = Vector((1, 2))
+>>> print p1.x, p1.y, p1
+1 2 Vector((1, 2))
+>>> p2 = Vector((2, 3))
+>>> print p2.x, p2.y, p2
+2 3 Vector((2, 3))
+>>> p3 = p1 + p2
+>>> print p3.x, p3.y, p3
+3 5 Vector((3, 5))
+>>> p4 = (4, 5) + p2
+>>> print p4.x, p4.y, p4
+6 8 Vector((6, 8))
 """
 
 import operator
@@ -58,10 +71,10 @@ import traceback
 from .data_error import DataError
 
 
-__all__ = ['SimpleArray']
-
-
-# TODO named tuple-like behaviour, so expressions can work on subkpis
+__all__ = [
+    'SimpleArray',
+    'named_simple_array',
+]
 
 
 class SimpleArray(tuple):
@@ -78,9 +91,9 @@ class SimpleArray(tuple):
         if isinstance(other, tuple):
             if len(other) != len(self):
                 raise TypeError("tuples must have same length for %s" % op)
-            return SimpleArray(map(_o2, self, other))
+            return self.__class__(map(_o2, self, other))
         else:
-            return SimpleArray(map(lambda z: _o2(z, other), self))
+            return self.__class__(_o2(z, other) for z in self)
 
     def __add__(self, other):
         return self._op(operator.add, other)
@@ -88,16 +101,16 @@ class SimpleArray(tuple):
     __radd__ = __add__
 
     def __pos__(self):
-        return SimpleArray(map(operator.pos, self))
+        return self.__class__(map(operator.pos, self))
 
     def __neg__(self):
-        return SimpleArray(map(operator.neg, self))
+        return self.__class__(map(operator.neg, self))
 
     def __sub__(self, other):
         return self._op(operator.sub, other)
 
     def __rsub__(self, other):
-        return SimpleArray(other)._op(operator.sub, self)
+        return self.__class__(other)._op(operator.sub, self)
 
     def __mul__(self, other):
         return self._op(operator.mul, other)
@@ -114,16 +127,32 @@ class SimpleArray(tuple):
         return self._op(operator.truediv, other)
 
     def __rdiv__(self, other):
-        return SimpleArray(other)._op(operator.div, self)
+        return self.__class__(other)._op(operator.div, self)
 
     def __rfloordiv__(self, other):
-        return SimpleArray(other)._op(operator.floordiv, self)
+        return self.__class__(other)._op(operator.floordiv, self)
 
     def __rtruediv__(self, other):
-        return SimpleArray(other)._op(operator.truediv, self)
+        return self.__class__(other)._op(operator.truediv, self)
 
     def __repr__(self):
-        return "SimpleArray(%s)" % tuple.__repr__(self)
+        return "%s(%s)" % (self.__class__.__name__, tuple.__repr__(self))
+
+
+def named_simple_array(typename, field_names):
+    """ Return a subclass of SimpleArray, with named properties.
+
+    This method is to SimpleArray what namedtuple is to tuple.
+    It's less sophisticated than namedtuple so some namedtuple
+    advanced use cases may not work, but it's good enough for
+    our needs in mis_builder, ie referring to subkpi values
+    by name.
+    """
+    props = dict(
+        (field_name, property(operator.itemgetter(i)))
+        for i, field_name in enumerate(field_names)
+    )
+    return type(typename, (SimpleArray, ), props)
 
 
 if __name__ == '__main__':
