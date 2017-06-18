@@ -4,12 +4,12 @@
 
 from collections import defaultdict, OrderedDict
 import datetime
-import dateutil
 from itertools import izip
 import logging
 import re
 import time
 
+import dateutil
 import pytz
 
 from odoo import api, fields, models, _
