@@ -44,12 +44,16 @@ SimpleArray((4.0, 2.5, 2.0))
 SimpleArray((2.0, 2.5, 3.0))
 >>> 2 * b
 SimpleArray((8.0, 10.0, 12.0))
+>>> 1 - b
+SimpleArray((-3.0, -4.0, -5.0))
 >>> b += 2 ; b
 SimpleArray((6.0, 7.0, 8.0))
 >>> a / ((1.0, 0.0, 1.0))
 SimpleArray((1.0, DataError(), 3.0))
 >>> a / 0.0
 SimpleArray((DataError(), DataError(), DataError()))
+>>> 6.0 / a
+SimpleArray((6.0, 3.0, 2.0))
 >>> Vector = named_simple_array('Vector', ('x', 'y'))
 >>> p1 = Vector((1, 2))
 >>> print p1.x, p1.y, p1
@@ -63,8 +67,22 @@ SimpleArray((DataError(), DataError(), DataError()))
 >>> p4 = (4, 5) + p2
 >>> print p4.x, p4.y, p4
 6 8 Vector((6, 8))
+>>> p1 * 2
+Vector((2, 4))
+>>> 2 * p1
+Vector((2, 4))
+>>> p1 - 1
+Vector((0, 1))
+>>> 1 - p1
+Vector((0, -1))
+>>> p1 / 2.0
+Vector((0.5, 1.0))
+>>> v = 2.0 / p1
+>>> print v.x, v.y, v
+2.0 1.0 Vector((2.0, 1.0))
 """
 
+import itertools
 import operator
 import traceback
 
@@ -95,6 +113,15 @@ class SimpleArray(tuple):
         else:
             return self.__class__(_o2(z, other) for z in self)
 
+    def _cast(self, other):
+        if isinstance(other, self.__class__):
+            return other
+        elif isinstance(other, tuple):
+            return self.__class__(other)
+        else:
+            # other is a scalar
+            return self.__class__(itertools.repeat(other, len(self)))
+
     def __add__(self, other):
         return self._op(operator.add, other)
 
@@ -110,7 +137,7 @@ class SimpleArray(tuple):
         return self._op(operator.sub, other)
 
     def __rsub__(self, other):
-        return self.__class__(other)._op(operator.sub, self)
+        return self._cast(other)._op(operator.sub, self)
 
     def __mul__(self, other):
         return self._op(operator.mul, other)
@@ -127,13 +154,13 @@ class SimpleArray(tuple):
         return self._op(operator.truediv, other)
 
     def __rdiv__(self, other):
-        return self.__class__(other)._op(operator.div, self)
+        return self._cast(other)._op(operator.div, self)
 
     def __rfloordiv__(self, other):
-        return self.__class__(other)._op(operator.floordiv, self)
+        return self._cast(other)._op(operator.floordiv, self)
 
     def __rtruediv__(self, other):
-        return self.__class__(other)._op(operator.truediv, self)
+        return self._cast(other)._op(operator.truediv, self)
 
     def __repr__(self):
         return "%s(%s)" % (self.__class__.__name__, tuple.__repr__(self))
