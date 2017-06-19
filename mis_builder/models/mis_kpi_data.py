@@ -41,12 +41,12 @@ class MisKpiData(models.AbstractModel):
     amount = fields.Float(
     )
     seq1 = fields.Integer(
-        releated='kpi_expression_id.kpi_id.sequence',
+        related='kpi_expression_id.kpi_id.sequence',
         store=True,
         readonly=True
     )
     seq2 = fields.Integer(
-        releated='kpi_expression_id.subkpi_id.sequence',
+        related='kpi_expression_id.subkpi_id.sequence',
         store=True,
         readonly=True
     )
