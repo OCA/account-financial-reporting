@@ -29,6 +29,7 @@ class OpenItemsReportWizard(models.TransientModel):
     account_ids = fields.Many2many(
         comodel_name='account.account',
         string='Filter accounts',
+        domain=[('reconcile', '=', True)],
     )
     hide_account_balance_at_0 = fields.Boolean(
         string='Hide account ending balance at 0',
