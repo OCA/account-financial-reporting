@@ -9,8 +9,8 @@ try:
     from openerp.addons.report_xlsx.report.report_xlsx import ReportXlsx
 except ImportError:
     ReportXlsx = object
-from openerp.report import report_sxw
-from openerp import _
+from odoo.report import report_sxw
+from odoo import _
 
 
 class JournalLedgerXlsx(ReportXlsx):

@@ -5,7 +5,7 @@
 # Copyright 2017 Eficent - Miquel Raich
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import api, fields, models
+from odoo import api, fields, models
 
 
 class JournalLedger(models.AbstractModel):
@@ -15,13 +15,12 @@ class JournalLedger(models.AbstractModel):
         if 'lang' not in self._context:
             return str_date
         lang_code = self._context['lang']
-        lang_id = self.env['res.lang']._lang_get(lang_code)
-        lang = self.env['res.lang'].browse(lang_id)
+        lang = self.env['res.lang']._lang_get(lang_code)
         date = fields.Date.from_string(str_date)
         return date.strftime(lang.date_format)
 
     @api.multi
-    def render_html(self, data):
+    def render_html(self, docids, data):
         account_move_obj = self.env['account.move']
         report_obj = self.env['report']
 

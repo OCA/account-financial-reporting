@@ -6,7 +6,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from datetime import date, timedelta
-from openerp import api, fields, models, exceptions, _
+from odoo import api, exceptions, fields, models, _
 
 
 class AccountJournalLedgerReport(models.TransientModel):
