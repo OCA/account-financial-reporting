@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<openerp>
+  <data noupdate="1">
+
+    <record id="mis_report_instance_01" model="mis.report.instance">
+      <field name="name">Actuals vs Budget</field>
+      <field name="report_id" ref="mis_report_budget_01"/>
+      <field name="root_account" ref="account.chart0"/>
+      <field name="date" eval="time.strftime('%Y-01-01')"/>
+    </record>
+
+    <record id="mis_report_instance_01_period_01" model="mis.report.instance.period">
+      <field name="name">Budget</field>
+      <field name="type">fp</field>
+      <field name="offset" eval="0"/>
+      <field name="duration" eval="12"/>
+      <field name="source">mis_budget</field>
+      <field name="report_instance_id" ref="mis_report_instance_01"/>
+      <field name="sequence" eval="1"/>
+    </record>
+
+    <record id="mis_report_instance_01_period_02" model="mis.report.instance.period">
+      <field name="name">Actuals</field>
+      <field name="type">fp</field>
+      <field name="offset" eval="0"/>
+      <field name="duration" eval="12"/>
+      <field name="source">actuals</field>
+      <field name="comparison_column_ids" eval="[(6, 0, [ref('mis_report_instance_01_period_01')])]"/>
+      <field name="report_instance_id" ref="mis_report_instance_01"/>
+      <field name="sequence" eval="2"/>
+    </record>
+
+  </data>
+</openerp>

@@ -22,5 +22,10 @@
         'views/mis_budget.xml',
     ],
     'demo': [
+        'demo/mis_report.xml',
+        'demo/mis_budget.xml',
+        'demo/mis_report_instance.xml',
     ],
+    'installable': True,
+    'application': True,
 }

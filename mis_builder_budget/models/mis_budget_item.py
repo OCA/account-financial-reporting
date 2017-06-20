@@ -103,8 +103,7 @@ class MisBudgetItem(models.Model):
             ('id', '!=', self.id),
         ]
 
-    @api.constrains('period_id', 'date_from', 'date_to',
-                    'budget_id', 'kpi_expression_id')
+    @api.constrains('period_id', 'date_from', 'date_to', 'budget_id')
     def _check_dates(self):
         for rec in self:
             # date_from <= date_to

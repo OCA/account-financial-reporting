@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<openerp>
+  <data noupdate="1">
+
+    <record id="mis_budget_01" model="mis.budget">
+      <field name="name">Actuals vs Budget</field>
+      <field name="report_id" ref="mis_report_budget_01"/>
+      <field name="date_from" eval="time.strftime('%Y-01-01')"/>
+      <field name="date_to" eval="time.strftime('%Y-12-31')"/>
+    </record>
+
+    <record id="mis_budget_01_kpi_01" model="mis.budget.item">
+      <field name="kpi_id" ref="mis_report_budget_01_kpi_01"/>
+      <field name="budget_id" ref="mis_budget_01"/>
+      <field name="date_from" eval="time.strftime('%Y-01-01')"/>
+      <field name="date_to" eval="time.strftime('%Y-12-31')"/>
+      <field name="amount" eval="10000"/>
+    </record>
+
+    <record id="mis_budget_01_kpi_02" model="mis.budget.item">
+      <field name="kpi_id" ref="mis_report_budget_01_kpi_02"/>
+      <field name="budget_id" ref="mis_budget_01"/>
+      <field name="date_from" eval="time.strftime('%Y-01-01')"/>
+      <field name="date_to" eval="time.strftime('%Y-12-31')"/>
+      <field name="amount" eval="6000"/>
+    </record>
+
+  </data>
+</openerp>
