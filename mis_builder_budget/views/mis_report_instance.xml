@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+  <data>
+
+    <record model="ir.ui.view" id="mis_report_instance_view_form">
+      <field name="name">mis.report.instance.view.form</field>
+      <field name="model">mis.report.instance</field>
+      <field name="inherit_id" ref="mis_builder.mis_report_instance_view_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='period_ids']/tree/field[@name='comparison_column_ids']" position="before">
+          <field name="source"/>
+        </xpath>
+      </field>
+    </record>
+
+  </data>
+</openerp>
