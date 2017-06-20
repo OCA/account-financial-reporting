@@ -712,7 +712,7 @@ class MisReportSubkpi(models.Model):
     _name = 'mis.report.subkpi'
     _order = 'sequence'
 
-    sequence = fields.Integer()
+    sequence = fields.Integer(default=1)
     report_id = fields.Many2one(
         comodel_name='mis.report',
         required=True,
