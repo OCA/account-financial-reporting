@@ -30,7 +30,7 @@ class MisReportInstancePeriod(models.Model):
 
         res = {}
         for kpi in mis_report.kpi_ids:
-            print '>>>>>>>>>>>'
+
             budget_items = budget.item_ids.filtered(
                 lambda r: r.kpi_id == kpi)
             budget_item = budget_items.filtered(
