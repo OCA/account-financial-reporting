@@ -31,26 +31,32 @@ class MisReportInstancePeriod(models.Model):
         res = {}
         for kpi in mis_report.kpi_ids:
 
-            budget_items = budget.item_ids.filtered(
-                lambda r: r.kpi_id == kpi)
-            budget_item = budget_items.filtered(
-                lambda r: r.date_from == self.date_from and
-                r.date_to == self.date_to)
-            if len(budget_item) != 1:
-                raise UserError(_(
-                    "Configuration Error !\n"
-                    "Budget Item (id: %s) Period/Dates do not "
-                    "correspond with report period %s")
-                    % (budget_item.id, self.name))
+            budget_item = False
 
-            kpi_val = budget_item.amount
-            kpi_val_rendered = kpi.render(lang_id, kpi_val)
-            kpi_val_comment = kpi.name + ' - ' + _("budget")
+            if kpi.budgetable:
+                budget_items = budget.item_ids.filtered(
+                    lambda r: r.kpi_id == kpi)
+                budget_item = budget_items.filtered(
+                    lambda r: r.date_from == self.date_from and
+                    r.date_to == self.date_to)
+                if len(budget_item) > 1:
+                    raise UserError(_(
+                        "Configuration Error !\n"
+                        "Budget Item (id: %s) Period/Dates do not "
+                        "correspond with report period %s")
+                        % (budget_item.id, self.name))
+
+            if budget_item:
+                kpi_val = budget_item.amount
+                kpi_val_rendered = kpi.render(lang_id, kpi_val)
+            else:
+                kpi_val = 0.0
+                kpi_val_rendered = ''
 
             res[kpi.name] = {
                 'val': kpi_val,
                 'val_r': kpi_val_rendered,
-                'val_c': kpi_val_comment,
+                'val_c': kpi.name + ' - ' + _("budget"),
                 'style': None,
                 'prefix': False,
                 'suffix': False,
@@ -60,6 +66,7 @@ class MisReportInstancePeriod(models.Model):
                 'expr': False,
                 'drilldown': False,
             }
+
         return res
 
     @api.multi

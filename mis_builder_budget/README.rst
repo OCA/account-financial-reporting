@@ -38,7 +38,7 @@ To configure this module, you need to:
 Known issues / Roadmap
 ======================
 
-* The current version of this module assumes equal start/stop dates of
+* The current version of this module assumes equal start/stop dates and equal duration of
   budget and report periods.
 
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/account-financial-reporting/issues>`_.
