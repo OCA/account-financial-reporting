@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-31 05:59+0000\n"
-"PO-Revision-Date: 2017-05-31 05:59+0000\n"
+"POT-Creation-Date: 2017-06-16 22:15+0000\n"
+"PO-Revision-Date: 2017-06-16 22:15+0000\n"
 "Last-Translator: Pedro Castro Silva <pedrocs@sossia.pt>, 2017\n"
 "Language-Team: Portuguese (https://www.transifex.com/oca/teams/23907/pt/)\n"
 "MIME-Version: 1.0\n"
@@ -1307,79 +1307,79 @@ msgstr "ou"
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_aged_partner_balance_qweb
 msgid "report_aged_partner_balance_qweb"
-msgstr ""
+msgstr "report_aged_partner_balance_qweb"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_aged_partner_balance_qweb_account
 msgid "report_aged_partner_balance_qweb_account"
-msgstr ""
+msgstr "report_aged_partner_balance_qweb_account"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_aged_partner_balance_qweb_line
 msgid "report_aged_partner_balance_qweb_line"
-msgstr ""
+msgstr "report_aged_partner_balance_qweb_line"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_aged_partner_balance_qweb_move_line
 msgid "report_aged_partner_balance_qweb_move_line"
-msgstr ""
+msgstr "report_aged_partner_balance_qweb_move_line"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_aged_partner_balance_qweb_partner
 msgid "report_aged_partner_balance_qweb_partner"
-msgstr ""
+msgstr "report_aged_partner_balance_qweb_partner"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_general_ledger_qweb
 msgid "report_general_ledger_qweb"
-msgstr ""
+msgstr "report_general_ledger_qweb"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_general_ledger_qweb_account
 msgid "report_general_ledger_qweb_account"
-msgstr ""
+msgstr "report_general_ledger_qweb_account"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_general_ledger_qweb_move_line
 msgid "report_general_ledger_qweb_move_line"
-msgstr ""
+msgstr "report_general_ledger_qweb_move_line"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_general_ledger_qweb_partner
 msgid "report_general_ledger_qweb_partner"
-msgstr ""
+msgstr "report_general_ledger_qweb_partner"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_open_items_qweb
 msgid "report_open_items_qweb"
-msgstr ""
+msgstr "report_open_items_qweb"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_open_items_qweb_account
 msgid "report_open_items_qweb_account"
-msgstr ""
+msgstr "report_open_items_qweb_account"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_open_items_qweb_move_line
 msgid "report_open_items_qweb_move_line"
-msgstr ""
+msgstr "report_open_items_qweb_move_line"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_open_items_qweb_partner
 msgid "report_open_items_qweb_partner"
-msgstr ""
+msgstr "report_open_items_qweb_partner"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_trial_balance_qweb
 msgid "report_trial_balance_qweb"
-msgstr ""
+msgstr "report_trial_balance_qweb"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_trial_balance_qweb_account
 msgid "report_trial_balance_qweb_account"
-msgstr ""
+msgstr "report_trial_balance_qweb_account"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_trial_balance_qweb_partner
 msgid "report_trial_balance_qweb_partner"
-msgstr ""
+msgstr "report_trial_balance_qweb_partner"
