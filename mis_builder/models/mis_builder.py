@@ -187,7 +187,7 @@ class MisReportKpi(models.Model):
             elif self.compare_method == 'pct':
                 if base_value and round(base_value, self.dp) != 0:
                     delta = (value - base_value) / abs(base_value)
-                    if delta and round(delta, self.dp) != 0:
+                    if delta and round(delta * 100, self.dp) != 0:
                         return self._render_num(
                             lang_id,
                             delta,
