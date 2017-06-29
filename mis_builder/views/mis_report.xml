@@ -95,7 +95,7 @@
             <field name="name">mis.report.view.kpi.form</field>
             <field name="model">mis.report.kpi</field>
             <field name="arch" type="xml">
-                <form string="MIS Report KPI" version="7.0">
+                <form string="MIS Report KPI">
                     <group col="4">
                         <field name="description"/>
                         <field name="name"/>
