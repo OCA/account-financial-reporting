@@ -98,9 +98,44 @@ var MisReport = form_common.FormWidget.extend({
             self.do_action(result);
         });
     },
+    display_multibarchart: function() {
+        var self = this;
+        var lines = [];
+        var values = [];
+        for (var i = 0; i < self.mis_report_data['body'].length; i++) {
+            var line = self.mis_report_data['body'][i];
+            var line_values = [];
+            for (var j = 0; j < line['cells'].length; j++) {
+                var cell = line['cells'][j];
+                var val = cell['val'] != null && cell['val'] !== undefined ? cell['val'] : 0;
+                var label = self.mis_report_data['header'][0]['cols'][j]['label'];
+                line_values.push({y:val, x:label});
+                values.push(val);
+            }
+            lines.push({key:line['label'], values:line_values});
+        }
+        var maxVal = _.max(values, function(v) {return v.y})
+        var chart = nv.models.multiBarChart();
+        chart.options({
+            margin: {left: 12 * String(maxVal && maxVal.y || 10000000).length},
+        });
+        d3.select('.mis_builder_svg > svg')
+        .datum(lines)
+        .transition().duration(500)
+        .call(chart);
+        nv.utils.windowResize(chart.update);
+    },
     generate_content: function() {
         var self = this;
         var context = new data.CompoundContext(self.build_context(), self.get_context()|| {});
+        new Model("mis.report.instance").call(
+            "read",
+            [self.mis_report_instance_id, ['display']],
+            {'context': context}
+        ).then(function(result){
+            console.debug(result);
+            self.display = result['display'];
+        });
         new Model("mis.report.instance").call(
             "compute",
             [self.mis_report_instance_id],
@@ -108,6 +143,9 @@ var MisReport = form_common.FormWidget.extend({
         ).then(function(result){
             self.mis_report_data = result;
             self.renderElement();
+            if (self.display == 'bar') {
+                self.display_multibarchart();
+            }
         });
     },
     renderElement: function() {
