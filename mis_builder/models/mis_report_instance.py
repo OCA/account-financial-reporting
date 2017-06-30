@@ -222,7 +222,8 @@ class MisReportInstance(models.Model):
                                  required=True)
     display = fields.Selection(
         [('table', 'Table'),
-         ('bar', 'Bar Chart')],
+         ('bar', 'Bar Chart'),
+         ('line', 'Line Chart')],
         string="Display",
         default="table")
     landscape_pdf = fields.Boolean(string='Landscape PDF')
