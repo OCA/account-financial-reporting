@@ -221,7 +221,7 @@ class MisReportInstance(models.Model):
                                  default=_default_company,
                                  required=True)
     display = fields.Selection(
-        [('table','Table'),
+        [('table', 'Table'),
          ('bar', 'Bar Chart')],
         string="Display",
         default="table")
