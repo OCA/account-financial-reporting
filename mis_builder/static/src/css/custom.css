@@ -27,4 +27,9 @@
 
 .oe_mis_builder_content {
   padding: 10px;
+  height: 100%;
+}
+
+.oe_mis_builder_content .mis_builder_svg {
+  clear: both;
 }
