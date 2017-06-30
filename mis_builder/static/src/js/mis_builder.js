@@ -98,6 +98,56 @@ var MisReport = form_common.FormWidget.extend({
             self.do_action(result);
         });
     },
+    display_linechart: function() {
+        var self = this;
+        console.debug(self.mis_report_data);
+        var labels = [];
+        for (var i = 0; i < self.mis_report_data['header'][0]['cols'].length; i++) {
+            labels.push(self.mis_report_data['header'][0]['cols'][i]['label']);
+        }
+        var lines = [];
+        var values = [];
+        for (var i = 0; i < self.mis_report_data['body'].length; i++) {
+            var line = self.mis_report_data['body'][i];
+            var line_values = [];
+            for (var j = 0; j < line['cells'].length; j++) {
+                var cell = line['cells'][j];
+                var val = cell['val'] != null && cell['val'] !== undefined ? cell['val'] : 0;
+                line_values.push({y:val, x:j});
+                values.push(val);
+            }
+            lines.push({key:line['label'], values:line_values});
+        }
+        console.debug(lines);
+        var maxVal = _.max(values, function(v) {return v.y})
+        var chart = nv.models.lineChart()
+            .useInteractiveGuideline(true)
+            .showLegend(true)
+            .showYAxis(true)
+            .showXAxis(true)
+            .options({
+                margin: {left: 12 * String(maxVal && maxVal.y || 10000000).length},
+            })
+        ;
+        chart.xAxis
+            .tickFormat(function(d){
+                return labels[d];
+            })
+        ;
+        chart.yAxis
+            .tickFormat(function(d){
+                if (d == null) {
+                    return 'N/A';
+                }
+                return d3.format(',.2f')(d);
+            })
+        ;
+        d3.select('.mis_builder_svg > svg')
+        .datum(lines)
+        .transition().duration(500)
+        .call(chart);
+        nv.utils.windowResize(chart.update);
+    },
     display_multibarchart: function() {
         var self = this;
         var lines = [];
@@ -145,6 +195,8 @@ var MisReport = form_common.FormWidget.extend({
             self.renderElement();
             if (self.display == 'bar') {
                 self.display_multibarchart();
+            } else if (self.display == 'line') {
+                self.display_linechart();
             }
         });
     },
