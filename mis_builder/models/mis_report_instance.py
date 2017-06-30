@@ -220,6 +220,11 @@ class MisReportInstance(models.Model):
                                  string='Company',
                                  default=_default_company,
                                  required=True)
+    display = fields.Selection(
+        [('table','Table'),
+         ('bar', 'Bar Chart')],
+        string="Display",
+        default="table")
     landscape_pdf = fields.Boolean(string='Landscape PDF')
     comparison_mode = fields.Boolean(
         compute="_compute_comparison_mode",
