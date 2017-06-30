@@ -52,7 +52,7 @@
                       <tr></tr>
                     </tfoot>
                 </table></t>
-                <t t-if="widget.display == 'bar'">
+                <t t-if="widget.display != 'table'">
                     <div class="o_graph">
                         <div class="o_graph_svg_container mis_builder_svg">
                             <svg></svg>
