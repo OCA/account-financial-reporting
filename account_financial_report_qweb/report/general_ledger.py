@@ -1227,9 +1227,17 @@ WHERE id = %s
     ):
         """ Return subquery used to compute sum amounts on
         unaffected earnings accounts """
-        sub_subquery_sum_amounts = """
+        if not include_initial_balance:
+            sub_subquery_sum_amounts = """
+        SELECT
+            -SUM(ml.balance) AS balance
+            """
+        else:
+            sub_subquery_sum_amounts = """
         SELECT
             SUM(ml.balance) AS balance
+            """
+        sub_subquery_sum_amounts += """
         FROM
             account_account a
         INNER JOIN
