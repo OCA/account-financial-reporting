@@ -803,6 +803,7 @@ class MisReport(models.Model):
 
     def prepare_locals_dict(self):
         return {
+            'self': self,
             'sum': _sum,
             'min': _min,
             'max': _max,
@@ -918,6 +919,7 @@ class MisReport(models.Model):
             locals_dict = {}
 
         locals_dict.update(self.prepare_locals_dict())
+        locals_dict.update({'date_from': date_from, 'date_to': date_to})
 
         # fetch non-accounting queries
         locals_dict.update(self._fetch_queries(
