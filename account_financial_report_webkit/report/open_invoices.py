@@ -26,7 +26,7 @@ from operator import itemgetter
 from mako.template import Template
 
 
-from openerp import pooler
+from openerp.modules.registry import RegistryManager
 from openerp.osv import osv
 from openerp.report import report_sxw
 from openerp.tools.translate import _
@@ -50,7 +50,7 @@ class PartnersOpenInvoicesWebkit(report_sxw.rml_parse,
     def __init__(self, cursor, uid, name, context):
         super(PartnersOpenInvoicesWebkit, self).__init__(
             cursor, uid, name, context=context)
-        self.pool = pooler.get_pool(self.cr.dbname)
+        self.pool = RegistryManager.get(self.cr.dbname)
         self.cursor = self.cr
 
         company = self.pool.get('res.users').browse(

@@ -25,7 +25,7 @@
 
 from openerp.report import report_sxw
 from openerp.tools.translate import _
-from openerp import pooler
+from openerp.modules.registry import RegistryManager
 from datetime import datetime
 
 from .common_reports import CommonReportHeaderWebkit
@@ -37,7 +37,7 @@ class PrintJournalWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
     def __init__(self, cursor, uid, name, context):
         super(PrintJournalWebkit, self).__init__(cursor, uid, name,
                                                  context=context)
-        self.pool = pooler.get_pool(self.cr.dbname)
+        self.pool = RegistryManager.get(self.cr.dbname)
         self.cursor = self.cr
 
         company_obj = self.pool.get('res.company')
