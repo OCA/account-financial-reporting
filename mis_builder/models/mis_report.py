@@ -809,6 +809,9 @@ class MisReport(models.Model):
             'max': _max,
             'len': len,
             'avg': _avg,
+            'time': time,
+            'datetime': datetime,
+            'dateutil': dateutil,
             'AccountingNone': AccountingNone,
             'SimpleArray': SimpleArray,
         }
