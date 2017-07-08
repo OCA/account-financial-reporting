@@ -21,7 +21,7 @@
 from __future__ import division
 from datetime import datetime
 
-from openerp import pooler
+from openerp.modules.registry import RegistryManager
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
 from openerp.tools.translate import _
 from .open_invoices import PartnersOpenInvoicesWebkit
@@ -74,7 +74,7 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
            refer to :class:`openerp.report.report_sxw.rml_parse`"""
         super(AccountAgedTrialBalanceWebkit, self).__init__(cursor, uid, name,
                                                             context=context)
-        self.pool = pooler.get_pool(self.cr.dbname)
+        self.pool = RegistryManager.get(self.cr.dbname)
         self.cursor = self.cr
         company = self.pool.get('res.users').browse(self.cr, uid, uid,
                                                     context=context).company_id
