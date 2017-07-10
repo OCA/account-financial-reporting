@@ -1,0 +1,639 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* mis_builder
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-09-02 02:43+0000\n"
+"PO-Revision-Date: 2016-09-01 22:42-0500\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: mis_builder
+#: code:addons/mis_builder/models/mis_builder.py:290
+#: code:addons/mis_builder/models/mis_builder.py:724
+#, python-format, fuzzy
+msgid "%s (copy)"
+msgstr "%s (copia)"
+
+#. module: mis_builder
+#: code:addons/mis_builder/models/mis_builder.py:859
+#, python-format
+msgid "%s vs %s"
+msgstr "%s vs %s"
+
+#. module: mis_builder
+#: view:mis.report:mis_builder.mis_report_view_form
+msgid "'accounts' is a comma-separated list of account codes, possibly containing % wildcards"
+msgstr "'accounts' es una lista de codigos de cuentas separado por comas, puede contener % comodines"
+
+#. module: mis_builder
+#: view:mis.report:mis_builder.mis_report_view_form
+msgid "'domain' is an optional filter on move lines (eg to filter on analytic accounts or journal)"
+msgstr "'domain' es una filtro opcional en las líneas de movimientos (ej: para filtrar cuentas analíticas o diarios)"
+
+#. module: mis_builder
+#: view:mis.report:mis_builder.mis_report_view_form
+msgid "* bal for balance (debit - credit)"
+msgstr "* bal para balance (debit - credit)"
+
+#. module: mis_builder
+#: view:mis.report:mis_builder.mis_report_view_form
+msgid "* bal[70]: variation of the balance of account 70 over the period (it is the same as balp[70]);"
+msgstr "* bal[70]: variación del balance de la cuenta 70 sobre el periodo (es lo mismo que balp[70]);"
+
+#. module: mis_builder
+#: view:mis.report:mis_builder.mis_report_view_form
+msgid "* bale[1%]: balance of accounts starting with 1 at end of period."
+msgstr "* bale[1%]: balance de cuentas empezando con 1 al final del periodo."
+
+#. module: mis_builder
+#: view:mis.report:mis_builder.mis_report_view_form
+msgid "* bali[70,60]: initial balance of accounts 70 and 60;"
+msgstr "* bali[70,60]: balance inicial de cuentas 70 y 60;"
+
+#. module: mis_builder
+#: view:mis.report:mis_builder.mis_report_view_form
+msgid "* crd for credit"
+msgstr "* crd para credit"
+
+#. module: mis_builder
+#: view:mis.report:mis_builder.mis_report_view_form
+msgid "* deb for debit"
+msgstr "* deb para debit"
+
+#. module: mis_builder
+#: view:mis.report:mis_builder.mis_report_view_form
+msgid "* e: at the end of the period"
+msgstr "* e: al final del periodo"
+
+#. module: mis_builder
+#: view:mis.report:mis_builder.mis_report_view_form
+msgid "* i: at the beginning of the period"
+msgstr "* i: al inicio del periodo"
+
+#. module: mis_builder
+#: view:mis.report:mis_builder.mis_report_view_form
+msgid "* nothing or p: variation over the period"
+msgstr "* nada o p: variación del período"
+
+#. module: mis_builder
+#: field:mis.report.instance,root_account:0
+msgid "Account chart"
+msgstr "Plan de Cuentas"
+
+#. module: mis_builder
+#: view:add.mis.report.instance.dashboard.wizard:mis_builder.mis_report_instance_add_to_dashboard_form_view
+#: model:ir.actions.act_window,name:mis_builder.mis_report_instance_add_to_dashboard_action
+#: view:mis.report.instance:mis_builder.mis_report_instance_view_form
+msgid "Add to dashboard"
+msgstr "Agregar a Tablero"
+
+#. module: mis_builder
+#: field:mis.report.query,aggregate:0
+msgid "Aggregate"
+msgstr "Agregar"
+
+#. module: mis_builder
+#: selection:mis.report.instance,target_move:0
+msgid "All Entries"
+msgstr "Incluir no contabilizado"
+
+#. module: mis_builder
+#: selection:mis.report.instance,target_move:0
+msgid "All Posted Entries"
+msgstr "Todo lo contabilizado"
+
+#. module: mis_builder
+#: code:addons/mis_builder/models/mis_builder.py:240
+#: selection:mis.report.query,aggregate:0
+#, python-format
+msgid "Average"
+msgstr "Promedio"
+
+#. module: mis_builder
+#: field:mis.report.instance,date:0
+msgid "Base date"
+msgstr "Fecha base"
+
+#. module: mis_builder
+#: field:mis.report.kpi,css_style:0
+msgid "CSS style expression"
+msgstr "Expresión de estilo CSS"
+
+#. module: mis_builder
+#: view:add.mis.report.instance.dashboard.wizard:mis_builder.mis_report_instance_add_to_dashboard_form_view
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: mis_builder
+#: field:mis.report.instance,company_id:0
+msgid "Company"
+msgstr "Compañía"
+
+#. module: mis_builder
+#: field:mis.report.instance.period,comparison_column_ids:0
+msgid "Compare with"
+msgstr "Comparar con"
+
+#. module: mis_builder
+#: field:mis.report.kpi,compare_method:0
+msgid "Comparison Method"
+msgstr "Método de Comparación"
+
+#. module: mis_builder
+#: field:add.mis.report.instance.dashboard.wizard,create_uid:0
+#: field:mis.report,create_uid:0
+#: field:mis.report.instance,create_uid:0
+#: field:mis.report.instance.period,create_uid:0
+#: field:mis.report.kpi,create_uid:0
+#: field:mis.report.query,create_uid:0
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: mis_builder
+#: field:add.mis.report.instance.dashboard.wizard,create_date:0
+#: field:mis.report,create_date:0
+#: field:mis.report.instance,create_date:0
+#: field:mis.report.instance.period,create_date:0
+#: field:mis.report.kpi,create_date:0
+#: field:mis.report.query,create_date:0
+msgid "Created on"
+msgstr "Creado"
+
+#. module: mis_builder
+#: field:add.mis.report.instance.dashboard.wizard,dashboard_id:0
+msgid "Dashboard"
+msgstr "Tablero"
+
+#. module: mis_builder
+#: field:mis.report.query,date_field:0
+msgid "Date field"
+msgstr "Campo fecha"
+
+#. module: mis_builder
+#: code:addons/mis_builder/models/mis_builder.py:556
+#: selection:mis.report.instance.period,type:0
+#, python-format
+msgid "Day"
+msgstr "Día"
+
+#. module: mis_builder
+#: field:mis.report.kpi,default_css_style:0
+msgid "Default CSS style"
+msgstr "Estilo CSS"
+
+#. module: mis_builder
+#: field:mis.report,description:0
+#: field:mis.report.instance,description:0
+#: field:mis.report.instance.period,name:0
+#: field:mis.report.kpi,description:0
+msgid "Description"
+msgstr "Descripción"
+
+#. module: mis_builder
+#: code:addons/mis_builder/models/mis_builder.py:92
+#: selection:mis.report.kpi,compare_method:0
+#, python-format
+msgid "Difference"
+msgstr "Diferencia"
+
+#. module: mis_builder
+#: field:add.mis.report.instance.dashboard.wizard,display_name:0
+#: field:mis.report,display_name:0
+#: field:mis.report.instance,display_name:0
+#: field:mis.report.instance.period,display_name:0
+#: field:mis.report.kpi,display_name:0
+#: field:mis.report.query,display_name:0
+#: field:report.mis_builder.report_mis_report_instance,display_name:0
+msgid "Display Name"
+msgstr "Etiqueta"
+
+#. module: mis_builder
+#: field:mis.report.query,domain:0
+msgid "Domain"
+msgstr "Dominio"
+
+#. module: mis_builder
+#: field:mis.report.instance.period,duration:0
+msgid "Duration"
+msgstr "Duración"
+
+#. module: mis_builder
+#: view:mis.report:mis_builder.mis_report_view_form
+msgid "Examples"
+msgstr "Ejemplos"
+
+#. module: mis_builder
+#. openerp-web
+#: code:addons/mis_builder/static/src/xml/mis_widget.xml:6
+#: view:mis.report.instance:mis_builder.mis_report_instance_view_form
+#, python-format
+msgid "Export"
+msgstr "Exportar"
+
+#. module: mis_builder
+#: field:mis.report.kpi,expression:0
+msgid "Expression"
+msgstr "Expresión"
+
+#. module: mis_builder
+#: view:mis.report:mis_builder.mis_report_view_form
+msgid "Expressions are of the form <field><mode>[accounts][domain]"
+msgstr "Formato de expresión: <field><mode>[accounts][domain]"
+
+#. module: mis_builder
+#: field:mis.report.instance.period,normalize_factor:0
+#: field:mis.report.kpi,divider:0
+msgid "Factor"
+msgstr "Factor"
+
+#. module: mis_builder
+#: help:mis.report.instance.period,normalize_factor:0
+msgid "Factor to use to normalize the period (used in comparison"
+msgstr "Factor: usar para normaliza el periodo (usado en comparación)"
+
+#. module: mis_builder
+#: field:mis.report.query,field_names:0
+msgid "Fetched fields name"
+msgstr "Nombres de campos recuperados"
+
+#. module: mis_builder
+#: field:mis.report.query,field_ids:0
+msgid "Fields to fetch"
+msgstr "Campos a recuperar"
+
+#. module: mis_builder
+#: code:addons/mis_builder/models/mis_builder.py:558
+#: selection:mis.report.instance.period,type:0
+#, python-format
+msgid "Fiscal Period"
+msgstr "Periodo Fiscal"
+
+#. module: mis_builder
+#: field:mis.report.instance.period,date_from:0
+msgid "From"
+msgstr "Desde"
+
+#. module: mis_builder
+#: field:mis.report.instance.period,period_from:0
+msgid "From period"
+msgstr "Desde"
+
+#. module: mis_builder
+#: field:add.mis.report.instance.dashboard.wizard,id:0
+#: field:mis.report,id:0
+#: field:mis.report.instance,id:0
+#: field:mis.report.instance.period,id:0
+#: field:mis.report.kpi,id:0
+#: field:mis.report.query,id:0
+#: field:report.mis_builder.report_mis_report_instance,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: mis_builder
+#: view:mis.report:mis_builder.mis_report_view_form
+#: field:mis.report,kpi_ids:0
+#: view:mis.report.instance:mis_builder.mis_report_instance_view_form
+msgid "KPI's"
+msgstr "KPI's"
+
+#. module: mis_builder
+#: field:mis.report.instance,landscape_pdf:0
+msgid "Landscape PDF"
+msgstr "Horizontal PDF"
+
+#. module: mis_builder
+#: field:add.mis.report.instance.dashboard.wizard,__last_update:0
+#: field:mis.report,__last_update:0
+#: field:mis.report.instance,__last_update:0
+#: field:mis.report.instance.period,__last_update:0
+#: field:mis.report.kpi,__last_update:0
+#: field:mis.report.query,__last_update:0
+#: field:report.mis_builder.report_mis_report_instance,__last_update:0
+msgid "Last Modified on"
+msgstr "Ultima modificación"
+
+#. module: mis_builder
+#: field:add.mis.report.instance.dashboard.wizard,write_uid:0
+#: field:mis.report,write_uid:0
+#: field:mis.report.instance,write_uid:0
+#: field:mis.report.instance.period,write_uid:0
+#: field:mis.report.kpi,write_uid:0
+#: field:mis.report.query,write_uid:0
+msgid "Last Updated by"
+msgstr "Actualizado por"
+
+#. module: mis_builder
+#: field:add.mis.report.instance.dashboard.wizard,write_date:0
+#: field:mis.report,write_date:0
+#: field:mis.report.instance,write_date:0
+#: field:mis.report.instance.period,write_date:0
+#: field:mis.report.kpi,write_date:0
+#: field:mis.report.query,write_date:0
+msgid "Last Updated on"
+msgstr "Actualizado"
+
+#. module: mis_builder
+#: view:mis.report:mis_builder.mis_report_view_form
+msgid "Legend (for kpi expressions)"
+msgstr "Leyenda (para expresiones kpi)"
+
+#. module: mis_builder
+#: view:mis.report:mis_builder.mis_report_view_form
+msgid "MIS Report"
+msgstr "Reportes MIS"
+
+#. module: mis_builder
+#: view:mis.report.instance:mis_builder.mis_report_instance_view_form
+msgid "MIS Report Instance"
+msgstr "Instancias de reportes MIS"
+
+#. module: mis_builder
+#: view:mis.report.instance:mis_builder.mis_report_instance_view_tree
+msgid "MIS Report Instances"
+msgstr "Instancias de Reportes MIS"
+
+#. module: mis_builder
+#: view:mis.report.instance:mis_builder.mis_report_instance_result_view_form
+msgid "MIS Report Result"
+msgstr "Resultados de Reportes MIS"
+
+#. module: mis_builder
+#: model:ir.actions.act_window,name:mis_builder.mis_report_view_action
+#: model:ir.ui.menu,name:mis_builder.mis_report_view_menu
+msgid "MIS Report Templates"
+msgstr "Plantillas de Reportes MIS"
+
+#. module: mis_builder
+#: model:ir.actions.act_window,name:mis_builder.mis_report_instance_view_action
+#: model:ir.ui.menu,name:mis_builder.mis_report_instance_view_menu
+#: view:mis.report:mis_builder.mis_report_view_tree
+msgid "MIS Reports"
+msgstr "Reportes MIS"
+
+#. module: mis_builder
+#: model:ir.actions.report.xml,name:mis_builder.qweb_pdf_export
+msgid "MIS report instance QWEB PDF report"
+msgstr "Reporte PDF"
+
+#. module: mis_builder
+#: model:ir.actions.report.xml,name:mis_builder.xls_export
+msgid "MIS report instance XLS report"
+msgstr "Reportes XLS"
+
+#. module: mis_builder
+#: code:addons/mis_builder/models/mis_builder.py:242
+#: selection:mis.report.query,aggregate:0
+#, python-format
+msgid "Max"
+msgstr "Max"
+
+#. module: mis_builder
+#: code:addons/mis_builder/models/mis_builder.py:241
+#: selection:mis.report.query,aggregate:0
+#, python-format
+msgid "Min"
+msgstr "Min"
+
+#. module: mis_builder
+#: field:mis.report.query,model_id:0
+msgid "Model"
+msgstr "Modelo"
+
+#. module: mis_builder
+#: code:addons/mis_builder/models/aep.py:305
+#, python-format
+msgid "Modes i and e are only applicable for fiscal periods"
+msgstr "Modos i y e son solo aplicables para periodo fiscal"
+
+#. module: mis_builder
+#: field:add.mis.report.instance.dashboard.wizard,name:0
+#: field:mis.report,name:0
+#: view:mis.report.instance:mis_builder.mis_report_instance_view_form
+#: field:mis.report.instance,name:0
+#: field:mis.report.kpi,name:0
+#: field:mis.report.query,name:0
+msgid "Name"
+msgstr "Nombre"
+
+#. module: mis_builder
+#: code:addons/mis_builder/models/mis_builder.py:94
+#: selection:mis.report.kpi,compare_method:0
+#, python-format
+msgid "None"
+msgstr "Ninguno"
+
+#. module: mis_builder
+#: help:mis.report.instance.period,duration:0
+msgid "Number of periods"
+msgstr "Número de períodos"
+
+#. module: mis_builder
+#: code:addons/mis_builder/models/mis_builder.py:76
+#: selection:mis.report.kpi,type:0
+#, python-format
+msgid "Numeric"
+msgstr "Numerico"
+
+#. module: mis_builder
+#: field:mis.report.instance.period,offset:0
+msgid "Offset"
+msgstr "Offset"
+
+#. module: mis_builder
+#: help:mis.report.instance.period,offset:0
+msgid "Offset from current period"
+msgstr "Offset para el periodo fiscal"
+
+#. module: mis_builder
+#: code:addons/mis_builder/models/mis_builder.py:77
+#: code:addons/mis_builder/models/mis_builder.py:93
+#: selection:mis.report.kpi,compare_method:0
+#: selection:mis.report.kpi,type:0
+#, python-format
+msgid "Percentage"
+msgstr "Porcentaje"
+
+#. module: mis_builder
+#: sql_constraint:mis.report.instance.period:0
+msgid "Period name should be unique by report"
+msgstr "Nombre del periodo debe ser único para el reporte"
+
+#. module: mis_builder
+#: field:mis.report.instance.period,type:0
+msgid "Period type"
+msgstr "Tipo de periodo"
+
+#. module: mis_builder
+#: view:mis.report.instance:mis_builder.mis_report_instance_view_form
+#: field:mis.report.instance,period_ids:0
+msgid "Periods"
+msgstr "Periodos"
+
+#. module: mis_builder
+#: field:mis.report.instance,pivot_date:0
+msgid "Pivot date"
+msgstr "Fecha Pivot"
+
+#. module: mis_builder
+#: view:mis.report:mis_builder.mis_report_view_form
+msgid "Possible values for 'field' can be:"
+msgstr "Valores posibles para 'field' pueden ser:"
+
+#. module: mis_builder
+#: view:mis.report:mis_builder.mis_report_view_form
+msgid "Possible values for 'mode' are:"
+msgstr "Valores posibles para 'mode' son:"
+
+#. module: mis_builder
+#: field:mis.report.kpi,prefix:0
+msgid "Prefix"
+msgstr "Prefijo"
+
+#. module: mis_builder
+#: view:mis.report.instance:mis_builder.mis_report_instance_view_form
+msgid "Preview"
+msgstr "Vista Previa"
+
+#. module: mis_builder
+#. openerp-web
+#: code:addons/mis_builder/static/src/xml/mis_widget.xml:5
+#: view:mis.report.instance:mis_builder.mis_report_instance_view_form
+#, python-format
+msgid "Print"
+msgstr "Imprimir"
+
+#. module: mis_builder
+#: view:mis.report:mis_builder.mis_report_view_form
+#: field:mis.report,query_ids:0
+msgid "Queries"
+msgstr "Consultas"
+
+#. module: mis_builder
+#: model:ir.model,name:mis_builder.model_report
+#: field:mis.report.instance,report_id:0
+#: field:mis.report.kpi,report_id:0
+#: field:mis.report.query,report_id:0
+msgid "Report"
+msgstr "Informe"
+
+#. module: mis_builder
+#: field:mis.report.instance.period,report_instance_id:0
+msgid "Report Instance"
+msgstr "Instancia de Reporte"
+
+#. module: mis_builder
+#: help:mis.report.instance,date:0
+msgid "Report base date (leave empty to use current date)"
+msgstr "Fecha base de repore (dejar en blanco para usar la actual)"
+
+#. module: mis_builder
+#: field:mis.report.kpi,dp:0
+msgid "Rounding"
+msgstr "Redondeo"
+
+#. module: mis_builder
+#: field:mis.report.instance.period,sequence:0
+#: field:mis.report.kpi,sequence:0
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: mis_builder
+#. openerp-web
+#: code:addons/mis_builder/static/src/xml/mis_widget.xml:7
+#, python-format
+msgid "Settings"
+msgstr "Configuración"
+
+#. module: mis_builder
+#: code:addons/mis_builder/models/mis_builder.py:78
+#: selection:mis.report.kpi,type:0
+#, python-format
+msgid "String"
+msgstr "String"
+
+#. module: mis_builder
+#: field:mis.report.kpi,suffix:0
+msgid "Suffix"
+msgstr "Sufijo"
+
+#. module: mis_builder
+#: code:addons/mis_builder/models/mis_builder.py:239
+#: selection:mis.report.query,aggregate:0
+#, python-format
+msgid "Sum"
+msgstr "Sum"
+
+#. module: mis_builder
+#: field:mis.report.instance,target_move:0
+msgid "Target Moves"
+msgstr "Movimientos"
+
+#. module: mis_builder
+#: field:mis.report.instance.period,date_to:0
+msgid "To"
+msgstr "Hasta"
+
+#. module: mis_builder
+#: field:mis.report.instance.period,period_to:0
+msgid "To period"
+msgstr "Hasta"
+
+#. module: mis_builder
+#: field:mis.report.kpi,type:0
+msgid "Type"
+msgstr "Tipo"
+
+#. module: mis_builder
+#: field:mis.report.instance.period,valid:0
+msgid "Valid"
+msgstr "Valido"
+
+#. module: mis_builder
+#: code:addons/mis_builder/models/mis_builder.py:557
+#: selection:mis.report.instance.period,type:0
+#, python-format
+msgid "Week"
+msgstr "Semana"
+
+#. module: mis_builder
+#: sql_constraint:mis.report.instance.period:0
+msgid "Wrong duration, it must be positive!"
+msgstr "Duración incorrecta, debe ser positiva!"
+
+#. module: mis_builder
+#: sql_constraint:mis.report.instance.period:0
+msgid "Wrong normalize factor, it must be positive!"
+msgstr "Factor de normalización incorrecto, debe ser positivo!"
+
+#. module: mis_builder
+#: code:addons/mis_builder/models/mis_builder.py:839
+#, python-format
+msgid "from %s to %s"
+msgstr "desde %s hasta %s"
+
+#. module: mis_builder
+#: view:add.mis.report.instance.dashboard.wizard:mis_builder.mis_report_instance_add_to_dashboard_form_view
+msgid "or"
+msgstr "o"
+
+#. module: mis_builder
+#: code:addons/mis_builder/models/mis_builder.py:172
+#, python-format
+msgid "pp"
+msgstr "pp"
+
+#. module: mis_builder
+#: code:addons/mis_builder/models/mis_builder.py:82
+#: selection:mis.report.kpi,divider:0
+#, python-format
+msgid "µ"
+msgstr "µ"
+
