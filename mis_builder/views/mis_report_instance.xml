@@ -42,7 +42,7 @@
             <field name="model">mis.report.instance</field>
             <field name="priority" eval="15"/>
             <field name="arch" type="xml">
-                <form string="MIS Report Instance" version="7.0">
+                <form string="MIS Report Instance">
                 <sheet>
                     <field name="temporary" invisible="1"/>
                     <div class="oe_read_only oe_right oe_button_box" name="buttons">
