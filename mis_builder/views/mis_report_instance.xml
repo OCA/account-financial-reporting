@@ -66,7 +66,6 @@
                             <field name="report_id" string="Template"/>
                             <field name="company_id" groups="base.group_multi_company"/>
                             <field name="target_move" widget="radio"/>
-                            <field name="display"/>
                             <field name="landscape_pdf"/>
                             <field name="comparison_mode"/>
                         </group>
