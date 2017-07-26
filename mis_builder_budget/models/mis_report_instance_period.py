@@ -26,7 +26,16 @@ class MisReportInstancePeriod(models.Model):
     def _compute_mis_budget(self, lang_id, aep):
         mis_report = self.report_instance_id.report_id
         budget = self.env['mis.budget'].search(
-            [('report_id', '=', mis_report.id)])
+            [('report_id', '=', mis_report.id),
+             ('state', '=', 'confirmed')])
+        if len(budget) == 0:
+            raise UserError(_(
+                "No Confirmed Budget defined for "
+                "MIS Report '%s'.") % mis_report.name)
+        if len(budget) > 1:
+            raise UserError(_(
+                "Multiple Confirmed Budgets defined for "
+                "MIS Report '%s'") % mis_report.name)
 
         res = {}
         for kpi in mis_report.kpi_ids:
