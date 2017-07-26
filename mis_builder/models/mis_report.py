@@ -698,7 +698,7 @@ class MisReportQuery(models.Model):
                                   ('min', _('Min')),
                                   ('max', _('Max'))],
                                  string='Aggregate')
-    date_field = fields.Many2one('ir.model.fields', required=True,
+    date_field = fields.Many2one('ir.model.fields'
                                  string='Date field',
                                  domain=[('ttype', 'in',
                                          ('date', 'datetime'))])
@@ -848,10 +848,10 @@ class MisReport(models.Model):
                 safe_eval(query.domain, eval_context) or []
             if get_additional_query_filter:
                 domain.extend(get_additional_query_filter(query))
-            if query.date_field.ttype == 'date':
+            if query.date_field and query.date_field.ttype == 'date':
                 domain.extend([(query.date_field.name, '>=', date_from),
                                (query.date_field.name, '<=', date_to)])
-            else:
+            elif query.date_field:
                 datetime_from = _utc_midnight(
                     date_from, self._context.get('tz', 'UTC'))
                 datetime_to = _utc_midnight(
