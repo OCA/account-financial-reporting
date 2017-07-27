@@ -32,7 +32,7 @@ var MisReport = form_common.FormWidget.extend({
         if (self.dfm)
             return;
         self.dfm = new form_common.DefaultFieldManager(self);
-        self.$(".oe_mis_builder_generate_content").click(_.bind(this.refresh_content, this));
+        self.$(".oe_mis_builder_generate_content").click(_.bind(this.generate_content, this));
     },
 
     destroy_content: function() {
@@ -100,6 +100,7 @@ var MisReport = form_common.FormWidget.extend({
     },
     display_linechart: function() {
         var self = this;
+        console.debug(self.mis_report_data);
         var labels = [];
         var lines = [];
         var values = [];
@@ -133,6 +134,7 @@ var MisReport = form_common.FormWidget.extend({
             }
             lines.push(linedata);
         }
+        console.debug(lines);
         var maxVal = _.max(values, function(v) {return v.y})
         var chart = nv.models.lineChart()
             .useInteractiveGuideline(true)
@@ -164,6 +166,7 @@ var MisReport = form_common.FormWidget.extend({
     },
     display_multibarchart: function() {
         var self = this;
+        console.debug(self.mis_report_data);
         var lines = [];
         var values = [];
         for (var i = 0; i < self.mis_report_data['body'].length; i++) {
@@ -211,6 +214,7 @@ var MisReport = form_common.FormWidget.extend({
     },
     display_multichart: function() {
         var self = this;
+        console.debug(self.mis_report_data);
         var labels = [];
         var lines = [];
         var values = [];
@@ -292,12 +296,7 @@ var MisReport = form_common.FormWidget.extend({
         .call(chart);
         nv.utils.windowResize(chart.update);
     },
-    refresh_content: function () {
-        var self = this;
-        var m = moment().format('YYYY-MM-DD HH:mm:ss');
-        self.generate_content(m);
-    },
-    generate_content: function(date) {
+    generate_content: function() {
         var self = this;
         var context = new data.CompoundContext(self.build_context(), self.get_context()|| {});
         new Model("mis.report.instance").call(
@@ -309,8 +308,7 @@ var MisReport = form_common.FormWidget.extend({
         });
         new Model("mis.report.instance").call(
             "compute",
-            [self.mis_report_instance_id, date],
-            
+            [self.mis_report_instance_id],
             {'context': context}
         ).then(function(result){
             self.mis_report_data = result;
