@@ -58,7 +58,7 @@ class KpiMatrixRow(object):
                 self.kpi.auto_expand_accounts_style_id])
         self.chart_display = None
         if self.kpi.report_id.display == 'multi' and \
-                    self.kpi.chart_display:
+                self.kpi.chart_display:
             self.chart_display = self.kpi.chart_display
 
     @property
@@ -487,7 +487,9 @@ class MisReportKpi(models.Model):
              'Such style is applied on top of the row style.')
     chart_display = fields.Selection(
         [('bar', 'Bar Chart'),
-         ('line', 'Line Chart')],
+         ('line', 'Line Chart'),
+         ('area', 'Area Chart'),
+         ('scatter', 'Scatter Chart')],
         string="Chart display")
     type = fields.Selection([(TYPE_NUM, _('Numeric')),
                              (TYPE_PCT, _('Percentage')),
@@ -748,7 +750,7 @@ class MisReport(models.Model):
     style_id = fields.Many2one(string="Style",
                                comodel_name="mis.report.style")
     display = fields.Selection(
-        [('table','Table'),
+        [('table', 'Table'),
          ('bar', 'Bar Chart'),
          ('line', 'Line Chart'),
          ('multi', 'Multi Chart')],
