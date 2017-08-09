@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from openerp import api, fields, models, _
+from openerp.exceptions import Warning as UserError
 
 
 class MisBudget(models.Model):
@@ -51,15 +52,6 @@ class MisBudget(models.Model):
         copy=True,
     )
 
-    @api.multi
-    def copy(self, default=None):
-        self.ensure_one()
-        if default is None:
-            default = {}
-        if 'name' not in default:
-            default['name'] = _("%s (copy)") % self.name
-        return super(MisBudget, self).copy(default=default)
-
     @api.onchange('fiscalyear_id')
     def _onchange_fiscalyear_id(self):
         for rec in self:
@@ -74,6 +66,23 @@ class MisBudget(models.Model):
                 if rec.date_from != rec.fiscalyear_id.date_start or \
                         rec.date_to != rec.fiscalyear_id.date_stop:
                     rec.fiscalyear_id = False
+
+    @api.multi
+    def copy(self, default=None):
+        self.ensure_one()
+        if default is None:
+            default = {}
+        if 'name' not in default:
+            default['name'] = _("%s (copy)") % self.name
+        return super(MisBudget, self).copy(default=default)
+
+    @api.multi
+    def unlink(self):
+        for budget in self:
+            if budget.state != 'draft':
+                raise UserError(
+                    _("You can only delete budgets in draft state."))
+        return super(MisBudget, self).unlink()
 
     @api.multi
     def action_draft(self):
