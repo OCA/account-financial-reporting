@@ -2,7 +2,7 @@
 # © 2016 Therp BV <http://therp.nl>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 from lxml import etree
-from openerp.tests.common import TransactionCase
+from odoo.tests.common import TransactionCase
 
 
 class TestAccountFinancialReportHorizontal(TransactionCase):
@@ -14,7 +14,7 @@ class TestAccountFinancialReportHorizontal(TransactionCase):
         data = action['data']
         html = self.env['report'].with_context(action['context']).get_html(
             self.env[data['model']].browse(data['ids']),
-            action['report_name'],
+            report_name=action['report_name'],
             data=data,
         )
         self.assertTrue(etree.fromstring(html).xpath('//div[@class="row"]'))
