@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
         <record id="paperformat_euro_landscape" model="report.paperformat">
             <field name="name">European A4 (Landscape)</field>
             <field name="format">A4</field>
@@ -15,5 +14,4 @@
             <field name="header_spacing">35</field>
             <field name="dpi">90</field>
         </record>
-    </data>
-</openerp>
+</odoo>
