@@ -803,11 +803,15 @@ class MisReport(models.Model):
 
     def prepare_locals_dict(self):
         return {
+            'self': self,
             'sum': _sum,
             'min': _min,
             'max': _max,
             'len': len,
             'avg': _avg,
+            'time': time,
+            'datetime': datetime,
+            'dateutil': dateutil,
             'AccountingNone': AccountingNone,
             'SimpleArray': SimpleArray,
         }
@@ -918,6 +922,7 @@ class MisReport(models.Model):
             locals_dict = {}
 
         locals_dict.update(self.prepare_locals_dict())
+        locals_dict.update({'date_from': date_from, 'date_to': date_to})
 
         # fetch non-accounting queries
         locals_dict.update(self._fetch_queries(
