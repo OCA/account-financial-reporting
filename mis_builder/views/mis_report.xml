@@ -42,6 +42,7 @@
                                 <field name="field_names"/>
                                 <field name="aggregate"/>
                                 <field name="date_field" domain="[('model_id', '=', model_id), ('ttype', 'in', ('date', 'datetime'))]"/>
+                                <field name="period_filter"/>
                                 <field name="domain"/>
                             </tree>
                         </field>
