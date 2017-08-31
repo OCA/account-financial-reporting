@@ -854,9 +854,9 @@ class MisReport(models.Model):
                 safe_eval(query.domain, eval_context) or []
             if get_additional_query_filter:
                 domain.extend(get_additional_query_filter(query))
-            if query.period_filter != 'none':
+            if query.period_filter != 'none' and query.date_field:
                 date_field = query.date_field.name
-                if query.date_field and query.date_field.ttype == 'date':
+                if query.date_field.ttype == 'date':
                     if query.period_filter == 'both':
                         domain.extend([(date_field, '>=', date_from),
                                        (date_field, '<=', date_to)])
@@ -864,7 +864,7 @@ class MisReport(models.Model):
                         domain.extend([(date_field, '>=', date_from)])
                     elif query.period_filter == 'to':
                         domain.extend([(date_field, '<=', date_to)])
-                elif query.date_field:
+                else:
                     datetime_from = _utc_midnight(
                         date_from, self._context.get('tz', 'UTC'))
                     datetime_to = _utc_midnight(
