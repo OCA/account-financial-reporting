@@ -240,3 +240,39 @@ class TestAEP(common.TransactionCase):
         account_ids = self.aep.get_account_ids_for_expr(expr)
         self.assertEquals(
             account_ids, set([self.account_in.id, self.account_ar.id]))
+
+    def test_get_aml_domain_for_expr(self):
+        expr = 'balp[700IN]'
+        domain = self.aep.get_aml_domain_for_expr(
+            expr, '2017-01-01', '2017-03-31', target_move='posted')
+        self.assertEqual(
+            domain, [
+                ('account_id', 'in', (self.account_in.id, )),
+                '&',
+                '&',
+                ('date', '>=', '2017-01-01'),
+                ('date', '<=', '2017-03-31'),
+                ('move_id.state', '=', 'posted'),
+            ])
+        expr = 'debi[700IN] - crdi[400AR]'
+        domain = self.aep.get_aml_domain_for_expr(
+            expr, '2017-02-01', '2017-03-31', target_move='draft')
+        self.assertEqual(
+            domain, [
+                '|',
+                # debi[700IN]
+                '&',
+                ('account_id', 'in', (self.account_in.id, )),
+                ('debit', '>', 0),
+                # crdi[400AR]
+                '&',
+                ('account_id', 'in', (self.account_ar.id, )),
+                ('credit', '>', 0),
+                '&',
+                # for P&L accounts, only after fy start
+                '|',
+                ('date', '>=', '2017-01-01'),
+                ('user_type_id.include_initial_balance', '=', True),
+                # everything must be before from_date for initial balance
+                ('date', '<', '2017-02-01'),
+            ])

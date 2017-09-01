@@ -212,6 +212,8 @@ class AccountingExpressionProcessor(object):
                     self.get_aml_domain_for_dates(date_from, date_to,
                                                   mode, target_move)
         assert aml_domains
+        # TODO we could do this for more precision:
+        #      AND(OR(aml_domains[mode]), date_domain[mode]) for each mode
         return expression.OR(aml_domains) + \
             expression.OR(date_domain_by_mode.values())
 
