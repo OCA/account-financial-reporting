@@ -4,7 +4,7 @@
 
 import doctest
 
-from odoo.addons.mis_builder.models import simple_array
+from ..models import simple_array
 
 
 def load_tests(loader, tests, ignore):

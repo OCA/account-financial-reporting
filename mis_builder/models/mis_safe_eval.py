@@ -23,7 +23,8 @@ def mis_safe_eval(expr, locals_dict):
     try:
         c = test_expr(expr, _SAFE_OPCODES, mode='eval')
         globals_dict = {'__builtins__': _BUILTINS}
-        val = eval(c, globals_dict, locals_dict)  # pylint: disable=eval-used
+        # pylint: disable=eval-used,eval-referenced
+        val = eval(c, globals_dict, locals_dict)
     except NameError:
         val = NameDataError('#NAME', traceback.format_exc())
     except ZeroDivisionError:
