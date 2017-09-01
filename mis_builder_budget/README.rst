@@ -39,7 +39,7 @@ To use this module, you need to:
 Known issues / Roadmap
 ======================
 
-* ...
+* Improve the workflow (eg, make non-draft budgets readonly)
 
 Bug Tracker
 ===========

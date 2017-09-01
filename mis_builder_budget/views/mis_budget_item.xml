@@ -3,8 +3,6 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 
 <odoo>
-<data>
-
 
     <record model="ir.ui.view" id="mis_budget_item_search_view">
         <field name="name">mis.budget.item.search (in mis_builder_budget)</field>
@@ -44,6 +42,4 @@
         <field name="context">{'default_budget_id': active_id}</field>
     </record>
 
-
-</data>
 </odoo>

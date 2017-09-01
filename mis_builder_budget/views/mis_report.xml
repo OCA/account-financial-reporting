@@ -3,7 +3,6 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 
 <odoo>
-<data>
 
     <record model="ir.ui.view" id="mis_report_view_form">
         <field name="name">mis.report.view.form (in mis_builder_budget)</field>
@@ -27,5 +26,4 @@
         </field>
     </record>
 
-</data>
 </odoo>

@@ -3,7 +3,6 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 
 <odoo>
-<data>
 
     <record model="ir.model.access" id="mis_budget_access_base_user">
         <field name="name">mis.budget access base user</field>
@@ -25,5 +24,4 @@
         <field name="perm_unlink" eval="1"/>
     </record>
 
-</data>
 </odoo>
