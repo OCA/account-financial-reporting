@@ -87,14 +87,14 @@ class MisReportInstancePeriod(models.Model):
                 record.date_from = record.manual_date_from
                 record.date_to = record.manual_date_to
                 record.valid = record.date_from and record.date_to
-            elif record.type == 'd':
+            elif record.mode == MODE_REL and record.type == 'd':
                 date_from = d + datetime.timedelta(days=record.offset)
                 date_to = date_from + \
                     datetime.timedelta(days=record.duration - 1)
                 record.date_from = fields.Date.to_string(date_from)
                 record.date_to = fields.Date.to_string(date_to)
                 record.valid = True
-            elif record.type == 'w':
+            elif record.mode == MODE_REL and record.type == 'w':
                 date_from = d - datetime.timedelta(d.weekday())
                 date_from = date_from + \
                     datetime.timedelta(days=record.offset * 7)
@@ -103,24 +103,24 @@ class MisReportInstancePeriod(models.Model):
                 record.date_from = fields.Date.to_string(date_from)
                 record.date_to = fields.Date.to_string(date_to)
                 record.valid = True
-            elif record.type == 'date_range':
+            elif record.mode == MODE_REL and record.type == 'date_range':
                 date_range_obj = record.env['date.range']
                 current_periods = date_range_obj.search(
                     [('type_id', '=', record.date_range_type_id.id),
                      ('date_start', '<=', d),
                      ('date_end', '>=', d),
-                     ('company_id', '=',
-                      record.report_instance_id.company_id.id)])
+                     '|',
+                     ('company_id', '=', False),
+                     ('company_id', '=', report.company_id.id)])
                 if current_periods:
+                    current_period = current_periods[0]
                     all_periods = date_range_obj.search(
-                        [('type_id', '=', record.date_range_type_id.id),
-                         ('company_id', '=',
-                          record.report_instance_id.company_id.id)],
+                        [('type_id', '=', current_period.type_id.id),
+                         ('company_id', '=', current_period.company_id.id)],
                         order='date_start')
-                    all_period_ids = [p.id for p in all_periods]
-                    p = all_period_ids.index(current_periods[0].id) + \
+                    p = all_periods.ids.index(current_period.id) + \
                         record.offset
-                    if p >= 0 and p + record.duration <= len(all_period_ids):
+                    if p >= 0 and p + record.duration <= len(all_periods):
                         periods = all_periods[p:p + record.duration]
                         record.date_from = periods[0].date_start
                         record.date_to = periods[-1].date_end
@@ -141,7 +141,10 @@ class MisReportInstancePeriod(models.Model):
                              ],
                             string='Period type')
     date_range_type_id = fields.Many2one(
-        comodel_name='date.range.type', string='Date Range Type')
+        comodel_name='date.range.type',
+        string='Date Range Type',
+        domain=[('allow_overlap', '=', False)],
+    )
     offset = fields.Integer(string='Offset',
                             help='Offset from current period',
                             default=-1)
