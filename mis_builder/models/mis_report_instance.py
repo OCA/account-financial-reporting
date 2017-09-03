@@ -23,6 +23,14 @@ MODE_FIX = 'fix'
 MODE_REL = 'relative'
 
 
+class DateFilterRequired(ValidationError):
+    pass
+
+
+class DateFilterForbidden(ValidationError):
+    pass
+
+
 class MisReportInstancePeriodSum(models.Model):
 
     _name = "mis.report.instance.period.sum"
@@ -279,12 +287,12 @@ class MisReportInstancePeriod(models.Model):
     def _check_mode_source(self):
         if self.source in (SRC_ACTUALS, SRC_ACTUALS_ALT):
             if self.mode == MODE_NONE:
-                raise ValidationError(
+                raise DateFilterRequired(
                     _("A date filter is mandatory for this source "
                       "in column %s.") % self.name)
         elif self.source in (SRC_SUMCOL, SRC_CMPCOL):
             if self.mode != MODE_NONE:
-                raise ValidationError(
+                raise DateFilterForbidden(
                     _("No date filter is allowed for this source "
                       "in column %s.") % self.name)
 
@@ -417,16 +425,16 @@ class MisReportInstance(models.Model):
         for record in self:
             if not record.comparison_mode:
                 if not record.date_from:
-                    record.date_from = datetime.now()
+                    record.date_from = fields.Date.context_today(self)
                 if not record.date_to:
-                    record.date_to = datetime.now()
+                    record.date_to = fields.Date.context_today(self)
                 record.period_ids.unlink()
-                record.write({'period_ids': [
-                    (0, 0, {
-                        'name': 'Default',
-                        'type': 'd',
+                record.write({
+                    'period_ids': [
+                        (0, 0, {
+                            'name': 'Default',
                         })
-                    ]})
+                ]})
             else:
                 record.date_from = None
                 record.date_to = None
