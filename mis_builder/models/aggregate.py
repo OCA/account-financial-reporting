@@ -124,6 +124,6 @@ def _max(*args):
     return max(*args)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     import doctest
     doctest.testmod()

@@ -182,6 +182,6 @@ def named_simple_array(typename, field_names):
     return type(typename, (SimpleArray, ), props)
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
     import doctest
     doctest.testmod()
