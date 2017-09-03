@@ -138,16 +138,19 @@ class MisReportInstancePeriod(models.Model):
 
     name = fields.Char(size=32, required=True,
                        string='Label', translate=True)
-    mode = fields.Selection([(MODE_FIX, 'Fixed dates'),
-                             (MODE_REL, 'Relative to report base date'),
-                             (MODE_NONE, 'No date filter'),
-                             ], required=True,
-                            default=MODE_FIX)
-    type = fields.Selection([('d', _('Day')),
-                             ('w', _('Week')),
-                             ('date_range', _('Date Range'))
-                             ],
-                            string='Period type')
+    mode = fields.Selection(
+        [(MODE_FIX, 'Fixed dates'),
+         (MODE_REL, 'Relative to report base date'),
+         (MODE_NONE, 'No date filter')],
+        required=True,
+        default=MODE_FIX,
+    )
+    type = fields.Selection(
+        [('d', _('Day')),
+         ('w', _('Week')),
+         ('date_range', _('Date Range'))],
+        string='Period type'
+    )
     date_range_type_id = fields.Many2one(
         comodel_name='date.range.type',
         string='Date Range Type',
@@ -430,11 +433,10 @@ class MisReportInstance(models.Model):
                     record.date_to = fields.Date.context_today(self)
                 record.period_ids.unlink()
                 record.write({
-                    'period_ids': [
-                        (0, 0, {
-                            'name': 'Default',
-                        })
-                ]})
+                    'period_ids': [(0, 0, {
+                        'name': 'Default',
+                    })],
+                })
             else:
                 record.date_from = None
                 record.date_to = None
@@ -510,8 +512,8 @@ class MisReportInstance(models.Model):
             self, aep, kpi_matrix, period, label, description):
         if not period.date_from or not period.date_to:
             raise UserError(_("Column %s with actuals source "
-                              "must have from/to dates." %
-                            (period.name,)))
+                              "must have from/to dates.") %
+                            (period.name,))
         self.report_id.declare_and_compute_period(
             kpi_matrix,
             period.id,
@@ -529,8 +531,8 @@ class MisReportInstance(models.Model):
             self, aep, kpi_matrix, period, label, description):
         if not period.date_from or not period.date_to:
             raise UserError(_("Column %s with actuals source "
-                              "must have from/to dates." %
-                            (period.name,)))
+                              "must have from/to dates.") %
+                            (period.name,))
         self.report_id.declare_and_compute_period(
             kpi_matrix,
             period.id,

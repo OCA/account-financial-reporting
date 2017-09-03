@@ -438,10 +438,12 @@ class KpiMatrix(object):
         account_ids = set()
         for detail_rows in self._detail_rows.values():
             account_ids.update(detail_rows.keys())
-        account_ids = list(account_ids)
-        accounts = self._account_model.search([('id', 'in', account_ids)])
-        self._account_names = {a.id: u'{} {}'.format(a.code, a.name)
-                               for a in accounts}
+        accounts = self._account_model.\
+            search([('id', 'in', list(account_ids))])
+        self._account_names = {
+            a.id: u'{} {}'.format(a.code, a.name)
+            for a in accounts
+        }
 
     def get_account_name(self, account_id):
         if account_id not in self._account_names:
@@ -832,15 +834,19 @@ class MisReportQuery(models.Model):
                                   ('min', _('Min')),
                                   ('max', _('Max'))],
                                  string='Aggregate')
-    date_field = fields.Many2one('ir.model.fields', required=True,
-                                 string='Date field',
-                                 domain=[('ttype', 'in',
-                                         ('date', 'datetime'))],
-                                 ondelete='restrict')
+    date_field = fields.Many2one(
+        comodel_name='ir.model.fields',
+        required=True,
+        domain=[('ttype', 'in', ('date', 'datetime'))],
+        ondelete='restrict',
+    )
     domain = fields.Char(string='Domain')
-    report_id = fields.Many2one('mis.report', string='Report',
-                                required=True,
-                                ondelete='cascade')
+    report_id = fields.Many2one(
+        comodel_name='mis.report',
+        string='Report',
+        required=True,
+        ondelete='cascade',
+    )
 
     _order = 'name'
 
