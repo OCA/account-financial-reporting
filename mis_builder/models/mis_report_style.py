@@ -4,7 +4,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo import api, fields, models, _
-from odoo.exceptions import UserError
+from odoo.exceptions import ValidationError
 
 from .accounting_none import AccountingNone
 from .data_error import DataError
@@ -50,8 +50,8 @@ class MisReportKpiStyle(models.Model):
     def check_positive_val(self):
         for record in self:
             if record.indent_level < 0:
-                raise UserError(_('Indent level must be greater than '
-                                  'or equal to 0'))
+                raise ValidationError(_('Indent level must be greater than '
+                                        'or equal to 0'))
 
     _font_style_selection = [
         ('normal', 'Normal'),
