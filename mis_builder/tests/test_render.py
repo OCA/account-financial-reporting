@@ -8,6 +8,7 @@ from ..models.accounting_none import AccountingNone
 from ..models.mis_report_style import (
     TYPE_NUM, TYPE_PCT, TYPE_STR, CMP_DIFF, CMP_PCT
 )
+from ..models.data_error import DataError
 
 
 class TestRendering(common.TransactionCase):
@@ -28,9 +29,13 @@ class TestRendering(common.TransactionCase):
     def _compare_and_render(self, value, base_value,
                             type=TYPE_NUM, compare_method=CMP_PCT):
         style_props = self.style_obj.merge([self.style])
-        return self.style_obj.compare_and_render(self.lang, style_props,
-                                                 type, compare_method,
-                                                 value, base_value)[:2]
+        r = self.style_obj.compare_and_render(self.lang, style_props,
+                                              type, compare_method,
+                                              value, base_value)[:2]
+        if r[0]:
+            return (round(r[0], 8), r[1])
+        else:
+            return r
 
     def test_render(self):
         self.assertEquals(u'1', self._render(1))
@@ -122,10 +127,20 @@ class TestRendering(common.TransactionCase):
                           self._compare_and_render(50, AccountingNone))
         self.assertEquals((AccountingNone, u''),
                           self._compare_and_render(50, None))
+        self.assertEquals((AccountingNone, u''),
+                          self._compare_and_render(50, 50))
+        self.assertEquals((0.002, u'+0.2\xa0%'),
+                          self._compare_and_render(50.1, 50))
+        self.assertEquals((AccountingNone, u''),
+                          self._compare_and_render(50.01, 50))
         self.assertEquals((-1.0, u'\u2011100.0\xa0%'),
                           self._compare_and_render(AccountingNone, 50))
         self.assertEquals((-1.0, u'\u2011100.0\xa0%'),
                           self._compare_and_render(None, 50))
+        self.assertEquals((AccountingNone, u''),
+                          self._compare_and_render(DataError('#ERR', '.'), 1))
+        self.assertEquals((AccountingNone, u''),
+                          self._compare_and_render(1, DataError('#ERR', '.')))
 
     def test_compare_num_diff(self):
         self.assertEquals((25, u'+25'),
@@ -152,7 +167,17 @@ class TestRendering(common.TransactionCase):
         self.assertEquals((-50.0, u'\u201150'),
                           self._compare_and_render(None, 50,
                                                    TYPE_NUM, CMP_DIFF))
+        self.style.dp_inherit = False
+        self.style.dp = 2
+        self.assertEquals((0.1, u'+0.10'),
+                          self._compare_and_render(1.1, 1.0,
+                                                   TYPE_NUM, CMP_DIFF))
+        self.assertEquals((AccountingNone, u''),
+                          self._compare_and_render(1.001, 1.0,
+                                                   TYPE_NUM, CMP_DIFF))
 
     def test_compare_pct(self):
         self.assertEquals((0.25, u'+25\xa0pp'),
                           self._compare_and_render(0.75, 0.50, TYPE_PCT))
+        self.assertEquals((AccountingNone, u''),
+                          self._compare_and_render(0.751, 0.750, TYPE_PCT))
