@@ -181,3 +181,110 @@ class TestRendering(common.TransactionCase):
                           self._compare_and_render(0.75, 0.50, TYPE_PCT))
         self.assertEquals((AccountingNone, u''),
                           self._compare_and_render(0.751, 0.750, TYPE_PCT))
+
+    def test_merge(self):
+        self.style.color = '#FF0000'
+        self.style.color_inherit = False
+        style_props = self.style_obj.merge([self.style])
+        self.assertEquals(style_props, {
+            'color': '#FF0000',
+        })
+        style_dict = {
+            'color': '#00FF00',
+            'dp': 0,
+        }
+        style_props = self.style_obj.merge([self.style, style_dict])
+        self.assertEquals(style_props, {
+            'color': '#00FF00',
+            'dp': 0,
+        })
+        style2 = self.style_obj.create(dict(
+            name='teststyle2',
+            dp_inherit=False,
+            dp=1,
+            # color_inherit=True: will not be applied
+            color='#0000FF',
+        ))
+        style_props = self.style_obj.merge([self.style, style_dict, style2])
+        self.assertEquals(style_props, {
+            'color': '#00FF00',
+            'dp': 1,
+        })
+
+    def test_css(self):
+        self.style.color_inherit = False
+        self.style.color = '#FF0000'
+        self.style.background_color_inherit = False
+        self.style.background_color = '#0000FF'
+        self.style.suffix_inherit = False
+        self.style.suffix = 's'
+        self.style.prefix_inherit = False
+        self.style.prefix = 'p'
+        self.style.font_style_inherit = False
+        self.style.font_style = 'italic'
+        self.style.font_weight_inherit = False
+        self.style.font_weight = 'bold'
+        self.style.font_size_inherit = False
+        self.style.font_size = 'small'
+        self.style.indent_level_inherit = False
+        self.style.indent_level = 2
+        style_props = self.style_obj.merge([self.style])
+        css = self.style_obj.to_css_style(style_props)
+        self.assertEquals(
+            css,
+            'font-style: italic; '
+            'font-weight: bold; '
+            'font-size: small; '
+            'color: #FF0000; '
+            'background-color: #0000FF; '
+            'text-indent: 2em'
+        )
+        css = self.style_obj.to_css_style(style_props, no_indent=True)
+        self.assertEquals(
+            css,
+            'font-style: italic; '
+            'font-weight: bold; '
+            'font-size: small; '
+            'color: #FF0000; '
+            'background-color: #0000FF'
+        )
+
+    def test_xslx(self):
+        self.style.color_inherit = False
+        self.style.color = '#FF0000'
+        self.style.background_color_inherit = False
+        self.style.background_color = '#0000FF'
+        self.style.suffix_inherit = False
+        self.style.suffix = 's'
+        self.style.prefix_inherit = False
+        self.style.prefix = 'p'
+        self.style.dp_inherit = False
+        self.style.dp = 2
+        self.style.font_style_inherit = False
+        self.style.font_style = 'italic'
+        self.style.font_weight_inherit = False
+        self.style.font_weight = 'bold'
+        self.style.font_size_inherit = False
+        self.style.font_size = 'small'
+        self.style.indent_level_inherit = False
+        self.style.indent_level = 2
+        style_props = self.style_obj.merge([self.style])
+        xlsx = self.style_obj.to_xlsx_style(style_props)
+        self.assertEquals(xlsx, {
+            'italic': True,
+            'bold': True,
+            'size': 9,
+            'font_color': u'#FF0000',
+            'bg_color': u'#0000FF',
+            'num_format': u'"p "0.00" s"',
+            'indent': 2,
+        })
+        xlsx = self.style_obj.to_xlsx_style(style_props, no_indent=True)
+        self.assertEquals(xlsx, {
+            'italic': True,
+            'bold': True,
+            'size': 9,
+            'font_color': u'#FF0000',
+            'bg_color': u'#0000FF',
+            'num_format': u'"p "0.00" s"',
+        })
