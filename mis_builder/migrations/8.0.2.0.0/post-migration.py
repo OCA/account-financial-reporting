@@ -16,3 +16,9 @@ def migrate(cr, version):
         ALTER TABLE mis_report_kpi
         DROP COLUMN old_expression
     """)
+    # set default mode to relative for existing periods
+    # as it was the only mode in previous versions
+    cr.execute("""
+        UPDATE mis_report_instance_period
+        SET mode='relative'
+    """)
