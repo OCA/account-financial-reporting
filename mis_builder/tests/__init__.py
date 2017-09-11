@@ -6,6 +6,7 @@ from . import test_accounting_none
 from . import test_aep
 from . import test_aggregate
 from . import test_fetch_query
+from . import test_kpi_data
 from . import test_mis_report_instance
 from . import test_mis_safe_eval
 from . import test_period_dates
