@@ -57,9 +57,14 @@ class MisKpiData(models.AbstractModel):
                  'date_to')
     def _compute_name(self):
         for rec in self:
-            rec.name = u'{}.{}: {} - {}'.format(
+            subkpi_name = rec.kpi_expression_id.subkpi_id.name
+            if subkpi_name:
+                subkpi_name = '.' + subkpi_name
+            else:
+                subkpi_name = ''
+            rec.name = u'{}{}: {} - {}'.format(
                 rec.kpi_expression_id.kpi_id.name,
-                rec.kpi_expression_id.subkpi_id.name,
+                subkpi_name,
                 rec.date_from,
                 rec.date_to)
 
