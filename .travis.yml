@@ -4,12 +4,10 @@ cache: pip
 addons:
   postgresql: "9.2" # minimal postgresql version for the daterange method
   apt:
-   sources:
-      - pov-wkhtmltopdf
    packages:
       - expect-dev  # provides unbuffer utility
       - python-lxml # because pip installation is slow
-      - wkhtmltopdf
+
 
 language: python
 
@@ -38,6 +36,7 @@ before_install:
 install:
   - git clone https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
+  - export WKHTMLTOPDF_VERSION=0.12.4
   - travis_install_nightly
 
 script:
