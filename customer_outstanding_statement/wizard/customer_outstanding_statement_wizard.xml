@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- wizard action on res.partner -->
+    <act_window id="customer_outstanding_statement_wizard_action"
+        name="Customer Outstanding Statement"
+        src_model="res.partner"
+        res_model="customer.outstanding.statement.wizard"
+        view_type="form" view_mode="form"
+        key2="client_action_multi" target="new"
+        groups="account.group_account_user"/>
+
+    <!-- wizard view -->
+    <record id="customer_outstanding_statement_wizard_view" model="ir.ui.view">
+        <field name="name">Customer Outstanding Statement Wizard</field>
+        <field name="model">customer.outstanding.statement.wizard</field>
+        <field name="arch" type="xml">
+            <form name="Report Options">
+                <div style="text-align:justify">
+                <label string="The outstanding statement provides details of all outstanding
+        customer receivables up to a particular date. This includes all unpaid invoices, unclaimed
+        refunds and outstanding payments. The list is displayed in chronological order and is
+        split by currencies."/><br/><br/>
+                <label string="Aging details can be shown in the report, expressed in aging
+                buckets (30 days due, ...), so the customer can review how much is open, due or overdue."/>
+                </div><hr/>
+                <group name="main_info">
+                    <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+                </group>
+                <group name="dates">
+                    <field name="date_end"/>
+                </group>
+                <group name="aging_report">
+                    <field name="show_aging_buckets"/>
+                </group>
+                <group name="multiple_partners">
+                    <field name="number_partner_ids" readonly="1" invisible="1"/>
+                    <field name="filter_partners_non_due" attrs="{'invisible': [('number_partner_ids', '=', 1)]}"/>
+                </group>
+                <footer>
+                    <button name="button_export_pdf" string="Export PDF" type="object" default_focus="1" class="oe_highlight"/>
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

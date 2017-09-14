@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="customer_outstanding_statement.statement_document">
+        <t t-call="report.external_layout">
+            <div class="page">
+                <div class="row">
+                    <div class="col-xs-5 col-xs-offset-7">
+                        <span t-field="o.name"/><br/>
+                        <span t-raw="o.contact_address.replace('\n\n', '\n').replace('\n', '&lt;br&gt;')"/>
+                        <span t-field="o.vat"/>
+                    </div>
+                    <h4 style="padding-left:20em">
+                        Outstanding Statement
+                    </h4>
+                    <p>
+                        Date: <span t-esc="Date[o.id]" /><br/>
+                        <t t-if="o.ref">Partner ref: <span t-field="o.ref"/></t>
+                    </p>
+
+                    <t t-if="Lines[o.id]">
+                        <br/>
+                        <t t-foreach="Lines[o.id]" t-as="currency">
+                            <br t-if="not currency_first" />
+                            <p>
+                                Outstanding Statement in <span t-esc="Currencies[o.id][currency].name"/>:
+                            </p>
+                            <table class="table table-condensed" style="border: 1px solid black; border-collapse: collapse;">
+                                <thead>
+                                    <tr>
+                                        <th style="border-right: 1px solid black;">Reference number</th>
+                                        <th class="text-center" style="border-right: 1px solid black;">Date</th>
+                                        <th class="text-center" style="border-right: 1px solid black;">Due Date</th>
+                                        <th style="border-right: 1px solid black;">Description</th>
+                                        <th class="text-right" style="border-right: 1px solid black;">Original Amount</th>
+                                        <th class="text-right" style="border-right: 1px solid black;">Open Amount</th>
+                                        <th class="text-right" style="border-right: 1px solid black;">Balance</th>
+                                    </tr>
+                                </thead>
+                                <tr t-foreach="Lines[o.id][currency]" t-as="line">
+                                    <t t-if="not line['blocked']">
+                                        <td style="border-right: 1px solid black;">
+                                            <span t-esc="line['move_id']"/>
+                                        </td>
+                                        <td style="border-right: 1px solid black;">
+                                            <span t-esc="line['date']"/>
+                                        </td>
+                                        <td style="border-right: 1px solid black;">
+                                            <span t-esc="line['date_maturity']"/>
+                                        </td>
+                                        <td style="border-right: 1px solid black;">
+                                            <t t-if="line['name'] != '/'">
+                                                <t t-if="not line['ref']"><span t-esc="line['name']"/></t>
+                                                <t t-if="line['ref'] and line['name']">
+                                                    <t t-if="line['name'] not in line['ref']"><span t-esc="line['name']"/></t>
+                                                    <t t-if="line['ref'] not in line['name']"><span t-esc="line['ref']"/></t>
+                                                </t>
+                                            </t>
+                                            <t t-if="line['name'] == '/'"><span t-esc="line['ref']"/></t>
+                                        </td>
+                                        <td class="text-right" style="border-right: 1px solid black;">
+                                            <span t-esc="line['amount']" t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
+                                        </td>
+                                        <td class="text-right" style="border-right: 1px solid black;">
+                                            <span t-esc="line['open_amount']" t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
+                                        </td>
+                                        <td class="text-right" style="border-right: 1px solid black;">
+                                            <span t-esc="line['balance']" t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
+                                        </td>
+                                    </t>
+                                    <t t-if="line['blocked']">
+                                        <td style="border-right: 1px solid black; background-color: grey;">
+                                            <span t-esc="line['move_id']"/>
+                                        </td>
+                                        <td style="border-right: 1px solid black; background-color: grey;">
+                                            <span t-esc="line['date']"/>
+                                        </td>
+                                        <td style="border-right: 1px solid black; background-color: grey;">
+                                            <span t-esc="line['date_maturity']"/>
+                                        </td>
+                                        <td style="border-right: 1px solid black; background-color: grey;">
+                                            <t t-if="line['name'] != '/'">
+                                                <t t-if="not line['ref']"><span t-esc="line['name']"/></t>
+                                                <t t-if="line['ref'] and line['name']">
+                                                    <t t-if="line['name'] not in line['ref']"><span t-esc="line['name']"/></t>
+                                                    <t t-if="line['ref'] not in line['name']"><span t-esc="line['ref']"/></t>
+                                                </t>
+                                            </t>
+                                            <t t-if="line['name'] == '/'"><span t-esc="line['ref']"/></t>
+                                        </td>
+                                        <td class="text-right" style="border-right: 1px solid black; background-color: grey;">
+                                            <span t-esc="line['amount']" t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
+                                        </td>
+                                        <td class="text-right" style="border-right: 1px solid black; background-color: grey;">
+                                            <span t-esc="line['open_amount']" t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
+                                        </td>
+                                        <td class="text-right" style="border-right: 1px solid black; background-color: grey;">
+                                            <span t-esc="line['balance']" t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <tr>
+                                    <td style="border-right: 1px solid black;"></td>
+                                    <td style="border-right: 1px solid black;">
+                                        <span t-esc="Date_end[o.id]"/>
+                                    </td>
+                                    <td style="border-right: 1px solid black;"></td>
+                                    <td style="border-right: 1px solid black;">
+                                        Ending Balance
+                                    </td>
+                                    <td style="border-right: 1px solid black;"></td>
+                                    <td style="border-right: 1px solid black;"></td>
+                                    <td class="text-right" style="border-right: 1px solid black;">
+                                        <span t-esc="Amount_Due[o.id][currency]" t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table class="table table-condensed" t-if="Show_Buckets" style="border: 1px solid black; border-collapse: collapse;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="border-right: 1px solid black;">Current Due</th>
+                                        <th class="text-center" style="border-right: 1px solid black;">1-30 Days Due</th>
+                                        <th class="text-center" style="border-right: 1px solid black;">30-60 Days Due</th>
+                                        <th class="text-center" style="border-right: 1px solid black;">60-90 Days Due</th>
+                                        <th class="text-center" style="border-right: 1px solid black;">90-120 Days Due</th>
+                                        <th class="text-center" style="border-right: 1px solid black;">+120 Days Due</th>
+                                        <th class="text-right" style="border-right: 1px solid black;">Balance Due</th>
+                                    </tr>
+                                </thead>
+                                <tr t-if="currency in Buckets[o.id]">
+                                    <td class="text-right" style="border-right: 1px solid black;">
+                                        <span t-esc="Buckets[o.id][currency]['current']" t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
+                                    </td>
+                                    <td class="text-right" style="border-right: 1px solid black;">
+                                        <span t-esc="Buckets[o.id][currency]['b_1_30']" t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
+                                    </td>
+                                    <td class="text-right" style="border-right: 1px solid black;">
+                                        <span t-esc="Buckets[o.id][currency]['b_30_60']" t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
+                                    </td>
+                                    <td class="text-right" style="border-right: 1px solid black;">
+                                        <span t-esc="Buckets[o.id][currency]['b_60_90']" t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
+                                    </td>
+                                    <td class="text-right" style="border-right: 1px solid black;">
+                                        <span t-esc="Buckets[o.id][currency]['b_90_120']" t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
+                                    </td>
+                                    <td class="text-right" style="border-right: 1px solid black;">
+                                        <span t-esc="Buckets[o.id][currency]['b_over_120']" t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
+                                    </td>
+                                    <td class="text-right" style="border-right: 1px solid black;">
+                                        <span t-esc="Buckets[o.id][currency]['balance']" t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
+                                    </td>
+                                </tr>
+                                <tr t-if="currency not in Buckets[o.id]">
+                                    <td class="text-right" style="border-right: 1px solid black;">
+                                        <span t-esc="0.0" t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
+                                    </td>
+                                    <td class="text-right" style="border-right: 1px solid black;">
+                                        <span t-esc="0.0" t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
+                                    </td>
+                                    <td class="text-right" style="border-right: 1px solid black;">
+                                        <span t-esc="0.0" t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
+                                    </td>
+                                    <td class="text-right" style="border-right: 1px solid black;">
+                                        <span t-esc="0.0" t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
+                                    </td>
+                                    <td class="text-right" style="border-right: 1px solid black;">
+                                        <span t-esc="0.0" t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
+                                    </td>
+                                    <td class="text-right" style="border-right: 1px solid black;">
+                                        <span t-esc="0.0" t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
+                                    </td>
+                                    <td class="text-right" style="border-right: 1px solid black;">
+                                        <span t-esc="0.0" t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </t>
+                    </t>
+                    <p t-if="not Lines[o.id]">
+                        <strong>The partner doesn't have due entries.</strong>
+                    </p>
+                </div>
+            </div>
+       </t>
+    </template>
+
+    <template id="statement">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-if="not (Filter_non_due_partners and (not Lines[o.id]) and (len(doc_ids) > 1))">
+                    <t t-call="customer_outstanding_statement.statement_document" t-lang="o.lang"/>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <report id="action_print_customer_outstanding_statement"
+        model="res.partner"
+        report_type="qweb-pdf"
+        menu="False"
+        string="Statement Action to PDF"
+        name="customer_outstanding_statement.statement"
+        file="customer_outstanding_statement.statement"
+    />
+</odoo>
