@@ -21,6 +21,7 @@ addon | version | summary
 --- | --- | ---
 [account_financial_report_qweb](account_financial_report_qweb/) | 10.0.1.0.1 | OCA Financial Reports
 [account_tax_balance](account_tax_balance/) | 10.0.1.1.1 | Compute tax balances based on date range
+[customer_activity_statement](customer_activity_statement/) | 10.0.1.0.0 | OCA Financial Reports
 [mis_builder](mis_builder/) | 10.0.2.0.2 | Build 'Management Information System' Reports and Dashboards
 
 
