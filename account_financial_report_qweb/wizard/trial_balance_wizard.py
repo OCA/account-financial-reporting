@@ -19,7 +19,6 @@ class TrialBalanceReportWizard(models.TransientModel):
     )
     date_range_id = fields.Many2one(
         comodel_name='date.range',
-        required=True,
         string='Date range'
     )
     date_from = fields.Date(required=True)
