@@ -37,7 +37,7 @@ Images
 Contributors
 ------------
 
-* Jordi Ballestrer <jordi.ballestrer@eficient.com>
+* Jordi Ballester <jordi.ballester@eficient.com>
 * Yannick Vaucher <yannick.vaucher@camptocamp.com>
 * Simone Orsi <simone.orsi@abstract.com>
 * Leonardo Pistone <leonardo.pistone@camptocamp.com>
@@ -51,6 +51,7 @@ Contributors
 * Lorenzo Battistini <lorenzo.battistini@agilebg.com>
 * Julien Coux <julien.coux@camptocamp.com>
 * Jairo Llopis <jairo.llopis@tecnativa.com>
+* Alexis de Lattre <alexis@via.ecp.fr>
 
 Much of the work in this module was done at a sprint in Sorrento, Italy in
 April 2016.
