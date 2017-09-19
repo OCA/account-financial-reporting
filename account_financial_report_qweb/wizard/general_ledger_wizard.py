@@ -2,6 +2,7 @@
 # Author: Damien Crier
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA
+# Copyright 2017 Akretion - Alexis de Lattre
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import models, fields, api
@@ -24,7 +25,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
     )
     date_from = fields.Date(required=True)
     date_to = fields.Date(required=True)
-    fy_start_date = fields.Date(required=True)
+    fy_start_date = fields.Date(compute='_compute_fy_start_date')
     target_move = fields.Selection([('posted', 'All Posted Entries'),
                                     ('all', 'All Entries')],
                                    string='Target Moves',
@@ -59,6 +60,13 @@ class GeneralLedgerReportWizard(models.TransientModel):
         string='Not only one unaffected earnings account'
     )
 
+    @api.depends('date_from')
+    def _compute_fy_start_date(self):
+        for wiz in self.filtered('date_from'):
+            date = fields.Datetime.from_string(wiz.date_from)
+            res = self.company_id.compute_fiscalyear_dates(date)
+            wiz.fy_start_date = res['date_from']
+
     @api.onchange('company_id')
     def onchange_company_id(self):
         """Handle company change."""
@@ -75,10 +83,6 @@ class GeneralLedgerReportWizard(models.TransientModel):
         """Handle date range change."""
         self.date_from = self.date_range_id.date_start
         self.date_to = self.date_range_id.date_end
-        if self.date_from:
-            self.fy_start_date = self.env.user.company_id.find_daterange_fy(
-                fields.Date.from_string(self.date_range_id.date_start)
-            ).date_start
 
     @api.onchange('receivable_accounts_only', 'payable_accounts_only')
     def onchange_type_accounts_only(self):
