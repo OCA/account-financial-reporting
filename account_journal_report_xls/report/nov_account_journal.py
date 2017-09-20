@@ -182,6 +182,8 @@ class nov_journal_print(report_sxw.rml_parse):
                         (tuple(period_ids), journal_id,
                          tuple(self.move_states)))
         lines = self.cr.dictfetchall()
+        if not lines:
+            return lines
 
         # add reference of corresponding origin document
         if journal.type in ('sale', 'sale_refund', 'purchase',
