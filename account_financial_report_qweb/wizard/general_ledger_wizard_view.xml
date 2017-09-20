@@ -13,7 +13,7 @@
                 <div attrs="{'invisible': [('not_only_one_unaffected_earnings_account', '=', True)]}">
                     <group name="filters">
                         <group name="date_range">
-                            <field name="date_range_id" domain="[('company_id','=',company_id)]"/>
+                            <field name="date_range_id" domain="['|',('company_id','=',company_id), ('company_id','=',False)]"/>
                             <field name="date_from"/>
                             <field name="date_to"/>
                             <field name="fy_start_date" invisible="1"/>
