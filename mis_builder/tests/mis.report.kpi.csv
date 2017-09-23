@@ -1,2 +1,0 @@
-"id","report_id/id","description","expression","name"
-"mis_report_kpi_test","mis_report_test","total test","len(test)","total_test"
