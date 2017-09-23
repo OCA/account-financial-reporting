@@ -11,7 +11,7 @@ from .common import init_test_model
 
 class TestKpiData(SavepointCase):
 
-
+    # pylint: disable=missing-return
     @classmethod
     def setUpClass(cls):
         super(TestKpiData, cls).setUpClass()

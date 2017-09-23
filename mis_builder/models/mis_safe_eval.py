@@ -28,6 +28,7 @@ def mis_safe_eval(expr, locals_dict):
     except NameError:
         val = NameDataError('#NAME', traceback.format_exc())
     except ZeroDivisionError:
+        # pylint: disable=redefined-variable-type
         val = DataError('#DIV/0', traceback.format_exc())
     except:
         val = DataError('#ERR', traceback.format_exc())
