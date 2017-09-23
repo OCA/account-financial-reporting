@@ -3,23 +3,26 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo import models
+from odoo.tests.common import SavepointCase
 
 from ..models.mis_kpi_data import ACC_SUM, ACC_AVG
-from .common import MisSavepointCase
+from .common import init_test_model
 
 
-class MisKpiDataTestItem(models.Model):
+class TestKpiData(SavepointCase):
 
-    _name = 'mis.kpi.data.test.item'
-    _inherit = 'mis.kpi.data'
-
-
-class TestKpiData(MisSavepointCase):
 
     @classmethod
     def setUpClass(cls):
         super(TestKpiData, cls).setUpClass()
-        cls._init_test_model(MisKpiDataTestItem)
+
+        class MisKpiDataTestItem(models.Model):
+
+            _name = 'mis.kpi.data.test.item'
+            _inherit = 'mis.kpi.data'
+
+        init_test_model(cls.env, MisKpiDataTestItem)
+
         report = cls.env['mis.report'].create(dict(
             name='test report',
         ))
@@ -136,5 +139,5 @@ class TestKpiData(MisSavepointCase):
         r = self.env['mis.kpi.data.test.item']._query_kpi_data(
             '2017-01-01', '2017-05-31', [])
         self.assertEqual(r, {
-            self.expr1: (10 * 10 + 20 * 10 + 30 * 5) / 25,
+            self.expr1: (10*10 + 20*10 + 30*5) / 25,
         })
