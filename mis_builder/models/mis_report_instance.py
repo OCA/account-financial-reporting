@@ -307,8 +307,8 @@ class MisReportInstancePeriod(models.Model):
                 raise ValidationError(
                     _("Please provide both columns to compare in %s.") %
                     self.name)
-            if self.source_cmpcol_from_id == self.id or \
-                    self.source_cmpcol_to_id == self.id:
+            if self.source_cmpcol_from_id == self or \
+                    self.source_cmpcol_to_id == self:
                 raise ValidationError(
                     _("Column %s cannot be compared to itself.") %
                     self.name)
