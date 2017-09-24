@@ -323,6 +323,8 @@ class MisReportKpiExpression(models.Model):
 
     @api.model
     def name_search(self, name='', args=None, operator='ilike', limit=100):
+        # TODO maybe implement negative search operators, although
+        #      there is not really a use case for that
         domain = args or []
         if '.' in name:
             kpi_name, subkpi_name = name.split('.', 2)
