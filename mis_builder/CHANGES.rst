@@ -9,15 +9,39 @@ Changelog
 10.0.3.0.0 (unreleased)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
+New features:
+
 * [ADD] Alternative move line source per report column.
   This makes mis buidler accounting expressions work on any model
-  that has debit, credit and account_id fields. Provided you can
+  that has debit, credit, account_id and date fields. Provided you can
   expose, say, committed purchases, or your budget as a view with
   debit, credit and account_id, this opens up a lot of possibilities
 * [ADD] Comparison column source (more flexible than the previous,
-  now deprecated, comparison mechanism).
+  now deprecated, comparison mechanism). 
+  CAVEAT: there is no automated migration to the new mechanism.
 * [ADD] Sum column source, to create columns that add/subtract
   other columns.
+* [ADD] mis.kpi.data abstract model as a basis for manual KPI values
+  supporting automatic ajustment to the reporting time period (the basis
+  for budget item, but could also server other purposes, such as manually
+  entering some KPI values, such as number of employee)
+* [ADD] mis_builder_budget module providing a new budget data source
+* [ADD] new "hide empty" style property
+* [IMP] new AEP method to get accounts involved in an expression
+  (this is useful to find which KPI relate to a given P&L
+  acount, to implement budget control)
+* [IMP] many UI improvements
+* [IMP] many code style improvements and some refactoring
+
+Main bug fixes:
+
+* [FIX] deletion of templates and reports (cascade and retricts) (#281)
+* [FIX] copy of reports (#282)
+* [FIX] better error message when periods have wrong/missing dates (#283)
+* [FIX] xlsx export of string types KPI (#285)
+* [FIX] sorting of detail by account
+* [FIX] computation bug in detail by account when multiple accounting 
+  expressions were used in a KPI
 
 10.0.2.0.3 (unreleased)
 ~~~~~~~~~~~~~~~~~~~~~~~
