@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# © 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
+# © 2014-2017 ACSONE SA/NV (<http://acsone.eu>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 {
@@ -11,7 +11,7 @@
     """,
     'author': 'ACSONE SA/NV,'
               'Odoo Community Association (OCA)',
-    'website': 'http://acsone.eu',
+    'website': 'https://github.com/OCA/account-financial-reporting/',
     'depends': [
         'account',
         'board',

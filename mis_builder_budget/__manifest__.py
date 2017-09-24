@@ -8,8 +8,9 @@
         Create budgets for MIS reports""",
     'version': '10.0.1.0.0',
     'license': 'AGPL-3',
-    'author': 'ACSONE SA/NV,Odoo Community Association (OCA)',
-    'website': 'https://acsone.eu/',
+    'author': 'ACSONE SA/NV,'
+              'Odoo Community Association (OCA)',
+    'website': 'https://github.com/OCA/account-financial-reporting/',
     'depends': [
         'mis_builder',
     ],
