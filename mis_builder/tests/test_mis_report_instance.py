@@ -5,6 +5,8 @@
 import odoo.tests.common as common
 from odoo.tools import test_reports
 
+from ..models.mis_report import TYPE_STR
+
 
 class TestMisReportInstance(common.TransactionCase):
     """ Basic integration test to exercise mis.report.instance.
@@ -102,6 +104,21 @@ class TestMisReportInstance(common.TransactionCase):
                 subkpi_id=self.report.subkpi_ids[0].id,
             )), (0, 0, dict(
                 name='1.0',
+                subkpi_id=self.report.subkpi_ids[1].id,
+            ))],
+        ))
+        # string-type kpi
+        self.env['mis.report.kpi'].create(dict(
+            report_id=self.report.id,
+            description='kpi 6',
+            name='k6',
+            multi=True,
+            type=TYPE_STR,
+            expression_ids=[(0, 0, dict(
+                name='"bla"',
+                subkpi_id=self.report.subkpi_ids[0].id,
+            )), (0, 0, dict(
+                name='"blabla"',
                 subkpi_id=self.report.subkpi_ids[1].id,
             ))],
         ))
