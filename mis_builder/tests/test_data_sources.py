@@ -9,13 +9,13 @@ from ..models.mis_report import (
     CMP_DIFF,
 )
 from ..models.mis_report_instance import (
-    MODE_NONE, SRC_CMPCOL, SRC_SUMCOL,
+    MODE_NONE, SRC_CMPCOL, SRC_SUMCOL, SRC_ACTUALS_ALT,
 )
 
 from .common import assert_matrix
 
 
-class TestMisReportInstanceSumCmp(common.TransactionCase):
+class TestMisReportInstanceDataSources(common.TransactionCase):
     """ Test sum and comparison data source.
     """
 
@@ -36,7 +36,7 @@ class TestMisReportInstanceSumCmp(common.TransactionCase):
         return move
 
     def setUp(self):
-        super(TestMisReportInstanceSumCmp, self).setUp()
+        super(TestMisReportInstanceDataSources, self).setUp()
         self.account_model = self.env['account.account']
         self.move_model = self.env['account.move']
         self.journal_model = self.env['account.journal']
@@ -188,4 +188,18 @@ class TestMisReportInstanceSumCmp(common.TransactionCase):
             [11, 30, 19],
             [11, 13, 2],
             [AccountingNone, 17, 17],
+        ])
+
+    def test_actuals_alt(self):
+        aml_model = self.env['ir.model'].\
+            search([('name', '=', 'account.move.line')])
+        self.kpi2.auto_expand_accounts = False
+        self.p1.source = SRC_ACTUALS_ALT
+        self.p1.source_aml_model_id = aml_model.id
+        self.p2.source = SRC_ACTUALS_ALT
+        self.p1.source_aml_model_id = aml_model.id
+        matrix = self.instance._compute_matrix()
+        assert_matrix(matrix, [
+            [11, 13],
+            [11, 30],
         ])
