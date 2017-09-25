@@ -17,9 +17,10 @@ class MisReportInstancePeriod(models.Model):
             (SRC_MIS_BUDGET, 'MIS Budget'),
         ],
     )
-    source_mis_budget = fields.Many2one(
+    source_mis_budget_id = fields.Many2one(
         comodel_name='mis.budget',
         string='Budget',
+        oldname='source_mis_budget',
     )
 
     @api.multi

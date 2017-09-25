@@ -10,7 +10,7 @@
         <field name="inherit_id" ref="mis_builder.mis_report_instance_period_view_form"/>
         <field name="arch" type="xml">
             <group name="source_data" position="inside">
-                <field name="source_mis_budget"
+                <field name="source_mis_budget_id"
                        attrs="{'invisible': [('source', '!=', 'mis_budget')], 'required': [('source', '=', 'mis_budget')]}"
                        domain="[('report_id', '=', report_id)]"/>
             </group>

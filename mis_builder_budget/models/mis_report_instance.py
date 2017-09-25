@@ -19,7 +19,7 @@ class MisReportInstance(models.Model):
 
         # fetch budget data for the period
         base_domain = expression.AND([
-            [('budget_id', '=', period.source_mis_budget.id)],
+            [('budget_id', '=', period.source_mis_budget_id.id)],
             period._get_additional_budget_item_filter(),
         ])
         kpi_data = self.env['mis.budget.item']._query_kpi_data(
@@ -74,7 +74,7 @@ class MisReportInstance(models.Model):
                     ('date_from', '<=', period.date_to),
                     ('date_to', '>=', period.date_from),
                     ('kpi_expression_id', '=', expr_id),
-                    ('budget_id', '=', period.source_mis_budget.id),
+                    ('budget_id', '=', period.source_mis_budget_id.id),
                 ]
                 domain.extend(period._get_additional_budget_item_filter())
                 return {
