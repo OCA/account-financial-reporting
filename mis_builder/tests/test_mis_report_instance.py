@@ -167,3 +167,27 @@ class TestMisReportInstance(common.TransactionCase):
         for account_id in account_ids:
             self.assertTrue(account_id in res)
             self.assertEquals(res[account_id], kpi200)
+
+    def test_kpi_name_get_name_search(self):
+        r = self.env['mis.report.kpi'].name_search('k1')
+        self.assertEqual(len(r), 1)
+        self.assertEqual(r[0][0], self.kpi1.id)
+        self.assertEqual(r[0][1], 'kpi 1 (k1)')
+        r = self.env['mis.report.kpi'].name_search('kpi 1')
+        self.assertEqual(len(r), 1)
+        self.assertEqual(r[0][0], self.kpi1.id)
+        self.assertEqual(r[0][1], 'kpi 1 (k1)')
+
+    def test_kpi_expr_name_get_name_search(self):
+        r = self.env['mis.report.kpi.expression'].name_search('k1')
+        self.assertEqual(
+            [i[1] for i in r],
+            ['kpi 1 / subkpi 1 (k1.sk1)', 'kpi 1 / subkpi 2 (k1.sk2)']
+        )
+        r = self.env['mis.report.kpi.expression'].name_search('k1.sk1')
+        self.assertEqual(
+            [i[1] for i in r],
+            ['kpi 1 / subkpi 1 (k1.sk1)']
+        )
+        r = self.env['mis.report.kpi.expression'].name_search('k4')
+        self.assertEqual([i[1] for i in r], ['kpi 4 (k4)'])

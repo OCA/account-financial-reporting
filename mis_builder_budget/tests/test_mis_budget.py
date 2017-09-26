@@ -92,7 +92,7 @@ class TestMisBudget(TransactionCase):
         assert_matrix(matrix, [
             # jan, bud jan, feb (3w), bud feb (3w),
             [10, 10, 10, 15],  # k1
-            [11, 11, 11, 16],  # k2 = k1 = 1
+            [11, 11, 11, 16],  # k2 = k1 + 1
         ])
 
     def test_drilldown(self):
@@ -100,36 +100,41 @@ class TestMisBudget(TransactionCase):
             period_id=self.pbud1.id,
             expr_id=self.expr1.id,
         ))
-        assert act['res_model'] == 'mis.budget.item'
-        assert act['domain'] == [
+        self.assertEqual(act['res_model'], 'mis.budget.item')
+        self.assertEqual(act['domain'], [
             ('date_from', '<=', '2017-01-31'),
             ('date_to', '>=', '2017-01-01'),
             ('kpi_expression_id', '=', self.expr1.id),
             ('budget_id', '=', self.budget.id),
-        ]
+        ])
 
     def test_copy(self):
         budget2 = self.budget.copy()
-        assert len(budget2.item_ids) == len(self.budget.item_ids)
+        self.assertEqual(len(budget2.item_ids), len(self.budget.item_ids))
 
     def test_workflow(self):
-        assert self.budget.state == 'draft'
+        self.assertEqual(self.budget.state, 'draft')
         self.budget.action_confirm()
-        assert self.budget.state == 'confirmed'
+        self.assertEqual(self.budget.state, 'confirmed')
         self.budget.action_cancel()
-        assert self.budget.state == 'cancelled'
+        self.assertEqual(self.budget.state, 'cancelled')
         self.budget.action_draft()
-        assert self.budget.state == 'draft'
+        self.assertEqual(self.budget.state, 'draft')
 
     def test_name_search(self):
         report2 = self.report.copy()
         report2.kpi_ids[0].name = 'k1_1'
         budget2 = self.budget.copy()
         budget2.report_id = report2.id
+        # search restricted to the context of budget2
+        # hence we find only k1_1 in report2 and not k1
         expr = self.env['mis.report.kpi.expression'].\
             with_context(default_budget_id=budget2.id).\
             name_search('k1')
-        # search was restricted to the context of budget2
-        # hence we found only k1_1 in report2 and not k1
-        assert len(expr) == 1
-        assert expr[0][1] == 'k1_1'
+        self.assertEqual(len(expr), 1)
+        self.assertEqual(expr[0][1], 'kpi 1 (k1_1)')
+        expr = self.env['mis.report.kpi.expression'].\
+            with_context(default_budget_id=budget2.id).\
+            name_search('kpi 1')
+        self.assertEqual(len(expr), 1)
+        self.assertEqual(expr[0][1], 'kpi 1 (k1_1)')
