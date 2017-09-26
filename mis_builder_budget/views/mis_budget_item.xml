@@ -4,25 +4,6 @@
 
 <odoo>
 
-    <record model="ir.ui.view" id="mis_budget_item_form_view">
-        <field name="name">mis.budget.item.form (in mis_builder_budget)</field>
-        <field name="model">mis.budget.item</field>
-        <field name="arch" type="xml">
-            <form>
-                <sheet>
-                    <group>
-                        <field name="name"/>
-                        <field name="kpi_expression_id"/>
-                        <field name="date_from"/>
-                        <field name="date_to"/>
-                        <field name="budget_id"/>
-                        <field name="amount"/>
-                    </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
-
     <record model="ir.ui.view" id="mis_budget_item_search_view">
         <field name="name">mis.budget.item.search (in mis_builder_budget)</field>
         <field name="model">mis.budget.item</field>

@@ -14,6 +14,7 @@ import pytz
 
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
+from odoo.osv import expression as osv_expression
 from odoo.tools.safe_eval import safe_eval
 
 from .aep import AccountingExpressionProcessor as AEP
@@ -136,7 +137,7 @@ class MisReportKpi(models.Model):
     def name_get(self):
         res = []
         for rec in self:
-            name = u'{} / {}'.format(rec.name, rec.description)
+            name = u'{} ({})'.format(rec.description, rec.name)
             res.append((rec.id, name))
         return res
 
@@ -331,9 +332,12 @@ class MisReportKpiExpression(models.Model):
     def name_get(self):
         res = []
         for rec in self:
-            if rec.subkpi_id:
-                name = u'{}.{}'.format(
-                    rec.kpi_id.name, rec.subkpi_id.name)
+            kpi = rec.kpi_id
+            subkpi = rec.subkpi_id
+            if subkpi:
+                name = u'{} / {} ({}.{})'.format(
+                    kpi.description, subkpi.description,
+                    kpi.name, subkpi.name)
             else:
                 name = rec.kpi_id.display_name
             res.append((rec.id, name))
@@ -344,18 +348,25 @@ class MisReportKpiExpression(models.Model):
         # TODO maybe implement negative search operators, although
         #      there is not really a use case for that
         domain = args or []
+        splitted_name = name.split('.', 2)
+        name_search_domain = []
         if '.' in name:
-            kpi_name, subkpi_name = name.split('.', 2)
-            domain += [
+            kpi_name, subkpi_name = splitted_name[0], splitted_name[1]
+            name_search_domain = osv_expression.AND([name_search_domain, [
+                '|',
+                '|',
+                '&',
                 ('kpi_id.name', '=', kpi_name),
                 ('subkpi_id.name', operator, subkpi_name),
-            ]
-        else:
-            domain += [
-                '|',
-                ('kpi_id.name', operator, name),
                 ('kpi_id.description', operator, name),
-            ]
+                ('subkpi_id.description', operator, name),
+            ]])
+        name_search_domain = osv_expression.OR([name_search_domain, [
+            '|',
+            ('kpi_id.name', operator, name),
+            ('kpi_id.description', operator, name),
+        ]])
+        domain = osv_expression.AND([domain, name_search_domain])
         return self.search(domain, limit=limit).name_get()
 
 
