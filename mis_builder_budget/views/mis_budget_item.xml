@@ -10,6 +10,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
+                <field name="kpi_expression_id"/>
                 <field name="date_from"/>
             </search>
         </field>
