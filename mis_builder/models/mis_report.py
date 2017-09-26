@@ -132,6 +132,24 @@ class MisReportKpi(models.Model):
 
     _order = 'sequence, id'
 
+    @api.multi
+    def name_get(self):
+        res = []
+        for rec in self:
+            name = u'{} / {}'.format(rec.name, rec.description)
+            res.append((rec.id, name))
+        return res
+
+    @api.model
+    def name_search(self, name='', args=None, operator='ilike', limit=100):
+        domain = args or []
+        domain += [
+            '|',
+            ('name', operator, name),
+            ('description', operator, name),
+        ]
+        return self.search(domain, limit=limit).name_get()
+
     @api.constrains('name')
     def _check_name(self):
         for record in self:
@@ -317,7 +335,7 @@ class MisReportKpiExpression(models.Model):
                 name = u'{}.{}'.format(
                     rec.kpi_id.name, rec.subkpi_id.name)
             else:
-                name = rec.kpi_id.name
+                name = rec.kpi_id.display_name
             res.append((rec.id, name))
         return res
 
@@ -334,7 +352,9 @@ class MisReportKpiExpression(models.Model):
             ]
         else:
             domain += [
+                '|',
                 ('kpi_id.name', operator, name),
+                ('kpi_id.description', operator, name),
             ]
         return self.search(domain, limit=limit).name_get()
 
