@@ -23,6 +23,7 @@
         'wizard/mis_builder_dashboard.xml',
         'views/mis_report.xml',
         'views/mis_report_instance.xml',
+        'views/mis_report_kpi.xml',
         'views/mis_report_style.xml',
         'datas/ir_cron.xml',
         'security/ir.model.access.csv',
