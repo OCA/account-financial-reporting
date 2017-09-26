@@ -49,9 +49,11 @@ SimpleArray((-3.0, -4.0, -5.0))
 >>> b += 2 ; b
 SimpleArray((6.0, 7.0, 8.0))
 >>> a / ((1.0, 0.0, 1.0))
-SimpleArray((1.0, DataError(), 3.0))
+SimpleArray((1.0, DataError('#DIV/0'), 3.0))
 >>> a / 0.0
-SimpleArray((DataError(), DataError(), DataError()))
+SimpleArray((DataError('#DIV/0'), DataError('#DIV/0'), DataError('#DIV/0')))
+>>> a * ((1.0, 'a', 1.0))
+SimpleArray((1.0, DataError('#ERR'), 3.0))
 >>> 6.0 / a
 SimpleArray((6.0, 3.0, 2.0))
 >>> Vector = named_simple_array('Vector', ('x', 'y'))
