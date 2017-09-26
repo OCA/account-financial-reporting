@@ -71,6 +71,7 @@ Contributors
 ------------
 
 * Adrien Peiffer <adrien.peiffer@acsone.eu>
+* Benjamin Willing <benjamine.willig@acsone.eu>
 
 Maintainer
 ----------
