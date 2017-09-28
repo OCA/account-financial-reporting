@@ -11,9 +11,6 @@
         <xpath expr="/form/label[contains(@string,'generate a pdf')]" position="replace">
           <label nolabel="1" colspan="4" string="This report allows you to generate a pdf or xls of your trial balance allowing you to quickly check the balance of each of your accounts in a single report"/>
         </xpath>
-        <xpath expr="/form/group[@col='4']" position='attributes'>
-          <attribute name="col">6</attribute>
-        </xpath>
         <button string="Print" position="after">
           <button icon="gtk-execute" name="xls_export" string="Export" type="object" context="{'xls_export':1}" colspan="2"/>
         </button>
