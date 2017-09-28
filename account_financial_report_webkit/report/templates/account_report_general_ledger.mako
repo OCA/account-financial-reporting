@@ -195,7 +195,7 @@
                           ## move reference
                           <div class="act_as_cell">${line.get('lref') or ''}</div>
                           ## label
-                          <div class="act_as_cell">${label}</div>
+                          <div class="act_as_cell">${label | h}</div>
                           ## counterpart
                           <div class="act_as_cell">${line.get('counterparts') or ''}</div>
                           ## debit
