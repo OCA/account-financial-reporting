@@ -698,10 +698,16 @@ class MisReportQuery(models.Model):
                                   ('min', _('Min')),
                                   ('max', _('Max'))],
                                  string='Aggregate')
-    date_field = fields.Many2one('ir.model.fields', required=True,
+    date_field = fields.Many2one('ir.model.fields'
                                  string='Date field',
                                  domain=[('ttype', 'in',
                                          ('date', 'datetime'))])
+    period_filter = fields.Selection([('period', _('Period')),
+                                      ('from', _('Period From')),
+                                      ('to', _('Period To')),
+                                      ('none', _('None'))],
+                                     string="Period Filter",
+                                     default='period')
     domain = fields.Char(string='Domain')
     report_id = fields.Many2one('mis.report', string='Report',
                                 ondelete='cascade')
@@ -848,16 +854,29 @@ class MisReport(models.Model):
                 safe_eval(query.domain, eval_context) or []
             if get_additional_query_filter:
                 domain.extend(get_additional_query_filter(query))
-            if query.date_field.ttype == 'date':
-                domain.extend([(query.date_field.name, '>=', date_from),
-                               (query.date_field.name, '<=', date_to)])
-            else:
-                datetime_from = _utc_midnight(
-                    date_from, self._context.get('tz', 'UTC'))
-                datetime_to = _utc_midnight(
-                    date_to, self._context.get('tz', 'UTC'), add_day=1)
-                domain.extend([(query.date_field.name, '>=', datetime_from),
-                               (query.date_field.name, '<', datetime_to)])
+            if query.period_filter != 'none' and query.date_field:
+                date_field = query.date_field.name
+                if query.date_field.ttype == 'date':
+                    if query.period_filter == 'both':
+                        domain.extend([(date_field, '>=', date_from),
+                                       (date_field, '<=', date_to)])
+                    elif query.period_filter == 'from':
+                        domain.extend([(date_field, '>=', date_from)])
+                    elif query.period_filter == 'to':
+                        domain.extend([(date_field, '<=', date_to)])
+                else:
+                    datetime_from = _utc_midnight(
+                        date_from, self._context.get('tz', 'UTC'))
+                    datetime_to = _utc_midnight(
+                        date_to, self._context.get('tz', 'UTC'), add_day=1)
+                    if query.period_filter == 'both':
+                        domain.extend([(date_field, '>=', datetime_from),
+                                       (date_field, '<', datetime_to)])
+                    elif query.period_filter == 'from':
+                        domain.extend([(date_field, '>=', datetime_from)])
+                    elif query.period_filter == 'to':
+                        domain.extend([(date_field, '<', datetime_to)])
+            field_names = [f.name for f in query.field_ids]
             field_names = [f.name for f in query.field_ids]
             all_stored = all([model._fields[f].store for f in field_names])
             if not query.aggregate:
