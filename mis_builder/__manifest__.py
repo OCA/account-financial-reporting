@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
-# © 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
+# © 2014-2017 ACSONE SA/NV (<http://acsone.eu>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 {
     'name': 'MIS Builder',
-    'version': '10.0.2.0.2',
+    'version': '10.0.3.0.1',
     'category': 'Reporting',
     'summary': """
         Build 'Management Information System' Reports and Dashboards
     """,
     'author': 'ACSONE SA/NV,'
               'Odoo Community Association (OCA)',
-    'website': 'http://acsone.eu',
+    'website': 'https://github.com/OCA/account-financial-reporting/',
     'depends': [
         'account',
         'board',
@@ -29,13 +29,6 @@
         'security/mis_builder_security.xml',
         'report/mis_report_instance_qweb.xml',
         'report/mis_report_instance_xlsx.xml',
-    ],
-    'demo': [
-        'tests/mis.report.kpi.csv',
-        'tests/mis.report.query.csv',
-        'tests/mis.report.csv',
-        'tests/mis.report.instance.period.csv',
-        'tests/mis.report.instance.csv',
     ],
     'qweb': [
         'static/src/xml/*.xml'

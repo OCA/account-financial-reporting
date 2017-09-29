@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# © 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
+# Copyright 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo import api, fields, models
@@ -17,11 +17,11 @@ class AddMisReportInstanceDashboard(models.TransientModel):
                                           "'board.board')]")
 
     @api.model
-    def default_get(self, fields):
+    def default_get(self, fields):  # pylint: disable=redefined-outer-name
         res = {}
         if self.env.context.get('active_id', False):
-            res = super(AddMisReportInstanceDashboard, self).default_get(
-                fields)
+            res = super(AddMisReportInstanceDashboard, self).\
+                default_get(fields)
             # get report instance name
             res['name'] = self.env['mis.report.instance'].browse(
                 self.env.context['active_id']).name
@@ -35,14 +35,15 @@ class AddMisReportInstanceDashboard(models.TransientModel):
         self.env.ref('mis_builder.mis_report_instance_result_view_form')
         view = self.env.ref(
             'mis_builder.mis_report_instance_result_view_form')
-        report_result = self.env['ir.actions.act_window'].create(
-            {'name': 'mis.report.instance.result.view.action.%d'
-             % self.env.context['active_id'],
-             'res_model': 'mis.report.instance',
-             'res_id': self.env.context['active_id'],
-             'target': 'current',
-             'view_mode': 'form',
-             'view_id': view.id})
+        report_result = self.env['ir.actions.act_window'].create({
+            'name': 'mis.report.instance.result.view.action.%d' %
+                    self.env.context['active_id'],
+            'res_model': 'mis.report.instance',
+            'res_id': self.env.context['active_id'],
+            'target': 'current',
+            'view_mode': 'form',
+            'view_id': view.id
+        })
         # add this result in the selected dashboard
         last_customization = self.env['ir.ui.view.custom'].search(
             [('user_id', '=', self.env.uid),
@@ -53,14 +54,16 @@ class AddMisReportInstanceDashboard(models.TransientModel):
                 last_customization[0].id).arch
         new_arch = etree.fromstring(arch)
         column = new_arch.xpath("//column")[0]
-        column.append(etree.Element('action', {'context': str(
-            self.env.context),
+        column.append(etree.Element('action', {
+            'context': str(self.env.context),
             'name': str(report_result.id),
             'string': self.name,
-            'view_mode': 'form'}))
-        self.env['ir.ui.view.custom'].create(
-            {'user_id': self.env.uid,
-             'ref_id': self.dashboard_id.view_id.id,
-             'arch': etree.tostring(new_arch, pretty_print=True)})
+            'view_mode': 'form'
+        }))
+        self.env['ir.ui.view.custom'].create({
+            'user_id': self.env.uid,
+            'ref_id': self.dashboard_id.view_id.id,
+            'arch': etree.tostring(new_arch, pretty_print=True)
+        })
 
         return {'type': 'ir.actions.act_window_close', }

@@ -15,7 +15,11 @@ can be added to Odoo dashboards.
 Installation
 ============
 
-There is no specific installation procedure for this module.
+The easiest way to install mis_builder is using pip:
+
+* ``pip install odoo10-addon-mis_builder odoo-autodiscover``
+* then restart Odoo, update the addons list in your database, and install
+  the MIS Builder application.
 
 Configuration and Usage
 =======================
@@ -59,32 +63,9 @@ analytic accounts.
 Known issues / Roadmap
 ======================
 
-* V9 thoughts:
-
-  * select accounts by tag (see also select accounts by type below)
-  * how to handle multi-company consolidation now that consolidation children are gone?
-  * what replaces root accounts / account charts in v9? nothing it seems, so
-    we are limited to one chart of accounts per company;
-  * for multi-company consolidation, must we replace the consolidation chart
-    of account by a list of companies?
-
-* Allow selecting accounts by type. This is currently possible by expressing
-  a query such as balp[][('account_id.user_type.code', '=', ...)]. This will work
-  but would be more efficient if one could write balp[user_type=...], as it would
-  involve much less queries to the database.
-  Possible syntax could be balp[code:60%,70%], balp[type:...], balp[tag:...],
-  with code: being optional and the default.
-
-* More tests should be added. The first part is creating test data, then it will be
-  easier. At the minimum, We need the following test data:
-
-  * one account charts with a few normal accounts and view accounts,
-  * two fiscal years,
-  * an opening entry in the second fiscal year,
-  * to test multi-company consolidation, we need a second company with it's own
-    account chart and two fiscal years, but without opening entry; we also need
-    a third company which is the parent of the other two and has a consolidation
-    chart of account.
+The `roadmap <https://github.com/oca/account-financial-reporting/issues?utf8=%E2%9C%93&q=is%3Aopen%20mis_builder%20label%3Aenhancement%20>`_ 
+and `known issues <https://github.com/oca/account-financial-reporting/issues?utf8=%E2%9C%93&q=is%3Aopen%20mis_builder%20label%3Abug%20>`_ can 
+be found on github.
 
 Bug Tracker
 ===========
@@ -97,10 +78,14 @@ If you spotted it first, help us smashing it by providing a detailed and welcome
 Credits
 =======
 
+Author
+------
+
+* Stéphane Bidoul <stephane.bidoul@acsone.eu>
+
 Contributors
 ------------
 
-* Stéphane Bidoul <stephane.bidoul@acsone.eu>
 * Laetitia Gangloff <laetitia.gangloff@acsone.eu>
 * Adrien Peiffer <adrien.peiffer@acsone.eu>
 * Alexis de Lattre <alexis.delattre@akretion.com>
@@ -111,6 +96,7 @@ Contributors
 * Marco Calcagni <mcalcagni@dinamicheaziendali.it>
 * Sébastien Beau <sebastien.beau@akretion.com>
 * Laurent Mignon <laurent.mignon@acsone.eu>
+* Benjamin Willing <benjamine.willig@acsone.eu>
 
 Maintainer
 ----------

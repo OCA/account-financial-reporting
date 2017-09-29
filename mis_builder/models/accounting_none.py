@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# © 2016 Thomas Binsfeld
-# © 2016 ACSONE SA/NV (<http://acsone.eu>)
+# Copyright 2016 Thomas Binsfeld
+# Copyright 2016-2017 ACSONE SA/NV (<http://acsone.eu>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 """
 Provides the AccountingNone singleton.
@@ -177,15 +177,15 @@ class AccountingNoneType(object):
         return other == 0 or other is None or other is AccountingNone
 
     def __lt__(self, other):
-        return 0 < other
+        return other > 0
 
     def __gt__(self, other):
-        return 0 > other
+        return other < 0
 
 
 AccountingNone = AccountingNoneType()
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
     import doctest
     doctest.testmod()

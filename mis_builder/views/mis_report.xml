@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <data>
 
         <record model="ir.ui.view" id="mis_report_view_tree">
             <field name="name">mis.report.view.tree</field>
@@ -34,7 +33,7 @@
                         </field>
                     </group>
                     <group string="Queries">
-                        <field name="query_ids" nolabel="1" colspan="2">
+                        <field name="query_ids" nolabel="1" colspan="2" context="{'default_report_id': id}">
                             <tree string="Queries" editable="bottom">
                                 <field name="name"/>
                                 <field name="model_id"/>
@@ -47,14 +46,14 @@
                         </field>
                     </group>
                     <group string="KPI's">
-                        <field name="kpi_ids" nolabel="1" colspan="2">
+                        <field name="kpi_ids" nolabel="1" colspan="2" context="{'default_report_id': id}">
                             <tree string="KPI's">
                                 <field name="sequence" widget="handle"/>
                                 <field name="description"/>
                                 <field name="name"/>
                                 <field name="type"/>
                                 <field name="compare_method" attrs="{'invisible': [('type', '=', 'str')]}"/>
-                                <field name="multi"/>
+                                <field name="accumulation_method" attrs="{'invisible': [('type', '=', 'str')]}"/>
                                 <field name="expression"/>
                             </tree>
                         </field>
@@ -100,23 +99,24 @@
                         <field name="description"/>
                         <field name="name"/>
                         <field name="type"/>
+                        <newline/>
                         <field name="compare_method"/>
+                        <field name="accumulation_method"/>
                         <field name="style_id"/>
                         <field name="style_expression"/>
-                        <!--<field name="sequence" />-->
                         <field name="report_id" invisible="1"/>
                     </group>
-                    <group string="Expression">
+                    <group string="Expression" col="2">
                         <field name="multi"/>
-                        <field name="expression_ids" colspan="4" nolabel="1"
-                               delete="0" create="0"
+                        <newline/>
+                        <field name="expression_ids" colspan="2" nolabel="1"
                                attrs="{'invisible': [('multi', '=', False)]}">
                             <tree editable="bottom">
                                 <field name="subkpi_id" domain="[('report_id', '=', parent.report_id)]"/>
                                 <field name="name"/>
                             </tree>
                         </field>
-                        <field name="expression" colspan="4" nolabel="1"
+                        <field name="expression" colspan="2" nolabel="1"
                                attrs="{'invisible': [('multi', '=', True)],
                                        'readonly': [('multi', '=', True)]}"/>
                     </group>
@@ -168,5 +168,4 @@
         <menuitem id="mis_report_conf_menu" parent="account.menu_finance_configuration" name="MIS Reporting" sequence="90"/>
         <menuitem id="mis_report_view_menu" parent="mis_report_conf_menu" name="MIS Report Templates" action="mis_report_view_action" sequence="21"/>
 
-    </data>
 </odoo>

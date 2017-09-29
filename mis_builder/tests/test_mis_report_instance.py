@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
-# © 2016 ACSONE SA/NV (<http://acsone.eu>)
+# Copyright 2016-2017 ACSONE SA/NV (<http://acsone.eu>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 import odoo.tests.common as common
 from odoo.tools import test_reports
+
+from ..models.mis_report import TYPE_STR
 
 
 class TestMisReportInstance(common.TransactionCase):
@@ -42,7 +44,7 @@ class TestMisReportInstance(common.TransactionCase):
             ))],
         ))
         # kpi with accounting formulas
-        self.env['mis.report.kpi'].create(dict(
+        self.kpi1 = self.env['mis.report.kpi'].create(dict(
             report_id=self.report.id,
             description='kpi 1',
             name='k1',
@@ -56,7 +58,7 @@ class TestMisReportInstance(common.TransactionCase):
             ))],
         ))
         # kpi with accounting formula and query
-        self.env['mis.report.kpi'].create(dict(
+        self.kpi2 = self.env['mis.report.kpi'].create(dict(
             report_id=self.report.id,
             description='kpi 2',
             name='k2',
@@ -105,6 +107,21 @@ class TestMisReportInstance(common.TransactionCase):
                 subkpi_id=self.report.subkpi_ids[1].id,
             ))],
         ))
+        # string-type kpi
+        self.env['mis.report.kpi'].create(dict(
+            report_id=self.report.id,
+            description='kpi 6',
+            name='k6',
+            multi=True,
+            type=TYPE_STR,
+            expression_ids=[(0, 0, dict(
+                name='"bla"',
+                subkpi_id=self.report.subkpi_ids[0].id,
+            )), (0, 0, dict(
+                name='"blabla"',
+                subkpi_id=self.report.subkpi_ids[1].id,
+            ))],
+        ))
         # create a report instance
         self.report_instance = self.env['mis.report.instance'].create(dict(
             name='test instance',
@@ -139,3 +156,38 @@ class TestMisReportInstance(common.TransactionCase):
                                 'mis.report.instance.xlsx',
                                 [self.report_instance.id],
                                 report_type='xlsx')
+
+    def test_get_kpis_by_account_id(self):
+        account_ids = self.env['account.account'].\
+            search([('code', '=like', '200%')]).\
+            mapped('id')
+        kpi200 = set([self.kpi1, self.kpi2])
+        res = self.report.get_kpis_by_account_id(
+            self.env.ref('base.main_company'))
+        for account_id in account_ids:
+            self.assertTrue(account_id in res)
+            self.assertEquals(res[account_id], kpi200)
+
+    def test_kpi_name_get_name_search(self):
+        r = self.env['mis.report.kpi'].name_search('k1')
+        self.assertEqual(len(r), 1)
+        self.assertEqual(r[0][0], self.kpi1.id)
+        self.assertEqual(r[0][1], 'kpi 1 (k1)')
+        r = self.env['mis.report.kpi'].name_search('kpi 1')
+        self.assertEqual(len(r), 1)
+        self.assertEqual(r[0][0], self.kpi1.id)
+        self.assertEqual(r[0][1], 'kpi 1 (k1)')
+
+    def test_kpi_expr_name_get_name_search(self):
+        r = self.env['mis.report.kpi.expression'].name_search('k1')
+        self.assertEqual(
+            [i[1] for i in r],
+            ['kpi 1 / subkpi 1 (k1.sk1)', 'kpi 1 / subkpi 2 (k1.sk2)']
+        )
+        r = self.env['mis.report.kpi.expression'].name_search('k1.sk1')
+        self.assertEqual(
+            [i[1] for i in r],
+            ['kpi 1 / subkpi 1 (k1.sk1)']
+        )
+        r = self.env['mis.report.kpi.expression'].name_search('k4')
+        self.assertEqual([i[1] for i in r], ['kpi 4 (k4)'])

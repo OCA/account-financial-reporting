@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# © 2014-2015 ACSONE SA/NV (<http://acsone.eu>)
+# Copyright 2014-2017 ACSONE SA/NV (<http://acsone.eu>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 import datetime
@@ -79,6 +79,8 @@ class TestAEP(common.TransactionCase):
         self.aep.parse_expr("balp[400AR]")
         self.aep.parse_expr("debp[400A%]")
         self.aep.parse_expr("crdp[700I%]")
+        self.aep.parse_expr("bali[400%]")
+        self.aep.parse_expr("bale[700%]")
         self.aep.parse_expr("bal_700IN")  # deprecated
         self.aep.parse_expr("bals[700IN]")  # deprecated
         self.aep.done_parsing()
@@ -187,6 +189,11 @@ class TestAEP(common.TransactionCase):
         self.assertEquals(variation, {
             self.account_in.id: -500,
         })
+        variation = self._eval_by_account_id('crdp[700IN] - debp[400AR]')
+        self.assertEquals(variation, {
+            self.account_ar.id: -500,
+            self.account_in.id: 500,
+        })
         end = self._eval_by_account_id('bale[]')
         self.assertEquals(end, {
             self.account_ar.id: 900,
@@ -224,3 +231,53 @@ class TestAEP(common.TransactionCase):
             time.strftime('%Y') + '-03-15',
             'posted')
         self.assertEquals(unallocated, (0, 100))
+
+    def test_get_account_ids_for_expr(self):
+        expr = 'balp[700IN]'
+        account_ids = self.aep.get_account_ids_for_expr(expr)
+        self.assertEquals(
+            account_ids, set([self.account_in.id]))
+        expr = 'balp[700%]'
+        account_ids = self.aep.get_account_ids_for_expr(expr)
+        self.assertEquals(
+            account_ids, set([self.account_in.id]))
+        expr = 'bali[400%], bale[700%]'  # subkpis combined expression
+        account_ids = self.aep.get_account_ids_for_expr(expr)
+        self.assertEquals(
+            account_ids, set([self.account_in.id, self.account_ar.id]))
+
+    def test_get_aml_domain_for_expr(self):
+        expr = 'balp[700IN]'
+        domain = self.aep.get_aml_domain_for_expr(
+            expr, '2017-01-01', '2017-03-31', target_move='posted')
+        self.assertEqual(
+            domain, [
+                ('account_id', 'in', (self.account_in.id, )),
+                '&',
+                '&',
+                ('date', '>=', '2017-01-01'),
+                ('date', '<=', '2017-03-31'),
+                ('move_id.state', '=', 'posted'),
+            ])
+        expr = 'debi[700IN] - crdi[400AR]'
+        domain = self.aep.get_aml_domain_for_expr(
+            expr, '2017-02-01', '2017-03-31', target_move='draft')
+        self.assertEqual(
+            domain, [
+                '|',
+                # debi[700IN]
+                '&',
+                ('account_id', 'in', (self.account_in.id, )),
+                ('debit', '>', 0),
+                # crdi[400AR]
+                '&',
+                ('account_id', 'in', (self.account_ar.id, )),
+                ('credit', '>', 0),
+                '&',
+                # for P&L accounts, only after fy start
+                '|',
+                ('date', '>=', '2017-01-01'),
+                ('user_type_id.include_initial_balance', '=', True),
+                # everything must be before from_date for initial balance
+                ('date', '<', '2017-02-01'),
+            ])

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<odoo>
-    <data noupdate="1">
+<odoo noupdate="1">
 
         <record id="ir_cron_vacuum_temp_reports" model="ir.cron">
             <field name="name">Vacuum temporary reports</field>
@@ -14,5 +13,4 @@
             <field name="active" eval="True" />
         </record>
 
-    </data>
 </odoo>

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-# © 2016 Therp BV (<http://therp.nl>)
-# © 2016 ACSONE SA/NV (<http://acsone.eu>)
+# Copyright 2016 Therp BV (<http://therp.nl>)
+# Copyright 2016-2017 ACSONE SA/NV (<http://acsone.eu>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo import api, fields, models, _
-from odoo.exceptions import UserError
+from odoo.exceptions import ValidationError
 
 from .accounting_none import AccountingNone
 from .data_error import DataError
@@ -30,6 +30,7 @@ PROPS = [
     'suffix',
     'dp',
     'divider',
+    'hide_empty',
 ]
 
 TYPE_NUM = 'num'
@@ -49,8 +50,8 @@ class MisReportKpiStyle(models.Model):
     def check_positive_val(self):
         for record in self:
             if record.indent_level < 0:
-                raise UserError(_('Indent level must be greater than '
-                                  'or equal to 0'))
+                raise ValidationError(_('Indent level must be greater than '
+                                        'or equal to 0'))
 
     _font_style_selection = [
         ('normal', 'Normal'),
@@ -129,6 +130,8 @@ class MisReportKpiStyle(models.Model):
                                 ('1e6', _('M'))],
                                string='Factor',
                                default='1')
+    hide_empty_inherit = fields.Boolean(default=True)
+    hide_empty = fields.Boolean(default=False)
 
     @api.model
     def merge(self, styles):
@@ -145,11 +148,7 @@ class MisReportKpiStyle(models.Model):
             else:
                 for prop in PROPS:
                     inherit = getattr(style, prop + '_inherit', None)
-                    if inherit is None:
-                        value = getattr(style, prop)
-                        if value:
-                            r[prop] = value
-                    elif not inherit:
+                    if not inherit:
                         value = getattr(style, prop)
                         r[prop] = value
         return r
@@ -212,8 +211,10 @@ class MisReportKpiStyle(models.Model):
                 delta = AccountingNone
         elif type == TYPE_NUM:
             if value and average_value:
+                # pylint: disable=redefined-variable-type
                 value = value / float(average_value)
             if base_value and average_base_value:
+                # pylint: disable=redefined-variable-type
                 base_value = base_value / float(average_base_value)
             if compare_method == CMP_DIFF:
                 delta = value - base_value
@@ -224,7 +225,7 @@ class MisReportKpiStyle(models.Model):
             elif compare_method == CMP_PCT:
                 if base_value and round(base_value, style_props.dp or 0) != 0:
                     delta = (value - base_value) / abs(base_value)
-                    if delta and round(delta, 1) != 0:
+                    if delta and round(delta, 3) != 0:
                         style_r.update(dict(
                             divider=0.01, dp=1, prefix='', suffix='%'))
                     else:
@@ -241,10 +242,10 @@ class MisReportKpiStyle(models.Model):
 
     @api.model
     def to_xlsx_style(self, props, no_indent=False):
-        num_format = '0'
+        num_format = u'0'
         if props.dp:
-            num_format += '.'
-            num_format += '0' * props.dp
+            num_format += u'.'
+            num_format += u'0' * props.dp
         if props.prefix:
             num_format = u'"{} "{}'.format(props.prefix, num_format)
         if props.suffix:
@@ -269,7 +270,7 @@ class MisReportKpiStyle(models.Model):
         css_attributes = [
             ('font-style', props.font_style),
             ('font-weight', props.font_weight),
-            ('font-size',  props.font_size),
+            ('font-size', props.font_size),
             ('color', props.color),
             ('background-color', props.background_color),
         ]

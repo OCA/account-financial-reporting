@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-# © 2014-2016 ACSONE SA/NV (<http://acsone.eu>)
+# Copyright 2014-2017 ACSONE SA/NV (<http://acsone.eu>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from collections import defaultdict
 import logging
+import numbers
 
 from odoo.report import report_sxw
 
@@ -97,6 +98,8 @@ class MisBuilderXlsx(ReportXlsx):
 
         # rows
         for row in matrix.iter_rows():
+            if row.style_props.hide_empty and row.is_empty():
+                continue
             row_xlsx_style = style_obj.to_xlsx_style(row.style_props)
             row_format = workbook.add_format(row_xlsx_style)
             col_pos = 0
@@ -124,7 +127,11 @@ class MisBuilderXlsx(ReportXlsx):
                 elif cell.val is None or cell.val is AccountingNone:
                     val = ''
                 else:
-                    val = cell.val / float(cell.style_props.get('divider', 1))
+                    divider = float(cell.style_props.get('divider', 1))
+                    if divider != 1 and isinstance(cell.val, numbers.Number):
+                        val = cell.val / divider
+                    else:
+                        val = cell.val
                 sheet.write(row_pos, col_pos, val, cell_format)
                 col_width[col_pos] = max(col_width[col_pos],
                                          len(cell.val_rendered or ''))
