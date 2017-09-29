@@ -56,6 +56,10 @@ class KpiMatrixRow(object):
             self.style_props = self._matrix._style_model.merge([
                 self.kpi.report_id.style_id,
                 self.kpi.auto_expand_accounts_style_id])
+        self.chart_display = None
+        if self.kpi.report_id.display == 'multi' and \
+                self.kpi.chart_display:
+            self.chart_display = self.kpi.chart_display
 
     @property
     def label(self):
@@ -396,6 +400,7 @@ class KpiMatrix(object):
                 'description': row.description,
                 'style': self._style_model.to_css_style(
                     row.style_props),
+                'chart_display': row.chart_display,
                 'cells': []
             }
             for cell in row.iter_cells():
@@ -480,6 +485,12 @@ class MisReportKpi(models.Model):
         string='Style expression',
         help='An expression that returns a style depending on the KPI value. '
              'Such style is applied on top of the row style.')
+    chart_display = fields.Selection(
+        [('bar', 'Bar Chart'),
+         ('line', 'Line Chart'),
+         ('area', 'Area Chart'),
+         ('scatter', 'Scatter Chart')],
+        string="Chart display")
     type = fields.Selection([(TYPE_NUM, _('Numeric')),
                              (TYPE_PCT, _('Percentage')),
                              (TYPE_STR, _('String'))],
@@ -738,6 +749,13 @@ class MisReport(models.Model):
                               string='Description', translate=True)
     style_id = fields.Many2one(string="Style",
                                comodel_name="mis.report.style")
+    display = fields.Selection(
+        [('table', 'Table'),
+         ('bar', 'Bar Chart'),
+         ('line', 'Line Chart'),
+         ('multi', 'Multi Chart')],
+        string="Display",
+        default="table")
     query_ids = fields.One2many('mis.report.query', 'report_id',
                                 string='Queries',
                                 copy=True)

@@ -23,6 +23,7 @@
                         <field name="name"/>
                         <field name="description"/>
                         <field name="style_id"/>
+                        <field name="display"/>
                     </group>
                     <group string="Sub KPI's">
                          <field name="subkpi_ids" nolabel="1" colspan="2">
@@ -104,6 +105,7 @@
                         <field name="style_id"/>
                         <field name="style_expression"/>
                         <!--<field name="sequence" />-->
+                        <field name="chart_display"/>
                         <field name="report_id" invisible="1"/>
                     </group>
                     <group string="Expression">

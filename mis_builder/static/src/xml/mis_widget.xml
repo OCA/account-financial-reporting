@@ -9,6 +9,7 @@
                     <button class="oe_mis_builder_export btn btn-sm oe_button"><span class="fa fa-download"/>Export</button>
                     <button style="display: none;" class="oe_mis_builder_settings btn btn-sm oe_button"><span class="fa fa-cog"/> Settings</button>
                 </div>
+                <t t-if="widget.display == 'table'">
                 <table class="oe_list_content o_list_view table table-condensed table-striped mis_builder">
                     <thead>
                         <tr t-foreach="widget.mis_report_data.header" t-as="row" class="oe_list_header_columns">
@@ -50,7 +51,14 @@
                     <tfoot>
                       <tr></tr>
                     </tfoot>
-                </table>
+                </table></t>
+                <t t-if="widget.display != 'table'">
+                    <div class="o_graph">
+                        <div class="o_graph_svg_container mis_builder_svg">
+                            <svg></svg>
+                        </div>
+                    </div>
+                </t>
             </t>
         </div>
     </t>
