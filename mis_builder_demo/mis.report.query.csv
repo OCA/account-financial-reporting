@@ -1,3 +1,0 @@
-"id","date_field/id","domain","field_ids/id","model_id/id","name"
-"mis_report_query","account.field_account_invoice_date_invoice","","account.field_account_invoice_amount_untaxed","account.model_account_invoice","inv"
-"mis_report_phonecall_query","crm.field_crm_phonecall_date","","crm.field_crm_phonecall_duration,crm.field_crm_phonecall_opportunity_id","crm.model_crm_phonecall","phone"

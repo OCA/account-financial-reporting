@@ -1,8 +1,0 @@
-id,duration,name,offset,type,sequence
-mis_report_instance_period_1,1,today,0,Day,1
-mis_report_instance_period_2,1,yesterday,-1,Day,2
-mis_report_instance_period_3,1,last week,-1,Week,3
-mis_report_instance_period_4,1,last period,-1,Fiscal Period,4
-mis_report_phonecall_instance_period_1,1,today,0,Day,1
-mis_report_phonecall_instance_period_2,1,this period,0,Fiscal Period,2
-mis_report_phonecall_instance_period_3,1,previous period,-1,Fiscal Period,3
