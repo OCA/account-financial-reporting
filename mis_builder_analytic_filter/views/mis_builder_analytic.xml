@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+       <template id="assets_backend" name="mis_builder_analytic_filter" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/mis_builder_analytic_filter/static/src/js/mis_builder.js"></script>
+            </xpath>
+        </template>
+    </data>
+</openerp>
