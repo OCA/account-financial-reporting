@@ -1,3 +1,0 @@
-id,date,description,name,period_ids/id,report_id/id,root_account/id
-mis_report_instance,,,Test-margin-report-instance,"mis_report_instance_period_1,mis_report_instance_period_2,mis_report_instance_period_3,mis_report_instance_period_4",mis_report,account.chart0
-mis_report_phonecall_instance,,,Test phonecall report instance,"mis_report_phonecall_instance_period_1,mis_report_phonecall_instance_period_2,mis_report_phonecall_instance_period_3",mis_report_phonecall,account.chart0
