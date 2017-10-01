@@ -2,7 +2,7 @@
 [![Coverage Status](https://coveralls.io/repos/OCA/account-financial-reporting/badge.png?branch=10.0)](https://coveralls.io/r/OCA/account-financial-reporting?branch=10.0)
 
 Odoo account financial reports
-=================================
+==============================
 
 This project aims to deal with modules related to financial reports. You'll 
 find modules that print legal and official reports. This includes, among 
