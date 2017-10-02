@@ -201,8 +201,8 @@ WITH
         query_inject_account += """
             WHERE
                 a.company_id = %s
-            AND a.internal_type IN ('payable', 'receivable')
-                    """
+            AND a.reconcile IS true
+            """
         if self.filter_account_ids:
             query_inject_account += """
             AND
