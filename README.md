@@ -20,7 +20,7 @@ Available addons
 addon | version | summary
 --- | --- | ---
 [account_financial_report_horizontal](account_financial_report_horizontal/) | 10.0.1.0.0 | Accounting Financial Report Horizontal
-[account_financial_report_qweb](account_financial_report_qweb/) | 10.0.1.1.1 | OCA Financial Reports
+[account_financial_report_qweb](account_financial_report_qweb/) | 10.0.1.2.0 | OCA Financial Reports
 [account_tax_balance](account_tax_balance/) | 10.0.1.1.1 | Compute tax balances based on date range
 [customer_activity_statement](customer_activity_statement/) | 10.0.1.0.0 | OCA Financial Reports
 [customer_outstanding_statement](customer_outstanding_statement/) | 10.0.1.0.0 | OCA Financial Reports
