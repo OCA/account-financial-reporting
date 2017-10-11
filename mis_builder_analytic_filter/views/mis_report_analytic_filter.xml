@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2016 ACSONE SA/NV
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+<data>
+    <template id="assets_backend" name="mis_builder_analytic_filter" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/mis_builder_analytic_filter/static/src/js/mis_builder.js"></script>
+        </xpath>
+    </template>
+</data>
+</odoo>
