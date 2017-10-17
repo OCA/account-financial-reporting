@@ -14,9 +14,16 @@ Accounting / Reporting / OCA Reports.
 - Open Items
 - Aged Partner Balance
 
+Usage
+=====
+
+You can filter accounts by tags or with a One2many field in General Ledger and
+Trial balance wizards selecting a user permission named
+"Filter financial reports accounts in One2many field"
+
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
    :alt: Try me on Runbot
-   :target: https://runbot.odoo-community.org/runbot/91/9.0
+   :target: https://runbot.odoo-community.org/runbot/91/10.0
 
 Bug Tracker
 ===========
@@ -52,6 +59,7 @@ Contributors
 * Julien Coux <julien.coux@camptocamp.com>
 * Akim Juillerat <akim.juillerat@camptocamp.com>
 * Alexis de Lattre <alexis@via.ecp.fr>
+* Sergio Teruel <sergio.teruel@tecnativa.com>
 
 Much of the work in this module was done at a sprint in Sorrento, Italy in
 April 2016.

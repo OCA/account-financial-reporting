@@ -56,6 +56,19 @@
         </field>
     </record>
 
+    <!-- TRIAL BALANCE One2many widget instead of Many2many tags. You can
+         select this option in settings-->
+    <record id="trial_balance_wizard_setting" model="ir.ui.view">
+        <field name="model">trial.balance.report.wizard</field>
+        <field name="inherit_id" ref="account_financial_report_qweb.trial_balance_wizard"/>
+        <field name="groups_id" eval="[(4, ref('group_one2many_financial_report_account'))]"/>
+        <field name="arch" type="xml">
+            <field name="account_ids" position="attributes">
+                <attribute name="widget"></attribute>
+            </field>
+        </field>
+    </record>
+
     <act_window id="action_trial_balance_wizard"
                 name="Trial Balance"
                 res_model="trial.balance.report.wizard"
