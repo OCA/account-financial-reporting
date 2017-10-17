@@ -59,6 +59,19 @@
         </field>
     </record>
 
+    <!-- GENERAL LEDGER One2many widget instead of Many2many tags. You can
+         select this option in settings-->
+    <record id="general_ledger_wizard_setting" model="ir.ui.view">
+        <field name="model">general.ledger.report.wizard</field>
+        <field name="inherit_id" ref="account_financial_report_qweb.general_ledger_wizard"/>
+        <field name="groups_id" eval="[(4, ref('group_one2many_financial_report_account'))]"/>
+        <field name="arch" type="xml">
+            <field name="account_ids" position="attributes">
+                <attribute name="widget"></attribute>
+            </field>
+        </field>
+    </record>
+
     <act_window id="action_general_ledger_wizard"
                 name="General Ledger"
                 res_model="general.ledger.report.wizard"

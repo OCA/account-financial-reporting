@@ -5,7 +5,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     'name': 'QWeb Financial Reports',
-    'version': '10.0.1.2.0',
+    'version': '10.0.1.2.1',
     'category': 'Reporting',
     'summary': 'OCA Financial Reports',
     'author': 'Camptocamp SA,'
@@ -21,6 +21,7 @@
         'report',
     ],
     'data': [
+        'security/account_financial_report_qweb.xml',
         'wizard/aged_partner_balance_wizard_view.xml',
         'wizard/general_ledger_wizard_view.xml',
         'wizard/open_items_wizard_view.xml',

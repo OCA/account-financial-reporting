@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2017 Sergio Teruel - Tecnativa <sergio.teruel@tecnativa.com>
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+<record id="group_one2many_financial_report_account" model="res.groups">
+    <field name="name">Filter financial reports accounts in One2many field</field>
+    <field name="category_id" ref="base.module_category_hidden"/>
+</record>
+
+</odoo>
