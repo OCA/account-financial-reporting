@@ -68,12 +68,12 @@ class TestAccountTaxBalance(TransactionCase):
         # change the state of invoice to open by clicking Validate button
         invoice.action_invoice_open()
 
-        self.assertEquals(tax.base_balance, 100.)
-        self.assertEquals(tax.balance, 10.)
-        self.assertEquals(tax.base_balance_regular, 100.)
-        self.assertEquals(tax.balance_regular, 10.)
-        self.assertEquals(tax.base_balance_refund, 0.)
-        self.assertEquals(tax.balance_refund, 0.)
+        self.assertEqual(tax.base_balance, 100.)
+        self.assertEqual(tax.balance, 10.)
+        self.assertEqual(tax.base_balance_regular, 100.)
+        self.assertEqual(tax.balance_regular, 10.)
+        self.assertEqual(tax.base_balance_refund, 0.)
+        self.assertEqual(tax.balance_refund, 0.)
 
         # testing wizard
         current_range = self.range.search([
@@ -99,7 +99,7 @@ class TestAccountTaxBalance(TransactionCase):
         # exercise search has_moves = True
         taxes = self.env['account.tax'].search([('has_moves', '=', True)])
         self.assertEqual(len(taxes), 1)
-        self.assertEqual(taxes[0].name, u"Tax 10.0%")
+        self.assertEqual(taxes[0].name, "Tax 10.0%")
 
         # testing buttons
         tax_action = tax.view_tax_lines()
@@ -143,12 +143,12 @@ class TestAccountTaxBalance(TransactionCase):
         # change the state of refund to open by clicking Validate button
         refund.action_invoice_open()
 
-        self.assertEquals(tax.base_balance, 75.)
-        self.assertEquals(tax.balance, 7.5)
-        self.assertEquals(tax.base_balance_regular, 100.)
-        self.assertEquals(tax.balance_regular, 10.)
-        self.assertEquals(tax.base_balance_refund, -25.)
-        self.assertEquals(tax.balance_refund, -2.5)
+        self.assertEqual(tax.base_balance, 75.)
+        self.assertEqual(tax.balance, 7.5)
+        self.assertEqual(tax.base_balance_regular, 100.)
+        self.assertEqual(tax.balance_regular, 10.)
+        self.assertEqual(tax.base_balance_refund, -25.)
+        self.assertEqual(tax.balance_refund, -2.5)
 
         # Taxes on liquidity type moves are included
         liquidity_account_id = self.env['account.account'].search(
@@ -178,5 +178,5 @@ class TestAccountTaxBalance(TransactionCase):
             })],
         }).post()
         tax.refresh()
-        self.assertEquals(tax.base_balance, 175.)
-        self.assertEquals(tax.balance, 17.5)
+        self.assertEqual(tax.base_balance, 175.)
+        self.assertEqual(tax.balance, 17.5)
