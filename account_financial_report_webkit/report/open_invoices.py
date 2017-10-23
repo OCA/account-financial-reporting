@@ -120,7 +120,7 @@ class PartnersOpenInvoicesWebkit(report_sxw.rml_parse,
         group_by_currency = self._get_form_param('group_by_currency', data)
 
         if main_filter == 'filter_no' and fiscalyear:
-            start_period = self.get_first_fiscalyear_period(fiscalyear)
+            start_period = self._get_first_special_period()
             stop_period = self.get_last_fiscalyear_period(fiscalyear)
 
         # Retrieving accounts
