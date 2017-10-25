@@ -165,6 +165,7 @@ Contributors
 * Nicolas Bessi
 * Guewen Baconnier
 * David Dufresne <david.dufresne@savoirfairelinux.com>
+* Jacques-Etienne Baudoux <je@bcim.be>
 
 Maintainer
 ----------

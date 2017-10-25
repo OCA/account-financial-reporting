@@ -85,22 +85,6 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
                    key=lambda p: datetime.strptime(p.date_start,
                                                    DEFAULT_SERVER_DATE_FORMAT))
 
-    def _get_period_range_from_start_period(self, start_period,
-                                            include_opening=False,
-                                            fiscalyear=False,
-                                            stop_at_previous_opening=False):
-        """We retrieve all periods before start period"""
-        periods = super(CommonPartnersReportHeaderWebkit, self).\
-            _get_period_range_from_start_period(
-                start_period,
-                include_opening=include_opening,
-                fiscalyear=fiscalyear,
-                stop_at_previous_opening=stop_at_previous_opening)
-        first_special = self._get_first_special_period()
-        if first_special and first_special.id not in periods:
-            periods.append(first_special.id)
-        return periods
-
     def _get_query_params_from_periods(self, period_start, period_stop,
                                        mode='exclude_opening'):
         """
@@ -269,11 +253,17 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
                                            exclude_reconcile=False,
                                            force_period_ids=False,
                                            date_stop=None):
-        # take ALL previous periods
-        period_ids = force_period_ids \
-            if force_period_ids \
-            else self._get_period_range_from_start_period(
-                start_period, fiscalyear=False, include_opening=False)
+        # take ALL previous periods from first special period
+        if force_period_ids:
+            period_ids = force_period_ids
+        else:
+            first_special = self._get_first_special_period()
+            period_ids = self._get_period_range_from_periods(
+                first_special, start_period, mode="exclude_opening")
+            if start_period.id in period_ids:
+                period_ids.remove(start_period.id)
+            if first_special not in period_ids:
+                period_ids.append(first_special.id)
 
         if not period_ids:
             period_ids = [-1]
