@@ -12,7 +12,9 @@
     'depends': ['account', 'report_xlsx'],
     'data': [
         'report/report.xml',
-        'views/account_bank_statement_view.xml',
+        'views/account_bank_statement.xml',
+        'views/account_move_line.xml',
+        'wizard/bank_reconciliation_report_wizard_view.xml',
         ],
     'installable': True,
 }
