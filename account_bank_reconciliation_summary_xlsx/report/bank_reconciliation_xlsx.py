@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo.addons.report_xlsx.report.report_xlsx import ReportXlsx
-from odoo import _
+from odoo import fields, _
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 from datetime import datetime
 
@@ -11,10 +11,22 @@ from datetime import datetime
 class BankReconciliationXlsx(ReportXlsx):
 
     def generate_xlsx_report(self, workbook, data, journals):
+        # I can't use fields.Date.context_today(self)
+        date = data.get('date') or datetime.today()
+        date_dt = fields.Date.from_string(date)
         no_bank_journal = True
         for o in journals.filtered(lambda o: o.type == 'bank'):
             no_bank_journal = False
             # Start styles
+            lang_code = self.env.user.lang
+            lang = False
+            if lang_code:
+                lang = self.env['res.lang'].search([('code', '=', lang_code)])
+            if not lang:
+                lang = self.env['res.lang'].search([], limit=1)
+            xls_date_format = lang.date_format.replace('%Y', 'yyyy').\
+                replace('%m', 'mm').replace('%d', 'dd').replace('%y', 'yy')
+
             doc_title = workbook.add_format({'bold': True, 'font_size': 16})
             col_title = workbook.add_format({
                 'bold': True, 'bg_color': '#e2e2fa',
@@ -24,19 +36,16 @@ class BankReconciliationXlsx(ReportXlsx):
                 'bold': True, 'bg_color': '#e6e6fa',
                 'font_size': 10, 'align': 'right',
                 })
+            title_date = workbook.add_format({
+                'bg_color': '#f6f6ff', 'bold': True,
+                'num_format': xls_date_format,
+                'font_size': 10,
+                'align': 'left'})
             label_bold = workbook.add_format({
                 'bold': True, 'text_wrap': False, 'font_size': 10})
             none = workbook.add_format({
                 'bold': True, 'font_size': 10, 'align': 'right'})
             regular = workbook.add_format({'font_size': 10})
-            lang_code = self.env.user.lang
-            lang = False
-            if lang_code:
-                lang = self.env['res.lang'].search([('code', '=', lang_code)])
-            if not lang:
-                lang = self.env['res.lang'].search([], limit=1)
-            xls_date_format = lang.date_format.replace('%Y', 'yyyy').\
-                replace('%m', 'mm').replace('%d', 'dd').replace('%y', 'yy')
             if '%' in xls_date_format:
                 # fallback
                 xls_date_format = 'yyyy-mm-dd'
@@ -71,10 +80,10 @@ class BankReconciliationXlsx(ReportXlsx):
             sheet.set_column(5, 5, 14)
             sheet.set_column(6, 6, 22)
             row = 2
-            sheet.write(row, 0, _("Date:"), label_bold)
-            # I can't use fields.Date.context_today(self)
-            sheet.write(row, 1, datetime.today(), regular_date)
+            sheet.write(row, 0, _("Date:"), title_right)
+            sheet.write(row, 1, date_dt, title_date)
             # 1) Show accounting balance of bank account
+            row += 1
             bank_account = o.default_debit_account_id
             sheet.write(
                 row, 3,
@@ -84,8 +93,8 @@ class BankReconciliationXlsx(ReportXlsx):
             # if not o.currency_id else 'amount_currency'
             query = """
                 SELECT sum(%s) FROM account_move_line
-                WHERE account_id=%%s""" % (amount_field,)
-            self.env.cr.execute(query, (bank_account.id,))
+                WHERE account_id=%%s AND date <= %%s""" % (amount_field, )
+            self.env.cr.execute(query, (bank_account.id, date))
             query_results = self.env.cr.dictfetchall()
             if query_results:
                 account_bal = query_results[0].get('sum') or 0.0
@@ -95,7 +104,8 @@ class BankReconciliationXlsx(ReportXlsx):
             sheet.write(row, 4, account_bal, regular_currency_bg)
             bank_bal = account_bal
             formula = '=E%d' % (row + 1)
-            # 2) Show account move line that are not linked to bank account
+            # 2) Show account move line that are not linked to bank statement
+            # line or linked to a statement line after the date
             row += 2
             sheet.write(
                 row, 0, _(
@@ -105,7 +115,9 @@ class BankReconciliationXlsx(ReportXlsx):
             mlines = self.env['account.move.line'].search([
                 ('account_id', '=', bank_account.id),
                 ('journal_id', '=', o.id),  # to avoid initial line
-                ('statement_id', '=', False)])
+                ('date', '<=', date),
+                '|', ('statement_line_date', '=', False),
+                ('statement_line_date', '>', date)])
             if not mlines:
                 sheet.write(row, 4, _('NONE'), none)
             else:
@@ -115,8 +127,9 @@ class BankReconciliationXlsx(ReportXlsx):
                 sheet.write(row, 2, _('Ref.'), col_title)
                 sheet.write(row, 3, _('Partner'), col_title)
                 sheet.write(row, 4, _('Amount'), col_title)
-                sheet.write(row, 5, _('Move Number'), col_title)
-                sheet.write(row, 6, _('Counter-part'), col_title)
+                sheet.write(row, 5, _('Statement Line Date'), col_title)
+                sheet.write(row, 6, _('Move Number'), col_title)
+                sheet.write(row, 7, _('Counter-part'), col_title)
                 m_start_row = m_end_row = row + 1
                 for mline in mlines:
                     row += 1
@@ -131,7 +144,9 @@ class BankReconciliationXlsx(ReportXlsx):
                     sheet.write(
                         row, 3, mline.partner_id.display_name or '', regular)
                     sheet.write(row, 4, mline.balance, regular_currency)
-                    sheet.write(row, 5, move.name, regular)
+                    sheet.write(
+                        row, 5, mline.statement_line_date, regular_date)
+                    sheet.write(row, 6, move.name, regular)
                     # counter-part accounts
                     cpart = []
                     for line in move.line_ids:
@@ -139,7 +154,7 @@ class BankReconciliationXlsx(ReportXlsx):
                                 line.account_id != bank_account and
                                 line.account_id.code not in cpart):
                             cpart.append(line.account_id.code)
-                    sheet.write(row, 6, ' ,'.join(cpart), regular)
+                    sheet.write(row, 7, ' ,'.join(cpart), regular)
 
                 formula += '-SUM(E%d:E%d)' % (m_start_row + 1, m_end_row + 1)
 
@@ -151,7 +166,8 @@ class BankReconciliationXlsx(ReportXlsx):
                 label_bold)
             blines = self.env['account.bank.statement.line'].search([
                 ('journal_entry_ids', '=', False),
-                ('journal_id', '=', o.id)])
+                ('journal_id', '=', o.id),
+                ('date', '<=', date)])
             if not blines:
                 sheet.write(row, 4, _('NONE'), none)
             else:
