@@ -10,12 +10,11 @@ from datetime import datetime
 
 class BankReconciliationXlsx(ReportXlsx):
 
-    def generate_xlsx_report(self, workbook, data, journals):
-        # I can't use fields.Date.context_today(self)
-        date = data.get('date') or datetime.today()
+    def generate_xlsx_report(self, workbook, data, wizard):
+        date = wizard.date
         date_dt = fields.Date.from_string(date)
         no_bank_journal = True
-        for o in journals.filtered(lambda o: o.type == 'bank'):
+        for o in wizard.journal_ids:
             no_bank_journal = False
             # Start styles
             lang_code = self.env.user.lang
@@ -77,14 +76,17 @@ class BankReconciliationXlsx(ReportXlsx):
             sheet.set_column(2, 2, 15)
             sheet.set_column(3, 3, 25)
             sheet.set_column(4, 4, 12)
-            sheet.set_column(5, 5, 14)
-            sheet.set_column(6, 6, 22)
+            sheet.set_column(5, 5, 18)
+            sheet.set_column(6, 6, 14)
+            sheet.set_column(7, 7, 14)
             row = 2
             sheet.write(row, 0, _("Date:"), title_right)
             sheet.write(row, 1, date_dt, title_date)
             # 1) Show accounting balance of bank account
-            row += 1
+            row += 2
             bank_account = o.default_debit_account_id
+            for col in range(3):
+                sheet.write(row, col, '', title_right)
             sheet.write(
                 row, 3,
                 _('Balance %s:') % bank_account.code, title_right)
@@ -122,30 +124,33 @@ class BankReconciliationXlsx(ReportXlsx):
                 sheet.write(row, 4, _('NONE'), none)
             else:
                 row += 1
-                sheet.write(row, 0, _('Date'), col_title)
-                sheet.write(row, 1, _('Label'), col_title)
-                sheet.write(row, 2, _('Ref.'), col_title)
-                sheet.write(row, 3, _('Partner'), col_title)
-                sheet.write(row, 4, _('Amount'), col_title)
-                sheet.write(row, 5, _('Statement Line Date'), col_title)
-                sheet.write(row, 6, _('Move Number'), col_title)
-                sheet.write(row, 7, _('Counter-part'), col_title)
+                col_labels = [
+                    _('Date'), _('Label'), _('Ref.'), _('Partner'),
+                    _('Amount'), _('Statement Line Date'), _('Move Number'),
+                    _('Counter-part')]
+                col = 0
+                for col_label in col_labels:
+                    sheet.write(row, col, col_label, col_title)
+                    col += 1
                 m_start_row = m_end_row = row + 1
                 for mline in mlines:
                     row += 1
                     m_end_row = row
                     move = mline.move_id
                     bank_bal -= mline.balance
-                    date_dt = datetime.strptime(
-                        mline.date, DEFAULT_SERVER_DATE_FORMAT)
+                    date_dt = fields.Date.from_string(mline.date)
                     sheet.write(row, 0, date_dt, regular_date)
                     sheet.write(row, 1, mline.name, regular)
                     sheet.write(row, 2, mline.ref or '', regular)
                     sheet.write(
                         row, 3, mline.partner_id.display_name or '', regular)
                     sheet.write(row, 4, mline.balance, regular_currency)
-                    sheet.write(
-                        row, 5, mline.statement_line_date, regular_date)
+                    if mline.statement_line_date:
+                        stl_date_dt = fields.Date.from_string(
+                            mline.statement_line_date)
+                    else:
+                        stl_date_dt = ''
+                    sheet.write(row, 5, stl_date_dt, regular_date)
                     sheet.write(row, 6, move.name, regular)
                     # counter-part accounts
                     cpart = []
@@ -172,12 +177,13 @@ class BankReconciliationXlsx(ReportXlsx):
                 sheet.write(row, 4, _('NONE'), none)
             else:
                 row += 1
-                sheet.write(row, 0, _('Date'), col_title)
-                sheet.write(row, 1, _('Label'), col_title)
-                sheet.write(row, 2, _('Ref.'), col_title)
-                sheet.write(row, 3, _('Partner'), col_title)
-                sheet.write(row, 4, _('Amount'), col_title)
-                sheet.write(row, 5, _('Statement Ref.'), col_title)
+                col_labels = [
+                    _('Date'), _('Label'), _('Ref.'),
+                    _('Partner'), _('Amount'), _('Statement Ref.'), '', '']
+                col = 0
+                for col_label in col_labels:
+                    sheet.write(row, col, col_label, col_title)
+                    col += 1
                 b_start_row = b_end_row = row + 1
                 for bline in blines:
                     row += 1
@@ -198,6 +204,8 @@ class BankReconciliationXlsx(ReportXlsx):
 
             # 4) Theoric bank account balance at the bank
             row += 2
+            for col in range(3):
+                sheet.write(row, col, '', title_right)
             sheet.write(
                 row, 3, _('Computed Bank Account Balance at the Bank:'),
                 title_right)
@@ -214,4 +222,5 @@ class BankReconciliationXlsx(ReportXlsx):
                     "This report is only for bank journals."), warn_msg)
 
 
-BankReconciliationXlsx('report.bank.reconciliation.xlsx', 'account.journal')
+BankReconciliationXlsx(
+    'report.bank.reconciliation.xlsx', 'bank.reconciliation.report.wizard')
