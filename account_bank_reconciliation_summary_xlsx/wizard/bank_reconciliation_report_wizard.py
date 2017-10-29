@@ -16,9 +16,6 @@ class BankReconciliationReportWizard(models.TransientModel):
             ('company_id', '=', self.env.user.company_id.id)])
         return journals
 
-    company_id = fields.Many2one(
-        'res.company', string='Company',
-        default=lambda self: self.env.user.company_id)
     date = fields.Date(
         required=True,
         default=fields.Date.context_today)
@@ -32,8 +29,9 @@ class BankReconciliationReportWizard(models.TransientModel):
             'type': 'ir.actions.report.xml',
             'report_name': 'bank.reconciliation.xlsx',
             'datas': {
-                'model': 'account.journal',
-                'ids': self.journal_ids.ids,
+                'model': self._name,
+                'ids': self.ids,
+                'journal_ids': self.journal_ids.ids,
                 'date': self.date,
                 },
             'context': self._context,

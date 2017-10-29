@@ -13,8 +13,8 @@
     <field name="inherit_id" ref="account.view_bank_statement_form"/>
     <field name="arch" type="xml">
         <button name="check_confirm_bank" position="after">
-            <button name="print_reconciliation_xlsx" type="object"
-                string="Bank Reconciliation Report"/>
+            <button name="%(bank_reconciliation_report_wizard_action)d" type="action"
+                string="Bank Reconciliation Report" context="{'default_journal_ids': [journal_id]}"/>
         </button>
     </field>
 </record>
