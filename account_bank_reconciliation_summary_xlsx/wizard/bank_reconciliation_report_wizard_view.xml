@@ -6,13 +6,13 @@
 
 <odoo>
 
+
 <record id="bank_reconciliation_report_wizard_form" model="ir.ui.view">
     <field name="name">bank.reconciliation.report.wizard.form</field>
     <field name="model">bank.reconciliation.report.wizard</field>
     <field name="arch" type="xml">
         <form string="Bank Reconciliation Report">
             <group name="main">
-                <field name="company_id" groups="base.group_multi_company"/>
                 <field name="date"/>
                 <field name="journal_ids" widget="many2many_tags"/>
             </group>
@@ -32,5 +32,6 @@
 </record>
 
 <menuitem id="bank_reconciliation_report_wizard_menu" action="bank_reconciliation_report_wizard_action" parent="account.menu_finance_reports" groups="account.group_account_manager,account.group_account_user"/>
+
 
 </odoo>

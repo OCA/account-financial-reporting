@@ -8,7 +8,7 @@
 
 <report
     id="bank_reconciliation_xlsx"
-    model="account.journal"
+    model="bank.reconciliation.report.wizard"
     string="Bank Reconciliation XLSX"
     report_type="xlsx"
     name="bank.reconciliation.xlsx"
