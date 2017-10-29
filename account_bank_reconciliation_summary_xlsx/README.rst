@@ -23,10 +23,9 @@ This module doesn't require any configuration.
 Usage
 =====
 
-You can get the Bank Reconciliation Report from:
+You can launch the Bank Reconciliation Report wizard from:
 
-* the form view of a bank bournal: click on *Print > Bank Reconciliation XLSX*
-* the tree view of journals: select one or several journals and click on *Print > Bank Reconciliation XLSX* (if you selected several bank journals, you will get one tab per journal)
+* the menu *Accounting > Reports > OCA accounting reports > Bank Reconciliation*,
 * the form view of a bank statement: click on the button *Bank Reconciliation Report*.
 
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas

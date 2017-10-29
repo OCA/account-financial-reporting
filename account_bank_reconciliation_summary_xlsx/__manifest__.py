@@ -9,7 +9,7 @@
     'author': "Akretion,Odoo Community Association (OCA)",
     'website': 'http://www.akretion.com',
     'summary': 'Adds an XLSX report to help on bank reconciliation',
-    'depends': ['account', 'report_xlsx'],
+    'depends': ['account_financial_report_qweb', 'report_xlsx'],
     'data': [
         'report/report.xml',
         'wizard/bank_reconciliation_report_wizard_view.xml',

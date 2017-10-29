@@ -25,13 +25,13 @@
 </record>
 
 <record id="bank_reconciliation_report_wizard_action" model="ir.actions.act_window">
-    <field name="name">Bank Reconciliation Report</field>
+    <field name="name">Bank Reconciliation</field>
     <field name="res_model">bank.reconciliation.report.wizard</field>
     <field name="view_mode">form</field>
     <field name="target">new</field>
 </record>
 
-<menuitem id="bank_reconciliation_report_wizard_menu" action="bank_reconciliation_report_wizard_action" parent="account.menu_finance_reports" groups="account.group_account_manager,account.group_account_user"/>
+<menuitem id="bank_reconciliation_report_wizard_menu" action="bank_reconciliation_report_wizard_action" parent="account_financial_report_qweb.menu_oca_reports" groups="account.group_account_manager,account.group_account_user" sequence="100"/>
 
 
 </odoo>
