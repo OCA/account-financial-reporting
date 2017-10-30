@@ -896,15 +896,14 @@ SELECT
         WHEN
             ml.tax_line_id is not null
         THEN
-            at.name
+            COALESCE(at.description, at.name)
         WHEN
-            (SELECT count(*)
-            FROM account_move_line_account_tax_rel aml_at_rel
-            WHERE aml_at_rel.account_move_line_id = ml.id
-            LIMIT 1) > 0
+            ml.tax_line_id is null
         THEN
             (SELECT
-                array_to_string(array_agg(at.name), ', ')
+                array_to_string(
+                    array_agg(COALESCE(at.description, at.name)
+                ), ', ')
             FROM
                 account_move_line_account_tax_rel aml_at_rel
             LEFT JOIN
