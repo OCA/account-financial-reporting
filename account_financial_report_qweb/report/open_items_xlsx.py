@@ -49,12 +49,19 @@ class OpenItemsXslx(abstract_report_xlsx.AbstractReportXslx):
 
     def _get_report_filters(self, report):
         return [
-            [_('Date at filter'), report.date_at],
-            [_('Target moves filter'),
+            [
+                _('Date at filter'),
+                report.date_at
+            ],
+            [
+                _('Target moves filter'),
                 _('All posted entries') if report.only_posted_moves
-                else _('All entries')],
-            [_('Account balance at 0 filter'),
-                _('Hide') if report.hide_account_balance_at_0 else _('Show')],
+                else _('All entries'),
+            ],
+            [
+                _('Account balance at 0 filter'),
+                _('Hide') if report.hide_account_balance_at_0 else _('Show'),
+            ],
         ]
 
     def _get_col_count_filter_name(self):

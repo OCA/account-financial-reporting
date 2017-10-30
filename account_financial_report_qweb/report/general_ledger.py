@@ -210,10 +210,8 @@ class GeneralLedgerReportCompute(models.TransientModel):
                                              report_name=report_name)
 
     @api.multi
-    def compute_data_for_report(self,
-                                with_line_details=True,
-                                with_partners=True
-                                ):
+    def compute_data_for_report(
+            self, with_line_details=True, with_partners=True):
         self.ensure_one()
         # Compute report data
         self._inject_account_values()
@@ -253,8 +251,8 @@ class GeneralLedgerReportCompute(models.TransientModel):
 
         # Complete unaffected earnings account
         if (not self.filter_account_ids or
-                    self.unaffected_earnings_account.id in
-                    self.filter_account_ids.ids):
+                self.unaffected_earnings_account.id in
+                self.filter_account_ids.ids):
             self._complete_unaffected_earnings_account_values()
 
         if with_line_details:
@@ -617,7 +615,7 @@ AND
 
         Only for "partner" accounts (payable and receivable).
         """
-
+        # pylint: disable=sql-injection
         query_inject_partner = """
 WITH
     accounts_partners AS
@@ -1324,6 +1322,7 @@ WHERE id = %s
         subquery_sum_amounts += """
             ) sub
         """
+        # pylint: disable=sql-injection
         query_inject_account = """
         WITH
             initial_sum_amounts AS ( """ + subquery_sum_amounts + """ )

@@ -40,12 +40,14 @@ class GeneralLedgerXslx(abstract_report_xlsx.AbstractReportXslx):
                 'field_final_balance': 'final_debit',
                 'type': 'amount',
                 'width': 14},
-            10: {'header': _('Credit'),
+            10: {
+                'header': _('Credit'),
                 'field': 'credit',
                 'field_initial_balance': 'initial_credit',
                 'field_final_balance': 'final_credit',
                 'type': 'amount',
-                'width': 14},
+                'width': 14
+            },
             11: {'header': _('Cumul. Bal.'),
                  'field': 'cumul_balance',
                  'field_initial_balance': 'initial_balance',
@@ -61,15 +63,23 @@ class GeneralLedgerXslx(abstract_report_xlsx.AbstractReportXslx):
 
     def _get_report_filters(self, report):
         return [
-            [_('Date range filter'),
-                _('From: %s To: %s') % (report.date_from, report.date_to)],
-            [_('Target moves filter'),
+            [
+                _('Date range filter'),
+                _('From: %s To: %s') % (report.date_from, report.date_to),
+            ],
+            [
+                _('Target moves filter'),
                 _('All posted entries') if report.only_posted_moves
-                else _('All entries')],
-            [_('Account balance at 0 filter'),
-                _('Hide') if report.hide_account_balance_at_0 else _('Show')],
-            [_('Centralize filter'),
-                _('Yes') if report.centralize else _('No')],
+                else _('All entries'),
+            ],
+            [
+                _('Account balance at 0 filter'),
+                _('Hide') if report.hide_account_balance_at_0 else _('Show'),
+            ],
+            [
+                _('Centralize filter'),
+                _('Yes') if report.centralize else _('No'),
+            ],
         ]
 
     def _get_col_count_filter_name(self):
