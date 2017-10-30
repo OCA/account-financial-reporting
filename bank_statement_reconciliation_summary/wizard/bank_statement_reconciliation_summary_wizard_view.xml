@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2017 Eficent Business and IT Consulting Services, S.L.
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+
+<odoo>
+
+
+<record id="bank_statement_reconciliation_summary_wizard_form"
+        model="ir.ui.view">
+    <field name="name">bank.statement.reconciliation.summary.wizard.form</field>
+    <field name="model">bank.statement.reconciliation.summary.wizard</field>
+    <field name="arch" type="xml">
+        <form string="Bank Reconciliation Report">
+            <group name="main">
+                <field name="end_date"/>
+                <field name="journal_id"/>
+                <field name="balance_end_real"/>
+            </group>
+            <footer>
+                <button name="open_qweb" string="Open" type="object"
+                        class="btn-primary"/>
+                <button special="cancel" string="Cancel" class="oe_link"/>
+            </footer>
+        </form>
+    </field>
+</record>
+
+<record id="bank_statement_reconciliation_summary_action"
+        model="ir.actions.act_window">
+    <field name="name">Bank Statement Reconciliation</field>
+    <field name="res_model">bank.statement.reconciliation.summary.wizard</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+</record>
+
+<menuitem id="bank_statment_reconciliation_summary_wizard_menu"
+          action="bank_statement_reconciliation_summary_action" parent="account_financial_report_qweb.menu_oca_reports" groups="account.group_account_manager,account.group_account_user" sequence="100"/>
+
+
+</odoo>

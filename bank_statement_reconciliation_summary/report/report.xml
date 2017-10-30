@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="summary_report_paperformat" model="report.paperformat">
+            <field name="name">Bank Statement Reconcillation Summary Paperformat</field>
+            <field name="default" eval="True" />
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">0</field>
+            <field name="margin_bottom">0</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <report id="report_bank_stmt_reconcile_summary"
+                string="Bank Statement Reconcillation Summary"
+                model="bank.statement.reconciliation.summary.wizard"
+                report_type="qweb-pdf"
+                file="bank_statement_reconciliation_summary.summary_report"
+                name="bank_statement_reconciliation_summary.summary_report"/>
+
+        <record id="report_bank_stmt_reconcile_summary" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="summary_report_paperformat"/>
+        </record>
+
+    </data>
+</openerp>
