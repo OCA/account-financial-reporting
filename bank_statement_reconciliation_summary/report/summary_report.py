@@ -10,46 +10,57 @@ class SummaryReport(models.AbstractModel):
     _name = 'report.bank_statement_reconciliation_summary.summary_report'
 
     @api.model
-    def _plus_outstanding_payments(self, journals, end_date):
+    def _plus_outstanding_payments(self, journals, start_date, end_date):
         rec = {}
         for journal in journals:
             account_id = journal.default_debit_account_id.id
-            account_move_line_records = self.env['account.move.line'].search([
+            domain_search = [
                 ('account_id', '=', account_id),
                 ('reconciled', '=', False),
                 ('account_id.reconcile', '=', False),
                 ('credit', '>', 0.00),
                 ('date', '<=', end_date),
-            ], order='date')
+            ]
+            if start_date:
+                domain_search += [('date', '>=', start_date)]
+            account_move_line_records = self.env['account.move.line'].search(
+                domain_search, order='date')
             rec[journal.id] = account_move_line_records
         return rec
 
     @api.model
-    def _less_outstanding_receipts(self, journals, end_date):
+    def _less_outstanding_receipts(self, journals, start_date, end_date):
         rec = {}
         for journal in journals:
             account_id = journal.default_debit_account_id.id
-            account_move_line_records = self.env['account.move.line'].search([
+            domain_search = [
                 ('account_id', '=', account_id),
                 ('reconciled', '=', False),
                 ('account_id.reconcile', '=', False),
                 ('debit', '>', 0.00),
                 ('date', '<=', end_date),
-            ], order='date')
+            ]
+            if start_date:
+                domain_search += [('date', '>=', start_date)]
+            account_move_line_records = self.env['account.move.line'].search(
+                domain_search, order='date')
             rec[journal.id] = account_move_line_records
         return rec
 
     @api.model
-    def _plus_unreconciled_statement_lines(self, journals, end_date):
+    def _plus_unreconciled_statement_lines(self, journals, start_date,
+                                           end_date):
         rec = {}
         for journal in journals:
+            domain_search = [
+                ('date', '<=', end_date),
+                ('journal_id', '=', journal.id),
+                ('journal_entry_ids', '=', False)]
+            if start_date:
+                domain_search += [('date', '>=', start_date)]
             statement_lines = self.env['account.bank.statement.line'].search(
-                [('date', '<=', end_date),
-                 ('journal_id', '=', journal.id)])
-            for line in statement_lines:
-                if not line.journal_entry_ids:
-                    statement_lines += line
-            rec[journal.id] = statement_lines or False
+                domain_search)
+            rec[journal.id] = statement_lines
         return rec
 
     @api.model
@@ -84,11 +95,14 @@ class SummaryReport(models.AbstractModel):
             'docs': records,
             'time': time,
             'plus_outstanding_payments':
-                self._plus_outstanding_payments(records, data['end_date']),
+                self._plus_outstanding_payments(records, data['start_date'],
+                                                data['end_date']),
             'less_outstanding_receipts':
-                self._less_outstanding_receipts(records, data['end_date']),
+                self._less_outstanding_receipts(records, data['start_date'],
+                                                data['end_date']),
             'plus_unreconciled_statement_lines':
                 self._plus_unreconciled_statement_lines(records,
+                                                        data['start_date'],
                                                         data['end_date']),
             'bank_end_balance': self._get_bank_end_balance(
                 records, data['end_date']),

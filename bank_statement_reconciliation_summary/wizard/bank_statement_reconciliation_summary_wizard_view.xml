@@ -14,6 +14,7 @@
     <field name="arch" type="xml">
         <form string="Bank Reconciliation Report">
             <group name="main">
+                <field name="start_date"/>
                 <field name="end_date"/>
                 <field name="journal_id"/>
                 <field name="balance_end_real"/>

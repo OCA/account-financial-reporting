@@ -16,6 +16,7 @@ class BankReconciliationReportWizard(models.TransientModel):
             ('company_id', '=', self.env.user.company_id.id)], limit=1)
         return journal
 
+    start_date = fields.Date()
     end_date = fields.Date(
         required=True,
         default=fields.Date.context_today)
@@ -35,6 +36,7 @@ class BankReconciliationReportWizard(models.TransientModel):
                 'docids': self.journal_id.ids,
                 'ids': self.journal_id.ids,
                 'end_date': self.end_date,
+                'start_date': self.start_date,
                 'balance_end_real': self.balance_end_real,
                 },
             'context': self._context,

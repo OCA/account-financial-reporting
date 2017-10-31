@@ -22,7 +22,6 @@
                                   <div class='col-xs-3'><h4>Description</h4></div>
                                   <div class='col-xs-3'><h4>Reference</h4></div>
                                   <div class='col-xs-3 text-right'><h4>Amount</h4></div>
-                                  <div class='col-xs-3 text-right'><h4>Amount (foreign currency)</h4></div>
                               </div>
                             </div>
                             <div class='row mt16'>
