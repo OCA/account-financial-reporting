@@ -232,6 +232,8 @@ class CommonPartnerBalanceReportHeaderWebkit(CommonBalanceReportHeaderWebkit,
         return accounts_details_by_ids, comp_params
 
     def compute_partner_balance_data(self, data, filter_report_type=None):
+        lang = self.localcontext.get('lang')
+        lang_ctx = lang and {'lang': lang} or {}
         new_ids = data['form']['account_ids'] or data[
             'form']['chart_account_id']
         max_comparison = self._get_form_param(
@@ -271,7 +273,7 @@ class CommonPartnerBalanceReportHeaderWebkit(CommonBalanceReportHeaderWebkit,
         # get details for each accounts, total of debit / credit / balance
         accounts_by_ids = self._get_account_details(
             account_ids, target_move, fiscalyear, main_filter, start, stop,
-            initial_balance_mode)
+            initial_balance_mode, context=lang_ctx)
 
         partner_details_by_ids = self._get_account_partners_details(
             accounts_by_ids, main_filter, target_move, start, stop,
@@ -293,7 +295,8 @@ class CommonPartnerBalanceReportHeaderWebkit(CommonBalanceReportHeaderWebkit,
                 comp_accounts_by_ids.append(comparison_result)
         objects = self.pool.get('account.account').browse(self.cursor,
                                                           self.uid,
-                                                          account_ids)
+                                                          account_ids,
+                                                          context=lang_ctx)
 
         init_balance_accounts = {}
         comparisons_accounts = {}
