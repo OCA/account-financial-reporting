@@ -3,7 +3,7 @@
 # Copyright 2016 Serpent Consulting Services Pvt. Ltd.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 import time
-from odoo import api, models, _
+from odoo import api, models
 
 
 class SummaryReport(models.AbstractModel):
@@ -71,7 +71,7 @@ class SummaryReport(models.AbstractModel):
             amount_field = 'balance'
             query = """
             SELECT sum(%s) FROM account_move_line
-            WHERE account_id=%%s 
+            WHERE account_id=%%s
             AND date<=%%s""" % (amount_field,)
             self.env.cr.execute(query, (bank_account.id, end_date))
             query_results = self.env.cr.dictfetchall()
