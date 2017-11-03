@@ -23,7 +23,7 @@
     'name': 'Add XLS export to accounting reports',
     'version': '8.0.0.4.0',
     'license': 'AGPL-3',
-    'author': "Noviat,Odoo Community Association (OCA)",
+    'author': "Noviat,ClearCorp,Odoo Community Association (OCA)",
     'category': 'Generic Modules/Accounting',
     'description': """
 
@@ -33,6 +33,9 @@
         - partner ledger
         - partner balance
         - open invoices
+        - balance sheet
+        - profit and loss
+        - financial report
 
     """,
     'depends': ['report_xls', 'account_financial_report_webkit'],
@@ -43,6 +46,7 @@
         'wizard/partners_ledger_wizard_view.xml',
         'wizard/partners_balance_wizard_view.xml',
         'wizard/open_invoices_wizard_view.xml',
+        'wizard/account_financial_wizard_view.xml',
     ],
     'test': ['tests/general_ledger.yml',
              'tests/partner_ledger.yml',

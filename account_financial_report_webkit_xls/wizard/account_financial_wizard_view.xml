@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    
+        <record id="accounting_report_xls_wizard_view" model="ir.ui.view">
+            <field name="name">accounting.report.xls</field>
+            <field name="model">accounting.report</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account.accounting_report_view"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="/form/label[@string= '']" position="replace">
+                      <label nolabel="1" colspan="4" string="This report allows you to generate a pdf or xls of your financial accounts allowing you to quickly compare debits and credits for each of your accounts"/>
+                    </xpath>
+                    <button string="Print" position="after">
+                        <button icon="gtk-execute" name="xls_export" string="Export" type="object" context="{'xls_export':1}" colspan="2"/>
+                    </button>
+                </data>
+            </field>
+        </record>
+    </data>
+</openerp>
