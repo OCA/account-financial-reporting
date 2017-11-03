@@ -10,7 +10,7 @@
     'author': 'Eficent, '
               'Serpent Consulting Services Pvt. Ltd.,'
               'Odoo Community Association (OCA)',
-    'depends': ['account'],
+    'depends': ['account', 'account_financial_report_qweb'],
     'data': [
         'report/summary_report.xml',
         'report/report.xml',
