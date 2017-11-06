@@ -7,7 +7,6 @@ from odoo.addons.report_xlsx.report.report_xlsx import ReportXlsx
 
 
 class AbstractReportXslx(ReportXlsx):
-
     def __init__(self, name, table, rml=False, parser=False, header=True,
                  store=False):
         super(AbstractReportXslx, self).__init__(
@@ -47,7 +46,7 @@ class AbstractReportXslx(ReportXlsx):
         filters = self._get_report_filters(report)
         self.columns = self._get_report_columns(report)
 
-        self.sheet = workbook.add_worksheet(report_name[:31])
+        self.set_sheet(self.add_sheet(workbook, report_name[:31]))
 
         self._set_column_width()
 
@@ -56,6 +55,12 @@ class AbstractReportXslx(ReportXlsx):
         self._write_filters(filters)
 
         self._generate_report_content(workbook, report)
+
+    def add_sheet(self, workbook, sheet_name):
+        return workbook.add_worksheet(sheet_name)
+
+    def set_sheet(self, sheet):
+        self.sheet = sheet
 
     def _define_formats(self, workbook):
         """ Add cell formats to current workbook.
@@ -107,7 +112,13 @@ class AbstractReportXslx(ReportXlsx):
         """Set width for all defined columns.
         Columns are defined with `_get_report_columns` method.
         """
-        for position, column in self.columns.iteritems():
+        self._set_columns_width(self.columns)
+
+    def _set_columns_width(self, columns):
+        """Set width for all defined columns.
+        Columns are defined with `_get_report_columns` method.
+        """
+        for position, column in columns.iteritems():
             self.sheet.set_column(position, position, column['width'])
 
     def _write_report_title(self, title):
@@ -166,7 +177,10 @@ class AbstractReportXslx(ReportXlsx):
         """Write a line on current line using all defined columns field name.
         Columns are defined with `_get_report_columns` method.
         """
-        for col_pos, column in self.columns.iteritems():
+        self._write_line(self.columns, line_object)
+
+    def _write_line(self, columns_descriptions, line_object):
+        for col_pos, column in columns_descriptions.iteritems():
             value = getattr(line_object, column['field'])
             cell_type = column.get('type', 'string')
             if cell_type == 'string':
