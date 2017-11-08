@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_account_report_standard_ledger_line_tree">
+        <field name="name">account.report.standard.ledger.line</field>
+        <field name="model">account.report.standard.ledger.line</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="type"/>
+                <field name="date"/>
+                <field name="journal_id"/>
+                <field name="account_id"/>
+                <field name="move_id"/>
+                <field name="partner_id"/>
+                <field name="debit" sum="Total" attrs="{'invisible':[('debit','=',0)]}"/>
+                <field name="credit" sum="Total" attrs="{'invisible':[('credit','=',0)]}"/>
+                <field name="cumul_balance"/>
+                <field name="full_reconcile_id"/>
+                <field name="reconciled"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_aged_tree">
+        <field name="name">account.report.standard.ledger.line</field>
+        <field name="model">account.report.standard.ledger.line</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="type"/>
+                <field name="date"/>
+                <field name="partner_id"/>
+                <!-- <field name="account_id"/> -->
+                <field name="move_id"/>
+                <!-- <field name="move_line_id"/> -->
+                <field name="date_maturity"/>
+                <field name="current" sum="Total" attrs="{'invisible':[('current','=',0)]}"/>
+                <field name="age_30_days" sum="Total" attrs="{'invisible':[('age_30_days','=',0)]}"/>
+                <field name="age_60_days" sum="Total" attrs="{'invisible':[('age_60_days','=',0)]}"/>
+                <field name="age_90_days" sum="Total" attrs="{'invisible':[('age_90_days','=',0)]}"/>
+                <field name="age_120_days" sum="Total" attrs="{'invisible':[('age_120_days','=',0)]}"/>
+                <field name="older" sum="Total" attrs="{'invisible':[('older','=',0)]}"/>
+                <field name="balance" sum="Total"/>
+                <!-- <field name="cumul_balance"/> -->
+                <field name="full_reconcile_id"/>
+                <field name="reconciled"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="account_report_standard_ledger_line_form" model="ir.ui.view">
+        <field name="name">account.report.standard.ledger.line.form</field>
+        <field name="model">account.report.standard.ledger.line</field>
+        <field name="arch" type="xml">
+            <form string="Journal Item">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="type"/>
+                            <field name="move_line_id"/>
+                            <field name="partner_id"/>
+                        </group>
+                        <group>
+                            <field name="journal_id"/>
+                            <field name="date"/>
+                        </group>
+                    </group>
+                    <notebook colspan="4">
+                        <page string="Information">
+                            <group>
+                                <group string="Amount">
+                                    <field name="account_id" domain="[('company_id', '=', company_id)]"/>
+                                    <field name="debit"/>
+                                    <field name="credit"/>
+                                    <field name="balance"/>
+                                </group>
+                                <group string="Accounting Documents">
+                                    <field name="move_id" required="False"/>
+                                </group>
+                                <group string="Dates">
+                                    <field name="date_maturity"/>
+                                </group>
+                                <group string="Matching">
+                                    <field name="full_reconcile_id"/>
+                                    <field name="reconciled"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Other">
+                            <group>
+                                <field name="report_id"/>
+                                <field name="report_object_id"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- search view -->
+    <record id="account_report_standard_ledger_line_search_view" model="ir.ui.view">
+        <field name="name">account.report.standard.ledger.line.search</field>
+        <field name="model">account.report.standard.ledger.line</field>
+        <field name="arch" type="xml">
+            <search string="Journal Items">
+                <field name="move_id" filter_domain="['|', ('move_id','ilike',self)]" string="Move"/>
+                <field name="date"/>
+                <separator/>
+                <filter string="Unposted" domain="[('move_id.state','=','draft')]" help="Unposted Journal Items"/>
+                <filter name="posted" string="Posted" domain="[('move_id.state','=','posted')]" help="Posted Journal Items"/>
+                <separator/>
+                <filter string="Unreconciled" domain="[('full_reconcile_id', '=', False), ('balance','!=', 0), ('account_id.reconcile','=',True)]" help="Journal items where matching number isn't set" name="unreconciled"/>
+                <separator/>
+                <filter string="Supplier" domain="[('account_id.type_third_parties', '=', 'supplier')]" help="From Supplier accounts" name="supplier"/>
+                <filter string="Customer" domain="[('account_id.type_third_parties', '=', 'customer')]" help="From Customer accounts" name="customer"/>
+                <filter string="General" domain="[('type', '!=', '4_total')]" context="{'group_by':'account_id'}" name="general"/>
+                <filter string="Partner" domain="[('type', '!=', '4_total')]" context="{'group_by':'partner_id'}" name="partner"/>
+                <filter string="Journal" domain="[('type', '!=', '4_total')]" context="{'group_by':'journal_id'}" name="journal"/>
+                <filter string="Open" domain="[('type', '!=', '4_total')]" context="{'group_by':'account_id'}" name="open"/>
+                <filter string="Aged Balance" domain="[('type', '!=', '4_total')]" context="{'group_by':'partner_id'}" name="aged"/>
+                <separator/>
+                <field name="account_id"/>
+                <field name="partner_id"/>
+                <field name="journal_id"/>
+                <field name="type"/>
+                <group expand="0" string="Group By">
+                    <filter string="Partner" domain="[]" context="{'group_by':'partner_id'}"/>
+                    <filter string="Journal" domain="[]" context="{'group_by':'journal_id'}"/>
+                    <filter string="Account" context="{'group_by':'account_id'}"/>
+                    <filter string="Date" domain="[]" context="{'group_by':'date'}"/>
+                    <filter string="Type" domain="[]" context="{'group_by':'type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>

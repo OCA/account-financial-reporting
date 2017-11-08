@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="account_report_standard_view" model="ir.ui.view">
+            <field name="name">Standard Ledger</field>
+            <field name="model">account.report.standard.ledger</field>
+            <field name="arch" type="xml">
+                <form string="Report Options" class="oe_form_configuration">
+                    <header>
+                        <button name="action_view_lines" string="View Lines" type="object"/>
+                        <button name="print_pdf_report" string="Print PDF" type="object" default_focus="1" class="oe_highlight"/>
+                        <button name="print_excel_report" string="Excel File" type="object"/>
+                    </header>
+                    <field name="company_id" invisible="1"/>
+                    <h1>Standard Accounting Report</h1>
+                    <group col="4">
+                        <field name="type_ledger" widget="radio"/>
+                        <field name="summary"/>
+                    </group>
+                    <group col="4">
+                        <field name="target_move"/>
+                        <field name="reconciled" attrs="{'readonly': [('type_ledger', 'not in', ('partner', 'aged',))]}"/>
+                        <field name="compact_account" attrs="{'readonly': [('type_ledger', '!=', 'general')]}"/>
+                        <field name="result_selection" attrs="{'invisible': [('type_ledger', 'not in', ('partner', 'aged',))]}"/>
+                    </group>
+                    <group col="4">
+                        <field name="periode_date" widget="selection"/>
+                        <field name="month_selec" widget="selection"/>
+                    </group>
+                    <group col="2">
+                        <group>
+                            <field name="date_from"/>
+                        </group>
+                        <group>
+                            <field name="date_to"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="journal_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                    </group>
+                    <group col="3">
+                        <field name="partner_select_ids" widget="many2many_tags" options="{'no_create': True}" attrs="{'invisible': [('type_ledger', 'not in', ('partner', 'aged',))]}"/>
+                    </group>
+                    <group col="4">
+                        <field name="account_in_ex_clude" widget="many2many_tags" options="{'no_create': True}"/>
+                        <field name="account_methode" attrs="{'invisible':[('account_in_ex_clude', '=', [])]}"/>
+                    </group>
+                    <group col="4">
+                        <field name="init_balance_history"/>
+                        <field name="company_currency_id"/>
+                        <field name="company_id"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_account_standard_report_menu" model="ir.actions.act_window">
+            <field name="name">Standard Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.report.standard.ledger</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="account_report_standard_view"/>
+            <field name="target">inline</field>
+        </record>
+
+        <menuitem id="menu_account_standard_report" name="Standard Report" sequence="0" parent="account.menu_finance_reports" action="action_account_standard_report_menu" groups="account.group_account_manager,account.group_account_user"/>
+
+    </data>
+</odoo>
