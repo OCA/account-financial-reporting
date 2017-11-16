@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ###############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -25,7 +25,7 @@
     'name': 'Print chart of accounts',
     'version': '1.0',
     'category': 'Reports/pdf',
-    'description': """Print chart of accounts.
+    'description': r"""Print chart of accounts.
 
 This module add the menu Accounting \ Charts \ Print chart of Accounts
 and allow to print the selected chart of accounts.
@@ -44,6 +44,7 @@ Contributors
         'base',
         'account',
     ],
+    "license": 'AGPL-3',
     'data': [
         'account_report.xml',
         'wizard/account_report_chart_of_account.xml',

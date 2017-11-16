@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -135,8 +136,8 @@ class report_pl_account_horizontal(report_sxw.rml_parse, common_report_header):
                     account.user_type.report_type == typ
                 ):
                     currency = (
-                        account.currency_id and account.currency_id
-                        or account.company_id.currency_id)
+                        account.currency_id and account.currency_id or
+                        account.company_id.currency_id)
                     if typ == 'expense' and account.type != 'view' and (
                         account.debit != account.credit
                     ):

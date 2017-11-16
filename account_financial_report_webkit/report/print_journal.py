@@ -161,5 +161,3 @@ HeaderFooterTextWebKitParser(
     'addons/account_financial_report_webkit/report/templates/\
     account_report_print_journal.mako',
     parser=PrintJournalWebkit)
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

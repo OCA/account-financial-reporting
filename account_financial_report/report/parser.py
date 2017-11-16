@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ###########################################################################
 #    Module Writen to OpenERP, Open Source Management Solution
 #    Copyright (C) OpenERP Venezuela (<http://openerp.com.ve>).
@@ -164,19 +164,19 @@ class account_balance(report_sxw.rml_parse):
         return False
 
     def exchange_name(self, form):
-        self.from_currency_id = self.\
-            get_company_currency(form['company_id']
-                                 and type(form['company_id']) in (list, tuple)
-                                 and form['company_id'][0]
-                                 or form['company_id'])
+        self.from_currency_id = self.get_company_currency(
+            form['company_id'] and
+            type(form['company_id']) in (list, tuple) and
+            form['company_id'][0] or form['company_id'])
         if not form['currency_id']:
             self.to_currency_id = self.from_currency_id
         else:
-            self.to_currency_id = form['currency_id'] \
-                and type(form['currency_id']) in (list, tuple) \
-                and form['currency_id'][0] or form['currency_id']
-        return self.pool.get('res.currency').browse(self.cr, self.uid,
-                                                    self.to_currency_id).name
+            self.to_currency_id = (
+                form['currency_id'] and
+                type(form['currency_id']) in (list, tuple) and
+                form['currency_id'][0] or form['currency_id'])
+        return self.pool.get('res.currency').browse(
+            self.cr, self.uid, self.to_currency_id).name
 
     def exchange(self, from_amount):
         if self.from_currency_id == self.to_currency_id:
@@ -548,10 +548,10 @@ class account_balance(report_sxw.rml_parse):
         self.context['state'] = form['target_move'] or 'posted'
 
         self.from_currency_id = self.\
-            get_company_currency(form['company_id']
-                                 and type(form['company_id']) in (list, tuple)
-                                 and form['company_id'][0]
-                                 or form['company_id'])
+            get_company_currency(form['company_id'] and
+                                 type(form['company_id']) in (list, tuple) and
+                                 form['company_id'][0] or
+                                 form['company_id'])
         if not form['currency_id']:
             self.to_currency_id = self.from_currency_id
         else:
@@ -566,16 +566,16 @@ class account_balance(report_sxw.rml_parse):
             del form['account_list']
 
         credit_account_ids = self.\
-            get_company_accounts(form['company_id']
-                                 and type(form['company_id']) in (list, tuple)
-                                 and form['company_id'][0]
-                                 or form['company_id'], 'credit')
+            get_company_accounts(form['company_id'] and
+                                 type(form['company_id']) in (list, tuple) and
+                                 form['company_id'][0] or
+                                 form['company_id'], 'credit')
 
         debit_account_ids = self.\
-            get_company_accounts(form['company_id']
-                                 and type(form['company_id']) in (list, tuple)
-                                 and form['company_id'][0]
-                                 or form['company_id'], 'debit')
+            get_company_accounts(form['company_id'] and
+                                 type(form['company_id']) in (list, tuple) and
+                                 form['company_id'][0] or
+                                 form['company_id'], 'debit')
 
         if form.get('fiscalyear'):
             if type(form.get('fiscalyear')) in (list, tuple):
@@ -592,9 +592,9 @@ class account_balance(report_sxw.rml_parse):
 
         account_ids = _get_children_and_consol(
             self.cr, self.uid, account_ids,
-            form['display_account_level']
-            and form['display_account_level']
-            or 100, self.context)
+            form['display_account_level'] and
+            form['display_account_level'] or
+            100, self.context)
 
         credit_account_ids = _get_children_and_consol(
             self.cr, self.uid, credit_account_ids, 100, self.context,
@@ -850,15 +850,16 @@ class account_balance(report_sxw.rml_parse):
                     'id': id,
                     'type': aa_id[3].type,
                     'code': aa_id[3].code,
-                    'name': (aa_id[2] and not aa_id[1])
-                    and 'TOTAL %s' % (aa_id[3].name.upper())
-                    or aa_id[3].name,
+                    'name': ((aa_id[2] and not aa_id[1]) and
+                             'TOTAL %s' % (aa_id[3].name.upper()) or
+                             aa_id[3].name),
                     'parent_id': aa_id[3].parent_id and aa_id[3].parent_id.id,
                     'level': aa_id[3].level,
                     'label': aa_id[1],
                     'total': aa_id[2],
-                    'change_sign': credit_account_ids
-                    and (id in credit_account_ids and -1 or 1) or 1
+                    'change_sign': (
+                        credit_account_ids and
+                        (id in credit_account_ids and -1 or 1) or 1),
                 }
 
                 if form['columns'] == 'qtr':

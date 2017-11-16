@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Author: Nicolas Bessi, Guewen Baconnier
@@ -160,8 +160,8 @@ class PartnersOpenInvoicesWebkit(report_sxw.rml_parse,
             non_null_init_balances = dict([
                 (ib, amounts) for ib, amounts
                 in account.init_balance.iteritems()
-                if amounts['init_balance']
-                or amounts['init_balance_currency']])
+                if amounts['init_balance'] or
+                amounts['init_balance_currency']])
             init_bal_lines_pids = non_null_init_balances.keys()
 
             account.partners_order = self._order_partners(

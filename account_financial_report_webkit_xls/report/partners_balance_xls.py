@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -137,9 +137,10 @@ class partners_balance_xls(report_xls):
                 ('c', 2, 0, 'text', _('Comparison') + str(index + 1) +
                  ' (C' + str(index + 1) + ')')]
             if params['comparison_filter'] == 'filter_date':
-                c_specs += [('f', 2, 0, 'text', _('Dates Filter') + ': ' +
-                             _p.formatLang(params['start'], date=True) + ' - '
-                             + _p.formatLang(params['stop'], date=True))]
+                c_specs += [
+                    ('f', 2, 0, 'text', _('Dates Filter') + ': ' +
+                     _p.formatLang(params['start'], date=True) + ' - ' +
+                     _p.formatLang(params['stop'], date=True))]
             elif params['comparison_filter'] == 'filter_period':
                 c_specs += [('f', 2, 0, 'text', _('Periods Filter') +
                              ': ' + params['start'].name + ' - ' +

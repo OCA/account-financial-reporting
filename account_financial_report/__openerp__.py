@@ -1,7 +1,6 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ###########################################################################
 #    Copyright (C) OpenERP Venezuela (<http://openerp.com.ve>).
-#    All Rights Reserved
 # Credits######################################################
 #    Coded by:   Humberto Arocha humberto@openerp.com.ve
 #                Angelica Barrios angelicaisabelb@gmail.com
@@ -28,6 +27,7 @@
     "version": "2.0",
     "author": "Vauxoo,Odoo Community Association (OCA)",
     "website": "http://www.vauxoo.com",
+    "license": "AGPL-3",
     "depends": ["base",
                 "account"
                 ],
