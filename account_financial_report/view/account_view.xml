@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="view_account_specific_form">
+        <field name="name">account.account.form.inherit</field>
+        <field name="inherit_id" ref="account.view_account_form"/>
+        <field name="model">account.account</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <field name="deprecated" position="after">
+                <field name="centralized"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="action_report_general_ledger" model="ir.actions.client">
+        <field name="name">General Ledger Report</field>
+        <field name="tag">report_general_ledger</field>
+        <field name="context" eval="{'model': 'report_general_ledger'}" />
+    </record>
+
+    <record id="action_report_trial_balance" model="ir.actions.client">
+        <field name="name">Trial Balance Report</field>
+        <field name="tag">report_trial_balance</field>
+        <field name="context" eval="{'model': 'report_trial_balance'}" />
+    </record>
+
+    <record id="action_report_open_items" model="ir.actions.client">
+        <field name="name">Open Items Report</field>
+        <field name="tag">report_open_items</field>
+        <field name="context" eval="{'model': 'report_open_items'}" />
+    </record>
+
+    <record id="action_report_aged_partner_balance" model="ir.actions.client">
+        <field name="name">Aged Partner Balance Report</field>
+        <field name="tag">report_aged_partner_balance</field>
+        <field name="context" eval="{'model': 'report_aged_partner_balance'}" />
+    </record>
+
+
+
+</odoo>
