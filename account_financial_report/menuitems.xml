@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem
+        parent="account.menu_finance_reports"
+        id="menu_oca_reports"
+        name="OCA accounting reports"
+        groups="account.group_account_manager,account.group_account_user"
+        />
+
+    <menuitem
+        parent="menu_oca_reports"
+        action="action_general_ledger_wizard"
+        id="menu_general_ledger_wizard"
+        sequence="10"
+        />
+
+    <menuitem
+        parent="menu_oca_reports"
+        action="action_trial_balance_wizard"
+        id="menu_trial_balance_wizard"
+        sequence="20"
+        />
+
+    <menuitem
+        parent="menu_oca_reports"
+        action="action_open_items_wizard"
+        id="menu_open_items_wizard"
+        sequence="30"
+        />
+
+    <menuitem
+        parent="menu_oca_reports"
+        action="action_aged_partner_balance_wizard"
+        id="menu_aged_partner_balance_wizard"
+        sequence="40"
+        />
+
+    <!-- Hide odoo PDF reports menu -->
+    <menuitem
+        id="account.menu_finance_legal_statement"
+        name="PDF Reports"
+        parent="account.menu_finance_reports"
+        groups="base.group_erp_manager"
+        />
+
+    <menuitem
+        id="account.menu_general_ledger"
+        name="General Ledger"
+        parent="account.menu_finance_legal_statement"
+        action="account.action_account_general_ledger_menu"
+        groups="base.group_erp_manager"
+        />
+
+    <menuitem
+        id="account.menu_general_Balance_report"
+        name="Trial Balance"
+        parent="account.menu_finance_legal_statement"
+        action="account.action_account_balance_menu"
+        groups="base.group_erp_manager"
+        />
+
+    <menuitem
+        id="account.menu_account_report_bs"
+        name="Balance Sheet"
+        action="account.action_account_report_bs"
+        parent="account.menu_finance_legal_statement"
+        groups="base.group_erp_manager"
+        />
+
+    <menuitem
+        id="account.menu_account_report_pl"
+        name="Profit and Loss"
+        action="account.action_account_report_pl"
+        parent="account.menu_finance_legal_statement"
+        groups="base.group_erp_manager"
+        />
+
+    <menuitem
+        id="account.menu_aged_trial_balance"
+        name="Aged Partner Balance"
+        action="account.action_account_aged_balance_view"
+        parent="account.menu_finance_legal_statement"
+        groups="base.group_erp_manager"
+        />
+
+</odoo>
