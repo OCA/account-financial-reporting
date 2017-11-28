@@ -286,7 +286,7 @@
                     <!--## total-->
                     <div class="act_as_cell right" style="width: 370px;">Percents</div>
                     <!--## amount_residual-->
-                    <div class="act_as_cell amount" style="width: 110px;"></div>
+                    <div class="act_as_cell amount" style="width: 110px;"/>
                     <!--## current-->
                     <div class="act_as_cell amount" style="width: 110px;"><span t-field="account.percent_current"/>%</div>
                     <!--## age_30_days-->
@@ -306,7 +306,7 @@
                     <!--## date_due-->
                     <div class="act_as_cell" style="width: 60px;"/>
                     <!--## amount_residual-->
-                    <div class="act_as_cell amount" style="width: 70px;"></div>
+                    <div class="act_as_cell amount" style="width: 70px;"/>
                     <!--## current-->
                     <div class="act_as_cell amount" style="width: 70px;"><span t-field="account.percent_current"/>%</div>
                     <!--## age_30_days-->
