@@ -361,7 +361,8 @@ FROM
                         THEN pr.amount_currency
                         ELSE NULL
                     END
-                ) AS partial_amount_currency
+                ) AS partial_amount_currency,
+                ml.currency_id
             FROM
                 report_open_items_qweb_partner rp
             INNER JOIN
@@ -469,13 +470,15 @@ WITH
                             ELSE amount_currency + SUM(partial_amount_currency)
                         END
                     ELSE amount_currency
-                END AS amount_residual_currency
+                END AS amount_residual_currency,
+                currency_id
             FROM
                 move_lines_amount
             GROUP BY
                 id,
                 balance,
-                amount_currency
+                amount_currency,
+                currency_id
         )
 INSERT INTO
     report_open_items_qweb_move_line
@@ -557,7 +560,7 @@ INNER JOIN
 LEFT JOIN
     account_full_reconcile fr ON ml.full_reconcile_id = fr.id
 LEFT JOIN
-    res_currency c ON a.currency_id = c.id
+    res_currency c ON ml2.currency_id = c.id
 WHERE
     ra.report_id = %s
 AND
