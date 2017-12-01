@@ -26,7 +26,7 @@ class TestAgedPartnerBalance(abstract_test.AbstractTest):
                'action_report_aged_partner_balance_xlsx'
 
     def _getReportTitle(self):
-        return 'Aged Partner Balance'
+        return 'Odoo Report'
 
     def _getBaseFilters(self):
         return {

@@ -1,4 +1,3 @@
-
 # © 2016 Julien Coux (Camptocamp)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
@@ -43,7 +42,6 @@ class TrialBalanceReport(models.TransientModel):
 
 
 class TrialBalanceReportAccount(models.TransientModel):
-
     _name = 'report_trial_balance_account'
     _order = 'code ASC'
 
@@ -76,7 +74,6 @@ class TrialBalanceReportAccount(models.TransientModel):
 
 
 class TrialBalanceReportPartner(models.TransientModel):
-
     _name = 'report_trial_balance_partner'
 
     report_account_id = fields.Many2one(
@@ -123,7 +120,6 @@ class TrialBalanceReportCompute(models.TransientModel):
     @api.multi
     def print_report(self, report_type):
         self.ensure_one()
-        self.compute_data_for_report()
         if report_type == 'xlsx':
             report_name = 'a_f_r.report_trial_balance_xlsx'
         else:
@@ -132,6 +128,22 @@ class TrialBalanceReportCompute(models.TransientModel):
         return self.env['ir.actions.report'].search(
             [('report_name', '=', report_name),
              ('report_type', '=', report_type)], limit=1).report_action(self)
+
+    def _get_html(self):
+        result = {}
+        rcontext = {}
+        context = dict(self.env.context)
+        report = self.browse(context.get('active_id'))
+        if report:
+            rcontext['o'] = report
+            result['html'] = self.env.ref(
+                'account_financial_report.report_trial_balance').render(
+                rcontext)
+        return result
+
+    @api.model
+    def get_html(self, given_context=None):
+        return self._get_html()
 
     def _prepare_report_general_ledger(self):
         self.ensure_one()

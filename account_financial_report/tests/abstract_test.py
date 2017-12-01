@@ -31,6 +31,7 @@ class AbstractTest(TransactionCase):
         cls.additional_filters = cls._getAdditionalFiltersToBeTested()
 
         cls.report = cls.model.create(cls.base_filters)
+        cls.report.compute_data_for_report()
 
     def test_01_generation_report_qweb(self):
         """Check if report PDF/HTML is correctly generated"""
@@ -56,6 +57,7 @@ class AbstractTest(TransactionCase):
         rep = report.render(self.report.ids, {})
 
         self.assertTrue(self.report_title.encode('utf8') in rep[0])
+
         self.assertTrue(
             self.report.account_ids[0].name.encode('utf8') in rep[0]
         )

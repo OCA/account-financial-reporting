@@ -1,4 +1,3 @@
-
 # Author: Damien Crier, Andrea Stirpe, Kevin Graveman, Dennis Sluijk
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA, Onestein B.V.
@@ -6,6 +5,8 @@
 
 from datetime import datetime
 from odoo import api, fields, models
+from odoo.tools.safe_eval import safe_eval
+from odoo.tools import pycompat
 
 
 class AgedPartnerBalance(models.TransientModel):
@@ -56,8 +57,20 @@ class AgedPartnerBalance(models.TransientModel):
     @api.multi
     def button_export_html(self):
         self.ensure_one()
-        report_type = 'qweb-html'
-        return self._export(report_type)
+        action = self.env.ref(
+            'account_financial_report.action_report_aged_partner_balance')
+        vals = action.read()[0]
+        context1 = vals.get('context', {})
+        if isinstance(context1, pycompat.string_types):
+            context1 = safe_eval(context1)
+        model = self.env['report_aged_partner_balance']
+        report = model.create(self._prepare_report_aged_partner_balance())
+        report.compute_data_for_report()
+
+        context1['active_id'] = report.id
+        context1['active_ids'] = report.ids
+        vals['context'] = context1
+        return vals
 
     @api.multi
     def button_export_pdf(self):
@@ -86,4 +99,5 @@ class AgedPartnerBalance(models.TransientModel):
         """Default export is PDF."""
         model = self.env['report_aged_partner_balance']
         report = model.create(self._prepare_report_aged_partner_balance())
+        report.compute_data_for_report()
         return report.print_report(report_type)

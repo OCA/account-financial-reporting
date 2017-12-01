@@ -4,67 +4,71 @@
     <template id="report_general_ledger_qweb">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <!-- Saved flag fields into variables, used to define columns display -->
-                <t t-set="show_cost_center" t-value="o.show_cost_center"/>
-                <t t-set="has_second_currency" t-value="o.has_second_currency"/>
                 <t t-call="account_financial_report.internal_layout">
-                    <!-- Defines global variables used by internal layout -->
-                    <t t-set="title">General Ledger</t>
-                    <t t-set="company_name" t-value="o.company_id.name"/>
-
-                    <div class="page">
-                        <!-- Display filters -->
-                        <t t-call="account_financial_report.report_general_ledger_filters"/>
-
-                        <t t-foreach="o.account_ids" t-as="account">
-                            <div class="page_break">
-                                <!-- Display account header -->
-                                <div class="act_as_table list_table" style="margin-top: 10px;"/>
-                                <div class="act_as_caption account_title" style="width: 1141px !important;">
-                                    <span t-field="account.code"/> - <span t-field="account.name"/>
-                                </div>
-
-                                <t t-if="not account.partner_ids">
-                                    <!-- Display account move lines without partner regroup -->
-                                    <t t-call="account_financial_report.report_general_ledger_lines">
-                                        <t t-set="account_or_partner_object" t-value="account"/>
-                                    </t>
-                                </t>
-
-                                <t t-if="account.partner_ids">
-                                    <!-- Display account partners -->
-                                    <t t-foreach="account.partner_ids" t-as="partner">
-                                        <div class="page_break">
-                                            <!-- Display partner header -->
-                                            <div class="act_as_caption account_title">
-                                                <span t-field="partner.name"/>
-                                            </div>
-
-                                            <!-- Display partner move lines -->
-                                            <t t-call="account_financial_report.report_general_ledger_lines">
-                                                <t t-set="account_or_partner_object" t-value="partner"/>
-                                            </t>
-
-                                            <!-- Display partner footer -->
-                                            <t t-call="account_financial_report.report_general_ledger_ending_cumul">
-                                                <t t-set="account_or_partner_object" t-value="partner"/>
-                                                <t t-set="type" t-value='"partner_type"'/>
-                                            </t>
-                                        </div>
-                                    </t>
-                                </t>
-
-                                <!-- Display account footer -->
-                                <t t-call="account_financial_report.report_general_ledger_ending_cumul">
-                                    <t t-set="account_or_partner_object" t-value="account"/>
-                                    <t t-set="type" t-value='"account_type"'/>
-                                </t>
-                            </div>
-                        </t>
-                    </div>
+                    <t t-call="account_financial_report.report_general_ledger_base"/>
                 </t>
             </t>
         </t>
+    </template>
+
+    <template id="report_general_ledger_base">
+        <!-- Saved flag fields into variables, used to define columns display -->
+        <t t-set="show_cost_center" t-value="o.show_cost_center"/>
+        <t t-set="has_second_currency" t-value="o.has_second_currency"/>
+        <!-- Defines global variables used by internal layout -->
+        <t t-set="title">General Ledger</t>
+        <t t-set="company_name" t-value="o.company_id.name"/>
+
+        <div class="page">
+            <!-- Display filters -->
+            <t t-call="account_financial_report.report_general_ledger_filters"/>
+
+            <t t-foreach="o.account_ids" t-as="account">
+                <div class="page_break">
+                    <!-- Display account header -->
+                    <div class="act_as_table list_table" style="margin-top: 10px;"/>
+                    <div class="act_as_caption account_title" style="width: 1141px !important;">
+                        <span t-field="account.code"/> - <span t-field="account.name"/>
+                    </div>
+
+                    <t t-if="not account.partner_ids">
+                        <!-- Display account move lines without partner regroup -->
+                        <t t-call="account_financial_report.report_general_ledger_lines">
+                            <t t-set="account_or_partner_object" t-value="account"/>
+                        </t>
+                    </t>
+
+                    <t t-if="account.partner_ids">
+                        <!-- Display account partners -->
+                        <t t-foreach="account.partner_ids" t-as="partner">
+                            <div class="page_break">
+                                <!-- Display partner header -->
+                                <div class="act_as_caption account_title">
+                                    <span t-field="partner.name"/>
+                                </div>
+
+                                <!-- Display partner move lines -->
+                                <t t-call="account_financial_report.report_general_ledger_lines">
+                                    <t t-set="account_or_partner_object" t-value="partner"/>
+                                </t>
+
+                                <!-- Display partner footer -->
+                                <t t-call="account_financial_report.report_general_ledger_ending_cumul">
+                                    <t t-set="account_or_partner_object" t-value="partner"/>
+                                    <t t-set="type" t-value='"partner_type"'/>
+                                </t>
+                            </div>
+                        </t>
+                    </t>
+
+                    <!-- Display account footer -->
+                    <t t-call="account_financial_report.report_general_ledger_ending_cumul">
+                        <t t-set="account_or_partner_object" t-value="account"/>
+                        <t t-set="type" t-value='"account_type"'/>
+                    </t>
+                </div>
+            </t>
+        </div>
     </template>
 
     <template id="account_financial_report.report_general_ledger_filters">
@@ -171,13 +175,30 @@
                     <!--## date-->
                     <div class="act_as_cell left"><span t-field="line.date"/></div>
                     <!--## move-->
-                    <div class="act_as_cell left"><span t-field="line.entry"/></div>
+                    <div class="act_as_cell left">
+                        <t t-set="res_model" t-value="'account.move'"/>
+                        <span>
+                            <a t-att-data-active-id="line.move_line_id.move_id.id"
+                               t-att-data-res-model="res_model"
+                               class="o_account_financial_reports_web_action"
+                               style="color: black;">
+                                <t t-raw="line.entry"/></a>
+                        </span>
+                    </div>
                     <!--## journal-->
                     <div class="act_as_cell left"><span t-field="line.journal"/></div>
                     <!--## account code-->
                     <div class="act_as_cell left"><span t-field="line.account"/></div>
                     <!--## partner-->
-                    <div class="act_as_cell left"><span t-field="line.partner"/></div>
+                    <div class="act_as_cell left">
+                        <t t-set="res_model" t-value="'res.partner'"/>
+                        <span t-if="line.partner">
+                            <a t-att-data-active-id="line.move_line_id.partner_id.id"
+                               t-att-data-res-model="res_model"
+                               class="o_account_financial_reports_web_action"
+                               style="color: black;"><t t-raw="line.partner"/></a>
+                        </span>
+                    </div>
                     <!--## ref - label-->
                     <div class="act_as_cell left"><span t-field="line.label"/></div>
                     <t t-if="show_cost_center">
