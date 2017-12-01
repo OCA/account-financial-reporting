@@ -1,4 +1,3 @@
-
 # © 2016 Julien Coux (Camptocamp)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
@@ -39,7 +38,6 @@ class AgedPartnerBalanceReport(models.TransientModel):
 
 
 class AgedPartnerBalanceReportAccount(models.TransientModel):
-
     _name = 'report_aged_partner_balance_account'
     _order = 'code ASC'
 
@@ -82,7 +80,6 @@ class AgedPartnerBalanceReportAccount(models.TransientModel):
 
 
 class AgedPartnerBalanceReportPartner(models.TransientModel):
-
     _name = 'report_aged_partner_balance_partner'
 
     report_account_id = fields.Many2one(
@@ -126,7 +123,6 @@ ORDER BY
 
 
 class AgedPartnerBalanceReportLine(models.TransientModel):
-
     _name = 'report_aged_partner_balance_line'
 
     report_partner_id = fields.Many2one(
@@ -147,7 +143,6 @@ class AgedPartnerBalanceReportLine(models.TransientModel):
 
 
 class AgedPartnerBalanceReportMoveLine(models.TransientModel):
-
     _name = 'report_aged_partner_balance_move_line'
 
     report_partner_id = fields.Many2one(
@@ -187,7 +182,6 @@ class AgedPartnerBalanceReportCompute(models.TransientModel):
     @api.multi
     def print_report(self, report_type):
         self.ensure_one()
-        self.compute_data_for_report()
         if report_type == 'xlsx':
             report_name = 'a_f_r.report_aged_partner_balance_xlsx'
         else:
@@ -197,6 +191,22 @@ class AgedPartnerBalanceReportCompute(models.TransientModel):
             [('report_name', '=', report_name),
              ('report_type', '=', report_type)], limit=1)
         return report.report_action(self)
+
+    def _get_html(self):
+        result = {}
+        rcontext = {}
+        context = dict(self.env.context)
+        report = self.browse(context.get('active_id'))
+        if report:
+            rcontext['o'] = report
+            result['html'] = self.env.ref(
+                'account_financial_report.report_aged_partner_balance').render(
+                rcontext)
+        return result
+
+    @api.model
+    def get_html(self, given_context=None):
+        return self._get_html()
 
     def _prepare_report_open_items(self):
         self.ensure_one()

@@ -5,6 +5,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import models, fields, api
+from odoo.tools.safe_eval import safe_eval
+from odoo.tools import pycompat
 
 
 class TrialBalanceReportWizard(models.TransientModel):
@@ -104,8 +106,20 @@ class TrialBalanceReportWizard(models.TransientModel):
     @api.multi
     def button_export_html(self):
         self.ensure_one()
-        report_type = 'qweb-html'
-        return self._export(report_type)
+        action = self.env.ref(
+            'account_financial_report.action_report_trial_balance')
+        vals = action.read()[0]
+        context1 = vals.get('context', {})
+        if isinstance(context1, pycompat.string_types):
+            context1 = safe_eval(context1)
+        model = self.env['report_trial_balance']
+        report = model.create(self._prepare_report_trial_balance())
+        report.compute_data_for_report()
+
+        context1['active_id'] = report.id
+        context1['active_ids'] = report.ids
+        vals['context'] = context1
+        return vals
 
     @api.multi
     def button_export_pdf(self):
@@ -137,4 +151,5 @@ class TrialBalanceReportWizard(models.TransientModel):
         """Default export is PDF."""
         model = self.env['report_trial_balance']
         report = model.create(self._prepare_report_trial_balance())
+        report.compute_data_for_report()
         return report.print_report(report_type)

@@ -31,7 +31,12 @@
         'report/templates/general_ledger.xml',
         'report/templates/open_items.xml',
         'report/templates/trial_balance.xml',
-        'view/account_view.xml'
+        'view/account_view.xml',
+        'view/report_template.xml',
+        'view/report_general_ledger.xml',
+        'view/report_trial_balance.xml',
+        'view/report_open_items.xml',
+        'view/report_aged_partner_balance.xml',
     ],
     'installable': True,
     'application': True,

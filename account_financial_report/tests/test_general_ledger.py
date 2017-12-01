@@ -27,7 +27,7 @@ class TestGeneralLedger(abstract_test.AbstractTest):
                'action_report_general_ledger_xlsx'
 
     def _getReportTitle(self):
-        return 'General Ledger'
+        return 'Odoo Report'
 
     def _getBaseFilters(self):
         return {

@@ -143,7 +143,6 @@ class OpenItemsReportCompute(models.TransientModel):
     @api.multi
     def print_report(self, report_type):
         self.ensure_one()
-        self.compute_data_for_report()
         if report_type == 'xlsx':
             report_name = 'a_f_r.report_open_items_xlsx'
         else:
@@ -152,6 +151,22 @@ class OpenItemsReportCompute(models.TransientModel):
         return self.env['ir.actions.report'].search(
             [('report_name', '=', report_name),
              ('report_type', '=', report_type)], limit=1).report_action(self)
+
+    def _get_html(self):
+        result = {}
+        rcontext = {}
+        context = dict(self.env.context)
+        report = self.browse(context.get('active_id'))
+        if report:
+            rcontext['o'] = report
+            result['html'] = self.env.ref(
+                'account_financial_report.report_open_items').render(
+                rcontext)
+        return result
+
+    @api.model
+    def get_html(self, given_context=None):
+        return self._get_html()
 
     @api.multi
     def compute_data_for_report(self):

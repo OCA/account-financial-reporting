@@ -25,7 +25,7 @@ class TestTrialBalance(abstract_test.AbstractTest):
         return 'account_financial_report.action_report_trial_balance_xlsx'
 
     def _getReportTitle(self):
-        return 'Trial Balance'
+        return 'Odoo Report'
 
     def _getBaseFilters(self):
         return {

@@ -25,7 +25,7 @@ class TestOpenItems(abstract_test.AbstractTest):
         return 'account_financial_report.action_report_open_items_xlsx'
 
     def _getReportTitle(self):
-        return 'Open Items'
+        return 'Odoo Report'
 
     def _getBaseFilters(self):
         return {
