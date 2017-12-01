@@ -39,7 +39,7 @@ class AccountTax(models.Model):
             context.get('from_date', fields.Date.context_today(self)),
             context.get('to_date', fields.Date.context_today(self)),
             context.get('company_id', self.env.user.company_id.id),
-            context.get('target_move', 'posted')
+            context.get('target_move', 'posted'),
         )
 
     def _account_tax_ids_with_moves(self):
