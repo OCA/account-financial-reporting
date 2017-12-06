@@ -30,10 +30,14 @@ class AccountMoveLine(models.Model):
         for line in self:
             if line.reconcile_id:
                 move_lines = line.reconcile_id.line_id
-                last_line = move_lines.sorted(lambda l: l.date)[-1]
-                line.last_rec_date = last_line.date
+                last_line = move_lines.sorted(
+                    lambda l: max(l.date, l.period_id.date_start))[-1]
+                line.last_rec_date = max(
+                    last_line.date, last_line.period_id.date_start)
 
             elif line.reconcile_partial_id:
                 move_lines = line.reconcile_partial_id.line_partial_ids
-                last_line = move_lines.sorted(lambda l: l.date)[-1]
-                line.last_rec_date = last_line.date
+                last_line = move_lines.sorted(
+                    lambda l: max(l.date, l.period_id.date_start))[-1]
+                line.last_rec_date = max(
+                    last_line.date, last_line.period_id.date_start)

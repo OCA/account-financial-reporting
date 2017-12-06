@@ -17,13 +17,15 @@ def migrate(cr, version):
         """
         UPDATE account_move_line SET last_rec_date = rec_data.aml_date
         FROM (
-            SELECT rec.id, max(aml.date) as aml_date
+            SELECT rec.id, max(greatest(aml.date,ap.date_start)) as aml_date
             FROM account_move_line aml
+            JOIN account_period ap ON aml.period_id=ap.id
             JOIN account_move_reconcile rec
             ON rec.id = aml.reconcile_id
             GROUP BY rec.id
         ) as rec_data
         WHERE rec_data.id = account_move_line.reconcile_id
+        AND account_move_line.reconcile_id IS NOT NULL
         """
     )
 
@@ -31,12 +33,14 @@ def migrate(cr, version):
         """
         UPDATE account_move_line SET last_rec_date = rec_data.aml_date
         FROM (
-            SELECT rec.id, max(aml.date) as aml_date
+            SELECT rec.id, max(greatest(aml.date,ap.date_start)) as aml_date
             FROM account_move_line aml
+            JOIN account_period ap ON aml.period_id=ap.id
             JOIN account_move_reconcile rec
             ON rec.id = aml.reconcile_partial_id
             GROUP BY rec.id
         ) as rec_data
         WHERE rec_data.id = account_move_line.reconcile_partial_id
+        AND account_move_line.reconcile_partial_id IS NOT NULL
         """
     )
