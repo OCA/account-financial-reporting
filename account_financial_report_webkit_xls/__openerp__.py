@@ -16,6 +16,7 @@
         'wizard/partners_balance_wizard_view.xml',
         'wizard/open_invoices_wizard_view.xml',
         'wizard/aged_partner_balance_wizard.xml',
+        'wizard/aged_open_invoices_wizard.xml',
     ],
     'test': ['test/general_ledger.yml',
              'test/partner_ledger.yml',
