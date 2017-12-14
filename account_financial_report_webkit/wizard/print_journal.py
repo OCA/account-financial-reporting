@@ -34,7 +34,7 @@ class AccountReportPrintJournalWizard(models.TransientModel):
     _name = "print.journal.webkit"
     _description = "Journals Report"
 
-    amount_currency = fields.boolean(
+    amount_currency = fields.Boolean(
         "With Currency", default=False, help="It adds the currency column",
     )
     filter = fields.Selection(default='filter_period')
