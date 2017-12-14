@@ -9,6 +9,7 @@ class AccountPartnerBalanceWizard(models.TransientModel):
 
     """Will launch partner balance report and pass required args"""
 
+    # pylint: disable=consider-merging-classes-inherited
     _inherit = "account.common.balance.report"
     _name = "partner.balance.webkit"
     _description = "Partner Balance Report"

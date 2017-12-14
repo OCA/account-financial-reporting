@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -19,14 +19,14 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp import models
 
-from openerp.osv import orm
 
-
-class account_journal(orm.Model):
+class AccountJournal(models.Model):
     _inherit = 'account.journal'
 
     # allow inherited modules to extend the query
+    # pylint: disable=old-api7-method-defined
     def _report_xls_query_extra(self, cr, uid, context=None):
         select_extra = ""
         join_extra = ""
@@ -34,10 +34,12 @@ class account_journal(orm.Model):
         return (select_extra, join_extra, where_extra)
 
     # allow inherited modules to add document references
+    # pylint: disable=old-api7-method-defined
     def _report_xls_document_extra(self, cr, uid, context):
         return "''"
 
     # override list in inherited module to add/drop columns or change order
+    # pylint: disable=old-api7-method-defined
     def _report_xls_fields(self, cr, uid, context=None):
         res = [
             'move_name',         # account.move,name
@@ -73,6 +75,7 @@ class account_journal(orm.Model):
         return res
 
     # Change/Add Template entries
+    # pylint: disable=old-api7-method-defined
     def _report_xls_template(self, cr, uid, context=None):
         """
         Template updates, e.g.

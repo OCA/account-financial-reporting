@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Author: Nicolas Bessi, Guewen Baconnier
@@ -32,6 +32,7 @@ from .webkit_parser_header_fix import HeaderFooterTextWebKitParser
 
 class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
 
+    # pylint: disable=old-api7-method-defined
     def __init__(self, cursor, uid, name, context):
         super(GeneralLedgerWebkit, self).__init__(
             cursor, uid, name, context=context)

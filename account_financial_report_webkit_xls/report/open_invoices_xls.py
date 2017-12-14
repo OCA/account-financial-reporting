@@ -12,7 +12,7 @@ from openerp.tools.translate import _
 # _logger = logging.getLogger(__name__)
 
 
-class open_invoices_xls(report_xls):
+class OpenInvoicesXls(report_xls):
     column_sizes = [12, 12, 20, 15, 30, 30, 14, 14, 14, 14, 14, 14, 10]
 
     def global_initializations(self, wb, _p, xlwt, _xs, objects, data):
@@ -806,5 +806,5 @@ class open_invoices_xls(report_xls):
             row_pos += 1
 
 
-open_invoices_xls('report.account.account_report_open_invoices_xls',
-                  'account.account', parser=PartnersOpenInvoicesWebkit)
+OpenInvoicesXls('report.account.account_report_open_invoices_xls',
+                'account.account', parser=PartnersOpenInvoicesWebkit)

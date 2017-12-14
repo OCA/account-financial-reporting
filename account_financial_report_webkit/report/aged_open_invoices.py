@@ -71,6 +71,7 @@ class AccountAgedOpenInvoicesWebkit(PartnersOpenInvoicesWebkit):
 
     """Compute Aged Open Invoices based on result of Open Invoices"""
 
+    # pylint: disable=old-api7-method-defined
     def __init__(self, cursor, uid, name, context=None):
         """Constructor,
            refer to :class:`openerp.report.report_sxw.rml_parse`"""

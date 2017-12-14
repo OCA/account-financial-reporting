@@ -5,6 +5,7 @@
     <record id="aged_open_invoice_webkit" model="ir.ui.view">
       <field name="name">Aged Open Invoice Report</field>
       <field name="model">aged.open.invoices.webkit</field>
+      <field name="priority">99</field>
       <field name="inherit_id" ref="account.account_common_report_view"/>
       <field name="arch" type="xml">
         <data>

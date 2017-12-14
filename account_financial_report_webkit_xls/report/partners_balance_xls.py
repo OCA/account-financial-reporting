@@ -15,7 +15,7 @@ def display_line(all_comparison_lines):
     return any([line.get('balance') for line in all_comparison_lines])
 
 
-class partners_balance_xls(report_xls):
+class PartnersBalanceXls(report_xls):
     column_sizes = [12, 40, 25, 17, 17, 17, 17, 17]
 
     def print_title(self, ws, _p, row_position, xlwt, _xs):
@@ -409,6 +409,6 @@ class partners_balance_xls(report_xls):
                 _xs, xlwt, ws, row_account_start, row_pos, current_account, _p)
 
 
-partners_balance_xls('report.account.account_report_partner_balance_xls',
-                     'account.account',
-                     parser=PartnerBalanceWebkit)
+PartnersBalanceXls('report.account.account_report_partner_balance_xls',
+                   'account.account',
+                   parser=PartnerBalanceWebkit)

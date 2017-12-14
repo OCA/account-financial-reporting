@@ -29,7 +29,7 @@ _column_sizes = [
 ]
 
 
-class general_ledger_xls(report_xls):
+class GeneralLedgerXls(report_xls):
     column_sizes = [x[1] for x in _column_sizes]
 
     def generate_xls_report(self, _p, _xs, data, objects, wb):
@@ -327,6 +327,6 @@ class general_ledger_xls(report_xls):
                 row_pos += 1
 
 
-general_ledger_xls('report.account.account_report_general_ledger_xls',
-                   'account.account',
-                   parser=GeneralLedgerWebkit)
+GeneralLedgerXls('report.account.account_report_general_ledger_xls',
+                 'account.account',
+                 parser=GeneralLedgerWebkit)

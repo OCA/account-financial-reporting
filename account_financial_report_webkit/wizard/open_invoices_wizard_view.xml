@@ -5,6 +5,7 @@
         <record id="account_open_invoices_view_webkit" model="ir.ui.view">
             <field name="name">Open Invoices Report</field>
             <field name="model">open.invoices.webkit</field>
+            <field name="priority">99</field>
             <field name="inherit_id" ref="account.account_common_report_view"/>
             <field name="arch" type="xml">
                 <data>
