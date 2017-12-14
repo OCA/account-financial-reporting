@@ -102,7 +102,7 @@ class AccountBalanceCommonWizard(models.TransientModel):
     )
     # Set statically because of the impossibility of changing the selection
     # field when changing chart_account_id
-    account_level = fields.selection(
+    account_level = fields.Selection(
         [('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'),
          ('6', '6')], string="Account level"
     )
@@ -112,18 +112,18 @@ class AccountBalanceCommonWizard(models.TransientModel):
     for index in range(COMPARISON_LEVEL):
         _columns.update(
             {"comp%s_filter" % index:
-                fields.selection(
+                fields.fields.selection(
                     COMPARE_SELECTION, string='Compare By', required=True),
              "comp%s_fiscalyear_id" % index:
-                fields.many2one('account.fiscalyear', 'Fiscal Year'),
+                fields.fields.many2one('account.fiscalyear', 'Fiscal Year'),
              "comp%s_period_from" % index:
-                fields.many2one('account.period', 'Start Period'),
+                fields.fields.many2one('account.period', 'Start Period'),
              "comp%s_period_to" % index:
-                fields.many2one('account.period', 'End Period'),
+                fields.fields.many2one('account.period', 'End Period'),
              "comp%s_date_from" % index:
-                fields.date("Start Date"),
+                fields.fields.date("Start Date"),
              "comp%s_date_to" % index:
-                fields.date("End Date")})
+                fields.fields.date("End Date")})
 
     # pylint: disable=old-api7-method-defined
     def _check_fiscalyear(self, cr, uid, ids, context=None):
