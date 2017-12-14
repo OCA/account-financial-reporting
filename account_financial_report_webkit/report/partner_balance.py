@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Author: Guewen Baconnier
@@ -32,7 +32,7 @@ from .webkit_parser_header_fix import HeaderFooterTextWebKitParser
 
 class PartnerBalanceWebkit(report_sxw.rml_parse,
                            CommonPartnerBalanceReportHeaderWebkit):
-
+    # pylint: disable=old-api7-method-defined
     def __init__(self, cursor, uid, name, context):
         super(PartnerBalanceWebkit, self).__init__(
             cursor, uid, name, context=context)

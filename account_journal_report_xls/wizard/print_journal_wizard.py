@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -19,37 +19,34 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-from openerp.tools.translate import _
-from openerp.osv import orm, fields
+from openerp import _, exceptions, models, fields
 from openerp.addons.account.wizard.account_report_common_journal \
     import account_common_journal_report
 import logging
 _logger = logging.getLogger(__name__)
 
 
-class account_print_journal_xls(orm.TransientModel):
+class AccountPrintJournalXls(models.TransientModel):
     _inherit = 'account.print.journal'
     _name = 'account.print.journal.xls'
     _description = 'Print/Export Journal'
-    _columns = {
-        'journal_ids': fields.many2many(
-            'account.journal',
-            'account_print_journal_xls_journal_rel',
-            'journal_xls_id',
-            'journal_id',
-            string='Journals',
-            required=True),
-        'group_entries': fields.boolean(
-            'Group Entries',
-            help="Group entries with same General Account & Tax Code."),
-    }
-    _defaults = {
-        'group_entries': True,
-    }
 
+    journal_ids = fields.Many2many(
+        'account.journal',
+        'account_print_journal_xls_journal_rel',
+        'journal_xls_id',
+        'journal_id',
+        string='Journals',
+        required=True
+    )
+    group_entries = fields.Boolean(
+        'Group Entries', default=True,
+        help="Group entries with same General Account & Tax Code."
+    )
+
+    # pylint: disable=old-api7-method-defined
     def fields_get(self, cr, uid, fields=None, context=None):
-        res = super(account_print_journal_xls, self).fields_get(
+        res = super(AccountPrintJournalXls, self).fields_get(
             cr, uid, fields, context)
         if context.get('print_by') == 'fiscalyear':
             if 'fiscalyear_id' in res:
@@ -65,6 +62,7 @@ class account_print_journal_xls(orm.TransientModel):
                 res['period_to']['required'] = True
         return res
 
+    # pylint: disable=old-api7-method-defined
     def fy_period_ids(self, cr, uid, fiscalyear_id):
         """ returns all periods from a fiscalyear sorted by date """
         fy_period_ids = []
@@ -78,6 +76,7 @@ class account_print_journal_xls(orm.TransientModel):
             fy_period_ids = [x[0] for x in res]
         return fy_period_ids
 
+    # pylint: disable=old-api7-method-defined
     def onchange_fiscalyear_id(self, cr, uid, ids, fiscalyear_id=False,
                                context=None):
         res = {'value': {}}
@@ -89,6 +88,7 @@ class account_print_journal_xls(orm.TransientModel):
                 res['value']['period_to'] = fy_period_ids[-1]
         return res
 
+    # pylint: disable=old-api7-method-defined
     def fields_view_get(self, cr, uid, view_id=None, view_type='form',
                         context=None, toolbar=False, submenu=False):
         """ skip account.common.journal.report,fields_view_get
@@ -97,9 +97,11 @@ class account_print_journal_xls(orm.TransientModel):
             fields_view_get(cr, uid, view_id, view_type, context, toolbar,
                             submenu)
 
+    # pylint: disable=old-api7-method-defined
     def xls_export(self, cr, uid, ids, context=None):
         return self.print_report(cr, uid, ids, context=context)
 
+    # pylint: disable=old-api7-method-defined
     def print_report(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
@@ -156,7 +158,7 @@ class account_print_journal_xls(orm.TransientModel):
                 if aml_ids:
                     journal_fy_ids.append((journal_id, fiscalyear_id))
             if not journal_fy_ids:
-                raise orm.except_orm(
+                raise exceptions.except_orm(
                     _('No Data Available'),
                     _('No records found for your selection!'))
             datas.update({
@@ -180,7 +182,7 @@ class account_print_journal_xls(orm.TransientModel):
                 if period_ids:
                     journal_period_ids.append((journal_id, period_ids))
             if not journal_period_ids:
-                raise orm.except_orm(
+                raise exceptions.except_orm(
                     _('No Data Available'),
                     _('No records found for your selection!'))
             datas.update({

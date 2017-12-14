@@ -32,8 +32,10 @@ import time
 
 from lxml import etree
 from datetime import datetime
-from openerp.osv import fields, orm
+from openerp import fields, models
 from openerp.tools.translate import _
+# pylint: disable=deprecated-module
+from openerp.osv.orm import setup_modifiers
 
 
 def previous_year_date(date, nb_prev=1):
@@ -46,10 +48,11 @@ def previous_year_date(date, nb_prev=1):
     return previous_date
 
 
-class AccountBalanceCommonWizard(orm.TransientModel):
+class AccountBalanceCommonWizard(models.TransientModel):
 
     """Will launch trial balance report and pass required args"""
 
+    # pylint: disable=consider-merging-classes-inherited
     _inherit = "account.common.account.report"
     _name = "account.common.balance.report"
     _description = "Common Balance Report"
@@ -74,6 +77,7 @@ class AccountBalanceCommonWizard(orm.TransientModel):
                              for index in range(COMPARISON_LEVEL)]
     DYNAMIC_FIELDS = M2O_DYNAMIC_FIELDS + SIMPLE_DYNAMIC_FIELDS
 
+    # pylint: disable=old-api7-method-defined
     def _get_account_ids(self, cr, uid, context=None):
         res = False
         if context.get('active_model', False) == 'account.account' \
@@ -81,48 +85,47 @@ class AccountBalanceCommonWizard(orm.TransientModel):
             res = context['active_ids']
         return res
 
-    _columns = {
-        'account_ids': fields.many2many(
-            'account.account', string='Filter on accounts',
-            help="Only selected accounts will be printed. Leave empty to \
-            print all accounts."),
-        'filter': fields.selection(
-            [('filter_no', 'No Filters'),
-             ('filter_date', 'Date'),
-             ('filter_period', 'Periods'),
-             ('filter_opening', 'Opening Only')],
-            "Filter by",
-            required=True,
-            help='Filter by date: no opening balance will be displayed. '
-            '(opening balance can only be computed based on period to be \
-            correct).'),
-        # Set statically because of the impossibility of changing the selection
-        # field when changing chart_account_id
-        'account_level': fields.selection(
-            [('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'),
-             ('6', '6')], string="Account level"),
-    }
+    account_ids = fields.Many2many(
+        'account.account', string='Filter on accounts',
+        help="Only selected accounts will be printed. Leave empty to \
+        print all accounts.", default=lambda self: self._get_account_ids(),
+    )
+    filter = fields.Selection(
+        [('filter_no', 'No Filters'),
+         ('filter_date', 'Date'),
+         ('filter_period', 'Periods'),
+         ('filter_opening', 'Opening Only')],
+        "Filter by", required=True,
+        help='Filter by date: no opening balance will be displayed. '
+        '(opening balance can only be computed based on period to be \
+        correct).'
+    )
+    # Set statically because of the impossibility of changing the selection
+    # field when changing chart_account_id
+    account_level = fields.Selection(
+        [('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'),
+         ('6', '6')], string="Account level"
+    )
 
+    # pylint: disable=attribute-deprecated
+    _columns = {}
     for index in range(COMPARISON_LEVEL):
         _columns.update(
             {"comp%s_filter" % index:
-                fields.selection(
+                fields.fields.selection(
                     COMPARE_SELECTION, string='Compare By', required=True),
              "comp%s_fiscalyear_id" % index:
-                fields.many2one('account.fiscalyear', 'Fiscal Year'),
+                fields.fields.many2one('account.fiscalyear', 'Fiscal Year'),
              "comp%s_period_from" % index:
-                fields.many2one('account.period', 'Start Period'),
+                fields.fields.many2one('account.period', 'Start Period'),
              "comp%s_period_to" % index:
-                fields.many2one('account.period', 'End Period'),
+                fields.fields.many2one('account.period', 'End Period'),
              "comp%s_date_from" % index:
-                fields.date("Start Date"),
+                fields.fields.date("Start Date"),
              "comp%s_date_to" % index:
-                fields.date("End Date")})
+                fields.fields.date("End Date")})
 
-    _defaults = {
-        'account_ids': _get_account_ids,
-    }
-
+    # pylint: disable=old-api7-method-defined
     def _check_fiscalyear(self, cr, uid, ids, context=None):
         obj = self.read(
             cr, uid, ids[0], ['fiscalyear_id', 'filter'], context=context)
@@ -136,6 +139,7 @@ class AccountBalanceCommonWizard(orm.TransientModel):
          periods or by date.', ['filter']),
     ]
 
+    # pylint: disable=old-api7-method-defined
     def default_get(self, cr, uid, fields, context=None):
         """
              To get default values for the object.
@@ -157,6 +161,7 @@ class AccountBalanceCommonWizard(orm.TransientModel):
                 res[field] = 'filter_no'
         return res
 
+    # pylint: disable=old-api7-method-defined
     def fields_view_get(self, cr, uid, view_id=None, view_type='form',
                         context=None, toolbar=False, submenu=False):
         res = super(AccountBalanceCommonWizard, self).fields_view_get(
@@ -180,7 +185,7 @@ class AccountBalanceCommonWizard(orm.TransientModel):
                 page.append(group)
 
                 def modifiers_and_append(elem):
-                    orm.setup_modifiers(elem)
+                    setup_modifiers(elem)
                     group.append(elem)
 
                 modifiers_and_append(etree.Element(
@@ -244,6 +249,7 @@ class AccountBalanceCommonWizard(orm.TransientModel):
         res['arch'] = etree.tostring(eview)
         return res
 
+    # pylint: disable=old-api7-method-defined
     def onchange_filter(self, cr, uid, ids, filter='filter_no',
                         fiscalyear_id=False, context=None):
         res = {}
@@ -296,6 +302,7 @@ class AccountBalanceCommonWizard(orm.TransientModel):
                             end_period, 'date_from': False, 'date_to': False}
         return res
 
+    # pylint: disable=old-api7-method-defined
     def onchange_comp_filter(self, cr, uid, ids, index,
                              main_filter='filter_no', comp_filter='filter_no',
                              fiscalyear_id=False, start_date=False,
@@ -390,6 +397,7 @@ class AccountBalanceCommonWizard(orm.TransientModel):
                             date_to_field: False}
         return res
 
+    # pylint: disable=old-api7-method-defined
     def pre_print_report(self, cr, uid, ids, data, context=None):
         data = super(AccountBalanceCommonWizard, self).pre_print_report(
             cr, uid, ids, data, context=context)

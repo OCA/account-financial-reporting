@@ -5,6 +5,7 @@
     <record id="account_aged_trial_balance_webkit" model="ir.ui.view">
       <field name="name">Aged Partner Balance Report</field>
       <field name="model">account.aged.trial.balance.webkit</field>
+      <field name="priority">99</field>
       <field name="inherit_id" ref="account.account_common_report_view"/>
       <field name="arch" type="xml">
         <data>

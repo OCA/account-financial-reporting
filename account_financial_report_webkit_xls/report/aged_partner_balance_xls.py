@@ -13,6 +13,7 @@ from openerp.tools.translate import _
 
 class AccountAgedTrialBalanceWebkitXls(report_xls):
 
+    # pylint: disable=old-api7-method-defined
     def create(self, cr, uid, ids, data, context=None):
         self._column_sizes = [
             30,  # Partner

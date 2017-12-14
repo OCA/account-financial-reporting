@@ -23,6 +23,5 @@
              'test/trial_balance.yml',
              'test/partner_balance.yml',
              'test/open_invoices.yml'],
-    'active': False,
     'installable': True,
 }

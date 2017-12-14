@@ -21,30 +21,25 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-from openerp.osv import fields, orm
+from openerp import models, fields
 import time
 
 
-class AccountReportPrintJournalWizard(orm.TransientModel):
+class AccountReportPrintJournalWizard(models.TransientModel):
 
     """Will launch print journal report and pass requiered args"""
 
+    # pylint: disable=consider-merging-classes-inherited
     _inherit = "account.common.account.report"
     _name = "print.journal.webkit"
     _description = "Journals Report"
 
-    _columns = {
-        'amount_currency': fields.boolean("With Currency",
-                                          help="It adds the currency column"),
-    }
+    amount_currency = fields.Boolean(
+        "With Currency", default=False, help="It adds the currency column",
+    )
+    filter = fields.Selection(default='filter_period')
 
-    _defaults = {
-        'amount_currency': False,
-        'journal_ids': False,
-        'filter': 'filter_period',
-    }
-
+    # pylint: disable=old-api7-method-defined
     def _check_fiscalyear(self, cr, uid, ids, context=None):
         obj = self.read(cr, uid, ids[0], ['fiscalyear_id', 'filter'],
                         context=context)
@@ -57,6 +52,7 @@ class AccountReportPrintJournalWizard(orm.TransientModel):
                              to filter by periods or by date.', ['filter']),
     ]
 
+    # pylint: disable=old-api7-method-defined
     def pre_print_report(self, cr, uid, ids, data, context=None):
         data = super(AccountReportPrintJournalWizard, self).\
             pre_print_report(cr, uid, ids, data, context=context)
@@ -70,6 +66,7 @@ class AccountReportPrintJournalWizard(orm.TransientModel):
         data['form'].update(vals)
         return data
 
+    # pylint: disable=old-api7-method-defined
     def onchange_filter(self, cr, uid, ids, filter='filter_no',
                         fiscalyear_id=False, context=None):
         res = {}
@@ -122,6 +119,7 @@ class AccountReportPrintJournalWizard(orm.TransientModel):
                             end_period, 'date_from': False, 'date_to': False}
         return res
 
+    # pylint: disable=old-api7-method-defined
     def _print_report(self, cursor, uid, ids, data, context=None):
         context = context or {}
         # we update form with display account value

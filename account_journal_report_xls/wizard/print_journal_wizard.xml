@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-           
       <record id="view_print_journal_xls" model="ir.ui.view">
         <field name="name">Print/Export Journals</field>
         <field name="model">account.print.journal.xls</field>
+        <field name="priority">99</field>
         <field name="inherit_id" ref="account.account_common_report_view"/>
         <field name="arch" type="xml">
           <data>
@@ -19,7 +19,7 @@
             </xpath>
             <xpath expr="//field[@name='target_move']" position="after">
               <field name="sort_selection"/>
-              <field name="amount_currency"/> 
+              <field name="amount_currency"/>
               <field name="group_entries"/>
               <newline/>
               <separator string="Periods" colspan="4"/>
@@ -53,7 +53,7 @@
         action="action_print_journal_by_period_xls"
         id="menu_print_journal_by_period_xls"
         icon="STOCK_PRINT"/>
-      
+
       <record id="action_print_journal_by_fiscalyear_xls" model="ir.actions.act_window">
         <field name="name">Journal by Fiscal Year</field>
         <field name="type">ir.actions.act_window</field>
@@ -75,6 +75,6 @@
       <record id="account.menu_account_print_sale_purchase_journal" model="ir.ui.menu">
         <field name="sequence">3</field>
       </record>
-      
+
     </data>
 </openerp>

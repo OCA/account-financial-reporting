@@ -5,6 +5,7 @@
     <record id="account_report_general_ledger_view_webkit" model="ir.ui.view">
       <field name="name">general.ledger.webkit.xls</field>
       <field name="model">general.ledger.webkit</field>
+      <field name="priority">99</field>
       <field name="type">form</field>
       <field name="inherit_id" ref="account_financial_report_webkit.account_report_general_ledger_view_webkit"/>
       <field name="arch" type="xml">

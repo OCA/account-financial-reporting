@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Author: Guewen Baconnier
@@ -18,10 +18,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import fields, orm
+from openerp import models, fields
 
 
-class AccountReportOpenInvoicesWizard(orm.TransientModel):
+class AccountReportOpenInvoicesWizard(models.TransientModel):
 
     """Will launch partner ledger report and pass required args"""
 
@@ -29,13 +29,11 @@ class AccountReportOpenInvoicesWizard(orm.TransientModel):
     _name = "open.invoices.webkit"
     _description = "Open Invoices Report"
 
-    _columns = {
-        'group_by_currency': fields.boolean('Group Partner by currency'),
-        'until_date': fields.date(
-            "Clearance date",
-            required=True,
-            help="""The clearance date is essentially a tool used for debtors
-            provisionning calculation.
+    group_by_currency = fields.Boolean('Group Partner by currency')
+    until_date = fields.Date(
+        "Clearance date", required=True,
+        help="""The clearance date is essentially a tool used for debtors
+provisionning calculation.
 
 By default, this date is equal to the the end date (ie: 31/12/2011 if you
 select fy 2011).
@@ -43,8 +41,9 @@ select fy 2011).
 By amending the clearance date, you will be, for instance, able to answer the
 question : 'based on my last year end debtors open invoices, which invoices
 are still unpaid today (today is my clearance date)?'
-""")}
+""")
 
+    # pylint: disable=old-api7-method-defined
     def _check_until_date(self, cr, uid, ids, context=None):
         def get_key_id(obj, field):
             return obj.get(field) and obj[field][0] or False
@@ -66,6 +65,7 @@ are still unpaid today (today is my clearance date)?'
         last period or later.', ['until_date']),
     ]
 
+    # pylint: disable=old-api7-method-defined
     def default_until_date(self, cr, uid, ids, fiscalyear_id=False,
                            period_id=False, date_to=False, context=None):
         res_date = False
@@ -82,6 +82,7 @@ are still unpaid today (today is my clearance date)?'
                 context=context)['date_stop']
         return res_date
 
+    # pylint: disable=old-api7-method-defined
     def onchange_fiscalyear(self, cr, uid, ids, fiscalyear=False,
                             period_id=False, date_to=False, until_date=False,
                             context=None):
@@ -94,6 +95,7 @@ are still unpaid today (today is my clearance date)?'
             context=context)
         return res
 
+    # pylint: disable=old-api7-method-defined
     def onchange_date_to(self, cr, uid, ids, fiscalyear=False, period_id=False,
                          date_to=False, until_date=False, context=None):
         res = {'value': {}}
@@ -105,6 +107,7 @@ are still unpaid today (today is my clearance date)?'
             context=context)
         return res
 
+    # pylint: disable=old-api7-method-defined
     def onchange_period_to(self, cr, uid, ids, fiscalyear=False,
                            period_id=False, date_to=False, until_date=False,
                            context=None):
@@ -117,6 +120,7 @@ are still unpaid today (today is my clearance date)?'
             context=context)
         return res
 
+    # pylint: disable=old-api7-method-defined
     def onchange_filter(self, cr, uid, ids, filter='filter_no',
                         fiscalyear_id=False, context=None):
         res = super(AccountReportOpenInvoicesWizard, self).onchange_filter(
@@ -131,6 +135,7 @@ are still unpaid today (today is my clearance date)?'
                 context=context)
         return res
 
+    # pylint: disable=old-api7-method-defined
     def pre_print_report(self, cr, uid, ids, data, context=None):
         data = super(AccountReportOpenInvoicesWizard, self).pre_print_report(
             cr, uid, ids, data, context=context)
@@ -140,6 +145,7 @@ are still unpaid today (today is my clearance date)?'
         data['form'].update(vals)
         return data
 
+    # pylint: disable=old-api7-method-defined
     def _print_report(self, cr, uid, ids, data, context=None):
         # we update form with display account value
         data = self.pre_print_report(cr, uid, ids, data, context=context)
