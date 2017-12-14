@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ###########################################################################
 #    Module Writen to OpenERP, Open Source Management Solution
 #    Copyright (C) OpenERP Venezuela (<http://openerp.com.ve>).
@@ -25,13 +25,11 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##############################################################################
-
-from openerp.osv import osv, fields
+from openerp import _, fields, models
 import time
-from openerp.tools.translate import _
 
 
-class wizard_report(osv.osv_memory):
+class WizardReport(models.TransientModel):
     _name = "wizard.report"
 
     _columns = {
@@ -208,20 +206,20 @@ class wizard_report(osv.osv_memory):
             return res
         afr_brw = self.pool.get('afr').browse(cr, uid, afr_id, context=context)
         res['value'].update({
-                            'currency_id': afr_brw.currency_id
-                            and afr_brw.currency_id.id
-                            or afr_brw.company_id.currency_id.id})
+            'currency_id': afr_brw.currency_id and afr_brw.currency_id.id or
+            afr_brw.company_id.currency_id.id,
+        })
         res['value'].update({'inf_type': afr_brw.inf_type or 'BS'})
         res['value'].update({'columns': afr_brw.columns or 'five'})
         res['value'].update({
-                            'display_account': afr_brw.display_account
-                            or 'bal_mov'})
+            'display_account': afr_brw.display_account or 'bal_mov',
+        })
         res['value'].update({
-                            'display_account_level': afr_brw.
-                            display_account_level or 0})
+            'display_account_level': afr_brw.display_account_level or 0
+        })
         res['value'].update({
-                            'fiscalyear': afr_brw.fiscalyear_id
-                            and afr_brw.fiscalyear_id.id})
+            'fiscalyear': afr_brw.fiscalyear_id and afr_brw.fiscalyear_id.id
+        })
         res['value'].update({'account_list': [
                             acc.id for acc in afr_brw.account_ids]})
         res['value'].update({'periods': [p.id for p in afr_brw.period_ids]})
@@ -270,8 +268,8 @@ class wizard_report(osv.osv_memory):
         res = cr.dictfetchall()
 
         if res:
-            if (data['form']['date_to'] > res[0]['date_stop']
-                    or data['form']['date_from'] < res[0]['date_start']):
+            if data['form']['date_to'] > res[0]['date_stop'] or\
+               data['form']['date_from'] < res[0]['date_start']):
                 raise osv.except_osv(_('UserError'),
                                      'Las fechas deben estar entre %s y %s'
                                      % (res[0]['date_start'],
@@ -369,5 +367,3 @@ class wizard_report(osv.osv_memory):
         return {'type': 'ir.actions.report.xml',
                 'report_name': name,
                 'datas': data}
-
-wizard_report()

@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Author: Guewen Baconnier
@@ -18,17 +18,17 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp import models
 
-from openerp.osv import orm
 
-
-class AccountTrialBalanceWizard(orm.TransientModel):
+class AccountTrialBalanceWizard(models.TransientModel):
     """Will launch trial balance report and pass required args"""
 
     _inherit = "account.common.balance.report"
     _name = "trial.balance.webkit"
     _description = "Trial Balance Report"
 
+    # pylint: disable=old-api7-method-defined
     def _print_report(self, cursor, uid, ids, data, context=None):
         context = context or {}
         # we update form with display account value

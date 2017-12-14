@@ -28,9 +28,11 @@ from openerp.osv import orm
 class general_ledger_webkit_wizard(orm.TransientModel):
     _inherit = 'general.ledger.webkit'
 
+    # pylint: disable=old-api7-method-defined
     def xls_export(self, cr, uid, ids, context=None):
         return self.check_report(cr, uid, ids, context=context)
 
+    # pylint: disable=old-api7-method-defined
     def _print_report(self, cr, uid, ids, data, context=None):
         context = context or {}
         if context.get('xls_export'):

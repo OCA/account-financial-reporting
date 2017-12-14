@@ -394,7 +394,7 @@ act_as_colgroup {
 
 .account_level_consol {
     font-weight: normal;
-	font-style: italic;
+    font-style: italic;
 }
 
 .overflow_ellipsis {

@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Author: Nicolas Bessi, Guewen Baconnier
@@ -27,7 +27,7 @@ from mako.template import Template
 
 
 from openerp.modules.registry import RegistryManager
-from openerp.osv import osv
+from openerp.exceptions import except_orm
 from openerp.report import report_sxw
 from openerp.tools.translate import _
 from openerp.addons.report_webkit import report_helper
@@ -46,7 +46,7 @@ report_helper.WebKitHelper.get_mako_template = get_mako_template
 
 class PartnersOpenInvoicesWebkit(report_sxw.rml_parse,
                                  CommonPartnersReportHeaderWebkit):
-
+    # pylint: disable=old-api7-method-defined
     def __init__(self, cursor, uid, name, context):
         super(PartnersOpenInvoicesWebkit, self).__init__(
             cursor, uid, name, context=context)
@@ -136,7 +136,7 @@ class PartnersOpenInvoicesWebkit(report_sxw.rml_parse,
             new_ids, exclude_type=['view'], only_type=filter_type)
 
         if not account_ids:
-            raise osv.except_osv(_('Error'), _('No accounts to print.'))
+            raise except_orm(_('Error'), _('No accounts to print.'))
 
         # computation of ledeger lines
         if main_filter == 'filter_date':
@@ -213,9 +213,9 @@ class PartnersOpenInvoicesWebkit(report_sxw.rml_parse,
             date_until_match = (stop == date_until)
 
         else:
-            raise osv.except_osv(_('Unsuported filter'),
-                                 _('Filter has to be in filter date, period, \
-                                 or none'))
+            raise except_orm(
+                _('Unsuported filter'),
+                _('Filter has to be in filter date, period, or none'))
 
         initial_move_lines_per_account = {}
         if main_filter in ('filter_period', 'filter_no'):

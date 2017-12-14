@@ -27,7 +27,7 @@ _column_sizes = [
 ]
 
 
-class partner_ledger_xls(report_xls):
+class PartnerLedgerXls(report_xls):
     column_sizes = [x[1] for x in _column_sizes]
 
     def generate_xls_report(self, _p, _xs, data, objects, wb):
@@ -438,6 +438,6 @@ class partner_ledger_xls(report_xls):
                 row_pos += 2
 
 
-partner_ledger_xls('report.account.account_report_partner_ledger_xls',
-                   'account.account',
-                   parser=PartnersLedgerWebkit)
+PartnerLedgerXls('report.account.account_report_partner_ledger_xls',
+                 'account.account',
+                 parser=PartnersLedgerWebkit)

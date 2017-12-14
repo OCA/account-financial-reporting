@@ -38,7 +38,7 @@ from functools import partial
 
 
 from mako import exceptions
-from openerp.osv.orm import except_orm
+from openerp.exceptions import except_orm
 from openerp.tools.translate import _
 from openerp.modules.registry import RegistryManager
 from openerp import tools
@@ -182,6 +182,7 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
         return pdf
 
     # override needed to keep the attachments' storing procedure
+    # pylint: disable=old-api7-method-defined
     def create_single_pdf(self, cursor, uid, ids, data, report_xml,
                           context=None):
         """generate the PDF"""
