@@ -6,7 +6,7 @@
 Date Range Year on Financial Reports
 ====================================
 
-This module adds the 'Date Range' field to the Odoo OE standard addons
+This module adds the 'Date Range' field to the Odoo CE standard addons
 financial reports wizard.
 
 Installation
