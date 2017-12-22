@@ -1,1 +1,4 @@
 server-ux
+account-financial-tools https://github.com/Eficent/account-financial-tools 11.0-mig-account_fiscal_year
+reporting-engine https://github.com/OCA/reporting-engine
+server-ux https://github.com/OCA/server-ux
