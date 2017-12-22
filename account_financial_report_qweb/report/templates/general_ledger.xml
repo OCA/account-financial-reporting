@@ -126,12 +126,10 @@
                     <div class="act_as_cell amount" style="width: 75px;">Credit</div>
                     <!--## balance cumulated-->
                     <div class="act_as_cell amount" style="width: 75px;">Cumul. Bal.</div>
-                    <t t-if="has_second_currency">
-                        <!--## currency_name-->
-                        <div class="act_as_cell" style="width: 35px;">Cur.</div>
-                        <!--## amount_currency-->
-                        <div class="act_as_cell amount" style="width: 75px;">Amount cur.</div>
-                    </t>
+                    <!--## currency_name-->
+                    <div class="act_as_cell" style="width: 35px;">Cur.</div>
+                    <!--## amount_currency-->
+                    <div class="act_as_cell amount" style="width: 75px;">Amount cur.</div>
                 </div>
             </div>
 
@@ -161,12 +159,10 @@
                 <div class="act_as_cell amount"><span t-field="account_or_partner_object.initial_credit"/></div>
                 <!--## balance cumulated-->
                 <div class="act_as_cell amount"><span t-field="account_or_partner_object.initial_balance"/></div>
-                <t t-if="has_second_currency">
-                    <!--## currency_name-->
-                    <div class="act_as_cell"></div>
-                    <!--## amount_currency-->
-                    <div class="act_as_cell"></div>
-                </t>
+                <!--## currency_name-->
+                <div class="act_as_cell"></div>
+                <!--## amount_currency-->
+                <div class="act_as_cell"></div>
             </div>
 
             <!-- Display each lines -->
@@ -197,17 +193,15 @@
                     <div class="act_as_cell amount"><span t-field="line.credit"/></div>
                     <!--## balance cumulated-->
                     <div class="act_as_cell amount"><span t-field="line.cumul_balance"/></div>
-                    <t t-if="has_second_currency">
-                        <!--## currency_name-->
-                        <div class="act_as_cell"><span t-field="line.currency_name"/></div>
-                        <t t-if="line.currency_name">
-                            <!--## amount_currency-->
-                            <div class="act_as_cell amount"><span t-field="line.amount_currency"/></div>
-                        </t>
-                        <t t-if="not line.currency_name">
-                            <!--## amount_currency-->
-                            <div class="act_as_cell"></div>
-                        </t>
+                    <!--## currency_name-->
+                    <div class="act_as_cell"><span t-field="line.currency_name"/></div>
+                    <t t-if="line.currency_name">
+                        <!--## amount_currency-->
+                        <div class="act_as_cell amount"><span t-field="line.amount_currency"/></div>
+                    </t>
+                    <t t-if="not line.currency_name">
+                        <!--## amount_currency-->
+                        <div class="act_as_cell"></div>
                     </t>
                 </div>
             </t>
@@ -239,10 +233,8 @@
                 <div class="act_as_cell amount" style="width: 75px;"><span t-field="account_or_partner_object.final_credit"/></div>
                 <!--## balance cumulated-->
                 <div class="act_as_cell amount" style="width: 75px; padding-right: 1px;"><span t-field="account_or_partner_object.final_balance"/></div>
-                <t t-if="has_second_currency">
-                    <!--## currency_name + amount_currency-->
-                    <div class="act_as_cell" style="width: 110px;"></div>
-                </t>
+                <!--## currency_name + amount_currency-->
+                <div class="act_as_cell" style="width: 110px;"></div>
             </div>
         </div>
     </template>

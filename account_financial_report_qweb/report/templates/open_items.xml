@@ -103,14 +103,12 @@
                     <div class="act_as_cell" style="width: 75px;">Original</div>
                     <!--## amount_residual-->
                     <div class="act_as_cell" style="width: 75px;">Residual</div>
-                    <t t-if="has_second_currency">
-                        <!--## currency_name-->
-                        <div class="act_as_cell" style="width: 35px;">Cur.</div>
-                        <!--## amount_total_due_currency-->
-                        <div class="act_as_cell amount" style="width: 75px;">Cur. Original</div>
-                        <!--## amount_residual_currency-->
-                        <div class="act_as_cell amount" style="width: 75px;">Cur. Residual</div>
-                    </t>
+                    <!--## currency_name-->
+                    <div class="act_as_cell" style="width: 35px;">Cur.</div>
+                    <!--## amount_total_due_currency-->
+                    <div class="act_as_cell amount" style="width: 75px;">Cur. Original</div>
+                    <!--## amount_residual_currency-->
+                    <div class="act_as_cell amount" style="width: 75px;">Cur. Residual</div>
                 </div>
             </div>
 
@@ -136,21 +134,19 @@
                     <div class="act_as_cell amount"><span t-field="line.amount_total_due"/></div>
                     <!--## amount_residual-->
                     <div class="act_as_cell amount"><span t-field="line.amount_residual"/></div>
-                    <t t-if="has_second_currency">
-                        <!--## currency_name-->
-                        <div class="act_as_cell"><span t-field="line.currency_name"/></div>
-                        <t t-if="line.currency_name">
-                            <!--## amount_total_due_currency-->
-                            <div class="act_as_cell amount"><span t-field="line.amount_total_due_currency"/></div>
-                            <!--## amount_residual_currency-->
-                            <div class="act_as_cell amount"><span t-field="line.amount_residual_currency"/></div>
-                        </t>
-                        <t t-if="not line.currency_name">
-                            <!--## amount_total_due_currency-->
-                            <div class="act_as_cell"></div>
-                            <!--## amount_residual_currency-->
-                            <div class="act_as_cell"></div>
-                        </t>
+                    <!--## currency_name-->
+                    <div class="act_as_cell"><span t-field="line.currency_name"/></div>
+                    <t t-if="line.currency_name">
+                        <!--## amount_total_due_currency-->
+                        <div class="act_as_cell amount"><span t-field="line.amount_total_due_currency"/></div>
+                        <!--## amount_residual_currency-->
+                        <div class="act_as_cell amount"><span t-field="line.amount_residual_currency"/></div>
+                    </t>
+                    <t t-if="not line.currency_name">
+                        <!--## amount_total_due_currency-->
+                        <div class="act_as_cell"></div>
+                        <!--## amount_residual_currency-->
+                        <div class="act_as_cell"></div>
                     </t>
                 </div>
             </t>
@@ -176,10 +172,8 @@
                 <div class="act_as_cell amount" style="width: 75px;"></div>
                 <!--## amount_currency-->
                 <div class="act_as_cell amount" style="width: 75px;"><span t-field="account_or_partner_object.final_amount_residual"/></div>
-                <t t-if="has_second_currency">
-                    <!--## currency_name + amount_total_due_currency + amount_residual_currency -->
-                    <div class="act_as_cell" style="width: 185px;"></div>
-                </t>
+                <!--## currency_name + amount_total_due_currency + amount_residual_currency -->
+                <div class="act_as_cell" style="width: 185px;"></div>
             </div>
         </div>
     </template>

@@ -976,7 +976,7 @@ INNER JOIN
 LEFT JOIN
     account_full_reconcile fr ON ml.full_reconcile_id = fr.id
 LEFT JOIN
-    res_currency c ON a.currency_id = c.id
+    res_currency c ON ml.currency_id = c.id
                     """
         if self.filter_cost_center_ids:
             query_inject_move_line += """
@@ -1086,7 +1086,8 @@ WITH
                 )::date AS date,
                 SUM(ml.debit) AS debit,
                 SUM(ml.credit) AS credit,
-                SUM(ml.balance) AS balance
+                SUM(ml.balance) AS balance,
+                ml.currency_id AS currency_id
             FROM
                 report_general_ledger_qweb_account ra
             INNER JOIN
@@ -1119,7 +1120,7 @@ WITH
             """
         query_inject_move_line_centralized += """
             GROUP BY
-                ra.id, ml.account_id, a.code, 2
+                ra.id, ml.account_id, a.code, 2, ml.currency_id
         )
 INSERT INTO
     report_general_ledger_qweb_move_line
@@ -1154,7 +1155,7 @@ INNER JOIN
 INNER JOIN
     account_account a ON ml.account_id = a.id
 LEFT JOIN
-    res_currency c ON a.currency_id = c.id
+    res_currency c ON ml.currency_id = c.id
 WHERE
     ra.report_id = %s
 AND
