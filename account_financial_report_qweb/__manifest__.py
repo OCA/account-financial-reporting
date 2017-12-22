@@ -16,7 +16,6 @@
     'depends': [
         'account',
         'date_range',
-        'account_fiscal_year',
         'report_xlsx',
         'report',
     ],
