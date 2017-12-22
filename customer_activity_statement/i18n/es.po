@@ -4,13 +4,15 @@
 # 
 # Translators:
 # OCA Transbot <transbot@odoo-community.org>, 2017
+# Gelo Joga Landoo <gj@landoo.es>, 2017
+# Pedro M. Baeza <pedro.baeza@gmail.com>, 2017
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 9.0c\n"
+"Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-09 14:33+0000\n"
-"PO-Revision-Date: 2017-06-09 14:33+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2017\n"
+"POT-Creation-Date: 2017-12-22 16:14+0000\n"
+"PO-Revision-Date: 2017-12-22 16:14+0000\n"
+"Last-Translator: Pedro M. Baeza <pedro.baeza@gmail.com>, 2017\n"
 "Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -61,9 +63,9 @@ msgstr ""
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.customer_activity_statement_wizard_view
 msgid ""
-"Aging details can be shown in the report, expressed in aging             "
-"buckets (30 days due, ...), so the customer can review how much is open, due"
-" or overdue."
+"Aging details can be shown in the report, expressed in aging         buckets"
+" (30 days due, ...), so the customer can review how much is open, due or "
+"overdue."
 msgstr ""
 
 #. module: customer_activity_statement
@@ -74,7 +76,7 @@ msgstr ""
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Balance"
-msgstr "Saldo"
+msgstr "Cuota"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
@@ -129,12 +131,12 @@ msgstr "Fecha"
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_date_end
 msgid "Date end"
-msgstr "Fecha final"
+msgstr ""
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_date_start
 msgid "Date start"
-msgstr "Fecha inicial"
+msgstr ""
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
@@ -217,12 +219,12 @@ msgstr ""
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.customer_activity_statement_wizard_view
 msgid ""
-"The activity statement provides details of all activity on             the "
+"The activity statement provides details of all activity on         the "
 "customer receivables between two selected dates. This includes all invoices,"
-"             refunds and payments. Any outstanding balance dated prior to "
-"the chosen statement             period will appear as a forward balance at "
-"the top of the statement. The list is             displayed in chronological"
-" order and is split by currencies."
+"         refunds and payments. Any outstanding balance dated prior to the "
+"chosen statement         period will appear as a forward balance at the top "
+"of the statement. The list is         displayed in chronological order and "
+"is split by currencies."
 msgstr ""
 
 #. module: customer_activity_statement

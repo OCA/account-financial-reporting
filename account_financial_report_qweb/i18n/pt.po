@@ -3,14 +3,14 @@
 # * account_financial_report_qweb
 # 
 # Translators:
-# Pedro Castro Silva <pedrocs@sossia.pt>, 2017
+# Pedro Castro Silva <inactive+pcs.sossia@transifex.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-16 22:15+0000\n"
-"PO-Revision-Date: 2017-06-16 22:15+0000\n"
-"Last-Translator: Pedro Castro Silva <pedrocs@sossia.pt>, 2017\n"
+"POT-Creation-Date: 2017-12-22 16:14+0000\n"
+"PO-Revision-Date: 2017-12-22 16:14+0000\n"
+"Last-Translator: Pedro Castro Silva <inactive+pcs.sossia@transifex.com>, 2017\n"
 "Language-Team: Portuguese (https://www.transifex.com/oca/teams/23907/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -249,7 +249,7 @@ msgid "Centralized"
 msgstr "Centralizado"
 
 #. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:1143
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:1144
 #, python-format
 msgid "Centralized Entries"
 msgstr "Lançamentos Centralizados"
@@ -486,7 +486,7 @@ msgstr "Data de"
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_general_ledger_report_wizard_date_range_id
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_trial_balance_report_wizard_date_range_id
 msgid "Date range"
-msgstr "Intervalo de data"
+msgstr "Período"
 
 #. module: account_financial_report_qweb
 #: code:addons/account_financial_report_qweb/report/general_ledger_xlsx.py:61
@@ -540,7 +540,7 @@ msgstr "Débito"
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_partner_display_name
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_trial_balance_report_wizard_display_name
 msgid "Display Name"
-msgstr "Nome a exibir"
+msgstr "Exibir nome"
 
 #. module: account_financial_report_qweb
 #: code:addons/account_financial_report_qweb/report/aged_partner_balance_xlsx.py:75
@@ -855,7 +855,7 @@ msgstr "Rótulo"
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_partner___last_update
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_trial_balance_report_wizard___last_update
 msgid "Last Modified on"
-msgstr "Última Modificação em"
+msgstr "Última modificação em"
 
 #. module: account_financial_report_qweb
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_aged_partner_balance_wizard_write_uid
@@ -879,7 +879,7 @@ msgstr "Última Modificação em"
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_write_uid
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_trial_balance_report_wizard_write_uid
 msgid "Last Updated by"
-msgstr "Última atualização por"
+msgstr "Última atualização em"
 
 #. module: account_financial_report_qweb
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_aged_partner_balance_wizard_write_date
@@ -903,7 +903,7 @@ msgstr "Última atualização por"
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_write_date
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_trial_balance_report_wizard_write_date
 msgid "Last Updated on"
-msgstr "Última atualização em"
+msgstr "Última atualização por"
 
 #. module: account_financial_report_qweb
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_aged_partner_balance_qweb_partner_line_ids
@@ -953,7 +953,7 @@ msgstr "Não"
 #: code:addons/account_financial_report_qweb/report/general_ledger.py:637
 #: code:addons/account_financial_report_qweb/report/general_ledger.py:906
 #: code:addons/account_financial_report_qweb/report/open_items.py:277
-#: code:addons/account_financial_report_qweb/report/open_items.py:523
+#: code:addons/account_financial_report_qweb/report/open_items.py:526
 #, python-format
 msgid "No partner allocated"
 msgstr "Nenhum parceiro atribuído"

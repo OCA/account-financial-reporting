@@ -3,20 +3,20 @@
 # * customer_activity_statement
 # 
 # Translators:
-# Pedro Castro Silva <inactive+pcs.sossia@transifex.com>, 2017
+# Bole <bole@dajmi5.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-22 16:14+0000\n"
 "PO-Revision-Date: 2017-12-22 16:14+0000\n"
-"Last-Translator: Pedro Castro Silva <inactive+pcs.sossia@transifex.com>, 2017\n"
-"Language-Team: Portuguese (https://www.transifex.com/oca/teams/23907/pt/)\n"
+"Last-Translator: Bole <bole@dajmi5.com>, 2017\n"
+"Language-Team: Croatian (Croatia) (https://www.transifex.com/oca/teams/23907/hr_HR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: pt\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: hr_HR\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
@@ -89,22 +89,22 @@ msgstr ""
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.customer_activity_statement_wizard_view
 msgid "Cancel"
-msgstr "Cancelar"
+msgstr "Otkaži"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_company_id
 msgid "Company"
-msgstr "Empresa"
+msgstr "Tvrtka"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_create_uid
 msgid "Created by"
-msgstr "Criado por"
+msgstr "Kreirao"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_create_date
 msgid "Created on"
-msgstr "Criado em"
+msgstr "Kreirano"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
@@ -124,7 +124,7 @@ msgstr ""
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Date"
-msgstr "Data"
+msgstr "Datum"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_date_end
@@ -150,7 +150,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_display_name
 #: model:ir.model.fields,field_description:customer_activity_statement.field_report_customer_activity_statement_statement_display_name
 msgid "Display Name"
-msgstr "Exibir nome"
+msgstr "Naziv "
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_filter_partners_non_due
@@ -165,7 +165,7 @@ msgstr ""
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.customer_activity_statement_wizard_view
 msgid "Export PDF"
-msgstr "Exportar PDF"
+msgstr "Izvoz PDF"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_id
@@ -182,17 +182,17 @@ msgstr ""
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard___last_update
 #: model:ir.model.fields,field_description:customer_activity_statement.field_report_customer_activity_statement_statement___last_update
 msgid "Last Modified on"
-msgstr "Última modificação em"
+msgstr ""
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_write_uid
 msgid "Last Updated by"
-msgstr "Última atualização em"
+msgstr ""
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_write_date
 msgid "Last Updated on"
-msgstr "Última atualização por"
+msgstr ""
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_number_partner_ids
@@ -228,7 +228,7 @@ msgstr ""
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.customer_activity_statement_wizard_view
 msgid "or"
-msgstr "ou"
+msgstr "ili"
 
 #. module: customer_activity_statement
 #: model:ir.model,name:customer_activity_statement.model_report_customer_activity_statement_statement
