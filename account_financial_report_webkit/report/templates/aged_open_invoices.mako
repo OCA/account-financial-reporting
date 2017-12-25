@@ -88,6 +88,11 @@
                 <div class="act_as_cell">${ display_target_move(data) }</div>
             </div>
         </div>
+        <%
+            balance_list = []
+            classif_list = []
+            classif_list_2 = []
+        %>
         %for account in objects:
             %if aged_open_inv[account.id] and partners_order[account.id]:
 
@@ -167,11 +172,37 @@
                     <div class="act_as_cell"></div>
                     <div class="act_as_cell"></div>
                     <div class="act_as_cell amount classif total account_title bg">${formatLang(aged_open_inv[account.id]['balance']) | amount}</div>
+                    <%
+                        balance_list.append(aged_open_inv[account.id]['balance'])
+                    %>
                     %for classif in ranges:
-                        <div class="act_as_cell amount classif total account_title bg">${formatLang(aged_open_inv[account.id][classif]) | amount }</div>
+                        <div class="act_as_cell amount classif total account_title bg">
+                            ${formatLang(aged_open_inv[account.id][classif]) | amount }
+                        </div>
+                        <%
+                            classif_list.append(aged_open_inv[account.id][classif])
+                        %>
                     %endfor
                 </div>
             %endif
         %endfor  # end of the loop on accounts
+        <br/>
+        <%
+            classif_list = [classif_list[i:i+6] for i  in range(0, len(classif_list), 6)]
+            for i in range(6):
+                classif_list_2.append([line[i] for line in classif_list])
+        %>
+        <div class="act_as_row labels">
+            <div class="act_as_cell total account_title bg">${_('Overall Total')}</div>
+            <div class="act_as_cell"></div>
+            <div class="act_as_cell"></div>
+            <div class="act_as_cell"></div>
+            <div class="act_as_cell"></div>
+            <div class="act_as_cell"></div>
+            <div class="act_as_cell amount classif total account_title bg">${formatLang(sum(balance_list)) | amount}</div>
+            %for cf in classif_list_2:
+                <div class="act_as_cell amount classif total account_title bg">${formatLang(sum(cf)) | amount}</div>
+            %endfor
+        </div>
     </body>
 </html>
