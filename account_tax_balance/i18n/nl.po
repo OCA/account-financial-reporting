@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-29 23:16+0000\n"
-"PO-Revision-Date: 2017-12-29 23:16+0000\n"
+"POT-Creation-Date: 2018-01-05 23:13+0000\n"
+"PO-Revision-Date: 2018-01-05 23:13+0000\n"
 "Last-Translator: Melroy van den Berg <webmaster1989@gmail.com>, 2018\n"
 "Language-Team: Dutch (https://www.transifex.com/oca/teams/23907/nl/)\n"
 "MIME-Version: 1.0\n"
@@ -26,185 +26,185 @@ msgstr "Account"
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_account_move
 msgid "Account Entry"
-msgstr ""
+msgstr "Account Post"
 
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "Account Tax"
-msgstr ""
+msgstr "Accountbelasting"
 
 #. module: account_tax_balance
 #: selection:wizard.open.tax.balances,target_move:0
 msgid "All Entries"
-msgstr ""
+msgstr "Alle Vermeldingen"
 
 #. module: account_tax_balance
 #: selection:wizard.open.tax.balances,target_move:0
 msgid "All Posted Entries"
-msgstr ""
+msgstr "Alle Geposte Vermeldingen"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax_balance_regular
 msgid "Balance"
-msgstr ""
+msgstr "Balans"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax_balance_refund
 msgid "Balance Refund"
-msgstr ""
+msgstr "Restitutie van het saldo"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax_base_balance_regular
 msgid "Base Balance"
-msgstr ""
+msgstr "Basisbalans"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax_base_balance_refund
 msgid "Base Balance Refund"
-msgstr ""
+msgstr "Restitutie Basisbalans"
 
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "Base Total"
-msgstr ""
+msgstr "Basis Totaal"
 
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "Cancel"
-msgstr ""
+msgstr "Annuleren"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances_company_id
 msgid "Company"
-msgstr ""
+msgstr "Bedrijf"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances_create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Gecreëerd door"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances_create_date
 msgid "Created on"
-msgstr ""
+msgstr "Gecreëerd op"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances_date_range_id
 msgid "Date range"
-msgstr ""
+msgstr "Datumreeks"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances_display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Weergavenaam"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances_from_date
 msgid "From date"
-msgstr ""
+msgstr "Vanaf datum"
 
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
 msgid "Group By"
-msgstr ""
+msgstr "Groeperen Op"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax_has_moves
 msgid "Has balance in period"
-msgstr ""
+msgstr "Heeft balans in periode"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances_id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_account_move_line
 msgid "Journal Item"
-msgstr ""
+msgstr "Journaalpost"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances___last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Laatst Gewijzigd op"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances_write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Laatst Geüpdatet door"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances_write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Laatst Geüpdatet op"
 
 #. module: account_tax_balance
 #: selection:account.move,move_type:0
 msgid "Liquidity"
-msgstr ""
+msgstr "Liquiditeit"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_move_move_type
 #: model:ir.ui.view,arch_db:account_tax_balance.view_account_move_filter
 msgid "Move type"
-msgstr ""
+msgstr "Beweeg type"
 
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "Open Taxes"
-msgstr ""
+msgstr "Open Belastingen"
 
 #. module: account_tax_balance
 #: selection:account.move,move_type:0
 msgid "Other"
-msgstr ""
+msgstr "Overige"
 
 #. module: account_tax_balance
 #: selection:account.move,move_type:0
 msgid "Payable"
-msgstr ""
+msgstr "Te betalen"
 
 #. module: account_tax_balance
 #: selection:account.move,move_type:0
 msgid "Payable refund"
-msgstr ""
+msgstr "Te betalen restitutie"
 
 #. module: account_tax_balance
 #: selection:account.move,move_type:0
 msgid "Receivable"
-msgstr ""
+msgstr "Ontvangbaar"
 
 #. module: account_tax_balance
 #: selection:account.move,move_type:0
 msgid "Receivable refund"
-msgstr ""
+msgstr "Vorderbare restitutie"
 
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "Short Name"
-msgstr ""
+msgstr "Korte Naam"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances_target_move
 msgid "Target Moves"
-msgstr ""
+msgstr "Verplaatsbaar doel"
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_account_tax
 msgid "Tax"
-msgstr ""
+msgstr "Belasting"
 
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
 msgid "Tax Group"
-msgstr ""
+msgstr "Belastinggroep"
 
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
 msgid "Tax Scope"
-msgstr ""
+msgstr "Belastingbereik"
 
 #. module: account_tax_balance
 #: model:ir.actions.act_window,name:account_tax_balance.action_open_tax_balances
@@ -213,12 +213,12 @@ msgstr ""
 #: model:ir.ui.menu,name:account_tax_balance.menu_tax_balances
 #: model:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "Taxes Balance"
-msgstr ""
+msgstr "Belastingbalans"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances_to_date
 msgid "To date"
-msgstr ""
+msgstr "Tot datum"
 
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
@@ -228,53 +228,53 @@ msgstr "Totaal"
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax_balance
 msgid "Total Balance"
-msgstr ""
+msgstr "Totaal Balans"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax_base_balance
 msgid "Total Base Balance"
-msgstr ""
+msgstr "Totale basissaldo"
 
 #. module: account_tax_balance
 #: code:addons/account_tax_balance/models/account_tax.py:87
 #, python-format
 msgid "Unsupported search operator"
-msgstr ""
+msgstr "Ongeldige zoekoperatie"
 
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "View base lines"
-msgstr ""
+msgstr "Bekijk algemene regels"
 
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "View base refund lines"
-msgstr ""
+msgstr "Bekijk algemene terugbetalingregels"
 
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "View base regular lines"
-msgstr ""
+msgstr "Bekijk algemene regelmatige regels"
 
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "View tax lines"
-msgstr ""
+msgstr "Bekijk belasting regels"
 
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "View tax refund lines"
-msgstr ""
+msgstr "Bekijk belasting terugbetalingregels"
 
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "View tax regular lines"
-msgstr ""
+msgstr "Bekijk belasting regelmatige regels"
 
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "or"
-msgstr ""
+msgstr "of"
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_wizard_open_tax_balances

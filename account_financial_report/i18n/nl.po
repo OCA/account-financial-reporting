@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-29 23:16+0000\n"
-"PO-Revision-Date: 2017-12-29 23:16+0000\n"
+"POT-Creation-Date: 2018-01-05 23:13+0000\n"
+"PO-Revision-Date: 2018-01-05 23:13+0000\n"
 "Last-Translator: Melroy van den Berg <webmaster1989@gmail.com>, 2018\n"
 "Language-Team: Dutch (https://www.transifex.com/oca/teams/23907/nl/)\n"
 "MIME-Version: 1.0\n"
@@ -173,7 +173,7 @@ msgstr ""
 #: selection:open.items.report.wizard,target_move:0
 #: selection:trial.balance.report.wizard,target_move:0
 msgid "All Entries"
-msgstr ""
+msgstr "Alle Vermeldingen"
 
 #. module: account_financial_report
 #: selection:aged.partner.balance.wizard,target_move:0
@@ -181,7 +181,7 @@ msgstr ""
 #: selection:open.items.report.wizard,target_move:0
 #: selection:trial.balance.report.wizard,target_move:0
 msgid "All Posted Entries"
-msgstr ""
+msgstr "Alle Geposte Regels"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:126
@@ -249,7 +249,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:account_financial_report.open_items_wizard
 #: model:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
 msgid "Cancel"
-msgstr ""
+msgstr "Annuleren"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_centralize
@@ -295,7 +295,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_company_id
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_company_id
 msgid "Company"
-msgstr ""
+msgstr "Bedrijf"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_move_line_cost_center
@@ -331,7 +331,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_partner_create_uid
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Gecreëerd door"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard_create_date
@@ -355,7 +355,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_partner_create_date
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_create_date
 msgid "Created on"
-msgstr ""
+msgstr "Gecreëerd op"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:35
@@ -514,7 +514,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard_date_range_id
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_date_range_id
 msgid "Date range"
-msgstr ""
+msgstr "Datumreeks"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:56
@@ -565,7 +565,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_partner_display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Weergavenaam"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:70
@@ -795,7 +795,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_partner_id
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_account_account_centralized
@@ -888,7 +888,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_partner___last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard___last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Laatst Gewijzigd op"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard_write_uid
@@ -912,7 +912,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_write_uid
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Laatst Geüpdatet door"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard_write_date
@@ -936,7 +936,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_write_date
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Laatst Geüpdatet op"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_partner_line_ids
@@ -1232,7 +1232,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard_target_move
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_target_move
 msgid "Target Moves"
-msgstr ""
+msgstr "Verplaatsbaar doel"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:124
@@ -1326,7 +1326,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:account_financial_report.open_items_wizard
 #: model:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
 msgid "or"
-msgstr ""
+msgstr "of"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_aged_partner_balance_xlsx
