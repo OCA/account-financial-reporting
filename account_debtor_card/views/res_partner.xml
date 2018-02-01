@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report
+                id="action_report_debtor_card"
+                model="res.partner"
+                string="Debtor Card"
+                report_type="qweb-pdf"
+                file="account_debtor_card.report_debtor_card"
+                name="account_debtor_card.report_debtor_card"
+        />
+        <record id="view_partner_form_inherit" model="ir.ui.view">
+            <field name="name">view.partner.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet" position="before">
+                <header>
+                    <button type="object" name="print_debtor_card"
+                        string="Print Debtor Card"
+                        attrs="{'invisible':[('sale_order_ids','=',[])]}"/>
+                </header>
+            </xpath>
+                <notebook position="inside">
+                    <page name="sale_orders" string="Sale Orders">
+                        <field name="sale_order_ids"/>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="report_debtor_card">
+            <t t-call="report.html_container">
+                <t t-call="report.internal_layout">
+                    <div class="page">
+                    <t t-foreach="docs" t-as="o">
+                        <div class="oe_structure"/>
+                        <div class="row">
+                            <div class="col-xs-6" style="margin-top:30px;">
+                                <h2>
+                                    <span>Customer:</span>
+                                    <span t-field="o.name"/>
+                                </h2>
+                            </div>
+                        </div>
+                        <t t-foreach="o.sale_order_ids" t-as="so">
+                            <t t-set="state_name" t-value="dict(so.fields_get(allfields=['state'])['state']['selection'])[so.state]"/>
+                            <h3>
+                                <span>Order N°:</span>
+                                <t t-esc="so.name"/>&#160;&#160;<span>Status:</span>
+                                <t t-esc="state_name"/>
+                            </h3>
+                            <div class="row mt32 mb32" id="informations">
+                                <div t-if="so.client_order_ref"
+                                     class="col-xs-3">
+                                    <strong>Your Reference:</strong>
+                                    <p t-field="so.client_order_ref"/>
+                                </div>
+                                <div t-if="so.date_order" class="col-xs-3">
+                                    <strong>Date Ordered:</strong>
+                                    <p t-field="so.date_order" t-options='{"format": "d MMMM y"}'/>
+                                </div>
+                                <div t-if="so.user_id.name"
+                                     class="col-xs-3">
+                                    <strong>Salesperson:</strong>
+                                    <p t-field="so.user_id.name"/>
+                                </div>
+                                <div t-if="so.payment_term"
+                                     class="col-xs-3">
+                                    <strong>Payment Term:</strong>
+                                    <p t-field="so.payment_term"/>
+                                </div>
+                            </div>
+                            <!--<table class="table table-condensed">-->
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>Description</th>
+                                        <th class="text-right">Quantity</th>
+                                        <th class="text-right">Unit Price
+                                        </th>
+                                        <th class="text-right">Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="sale_tbody">
+                                    <tr t-foreach="so.order_line" t-as="l">
+                                        <td>
+                                            <span t-field="l.name"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="'%.1f'%(l.product_uom_qty)"/>
+                                            <span groups="product.group_uom"
+                                                  t-field="l.product_uom"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="l.price_unit"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="l.price_subtotal"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-xs-4 pull-right">
+                                    <table class="table table-condensed">
+                                        <tr class="border-black">
+                                            <td>
+                                                <strong>Total</strong>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-field="so.amount_total"
+                                                      t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;so.pricelist_id.currency_id&quot;}"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- Related Invoices -->
+                            <t t-if="so.invoice_ids">
+                                <table class="table table-condensed"
+                                       style="font-size:120%;">
+                                    <tr>
+                                        <th style="text-align:center;">Related Invoices</th>
+                                    </tr>
+                                </table>
+
+                                <table class="table table-striped table-condensed"
+                                       style="font-size:90%;">
+
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th>Quantity</th>
+                                        <th class="text-right">Unit Price
+                                        </th>
+                                        <th class="text-right">Total</th>
+                                    </tr>
+                                    <t t-foreach="so.invoice_ids" t-as="i">
+                                        <t t-set="state_name" t-value="dict(i.fields_get(allfields=['state'])['state']['selection'])[i.state]"/>
+                                        <tr t-foreach="i.invoice_line"
+                                            t-as="il">
+                                            <td>
+                                                <span t-esc="i.date_invoice"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="il.name"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="state_name"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="il.quantity"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-esc="il.price_unit"/>
+                                            </td>
+
+                                            <td class="text-right">
+                                                <span t-esc="il.price_subtotal "/>
+                                            </td>
+
+                                        </tr>
+
+                                    </t>
+                                </table>
+                                <t t-set="total"
+                                   t-value="sum(so.mapped('invoice_ids.amount_total'))"/>
+                                <t t-set="pending"
+                                   t-value="so.amount_total - total"/>
+                                <div class="row">
+                                    <div class="col-xs-4 pull-right">
+                                        <table class="table table-condensed">
+                                            <tr class="border-black">
+                                                <td>
+                                                    <strong>Total</strong>
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-esc="total"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong>Pending</strong>
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-esc="pending"/>
+                                                </td>
+                                            </tr>
+
+                                        </table>
+
+                                    </div>
+
+                                </div>
+                                <hr style="border-top: dotted 1px;"/>
+                            </t>
+                            <t t-if="not so.invoice_ids">
+                                <table class="table table-condensed"
+                                       style="font-size:120%;">
+                                    <tr>
+                                        <th style="text-align:center;">No Invoices for this order</th>
+                                    </tr>
+                                </table>
+                                <hr style="border-top: dotted 1px;"/>
+                            </t>
+                        </t>
+                        <p style="text-align: center;">---- Printed:
+                            <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%A,  %B %d, %Y')"/>
+                            ----
+                        </p>
+                    </t>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

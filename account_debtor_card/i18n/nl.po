@@ -1,0 +1,126 @@
+# This file contains the translation of the following modules:
+# * account_debtor_card
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-01-26 09:52+0000\n"
+"PO-Revision-Date: 2017-08-18 16:51+0000\n"
+"Last-Translator: Tom Blauwendraat <info@sunflowerweb.nl>\n"
+"Language-Team: Dutch (http://www.transifex.com/odoo/odoo-8/language/nl/)\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: account_debtor_card
+#: view:website:account_debtor_card.report_debtor_card
+msgid "---- Printed:"
+msgstr "---- Afgedrukt:"
+
+#. module: account_debtor_card
+#: view:website:account_debtor_card.report_debtor_card
+msgid "Customer:"
+msgstr "Klant:"
+
+#. module: account_debtor_card
+#: view:website:account_debtor_card.report_debtor_card
+msgid "Date"
+msgstr "Datum"
+
+#. module: account_debtor_card
+#: view:website:account_debtor_card.report_debtor_card
+msgid "Date Ordered:"
+msgstr "Besteldatum:"
+
+#. module: account_debtor_card
+#: model:ir.actions.report.xml,name:account_debtor_card.action_report_debtor_card
+msgid "Debtor Card"
+msgstr "Debiteurenkaart"
+
+#. module: account_debtor_card
+#: view:website:account_debtor_card.report_debtor_card
+msgid "Description"
+msgstr "Omschrijving"
+
+#. module: account_debtor_card
+#: view:website:account_debtor_card.report_debtor_card
+msgid "No Invoices for this order"
+msgstr "Geen fakturen voor deze verkooporder"
+
+#. module: account_debtor_card
+#: view:website:account_debtor_card.report_debtor_card
+msgid "Order N°:"
+msgstr "Ordernr:"
+
+#. module: account_debtor_card
+#: model:ir.model,name:account_debtor_card.model_res_partner
+msgid "Partner"
+msgstr "Relatie"
+
+#. module: account_debtor_card
+#: view:website:account_debtor_card.report_debtor_card
+msgid "Payment Term:"
+msgstr "Betaalconditie:"
+
+#. module: account_debtor_card
+#: view:website:account_debtor_card.report_debtor_card
+msgid "Pending"
+msgstr "In afwachting"
+
+#. module: account_debtor_card
+#: view:website:account_debtor_card.report_debtor_card
+msgid "Price"
+msgstr "Bedrag"
+
+#. module: account_debtor_card
+#: view:res.partner:account_debtor_card.view_partner_form_inherit
+msgid "Print Debtor Card"
+msgstr "Debiteurenkaart"
+
+#. module: account_debtor_card
+#: view:website:account_debtor_card.report_debtor_card
+msgid "Quantity"
+msgstr "Hoeveelheid"
+
+#. module: account_debtor_card
+#: view:website:account_debtor_card.report_debtor_card
+msgid "Related Invoices"
+msgstr "Bijbehorende fakturen"
+
+#. module: account_debtor_card
+#: view:res.partner:account_debtor_card.view_partner_form_inherit
+msgid "Sale Orders"
+msgstr "Verkooporders"
+
+#. module: account_debtor_card
+#: view:website:account_debtor_card.report_debtor_card
+msgid "Salesperson:"
+msgstr "Verkoper:"
+
+#. module: account_debtor_card
+#: view:website:account_debtor_card.report_debtor_card
+msgid "Status"
+msgstr "Status"
+
+#. module: account_debtor_card
+#: view:website:account_debtor_card.report_debtor_card
+msgid "Status:"
+msgstr "Status:"
+
+#. module: account_debtor_card
+#: view:website:account_debtor_card.report_debtor_card
+msgid "Total"
+msgstr "Totaal"
+
+#. module: account_debtor_card
+#: view:website:account_debtor_card.report_debtor_card
+msgid "Unit Price"
+msgstr "Prijs"
+
+#. module: account_debtor_card
+#: view:website:account_debtor_card.report_debtor_card
+msgid "Your Reference:"
+msgstr "Uw referentie:"
