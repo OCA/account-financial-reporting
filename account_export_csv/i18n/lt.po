@@ -4,13 +4,14 @@
 # 
 # Translators:
 # OCA Transbot <transbot@odoo-community.org>, 2016
+# Viktoras Norkus <viktoras@bmx.lt>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-16 12:25+0000\n"
-"PO-Revision-Date: 2016-12-16 12:25+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2016\n"
+"POT-Creation-Date: 2017-10-13 22:11+0000\n"
+"PO-Revision-Date: 2017-10-13 22:11+0000\n"
+"Last-Translator: Viktoras Norkus <viktoras@bmx.lt>, 2018\n"
 "Language-Team: Lithuanian (https://www.transifex.com/oca/teams/23907/lt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -97,7 +98,7 @@ msgstr ""
 #: code:addons/account_export_csv/wizard/account_export_csv.py:200
 #, python-format
 msgid "CODE"
-msgstr ""
+msgstr "KODAS"
 
 #. module: account_export_csv
 #: code:addons/account_export_csv/wizard/account_export_csv.py:141
@@ -121,7 +122,7 @@ msgstr ""
 #. module: account_export_csv
 #: view:account.csv.export:account_export_csv.account_csv_export_view
 msgid "Close"
-msgstr ""
+msgstr "Uždaryti"
 
 #. module: account_export_csv
 #: field:account.csv.export,company_id:0
@@ -142,7 +143,7 @@ msgstr "Sukurta"
 #: code:addons/account_export_csv/wizard/account_export_csv.py:285
 #, python-format
 msgid "DATE"
-msgstr ""
+msgstr "DATA"
 
 #. module: account_export_csv
 #: code:addons/account_export_csv/wizard/account_export_csv.py:140
@@ -161,7 +162,7 @@ msgstr ""
 #. module: account_export_csv
 #: field:account.csv.export,display_name:0
 msgid "Display Name"
-msgstr ""
+msgstr "Pavadinimas"
 
 #. module: account_export_csv
 #: code:addons/account_export_csv/wizard/account_export_csv.py:298
@@ -247,13 +248,13 @@ msgstr "Paskutinį kartą atnaujinta"
 #: code:addons/account_export_csv/wizard/account_export_csv.py:305
 #, python-format
 msgid "MONTH"
-msgstr ""
+msgstr "MĖNUO"
 
 #. module: account_export_csv
 #: code:addons/account_export_csv/wizard/account_export_csv.py:139
 #, python-format
 msgid "NAME"
-msgstr ""
+msgstr "VARDAS"
 
 #. module: account_export_csv
 #: code:addons/account_export_csv/wizard/account_export_csv.py:294
@@ -309,4 +310,4 @@ msgstr "Bandomasis balansas"
 #. module: account_export_csv
 #: view:account.csv.export:account_export_csv.account_csv_export_view
 msgid "or"
-msgstr ""
+msgstr "arba"

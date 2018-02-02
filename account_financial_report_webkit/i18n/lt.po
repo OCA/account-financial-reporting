@@ -4,13 +4,14 @@
 # 
 # Translators:
 # OCA Transbot <transbot@odoo-community.org>, 2016
+# Viktoras Norkus <viktoras@bmx.lt>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-27 17:33+0000\n"
-"PO-Revision-Date: 2017-04-27 17:33+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2016\n"
+"POT-Creation-Date: 2017-10-13 22:11+0000\n"
+"PO-Revision-Date: 2017-10-13 22:11+0000\n"
+"Last-Translator: Viktoras Norkus <viktoras@bmx.lt>, 2018\n"
 "Language-Team: Lithuanian (https://www.transifex.com/oca/teams/23907/lt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -494,7 +495,7 @@ msgstr "Atvaizduoti sąskaitas"
 #: field:print.journal.webkit,display_name:0
 #: field:trial.balance.webkit,display_name:0
 msgid "Display Name"
-msgstr ""
+msgstr "Pavadinimas"
 
 #. module: account_financial_report_webkit
 #: field:partner.balance.webkit,display_partner:0
