@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-13 22:11+0000\n"
-"PO-Revision-Date: 2017-10-13 22:11+0000\n"
+"POT-Creation-Date: 2018-02-02 23:30+0000\n"
+"PO-Revision-Date: 2018-02-02 23:30+0000\n"
 "Last-Translator: Viktoras Norkus <viktoras@bmx.lt>, 2018\n"
 "Language-Team: Lithuanian (https://www.transifex.com/oca/teams/23907/lt/)\n"
 "MIME-Version: 1.0\n"
@@ -209,7 +209,7 @@ msgid "Centralized"
 msgstr "Centralizuota"
 
 #. module: account_financial_report_webkit
-#: code:addons/account_financial_report_webkit/report/general_ledger.py:170
+#: code:addons/account_financial_report_webkit/report/general_ledger.py:173
 #, python-format
 msgid "Centralized Entries"
 msgstr "Centralizuoti įrašai"
@@ -570,8 +570,8 @@ msgstr "Įrašas"
 
 #. module: account_financial_report_webkit
 #: code:addons/account_financial_report_webkit/report/common_reports.py:408
-#: code:addons/account_financial_report_webkit/report/open_invoices.py:137
-#: code:addons/account_financial_report_webkit/report/partners_ledger.py:119
+#: code:addons/account_financial_report_webkit/report/open_invoices.py:139
+#: code:addons/account_financial_report_webkit/report/partners_ledger.py:121
 #, python-format
 msgid "Error"
 msgstr "Klaida"
@@ -606,7 +606,7 @@ msgstr ""
 "būtų teisinga)."
 
 #. module: account_financial_report_webkit
-#: code:addons/account_financial_report_webkit/report/open_invoices.py:214
+#: code:addons/account_financial_report_webkit/report/open_invoices.py:217
 #, python-format
 msgid ""
 "Filter has to be in filter date, period,                                  or"
@@ -947,8 +947,8 @@ msgid "No Partner"
 msgstr "Nėra partnerio"
 
 #. module: account_financial_report_webkit
-#: code:addons/account_financial_report_webkit/report/open_invoices.py:137
-#: code:addons/account_financial_report_webkit/report/partners_ledger.py:119
+#: code:addons/account_financial_report_webkit/report/open_invoices.py:139
+#: code:addons/account_financial_report_webkit/report/partners_ledger.py:121
 #, python-format
 msgid "No accounts to print."
 msgstr "Nėra spausdinamų sąskaitų."
@@ -1591,7 +1591,7 @@ msgstr ""
 "sąskaitas"
 
 #. module: account_financial_report_webkit
-#: code:addons/account_financial_report_webkit/report/open_invoices.py:213
+#: code:addons/account_financial_report_webkit/report/open_invoices.py:216
 #, python-format
 msgid "Unsuported filter"
 msgstr "Nepalaikomas filtras"
