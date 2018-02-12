@@ -25,13 +25,13 @@ class TestTrialBalance(abstract_test.AbstractTest):
         return 'account_financial_report.action_report_trial_balance_xlsx'
 
     def _getReportTitle(self):
-        return 'Odoo Report'
+        return 'Odoo'
 
     def _getBaseFilters(self):
         return {
             'date_from': time.strftime('%Y-01-01'),
             'date_to': time.strftime('%Y-12-31'),
-            'company_id': self.env.ref('base.main_company').id,
+            'company_id': self.company.id,
             'fy_start_date': time.strftime('%Y-01-01'),
         }
 
