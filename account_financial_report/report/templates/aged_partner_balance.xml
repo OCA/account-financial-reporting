@@ -27,7 +27,8 @@
                 <div class="page_break">
                     <!-- Display account header -->
                     <div class="act_as_table list_table" style="margin-top: 10px;"/>
-                    <div class="act_as_caption account_title" style="width: 1141px !important;">
+                    <div class="act_as_caption account_title"
+                         style="width: 100%;">
                         <span t-field="account.code"/>
                         -
                         <span t-field="account.name"/>
@@ -35,7 +36,8 @@
 
                     <!-- Display account lines -->
                     <t t-if="not show_move_line_details">
-                        <div class="act_as_table data_table" style="width: 1140px !important;">
+                        <div class="act_as_table data_table"
+                             style="width: 100%;">
                             <!-- Display account header -->
                             <t t-call="account_financial_report.report_aged_partner_balance_lines_header"/>
 
@@ -80,7 +82,7 @@
     </template>
 
     <template id="account_financial_report.report_aged_partner_balance_filters">
-        <div class="act_as_table data_table" style="width: 1140px !important;">
+        <div class="act_as_table data_table" style="width: 100%;">
             <div class="act_as_row labels">
                 <div class="act_as_cell">Date at filter</div>
                 <div class="act_as_cell">Target moves filter</div>
@@ -102,21 +104,21 @@
         <div class="act_as_thead">
             <div class="act_as_row labels">
                 <!--## partner-->
-                <div class="act_as_cell" style="width: 370px;">Partner</div>
+                <div class="act_as_cell" style="width: 32.52%;">Partner</div>
                 <!--## amount_residual-->
-                <div class="act_as_cell" style="width: 110px;">Residual</div>
+                <div class="act_as_cell" style="width: 9.64%;">Residual</div>
                 <!--## current-->
-                <div class="act_as_cell" style="width: 110px;">Not due</div>
+                <div class="act_as_cell" style="width: 9.64%;">Not due</div>
                 <!--## age_30_days-->
-                <div class="act_as_cell" style="width: 110px;">1 - 30 d.</div>
+                <div class="act_as_cell" style="width: 9.64%;">1 - 30 d.</div>
                 <!--## age_60_days-->
-                <div class="act_as_cell" style="width: 110px;">31 - 60 d.</div>
+                <div class="act_as_cell" style="width: 9.64%;">31 - 60 d.</div>
                 <!--## age_90_days-->
-                <div class="act_as_cell" style="width: 110px;">61 - 90 d.</div>
+                <div class="act_as_cell" style="width: 9.64%;">61 - 90 d.</div>
                 <!--## age_120_days-->
-                <div class="act_as_cell" style="width: 110px;">91 - 120 d.</div>
+                <div class="act_as_cell" style="width: 9.64%;">91 - 120 d.</div>
                 <!--## older-->
-                <div class="act_as_cell" style="width: 110px;"> > 120 d.</div>
+                <div class="act_as_cell" style="width: 9.64%;"> > 120 d.</div>
             </div>
         </div>
     </template>
@@ -163,38 +165,47 @@
     </template>
 
     <template id="account_financial_report.report_aged_partner_balance_move_lines">
-        <div class="act_as_table data_table" style="width: 1140px !important;">
+        <div class="act_as_table data_table" style="width: 100%;">
             <!-- Display table headers for move lines -->
             <div class="act_as_thead">
                 <div class="act_as_row labels">
                     <!--## date-->
-                    <div class="act_as_cell first_column" style="width: 60px;">Date</div>
+                    <div class="act_as_cell first_column" style="width: 5.26%;">
+                        Date</div>
                     <!--## move-->
-                    <div class="act_as_cell" style="width: 100px;">Entry</div>
+                    <div class="act_as_cell" style="width: 8.77%;">Entry</div>
                     <!--## journal-->
-                    <div class="act_as_cell" style="width: 40px;">Journal</div>
+                    <div class="act_as_cell" style="width: 5.01%;">Journal</div>
                     <!--## account code-->
-                    <div class="act_as_cell" style="width: 50px;">Account</div>
+                    <div class="act_as_cell" style="width: 6.88%;">Account</div>
                     <!--## partner-->
-                    <div class="act_as_cell" style="width: 120px;">Partner</div>
+                    <div class="act_as_cell" style="width: 10.52%;">Partner
+                    </div>
                     <!--## ref - label-->
-                    <div class="act_as_cell" style="width: 220px;">Ref - Label</div>
+                    <div class="act_as_cell" style="width: 19.23%;">Ref -
+                        Label</div>
                     <!--## date_due-->
-                    <div class="act_as_cell" style="width: 60px;">Due date</div>
+                    <div class="act_as_cell" style="width: 6.26%;">Due
+                        date</div>
                     <!--## amount_residual-->
-                    <div class="act_as_cell" style="width: 70px;">Residual</div>
+                    <div class="act_as_cell" style="width: 6.19%;">Residual
+                    </div>
                     <!--## current-->
-                    <div class="act_as_cell" style="width: 70px;">Current</div>
+                    <div class="act_as_cell" style="width: 6.19%;">Current</div>
                     <!--## age_30_days-->
-                    <div class="act_as_cell" style="width: 70px;">Age ≤ 30 d.</div>
+                    <div class="act_as_cell" style="width: 6.19%;">Age ≤ 30
+                        d.</div>
                     <!--## age_60_days-->
-                    <div class="act_as_cell" style="width: 70px;">Age ≤ 60 d.</div>
+                    <div class="act_as_cell" style="width: 6.19%;">Age ≤ 60
+                        d.</div>
                     <!--## age_90_days-->
-                    <div class="act_as_cell" style="width: 70px;">Age ≤ 90 d.</div>
+                    <div class="act_as_cell" style="width: 6.19%;">Age ≤ 90
+                        d.</div>
                     <!--## age_120_days-->
-                    <div class="act_as_cell" style="width: 70px;">Age ≤ 120 d.</div>
+                    <div class="act_as_cell" style="width: 6.19%;">Age ≤ 120
+                        d.</div>
                     <!--## older-->
-                    <div class="act_as_cell" style="width: 70px;">Older</div>
+                    <div class="act_as_cell" style="width: 6.19%;">Older</div>
                 </div>
             </div>
             <!-- Display each move lines -->
@@ -264,38 +275,39 @@
 
     <template id="account_financial_report.report_aged_partner_balance_partner_ending_cumul">
         <!-- Display ending balance line for partner -->
-        <div class="act_as_table list_table" style="width: 1141px !important;">
+        <div class="act_as_table list_table" style="width: 100%;">
             <div class="act_as_row labels" style="font-weight: bold;">
                 <!--## date-->
-                <div class="act_as_cell right" style="width: 590px;">Partner cumul aged balance</div>
+                <div class="act_as_cell right" style="width: 51.41%;">Partner
+                    cumul aged balance</div>
                 <!--## date_due-->
-                <div class="act_as_cell" style="width: 60px;"/>
+                <div class="act_as_cell" style="width: 5.26%;"/>
                 <!--## amount_residual-->
-                <div class="act_as_cell amount" style="width: 70px;">
+                <div class="act_as_cell amount" style="width: 6.19%;">
                     <span t-field="partner_cumul_line.amount_residual"/>
                 </div>
                 <!--## current-->
-                <div class="act_as_cell amount" style="width: 70px;">
+                <div class="act_as_cell amount" style="width: 6.19%;">
                     <span t-field="partner_cumul_line.current"/>
                 </div>
                 <!--## age_30_days-->
-                <div class="act_as_cell amount" style="width: 70px;">
+                <div class="act_as_cell amount" style="width: 6.19%;">
                     <span t-field="partner_cumul_line.age_30_days"/>
                 </div>
                 <!--## age_60_days-->
-                <div class="act_as_cell amount" style="width: 70px;">
+                <div class="act_as_cell amount" style="width: 6.19%;">
                     <span t-field="partner_cumul_line.age_60_days"/>
                 </div>
                 <!--## age_90_days-->
-                <div class="act_as_cell amount" style="width: 70px;">
+                <div class="act_as_cell amount" style="width: 6.19%;">
                     <span t-field="partner_cumul_line.age_90_days"/>
                 </div>
                 <!--## age_120_days-->
-                <div class="act_as_cell amount" style="width: 70px;">
+                <div class="act_as_cell amount" style="width: 6.19%;">
                     <span t-field="partner_cumul_line.age_120_days"/>
                 </div>
                 <!--## older-->
-                <div class="act_as_cell amount" style="width: 70px;">
+                <div class="act_as_cell amount" style="width: 6.19%;">
                     <span t-field="partner_cumul_line.older"/>
                 </div>
             </div>
@@ -304,71 +316,71 @@
 
     <template id="account_financial_report.report_aged_partner_balance_account_ending_cumul">
         <!-- Display ending balance line for account -->
-        <div class="act_as_table list_table" style="width: 1141px !important;">
+        <div class="act_as_table list_table" style="width: 100%;">
             <div class="act_as_row labels" style="font-weight: bold;">
                 <t t-if="not show_move_line_details">
                     <!--## total-->
-                    <div class="act_as_cell right" style="width: 370px;">Total</div>
+                    <div class="act_as_cell right" style="width: 32.52%;">Total</div>
                     <!--## amount_residual-->
-                    <div class="act_as_cell amount" style="width: 110px;">
+                    <div class="act_as_cell amount" style="width: 9.64%;">
                         <span t-field="account.cumul_amount_residual"/>
                     </div>
                     <!--## current-->
-                    <div class="act_as_cell amount" style="width: 110px;">
+                    <div class="act_as_cell amount" style="width: 9.64%;">
                         <span t-field="account.cumul_current"/>
                     </div>
                     <!--## age_30_days-->
-                    <div class="act_as_cell amount" style="width: 110px;">
+                    <div class="act_as_cell amount" style="width: 9.64%;">
                         <span t-field="account.cumul_age_30_days"/>
                     </div>
                     <!--## age_60_days-->
-                    <div class="act_as_cell amount" style="width: 110px;">
+                    <div class="act_as_cell amount" style="width: 9.64%;">
                         <span t-field="account.cumul_age_60_days"/>
                     </div>
                     <!--## age_90_days-->
-                    <div class="act_as_cell amount" style="width: 110px;">
+                    <div class="act_as_cell amount" style="width: 9.64%;">
                         <span t-field="account.cumul_age_90_days"/>
                     </div>
                     <!--## age_120_days-->
-                    <div class="act_as_cell amount" style="width: 110px;">
+                    <div class="act_as_cell amount" style="width: 9.64%;">
                         <span t-field="account.cumul_age_120_days"/>
                     </div>
                     <!--## older-->
-                    <div class="act_as_cell amount" style="width: 110px;">
+                    <div class="act_as_cell amount" style="width: 9.64%;">
                         <span t-field="account.cumul_older"/>
                     </div>
                 </t>
                 <t t-if="show_move_line_details">
                     <!--## total-->
-                    <div class="act_as_cell right" style="width: 590px;">Total</div>
+                    <div class="act_as_cell right" style="width: 51.41%;">Total</div>
                     <!--## date_due-->
-                    <div class="act_as_cell" style="width: 60px;"/>
+                    <div class="act_as_cell" style="width: 5.26%;"/>
                     <!--## amount_residual-->
-                    <div class="act_as_cell amount" style="width: 70px;">
+                    <div class="act_as_cell amount" style="width: 6.19%">
                         <span t-field="account.cumul_amount_residual"/>
                     </div>
                     <!--## current-->
-                    <div class="act_as_cell amount" style="width: 70px;">
+                    <div class="act_as_cell amount" style="width: 6.19%">
                         <span t-field="account.cumul_current"/>
                     </div>
                     <!--## age_30_days-->
-                    <div class="act_as_cell amount" style="width: 70px;">
+                    <div class="act_as_cell amount" style="width: 6.19%">
                         <span t-field="account.cumul_age_30_days"/>
                     </div>
                     <!--## age_60_days-->
-                    <div class="act_as_cell amount" style="width: 70px;">
+                    <div class="act_as_cell amount" style="width: 6.19%">
                         <span t-field="account.cumul_age_60_days"/>
                     </div>
                     <!--## age_90_days-->
-                    <div class="act_as_cell amount" style="width: 70px;">
+                    <div class="act_as_cell amount" style="width: 6.19%">
                         <span t-field="account.cumul_age_90_days"/>
                     </div>
                     <!--## age_120_days-->
-                    <div class="act_as_cell amount" style="width: 70px;">
+                    <div class="act_as_cell amount" style="width: 6.19%">
                         <span t-field="account.cumul_age_120_days"/>
                     </div>
                     <!--## older-->
-                    <div class="act_as_cell amount" style="width: 70px;">
+                    <div class="act_as_cell amount" style="width: 6.19%">
                         <span t-field="account.cumul_older"/>
                     </div>
                 </t>
@@ -376,53 +388,55 @@
             <div class="act_as_row" style="font-weight: bold; font-style: italic;">
                 <t t-if="not show_move_line_details">
                     <!--## total-->
-                    <div class="act_as_cell right" style="width: 370px;">Percents</div>
+                    <div class="act_as_cell right" style="width: 32.52%;">
+                        Percents</div>
                     <!--## amount_residual-->
-                    <div class="act_as_cell amount" style="width: 110px;"/>
+                    <div class="act_as_cell amount" style="width: 9.64%;"/>
                     <!--## current-->
-                    <div class="act_as_cell amount" style="width: 110px;"><span t-field="account.percent_current"/>%
+                    <div class="act_as_cell amount" style="width: 9.64%;"><span t-field="account.percent_current"/>%
                     </div>
                     <!--## age_30_days-->
-                    <div class="act_as_cell amount" style="width: 110px;"><span t-field="account.percent_age_30_days"/>%
+                    <div class="act_as_cell amount" style="width: 9.64%;"><span t-field="account.percent_age_30_days"/>%
                     </div>
                     <!--## age_60_days-->
-                    <div class="act_as_cell amount" style="width: 110px;"><span t-field="account.percent_age_60_days"/>%
+                    <div class="act_as_cell amount" style="width: 9.64%;"><span t-field="account.percent_age_60_days"/>%
                     </div>
                     <!--## age_90_days-->
-                    <div class="act_as_cell amount" style="width: 110px;"><span t-field="account.percent_age_90_days"/>%
+                    <div class="act_as_cell amount" style="width: 9.64%;"><span t-field="account.percent_age_90_days"/>%
                     </div>
                     <!--## age_120_days-->
-                    <div class="act_as_cell amount" style="width: 110px;"><span t-field="account.percent_age_120_days"/>
+                    <div class="act_as_cell amount" style="width: 9.64%;"><span t-field="account.percent_age_120_days"/>
                         %
                     </div>
                     <!--## older-->
-                    <div class="act_as_cell amount" style="width: 110px;"><span t-field="account.percent_older"/>%
+                    <div class="act_as_cell amount" style="width: 9.64%;"><span t-field="account.percent_older"/>%
                     </div>
                 </t>
                 <t t-if="show_move_line_details">
                     <!--## total-->
-                    <div class="act_as_cell right" style="width: 590px;">Percents</div>
+                    <div class="act_as_cell right" style="width: 51.41%;">
+                        Percents</div>
                     <!--## date_due-->
-                    <div class="act_as_cell" style="width: 60px;"/>
+                    <div class="act_as_cell" style="width: 5.26%;"/>
                     <!--## amount_residual-->
-                    <div class="act_as_cell amount" style="width: 70px;"/>
+                    <div class="act_as_cell amount" style="width: 6.19%"/>
                     <!--## current-->
-                    <div class="act_as_cell amount" style="width: 70px;"><span t-field="account.percent_current"/>%
+                    <div class="act_as_cell amount" style="width: 6.19%"><span t-field="account.percent_current"/>%
                     </div>
                     <!--## age_30_days-->
-                    <div class="act_as_cell amount" style="width: 70px;"><span t-field="account.percent_age_30_days"/>%
+                    <div class="act_as_cell amount" style="width: 6.19%"><span t-field="account.percent_age_30_days"/>%
                     </div>
                     <!--## age_60_days-->
-                    <div class="act_as_cell amount" style="width: 70px;"><span t-field="account.percent_age_60_days"/>%
+                    <div class="act_as_cell amount" style="width: 6.19%"><span t-field="account.percent_age_60_days"/>%
                     </div>
                     <!--## age_90_days-->
-                    <div class="act_as_cell amount" style="width: 70px;"><span t-field="account.percent_age_90_days"/>%
+                    <div class="act_as_cell amount" style="width: 6.19%"><span t-field="account.percent_age_90_days"/>%
                     </div>
                     <!--## age_120_days-->
-                    <div class="act_as_cell amount" style="width: 70px;"><span t-field="account.percent_age_120_days"/>%
+                    <div class="act_as_cell amount" style="width: 6.19%"><span t-field="account.percent_age_120_days"/>%
                     </div>
                     <!--## older-->
-                    <div class="act_as_cell amount" style="width: 70px;"><span t-field="account.percent_older"/>%
+                    <div class="act_as_cell amount" style="width: 6.19%"><span t-field="account.percent_older"/>%
                     </div>
                 </t>
             </div>
