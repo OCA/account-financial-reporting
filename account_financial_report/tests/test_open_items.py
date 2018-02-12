@@ -25,12 +25,12 @@ class TestOpenItems(abstract_test.AbstractTest):
         return 'account_financial_report.action_report_open_items_xlsx'
 
     def _getReportTitle(self):
-        return 'Odoo Report'
+        return 'Odoo'
 
     def _getBaseFilters(self):
         return {
             'date_at': time.strftime('%Y-12-31'),
-            'company_id': self.env.ref('base.main_company').id,
+            'company_id': self.company.id,
         }
 
     def _getAdditionalFiltersToBeTested(self):
