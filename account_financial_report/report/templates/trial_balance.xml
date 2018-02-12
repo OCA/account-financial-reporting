@@ -24,7 +24,7 @@
 
                 <!-- Display account lines -->
                 <t t-if="not show_partner_details">
-                    <div class="act_as_table data_table" style="width: 1140px !important;">
+                    <div class="act_as_table data_table" style="width: 100%;">
                         <!-- Display account header -->
                         <t t-call="account_financial_report.report_trial_balance_lines_header"/>
 
@@ -42,11 +42,13 @@
                         <div class="page_break">
                             <!-- Display account header -->
                             <div class="act_as_table list_table" style="margin-top: 10px;"/>
-                            <div class="act_as_caption account_title" style="width: 1141px !important;">
+                            <div class="act_as_caption account_title"
+                                 style="width: 100%;">
                                 <span t-field="account.code"/> - <span t-field="account.name"/>
                             </div>
 
-                            <div class="act_as_table data_table" style="width: 1140px !important;">
+                            <div class="act_as_table data_table"
+                                 style="width: 100%;">
                                 <!-- Display account/partner header -->
                                 <t t-call="account_financial_report.report_trial_balance_lines_header"/>
 
@@ -66,7 +68,7 @@
     </template>
 
     <template id="account_financial_report.report_trial_balance_filters">
-        <div class="act_as_table data_table" style="width: 1140px !important;">
+        <div class="act_as_table data_table" style="width: 100%;">
             <div class="act_as_row labels">
                 <div class="act_as_cell">Date range filter</div>
                 <div class="act_as_cell">Target moves filter</div>
@@ -94,22 +96,25 @@
             <div class="act_as_row labels">
                 <t t-if="not show_partner_details">
                     <!--## Code-->
-                    <div class="act_as_cell" style="width: 100px;">Code</div>
+                    <div class="act_as_cell" style="width: 8.86%;">Code</div>
                     <!--## Account-->
-                    <div class="act_as_cell" style="width: 600px;">Account</div>
+                    <div class="act_as_cell" style="width: 52.58%;">Account
+                    </div>
                 </t>
                 <t t-if="show_partner_details">
                     <!--## Partner-->
-                    <div class="act_as_cell" style="width: 700px;">Partner</div>
+                    <div class="act_as_cell" style="width: 61.44%;">Partner
+                    </div>
                 </t>
                 <!--## Initial balance-->
-                <div class="act_as_cell" style="width: 110px;">Initial balance</div>
+                <div class="act_as_cell" style="width: 9.64%;">Initial
+                    balance</div>
                 <!--## Debit-->
-                <div class="act_as_cell" style="width: 110px;">Debit</div>
+                <div class="act_as_cell" style="width: 9.64%;">Debit</div>
                 <!--## Credit-->
-                <div class="act_as_cell" style="width: 110px;">Credit</div>
+                <div class="act_as_cell" style="width: 9.64%;">Credit</div>
                 <!--## Ending balance-->
-                <div class="act_as_cell" style="width: 110px;">Ending balance</div>
+                <div class="act_as_cell" style="width: 9.64%;">Ending balance</div>
             </div>
         </div>
     </template>
@@ -136,18 +141,19 @@
 
     <template id="account_financial_report.report_trial_balance_account_footer">
         <!-- Display account footer -->
-        <div class="act_as_table list_table" style="width: 1141px !important;">
+        <div class="act_as_table list_table" style="width: 100%;">
             <div class="act_as_row labels" style="font-weight: bold;">
                 <!--## Account-->
-                <div class="act_as_cell left" style="width: 700px;"><span t-field="account.code"/> - <span t-field="account.name"/></div>
+                <div class="act_as_cell left" style="width: 61.44%;"><span
+                        t-field="account.code"/> - <span t-field="account.name"/></div>
                 <!--## Initial balance-->
-                <div class="act_as_cell amount" style="width: 110px;"><span t-field="account.initial_balance"/></div>
+                <div class="act_as_cell amount" style="width: 9.64%;"><span t-field="account.initial_balance"/></div>
                 <!--## Debit-->
-                <div class="act_as_cell amount" style="width: 110px;"><span t-field="account.debit"/></div>
+                <div class="act_as_cell amount" style="width: 9.64%;"><span t-field="account.debit"/></div>
                 <!--## Credit-->
-                <div class="act_as_cell amount" style="width: 110px;"><span t-field="account.credit"/></div>
+                <div class="act_as_cell amount" style="width: 9.64%;"><span t-field="account.credit"/></div>
                 <!--## Ending balance-->
-                <div class="act_as_cell amount" style="width: 110px;"><span t-field="account.final_balance"/></div>
+                <div class="act_as_cell amount" style="width: 9.64%;"><span t-field="account.final_balance"/></div>
             </div>
         </div>
     </template>
