@@ -5,7 +5,7 @@
 
 import time
 from . import abstract_test
-from odoo.tests.common import TransactionCase
+from odoo.tests import common
 
 
 class TestGeneralLedger(abstract_test.AbstractTest):
@@ -27,13 +27,13 @@ class TestGeneralLedger(abstract_test.AbstractTest):
                'action_report_general_ledger_xlsx'
 
     def _getReportTitle(self):
-        return 'Odoo Report'
+        return 'Odoo'
 
     def _getBaseFilters(self):
         return {
             'date_from': time.strftime('%Y-01-01'),
             'date_to': time.strftime('%Y-12-31'),
-            'company_id': self.env.ref('base.main_company').id,
+            'company_id': self.company.id,
             'fy_start_date': time.strftime('%Y-01-01'),
         }
 
@@ -53,7 +53,9 @@ class TestGeneralLedger(abstract_test.AbstractTest):
         ]
 
 
-class TestGeneralLedgerReport(TransactionCase):
+@common.at_install(False)
+@common.post_install(True)
+class TestGeneralLedgerReport(common.TransactionCase):
 
     def setUp(self):
         super(TestGeneralLedgerReport, self).setUp()

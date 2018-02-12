@@ -15,6 +15,7 @@
     "website": "https://odoo-community.org/",
     'depends': [
         'account',
+        'account_invoicing',
         'date_range',
         'report_xlsx',
     ],
