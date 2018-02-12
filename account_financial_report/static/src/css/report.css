@@ -102,4 +102,7 @@ body, table, td, span, div {
     background-color: @odoo-view-background-color;
     color: @odoo-main-text-color;
     padding-top: 10px;
+    width: 90%;
+    margin-right: auto;
+    margin-left: auto;
 }

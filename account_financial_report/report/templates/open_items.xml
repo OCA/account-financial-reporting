@@ -28,7 +28,8 @@
                 <div class="page_break">
                     <!-- Display account header -->
                     <div class="act_as_table list_table" style="margin-top: 10px;"/>
-                    <div class="act_as_caption account_title" style="width: 1141px !important;">
+                    <div class="act_as_caption account_title"
+                         style="width: 100%;">
                         <span t-field="account.code"/>
                         -
                         <span t-field="account.name"/>
@@ -64,7 +65,7 @@
     </template>
 
     <template id="account_financial_report.report_open_items_filters">
-        <div class="act_as_table data_table" style="width: 1140px !important;">
+        <div class="act_as_table data_table" style="width: 100%;">
             <div class="act_as_row labels">
                 <div class="act_as_cell">Date at filter</div>
                 <div class="act_as_cell">Target moves filter</div>
@@ -87,34 +88,39 @@
     </template>
 
     <template id="account_financial_report.report_open_items_lines">
-        <div class="act_as_table data_table" style="width: 1140px !important;">
+        <div class="act_as_table data_table" style="width: 100%;">
             <!-- Display table headers for lines -->
             <div class="act_as_thead">
                 <div class="act_as_row labels">
                     <!--## date-->
-                    <div class="act_as_cell first_column" style="width: 60px;">Date</div>
+                    <div class="act_as_cell first_column" style="width: 6.76%;">
+                        Date</div>
                     <!--## move-->
-                    <div class="act_as_cell" style="width: 100px;">Entry</div>
+                    <div class="act_as_cell" style="width: 9.76%;">Entry</div>
                     <!--## journal-->
-                    <div class="act_as_cell" style="width: 40px;">Journal</div>
+                    <div class="act_as_cell" style="width: 4.78%;">Journal</div>
                     <!--## account code-->
-                    <div class="act_as_cell" style="width: 50px;">Account</div>
+                    <div class="act_as_cell" style="width: 5.38%;">Account</div>
                     <!--## partner-->
-                    <div class="act_as_cell" style="width: 140px;">Partner</div>
+                    <div class="act_as_cell" style="width: 12.0%;">Partner
+                    </div>
                     <!--## ref - label-->
-                    <div class="act_as_cell" style="width: 290px;">Ref - Label</div>
+                    <div class="act_as_cell" style="width: 25.5%;">Ref -
+                        Label</div>
                     <!--## date_due-->
-                    <div class="act_as_cell" style="width: 60px;">Due date</div>
+                    <div class="act_as_cell" style="width: 6.47%;">Due
+                        date</div>
                     <!--## amount_total_due-->
-                    <div class="act_as_cell" style="width: 75px;">Original</div>
+                    <div class="act_as_cell" style="width: 6.57%;">Original
+                    </div>
                     <!--## amount_residual-->
-                    <div class="act_as_cell" style="width: 75px;">Residual</div>
+                    <div class="act_as_cell" style="width: 6.57%;">Residual</div>
                     <!--## currency_name-->
-                    <div class="act_as_cell" style="width: 35px;">Cur.</div>
+                    <div class="act_as_cell" style="width: 3.07%;">Cur.</div>
                     <!--## amount_total_due_currency-->
-                    <div class="act_as_cell amount" style="width: 75px;">Cur. Original</div>
+                    <div class="act_as_cell amount" style="width: 6.57%;">Cur. Original</div>
                     <!--## amount_residual_currency-->
-                    <div class="act_as_cell amount" style="width: 75px;">Cur. Residual</div>
+                    <div class="act_as_cell amount" style="width: 6.57%;">Cur. Residual</div>
                 </div>
             </div>
 
@@ -201,31 +207,34 @@
 
     <template id="account_financial_report.report_open_items_ending_cumul">
         <!-- Display ending balance line for account or partner -->
-        <div class="act_as_table list_table" style="width: 1141px !important;">
+        <div class="act_as_table list_table" style="width: 100%;">
             <div class="act_as_row labels" style="font-weight: bold;">
                 <!--## date-->
                 <t t-if='type == "account_type"'>
-                    <div class="act_as_cell first_column" style="width: 380px;">
+                    <div class="act_as_cell first_column" style="width: 34.3%;">
                         <span t-field="account_or_partner_object.code"/>
                         -
                         <span t-field="account_or_partner_object.name"/>
                     </div>
-                    <div class="act_as_cell right" style="width: 290px;">Ending balance</div>
+                    <div class="act_as_cell right" style="width: 26.4%;">Ending
+                        balance</div>
                 </t>
                 <t t-if='type == "partner_type"'>
-                    <div class="act_as_cell first_column" style="width: 380px;"/>
-                    <div class="act_as_cell right" style="width: 290px;">Partner ending balance</div>
+                    <div class="act_as_cell first_column"
+                         style="width: 34.3%;"/>
+                    <div class="act_as_cell right"
+                         style="width: 26.4%;">Partner ending balance</div>
                 </t>
                 <!--## date_due-->
-                <div class="act_as_cell" style="width: 60px;"/>
+                <div class="act_as_cell" style="width: 6.26%;"/>
                 <!--## amount_total_due-->
-                <div class="act_as_cell amount" style="width: 75px;"/>
+                <div class="act_as_cell amount" style="width: 7.57%;"/>
                 <!--## amount_currency-->
-                <div class="act_as_cell amount" style="width: 75px;">
+                <div class="act_as_cell amount" style="width: 7.57%;">
                     <span t-field="account_or_partner_object.final_amount_residual"/>
                 </div>
                 <!--## currency_name + amount_total_due_currency + amount_residual_currency -->
-                <div class="act_as_cell" style="width: 185px;"/>
+                <div class="act_as_cell" style="width: 17.90%;"/>
             </div>
         </div>
     </template>
