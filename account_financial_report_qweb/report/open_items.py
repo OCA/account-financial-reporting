@@ -35,6 +35,8 @@ class OpenItemsReport(models.TransientModel):
         inverse_name='report_id'
     )
 
+    user_id = fields.Many2one('res.users', string='Salesman')
+
 
 class OpenItemsReportAccount(models.TransientModel):
 
@@ -188,7 +190,7 @@ WITH
             INNER JOIN
                 account_move_line ml ON a.id = ml.account_id AND ml.date <= %s
             """
-        if self.filter_partner_ids:
+        if self.filter_partner_ids or self.user_id:
             query_inject_account += """
             INNER JOIN
                 res_partner p ON ml.partner_id = p.id
@@ -212,6 +214,11 @@ WITH
             query_inject_account += """
             AND
                 p.id IN %s
+            """
+        if self.user_id:
+            query_inject_account += """
+            AND
+                p.user_id = %s
             """
         query_inject_account += """
             GROUP BY
@@ -248,6 +255,10 @@ FROM
         if self.filter_partner_ids:
             query_inject_account_params += (
                 tuple(self.filter_partner_ids.ids),
+            )
+        if self.user_id:
+            query_inject_account_params += (
+                self.user_id.id,
             )
         query_inject_account_params += (
             self.id,
@@ -301,6 +312,11 @@ WITH
             AND
                 p.id IN %s
             """
+        if self.user_id:
+            query_inject_partner += """
+            AND
+                p.user_id = %s
+            """
         query_inject_partner += """
             GROUP BY
                 ra.id,
@@ -333,6 +349,10 @@ FROM
         if self.filter_partner_ids:
             query_inject_partner_params += (
                 tuple(self.filter_partner_ids.ids),
+            )
+        if self.user_id:
+            query_inject_partner_params += (
+                self.user_id.id,
             )
         query_inject_partner_params += (
             self.env.uid,
