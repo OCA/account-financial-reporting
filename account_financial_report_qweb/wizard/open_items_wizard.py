@@ -45,6 +45,8 @@ class OpenItemsReportWizard(models.TransientModel):
         string='Filter partners',
     )
 
+    user_id = fields.Many2one('res.users', string='Salesman')
+
     @api.onchange('receivable_accounts_only', 'payable_accounts_only')
     def onchange_type_accounts_only(self):
         """Handle receivable/payable accounts only change."""
@@ -79,6 +81,7 @@ class OpenItemsReportWizard(models.TransientModel):
             'company_id': self.company_id.id,
             'filter_account_ids': [(6, 0, self.account_ids.ids)],
             'filter_partner_ids': [(6, 0, self.partner_ids.ids)],
+            'user_id': self.user_id.id,
         }
 
     def _export(self, xlsx_report=False):

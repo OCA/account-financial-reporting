@@ -18,6 +18,9 @@
                         <field name="target_move" widget="radio"/>
                         <field name="hide_account_balance_at_0"/>
                     </group>
+                    <group name="salesman_filters">
+                        <field name="user_id"/>
+                    </group>
                 </group>
                 <label for="partner_ids"/>
                 <field name="partner_ids" nolabel="1" options="{'no_create': True}"/>
