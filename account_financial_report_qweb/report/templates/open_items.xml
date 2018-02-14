@@ -60,11 +60,15 @@
     <template id="account_financial_report_qweb.report_open_items_qweb_filters">
         <div class="act_as_table data_table" style="width: 1140px !important;">
             <div class="act_as_row labels">
+                <div t-if="o.user_id" class="act_as_cell">Agent</div>
                 <div class="act_as_cell">Date at filter</div>
                 <div class="act_as_cell">Target moves filter</div>
                 <div class="act_as_cell">Account balance at 0 filter</div>
             </div>
             <div class="act_as_row">
+                <div t-if="o.user_id" class="act_as_cell">
+                    <span t-field="o.user_id"/>
+                </div>
                 <div class="act_as_cell">
                     <span t-field="o.date_at"/>
                 </div>
