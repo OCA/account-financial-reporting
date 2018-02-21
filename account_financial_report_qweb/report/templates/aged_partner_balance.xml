@@ -100,7 +100,7 @@
                 <!--## amount_residual-->
                 <div class="act_as_cell" style="width: 110px;">Residual</div>
                 <!--## current-->
-                <div class="act_as_cell" style="width: 110px;">Current</div>
+                <div class="act_as_cell" style="width: 110px;">Not due</div>
                 <!--## age_30_days-->
                 <div class="act_as_cell" style="width: 110px;">Age ≤ 30 d.</div>
                 <!--## age_60_days-->
