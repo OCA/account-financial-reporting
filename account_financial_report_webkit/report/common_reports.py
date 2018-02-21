@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Author: Nicolas Bessi, Guewen Baconnier
@@ -24,7 +24,7 @@
 
 import logging
 
-from openerp.osv import osv
+from openerp.exceptions import except_orm
 from openerp.tools.translate import _
 from openerp.addons.account.report.common_report_header \
     import common_report_header
@@ -361,7 +361,7 @@ class CommonReportHeaderWebkit(common_report_header):
                                  limit=1,
                                  order='date_start %s' % (order,))
         if not p_id:
-            raise osv.except_osv(_('No period found'), '')
+            raise except_orm(_('No period found'), '')
         return period_obj.browse(self.cursor, self.uid, p_id[0])
 
     ###############################
@@ -404,7 +404,7 @@ class CommonReportHeaderWebkit(common_report_header):
         opening_period_selected = self.get_included_opening_period(
             start_period)
         if not opening_period_selected:
-            raise osv.except_osv(
+            raise except_orm(
                 _('Error'),
                 _('No opening period found to compute the opening balances.\n'
                   'You have to configure a period on the first of January'
@@ -490,7 +490,7 @@ class CommonReportHeaderWebkit(common_report_header):
                            target_move, mode='include_opening'):
         """Get account move lines base on form data"""
         if mode not in ('include_opening', 'exclude_opening'):
-            raise osv.except_osv(
+            raise except_orm(
                 _('Invalid query mode'),
                 _('Must be in include_opening, exclude_opening'))
 
@@ -502,7 +502,7 @@ class CommonReportHeaderWebkit(common_report_header):
             return self._get_move_ids_from_dates(account_id, start, stop,
                                                  target_move)
         else:
-            raise osv.except_osv(
+            raise except_orm(
                 _('No valid filter'), _('Please set a valid time filter'))
 
     def _get_move_line_datas(self, move_line_ids,

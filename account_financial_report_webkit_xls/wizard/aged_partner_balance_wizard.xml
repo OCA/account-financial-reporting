@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+
+    <record id="account_aged_trial_balance_webkit" model="ir.ui.view">
+      <field name="name">account.aged.trial.balance.webkit.xls</field>
+      <field name="model">account.aged.trial.balance.webkit</field>
+      <field name="type">form</field>
+      <field name="inherit_id" ref="account_financial_report_webkit.account_aged_trial_balance_webkit"/>
+      <field name="arch" type="xml">
+        <button string="Print" position="after">
+          <button icon="gtk-execute" name="xls_export" string="Export" type="object" context="{'xls_export':1}" colspan="2"/>
+        </button>
+      </field>
+    </record>
+
+  </data>
+</openerp>

@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Author: Nicolas Bessi, Guewen Baconnier
@@ -23,7 +23,7 @@ from collections import defaultdict
 from datetime import datetime
 
 from openerp.modules.registry import RegistryManager
-from openerp.osv import osv
+from openerp.exceptions import except_orm
 from openerp.report import report_sxw
 from openerp.tools.translate import _
 from .common_partner_reports import CommonPartnersReportHeaderWebkit
@@ -33,6 +33,7 @@ from .webkit_parser_header_fix import HeaderFooterTextWebKitParser
 class PartnersLedgerWebkit(report_sxw.rml_parse,
                            CommonPartnersReportHeaderWebkit):
 
+    # pylint: disable=old-api7-method-defined
     def __init__(self, cursor, uid, name, context):
         super(PartnersLedgerWebkit, self).__init__(
             cursor, uid, name, context=context)
@@ -118,7 +119,7 @@ class PartnersLedgerWebkit(report_sxw.rml_parse,
                                          only_type=filter_type)
 
         if not accounts:
-            raise osv.except_osv(_('Error'), _('No accounts to print.'))
+            raise except_orm(_('Error'), _('No accounts to print.'))
 
         if main_filter == 'filter_date':
             start = start_date

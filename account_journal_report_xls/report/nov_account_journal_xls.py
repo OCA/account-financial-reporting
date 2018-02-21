@@ -4,20 +4,21 @@
 
 import xlwt
 from datetime import datetime
-from openerp.osv import orm
 from openerp.addons.report_xls.report_xls import report_xls
 from openerp.addons.report_xls.utils import rowcol_to_cell, _render
-from .nov_account_journal import nov_journal_print
+from .nov_account_journal import NovJournalPrint
 from openerp.tools.translate import _
+from openerp.exceptions import except_orm
 import logging
 _logger = logging.getLogger(__name__)
 
 
-class account_journal_xls_parser(nov_journal_print):
+class AccountJournalXlsParser(NovJournalPrint):
 
+    # pylint: disable=old-api7-method-defined
     def __init__(self, cr, uid, name, context):
-        super(account_journal_xls_parser, self).__init__(cr, uid, name,
-                                                         context=context)
+        super(AccountJournalXlsParser, self).__init__(
+            cr, uid, name, context=context)
         journal_obj = self.pool.get('account.journal')
         self.context = context
         wanted_list = journal_obj._report_xls_fields(cr, uid, context)
@@ -29,11 +30,12 @@ class account_journal_xls_parser(nov_journal_print):
         })
 
 
-class account_journal_xls(report_xls):
+class AccountJournalXls(report_xls):
 
+    # pylint: disable=old-api7-method-defined
     def __init__(self, name, table, rml=False, parser=False, header=True,
                  store=False):
-        super(account_journal_xls, self).__init__(
+        super(AccountJournalXls, self).__init__(
             name, table, rml, parser, header, store)
 
         # Cell Styles
@@ -305,7 +307,7 @@ class account_journal_xls(report_xls):
         cols_number = len(wanted_list)
         vat_summary_cols_number = len(vat_summary_wanted_list)
         if vat_summary_cols_number > cols_number:
-            raise orm.except_orm(
+            raise except_orm(
                 _('Programming Error!'),
                 _("vat_summary_cols_number should be < cols_number !"))
         index = 0
@@ -360,10 +362,12 @@ class account_journal_xls(report_xls):
             'credit')
         if not (self.credit_pos and self.debit_pos) and 'balance' \
                 in wanted_list:
-            raise orm.except_orm(_('Customisation Error!'),
-                                 _("The 'Balance' field is a calculated XLS \
-                                    field requiring the presence of the \
-                                    'Debit' and 'Credit' fields !"))
+            raise except_orm(
+                _('Customisation Error!'),
+                _("The 'Balance' field is a calculated XLS \
+                  field requiring the presence of the \
+                  'Debit' and 'Credit' fields !")
+            )
 
         for o in objects:
 
@@ -387,5 +391,7 @@ class account_journal_xls(report_xls):
             row_pos = self._journal_vat_summary(o, ws, _p, row_pos, _xs)
 
 
-account_journal_xls('report.nov.account.journal.xls', 'account.journal.period',
-                    parser=account_journal_xls_parser)
+AccountJournalXls(
+    'report.nov.account.journal.xls', 'account.journal.period',
+    parser=AccountJournalXlsParser,
+)

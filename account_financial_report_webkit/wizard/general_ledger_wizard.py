@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Author: Nicolas Bessi, Guewen Baconnier
@@ -20,11 +20,10 @@
 ##############################################################################
 
 import time
+from openerp import models, fields
 
-from openerp.osv import fields, orm
 
-
-class AccountReportGeneralLedgerWizard(orm.TransientModel):
+class AccountReportGeneralLedgerWizard(models.TransientModel):
 
     """Will launch general ledger report and pass required args"""
 
@@ -32,6 +31,7 @@ class AccountReportGeneralLedgerWizard(orm.TransientModel):
     _name = "general.ledger.webkit"
     _description = "General Ledger Report"
 
+    # pylint: disable=old-api7-method-defined
     def _get_account_ids(self, cr, uid, context=None):
         res = False
         if context.get('active_model', False) == 'account.account' \
@@ -39,30 +39,27 @@ class AccountReportGeneralLedgerWizard(orm.TransientModel):
             res = context['active_ids']
         return res
 
-    _columns = {
-        'amount_currency': fields.boolean("With Currency",
-                                          help="It adds the currency column"),
+    amount_currency = fields.Boolean(
+        "With Currency", help="It adds the currency column", default=False,
+    )
+    display_account = fields.Selection(
+        [
+            ('bal_all', 'All'),
+            ('bal_mix', 'With transactions or non zero balance')
+        ],
+        'Display accounts', required=True, default='bal_mix',
+    )
+    account_ids = fields.Many2many(
+        'account.account', string='Filter on accounts',
+        help="Only selected accounts will be printed. Leave empty to "
+        "print all accounts.", default=lambda self: self._get_account_ids(),
+    )
+    centralize = fields.Boolean(
+        'Activate Centralization', default=True,
+        help='Uncheck to display all the details of centralized accounts.',
+    )
 
-        'display_account': fields.selection(
-            [('bal_all', 'All'),
-             ('bal_mix', 'With transactions or non zero balance')],
-            'Display accounts',
-            required=True),
-        'account_ids': fields.many2many(
-            'account.account', string='Filter on accounts',
-            help="""Only selected accounts will be printed. Leave empty to
-                    print all accounts."""),
-        'centralize': fields.boolean(
-            'Activate Centralization',
-            help='Uncheck to display all the details of centralized accounts.')
-    }
-    _defaults = {
-        'amount_currency': False,
-        'display_account': 'bal_mix',
-        'account_ids': _get_account_ids,
-        'centralize': True,
-    }
-
+    # pylint: disable=old-api7-method-defined
     def _check_fiscalyear(self, cr, uid, ids, context=None):
         obj = self.read(
             cr, uid, ids[0], ['fiscalyear_id', 'filter'], context=context)
@@ -76,6 +73,7 @@ class AccountReportGeneralLedgerWizard(orm.TransientModel):
          periods or by date.', ['filter']),
     ]
 
+    # pylint: disable=old-api7-method-defined
     def pre_print_report(self, cr, uid, ids, data, context=None):
         data = super(AccountReportGeneralLedgerWizard, self).pre_print_report(
             cr, uid, ids, data, context=context)
@@ -90,6 +88,7 @@ class AccountReportGeneralLedgerWizard(orm.TransientModel):
         data['form'].update(vals)
         return data
 
+    # pylint: disable=old-api7-method-defined
     def onchange_filter(self, cr, uid, ids, filter='filter_no',
                         fiscalyear_id=False, context=None):
         res = {}
@@ -148,6 +147,7 @@ class AccountReportGeneralLedgerWizard(orm.TransientModel):
                             end_period, 'date_from': False, 'date_to': False}
         return res
 
+    # pylint: disable=old-api7-method-defined
     def _print_report(self, cursor, uid, ids, data, context=None):
         # we update form with display account value
         data = self.pre_print_report(cursor, uid, ids, data, context=context)

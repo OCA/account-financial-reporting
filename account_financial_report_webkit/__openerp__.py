@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Authors: Nicolas Bessi, Guewen Baconnier
@@ -57,7 +57,7 @@
              'test/open_invoices.yml',
              'test/aged_trial_balance.yml'],
     # 'tests/account_move_line.yml'
-    'active': False,
     'installable': True,
     'application': True,
+    'pre_init_hook': 'pre_init_hook',
 }

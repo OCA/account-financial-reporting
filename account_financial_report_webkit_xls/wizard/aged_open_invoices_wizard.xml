@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+
+    <record id="aged_open_invoice_webkit" model="ir.ui.view">
+      <field name="model">aged.open.invoices.webkit</field>
+      <field name="type">form</field>
+      <field name="inherit_id" ref="account_financial_report_webkit.aged_open_invoice_webkit"/>
+      <field name="arch" type="xml">
+        <button string="Print" position="after">
+          <button icon="gtk-execute" name="xls_export" string="Export" type="object" context="{'xls_export':1}" colspan="2"/>
+        </button>
+      </field>
+    </record>
+
+  </data>
+</openerp>

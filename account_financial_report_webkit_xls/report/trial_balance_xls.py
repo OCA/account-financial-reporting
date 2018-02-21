@@ -11,8 +11,14 @@ from openerp.tools.translate import _
 # _logger = logging.getLogger(__name__)
 
 
-class trial_balance_xls(report_xls):
-    column_sizes = [12, 60, 17, 17, 17, 17, 17, 17]
+class TrialBalanceXls(report_xls):
+
+    # pylint: disable=old-api7-method-defined
+    def create(self, cr, uid, ids, data, context=None):
+        self._column_sizes = [12, 60, 17, 17, 17, 17, 17, 17]
+        self._debit_pos = 4
+        return super(TrialBalanceXls, self).create(
+            cr, uid, ids, data, context=context)
 
     def generate_xls_report(self, _p, _xs, data, objects, wb):
 
@@ -45,7 +51,7 @@ class trial_balance_xls(report_xls):
             ws, row_pos, row_data, row_style=cell_style)
 
         # write empty row to define column sizes
-        c_sizes = self.column_sizes
+        c_sizes = self._column_sizes
         c_specs = [('empty%s' % i, 1, c_sizes[i], 'text', None)
                    for i in range(0, len(c_sizes))]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
@@ -246,15 +252,14 @@ class trial_balance_xls(report_xls):
                 ('account', account_span, 0, 'text', current_account.name),
             ]
             if _p.comparison_mode == 'no_comparison':
-
-                debit_cell = rowcol_to_cell(row_pos, 4)
-                credit_cell = rowcol_to_cell(row_pos, 5)
+                debit_cell = rowcol_to_cell(row_pos, self._debit_pos)
+                credit_cell = rowcol_to_cell(row_pos, self._debit_pos + 1)
                 bal_formula = debit_cell + '-' + credit_cell
 
                 if _p.initial_balance_mode:
-                    init_cell = rowcol_to_cell(row_pos, 3)
-                    debit_cell = rowcol_to_cell(row_pos, 4)
-                    credit_cell = rowcol_to_cell(row_pos, 5)
+                    init_cell = rowcol_to_cell(row_pos, self._debit_pos - 1)
+                    debit_cell = rowcol_to_cell(row_pos, self._debit_pos)
+                    credit_cell = rowcol_to_cell(row_pos, self._debit_pos + 1)
                     bal_formula = init_cell + '+' + \
                         debit_cell + '-' + credit_cell
                     c_specs += [('init_bal', 1, 0, 'number',
@@ -301,6 +306,6 @@ class trial_balance_xls(report_xls):
                 ws, row_pos, row_data, row_style=cell_style)
 
 
-trial_balance_xls('report.account.account_report_trial_balance_xls',
-                  'account.account',
-                  parser=TrialBalanceWebkit)
+TrialBalanceXls('report.account.account_report_trial_balance_xls',
+                'account.account',
+                parser=TrialBalanceWebkit)

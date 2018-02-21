@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Author: Guewen Baconnier
@@ -36,6 +36,7 @@ def sign(number):
 class TrialBalanceWebkit(report_sxw.rml_parse,
                          CommonBalanceReportHeaderWebkit):
 
+    # pylint: disable=old-api7-method-defined
     def __init__(self, cursor, uid, name, context):
         super(TrialBalanceWebkit, self).__init__(cursor, uid, name,
                                                  context=context)

@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Author: Nicolas Bessi, Guewen Baconnier
@@ -19,11 +19,10 @@
 #
 ##############################################################################
 import time
+from openerp import models, fields
 
-from openerp.osv import fields, orm
 
-
-class AccountReportPartnersLedgerWizard(orm.TransientModel):
+class AccountReportPartnersLedgerWizard(models.TransientModel):
 
     """Will launch partner ledger report and pass required args"""
 
@@ -31,27 +30,25 @@ class AccountReportPartnersLedgerWizard(orm.TransientModel):
     _name = "partners.ledger.webkit"
     _description = "Partner Ledger Report"
 
-    _columns = {
-        'amount_currency': fields.boolean("With Currency",
-                                          help="It adds the currency column"),
-        'partner_ids': fields.many2many(
-            'res.partner',
-            string='Filter on partner',
-            help="Only selected partners will be printed. "
-            "Leave empty to print all partners."),
-        'filter': fields.selection(
-            [('filter_no', 'No Filters'),
-             ('filter_date', 'Date'),
-             ('filter_period', 'Periods')], "Filter by", required=True,
-            help='Filter by date: no opening balance will be displayed. '
-            '(opening balance can only be computed based on period to be \
-            correct).'),
-    }
-    _defaults = {
-        'amount_currency': False,
-        'result_selection': 'customer_supplier',
-    }
+    amount_currency = fields.Boolean(
+        "With Currency", help="It adds the currency column", default=False,
+    )
+    partner_ids = fields.Many2many(
+        'res.partner', string='Filter on partner',
+        help="Only selected partners will be printed. Leave empty to print "
+        "all partners."
+    )
+    filter = fields.Selection(
+        [('filter_no', 'No Filters'),
+         ('filter_date', 'Date'),
+         ('filter_period', 'Periods')], "Filter by", required=True,
+        help='Filter by date: no opening balance will be displayed. '
+        '(opening balance can only be computed based on period to be '
+        'correct).',
+    )
+    result_selection = fields.Selection(default='customer_supplier')
 
+    # pylint: disable=old-api7-method-defined
     def _check_fiscalyear(self, cr, uid, ids, context=None):
         obj = self.read(
             cr, uid, ids[0], ['fiscalyear_id', 'filter'], context=context)
@@ -66,6 +63,7 @@ class AccountReportPartnersLedgerWizard(orm.TransientModel):
          ['filter']),
     ]
 
+    # pylint: disable=old-api7-method-defined
     def onchange_filter(self, cr, uid, ids, filter='filter_no',
                         fiscalyear_id=False, context=None):
         res = {}
@@ -119,6 +117,7 @@ class AccountReportPartnersLedgerWizard(orm.TransientModel):
                             end_period, 'date_from': False, 'date_to': False}
         return res
 
+    # pylint: disable=old-api7-method-defined
     def pre_print_report(self, cr, uid, ids, data, context=None):
         data = super(AccountReportPartnersLedgerWizard, self).pre_print_report(
             cr, uid, ids, data, context=context)
@@ -132,6 +131,7 @@ class AccountReportPartnersLedgerWizard(orm.TransientModel):
         data['form'].update(vals)
         return data
 
+    # pylint: disable=old-api7-method-defined
     def _print_report(self, cursor, uid, ids, data, context=None):
         # we update form with display account value
         data = self.pre_print_report(cursor, uid, ids, data, context=context)

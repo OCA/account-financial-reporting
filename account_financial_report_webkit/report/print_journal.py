@@ -34,6 +34,7 @@ from .webkit_parser_header_fix import HeaderFooterTextWebKitParser
 
 class PrintJournalWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
 
+    # pylint: disable=old-api7-method-defined
     def __init__(self, cursor, uid, name, context):
         super(PrintJournalWebkit, self).__init__(cursor, uid, name,
                                                  context=context)
@@ -165,5 +166,3 @@ HeaderFooterTextWebKitParser(
     'addons/account_financial_report_webkit/report/templates/\
     account_report_print_journal.mako',
     parser=PrintJournalWebkit)
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
