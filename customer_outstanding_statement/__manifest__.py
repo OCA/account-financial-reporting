@@ -12,7 +12,8 @@
     'website': 'https://github.com/OCA/account-financial-reporting',
     'license': 'AGPL-3',
     'depends': [
-        'account',
+        'account_invoicing',
+        'web',
     ],
     'data': [
         'views/statement.xml',

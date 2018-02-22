@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2017 Eficent Business and IT Consulting Services S.L.
-#   (http://www.eficent.com)
+# Copyright 2018 Fork Sand, Inc.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from datetime import datetime, timedelta
@@ -257,7 +256,7 @@ class CustomerOutstandingStatement(models.AbstractModel):
         return res
 
     @api.multi
-    def render_html(self, docids, data):
+    def get_report_values(self, docids, data):
         company_id = data['company_id']
         partner_ids = data['partner_ids']
         date_end = data['date_end']
@@ -305,7 +304,7 @@ class CustomerOutstandingStatement(models.AbstractModel):
                         buckets_to_display[partner_id][currency] = []
                     buckets_to_display[partner_id][currency] = line
 
-        docargs = {
+        return {
             'doc_ids': partner_ids,
             'doc_model': 'res.partner',
             'docs': self.env['res.partner'].browse(partner_ids),
@@ -318,5 +317,3 @@ class CustomerOutstandingStatement(models.AbstractModel):
             'Date_end': date_end_display,
             'Date': today_display,
         }
-        return self.env['report'].render(
-            'customer_outstanding_statement.statement', values=docargs)
