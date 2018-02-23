@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-23 03:39+0000\n"
-"PO-Revision-Date: 2017-12-23 03:39+0000\n"
+"POT-Creation-Date: 2018-02-23 00:20+0000\n"
+"PO-Revision-Date: 2018-02-23 00:20+0000\n"
 "Last-Translator: Rudolf Schnapka <rs@techno-flex.de>, 2017\n"
 "Language-Team: German (https://www.transifex.com/oca/teams/23907/de/)\n"
 "MIME-Version: 1.0\n"
@@ -17,6 +17,31 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: account_financial_report
+#: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
+msgid "&gt; 120 d."
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
+msgid "1 - 30 d."
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
+msgid "31 - 60 d."
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
+msgid "61 - 90 d."
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
+msgid "91 - 120 d."
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_buttons
@@ -122,25 +147,21 @@ msgid "Age â¤ 90 d."
 msgstr "Alter bis 90 T."
 
 #. module: account_financial_report
-#: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid "Age ≤ 120 d."
 msgstr "Alter ≤ 120 T."
 
 #. module: account_financial_report
-#: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid "Age ≤ 30 d."
 msgstr "Alter ≤ 30 T."
 
 #. module: account_financial_report
-#: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid "Age ≤ 60 d."
 msgstr "Alter ≤ 60 T."
 
 #. module: account_financial_report
-#: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid "Age ≤ 90 d."
 msgstr "Alter ≤ 90 T."
@@ -451,7 +472,6 @@ msgstr "Währungsbezeichnung"
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:77
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_line_current
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_move_line_current
-#: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 #, python-format
 msgid "Current"
@@ -992,6 +1012,11 @@ msgid "No partner allocated"
 msgstr "Kein Partner zugewiesen"
 
 #. module: account_financial_report
+#: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
+msgid "Not due"
+msgstr ""
+
+#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard_not_only_one_unaffected_earnings_account
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_not_only_one_unaffected_earnings_account
 msgid "Not only one unaffected earnings account"
@@ -1007,7 +1032,6 @@ msgstr "OCA Finanzberichte"
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:112
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_line_older
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_move_line_older
-#: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 #, python-format
 msgid "Older"
