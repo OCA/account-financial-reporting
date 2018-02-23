@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Eficent Business and IT Consulting Services S.L.
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
     <template id="customer_outstanding_statement.statement_document">
-        <t t-call="report.external_layout">
+        <t t-call="web.external_layout">
             <div class="page">
                 <div class="row">
                     <div class="col-xs-5 col-xs-offset-7">
@@ -99,16 +101,16 @@
                                     </t>
                                 </tr>
                                 <tr>
-                                    <td style="border-right: 1px solid black;"></td>
+                                    <td style="border-right: 1px solid black;"/>
                                     <td style="border-right: 1px solid black;">
                                         <span t-esc="Date_end[o.id]"/>
                                     </td>
-                                    <td style="border-right: 1px solid black;"></td>
+                                    <td style="border-right: 1px solid black;"/>
                                     <td style="border-right: 1px solid black;">
                                         Ending Balance
                                     </td>
-                                    <td style="border-right: 1px solid black;"></td>
-                                    <td style="border-right: 1px solid black;"></td>
+                                    <td style="border-right: 1px solid black;"/>
+                                    <td style="border-right: 1px solid black;"/>
                                     <td class="text-right" style="border-right: 1px solid black;">
                                         <span t-esc="Amount_Due[o.id][currency]" t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
                                     </td>
@@ -184,7 +186,7 @@
     </template>
 
     <template id="statement">
-        <t t-call="report.html_container">
+        <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
                 <t t-if="not (Filter_non_due_partners and (not Lines[o.id]) and (len(doc_ids) > 1))">
                     <t t-call="customer_outstanding_statement.statement_document" t-lang="o.lang"/>

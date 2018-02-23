@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-# Copyright 2017 Eficent Business and IT Consulting Services S.L.
+# Copyright 2018 Eficent Business and IT Consulting Services S.L.
 #   (http://www.eficent.com)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
@@ -91,6 +90,7 @@ class CustomerOutstandingStatement(models.AbstractModel):
         partners = ', '.join([str(i) for i in partner_ids])
         date_end = datetime.strptime(
             date_end, DEFAULT_SERVER_DATE_FORMAT).date()
+        # pylint: disable=E8103
         self.env.cr.execute("""WITH Q1 AS (%s), Q2 AS (%s), Q3 AS (%s)
         SELECT partner_id, currency_id, move_id, date, date_maturity, debit,
                             credit, amount, open_amount, name, ref, blocked
@@ -142,6 +142,7 @@ class CustomerOutstandingStatement(models.AbstractModel):
 
     def _show_buckets_sql_q2(self, today, minus_30, minus_60, minus_90,
                              minus_120):
+        # pylint: disable=E8103
         return """
             SELECT partner_id, currency_id, date_maturity, open_due,
                             open_due_currency, move_id, company_id,
@@ -234,6 +235,7 @@ class CustomerOutstandingStatement(models.AbstractModel):
         partners = ', '.join([str(i) for i in partner_ids])
         date_end = datetime.strptime(
             date_end, DEFAULT_SERVER_DATE_FORMAT).date()
+        # pylint: disable=E8103
         self.env.cr.execute("""WITH Q1 AS (%s), Q2 AS (%s),
         Q3 AS (%s), Q4 AS (%s)
         SELECT partner_id, currency_id, current, b_1_30, b_30_60, b_60_90,
@@ -257,7 +259,7 @@ class CustomerOutstandingStatement(models.AbstractModel):
         return res
 
     @api.multi
-    def render_html(self, docids, data):
+    def get_report_values(self, docids, data):
         company_id = data['company_id']
         partner_ids = data['partner_ids']
         date_end = data['date_end']
@@ -305,7 +307,7 @@ class CustomerOutstandingStatement(models.AbstractModel):
                         buckets_to_display[partner_id][currency] = []
                     buckets_to_display[partner_id][currency] = line
 
-        docargs = {
+        return {
             'doc_ids': partner_ids,
             'doc_model': 'res.partner',
             'docs': self.env['res.partner'].browse(partner_ids),
@@ -318,5 +320,3 @@ class CustomerOutstandingStatement(models.AbstractModel):
             'Date_end': date_end_display,
             'Date': today_display,
         }
-        return self.env['report'].render(
-            'customer_outstanding_statement.statement', values=docargs)
