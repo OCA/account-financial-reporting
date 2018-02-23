@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-# Copyright 2017 Eficent Business and IT Consulting Services S.L.
+# Copyright 2018 Eficent Business and IT Consulting Services S.L.
 #   (http://www.eficent.com)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
@@ -47,5 +46,7 @@ class CustomerOutstandingStatementWizard(models.TransientModel):
     def _export(self):
         """Export to PDF."""
         data = self._prepare_outstanding_statement()
-        return self.env['report'].with_context(landscape=True).get_action(
-            self, 'customer_outstanding_statement.statement', data=data)
+        return self.env.ref(
+            'customer_outstanding_statement'
+            '.action_print_customer_outstanding_statement').report_action(
+            self, data=data)
