@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-# Copyright 2017 Eficent Business and IT Consulting Services S.L.
+# Copyright 2018 Eficent Business and IT Consulting Services S.L.
 #   (http://www.eficent.com)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
@@ -51,7 +50,7 @@ class TestCustomerActivityStatement(TransactionCase):
 
         self.assertDictContainsSubset(
             {
-                'type': 'ir.actions.report.xml',
+                'type': 'ir.actions.report',
                 'report_name': self.report_name,
                 'report_type': 'qweb-pdf',
             },
@@ -61,8 +60,8 @@ class TestCustomerActivityStatement(TransactionCase):
 
         data = wiz_id._prepare_activity_statement()
         docids = data['partner_ids']
-        report = self.statement_model.render_html(docids, data)
-        self.assertIsInstance(report, str,
+        report = self.statement_model.get_report_values(docids, data)
+        self.assertIsInstance(report, dict,
                               "There was an error while compiling the report.")
-        self.assertIn("<!DOCTYPE html>", report,
+        self.assertIn("Show_Buckets", report,
                       "There was an error while compiling the report.")
