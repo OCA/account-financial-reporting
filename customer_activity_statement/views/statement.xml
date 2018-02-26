@@ -9,11 +9,11 @@
                         <span t-raw="o.contact_address.replace('\n\n', '\n').replace('\n', '&lt;br&gt;')"/>
                         <span t-field="o.vat"/>
                     </div>
-                    <h4 style="padding-left:20em">
+                    <h4 style="padding-left:15em;padding-top:2em">
                         Activity Statement
                     </h4>
                     <p>
-                        Date: <span t-esc="Date[o.id]" /><br/>
+                        Date: <span t-esc="Date[o.id]" /><br/><!--Today-->
                         <t t-if="o.ref">Partner ref: <span t-field="o.ref"/></t>
                     </p>
 
@@ -22,7 +22,7 @@
                         <t t-foreach="Lines[o.id]" t-as="currency">
                             <br t-if="not currency_first" />
                             <p>
-                                Activity Statement in <span t-esc="Currencies[o.id][currency].name"/>:
+                                Activity Statement between <span t-esc="Date_start[o.id]" /> and <span t-esc="Date_end[o.id]" /> in <span t-esc="Currencies[o.id][currency].name"/>:
                             </p>
                             <table class="table table-condensed" style="border: 1px solid black; border-collapse: collapse;">
                                 <thead>
@@ -114,6 +114,9 @@
                                     </td>
                                 </tr>
                             </table>
+                            <p>
+                                Aging Report at  <span t-esc="Date_end[o.id]" /> in <span t-esc="Currencies[o.id][currency].name"/>:
+                            </p>
                             <table class="table table-condensed" t-if="Show_Buckets" style="border: 1px solid black; border-collapse: collapse;">
                                 <thead>
                                     <tr>
