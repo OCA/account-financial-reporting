@@ -165,7 +165,7 @@ class TrialBalanceReportCompute(models.TransientModel):
         if self.show_partner_details:
             self._inject_partner_values()
         # Refresh cache because all data are computed with SQL requests
-        self.refresh()
+        self.invalidate_cache()
 
     def _inject_account_values(self):
         """Inject report values for report_trial_balance_qweb_account"""

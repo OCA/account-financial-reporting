@@ -261,7 +261,7 @@ class GeneralLedgerReportCompute(models.TransientModel):
             self._compute_has_second_currency()
 
         # Refresh cache because all data are computed with SQL requests
-        self.refresh()
+        self.invalidate_cache()
 
     def _get_account_sub_subquery_sum_amounts(
             self, include_initial_balance, date_included):
