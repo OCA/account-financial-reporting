@@ -29,20 +29,23 @@ class CustomerOutstandingStatement(models.AbstractModel):
                 ELSE null
             END as reconciled_date
             FROM account_move_line l1
-            LEFT JOIN (SELECT pr.*
+            LEFT JOIN (SELECT pr.*, Q0c.max_date
                 FROM account_partial_reconcile pr
                 INNER JOIN account_move_line l2
-                ON pr.credit_move_id = l2.id
+                    ON pr.credit_move_id = l2.id
+                LEFT JOIN (%s) as Q0c ON Q0c.id = pr.id
                 WHERE l2.date <= '%s'
             ) as pd ON pd.debit_move_id = l1.id
-            LEFT JOIN (SELECT pr.*
+            LEFT JOIN (SELECT pr.*, Q0c.max_date
                 FROM account_partial_reconcile pr
                 INNER JOIN account_move_line l2
-                ON pr.debit_move_id = l2.id
+                    ON pr.debit_move_id = l2.id
+                LEFT JOIN (%s) as Q0c ON Q0c.id = pr.id
                 WHERE l2.date <= '%s'
             ) as pc ON pc.credit_move_id = l1.id
             GROUP BY l1.id
-        """ % (date_end, date_end)
+        """ % (self._get_reconcile_date(), date_end,
+               self._get_reconcile_date(), date_end)
 
     def _display_lines_sql_q1(self, partners, date_end):
         return """
@@ -134,6 +137,35 @@ class CustomerOutstandingStatement(models.AbstractModel):
             res[row.pop('partner_id')].append(row)
         return res
 
+    def _get_credit_date(self):
+        return """
+            SELECT apr.id, aml.date as credit_date
+            FROM account_partial_reconcile apr
+            LEFT JOIN account_move_line aml
+            ON aml.id = apr.credit_move_id
+        """
+
+    def _get_debit_date(self):
+        return """
+            SELECT apr.id, aml.date as debit_date
+            FROM account_partial_reconcile apr
+            LEFT JOIN account_move_line aml
+            ON aml.id = apr.debit_move_id
+        """
+
+    def _get_reconcile_date(self):
+        return """
+            SELECT pr2.id,
+            CASE WHEN Q0a.credit_date > Q0b.debit_date
+                THEN Q0a.credit_date
+                ELSE Q0b.debit_date
+            END AS max_date
+            FROM account_partial_reconcile pr2
+            LEFT JOIN (%s) as Q0a ON Q0a.id = pr2.id
+            LEFT JOIN (%s) as Q0b ON Q0b.id = pr2.id
+            GROUP BY pr2.id, Q0a.credit_date, Q0b.debit_date
+        """ % (self._get_credit_date(), self._get_debit_date())
+
     def _show_buckets_sql_q0(self, date_end):
         return """
             SELECT l1.id,
@@ -144,20 +176,23 @@ class CustomerOutstandingStatement(models.AbstractModel):
                 ELSE null
             END as reconciled_date
             FROM account_move_line l1
-            LEFT JOIN (SELECT pr.*
+            LEFT JOIN (SELECT pr.*, Q0c.max_date
                 FROM account_partial_reconcile pr
                 INNER JOIN account_move_line l2
-                ON pr.credit_move_id = l2.id
+                    ON pr.credit_move_id = l2.id
+                LEFT JOIN (%s) as Q0c ON Q0c.id = pr.id
                 WHERE l2.date <= '%s'
             ) as pd ON pd.debit_move_id = l1.id
-            LEFT JOIN (SELECT pr.*
+            LEFT JOIN (SELECT pr.*, Q0c.max_date
                 FROM account_partial_reconcile pr
                 INNER JOIN account_move_line l2
-                ON pr.debit_move_id = l2.id
+                    ON pr.debit_move_id = l2.id
+                LEFT JOIN (%s) as Q0c ON Q0c.id = pr.id
                 WHERE l2.date <= '%s'
             ) as pc ON pc.credit_move_id = l1.id
             GROUP BY l1.id
-        """ % (date_end, date_end)
+        """ % (self._get_reconcile_date(), date_end,
+               self._get_reconcile_date(), date_end)
 
     def _show_buckets_sql_q1(self, partners, date_end):
         return """
