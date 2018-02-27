@@ -670,6 +670,12 @@ msgid "Final balance"
 msgstr "Bilancio finale"
 
 #. module: account_financial_report_qweb
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_account_final_balance_currency
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_partner_final_balance_currency
+msgid "Final balance foreign currency"
+msgstr "Bilancio finale in valuta estera"
+
+#. module: account_financial_report_qweb
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_account_final_credit
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_partner_final_credit
 msgid "Final credit"
@@ -814,6 +820,12 @@ msgstr ""
 #, python-format
 msgid "Initial balance"
 msgstr "Bilancio iniziale"
+
+#. module: account_financial_report_qweb
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_account_initial_balance_currency
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_partner_initial_balance_currency
+msgid "Initial balance foreign currency"
+msgstr "Bilancio iniziale valuta estera"
 
 #. module: account_financial_report_qweb
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_account_initial_credit
