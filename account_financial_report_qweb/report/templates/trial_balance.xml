@@ -19,7 +19,7 @@
 
                         <!-- Display account lines -->
                         <t t-if="not show_partner_details">
-                            <div class="act_as_table data_table" style="width: 1140px !important;">
+                            <div class="act_as_table data_table" style="width: 1325px !important;">
                                 <!-- Display account header -->
                                 <t t-call="account_financial_report_qweb.report_trial_balance_qweb_lines_header"/>
 
@@ -41,7 +41,7 @@
                                         <span t-field="account.code"/> - <span t-field="account.name"/>
                                     </div>
 
-                                    <div class="act_as_table data_table" style="width: 1140px !important;">
+                                    <div class="act_as_table data_table" style="width: 1325px !important;">
                                         <!-- Display account/partner header -->
                                         <t t-call="account_financial_report_qweb.report_trial_balance_qweb_lines_header"/>
 
@@ -65,7 +65,7 @@
     </template>
 
     <template id="account_financial_report_qweb.report_trial_balance_qweb_filters">
-        <div class="act_as_table data_table" style="width: 1140px !important;">
+        <div class="act_as_table data_table" style="width: 1325px !important;">
             <div class="act_as_row labels">
                 <div class="act_as_cell">Date range filter</div>
                 <div class="act_as_cell">Target moves filter</div>
@@ -109,6 +109,11 @@
                 <div class="act_as_cell" style="width: 110px;">Credit</div>
                 <!--## Ending balance-->
                 <div class="act_as_cell" style="width: 110px;">Ending balance</div>
+                <!--## currency_name-->
+                <div class="act_as_cell" style="width: 35px;">Cur.</div>
+                <!--## amount_currency-->
+                <div class="act_as_cell" style="width: 75px;">Initial blance cur.</div>
+                <div class="act_as_cell" style="width: 75px;">Ending blance cur.</div>
             </div>
         </div>
     </template>
@@ -130,6 +135,19 @@
             <div class="act_as_cell amount"><span t-field="line.credit"/></div>
             <!--## Ending balance-->
             <div class="act_as_cell amount"><span t-field="line.final_balance"/></div>
+            <!--## currency_name-->
+            <div class="act_as_cell"><span t-field="line.currency_name"/></div>
+            <t t-if="line.currency_name">
+                <!--## balance_currency-->
+                <div class="act_as_cell amount"><span t-field="line.initial_balance_foreign_currency"/></div>
+                <div class="act_as_cell amount"><span
+                        t-field="line.final_balance_foreign_currency"/></div>
+            </t>
+            <t t-if="not line.currency_name">
+                <!--## balance_currency-->
+                <div class="act_as_cell"/>
+                <div class="act_as_cell"/>
+            </t>
         </div>
     </template>
 

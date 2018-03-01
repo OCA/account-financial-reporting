@@ -64,9 +64,12 @@ class TrialBalanceReportAccount(models.TransientModel):
     name = fields.Char()
 
     initial_balance = fields.Float(digits=(16, 2))
+    initial_balance_foreign_currency = fields.Float(digits=(16, 2))
     debit = fields.Float(digits=(16, 2))
     credit = fields.Float(digits=(16, 2))
+    currency_name = fields.Char()
     final_balance = fields.Float(digits=(16, 2))
+    final_balance_foreign_currency = fields.Float(digits=(16, 2))
 
     # Data fields, used to browse report data
     partner_ids = fields.One2many(
@@ -182,7 +185,10 @@ INSERT INTO
     initial_balance,
     debit,
     credit,
-    final_balance
+    final_balance,
+    currency_name,
+    initial_balance_foreign_currency,
+    final_balance_foreign_currency
     )
 SELECT
     %s AS report_id,
@@ -194,7 +200,10 @@ SELECT
     rag.initial_balance AS initial_balance,
     rag.final_debit - rag.initial_debit AS debit,
     rag.final_credit - rag.initial_credit AS credit,
-    rag.final_balance AS final_balance
+    rag.final_balance AS final_balance,
+    rag.currency_name AS currency_name,
+    rag.initial_balance_foreign_currency AS initial_balance_foreign_currency,
+    rag.final_balance_foreign_currency AS final_balance_foreign_currency
 FROM
     report_general_ledger_qweb_account rag
 WHERE
