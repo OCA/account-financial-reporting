@@ -3,52 +3,50 @@
 # * customer_activity_statement
 # 
 # Translators:
-# OCA Transbot <transbot@odoo-community.org>, 2018
-# Quentin THEURET <odoo@kerpeo.com>, 2018
+# Melroy van den Berg <webmaster1989@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-28 10:11+0000\n"
 "PO-Revision-Date: 2018-02-28 10:11+0000\n"
-"Last-Translator: Quentin THEURET <odoo@kerpeo.com>, 2018\n"
-"Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
+"Last-Translator: Melroy van den Berg <webmaster1989@gmail.com>, 2018\n"
+"Language-Team: Dutch (https://www.transifex.com/oca/teams/23907/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: fr\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "+120 Days Due"
-msgstr "+120 Jours d'arriérés"
+msgstr ""
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "1-30 Days Due"
-msgstr "1-30 jours d'arriérés"
+msgstr ""
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "30-60 Days Due"
-msgstr "30-60 jours d'arriéré"
+msgstr ""
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "60-90 Days Due"
-msgstr "60-90 Jours d'arriérés"
+msgstr ""
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "90-120 Days Due"
-msgstr "90-120 jours d'arriérés"
+msgstr ""
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "<strong>The partner doesn't have due entries.</strong>"
 msgstr ""
-"<strong>Le partenaire n'a pas d'écriture en attente de paiement.</strong>"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
@@ -63,7 +61,7 @@ msgstr ""
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Aging Report at"
-msgstr "Rapport âgé à "
+msgstr ""
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.customer_activity_statement_wizard_view
@@ -81,7 +79,7 @@ msgstr ""
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Balance"
-msgstr ""
+msgstr "Balans"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
@@ -96,22 +94,22 @@ msgstr ""
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.customer_activity_statement_wizard_view
 msgid "Cancel"
-msgstr "Annuler"
+msgstr "Annuleren"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_company_id
 msgid "Company"
-msgstr "Société"
+msgstr "Bedrijf"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_create_uid
 msgid "Created by"
-msgstr "Créé par"
+msgstr "Gecreëerd door"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_create_date
 msgid "Created on"
-msgstr "Créé le"
+msgstr "Gecreëerd op"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
@@ -131,7 +129,7 @@ msgstr ""
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Date"
-msgstr "Date"
+msgstr ""
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_date_end
@@ -157,7 +155,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_display_name
 #: model:ir.model.fields,field_description:customer_activity_statement.field_report_customer_activity_statement_statement_display_name
 msgid "Display Name"
-msgstr "Nom affiché"
+msgstr "Weergavenaam"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_filter_partners_non_due
@@ -172,7 +170,7 @@ msgstr ""
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.customer_activity_statement_wizard_view
 msgid "Export PDF"
-msgstr "Export PDF"
+msgstr ""
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_id
@@ -189,17 +187,17 @@ msgstr ""
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard___last_update
 #: model:ir.model.fields,field_description:customer_activity_statement.field_report_customer_activity_statement_statement___last_update
 msgid "Last Modified on"
-msgstr "Dernière modification le"
+msgstr "Laatst Gewijzigd op"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_write_uid
 msgid "Last Updated by"
-msgstr "Dernière mise à jour par"
+msgstr "Laatst Geüpdatet door"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_write_date
 msgid "Last Updated on"
-msgstr "Dernière mise à jour le"
+msgstr "Laatst Geüpdatet op"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_number_partner_ids
@@ -245,7 +243,7 @@ msgstr ""
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.customer_activity_statement_wizard_view
 msgid "or"
-msgstr "ou"
+msgstr "of"
 
 #. module: customer_activity_statement
 #: model:ir.model,name:customer_activity_statement.model_report_customer_activity_statement_statement
