@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-23 00:20+0000\n"
-"PO-Revision-Date: 2018-02-23 00:20+0000\n"
+"POT-Creation-Date: 2018-02-28 10:11+0000\n"
+"PO-Revision-Date: 2018-02-28 10:11+0000\n"
 "Last-Translator: Rudolf Schnapka <rs@techno-flex.de>, 2017\n"
 "Language-Team: German (https://www.transifex.com/oca/teams/23907/de/)\n"
 "MIME-Version: 1.0\n"
@@ -148,23 +148,31 @@ msgstr "Alter bis 90 T."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-msgid "Age ≤ 120 d."
-msgstr "Alter ≤ 120 T."
+msgid ""
+"Age ≤ 120\n"
+"                        d."
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-msgid "Age ≤ 30 d."
-msgstr "Alter ≤ 30 T."
+msgid ""
+"Age ≤ 30\n"
+"                        d."
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-msgid "Age ≤ 60 d."
-msgstr "Alter ≤ 60 T."
+msgid ""
+"Age ≤ 60\n"
+"                        d."
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-msgid "Age ≤ 90 d."
-msgstr "Alter ≤ 90 T."
+msgid ""
+"Age ≤ 90\n"
+"                        d."
+msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:14
@@ -319,13 +327,19 @@ msgid "Company"
 msgstr "Unternehmen"
 
 #. module: account_financial_report
+#: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+msgid ""
+"Cost\n"
+"                            center"
+msgstr ""
+
+#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_move_line_cost_center
 msgid "Cost Center"
 msgstr "Kostenstelle"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:25
-#: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #, python-format
 msgid "Cost center"
 msgstr "Kostenstelle"
@@ -588,13 +602,26 @@ msgid "Display Name"
 msgstr "Anzeigebezeichnung"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:70
-#: code:addons/account_financial_report/report/open_items_xlsx.py:24
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_lines
+msgid ""
+"Due\n"
+"                        date"
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:70
+#: code:addons/account_financial_report/report/open_items_xlsx.py:24
 #, python-format
 msgid "Due date"
 msgstr "Fälligkeit"
+
+#. module: account_financial_report
+#: model:ir.ui.view,arch_db:account_financial_report.report_open_items_ending_cumul
+msgid ""
+"Ending\n"
+"                        balance"
+msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:134
@@ -602,7 +629,6 @@ msgstr "Fälligkeit"
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:34
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:54
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_ending_cumul
-#: model:ir.ui.view,arch_db:account_financial_report.report_open_items_ending_cumul
 #: model:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
 #, python-format
 msgid "Ending balance"
@@ -829,6 +855,13 @@ msgstr ""
 "pro Periode ausgewiesen."
 
 #. module: account_financial_report
+#: model:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
+msgid ""
+"Initial\n"
+"                    balance"
+msgstr ""
+
+#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_account_initial_balance
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_partner_initial_balance
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_account_initial_balance
@@ -854,7 +887,6 @@ msgstr "Anfangssoll"
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:22
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:42
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
-#: model:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
 #, python-format
 msgid "Initial balance"
 msgstr "Anfangssaldo"
@@ -1103,8 +1135,14 @@ msgid "Partner"
 msgstr "Partner"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:225
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_partner_ending_cumul
+msgid ""
+"Partner\n"
+"                    cumul aged balance"
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:225
 #, python-format
 msgid "Partner cumul aged balance"
 msgstr "Partner-Salden nach Alter"
@@ -1180,12 +1218,18 @@ msgid "Receivable Accounts Only"
 msgstr "Nur Forderungen"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:69
-#: code:addons/account_financial_report/report/general_ledger_xlsx.py:24
-#: code:addons/account_financial_report/report/open_items_xlsx.py:23
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_lines
+msgid ""
+"Ref -\n"
+"                        Label"
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:69
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:24
+#: code:addons/account_financial_report/report/open_items_xlsx.py:23
 #, python-format
 msgid "Ref - Label"
 msgstr "Ref - Titel"

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-22 13:41+0000\n"
-"PO-Revision-Date: 2017-12-22 13:41+0000\n"
+"POT-Creation-Date: 2018-02-28 10:11+0000\n"
+"PO-Revision-Date: 2018-02-28 10:11+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2017\n"
 "Language-Team: Croatian (Croatia) (https://www.transifex.com/oca/teams/23907/hr_HR/)\n"
 "MIME-Version: 1.0\n"
@@ -17,6 +17,31 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Language: hr_HR\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#. module: account_financial_report
+#: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
+msgid "&gt; 120 d."
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
+msgid "1 - 30 d."
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
+msgid "31 - 60 d."
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
+msgid "61 - 90 d."
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
+msgid "91 - 120 d."
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_buttons
@@ -122,27 +147,31 @@ msgid "Age â¤ 90 d."
 msgstr ""
 
 #. module: account_financial_report
-#: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-msgid "Age ≤ 120 d."
+msgid ""
+"Age ≤ 120\n"
+"                        d."
 msgstr ""
 
 #. module: account_financial_report
-#: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-msgid "Age ≤ 30 d."
+msgid ""
+"Age ≤ 30\n"
+"                        d."
 msgstr ""
 
 #. module: account_financial_report
-#: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-msgid "Age ≤ 60 d."
+msgid ""
+"Age ≤ 60\n"
+"                        d."
 msgstr ""
 
 #. module: account_financial_report
-#: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-msgid "Age ≤ 90 d."
+msgid ""
+"Age ≤ 90\n"
+"                        d."
 msgstr ""
 
 #. module: account_financial_report
@@ -298,13 +327,19 @@ msgid "Company"
 msgstr "Tvrtka"
 
 #. module: account_financial_report
+#: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+msgid ""
+"Cost\n"
+"                            center"
+msgstr ""
+
+#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_move_line_cost_center
 msgid "Cost Center"
 msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:25
-#: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #, python-format
 msgid "Cost center"
 msgstr ""
@@ -451,7 +486,6 @@ msgstr ""
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:77
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_line_current
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_move_line_current
-#: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 #, python-format
 msgid "Current"
@@ -469,7 +503,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_lines
 #, python-format
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard_date_at
@@ -568,12 +602,25 @@ msgid "Display Name"
 msgstr "Naziv "
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:70
-#: code:addons/account_financial_report/report/open_items_xlsx.py:24
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_lines
+msgid ""
+"Due\n"
+"                        date"
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:70
+#: code:addons/account_financial_report/report/open_items_xlsx.py:24
 #, python-format
 msgid "Due date"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.ui.view,arch_db:account_financial_report.report_open_items_ending_cumul
+msgid ""
+"Ending\n"
+"                        balance"
 msgstr ""
 
 #. module: account_financial_report
@@ -582,7 +629,6 @@ msgstr ""
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:34
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:54
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_ending_cumul
-#: model:ir.ui.view,arch_db:account_financial_report.report_open_items_ending_cumul
 #: model:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
 #, python-format
 msgid "Ending balance"
@@ -608,7 +654,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:account_financial_report.open_items_wizard
 #: model:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
 msgid "Export PDF"
-msgstr ""
+msgstr "Izvoz PDF"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
@@ -805,6 +851,13 @@ msgid ""
 msgstr ""
 
 #. module: account_financial_report
+#: model:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
+msgid ""
+"Initial\n"
+"                    balance"
+msgstr ""
+
+#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_account_initial_balance
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_partner_initial_balance
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_account_initial_balance
@@ -830,7 +883,6 @@ msgstr ""
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:22
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:42
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
-#: model:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
 #, python-format
 msgid "Initial balance"
 msgstr ""
@@ -988,6 +1040,11 @@ msgid "No partner allocated"
 msgstr ""
 
 #. module: account_financial_report
+#: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
+msgid "Not due"
+msgstr ""
+
+#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard_not_only_one_unaffected_earnings_account
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_not_only_one_unaffected_earnings_account
 msgid "Not only one unaffected earnings account"
@@ -1003,7 +1060,6 @@ msgstr ""
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:112
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_line_older
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_move_line_older
-#: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 #, python-format
 msgid "Older"
@@ -1075,8 +1131,14 @@ msgid "Partner"
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:225
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_partner_ending_cumul
+msgid ""
+"Partner\n"
+"                    cumul aged balance"
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:225
 #, python-format
 msgid "Partner cumul aged balance"
 msgstr ""
@@ -1152,12 +1214,18 @@ msgid "Receivable Accounts Only"
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:69
-#: code:addons/account_financial_report/report/general_ledger_xlsx.py:24
-#: code:addons/account_financial_report/report/open_items_xlsx.py:23
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_lines
+msgid ""
+"Ref -\n"
+"                        Label"
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:69
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:24
+#: code:addons/account_financial_report/report/open_items_xlsx.py:23
 #, python-format
 msgid "Ref - Label"
 msgstr ""
