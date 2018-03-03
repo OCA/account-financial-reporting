@@ -1,4 +1,3 @@
-
 # Author: Damien Crier
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA
