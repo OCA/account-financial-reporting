@@ -1,12 +1,12 @@
-
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+import logging
+
 from odoo.tests import common
 from odoo.tools import test_reports
 
-import logging
 _logger = logging.getLogger(__name__)
 
 

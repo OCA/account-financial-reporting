@@ -184,7 +184,7 @@ class GeneralLedgerReportMoveLine(models.TransientModel):
     debit = fields.Float(digits=(16, 2))
     credit = fields.Float(digits=(16, 2))
     cumul_balance = fields.Float(digits=(16, 2))
-    currency_name = fields.Char()
+    currency_id = fields.Many2one('res.currency')
     amount_currency = fields.Float(digits=(16, 2))
 
 
@@ -216,7 +216,7 @@ class GeneralLedgerReportCompute(models.TransientModel):
             rcontext['o'] = report
             result['html'] = self.env.ref(
                 'account_financial_report.report_general_ledger').render(
-                rcontext)
+                    rcontext)
         return result
 
     @api.model
@@ -226,8 +226,7 @@ class GeneralLedgerReportCompute(models.TransientModel):
     @api.multi
     def compute_data_for_report(self,
                                 with_line_details=True,
-                                with_partners=True
-                                ):
+                                with_partners=True):
         self.ensure_one()
         # Compute report data
         self._inject_account_values()
@@ -884,7 +883,7 @@ INSERT INTO
     debit,
     credit,
     cumul_balance,
-    currency_name,
+    currency_id,
     amount_currency
     )
 SELECT
@@ -952,7 +951,7 @@ SELECT
     ) AS cumul_balance,
             """
         query_inject_move_line += """
-    c.name AS currency_name,
+    c.id AS currency_id,
     ml.amount_currency
 FROM
         """
@@ -1213,7 +1212,7 @@ SET
                     ON l.report_account_id = a.id
             WHERE
                 a.report_id = %s
-            AND l.currency_name IS NOT NULL
+            AND l.currency_id IS NOT NULL
             LIMIT 1
         )
         OR
@@ -1230,7 +1229,7 @@ SET
                     ON p.report_account_id = a.id
             WHERE
                 a.report_id = %s
-            AND l.currency_name IS NOT NULL
+            AND l.currency_id IS NOT NULL
             LIMIT 1
         )
 WHERE id = %s

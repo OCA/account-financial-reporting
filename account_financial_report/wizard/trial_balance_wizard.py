@@ -1,4 +1,3 @@
-
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA
 # Copyright 2017 Akretion - Alexis de Lattre
@@ -32,6 +31,11 @@ class TrialBalanceReportWizard(models.TransientModel):
                                    string='Target Moves',
                                    required=True,
                                    default='all')
+    hierarchy_on = fields.Selection([('computed', 'Computed Accounts'),
+                                     ('relation', 'Child Accounts')],
+                                    string='Hierarchy On',
+                                    required=True,
+                                    default='computed')
     account_ids = fields.Many2many(
         comodel_name='account.account',
         string='Filter accounts',
@@ -100,8 +104,10 @@ class TrialBalanceReportWizard(models.TransientModel):
         """Handle partners change."""
         if self.show_partner_details:
             self.receivable_accounts_only = self.payable_accounts_only = True
+            self.hide_account_balance_at_0 = True
         else:
             self.receivable_accounts_only = self.payable_accounts_only = False
+            self.hide_account_balance_at_0 = False
 
     @api.multi
     def button_export_html(self):
@@ -144,6 +150,7 @@ class TrialBalanceReportWizard(models.TransientModel):
             'filter_account_ids': [(6, 0, self.account_ids.ids)],
             'filter_partner_ids': [(6, 0, self.partner_ids.ids)],
             'fy_start_date': self.fy_start_date,
+            'hierarchy_on': self.hierarchy_on,
             'show_partner_details': self.show_partner_details,
         }
 
