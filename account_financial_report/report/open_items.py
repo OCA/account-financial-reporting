@@ -128,7 +128,7 @@ class OpenItemsReportMoveLine(models.TransientModel):
     label = fields.Char()
     amount_total_due = fields.Float(digits=(16, 2))
     amount_residual = fields.Float(digits=(16, 2))
-    currency_name = fields.Char()
+    currency_id = fields.Many2one('res.currency')
     amount_total_due_currency = fields.Float(digits=(16, 2))
     amount_residual_currency = fields.Float(digits=(16, 2))
 
@@ -161,7 +161,7 @@ class OpenItemsReportCompute(models.TransientModel):
             rcontext['o'] = report
             result['html'] = self.env.ref(
                 'account_financial_report.report_open_items').render(
-                rcontext)
+                    rcontext)
         return result
 
     @api.model
@@ -512,7 +512,7 @@ INSERT INTO
     label,
     amount_total_due,
     amount_residual,
-    currency_name,
+    currency_id,
     amount_total_due_currency,
     amount_residual_currency
     )
@@ -545,7 +545,7 @@ SELECT
     CONCAT_WS(' - ', NULLIF(ml.ref, ''), NULLIF(ml.name, '')) AS label,
     ml.balance,
     ml2.amount_residual,
-    c.name AS currency_name,
+    c.id AS currency_id,
     ml.amount_currency,
     ml2.amount_residual_currency
 FROM
@@ -767,7 +767,7 @@ SET
                     ON p.report_account_id = a.id
             WHERE
                 a.report_id = %s
-            AND l.currency_name IS NOT NULL
+            AND l.currency_id IS NOT NULL
             LIMIT 1
         )
 WHERE id = %s

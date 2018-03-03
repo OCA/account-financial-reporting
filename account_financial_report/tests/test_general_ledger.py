@@ -1,11 +1,11 @@
-
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import time
-from . import abstract_test
+
 from odoo.tests import common
+from . import abstract_test
 
 
 class TestGeneralLedger(abstract_test.AbstractTest):
@@ -78,14 +78,14 @@ class TestGeneralLedgerReport(common.TransactionCase):
             )], limit=1)
 
     def _add_move(
-        self,
-        date,
-        receivable_debit,
-        receivable_credit,
-        income_debit,
-        income_credit,
-        unaffected_debit=0,
-        unaffected_credit=0
+            self,
+            date,
+            receivable_debit,
+            receivable_credit,
+            income_debit,
+            income_credit,
+            unaffected_debit=0,
+            unaffected_credit=0
     ):
         move_name = 'expense accrual'
         journal = self.env['account.journal'].search([

@@ -166,7 +166,10 @@ class AbstractReportXslx(models.AbstractModel):
         for col_pos, column in self.columns.items():
             value = getattr(line_object, column['field'])
             cell_type = column.get('type', 'string')
-            if cell_type == 'string':
+            if cell_type == 'many2one':
+                self.sheet.write_string(
+                    self.row_pos, col_pos, value.name or '')
+            elif cell_type == 'string':
                 self.sheet.write_string(self.row_pos, col_pos, value or '')
             elif cell_type == 'amount':
                 self.sheet.write_number(

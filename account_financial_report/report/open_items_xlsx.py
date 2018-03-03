@@ -1,4 +1,3 @@
-
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
@@ -31,7 +30,8 @@ class OpenItemsXslx(models.AbstractModel):
                 'field_final_balance': 'final_amount_residual',
                 'type': 'amount',
                 'width': 14},
-            9: {'header': _('Cur.'), 'field': 'currency_name', 'width': 7},
+            9: {'header': _('Cur.'), 'field': 'currency_id',
+                'type': 'many2one', 'width': 7},
             10: {'header': _('Cur. Original'),
                  'field': 'amount_total_due_currency',
                  'type': 'amount',
@@ -46,10 +46,10 @@ class OpenItemsXslx(models.AbstractModel):
         return [
             [_('Date at filter'), report.date_at],
             [_('Target moves filter'),
-                _('All posted entries') if report.only_posted_moves
-                else _('All entries')],
+             _('All posted entries') if report.only_posted_moves else _(
+                 'All entries')],
             [_('Account balance at 0 filter'),
-                _('Hide') if report.hide_account_balance_at_0 else _('Show')],
+             _('Hide') if report.hide_account_balance_at_0 else _('Show')],
         ]
 
     def _get_col_count_filter_name(self):
