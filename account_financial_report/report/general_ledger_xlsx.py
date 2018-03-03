@@ -44,7 +44,8 @@ class GeneralLedgerXslx(models.AbstractModel):
                  'field_final_balance': 'final_balance',
                  'type': 'amount',
                  'width': 14},
-            11: {'header': _('Cur.'), 'field': 'currency_name', 'width': 7},
+            11: {'header': _('Cur.'), 'field': 'currency_id',
+                 'type': 'many2one', 'width': 7},
             12: {'header': _('Amount cur.'),
                  'field': 'amount_currency',
                  'type': 'amount',
@@ -54,14 +55,14 @@ class GeneralLedgerXslx(models.AbstractModel):
     def _get_report_filters(self, report):
         return [
             [_('Date range filter'),
-                _('From: %s To: %s') % (report.date_from, report.date_to)],
+             _('From: %s To: %s') % (report.date_from, report.date_to)],
             [_('Target moves filter'),
-                _('All posted entries') if report.only_posted_moves
-                else _('All entries')],
+             _('All posted entries') if report.only_posted_moves else _(
+                 'All entries')],
             [_('Account balance at 0 filter'),
-                _('Hide') if report.hide_account_balance_at_0 else _('Show')],
+             _('Hide') if report.hide_account_balance_at_0 else _('Show')],
             [_('Centralize filter'),
-                _('Yes') if report.centralize else _('No')],
+             _('Yes') if report.centralize else _('No')],
         ]
 
     def _get_col_count_filter_name(self):
