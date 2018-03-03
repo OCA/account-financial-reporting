@@ -1,4 +1,3 @@
-
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
@@ -60,12 +59,12 @@ class TrialBalanceXslx(models.AbstractModel):
     def _get_report_filters(self, report):
         return [
             [_('Date range filter'),
-                _('From: %s To: %s') % (report.date_from, report.date_to)],
+             _('From: %s To: %s') % (report.date_from, report.date_to)],
             [_('Target moves filter'),
-                _('All posted entries') if report.only_posted_moves
-                else _('All entries')],
+             _('All posted entries') if report.only_posted_moves else _(
+                 'All entries')],
             [_('Account balance at 0 filter'),
-                _('Hide') if report.hide_account_balance_at_0 else _('Show')],
+             _('Hide') if report.hide_account_balance_at_0 else _('Show')],
         ]
 
     def _get_col_count_filter_name(self):

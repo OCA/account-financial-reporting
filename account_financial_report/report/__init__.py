@@ -1,4 +1,3 @@
-
 # © 2015 Yannick Vaucher (Camptocamp)
 # © 2016 Damien Crier (Camptocamp)
 # © 2016 Julien Coux (Camptocamp)
@@ -13,3 +12,5 @@ from . import open_items
 from . import open_items_xlsx
 from . import trial_balance
 from . import trial_balance_xlsx
+from . import vat_report
+from . import vat_report_xlsx
