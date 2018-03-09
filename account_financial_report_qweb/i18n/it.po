@@ -4,13 +4,14 @@
 # 
 # Translators:
 # Stefano <stefano.sforzi@agilebg.com>, 2017
+# OCA Transbot <transbot@odoo-community.org>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-23 01:40+0000\n"
-"PO-Revision-Date: 2018-02-23 01:40+0000\n"
-"Last-Translator: Stefano <stefano.sforzi@agilebg.com>, 2017\n"
+"POT-Creation-Date: 2018-03-09 08:11+0000\n"
+"PO-Revision-Date: 2018-03-09 08:11+0000\n"
+"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2018\n"
 "Language-Team: Italian (https://www.transifex.com/oca/teams/23907/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -270,7 +271,7 @@ msgid "Centralized"
 msgstr "Centralizzate"
 
 #. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:1144
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:1181
 #, python-format
 msgid "Centralized Entries"
 msgstr "Registrazioni centralizzate"
@@ -423,6 +424,7 @@ msgstr "Bil. Cumul."
 #: code:addons/account_financial_report_qweb/report/open_items_xlsx.py:39
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_general_ledger_qweb_lines
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_open_items_qweb_lines
+#: model:ir.ui.view,arch_db:account_financial_report_qweb.report_trial_balance_qweb_lines_header
 #, python-format
 msgid "Cur."
 msgstr "Val."
@@ -442,8 +444,11 @@ msgid "Cur. Residual"
 msgstr "Val. Residuo"
 
 #. module: account_financial_report_qweb
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_account_currency_name
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_move_line_currency_name
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_partner_currency_name
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_open_items_qweb_move_line_currency_name
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_account_currency_name
 msgid "Currency name"
 msgstr "Valuta"
 
@@ -584,6 +589,11 @@ msgid "Ending balance"
 msgstr "Bilancio finale"
 
 #. module: account_financial_report_qweb
+#: model:ir.ui.view,arch_db:account_financial_report_qweb.report_trial_balance_qweb_lines_header
+msgid "Ending blance cur."
+msgstr ""
+
+#. module: account_financial_report_qweb
 #: code:addons/account_financial_report_qweb/report/aged_partner_balance_xlsx.py:70
 #: code:addons/account_financial_report_qweb/report/general_ledger_xlsx.py:25
 #: code:addons/account_financial_report_qweb/report/open_items_xlsx.py:24
@@ -670,8 +680,9 @@ msgid "Final balance"
 msgstr "Bilancio finale"
 
 #. module: account_financial_report_qweb
-#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_account_final_balance_currency
-#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_partner_final_balance_currency
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_account_final_balance_foreign_currency
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_partner_final_balance_foreign_currency
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_account_final_balance_foreign_currency
 msgid "Final balance foreign currency"
 msgstr "Bilancio finale in valuta estera"
 
@@ -822,10 +833,16 @@ msgid "Initial balance"
 msgstr "Bilancio iniziale"
 
 #. module: account_financial_report_qweb
-#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_account_initial_balance_currency
-#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_partner_initial_balance_currency
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_account_initial_balance_foreign_currency
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_partner_initial_balance_foreign_currency
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_account_initial_balance_foreign_currency
 msgid "Initial balance foreign currency"
 msgstr "Bilancio iniziale valuta estera"
+
+#. module: account_financial_report_qweb
+#: model:ir.ui.view,arch_db:account_financial_report_qweb.report_trial_balance_qweb_lines_header
+msgid "Initial blance cur."
+msgstr ""
 
 #. module: account_financial_report_qweb
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_account_initial_credit
@@ -982,8 +999,8 @@ msgid "No"
 msgstr ""
 
 #. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:637
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:906
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:668
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:943
 #: code:addons/account_financial_report_qweb/report/open_items.py:277
 #: code:addons/account_financial_report_qweb/report/open_items.py:526
 #, python-format
