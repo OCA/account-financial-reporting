@@ -168,11 +168,13 @@ class AccountCSVExport(orm.TransientModel):
                 from account_move_line as aml,account_account as ac
                 where aml.account_id = ac.id
                 and period_id in %(period_ids)s
+                and journal_id in %(journal_ids)s
                 group by ac.id,ac.code,ac.name
                 order by ac.code
                    """,
                    {'fiscalyear_id': fiscalyear_id,
-                       'period_ids': tuple(period_range_ids)}
+                       'period_ids': tuple(period_range_ids),
+                       'journal_ids': tuple(journal_ids)}
                    )
         res = cr.fetchall()
 
