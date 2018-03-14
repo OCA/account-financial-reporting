@@ -110,6 +110,9 @@ class CommonReportHeaderWebkit(common_report_header):
     def _get_amount_currency(self, data):
         return self._get_form_param('amount_currency', data)
 
+    def _get_new_page_after_each_account(self, data):
+        return self._get_form_param('new_page_after_each_account', data)
+
     def _get_date_from(self, data):
         return self._get_form_param('date_from', data)
 
@@ -421,9 +424,11 @@ class CommonReportHeaderWebkit(common_report_header):
         opening_period_selected = self.get_included_opening_period(
             start_period)
 
-        for acc in self.pool.get('account.account').browse(self.cursor,
-                                                           self.uid,
-                                                           account_ids):
+        for acc in self.pool.get('account.account').browse(
+                self.cursor,
+                self.uid,
+                account_ids,
+                context=self.localcontext):
             res[acc.id] = self._compute_init_balance(default_values=True)
             if acc.user_type.close_method == 'none':
                 # we compute the initial balance for close_method == none only

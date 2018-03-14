@@ -182,7 +182,7 @@ class HeaderFooterTextWebKitParser(webkit_report.WebKitParser):
         return pdf
 
     # override needed to keep the attachments' storing procedure
-    def create_single_pdf(self, cursor, uid, ids, data, report_xml,
+    def create_single_pdf_old(self, cursor, uid, ids, data, report_xml,
                           context=None):
         """generate the PDF"""
 

@@ -281,7 +281,10 @@ class CommonPartnerBalanceReportHeaderWebkit(CommonBalanceReportHeaderWebkit,
         objects = []
 
         for account in self.pool.get('account.account').browse(
-                self.cursor, self.uid, account_ids, context=self.localcontext):
+                self.cursor,
+                self.uid,
+                account_ids,
+                context=self.localcontext):
             if not account.parent_id:  # hide top level account
                 continue
             account.debit = accounts_by_ids[account.id]['debit']
