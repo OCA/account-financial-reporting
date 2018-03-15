@@ -34,7 +34,7 @@ class CustomerActivityStatement(models.AbstractModel):
             JOIN account_account_type at ON (at.id = l.user_type_id)
             JOIN account_move m ON (l.move_id = m.id)
             WHERE l.partner_id IN (%s) AND at.type = 'receivable'
-                                AND l.date <= '%s' AND not l.blocked
+                                AND l.date < '%s' AND not l.blocked
             GROUP BY l.partner_id, l.currency_id, l.amount_currency,
                                 l.company_id
         """ % (partners, date_start)
@@ -54,6 +54,7 @@ class CustomerActivityStatement(models.AbstractModel):
         partners = ', '.join([str(i) for i in partner_ids])
         date_start = datetime.strptime(
             date_start, DEFAULT_SERVER_DATE_FORMAT).date()
+        # pylint: disable=E8103
         self.env.cr.execute("""WITH Q1 AS (%s), Q2 AS (%s)
         SELECT partner_id, currency_id, balance
         FROM Q2""" % (self._initial_balance_sql_q1(partners, date_start),
@@ -82,7 +83,7 @@ class CustomerActivityStatement(models.AbstractModel):
             JOIN account_account_type at ON (at.id = l.user_type_id)
             JOIN account_move m ON (l.move_id = m.id)
             WHERE l.partner_id IN (%s) AND at.type = 'receivable'
-                                AND '%s' < l.date AND l.date <= '%s'
+                                AND '%s' <= l.date AND l.date <= '%s'
             GROUP BY l.partner_id, m.name, l.date, l.date_maturity, l.name,
                                 l.ref, l.blocked, l.currency_id,
                                 l.amount_currency, l.company_id
@@ -117,6 +118,63 @@ class CustomerActivityStatement(models.AbstractModel):
             res[row.pop('partner_id')].append(row)
         return res
 
+    def _get_credit_date(self):
+        return """
+            SELECT apr.id, aml.date as credit_date
+            FROM account_partial_reconcile apr
+            LEFT JOIN account_move_line aml
+            ON aml.id = apr.credit_move_id
+        """
+
+    def _get_debit_date(self):
+        return """
+            SELECT apr.id, aml.date as debit_date
+            FROM account_partial_reconcile apr
+            LEFT JOIN account_move_line aml
+            ON aml.id = apr.debit_move_id
+        """
+
+    def _get_reconcile_date(self):
+        return """
+            SELECT pr2.id,
+            CASE WHEN Q0a.credit_date > Q0b.debit_date
+                THEN Q0a.credit_date
+                ELSE Q0b.debit_date
+            END AS max_date
+            FROM account_partial_reconcile pr2
+            LEFT JOIN (%s) as Q0a ON Q0a.id = pr2.id
+            LEFT JOIN (%s) as Q0b ON Q0b.id = pr2.id
+            GROUP BY pr2.id, Q0a.credit_date, Q0b.debit_date
+        """ % (self._get_credit_date(), self._get_debit_date())
+
+    def _show_buckets_sql_q0(self, date_end):
+        return """
+            SELECT l1.id,
+            CASE WHEN l1.reconciled = TRUE and l1.balance > 0.0
+                                THEN max(pd.max_date)
+                WHEN l1.reconciled = TRUE and l1.balance < 0.0
+                                THEN max(pc.max_date)
+                ELSE null
+            END as reconciled_date
+            FROM account_move_line l1
+            LEFT JOIN (SELECT pr.*, Q0c.max_date
+                FROM account_partial_reconcile pr
+                INNER JOIN account_move_line l2
+                    ON pr.credit_move_id = l2.id
+                LEFT JOIN (%s) as Q0c ON Q0c.id = pr.id
+                WHERE l2.date <= '%s'
+            ) as pd ON pd.debit_move_id = l1.id
+            LEFT JOIN (SELECT pr.*, Q0c.max_date
+                FROM account_partial_reconcile pr
+                INNER JOIN account_move_line l2
+                    ON pr.debit_move_id = l2.id
+                LEFT JOIN (%s) as Q0c ON Q0c.id = pr.id
+                WHERE l2.date <= '%s'
+            ) as pc ON pc.credit_move_id = l1.id
+            GROUP BY l1.id
+        """ % (self._get_reconcile_date(), date_end,
+               self._get_reconcile_date(), date_end)
+
     def _show_buckets_sql_q1(self, partners, date_end):
         return """
             SELECT l.partner_id, l.currency_id, l.company_id, l.move_id,
@@ -135,6 +193,7 @@ class CustomerActivityStatement(models.AbstractModel):
             FROM account_move_line l
             JOIN account_account_type at ON (at.id = l.user_type_id)
             JOIN account_move m ON (l.move_id = m.id)
+            LEFT JOIN Q0 ON Q0.id = l.id
             LEFT JOIN (SELECT pr.*
                 FROM account_partial_reconcile pr
                 INNER JOIN account_move_line l2
@@ -148,13 +207,15 @@ class CustomerActivityStatement(models.AbstractModel):
                 WHERE l2.date <= '%s'
             ) as pc ON pc.credit_move_id = l.id
             WHERE l.partner_id IN (%s) AND at.type = 'receivable'
-                                AND not l.reconciled AND not l.blocked
+                                AND (Q0.reconciled_date is null or
+                                    Q0.reconciled_date > '%s')
+                                AND l.date <= '%s' AND not l.blocked
             GROUP BY l.partner_id, l.currency_id, l.date, l.date_maturity,
                                 l.amount_currency, l.balance, l.move_id,
                                 l.company_id
-        """ % (date_end, date_end, partners)
+        """ % (date_end, date_end, partners, date_end, date_end)
 
-    def _show_buckets_sql_q2(self, today, minus_30, minus_60, minus_90,
+    def _show_buckets_sql_q2(self, date_end, minus_30, minus_60, minus_90,
                              minus_120):
         return """
             SELECT partner_id, currency_id, date_maturity, open_due,
@@ -208,10 +269,10 @@ class CustomerActivityStatement(models.AbstractModel):
             FROM Q1
             GROUP BY partner_id, currency_id, date_maturity, open_due,
                                 open_due_currency, move_id, company_id
-        """ % (today, today, minus_30, today, minus_30, today, minus_60,
-               minus_30, minus_60, minus_30, minus_90, minus_60, minus_90,
-               minus_60, minus_120, minus_90, minus_120, minus_90, minus_120,
-               minus_120)
+        """ % (date_end, date_end, minus_30, date_end, minus_30, date_end,
+               minus_60, minus_30, minus_60, minus_30, minus_90, minus_60,
+               minus_90, minus_60, minus_120, minus_90, minus_120, minus_90,
+               minus_120, minus_120)
 
     def _show_buckets_sql_q3(self, company_id):
         return """
@@ -235,21 +296,24 @@ class CustomerActivityStatement(models.AbstractModel):
             GROUP BY partner_id, currency_id
         """
 
-    _bucket_dates = {
-        'today': fields.date.today(),
-        'minus_30': fields.date.today() - timedelta(days=30),
-        'minus_60': fields.date.today() - timedelta(days=60),
-        'minus_90': fields.date.today() - timedelta(days=90),
-        'minus_120': fields.date.today() - timedelta(days=120),
-    }
+    def _get_bucket_dates(self, date_end):
+        return {
+            'date_end': date_end,
+            'minus_30': date_end - timedelta(days=30),
+            'minus_60': date_end - timedelta(days=60),
+            'minus_90': date_end - timedelta(days=90),
+            'minus_120': date_end - timedelta(days=120),
+        }
 
     def _get_account_show_buckets(self, company_id, partner_ids, date_end):
         res = dict(map(lambda x: (x, []), partner_ids))
         partners = ', '.join([str(i) for i in partner_ids])
         date_end = datetime.strptime(
             date_end, DEFAULT_SERVER_DATE_FORMAT).date()
-        self.env.cr.execute("""WITH Q1 AS (%s), Q2 AS (%s),
-        Q3 AS (%s), Q4 AS (%s)
+        full_dates = self._get_bucket_dates(date_end)
+        # pylint: disable=E8103
+        self.env.cr.execute("""
+        WITH Q0 AS (%s), Q1 AS (%s), Q2 AS (%s), Q3 AS (%s), Q4 AS (%s)
         SELECT partner_id, currency_id, current, b_1_30, b_30_60, b_60_90,
                             b_90_120, b_over_120,
                             current+b_1_30+b_30_60+b_60_90+b_90_120+b_over_120
@@ -257,13 +321,14 @@ class CustomerActivityStatement(models.AbstractModel):
         FROM Q4
         GROUP BY partner_id, currency_id, current, b_1_30, b_30_60, b_60_90,
         b_90_120, b_over_120""" % (
+            self._show_buckets_sql_q0(date_end),
             self._show_buckets_sql_q1(partners, date_end),
             self._show_buckets_sql_q2(
-                self._bucket_dates['today'],
-                self._bucket_dates['minus_30'],
-                self._bucket_dates['minus_60'],
-                self._bucket_dates['minus_90'],
-                self._bucket_dates['minus_120']),
+                full_dates['date_end'],
+                full_dates['minus_30'],
+                full_dates['minus_60'],
+                full_dates['minus_90'],
+                full_dates['minus_120']),
             self._show_buckets_sql_q3(company_id),
             self._show_buckets_sql_q4()))
         for row in self.env.cr.dictfetchall():
