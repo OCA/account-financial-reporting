@@ -3,7 +3,7 @@
 #   (http://www.eficent.com)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from datetime import date, timedelta
+from datetime import date
 from openerp import api, fields, models
 
 
@@ -21,7 +21,7 @@ class CustomerActivityStatementWizard(models.TransientModel):
 
     date_start = fields.Date(required=True,
                              default=fields.Date.to_string(
-                                 date.today()-timedelta(days=120)))
+                                 date(date.today().year, 1, 1)))
     date_end = fields.Date(required=True,
                            default=fields.Date.to_string(date.today()))
     show_aging_buckets = fields.Boolean(string='Include Aging Buckets',
