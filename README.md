@@ -23,8 +23,8 @@ addon | version | summary
 [account_financial_report_qweb](account_financial_report_qweb/) | 9.0.1.0.2 | OCA Financial Reports
 [account_journal_report](account_journal_report/) | 9.0.1.0.0 | Journal Report
 [account_tax_balance](account_tax_balance/) | 9.0.1.1.0 | Compute tax balances based on date range
-[customer_activity_statement](customer_activity_statement/) | 9.0.1.0.0 | OCA Financial Reports
-[customer_outstanding_statement](customer_outstanding_statement/) | 9.0.1.0.0 | OCA Financial Reports
+[customer_activity_statement](customer_activity_statement/) | 9.0.1.1.0 | OCA Financial Reports
+[customer_outstanding_statement](customer_outstanding_statement/) | 9.0.1.1.0 | OCA Financial Reports
 
 
 Unported addons
