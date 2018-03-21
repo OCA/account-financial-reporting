@@ -49,6 +49,7 @@ _column_sizes = [
     ('journal', 12),
     ('account_code', 12),
     ('partner', 30),
+    ('ref', 30),
     ('label', 45),
     ('counterpart', 30),
     ('debit', 15),
@@ -64,7 +65,7 @@ COLS_FY = 1
 COLS_DF = 3
 COLS_AF = 1
 COLS_TM = 2
-COLS_IB = 2
+COLS_IB = 3
 
 # Full column span
 COLS_TOT = sum((COLS_COA, COLS_FY, COLS_DF, COLS_AF, COLS_TM, COLS_IB))
@@ -191,6 +192,7 @@ class general_ledger_xls(report_xls):
             ('account_code', 1, 0, 'text',
              _('Account'), None, c_hdr_cell_style),
             ('partner', 1, 0, 'text', _('Partner'), None, c_hdr_cell_style),
+            ('ref', 1, 0, 'text', _('Reference'), None, c_hdr_cell_style),
             ('label', 1, 0, 'text', _('Label'), None, c_hdr_cell_style),
             ('counterpart', 1, 0, 'text',
              _('Counterpart'), None, c_hdr_cell_style),
@@ -256,7 +258,7 @@ class general_ledger_xls(report_xls):
                     cumul_balance_curr = account.init_balance.get(
                         'init_balance_currency') or 0.0
                     c_specs = [('empty%s' % x, 1, 0, 'text', None)
-                               for x in range(7)]
+                               for x in range(8)]
                     c_specs += [
                         ('init_bal', 1, 0, 'text', _('Initial Balance')),
                         ('counterpart', 1, 0, 'text', None),
@@ -310,6 +312,7 @@ class general_ledger_xls(report_xls):
                         ('account_code', 1, 0, 'text', account.code),
                         ('partner', 1, 0, 'text',
                          line.get('partner_name') or ''),
+                        ('ref', 1, 0, 'text', line.get('lref')),
                         ('label', 1, 0, 'text', label),
                         ('counterpart', 1, 0, 'text',
                          line.get('counterparts') or ''),
@@ -334,14 +337,14 @@ class general_ledger_xls(report_xls):
                     row_pos = self.xls_write_row(
                         ws, row_pos, row_data, ll_cell_style)
 
-                debit_start = rowcol_to_cell(row_start, 9)
-                debit_end = rowcol_to_cell(row_pos - 1, 9)
+                debit_start = rowcol_to_cell(row_start, 10)
+                debit_end = rowcol_to_cell(row_pos - 1, 10)
                 debit_formula = 'SUM(' + debit_start + ':' + debit_end + ')'
-                credit_start = rowcol_to_cell(row_start, 10)
-                credit_end = rowcol_to_cell(row_pos - 1, 10)
+                credit_start = rowcol_to_cell(row_start, 11)
+                credit_end = rowcol_to_cell(row_pos - 1, 11)
                 credit_formula = 'SUM(' + credit_start + ':' + credit_end + ')'
-                balance_debit = rowcol_to_cell(row_pos, 9)
-                balance_credit = rowcol_to_cell(row_pos, 10)
+                balance_debit = rowcol_to_cell(row_pos, 10)
+                balance_credit = rowcol_to_cell(row_pos, 11)
                 balance_formula = balance_debit + '-' + balance_credit
                 c_specs = [
                     ('acc_title', COLS_TOT - 4, 0, 'text',
