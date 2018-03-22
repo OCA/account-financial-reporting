@@ -6,14 +6,14 @@ import xlwt
 from datetime import datetime
 from openerp.addons.report_xls.report_xls import report_xls
 from openerp.addons.report_xls.utils import rowcol_to_cell, _render
-from .nov_account_journal import nov_journal_print
+from .nov_account_journal import NovJournalPrint
 from openerp.tools.translate import _
 from openerp.exceptions import except_orm
 import logging
 _logger = logging.getLogger(__name__)
 
 
-class AccountJournalXlsParser(nov_journal_print):
+class AccountJournalXlsParser(NovJournalPrint):
 
     # pylint: disable=old-api7-method-defined
     def __init__(self, cr, uid, name, context):

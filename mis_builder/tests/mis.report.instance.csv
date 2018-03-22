@@ -1,2 +1,0 @@
-"id","date","description","name","period_ids/id","report_id/id","root_account/id"
-"mis_report_instance_test","2014-07-31","","Test-report-instance without company","mis_report_instance_period_test","mis_report_test","account.chart0"

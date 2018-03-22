@@ -76,6 +76,8 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
     def set_context(self, objects, data, ids, report_type=None):
         """Populate a ledger_lines attribute on each browse record that will be
         used by mako template"""
+        lang = self.localcontext.get('lang')
+        lang_ctx = lang and {'lang': lang} or {}
         new_ids = data['form']['account_ids'] or data[
             'form']['chart_account_id']
 
@@ -122,7 +124,8 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
             stop)
         objects = self.pool.get('account.account').browse(self.cursor,
                                                           self.uid,
-                                                          accounts)
+                                                          accounts,
+                                                          context=lang_ctx)
 
         init_balance = {}
         ledger_lines = {}

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-16 12:25+0000\n"
-"PO-Revision-Date: 2016-12-16 12:25+0000\n"
+"POT-Creation-Date: 2017-09-29 00:45+0000\n"
+"PO-Revision-Date: 2017-09-29 00:45+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2016\n"
 "Language-Team: Lithuanian (https://www.transifex.com/oca/teams/23907/lt/)\n"
 "MIME-Version: 1.0\n"
@@ -20,13 +20,13 @@ msgstr ""
 
 #. module: mis_builder
 #: code:addons/mis_builder/models/mis_builder.py:290
-#: code:addons/mis_builder/models/mis_builder.py:724
+#: code:addons/mis_builder/models/mis_builder.py:734
 #, python-format
 msgid "%s (copy)"
 msgstr ""
 
 #. module: mis_builder
-#: code:addons/mis_builder/models/mis_builder.py:859
+#: code:addons/mis_builder/models/mis_builder.py:869
 #, python-format
 msgid "%s vs %s"
 msgstr ""
@@ -183,7 +183,7 @@ msgid "Date field"
 msgstr ""
 
 #. module: mis_builder
-#: code:addons/mis_builder/models/mis_builder.py:556
+#: code:addons/mis_builder/models/mis_builder.py:566
 #: selection:mis.report.instance.period,type:0
 #, python-format
 msgid "Day"
@@ -271,7 +271,7 @@ msgid "Fields to fetch"
 msgstr ""
 
 #. module: mis_builder
-#: code:addons/mis_builder/models/mis_builder.py:558
+#: code:addons/mis_builder/models/mis_builder.py:568
 #: selection:mis.report.instance.period,type:0
 #, python-format
 msgid "Fiscal Period"
@@ -594,7 +594,7 @@ msgid "Valid"
 msgstr ""
 
 #. module: mis_builder
-#: code:addons/mis_builder/models/mis_builder.py:557
+#: code:addons/mis_builder/models/mis_builder.py:567
 #: selection:mis.report.instance.period,type:0
 #, python-format
 msgid "Week"
@@ -611,7 +611,7 @@ msgid "Wrong normalize factor, it must be positive!"
 msgstr ""
 
 #. module: mis_builder
-#: code:addons/mis_builder/models/mis_builder.py:839
+#: code:addons/mis_builder/models/mis_builder.py:849
 #, python-format
 msgid "from %s to %s"
 msgstr ""

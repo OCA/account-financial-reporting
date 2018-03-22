@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 # Copyright 2014 Camptocamp SA, Nicolas Bessi.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-from datetime import date
 from openerp import models, fields
-from openerp.tools import DEFAULT_SERVER_DATE_FORMAT as DATE_FORMAT
 
 
 class AccountAgedTrialBalance(models.TransientModel):
@@ -18,19 +16,7 @@ class AccountAgedTrialBalance(models.TransientModel):
 
     # pylint: disable=old-api7-method-defined
     def _get_current_fiscalyear(self, cr, uid, context=None):
-        user_obj = self.pool['res.users']
-        company = user_obj.browse(cr, uid, uid, context=context).company_id
-        fyear_obj = self.pool['account.period']
-        today = date.today().strftime(DATE_FORMAT)
-        fyear_ids = fyear_obj.search(
-            cr, uid,
-            [('date_start', '>=', today),
-             ('date_stop', '<=', today),
-             ('company_id', '=', company.id)],
-            limit=1,
-            context=context)
-        if fyear_ids:
-            return fyear_ids[0]
+        return self.pool['account.fiscalyear'].find(cr, uid, context=context)
 
     filter = fields.Selection(
         [('filter_period', 'Periods')], "Filter by", required=True,

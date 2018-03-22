@@ -4,14 +4,13 @@
 # 
 # Translators:
 # OCA Transbot <transbot@odoo-community.org>, 2016
-# Matjaž Mozetič <m.mozetic@matmoz.si>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-30 13:02+0000\n"
-"PO-Revision-Date: 2016-12-30 13:02+0000\n"
-"Last-Translator: Matjaž Mozetič <m.mozetic@matmoz.si>, 2016\n"
+"POT-Creation-Date: 2018-02-22 01:40+0000\n"
+"PO-Revision-Date: 2018-02-22 01:40+0000\n"
+"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2016\n"
 "Language-Team: Slovenian (https://www.transifex.com/oca/teams/23907/sl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,7 +29,7 @@ msgid "All Posted Entries"
 msgstr "Vsi knjiženi vnosi"
 
 #. module: account_journal_report_xls
-#: code:addons/account_journal_report_xls/report/nov_account_journal.py:79
+#: code:addons/account_journal_report_xls/report/nov_account_journal.py:80
 #, python-format
 msgid "Amount"
 msgstr "Znesek"
@@ -56,19 +55,19 @@ msgid "Created on"
 msgstr "Ustvarjeno"
 
 #. module: account_journal_report_xls
-#: code:addons/account_journal_report_xls/report/nov_account_journal.py:80
+#: code:addons/account_journal_report_xls/report/nov_account_journal.py:81
 #, python-format
 msgid "Credit"
 msgstr "Terjatve"
 
 #. module: account_journal_report_xls
-#: code:addons/account_journal_report_xls/report/nov_account_journal.py:79
+#: code:addons/account_journal_report_xls/report/nov_account_journal.py:80
 #, python-format
 msgid "Currency"
 msgstr "Valuta"
 
 #. module: account_journal_report_xls
-#: code:addons/account_journal_report_xls/report/nov_account_journal_xls.py:363
+#: code:addons/account_journal_report_xls/report/nov_account_journal_xls.py:366
 #, python-format
 msgid "Customisation Error!"
 msgstr "Napaka prilagoditve!"
@@ -80,7 +79,7 @@ msgid "Date"
 msgstr "Datum"
 
 #. module: account_journal_report_xls
-#: code:addons/account_journal_report_xls/report/nov_account_journal.py:80
+#: code:addons/account_journal_report_xls/report/nov_account_journal.py:81
 #, python-format
 msgid "Debit"
 msgstr "Obveznosti"
@@ -117,7 +116,7 @@ msgstr "Filtriraj po"
 
 #. module: account_journal_report_xls
 #: field:account.print.journal.xls,fiscalyear_id:0
-#: code:addons/account_journal_report_xls/report/nov_account_journal.py:75
+#: code:addons/account_journal_report_xls/report/nov_account_journal.py:76
 #, python-format
 msgid "Fiscal Year"
 msgstr "Fiskalno leto"
@@ -133,7 +132,7 @@ msgid "Group entries with same General Account & Tax Code."
 msgstr "Skupinski vnosi z istim splošnim kontom in davčno kodo."
 
 #. module: account_journal_report_xls
-#: code:addons/account_journal_report_xls/report/nov_account_journal.py:254
+#: code:addons/account_journal_report_xls/report/nov_account_journal.py:257
 #, python-format
 msgid "Grouped Entries"
 msgstr "Združeni vnosi"
@@ -144,7 +143,7 @@ msgid "ID"
 msgstr "ID"
 
 #. module: account_journal_report_xls
-#: code:addons/account_journal_report_xls/report/nov_account_journal.py:189
+#: code:addons/account_journal_report_xls/report/nov_account_journal.py:191
 #, python-format
 msgid "Invoice"
 msgstr "Račun"
@@ -160,7 +159,7 @@ msgid "Journal Entry Number"
 msgstr "Številka dnevniškega vnosa"
 
 #. module: account_journal_report_xls
-#: code:addons/account_journal_report_xls/report/nov_account_journal_xls.py:226
+#: code:addons/account_journal_report_xls/report/nov_account_journal_xls.py:228
 #, python-format
 msgid "Journal Overview"
 msgstr "Pregled dnevnika"
@@ -204,8 +203,8 @@ msgid "Last Updated on"
 msgstr "Zadnjič posodobljeno"
 
 #. module: account_journal_report_xls
-#: code:addons/account_journal_report_xls/wizard/print_journal_wizard.py:160
-#: code:addons/account_journal_report_xls/wizard/print_journal_wizard.py:184
+#: code:addons/account_journal_report_xls/wizard/print_journal_wizard.py:162
+#: code:addons/account_journal_report_xls/wizard/print_journal_wizard.py:186
 #, python-format
 msgid "No Data Available"
 msgstr "Ni podatkov na voljo"
@@ -216,14 +215,14 @@ msgid "No Filters"
 msgstr "Brez filtrov"
 
 #. module: account_journal_report_xls
-#: code:addons/account_journal_report_xls/wizard/print_journal_wizard.py:161
-#: code:addons/account_journal_report_xls/wizard/print_journal_wizard.py:185
+#: code:addons/account_journal_report_xls/wizard/print_journal_wizard.py:163
+#: code:addons/account_journal_report_xls/wizard/print_journal_wizard.py:187
 #, python-format
 msgid "No records found for your selection!"
 msgstr "Za vaš izbor ni najdenih zapisov!"
 
 #. module: account_journal_report_xls
-#: code:addons/account_journal_report_xls/report/nov_account_journal.py:74
+#: code:addons/account_journal_report_xls/report/nov_account_journal.py:75
 #, python-format
 msgid "Period"
 msgstr "Obdobje"
@@ -254,7 +253,7 @@ msgid "Print/Export Journal"
 msgstr "Natisni/izvozi dnevnik"
 
 #. module: account_journal_report_xls
-#: code:addons/account_journal_report_xls/report/nov_account_journal_xls.py:309
+#: code:addons/account_journal_report_xls/report/nov_account_journal_xls.py:311
 #, python-format
 msgid "Programming Error!"
 msgstr "Programska napaka!"
@@ -275,7 +274,7 @@ msgid "Start Period"
 msgstr "Začetno obdobje"
 
 #. module: account_journal_report_xls
-#: code:addons/account_journal_report_xls/report/nov_account_journal.py:193
+#: code:addons/account_journal_report_xls/report/nov_account_journal.py:195
 #, python-format
 msgid "Statement"
 msgstr "Izpisek"
@@ -286,15 +285,12 @@ msgid "Target Moves"
 msgstr "Ciljni premiki"
 
 #. module: account_journal_report_xls
-#: code:addons/account_journal_report_xls/report/nov_account_journal_xls.py:364
+#: code:addons/account_journal_report_xls/report/nov_account_journal_xls.py:367
 #, python-format
 msgid ""
-"The 'Balance' field is a calculated XLS                                     "
-"field requiring the presence of the                                     "
-"'Debit' and 'Credit' fields !"
+"The 'Balance' field is a calculated XLS                   field requiring "
+"the presence of the                   'Debit' and 'Credit' fields !"
 msgstr ""
-"Polje 'Bilanca' je izračunano XLS polje, ki potrebuje prisotnost polj "
-"'Obveznosti' in 'Terjatve'!"
 
 #. module: account_journal_report_xls
 #: view:account.print.journal.xls:account_journal_report_xls.view_print_journal_xls
@@ -302,14 +298,14 @@ msgid "This report allows you to generate a pdf or xls of your journals"
 msgstr "To poročilo omogoča ustvarjanje pdf ali xls za vaše dnevnike"
 
 #. module: account_journal_report_xls
-#: code:addons/account_journal_report_xls/report/nov_account_journal_xls.py:296
+#: code:addons/account_journal_report_xls/report/nov_account_journal_xls.py:298
 #, python-format
 msgid "VAT Declaration"
 msgstr "DDV deklaracija"
 
 #. module: account_journal_report_xls
-#: code:addons/account_journal_report_xls/report/nov_account_journal.py:190
-#: code:addons/account_journal_report_xls/report/nov_account_journal.py:194
+#: code:addons/account_journal_report_xls/report/nov_account_journal.py:192
+#: code:addons/account_journal_report_xls/report/nov_account_journal.py:196
 #, python-format
 msgid "Voucher"
 msgstr "Vavčer"
@@ -325,7 +321,7 @@ msgid "onchange_fiscalyear_id(fiscalyear_id, context)"
 msgstr "onchange_fiscalyear_id(fiscalyear_id, context)"
 
 #. module: account_journal_report_xls
-#: code:addons/account_journal_report_xls/report/nov_account_journal_xls.py:310
+#: code:addons/account_journal_report_xls/report/nov_account_journal_xls.py:312
 #, python-format
 msgid "vat_summary_cols_number should be < cols_number !"
 msgstr "vat_summary_cols_number should be < cols_number !"

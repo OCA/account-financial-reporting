@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-10 23:14+0000\n"
-"PO-Revision-Date: 2017-03-10 23:14+0000\n"
+"POT-Creation-Date: 2018-02-22 01:40+0000\n"
+"PO-Revision-Date: 2018-02-22 01:40+0000\n"
 "Last-Translator: Matjaž Mozetič <m.mozetic@matmoz.si>, 2017\n"
 "Language-Team: Slovenian (https://www.transifex.com/oca/teams/23907/sl/)\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #. module: account_financial_report_webkit_xls
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:85
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:87
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:93
 #, python-format
 msgid ""
 "\n"
@@ -32,14 +32,14 @@ msgstr ""
 
 #. module: account_financial_report_webkit_xls
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:188
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:190
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:196
 #, python-format
 msgid "% Difference"
 msgstr "% razlike"
 
 #. module: account_financial_report_webkit_xls
 #: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:148
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:155
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:161
 #, python-format
 msgid "Account"
 msgstr "Konto"
@@ -51,26 +51,40 @@ msgid "Account / Partner Name"
 msgstr "Konto / naziv partnerja"
 
 #. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/aged_open_invoices_xls.py:99
+#: code:addons/account_financial_report_webkit_xls/report/aged_partner_balance_xls.py:98
 #: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:82
 #: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:147
 #: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:83
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:50
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:61
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:67
 #, python-format
 msgid "Accounts Filter"
 msgstr "Kontni filter"
 
 #. module: account_financial_report_webkit_xls
+#: model:ir.model,name:account_financial_report_webkit_xls.model_aged_open_invoices_webkit
+msgid "Aged open invoices"
+msgstr "Zapadli odprti računi"
+
+#. module: account_financial_report_webkit_xls
+#: model:ir.model,name:account_financial_report_webkit_xls.model_account_aged_trial_balance_webkit
+msgid "Aged partner balanced"
+msgstr "Zapadlosti partnerja usklajene"
+
+#. module: account_financial_report_webkit_xls
 #: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:111
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:77
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:80
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:86
 #, python-format
 msgid "All"
 msgstr "Vse"
 
 #. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/aged_open_invoices_xls.py:163
+#: code:addons/account_financial_report_webkit_xls/report/aged_partner_balance_xls.py:162
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:166
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:168
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:174
 #, python-format
 msgid "Balance"
 msgstr "Bilanca"
@@ -78,37 +92,43 @@ msgstr "Bilanca"
 #. module: account_financial_report_webkit_xls
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:168
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:176
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:170
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:178
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:176
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:184
 #, python-format
 msgid "Balance %s"
 msgstr "Bilanca %s"
 
 #. module: account_financial_report_webkit_xls
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:181
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:183
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:189
 #, python-format
 msgid "Balance C%s"
 msgstr "Bilanca C%s"
 
 #. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/aged_open_invoices_xls.py:95
+#: code:addons/account_financial_report_webkit_xls/report/aged_partner_balance_xls.py:94
 #: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:78
 #: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:138
 #: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:79
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:60
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:67
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:73
 #, python-format
 msgid "Chart of Account"
 msgstr "Kontni plan"
 
 #. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/aged_open_invoices_xls.py:98
+#: code:addons/account_financial_report_webkit_xls/report/aged_partner_balance_xls.py:97
 #: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:146
 #, python-format
 msgid "Clearance Date"
 msgstr "Datum izbrisa"
 
 #. module: account_financial_report_webkit_xls
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:154
+#: code:addons/account_financial_report_webkit_xls/report/aged_open_invoices_xls.py:161
+#: code:addons/account_financial_report_webkit_xls/report/aged_partner_balance_xls.py:160
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:160
 #, python-format
 msgid "Code"
 msgstr "Koda"
@@ -121,14 +141,14 @@ msgstr "Koda/sklic"
 
 #. module: account_financial_report_webkit_xls
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:118
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:118
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:124
 #, python-format
 msgid "Comparison"
 msgstr "Primerjava"
 
 #. module: account_financial_report_webkit_xls
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:110
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:111
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:117
 #, python-format
 msgid "Comparisons"
 msgstr "Primerjave"
@@ -137,7 +157,7 @@ msgstr "Primerjave"
 #: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:49
 #: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:47
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:261
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:31
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:37
 #, python-format
 msgid "Computed"
 msgstr "Obdelano"
@@ -153,7 +173,7 @@ msgstr "Proti postavka"
 #: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:213
 #: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:171
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:161
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:163
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:169
 #, python-format
 msgid "Credit"
 msgstr "Terjatve"
@@ -239,8 +259,8 @@ msgstr "Datum"
 #: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:82
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:52
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:123
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:63
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:121
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:69
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:127
 #, python-format
 msgid "Dates Filter"
 msgstr "Datumski filter"
@@ -250,17 +270,24 @@ msgstr "Datumski filter"
 #: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:211
 #: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:170
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:160
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:162
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:168
 #, python-format
 msgid "Debit"
 msgstr "Obveznosti"
 
 #. module: account_financial_report_webkit_xls
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:185
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:187
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:193
 #, python-format
 msgid "Difference"
 msgstr "Razlika"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/aged_open_invoices_xls.py:164
+#: code:addons/account_financial_report_webkit_xls/report/aged_partner_balance_xls.py:163
+#, python-format
+msgid "Due"
+msgstr ""
 
 #. module: account_financial_report_webkit_xls
 #: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:209
@@ -277,32 +304,38 @@ msgid "Entry"
 msgstr "Vnos"
 
 #. module: account_financial_report_webkit_xls
-#: view:general.ledger.webkit:account_financial_report_webkit_xls.general_ledger_webkit_xls_wizard_view
-#: view:open.invoices.webkit:account_financial_report_webkit_xls.open_invoices_webkit_xls_wizard_view
-#: view:partner.balance.webkit:account_financial_report_webkit_xls.partners_balance_webkit_xls_wizard_view
-#: view:partners.ledger.webkit:account_financial_report_webkit_xls.partner_ledger_webkit_xls_wizard_view
-#: view:trial.balance.webkit:account_financial_report_webkit_xls.trial_balance_webkit_xls_wizard_view
+#: view:account.aged.trial.balance.webkit:account_financial_report_webkit_xls.account_aged_trial_balance_webkit
+#: view:aged.open.invoices.webkit:account_financial_report_webkit_xls.aged_open_invoice_webkit
+#: view:general.ledger.webkit:account_financial_report_webkit_xls.account_report_general_ledger_view_webkit
+#: view:open.invoices.webkit:account_financial_report_webkit_xls.account_open_invoices_view_webkit
+#: view:partner.balance.webkit:account_financial_report_webkit_xls.account_partner_balance_view_webkit
+#: view:partners.ledger.webkit:account_financial_report_webkit_xls.account_partner_ledger_view_webkit
+#: view:trial.balance.webkit:account_financial_report_webkit_xls.account_trial_balance_view_webkit
 msgid "Export"
 msgstr "Izvoz"
 
 #. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/aged_open_invoices_xls.py:96
+#: code:addons/account_financial_report_webkit_xls/report/aged_partner_balance_xls.py:95
 #: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:79
 #: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:140
 #: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:80
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:49
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:131
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:60
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:130
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:66
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:136
 #, python-format
 msgid "Fiscal Year"
 msgstr "Fiskalno leto"
 
 #. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/aged_open_invoices_xls.py:110
+#: code:addons/account_financial_report_webkit_xls/report/aged_partner_balance_xls.py:109
 #: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:98
 #: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:167
 #: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:99
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:80
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:82
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:88
 #, python-format
 msgid "From"
 msgstr "Od"
@@ -320,9 +353,9 @@ msgstr "Izpis glavne knjige"
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:58
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:133
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:158
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:65
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:132
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:160
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:71
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:138
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:166
 #, python-format
 msgid "Initial Balance"
 msgstr "Začetna bilanca"
@@ -347,7 +380,7 @@ msgstr "Oznaka"
 #: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:51
 #: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:49
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:263
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:33
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:39
 #, python-format
 msgid "No"
 msgstr "Brez"
@@ -366,6 +399,13 @@ msgid "No partner"
 msgstr "Brez partnerja"
 
 #. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/aged_open_invoices_xls.py:169
+#: code:addons/account_financial_report_webkit_xls/report/aged_partner_balance_xls.py:168
+#, python-format
+msgid "Older"
+msgstr ""
+
+#. module: account_financial_report_webkit_xls
 #: model:ir.model,name:account_financial_report_webkit_xls.model_open_invoices_webkit
 msgid "Open Invoices Report"
 msgstr "Izpis odprtih računov"
@@ -374,12 +414,21 @@ msgstr "Izpis odprtih računov"
 #: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:50
 #: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:48
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:262
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:32
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:38
 #, python-format
 msgid "Opening Entries"
 msgstr "Otvoritveni vnosi"
 
 #. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/aged_open_invoices_xls.py:167
+#: code:addons/account_financial_report_webkit_xls/report/aged_partner_balance_xls.py:166
+#, python-format
+msgid "Overdue ≤ %s d."
+msgstr "Zapade ≤ %s d."
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/aged_open_invoices_xls.py:159
+#: code:addons/account_financial_report_webkit_xls/report/aged_partner_balance_xls.py:158
 #: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:149
 #: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:204
 #: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:167
@@ -398,10 +447,19 @@ msgid "Partner Ledger Report"
 msgstr "Saldakonti partnerja"
 
 #. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/aged_open_invoices_xls.py:100
+#: code:addons/account_financial_report_webkit_xls/report/aged_partner_balance_xls.py:99
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:55
 #, python-format
 msgid "Partners Filter"
 msgstr "Filtriranje partnerjev"
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/aged_open_invoices_xls.py:227
+#: code:addons/account_financial_report_webkit_xls/report/aged_partner_balance_xls.py:226
+#, python-format
+msgid "Percentages"
+msgstr ""
 
 #. module: account_financial_report_webkit_xls
 #: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:144
@@ -412,23 +470,27 @@ msgid "Period"
 msgstr "Obdobje"
 
 #. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/aged_open_invoices_xls.py:97
+#: code:addons/account_financial_report_webkit_xls/report/aged_partner_balance_xls.py:96
 #: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:81
 #: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:143
 #: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:82
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:53
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:127
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:63
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:126
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:69
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:132
 #, python-format
 msgid "Periods Filter"
 msgstr "Filtriranje obdobij"
 
 #. module: account_financial_report_webkit_xls
-#: view:general.ledger.webkit:account_financial_report_webkit_xls.general_ledger_webkit_xls_wizard_view
-#: view:open.invoices.webkit:account_financial_report_webkit_xls.open_invoices_webkit_xls_wizard_view
-#: view:partner.balance.webkit:account_financial_report_webkit_xls.partners_balance_webkit_xls_wizard_view
-#: view:partners.ledger.webkit:account_financial_report_webkit_xls.partner_ledger_webkit_xls_wizard_view
-#: view:trial.balance.webkit:account_financial_report_webkit_xls.trial_balance_webkit_xls_wizard_view
+#: view:account.aged.trial.balance.webkit:account_financial_report_webkit_xls.account_aged_trial_balance_webkit
+#: view:aged.open.invoices.webkit:account_financial_report_webkit_xls.aged_open_invoice_webkit
+#: view:general.ledger.webkit:account_financial_report_webkit_xls.account_report_general_ledger_view_webkit
+#: view:open.invoices.webkit:account_financial_report_webkit_xls.account_open_invoices_view_webkit
+#: view:partner.balance.webkit:account_financial_report_webkit_xls.account_partner_balance_view_webkit
+#: view:partners.ledger.webkit:account_financial_report_webkit_xls.account_partner_ledger_view_webkit
+#: view:trial.balance.webkit:account_financial_report_webkit_xls.account_trial_balance_view_webkit
 msgid "Print"
 msgstr "Natisni"
 
@@ -446,17 +508,26 @@ msgid "Reference"
 msgstr "Sklic"
 
 #. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/aged_open_invoices_xls.py:123
+#: code:addons/account_financial_report_webkit_xls/report/aged_partner_balance_xls.py:122
+#, python-format
+msgid "Selected Partners"
+msgstr ""
+
+#. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/aged_open_invoices_xls.py:101
+#: code:addons/account_financial_report_webkit_xls/report/aged_partner_balance_xls.py:100
 #: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:83
 #: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:150
 #: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:84
 #: code:addons/account_financial_report_webkit_xls/report/partners_balance_xls.py:57
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:64
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:70
 #, python-format
 msgid "Target Moves"
 msgstr "Ciljni premiki"
 
 #. module: account_financial_report_webkit_xls
-#: view:general.ledger.webkit:account_financial_report_webkit_xls.general_ledger_webkit_xls_wizard_view
+#: view:general.ledger.webkit:account_financial_report_webkit_xls.account_report_general_ledger_view_webkit
 msgid ""
 "This report allows you to generate a pdf or xls of your general ledger with "
 "details of all your account journals"
@@ -465,7 +536,7 @@ msgstr ""
 "vseh kontnih dnevnikov"
 
 #. module: account_financial_report_webkit_xls
-#: view:open.invoices.webkit:account_financial_report_webkit_xls.open_invoices_webkit_xls_wizard_view
+#: view:open.invoices.webkit:account_financial_report_webkit_xls.account_open_invoices_view_webkit
 msgid ""
 "This report allows you to generate a pdf or xls of your open invoices per "
 "partner with details of all your payable/receivable account. Exclude full "
@@ -476,17 +547,7 @@ msgstr ""
 "dnevniške postavke."
 
 #. module: account_financial_report_webkit_xls
-#: view:partner.balance.webkit:account_financial_report_webkit_xls.partners_balance_webkit_xls_wizard_view
-msgid ""
-"This report allows you to generate a pdf or xls of your partner balance "
-"allowing you to quickly check the balance of each of your accounts in a "
-"single report"
-msgstr ""
-"To poročilo omogoči ustvarjanje pdf ali xls partnerjeve bilance, s čimer "
-"lahko hitro preverite stanja kontov v enem samem poročilu."
-
-#. module: account_financial_report_webkit_xls
-#: view:partners.ledger.webkit:account_financial_report_webkit_xls.partner_ledger_webkit_xls_wizard_view
+#: view:partners.ledger.webkit:account_financial_report_webkit_xls.account_partner_ledger_view_webkit
 msgid ""
 "This report allows you to generate a pdf or xls of your partner ledger with "
 "details of all your account journals"
@@ -495,7 +556,7 @@ msgstr ""
 "podrobnostmi vseh kontnih dnevnikov"
 
 #. module: account_financial_report_webkit_xls
-#: view:trial.balance.webkit:account_financial_report_webkit_xls.trial_balance_webkit_xls_wizard_view
+#: view:trial.balance.webkit:account_financial_report_webkit_xls.account_trial_balance_view_webkit
 msgid ""
 "This report allows you to generate a pdf or xls of your trial balance "
 "allowing you to quickly check the balance of each of your accounts in a "
@@ -505,6 +566,8 @@ msgstr ""
 " preverite stanja vseh kontov v enem samem poročilu."
 
 #. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/aged_open_invoices_xls.py:112
+#: code:addons/account_financial_report_webkit_xls/report/aged_partner_balance_xls.py:111
 #: code:addons/account_financial_report_webkit_xls/report/general_ledger_xls.py:103
 #: code:addons/account_financial_report_webkit_xls/report/open_invoices_xls.py:172
 #: code:addons/account_financial_report_webkit_xls/report/partner_ledger_xls.py:104
@@ -513,12 +576,19 @@ msgid "To"
 msgstr "Do"
 
 #. module: account_financial_report_webkit_xls
+#: code:addons/account_financial_report_webkit_xls/report/aged_open_invoices_xls.py:203
+#: code:addons/account_financial_report_webkit_xls/report/aged_partner_balance_xls.py:202
+#, python-format
+msgid "Total"
+msgstr "Skupaj"
+
+#. module: account_financial_report_webkit_xls
 #: model:ir.model,name:account_financial_report_webkit_xls.model_trial_balance_webkit
 msgid "Trial Balance Report"
 msgstr "Izpis poskusne bilance"
 
 #. module: account_financial_report_webkit_xls
-#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:192
+#: code:addons/account_financial_report_webkit_xls/report/trial_balance_xls.py:198
 #, python-format
 msgid "Type"
 msgstr "Tip"
