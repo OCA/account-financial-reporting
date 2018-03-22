@@ -12,6 +12,12 @@ from openerp.tools.translate import _
 
 
 class TrialBalanceXls(report_xls):
+    # pylint: disable=old-api7-method-defined
+    def create(self, cr, uid, ids, data, context=None):
+        self._column_sizes = [12, 60, 17, 17, 17, 17, 17, 17]
+        self._debit_pos = 4
+        return super(TrialBalanceXls, self).create(
+            cr, uid, ids, data, context=context)
 
     # pylint: disable=old-api7-method-defined
     def create(self, cr, uid, ids, data, context=None):
