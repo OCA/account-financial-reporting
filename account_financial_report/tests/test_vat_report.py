@@ -48,22 +48,27 @@ class TestVATReport(common.TransactionCase):
 
     def setUp(self):
         super(TestVATReport, self).setUp()
-        self.date_from = time.strftime('%Y-%m-01'),
-        self.date_to = time.strftime('%Y-%m-28'),
+        self.date_from = time.strftime('%Y-%m-01')
+        self.date_to = time.strftime('%Y-%m-28')
+        self.company = self.env.ref('base.main_company')
         self.receivable_account = self.env['account.account'].search([
+            ('company_id', '=', self.company.id),
             ('user_type_id.name', '=', 'Receivable')
             ], limit=1)
         self.income_account = self.env['account.account'].search([
+            ('company_id', '=', self.company.id),
             ('user_type_id.name', '=', 'Income')
             ], limit=1)
         self.tax_account = self.env['account.account'].search([
+            ('company_id', '=', self.company.id),
             ('user_type_id',
              '=',
              self.env.ref(
-                 'account.data_account_type_non_current_liabilities').id
-             )], limit=1)
-        self.bank_journal = self.env['account.journal'].search(
-            [('type', '=', 'bank')], limit=1)
+                 'account.data_account_type_non_current_liabilities').id)
+            ], limit=1)
+        self.bank_journal = self.env['account.journal'].search([
+            ('type', '=', 'bank'), ('company_id', '=', self.company.id)
+            ], limit=1)
         self.tax_tag_01 = self.env['account.account.tag'].create({
             'name': 'Tag 01',
             'applicability': 'taxes'
@@ -90,6 +95,7 @@ class TestVATReport(common.TransactionCase):
             'amount_type': 'percent',
             'type_tax_use': 'sale',
             'account_id': self.tax_account.id,
+            'company_id': self.company.id,
             'refund_account_id': self.tax_account.id,
             'tax_group_id': self.tax_group_10.id,
             'tag_ids': [(6, 0, [self.tax_tag_01.id, self.tax_tag_02.id])]
@@ -102,6 +108,7 @@ class TestVATReport(common.TransactionCase):
             'type_tax_use': 'sale',
             'tax_exigibility': 'on_payment',
             'account_id': self.tax_account.id,
+            'company_id': self.company.id,
             'refund_account_id': self.tax_account.id,
             'cash_basis_account': self.tax_account.id,
             'tax_group_id': self.tax_group_20.id,
@@ -111,6 +118,7 @@ class TestVATReport(common.TransactionCase):
         invoice = self.env['account.invoice'].create({
             'partner_id': self.env.ref('base.res_partner_2').id,
             'account_id': self.receivable_account.id,
+            'company_id': self.company.id,
             'date_invoice': time.strftime('%Y-%m-03'),
             'type': 'out_invoice',
         })
@@ -130,6 +138,7 @@ class TestVATReport(common.TransactionCase):
         self.cbinvoice = self.env['account.invoice'].create({
             'partner_id': self.env.ref('base.res_partner_2').id,
             'account_id': self.receivable_account.id,
+            'company_id': self.company.id,
             'date_invoice': time.strftime('%Y-%m-05'),
             'type': 'out_invoice',
         })
@@ -147,13 +156,12 @@ class TestVATReport(common.TransactionCase):
         self.cbinvoice.action_invoice_open()
 
     def _get_report_lines(self):
-        company = self.env.ref('base.main_company')
         self.cbinvoice.pay_and_reconcile(
             self.bank_journal.id, 300, time.strftime('%Y-%m-10'))
         vat_report = self.env['report_vat_report'].create({
             'date_from': self.date_from,
             'date_to': self.date_to,
-            'company_id': company.id,
+            'company_id': self.company.id,
             'based_on': 'taxtags',
             'tax_detail': True,
             })
@@ -238,11 +246,10 @@ class TestVATReport(common.TransactionCase):
         self.assertEqual(lines['tax_group_20'].tax, 50)
 
     def test_get_report_html(self):
-        company = self.env.ref('base.main_company')
         vat_report = self.env['report_vat_report'].create({
             'date_from': self.date_from,
             'date_to': self.date_to,
-            'company_id': company.id,
+            'company_id': self.company.id,
             'tax_detail': True,
             })
         vat_report.compute_data_for_report()
