@@ -25,17 +25,17 @@
                         </group>
                     </group>
                     <label for="cost_center_ids" groups="analytic.group_analytic_accounting"/>
-                    <field name="cost_center_ids" nolabel="1" options="{'no_create': True}" groups="analytic.group_analytic_accounting"/>
+                    <field name="cost_center_ids" nolabel="1" options="{'no_create': True}" groups="analytic.group_analytic_accounting" domain="[('company_id','=',company_id)]"/>
                     <group/>
                     <label for="partner_ids"/>
-                    <field name="partner_ids" nolabel="1" options="{'no_create': True}"/>
+                    <field name="partner_ids" nolabel="1" options="{'no_create': True}" domain="['|',('company_id','=',company_id), ('company_id','=',False)]"/>
                     <group/>
                     <label for="account_ids"/>
                     <group col="4">
                         <field name="receivable_accounts_only"/>
                         <field name="payable_accounts_only"/>
                     </group>
-                    <field name="account_ids" widget="many2many_tags"  nolabel="1" options="{'no_create': True}"/>
+                    <field name="account_ids" widget="many2many_tags"  nolabel="1" options="{'no_create': True}" domain="[('company_id','=',company_id)]"/>
                 </div>
                 <div attrs="{'invisible': [('not_only_one_unaffected_earnings_account', '=', False)]}">
                     <field name="not_only_one_unaffected_earnings_account" invisible="1"/>
