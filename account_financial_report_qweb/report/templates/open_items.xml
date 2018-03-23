@@ -13,11 +13,14 @@
 
     <template id="report_open_items_base">
         <!-- Defines global variables used by internal layout -->
-        <t t-set="title">Open Items</t>
+        <t t-set="title" >Open Items - <t t-raw="o.company_id.name"/> - <t t-raw="o.company_id.currency_id.name"/></t>
         <t t-set="company_name" t-value="o.company_id.name"/>
         <t t-set="res_company" t-value="o.company_id"/>
         <t t-set="foreign_currency" t-value="o.foreign_currency"/>
-        <div class="page">
+        <div class="page data_table">
+            <div class="row">
+                <h4 class="mt0" t-esc="title or 'Odoo Report'" style="text-align: center;"/>
+            </div>
             <!-- Display filters -->
             <t t-call="account_financial_report_qweb.report_open_items_qweb_filters"/>
 

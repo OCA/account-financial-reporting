@@ -17,6 +17,7 @@ class AgedPartnerBalance(models.TransientModel):
     company_id = fields.Many2one(
         comodel_name='res.company',
         default=lambda self: self.env.user.company_id,
+        required=True,
         string='Company'
     )
     date_at = fields.Date(required=True,
@@ -38,11 +39,22 @@ class AgedPartnerBalance(models.TransientModel):
     )
     show_move_line_details = fields.Boolean()
 
+    @api.onchange('company_id')
+    def onchange_company_id(self):
+        """Handle company change."""
+        if self.company_id and self.partner_ids:
+            self.partner_ids = self.partner_ids.filtered(
+                lambda p: p.company_id == self.company_id or
+                not p.company_id)
+        if self.company_id and self.account_ids:
+            self.account_ids = self.account_ids.filtered(
+                lambda a: a.company_id == self.company_id)
+
     @api.onchange('receivable_accounts_only', 'payable_accounts_only')
     def onchange_type_accounts_only(self):
         """Handle receivable/payable accounts only change."""
         if self.receivable_accounts_only or self.payable_accounts_only:
-            domain = []
+            domain = [('company_id', '=', self.company_id.id)]
             if self.receivable_accounts_only and self.payable_accounts_only:
                 domain += [('internal_type', 'in', ('receivable', 'payable'))]
             elif self.receivable_accounts_only:

@@ -8,16 +8,6 @@
     </template>
 
     <template id="account_financial_report_qweb.internal_layout">
-        <div class="header">
-            <div class="row">
-                <div class="col-xs-6">
-                    <span t-esc="title"/>
-                </div>
-                <div class="col-xs-6 text-right">
-                    <span t-esc="company_name"/>
-                </div>
-            </div>
-        </div>
         <t t-raw="0" />
         <div class="footer">
             <div class="row">

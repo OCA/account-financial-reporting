@@ -21,13 +21,20 @@
                 </group>
                 <group name="partner_filter" col="1">
                     <label for="partner_ids"/>
-                    <field name="partner_ids" nolabel="1" widget="many2many_tags" options="{'no_create': True}"/>
+                    <field name="partner_ids" nolabel="1"
+                           widget="many2many_tags"
+                           options="{'no_create': True}"
+                           domain="['|',('company_id','=',company_id), ('company_id','=',False)]"/>
                 </group>
                 <group name="account_filter" col="4">
                     <label for="account_ids" colspan="4"/>
                     <field name="receivable_accounts_only"/>
                     <field name="payable_accounts_only"/>
-                    <field name="account_ids" nolabel="1" widget="many2many_tags" options="{'no_create': True}" colspan="4"/>
+                    <field name="account_ids" nolabel="1"
+                           widget="many2many_tags"
+                           options="{'no_create': True}"
+                           domain="[('company_id','=',company_id)]"
+                           colspan="4"/>
                 </group>
                 <footer>
                     <button name="button_export_html" string="View"
