@@ -1,9 +1,10 @@
 # Copyright  2018 Forest and Biomass Romania
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 from odoo.tools.safe_eval import safe_eval
 from odoo.tools import pycompat
+from odoo.exceptions import ValidationError
 
 
 class VATReportWizard(models.TransientModel):
@@ -12,6 +13,7 @@ class VATReportWizard(models.TransientModel):
     company_id = fields.Many2one(
         comodel_name='res.company',
         default=lambda self: self.env.user.company_id,
+        required=True,
         string='Company'
     )
     date_range_id = fields.Many2one(
@@ -27,11 +29,27 @@ class VATReportWizard(models.TransientModel):
                                 default='taxtags')
     tax_detail = fields.Boolean('Detail Taxes')
 
+    @api.onchange('company_id')
+    def onchange_company_id(self):
+        if self.company_id and self.date_range_id.company_id and \
+                self.date_range_id.company_id != self.company_id:
+            self.date_range_id = False
+
     @api.onchange('date_range_id')
     def onchange_date_range_id(self):
         """Handle date range change."""
         self.date_from = self.date_range_id.date_start
         self.date_to = self.date_range_id.date_end
+
+    @api.multi
+    @api.constrains('company_id', 'date_range_id')
+    def _check_company_id_date_range_id(self):
+        for rec in self.sudo():
+            if rec.company_id and rec.date_range_id.company_id and\
+                    rec.company_id != rec.date_range_id.company_id:
+                raise ValidationError(
+                    _('The Company in the Vat Report Wizard and in '
+                      'Date Range must be the same.'))
 
     @api.multi
     def button_export_html(self):
