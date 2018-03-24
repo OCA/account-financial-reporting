@@ -15,6 +15,7 @@
         'wizard/bank_reconciliation_report_wizard_view.xml',
         'views/account_bank_statement.xml',
         'views/account_move_line.xml',
+        'views/account_journal.xml',
         ],
     'installable': True,
 }

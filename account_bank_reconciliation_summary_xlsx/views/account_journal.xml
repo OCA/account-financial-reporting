@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2018 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+
+<odoo>
+
+<!-- Accounting Dashboard -->
+<record id="account_journal_dashboard_kanban_view" model="ir.ui.view">
+    <field name="name">bank_reconciliation_summarry.account_journal_dashboard</field>
+    <field name="model">account.journal</field>
+    <field name="inherit_id" ref="account.account_journal_dashboard_kanban_view"/>
+    <field name="arch" type="xml">
+        <xpath expr="//div[@name='bank_cash_commands']/.." position="after">
+            <div class="col-xs-4 o_kanban_card_manage_section o_kanban_manage_new">
+                <div class="o_kanban_card_manage_title">
+                    <span>Report</span>
+                </div>
+                <div name="bank_reconciliation_report">
+                    <a name="%(bank_reconciliation_report_wizard_action)d"
+                        type="action"
+                        context="{'default_journal_ids': [active_id]}">Bank Reconciliation</a>
+                </div>
+            </div>
+        </xpath>
+    </field>
+</record>
+
+
+</odoo>
