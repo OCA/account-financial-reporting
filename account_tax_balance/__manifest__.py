@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2016 Lorenzo Battistini - Agile Business Group
 # Copyright 2016 Tecnativa - Antonio Espinosa
 # Copyright 2016 ACSONE SA/NV - Stéphane Bidoul
