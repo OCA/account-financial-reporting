@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2017 ACSONE SA/NV
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="journal_report_wizard_form_view">
+        <field name="name">journal.report.wizard.form (in account_financial_report_qweb)</field>
+        <field name="model">journal.report.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </group>
+
+                <separator string="Periods"/>
+                <group>
+                    <group>
+                        <field name="date_range_id"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <group/>
+                </group>
+
+                <separator string="Options"/>
+                <group name="options">
+                    <group>
+                        <field name="move_target" widget="radio" options="{'horizontal': true}"/>
+                        <field name="sort_option"/>
+                        <field name="group_option"/>
+                        <field name="with_currency"/>
+                        <field name="with_account_name"/>
+                    </group>
+                    <group/>
+                </group>
+
+                <separator string="Journals"/>
+                <group>
+                    <field name="journal_ids" widget="many2many_tags"/>
+                </group>
+
+                <footer>
+                    <button name="export_as_pdf"
+                            string="Print" class="btn-primary"
+                            type="object"/>
+                    <button name="export_as_xlsx"
+                            string="Export" class="btn-primary"
+                            type="object"/>
+                    <button string="Cancel"
+                            class="btn-default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="journal_report_wizard_act_window">
+        <field name="name">Journal Ledger Report Wizard</field>
+        <field name="res_model">journal.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="context">{}</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

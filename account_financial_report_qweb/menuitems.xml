@@ -16,6 +16,14 @@
         />
 
     <menuitem
+        id="journal_report_wizard_menu"
+        name="Journal Ledger"
+        parent="menu_oca_reports"
+        action="journal_report_wizard_act_window"
+        sequence="15"
+        />
+
+    <menuitem
         parent="menu_oca_reports"
         action="action_trial_balance_wizard"
         id="menu_trial_balance_wizard"
