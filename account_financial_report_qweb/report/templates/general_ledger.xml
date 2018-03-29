@@ -110,10 +110,12 @@
                     <div class="act_as_cell" style="width: 40px;">Journal</div>
                     <!--## account code-->
                     <div class="act_as_cell" style="width: 50px;">Account</div>
+                    <!--## account code-->
+                    <div class="act_as_cell" style="width: 90px;">Taxes</div>
                     <!--## partner-->
                     <div class="act_as_cell" style="width: 140px;">Partner</div>
                     <!--## ref - label-->
-                    <div class="act_as_cell" style="width: 290px;">Ref - Label</div>
+                    <div class="act_as_cell" style="width: 250px;">Ref - Label</div>
                     <t t-if="show_cost_center">
                         <!--## cost_center-->
                         <div class="act_as_cell" style="width: 100px;">Cost center</div>
@@ -142,6 +144,8 @@
                 <!--## journal-->
                 <div class="act_as_cell"></div>
                 <!--## account code-->
+                <div class="act_as_cell"></div>
+                <!--## taxes-->
                 <div class="act_as_cell"></div>
                 <!--## partner-->
                 <div class="act_as_cell"></div>
@@ -183,6 +187,8 @@
                     <div class="act_as_cell left"><span t-field="line.journal"/></div>
                     <!--## account code-->
                     <div class="act_as_cell left"><span t-field="line.account"/></div>
+                    <!--## taxes-->
+                    <div class="act_as_cell left"><span t-field="line.taxes_description"/></div>
                     <!--## partner-->
                     <div class="act_as_cell left"><span t-field="line.partner"/></div>
                     <!--## ref - label-->

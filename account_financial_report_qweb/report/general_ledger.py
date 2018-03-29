@@ -183,6 +183,7 @@ class GeneralLedgerReportMoveLine(models.TransientModel):
     entry = fields.Char()
     journal = fields.Char()
     account = fields.Char()
+    taxes_description = fields.Char()
     partner = fields.Char()
     label = fields.Char()
     cost_center = fields.Char()
@@ -215,10 +216,8 @@ class GeneralLedgerReportCompute(models.TransientModel):
                                              report_name=report_name)
 
     @api.multi
-    def compute_data_for_report(self,
-                                with_line_details=True,
-                                with_partners=True
-                                ):
+    def compute_data_for_report(
+            self, with_line_details=True, with_partners=True):
         self.ensure_one()
         # Compute report data
         self._inject_account_values()
@@ -647,7 +646,7 @@ AND
 
         Only for "partner" accounts (payable and receivable).
         """
-
+        # pylint: disable=sql-injection
         query_inject_partner = """
 WITH
     accounts_partners AS
@@ -899,6 +898,7 @@ INSERT INTO
     entry,
     journal,
     account,
+    taxes_description,
     partner,
     label,
     cost_center,
@@ -927,6 +927,27 @@ SELECT
     m.name AS entry,
     j.code AS journal,
     a.code AS account,
+    CASE
+        WHEN
+            ml.tax_line_id is not null
+        THEN
+            COALESCE(at.description, at.name)
+        WHEN
+            ml.tax_line_id is null
+        THEN
+            (SELECT
+                array_to_string(
+                    array_agg(COALESCE(at.description, at.name)
+                ), ', ')
+            FROM
+                account_move_line_account_tax_rel aml_at_rel
+            LEFT JOIN
+                account_tax at on (at.id = aml_at_rel.account_tax_id)
+            WHERE
+                aml_at_rel.account_move_line_id = ml.id)
+        ELSE
+            ''
+    END as taxes_description,
         """
         if not only_empty_partner_line:
             query_inject_move_line += """
@@ -997,6 +1018,8 @@ INNER JOIN
     account_journal j ON ml.journal_id = j.id
 INNER JOIN
     account_account a ON ml.account_id = a.id
+LEFT JOIN
+    account_tax at ON ml.tax_line_id = at.id
         """
         if is_account_line:
             query_inject_move_line += """
@@ -1337,6 +1360,7 @@ WHERE id = %s
         subquery_sum_amounts += """
             ) sub
         """
+        # pylint: disable=sql-injection
         query_inject_account = """
         WITH
             initial_sum_amounts AS ( """ + subquery_sum_amounts + """ )

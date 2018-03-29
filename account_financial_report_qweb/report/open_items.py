@@ -257,6 +257,7 @@ FROM
 
     def _inject_partner_values(self):
         """ Inject report values for report_open_items_qweb_partner. """
+        # pylint: disable=sql-injection
         query_inject_partner = """
 WITH
     accounts_partners AS
