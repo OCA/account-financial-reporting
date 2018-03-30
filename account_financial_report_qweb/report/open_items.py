@@ -393,11 +393,11 @@ FROM
             LEFT JOIN
                 account_move_line ml_future
                     ON ml.balance < 0 AND pr.debit_move_id = ml_future.id
-                    AND ml_future.date >= %s
+                    AND ml_future.date > %s
             LEFT JOIN
                 account_move_line ml_past
                     ON ml.balance < 0 AND pr.debit_move_id = ml_past.id
-                    AND ml_past.date < %s
+                    AND ml_past.date <= %s
             """
         else:
             sub_query += """
@@ -407,11 +407,11 @@ FROM
             LEFT JOIN
                 account_move_line ml_future
                     ON ml.balance > 0 AND pr.credit_move_id = ml_future.id
-                    AND ml_future.date >= %s
+                    AND ml_future.date > %s
             LEFT JOIN
                 account_move_line ml_past
                     ON ml.balance > 0 AND pr.credit_move_id = ml_past.id
-                    AND ml_past.date < %s
+                    AND ml_past.date <= %s
         """
         sub_query += """
             WHERE
