@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- encoding: utf-8 -*-
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -20,9 +20,25 @@
 #
 ##############################################################################
 
-from . import general_ledger_xls
-from . import trial_balance_xls
-from . import partners_balance_xls
-from . import partner_ledger_xls
-from . import open_invoices_xls
-from . import print_journal_xls
+from openerp.osv import orm
+# import logging
+# _logger = logging.getLogger(__name__)
+
+
+class print_journal_wizard(orm.TransientModel):
+    _inherit = 'print.journal.webkit'
+
+    def xls_export(self, cr, uid, ids, context=None):
+        return self.check_report(cr, uid, ids, context=context)
+
+    def _print_report(self, cr, uid, ids, data, context=None):
+        context = context or {}
+        if context.get('xls_export'):
+            # we update form with display account value
+            data = self.pre_print_report(cr, uid, ids, data, context=context)
+            return {'type': 'ir.actions.report.xml',
+                    'report_name': 'account.account_report_journal_xls',
+                    'datas': data}
+        else:
+            return super(print_journal_wizard, self)._print_report(
+                cr, uid, ids, data, context=context)

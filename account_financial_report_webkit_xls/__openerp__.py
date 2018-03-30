@@ -43,6 +43,7 @@
         'wizard/partners_ledger_wizard_view.xml',
         'wizard/partners_balance_wizard_view.xml',
         'wizard/open_invoices_wizard_view.xml',
+        'wizard/journal_wizard_view.xml',
     ],
     'active': False,
     'installable': True,
