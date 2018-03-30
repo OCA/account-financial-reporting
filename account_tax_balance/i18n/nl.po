@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-05 23:13+0000\n"
-"PO-Revision-Date: 2018-01-05 23:13+0000\n"
+"POT-Creation-Date: 2018-03-27 12:02+0000\n"
+"PO-Revision-Date: 2018-03-27 12:02+0000\n"
 "Last-Translator: Melroy van den Berg <webmaster1989@gmail.com>, 2018\n"
 "Language-Team: Dutch (https://www.transifex.com/oca/teams/23907/nl/)\n"
 "MIME-Version: 1.0\n"
@@ -236,7 +236,7 @@ msgid "Total Base Balance"
 msgstr "Totale basissaldo"
 
 #. module: account_tax_balance
-#: code:addons/account_tax_balance/models/account_tax.py:87
+#: code:addons/account_tax_balance/models/account_tax.py:86
 #, python-format
 msgid "Unsupported search operator"
 msgstr "Ongeldige zoekoperatie"
