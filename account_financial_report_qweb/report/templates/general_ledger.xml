@@ -164,12 +164,12 @@
                 <!--## balance cumulated-->
                 <div class="act_as_cell amount"><span t-field="account_or_partner_object.initial_balance"/></div>
                 <!--## currency_name-->
-                <div class="act_as_cell"><span t-field="account_or_partner_object.currency_name"/></div>
-                <t t-if="account_or_partner_object.currency_name">
+                <div class="act_as_cell"><span t-field="account_or_partner_object.currency_id.name"/></div>
+                <t t-if="account_or_partner_object.currency_id">
                     <!--## balance_currency-->
                     <div class="act_as_cell amount"><span t-field="account_or_partner_object.initial_balance_foreign_currency"/></div>
                 </t>
-                <t t-if="not account_or_partner_object.currency_name">
+                <t t-if="not account_or_partner_object.currency_id">
                     <!--## balance_currency-->
                     <div class="act_as_cell"></div>
                 </t>
@@ -206,12 +206,12 @@
                     <!--## balance cumulated-->
                     <div class="act_as_cell amount"><span t-field="line.cumul_balance"/></div>
                     <!--## currency_name-->
-                    <div class="act_as_cell"><span t-field="line.currency_name"/></div>
-                    <t t-if="line.currency_name">
+                    <div class="act_as_cell"><span t-field="line.currency_id.name"/></div>
+                    <t t-if="line.currency_id">
                         <!--## amount_currency-->
                         <div class="act_as_cell amount"><span t-field="line.amount_currency"/></div>
                     </t>
-                    <t t-if="not line.currency_name">
+                    <t t-if="not line.currency_id">
                         <!--## amount_currency-->
                         <div class="act_as_cell"></div>
                     </t>
@@ -246,12 +246,12 @@
                 <!--## balance cumulated-->
                 <div class="act_as_cell amount" style="width: 75px; padding-right: 1px;"><span t-field="account_or_partner_object.final_balance"/></div>
                 <!--## currency_name-->
-                <div class="act_as_cell" style="width: 35px;"><span t-field="account_or_partner_object.currency_name"/></div>
-                <t t-if="account_or_partner_object.currency_name">
+                <div class="act_as_cell" style="width: 35px;"><span t-field="account_or_partner_object.currency_id.name"/></div>
+                <t t-if="account_or_partner_object.currency_id">
                     <!--## balance_currency-->
                     <div class="act_as_cell amount" style="width: 75px;"><span t-field="account_or_partner_object.final_balance_foreign_currency"/></div>
                 </t>
-                <t t-if="not account_or_partner_object.currency_name">
+                <t t-if="not account_or_partner_object.currency_id">
                     <!--## balance_currency-->
                     <div class="act_as_cell" style="width: 75px;"/>
                 </t>

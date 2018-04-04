@@ -108,6 +108,22 @@ class AbstractReportXslx(ReportXlsx):
         )
         self.format_percent_bold_italic.set_num_format('#,##0.00%')
 
+    def _get_currency_amt_format(self, line_object):
+        """ Return amount format specific for each currency. """
+        format_amt = getattr(self, 'format_amount')
+        if line_object.currency_id:
+            field_name = \
+                'format_amount_%s' % line_object.currency_id.name
+            if hasattr(self, field_name):
+                format_amt = getattr(self, field_name)
+            else:
+                format_amt = self.workbook.add_format()
+                setattr(self, 'field_name', format_amt)
+                format_amount = \
+                    '#,##0.' + ('0' * line_object.currency_id.decimal_places)
+                format_amt.set_num_format(format_amount)
+        return format_amt
+
     def _set_column_width(self):
         """Set width for all defined columns.
         Columns are defined with `_get_report_columns` method.
@@ -189,6 +205,14 @@ class AbstractReportXslx(ReportXlsx):
                 self.sheet.write_number(
                     self.row_pos, col_pos, float(value), self.format_amount
                 )
+            elif cell_type == 'amount_currency':
+                if line_object.currency_id:
+                    format_amt = self._get_currency_amt_format(line_object)
+                    self.sheet.write_number(
+                        self.row_pos, col_pos, float(value), format_amt)
+            elif cell_type == 'many2one':
+                self.sheet.write_string(
+                    self.row_pos, col_pos, value.name or '', self.format_right)
         self.row_pos += 1
 
     def write_initial_balance(self, my_object, label):
@@ -209,6 +233,19 @@ class AbstractReportXslx(ReportXlsx):
                     self.sheet.write_number(
                         self.row_pos, col_pos, float(value), self.format_amount
                     )
+                elif cell_type == 'amount_currency':
+                    if my_object.currency_id:
+                        format_amt = self._get_currency_amt_format(
+                            my_object)
+                        self.sheet.write_number(
+                            self.row_pos, col_pos,
+                            float(value), format_amt
+                        )
+                elif cell_type == 'many2one':
+                    self.sheet.write_string(
+                        self.row_pos, col_pos, value.name or '',
+                        self.format_header_right)
+
         self.row_pos += 1
 
     def write_ending_balance(self, my_object, name, label):
@@ -239,6 +276,18 @@ class AbstractReportXslx(ReportXlsx):
                         self.row_pos, col_pos, float(value),
                         self.format_header_amount
                     )
+                elif cell_type == 'amount_currency':
+                    if my_object.currency_id:
+                        format_amt = self._get_currency_amt_format(
+                            my_object)
+                        self.sheet.write_number(
+                            self.row_pos, col_pos,
+                            float(value), format_amt
+                        )
+                elif cell_type == 'many2one':
+                    self.sheet.write_string(
+                        self.row_pos, col_pos, value.name or '',
+                        self.format_header_right)
         self.row_pos += 1
 
     def _generate_report_content(self, workbook, report):
