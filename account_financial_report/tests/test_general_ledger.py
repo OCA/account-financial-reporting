@@ -371,9 +371,9 @@ class TestGeneralLedgerReport(common.TransactionCase):
         self.assertEqual(lines['unaffected'].initial_debit, 0)
         self.assertEqual(lines['unaffected'].initial_credit, 0)
         self.assertEqual(lines['unaffected'].initial_balance, -1000)
-        self.assertEqual(lines['unaffected'].final_debit, 1000)
+        self.assertEqual(lines['unaffected'].final_debit, 0)
         self.assertEqual(lines['unaffected'].final_credit, 0)
-        self.assertEqual(lines['unaffected'].final_balance, 0)
+        self.assertEqual(lines['unaffected'].final_balance, -1000)
 
         # Add another move at the end day of fiscal year
         # to check that it correctly used on report
@@ -395,9 +395,9 @@ class TestGeneralLedgerReport(common.TransactionCase):
         self.assertEqual(lines['unaffected'].initial_debit, 0)
         self.assertEqual(lines['unaffected'].initial_credit, 0)
         self.assertEqual(lines['unaffected'].initial_balance, -1000)
-        self.assertEqual(lines['unaffected'].final_debit, 1000)
-        self.assertEqual(lines['unaffected'].final_credit, 3000)
-        self.assertEqual(lines['unaffected'].final_balance, -3000)
+        self.assertEqual(lines['unaffected'].final_debit, 0)
+        self.assertEqual(lines['unaffected'].final_credit, 0)
+        self.assertEqual(lines['unaffected'].final_balance, -4000)
 
     def test_04_unaffected_account_balance_2_years(self):
         # Generate the general ledger line
