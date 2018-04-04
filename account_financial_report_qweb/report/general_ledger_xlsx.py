@@ -57,6 +57,8 @@ class GeneralLedgerXslx(abstract_report_xlsx.AbstractReportXslx):
             12: {'header': _('Cur.'), 'field': 'currency_name', 'width': 7},
             13: {'header': _('Amount cur.'),
                  'field': 'amount_currency',
+                 'field_initial_balance': 'initial_balance_foreign_currency',
+                 'field_final_balance': 'final_balance_foreign_currency',
                  'type': 'amount',
                  'width': 14},
         }
