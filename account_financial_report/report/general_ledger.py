@@ -264,12 +264,6 @@ class GeneralLedgerReportCompute(models.TransientModel):
             if self.centralize:
                 self._inject_line_centralized_values()
 
-        # Complete unaffected earnings account
-        if (not self.filter_account_ids or
-                self.unaffected_earnings_account.id in
-                self.filter_account_ids.ids):
-            self._complete_unaffected_earnings_account_values()
-
         if with_line_details:
             # Compute display flag
             self._compute_has_second_currency()
@@ -1237,22 +1231,15 @@ WHERE id = %s
         params = (self.id,) * 3
         self.env.cr.execute(query_update_has_second_currency, params)
 
-    def _get_unaffected_earnings_account_sub_subquery_sum_amounts(
-            self, include_initial_balance
+    def _get_unaffected_earnings_account_sub_subquery_sum_initial(
+            self
     ):
         """ Return subquery used to compute sum amounts on
         unaffected earnings accounts """
-        if not include_initial_balance:
-            sub_subquery_sum_amounts = """
+        sub_subquery_sum_amounts = """
         SELECT
-            -SUM(ml.balance) AS balance
-            """
-        else:
-            sub_subquery_sum_amounts = """
-        SELECT
-            SUM(ml.balance) AS balance
-            """
-        sub_subquery_sum_amounts += """
+            SUM(ml.balance) AS initial_balance,
+            0.0 AS final_balance
         FROM
             account_account a
         INNER JOIN
@@ -1260,16 +1247,7 @@ WHERE id = %s
         INNER JOIN
             account_move_line ml
                 ON a.id = ml.account_id
-                AND ml.date < %s
-        """
-
-        if not include_initial_balance:
-            sub_subquery_sum_amounts += """
-                AND NOT(at.include_initial_balance != TRUE AND ml.date >= %s)
-            """
-        else:
-            sub_subquery_sum_amounts += """
-                AND at.include_initial_balance = FALSE
+                AND ml.date < %(date_from)s
             """
         if self.only_posted_moves:
             sub_subquery_sum_amounts += """
@@ -1282,13 +1260,52 @@ WHERE id = %s
             account_analytic_account aa
                 ON
                     ml.analytic_account_id = aa.id
-                    AND aa.id IN %s
+                    AND aa.id IN %(cost_center_ids)s
             """
         sub_subquery_sum_amounts += """
         WHERE
-            a.company_id =%s
-        AND a.id != %s
+            a.company_id = %(company_id)s
+        AND a.id IN %(unaffected_earnings_account_ids)s
         """
+        return sub_subquery_sum_amounts
+
+    def _get_unaffected_earnings_account_sub_subquery_sum_final(self):
+        """ Return subquery used to compute sum amounts on
+                unaffected earnings accounts """
+
+        sub_subquery_sum_amounts = """
+            SELECT
+                0.0 AS initial_balance,
+                SUM(ml.balance) AS final_balance
+                """
+        sub_subquery_sum_amounts += """
+                FROM
+                    account_account a
+                INNER JOIN
+                    account_account_type at ON a.user_type_id = at.id
+                INNER JOIN
+                    account_move_line ml
+                        ON a.id = ml.account_id
+                        AND ml.date <= %(date_to)s
+                """
+        if self.only_posted_moves:
+            sub_subquery_sum_amounts += """
+                INNER JOIN
+                    account_move m ON ml.move_id = m.id AND m.state = 'posted'
+                    """
+        if self.filter_cost_center_ids:
+            sub_subquery_sum_amounts += """
+                INNER JOIN
+                    account_analytic_account aa
+                        ON
+                            ml.analytic_account_id = aa.id
+                            AND aa.id IN %(cost_center_ids)s
+                    """
+        sub_subquery_sum_amounts += """
+                WHERE
+                    a.company_id = %(company_id)s
+                AND a.id IN %(unaffected_earnings_account_ids)s
+                """
         return sub_subquery_sum_amounts
 
     def _inject_unaffected_earnings_account_values(self):
@@ -1296,21 +1313,19 @@ WHERE id = %s
         for report_general_ledger_account."""
         subquery_sum_amounts = """
             SELECT
-                SUM(COALESCE(sub.balance, 0.0)) AS balance
+                SUM(COALESCE(sub.initial_balance, 0.0)) AS initial_balance,
+                SUM(COALESCE(sub.final_balance, 0.0)) AS final_balance
             FROM
             (
         """
+        # Initial balances
         subquery_sum_amounts += \
-            self._get_unaffected_earnings_account_sub_subquery_sum_amounts(
-                include_initial_balance=False
-            )
+            self._get_unaffected_earnings_account_sub_subquery_sum_initial()
         subquery_sum_amounts += """
                 UNION
         """
         subquery_sum_amounts += \
-            self._get_unaffected_earnings_account_sub_subquery_sum_amounts(
-                include_initial_balance=True
-            )
+            self._get_unaffected_earnings_account_sub_subquery_sum_final()
         subquery_sum_amounts += """
             ) sub
         """
@@ -1318,7 +1333,7 @@ WHERE id = %s
         # pylint: disable=sql-injection
         query_inject_account = """
         WITH
-            initial_sum_amounts AS ( """ + subquery_sum_amounts + """ )
+            sum_amounts AS ( """ + subquery_sum_amounts + """ )
         INSERT INTO
             report_general_ledger_account
             (
@@ -1329,102 +1344,51 @@ WHERE id = %s
             code,
             name,
             is_partner_account,
-            initial_balance
+            initial_balance,
+            final_balance
             )
         SELECT
-            %s AS report_id,
-            %s AS create_uid,
+            %(report_id)s AS report_id,
+            %(user_id)s AS create_uid,
             NOW() AS create_date,
             a.id AS account_id,
             a.code,
             a.name,
             False AS is_partner_account,
-            COALESCE(i.balance, 0.0) AS initial_balance
+            COALESCE(i.initial_balance, 0.0) AS initial_balance,
+            COALESCE(i.final_balance, 0.0) AS final_balance
         FROM
             account_account a,
-            initial_sum_amounts i
+            sum_amounts i
         WHERE
-            a.company_id = %s
-        AND a.id = %s
+            a.company_id = %(company_id)s
+        AND a.id = %(unaffected_earnings_account_id)s
                 """
-        query_inject_account_params = (
-            self.date_from,
-            self.fy_start_date,
-        )
+        query_inject_account_params = {
+            'date_from': self.date_from,
+            'date_to': self.date_to,
+            'fy_start_date': self.fy_start_date,
+        }
         if self.filter_cost_center_ids:
-            query_inject_account_params += (
-                tuple(self.filter_cost_center_ids.ids),
-            )
-        query_inject_account_params += (
-            self.company_id.id,
-            self.unaffected_earnings_account.id,
-        )
-        query_inject_account_params += (
-            self.date_from,
-        )
-        if self.filter_cost_center_ids:
-            query_inject_account_params += (
-                tuple(self.filter_cost_center_ids.ids),
-            )
-        query_inject_account_params += (
-            self.company_id.id,
-            self.unaffected_earnings_account.id,
-        )
-        query_inject_account_params += (
-            self.id,
-            self.env.uid,
-            self.company_id.id,
-            self.unaffected_earnings_account.id,
-        )
+            query_inject_account_params['cost_center_ids'] = \
+                tuple(self.filter_cost_center_ids.ids)
+        query_inject_account_params['company_id'] = self.company_id.id
+        query_inject_account_params['unaffected_earnings_account_id'] = \
+            self.unaffected_earnings_account.id
+        query_inject_account_params['report_id'] = self.id
+        query_inject_account_params['user_id'] = self.env.uid
+
+        # Fetch the profit and loss accounts
+        query_unaffected_earnings_account_ids = """
+            SELECT a.id
+            FROM account_account as a
+            INNER JOIN account_account_type as at
+            ON at.id = a.user_type_id
+            WHERE at.include_initial_balance = FALSE
+        """
+        self.env.cr.execute(query_unaffected_earnings_account_ids)
+        pl_account_ids = [r[0] for r in self.env.cr.fetchall()]
+        query_inject_account_params['unaffected_earnings_account_ids'] = \
+            tuple(pl_account_ids + [self.unaffected_earnings_account.id])
         self.env.cr.execute(query_inject_account,
                             query_inject_account_params)
-
-    def _complete_unaffected_earnings_account_values(self):
-        """Complete the report values of the unaffected earnings account
-        for report_general_ledger_account."""
-        query_update_unaffected_earnings_account_values = """
-        WITH
-            sum_amounts AS
-                (
-                    SELECT
-                        SUM(COALESCE(rml.debit, 0.0)) AS debit,
-                        SUM(COALESCE(rml.credit, 0.0)) AS credit,
-                        SUM(
-                            COALESCE(rml.debit, 0.0) -
-                            COALESCE(rml.credit, 0.0)
-                        ) + ra.initial_balance AS balance
-                    FROM
-                        report_general_ledger_account ra
-                    LEFT JOIN
-                        report_general_ledger_move_line rml
-                            ON ra.id = rml.report_account_id
-                    WHERE
-                        ra.report_id = %s
-                    AND ra.account_id = %s
-                    GROUP BY
-                        ra.id
-                )
-        UPDATE
-            report_general_ledger_account ra
-        SET
-            initial_debit = 0.0,
-            initial_credit = 0.0,
-            final_debit = sum_amounts.debit,
-            final_credit = sum_amounts.credit,
-            final_balance = sum_amounts.balance
-        FROM
-            sum_amounts
-        WHERE
-            ra.report_id = %s
-        AND ra.account_id = %s
-        """
-        params = (
-            self.id,
-            self.unaffected_earnings_account.id,
-            self.id,
-            self.unaffected_earnings_account.id,
-        )
-        self.env.cr.execute(
-            query_update_unaffected_earnings_account_values,
-            params
-        )
