@@ -100,6 +100,7 @@ class TrialBalanceReportPartner(models.TransientModel):
     initial_balance = fields.Float(digits=(16, 2))
     debit = fields.Float(digits=(16, 2))
     credit = fields.Float(digits=(16, 2))
+    currency_name = fields.Char()
     final_balance = fields.Float(digits=(16, 2))
 
     @api.model
@@ -230,7 +231,8 @@ INSERT INTO
     initial_balance,
     debit,
     credit,
-    final_balance
+    final_balance,
+    currency_name
     )
 SELECT
     ra.id AS report_account_id,
@@ -241,7 +243,8 @@ SELECT
     rpg.initial_balance AS initial_balance,
     rpg.final_debit - rpg.initial_debit AS debit,
     rpg.final_credit - rpg.initial_credit AS credit,
-    rpg.final_balance AS final_balance
+    rpg.final_balance AS final_balance,
+    rpg.currency_name AS currency_name
 FROM
     report_general_ledger_qweb_partner rpg
 INNER JOIN
