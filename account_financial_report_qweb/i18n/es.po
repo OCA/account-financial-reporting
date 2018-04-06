@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-29 12:15+0000\n"
-"PO-Revision-Date: 2018-03-29 12:15+0000\n"
+"POT-Creation-Date: 2018-04-05 12:32+0000\n"
+"PO-Revision-Date: 2018-04-05 12:32+0000\n"
 "Last-Translator: Gelo Joga Landoo <gj@landoo.es>, 2018\n"
 "Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
 "MIME-Version: 1.0\n"
@@ -585,6 +585,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_journal_qweb_move_line_currency_name
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_open_items_qweb_move_line_currency_name
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_account_currency_name
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_partner_currency_name
 msgid "Currency name"
 msgstr "Nombre de la moneda"
 
