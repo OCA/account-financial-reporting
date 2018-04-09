@@ -26,9 +26,6 @@ class OpenItemsReport(models.TransientModel):
     filter_account_ids = fields.Many2many(comodel_name='account.account')
     filter_partner_ids = fields.Many2many(comodel_name='res.partner')
 
-    # Flag fields, used for report display
-    has_second_currency = fields.Boolean()
-
     # Data fields, used to browse report data
     account_ids = fields.One2many(
         comodel_name='report_open_items_qweb_account',
@@ -59,6 +56,8 @@ class OpenItemsReportAccount(models.TransientModel):
     currency_name = fields.Char()
     final_amount_residual = fields.Float(digits=(16, 2))
     final_amount_total_due = fields.Float(digits=(16, 2))
+    final_amount_residual_currency = fields.Float(digits=(16, 2))
+    final_amount_total_due_currency = fields.Float(digits=(16, 2))
 
     # Data fields, used to browse report data
     partner_ids = fields.One2many(
@@ -88,6 +87,8 @@ class OpenItemsReportPartner(models.TransientModel):
     currency_name = fields.Char()
     final_amount_residual = fields.Float(digits=(16, 2))
     final_amount_total_due = fields.Float(digits=(16, 2))
+    final_amount_residual_currency = fields.Float(digits=(16, 2))
+    final_amount_total_due_currency = fields.Float(digits=(16, 2))
 
     # Data fields, used to browse report data
     move_line_ids = fields.One2many(
@@ -171,8 +172,6 @@ class OpenItemsReportCompute(models.TransientModel):
             self._clean_partners_and_accounts(
                 only_delete_account_balance_at_0=True
             )
-        # Compute display flag
-        self._compute_has_second_currency()
         # Refresh cache because all data are computed with SQL requests
         self.invalidate_cache()
 
@@ -186,11 +185,14 @@ WITH
                 a.id,
                 a.code,
                 a.name,
-                a.user_type_id
+                a.user_type_id,
+                c.name as currency_name
             FROM
                 account_account a
             INNER JOIN
                 account_move_line ml ON a.id = ml.account_id AND ml.date <= %s
+            LEFT JOIN
+                res_currency c ON a.currency_id = c.id
             """
         if self.filter_partner_ids:
             query_inject_account += """
@@ -219,7 +221,7 @@ WITH
             """
         query_inject_account += """
             GROUP BY
-                a.id
+                a.id, c.name
         )
 INSERT INTO
     report_open_items_qweb_account
@@ -228,6 +230,7 @@ INSERT INTO
     create_uid,
     create_date,
     account_id,
+    currency_name,
     code,
     name
     )
@@ -236,6 +239,7 @@ SELECT
     %s AS create_uid,
     NOW() AS create_date,
     a.id AS account_id,
+    a.currency_name,
     a.code,
     a.name
 FROM
@@ -667,6 +671,33 @@ WHERE
         params_compute_accounts_cumul = (self.id,)
         self.env.cr.execute(query_compute_accounts_cumul,
                             params_compute_accounts_cumul)
+        query_compute_accounts_cur_cumul = """
+UPDATE
+    report_open_items_qweb_account
+SET
+    (
+        final_amount_residual_currency,
+        final_amount_total_due_currency
+    ) =
+        (
+            SELECT
+                SUM(rml.amount_residual_currency) AS final_amount_residual_currency,
+                SUM(rml.amount_total_due_currency) AS final_amount_total_due_currency
+            FROM
+                report_open_items_qweb_move_line rml
+            INNER JOIN
+                report_open_items_qweb_partner rp 
+                ON rml.report_partner_id = rp.id
+            WHERE
+                rp.report_account_id = report_open_items_qweb_account.id
+                AND report_open_items_qweb_account.currency_name IS NOT NULL
+        )
+WHERE
+    report_id  = %s
+                """
+        params_compute_accounts_cur_cumul = (self.id,)
+        self.env.cr.execute(query_compute_accounts_cur_cumul,
+                            params_compute_accounts_cur_cumul)
 
     def _clean_partners_and_accounts(self,
                                      only_delete_account_balance_at_0=False):
@@ -743,31 +774,3 @@ WHERE
         """
         params_clean_accounts = (self.id,)
         self.env.cr.execute(query_clean_accounts, params_clean_accounts)
-
-    def _compute_has_second_currency(self):
-        """ Compute "has_second_currency" flag which will used for display."""
-        query_update_has_second_currency = """
-UPDATE
-    report_open_items_qweb
-SET
-    has_second_currency =
-        (
-            SELECT
-                TRUE
-            FROM
-                report_open_items_qweb_move_line l
-            INNER JOIN
-                report_open_items_qweb_partner p
-                    ON l.report_partner_id = p.id
-            INNER JOIN
-                report_open_items_qweb_account a
-                    ON p.report_account_id = a.id
-            WHERE
-                a.report_id = %s
-            AND l.currency_name IS NOT NULL
-            LIMIT 1
-        )
-WHERE id = %s
-        """
-        params = (self.id,) * 2
-        self.env.cr.execute(query_update_has_second_currency, params)

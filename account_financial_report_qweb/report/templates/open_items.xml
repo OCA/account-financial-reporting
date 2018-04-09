@@ -4,8 +4,6 @@
     <template id="account_financial_report_qweb.report_open_items_qweb">
         <t t-call="report.html_container">
             <t t-foreach="docs" t-as="o">
-                <!-- Saved flag fields into variables, used to define columns display -->
-                <t t-set="has_second_currency" t-value="o.has_second_currency"/>
 
                 <t t-call="account_financial_report_qweb.internal_layout">
                     <!-- Defines global variables used by internal layout -->
@@ -172,8 +170,18 @@
                 <div class="act_as_cell amount" style="width: 75px;"><span t-field="account_or_partner_object.final_amount_total_due"/></div>
                 <!--## amount_currency-->
                 <div class="act_as_cell amount" style="width: 75px;"><span t-field="account_or_partner_object.final_amount_residual"/></div>
-                <!--## currency_name + amount_total_due_currency + amount_residual_currency -->
-                <div class="act_as_cell" style="width: 185px;"></div>
+                <t t-if="account_or_partner_object.currency_name">
+                    <!--## currency_name-->
+                    <div class="act_as_cell" style="width: 35px;"><span t-field="account_or_partner_object.currency_name"/></div>
+                    <!--## amount_total_due_currency-->
+                    <div class="act_as_cell amount" style="width: 75px;"><span t-field="account_or_partner_object.final_amount_total_due_currency"/></div>
+                    <!--## amount_residual_currency-->
+                    <div class="act_as_cell amount" style="width: 75px;"><span t-field="account_or_partner_object.final_amount_residual_currency"/></div>
+                </t>
+                <t t-if="not account_or_partner_object.currency_name">
+                    <!--## currency_name + amount_total_due_currency + amount_residual_currency -->
+                    <div class="act_as_cell" style="width: 185px;"></div>
+                </t>
             </div>
         </div>
     </template>
