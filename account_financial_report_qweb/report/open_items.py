@@ -56,7 +56,9 @@ class OpenItemsReportAccount(models.TransientModel):
     # Data fields, used for report display
     code = fields.Char()
     name = fields.Char()
+    currency_name = fields.Char()
     final_amount_residual = fields.Float(digits=(16, 2))
+    final_amount_total_due = fields.Float(digits=(16, 2))
 
     # Data fields, used to browse report data
     partner_ids = fields.One2many(
@@ -83,7 +85,9 @@ class OpenItemsReportPartner(models.TransientModel):
 
     # Data fields, used for report display
     name = fields.Char()
+    currency_name = fields.Char()
     final_amount_residual = fields.Float(digits=(16, 2))
+    final_amount_total_due = fields.Float(digits=(16, 2))
 
     # Data fields, used to browse report data
     move_line_ids = fields.One2many(
@@ -610,10 +614,14 @@ ORDER BY
 UPDATE
     report_open_items_qweb_partner
 SET
-    final_amount_residual =
+    (
+        final_amount_residual,
+        final_amount_total_due
+    ) =
         (
             SELECT
-                SUM(rml.amount_residual) AS final_amount_residual
+                SUM(rml.amount_residual) AS final_amount_residual,
+                SUM(rml.amount_total_due) AS final_amount_total_due
             FROM
                 report_open_items_qweb_move_line rml
             WHERE
@@ -640,10 +648,14 @@ WHERE
 UPDATE
     report_open_items_qweb_account
 SET
-    final_amount_residual =
+    (
+        final_amount_residual,
+        final_amount_total_due
+    ) =
         (
             SELECT
-                SUM(rp.final_amount_residual) AS final_amount_residual
+                SUM(rp.final_amount_residual) AS final_amount_residual,
+                SUM(rp.final_amount_total_due) AS final_amount_total_due
             FROM
                 report_open_items_qweb_partner rp
             WHERE
