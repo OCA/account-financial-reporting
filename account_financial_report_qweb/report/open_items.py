@@ -55,7 +55,6 @@ class OpenItemsReportAccount(models.TransientModel):
     name = fields.Char()
     currency_name = fields.Char()
     final_amount_residual = fields.Float(digits=(16, 2))
-    final_amount_total_due = fields.Float(digits=(16, 2))
     final_amount_residual_currency = fields.Float(digits=(16, 2))
     final_amount_total_due_currency = fields.Float(digits=(16, 2))
 
@@ -86,7 +85,6 @@ class OpenItemsReportPartner(models.TransientModel):
     name = fields.Char()
     currency_name = fields.Char()
     final_amount_residual = fields.Float(digits=(16, 2))
-    final_amount_total_due = fields.Float(digits=(16, 2))
     final_amount_residual_currency = fields.Float(digits=(16, 2))
     final_amount_total_due_currency = fields.Float(digits=(16, 2))
 
@@ -618,14 +616,10 @@ ORDER BY
 UPDATE
     report_open_items_qweb_partner
 SET
-    (
-        final_amount_residual,
-        final_amount_total_due
-    ) =
+    final_amount_residual =
         (
             SELECT
-                SUM(rml.amount_residual) AS final_amount_residual,
-                SUM(rml.amount_total_due) AS final_amount_total_due
+                SUM(rml.amount_residual) AS final_amount_residual
             FROM
                 report_open_items_qweb_move_line rml
             WHERE
@@ -652,14 +646,10 @@ WHERE
 UPDATE
     report_open_items_qweb_account
 SET
-    (
-        final_amount_residual,
-        final_amount_total_due
-    ) =
+    final_amount_residual =
         (
             SELECT
-                SUM(rp.final_amount_residual) AS final_amount_residual,
-                SUM(rp.final_amount_total_due) AS final_amount_total_due
+                SUM(rp.final_amount_residual) AS final_amount_residual
             FROM
                 report_open_items_qweb_partner rp
             WHERE
@@ -681,20 +671,21 @@ SET
     ) =
         (
             SELECT
-                SUM(rml.amount_residual_currency) AS final_amount_residual_currency,
-                SUM(rml.amount_total_due_currency) AS final_amount_total_due_currency
+                SUM(rml.amount_residual_currency)
+                    AS final_amount_residual_currency,
+                SUM(rml.amount_total_due_currency)
+                    AS final_amount_total_due_currency
             FROM
                 report_open_items_qweb_move_line rml
             INNER JOIN
-                report_open_items_qweb_partner rp 
+                report_open_items_qweb_partner rp
                 ON rml.report_partner_id = rp.id
             WHERE
                 rp.report_account_id = report_open_items_qweb_account.id
-                AND report_open_items_qweb_account.currency_name IS NOT NULL
         )
 WHERE
-    report_id  = %s
-                """
+    report_id  = %s AND currency_name IS NOT NULL
+        """
         params_compute_accounts_cur_cumul = (self.id,)
         self.env.cr.execute(query_compute_accounts_cur_cumul,
                             params_compute_accounts_cur_cumul)

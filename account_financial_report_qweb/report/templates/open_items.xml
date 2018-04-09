@@ -167,7 +167,7 @@
                 <!--## date_due-->
                 <div class="act_as_cell" style="width: 60px;"></div>
                 <!--## amount_total_due-->
-                <div class="act_as_cell amount" style="width: 75px;"><span t-field="account_or_partner_object.final_amount_total_due"/></div>
+                <div class="act_as_cell amount" style="width: 75px;"></div>
                 <!--## amount_currency-->
                 <div class="act_as_cell amount" style="width: 75px;"><span t-field="account_or_partner_object.final_amount_residual"/></div>
                 <t t-if="account_or_partner_object.currency_name">

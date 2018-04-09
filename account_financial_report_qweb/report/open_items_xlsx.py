@@ -29,7 +29,6 @@ class OpenItemsXslx(abstract_report_xlsx.AbstractReportXslx):
             6: {'header': _('Due date'), 'field': 'date_due', 'width': 11},
             7: {'header': _('Original'),
                 'field': 'amount_total_due',
-                'field_final_balance': 'final_amount_total_due',
                 'type': 'amount',
                 'width': 14},
             8: {'header': _('Residual'),
