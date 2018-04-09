@@ -272,7 +272,11 @@ class GeneralLedgerReportCompute(models.TransientModel):
                 SUM(ml.credit) AS credit,
                 SUM(ml.balance) AS balance,
                 c.name AS currency_name,
-                SUM(ml.amount_currency) AS balance_currency
+                CASE
+                    WHEN c.name IS NOT NULL
+                    THEN SUM(ml.amount_currency)
+                    ELSE NULL
+                END AS balance_currency
             FROM
                 accounts a
             INNER JOIN
@@ -544,13 +548,17 @@ AND
                 SUM(ml.credit) AS credit,
                 SUM(ml.balance) AS balance,
                 c.name as currency_name,
-                SUM(ml.amount_currency) AS balance_currency
+                CASE
+                    WHEN c.name IS NOT NULL
+                    THEN SUM(ml.amount_currency)
+                    ELSE NULL
+                END AS balance_currency
             FROM
                 accounts_partners ap
             INNER JOIN account_account ac
             ON ac.id = ap.account_id
             LEFT JOIN
-                res_currency c ON ap.account_id = c.id
+                res_currency c ON ac.currency_id = c.id
             INNER JOIN
                 account_move_line ml
                     ON ap.account_id = ml.account_id
