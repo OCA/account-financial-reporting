@@ -661,18 +661,36 @@ WHERE
         params_compute_accounts_cumul = (self.id,)
         self.env.cr.execute(query_compute_accounts_cumul,
                             params_compute_accounts_cumul)
-        query_compute_accounts_cur_cumul = """
+        query_compute_accounts_cur_residual_cumul = """
 UPDATE
     report_open_items_qweb_account
 SET
-    (
-        final_amount_residual_currency,
-        final_amount_total_due_currency
-    ) =
+    final_amount_residual_currency =
         (
             SELECT
                 SUM(rml.amount_residual_currency)
-                    AS final_amount_residual_currency,
+                    AS final_amount_residual_currency
+            FROM
+                report_open_items_qweb_move_line rml
+            INNER JOIN
+                report_open_items_qweb_partner rp
+                ON rml.report_partner_id = rp.id
+            WHERE
+                rp.report_account_id = report_open_items_qweb_account.id
+        )
+WHERE
+    report_id  = %s AND currency_name IS NOT NULL
+        """
+        params_compute_accounts_cur_residual_cumul = (self.id,)
+        self.env.cr.execute(query_compute_accounts_cur_residual_cumul,
+                            params_compute_accounts_cur_residual_cumul)
+        query_compute_accounts_cur_due_cumul = """
+UPDATE
+    report_open_items_qweb_account
+SET
+    final_amount_total_due_currency =
+        (
+            SELECT
                 SUM(rml.amount_total_due_currency)
                     AS final_amount_total_due_currency
             FROM
@@ -686,9 +704,9 @@ SET
 WHERE
     report_id  = %s AND currency_name IS NOT NULL
         """
-        params_compute_accounts_cur_cumul = (self.id,)
-        self.env.cr.execute(query_compute_accounts_cur_cumul,
-                            params_compute_accounts_cur_cumul)
+        params_compute_accounts_cur_due_cumul = (self.id,)
+        self.env.cr.execute(query_compute_accounts_cur_due_cumul,
+                            params_compute_accounts_cur_due_cumul)
 
     def _clean_partners_and_accounts(self,
                                      only_delete_account_balance_at_0=False):
