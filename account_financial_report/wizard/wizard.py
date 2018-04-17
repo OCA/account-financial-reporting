@@ -269,7 +269,7 @@ class WizardReport(models.TransientModel):
 
         if res:
             if data['form']['date_to'] > res[0]['date_stop'] or\
-               data['form']['date_from'] < res[0]['date_start']):
+                   data['form']['date_from'] < res[0]['date_start']:
                 raise osv.except_osv(_('UserError'),
                                      'Las fechas deben estar entre %s y %s'
                                      % (res[0]['date_start'],

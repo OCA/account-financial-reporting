@@ -25,7 +25,7 @@
 ##############################################################################
 {
     "name": "Common financial reports",
-    "version": "2.0",
+    "version": "8.0.2.0.1",
     "author": "Vauxoo,Odoo Community Association (OCA)",
     "website": "http://www.vauxoo.com",
     "license": "GPL-3 or any later version",
