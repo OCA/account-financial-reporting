@@ -54,6 +54,7 @@ Contributors
 * Akim Juillerat <akim.juillerat@camptocamp.com>
 * Alexis de Lattre <alexis@via.ecp.fr>
 * Benjamin Willig <benjamin.willig@acsone.eu>
+* Ignacio Ibeas <ignacio@acysos.com>
 
 Much of the work in this module was done at a sprint in Sorrento, Italy in
 April 2016.

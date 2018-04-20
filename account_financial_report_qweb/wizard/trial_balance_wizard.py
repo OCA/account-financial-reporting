@@ -34,6 +34,9 @@ class TrialBalanceReportWizard(models.TransientModel):
         comodel_name='account.account',
         string='Filter accounts',
     )
+    journal_exclude_ids = fields.Many2many(
+        comodel_name='account.journal',
+        string='Journal Exclude')
     hide_account_balance_at_0 = fields.Boolean(
         string='Hide account ending balance at 0',
         help='Use this filter to hide an account or a partner '
@@ -121,6 +124,7 @@ class TrialBalanceReportWizard(models.TransientModel):
             'company_id': self.company_id.id,
             'filter_account_ids': [(6, 0, self.account_ids.ids)],
             'filter_partner_ids': [(6, 0, self.partner_ids.ids)],
+            'journal_exclude_ids': [(6, 0, self.journal_exclude_ids.ids)],
             'fy_start_date': self.fy_start_date,
             'show_partner_details': self.show_partner_details,
         }

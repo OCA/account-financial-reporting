@@ -35,6 +35,9 @@ class GeneralLedgerReport(models.TransientModel):
     filter_cost_center_ids = fields.Many2many(
         comodel_name='account.analytic.account'
     )
+    journal_exclude_ids = fields.Many2many(
+        comodel_name='account.journal'
+    )
     centralize = fields.Boolean()
 
     # Flag fields, used for report display
@@ -306,6 +309,11 @@ class GeneralLedgerReportCompute(models.TransientModel):
                 AND at.include_initial_balance = TRUE
             """
 
+        if self.journal_exclude_ids:
+            sub_subquery_sum_amounts += """
+                AND ml.journal_id NOT IN %s
+            """
+
         if self.only_posted_moves:
             sub_subquery_sum_amounts += """
         INNER JOIN
@@ -506,6 +514,10 @@ AND
             self.date_from,
             self.fy_start_date,
         )
+        if self.journal_exclude_ids:
+            query_inject_account_params += (
+                tuple(self.journal_exclude_ids.ids),
+            )
         if self.filter_cost_center_ids:
             query_inject_account_params += (
                 tuple(self.filter_cost_center_ids.ids),
@@ -513,6 +525,10 @@ AND
         query_inject_account_params += (
             self.date_from,
         )
+        if self.journal_exclude_ids:
+            query_inject_account_params += (
+                tuple(self.journal_exclude_ids.ids),
+            )
         if self.filter_cost_center_ids:
             query_inject_account_params += (
                 tuple(self.filter_cost_center_ids.ids),
@@ -521,6 +537,10 @@ AND
             self.date_to,
             self.fy_start_date,
         )
+        if self.journal_exclude_ids:
+            query_inject_account_params += (
+                tuple(self.journal_exclude_ids.ids),
+            )
         if self.filter_cost_center_ids:
             query_inject_account_params += (
                 tuple(self.filter_cost_center_ids.ids),
@@ -528,6 +548,10 @@ AND
         query_inject_account_params += (
             self.date_to,
         )
+        if self.journal_exclude_ids:
+            query_inject_account_params += (
+                tuple(self.journal_exclude_ids.ids),
+            )
         if self.filter_cost_center_ids:
             query_inject_account_params += (
                 tuple(self.filter_cost_center_ids.ids),
@@ -536,6 +560,7 @@ AND
             self.id,
             self.env.uid,
         )
+
         self.env.cr.execute(query_inject_account, query_inject_account_params)
 
     def _get_partner_sub_subquery_sum_amounts(
@@ -584,6 +609,10 @@ AND
         else:
             sub_subquery_sum_amounts += """
                     AND ap.include_initial_balance = TRUE
+            """
+        if self.journal_exclude_ids:
+            sub_subquery_sum_amounts += """
+                AND ml.journal_id NOT IN %s
             """
         if self.only_posted_moves:
             sub_subquery_sum_amounts += """
@@ -829,6 +858,10 @@ AND
             self.date_from,
             self.fy_start_date,
         )
+        if self.journal_exclude_ids:
+            query_inject_partner_params += (
+                tuple(self.journal_exclude_ids.ids),
+            )
         if self.filter_cost_center_ids:
             query_inject_partner_params += (
                 tuple(self.filter_cost_center_ids.ids),
@@ -836,6 +869,10 @@ AND
         query_inject_partner_params += (
             self.date_from,
         )
+        if self.journal_exclude_ids:
+            query_inject_partner_params += (
+                tuple(self.journal_exclude_ids.ids),
+            )
         if self.filter_cost_center_ids:
             query_inject_partner_params += (
                 tuple(self.filter_cost_center_ids.ids),
@@ -844,6 +881,10 @@ AND
             self.date_to,
             self.fy_start_date,
         )
+        if self.journal_exclude_ids:
+            query_inject_partner_params += (
+                tuple(self.journal_exclude_ids.ids),
+            )
         if self.filter_cost_center_ids:
             query_inject_partner_params += (
                 tuple(self.filter_cost_center_ids.ids),
@@ -851,6 +892,10 @@ AND
         query_inject_partner_params += (
             self.date_to,
         )
+        if self.journal_exclude_ids:
+            query_inject_partner_params += (
+                tuple(self.journal_exclude_ids.ids),
+            )
         if self.filter_cost_center_ids:
             query_inject_partner_params += (
                 tuple(self.filter_cost_center_ids.ids),
@@ -1078,6 +1123,10 @@ AND
 AND
     ml.date BETWEEN %s AND %s
         """
+        if self.journal_exclude_ids:
+            query_inject_move_line += """
+                AND ml.journal_id NOT IN %s
+            """
         if self.only_posted_moves:
             query_inject_move_line += """
 AND
@@ -1124,6 +1173,10 @@ ORDER BY
             self.date_from,
             self.date_to,
         )
+        if self.journal_exclude_ids:
+            query_inject_move_line_params += (
+                tuple(self.journal_exclude_ids.ids),
+            )
         self.env.cr.execute(
             query_inject_move_line,
             query_inject_move_line_params

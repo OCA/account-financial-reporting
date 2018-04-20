@@ -35,6 +35,9 @@ class GeneralLedgerReportWizard(models.TransientModel):
         comodel_name='account.account',
         string='Filter accounts',
     )
+    journal_exclude_ids = fields.Many2many(
+        comodel_name='account.journal',
+        string='Journal Exclude')
     centralize = fields.Boolean(string='Activate centralization',
                                 default=True)
     hide_account_balance_at_0 = fields.Boolean(
@@ -128,6 +131,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
             'filter_account_ids': [(6, 0, self.account_ids.ids)],
             'filter_partner_ids': [(6, 0, self.partner_ids.ids)],
             'filter_cost_center_ids': [(6, 0, self.cost_center_ids.ids)],
+            'journal_exclude_ids': [(6, 0, self.journal_exclude_ids.ids)],
             'centralize': self.centralize,
             'fy_start_date': self.fy_start_date,
         }
