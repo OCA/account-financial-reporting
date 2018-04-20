@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-16 23:16+0000\n"
-"PO-Revision-Date: 2018-03-16 23:16+0000\n"
+"POT-Creation-Date: 2018-04-20 05:15+0000\n"
+"PO-Revision-Date: 2018-04-20 05:15+0000\n"
 "Last-Translator: Ricardo Gross <rwgross@gmail.com>, 2018\n"
 "Language-Team: German (https://www.transifex.com/oca/teams/23907/de/)\n"
 "MIME-Version: 1.0\n"
@@ -326,7 +326,7 @@ msgid "Centralized"
 msgstr "Abgestimmt"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger.py:1158
+#: code:addons/account_financial_report/report/general_ledger.py:1152
 #, python-format
 msgid "Centralized Entries"
 msgstr "Abgestimmte Posten"
@@ -1170,8 +1170,8 @@ msgid "No"
 msgstr "Nein"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger.py:651
-#: code:addons/account_financial_report/report/general_ledger.py:920
+#: code:addons/account_financial_report/report/general_ledger.py:645
+#: code:addons/account_financial_report/report/general_ledger.py:914
 #: code:addons/account_financial_report/report/open_items.py:293
 #: code:addons/account_financial_report/report/open_items.py:542
 #, python-format
