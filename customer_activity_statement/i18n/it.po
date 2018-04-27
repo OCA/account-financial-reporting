@@ -4,13 +4,14 @@
 # 
 # Translators:
 # Stefano <stefano.sforzi@agilebg.com>, 2017
+# Marco Calcagni <mcalcagni@dinamicheaziendali.it>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-22 23:13+0000\n"
-"PO-Revision-Date: 2017-12-22 23:13+0000\n"
-"Last-Translator: Stefano <stefano.sforzi@agilebg.com>, 2017\n"
+"POT-Creation-Date: 2018-04-23 15:26+0000\n"
+"PO-Revision-Date: 2018-04-23 15:26+0000\n"
+"Last-Translator: Marco Calcagni <mcalcagni@dinamicheaziendali.it>, 2018\n"
 "Language-Team: Italian (https://www.transifex.com/oca/teams/23907/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,42 +22,47 @@ msgstr ""
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "+120 Days Due"
-msgstr ""
+msgstr "Scaduto da +120 giorni"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "1-30 Days Due"
-msgstr ""
+msgstr "Scaduto da 1-30 giorni"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "30-60 Days Due"
-msgstr ""
+msgstr "Scaduto da 30-60 giorni"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "60-90 Days Due"
-msgstr ""
+msgstr "Scaduto da 60-90 giorni"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "90-120 Days Due"
-msgstr ""
+msgstr "Scaduto da 90-120 giorni"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "<strong>The partner doesn't have due entries.</strong>"
-msgstr ""
+msgstr "<strong>Il partner non ha movimenti contabili.</strong>"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Activity Statement"
-msgstr ""
+msgstr "Estratto Conto"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
-msgid "Activity Statement in"
-msgstr ""
+msgid "Activity Statement between"
+msgstr "Estratto Conto tra "
+
+#. module: customer_activity_statement
+#: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
+msgid "Aging Report at"
+msgstr "Estratto conto al"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.customer_activity_statement_wizard_view
@@ -65,26 +71,29 @@ msgid ""
 " (30 days due, ...), so the customer can review how much is open, due or "
 "overdue."
 msgstr ""
+"Il dettaglio dell'estratto conto (in intervalli di 30 giorni) può essere "
+"stampato nel report. Il cliente può verificare quanto è aperto, in scadenza "
+"o scaduto."
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Amount"
-msgstr ""
+msgstr "Importo"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Balance"
-msgstr ""
+msgstr "Saldo"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Balance Due"
-msgstr ""
+msgstr "Saldo dovuto"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Balance Forward"
-msgstr ""
+msgstr "Saldo alla data"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.customer_activity_statement_wizard_view
@@ -99,27 +108,27 @@ msgstr "Azienda"
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Creato da"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_create_date
 msgid "Created on"
-msgstr ""
+msgstr "Creato il "
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Current Due"
-msgstr ""
+msgstr "A scadere"
 
 #. module: customer_activity_statement
 #: model:ir.actions.act_window,name:customer_activity_statement.customer_activity_statement_wizard_action
 msgid "Customer Activity Statement"
-msgstr ""
+msgstr "Estratto Conto Cliente"
 
 #. module: customer_activity_statement
 #: model:ir.model,name:customer_activity_statement.model_customer_activity_statement_wizard
 msgid "Customer Activity Statement Wizard"
-msgstr ""
+msgstr "Wizard Estratto conto cliente"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
@@ -129,22 +138,22 @@ msgstr "Data"
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_date_end
 msgid "Date end"
-msgstr ""
+msgstr "Data fine"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_date_start
 msgid "Date start"
-msgstr ""
+msgstr "Data inizio"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Date:"
-msgstr ""
+msgstr "Data:"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Description"
-msgstr ""
+msgstr "Descrizione"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_display_name
@@ -155,64 +164,64 @@ msgstr "Nome mostrato"
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_filter_partners_non_due
 msgid "Don't show partners with no due entries"
-msgstr ""
+msgstr "Escludi partner senza movimenti "
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Ending Balance"
-msgstr ""
+msgstr "Saldo finale"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.customer_activity_statement_wizard_view
 msgid "Export PDF"
-msgstr ""
+msgstr "Export PDF"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_id
 #: model:ir.model.fields,field_description:customer_activity_statement.field_report_customer_activity_statement_statement_id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_show_aging_buckets
 msgid "Include Aging Buckets"
-msgstr ""
+msgstr "Riepilogo scaduto"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard___last_update
 #: model:ir.model.fields,field_description:customer_activity_statement.field_report_customer_activity_statement_statement___last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Ultima modifica il"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Modificato da "
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Ultima modifica il"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_number_partner_ids
 msgid "Number partner ids"
-msgstr ""
+msgstr "Numero IDs del partner"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Partner ref:"
-msgstr ""
+msgstr "Riferimento interno cliente:"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Reference number"
-msgstr ""
+msgstr "Riferimento"
 
 #. module: customer_activity_statement
 #: model:ir.actions.report.xml,name:customer_activity_statement.action_print_customer_activity_statement
 msgid "Statement Action to PDF"
-msgstr ""
+msgstr "Estratto Conto in PDF"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.customer_activity_statement_wizard_view
@@ -224,6 +233,20 @@ msgid ""
 "of the statement. The list is         displayed in chronological order and "
 "is split by currencies."
 msgstr ""
+"L'estratto conto ha il dettaglio della movimentazione del cliente tra le "
+"date selezionate. Include tutte le fatture, note e pagamenti. I movimenti "
+"aperti precedenti alla data indicata verrà indicato come saldo iniziale. Il "
+"report è in ordine cronologico e suddiviso in valute."
+
+#. module: customer_activity_statement
+#: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
+msgid "and"
+msgstr "e"
+
+#. module: customer_activity_statement
+#: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
+msgid "in"
+msgstr "in"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.customer_activity_statement_wizard_view
@@ -233,4 +256,4 @@ msgstr "o"
 #. module: customer_activity_statement
 #: model:ir.model,name:customer_activity_statement.model_report_customer_activity_statement_statement
 msgid "report.customer_activity_statement.statement"
-msgstr ""
+msgstr "report.customer_activity_statement.statement"
