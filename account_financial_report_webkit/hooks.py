@@ -6,6 +6,14 @@ from .models.account_move_line import AccountMoveLine
 
 def pre_init_hook(cr):
     with cr.savepoint():
+        cr.execute(
+            'SELECT count(attname) FROM pg_attribute '
+            'WHERE attrelid = '
+            '( SELECT oid FROM pg_class WHERE relname = %s ) '
+            'AND attname = %s',
+            ('account_move_line', 'last_rec_date'))
+        if cr.fetchone()[0]:
+            return
         # don't break if column exists
         cr.execute(
             'alter table account_move_line add column last_rec_date date',
