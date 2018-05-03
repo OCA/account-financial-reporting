@@ -31,12 +31,16 @@ class GeneralLedgerReport(models.TransientModel):
     only_posted_moves = fields.Boolean()
     hide_account_balance_at_0 = fields.Boolean()
     foreign_currency = fields.Boolean()
+    show_analytic_tags = fields.Boolean()
     company_id = fields.Many2one(comodel_name='res.company')
     filter_account_ids = fields.Many2many(comodel_name='account.account')
     filter_partner_ids = fields.Many2many(comodel_name='res.partner')
     filter_journal_ids = fields.Many2many(comodel_name='account.journal')
     filter_cost_center_ids = fields.Many2many(
         comodel_name='account.analytic.account'
+    )
+    filter_analytic_tag_ids = fields.Many2many(
+        comodel_name='account.analytic.tag',
     )
     centralize = fields.Boolean()
 
@@ -192,6 +196,7 @@ class GeneralLedgerReportMoveLine(models.TransientModel):
     partner = fields.Char()
     label = fields.Char()
     cost_center = fields.Char()
+    tags = fields.Char()
     matching_number = fields.Char()
     debit = fields.Float(digits=(16, 2))
     credit = fields.Float(digits=(16, 2))
@@ -275,6 +280,10 @@ class GeneralLedgerReportCompute(models.TransientModel):
             if self.centralize:
                 self._inject_line_centralized_values()
 
+        if self.show_analytic_tags:
+            # Compute analytic tags
+            self._compute_analytic_tags()
+
         # Refresh cache because all data are computed with SQL requests
         self.invalidate_cache()
 
@@ -333,6 +342,11 @@ class GeneralLedgerReportCompute(models.TransientModel):
                     ml.analytic_account_id = aa.id
                     AND aa.id IN %s
             """
+        if self.filter_analytic_tag_ids:
+            sub_subquery_sum_amounts += """
+        INNER JOIN
+            move_lines_on_tags ON ml.id = move_lines_on_tags.ml_id
+            """
         sub_subquery_sum_amounts += """
         LEFT JOIN
             res_currency c ON a.currency_id = c.id
@@ -389,7 +403,11 @@ WITH
             FROM
                 account_account a
             """
-        if self.filter_partner_ids or self.filter_cost_center_ids:
+        if (
+            self.filter_partner_ids or
+            self.filter_cost_center_ids or
+            self.filter_analytic_tag_ids
+        ):
             query_inject_account += """
             INNER JOIN
                 account_move_line ml ON a.id = ml.account_id
@@ -407,6 +425,17 @@ WITH
                         ml.analytic_account_id = aa.id
                         AND aa.id IN %s
             """
+        if self.filter_analytic_tag_ids:
+            query_inject_account += """
+            INNER JOIN
+                account_analytic_tag_account_move_line_rel atml
+                    ON atml.account_move_line_id = ml.id
+            INNER JOIN
+                account_analytic_tag aat
+                    ON
+                        atml.account_analytic_tag_id = aat.id
+                        AND aat.id IN %s
+            """
         query_inject_account += """
             WHERE
                 a.company_id = %s
@@ -422,10 +451,40 @@ WITH
             AND
                 p.id IN %s
             """
-        if self.filter_partner_ids or self.filter_cost_center_ids:
+        if (
+            self.filter_partner_ids or
+            self.filter_cost_center_ids or
+            self.filter_analytic_tag_ids
+        ):
             query_inject_account += """
             GROUP BY
                 a.id
+            """
+        query_inject_account += """
+        ),
+        """
+
+        if self.filter_analytic_tag_ids:
+            query_inject_account += """
+    move_lines_on_tags AS
+        (
+            SELECT
+                DISTINCT ml.id AS ml_id
+            FROM
+                accounts a
+            INNER JOIN
+                account_move_line ml
+                    ON a.id = ml.account_id
+            INNER JOIN
+                account_analytic_tag_account_move_line_rel atml
+                    ON atml.account_move_line_id = ml.id
+            INNER JOIN
+                account_analytic_tag aat
+                    ON
+                        atml.account_analytic_tag_id = aat.id
+            WHERE
+                aat.id IN %s
+        ),
             """
 
         init_subquery = self._get_final_account_sub_subquery_sum_amounts(
@@ -436,7 +495,6 @@ WITH
         )
 
         query_inject_account += """
-        ),
     initial_sum_amounts AS ( """ + init_subquery + """ ),
     final_sum_amounts AS ( """ + final_subquery + """ )
 INSERT INTO
@@ -504,6 +562,10 @@ AND
             query_inject_account_params += (
                 tuple(self.filter_cost_center_ids.ids),
             )
+        if self.filter_analytic_tag_ids:
+            query_inject_account_params += (
+                tuple(self.filter_analytic_tag_ids.ids),
+            )
         query_inject_account_params += (
             self.company_id.id,
             self.unaffected_earnings_account.id,
@@ -515,6 +577,10 @@ AND
         if self.filter_partner_ids:
             query_inject_account_params += (
                 tuple(self.filter_partner_ids.ids),
+            )
+        if self.filter_analytic_tag_ids:
+            query_inject_account_params += (
+                tuple(self.filter_analytic_tag_ids.ids),
             )
         query_inject_account_params += (
             self.date_from,
@@ -616,6 +682,11 @@ AND
                     ml.analytic_account_id = aa.id
                     AND aa.id IN %s
             """
+        if self.filter_analytic_tag_ids:
+            sub_subquery_sum_amounts += """
+        INNER JOIN
+            move_lines_on_tags ON ml.id = move_lines_on_tags.ml_id
+            """
         sub_subquery_sum_amounts += """
             GROUP BY
                 ap.account_id, ap.partner_id, c.id
@@ -703,6 +774,17 @@ WITH
                         ml.analytic_account_id = aa.id
                         AND aa.id IN %s
             """
+        if self.filter_analytic_tag_ids:
+            query_inject_partner += """
+            INNER JOIN
+                account_analytic_tag_account_move_line_rel atml
+                    ON atml.account_move_line_id = ml.id
+            INNER JOIN
+                account_analytic_tag aat
+                    ON
+                        atml.account_analytic_tag_id = aat.id
+                        AND aat.id IN %s
+            """
         query_inject_partner += """
             WHERE
                 ra.report_id = %s
@@ -747,6 +829,32 @@ WITH
                 p.id,
                 at.include_initial_balance
         ),
+        """
+
+        if self.filter_analytic_tag_ids:
+            query_inject_partner += """
+    move_lines_on_tags AS
+        (
+            SELECT
+                DISTINCT ml.id AS ml_id
+            FROM
+                accounts_partners ap
+            INNER JOIN
+                account_move_line ml
+                    ON ap.account_id = ml.account_id
+            INNER JOIN
+                account_analytic_tag_account_move_line_rel atml
+                    ON atml.account_move_line_id = ml.id
+            INNER JOIN
+                account_analytic_tag aat
+                    ON
+                        atml.account_analytic_tag_id = aat.id
+            WHERE
+                aat.id IN %s
+        ),
+            """
+
+        query_inject_partner += """
     initial_sum_amounts AS ( """ + init_subquery + """ ),
     final_sum_amounts AS ( """ + final_subquery + """ )
 INSERT INTO
@@ -836,12 +944,20 @@ AND
             query_inject_partner_params += (
                 tuple(self.filter_cost_center_ids.ids),
             )
+        if self.filter_analytic_tag_ids:
+            query_inject_partner_params += (
+                tuple(self.filter_analytic_tag_ids.ids),
+            )
         query_inject_partner_params += (
             self.id,
         )
         if self.filter_partner_ids:
             query_inject_partner_params += (
                 tuple(self.filter_partner_ids.ids),
+            )
+        if self.filter_analytic_tag_ids:
+            query_inject_partner_params += (
+                tuple(self.filter_analytic_tag_ids.ids),
             )
         query_inject_partner_params += (
             self.date_from,
@@ -895,7 +1011,46 @@ AND
         The "only_empty_partner_line" value is used
         to compute data without partner.
         """
-        query_inject_move_line = """
+
+        query_inject_move_line = ""
+        if self.filter_analytic_tag_ids:
+            query_inject_move_line += """
+WITH
+    move_lines_on_tags AS
+        (
+            SELECT
+                DISTINCT ml.id AS ml_id
+            FROM
+        """
+            if is_account_line:
+                query_inject_move_line += """
+                report_general_ledger_qweb_account ra
+            """
+            elif is_partner_line:
+                query_inject_move_line += """
+                report_general_ledger_qweb_partner rp
+            INNER JOIN
+                report_general_ledger_qweb_account ra
+                    ON rp.report_account_id = ra.id
+            """
+            query_inject_move_line += """
+            INNER JOIN
+                account_move_line ml
+                    ON ra.account_id = ml.account_id
+            INNER JOIN
+                account_analytic_tag_account_move_line_rel atml
+                    ON atml.account_move_line_id = ml.id
+            INNER JOIN
+                account_analytic_tag aat
+                    ON
+                        atml.account_analytic_tag_id = aat.id
+            WHERE
+                ra.report_id = %s
+            AND
+                aat.id IN %s
+        )
+            """
+        query_inject_move_line += """
 INSERT INTO
     report_general_ledger_qweb_move_line
     (
@@ -1069,6 +1224,11 @@ INNER JOIN
 LEFT JOIN
     account_analytic_account aa ON ml.analytic_account_id = aa.id
             """
+        if self.filter_analytic_tag_ids:
+            query_inject_move_line += """
+INNER JOIN
+    move_lines_on_tags ON ml.id = move_lines_on_tags.ml_id
+            """
         query_inject_move_line += """
 WHERE
     ra.report_id = %s
@@ -1129,7 +1289,13 @@ ORDER BY
     a.code, ml.date, ml.id
             """
 
-        query_inject_move_line_params = (
+        query_inject_move_line_params = ()
+        if self.filter_analytic_tag_ids:
+            query_inject_move_line_params += (
+                self.id,
+                tuple(self.filter_analytic_tag_ids.ids),
+            )
+        query_inject_move_line_params += (
             self.env.uid,
         )
         if self.filter_cost_center_ids:
@@ -1161,8 +1327,37 @@ ORDER BY
 
         Only centralized accounts are computed.
         """
-        query_inject_move_line_centralized = """
+
+        if self.filter_analytic_tag_ids:
+            query_inject_move_line_centralized = """
 WITH
+    move_lines_on_tags AS
+        (
+            SELECT
+                DISTINCT ml.id AS ml_id
+            FROM
+                report_general_ledger_qweb_account ra
+            INNER JOIN
+                account_move_line ml
+                    ON ra.account_id = ml.account_id
+            INNER JOIN
+                account_analytic_tag_account_move_line_rel atml
+                    ON atml.account_move_line_id = ml.id
+            INNER JOIN
+                account_analytic_tag aat
+                    ON
+                        atml.account_analytic_tag_id = aat.id
+            WHERE
+                ra.report_id = %s
+            AND
+                aat.id IN %s
+        ),
+            """
+        else:
+            query_inject_move_line_centralized = """
+WITH
+            """
+        query_inject_move_line_centralized += """
     move_lines AS
         (
             SELECT
@@ -1192,6 +1387,11 @@ WITH
                     ON
                         ml.analytic_account_id = aa.id
                         AND aa.id IN %s
+            """
+        if self.filter_analytic_tag_ids:
+            query_inject_move_line_centralized += """
+            INNER JOIN
+                move_lines_on_tags ON ml.id = move_lines_on_tags.ml_id
             """
         query_inject_move_line_centralized += """
             WHERE
@@ -1264,6 +1464,11 @@ ORDER BY
         """
 
         query_inject_move_line_centralized_params = ()
+        if self.filter_analytic_tag_ids:
+            query_inject_move_line_centralized_params += (
+                self.id,
+                tuple(self.filter_analytic_tag_ids.ids),
+            )
         if self.filter_cost_center_ids:
             query_inject_move_line_centralized_params += (
                 tuple(self.filter_cost_center_ids.ids),
@@ -1283,6 +1488,76 @@ ORDER BY
             query_inject_move_line_centralized,
             query_inject_move_line_centralized_params
         )
+
+    def _compute_analytic_tags(self):
+        """ Compute "tags" column"""
+        query_update_analytic_tags = """
+UPDATE
+    report_general_ledger_qweb_move_line
+SET
+    tags = tags_values.tags
+FROM
+    (
+        (
+            SELECT
+                rml.id AS report_id,
+                array_to_string(array_agg(t.name ORDER BY t.name), ',') AS tags
+            FROM
+                account_move_line ml
+            INNER JOIN
+                report_general_ledger_qweb_move_line rml
+                    ON ml.id = rml.move_line_id
+            INNER JOIN
+                report_general_ledger_qweb_account ra
+                    ON rml.report_account_id = ra.id
+            INNER JOIN
+                account_analytic_tag_account_move_line_rel tml
+                    ON ml.id = tml.account_move_line_id
+            INNER JOIN
+                account_analytic_tag t
+                    ON tml.account_analytic_tag_id = t.id
+            WHERE
+                ra.report_id = %(report_id)s
+            GROUP BY
+                rml.id,
+                ml.id
+        )
+        UNION
+        (
+            SELECT
+                rml.id AS report_id,
+                array_to_string(array_agg(t.name ORDER BY t.name), ',') AS tags
+            FROM
+                account_move_line ml
+            INNER JOIN
+                report_general_ledger_qweb_move_line rml
+                    ON ml.id = rml.move_line_id
+            INNER JOIN
+                report_general_ledger_qweb_partner rp
+                    ON rml.report_partner_id = rp.id
+            INNER JOIN
+                report_general_ledger_qweb_account ra
+                    ON rp.report_account_id = ra.id
+            INNER JOIN
+                account_analytic_tag_account_move_line_rel tml
+                    ON ml.id = tml.account_move_line_id
+            INNER JOIN
+                account_analytic_tag t
+                    ON tml.account_analytic_tag_id = t.id
+            WHERE
+                ra.report_id = %(report_id)s
+            GROUP BY
+                rml.id,
+                ml.id
+        )
+    ) AS tags_values
+WHERE
+    report_general_ledger_qweb_move_line.id = tags_values.report_id
+        """
+        params = {
+            'report_id': self.id,
+        }
+        self.env.cr.execute(query_update_analytic_tags, params)
 
     def _get_unaffected_earnings_account_sub_subquery_sum_initial(
             self
@@ -1314,6 +1589,11 @@ ORDER BY
                 ON
                     ml.analytic_account_id = aa.id
                     AND aa.id IN %(cost_center_ids)s
+            """
+        if self.filter_analytic_tag_ids:
+            sub_subquery_sum_amounts += """
+            INNER JOIN
+                move_lines_on_tags ON ml.id = move_lines_on_tags.ml_id
             """
         sub_subquery_sum_amounts += """
         WHERE
@@ -1359,6 +1639,11 @@ ORDER BY
                             ml.analytic_account_id = aa.id
                             AND aa.id IN %(cost_center_ids)s
                     """
+        if self.filter_analytic_tag_ids:
+            sub_subquery_sum_amounts += """
+            INNER JOIN
+                move_lines_on_tags ON ml.id = move_lines_on_tags.ml_id
+            """
         sub_subquery_sum_amounts += """
         WHERE
             a.company_id = %(company_id)s
@@ -1396,6 +1681,32 @@ ORDER BY
         # pylint: disable=sql-injection
         query_inject_account = """
         WITH
+        """
+
+        if self.filter_analytic_tag_ids:
+            query_inject_account += """
+    move_lines_on_tags AS
+        (
+            SELECT
+                DISTINCT ml.id AS ml_id
+            FROM
+                account_account a
+            INNER JOIN
+                account_move_line ml
+                    ON a.id = ml.account_id
+            INNER JOIN
+                account_analytic_tag_account_move_line_rel atml
+                    ON atml.account_move_line_id = ml.id
+            INNER JOIN
+                account_analytic_tag aat
+                    ON
+                        atml.account_analytic_tag_id = aat.id
+            WHERE
+                aat.id IN %(analytic_tag_ids)s
+        ),
+            """
+
+        query_inject_account += """
             sum_amounts AS ( """ + subquery_sum_amounts + """ )
         INSERT INTO
             report_general_ledger_qweb_account
@@ -1431,11 +1742,15 @@ ORDER BY
             a.company_id = %(company_id)s
         AND a.id = %(unaffected_earnings_account_id)s
                 """
-        query_inject_account_params = {
+        query_inject_account_params = {}
+        if self.filter_analytic_tag_ids:
+            query_inject_account_params['analytic_tag_ids'] = \
+                tuple(self.filter_analytic_tag_ids.ids)
+        query_inject_account_params.update({
             'date_from': self.date_from,
             'date_to': self.date_to,
             'fy_start_date': self.fy_start_date,
-        }
+        })
         if self.filter_cost_center_ids:
             query_inject_account_params['cost_center_ids'] = \
                 tuple(self.filter_cost_center_ids.ids)
