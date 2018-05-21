@@ -67,7 +67,7 @@ class TrialBalanceReportAccount(models.TransientModel):
     initial_balance_foreign_currency = fields.Float(digits=(16, 2))
     debit = fields.Float(digits=(16, 2))
     credit = fields.Float(digits=(16, 2))
-    currency_name = fields.Char()
+    currency_id = fields.Many2one(comodel_name='res.currency')
     final_balance = fields.Float(digits=(16, 2))
     final_balance_foreign_currency = fields.Float(digits=(16, 2))
 
@@ -100,7 +100,7 @@ class TrialBalanceReportPartner(models.TransientModel):
     initial_balance = fields.Float(digits=(16, 2))
     debit = fields.Float(digits=(16, 2))
     credit = fields.Float(digits=(16, 2))
-    currency_name = fields.Char()
+    currency_id = fields.Many2one(comodel_name='res.currency')
     final_balance = fields.Float(digits=(16, 2))
 
     @api.model
@@ -187,7 +187,7 @@ INSERT INTO
     debit,
     credit,
     final_balance,
-    currency_name,
+    currency_id,
     initial_balance_foreign_currency,
     final_balance_foreign_currency
     )
@@ -202,7 +202,7 @@ SELECT
     rag.final_debit - rag.initial_debit AS debit,
     rag.final_credit - rag.initial_credit AS credit,
     rag.final_balance AS final_balance,
-    rag.currency_name AS currency_name,
+    rag.currency_id,
     rag.initial_balance_foreign_currency AS initial_balance_foreign_currency,
     rag.final_balance_foreign_currency AS final_balance_foreign_currency
 FROM
@@ -232,7 +232,7 @@ INSERT INTO
     debit,
     credit,
     final_balance,
-    currency_name
+    currency_id
     )
 SELECT
     ra.id AS report_account_id,
@@ -244,7 +244,7 @@ SELECT
     rpg.final_debit - rpg.initial_debit AS debit,
     rpg.final_credit - rpg.initial_credit AS credit,
     rpg.final_balance AS final_balance,
-    rpg.currency_name AS currency_name
+    rpg.currency_id
 FROM
     report_general_ledger_qweb_partner rpg
 INNER JOIN
