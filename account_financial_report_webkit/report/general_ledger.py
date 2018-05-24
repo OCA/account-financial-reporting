@@ -206,25 +206,21 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
                                       init_balance_memoizer, main_filter,
                                       target_move, start, stop):
         res = {}
-        for acc_id in accounts_ids:
-            move_line_ids = self.get_move_lines_ids(
-                acc_id, main_filter, start, stop, target_move)
-            if not move_line_ids:
-                res[acc_id] = []
-                continue
-
-            lines = self._get_ledger_lines(move_line_ids, acc_id)
-            res[acc_id] = lines
+        move_line_ids = self.get_move_lines_ids(
+            accounts_ids, main_filter, start, stop, target_move)
+        ledger_lines = self._get_ledger_lines(move_line_ids)
+        for account_id in accounts_ids:
+            res[account_id] = []
+        for line in ledger_lines:
+            res[line['account_id']].append(line)
         return res
 
-    def _get_ledger_lines(self, move_line_ids, account_id):
+    def _get_ledger_lines(self, move_line_ids):
         if not move_line_ids:
             return []
         res = self._get_move_line_datas(move_line_ids)
-        # computing counter part is really heavy in term of ressouces
-        # consuption looking for a king of SQL to help me improve it
         move_ids = [x.get('move_id') for x in res]
-        counter_parts = self._get_moves_counterparts(move_ids, account_id)
+        counter_parts = self._get_moves_counterparts(move_ids)
         for line in res:
             line['counterparts'] = counter_parts.get(line.get('move_id'), '')
         return res

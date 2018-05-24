@@ -439,7 +439,7 @@ class CommonReportHeaderWebkit(common_report_header):
     ################################################
     # Account move retrieval helper                #
     ################################################
-    def _get_move_ids_from_periods(self, account_id, period_start, period_stop,
+    def _get_move_ids_from_periods(self, account_ids, period_start, period_stop,
                                    target_move):
         move_line_obj = self.pool.get('account.move.line')
         period_obj = self.pool.get('account.period')
@@ -448,18 +448,18 @@ class CommonReportHeaderWebkit(common_report_header):
         if not periods:
             return []
         search = [
-            ('period_id', 'in', periods), ('account_id', '=', account_id)]
+            ('period_id', 'in', periods), ('account_id', 'in', account_ids)]
         if target_move == 'posted':
             search += [('move_id.state', '=', 'posted')]
         return move_line_obj.search(self.cursor, self.uid, search)
 
-    def _get_move_ids_from_dates(self, account_id, date_start, date_stop,
+    def _get_move_ids_from_dates(self, account_ids, date_start, date_stop,
                                  target_move, mode='include_opening'):
         # TODO imporve perfomance by setting opening period as a property
         move_line_obj = self.pool.get('account.move.line')
         search_period = [('date', '>=', date_start),
                          ('date', '<=', date_stop),
-                         ('account_id', '=', account_id)]
+                         ('account_id', 'in', account_ids)]
 
         # actually not used because OpenERP itself always include the opening
         # when we get the periods from january to december
@@ -473,20 +473,20 @@ class CommonReportHeaderWebkit(common_report_header):
 
         return move_line_obj.search(self.cursor, self.uid, search_period)
 
-    def get_move_lines_ids(self, account_id, main_filter, start, stop,
+    def get_move_lines_ids(self, account_ids, main_filter, start, stop,
                            target_move, mode='include_opening'):
-        """Get account move lines base on form data"""
+        """Get account move opening_move_lines base on form data"""
         if mode not in ('include_opening', 'exclude_opening'):
             raise osv.except_osv(
                 _('Invalid query mode'),
                 _('Must be in include_opening, exclude_opening'))
 
         if main_filter in ('filter_period', 'filter_no'):
-            return self._get_move_ids_from_periods(account_id, start, stop,
+            return self._get_move_ids_from_periods(account_ids, start, stop,
                                                    target_move)
 
         elif main_filter == 'filter_date':
-            return self._get_move_ids_from_dates(account_id, start, stop,
+            return self._get_move_ids_from_dates(account_ids, start, stop,
                                                  target_move)
         else:
             raise osv.except_osv(
@@ -573,7 +573,7 @@ class CommonReportHeaderWebkit(common_report_header):
             raise
         return res or []
 
-    def _get_moves_counterparts(self, move_ids, account_id, limit=3):
+    def _get_moves_counterparts(self, move_ids, limit=3):
         if not move_ids:
             return {}
         if not isinstance(move_ids, list):
@@ -585,7 +585,7 @@ SELECT account_move.id,
                 FROM account_move_line m2
                   LEFT JOIN account_account a ON (m2.account_id=a.id)
                 WHERE m2.move_id =account_move_line.move_id
-                  AND m2.account_id<>%s limit %s) , ', ')
+                  AND m2.account_id<>account_move_line.account_id limit %s) , ', ')
 
 FROM account_move
         JOIN account_move_line
@@ -595,7 +595,7 @@ FROM account_move
 WHERE move_id in %s"""
 
         try:
-            self.cursor.execute(sql, (account_id, limit, tuple(move_ids)))
+            self.cursor.execute(sql, (limit, tuple(move_ids)))
             res = self.cursor.fetchall()
         except Exception:
             self.cursor.rollback()
