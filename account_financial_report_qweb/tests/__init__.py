@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).-
 
 from . import abstract_test
+from . import abstract_test_foreign_currency
 from . import test_aged_partner_balance
 from . import test_general_ledger
 from . import test_journal

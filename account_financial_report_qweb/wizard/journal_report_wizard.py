@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models, _
+from odoo.tools.safe_eval import safe_eval
 
 
 class JournalReportWizard(models.TransientModel):
@@ -42,7 +43,7 @@ class JournalReportWizard(models.TransientModel):
         default='all',
         required=True,
     )
-    with_currency = fields.Boolean()
+    foreign_currency = fields.Boolean()
     sort_option = fields.Selection(
         selection='_get_sort_options',
         string="Sort entries by",
@@ -87,14 +88,33 @@ class JournalReportWizard(models.TransientModel):
         self.date_to = self.date_range_id.date_end
 
     @api.multi
-    def export_as_pdf(self):
+    def button_export_html(self):
         self.ensure_one()
-        return self._export()
+        action = self.env.ref(
+            'account_financial_report_qweb.action_report_journal_ledger')
+        vals = action.read()[0]
+        context1 = vals.get('context', {})
+        if isinstance(context1, basestring):
+            context1 = safe_eval(context1)
+        model = self.env['report_journal_qweb']
+        report = model.create(self._prepare_report_journal())
+        report.compute_data_for_report()
+        context1['active_id'] = report.id
+        context1['active_ids'] = report.ids
+        vals['context'] = context1
+        return vals
 
     @api.multi
-    def export_as_xlsx(self):
+    def button_export_pdf(self):
         self.ensure_one()
-        return self._export(xlsx_report=True)
+        report_type = 'qweb-pdf'
+        return self._export(report_type)
+
+    @api.multi
+    def button_export_xlsx(self):
+        self.ensure_one()
+        report_type = 'xlsx'
+        return self._export(report_type)
 
     @api.multi
     def _prepare_report_journal(self):
@@ -103,7 +123,7 @@ class JournalReportWizard(models.TransientModel):
             'date_from': self.date_from,
             'date_to': self.date_to,
             'move_target': self.move_target,
-            'with_currency': self.with_currency,
+            'foreign_currency': self.foreign_currency,
             'company_id': self.company_id.id,
             'journal_ids': [(6, 0, self.journal_ids.ids)],
             'sort_option': self.sort_option,
@@ -112,8 +132,10 @@ class JournalReportWizard(models.TransientModel):
         }
 
     @api.multi
-    def _export(self, xlsx_report=False):
+    def _export(self, report_type):
+        """Default export is PDF."""
         self.ensure_one()
         model = self.env['report_journal_qweb']
         report = model.create(self._prepare_report_journal())
-        return report.print_report(xlsx_report=xlsx_report)
+        report.compute_data_for_report()
+        return report.print_report(report_type)

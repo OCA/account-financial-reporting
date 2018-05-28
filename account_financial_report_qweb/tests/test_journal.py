@@ -2,11 +2,56 @@
 # Copyright 2017 ACSONE SA/NV
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import time
+
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 from odoo.fields import Date
 from odoo.tests.common import TransactionCase
+
+from . import abstract_test_foreign_currency as a_t_f_c
+
+
+class TestJournalLedger(a_t_f_c.AbstractTestForeignCurrency):
+    """
+        Technical tests for General Ledger Report.
+    """
+    def _getReportModel(self):
+        return self.env['report_journal_qweb']
+
+    def _getQwebReportName(self):
+        return 'account_financial_report_qweb.report_journal_qweb'
+
+    def _getXlsxReportName(self):
+        return 'account_financial_report_qweb.report_journal_xlsx'
+
+    def _getXlsxReportActionName(self):
+        return 'account_financial_report_qweb.' \
+               'action_report_journal_ledger'
+
+    def _getReportTitle(self):
+        return 'Journal Ledger'
+
+    def _getBaseFilters(self):
+        return {
+            'date_from': time.strftime('%Y-01-01'),
+            'date_to': time.strftime('%Y-12-31'),
+            'company_id': self.company.id,
+            'journal_ids': [(6, 0, self.journal_sale.ids)]
+        }
+
+    def _getAdditionalFiltersToBeTested(self):
+        return [
+            {'move_target': "All",
+             'sort_option': "Date",
+             'group_option': "Journal",
+             'with_account_name': True,
+             'foreign_currency': True},
+        ]
+
+    def test_04_compute_data(self):
+        return True
 
 
 class TestJournalReport(TransactionCase):

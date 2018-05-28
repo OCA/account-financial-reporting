@@ -75,7 +75,6 @@ body, table, td, span, div {
     text-align:right;
 }
 .list_table .act_as_cell{
-    padding-left: 5px;
 /*    border-right:1px solid lightGrey;  uncomment to active column lines */
 }
 .list_table .act_as_cell.first_column {
@@ -92,4 +91,17 @@ body, table, td, span, div {
 }
 .page_break {
     page-break-inside: avoid;
+}
+
+.button_row {
+    padding-bottom: 10px;
+}
+
+.o_account_financial_reports_page {
+    background-color: @odoo-view-background-color;
+    color: @odoo-main-text-color;
+    padding-top: 10px;
+    width: 90%;
+    margin-right: auto;
+    margin-left: auto;
 }

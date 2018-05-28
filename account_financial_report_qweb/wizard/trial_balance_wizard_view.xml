@@ -22,6 +22,7 @@
                             <field name="target_move" widget="radio"/>
                             <field name="hide_account_balance_at_0"/>
                             <field name="show_partner_details"/>
+                            <field name="foreign_currency"/>
                         </group>
                     </group>
                     <label for="partner_ids" attrs="{'invisible':[('show_partner_details','!=',True)]}"/>
@@ -42,6 +43,9 @@
                 </div>
                 <footer>
                     <div attrs="{'invisible': [('not_only_one_unaffected_earnings_account', '=', True)]}">
+                        <button name="button_export_html" string="View"
+                            type="object" default_focus="1" class="oe_highlight"/>
+                        or
                         <button name="button_export_pdf" string="Export PDF" type="object" default_focus="1" class="oe_highlight"/>
                         or
                         <button name="button_export_xlsx" string="Export XLSX" type="object"/>

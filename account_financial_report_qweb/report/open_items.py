@@ -22,6 +22,7 @@ class OpenItemsReport(models.TransientModel):
     date_at = fields.Date()
     only_posted_moves = fields.Boolean()
     hide_account_balance_at_0 = fields.Boolean()
+    foreign_currency = fields.Boolean()
     company_id = fields.Many2one(comodel_name='res.company')
     filter_account_ids = fields.Many2many(comodel_name='account.account')
     filter_partner_ids = fields.Many2many(comodel_name='res.partner')
@@ -53,7 +54,7 @@ class OpenItemsReportAccount(models.TransientModel):
     # Data fields, used for report display
     code = fields.Char()
     name = fields.Char()
-    currency_name = fields.Char()
+    currency_id = fields.Many2one(comodel_name='res.currency')
     final_amount_residual = fields.Float(digits=(16, 2))
     final_amount_total_due = fields.Float(digits=(16, 2))
     final_amount_residual_currency = fields.Float(digits=(16, 2))
@@ -84,7 +85,7 @@ class OpenItemsReportPartner(models.TransientModel):
 
     # Data fields, used for report display
     name = fields.Char()
-    currency_name = fields.Char()
+    currency_id = fields.Many2one(comodel_name='res.currency')
     final_amount_residual = fields.Float(digits=(16, 2))
     final_amount_total_due = fields.Float(digits=(16, 2))
     final_amount_residual_currency = fields.Float(digits=(16, 2))
@@ -133,7 +134,7 @@ class OpenItemsReportMoveLine(models.TransientModel):
     label = fields.Char()
     amount_total_due = fields.Float(digits=(16, 2))
     amount_residual = fields.Float(digits=(16, 2))
-    currency_name = fields.Char()
+    currency_id = fields.Many2one(comodel_name='res.currency')
     amount_total_due_currency = fields.Float(digits=(16, 2))
     amount_residual_currency = fields.Float(digits=(16, 2))
 
@@ -146,10 +147,9 @@ class OpenItemsReportCompute(models.TransientModel):
     _inherit = 'report_open_items_qweb'
 
     @api.multi
-    def print_report(self, xlsx_report=False):
+    def print_report(self, report_type):
         self.ensure_one()
-        self.compute_data_for_report()
-        if xlsx_report:
+        if report_type == 'xlsx':
             report_name = 'account_financial_report_qweb.' \
                           'report_open_items_xlsx'
         else:
@@ -157,6 +157,22 @@ class OpenItemsReportCompute(models.TransientModel):
                           'report_open_items_qweb'
         return self.env['report'].get_action(docids=self.ids,
                                              report_name=report_name)
+
+    def _get_html(self):
+        result = {}
+        rcontext = {}
+        context = dict(self.env.context)
+        report = self.browse(context.get('active_id'))
+        if report:
+            rcontext['o'] = report
+            result['html'] = self.env.ref(
+                'account_financial_report_qweb.'
+                'report_open_items_html').render(rcontext)
+        return result
+
+    @api.model
+    def get_html(self, given_context=None):
+        return self._get_html()
 
     @api.multi
     def compute_data_for_report(self):
@@ -186,7 +202,7 @@ WITH
                 a.code,
                 a.name,
                 a.user_type_id,
-                c.name as currency_name
+                c.id as currency_id
             FROM
                 account_account a
             INNER JOIN
@@ -221,7 +237,7 @@ WITH
             """
         query_inject_account += """
             GROUP BY
-                a.id, c.name
+                a.id, c.id
         )
 INSERT INTO
     report_open_items_qweb_account
@@ -230,7 +246,7 @@ INSERT INTO
     create_uid,
     create_date,
     account_id,
-    currency_name,
+    currency_id,
     code,
     name
     )
@@ -239,7 +255,7 @@ SELECT
     %s AS create_uid,
     NOW() AS create_date,
     a.id AS account_id,
-    a.currency_name,
+    a.currency_id,
     a.code,
     a.name
 FROM
@@ -505,7 +521,7 @@ INSERT INTO
     label,
     amount_total_due,
     amount_residual,
-    currency_name,
+    currency_id,
     amount_total_due_currency,
     amount_residual_currency
     )
@@ -538,7 +554,7 @@ SELECT
     CONCAT_WS(' - ', NULLIF(ml.ref, ''), NULLIF(ml.name, '')) AS label,
     ml.balance,
     ml2.amount_residual,
-    c.name AS currency_name,
+    c.id AS currency_id,
     ml.amount_currency,
     ml2.amount_residual_currency
 FROM
@@ -632,7 +648,7 @@ WHERE
             WHERE
                 ra.report_id = %s
         )"""
-        query_compute_partners_residual_cumul = """
+        query_computer_partner_residual_cumul = """
 UPDATE
     report_open_items_qweb_partner
 SET
@@ -647,7 +663,7 @@ SET
         )
 """ + where_condition_partner_by_account
         params_compute_partners_residual_cumul = (self.id,)
-        self.env.cr.execute(query_compute_partners_residual_cumul,
+        self.env.cr.execute(query_computer_partner_residual_cumul,
                             params_compute_partners_residual_cumul)
 
         query_compute_partners_due_cumul = """
@@ -664,9 +680,9 @@ SET
                 rml.report_partner_id = report_open_items_qweb_partner.id
         )
 """ + where_condition_partner_by_account
-        params_compute_partners_due_cumul = (self.id,)
+        params_compute_partner_due_cumul = (self.id,)
         self.env.cr.execute(query_compute_partners_due_cumul,
-                            params_compute_partners_due_cumul)
+                            params_compute_partner_due_cumul)
 
         # Manage currency in partner
         where_condition_partner_by_account_cur = """
@@ -681,25 +697,26 @@ WHERE
                 report_open_items_qweb_partner rp
                     ON ra.id = rp.report_account_id
             WHERE
-                ra.report_id = %s AND ra.currency_name IS NOT NULL
-        )"""
-        query_compute_partners_cur_name_cumul = """
+                ra.report_id = %s AND ra.currency_id IS NOT NULL
+        )
+        """
+        query_compute_partners_cur_id_cumul = """
 UPDATE
     report_open_items_qweb_partner
 SET
-    currency_name =
+    currency_id =
         (
             SELECT
-                MAX(currency_name) as currency_name
+                MAX(currency_id) as currency_id
             FROM
                 report_open_items_qweb_move_line rml
             WHERE
                 rml.report_partner_id = report_open_items_qweb_partner.id
         )
 """ + where_condition_partner_by_account_cur
-        params_compute_partners_cur_name_cumul = (self.id,)
-        self.env.cr.execute(query_compute_partners_cur_name_cumul,
-                            params_compute_partners_cur_name_cumul)
+        params_compute_partners_cur_id_cumul = (self.id,)
+        self.env.cr.execute(query_compute_partners_cur_id_cumul,
+                            params_compute_partners_cur_id_cumul)
 
         query_compute_partners_cur_residual_cumul = """
 UPDATE
