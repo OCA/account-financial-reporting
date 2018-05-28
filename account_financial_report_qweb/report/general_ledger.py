@@ -29,6 +29,7 @@ class GeneralLedgerReport(models.TransientModel):
     fy_start_date = fields.Date()
     only_posted_moves = fields.Boolean()
     hide_account_balance_at_0 = fields.Boolean()
+    foreign_currency = fields.Boolean()
     company_id = fields.Many2one(comodel_name='res.company')
     filter_account_ids = fields.Many2many(comodel_name='account.account')
     filter_partner_ids = fields.Many2many(comodel_name='res.partner')
@@ -38,7 +39,6 @@ class GeneralLedgerReport(models.TransientModel):
     centralize = fields.Boolean()
 
     # Flag fields, used for report display
-    has_second_currency = fields.Boolean()
     show_cost_center = fields.Boolean(
         default=lambda self: self.env.user.has_group(
             'analytic.group_analytic_accounting'
@@ -255,10 +255,6 @@ class GeneralLedgerReportCompute(models.TransientModel):
             if self.centralize:
                 self._inject_line_centralized_values()
 
-        if with_line_details:
-            # Compute display flag
-            self._compute_has_second_currency()
-
         # Refresh cache because all data are computed with SQL requests
         self.invalidate_cache()
 
@@ -453,7 +449,7 @@ SELECT
     COALESCE(i.debit, 0.0) AS initial_debit,
     COALESCE(i.credit, 0.0) AS initial_credit,
     COALESCE(i.balance, 0.0) AS initial_balance,
-    a.currency_id,
+    c.id AS currency_id,
     COALESCE(i.balance_currency, 0.0) AS initial_balance_foreign_currency,
     COALESCE(f.debit, 0.0) AS final_debit,
     COALESCE(f.credit, 0.0) AS final_credit,
@@ -466,6 +462,8 @@ LEFT JOIN
     initial_sum_amounts i ON a.id = i.account_id
 LEFT JOIN
     final_sum_amounts f ON a.id = f.account_id
+LEFT JOIN
+    res_currency c ON c.id = a.currency_id
 WHERE
     (
         i.debit IS NOT NULL AND i.debit != 0
@@ -529,7 +527,7 @@ AND
                 tuple(self.filter_cost_center_ids.ids),
             )
         query_inject_account_params += (
-            self.id,
+            self.id or 'NULL',
             self.env.uid,
         )
         self.env.cr.execute(query_inject_account, query_inject_account_params)
@@ -1240,48 +1238,6 @@ ORDER BY
             query_inject_move_line_centralized,
             query_inject_move_line_centralized_params
         )
-
-    def _compute_has_second_currency(self):
-        """ Compute "has_second_currency" flag which will used for display."""
-        query_update_has_second_currency = """
-UPDATE
-    report_general_ledger_qweb
-SET
-    has_second_currency =
-        (
-            SELECT
-                TRUE
-            FROM
-                report_general_ledger_qweb_move_line l
-            INNER JOIN
-                report_general_ledger_qweb_account a
-                    ON l.report_account_id = a.id
-            WHERE
-                a.report_id = %s
-            AND l.currency_id IS NOT NULL
-            LIMIT 1
-        )
-        OR
-        (
-            SELECT
-                TRUE
-            FROM
-                report_general_ledger_qweb_move_line l
-            INNER JOIN
-                report_general_ledger_qweb_partner p
-                    ON l.report_partner_id = p.id
-            INNER JOIN
-                report_general_ledger_qweb_account a
-                    ON p.report_account_id = a.id
-            WHERE
-                a.report_id = %s
-            AND l.currency_id IS NOT NULL
-            LIMIT 1
-        )
-WHERE id = %s
-        """
-        params = (self.id,) * 3
-        self.env.cr.execute(query_update_has_second_currency, params)
 
     def _get_unaffected_earnings_account_sub_subquery_sum_initial(
             self

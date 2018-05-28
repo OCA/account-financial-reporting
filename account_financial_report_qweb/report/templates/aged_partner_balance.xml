@@ -123,19 +123,33 @@
                 <!--## partner-->
                 <div class="act_as_cell left"><span t-field="line.partner"/></div>
                 <!--## amount_residual-->
-                <div class="act_as_cell amount"><span t-field="line.amount_residual"/></div>
+                <div class="act_as_cell amount">
+                    <span t-field="line.amount_residual" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                </div>
                 <!--## current-->
-                <div class="act_as_cell amount"><span t-field="line.current"/></div>
+                <div class="act_as_cell amount">
+                    <span t-field="line.current" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                </div>
                 <!--## age_30_days-->
-                <div class="act_as_cell amount"><span t-field="line.age_30_days"/></div>
+                <div class="act_as_cell amount">
+                    <span t-field="line.age_30_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                </div>
                 <!--## age_60_days-->
-                <div class="act_as_cell amount"><span t-field="line.age_60_days"/></div>
+                <div class="act_as_cell amount">
+                    <span t-field="line.age_60_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                </div>
                 <!--## age_90_days-->
-                <div class="act_as_cell amount"><span t-field="line.age_90_days"/></div>
+                <div class="act_as_cell amount">
+                    <span t-field="line.age_90_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                </div>
                 <!--## age_120_days-->
-                <div class="act_as_cell amount"><span t-field="line.age_120_days"/></div>
+                <div class="act_as_cell amount">
+                    <span t-field="line.age_120_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                </div>
                 <!--## older-->
-                <div class="act_as_cell amount"><span t-field="line.older"/></div>
+                <div class="act_as_cell amount">
+                    <span t-field="line.older" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                </div>
             </div>
         </t>
     </template>
@@ -246,19 +260,33 @@
                     <!--## total-->
                     <div class="act_as_cell right" style="width: 370px;">Total</div>
                     <!--## amount_residual-->
-                    <div class="act_as_cell amount" style="width: 110px;"><span t-field="account.cumul_amount_residual"/></div>
+                    <div class="act_as_cell amount" style="width: 110px;">
+                        <span t-field="account.cumul_amount_residual" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    </div>
                     <!--## current-->
-                    <div class="act_as_cell amount" style="width: 110px;"><span t-field="account.cumul_current"/></div>
+                    <div class="act_as_cell amount" style="width: 110px;">
+                        <span t-field="account.cumul_current" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    </div>
                     <!--## age_30_days-->
-                    <div class="act_as_cell amount" style="width: 110px;"><span t-field="account.cumul_age_30_days"/></div>
+                    <div class="act_as_cell amount" style="width: 110px;">
+                        <span t-field="account.cumul_age_30_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    </div>
                     <!--## age_60_days-->
-                    <div class="act_as_cell amount" style="width: 110px;"><span t-field="account.cumul_age_60_days"/></div>
+                    <div class="act_as_cell amount" style="width: 110px;">
+                        <span t-field="account.cumul_age_60_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    </div>
                     <!--## age_90_days-->
-                    <div class="act_as_cell amount" style="width: 110px;"><span t-field="account.cumul_age_90_days"/></div>
+                    <div class="act_as_cell amount" style="width: 110px;">
+                        <span t-field="account.cumul_age_90_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    </div>
                     <!--## age_120_days-->
-                    <div class="act_as_cell amount" style="width: 110px;"><span t-field="account.cumul_age_120_days"/></div>
+                    <div class="act_as_cell amount" style="width: 110px;">
+                        <span t-field="account.cumul_age_120_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    </div>
                     <!--## older-->
-                    <div class="act_as_cell amount" style="width: 110px;"><span t-field="account.cumul_older"/></div>
+                    <div class="act_as_cell amount" style="width: 110px;">
+                        <span t-field="account.cumul_older" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    </div>
                 </t>
                 <t t-if="show_move_line_details">
                     <!--## total-->
@@ -266,19 +294,33 @@
                     <!--## date_due-->
                     <div class="act_as_cell" style="width: 60px;"/>
                     <!--## amount_residual-->
-                    <div class="act_as_cell amount" style="width: 70px;"><span t-field="account.cumul_amount_residual"/></div>
+                    <div class="act_as_cell amount" style="width: 70px;">
+                        <span t-field="account.cumul_amount_residual" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    </div>
                     <!--## current-->
-                    <div class="act_as_cell amount" style="width: 70px;"><span t-field="account.cumul_current"/></div>
+                    <div class="act_as_cell amount" style="width: 70px;">
+                        <span t-field="account.cumul_current" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    </div>
                     <!--## age_30_days-->
-                    <div class="act_as_cell amount" style="width: 70px;"><span t-field="account.cumul_age_30_days"/></div>
+                    <div class="act_as_cell amount" style="width: 70px;">
+                        <span t-field="account.cumul_age_30_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    </div>
                     <!--## age_60_days-->
-                    <div class="act_as_cell amount" style="width: 70px;"><span t-field="account.cumul_age_60_days"/></div>
+                    <div class="act_as_cell amount" style="width: 70px;">
+                        <span t-field="account.cumul_age_60_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    </div>
                     <!--## age_90_days-->
-                    <div class="act_as_cell amount" style="width: 70px;"><span t-field="account.cumul_age_90_days"/></div>
+                    <div class="act_as_cell amount" style="width: 70px;">
+                        <span t-field="account.cumul_age_90_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    </div>
                     <!--## age_120_days-->
-                    <div class="act_as_cell amount" style="width: 70px;"><span t-field="account.cumul_age_120_days"/></div>
+                    <div class="act_as_cell amount" style="width: 70px;">
+                        <span t-field="account.cumul_age_120_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    </div>
                     <!--## older-->
-                    <div class="act_as_cell amount" style="width: 70px;"><span t-field="account.cumul_older"/></div>
+                    <div class="act_as_cell amount" style="width: 70px;">
+                        <span t-field="account.cumul_older" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    </div>
                 </t>
             </div>
             <div class="act_as_row" style="font-weight: bold; font-style: italic;">

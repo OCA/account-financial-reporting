@@ -19,7 +19,7 @@ class OpenItemsXslx(abstract_report_xlsx.AbstractReportXslx):
         return _('Open Items')
 
     def _get_report_columns(self, report):
-        return {
+        res = {
             0: {'header': _('Date'), 'field': 'date', 'width': 11},
             1: {'header': _('Entry'), 'field': 'entry', 'width': 18},
             2: {'header': _('Journal'), 'field': 'journal', 'width': 8},
@@ -29,7 +29,6 @@ class OpenItemsXslx(abstract_report_xlsx.AbstractReportXslx):
             6: {'header': _('Due date'), 'field': 'date_due', 'width': 11},
             7: {'header': _('Original'),
                 'field': 'amount_total_due',
-                'field_final_balance': 'final_amount_total_due',
                 'type': 'amount',
                 'width': 14},
             8: {'header': _('Residual'),
@@ -37,37 +36,36 @@ class OpenItemsXslx(abstract_report_xlsx.AbstractReportXslx):
                 'field_final_balance': 'final_amount_residual',
                 'type': 'amount',
                 'width': 14},
-            9: {'header': _('Cur.'),
-                'field': 'currency_name',
-                'field_final_balance': 'currency_name',
-                'width': 7},
-            10: {'header': _('Cur. Original'),
-                 'field': 'amount_total_due_currency',
-                 'field_final_balance': 'final_amount_total_due_currency',
-                 'type': 'amount',
-                 'width': 14},
-            11: {'header': _('Cur. Residual'),
-                 'field': 'amount_residual_currency',
-                 'field_final_balance': 'final_amount_residual_currency',
-                 'type': 'amount',
-                 'width': 14},
         }
+        if report.foreign_currency:
+            foreign_currency = {
+                9: {'header': _('Cur.'), 'field': 'currency_id',
+                    'field_currency_balance': 'currency_id',
+                    'type': 'many2one', 'width': 7},
+                10: {'header': _('Cur. Original'),
+                     'field': 'amount_total_due_currency',
+                     'field_final_balance': 'final_amount_total_due_currency',
+                     'type': 'amount_currency',
+                     'width': 14},
+                11: {'header': _('Cur. Residual'),
+                     'field': 'amount_residual_currency',
+                     'field_final_balance': 'final_amount_residual_currency',
+                     'type': 'amount_currency',
+                     'width': 14},
+            }
+            res = dict(res.items() + foreign_currency.items())
+        return res
 
     def _get_report_filters(self, report):
         return [
-            [
-                _('Date at filter'),
-                report.date_at
-            ],
-            [
-                _('Target moves filter'),
-                _('All posted entries') if report.only_posted_moves
-                else _('All entries'),
-            ],
-            [
-                _('Account balance at 0 filter'),
-                _('Hide') if report.hide_account_balance_at_0 else _('Show'),
-            ],
+            [_('Date at filter'), report.date_at],
+            [_('Target moves filter'),
+             _('All posted entries') if report.only_posted_moves else _(
+                 'All entries')],
+            [_('Account balance at 0 filter'),
+             _('Hide') if report.hide_account_balance_at_0 else _('Show')],
+            [_('Show foreign currency'),
+             _('Yes') if report.foreign_currency else _('No')],
         ]
 
     def _get_col_count_filter_name(self):
@@ -117,6 +115,7 @@ class OpenItemsXslx(abstract_report_xlsx.AbstractReportXslx):
         if type_object == 'partner':
             name = my_object.name
             label = _('Partner ending balance')
+            my_object.currency_id = my_object.report_account_id.currency_id
         elif type_object == 'account':
             name = my_object.code + ' - ' + my_object.name
             label = _('Ending balance')

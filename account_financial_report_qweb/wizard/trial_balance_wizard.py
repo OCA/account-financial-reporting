@@ -30,6 +30,11 @@ class TrialBalanceReportWizard(models.TransientModel):
                                    string='Target Moves',
                                    required=True,
                                    default='all')
+    hierarchy_on = fields.Selection([('computed', 'Computed Accounts'),
+                                     ('relation', 'Child Accounts')],
+                                    string='Hierarchy On',
+                                    required=True,
+                                    default='computed')
     account_ids = fields.Many2many(
         comodel_name='account.account',
         string='Filter accounts',
@@ -52,6 +57,13 @@ class TrialBalanceReportWizard(models.TransientModel):
     not_only_one_unaffected_earnings_account = fields.Boolean(
         readonly=True,
         string='Not only one unaffected earnings account'
+    )
+
+    foreign_currency = fields.Boolean(
+        string='Show foreign currency',
+        help='Display foreign currency for move lines, unless '
+             'account currency is not setup through chart of accounts '
+             'will display initial and final balance in that currency.'
     )
 
     @api.depends('date_from')
@@ -98,8 +110,10 @@ class TrialBalanceReportWizard(models.TransientModel):
         """Handle partners change."""
         if self.show_partner_details:
             self.receivable_accounts_only = self.payable_accounts_only = True
+            self.hide_account_balance_at_0 = True
         else:
             self.receivable_accounts_only = self.payable_accounts_only = False
+            self.hide_account_balance_at_0 = False
 
     @api.multi
     def button_export_pdf(self):
@@ -118,10 +132,12 @@ class TrialBalanceReportWizard(models.TransientModel):
             'date_to': self.date_to,
             'only_posted_moves': self.target_move == 'posted',
             'hide_account_balance_at_0': self.hide_account_balance_at_0,
+            'foreign_currency': self.foreign_currency,
             'company_id': self.company_id.id,
             'filter_account_ids': [(6, 0, self.account_ids.ids)],
             'filter_partner_ids': [(6, 0, self.partner_ids.ids)],
             'fy_start_date': self.fy_start_date,
+            'hierarchy_on': self.hierarchy_on,
             'show_partner_details': self.show_partner_details,
         }
 
