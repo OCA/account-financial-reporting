@@ -3,10 +3,10 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import time
-from . import abstract_test
+from . import abstract_test_foreign_currency as a_t_f_c
 
 
-class TestOpenItems(abstract_test.AbstractTest):
+class TestOpenItems(a_t_f_c.AbstractTestForeignCurrency):
     """
         Technical tests for Open Items Report.
     """
@@ -30,6 +30,7 @@ class TestOpenItems(abstract_test.AbstractTest):
         return {
             'date_at': time.strftime('%Y-12-31'),
             'company_id': self.company.id,
+            'foreign_currency': True,
         }
 
     def _getAdditionalFiltersToBeTested(self):

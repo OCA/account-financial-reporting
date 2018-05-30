@@ -23,6 +23,7 @@
                             <field name="hide_account_balance_at_0"/>
                             <field name="show_partner_details"/>
                             <field name="hierarchy_on" widget="radio" attrs="{'invisible':[('show_partner_details','=',True)]}"/>
+                            <field name="foreign_currency"/>
                         </group>
                     </group>
                     <label for="partner_ids" attrs="{'invisible':[('show_partner_details','!=',True)]}"/>

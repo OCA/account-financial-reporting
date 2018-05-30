@@ -29,6 +29,7 @@ class GeneralLedgerReport(models.TransientModel):
     fy_start_date = fields.Date()
     only_posted_moves = fields.Boolean()
     hide_account_balance_at_0 = fields.Boolean()
+    foreign_currency = fields.Boolean()
     company_id = fields.Many2one(comodel_name='res.company')
     filter_account_ids = fields.Many2many(comodel_name='account.account')
     filter_partner_ids = fields.Many2many(comodel_name='res.partner')
@@ -38,7 +39,6 @@ class GeneralLedgerReport(models.TransientModel):
     centralize = fields.Boolean()
 
     # Flag fields, used for report display
-    has_second_currency = fields.Boolean()
     show_cost_center = fields.Boolean(
         default=lambda self: self.env.user.has_group(
             'analytic.group_analytic_accounting'
@@ -91,9 +91,12 @@ class GeneralLedgerReportAccount(models.TransientModel):
     initial_debit = fields.Float(digits=(16, 2))
     initial_credit = fields.Float(digits=(16, 2))
     initial_balance = fields.Float(digits=(16, 2))
+    currency_id = fields.Many2one('res.currency')
+    initial_balance_foreign_currency = fields.Float(digits=(16, 2))
     final_debit = fields.Float(digits=(16, 2))
     final_credit = fields.Float(digits=(16, 2))
     final_balance = fields.Float(digits=(16, 2))
+    final_balance_foreign_currency = fields.Float(digits=(16, 2))
 
     # Flag fields, used for report display and for data computation
     is_partner_account = fields.Boolean()
@@ -130,9 +133,12 @@ class GeneralLedgerReportPartner(models.TransientModel):
     initial_debit = fields.Float(digits=(16, 2))
     initial_credit = fields.Float(digits=(16, 2))
     initial_balance = fields.Float(digits=(16, 2))
+    currency_id = fields.Many2one('res.currency')
+    initial_balance_foreign_currency = fields.Float(digits=(16, 2))
     final_debit = fields.Float(digits=(16, 2))
     final_credit = fields.Float(digits=(16, 2))
     final_balance = fields.Float(digits=(16, 2))
+    final_balance_foreign_currency = fields.Float(digits=(16, 2))
 
     # Data fields, used to browse report data
     move_line_ids = fields.One2many(
@@ -177,6 +183,7 @@ class GeneralLedgerReportMoveLine(models.TransientModel):
     entry = fields.Char()
     journal = fields.Char()
     account = fields.Char()
+    taxes_description = fields.Char()
     partner = fields.Char()
     label = fields.Char()
     cost_center = fields.Char()
@@ -264,12 +271,8 @@ class GeneralLedgerReportCompute(models.TransientModel):
             if self.centralize:
                 self._inject_line_centralized_values()
 
-        if with_line_details:
-            # Compute display flag
-            self._compute_has_second_currency()
-
         # Refresh cache because all data are computed with SQL requests
-        self.refresh()
+        self.invalidate_cache()
 
     def _get_account_sub_subquery_sum_amounts(
             self, include_initial_balance, date_included):
@@ -279,7 +282,13 @@ class GeneralLedgerReportCompute(models.TransientModel):
                 a.id AS account_id,
                 SUM(ml.debit) AS debit,
                 SUM(ml.credit) AS credit,
-                SUM(ml.balance) AS balance
+                SUM(ml.balance) AS balance,
+                c.id AS currency_id,
+                CASE
+                    WHEN c.id IS NOT NULL
+                    THEN SUM(ml.amount_currency)
+                    ELSE NULL
+                END AS balance_currency
             FROM
                 accounts a
             INNER JOIN
@@ -321,8 +330,12 @@ class GeneralLedgerReportCompute(models.TransientModel):
                     AND aa.id IN %s
             """
         sub_subquery_sum_amounts += """
+        LEFT JOIN
+            res_currency c ON a.currency_id = c.id
+        """
+        sub_subquery_sum_amounts += """
         GROUP BY
-            a.id
+            a.id, c.id
         """
         return sub_subquery_sum_amounts
 
@@ -333,7 +346,9 @@ class GeneralLedgerReportCompute(models.TransientModel):
                 sub.account_id AS account_id,
                 SUM(COALESCE(sub.debit, 0.0)) AS debit,
                 SUM(COALESCE(sub.credit, 0.0)) AS credit,
-                SUM(COALESCE(sub.balance, 0.0)) AS balance
+                SUM(COALESCE(sub.balance, 0.0)) AS balance,
+                MAX(sub.currency_id) AS currency_id,
+                SUM(COALESCE(sub.balance_currency, 0.0)) AS balance_currency
             FROM
             (
         """
@@ -365,7 +380,8 @@ WITH
                 a.name,
                 a.internal_type IN ('payable', 'receivable')
                     AS is_partner_account,
-                a.user_type_id
+                a.user_type_id,
+                a.currency_id
             FROM
                 account_account a
             """
@@ -431,9 +447,12 @@ INSERT INTO
     initial_debit,
     initial_credit,
     initial_balance,
+    currency_id,
+    initial_balance_foreign_currency,
     final_debit,
     final_credit,
     final_balance,
+    final_balance_foreign_currency,
     is_partner_account
     )
 SELECT
@@ -446,9 +465,12 @@ SELECT
     COALESCE(i.debit, 0.0) AS initial_debit,
     COALESCE(i.credit, 0.0) AS initial_credit,
     COALESCE(i.balance, 0.0) AS initial_balance,
+    c.id AS currency_id,
+    COALESCE(i.balance_currency, 0.0) AS initial_balance_foreign_currency,
     COALESCE(f.debit, 0.0) AS final_debit,
     COALESCE(f.credit, 0.0) AS final_credit,
     COALESCE(f.balance, 0.0) AS final_balance,
+    COALESCE(f.balance_currency, 0.0) AS final_balance_foreign_currency,
     a.is_partner_account
 FROM
     accounts a
@@ -456,6 +478,8 @@ LEFT JOIN
     initial_sum_amounts i ON a.id = i.account_id
 LEFT JOIN
     final_sum_amounts f ON a.id = f.account_id
+LEFT JOIN
+    res_currency c ON c.id = a.currency_id
 WHERE
     (
         i.debit IS NOT NULL AND i.debit != 0
@@ -534,9 +558,19 @@ AND
                 ap.partner_id AS partner_id,
                 SUM(ml.debit) AS debit,
                 SUM(ml.credit) AS credit,
-                SUM(ml.balance) AS balance
+                SUM(ml.balance) AS balance,
+                c.id as currency_id,
+                CASE
+                    WHEN c.id IS NOT NULL
+                    THEN SUM(ml.amount_currency)
+                    ELSE NULL
+                END AS balance_currency
             FROM
                 accounts_partners ap
+            INNER JOIN account_account ac
+                ON ac.id = ap.account_id
+            LEFT JOIN
+                res_currency c ON ac.currency_id = c.id
             INNER JOIN
                 account_move_line ml
                     ON ap.account_id = ml.account_id
@@ -580,7 +614,7 @@ AND
             """
         sub_subquery_sum_amounts += """
             GROUP BY
-                ap.account_id, ap.partner_id
+                ap.account_id, ap.partner_id, c.id
         """
         return sub_subquery_sum_amounts
 
@@ -595,7 +629,9 @@ AND
                 sub.partner_id AS partner_id,
                 SUM(COALESCE(sub.debit, 0.0)) AS debit,
                 SUM(COALESCE(sub.credit, 0.0)) AS credit,
-                SUM(COALESCE(sub.balance, 0.0)) AS balance
+                SUM(COALESCE(sub.balance, 0.0)) AS balance,
+                MAX(sub.currency_id) AS currency_id,
+                SUM(COALESCE(sub.balance_currency, 0.0)) AS balance_currency
             FROM
             (
         """
@@ -720,9 +756,12 @@ INSERT INTO
     initial_debit,
     initial_credit,
     initial_balance,
+    currency_id,
+    initial_balance_foreign_currency,
     final_debit,
     final_credit,
-    final_balance
+    final_balance,
+    final_balance_foreign_currency
     )
 SELECT
     ap.report_account_id,
@@ -733,9 +772,12 @@ SELECT
     COALESCE(i.debit, 0.0) AS initial_debit,
     COALESCE(i.credit, 0.0) AS initial_credit,
     COALESCE(i.balance, 0.0) AS initial_balance,
+    i.currency_id AS currency_id,
+    COALESCE(i.balance_currency, 0.0) AS initial_balance_foreign_currency,
     COALESCE(f.debit, 0.0) AS final_debit,
     COALESCE(f.credit, 0.0) AS final_credit,
-    COALESCE(f.balance, 0.0) AS final_balance
+    COALESCE(f.balance, 0.0) AS final_balance,
+    COALESCE(f.balance_currency, 0.0) AS final_balance_foreign_currency
 FROM
     accounts_partners ap
 LEFT JOIN
@@ -870,6 +912,7 @@ INSERT INTO
     entry,
     journal,
     account,
+    taxes_description,
     partner,
     label,
     cost_center,
@@ -898,6 +941,27 @@ SELECT
     m.name AS entry,
     j.code AS journal,
     a.code AS account,
+    CASE
+        WHEN
+            ml.tax_line_id is not null
+        THEN
+            COALESCE(at.description, at.name)
+        WHEN
+            ml.tax_line_id is null
+        THEN
+            (SELECT
+                array_to_string(
+                    array_agg(COALESCE(at.description, at.name)
+                ), ', ')
+            FROM
+                account_move_line_account_tax_rel aml_at_rel
+            LEFT JOIN
+                account_tax at on (at.id = aml_at_rel.account_tax_id)
+            WHERE
+                aml_at_rel.account_move_line_id = ml.id)
+        ELSE
+            ''
+    END as taxes_description,
         """
         if not only_empty_partner_line:
             query_inject_move_line += """
@@ -968,6 +1032,8 @@ INNER JOIN
     account_journal j ON ml.journal_id = j.id
 INNER JOIN
     account_account a ON ml.account_id = a.id
+LEFT JOIN
+    account_tax at ON ml.tax_line_id = at.id
         """
         if is_account_line:
             query_inject_move_line += """
@@ -1189,48 +1255,6 @@ ORDER BY
             query_inject_move_line_centralized_params
         )
 
-    def _compute_has_second_currency(self):
-        """ Compute "has_second_currency" flag which will used for display."""
-        query_update_has_second_currency = """
-UPDATE
-    report_general_ledger
-SET
-    has_second_currency =
-        (
-            SELECT
-                TRUE
-            FROM
-                report_general_ledger_move_line l
-            INNER JOIN
-                report_general_ledger_account a
-                    ON l.report_account_id = a.id
-            WHERE
-                a.report_id = %s
-            AND l.currency_id IS NOT NULL
-            LIMIT 1
-        )
-        OR
-        (
-            SELECT
-                TRUE
-            FROM
-                report_general_ledger_move_line l
-            INNER JOIN
-                report_general_ledger_partner p
-                    ON l.report_partner_id = p.id
-            INNER JOIN
-                report_general_ledger_account a
-                    ON p.report_account_id = a.id
-            WHERE
-                a.report_id = %s
-            AND l.currency_id IS NOT NULL
-            LIMIT 1
-        )
-WHERE id = %s
-        """
-        params = (self.id,) * 3
-        self.env.cr.execute(query_update_has_second_currency, params)
-
     def _get_unaffected_earnings_account_sub_subquery_sum_initial(
             self
     ):
@@ -1345,7 +1369,8 @@ WHERE id = %s
             name,
             is_partner_account,
             initial_balance,
-            final_balance
+            final_balance,
+            currency_id
             )
         SELECT
             %(report_id)s AS report_id,
@@ -1356,9 +1381,12 @@ WHERE id = %s
             a.name,
             False AS is_partner_account,
             COALESCE(i.initial_balance, 0.0) AS initial_balance,
-            COALESCE(i.final_balance, 0.0) AS final_balance
+            COALESCE(i.final_balance, 0.0) AS final_balance,
+            c.id as currency_id
         FROM
-            account_account a,
+            account_account a
+        LEFT JOIN
+            res_currency c ON c.id = a.currency_id,
             sum_amounts i
         WHERE
             a.company_id = %(company_id)s

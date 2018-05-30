@@ -9,7 +9,7 @@ from odoo.tools.safe_eval import safe_eval
 from odoo.tools import pycompat
 
 
-class AgedPartnerBalance(models.TransientModel):
+class AgedPartnerBalanceWizard(models.TransientModel):
     """Aged partner balance report wizard."""
 
     _name = 'aged.partner.balance.wizard'

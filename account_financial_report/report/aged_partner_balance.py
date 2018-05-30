@@ -238,7 +238,7 @@ class AgedPartnerBalanceReportCompute(models.TransientModel):
             self._inject_move_line_values(only_empty_partner_line=True)
         self._compute_accounts_cumul()
         # Refresh cache because all data are computed with SQL requests
-        self.refresh()
+        self.invalidate_cache()
 
     def _inject_account_values(self):
         """Inject report values for report_aged_partner_balance_account"""
