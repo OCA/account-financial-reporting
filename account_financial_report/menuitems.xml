@@ -17,6 +17,13 @@
 
     <menuitem
         parent="menu_oca_reports"
+        action="action_journal_ledger_wizard"
+        id="menu_journal_ledger_wizard"
+        sequence="15"
+        />
+
+    <menuitem
+        parent="menu_oca_reports"
         action="action_trial_balance_wizard"
         id="menu_trial_balance_wizard"
         sequence="20"

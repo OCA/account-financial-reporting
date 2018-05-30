@@ -24,6 +24,7 @@ class TrialBalanceReport(models.TransientModel):
     fy_start_date = fields.Date()
     only_posted_moves = fields.Boolean()
     hide_account_balance_at_0 = fields.Boolean()
+    foreign_currency = fields.Boolean()
     company_id = fields.Many2one(comodel_name='res.company')
     filter_account_ids = fields.Many2many(comodel_name='account.account')
     filter_partner_ids = fields.Many2many(comodel_name='res.partner')
@@ -85,10 +86,13 @@ class TrialBalanceReportAccount(models.TransientModel):
     code = fields.Char()
     name = fields.Char()
 
+    currency_id = fields.Many2one('res.currency')
     initial_balance = fields.Float(digits=(16, 2))
+    initial_balance_foreign_currency = fields.Float(digits=(16, 2))
     debit = fields.Float(digits=(16, 2))
     credit = fields.Float(digits=(16, 2))
     final_balance = fields.Float(digits=(16, 2))
+    final_balance_foreign_currency = fields.Float(digits=(16, 2))
 
     # Data fields, used to browse report data
     partner_ids = fields.One2many(
@@ -115,10 +119,13 @@ class TrialBalanceReportPartner(models.TransientModel):
     # Data fields, used for report display
     name = fields.Char()
 
+    currency_id = fields.Many2one('res.currency')
     initial_balance = fields.Float(digits=(16, 2))
+    initial_balance_foreign_currency = fields.Float(digits=(16, 2))
     debit = fields.Float(digits=(16, 2))
     credit = fields.Float(digits=(16, 2))
     final_balance = fields.Float(digits=(16, 2))
+    final_balance_foreign_currency = fields.Float(digits=(16, 2))
 
     @api.model
     def _generate_order_by(self, order_spec, query):
@@ -176,6 +183,7 @@ class TrialBalanceReportCompute(models.TransientModel):
             'date_to': self.date_to,
             'only_posted_moves': self.only_posted_moves,
             'hide_account_balance_at_0': self.hide_account_balance_at_0,
+            'foreign_currency': self.foreign_currency,
             'company_id': self.company_id.id,
             'filter_account_ids': [(6, 0, account_ids.ids)],
             'filter_partner_ids': [(6, 0, self.filter_partner_ids.ids)],
@@ -236,7 +244,10 @@ INSERT INTO
     initial_balance,
     debit,
     credit,
-    final_balance
+    final_balance,
+    currency_id,
+    initial_balance_foreign_currency,
+    final_balance_foreign_currency
     )
 SELECT
     %s AS report_id,
@@ -249,7 +260,12 @@ SELECT
     coalesce(rag.initial_balance, 0) AS initial_balance,
     coalesce(rag.final_debit - rag.initial_debit, 0) AS debit,
     coalesce(rag.final_credit - rag.initial_credit, 0) AS credit,
-    coalesce(rag.final_balance, 0) AS final_balance
+    coalesce(rag.final_balance, 0) AS final_balance,
+    rag.currency_id AS currency_id,
+    coalesce(rag.initial_balance_foreign_currency, 0)
+        AS initial_balance_foreign_currency,
+    coalesce(rag.final_balance_foreign_currency, 0)
+        AS final_balance_foreign_currency
 FROM
     account_account acc
     LEFT OUTER JOIN report_general_ledger_account AS rag
@@ -280,9 +296,11 @@ INSERT INTO
     partner_id,
     name,
     initial_balance,
+    initial_balance_foreign_currency,
     debit,
     credit,
-    final_balance
+    final_balance,
+    final_balance_foreign_currency
     )
 SELECT
     ra.id AS report_account_id,
@@ -291,9 +309,11 @@ SELECT
     rpg.partner_id,
     rpg.name,
     rpg.initial_balance AS initial_balance,
+    rpg.initial_balance_foreign_currency AS initial_balance_foreign_currency,
     rpg.final_debit - rpg.initial_debit AS debit,
     rpg.final_credit - rpg.initial_credit AS credit,
-    rpg.final_balance AS final_balance
+    rpg.final_balance AS final_balance,
+    rpg.final_balance_foreign_currency AS final_balance_foreign_currency
 FROM
     report_general_ledger_partner rpg
 INNER JOIN
@@ -351,30 +371,40 @@ FROM
         query_update_account_group = """
 WITH computed AS (WITH RECURSIVE cte AS (
    SELECT account_group_id, code, account_group_id AS parent_id,
-    initial_balance, debit, credit, final_balance
+    initial_balance, initial_balance_foreign_currency, debit, credit,
+    final_balance, final_balance_foreign_currency
    FROM   report_trial_balance_account
    WHERE report_id = %s
    GROUP BY report_trial_balance_account.id
 
    UNION  ALL
    SELECT c.account_group_id, c.code, p.account_group_id,
-    p.initial_balance, p.debit, p.credit, p.final_balance
+    p.initial_balance, p.initial_balance_foreign_currency, p.debit, p.credit,
+    p.final_balance, p.final_balance_foreign_currency
    FROM   cte c
    JOIN   report_trial_balance_account p USING (parent_id)
     WHERE p.report_id = %s
 )
 SELECT account_group_id, code,
-    sum(initial_balance) AS initial_balance, sum(debit) AS debit,
-    sum(credit) AS credit, sum(final_balance) AS final_balance
+    sum(initial_balance) AS initial_balance,
+    sum(initial_balance_foreign_currency) AS initial_balance_foreign_currency,
+    sum(debit) AS debit,
+    sum(credit) AS credit,
+    sum(final_balance) AS final_balance,
+    sum(final_balance_foreign_currency) AS final_balance_foreign_currency
 FROM   cte
 GROUP BY cte.account_group_id, cte.code
 ORDER BY account_group_id
 )
 UPDATE report_trial_balance_account
 SET initial_balance = computed.initial_balance,
+    initial_balance_foreign_currency =
+        computed.initial_balance_foreign_currency,
     debit = computed.debit,
     credit = computed.credit,
-    final_balance = computed.final_balance
+    final_balance = computed.final_balance,
+    final_balance_foreign_currency =
+        computed.final_balance_foreign_currency
 FROM computed
 WHERE report_trial_balance_account.account_group_id = computed.account_group_id
     AND report_trial_balance_account.report_id = %s
@@ -431,9 +461,13 @@ WITH RECURSIVE accgroup AS
 (SELECT
     accgroup.id,
     coalesce(sum(ra.initial_balance),0) as initial_balance,
+    coalesce(sum(ra.initial_balance_foreign_currency),0)
+        as initial_balance_foreign_currency,
     coalesce(sum(ra.debit),0) as debit,
     coalesce(sum(ra.credit),0) as credit,
-    coalesce(sum(ra.final_balance),0) as final_balance
+    coalesce(sum(ra.final_balance),0) as final_balance,
+    coalesce(sum(ra.final_balance_foreign_currency),0)
+        as final_balance_foreign_currency
  FROM
     account_group accgroup
     LEFT OUTER JOIN account_account AS acc
@@ -445,9 +479,14 @@ WITH RECURSIVE accgroup AS
 )
 UPDATE report_trial_balance_account
 SET initial_balance = accgroup.initial_balance,
+    initial_balance_foreign_currency =
+        accgroup.initial_balance_foreign_currency,
     debit = accgroup.debit,
     credit = accgroup.credit,
-    final_balance = accgroup.final_balance
+    final_balance = accgroup.final_balance,
+    final_balance_foreign_currency =
+        accgroup.final_balance_foreign_currency
+
 FROM accgroup
 WHERE report_trial_balance_account.account_group_id = accgroup.id
 """
