@@ -60,6 +60,13 @@ class TrialBalanceReportWizard(models.TransientModel):
         string='Not only one unaffected earnings account'
     )
 
+    foreign_currency = fields.Boolean(
+        string='Show foreign currency',
+        help='Display foreign currency for move lines, unless '
+             'account currency is not setup through chart of accounts '
+             'will display initial and final balance in that currency.'
+    )
+
     @api.depends('date_from')
     def _compute_fy_start_date(self):
         for wiz in self.filtered('date_from'):
@@ -146,6 +153,7 @@ class TrialBalanceReportWizard(models.TransientModel):
             'date_to': self.date_to,
             'only_posted_moves': self.target_move == 'posted',
             'hide_account_balance_at_0': self.hide_account_balance_at_0,
+            'foreign_currency': self.foreign_currency,
             'company_id': self.company_id.id,
             'filter_account_ids': [(6, 0, self.account_ids.ids)],
             'filter_partner_ids': [(6, 0, self.partner_ids.ids)],
