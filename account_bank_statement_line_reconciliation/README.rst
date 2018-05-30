@@ -6,8 +6,8 @@
 Account Bank Statement Line Reconciliation
 ==========================================
 
-The wizard provide ability to specify bank statement line when it needed.
-Only user from security group "Settings" can use it.
+The wizard provides the ability to specify bank statement line when it needed.
+The only user from security group "Settings" can use it.
 
 Configuration
 =============
