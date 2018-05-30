@@ -11,7 +11,7 @@
     'website': 'https://github.com/OCA/account-financial-reporting',
     'license': 'AGPL-3',
     'depends': [
-        'account',
+        'account_accountant',
     ],
     'data': [
         'wizard/account_bank_statement_line_reconciliation_wizard.xml',
