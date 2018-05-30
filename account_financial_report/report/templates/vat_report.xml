@@ -4,7 +4,7 @@
     <template id="account_financial_report.report_vat_report_qweb">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <t t-call="account_financial_report.internal_layout" t-lang="user.lang">
+                <t t-call="account_financial_report.internal_layout">
                     <t t-call="account_financial_report.report_vat_report_base"/>
                 </t>
             </t>
@@ -17,8 +17,6 @@
             <div class="row">
                 <h4 class="mt0" t-esc="title or 'Odoo Report'"/>
             </div>
-
-
             <!-- Display filters -->
             <t t-call="account_financial_report.report_vat_report_filters"/>
             <div class="page_break"/>
