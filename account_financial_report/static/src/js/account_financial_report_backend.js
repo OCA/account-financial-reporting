@@ -62,14 +62,13 @@ var report_backend = Widget.extend(ControlPanelMixin, {
     },
     // Updates the control panel and render the elements that have yet to be rendered
     update_cp: function() {
-        if (!this.$buttons) {
-
+        if (this.$buttons) {
+            var status = {
+                breadcrumbs: this.actionManager.get_breadcrumbs(),
+                cp_content: {$buttons: this.$buttons},
+            };
+            return this.update_control_panel(status);
         }
-        var status = {
-            breadcrumbs: this.actionManager.get_breadcrumbs(),
-            cp_content: {$buttons: this.$buttons},
-        };
-        return this.update_control_panel(status);
     },
     do_show: function() {
         this._super();
