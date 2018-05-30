@@ -28,7 +28,7 @@ body, table, td, span, div {
 .list_table, .data_table, .totals_table, .list_table .act_as_row {
     border-left:0px;
     border-right:0px;
-    text-align:left;
+    text-align:center;
     font-size:10px;
     padding-right:3px;
     padding-left:3px;
@@ -75,7 +75,6 @@ body, table, td, span, div {
     text-align:right;
 }
 .list_table .act_as_cell{
-    padding-left: 5px;
 /*    border-right:1px solid lightGrey;  uncomment to active column lines */
 }
 .list_table .act_as_cell.first_column {
