@@ -5,10 +5,10 @@
 import time
 
 from odoo.tests import common
-from . import abstract_test
+from . import abstract_test_foreign_currency as a_t_f_c
 
 
-class TestGeneralLedger(abstract_test.AbstractTest):
+class TestGeneralLedger(a_t_f_c.AbstractTestForeignCurrency):
     """
         Technical tests for General Ledger Report.
     """
@@ -35,6 +35,7 @@ class TestGeneralLedger(abstract_test.AbstractTest):
             'date_to': time.strftime('%Y-12-31'),
             'company_id': self.company.id,
             'fy_start_date': time.strftime('%Y-01-01'),
+            'foreign_currency': True,
         }
 
     def _getAdditionalFiltersToBeTested(self):
