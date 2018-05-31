@@ -44,6 +44,12 @@ class OpenItemsReportWizard(models.TransientModel):
         comodel_name='res.partner',
         string='Filter partners',
     )
+    foreign_currency = fields.Boolean(
+        string='Show foreign currency',
+        help='Display foreign currency for move lines, unless '
+             'account currency is not setup through chart of accounts '
+             'will display initial and final balance in that currency.'
+    )
 
     @api.onchange('receivable_accounts_only', 'payable_accounts_only')
     def onchange_type_accounts_only(self):
@@ -76,6 +82,7 @@ class OpenItemsReportWizard(models.TransientModel):
             'date_at': self.date_at,
             'only_posted_moves': self.target_move == 'posted',
             'hide_account_balance_at_0': self.hide_account_balance_at_0,
+            'foreign_currency': self.foreign_currency,
             'company_id': self.company_id.id,
             'filter_account_ids': [(6, 0, self.account_ids.ids)],
             'filter_partner_ids': [(6, 0, self.partner_ids.ids)],
