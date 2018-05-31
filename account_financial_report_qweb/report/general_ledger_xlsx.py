@@ -20,7 +20,7 @@ class GeneralLedgerXslx(abstract_report_xlsx.AbstractReportXslx):
         return _('General Ledger')
 
     def _get_report_columns(self, report):
-        return {
+        res = {
             0: {'header': _('Date'), 'field': 'date', 'width': 11},
             1: {'header': _('Entry'), 'field': 'entry', 'width': 18},
             2: {'header': _('Journal'), 'field': 'journal', 'width': 8},
@@ -54,32 +54,38 @@ class GeneralLedgerXslx(abstract_report_xlsx.AbstractReportXslx):
                  'field_final_balance': 'final_balance',
                  'type': 'amount',
                  'width': 14},
-            12: {'header': _('Cur.'), 'field': 'currency_name', 'width': 7},
-            13: {'header': _('Amount cur.'),
-                 'field': 'amount_currency',
-                 'type': 'amount',
-                 'width': 14},
         }
+        if report.foreign_currency:
+            foreign_currency = {
+                12: {'header': _('Cur.'),
+                     'field': 'currency_id',
+                     'field_currency_balance': 'currency_id',
+                     'type': 'many2one',
+                     'width': 7},
+                13: {'header': _('Amount cur.'),
+                     'field': 'amount_currency',
+                     'field_initial_balance':
+                         'initial_balance_foreign_currency',
+                     'field_final_balance': 'final_balance_foreign_currency',
+                     'type': 'amount_currency',
+                     'width': 14},
+            }
+            res = dict(res.items() + foreign_currency.items())
+        return res
 
     def _get_report_filters(self, report):
         return [
-            [
-                _('Date range filter'),
-                _('From: %s To: %s') % (report.date_from, report.date_to),
-            ],
-            [
-                _('Target moves filter'),
-                _('All posted entries') if report.only_posted_moves
-                else _('All entries'),
-            ],
-            [
-                _('Account balance at 0 filter'),
-                _('Hide') if report.hide_account_balance_at_0 else _('Show'),
-            ],
-            [
-                _('Centralize filter'),
-                _('Yes') if report.centralize else _('No'),
-            ],
+            [_('Date range filter'),
+             _('From: %s To: %s') % (report.date_from, report.date_to)],
+            [_('Target moves filter'),
+             _('All posted entries') if report.only_posted_moves else _(
+                 'All entries')],
+            [_('Account balance at 0 filter'),
+             _('Hide') if report.hide_account_balance_at_0 else _('Show')],
+            [_('Centralize filter'),
+             _('Yes') if report.centralize else _('No')],
+            [_('Show foreign currency'),
+             _('Yes') if report.foreign_currency else _('No')],
         ]
 
     def _get_col_count_filter_name(self):
@@ -108,7 +114,7 @@ class GeneralLedgerXslx(abstract_report_xlsx.AbstractReportXslx):
                 self.write_array_header()
 
                 # Display initial balance line for account
-                self.write_initial_balance(account, _('Initial balance'))
+                self.write_initial_balance(account)
 
                 # Display account move lines
                 for line in account.move_line_ids:
@@ -124,30 +130,41 @@ class GeneralLedgerXslx(abstract_report_xlsx.AbstractReportXslx):
                     self.write_array_header()
 
                     # Display initial balance line for partner
-                    self.write_initial_balance(partner, _('Initial balance'))
+                    self.write_initial_balance(partner)
 
                     # Display account move lines
                     for line in partner.move_line_ids:
                         self.write_line(line)
 
                     # Display ending balance line for partner
-                    self.write_ending_balance(partner, 'partner')
+                    self.write_ending_balance(partner)
 
                     # Line break
                     self.row_pos += 1
 
             # Display ending balance line for account
-            self.write_ending_balance(account, 'account')
+            self.write_ending_balance(account)
 
             # 2 lines break
             self.row_pos += 2
 
-    def write_ending_balance(self, my_object, type_object):
+    def write_initial_balance(self, my_object):
+        """Specific function to write initial balance for General Ledger"""
+        if 'partner' in my_object._name:
+            label = _('Partner Initial balance')
+            my_object.currency_id = my_object.report_account_id.currency_id
+        elif 'account' in my_object._name:
+            label = _('Initial balance')
+        super(GeneralLedgerXslx, self).write_initial_balance(
+            my_object, label
+        )
+
+    def write_ending_balance(self, my_object):
         """Specific function to write ending balance for General Ledger"""
-        if type_object == 'partner':
+        if 'partner' in my_object._name:
             name = my_object.name
             label = _('Partner ending balance')
-        elif type_object == 'account':
+        elif 'account' in my_object._name:
             name = my_object.code + ' - ' + my_object.name
             label = _('Ending balance')
         super(GeneralLedgerXslx, self).write_ending_balance(

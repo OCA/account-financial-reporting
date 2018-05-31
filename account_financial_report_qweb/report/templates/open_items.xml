@@ -4,14 +4,12 @@
     <template id="account_financial_report_qweb.report_open_items_qweb">
         <t t-call="report.html_container">
             <t t-foreach="docs" t-as="o">
-                <!-- Saved flag fields into variables, used to define columns display -->
-                <t t-set="has_second_currency" t-value="o.has_second_currency"/>
 
                 <t t-call="account_financial_report_qweb.internal_layout">
                     <!-- Defines global variables used by internal layout -->
                     <t t-set="title">Open Items</t>
                     <t t-set="company_name" t-value="o.company_id.name"/>
-
+                    <t t-set="foreign_currency" t-value="o.foreign_currency"/>
                     <div class="page">
                         <!-- Display filters -->
                         <t t-call="account_financial_report_qweb.report_open_items_qweb_filters"/>
@@ -103,12 +101,14 @@
                     <div class="act_as_cell" style="width: 75px;">Original</div>
                     <!--## amount_residual-->
                     <div class="act_as_cell" style="width: 75px;">Residual</div>
-                    <!--## currency_name-->
-                    <div class="act_as_cell" style="width: 35px;">Cur.</div>
-                    <!--## amount_total_due_currency-->
-                    <div class="act_as_cell amount" style="width: 75px;">Cur. Original</div>
-                    <!--## amount_residual_currency-->
-                    <div class="act_as_cell amount" style="width: 75px;">Cur. Residual</div>
+                    <t t-if="foreign_currency">
+                        <!--## currency_name-->
+                        <div class="act_as_cell" style="width: 35px;">Cur.</div>
+                        <!--## amount_total_due_currency-->
+                        <div class="act_as_cell amount" style="width: 75px;">Cur. Original</div>
+                        <!--## amount_residual_currency-->
+                        <div class="act_as_cell amount" style="width: 75px;">Cur. Residual</div>
+                    </t>
                 </div>
             </div>
 
@@ -119,34 +119,68 @@
                     <!--## date-->
                     <div class="act_as_cell left"><span t-field="line.date"/></div>
                     <!--## move-->
-                    <div class="act_as_cell left"><span t-field="line.entry"/></div>
+                    <div class="act_as_cell left">
+                        <t t-set="res_model" t-value="'account.move'"/>
+                        <span>
+                            <a t-att-data-active-id="line.move_line_id.move_id.id"
+                               t-att-data-res-model="res_model"
+                               class="o_account_financial_reports_web_action"
+                               style="color: black;">
+                                <t t-raw="line.entry"/>
+                            </a>
+                        </span>
+                    </div>
                     <!--## journal-->
                     <div class="act_as_cell left"><span t-field="line.journal"/></div>
                     <!--## account code-->
                     <div class="act_as_cell left"><span t-field="line.account"/></div>
                     <!--## partner-->
-                    <div class="act_as_cell left"><span t-field="line.partner"/></div>
+                    <div class="act_as_cell left">
+                        <t t-set="res_model" t-value="'res.partner'"/>
+                        <span t-if="line.partner">
+                            <a t-att-data-active-id="line.move_line_id.partner_id.id"
+                               t-att-data-res-model="res_model"
+                               class="o_account_financial_reports_web_action"
+                               style="color: black;">
+                                <t t-raw="line.partner"/>
+                            </a>
+                        </span>
+                    </div>
                     <!--## ref - label-->
                     <div class="act_as_cell left"><span t-field="line.label"/></div>
                     <!--## date_due-->
                     <div class="act_as_cell left"><span t-field="line.date_due"/></div>
                     <!--## amount_total_due-->
-                    <div class="act_as_cell amount"><span t-field="line.amount_total_due"/></div>
+                    <div class="act_as_cell amount">
+                        <span t-field="line.amount_total_due" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    </div>
                     <!--## amount_residual-->
-                    <div class="act_as_cell amount"><span t-field="line.amount_residual"/></div>
+                    <div class="act_as_cell amount">
+                        <span t-field="line.amount_residual" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    </div>
+                    <t t-if="foreign_currency">
+                        <t t-if="line.currency_id.id">
                     <!--## currency_name-->
-                    <div class="act_as_cell"><span t-field="line.currency_name"/></div>
-                    <t t-if="line.currency_name">
+                            <div class="act_as_cell amount">
+                                <span t-field="line.currency_id.display_name"/>
+                            </div>
                         <!--## amount_total_due_currency-->
-                        <div class="act_as_cell amount"><span t-field="line.amount_total_due_currency"/></div>
+                            <div class="act_as_cell amount">
+                                <span t-field="line.amount_total_due_currency" t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/>
+                            </div>
                         <!--## amount_residual_currency-->
-                        <div class="act_as_cell amount"><span t-field="line.amount_residual_currency"/></div>
+                            <div class="act_as_cell amount">
+                                <span t-field="line.amount_residual_currency" t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/>
+                            </div>
                     </t>
-                    <t t-if="not line.currency_name">
+                        <t t-if="not line.currency_id.id">
+                            <!--## currency_name-->
+                            <div class="act_as_cell" style="width: 35px;"/>
                         <!--## amount_total_due_currency-->
-                        <div class="act_as_cell"></div>
+                            <div class="act_as_cell" style="width: 75px;"/>
                         <!--## amount_residual_currency-->
-                        <div class="act_as_cell"></div>
+                            <div class="act_as_cell" style="width: 75px;"/>
+                        </t>
                     </t>
                 </div>
             </t>
@@ -169,11 +203,36 @@
                 <!--## date_due-->
                 <div class="act_as_cell" style="width: 60px;"></div>
                 <!--## amount_total_due-->
-                <div class="act_as_cell amount" style="width: 75px;"></div>
+                <div class="act_as_cell amount" style="width: 75px;"><span t-field="account_or_partner_object.final_amount_total_due"/></div>
                 <!--## amount_currency-->
-                <div class="act_as_cell amount" style="width: 75px;"><span t-field="account_or_partner_object.final_amount_residual"/></div>
-                <!--## currency_name + amount_total_due_currency + amount_residual_currency -->
-                <div class="act_as_cell" style="width: 185px;"></div>
+                <div class="act_as_cell amount" style="width: 75px;">
+                    <span t-field="account_or_partner_object.final_amount_residual" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                </div>
+                <!--## amount_total_due_currency + amount_residual_currency -->
+                <t t-if="foreign_currency">
+                    <t t-if="account_or_partner_object.currency_id.id">
+                    <!--## currency_name-->
+                    <div class="act_as_cell" style="width: 35px;">
+                            <span t-field="account_or_partner_object.currency_id.display_name"/>
+                    </div>
+                    <!--## amount_total_due_currency-->
+                    <div class="act_as_cell amount" style="width: 75px;">
+                        <span t-field="account_or_partner_object.final_amount_total_due_currency" t-options="{'widget': 'monetary', 'display_currency': account_or_partner_object.currency_id}"/>
+                    </div>
+                    <!--## amount_residual_currency-->
+                    <div class="act_as_cell amount" style="width: 75px;">
+                        <span t-field="account_or_partner_object.final_amount_residual_currency" t-options="{'widget': 'monetary', 'display_currency': account_or_partner_object.currency_id}"/>
+                    </div>
+                </t>
+                    <t t-if="not account_or_partner_object.currency_id.id">
+                        <!--## currency_name-->
+                        <div class="act_as_cell" style="width: 35px;"/>
+                        <!--## amount_total_due_currency-->
+                        <div class="act_as_cell" style="width: 75px;"/>
+                        <!--## amount_residual_currency-->
+                        <div class="act_as_cell" style="width: 75px;"/>
+                    </t>
+                </t>
             </div>
         </div>
     </template>
