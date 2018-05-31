@@ -234,7 +234,7 @@ class AbstractReportXslx(ReportXlsx):
                 if cell_type == 'many2one':
                     if my_object.currency_id:
                         self.sheet.write_string(
-                        self.row_pos, col_pos, value.name or '',
+                            self.row_pos, col_pos, value.name or '',
                             self.format_right
                         )
         self.row_pos += 1
@@ -281,8 +281,8 @@ class AbstractReportXslx(ReportXlsx):
                 if cell_type == 'many2one':
                     if my_object.currency_id:
                         self.sheet.write_string(
-                        self.row_pos, col_pos, value.name or '',
-                        self.format_header_right)
+                            self.row_pos, col_pos, value.name or '',
+                            self.format_header_right)
         self.row_pos += 1
 
     def _get_currency_amt_format(self, line_object):

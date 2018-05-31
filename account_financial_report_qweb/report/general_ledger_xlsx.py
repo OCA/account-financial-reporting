@@ -64,7 +64,8 @@ class GeneralLedgerXslx(abstract_report_xlsx.AbstractReportXslx):
                      'width': 7},
                 13: {'header': _('Amount cur.'),
                      'field': 'amount_currency',
-                     'field_initial_balance': 'initial_balance_foreign_currency',
+                     'field_initial_balance':
+                         'initial_balance_foreign_currency',
                      'field_final_balance': 'final_balance_foreign_currency',
                      'type': 'amount_currency',
                      'width': 14},
@@ -74,8 +75,7 @@ class GeneralLedgerXslx(abstract_report_xlsx.AbstractReportXslx):
 
     def _get_report_filters(self, report):
         return [
-            [
-                _('Date range filter'),
+            [_('Date range filter'),
              _('From: %s To: %s') % (report.date_from, report.date_to)],
             [_('Target moves filter'),
              _('All posted entries') if report.only_posted_moves else _(
