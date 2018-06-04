@@ -51,13 +51,14 @@ class AccountBankStatementLineReconciliationWizard(models.TransientModel):
     account_move_ids = fields.One2many(
         'account.move',
         default=_default_account_move_ids,
-        readonly=True
+        compute='_default_account_move_ids'
     )
 
     statement_line_ids = fields.One2many(
         'account.bank.statement.line',
         string=_('Current values'),
-        default=_default_statement_line_ids
+        default=_default_statement_line_ids,
+        compute='_default_statement_line_ids'
     )
 
     new_statement_line_id = fields.Many2one(
