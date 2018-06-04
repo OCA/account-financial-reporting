@@ -54,7 +54,7 @@ class AccountBankStatementLineReconciliationWizard(models.TransientModel):
 
     new_statement_line_id = fields.Many2one(
         'account.bank.statement.line',
-        string='New value',
+        string=_('New value'),
         domain=_domain_new_statement_line_id
     )
 
