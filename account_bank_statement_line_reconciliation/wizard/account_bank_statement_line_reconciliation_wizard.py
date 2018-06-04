@@ -27,12 +27,9 @@ class AccountBankStatementLineReconciliationWizard(models.TransientModel):
 
         return account_move_ids, journal_id
 
-    def _default_account_move_ids(self):
-        account_move_ids, __ = self._account_move_ids_and_journal_id()
-        return account_move_ids
-
     def _default_statement_line_ids(self):
-        return self._default_account_move_ids.mapped('statement_line_id')
+        account_move_ids, __ = self._account_move_ids_and_journal_id()
+        return account_move_ids.mapped('statement_line_id')
 
     def _domain_new_statement_line_id(self):
         __, journal_id = self._account_move_ids_and_journal_id()
@@ -47,12 +44,6 @@ class AccountBankStatementLineReconciliationWizard(models.TransientModel):
 
             return "[('id','in',{ids})]".format(ids=statement_line_ids)
         return "[]"
-
-    account_move_ids = fields.One2many(
-        'account.move',
-        default=_default_account_move_ids,
-        compute='_default_account_move_ids'
-    )
 
     statement_line_ids = fields.One2many(
         'account.bank.statement.line',
@@ -69,7 +60,8 @@ class AccountBankStatementLineReconciliationWizard(models.TransientModel):
 
     @api.multi
     def set_new_statement_line_value(self):
-        self.account_move_ids.write({
+        account_move_ids, __ = self._account_move_ids_and_journal_id()
+        account_move_ids.write({
             'statement_line_id': self.new_statement_line_id.id,
         })
         return {}
