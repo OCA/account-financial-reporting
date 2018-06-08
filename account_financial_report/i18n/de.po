@@ -5,13 +5,14 @@
 # Translators:
 # Rudolf Schnapka <rs@techno-flex.de>, 2017
 # Ricardo Gross <rwgross@gmail.com>, 2018
+# Daniel Göppner <daniel.goeppner@braintec-group.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-20 05:15+0000\n"
-"PO-Revision-Date: 2018-04-20 05:15+0000\n"
-"Last-Translator: Ricardo Gross <rwgross@gmail.com>, 2018\n"
+"POT-Creation-Date: 2018-06-01 22:18+0000\n"
+"PO-Revision-Date: 2018-06-01 22:18+0000\n"
+"Last-Translator: Daniel Göppner <daniel.goeppner@braintec-group.com>, 2018\n"
 "Language-Team: German (https://www.transifex.com/oca/teams/23907/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,27 +23,27 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "&gt; 120 d."
-msgstr ""
+msgstr "&gt; 120 T."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "1 - 30 d."
-msgstr ""
+msgstr "1 - 30 T."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "31 - 60 d."
-msgstr ""
+msgstr "31 - 60 T."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "61 - 90 d."
-msgstr ""
+msgstr "61 - 90 T."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "91 - 120 d."
-msgstr ""
+msgstr "91-120 T."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_buttons
@@ -165,28 +166,28 @@ msgstr "Alter bis 90 T."
 msgid ""
 "Age ≤ 120\n"
 "                        d."
-msgstr ""
+msgstr "Alter ≤ 120"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid ""
 "Age ≤ 30\n"
 "                        d."
-msgstr ""
+msgstr "Age ≤ 30"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid ""
 "Age ≤ 60\n"
 "                        d."
-msgstr ""
+msgstr "Age ≤ 60"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid ""
 "Age ≤ 90\n"
 "                        d."
-msgstr ""
+msgstr "Age ≤ 90"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:14
@@ -291,13 +292,13 @@ msgstr "Betragwährung"
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard_based_on
 #: model:ir.ui.view,arch_db:account_financial_report.report_vat_report_filters
 msgid "Based On"
-msgstr ""
+msgstr "Basierend auf"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/vat_report_xlsx.py:32
 #, python-format
 msgid "Based on"
-msgstr ""
+msgstr "Basierend auf"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
@@ -335,12 +336,12 @@ msgstr "Abgestimmte Posten"
 #: selection:report_trial_balance,hierarchy_on:0
 #: selection:trial.balance.report.wizard,hierarchy_on:0
 msgid "Child Accounts"
-msgstr ""
+msgstr "Unterkonto"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group_group_child_ids
 msgid "Child Groups"
-msgstr ""
+msgstr "Untergruppe"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:19
@@ -375,14 +376,14 @@ msgstr "Unternehmen"
 #: selection:report_trial_balance,hierarchy_on:0
 #: selection:trial.balance.report.wizard,hierarchy_on:0
 msgid "Computed Accounts"
-msgstr ""
+msgstr "berücksichtigte konten"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 msgid ""
 "Cost\n"
 "                            center"
-msgstr ""
+msgstr "Kosten"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_move_line_cost_center
@@ -536,7 +537,7 @@ msgstr "Whrg. Restb."
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_move_line_currency_id
 #: model:ir.model.fields,field_description:account_financial_report.field_report_open_items_move_line_currency_id
 msgid "Currency"
-msgstr ""
+msgstr "Währung"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:25
@@ -609,7 +610,7 @@ msgstr "Stichtagfilter"
 #: code:addons/account_financial_report/report/vat_report_xlsx.py:30
 #, python-format
 msgid "Date from"
-msgstr ""
+msgstr "Datum von"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard_date_range_id
@@ -631,7 +632,7 @@ msgstr "Zeitraumfilter"
 #: code:addons/account_financial_report/report/vat_report_xlsx.py:31
 #, python-format
 msgid "Date to"
-msgstr ""
+msgstr "Datum bis"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:29
@@ -649,7 +650,7 @@ msgstr "Soll"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard_tax_detail
 msgid "Detail Taxes"
-msgstr ""
+msgstr "Detail Steuer"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard_display_name
@@ -692,6 +693,8 @@ msgid ""
 "Due\n"
 "                        date"
 msgstr ""
+"Fälligkeits\n"
+"datum"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:69
@@ -703,14 +706,14 @@ msgstr "Fälligkeit"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard_date_to
 msgid "End Date"
-msgstr ""
+msgstr "Enddatum"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_ending_cumul
 msgid ""
 "Ending\n"
 "                        balance"
-msgstr ""
+msgstr "Endstand"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:135
@@ -911,7 +914,7 @@ msgstr "Verberge Konten mit 0-Endsaldo"
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_hierarchy_on
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_hierarchy_on
 msgid "Hierarchy On"
-msgstr ""
+msgstr "Hierarchie an"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard_id
@@ -961,7 +964,7 @@ msgstr ""
 msgid ""
 "Initial\n"
 "                    balance"
-msgstr ""
+msgstr "Anfangssaldo"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_account_initial_balance
@@ -1113,7 +1116,7 @@ msgstr "Zuletzt aktualisiert am"
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group_level
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_account_level
 msgid "Level"
-msgstr ""
+msgstr "Ebene"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_partner_line_ids
@@ -1160,7 +1163,7 @@ msgstr "Bezeichnung"
 #: model:ir.ui.view,arch_db:account_financial_report.report_vat_report_base
 #, python-format
 msgid "Net"
-msgstr ""
+msgstr "Netto"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:65
@@ -1181,7 +1184,7 @@ msgstr "Kein Partner zugewiesen"
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "Not due"
-msgstr ""
+msgstr "nicht fällig"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard_not_only_one_unaffected_earnings_account
@@ -1403,7 +1406,7 @@ msgstr "Berichtspartner"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_vat_report_tax_report_tax_id
 msgid "Report Tax"
-msgstr ""
+msgstr "Steuerbericht"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:20
@@ -1419,7 +1422,7 @@ msgstr "Restbetrag"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_account_sequence
 msgid "Sequence"
-msgstr ""
+msgstr "Sequenz"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:63
@@ -1452,7 +1455,7 @@ msgstr "Zeige Partnerdetails"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard_date_from
 msgid "Start Date"
-msgstr ""
+msgstr "Anfangsdatum"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard_target_move
@@ -1489,34 +1492,34 @@ msgstr "Steuer"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_vat_report_tax_detail
 msgid "Tax Detail"
-msgstr ""
+msgstr "Steuerdetail"
 
 #. module: account_financial_report
 #: selection:report_vat_report,based_on:0
 #: selection:vat.report.wizard,based_on:0
 msgid "Tax Groups"
-msgstr ""
+msgstr "Steuerklassen"
 
 #. module: account_financial_report
 #: selection:report_vat_report,based_on:0
 #: selection:vat.report.wizard,based_on:0
 msgid "Tax Tags"
-msgstr ""
+msgstr "Steuer-Stichwörter"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_vat_report_taxtag_taxgroup_id
 msgid "Taxgroup"
-msgstr ""
+msgstr "Steuerklasse"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_vat_report_taxtag_taxtag_id
 msgid "Taxtag"
-msgstr ""
+msgstr "Steuer-Stichwort"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_vat_report_taxtags_ids
 msgid "Taxtags"
-msgstr ""
+msgstr "Steuer-Stichwörter"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
@@ -1591,17 +1594,17 @@ msgstr ""
 #: model:ir.ui.view,arch_db:account_financial_report.report_vat_report_base
 #, python-format
 msgid "VAT Report"
-msgstr ""
+msgstr "Steuerbericht"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.vat_report_wizard
 msgid "VAT Report Options"
-msgstr ""
+msgstr "Steuerbericht option"
 
 #. module: account_financial_report
 #: model:ir.actions.report,name:account_financial_report.action_report_vat_report_xlsx
 msgid "VAT Report XLSX"
-msgstr ""
+msgstr "Steuerbericht XLSX"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
