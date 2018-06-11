@@ -1,37 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <template id="account_financial_report_qweb.report_journal_qweb">
+    <template id="report_journal_qweb">
         <t t-call="report.html_container">
             <t t-foreach="docs" t-as="o">
                 <t t-call="account_financial_report_qweb.internal_layout">
-                    <t t-set="title">Journal Ledger</t>
-                    <t t-set="company_name" t-value="o.company_id.name"/>
-                    <t t-set="display_currency" t-value="o.with_currency"/>
-                    <t t-set="display_account_name" t-value="o.with_account_name"/>
-
-                    <div class="page">
-                        <t t-if="o.group_option == 'none'">
-                            <div class="page_break">
-                                <t t-call="account_financial_report_qweb.report_journal_qweb_all"/>
-                                <br/>
-                                <t t-call="account_financial_report_qweb.report_journal_qweb_all_taxes"/>
-                            </div>
-                        </t>
-                        <t t-if="o.group_option == 'journal'">
-                            <t t-foreach="o.report_journal_ids" t-as="journal">
-                                <div class="page_break">
-                                    <t t-call="account_financial_report_qweb.report_journal_qweb_journal"/>
-                                    <br/>
-                                    <t t-call="account_financial_report_qweb.report_journal_qweb_journal_taxes"/>
-                                    <br/>
-                                </div>
-                            </t>
-                        </t>
-                    </div>
+                    <t t-call="account_financial_report_qweb.report_journal_qweb_base"/>
                 </t>
             </t>
         </t>
+    </template>
+
+    <template id="report_journal_qweb_base">
+        <t t-set="title">Journal Ledger</t>
+        <t t-set="company_name" t-value="o.company_id.name"/>
+        <t t-set="display_currency" t-value="o.foreign_currency"/>
+        <t t-set="display_account_name" t-value="o.with_account_name"/>
+
+        <div class="page">
+            <t t-if="o.group_option == 'none'">
+                <div class="page_break">
+                    <t t-call="account_financial_report_qweb.report_journal_qweb_all"/>
+                    <br/>
+                    <t t-call="account_financial_report_qweb.report_journal_qweb_all_taxes"/>
+                </div>
+            </t>
+            <t t-if="o.group_option == 'journal'">
+                <t t-foreach="o.report_journal_ids" t-as="journal">
+                    <div class="page_break">
+                        <t t-call="account_financial_report_qweb.report_journal_qweb_journal"/>
+                        <br/>
+                        <t t-call="account_financial_report_qweb.report_journal_qweb_journal_taxes"/>
+                        <br/>
+                    </div>
+                </t>
+            </t>
+        </div>
     </template>
 
     <template id="account_financial_report_qweb.report_journal_qweb_all">

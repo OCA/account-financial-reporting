@@ -29,7 +29,7 @@
                         <field name="move_target" widget="radio" options="{'horizontal': true}"/>
                         <field name="sort_option"/>
                         <field name="group_option"/>
-                        <field name="with_currency"/>
+                        <field name="foreign_currency"/>
                         <field name="with_account_name"/>
                     </group>
                     <group/>
@@ -41,15 +41,14 @@
                 </group>
 
                 <footer>
-                    <button name="export_as_pdf"
-                            string="Print" class="btn-primary"
-                            type="object"/>
-                    <button name="export_as_xlsx"
-                            string="Export" class="btn-primary"
-                            type="object"/>
-                    <button string="Cancel"
-                            class="btn-default"
-                            special="cancel"/>
+                    <button name="button_export_html" string="View"
+                            type="object" default_focus="1" class="oe_highlight"/>
+                    or
+                    <button name="button_export_pdf" string="Export PDF" type="object" default_focus="1" class="oe_highlight"/>
+                    or
+                    <button name="button_export_xlsx" string="Export XLSX" type="object"/>
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel" />
                 </footer>
             </form>
         </field>

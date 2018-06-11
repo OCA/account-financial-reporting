@@ -61,7 +61,7 @@ class ReportJournalQweb(models.TransientModel):
         comodel_name='report_journal_qweb_report_tax_line',
         inverse_name='report_id',
     )
-    with_currency = fields.Boolean()
+    foreign_currency = fields.Boolean()
     with_account_name = fields.Boolean()
 
     @api.model
@@ -77,6 +77,12 @@ class ReportJournalQweb(models.TransientModel):
         return self.env['journal.report.wizard']._get_group_options()
 
     @api.multi
+    def refresh(self):
+        self.ensure_one()
+        self.report_journal_ids.unlink()
+        self.compute_data_for_report()
+
+    @api.multi
     def compute_data_for_report(self):
         self.ensure_one()
         self._inject_journal_values()
@@ -88,15 +94,21 @@ class ReportJournalQweb(models.TransientModel):
         if self.group_option == 'none':
             self._inject_report_tax_values()
 
-    @api.multi
-    def refresh(self):
-        self.ensure_one()
-        self.report_journal_ids.unlink()
-        self.compute_data_for_report()
+        # Refresh cache because all data are computed with SQL requests
+        self.invalidate_cache()
 
     @api.multi
     def _inject_journal_values(self):
         self.ensure_one()
+        sql = """
+            DELETE
+            FROM report_journal_qweb_journal
+            WHERE report_id = %s
+        """
+        params = (
+            self.id,
+        )
+        self.env.cr.execute(sql, params)
         sql = """
             INSERT INTO report_journal_qweb_journal (
                 create_uid,
@@ -139,6 +151,15 @@ class ReportJournalQweb(models.TransientModel):
     @api.multi
     def _inject_move_values(self):
         self.ensure_one()
+        sql = """
+            DELETE
+            FROM report_journal_qweb_move
+            WHERE report_id = %s
+        """
+        params = (
+            self.id,
+        )
+        self.env.cr.execute(sql, params)
         sql = self._get_inject_move_insert()
         sql += self._get_inject_move_select()
         sql += self._get_inject_move_where_clause()
@@ -225,6 +246,15 @@ class ReportJournalQweb(models.TransientModel):
     @api.multi
     def _inject_move_line_values(self):
         self.ensure_one()
+        sql = """
+            DELETE
+            FROM report_journal_qweb_move_line
+            WHERE report_id = %s
+        """
+        params = (
+            self.id,
+        )
+        self.env.cr.execute(sql, params)
         sql = """
             INSERT INTO report_journal_qweb_move_line (
                 create_uid,
@@ -414,7 +444,15 @@ class ReportJournalQweb(models.TransientModel):
     @api.multi
     def _inject_journal_tax_values(self):
         self.ensure_one()
-
+        sql = """
+            DELETE
+            FROM report_journal_qweb_journal_tax_line
+            WHERE report_id = %s
+        """
+        params = (
+            self.id,
+        )
+        self.env.cr.execute(sql, params)
         sql_distinct_tax_id = """
             SELECT
                 distinct(jrqml.tax_id)
@@ -553,10 +591,9 @@ class ReportJournalQweb(models.TransientModel):
         self.env.cr.execute(sql, (self.id,))
 
     @api.multi
-    def print_report(self, xlsx_report=False):
+    def print_report(self, report_type):
         self.ensure_one()
-        self.compute_data_for_report()
-        if xlsx_report:
+        if report_type == 'xlsx':
             report_name = 'account_financial_report_qweb.' \
                           'report_journal_xlsx'
         else:
@@ -564,6 +601,22 @@ class ReportJournalQweb(models.TransientModel):
                           'report_journal_qweb'
         return self.env['report'].get_action(
             docids=self.ids, report_name=report_name)
+
+    def _get_html(self):
+        result = {}
+        rcontext = {}
+        context = dict(self.env.context)
+        report = self.browse(context.get('active_id'))
+        if report:
+            rcontext['o'] = report
+            result['html'] = self.env.ref(
+                'account_financial_report_qweb.'
+                'report_journal_html').render(rcontext)
+        return result
+
+    @api.model
+    def get_html(self, given_context=None):
+        return self._get_html()
 
 
 class ReportJournalQwebJournal(models.TransientModel):

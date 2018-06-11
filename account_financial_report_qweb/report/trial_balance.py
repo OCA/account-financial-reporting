@@ -24,6 +24,7 @@ class TrialBalanceReport(models.TransientModel):
     fy_start_date = fields.Date()
     only_posted_moves = fields.Boolean()
     hide_account_balance_at_0 = fields.Boolean()
+    foreign_currency = fields.Boolean()
     company_id = fields.Many2one(comodel_name='res.company')
     filter_account_ids = fields.Many2many(comodel_name='account.account')
     filter_partner_ids = fields.Many2many(comodel_name='res.partner')
@@ -54,6 +55,10 @@ class TrialBalanceReportAccount(models.TransientModel):
     )
 
     # Data fields, used to keep link with real object
+    sequence = fields.Integer(index=True, default=0)
+    level = fields.Integer(index=True, default=0)
+
+    # Data fields, used to keep link with real object
     account_id = fields.Many2one(
         'account.account',
         index=True
@@ -67,7 +72,7 @@ class TrialBalanceReportAccount(models.TransientModel):
     initial_balance_foreign_currency = fields.Float(digits=(16, 2))
     debit = fields.Float(digits=(16, 2))
     credit = fields.Float(digits=(16, 2))
-    currency_name = fields.Char()
+    currency_id = fields.Many2one(comodel_name='res.currency')
     final_balance = fields.Float(digits=(16, 2))
     final_balance_foreign_currency = fields.Float(digits=(16, 2))
 
@@ -98,10 +103,12 @@ class TrialBalanceReportPartner(models.TransientModel):
     name = fields.Char()
 
     initial_balance = fields.Float(digits=(16, 2))
+    initial_balance_foreign_currency = fields.Float(digits=(16, 2))
     debit = fields.Float(digits=(16, 2))
     credit = fields.Float(digits=(16, 2))
-    currency_name = fields.Char()
+    currency_id = fields.Many2one(comodel_name='res.currency')
     final_balance = fields.Float(digits=(16, 2))
+    final_balance_foreign_currency = fields.Float(digits=(16, 2))
 
     @api.model
     def _generate_order_by(self, order_spec, query):
@@ -125,10 +132,9 @@ class TrialBalanceReportCompute(models.TransientModel):
     _inherit = 'report_trial_balance_qweb'
 
     @api.multi
-    def print_report(self, xlsx_report=False):
+    def print_report(self, report_type):
         self.ensure_one()
-        self.compute_data_for_report()
-        if xlsx_report:
+        if report_type == 'xlsx':
             report_name = 'account_financial_report_qweb.' \
                           'report_trial_balance_xlsx'
         else:
@@ -137,15 +143,32 @@ class TrialBalanceReportCompute(models.TransientModel):
         return self.env['report'].get_action(docids=self.ids,
                                              report_name=report_name)
 
-    def _prepare_report_general_ledger(self):
+    def _get_html(self):
+        result = {}
+        rcontext = {}
+        context = dict(self.env.context)
+        report = self.browse(context.get('active_id'))
+        if report:
+            rcontext['o'] = report
+            result['html'] = self.env.ref(
+                'account_financial_report_qweb.'
+                'report_trial_balance_html').render(rcontext)
+        return result
+
+    @api.model
+    def get_html(self, given_context=None):
+        return self._get_html()
+
+    def _prepare_report_general_ledger(self, account_ids):
         self.ensure_one()
         return {
             'date_from': self.date_from,
             'date_to': self.date_to,
             'only_posted_moves': self.only_posted_moves,
             'hide_account_balance_at_0': self.hide_account_balance_at_0,
+            'foreign_currency': self.foreign_currency,
             'company_id': self.company_id.id,
-            'filter_account_ids': [(6, 0, self.filter_account_ids.ids)],
+            'filter_account_ids': [(6, 0, account_ids.ids)],
             'filter_partner_ids': [(6, 0, self.filter_partner_ids.ids)],
             'fy_start_date': self.fy_start_date,
         }
@@ -157,21 +180,26 @@ class TrialBalanceReportCompute(models.TransientModel):
         # The data of Trial Balance Report
         # are based on General Ledger Report data.
         model = self.env['report_general_ledger_qweb']
+        if self.filter_account_ids:
+            account_ids = self.filter_account_ids
+        else:
+            account_ids = self.env['account.account'].search(
+                [('company_id', '=', self.company_id.id)])
         self.general_ledger_id = model.create(
-            self._prepare_report_general_ledger()
+            self._prepare_report_general_ledger(account_ids)
         )
         self.general_ledger_id.compute_data_for_report(
             with_line_details=False, with_partners=self.show_partner_details
         )
 
         # Compute report data
-        self._inject_account_values()
+        self._inject_account_values(account_ids)
         if self.show_partner_details:
             self._inject_partner_values()
         # Refresh cache because all data are computed with SQL requests
         self.invalidate_cache()
 
-    def _inject_account_values(self):
+    def _inject_account_values(self, account_ids):
         """Inject report values for report_trial_balance_qweb_account"""
         query_inject_account = """
 INSERT INTO
@@ -187,7 +215,7 @@ INSERT INTO
     debit,
     credit,
     final_balance,
-    currency_name,
+    currency_id,
     initial_balance_foreign_currency,
     final_balance_foreign_currency
     )
@@ -195,25 +223,33 @@ SELECT
     %s AS report_id,
     %s AS create_uid,
     NOW() AS create_date,
-    rag.account_id,
-    rag.code,
-    rag.name,
-    rag.initial_balance AS initial_balance,
-    rag.final_debit - rag.initial_debit AS debit,
-    rag.final_credit - rag.initial_credit AS credit,
-    rag.final_balance AS final_balance,
-    rag.currency_name AS currency_name,
-    rag.initial_balance_foreign_currency AS initial_balance_foreign_currency,
-    rag.final_balance_foreign_currency AS final_balance_foreign_currency
+    acc.id,
+    acc.code,
+    acc.name,
+    coalesce(rag.initial_balance, 0) AS initial_balance,
+    coalesce(rag.final_debit - rag.initial_debit, 0) AS debit,
+    coalesce(rag.final_credit - rag.initial_credit, 0) AS credit,
+    coalesce(rag.final_balance, 0) AS final_balance,
+    rag.currency_id AS currency_id,
+    coalesce(rag.initial_balance_foreign_currency, 0)
+        AS initial_balance_foreign_currency,
+    coalesce(rag.final_balance_foreign_currency, 0)
+        AS final_balance_foreign_currency
 FROM
-    report_general_ledger_qweb_account rag
+    account_account acc
+    LEFT OUTER JOIN report_general_ledger_qweb_account AS rag
+        ON rag.account_id = acc.id AND rag.report_id = %s
 WHERE
-    rag.report_id = %s
+    acc.id in %s
         """
+        if self.hide_account_balance_at_0:
+            query_inject_account += """ AND
+    final_balance IS NOT NULL AND final_balance != 0"""
         query_inject_account_params = (
             self.id,
             self.env.uid,
             self.general_ledger_id.id,
+            account_ids._ids,
         )
         self.env.cr.execute(query_inject_account, query_inject_account_params)
 
@@ -229,10 +265,11 @@ INSERT INTO
     partner_id,
     name,
     initial_balance,
+    initial_balance_foreign_currency,
     debit,
     credit,
     final_balance,
-    currency_name
+    final_balance_foreign_currency
     )
 SELECT
     ra.id AS report_account_id,
@@ -241,10 +278,11 @@ SELECT
     rpg.partner_id,
     rpg.name,
     rpg.initial_balance AS initial_balance,
+    rpg.initial_balance_foreign_currency AS initial_balance_foreign_currency,
     rpg.final_debit - rpg.initial_debit AS debit,
     rpg.final_credit - rpg.initial_credit AS credit,
     rpg.final_balance AS final_balance,
-    rpg.currency_name AS currency_name
+    rpg.final_balance_foreign_currency AS final_balance_foreign_currency
 FROM
     report_general_ledger_qweb_partner rpg
 INNER JOIN

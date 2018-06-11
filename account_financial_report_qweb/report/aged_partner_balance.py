@@ -185,10 +185,9 @@ class AgedPartnerBalanceReportCompute(models.TransientModel):
     _inherit = 'report_aged_partner_balance_qweb'
 
     @api.multi
-    def print_report(self, xlsx_report=False):
+    def print_report(self, report_type):
         self.ensure_one()
-        self.compute_data_for_report()
-        if xlsx_report:
+        if report_type == 'xlsx':
             report_name = 'account_financial_report_qweb.' \
                           'report_aged_partner_balance_xlsx'
         else:
@@ -196,6 +195,22 @@ class AgedPartnerBalanceReportCompute(models.TransientModel):
                           'report_aged_partner_balance_qweb'
         return self.env['report'].get_action(docids=self.ids,
                                              report_name=report_name)
+
+    def _get_html(self):
+        result = {}
+        rcontext = {}
+        context = dict(self.env.context)
+        report = self.browse(context.get('active_id'))
+        if report:
+            rcontext['o'] = report
+            result['html'] = self.env.ref(
+                'account_financial_report_qweb.'
+                'report_aged_partner_balance_html').render(rcontext)
+        return result
+
+    @api.model
+    def get_html(self, given_context=None):
+        return self._get_html()
 
     def _prepare_report_open_items(self):
         self.ensure_one()
@@ -439,6 +454,7 @@ INSERT INTO
         report_partner_id,
         create_uid,
         create_date,
+        move_line_id,
         date,
         date_due,
         entry,
@@ -458,6 +474,7 @@ SELECT
     rp.id AS report_partner_id,
     %s AS create_uid,
     NOW() AS create_date,
+    rlo.move_line_id,
     rlo.date,
     rlo.date_due,
     rlo.entry,

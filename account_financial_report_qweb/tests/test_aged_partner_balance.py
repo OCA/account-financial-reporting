@@ -31,7 +31,7 @@ class TestAgedPartnerBalance(abstract_test.AbstractTest):
     def _getBaseFilters(self):
         return {
             'date_at': time.strftime('%Y-12-31'),
-            'company_id': self.env.ref('base.main_company').id,
+            'company_id': self.company.id,
         }
 
     def _getAdditionalFiltersToBeTested(self):

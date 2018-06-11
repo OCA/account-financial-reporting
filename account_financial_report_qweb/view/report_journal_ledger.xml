@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_journal_html">
+        <div class="o_account_financial_reports_page">
+            <t t-call="account_financial_report_qweb.report_buttons"/>
+            <t t-call="account_financial_report_qweb.report_journal_qweb_base"/>
+        </div>
+    </template>
+</odoo>

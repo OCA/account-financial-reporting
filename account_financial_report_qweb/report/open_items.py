@@ -22,12 +22,10 @@ class OpenItemsReport(models.TransientModel):
     date_at = fields.Date()
     only_posted_moves = fields.Boolean()
     hide_account_balance_at_0 = fields.Boolean()
+    foreign_currency = fields.Boolean()
     company_id = fields.Many2one(comodel_name='res.company')
     filter_account_ids = fields.Many2many(comodel_name='account.account')
     filter_partner_ids = fields.Many2many(comodel_name='res.partner')
-
-    # Flag fields, used for report display
-    has_second_currency = fields.Boolean()
 
     # Data fields, used to browse report data
     account_ids = fields.One2many(
@@ -56,7 +54,11 @@ class OpenItemsReportAccount(models.TransientModel):
     # Data fields, used for report display
     code = fields.Char()
     name = fields.Char()
+    currency_id = fields.Many2one(comodel_name='res.currency')
     final_amount_residual = fields.Float(digits=(16, 2))
+    final_amount_total_due = fields.Float(digits=(16, 2))
+    final_amount_residual_currency = fields.Float(digits=(16, 2))
+    final_amount_total_due_currency = fields.Float(digits=(16, 2))
 
     # Data fields, used to browse report data
     partner_ids = fields.One2many(
@@ -83,7 +85,11 @@ class OpenItemsReportPartner(models.TransientModel):
 
     # Data fields, used for report display
     name = fields.Char()
+    currency_id = fields.Many2one(comodel_name='res.currency')
     final_amount_residual = fields.Float(digits=(16, 2))
+    final_amount_total_due = fields.Float(digits=(16, 2))
+    final_amount_residual_currency = fields.Float(digits=(16, 2))
+    final_amount_total_due_currency = fields.Float(digits=(16, 2))
 
     # Data fields, used to browse report data
     move_line_ids = fields.One2many(
@@ -128,7 +134,7 @@ class OpenItemsReportMoveLine(models.TransientModel):
     label = fields.Char()
     amount_total_due = fields.Float(digits=(16, 2))
     amount_residual = fields.Float(digits=(16, 2))
-    currency_name = fields.Char()
+    currency_id = fields.Many2one(comodel_name='res.currency')
     amount_total_due_currency = fields.Float(digits=(16, 2))
     amount_residual_currency = fields.Float(digits=(16, 2))
 
@@ -141,10 +147,9 @@ class OpenItemsReportCompute(models.TransientModel):
     _inherit = 'report_open_items_qweb'
 
     @api.multi
-    def print_report(self, xlsx_report=False):
+    def print_report(self, report_type):
         self.ensure_one()
-        self.compute_data_for_report()
-        if xlsx_report:
+        if report_type == 'xlsx':
             report_name = 'account_financial_report_qweb.' \
                           'report_open_items_xlsx'
         else:
@@ -152,6 +157,22 @@ class OpenItemsReportCompute(models.TransientModel):
                           'report_open_items_qweb'
         return self.env['report'].get_action(docids=self.ids,
                                              report_name=report_name)
+
+    def _get_html(self):
+        result = {}
+        rcontext = {}
+        context = dict(self.env.context)
+        report = self.browse(context.get('active_id'))
+        if report:
+            rcontext['o'] = report
+            result['html'] = self.env.ref(
+                'account_financial_report_qweb.'
+                'report_open_items_html').render(rcontext)
+        return result
+
+    @api.model
+    def get_html(self, given_context=None):
+        return self._get_html()
 
     @api.multi
     def compute_data_for_report(self):
@@ -167,8 +188,6 @@ class OpenItemsReportCompute(models.TransientModel):
             self._clean_partners_and_accounts(
                 only_delete_account_balance_at_0=True
             )
-        # Compute display flag
-        self._compute_has_second_currency()
         # Refresh cache because all data are computed with SQL requests
         self.invalidate_cache()
 
@@ -182,11 +201,14 @@ WITH
                 a.id,
                 a.code,
                 a.name,
-                a.user_type_id
+                a.user_type_id,
+                c.id as currency_id
             FROM
                 account_account a
             INNER JOIN
                 account_move_line ml ON a.id = ml.account_id AND ml.date <= %s
+            LEFT JOIN
+                res_currency c ON a.currency_id = c.id
             """
         if self.filter_partner_ids:
             query_inject_account += """
@@ -215,7 +237,7 @@ WITH
             """
         query_inject_account += """
             GROUP BY
-                a.id
+                a.id, c.id
         )
 INSERT INTO
     report_open_items_qweb_account
@@ -224,6 +246,7 @@ INSERT INTO
     create_uid,
     create_date,
     account_id,
+    currency_id,
     code,
     name
     )
@@ -232,6 +255,7 @@ SELECT
     %s AS create_uid,
     NOW() AS create_date,
     a.id AS account_id,
+    a.currency_id,
     a.code,
     a.name
 FROM
@@ -497,7 +521,7 @@ INSERT INTO
     label,
     amount_total_due,
     amount_residual,
-    currency_name,
+    currency_id,
     amount_total_due_currency,
     amount_residual_currency
     )
@@ -530,7 +554,7 @@ SELECT
     CONCAT_WS(' - ', NULLIF(ml.ref, ''), NULLIF(ml.name, '')) AS label,
     ml.balance,
     ml2.amount_residual,
-    c.name AS currency_name,
+    c.id AS currency_id,
     ml.amount_currency,
     ml2.amount_residual_currency
 FROM
@@ -606,19 +630,11 @@ ORDER BY
         """ Compute cumulative amount for
         report_open_items_qweb_partner and report_open_items_qweb_account.
         """
-        query_compute_partners_cumul = """
-UPDATE
-    report_open_items_qweb_partner
-SET
-    final_amount_residual =
-        (
-            SELECT
-                SUM(rml.amount_residual) AS final_amount_residual
-            FROM
-                report_open_items_qweb_move_line rml
-            WHERE
-                rml.report_partner_id = report_open_items_qweb_partner.id
-        )
+        self._compute_partner_cumul()
+        self._compute_account_cumul()
+
+    def _compute_partner_cumul(self):
+        where_condition_partner_by_account = """
 WHERE
     id IN
         (
@@ -631,12 +647,117 @@ WHERE
                     ON ra.id = rp.report_account_id
             WHERE
                 ra.report_id = %s
+        )"""
+        query_computer_partner_residual_cumul = """
+UPDATE
+    report_open_items_qweb_partner
+SET
+    final_amount_residual =
+        (
+            SELECT
+                SUM(rml.amount_residual) AS final_amount_residual
+            FROM
+                report_open_items_qweb_move_line rml
+            WHERE
+                rml.report_partner_id = report_open_items_qweb_partner.id
+        )
+""" + where_condition_partner_by_account
+        params_compute_partners_residual_cumul = (self.id,)
+        self.env.cr.execute(query_computer_partner_residual_cumul,
+                            params_compute_partners_residual_cumul)
+
+        query_compute_partners_due_cumul = """
+UPDATE
+    report_open_items_qweb_partner
+SET
+    final_amount_total_due =
+        (
+            SELECT
+                SUM(rml.amount_total_due) AS final_amount_total_due
+            FROM
+                report_open_items_qweb_move_line rml
+            WHERE
+                rml.report_partner_id = report_open_items_qweb_partner.id
+        )
+""" + where_condition_partner_by_account
+        params_compute_partner_due_cumul = (self.id,)
+        self.env.cr.execute(query_compute_partners_due_cumul,
+                            params_compute_partner_due_cumul)
+
+        # Manage currency in partner
+        where_condition_partner_by_account_cur = """
+WHERE
+    id IN
+        (
+            SELECT
+                rp.id
+            FROM
+                report_open_items_qweb_account ra
+            INNER JOIN
+                report_open_items_qweb_partner rp
+                    ON ra.id = rp.report_account_id
+            WHERE
+                ra.report_id = %s AND ra.currency_id IS NOT NULL
         )
         """
-        params_compute_partners_cumul = (self.id,)
-        self.env.cr.execute(query_compute_partners_cumul,
-                            params_compute_partners_cumul)
-        query_compute_accounts_cumul = """
+        query_compute_partners_cur_id_cumul = """
+UPDATE
+    report_open_items_qweb_partner
+SET
+    currency_id =
+        (
+            SELECT
+                MAX(currency_id) as currency_id
+            FROM
+                report_open_items_qweb_move_line rml
+            WHERE
+                rml.report_partner_id = report_open_items_qweb_partner.id
+        )
+""" + where_condition_partner_by_account_cur
+        params_compute_partners_cur_id_cumul = (self.id,)
+        self.env.cr.execute(query_compute_partners_cur_id_cumul,
+                            params_compute_partners_cur_id_cumul)
+
+        query_compute_partners_cur_residual_cumul = """
+UPDATE
+    report_open_items_qweb_partner
+SET
+    final_amount_residual_currency =
+        (
+            SELECT
+                SUM(rml.amount_residual_currency)
+                    AS final_amount_residual_currency
+            FROM
+                report_open_items_qweb_move_line rml
+            WHERE
+                rml.report_partner_id = report_open_items_qweb_partner.id
+        )
+""" + where_condition_partner_by_account_cur
+        params_compute_partners_cur_residual_cumul = (self.id,)
+        self.env.cr.execute(query_compute_partners_cur_residual_cumul,
+                            params_compute_partners_cur_residual_cumul)
+
+        query_compute_partners_cur_due_cumul = """
+UPDATE
+    report_open_items_qweb_partner
+SET
+    final_amount_total_due_currency =
+        (
+            SELECT
+                SUM(rml.amount_total_due_currency)
+                    AS final_amount_total_due_currency
+            FROM
+                report_open_items_qweb_move_line rml
+            WHERE
+                rml.report_partner_id = report_open_items_qweb_partner.id
+        )
+""" + where_condition_partner_by_account_cur
+        params_compute_partners_cur_due_cumul = (self.id,)
+        self.env.cr.execute(query_compute_partners_cur_due_cumul,
+                            params_compute_partners_cur_due_cumul)
+
+    def _compute_account_cumul(self):
+        query_compute_accounts_residual_cumul = """
 UPDATE
     report_open_items_qweb_account
 SET
@@ -652,9 +773,71 @@ SET
 WHERE
     report_id  = %s
         """
-        params_compute_accounts_cumul = (self.id,)
-        self.env.cr.execute(query_compute_accounts_cumul,
-                            params_compute_accounts_cumul)
+        params_compute_accounts_residual_cumul = (self.id,)
+        self.env.cr.execute(query_compute_accounts_residual_cumul,
+                            params_compute_accounts_residual_cumul)
+
+        query_compute_accounts_cur_residual_cumul = """
+UPDATE
+    report_open_items_qweb_account
+SET
+    final_amount_residual_currency =
+        (
+            SELECT
+                SUM(rp.final_amount_residual_currency)
+                    AS final_amount_residual_currency
+            FROM
+                report_open_items_qweb_partner rp
+            WHERE
+                rp.report_account_id = report_open_items_qweb_account.id
+        )
+WHERE
+    report_id  = %s
+        """
+        params_compute_accounts_cur_residual_cumul = (self.id,)
+        self.env.cr.execute(query_compute_accounts_cur_residual_cumul,
+                            params_compute_accounts_cur_residual_cumul)
+
+        query_compute_accounts_due_cumul = """
+UPDATE
+    report_open_items_qweb_account
+SET
+    final_amount_total_due =
+        (
+            SELECT
+                SUM(rp.final_amount_total_due) AS final_amount_total_due
+            FROM
+                report_open_items_qweb_partner rp
+            WHERE
+                rp.report_account_id = report_open_items_qweb_account.id
+        )
+WHERE
+    report_id  = %s
+        """
+        params_compute_accounts_due_cumul = (self.id,)
+        self.env.cr.execute(query_compute_accounts_due_cumul,
+                            params_compute_accounts_due_cumul)
+
+        query_compute_accounts_cur_due_cumul = """
+UPDATE
+    report_open_items_qweb_account
+SET
+    final_amount_total_due_currency =
+        (
+            SELECT
+                SUM(rp.final_amount_total_due_currency)
+                    AS final_amount_total_due_currency
+            FROM
+                report_open_items_qweb_partner rp
+            WHERE
+                rp.report_account_id = report_open_items_qweb_account.id
+        )
+WHERE
+    report_id  = %s
+        """
+        params_compute_accounts_cur_due_cumul = (self.id,)
+        self.env.cr.execute(query_compute_accounts_cur_due_cumul,
+                            params_compute_accounts_cur_due_cumul)
 
     def _clean_partners_and_accounts(self,
                                      only_delete_account_balance_at_0=False):
@@ -731,31 +914,3 @@ WHERE
         """
         params_clean_accounts = (self.id,)
         self.env.cr.execute(query_clean_accounts, params_clean_accounts)
-
-    def _compute_has_second_currency(self):
-        """ Compute "has_second_currency" flag which will used for display."""
-        query_update_has_second_currency = """
-UPDATE
-    report_open_items_qweb
-SET
-    has_second_currency =
-        (
-            SELECT
-                TRUE
-            FROM
-                report_open_items_qweb_move_line l
-            INNER JOIN
-                report_open_items_qweb_partner p
-                    ON l.report_partner_id = p.id
-            INNER JOIN
-                report_open_items_qweb_account a
-                    ON p.report_account_id = a.id
-            WHERE
-                a.report_id = %s
-            AND l.currency_name IS NOT NULL
-            LIMIT 1
-        )
-WHERE id = %s
-        """
-        params = (self.id,) * 2
-        self.env.cr.execute(query_update_has_second_currency, params)

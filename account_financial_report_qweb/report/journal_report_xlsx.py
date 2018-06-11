@@ -76,7 +76,7 @@ class JournalXslx(abstract_report_xlsx.AbstractReportXslx):
             }
         ]
 
-        if report.with_currency:
+        if report.foreign_currency:
             columns += [
                 {
                     'header': _('Amount Currency'),

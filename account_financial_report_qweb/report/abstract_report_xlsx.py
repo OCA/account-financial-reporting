@@ -46,6 +46,7 @@ class AbstractReportXslx(ReportXlsx):
         filters = self._get_report_filters(report)
         self.columns = self._get_report_columns(report)
 
+        self.workbook = workbook
         self.set_sheet(self.add_sheet(workbook, report_name[:31]))
 
         self._set_column_width()
@@ -100,9 +101,12 @@ class AbstractReportXslx(ReportXlsx):
             {'bold': True,
              'border': True,
              'bg_color': '#FFFFCC'})
-        self.format_header_amount.set_num_format('#,##0.00')
+        currency_id = self.env['res.company']._get_user_currency()
+        self.format_header_amount.set_num_format(
+            '#,##0.'+'0'*currency_id.decimal_places)
         self.format_amount = workbook.add_format()
-        self.format_amount.set_num_format('#,##0.00')
+        self.format_amount.set_num_format(
+            '#,##0.'+'0'*currency_id.decimal_places)
         self.format_percent_bold_italic = workbook.add_format(
             {'bold': True, 'italic': True}
         )
@@ -189,6 +193,14 @@ class AbstractReportXslx(ReportXlsx):
                 self.sheet.write_number(
                     self.row_pos, col_pos, float(value), self.format_amount
                 )
+            elif cell_type == 'amount_currency':
+                if line_object.currency_id:
+                    format_amt = self._get_currency_amt_format(line_object)
+                    self.sheet.write_number(
+                        self.row_pos, col_pos, float(value), format_amt)
+            elif cell_type == 'many2one':
+                self.sheet.write_string(
+                    self.row_pos, col_pos, value.name or '', self.format_right)
         self.row_pos += 1
 
     def write_initial_balance(self, my_object, label):
@@ -209,6 +221,23 @@ class AbstractReportXslx(ReportXlsx):
                     self.sheet.write_number(
                         self.row_pos, col_pos, float(value), self.format_amount
                     )
+                elif cell_type == 'amount_currency':
+                    if my_object.currency_id:
+                        format_amt = self._get_currency_amt_format(
+                            my_object)
+                        self.sheet.write_number(
+                            self.row_pos, col_pos,
+                            float(value), format_amt
+                        )
+            elif column.get('field_currency_balance'):
+                value = getattr(my_object, column['field_currency_balance'])
+                cell_type = column.get('type', 'string')
+                if cell_type == 'many2one':
+                    if my_object.currency_id:
+                        self.sheet.write_string(
+                            self.row_pos, col_pos, value.name or '',
+                            self.format_right
+                        )
         self.row_pos += 1
 
     def write_ending_balance(self, my_object, name, label):
@@ -239,7 +268,58 @@ class AbstractReportXslx(ReportXlsx):
                         self.row_pos, col_pos, float(value),
                         self.format_header_amount
                     )
+                elif cell_type == 'amount_currency':
+                    if my_object.currency_id:
+                        format_amt = self._get_currency_amt_header_format(
+                            my_object)
+                        self.sheet.write_number(
+                            self.row_pos, col_pos,
+                            float(value), format_amt
+                        )
+            elif column.get('field_currency_balance'):
+                value = getattr(my_object, column['field_currency_balance'])
+                cell_type = column.get('type', 'string')
+                if cell_type == 'many2one':
+                    if my_object.currency_id:
+                        self.sheet.write_string(
+                            self.row_pos, col_pos, value.name or '',
+                            self.format_header_right)
         self.row_pos += 1
+
+    def _get_currency_amt_format(self, line_object):
+        """ Return amount format specific for each currency. """
+        format_amt = getattr(self, 'format_amount')
+        if line_object.currency_id:
+            field_name = \
+                'format_amount_%s' % line_object.currency_id.name
+            if hasattr(self, field_name):
+                format_amt = getattr(self, field_name)
+            else:
+                format_amt = self.workbook.add_format()
+                setattr(self, 'field_name', format_amt)
+                format_amount = \
+                    '#,##0.' + ('0' * line_object.currency_id.decimal_places)
+                format_amt.set_num_format(format_amount)
+        return format_amt
+
+    def _get_currency_amt_header_format(self, line_object):
+        """ Return amount header format for each currency. """
+        format_amt = getattr(self, 'format_header_amount')
+        if line_object.currency_id:
+            field_name = \
+                'format_header_amount_%s' % line_object.currency_id.name
+            if hasattr(self, field_name):
+                format_amt = getattr(self, field_name)
+            else:
+                format_amt = self.workbook.add_format(
+                    {'bold': True,
+                     'border': True,
+                     'bg_color': '#FFFFCC'})
+                setattr(self, 'field_name', format_amt)
+                format_amount = \
+                    '#,##0.' + ('0' * line_object.currency_id.decimal_places)
+                format_amt.set_num_format(format_amount)
+        return format_amt
 
     def _generate_report_content(self, workbook, report):
         pass

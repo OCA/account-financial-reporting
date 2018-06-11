@@ -29,6 +29,9 @@
                 </group>
                 <field name="account_ids" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
                 <footer>
+                    <button name="button_export_html" string="View"
+                            type="object" default_focus="1" class="oe_highlight"/>
+                    or
                     <button name="button_export_pdf" string="Export PDF" type="object" default_focus="1" class="oe_highlight"/>
                     or
                     <button name="button_export_xlsx" string="Export XLSX" type="object"/>
