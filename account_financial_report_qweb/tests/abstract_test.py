@@ -13,7 +13,7 @@ _logger = logging.getLogger(__name__)
 
 class AbstractTest(common.TransactionCase):
     """Common technical tests for all reports."""
-    at_install = True
+    at_install = False
     post_install = True
 
     accounts = {}
