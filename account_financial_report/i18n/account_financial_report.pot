@@ -1,22 +1,17 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# * account_financial_report
+#	* account_financial_report
 #
-# Translators:
-# OCA Transbot <transbot@odoo-community.org>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-16 08:14+0000\n"
-"PO-Revision-Date: 2018-03-16 08:14+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2017\n"
-"Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
-"Language: fr\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: \n"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
@@ -91,13 +86,12 @@ msgstr ""
 #: model:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
 #, python-format
 msgid "Account"
-msgstr "Compte"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_move_line_account_code
-#, fuzzy
 msgid "Account Code"
-msgstr "Compte"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_account_account_group_id
@@ -106,15 +100,14 @@ msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:37
-#, fuzzy, python-format
+#, python-format
 msgid "Account Name"
-msgstr "Compte"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_move_line_account_type
-#, fuzzy
 msgid "Account Type"
-msgstr "Compte"
+msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:76
@@ -194,29 +187,25 @@ msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-msgid ""
-"Age ≤ 120\n"
+msgid "Age ≤ 120\n"
 "                        d."
 msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-msgid ""
-"Age ≤ 30\n"
+msgid "Age ≤ 30\n"
 "                        d."
 msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-msgid ""
-"Age ≤ 60\n"
+msgid "Age ≤ 60\n"
 "                        d."
 msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-msgid ""
-"Age ≤ 90\n"
+msgid "Age ≤ 90\n"
 "                        d."
 msgstr ""
 
@@ -254,7 +243,7 @@ msgstr ""
 #: selection:open.items.report.wizard,target_move:0
 #: selection:trial.balance.report.wizard,target_move:0
 msgid "All Entries"
-msgstr "Écritures comptabilisées + non-comptabilisées"
+msgstr ""
 
 #. module: account_financial_report
 #: selection:aged.partner.balance.wizard,target_move:0
@@ -262,7 +251,7 @@ msgstr "Écritures comptabilisées + non-comptabilisées"
 #: selection:open.items.report.wizard,target_move:0
 #: selection:trial.balance.report.wizard,target_move:0
 msgid "All Posted Entries"
-msgstr "Écritures comptabilisées seulement"
+msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:124
@@ -335,9 +324,8 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
 #: model:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_taxes
-#, fuzzy
 msgid "Balance"
-msgstr "Annuler"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
@@ -390,7 +378,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
 #: model:ir.ui.view,arch_db:account_financial_report.vat_report_wizard
 msgid "Cancel"
-msgstr "Annuler"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_centralize
@@ -461,13 +449,12 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard_company_id
 #, python-format
 msgid "Company"
-msgstr "Société"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_move_line_company_currency_id
-#, fuzzy
 msgid "Company Currency"
-msgstr "Société"
+msgstr ""
 
 #. module: account_financial_report
 #: selection:report_trial_balance,hierarchy_on:0
@@ -477,8 +464,7 @@ msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
-msgid ""
-"Cost\n"
+msgid "Cost\n"
 "                            center"
 msgstr ""
 
@@ -526,7 +512,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_create_uid
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard_create_uid
 msgid "Created by"
-msgstr "Créé par"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard_create_date
@@ -561,7 +547,7 @@ msgstr "Créé par"
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_create_date
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard_create_date
 msgid "Created on"
-msgstr "Créé le"
+msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:38
@@ -703,7 +689,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_lines
 #, python-format
 msgid "Date"
-msgstr "Date"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard_date_at
@@ -762,7 +748,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_date_range_id
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard_date_range_id
 msgid "Date range"
-msgstr "Plage de date"
+msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:71
@@ -852,23 +838,19 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard_display_name
 msgid "Display Name"
-msgstr "Nom affiché"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard_foreign_currency
 #: model:ir.model.fields,help:account_financial_report.field_open_items_report_wizard_foreign_currency
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard_foreign_currency
-msgid ""
-"Display foreign currency for move lines, unless account currency is not "
-"setup through chart of accounts will display initial and final balance in "
-"that currency."
+msgid "Display foreign currency for move lines, unless account currency is not setup through chart of accounts will display initial and final balance in that currency."
 msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_lines
-msgid ""
-"Due\n"
+msgid "Due\n"
 "                        date"
 msgstr ""
 
@@ -891,8 +873,7 @@ msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_ending_cumul
-msgid ""
-"Ending\n"
+msgid "Ending\n"
 "                        balance"
 msgstr ""
 
@@ -951,7 +932,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
 #: model:ir.ui.view,arch_db:account_financial_report.vat_report_wizard
 msgid "Export PDF"
-msgstr "Export PDF"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
@@ -1113,9 +1094,7 @@ msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
-msgid ""
-"General Ledger can be computed only if selected company have only one "
-"unaffected earnings account."
+msgid "General Ledger can be computed only if selected company have only one unaffected earnings account."
 msgstr ""
 
 #. module: account_financial_report
@@ -1199,19 +1178,16 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_id
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard_id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_account_account_centralized
-msgid ""
-"If flagged, no details will be displayed in the General Ledger report (the "
-"webkit one only), only centralized amounts per period."
+msgid "If flagged, no details will be displayed in the General Ledger report (the webkit one only), only centralized amounts per period."
 msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
-msgid ""
-"Initial\n"
+msgid "Initial\n"
 "                    balance"
 msgstr ""
 
@@ -1359,7 +1335,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard___last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard___last_update
 msgid "Last Modified on"
-msgstr "Dernière modification le"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard_write_uid
@@ -1394,7 +1370,7 @@ msgstr "Dernière modification le"
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_write_uid
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard_write_uid
 msgid "Last Updated by"
-msgstr "Dernière mise à jour par"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard_write_date
@@ -1429,7 +1405,7 @@ msgstr "Dernière mise à jour par"
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_write_date
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard_write_date
 msgid "Last Updated on"
-msgstr "Dernière mise à jour le"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group_level
@@ -1644,8 +1620,7 @@ msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_partner_ending_cumul
-msgid ""
-"Partner\n"
+msgid "Partner\n"
 "                    cumul aged balance"
 msgstr ""
 
@@ -1746,8 +1721,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_lines
-msgid ""
-"Ref -\n"
+msgid "Ref -\n"
 "                        Label"
 msgstr ""
 
@@ -1801,9 +1775,8 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_journal_report_move_ids
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_move_line_report_move_id
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_report_move_ids
-#, fuzzy
 msgid "Report Move"
-msgstr "Écritures ciblées"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_move_report_move_line_ids
@@ -1911,7 +1884,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard_target_move
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_target_move
 msgid "Target Moves"
-msgstr "Écritures ciblées"
+msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:123
@@ -1991,9 +1964,8 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_journal_tax_line_tax_name
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_report_tax_line_tax_name
-#, fuzzy
 msgid "Tax Name"
-msgstr "Nom affiché"
+msgstr ""
 
 #. module: account_financial_report
 #: selection:report_vat_report,based_on:0
@@ -2043,7 +2015,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_account_ending_cumul
 #, python-format
 msgid "Total"
-msgstr "Total"
+msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:14
@@ -2069,9 +2041,7 @@ msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
-msgid ""
-"Trial Balance can be computed only if selected company have only one "
-"unaffected earnings account."
+msgid "Trial Balance can be computed only if selected company have only one unaffected earnings account."
 msgstr ""
 
 #. module: account_financial_report
@@ -2083,10 +2053,7 @@ msgstr ""
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard_hide_account_balance_at_0
 #: model:ir.model.fields,help:account_financial_report.field_open_items_report_wizard_hide_account_balance_at_0
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard_hide_account_balance_at_0
-msgid ""
-"Use this filter to hide an account or a partner with an ending balance at 0. "
-"If partners are filtered, debits and credits totals will not match the trial "
-"balance."
+msgid "Use this filter to hide an account or a partner with an ending balance at 0. If partners are filtered, debits and credits totals will not match the trial balance."
 msgstr ""
 
 #. module: account_financial_report
@@ -2150,7 +2117,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
 #: model:ir.ui.view,arch_db:account_financial_report.vat_report_wizard
 msgid "or"
-msgstr "ou"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_aged_partner_balance_xlsx
@@ -2341,3 +2308,4 @@ msgstr ""
 #: model:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 8.11%;"
 msgstr ""
+
