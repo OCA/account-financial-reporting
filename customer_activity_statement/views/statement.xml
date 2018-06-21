@@ -23,8 +23,11 @@
                         <br/>
                         <t t-foreach="Lines[o.id]" t-as="currency">
                             <br t-if="not currency_first" />
-                            <p>
-                                Activity Statement between <span t-esc="Date_start[o.id]" /> and <span t-esc="Date_end[o.id]" /> in <span t-esc="Currencies[o.id][currency].name"/>:
+                            <p t-if="account_type == 'receivable'">
+                                Customer Activity Statement between <span t-esc="Date_start[o.id]" /> and <span t-esc="Date_end[o.id]" /> in <span t-esc="Currencies[o.id][currency].name"/>:
+                            </p>
+                            <p t-if="account_type == 'payable'">
+                                Supplier Activity Statement between <span t-esc="Date_start[o.id]" /> and <span t-esc="Date_end[o.id]" /> in <span t-esc="Currencies[o.id][currency].name"/>:
                             </p>
                             <table class="table table-condensed" style="border: 1px solid black; border-collapse: collapse;">
                                 <thead>
