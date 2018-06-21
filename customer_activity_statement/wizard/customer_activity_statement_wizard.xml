@@ -2,7 +2,7 @@
 <odoo>
     <!-- wizard action on res.partner -->
     <act_window id="customer_activity_statement_wizard_action"
-        name="Customer Activity Statement"
+        name="Partner Activity Statement"
         src_model="res.partner"
         res_model="customer.activity.statement.wizard"
         view_type="form" view_mode="form"
@@ -17,16 +17,21 @@
             <form name="Report Options">
                 <div style="text-align:justify">
                 <label string="The activity statement provides details of all activity on
-        the customer receivables between two selected dates. This includes all invoices,
+        a partner's receivables and payables between two selected dates. This includes all invoices,
         refunds and payments. Any outstanding balance dated prior to the chosen statement
         period will appear as a forward balance at the top of the statement. The list is
         displayed in chronological order and is split by currencies."/><br/><br/>
                 <label string="Aging details can be shown in the report, expressed in aging
-        buckets (30 days due, ...), so the customer can review how much is open, due or overdue."/>
+        buckets (30 days due, ...), so the customer or vendor can review how much is open, due or overdue."/>
                 </div><hr/>
                 <group name="main_info">
                     <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
                 </group>
+                <group name="account_type">
+                    <label for="account_type"/>
+                    <field name="account_type" nolabel="1" widget="radio"/>
+                </group>
+
                 <group name="dates">
                     <field name="date_start"/>
                     <field name="date_end"/>

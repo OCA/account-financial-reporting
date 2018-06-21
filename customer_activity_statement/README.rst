@@ -2,18 +2,18 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-=================================
-Print Customer Activity Statement
-=================================
+================================
+Print Partner Activity Statement
+================================
 
-The activity statement provides details of all activity on the customer receivables
+The activity statement provides details of all activity on the partner receivables or payables
 between two selected dates. This includes all invoices, refunds and payments.
 Any outstanding balance dated prior to the chosen statement period will appear
 as a forward balance at the top of the statement. The list is displayed in chronological
 order and is split by currencies.
 
 Aging details can be shown in the report, expressed in aging buckets (30 days
-due, ...), so the customer can review how much is open, due or overdue.
+due, ...), so the customer or vendor can review how much is open, due or overdue.
 
 Configuration
 =============
@@ -28,9 +28,9 @@ Usage
 
 To use this module, you need to:
 
-#. Go to Customers and select one or more
-#. Press 'Action > Customer Activity Statement'
-#. Indicate if you want to display aging buckets
+#. Go to Customers or Vendors and select one or more
+#. Press 'Action > Partner Activity Statement'
+#. Indicate if you want to display receivables or payables, and if you want to display aging buckets
 
 
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas

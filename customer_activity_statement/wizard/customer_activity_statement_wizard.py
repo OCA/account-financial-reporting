@@ -31,6 +31,9 @@ class CustomerActivityStatementWizard(models.TransientModel):
     )
     filter_partners_non_due = fields.Boolean(
         string='Don\'t show partners with no due entries', default=True)
+    account_type = fields.Selection(
+        [('receivable', 'Receivable'),
+         ('payable', 'Payable')], string='Account type', default='receivable')
 
     @api.multi
     def button_export_pdf(self):
@@ -46,6 +49,7 @@ class CustomerActivityStatementWizard(models.TransientModel):
             'partner_ids': self._context['active_ids'],
             'show_aging_buckets': self.show_aging_buckets,
             'filter_non_due_partners': self.filter_partners_non_due,
+            'account_type': self.account_type,
         }
 
     def _export(self):
