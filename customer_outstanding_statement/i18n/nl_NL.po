@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * customer_outstanding_statement
-# 
+#
 # Translators:
 # Peter Hageman <hageman.p@gmail.com>, 2017
 msgid ""
@@ -11,11 +11,12 @@ msgstr ""
 "POT-Creation-Date: 2017-12-22 16:14+0000\n"
 "PO-Revision-Date: 2017-12-22 16:14+0000\n"
 "Last-Translator: Peter Hageman <hageman.p@gmail.com>, 2017\n"
-"Language-Team: Dutch (Netherlands) (https://www.transifex.com/oca/teams/23907/nl_NL/)\n"
+"Language-Team: Dutch (Netherlands) (https://www.transifex.com/oca/"
+"teams/23907/nl_NL/)\n"
+"Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: nl_NL\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: customer_outstanding_statement
@@ -49,11 +50,16 @@ msgid "<strong>The partner doesn't have due entries.</strong>"
 msgstr ""
 
 #. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "Aging Report at"
+msgstr ""
+
+#. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
 msgid ""
-"Aging details can be shown in the report, expressed in aging"
-"                 buckets (30 days due, ...), so the customer can review how "
-"much is open, due or overdue."
+"Aging details can be shown in the report, expressed in aging                 "
+"buckets (30 days due, ...), so the customer can review how much is open, due "
+"or overdue."
 msgstr ""
 
 #. module: customer_outstanding_statement
@@ -196,7 +202,7 @@ msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
-msgid "Outstanding Statement in"
+msgid "Outstanding Statement at"
 msgstr ""
 
 #. module: customer_outstanding_statement
@@ -221,6 +227,11 @@ msgid ""
 "customer receivables up to a particular date. This includes all unpaid "
 "invoices, unclaimed         refunds and outstanding payments. The list is "
 "displayed in chronological order and is         split by currencies."
+msgstr ""
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "in"
 msgstr ""
 
 #. module: customer_outstanding_statement
