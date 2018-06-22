@@ -1,53 +1,48 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# * account_tax_balance
+#	* account_tax_balance
 #
-# Translators:
-# Marc Tormo i Bochaca <mtbochaca@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-26 02:44+0000\n"
-"PO-Revision-Date: 2017-04-26 02:44+0000\n"
-"Last-Translator: Marc Tormo i Bochaca <mtbochaca@gmail.com>, 2017\n"
-"Language-Team: Catalan (https://www.transifex.com/oca/teams/23907/ca/)\n"
-"Language: ca\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: \n"
 
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
 msgid "Account"
-msgstr "Compte "
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_account_move
 msgid "Account Entry"
-msgstr "Entrada comptable "
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "Account Tax"
-msgstr "Impost sobre el compte "
+msgstr ""
 
 #. module: account_tax_balance
 #: selection:wizard.open.tax.balances,target_move:0
 msgid "All Entries"
-msgstr "Totes les entrades "
+msgstr ""
 
 #. module: account_tax_balance
 #: selection:wizard.open.tax.balances,target_move:0
 msgid "All Posted Entries"
-msgstr "Totes les entrades publicades "
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax_balance_regular
 msgid "Balance"
-msgstr "Balanç "
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax_balance_refund
@@ -67,47 +62,47 @@ msgstr ""
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "Base Total"
-msgstr "Total Base "
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "Cancel"
-msgstr "Cancel·lar "
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances_company_id
 msgid "Company"
-msgstr "Empresa "
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances_create_uid
 msgid "Created by"
-msgstr "Creat per "
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances_create_date
 msgid "Created on"
-msgstr "Creat a "
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances_date_range_id
 msgid "Date range"
-msgstr "Rang de dates "
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances_display_name
 msgid "Display Name"
-msgstr "Nom a mostrar "
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances_from_date
 msgid "From date"
-msgstr "Des de data "
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
 msgid "Group By"
-msgstr "Agrupat per "
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax_has_moves
@@ -117,22 +112,22 @@ msgstr ""
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances_id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances___last_update
 msgid "Last Modified on"
-msgstr "Última modificació a "
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances_write_uid
 msgid "Last Updated by"
-msgstr "Última actualització per "
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances_write_date
 msgid "Last Updated on"
-msgstr "Última actualització a "
+msgstr ""
 
 #. module: account_tax_balance
 #: selection:account.move,move_type:0
@@ -153,7 +148,7 @@ msgstr ""
 #. module: account_tax_balance
 #: selection:account.move,move_type:0
 msgid "Other"
-msgstr "Altres "
+msgstr ""
 
 #. module: account_tax_balance
 #: selection:account.move,move_type:0
@@ -179,7 +174,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "Short Name"
-msgstr "Nom curt "
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances_target_move
@@ -189,17 +184,17 @@ msgstr ""
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_account_tax
 msgid "Tax"
-msgstr "Impost "
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
 msgid "Tax Group"
-msgstr "Grup d'impost "
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
 msgid "Tax Scope"
-msgstr "Àmbit d'aplicació d'impost "
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.actions.act_window,name:account_tax_balance.action_open_tax_balances
@@ -212,17 +207,17 @@ msgstr ""
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances_to_date
 msgid "To date"
-msgstr "Cap a data "
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "Total"
-msgstr "Total"
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax_balance
 msgid "Total Balance"
-msgstr "Total Balanç "
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax_base_balance
@@ -268,9 +263,10 @@ msgstr ""
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "or"
-msgstr "o"
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_wizard_open_tax_balances
 msgid "wizard.open.tax.balances"
-msgstr "wizard.open.tax.balances"
+msgstr ""
+
