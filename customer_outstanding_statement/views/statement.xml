@@ -23,8 +23,11 @@
                         <br/>
                         <t t-foreach="Lines[o.id]" t-as="currency">
                             <br t-if="not currency_first" />
-                            <p>
-                                Outstanding Statement at <span t-esc="Date_end[o.id]" /> in <span t-esc="Currencies[o.id][currency].name"/>:
+                            <p t-if="account_type == 'receivable'">
++                                Customer Outstanding Statement at <span t-esc="Date_end[o.id]" /> in <span t-esc="Currencies[o.id][currency].name"/>:
++                           </p>
+                            <p t-if="account_type == 'payable'">
++                                Supplier Outstanding Statement at <span t-esc="Date_end[o.id]" /> in <span t-esc="Currencies[o.id][currency].name"/>:
                             </p>
                             <table class="table table-condensed" style="border: 1px solid black; border-collapse: collapse;">
                                 <thead>
