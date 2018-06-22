@@ -43,7 +43,7 @@ class CustomerOutstandingStatement(models.AbstractModel):
             GROUP BY l1.id
         """ % (date_end, date_end)
 
-    def _display_lines_sql_q1(self, partners, date_end):
+    def _display_lines_sql_q1(self, partners, date_end, account_type):
         return """
             SELECT m.name as move_id, l.partner_id, l.date, l.name,
                             l.ref, l.blocked, l.currency_id, l.company_id,
@@ -83,14 +83,14 @@ class CustomerOutstandingStatement(models.AbstractModel):
                 ON pr.debit_move_id = l2.id
                 WHERE l2.date <= '%s'
             ) as pc ON pc.credit_move_id = l.id
-            WHERE l.partner_id IN (%s) AND at.type = 'receivable'
+            WHERE l.partner_id IN (%s) AND at.type = '%s'
                                 AND (Q0.reconciled_date is null or
                                     Q0.reconciled_date > '%s')
                                 AND l.date <= '%s'
             GROUP BY l.partner_id, m.name, l.date, l.date_maturity, l.name,
                                 l.ref, l.blocked, l.currency_id,
                                 l.balance, l.amount_currency, l.company_id
-        """ % (date_end, date_end, partners, date_end, date_end)
+        """ % (date_end, date_end, partners, account_type, date_end, date_end)
 
     def _display_lines_sql_q2(self):
         return """
@@ -113,7 +113,8 @@ class CustomerOutstandingStatement(models.AbstractModel):
             WHERE c.id = %s
         """ % company_id
 
-    def _get_account_display_lines(self, company_id, partner_ids, date_end):
+    def _get_account_display_lines(self, company_id, partner_ids, date_end,
+                                   account_type):
         res = dict(map(lambda x: (x, []), partner_ids))
         partners = ', '.join([str(i) for i in partner_ids])
         date_end = datetime.strptime(
@@ -126,7 +127,7 @@ class CustomerOutstandingStatement(models.AbstractModel):
         FROM Q3
         ORDER BY date, date_maturity, move_id""" % (
             self._display_lines_sql_q0(date_end),
-            self._display_lines_sql_q1(partners, date_end),
+            self._display_lines_sql_q1(partners, date_end, account_type),
             self._display_lines_sql_q2(),
             self._display_lines_sql_q3(company_id)))
         for row in self.env.cr.dictfetchall():
@@ -158,7 +159,7 @@ class CustomerOutstandingStatement(models.AbstractModel):
             GROUP BY l1.id
         """ % (date_end, date_end)
 
-    def _show_buckets_sql_q1(self, partners, date_end):
+    def _show_buckets_sql_q1(self, partners, date_end, account_type):
         return """
             SELECT l.partner_id, l.currency_id, l.company_id, l.move_id,
             CASE WHEN l.balance > 0.0
@@ -189,14 +190,14 @@ class CustomerOutstandingStatement(models.AbstractModel):
                 ON pr.debit_move_id = l2.id
                 WHERE l2.date <= '%s'
             ) as pc ON pc.credit_move_id = l.id
-            WHERE l.partner_id IN (%s) AND at.type = 'receivable'
+            WHERE l.partner_id IN (%s) AND at.type = '%s'
                                 AND (Q0.reconciled_date is null or
                                     Q0.reconciled_date > '%s')
                                 AND l.date <= '%s' AND not l.blocked
             GROUP BY l.partner_id, l.currency_id, l.date, l.date_maturity,
                                 l.amount_currency, l.balance, l.move_id,
                                 l.company_id
-        """ % (date_end, date_end, partners, date_end, date_end)
+        """ % (date_end, date_end, partners, account_type, date_end, date_end)
 
     def _show_buckets_sql_q2(self, date_end, minus_30, minus_60, minus_90,
                              minus_120):
@@ -288,7 +289,8 @@ class CustomerOutstandingStatement(models.AbstractModel):
             'minus_120': date_end - timedelta(days=120),
         }
 
-    def _get_account_show_buckets(self, company_id, partner_ids, date_end):
+    def _get_account_show_buckets(self, company_id, partner_ids, date_end,
+                                  account_type):
         res = dict(map(lambda x: (x, []), partner_ids))
         partners = ', '.join([str(i) for i in partner_ids])
         date_end = datetime.strptime(
@@ -305,7 +307,7 @@ class CustomerOutstandingStatement(models.AbstractModel):
         GROUP BY partner_id, currency_id, current, b_1_30, b_30_60, b_60_90,
         b_90_120, b_over_120""" % (
             self._show_buckets_sql_q0(date_end),
-            self._show_buckets_sql_q1(partners, date_end),
+            self._show_buckets_sql_q1(partners, date_end, account_type),
             self._show_buckets_sql_q2(
                 full_dates['date_end'],
                 full_dates['minus_30'],
@@ -323,6 +325,7 @@ class CustomerOutstandingStatement(models.AbstractModel):
         company_id = data['company_id']
         partner_ids = data['partner_ids']
         date_end = data['date_end']
+        account_type = data['account_type']
         today = fields.Date.today()
 
         buckets_to_display = {}
@@ -331,7 +334,7 @@ class CustomerOutstandingStatement(models.AbstractModel):
         today_display, date_end_display = {}, {}
 
         lines = self._get_account_display_lines(
-            company_id, partner_ids, date_end)
+            company_id, partner_ids, date_end, account_type)
 
         for partner_id in partner_ids:
             lines_to_display[partner_id], amount_due[partner_id] = {}, {}
@@ -357,7 +360,7 @@ class CustomerOutstandingStatement(models.AbstractModel):
 
         if data['show_aging_buckets']:
             buckets = self._get_account_show_buckets(
-                company_id, partner_ids, date_end)
+                company_id, partner_ids, date_end, account_type)
             for partner_id in partner_ids:
                 buckets_to_display[partner_id] = {}
                 for line in buckets[partner_id]:
@@ -379,4 +382,5 @@ class CustomerOutstandingStatement(models.AbstractModel):
             'Filter_non_due_partners': data['filter_non_due_partners'],
             'Date_end': date_end_display,
             'Date': today_display,
+            'account_type': account_type,
         }
