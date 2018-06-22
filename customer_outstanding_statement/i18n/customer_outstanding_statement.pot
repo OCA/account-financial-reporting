@@ -1,22 +1,17 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# * customer_outstanding_statement
+#	* customer_outstanding_statement
 #
-# Translators:
-# OCA Transbot <transbot@odoo-community.org>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-09 14:34+0000\n"
-"PO-Revision-Date: 2017-06-09 14:34+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2017\n"
-"Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
-"Language: es\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: \n"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
@@ -55,16 +50,13 @@ msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
-msgid ""
-"Aging details can be shown in the report, expressed in "
-"aging                     buckets (30 days due, ...), so the customer can "
-"review how much is open, due or overdue."
+msgid "Aging details can be shown in the report, expressed in aging                     buckets (30 days due, ...), so the customer can review how much is open, due or overdue."
 msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Balance"
-msgstr "Saldo"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
@@ -74,22 +66,22 @@ msgstr ""
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
 msgid "Cancel"
-msgstr "Cancelar"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_company_id
 msgid "Company"
-msgstr "Compañía"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_create_uid
 msgid "Created by"
-msgstr "Creado por"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_create_date
 msgid "Created on"
-msgstr "Creado en"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
@@ -109,12 +101,12 @@ msgstr ""
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Date"
-msgstr "Fecha"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_date_end
 msgid "Date end"
-msgstr "Fecha final"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
@@ -124,13 +116,13 @@ msgstr ""
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Description"
-msgstr "Descripción"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_display_name
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_report_customer_outstanding_statement_statement_display_name
 msgid "Display Name"
-msgstr "Nombre a mostrar"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_filter_partners_non_due
@@ -150,13 +142,13 @@ msgstr ""
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
 msgid "Export PDF"
-msgstr "Exportar a PDF"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_id
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_report_customer_outstanding_statement_statement_id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_show_aging_buckets
@@ -167,17 +159,17 @@ msgstr ""
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard___last_update
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_report_customer_outstanding_statement_statement___last_update
 msgid "Last Modified on"
-msgstr "Última modificación en"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_write_uid
 msgid "Last Updated by"
-msgstr "Última modificación por"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_write_date
 msgid "Last Updated on"
-msgstr "Última actualización en"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_number_partner_ids
@@ -221,11 +213,7 @@ msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
-msgid ""
-"The outstanding statement provides details of all outstanding             "
-"customer receivables up to a particular date. This includes all unpaid "
-"invoices, unclaimed             refunds and outstanding payments. The list "
-"is displayed in chronological order and is             split by currencies."
+msgid "The outstanding statement provides details of all outstanding             customer receivables up to a particular date. This includes all unpaid invoices, unclaimed             refunds and outstanding payments. The list is displayed in chronological order and is             split by currencies."
 msgstr ""
 
 #. module: customer_outstanding_statement
@@ -236,9 +224,10 @@ msgstr ""
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
 msgid "or"
-msgstr "o"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.model,name:customer_outstanding_statement.model_report_customer_outstanding_statement_statement
 msgid "report.customer_outstanding_statement.statement"
 msgstr ""
+
