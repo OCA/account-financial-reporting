@@ -2,7 +2,7 @@
 <odoo>
     <!-- wizard action on res.partner -->
     <act_window id="customer_outstanding_statement_wizard_action"
-        name="Customer Outstanding Statement"
+        name="Partner Outstanding Statement"
         src_model="res.partner"
         res_model="customer.outstanding.statement.wizard"
         view_type="form" view_mode="form"
@@ -16,16 +16,21 @@
         <field name="arch" type="xml">
             <form name="Report Options">
                 <div style="text-align:justify">
-                <label string="The outstanding statement provides details of all outstanding
-        customer receivables up to a particular date. This includes all unpaid invoices, unclaimed
+                <label string="The outstanding statement provides details of all partner's outstanding
+        receivables and payables up to a particular date. This includes all unpaid invoices, unclaimed
         refunds and outstanding payments. The list is displayed in chronological order and is
         split by currencies."/><br/><br/>
                 <label string="Aging details can be shown in the report, expressed in aging
-                buckets (30 days due, ...), so the customer can review how much is open, due or overdue."/>
+                buckets (30 days due, ...), so the customer or vendor can review how much is open, due or overdue."/>
                 </div><hr/>
                 <group name="main_info">
                     <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
                 </group>
+                <group name="account_type">
+                    <label for="account_type"/>
+                    <field name="account_type" nolabel="1" widget="radio"/>
+                </group>
+
                 <group name="dates">
                     <field name="date_end"/>
                 </group>

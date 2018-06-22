@@ -2,16 +2,16 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-====================================
-Print Customer Outstanding Statement
-====================================
+===================================
+Print Partner Outstanding Statement
+===================================
 
-The outstanding statement provides details of all outstanding customer receivables
+The outstanding statement provides details of all outstanding partner receivables or payables
 up to a particular date. This includes all unpaid invoices, unclaimed refunds and
 outstanding payments. The list is displayed in chronological order and is split by currencies.
 
 Aging details can be shown in the report, expressed in aging buckets (30 days
-due, ...), so the customer can review how much is open, due or overdue.
+due, ...), so the customer or vendor can review how much is open, due or overdue.
 
 Configuration
 =============
@@ -26,9 +26,9 @@ Usage
 
 To use this module, you need to:
 
-#. Go to Customers and select one or more
-#. Press 'Action > Customer Outstanding Statement'
-#. Indicate if you want to display aging buckets
+#. Go to Customers or Vendors and select one or more
+#. Press 'Action > Partner Outstanding Statement'
+#. Indicate if you want to display receivables or payables, and if you want to display aging buckets
 
 
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
