@@ -44,13 +44,13 @@ msgid "<strong>The partner doesn't have due entries.</strong>"
 msgstr ""
 
 #. module: customer_activity_statement
-#: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
-msgid "Activity Statement"
+#: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_account_type
+msgid "Account type"
 msgstr ""
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
-msgid "Activity Statement between"
+msgid "Activity Statement"
 msgstr ""
 
 #. module: customer_activity_statement
@@ -60,7 +60,7 @@ msgstr ""
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.customer_activity_statement_wizard_view
-msgid "Aging details can be shown in the report, expressed in aging         buckets (30 days due, ...), so the customer can review how much is open, due or overdue."
+msgid "Aging details can be shown in the report, expressed in aging         buckets (30 days due, ...), so the customer or vendor can review how much is open, due or overdue."
 msgstr ""
 
 #. module: customer_activity_statement
@@ -109,13 +109,13 @@ msgid "Current Due"
 msgstr ""
 
 #. module: customer_activity_statement
-#: model:ir.actions.act_window,name:customer_activity_statement.customer_activity_statement_wizard_action
-msgid "Customer Activity Statement"
+#: model:ir.model,name:customer_activity_statement.model_customer_activity_statement_wizard
+msgid "Customer Activity Statement Wizard"
 msgstr ""
 
 #. module: customer_activity_statement
-#: model:ir.model,name:customer_activity_statement.model_customer_activity_statement_wizard
-msgid "Customer Activity Statement Wizard"
+#: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
+msgid "Customer Activity Statement between"
 msgstr ""
 
 #. module: customer_activity_statement
@@ -197,8 +197,23 @@ msgid "Number Partner"
 msgstr ""
 
 #. module: customer_activity_statement
+#: model:ir.actions.act_window,name:customer_activity_statement.customer_activity_statement_wizard_action
+msgid "Partner Activity Statement"
+msgstr ""
+
+#. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Partner ref:"
+msgstr ""
+
+#. module: customer_activity_statement
+#: selection:customer.activity.statement.wizard,account_type:0
+msgid "Payable"
+msgstr ""
+
+#. module: customer_activity_statement
+#: selection:customer.activity.statement.wizard,account_type:0
+msgid "Receivable"
 msgstr ""
 
 #. module: customer_activity_statement
@@ -212,8 +227,13 @@ msgid "Statement Action to PDF"
 msgstr ""
 
 #. module: customer_activity_statement
+#: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
+msgid "Supplier Activity Statement between"
+msgstr ""
+
+#. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.customer_activity_statement_wizard_view
-msgid "The activity statement provides details of all activity on         the customer receivables between two selected dates. This includes all invoices,         refunds and payments. Any outstanding balance dated prior to the chosen statement         period will appear as a forward balance at the top of the statement. The list is         displayed in chronological order and is split by currencies."
+msgid "The activity statement provides details of all activity on         a partner's receivables and payables between two selected dates. This includes all invoices,         refunds and payments. Any outstanding balance dated prior to the chosen statement         period will appear as a forward balance at the top of the statement. The list is         displayed in chronological order and is split by currencies."
 msgstr ""
 
 #. module: customer_activity_statement
