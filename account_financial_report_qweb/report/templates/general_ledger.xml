@@ -115,28 +115,28 @@
                     <!--## journal-->
                     <div class="act_as_cell" style="width: 4.13%;">Journal</div>
                     <!--## account code-->
-                    <div class="act_as_cell" style="width: 4.75%;">Account</div>
+                    <div class="act_as_cell" style="width: 4.70%;">Account</div>
                     <!--## account code-->
                     <div class="act_as_cell" style="width: 8.89%;">Taxes</div>
                     <!--## partner-->
-                    <div class="act_as_cell" style="width: 12.01%;">Partner
+                    <div class="act_as_cell" style="width: 10.0%;">Partner
                     </div>
                     <!--## ref - label-->
-                    <div class="act_as_cell" style="width: 22.9%;">Ref -
+                    <div class="act_as_cell" style="width: 17.0%;">Ref -
                         Label</div>
                     <t t-if="show_cost_center">
                         <!--## cost_center-->
-                        <div class="act_as_cell" style="width: 8.03%;">Cost
+                        <div class="act_as_cell" style="width: 7.03%;">Cost
                             center</div>
                     </t>
                     <!--## matching_number-->
                     <div class="act_as_cell" style="width: 2.41%;">Rec.</div>
                     <!--## debit-->
-                    <div class="act_as_cell amount" style="width: 6.02%;">Debit</div>
+                    <div class="act_as_cell amount" style="width: 8.02%;">Debit</div>
                     <!--## credit-->
-                    <div class="act_as_cell amount" style="width: 6.02%;">Credit</div>
+                    <div class="act_as_cell amount" style="width: 8.02%;">Credit</div>
                     <!--## balance cumulated-->
-                    <div class="act_as_cell amount" style="width: 6.02%;">Cumul. Bal.</div>
+                    <div class="act_as_cell amount" style="width: 8.02%;">Cumul. Bal.</div>
                     <t t-if="foreign_currency">
                         <!--## currency_name-->
                         <div class="act_as_cell" style="width: 2.08%;">Cur.</div>
@@ -460,31 +460,31 @@
                 <!--## date-->
                 <t t-if='type == "account_type"'>
                     <div class="act_as_cell first_column"
-                         style="width: 43.88%;"><span
+                         style="width: 35.5%;"><span
                             t-field="account_or_partner_object.code"/> - <span t-field="account_or_partner_object.name"/></div>
                     <div class="act_as_cell right"
                          style="width: 22.9%;">Ending balance</div>
                 </t>
                 <t t-if='type == "partner_type"'>
-                    <div class="act_as_cell first_column" style="width: 43.88%;"/>
+                    <div class="act_as_cell first_column" style="width: 35.5%;"/>
                     <div class="act_as_cell right" style="width: 22.9%;">Partner ending balance</div>
                 </t>
                 <t t-if="show_cost_center">
                     <!--## cost_center-->
-                    <div class="act_as_cell" style="width: 8.03%"/>
+                    <div class="act_as_cell" style="width: 7.03%"/>
                 </t>
                 <!--## matching_number-->
                 <div class="act_as_cell" style="width: 2.41%;"/>
                 <!--## debit-->
-                <div class="act_as_cell amount" style="width: 6.02%;">
+                <div class="act_as_cell amount" style="width: 8.02%;">
                     <span t-field="account_or_partner_object.final_debit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                 </div>
                 <!--## credit-->
-                <div class="act_as_cell amount" style="width: 6.02%;">
+                <div class="act_as_cell amount" style="width: 8.02%;">
                     <span t-field="account_or_partner_object.final_credit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                 </div>
                 <!--## balance cumulated-->
-                <div class="act_as_cell amount" style="width: 6.02%;">
+                <div class="act_as_cell amount" style="width: 8.02%;">
                     <span t-field="account_or_partner_object.final_balance" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                 </div>
                 <!--## currency_name + amount_currency-->
