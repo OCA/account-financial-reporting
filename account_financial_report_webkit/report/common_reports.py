@@ -372,31 +372,54 @@ class CommonReportHeaderWebkit(common_report_header):
                               mode='computed', default_values=False):
         if not isinstance(period_ids, list):
             period_ids = [period_ids]
+
+        if not isinstance(account_id, list):
+            account_id = [account_id]
+        account_ids = account_id
         res = {}
 
+        if not account_ids or not period_ids:
+            raise Exception('Missing account or period_ids')
+
+        # Setup default values for all accounts
+        for acc_id in account_ids:
+            res[acc_id] = {
+                'debit': 0.0,
+                'credit': 0.0,
+                'init_balance': 0.0,
+                'init_balance_currency': 0.0,
+                'state': mode
+            }
+
+        # Actual calculation of the balances for each account
         if not default_values:
-            if not account_id or not period_ids:
-                raise Exception('Missing account or period_ids')
             try:
-                self.cursor.execute("SELECT sum(debit) AS debit, "
-                                    " sum(credit) AS credit, "
-                                    " sum(debit)-sum(credit) AS balance, "
-                                    " sum(amount_currency) AS curr_balance"
-                                    " FROM account_move_line"
-                                    " WHERE period_id in %s"
-                                    " AND account_id = %s",
-                                    (tuple(period_ids), account_id))
-                res = self.cursor.dictfetchone()
+                self.cursor.execute(
+                    "SELECT account_id, sum(debit) AS debit, "
+                    "sum(credit) AS credit, "
+                    "sum(debit)-sum(credit) AS balance, "
+                    "sum(amount_currency) AS curr_balance "
+                    "FROM account_move_line "
+                    "WHERE period_id in %s "
+                    "AND account_id in %s "
+                    "GROUP BY account_id",
+                    (tuple(period_ids), tuple(account_ids)))
+                result = self.cursor.dictfetchall()
 
             except Exception:
                 self.cursor.rollback()
                 raise
 
-        return {'debit': res.get('debit') or 0.0,
-                'credit': res.get('credit') or 0.0,
-                'init_balance': res.get('balance') or 0.0,
-                'init_balance_currency': res.get('curr_balance') or 0.0,
-                'state': mode}
+        # Override the default values with actual values.
+        for entry in result:
+            res[entry.get('account_id')] = {
+                'debit': entry.get('debit') or 0.0,
+                'credit': entry.get('credit') or 0.0,
+                'init_balance': entry.get('balance') or 0.0,
+                'init_balance_currency': entry.get('curr_balance') or 0.0,
+                'state': mode
+            }
+        return res
 
     def _read_opening_balance(self, account_ids, start_period):
         """ Read opening balances from the opening balance
@@ -434,19 +457,16 @@ class CommonReportHeaderWebkit(common_report_header):
         opening_period_selected = self.get_included_opening_period(
             start_period)
 
-        for acc in self.pool.get('account.account').browse(self.cursor,
-                                                           self.uid,
-                                                           account_ids):
-            res[acc.id] = self._compute_init_balance(default_values=True)
-            if acc.user_type.close_method == 'none':
-                # we compute the initial balance for close_method == none only
-                # when we print a GL during the year, when the opening period
-                # is not included in the period selection!
-                if pnl_periods_ids and not opening_period_selected:
-                    res[acc.id] = self._compute_init_balance(
-                        acc.id, pnl_periods_ids)
-            else:
-                res[acc.id] = self._compute_init_balance(acc.id, bs_period_ids)
+        # Get accounts data
+        accounts = self.pool.get('account.account').browse(
+            self.cursor, self.uid, account_ids)
+        if pnl_periods_ids and not opening_period_selected:
+            # Filter accounts with close_method == none
+            open_accs = accounts.filtered(
+                lambda x:  x.user_type.close_method == 'none')
+            res = self._compute_init_balance(open_accs.ids, pnl_periods_ids)
+            accounts -= open_accs
+        res.update(self._compute_init_balance(accounts.ids, bs_period_ids))
         return res
 
     ################################################
