@@ -373,11 +373,11 @@ class CommonReportHeaderWebkit(common_report_header):
         if not isinstance(period_ids, list):
             period_ids = [period_ids]
 
-        if not isinstance(account_id, list):
-            account_id = [account_id]
         account_ids = account_id
+        if not isinstance(account_id, list):
+            account_ids = [account_ids]
         res = {}
-
+        result = []
         if not account_ids or not period_ids:
             raise Exception('Missing account or period_ids')
 
@@ -409,7 +409,15 @@ class CommonReportHeaderWebkit(common_report_header):
             except Exception:
                 self.cursor.rollback()
                 raise
-
+        if not isinstance(account_id, list):
+            entry = result[0] if result else {}
+            return {
+                'debit': entry.get('debit') or 0.0,
+                'credit': entry.get('credit') or 0.0,
+                'init_balance': entry.get('balance') or 0.0,
+                'init_balance_currency': entry.get('curr_balance') or 0.0,
+                'state': mode
+            }
         # Override the default values with actual values.
         for entry in result:
             res[entry.get('account_id')] = {
