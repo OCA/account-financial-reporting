@@ -41,6 +41,14 @@ class AccountFinancialReport(models.Model):
             for report in reports:
                 if not report.parent_id:
                     result += report
+                # special treatment for profit and loss if they have the
+                # standard configuration type='other'
+                elif side == 'right' and report == self.env.ref(
+                        'account.account_financial_report_income0'
+                ) or side == 'left' and report == self.env.ref(
+                        'account.account_financial_report_expense0'
+                ):
+                    last_bad_report = report
                 # don't check children if we already checked the parent
                 elif report.parent_id == last_bad_report:
                     continue
