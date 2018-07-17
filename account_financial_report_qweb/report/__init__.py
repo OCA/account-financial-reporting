@@ -7,6 +7,7 @@
 import logging
 _logger = logging.getLogger(__name__)
 
+from . import abstract_report
 from . import aged_partner_balance
 from . import general_ledger
 from . import open_items
