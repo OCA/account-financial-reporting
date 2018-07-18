@@ -12,7 +12,7 @@ _logger = logging.getLogger(__name__)
 
 class AbstractTest(common.TransactionCase):
     """Common technical tests for all reports."""
-    at_install = True
+    at_install = False
     post_install = True
 
     accounts = {}
@@ -289,9 +289,10 @@ class AbstractTest(common.TransactionCase):
             # Same filters with only one account
             current_filter = self.base_filters.copy()
             current_filter.update(filters)
+            report_accounts = report.account_ids.filtered('account_id')
             current_filter.update({
                 'filter_account_ids':
-                    [(6, 0, report.account_ids[0].account_id.ids)],
+                    [(6, 0, report_accounts[0].account_id.ids)],
             })
 
             report2 = self.model.create(current_filter)
@@ -299,7 +300,7 @@ class AbstractTest(common.TransactionCase):
 
             self.assertEqual(len(report2.account_ids), 1)
             self.assertEqual(report2.account_ids.name,
-                             report.account_ids[0].name)
+                             report_accounts[0].name)
 
             if self._partner_test_is_possible(filters):
                 # Same filters with only one partner
