@@ -460,13 +460,13 @@ WHERE report_trial_balance_account.account_group_id = aggr.account_group_id
 WITH RECURSIVE accgroup AS
 (SELECT
     accgroup.id,
-    coalesce(sum(ra.initial_balance),0) as initial_balance,
-    coalesce(sum(ra.initial_balance_foreign_currency),0)
+    sum(coalesce(ra.initial_balance, 0)) as initial_balance,
+    sum(coalesce(ra.initial_balance_foreign_currency, 0))
         as initial_balance_foreign_currency,
-    coalesce(sum(ra.debit),0) as debit,
-    coalesce(sum(ra.credit),0) as credit,
-    coalesce(sum(ra.final_balance),0) as final_balance,
-    coalesce(sum(ra.final_balance_foreign_currency),0)
+    sum(coalesce(ra.debit, 0)) as debit,
+    sum(coalesce(ra.credit, 0)) as credit,
+    sum(coalesce(ra.final_balance, 0)) as final_balance,
+    sum(coalesce(ra.final_balance_foreign_currency, 0))
         as final_balance_foreign_currency
  FROM
     account_group accgroup

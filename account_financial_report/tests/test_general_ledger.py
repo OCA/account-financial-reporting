@@ -89,8 +89,7 @@ class TestGeneralLedgerReport(common.TransactionCase):
             unaffected_credit=0
     ):
         move_name = 'expense accrual'
-        journal = self.env['account.journal'].search([
-            ('code', '=', 'MISC')])
+        journal = self.env['account.journal'].search([], limit=1)
         partner = self.env.ref('base.res_partner_12')
         move_vals = {
             'journal_id': journal.id,
