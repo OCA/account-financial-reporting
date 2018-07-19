@@ -49,6 +49,9 @@ class TrialBalanceReportWizard(models.TransientModel):
         comodel_name='res.partner',
         string='Filter partners',
     )
+    journal_ids = fields.Many2many(
+        comodel_name="account.journal",
+    )
 
     not_only_one_unaffected_earnings_account = fields.Boolean(
         readonly=True,
@@ -151,6 +154,7 @@ class TrialBalanceReportWizard(models.TransientModel):
             'company_id': self.company_id.id,
             'filter_account_ids': [(6, 0, self.account_ids.ids)],
             'filter_partner_ids': [(6, 0, self.partner_ids.ids)],
+            'filter_journal_ids': [(6, 0, self.partner_ids.ids)],
             'fy_start_date': self.fy_start_date,
             'show_partner_details': self.show_partner_details,
         }

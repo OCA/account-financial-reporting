@@ -28,6 +28,7 @@ class TrialBalanceReport(models.TransientModel):
     company_id = fields.Many2one(comodel_name='res.company')
     filter_account_ids = fields.Many2many(comodel_name='account.account')
     filter_partner_ids = fields.Many2many(comodel_name='res.partner')
+    filter_journal_ids = fields.Many2many(comodel_name='account.journal')
     show_partner_details = fields.Boolean()
 
     # General Ledger Report Data fields,
@@ -170,6 +171,7 @@ class TrialBalanceReportCompute(models.TransientModel):
             'company_id': self.company_id.id,
             'filter_account_ids': [(6, 0, account_ids.ids)],
             'filter_partner_ids': [(6, 0, self.filter_partner_ids.ids)],
+            'filter_journal_ids': [(6, 0, self.filter_journal_ids.ids)],
             'fy_start_date': self.fy_start_date,
         }
 
