@@ -398,7 +398,7 @@ msgid "Centralized"
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger.py:1218
+#: code:addons/account_financial_report/report/general_ledger.py:1233
 #, python-format
 msgid "Centralized Entries"
 msgstr ""
@@ -958,6 +958,12 @@ msgid "Filter Cost Center"
 msgstr ""
 
 #. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_filter_journal_ids
+#: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_filter_journal_ids
+msgid "Filter Journal"
+msgstr ""
+
+#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_filter_partner_ids
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_filter_partner_ids
 #: model:ir.model.fields,field_description:account_financial_report.field_report_open_items_filter_partner_ids
@@ -976,6 +982,11 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard_cost_center_ids
 msgid "Filter cost centers"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard_account_journal_ids
+msgid "Filter journals"
 msgstr ""
 
 #. module: account_financial_report
@@ -1251,6 +1262,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_journal_ids
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_journal_journal_id
 #: model:ir.model.fields,field_description:account_financial_report.field_report_open_items_move_line_journal
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_journal_ids
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_lines
@@ -1499,8 +1511,8 @@ msgid "No group"
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger.py:681
-#: code:addons/account_financial_report/report/general_ledger.py:978
+#: code:addons/account_financial_report/report/general_ledger.py:684
+#: code:addons/account_financial_report/report/general_ledger.py:981
 #: code:addons/account_financial_report/report/open_items.py:302
 #: code:addons/account_financial_report/report/open_items.py:551
 #, python-format
