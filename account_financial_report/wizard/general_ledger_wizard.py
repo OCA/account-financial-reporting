@@ -54,6 +54,10 @@ class GeneralLedgerReportWizard(models.TransientModel):
         comodel_name='res.partner',
         string='Filter partners',
     )
+    account_journal_ids = fields.Many2many(
+        comodel_name='account.journal',
+        string='Filter journals',
+    )
     cost_center_ids = fields.Many2many(
         comodel_name='account.analytic.account',
         string='Filter cost centers',
@@ -122,8 +126,8 @@ class GeneralLedgerReportWizard(models.TransientModel):
         self.ensure_one()
         action = self.env.ref(
             'account_financial_report.action_report_general_ledger')
-        vals = action.read()[0]
-        context1 = vals.get('context', {})
+        action_data = action.read()[0]
+        context1 = action_data.get('context', {})
         if isinstance(context1, pycompat.string_types):
             context1 = safe_eval(context1)
         model = self.env['report_general_ledger']
@@ -131,8 +135,8 @@ class GeneralLedgerReportWizard(models.TransientModel):
         report.compute_data_for_report()
         context1['active_id'] = report.id
         context1['active_ids'] = report.ids
-        vals['context'] = context1
-        return vals
+        action_data['context'] = context1
+        return action_data
 
     @api.multi
     def button_export_pdf(self):
@@ -158,6 +162,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
             'filter_account_ids': [(6, 0, self.account_ids.ids)],
             'filter_partner_ids': [(6, 0, self.partner_ids.ids)],
             'filter_cost_center_ids': [(6, 0, self.cost_center_ids.ids)],
+            'filter_journal_ids': [(6, 0, self.account_journal_ids.ids)],
             'centralize': self.centralize,
             'fy_start_date': self.fy_start_date,
         }
