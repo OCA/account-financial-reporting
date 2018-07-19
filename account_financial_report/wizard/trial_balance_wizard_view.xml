@@ -28,6 +28,8 @@
                     </group>
                     <label for="partner_ids" attrs="{'invisible':[('show_partner_details','!=',True)]}"/>
                     <field name="partner_ids" nolabel="1" options="{'no_create': True}" attrs="{'invisible':[('show_partner_details','!=',True)]}"/>
+                    <label for="journal_ids"/>
+                    <field name="journal_ids" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
                     <group attrs="{'invisible':[('show_partner_details','!=',True)]}"/>
                     <label for="account_ids"/>
                     <group col="4">
