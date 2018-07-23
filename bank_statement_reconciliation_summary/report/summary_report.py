@@ -10,38 +10,50 @@ class SummaryReport(models.AbstractModel):
     _name = 'report.bank_statement_reconciliation_summary.summary_report'
 
     @api.model
+    def _plus_outstanding_payments_domain(self, journal, start_date,
+                                          end_date):
+        account_id = journal.default_debit_account_id.id
+        domain_search = [
+            ('account_id', '=', account_id),
+            ('move_id.statement_line_id', '=', False),
+            ('credit', '>', 0.00),
+            ('date', '<=', end_date),
+        ]
+        if start_date:
+            domain_search += [('date', '>=', start_date)]
+        return domain_search
+
+    @api.model
     def _plus_outstanding_payments(self, journals, start_date, end_date):
         rec = {}
         for journal in journals:
-            account_id = journal.default_debit_account_id.id
-            domain_search = [
-                ('account_id', '=', account_id),
-                ('reconciled', '=', False),
-                ('account_id.reconcile', '=', False),
-                ('credit', '>', 0.00),
-                ('date', '<=', end_date),
-            ]
-            if start_date:
-                domain_search += [('date', '>=', start_date)]
+            domain_search = self._plus_outstanding_payments_domain(
+                journal, start_date, end_date)
             account_move_line_records = self.env['account.move.line'].search(
                 domain_search, order='date')
             rec[journal.id] = account_move_line_records
         return rec
 
     @api.model
+    def _less_outstanding_receipts_domain(self, journal, start_date,
+                                          end_date):
+        account_id = journal.default_debit_account_id.id
+        domain_search = [
+            ('account_id', '=', account_id),
+            ('move_id.statement_line_id', '=', False),
+            ('debit', '>', 0.00),
+            ('date', '<=', end_date),
+        ]
+        if start_date:
+            domain_search += [('date', '>=', start_date)]
+        return domain_search
+
+    @api.model
     def _less_outstanding_receipts(self, journals, start_date, end_date):
         rec = {}
         for journal in journals:
-            account_id = journal.default_debit_account_id.id
-            domain_search = [
-                ('account_id', '=', account_id),
-                ('reconciled', '=', False),
-                ('account_id.reconcile', '=', False),
-                ('debit', '>', 0.00),
-                ('date', '<=', end_date),
-            ]
-            if start_date:
-                domain_search += [('date', '>=', start_date)]
+            domain_search = self._less_outstanding_receipts_domain(
+                journal, start_date, end_date)
             account_move_line_records = self.env['account.move.line'].search(
                 domain_search, order='date')
             rec[journal.id] = account_move_line_records
