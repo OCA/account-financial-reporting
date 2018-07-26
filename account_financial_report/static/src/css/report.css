@@ -1,6 +1,3 @@
-body, table, td, span, div {
-    font-family: Helvetica, Arial;
-}
 .act_as_table {
     display: table !important;
 }
@@ -104,4 +101,5 @@ body, table, td, span, div {
     width: 90%;
     margin-right: auto;
     margin-left: auto;
+    font-family: Helvetica, Arial;
 }
