@@ -19,6 +19,7 @@ Available addons
 ----------------
 addon | version | summary
 --- | --- | ---
+[account_financial_report_date_range](account_financial_report_date_range/) | 10.0.1.0.0 | Add Date Range field to the Odoo OE standard addons financial reports wizard.
 [account_financial_report_horizontal](account_financial_report_horizontal/) | 10.0.1.0.0 | Accounting Financial Report Horizontal
 [account_financial_report_qweb](account_financial_report_qweb/) | 10.0.1.5.2 | OCA Financial Reports
 [account_tax_balance](account_tax_balance/) | 10.0.1.1.1 | Compute tax balances based on date range
