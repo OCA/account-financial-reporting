@@ -8,6 +8,7 @@ setuptools.setup(
     description="Meta package for oca-account-financial-reporting Odoo addons",
     version=version,
     install_requires=[
+        'odoo10-addon-account_financial_report_date_range',
         'odoo10-addon-account_financial_report_horizontal',
         'odoo10-addon-account_financial_report_qweb',
         'odoo10-addon-account_tax_balance',
