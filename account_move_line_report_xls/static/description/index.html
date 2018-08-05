@@ -38,25 +38,26 @@
           The Excel export can be tailored to your exact needs via the following methods of the 'account.move.line' object:
           <ul>
             <li>
-              <b>_report_xls_fields</b>
+              <b>_report_xlsx_fields</b>
               <div style="padding-top:10px">
                 Add/drop columns or change order from the list of columns that are defined in the Excel template.
                 <br>
                   The following fields are available:
                   <div style="margin-left:40px">
                     <code>
-                      move, name, date, journal, period, partner, account,
+                      move, name, date, journal, partner, account,
                       <br/>
                       date_maturity, debit, credit, balance,
                       <br/>
-                      reconcile, reconcile_partial, analytic_account,
+                      reconcile, analytic_account,
                       <br/>
-                      ref, partner_ref, tax_code, tax_amount, amount_residual,
+                      ref, partner_ref, amount_residual,
                       <br/>
                       amount_currency, currency_name, company_currency,
                       <br/>
                       amount_residual_currency, product, product_ref', product_uom, quantity,
-                      <br/>statement, invoice, narration, blocked
+                      <br/>
+                      statement, invoice, narration, blocked
                     </code>
                   </div>
                 </div>
@@ -66,36 +67,10 @@
         <p class="oe_mt32">
           <ul>
             <li>
-              <b>_report_xls_template</b>
+              <b>_report_xlsx_template</b>
               <div style="padding-top:10px">
                 Change/extend the Excel template.
               </div>
-            </li>
-          </ul>
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section class="oe_container">
-    <div class="oe_row oe_spaced">
-      <h2 class="oe_slogan">Credits</h2>
-      <div class="oe_span6">
-        <p class="oe_mt32">
-          Author:
-          <ul>
-            <li>
-              <a href="mailto:info@noviat.com">Luc De Meyer (Noviat)</a>
-            </li>
-          </ul>
-        </p>
-      </div>
-      <div class="oe_span6">
-        <p class="oe_mt32">
-          Contributors:
-          <ul>
-            <li>
-              <a href="mailto:guillaume.auger@savoirfairelinux.com">Guillaume Auger, Savoir-faire LINUX</a>
             </li>
           </ul>
         </p>
