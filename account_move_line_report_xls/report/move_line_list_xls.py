@@ -1,373 +1,450 @@
-# -*- encoding: utf-8 -*-
-##############################################################################
-#
-#    OpenERP, Open Source Management Solution
-#
-#    Copyright (c) 2014 Noviat nv/sa (www.noviat.com). All rights reserved.
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program. If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+# -*- coding: utf-8 -*-
+# Copyright 2009-2018 Noviat
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-import xlwt
-from datetime import datetime
-from openerp.osv import orm
-from openerp.report import report_sxw
-from openerp.addons.report_xls.report_xls import report_xls
-from openerp.addons.report_xls.utils import rowcol_to_cell, _render
-from openerp.tools.translate import translate, _
 import logging
+
+from odoo.addons.report_xlsx_helper.report.abstract_report_xlsx \
+    import AbstractReportXlsx
+from odoo.report import report_sxw
+from odoo.tools.translate import translate
+
 _logger = logging.getLogger(__name__)
 
-_ir_translation_name = 'move.line.list.xls'
+IR_TRANSLATION_NAME = 'move.line.list.xls'
 
 
-class move_line_xls_parser(report_sxw.rml_parse):
-
-    def __init__(self, cr, uid, name, context):
-        super(move_line_xls_parser, self).__init__(
-            cr, uid, name, context=context)
-        move_obj = self.pool.get('account.move.line')
-        self.context = context
-        wanted_list = move_obj._report_xls_fields(cr, uid, context)
-        template_changes = move_obj._report_xls_template(cr, uid, context)
-        self.localcontext.update({
-            'datetime': datetime,
-            'wanted_list': wanted_list,
-            'template_changes': template_changes,
-            '_': self._,
-        })
+class MoveLineXlsx(AbstractReportXlsx):
 
     def _(self, src):
-        lang = self.context.get('lang', 'en_US')
-        return translate(self.cr, _ir_translation_name, 'report', lang, src) \
-            or src
+        lang = self.env.context.get('lang', 'en_US')
+        val = translate(
+            self.env.cr, IR_TRANSLATION_NAME, 'report', lang, src) or src
+        return val
 
+    def _get_ws_params(self, workbook, data, amls):
 
-class move_line_xls(report_xls):
-
-    def __init__(self, name, table, rml=False, parser=False, header=True,
-                 store=False):
-        super(move_line_xls, self).__init__(
-            name, table, rml, parser, header, store)
-
-        # Cell Styles
-        _xs = self.xls_styles
-        # header
-        rh_cell_format = _xs['bold'] + _xs['fill'] + _xs['borders_all']
-        self.rh_cell_style = xlwt.easyxf(rh_cell_format)
-        self.rh_cell_style_center = xlwt.easyxf(rh_cell_format + _xs['center'])
-        self.rh_cell_style_right = xlwt.easyxf(rh_cell_format + _xs['right'])
-        # lines
-        aml_cell_format = _xs['borders_all']
-        self.aml_cell_style = xlwt.easyxf(aml_cell_format)
-        self.aml_cell_style_center = xlwt.easyxf(
-            aml_cell_format + _xs['center'])
-        self.aml_cell_style_date = xlwt.easyxf(
-            aml_cell_format + _xs['left'],
-            num_format_str=report_xls.date_format)
-        self.aml_cell_style_decimal = xlwt.easyxf(
-            aml_cell_format + _xs['right'],
-            num_format_str=report_xls.decimal_format)
-        # totals
-        rt_cell_format = _xs['bold'] + _xs['fill'] + _xs['borders_all']
-        self.rt_cell_style = xlwt.easyxf(rt_cell_format)
-        self.rt_cell_style_right = xlwt.easyxf(rt_cell_format + _xs['right'])
-        self.rt_cell_style_decimal = xlwt.easyxf(
-            rt_cell_format + _xs['right'],
-            num_format_str=report_xls.decimal_format)
-
-        # XLS Template
-        self.col_specs_template = {
+        # XLSX Template
+        col_specs = {
             'move': {
-                'header': [1, 20, 'text', _render("_('Entry')")],
-                'lines': [1, 0, 'text', _render("line.move_id.name or ''")],
-                'totals': [1, 0, 'text', None]},
+                'header': {
+                    'value': self._('Entry'),
+                },
+                'lines': {
+                    'value': self._render("line.move_id.name"),
+                },
+                'width': 20,
+            },
             'name': {
-                'header': [1, 42, 'text', _render("_('Name')")],
-                'lines': [1, 0, 'text', _render("line.name or ''")],
-                'totals': [1, 0, 'text', None]},
+                'header': {
+                    'value': self._('Name'),
+                },
+                'lines': {
+                    'value': self._render("line.name"),
+                },
+                'width': 42,
+            },
             'ref': {
-                'header': [1, 42, 'text', _render("_('Reference')")],
-                'lines': [1, 0, 'text', _render("line.ref or ''")],
-                'totals': [1, 0, 'text', None]},
+                'header': {
+                    'value': self._('Reference'),
+                },
+                'lines': {
+                    'value': self._render("line.ref"),
+                },
+                'width': 42,
+            },
             'date': {
-                'header': [1, 13, 'text', _render("_('Effective Date')")],
-                'lines': [1, 0, 'date',
-                          _render("datetime.strptime(line.date,'%Y-%m-%d')"),
-                          None, self.aml_cell_style_date],
-                'totals': [1, 0, 'text', None]},
-            'period': {
-                'header': [1, 12, 'text', _render("_('Period')")],
-                'lines':
-                [1, 0, 'text',
-                 _render("line.period_id.code or line.period_id.name")],
-                'totals': [1, 0, 'text', None]},
+                'header': {
+                    'value': self._('Effective Date'),
+                },
+                'lines': {
+                    'value': self._render(
+                        "datetime.strptime(line.date, '%Y-%m-%d')"),
+                    'format': self.format_tcell_date_left,
+                },
+                'width': 13,
+            },
             'partner': {
-                'header': [1, 36, 'text', _render("_('Partner')")],
-                'lines':
-                [1, 0, 'text',
-                 _render("line.partner_id and line.partner_id.name or ''")],
-                'totals': [1, 0, 'text', None]},
+                'header': {
+                    'value': self._('Partner'),
+                },
+                'lines': {
+                    'value': self._render(
+                        "line.partner_id and line.partner_id.name"),
+                },
+                'width': 36,
+            },
             'partner_ref': {
-                'header': [1, 36, 'text', _render("_('Partner Reference')")],
-                'lines':
-                [1, 0, 'text',
-                 _render("line.partner_id and line.partner_id.ref or ''")],
-                'totals': [1, 0, 'text', None]},
+                'header': {
+                    'value': self._('Partner Reference'),
+                },
+                'lines': {
+                    'value': self._render(
+                        "line.partner_id and line.partner_id.ref"),
+                },
+                'width': 36,
+            },
             'account': {
-                'header': [1, 12, 'text', _render("_('Account')")],
-                'lines': [1, 0, 'text', _render("line.account_id.code")],
-                'totals': [1, 0, 'text', None]},
+                'header': {
+                    'value': self._('Account'),
+                },
+                'lines': {
+                    'value': self._render(
+                        "line.account_id.code"),
+                },
+                'width': 12,
+            },
             'date_maturity': {
-                'header': [1, 13, 'text', _render("_('Maturity Date')")],
-                'lines':
-                [1, 0,
-                 _render("line.date_maturity and 'date' or 'text'"),
-                 _render(
-                     "line.date_maturity"
-                     " and datetime.strptime(line.date_maturity,'%Y-%m-%d')"
-                     " or None"),
-                    None, self.aml_cell_style_date],
-                'totals': [1, 0, 'text', None]},
+                'header': {
+                    'value': self._('Maturity Date'),
+                },
+                'lines': {
+                    'value': self._render(
+                        "datetime.strptime(line.date_maturity,'%Y-%m-%d')"),
+                    'format': self.format_tcell_date_left,
+                },
+                'width': 13,
+            },
             'debit': {
-                'header': [1, 18, 'text', _render("_('Debit')"), None,
-                           self.rh_cell_style_right],
-                'lines': [1, 0, 'number', _render("line.debit"), None,
-                          self.aml_cell_style_decimal],
-                'totals': [1, 0, 'number', None, _render("debit_formula"),
-                           self.rt_cell_style_decimal]},
+                'header': {
+                    'value': self._('Debit'),
+                    'format': self.format_theader_yellow_right,
+                },
+                'lines': {
+                    'value': self._render("line.debit"),
+                    'format': self.format_tcell_amount_right,
+                },
+                'totals': {
+                    'type': 'formula',
+                    'value': self._render("debit_formula"),
+                    'format': self.format_theader_yellow_amount_right,
+                },
+                'width': 18,
+            },
             'credit': {
-                'header': [1, 18, 'text', _render("_('Credit')"), None,
-                           self.rh_cell_style_right],
-                'lines': [1, 0, 'number', _render("line.credit"), None,
-                          self.aml_cell_style_decimal],
-                'totals': [1, 0, 'number', None, _render("credit_formula"),
-                           self.rt_cell_style_decimal]},
+                'header': {
+                    'value': self._('Credit'),
+                    'format': self.format_theader_yellow_right,
+                },
+                'lines': {
+                    'value': self._render("line.credit"),
+                    'format': self.format_tcell_amount_right,
+                },
+                'totals': {
+                    'type': 'formula',
+                    'value': self._render("credit_formula"),
+                    'format': self.format_theader_yellow_amount_right,
+                },
+                'width': 18,
+            },
             'balance': {
-                'header': [1, 18, 'text', _render("_('Balance')"), None,
-                           self.rh_cell_style_right],
-                'lines': [1, 0, 'number', None, _render("bal_formula"),
-                          self.aml_cell_style_decimal],
-                'totals': [1, 0, 'number', None, _render("bal_formula"),
-                           self.rt_cell_style_decimal]},
-            'reconcile': {
-                'header': [1, 12, 'text', _render("_('Rec.')"), None,
-                           self.rh_cell_style_center],
-                'lines': [1, 0, 'text',
-                          _render("line.reconcile_id.name or ''"), None,
-                          self.aml_cell_style_center],
-                'totals': [1, 0, 'text', None]},
-            'reconcile_partial': {
-                'header': [1, 12, 'text', _render("_('Part. Rec.')"), None,
-                           self.rh_cell_style_center],
-                'lines': [1, 0, 'text',
-                          _render("line.reconcile_partial_id.name or ''"),
-                          None, self.aml_cell_style_center],
-                'totals': [1, 0, 'text', None]},
-            'tax_code': {
-                'header': [1, 12, 'text', _render("_('Tax Code')"), None,
-                           self.rh_cell_style_center],
-                'lines': [1, 0, 'text', _render("line.tax_code_id.code or ''"),
-                          None, self.aml_cell_style_center],
-                'totals': [1, 0, 'text', None]},
-            'tax_amount': {
-                'header': [1, 18, 'text', _render("_('Tax/Base Amount')"),
-                           None, self.rh_cell_style_right],
-                'lines': [1, 0, 'number', _render("line.tax_amount"), None,
-                          self.aml_cell_style_decimal],
-                'totals': [1, 0, 'text', None]},
+                'header': {
+                    'value': self._('Balance'),
+                    'format': self.format_theader_yellow_right,
+                },
+                'lines': {
+                    'value': self._render("line.balance"),
+                    'format': self.format_tcell_amount_right,
+                },
+                'totals': {
+                    'type': 'formula',
+                    'value': self._render("bal_formula"),
+                    'format': self.format_theader_yellow_amount_right,
+                },
+                'width': 18,
+            },
+            'full_reconcile': {
+                'header': {
+                    'value': self._('Rec.'),
+                    'format': self.format_theader_yellow_center,
+                },
+                'lines': {
+                    'value': self._render(
+                        "line.full_reconcile_id "
+                        "and line.full_reconcile_id.name"),
+                    'format': self.format_tcell_center,
+                },
+                'width': 12,
+            },
+            'reconcile_amount': {
+                'header': {
+                    'value': self._('Reconcile Amount'),
+                },
+                'lines': {
+                    'value': self._render(
+                        "line.full_reconcile_id and line.balance or "
+                        "(sum(line.matched_credit_ids.mapped('amount')) - "
+                        "sum(line.matched_debit_ids.mapped('amount')))"),
+                    'format': self.format_tcell_amount_right,
+                },
+                'width': 12,
+            },
+            'matched_debit_ids': {
+                'header': {
+                    'value': self._('Matched Debits'),
+                },
+                'lines': {
+                    'value': self._render(
+                        "line.matched_debit_ids "
+                        "and str([x.debit_move_id.id "
+                        "for x in line.matched_debit_ids])"),
+                },
+                'width': 20,
+            },
+            'matched_credit_ids': {
+                'header': {
+                    'value': self._('Matched Credits'),
+                },
+                'lines': {
+                    'value': self._render(
+                        "line.matched_credit_ids "
+                        "and str([x.credit_move_id.id "
+                        "for x in line.matched_credit_ids])"),
+                },
+                'width': 20,
+            },
             'amount_currency': {
-                'header': [1, 18, 'text', _render("_('Am. Currency')"), None,
-                           self.rh_cell_style_right],
-                'lines':
-                [1, 0,
-                 _render("line.amount_currency and 'number' or 'text'"),
-                 _render("line.amount_currency or None"),
-                 None, self.aml_cell_style_decimal],
-                'totals': [1, 0, 'text', None]},
+                'header': {
+                    'value': self._('Am. Currency'),
+                    'format': self.format_theader_yellow_right,
+                },
+                'lines': {
+                    'value': self._render("line.amount_currency"),
+                    'format': self.format_tcell_amount_right,
+                },
+                'width': 18,
+            },
             'currency_name': {
-                'header': [1, 6, 'text', _render("_('Curr.')"), None,
-                           self.rh_cell_style_center],
-                'lines':
-                [1, 0, 'text',
-                 _render("line.currency_id and line.currency_id.name or ''"),
-                 None, self.aml_cell_style_center],
-                'totals': [1, 0, 'text', None]},
+                'header': {
+                    'value': self._('Curr.'),
+                    'format': self.format_theader_yellow_center,
+                },
+                'lines': {
+                    'value': self._render(
+                        "line.currency_id and line.currency_id.name"),
+                    'format': self.format_tcell_center,
+                },
+                'width': 6,
+            },
             'journal': {
-                'header': [1, 12, 'text', _render("_('Journal')")],
-                'lines': [1, 0, 'text', _render("line.journal_id.code or ''")],
-                'totals': [1, 0, 'text', None]},
+                'header': {
+                    'value': self._('Journal'),
+                },
+                'lines': {
+                    'value': self._render("line.journal_id.code"),
+                },
+                'width': 12,
+            },
             'company_currency': {
-                'header': [1, 10, 'text', _render("_('Comp. Curr.')")],
-                'lines': [1, 0, 'text',
-                          _render("line.company_id.currency_id.name or ''"),
-                          None, self.aml_cell_style_center],
-                'totals': [1, 0, 'text', None]},
+                'header': {
+                    'value': self._('Comp. Curr.'),
+                    'format': self.format_theader_yellow_center,
+                },
+                'lines': {
+                    'value': self._render(
+                        "line.company_id.currency_id.name"),
+                    'format': self.format_tcell_center,
+                },
+                'width': 10,
+            },
             'analytic_account': {
-                'header': [1, 36, 'text', _render("_('Analytic Account')")],
-                'lines': [1, 0, 'text',
-                          _render("line.analytic_account_id.code or ''")],
-                'totals': [1, 0, 'text', None]},
+                'header': {
+                    'value': self._('Analytic Account Reference'),
+                },
+                'lines': {
+                    'value': self._render(
+                        "line.analytic_account_id "
+                        "and line.analytic_account_id.code"),
+                },
+                'width': 36,
+            },
+            'analytic_account_name': {
+                'header': {
+                    'value': self._('Analytic Account'),
+                },
+                'lines': {
+                    'value': self._render(
+                        "line.analytic_account_id "
+                        "and line.analytic_account_id.name"),
+                },
+                'width': 36,
+            },
             'product': {
-                'header': [1, 36, 'text', _render("_('Product')")],
-                'lines': [1, 0, 'text', _render("line.product_id.name or ''")],
-                'totals': [1, 0, 'text', None]},
+                'header': {
+                    'value': self._('Product'),
+                },
+                'lines': {
+                    'value': self._render(
+                        "line.product_id and line.product_id.name"),
+                },
+                'width': 36,
+            },
             'product_ref': {
-                'header': [1, 36, 'text', _render("_('Product Reference')")],
-                'lines': [1, 0, 'text',
-                          _render("line.product_id.default_code or ''")],
-                'totals': [1, 0, 'text', None]},
+                'header': {
+                    'value': self._('Product Reference'),
+                },
+                'lines': {
+                    'value': self._render(
+                        "line.product_id and line.product_id.default_code "
+                        "or ''"),
+                },
+                'width': 36,
+            },
             'product_uom': {
-                'header': [1, 20, 'text', _render("_('Unit of Measure')")],
-                'lines': [1, 0, 'text',
-                          _render("line.product_uom_id.name or ''")],
-                'totals': [1, 0, 'text', None]},
+                'header': {
+                    'value': self._('Unit of Measure'),
+                },
+                'lines': {
+                    'value': self._render(
+                        "line.product_uom_id and line.product_uom_id.name"),
+                },
+                'width': 20,
+            },
             'quantity': {
-                'header': [1, 8, 'text', _render("_('Qty')"), None,
-                           self.rh_cell_style_right],
-                'lines': [1, 0,
-                          _render("line.quantity and 'number' or 'text'"),
-                          _render("line.quantity or None"), None,
-                          self.aml_cell_style_decimal],
-                'totals': [1, 0, 'text', None]},
+                'header': {
+                    'value': self._('Qty'),
+                    'format': self.format_theader_yellow_right,
+                },
+                'lines': {
+                    'value': self._render("line.quantity"),
+                    'format': self.format_tcell_amount_right,
+                },
+                'width': 8,
+            },
             'statement': {
-                'header': [1, 20, 'text', _render("_('Statement')")],
-                'lines':
-                [1, 0, 'text',
-                 _render("line.statement_id and line.statement_id.name or ''")
-                 ],
-                'totals': [1, 0, 'text', None]},
+                'header': {
+                    'value': self._('Statement'),
+                },
+                'lines': {
+                    'value': self._render(
+                        "line.statement_id and line.statement_id.name"),
+                },
+                'width': 20,
+            },
             'invoice': {
-                'header': [1, 20, 'text', _render("_('Invoice')")],
-                'lines':
-                [1, 0, 'text',
-                 _render("line.invoice and line.invoice.number or ''")],
-                'totals': [1, 0, 'text', None]},
+                'header': {
+                    'value': self._('Invoice'),
+                },
+                'lines': {
+                    'value': self._render(
+                        "line.invoice_id and line.invoice_id.number"),
+                },
+                'width': 20,
+            },
             'amount_residual': {
-                'header': [1, 18, 'text', _render("_('Residual Amount')"),
-                           None, self.rh_cell_style_right],
-                'lines':
-                [1, 0,
-                 _render("line.amount_residual and 'number' or 'text'"),
-                 _render("line.amount_residual or None"),
-                 None, self.aml_cell_style_decimal],
-                'totals': [1, 0, 'text', None]},
+                'header': {
+                    'value': self._('Residual Amount'),
+                    'format': self.format_theader_yellow_right,
+                },
+                'lines': {
+                    'value': self._render("line.amount_residual"),
+                    'format': self.format_tcell_amount_right,
+                },
+                'width': 18,
+            },
             'amount_residual_currency': {
-                'header': [1, 18, 'text', _render("_('Res. Am. in Curr.')"),
-                           None, self.rh_cell_style_right],
-                'lines':
-                [1, 0,
-                 _render(
-                     "line.amount_residual_currency and 'number' or 'text'"),
-                 _render("line.amount_residual_currency or None"),
-                 None, self.aml_cell_style_decimal],
-                'totals': [1, 0, 'text', None]},
+                'header': {
+                    'value': self._('Res. Am. in Curr.'),
+                    'format': self.format_theader_yellow_right,
+                },
+                'lines': {
+                    'value': self._render("line.amount_residual_currency"),
+                    'format': self.format_tcell_amount_right,
+                },
+                'width': 18,
+            },
             'narration': {
-                'header': [1, 42, 'text', _render("_('Notes')")],
-                'lines': [1, 0, 'text',
-                          _render("line.move_id.narration or ''")],
-                'totals': [1, 0, 'text', None]},
+                'header': {
+                    'value': self._('Notes'),
+                },
+                'lines': {
+                    'value': self._render("line.move_id.narration or ''"),
+                },
+                'width': 42,
+            },
             'blocked': {
-                'header': [1, 4, 'text', _('Lit.'),
-                           None, self.rh_cell_style_right],
-                'lines': [1, 0, 'text', _render("line.blocked and 'x' or ''"),
-                          None, self.aml_cell_style_center],
-                'totals': [1, 0, 'text', None]},
+                'header': {
+                    'value': self._('Lit.'),
+                    'format': self.format_theader_yellow_center,
+                },
+                'lines': {
+                    'value': self._render("line.blocked and 'x' or ''"),
+                    'format': self.format_tcell_center,
+                },
+                'width': 4,
+            },
+            'id': {
+                'header': {
+                    'value': self._('Id'),
+                    'format': self.format_theader_yellow_right,
+                },
+                'lines': {
+                    'value': self._render("line.id"),
+                    'format': self.format_tcell_integer_right,
+                },
+                'width': 12,
+            },
         }
+        col_specs.update(self.env['account.move.line']._report_xlsx_template())
+        wanted_list = self.env['account.move.line']._report_xlsx_fields()
+        title = self._("Journal Items")
 
-    def generate_xls_report(self, _p, _xs, data, objects, wb):
+        return [{
+            'ws_name': title,
+            'generate_ws_method': '_amls_export',
+            'title': title,
+            'wanted_list': wanted_list,
+            'col_specs': col_specs,
+        }]
 
-        wanted_list = _p.wanted_list
-        self.col_specs_template.update(_p.template_changes)
-        _ = _p._
+    def _amls_export(self, workbook, ws, ws_params, data, amls):
 
+        ws.set_landscape()
+        ws.fit_to_pages(1, 0)
+        ws.set_header(self.xls_headers['standard'])
+        ws.set_footer(self.xls_footers['standard'])
+
+        self._set_column_width(ws, ws_params)
+
+        row_pos = 0
+        row_pos = self._write_ws_title(ws, row_pos, ws_params)
+
+        row_pos = self._write_line(
+            ws, row_pos, ws_params, col_specs_section='header',
+            default_format=self.format_theader_yellow_left)
+
+        ws.freeze_panes(row_pos, 0)
+
+        wanted_list = ws_params['wanted_list']
         debit_pos = 'debit' in wanted_list and wanted_list.index('debit')
         credit_pos = 'credit' in wanted_list and wanted_list.index('credit')
-        if not (credit_pos and debit_pos) and 'balance' in wanted_list:
-            raise orm.except_orm(
-                _('Customisation Error!'),
-                _("The 'Balance' field is a calculated XLS field requiring \
-                the presence of the 'Debit' and 'Credit' fields !"))
 
-        # report_name = objects[0]._description or objects[0]._name
-        report_name = _("Journal Items")
-        ws = wb.add_sheet(report_name[:31])
-        ws.panes_frozen = True
-        ws.remove_splits = True
-        ws.portrait = 0  # Landscape
-        ws.fit_width_to_pages = 1
-        row_pos = 0
+        for line in amls:
+            row_pos = self._write_line(
+                ws, row_pos, ws_params, col_specs_section='lines',
+                render_space={'line': line},
+                default_format=self.format_tcell_left)
 
-        # set print header/footer
-        ws.header_str = self.xls_headers['standard']
-        ws.footer_str = self.xls_footers['standard']
-
-        # Title
-        cell_style = xlwt.easyxf(_xs['xls_title'])
-        c_specs = [
-            ('report_name', 1, 0, 'text', report_name),
-        ]
-        row_data = self.xls_row_template(c_specs, ['report_name'])
-        row_pos = self.xls_write_row(
-            ws, row_pos, row_data, row_style=cell_style)
-        row_pos += 1
-
-        # Column headers
-        c_specs = map(lambda x: self.render(
-            x, self.col_specs_template, 'header', render_space={'_': _p._}),
-            wanted_list)
-        row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
-        row_pos = self.xls_write_row(
-            ws, row_pos, row_data, row_style=self.rh_cell_style,
-            set_column_size=True)
-        ws.set_horz_split_pos(row_pos)
-
-        # account move lines
-        for line in objects:
-            debit_cell = rowcol_to_cell(row_pos, debit_pos)
-            credit_cell = rowcol_to_cell(row_pos, credit_pos)
-            bal_formula = debit_cell + '-' + credit_cell
-            _logger.debug('dummy call - %s', bal_formula)
-            c_specs = map(
-                lambda x: self.render(x, self.col_specs_template, 'lines'),
-                wanted_list)
-            row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
-            row_pos = self.xls_write_row(
-                ws, row_pos, row_data, row_style=self.aml_cell_style)
-
-        # Totals
-        aml_cnt = len(objects)
-        debit_start = rowcol_to_cell(row_pos - aml_cnt, debit_pos)
-        debit_stop = rowcol_to_cell(row_pos - 1, debit_pos)
+        aml_cnt = len(amls)
+        debit_start = self._rowcol_to_cell(row_pos - aml_cnt, debit_pos)
+        debit_stop = self._rowcol_to_cell(row_pos - 1, debit_pos)
         debit_formula = 'SUM(%s:%s)' % (debit_start, debit_stop)
-        _logger.debug('dummy call - %s', debit_formula)
-        credit_start = rowcol_to_cell(row_pos - aml_cnt, credit_pos)
-        credit_stop = rowcol_to_cell(row_pos - 1, credit_pos)
+        credit_start = self._rowcol_to_cell(row_pos - aml_cnt, credit_pos)
+        credit_stop = self._rowcol_to_cell(row_pos - 1, credit_pos)
         credit_formula = 'SUM(%s:%s)' % (credit_start, credit_stop)
-        _logger.debug('dummy call - %s', credit_formula)
-        debit_cell = rowcol_to_cell(row_pos, debit_pos)
-        credit_cell = rowcol_to_cell(row_pos, credit_pos)
+        debit_cell = self._rowcol_to_cell(row_pos, debit_pos)
+        credit_cell = self._rowcol_to_cell(row_pos, credit_pos)
         bal_formula = debit_cell + '-' + credit_cell
-        _logger.debug('dummy call - %s', bal_formula)
-        c_specs = map(
-            lambda x: self.render(x, self.col_specs_template, 'totals'),
-            wanted_list)
-        row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
-        row_pos = self.xls_write_row(
-            ws, row_pos, row_data, row_style=self.rt_cell_style_right)
+        row_pos = self._write_line(
+            ws, row_pos, ws_params, col_specs_section='totals',
+            render_space={
+                'debit_formula': debit_formula,
+                'credit_formula': credit_formula,
+                'bal_formula': bal_formula,
+            },
+            default_format=self.format_theader_yellow_left)
 
-move_line_xls('report.move.line.list.xls',
-              'account.move.line',
-              parser=move_line_xls_parser)
+
+MoveLineXlsx('report.move.line.list.xls',
+             'account.move.line',
+             parser=report_sxw.rml_parse)
