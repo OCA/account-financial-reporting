@@ -385,7 +385,7 @@ msgid "Centralized"
 msgstr ""
 
 #. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:1217
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:1230
 #, python-format
 msgid "Centralized Entries"
 msgstr ""
@@ -891,6 +891,17 @@ msgid "Filter cost centers"
 msgstr ""
 
 #. module: account_financial_report_qweb
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_filter_journal_ids
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_filter_journal_ids
+msgid "Filter journal ids"
+msgstr ""
+
+#. module: account_financial_report_qweb
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_general_ledger_report_wizard_journal_ids
+msgid "Filter journals"
+msgstr ""
+
+#. module: account_financial_report_qweb
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_aged_partner_balance_qweb_filter_partner_ids
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_filter_partner_ids
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_open_items_qweb_filter_partner_ids
@@ -1185,6 +1196,7 @@ msgstr ""
 
 #. module: account_financial_report_qweb
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_journal_qweb_journal_ids
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_trial_balance_report_wizard_journal_ids
 msgid "Journal ids"
 msgstr ""
 
@@ -1379,8 +1391,8 @@ msgid "No group"
 msgstr ""
 
 #. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:680
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:977
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:681
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:978
 #: code:addons/account_financial_report_qweb/report/open_items.py:302
 #: code:addons/account_financial_report_qweb/report/open_items.py:551
 #, python-format
