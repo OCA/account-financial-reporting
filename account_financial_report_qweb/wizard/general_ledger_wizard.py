@@ -51,6 +51,10 @@ class GeneralLedgerReportWizard(models.TransientModel):
         comodel_name='res.partner',
         string='Filter partners',
     )
+    journal_ids = fields.Many2many(
+        comodel_name="account.journal",
+        string="Filter journals",
+    )
     cost_center_ids = fields.Many2many(
         comodel_name='account.analytic.account',
         string='Filter cost centers',
@@ -154,6 +158,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
             'company_id': self.company_id.id,
             'filter_account_ids': [(6, 0, self.account_ids.ids)],
             'filter_partner_ids': [(6, 0, self.partner_ids.ids)],
+            'filter_journal_ids': [(6, 0, self.partner_ids.ids)],
             'filter_cost_center_ids': [(6, 0, self.cost_center_ids.ids)],
             'centralize': self.centralize,
             'fy_start_date': self.fy_start_date,
