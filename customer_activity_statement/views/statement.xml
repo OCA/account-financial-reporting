@@ -3,10 +3,10 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
     <template id="report_assets_common" name="oca_statements report assets" inherit_id="web.report_assets_common">
-    <xpath expr="." position="inside">
-        <link href="/customer_activity_statement/static/src/less/layout_statement.less" rel="stylesheet"/>
-    </xpath>
-</template>
+        <xpath expr="." position="inside">
+            <link href="/customer_activity_statement/static/src/less/layout_statement.less" rel="stylesheet"/>
+        </xpath>
+    </template>
 
     <template id="customer_activity_statement.statement_document">
         <t t-call="web.external_layout">
