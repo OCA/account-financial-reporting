@@ -164,7 +164,7 @@
         model="res.partner"
         report_type="qweb-pdf"
         menu="False"
-        string="Customer Statement"
+        string="Activity Statement"
         name="customer_activity_statement.statement"
         file="customer_activity_statement.statement"
     />
