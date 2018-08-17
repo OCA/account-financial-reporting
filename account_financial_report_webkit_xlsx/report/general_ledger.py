@@ -168,6 +168,15 @@ class GeneralLedgerXlsx(ReportXlsx, report_xlsx_format):
         style_sums = self._get_style(wb, ('fill_yellow', 'money', 'bold'))
 
         for account in _p.objects:
+            display_initial_balance = _p['init_balance'][account.id] and \
+                (_p['init_balance'][account.id].get(
+                    'debit', 0.0) != 0.0 or
+                    _p['init_balance'][account.id].get('credit', 0.0) != 0.0)
+            if (not display_initial_balance and
+                    not _p['ledger_lines'][account.id]):
+                # no lines and no initial balance, do no show account in report
+                continue
+
             # Write account
             name = ' - '.join([account.code, account.name])
             ws.write(row_pos, 0, name, style_account)
@@ -187,10 +196,6 @@ class GeneralLedgerXlsx(ReportXlsx, report_xlsx_format):
             cumul_balance = cumul_balance_curr = 0
 
             # Write initial balance
-            display_initial_balance = _p['init_balance'][account.id] and \
-                (_p['init_balance'][account.id].get(
-                    'debit', 0.0) != 0.0 or
-                    _p['init_balance'][account.id].get('credit', 0.0) != 0.0)
             if display_initial_balance:
                 ws.write(row_pos, 8, _('Initial Balance'),
                          style_initial_balance)
