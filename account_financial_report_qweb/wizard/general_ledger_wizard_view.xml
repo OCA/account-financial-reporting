@@ -16,6 +16,7 @@
                             <field name="date_range_id" domain="['|',('company_id','=',company_id), ('company_id','=',False)]"/>
                             <field name="date_from"/>
                             <field name="date_to"/>
+                            <field name="group_partner"/>
                             <field name="fy_start_date" invisible="1"/>
                         </group>
                         <group name="other_filters">

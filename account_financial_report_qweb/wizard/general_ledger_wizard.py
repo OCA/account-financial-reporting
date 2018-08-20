@@ -70,6 +70,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
              'account currency is not setup through chart of accounts '
              'will display initial and final balance in that currency.'
     )
+    group_partner = fields.Boolean("Group By Partner")
 
     @api.depends('date_from')
     def _compute_fy_start_date(self):
@@ -162,6 +163,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
             'filter_cost_center_ids': [(6, 0, self.cost_center_ids.ids)],
             'centralize': self.centralize,
             'fy_start_date': self.fy_start_date,
+            'group_by': self.group_partner
         }
 
     def _export(self, report_type):

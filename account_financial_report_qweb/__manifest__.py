@@ -5,14 +5,15 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     'name': 'QWeb Financial Reports',
-    'version': '10.0.1.5.2',
+    'version': '10.0.1.6.0',
     'category': 'Reporting',
     'summary': 'OCA Financial Reports',
     'author': 'Camptocamp SA,'
               'initOS GmbH,'
               'redCOR AG,'
               'ACSONE SA/NV,'
-              'Odoo Community Association (OCA)',
+              'Odoo Community Association (OCA),'
+              'Serpent Consulting Services Pvt. Ltd.',
     "website": "https://odoo-community.org/",
     'depends': [
         'account',

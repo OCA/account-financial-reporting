@@ -45,6 +45,7 @@ class GeneralLedgerReport(models.TransientModel):
             'analytic.group_analytic_accounting'
         )
     )
+    group_by = fields.Boolean()
 
     # Data fields, used to browse report data
     account_ids = fields.One2many(
@@ -423,14 +424,12 @@ WITH
             GROUP BY
                 a.id
             """
-
         init_subquery = self._get_final_account_sub_subquery_sum_amounts(
             date_included=False
         )
         final_subquery = self._get_final_account_sub_subquery_sum_amounts(
             date_included=True
         )
-
         query_inject_account += """
         ),
     initial_sum_amounts AS ( """ + init_subquery + """ ),

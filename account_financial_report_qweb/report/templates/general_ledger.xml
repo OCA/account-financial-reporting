@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
     <template id="report_general_ledger_qweb">
         <t t-call="report.html_container">
             <t t-foreach="docs" t-as="o">
@@ -10,7 +9,6 @@
             </t>
         </t>
     </template>
-
     <template id="report_general_ledger_base">
         <!-- Saved flag fields into variables, used to define columns display -->
         <t t-set="show_cost_center" t-value="o.show_cost_center"/>
@@ -21,16 +19,13 @@
         <div class="page">
             <!-- Display filters -->
             <t t-call="account_financial_report_qweb.report_general_ledger_filters"/>
-
             <t t-foreach="o.account_ids" t-as="account">
                 <div class="page_break">
                     <!-- Display account header -->
                     <div class="act_as_table list_table" style="margin-top: 10px;"/>
-                    <div class="act_as_caption account_title"
-                         style="width: 100%">
-                        <span t-field="account.code"/> - <span t-field="account.name"/>
+                    <div class="act_as_caption account_title" style="width: 100%">
+                        <span t-field="account.code" /> - <span t-field="account.name"/>
                     </div>
-
                     <t t-if="not account.partner_ids">
                         <!-- Display account move lines without partner regroup -->
                         <t t-set="type" t-value='"account_type"'/>
@@ -38,41 +33,324 @@
                             <t t-set="account_or_partner_object" t-value="account"/>
                         </t>
                     </t>
-
                     <t t-if="account.partner_ids">
-                        <!-- Display account partners -->
-                        <t t-foreach="account.partner_ids" t-as="partner">
-                            <t t-set="type" t-value='"partner_type"'/>
-                            <div class="page_break">
-                                <!-- Display partner header -->
-                                <div class="act_as_caption account_title">
-                                    <span t-field="partner.name"/>
+                        <t t-if="o.group_by">
+                            <!-- Display account partners -->
+                            <t t-foreach="account.partner_ids" t-as="partner">
+                                <t t-set="type" t-value='"partner_type"'/>
+                                <div class="page_break">
+                                    <!-- Display partner header -->
+                                    <div class="act_as_caption account_title">
+                                        <span t-field="partner.name"/>
+                                    </div>
+
+                                    <!-- Display partner move lines -->
+                                    <t t-call="account_financial_report_qweb.report_general_ledger_lines">
+                                        <t t-set="account_or_partner_object" t-value="partner"/>
+                                    </t>
+
+                                    <!-- Display partner footer -->
+                                    <t t-call="account_financial_report_qweb.report_general_ledger_ending_cumul">
+                                        <t t-set="account_or_partner_object" t-value="partner"/>
+                                        <t t-set="type" t-value='"partner_type"'/>
+                                    </t>
                                 </div>
+                            </t>
+                        </t>
+                        <t t-if="not o.group_by">
+                            <t t-set="type" t-value='"partner_type"'/>
+                            <t t-set="debit" t-value="0"/>
+                            <t t-set="credit" t-value="0"/>
+                            <t t-set="initial_balance" t-value="0"/>
+                            <t t-set="initial_balance_foreign_currency" t-value="0"/>
+                            <t t-foreach="account.partner_ids" t-as="partner">
+                                <t t-set="account_or_partner_object" t-value="partner"/>
 
-                                <!-- Display partner move lines -->
-                                <t t-call="account_financial_report_qweb.report_general_ledger_lines">
-                                    <t t-set="account_or_partner_object" t-value="partner"/>
-                                </t>
+                                <!--Set the initial value for debit column-->
+                                <t t-set="domain"
+                                   t-value="[('account_id', '=', account_or_partner_object.report_account_id.account_id.id),
+                                             ('partner_id', '=', account_or_partner_object.partner_id.id),
+                                             ('date', '&lt;', o.date_from),
+                                             ('debit', '&lt;&gt;', 0)]"/>
+                                <a t-att-data-domain="domain"
+                                   t-att-data-res-model="'account.move.line'"
+                                   class="o_account_financial_reports_web_action_monetary_multi underline-on-hover"
+                                   style="color: black; cursor: pointer;"/>
+                                <t t-set="debit" t-value="account_or_partner_object.initial_debit + debit"/>
 
-                                <!-- Display partner footer -->
-                                <t t-call="account_financial_report_qweb.report_general_ledger_ending_cumul">
+                                <!--Set the initial value for credit column-->
+                                <t t-set="domain"
+                                   t-value="[('account_id', '=', account_or_partner_object.report_account_id.account_id.id),
+                                             ('partner_id', '=', account_or_partner_object.partner_id.id),
+                                             ('date', '&lt;', o.date_from),
+                                             ('credit', '&lt;&gt;', 0)]"/>
+                                <a t-att-data-domain="domain"
+                                   t-att-data-res-model="'account.move.line'"
+                                   class="o_account_financial_reports_web_action_monetary_multi underline-on-hover"
+                                   style="color: black; cursor: pointer;"/>
+                                <t t-set="credit" t-value="account_or_partner_object.initial_credit + credit"/>
+
+                                <!--Set the initial balance-->
+                                <t t-set="domain"
+                                   t-value="[('account_id', '=', account_or_partner_object.report_account_id.account_id.id),
+                                             ('partner_id', '=', account_or_partner_object.partner_id.id),
+                                             ('date', '&lt;', o.date_from)]"/>
+                                <a t-att-data-domain="domain"
+                                   t-att-data-res-model="'account.move.line'"
+                                   class="o_account_financial_reports_web_action_monetary_multi underline-on-hover"
+                                   style="color: black; cursor: pointer;"/>
+                                <t t-set="initial_balance" t-value="account_or_partner_object.initial_balance + initial_balance"/>
+                                
+                                <!--Set the initial balance for foreign currency -->
+                                <t t-set="domain"
+                                   t-value="[('account_id', '=', account_or_partner_object.report_account_id.account_id.id),
+                                             ('partner_id', '=', account_or_partner_object.partner_id.id),
+                                             ('date', '&lt;', o.date_from)]"/>
+                                <a t-att-data-domain="domain"
+                                   t-att-data-res-model="'account.move.line'"
+                                   class="o_account_financial_reports_web_action_monetary_multi"
+                                   style="color: black;"/>
+                                <t t-set="initial_balance_foreign_currency" t-value="account_or_partner_object.initial_balance_foreign_currency + initial_balance_foreign_currency"/>
+                            </t>
+                            <div class="act_as_table data_table" style="width: 100%;">
+                                <div class="act_as_thead">
+                                    <div class="act_as_row labels">
+                                        <!--## date-->
+                                        <div class="act_as_cell first_column" style="width: 5.74%;">
+                                            Date</div>
+                                        <!--## move-->
+                                        <div class="act_as_cell" style="width: 8.77%">Entry</div>
+                                        <!--## journal-->
+                                        <div class="act_as_cell" style="width: 4.13%;">Journal</div>
+                                        <!--## account code-->
+                                        <div class="act_as_cell" style="width: 4.70%;">Account</div>
+                                        <!--## account code-->
+                                        <div class="act_as_cell" style="width: 8.89%;">Taxes</div>
+                                        <!--## partner-->
+                                        <div class="act_as_cell" style="width: 10.0%;">Partner
+                                        </div>
+                                        <!--## ref - label-->
+                                        <div class="act_as_cell" style="width: 17.0%;">Ref -
+                                            Label</div>
+                                        <t t-if="show_cost_center">
+                                            <!--## cost_center-->
+                                            <div class="act_as_cell" style="width: 7.03%;">Cost
+                                                center</div>
+                                        </t>
+                                        <!--## matching_number-->
+                                        <div class="act_as_cell" style="width: 2.41%;">Rec.</div>
+                                        <!--## debit-->
+                                        <div class="act_as_cell amount" style="width: 8.02%;">Debit</div>
+                                        <!--## credit-->
+                                        <div class="act_as_cell amount" style="width: 8.02%;">Credit</div>
+                                        <!--## balance cumulated-->
+                                        <div class="act_as_cell amount" style="width: 8.02%;">Cumul. Bal.</div>
+                                        <t t-if="foreign_currency">
+                                            <!--## currency_name-->
+                                            <div class="act_as_cell" style="width: 2.08%;">Cur.</div>
+                                            <!--## amount_currency-->
+                                            <div class="act_as_cell amount" style="width: 5.19%;">Amount cur.</div>
+                                        </t>
+                                    </div>
+                                </div>
+                                 
+                                <!-- Display first line with initial balance -->
+                                    
+                                <div class="act_as_row lines">
+                                    <!--## date-->
+                                    <div class="act_as_cell"/>
+                                    <!--## move-->
+                                    <div class="act_as_cell"/>
+                                    <!--## journal-->
+                                    <div class="act_as_cell"/>
+                                    <!--## account code-->
+                                    <div class="act_as_cell"/>
+                                    <!--## taxes-->
+                                    <div class="act_as_cell"/>
+                                    <!--## partner-->
+                                    <div class="act_as_cell"/>
+                                    <!--## ref - label-->
+                                    <div class="act_as_cell amount">Initial balance</div>
+                                    <t t-if="show_cost_center">
+                                        <!--## cost_center-->
+                                        <div class="act_as_cell"/>
+                                    </t>
+                                    <!--## matching_number-->
+                                    <div class="act_as_cell"/>
+                                    <!--## debit-->
+
+                                    <div class="act_as_cell amount">
+                                        <t t-raw="debit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                    </div>
+                                    <div class="act_as_cell amount">
+                                        <t t-raw="credit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                    </div>
+                                    <div class="act_as_cell amount">
+                                        <t t-raw="initial_balance" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                    </div>
+                                    <t t-if="foreign_currency">
+                                        <t t-if="account.account_id.currency_id.id">
+                                            <div class="act_as_cell amount" style="width: 2.08%;">
+                                                <span t-field="account.account_id.currency_id.display_name"/>
+                                            </div>
+                                            <div class="act_as_cell amount" style="width: 5.19%;">
+                                                <t t-raw="initial_balance_foreign_currency" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                            </div>
+                                        </t>
+                                        <t t-if="not account.account_id.currency_id.id">
+                                            <div class="act_as_cell" style="width: 2.08%;"/>
+                                            <div class="act_as_cell" style="width: 5.19%;"/>
+                                        </t>
+                                    </t>
+                                </div>
+                                <t t-foreach="account.partner_ids" t-as="partner">
                                     <t t-set="account_or_partner_object" t-value="partner"/>
-                                    <t t-set="type" t-value='"partner_type"'/>
+                                    <t t-foreach="partner.move_line_ids" t-as="line">
+                                        <!-- # lines or centralized lines -->
+                                        <div class="act_as_row lines">
+                                            <!--## date-->
+                                            <div class="act_as_cell left">
+                                                <t t-set="res_model" t-value="'account.move.line'" />
+                                                <span>
+                                                    <a t-att-data-active-id="line.move_line_id.id" t-att-data-res-model="res_model" class="o_account_financial_reports_web_action underline-on-hover" style="color: black; cursor: pointer;">
+                                                        <t t-raw="line.date" />
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            <!--## move-->
+                                            <div class="act_as_cell left">
+                                                <t t-set="res_model" t-value="'account.move'" />
+                                                <span>
+                                                    <a t-att-data-active-id="line.move_line_id.move_id.id" t-att-data-res-model="res_model" class="o_account_financial_reports_web_action underline-on-hover" style="color: black; cursor: pointer;">
+                                                        <t t-raw="line.entry" />
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            <!--## journal-->
+                                            <div class="act_as_cell left">
+                                                <t t-set="res_model" t-value="'account.journal'" />
+                                                <span>
+                                                    <a t-att-data-active-id="line.move_line_id.move_id.journal_id.id" t-att-data-res-model="res_model" class="o_account_financial_reports_web_action underline-on-hover" style="color: black; cursor: pointer;">
+                                                        <t t-raw="line.journal" />
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            <!--## account code-->
+                                            <div class="act_as_cell left">
+                                                <t t-set="res_model" t-value="'account.account'" />
+                                                <span>
+                                                    <a t-att-data-active-id="line.move_line_id.account_id.id" t-att-data-res-model="res_model" class="o_account_financial_reports_web_action underline-on-hover" style="color: black; cursor: pointer;">
+                                                        <t t-raw="line.account" />
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            <!--## taxes-->
+                                            <div class="act_as_cell left">
+                                                <span t-field="line.taxes_description" />
+                                            </div>
+                                            <!--## partner-->
+                                            <div class="act_as_cell left">
+                                                <t t-set="res_model" t-value="'res.partner'" />
+                                                <span t-if="line.partner">
+                                                    <a t-att-data-active-id="line.move_line_id.partner_id.id" t-att-data-res-model="res_model" class="o_account_financial_reports_web_action underline-on-hover" style="color: black; cursor: pointer;">
+                                                        <t t-raw="line.partner" />
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            <!--## ref - label-->
+                                            <div class="act_as_cell left">
+                                                <t t-set="res_model" t-value="'account.move.line'" />
+                                                <span>
+                                                    <a t-att-data-active-id="line.move_line_id.id" t-att-data-res-model="res_model" class="o_account_financial_reports_web_action underline-on-hover" style="color: black; cursor: pointer;">
+                                                        <t t-raw="line.label" />
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            <!--## cost_center-->
+                                            <t t-if="show_cost_center">
+                                                <div class="act_as_cell left">
+                                                    <t t-set="res_model" t-value="'account_analytic_account'" />
+                                                    <span t-if="line.cost_center">
+                                                        <a t-att-data-active-id="line.move_line_id.analytic_account_id.id" t-att-data-res-model="res_model" class="o_account_financial_reports_web_action underline-on-hover" style="color: black; cursor: pointer;">
+                                                            <t t-raw="line.cost_center" />
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                            </t>
+                                            <!--## matching_number-->
+                                            <div class="act_as_cell">
+                                                <t t-set="res_model" t-value="'account_full_reconcile'" />
+                                                <span t-if="line.matching_number">
+                                                    <a t-att-data-active-id="line.move_line_id.full_reconcile_id.id" t-att-data-res-model="res_model" class="o_account_financial_reports_web_action underline-on-hover" style="color: black; cursor: pointer;">
+                                                        <t t-raw="line.matching_number" />
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            <!--## debit-->
+                                            <div class="act_as_cell amount">
+                                                <t t-set="res_model" t-value="'account.move.line'" />
+                                                <span>
+                                                    <a t-att-data-active-id="line.move_line_id.id" t-att-data-res-model="res_model" class="o_account_financial_reports_web_action_monetary underline-on-hover" style="color: black; cursor: pointer;">
+                                                        <t t-raw="line.debit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            <!--## credit-->
+                                            <div class="act_as_cell amount">
+                                                <t t-set="res_model" t-value="'account.move.line'" />
+                                                <span>
+                                                    <a t-att-data-active-id="line.move_line_id.id" t-att-data-res-model="res_model" class="o_account_financial_reports_web_action_monetary underline-on-hover" style="color: black; cursor: pointer;">
+                                                        <t t-raw="line.credit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            <!--## balance cumulated-->
+                                            <div class="act_as_cell amount">
+                                                <t t-set="res_model" t-value="'account.move.line'" />
+                                                <span>
+                                                    <a t-att-data-active-id="line.move_line_id.id" t-att-data-res-model="res_model" class="o_account_financial_reports_web_action_monetary underline-on-hover" style="color: black; cursor: pointer;">
+                                                        <t t-raw="line.cumul_balance" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            <t t-if="foreign_currency">
+                                                <t t-if="line.currency_id.id">
+                                                    <!--## currency_name-->
+                                                    <div class="act_as_cell amount" style="width: 2.08%;">
+                                                        <span t-field="line.currency_id.display_name" />
+                                                    </div>
+                                                    <!--## amount_currency-->
+                                                    <div class="act_as_cell amount" style="width: 5.19%;">
+                                                        <t t-set="res_model" t-value="'account.move.line'" />
+                                                        <span>
+                                                            <a t-att-data-active-id="line.move_line_id.id" t-att-data-res-model="res_model" class="o_account_financial_reports_web_action underline-on-hover" style="color: black; cursor: pointer;">
+                                                                <t t-raw="line.amount_currency" t-options="{'widget': 'monetary', 'display_currency': line.currency_id}" />
+                                                            </a>
+                                                        </span>
+                                                    </div>
+                                                </t>
+                                                <t t-if="not line.currency_id.id">
+                                                    <!--## currency_name-->
+                                                    <div class="act_as_cell amount" style="width: 2.08%;" />
+                                                    <!--## amount_currency-->
+                                                    <div class="act_as_cell amount" style="width: 5.19%;" />
+                                                </t>
+                                            </t>
+                                        </div>
+                                    </t>
                                 </t>
                             </div>
                         </t>
                     </t>
-
                     <!-- Display account footer -->
                     <t t-call="account_financial_report_qweb.report_general_ledger_ending_cumul">
-                        <t t-set="account_or_partner_object" t-value="account"/>
-                        <t t-set="type" t-value='"account_type"'/>
+                        <t t-set="account_or_partner_object" t-value="account" />
+                        <t t-set="type" t-value="&quot;account_type&quot;" />
                     </t>
                 </div>
             </t>
         </div>
     </template>
-
     <template id="account_financial_report_qweb.report_general_ledger_filters">
         <div class="act_as_table data_table" style="width: 100%;">
             <div class="act_as_row labels">
@@ -83,8 +361,7 @@
             </div>
             <div class="act_as_row">
                 <div class="act_as_cell">
-                    From: <span t-field="o.date_from"/> To: <span t-field="o.date_to"/>
-                </div>
+                    From: <span t-field="o.date_from" /> To: <span t-field="o.date_to" /></div>
                 <div class="act_as_cell">
                     <t t-if="o.only_posted_moves">All posted entries</t>
                     <t t-if="not o.only_posted_moves">All entries</t>
@@ -100,7 +377,6 @@
             </div>
         </div>
     </template>
-
     <template id="account_financial_report_qweb.report_general_ledger_lines">
         <div class="act_as_table data_table" style="width: 100%;">
 
@@ -452,71 +728,59 @@
             </t>
         </div>
     </template>
-
     <template id="account_financial_report_qweb.report_general_ledger_ending_cumul">
         <!-- Display ending balance line for account or partner -->
         <div class="act_as_table list_table" style="width: 100%;">
             <div class="act_as_row labels" style="font-weight: bold;">
                 <!--## date-->
-                <t t-if='type == "account_type"'>
-                    <div class="act_as_cell first_column"
-                         style="width: 35.5%;"><span
-                            t-field="account_or_partner_object.code"/> - <span t-field="account_or_partner_object.name"/></div>
-                    <div class="act_as_cell right"
-                         style="width: 22.9%;">Ending balance</div>
+                <t t-if="type == &quot;account_type&quot;">
+                    <div class="act_as_cell first_column" style="width: 35.5%;">
+                        <span t-field="account_or_partner_object.code" /> - <span t-field="account_or_partner_object.name" /></div>
+                    <div class="act_as_cell right" style="width: 22.9%;">Ending balance</div>
                 </t>
-                <t t-if='type == "partner_type"'>
-                    <div class="act_as_cell first_column" style="width: 35.5%;"/>
+                <t t-if="type == &quot;partner_type&quot;">
+                    <div class="act_as_cell first_column" style="width: 35.5%;" />
                     <div class="act_as_cell right" style="width: 22.9%;">Partner ending balance</div>
                 </t>
                 <t t-if="show_cost_center">
                     <!--## cost_center-->
-                    <div class="act_as_cell" style="width: 7.03%"/>
+                    <div class="act_as_cell" style="width: 7.03%" />
                 </t>
                 <!--## matching_number-->
-                <div class="act_as_cell" style="width: 2.41%;"/>
+                <div class="act_as_cell" style="width: 2.41%;" />
                 <!--## debit-->
                 <div class="act_as_cell amount" style="width: 8.02%;">
-                    <span t-field="account_or_partner_object.final_debit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    <span t-field="account_or_partner_object.final_debit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
                 </div>
                 <!--## credit-->
                 <div class="act_as_cell amount" style="width: 8.02%;">
-                    <span t-field="account_or_partner_object.final_credit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    <span t-field="account_or_partner_object.final_credit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
                 </div>
                 <!--## balance cumulated-->
                 <div class="act_as_cell amount" style="width: 8.02%;">
-                    <span t-field="account_or_partner_object.final_balance" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    <span t-field="account_or_partner_object.final_balance" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
                 </div>
                 <!--## currency_name + amount_currency-->
                 <t t-if="foreign_currency">
                     <t t-if="account.account_id.currency_id.id">
                         <div class="act_as_cell amount" style="width: 2.08%;">
-                            <span t-field="account.account_id.currency_id.display_name"/>
+                            <span t-field="account.account_id.currency_id.display_name" />
                         </div>
                         <div class="act_as_cell amount" style="width: 5.19%;">
                             <t t-if="type == 'account_type'">
-                                <t t-set="domain"
-                                   t-value="[('account_id', '=', account_or_partner_object.account_id.id),
-                                             ('date', '&lt;', o.date_from)]"/>
+                                <t t-set="domain" t-value="[('account_id', '=', account_or_partner_object.account_id.id),                                              ('date', '&lt;', o.date_from)]" />
                                 <span>
-                                    <a t-att-data-domain="domain"
-                                       t-att-data-res-model="'account.move.line'"
-                                       class="o_account_financial_reports_web_action_monetary_multi"
-                                       style="color: black;">
-                                    <t t-raw="account_or_partner_object.final_balance_foreign_currency" t-options="{'widget': 'monetary', 'display_currency': account_or_partner_object.account_id.currency_id}"/></a>
+                                    <a t-att-data-domain="domain" t-att-data-res-model="'account.move.line'" class="o_account_financial_reports_web_action_monetary_multi" style="color: black;">
+                                        <t t-raw="account_or_partner_object.final_balance_foreign_currency" t-options="{'widget': 'monetary', 'display_currency': account_or_partner_object.account_id.currency_id}" />
+                                    </a>
                                 </span>
                             </t>
                             <t t-if="type == 'partner_type'">
-                                <t t-set="domain"
-                                   t-value="[('account_id', '=', account_or_partner_object.report_account_id.account_id.id),
-                                             ('partner_id', '=', account_or_partner_object.partner_id.id),
-                                             ('date', '&lt;', o.date_from)]"/>
+                                <t t-set="domain" t-value="[('account_id', '=', account_or_partner_object.report_account_id.account_id.id),                                              ('partner_id', '=', account_or_partner_object.partner_id.id),                                              ('date', '&lt;', o.date_from)]" />
                                 <span>
-                                    <a t-att-data-domain="domain"
-                                       t-att-data-res-model="'account.move.line'"
-                                       class="o_account_financial_reports_web_action_monetary_multi"
-                                       style="color: black;">
-                                    <t t-raw="account_or_partner_object.final_balance_foreign_currency" t-options="{'widget': 'monetary', 'display_currency': account_or_partner_object.report_account_id.currency_id}"/></a>
+                                    <a t-att-data-domain="domain" t-att-data-res-model="'account.move.line'" class="o_account_financial_reports_web_action_monetary_multi" style="color: black;">
+                                        <t t-raw="account_or_partner_object.final_balance_foreign_currency" t-options="{'widget': 'monetary', 'display_currency': account_or_partner_object.report_account_id.currency_id}" />
+                                    </a>
                                 </span>
                             </t>
                         </div>
@@ -529,5 +793,4 @@
             </div>
         </div>
     </template>
-
 </odoo>
