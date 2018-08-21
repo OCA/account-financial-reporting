@@ -17,7 +17,6 @@
         'account',
         'account_full_reconcile',
         'date_range',
-        'account_fiscal_year',
         'report_xlsx',
         'report',
     ],

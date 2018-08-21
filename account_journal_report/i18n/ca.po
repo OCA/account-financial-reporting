@@ -1,0 +1,265 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * account_journal_report
+#
+# Translators:
+# Marc Tormo i Bochaca <mtbochaca@gmail.com>, 2017
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 9.0c\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-06-09 14:33+0000\n"
+"PO-Revision-Date: 2017-06-09 14:33+0000\n"
+"Last-Translator: Marc Tormo i Bochaca <mtbochaca@gmail.com>, 2017\n"
+"Language-Team: Catalan (https://www.transifex.com/oca/teams/23907/ca/)\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: account_journal_report
+#: code:addons/account_journal_report/report/journal_ledger_report_xlsx.py:74
+#, python-format
+msgid " to "
+msgstr ""
+
+#. module: account_journal_report
+#: model:ir.ui.view,arch_db:account_journal_report.journal_ledger
+msgid "<em>Account name</em>"
+msgstr ""
+
+#. module: account_journal_report
+#: model:ir.ui.view,arch_db:account_journal_report.journal_ledger
+msgid "<em>Account</em>"
+msgstr ""
+
+#. module: account_journal_report
+#: model:ir.ui.view,arch_db:account_journal_report.journal_ledger
+msgid "<em>Description</em>"
+msgstr ""
+
+#. module: account_journal_report
+#: code:addons/account_journal_report/report/journal_ledger_report_xlsx.py:95
+#, python-format
+msgid "Account"
+msgstr "Compte "
+
+#. module: account_journal_report
+#: code:addons/account_journal_report/report/journal_ledger_report_xlsx.py:98
+#, python-format
+msgid "Account name"
+msgstr ""
+
+#. module: account_journal_report
+#: selection:account.journal.entries.report,sort_selection:0
+msgid "By date"
+msgstr ""
+
+#. module: account_journal_report
+#: selection:account.journal.entries.report,sort_selection:0
+msgid "By entry number"
+msgstr ""
+
+#. module: account_journal_report
+#: selection:account.journal.entries.report,sort_selection:0
+msgid "By reference number"
+msgstr ""
+
+#. module: account_journal_report
+#: model:ir.ui.view,arch_db:account_journal_report.account_journal_ledger_report_view
+msgid "Cancel"
+msgstr "Cancel·lar "
+
+#. module: account_journal_report
+#: model:ir.model.fields,field_description:account_journal_report.field_account_journal_entries_report_create_uid
+msgid "Created by"
+msgstr "Creat per "
+
+#. module: account_journal_report
+#: model:ir.model.fields,field_description:account_journal_report.field_account_journal_entries_report_create_date
+msgid "Created on"
+msgstr "Creat a "
+
+#. module: account_journal_report
+#: code:addons/account_journal_report/report/journal_ledger_report_xlsx.py:107
+#: model:ir.ui.view,arch_db:account_journal_report.journal_ledger
+#, python-format
+msgid "Credit"
+msgstr "Crèdit "
+
+#. module: account_journal_report
+#: code:addons/account_journal_report/report/journal_ledger_report_xlsx.py:92
+#: model:ir.ui.view,arch_db:account_journal_report.journal_ledger
+#, python-format
+msgid "Date"
+msgstr ""
+
+#. module: account_journal_report
+#: model:ir.model.fields,field_description:account_journal_report.field_account_journal_entries_report_date_end
+msgid "Date end"
+msgstr ""
+
+#. module: account_journal_report
+#: model:ir.model.fields,field_description:account_journal_report.field_account_journal_entries_report_date_start
+msgid "Date start"
+msgstr ""
+
+#. module: account_journal_report
+#: code:addons/account_journal_report/report/journal_ledger_report_xlsx.py:104
+#: model:ir.ui.view,arch_db:account_journal_report.journal_ledger
+#, python-format
+msgid "Debit"
+msgstr "Dèbit "
+
+#. module: account_journal_report
+#: code:addons/account_journal_report/report/journal_ledger_report_xlsx.py:101
+#, python-format
+msgid "Description"
+msgstr ""
+
+#. module: account_journal_report
+#: model:ir.model.fields,field_description:account_journal_report.field_account_journal_entries_report_display_name
+#: model:ir.model.fields,field_description:account_journal_report.field_report_account_journal_report_journal_ledger_display_name
+msgid "Display Name"
+msgstr "Nom a mostrar "
+
+#. module: account_journal_report
+#: model:ir.model.fields,field_description:account_journal_report.field_account_journal_entries_report_sort_selection
+msgid "Entries Sorted By"
+msgstr ""
+
+#. module: account_journal_report
+#: code:addons/account_journal_report/report/journal_ledger_report_xlsx.py:89
+#: model:ir.ui.view,arch_db:account_journal_report.journal_ledger
+#, python-format
+msgid "Entry"
+msgstr ""
+
+#. module: account_journal_report
+#: model:ir.ui.view,arch_db:account_journal_report.account_journal_ledger_report_view
+msgid "Export"
+msgstr ""
+
+#. module: account_journal_report
+#: model:ir.ui.view,arch_db:account_journal_report.journal_ledger
+msgid "From"
+msgstr ""
+
+#. module: account_journal_report
+#: code:addons/account_journal_report/report/journal_ledger_report_xlsx.py:74
+#, python-format
+msgid "From "
+msgstr ""
+
+#. module: account_journal_report
+#: model:ir.model.fields,field_description:account_journal_report.field_account_journal_entries_report_id
+#: model:ir.model.fields,field_description:account_journal_report.field_report_account_journal_report_journal_ledger_id
+msgid "ID"
+msgstr "ID"
+
+#. module: account_journal_report
+#: code:addons/account_journal_report/report/journal_ledger_report_xlsx.py:79
+#: model:ir.ui.view,arch_db:account_journal_report.journal_ledger
+#, python-format
+msgid "Journal"
+msgstr ""
+
+#. module: account_journal_report
+#: code:addons/account_journal_report/report/journal_ledger_report_xlsx.py:180
+#: model:ir.actions.report.xml,name:account_journal_report.account_journal_ledger_report
+#: model:ir.actions.report.xml,name:account_journal_report.action_account_journal_ledger_xlsx
+#: model:ir.ui.menu,name:account_journal_report.menu_journal_ledger_report
+#, python-format
+msgid "Journal Ledger"
+msgstr ""
+
+#. module: account_journal_report
+#: model:ir.ui.view,arch_db:account_journal_report.journal_ledger
+msgid "Journal Ledger -"
+msgstr ""
+
+#. module: account_journal_report
+#: model:ir.model.fields,field_description:account_journal_report.field_account_journal_entries_report_journal_ids
+msgid "Journals"
+msgstr ""
+
+#. module: account_journal_report
+#: model:ir.model.fields,field_description:account_journal_report.field_account_journal_entries_report_landscape
+msgid "Landscape mode"
+msgstr ""
+
+#. module: account_journal_report
+#: model:ir.model.fields,field_description:account_journal_report.field_account_journal_entries_report___last_update
+#: model:ir.model.fields,field_description:account_journal_report.field_report_account_journal_report_journal_ledger___last_update
+msgid "Last Modified on"
+msgstr "Última modificació a "
+
+#. module: account_journal_report
+#: model:ir.model.fields,field_description:account_journal_report.field_account_journal_entries_report_write_uid
+msgid "Last Updated by"
+msgstr "Última actualització per "
+
+#. module: account_journal_report
+#: model:ir.model.fields,field_description:account_journal_report.field_account_journal_entries_report_write_date
+msgid "Last Updated on"
+msgstr "Última actualització a "
+
+#. module: account_journal_report
+#: code:addons/account_journal_report/wizard/wizard_print_journal_ledger.py:57
+#: code:addons/account_journal_report/wizard/wizard_print_journal_ledger.py:76
+#, python-format
+msgid "No data available"
+msgstr ""
+
+#. module: account_journal_report
+#: code:addons/account_journal_report/wizard/wizard_print_journal_ledger.py:58
+#: code:addons/account_journal_report/wizard/wizard_print_journal_ledger.py:77
+#, python-format
+msgid "No records found for your selection!"
+msgstr ""
+
+#. module: account_journal_report
+#: code:addons/account_journal_report/report/journal_ledger_report_xlsx.py:82
+#: model:ir.ui.view,arch_db:account_journal_report.journal_ledger
+#, python-format
+msgid "Partner"
+msgstr ""
+
+#. module: account_journal_report
+#: model:ir.ui.view,arch_db:account_journal_report.account_journal_ledger_report_view
+msgid "Print"
+msgstr ""
+
+#. module: account_journal_report
+#: model:ir.actions.act_window,name:account_journal_report.wizard_account_journal_ledger_report_new
+#: model:ir.model,name:account_journal_report.model_account_journal_entries_report
+msgid "Print Journal Ledger"
+msgstr ""
+
+#. module: account_journal_report
+#: model:ir.ui.view,arch_db:account_journal_report.account_journal_ledger_report_view
+msgid "Print journal ledger"
+msgstr ""
+
+#. module: account_journal_report
+#: code:addons/account_journal_report/report/journal_ledger_report_xlsx.py:85
+#: model:ir.ui.view,arch_db:account_journal_report.journal_ledger
+#, python-format
+msgid "Reference"
+msgstr ""
+
+#. module: account_journal_report
+#: model:ir.ui.view,arch_db:account_journal_report.account_journal_ledger_report_view
+msgid "or"
+msgstr "o"
+
+#. module: account_journal_report
+#: model:ir.model,name:account_journal_report.model_report_account_journal_report_journal_ledger
+msgid "report.account_journal_report.journal_ledger"
+msgstr ""
+
+#. module: account_journal_report
+#: model:ir.ui.view,arch_db:account_journal_report.journal_ledger
+msgid "to"
+msgstr ""
