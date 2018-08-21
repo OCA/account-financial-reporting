@@ -17,6 +17,7 @@ class TrialBalanceReport(models.TransientModel):
     """
 
     _name = 'report_trial_balance_qweb'
+    _inherit = 'report_qweb_abstract'
 
     # Filters fields, used for data computation
     date_from = fields.Date()
@@ -47,6 +48,7 @@ class TrialBalanceReport(models.TransientModel):
 class TrialBalanceReportAccount(models.TransientModel):
 
     _name = 'report_trial_balance_qweb_account'
+    _inherit = 'report_qweb_abstract'
     _order = 'code ASC'
 
     report_id = fields.Many2one(
@@ -87,6 +89,7 @@ class TrialBalanceReportAccount(models.TransientModel):
 class TrialBalanceReportPartner(models.TransientModel):
 
     _name = 'report_trial_balance_qweb_partner'
+    _inherit = 'report_qweb_abstract'
 
     report_account_id = fields.Many2one(
         comodel_name='report_trial_balance_qweb_account',

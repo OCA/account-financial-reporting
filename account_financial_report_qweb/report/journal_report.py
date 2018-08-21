@@ -10,6 +10,7 @@ DIGITS = (16, 2)
 class ReportJournalQweb(models.TransientModel):
 
     _name = 'report_journal_qweb'
+    _inherit = 'report_qweb_abstract'
 
     date_from = fields.Date(
         required=True
@@ -622,6 +623,7 @@ class ReportJournalQweb(models.TransientModel):
 class ReportJournalQwebJournal(models.TransientModel):
 
     _name = 'report_journal_qweb_journal'
+    _inherit = 'report_qweb_abstract'
 
     name = fields.Char(
         required=True,
@@ -664,6 +666,7 @@ class ReportJournalQwebJournal(models.TransientModel):
 class ReportJournalQwebMove(models.TransientModel):
 
     _name = 'report_journal_qweb_move'
+    _inherit = 'report_qweb_abstract'
 
     report_id = fields.Many2one(
         comodel_name='report_journal_qweb',
@@ -695,6 +698,7 @@ class ReportJournalQwebMove(models.TransientModel):
 class ReportJournalQwebMoveLine(models.TransientModel):
 
     _name = 'report_journal_qweb_move_line'
+    _inherit = 'report_qweb_abstract'
     _order = 'partner_id desc, account_id desc'
 
     report_id = fields.Many2one(
@@ -760,6 +764,7 @@ class ReportJournalQwebMoveLine(models.TransientModel):
 class ReportJournalQwebReportTaxLine(models.TransientModel):
 
     _name = 'report_journal_qweb_report_tax_line'
+    _inherit = 'report_qweb_abstract'
     _order = 'tax_code'
 
     report_id = fields.Many2one(
