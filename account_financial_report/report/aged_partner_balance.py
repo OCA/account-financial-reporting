@@ -18,6 +18,7 @@ class AgedPartnerBalanceReport(models.TransientModel):
     """
 
     _name = 'report_aged_partner_balance'
+    _inherit = 'account_financial_report_abstract'
 
     # Filters fields, used for data computation
     date_at = fields.Date()
@@ -39,6 +40,7 @@ class AgedPartnerBalanceReport(models.TransientModel):
 
 class AgedPartnerBalanceReportAccount(models.TransientModel):
     _name = 'report_aged_partner_balance_account'
+    _inherit = 'account_financial_report_abstract'
     _order = 'code ASC'
 
     report_id = fields.Many2one(
@@ -81,6 +83,7 @@ class AgedPartnerBalanceReportAccount(models.TransientModel):
 
 class AgedPartnerBalanceReportPartner(models.TransientModel):
     _name = 'report_aged_partner_balance_partner'
+    _inherit = 'account_financial_report_abstract'
 
     report_account_id = fields.Many2one(
         comodel_name='report_aged_partner_balance_account',
@@ -124,6 +127,7 @@ ORDER BY
 
 class AgedPartnerBalanceReportLine(models.TransientModel):
     _name = 'report_aged_partner_balance_line'
+    _inherit = 'account_financial_report_abstract'
 
     report_partner_id = fields.Many2one(
         comodel_name='report_aged_partner_balance_partner',
@@ -144,6 +148,7 @@ class AgedPartnerBalanceReportLine(models.TransientModel):
 
 class AgedPartnerBalanceReportMoveLine(models.TransientModel):
     _name = 'report_aged_partner_balance_move_line'
+    _inherit = 'account_financial_report_abstract'
 
     report_partner_id = fields.Many2one(
         comodel_name='report_aged_partner_balance_partner',

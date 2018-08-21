@@ -6,6 +6,7 @@ from odoo import api, fields, models
 
 class VATReport(models.TransientModel):
     _name = "report_vat_report"
+    _inherit = 'account_financial_report_abstract'
     """ Here, we just define class fields.
     For methods, go more bottom at this file.
 
@@ -35,6 +36,7 @@ class VATReport(models.TransientModel):
 
 class VATReportTaxTags(models.TransientModel):
     _name = 'report_vat_report_taxtag'
+    _inherit = 'account_financial_report_abstract'
     _order = 'code ASC'
 
     report_id = fields.Many2one(
@@ -68,6 +70,7 @@ class VATReportTaxTags(models.TransientModel):
 
 class VATReportTax(models.TransientModel):
     _name = 'report_vat_report_tax'
+    _inherit = 'account_financial_report_abstract'
     _order = 'name ASC'
 
     report_tax_id = fields.Many2one(
