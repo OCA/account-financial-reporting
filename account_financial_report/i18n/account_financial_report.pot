@@ -398,7 +398,7 @@ msgid "Centralized"
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger.py:1233
+#: code:addons/account_financial_report/report/general_ledger.py:1237
 #, python-format
 msgid "Centralized Entries"
 msgstr ""
@@ -799,6 +799,7 @@ msgid "Detail Taxes"
 msgstr ""
 
 #. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract_display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard_display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard_display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard_display_name
@@ -1150,6 +1151,7 @@ msgid "Hierarchy On"
 msgstr ""
 
 #. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract_id
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard_id
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard_id
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard_id
@@ -1308,6 +1310,7 @@ msgid "Label"
 msgstr ""
 
 #. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract___last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard___last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard___last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard___last_update
@@ -1511,10 +1514,10 @@ msgid "No group"
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger.py:684
-#: code:addons/account_financial_report/report/general_ledger.py:981
-#: code:addons/account_financial_report/report/open_items.py:302
-#: code:addons/account_financial_report/report/open_items.py:551
+#: code:addons/account_financial_report/report/general_ledger.py:688
+#: code:addons/account_financial_report/report/general_ledger.py:985
+#: code:addons/account_financial_report/report/open_items.py:306
+#: code:addons/account_financial_report/report/open_items.py:555
 #, python-format
 msgid "No partner allocated"
 msgstr ""
@@ -2119,6 +2122,11 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_group
 msgid "account.group"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_account_financial_report_abstract
+msgid "account_financial_report_abstract"
 msgstr ""
 
 #. module: account_financial_report

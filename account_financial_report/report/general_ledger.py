@@ -22,6 +22,7 @@ class GeneralLedgerReport(models.TransientModel):
     """
 
     _name = 'report_general_ledger'
+    _inherit = 'account_financial_report_abstract'
 
     # Filters fields, used for data computation
     date_from = fields.Date()
@@ -74,6 +75,7 @@ class GeneralLedgerReport(models.TransientModel):
 class GeneralLedgerReportAccount(models.TransientModel):
 
     _name = 'report_general_ledger_account'
+    _inherit = 'account_financial_report_abstract'
     _order = 'code ASC'
 
     report_id = fields.Many2one(
@@ -118,6 +120,7 @@ class GeneralLedgerReportAccount(models.TransientModel):
 class GeneralLedgerReportPartner(models.TransientModel):
 
     _name = 'report_general_ledger_partner'
+    _inherit = 'account_financial_report_abstract'
 
     report_account_id = fields.Many2one(
         comodel_name='report_general_ledger_account',
@@ -166,6 +169,7 @@ ORDER BY
 class GeneralLedgerReportMoveLine(models.TransientModel):
 
     _name = 'report_general_ledger_move_line'
+    _inherit = 'account_financial_report_abstract'
 
     report_account_id = fields.Many2one(
         comodel_name='report_general_ledger_account',
