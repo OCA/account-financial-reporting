@@ -17,6 +17,7 @@ class OpenItemsReport(models.TransientModel):
     """
 
     _name = 'report_open_items'
+    _inherit = 'account_financial_report_abstract'
 
     # Filters fields, used for data computation
     date_at = fields.Date()
@@ -37,6 +38,7 @@ class OpenItemsReport(models.TransientModel):
 class OpenItemsReportAccount(models.TransientModel):
 
     _name = 'report_open_items_account'
+    _inherit = 'account_financial_report_abstract'
     _order = 'code ASC'
 
     report_id = fields.Many2one(
@@ -70,6 +72,7 @@ class OpenItemsReportAccount(models.TransientModel):
 class OpenItemsReportPartner(models.TransientModel):
 
     _name = 'report_open_items_partner'
+    _inherit = 'account_financial_report_abstract'
 
     report_account_id = fields.Many2one(
         comodel_name='report_open_items_account',
@@ -114,6 +117,7 @@ ORDER BY
 class OpenItemsReportMoveLine(models.TransientModel):
 
     _name = 'report_open_items_move_line'
+    _inherit = 'account_financial_report_abstract'
 
     report_partner_id = fields.Many2one(
         comodel_name='report_open_items_partner',
