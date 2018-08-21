@@ -9,6 +9,7 @@ DIGITS = (16, 2)
 class ReportJournalLedger(models.TransientModel):
 
     _name = 'report_journal_ledger'
+    _inherit = 'account_financial_report_abstract'
 
     date_from = fields.Date(
         required=True
@@ -615,6 +616,7 @@ class ReportJournalLedger(models.TransientModel):
 class ReportJournalLedgerJournal(models.TransientModel):
 
     _name = 'report_journal_ledger_journal'
+    _inherit = 'account_financial_report_abstract'
 
     name = fields.Char(
         required=True,
@@ -657,6 +659,7 @@ class ReportJournalLedgerJournal(models.TransientModel):
 class ReportJournalLedgerMove(models.TransientModel):
 
     _name = 'report_journal_ledger_move'
+    _inherit = 'account_financial_report_abstract'
 
     report_id = fields.Many2one(
         comodel_name='report_journal_ledger',
@@ -688,6 +691,7 @@ class ReportJournalLedgerMove(models.TransientModel):
 class ReportJournalLedgerMoveLine(models.TransientModel):
 
     _name = 'report_journal_ledger_move_line'
+    _inherit = 'account_financial_report_abstract'
     _order = 'partner_id desc, account_id desc'
 
     report_id = fields.Many2one(
@@ -753,6 +757,7 @@ class ReportJournalLedgerMoveLine(models.TransientModel):
 class ReportJournalLedgerReportTaxLine(models.TransientModel):
 
     _name = 'report_journal_ledger_report_tax_line'
+    _inherit = 'account_financial_report_abstract'
     _order = 'tax_code'
 
     report_id = fields.Many2one(
