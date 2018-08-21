@@ -49,8 +49,14 @@ msgid "Account type"
 msgstr ""
 
 #. module: customer_activity_statement
+#: model:ir.actions.report,name:customer_activity_statement.action_print_customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Activity Statement"
+msgstr ""
+
+#. module: customer_activity_statement
+#: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
+msgid "Activity Statement between"
 msgstr ""
 
 #. module: customer_activity_statement
@@ -111,11 +117,6 @@ msgstr ""
 #. module: customer_activity_statement
 #: model:ir.model,name:customer_activity_statement.model_customer_activity_statement_wizard
 msgid "Customer Activity Statement Wizard"
-msgstr ""
-
-#. module: customer_activity_statement
-#: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
-msgid "Customer Activity Statement between"
 msgstr ""
 
 #. module: customer_activity_statement
@@ -219,16 +220,6 @@ msgstr ""
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Reference number"
-msgstr ""
-
-#. module: customer_activity_statement
-#: model:ir.actions.report,name:customer_activity_statement.action_print_customer_activity_statement
-msgid "Statement Action to PDF"
-msgstr ""
-
-#. module: customer_activity_statement
-#: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
-msgid "Supplier Activity Statement between"
 msgstr ""
 
 #. module: customer_activity_statement
