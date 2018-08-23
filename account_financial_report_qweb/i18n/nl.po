@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2018-08-23 18:55+0000\n"
+"PO-Revision-Date: 2018-08-23 18:56+0000\n"
 "Last-Translator: Stefan Rijnhart (Opener) <stefan@opener.am>\n"
 "Language-Team: none\n"
 "Language: nl\n"
@@ -908,12 +908,12 @@ msgstr "Kostenplaatsenfilter"
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_filter_journal_ids
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_filter_journal_ids
 msgid "Filter journal ids"
-msgstr ""
+msgstr "Filterjournalen"
 
 #. module: account_financial_report_qweb
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_general_ledger_report_wizard_journal_ids
 msgid "Filter journals"
-msgstr ""
+msgstr "Filterjournalen"
 
 #. module: account_financial_report_qweb
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_aged_partner_balance_qweb_filter_partner_ids
@@ -2091,7 +2091,7 @@ msgstr "report_open_items_qweb_partner"
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_qweb_abstract
 msgid "report_qweb_abstract"
-msgstr ""
+msgstr "report_qweb_abstract"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_trial_balance_qweb
