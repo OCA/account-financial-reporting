@@ -17,6 +17,7 @@
                             <field name="date_from"/>
                             <field name="date_to"/>
                             <field name="fy_start_date" invisible="1"/>
+                            <field name="journal_ids" widget="many2many_tags" options="{'no_create': True}"/>
                         </group>
                         <group name="other_filters">
                             <field name="target_move" widget="radio"/>
@@ -25,15 +26,14 @@
                             <field name="foreign_currency"/>
                         </group>
                     </group>
-                    <label for="cost_center_ids" groups="analytic.group_analytic_accounting"/>
-                    <field name="cost_center_ids" nolabel="1" options="{'no_create': True}" groups="analytic.group_analytic_accounting"/>
-                    <group/>
-                    <label for="partner_ids"/>
-                    <field name="partner_ids" nolabel="1" options="{'no_create': True}"/>
-                    <group/>
-                    <label for="journal_ids"/>
-                    <field name="journal_ids" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
-                    <group/>
+                    <group groups="analytic.group_analytic_accounting" name="cost_center_filter" col="1">
+                        <label for="cost_center_ids"/>
+                        <field name="cost_center_ids" nolabel="1" options="{'no_create': True}" groups="analytic.group_analytic_accounting"/>
+                    </group>
+                    <group name="partner_filter" col="1">
+                        <label for="partner_ids"/>
+                        <field name="partner_ids" nolabel="1" options="{'no_create': True}"/>
+                    </group>
                     <label for="account_ids"/>
                     <group col="4">
                         <field name="receivable_accounts_only"/>
