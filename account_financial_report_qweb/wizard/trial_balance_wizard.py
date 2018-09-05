@@ -51,6 +51,7 @@ class TrialBalanceReportWizard(models.TransientModel):
     )
     journal_ids = fields.Many2many(
         comodel_name="account.journal",
+        string="Filter journals",
     )
 
     not_only_one_unaffected_earnings_account = fields.Boolean(
