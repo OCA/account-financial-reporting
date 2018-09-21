@@ -15,7 +15,7 @@ class AbstractReport(models.AbstractModel):
         query = """
 DELETE FROM """ + self._table + """
 WHERE COALESCE(
-    write_date, self.create_date, (now() at time zone 'UTC'))::timestamp
+    write_date, create_date, (now() at time zone 'UTC'))::timestamp
     < ((now() at time zone 'UTC') - interval %s)
 """
         self.env.cr.execute(query, ("%s seconds" % seconds,))
