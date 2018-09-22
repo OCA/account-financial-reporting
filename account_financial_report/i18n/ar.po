@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2018-06-30 07:01+0000\n"
-"Last-Translator: Osoul <baruni@osoul.ly>\n"
+"PO-Revision-Date: 2018-09-23 16:01+0000\n"
+"Last-Translator: yaseentai <eltahiryaseen@outlook.com>\n"
 "Language-Team: none\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
@@ -14,17 +14,17 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 3.0.1\n"
+"X-Generator: Weblate 3.1.1\n"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "&gt; 120 d."
-msgstr "‫&gt; 120 يوم"
+msgstr "‫&gt; 120 يوم."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "1 - 30 d."
-msgstr "1 - 30 يوم"
+msgstr "1 - 30 يوم."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
@@ -34,17 +34,17 @@ msgstr "10"
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "31 - 60 d."
-msgstr "31 - 60 يوم"
+msgstr "31 - 60 يوم."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "61 - 90 d."
-msgstr "61 - 90 يوم"
+msgstr "61 - 90 يوم."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "91 - 120 d."
-msgstr "91 - 120 يوم"
+msgstr "91 - 120 يوم."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
@@ -165,52 +165,52 @@ msgstr "90 يوم"
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:104
 #, python-format
 msgid "Age â¤ 120 d."
-msgstr "‫â¤ 120 يوم"
+msgstr "‫â¤ 120 يوم."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:31
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:83
 #, python-format
 msgid "Age â¤ 30 d."
-msgstr "‫â¤ 30 يوم"
+msgstr "‫â¤ 30 يوم."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:37
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:90
 #, python-format
 msgid "Age â¤ 60 d."
-msgstr "‫‫‫â¤ 60 يوم"
+msgstr "‫‫‫â¤ 60 يوم."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:43
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:97
 #, python-format
 msgid "Age â¤ 90 d."
-msgstr "‫‫‫â¤ 90 يوم"
+msgstr "‫‫‫â¤ 90 يوم."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid "Age ≤ 120\n"
 "                        d."
-msgstr "≤ 120 يوم"
+msgstr "≤ 120 يوم."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid "Age ≤ 30\n"
 "                        d."
-msgstr "≤ 30 يوم"
+msgstr "المدة ≤ 30 يوم."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid "Age ≤ 60\n"
 "                        d."
-msgstr "≤ 60 يوم"
+msgstr "المدة ≤ 60 يوم."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid "Age ≤ 90\n"
 "                        d."
-msgstr "≤ 90 يوم"
+msgstr "المدة ≤ 90 يوم."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:14
@@ -285,7 +285,7 @@ msgstr "المرحّلة فقط"
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "Amount Cur."
-msgstr "القيمة بالعملة"
+msgstr "القيمة بالعملة."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:81
@@ -322,7 +322,7 @@ msgstr "إجمالي المستحق بالعملة"
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #, python-format
 msgid "Amount cur."
-msgstr "القيمة بالعملة"
+msgstr "القيمة بالعملة."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
@@ -616,7 +616,7 @@ msgstr "المتراكم القديم"
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #, python-format
 msgid "Cumul. Bal."
-msgstr "الرصيد"
+msgstr "الرصيد التراكمي."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:53
@@ -896,7 +896,7 @@ msgstr "الرصيد الختامي"
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
 msgid "Ending blance cur."
-msgstr "الرصيد الختامي بالعملة"
+msgstr "الرصيد الختامي بالعملة."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:176
@@ -1236,7 +1236,7 @@ msgstr "الرصيد الافتتاحي"
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
 msgid "Initial blance cur."
-msgstr "‫الرصيد الافتتاحي بالعملة"
+msgstr "‫الرصيد الافتتاحي بالعملة."
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_account_is_partner_account
