@@ -11,49 +11,50 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-22 16:14+0000\n"
-"PO-Revision-Date: 2017-12-22 16:14+0000\n"
-"Last-Translator: Pedro M. Baeza <pedro.baeza@gmail.com>, 2017\n"
+"PO-Revision-Date: 2018-09-25 17:02+0000\n"
+"Last-Translator: Jimmy Ramos <jimmybanegas93@gmail.com>\n"
 "Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.1.1\n"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "+120 Days Due"
-msgstr ""
+msgstr "+120 Días"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "1-30 Days Due"
-msgstr ""
+msgstr "1-30 Días"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "30-60 Days Due"
-msgstr ""
+msgstr "30-60 Días"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "60-90 Days Due"
-msgstr ""
+msgstr "60-90 Días"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "90-120 Days Due"
-msgstr ""
+msgstr "90-120 Días"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "<strong>The partner doesn't have due entries.</strong>"
-msgstr ""
+msgstr "<strong>Este cliente no tiene pagos pendientes</strong>"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Aging Report at"
-msgstr ""
+msgstr "Reporte de vencidos al"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
@@ -62,6 +63,9 @@ msgid ""
 "buckets (30 days due, ...), so the customer can review how much is open, due "
 "or overdue."
 msgstr ""
+"Detalles de vencidos pueden ser mostrados en el reporte, expresados en "
+"rangos……de mora (30 días, …), para que el cliente pueda revisar cuando está "
+"abierto, cuando debe y cuańto está vencido."
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
@@ -71,7 +75,7 @@ msgstr "Cuota"
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Balance Due"
-msgstr ""
+msgstr "Saldo"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
@@ -96,17 +100,17 @@ msgstr "Creado en"
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Current Due"
-msgstr ""
+msgstr "Saldo a la Fecha"
 
 #. module: customer_outstanding_statement
 #: model:ir.actions.act_window,name:customer_outstanding_statement.customer_outstanding_statement_wizard_action
 msgid "Customer Outstanding Statement"
-msgstr ""
+msgstr "Estado de Cuenta de Cliente"
 
 #. module: customer_outstanding_statement
 #: model:ir.model,name:customer_outstanding_statement.model_customer_outstanding_statement_wizard
 msgid "Customer Outstanding Statement Wizard"
-msgstr ""
+msgstr "Asistente de Estado de Cuenta de Cliente"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
@@ -115,14 +119,13 @@ msgstr "Fecha"
 
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_date_end
-#, fuzzy
 msgid "Date End"
-msgstr "Fecha"
+msgstr "Fecha Fin"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Date:"
-msgstr ""
+msgstr "Fecha:"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
@@ -138,17 +141,17 @@ msgstr "Nombre a mostrar"
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_filter_partners_non_due
 msgid "Don't show partners with no due entries"
-msgstr ""
+msgstr "No mostrar clientes sin saldo pendiente"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Due Date"
-msgstr ""
+msgstr "Fecha de Pago"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Ending Balance"
-msgstr ""
+msgstr "Saldo Final"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
@@ -164,7 +167,7 @@ msgstr "ID"
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_show_aging_buckets
 msgid "Include Aging Buckets"
-msgstr ""
+msgstr "Inluir Períodos de Mora"
 
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard___last_update
@@ -185,42 +188,42 @@ msgstr "Última actualización en"
 #. module: customer_outstanding_statement
 #: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_number_partner_ids
 msgid "Number Partner"
-msgstr ""
+msgstr "Número de Cliente"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Open Amount"
-msgstr ""
+msgstr "Saldo Abierto"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Original Amount"
-msgstr ""
+msgstr "Saldo Original"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Outstanding Statement"
-msgstr ""
+msgstr "Estado de Cuenta"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Outstanding Statement at"
-msgstr ""
+msgstr "Estado de Cuenta al"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Partner ref:"
-msgstr ""
+msgstr "Ref. de Cliente:"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Reference number"
-msgstr ""
+msgstr "Número de Referencia"
 
 #. module: customer_outstanding_statement
 #: model:ir.actions.report,name:customer_outstanding_statement.action_print_customer_outstanding_statement
 msgid "Statement Action to PDF"
-msgstr ""
+msgstr "Acción Estado a PDF"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
@@ -230,11 +233,15 @@ msgid ""
 "invoices, unclaimed         refunds and outstanding payments. The list is "
 "displayed in chronological order and is         split by currencies."
 msgstr ""
+"El estado de cuenta proporciona detalles de todas las cuentas por cobrar "
+"pendientes…… de clientes hasta una fecha determinada. Esto incluye todas las "
+"facturas no pagadas, reembolsos…… no reclamados y pagos pendientes. La lista "
+"se muestra en orden cronológico y se divide por monedas."
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "in"
-msgstr ""
+msgstr "en"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
@@ -244,4 +251,4 @@ msgstr "o"
 #. module: customer_outstanding_statement
 #: model:ir.model,name:customer_outstanding_statement.model_report_customer_outstanding_statement_statement
 msgid "report.customer_outstanding_statement.statement"
-msgstr ""
+msgstr "informe.estado_de_cuenta_de_cliente"
