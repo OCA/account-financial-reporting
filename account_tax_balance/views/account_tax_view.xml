@@ -47,9 +47,9 @@
             <field name="type_tax_use"/>
             <field name="account_id"/>
             <group expand="0" string="Group By">
-                <filter string="Tax Group" domain="[]" context="{'group_by':'tax_group_id'}"/>
-                <filter string="Tax Scope" domain="[]" context="{'group_by':'type_tax_use'}"/>
-                <filter string="Account" domain="[]" context="{'group_by':'account_id'}"/>
+                <filter name="tax_group" string="Tax Group" domain="[]" context="{'group_by':'tax_group_id'}"/>
+                <filter name="tax_scope" string="Tax Scope" domain="[]" context="{'group_by':'type_tax_use'}"/>
+                <filter name="tax_account" string="Account" domain="[]" context="{'group_by':'account_id'}"/>
             </group>
         </search>
     </field>
