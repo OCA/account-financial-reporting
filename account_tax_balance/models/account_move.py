@@ -1,21 +1,26 @@
 # © 2016 Antonio Espinosa <antonio.espinosa@tecnativa.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, fields, api
+from odoo import api, fields, models
 
 
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
-    move_type = fields.Selection(
-        string="Move type", selection=[
+    @api.model
+    def _selection_move_type(self):
+        return [
             ('other', 'Other'),
             ('liquidity', 'Liquidity'),
             ('receivable', 'Receivable'),
             ('receivable_refund', 'Receivable refund'),
             ('payable', 'Payable'),
             ('payable_refund', 'Payable refund'),
-        ], compute='_compute_move_type', store=True, readonly=True)
+        ]
+
+    move_type = fields.Selection(
+        selection='_selection_move_type',
+        compute='_compute_move_type', store=True, readonly=True)
 
     @api.multi
     @api.depends(
