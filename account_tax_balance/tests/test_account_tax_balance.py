@@ -2,10 +2,12 @@
 # © 2016 Giovanni Capalbo <giovanni@therp.nl>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp.fields import Date
-from openerp.tests.common import HttpCase
 from datetime import datetime
+
 from dateutil.rrule import MONTHLY
+
+from odoo.fields import Date
+from odoo.tests.common import HttpCase
 
 
 class TestAccountTaxBalance(HttpCase):
@@ -143,6 +145,9 @@ class TestAccountTaxBalance(HttpCase):
 
         # change the state of refund to open by clicking Validate button
         refund.action_invoice_open()
+
+        # force the _compute_balance() to be triggered
+        tax._compute_balance()
 
         self.assertEqual(tax.base_balance, 75.)
         self.assertEqual(tax.balance, 7.5)
