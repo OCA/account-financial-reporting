@@ -24,7 +24,7 @@ class TrialBalanceReport(models.TransientModel):
     date_to = fields.Date()
     fy_start_date = fields.Date()
     only_posted_moves = fields.Boolean()
-    hide_account_balance_at_0 = fields.Boolean()
+    hide_account_at_0 = fields.Boolean()
     foreign_currency = fields.Boolean()
     company_id = fields.Many2one(comodel_name='res.company')
     filter_account_ids = fields.Many2many(comodel_name='account.account')
@@ -75,6 +75,7 @@ class TrialBalanceReportAccount(models.TransientModel):
     initial_balance_foreign_currency = fields.Float(digits=(16, 2))
     debit = fields.Float(digits=(16, 2))
     credit = fields.Float(digits=(16, 2))
+    period_balance = fields.Float(digits=(16, 2))
     currency_id = fields.Many2one(comodel_name='res.currency')
     final_balance = fields.Float(digits=(16, 2))
     final_balance_foreign_currency = fields.Float(digits=(16, 2))
@@ -110,6 +111,7 @@ class TrialBalanceReportPartner(models.TransientModel):
     initial_balance_foreign_currency = fields.Float(digits=(16, 2))
     debit = fields.Float(digits=(16, 2))
     credit = fields.Float(digits=(16, 2))
+    period_balance = fields.Float(digits=(16, 2))
     currency_id = fields.Many2one(comodel_name='res.currency')
     final_balance = fields.Float(digits=(16, 2))
     final_balance_foreign_currency = fields.Float(digits=(16, 2))
@@ -169,7 +171,7 @@ class TrialBalanceReportCompute(models.TransientModel):
             'date_from': self.date_from,
             'date_to': self.date_to,
             'only_posted_moves': self.only_posted_moves,
-            'hide_account_balance_at_0': self.hide_account_balance_at_0,
+            'hide_account_balance_at_0': False,
             'foreign_currency': self.foreign_currency,
             'company_id': self.company_id.id,
             'filter_account_ids': [(6, 0, account_ids.ids)],
@@ -219,6 +221,7 @@ INSERT INTO
     initial_balance,
     debit,
     credit,
+    period_balance,
     final_balance,
     currency_id,
     initial_balance_foreign_currency,
@@ -234,6 +237,7 @@ SELECT
     coalesce(rag.initial_balance, 0) AS initial_balance,
     coalesce(rag.final_debit - rag.initial_debit, 0) AS debit,
     coalesce(rag.final_credit - rag.initial_credit, 0) AS credit,
+    coalesce(rag.final_balance - rag.initial_balance, 0) AS period_balance,
     coalesce(rag.final_balance, 0) AS final_balance,
     rag.currency_id AS currency_id,
     coalesce(rag.initial_balance_foreign_currency, 0)
@@ -247,9 +251,16 @@ FROM
 WHERE
     acc.id in %s
         """
-        if self.hide_account_balance_at_0:
-            query_inject_account += """ AND
-    final_balance IS NOT NULL AND final_balance != 0"""
+        if self.hide_account_at_0:
+            query_inject_account += """ AND (
+    (initial_balance IS NOT NULL AND initial_balance != 0) OR
+    ((final_debit - initial_debit) IS NOT NULL AND
+     (final_debit - initial_debit) != 0) OR
+    ((final_credit - initial_credit) IS NOT NULL AND
+     (final_credit - initial_credit) != 0) OR
+    (final_balance IS NOT NULL AND final_balance != 0)
+    )
+    """
         query_inject_account_params = (
             self.id,
             self.env.uid,
@@ -273,6 +284,7 @@ INSERT INTO
     initial_balance_foreign_currency,
     debit,
     credit,
+    period_balance,
     final_balance,
     final_balance_foreign_currency
     )
@@ -286,6 +298,7 @@ SELECT
     rpg.initial_balance_foreign_currency AS initial_balance_foreign_currency,
     rpg.final_debit - rpg.initial_debit AS debit,
     rpg.final_credit - rpg.initial_credit AS credit,
+    rpg.final_balance - rpg.initial_balance AS period_balance,
     rpg.final_balance AS final_balance,
     rpg.final_balance_foreign_currency AS final_balance_foreign_currency
 FROM
