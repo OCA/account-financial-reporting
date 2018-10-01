@@ -6,13 +6,12 @@
 {
     "name": "Tax Balance",
     "summary": "Compute tax balances based on date range",
-    "version": "11.0.1.0.0",
-    "category": "Accounting & Finance",
-    "website": "https://www.agilebg.com/",
+    "version": "12.0.1.0.0",
+    "category": "Invoices & Payments",
+    "website": "https://github.com/OCA/account-financial-reporting",
     "author": "Agile Business Group, Therp BV, Tecnativa, ACSONE SA/NV, "
               "Odoo Community Association (OCA)",
     "license": "AGPL-3",
-    "application": False,
     "installable": True,
     "depends": [
         "account",
@@ -24,6 +23,6 @@
         "views/account_tax_view.xml",
     ],
     "images": [
-        'images/tax_balance.png',
+        "images/tax_balance.png",
     ]
 }

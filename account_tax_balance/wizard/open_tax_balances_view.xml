@@ -4,7 +4,6 @@
 <odoo>
 
 <record id="wizard_open_tax_balances" model="ir.ui.view">
-    <field name="name">wizard_open_tax_balances</field>
     <field name="model">wizard.open.tax.balances</field>
     <field name="arch" type="xml">
         <form string="Taxes Balance">

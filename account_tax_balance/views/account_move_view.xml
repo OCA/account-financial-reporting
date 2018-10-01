@@ -3,7 +3,6 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
 
-
 <record id="view_move_tree" model="ir.ui.view">
     <field name="name">Add move type column</field>
     <field name="model">account.move</field>
@@ -32,7 +31,7 @@
     <field name="inherit_id" ref="account.view_account_move_filter"/>
     <field name="arch" type="xml">
         <group expand="0" position="inside">
-            <filter string="Move type" domain="[]" context="{'group_by':'move_type'}"/>
+            <filter name="move_type" string="Move type" domain="[]" context="{'group_by':'move_type'}"/>
         </group>
     </field>
 </record>

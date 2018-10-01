@@ -1,11 +1,13 @@
 # © 2016 Lorenzo Battistini - Agile Business Group
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, fields, api
+from odoo import api, fields, models
 
 
-class OpenTaxBalances(models.TransientModel):
+class WizardOpenTaxBalances(models.TransientModel):
     _name = 'wizard.open.tax.balances'
+    _description = 'Wizard Open Tax Balances'
+
     company_id = fields.Many2one(
         'res.company', 'Company', required=True,
         default=lambda self: self.env.user.company_id)
