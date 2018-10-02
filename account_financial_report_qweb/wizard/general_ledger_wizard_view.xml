@@ -32,14 +32,14 @@
                     </group>
                     <group name="partner_filter" col="1">
                         <label for="partner_ids"/>
-                        <field name="partner_ids" nolabel="1" options="{'no_create': True}"/>
+                        <field name="partner_ids" nolabel="1" widget="many2many_tags" options="{'no_create': True}"/>
                     </group>
-                    <label for="account_ids"/>
-                    <group col="4">
+                    <group name="account_filter" col="4">
+                        <label for="account_ids" colspan="4"/>
                         <field name="receivable_accounts_only"/>
                         <field name="payable_accounts_only"/>
+                        <field name="account_ids" nolabel="1" widget="many2many_tags" options="{'no_create': True}" colspan="4"/>
                     </group>
-                    <field name="account_ids" nolabel="1" options="{'no_create': True}"/>
                 </div>
                 <div attrs="{'invisible': [('not_only_one_unaffected_earnings_account', '=', False)]}">
                     <field name="not_only_one_unaffected_earnings_account" invisible="1"/>

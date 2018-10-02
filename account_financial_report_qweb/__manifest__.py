@@ -19,6 +19,7 @@
         'date_range',
         'report_xlsx',
         'report',
+        'web_widget_many2many_tags_multi_selection',
     ],
     'data': [
         'wizard/aged_partner_balance_wizard_view.xml',
