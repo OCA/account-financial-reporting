@@ -232,6 +232,11 @@ class TrialBalanceReportCompute(models.TransientModel):
         else:
             for line in self.account_ids:
                 line.write({'level': 0})
+        if self.hide_account_balance_at_0:
+            self.env.cr.execute("""
+DELETE FROM report_trial_balance_account
+WHERE report_id=%s AND final_balance IS NULL OR final_balance = 0""",
+                                [self.id])
 
     def _inject_account_values(self, account_ids):
         """Inject report values for report_trial_balance_account"""
