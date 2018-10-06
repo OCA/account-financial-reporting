@@ -17,7 +17,7 @@ Tax Balance
     :target: https://github.com/OCA/account-financial-reporting/tree/12.0/account_tax_balance
     :alt: OCA/account-financial-reporting
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/account-financial-reporting-11-0/account-financial-reporting-11-0-account_tax_balance
+    :target: https://translation.odoo-community.org/projects/account-financial-reporting-12-0/account-financial-reporting-12-0-account_tax_balance
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runbot-Try%20me-875A7B.png
     :target: https://runbot.odoo-community.org/runbot/91/12.0
