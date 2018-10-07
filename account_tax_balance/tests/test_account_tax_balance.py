@@ -6,13 +6,13 @@ from datetime import datetime
 
 from dateutil.rrule import MONTHLY
 
+import odoo
 from odoo.fields import Date
 from odoo.tests.common import HttpCase
 
 
+@odoo.tests.tagged('post_install', '-at_install')
 class TestAccountTaxBalance(HttpCase):
-    at_install = False
-    post_install = False
 
     def setUp(self):
         super(TestAccountTaxBalance, self).setUp()
