@@ -1,85 +1,83 @@
-# French translation of Odoo.
+# Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#    * account_move_line_report_xls
+#	* account_move_line_report_xls
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 8.0\n"
+"Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-16 12:31:16.568000\n"
-"PO-Revision-Date: 2016-05-16 12:31:16.568000\n"
-"Last-Translator: Luc De Meyer (Noviat nv/sa)\n"
+"Last-Translator: <>\n"
 "Language-Team: \n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:89
 #, python-format
 msgid "Account"
-msgstr "Compte"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:208
 #, python-format
 msgid "Am. Currency"
-msgstr "Montant devise"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:263
 #, python-format
 msgid "Analytic Account"
-msgstr "Compte analytique"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:252
 #, python-format
 msgid "Analytic Account Reference"
-msgstr "Référence compte analytique"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:142
 #, python-format
 msgid "Balance"
-msgstr "Solde"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:240
 #, python-format
 msgid "Comp. Curr."
-msgstr "Dev. Soc."
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:126
 #, python-format
 msgid "Credit"
-msgstr "Crédit"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:219
 #, python-format
 msgid "Curr."
-msgstr "Dev."
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:110
 #, python-format
 msgid "Debit"
-msgstr "Débit"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:58
 #, python-format
 msgid "Effective Date"
-msgstr "Date"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:31
 #, python-format
 msgid "Entry"
-msgstr "Écriture"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: model:ir.actions.report.xml,name:account_move_line_report_xls.action_move_line_list_xls
@@ -96,31 +94,30 @@ msgstr ""
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:326
 #, python-format
 msgid "Invoice"
-msgstr "Facture"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:231
 #, python-format
 msgid "Journal"
-msgstr "Journal"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: model:ir.model,name:account_move_line_report_xls.model_account_move_line
-#, fuzzy
 msgid "Journal Item"
-msgstr "Écritures comptables"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:390
 #, python-format
 msgid "Journal Items"
-msgstr "Écritures comptables"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:367
 #, python-format
 msgid "Lit."
-msgstr "Lit."
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:196
@@ -138,100 +135,89 @@ msgstr ""
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:99
 #, python-format
 msgid "Maturity Date"
-msgstr "Date d'échéance"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:40
 #, python-format
 msgid "Name"
-msgstr "Nom"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:358
 #, python-format
 msgid "Notes"
-msgstr "Notes"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:69
 #, python-format
 msgid "Partner"
-msgstr "Partenaire"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:79
 #, python-format
 msgid "Partner Reference"
-msgstr "Réf. Partenaire"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:274
 #, python-format
 msgid "Product"
-msgstr "Article"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:284
 #, python-format
 msgid "Product Reference"
-msgstr "Réf. Article"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:305
 #, python-format
 msgid "Qty"
-msgstr "Qty"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:158
 #, python-format
 msgid "Rec."
-msgstr "Let."
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:171
-#, fuzzy, python-format
+#, python-format
 msgid "Reconcile Amount"
-msgstr "Montant résiduel"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:49
 #, python-format
 msgid "Reference"
-msgstr "Référence"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:347
 #, python-format
 msgid "Res. Am. in Curr."
-msgstr "Montant résiduel en dev."
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:336
 #, python-format
 msgid "Residual Amount"
-msgstr "Montant résiduel"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:316
 #, python-format
 msgid "Statement"
-msgstr "Relevé"
+msgstr ""
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:295
 #, python-format
 msgid "Unit of Measure"
-msgstr "Unité de mesure"
+msgstr ""
 
-#~ msgid "Period"
-#~ msgstr "Période"
-
-#~ msgid "Part. Rec."
-#~ msgstr "Let. Part."
-
-#~ msgid "Tax Code"
-#~ msgstr "Case TVA"
-
-#~ msgid "Tax/Base Amount"
-#~ msgstr "Montant TVA/Base"
