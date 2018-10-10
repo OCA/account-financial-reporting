@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <act_window id="action_account_bank_statement_line_reconciliation_wizard"
+                name="Bank reconcile report change"
+                src_model="account.move"
+                res_model="account.bank.statement.line.reconciliation.wizard"
+                view_mode="form"
+                target="new"
+                key2="client_action_multi"
+                groups="base.group_system"/>
+
+    <record id="account_bank_statement_line_reconciliation_wizard" model="ir.ui.view">
+        <field name="name">Bank reconcile report change</field>
+        <field name="model">account.bank.statement.line.reconciliation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Bank reconcile report change">
+                <sheet>
+                    <group>
+                        <field name="statement_line_ids">
+                            <tree>
+                                <field name="name" string="Entry"/>
+                            </tree>
+                        </field>
+                        <field name="new_statement_line_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Set value" name="set_new_statement_line_value" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>
