@@ -11,6 +11,7 @@ setuptools.setup(
         'odoo10-addon-account_financial_report_date_range',
         'odoo10-addon-account_financial_report_horizontal',
         'odoo10-addon-account_financial_report_qweb',
+        'odoo10-addon-account_move_line_report_xls',
         'odoo10-addon-account_tax_balance',
         'odoo10-addon-customer_activity_statement',
         'odoo10-addon-customer_outstanding_statement',
