@@ -63,7 +63,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                      'type': 'amount_currency',
                      'width': 14},
             }
-            res = {**res, **foreign_currency}
+            res.update(foreign_currency)
         return res
 
     def _get_report_filters(self, report):
