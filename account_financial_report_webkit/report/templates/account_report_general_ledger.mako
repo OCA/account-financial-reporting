@@ -8,6 +8,9 @@
                 overflow: hidden;
                 white-space: nowrap;
             }
+            div {
+                page-break-inside: avoid;
+            }
             ${css}
         </style>
     </head>
