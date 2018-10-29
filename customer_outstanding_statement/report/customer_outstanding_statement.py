@@ -10,16 +10,11 @@ from odoo import api, fields, models
 class CustomerOutstandingStatement(models.AbstractModel):
     """Model of Customer Outstanding Statement"""
 
+    _inherit = 'report.statement.common'
     _name = 'report.customer_outstanding_statement.statement'
 
-    def _format_date_to_partner_lang(self, str_date, partner_id):
-        lang_code = self.env['res.partner'].browse(partner_id).lang
-        lang = self.env['res.lang']._lang_get(lang_code)
-        date = datetime.strptime(str_date, DEFAULT_SERVER_DATE_FORMAT).date()
-        return date.strftime(lang.date_format)
-
     def _display_lines_sql_q0(self, date_end):
-        return """
+        return self._cr.mogrify("""
             SELECT l1.id,
             CASE WHEN l1.reconciled = TRUE and l1.balance > 0.0
                                 THEN max(pd.max_date)
@@ -32,20 +27,22 @@ class CustomerOutstandingStatement(models.AbstractModel):
                 FROM account_partial_reconcile pr
                 INNER JOIN account_move_line l2
                 ON pr.credit_move_id = l2.id
-                WHERE l2.date <= '%s'
+                WHERE l2.date <= %(date_end)s
             ) as pd ON pd.debit_move_id = l1.id
             LEFT JOIN (SELECT pr.*
                 FROM account_partial_reconcile pr
                 INNER JOIN account_move_line l2
                 ON pr.debit_move_id = l2.id
-                WHERE l2.date <= '%s'
+                WHERE l2.date <= %(date_end)s
             ) as pc ON pc.credit_move_id = l1.id
             GROUP BY l1.id
-        """ % (date_end, date_end)
+        """, locals()
+        )
 
     def _display_lines_sql_q1(self, partners, date_end, account_type):
-        return """
-            SELECT m.name as move_id, l.partner_id, l.date, l.name,
+        partners = tuple(partners)
+        return self._cr.mogrify("""
+            SELECT m.name AS move_id, l.partner_id, l.date, l.name,
                             l.ref, l.blocked, l.currency_id, l.company_id,
             CASE WHEN (l.currency_id is not null AND l.amount_currency > 0.0)
                 THEN avg(l.amount_currency)
@@ -75,25 +72,25 @@ class CustomerOutstandingStatement(models.AbstractModel):
                 FROM account_partial_reconcile pr
                 INNER JOIN account_move_line l2
                 ON pr.credit_move_id = l2.id
-                WHERE l2.date <= '%s'
+                WHERE l2.date <= %(date_end)s
             ) as pd ON pd.debit_move_id = l.id
             LEFT JOIN (SELECT pr.*
                 FROM account_partial_reconcile pr
                 INNER JOIN account_move_line l2
                 ON pr.debit_move_id = l2.id
-                WHERE l2.date <= '%s'
+                WHERE l2.date <= %(date_end)s
             ) as pc ON pc.credit_move_id = l.id
-            WHERE l.partner_id IN (%s) AND at.type = '%s'
+            WHERE l.partner_id IN %(partners)s AND at.type = %(account_type)s
                                 AND (Q0.reconciled_date is null or
-                                    Q0.reconciled_date > '%s')
-                                AND l.date <= '%s'
+                                    Q0.reconciled_date > %(date_end)s)
+                                AND l.date <= %(date_end)s
             GROUP BY l.partner_id, m.name, l.date, l.date_maturity, l.name,
                                 l.ref, l.blocked, l.currency_id,
                                 l.balance, l.amount_currency, l.company_id
-        """ % (date_end, date_end, partners, account_type, date_end, date_end)
+        """, locals())
 
     def _display_lines_sql_q2(self):
-        return """
+        return self._cr.mogrify("""
             SELECT partner_id, currency_id, move_id, date, date_maturity,
                             debit, credit, name, ref, blocked, company_id,
             CASE WHEN currency_id is not null
@@ -101,27 +98,28 @@ class CustomerOutstandingStatement(models.AbstractModel):
                     ELSE open_amount
             END as open_amount
             FROM Q1
-        """
+        """, locals())
 
     def _display_lines_sql_q3(self, company_id):
-        return """
+        return self._cr.mogrify("""
             SELECT Q2.partner_id, move_id, date, date_maturity, Q2.name, ref,
                             debit, credit, debit-credit AS amount, blocked,
             COALESCE(Q2.currency_id, c.currency_id) AS currency_id, open_amount
             FROM Q2
             JOIN res_company c ON (c.id = Q2.company_id)
-            WHERE c.id = %s
-        """ % company_id
+            WHERE c.id = %(company_id)s
+        """, locals())
 
     def _get_account_display_lines(self, company_id, partner_ids, date_end,
                                    account_type):
         res = dict(map(lambda x: (x, []), partner_ids))
-        partners = ', '.join([str(i) for i in partner_ids])
-        date_end = datetime.strptime(
-            date_end, DEFAULT_SERVER_DATE_FORMAT).date()
+        partners = tuple(partner_ids)
         # pylint: disable=E8103
         self.env.cr.execute("""
-        WITH Q0 as (%s), Q1 AS (%s), Q2 AS (%s), Q3 AS (%s)
+        WITH Q0 as (%s),
+             Q1 AS (%s),
+             Q2 AS (%s),
+             Q3 AS (%s)
         SELECT partner_id, currency_id, move_id, date, date_maturity, debit,
                             credit, amount, open_amount, name, ref, blocked
         FROM Q3
@@ -130,192 +128,6 @@ class CustomerOutstandingStatement(models.AbstractModel):
             self._display_lines_sql_q1(partners, date_end, account_type),
             self._display_lines_sql_q2(),
             self._display_lines_sql_q3(company_id)))
-        for row in self.env.cr.dictfetchall():
-            res[row.pop('partner_id')].append(row)
-        return res
-
-    def _show_buckets_sql_q0(self, date_end):
-        return """
-            SELECT l1.id,
-            CASE WHEN l1.reconciled = TRUE and l1.balance > 0.0
-                                THEN max(pd.max_date)
-                WHEN l1.reconciled = TRUE and l1.balance < 0.0
-                                THEN max(pc.max_date)
-                ELSE null
-            END as reconciled_date
-            FROM account_move_line l1
-            LEFT JOIN (SELECT pr.*
-                FROM account_partial_reconcile pr
-                INNER JOIN account_move_line l2
-                ON pr.credit_move_id = l2.id
-                WHERE l2.date <= '%s'
-            ) as pd ON pd.debit_move_id = l1.id
-            LEFT JOIN (SELECT pr.*
-                FROM account_partial_reconcile pr
-                INNER JOIN account_move_line l2
-                ON pr.debit_move_id = l2.id
-                WHERE l2.date <= '%s'
-            ) as pc ON pc.credit_move_id = l1.id
-            GROUP BY l1.id
-        """ % (date_end, date_end)
-
-    def _show_buckets_sql_q1(self, partners, date_end, account_type):
-        return """
-            SELECT l.partner_id, l.currency_id, l.company_id, l.move_id,
-            CASE WHEN l.balance > 0.0
-                THEN l.balance - sum(coalesce(pd.amount, 0.0))
-                ELSE l.balance + sum(coalesce(pc.amount, 0.0))
-            END AS open_due,
-            CASE WHEN l.balance > 0.0
-                THEN l.amount_currency - sum(coalesce(pd.amount_currency, 0.0))
-                ELSE l.amount_currency + sum(coalesce(pc.amount_currency, 0.0))
-            END AS open_due_currency,
-            CASE WHEN l.date_maturity is null
-                THEN l.date
-                ELSE l.date_maturity
-            END as date_maturity
-            FROM account_move_line l
-            JOIN account_account_type at ON (at.id = l.user_type_id)
-            JOIN account_move m ON (l.move_id = m.id)
-            LEFT JOIN Q0 ON Q0.id = l.id
-            LEFT JOIN (SELECT pr.*
-                FROM account_partial_reconcile pr
-                INNER JOIN account_move_line l2
-                ON pr.credit_move_id = l2.id
-                WHERE l2.date <= '%s'
-            ) as pd ON pd.debit_move_id = l.id
-            LEFT JOIN (SELECT pr.*
-                FROM account_partial_reconcile pr
-                INNER JOIN account_move_line l2
-                ON pr.debit_move_id = l2.id
-                WHERE l2.date <= '%s'
-            ) as pc ON pc.credit_move_id = l.id
-            WHERE l.partner_id IN (%s) AND at.type = '%s'
-                                AND (Q0.reconciled_date is null or
-                                    Q0.reconciled_date > '%s')
-                                AND l.date <= '%s' AND not l.blocked
-            GROUP BY l.partner_id, l.currency_id, l.date, l.date_maturity,
-                                l.amount_currency, l.balance, l.move_id,
-                                l.company_id
-        """ % (date_end, date_end, partners, account_type, date_end, date_end)
-
-    def _show_buckets_sql_q2(self, date_end, minus_30, minus_60, minus_90,
-                             minus_120):
-        return """
-            SELECT partner_id, currency_id, date_maturity, open_due,
-                            open_due_currency, move_id, company_id,
-            CASE
-                WHEN '%s' <= date_maturity AND currency_id is null
-                                THEN open_due
-                WHEN '%s' <= date_maturity AND currency_id is not null
-                                THEN open_due_currency
-                ELSE 0.0
-            END as current,
-            CASE
-                WHEN '%s' < date_maturity AND date_maturity < '%s'
-                                AND currency_id is null THEN open_due
-                WHEN '%s' < date_maturity AND date_maturity < '%s'
-                                AND currency_id is not null
-                                THEN open_due_currency
-                ELSE 0.0
-            END as b_1_30,
-            CASE
-                WHEN '%s' < date_maturity AND date_maturity <= '%s'
-                                AND currency_id is null THEN open_due
-                WHEN '%s' < date_maturity AND date_maturity <= '%s'
-                                AND currency_id is not null
-                                THEN open_due_currency
-                ELSE 0.0
-            END as b_30_60,
-            CASE
-                WHEN '%s' < date_maturity AND date_maturity <= '%s'
-                                AND currency_id is null THEN open_due
-                WHEN '%s' < date_maturity AND date_maturity <= '%s'
-                                AND currency_id is not null
-                                THEN open_due_currency
-                ELSE 0.0
-            END as b_60_90,
-            CASE
-                WHEN '%s' < date_maturity AND date_maturity <= '%s'
-                                AND currency_id is null THEN open_due
-                WHEN '%s' < date_maturity AND date_maturity <= '%s'
-                                AND currency_id is not null
-                                THEN open_due_currency
-                ELSE 0.0
-            END as b_90_120,
-            CASE
-                WHEN date_maturity <= '%s' AND currency_id is null
-                                THEN open_due
-                WHEN date_maturity <= '%s' AND currency_id is not null
-                                THEN open_due_currency
-                ELSE 0.0
-            END as b_over_120
-            FROM Q1
-            GROUP BY partner_id, currency_id, date_maturity, open_due,
-                                open_due_currency, move_id, company_id
-        """ % (date_end, date_end, minus_30, date_end, minus_30, date_end,
-               minus_60, minus_30, minus_60, minus_30, minus_90, minus_60,
-               minus_90, minus_60, minus_120, minus_90, minus_120, minus_90,
-               minus_120, minus_120)
-
-    def _show_buckets_sql_q3(self, company_id):
-        return """
-            SELECT Q2.partner_id, current, b_1_30, b_30_60, b_60_90, b_90_120,
-                                b_over_120,
-            COALESCE(Q2.currency_id, c.currency_id) AS currency_id
-            FROM Q2
-            JOIN res_company c ON (c.id = Q2.company_id)
-            WHERE c.id = %s
-        """ % company_id
-
-    def _show_buckets_sql_q4(self):
-        return """
-            SELECT partner_id, currency_id, sum(current) as current,
-                                sum(b_1_30) as b_1_30,
-                                sum(b_30_60) as b_30_60,
-                                sum(b_60_90) as b_60_90,
-                                sum(b_90_120) as b_90_120,
-                                sum(b_over_120) as b_over_120
-            FROM Q3
-            GROUP BY partner_id, currency_id
-        """
-
-    def _get_bucket_dates(self, date_end):
-        return {
-            'date_end': date_end,
-            'minus_30': date_end - timedelta(days=30),
-            'minus_60': date_end - timedelta(days=60),
-            'minus_90': date_end - timedelta(days=90),
-            'minus_120': date_end - timedelta(days=120),
-        }
-
-    def _get_account_show_buckets(self, company_id, partner_ids, date_end,
-                                  account_type):
-        res = dict(map(lambda x: (x, []), partner_ids))
-        partners = ', '.join([str(i) for i in partner_ids])
-        date_end = datetime.strptime(
-            date_end, DEFAULT_SERVER_DATE_FORMAT).date()
-        full_dates = self._get_bucket_dates(date_end)
-        # pylint: disable=E8103
-        self.env.cr.execute("""
-        WITH Q0 AS (%s), Q1 AS (%s), Q2 AS (%s), Q3 AS (%s), Q4 AS (%s)
-        SELECT partner_id, currency_id, current, b_1_30, b_30_60, b_60_90,
-                            b_90_120, b_over_120,
-                            current+b_1_30+b_30_60+b_60_90+b_90_120+b_over_120
-                            AS balance
-        FROM Q4
-        GROUP BY partner_id, currency_id, current, b_1_30, b_30_60, b_60_90,
-        b_90_120, b_over_120""" % (
-            self._show_buckets_sql_q0(date_end),
-            self._show_buckets_sql_q1(partners, date_end, account_type),
-            self._show_buckets_sql_q2(
-                full_dates['date_end'],
-                full_dates['minus_30'],
-                full_dates['minus_60'],
-                full_dates['minus_90'],
-                full_dates['minus_120']),
-            self._show_buckets_sql_q3(company_id),
-            self._show_buckets_sql_q4()))
         for row in self.env.cr.dictfetchall():
             res[row.pop('partner_id')].append(row)
         return res
@@ -359,16 +171,8 @@ class CustomerOutstandingStatement(models.AbstractModel):
                 lines_to_display[partner_id][currency].append(line)
 
         if data['show_aging_buckets']:
-            buckets = self._get_account_show_buckets(
+            buckets_to_display = self._get_account_show_buckets(
                 company_id, partner_ids, date_end, account_type)
-            for partner_id in partner_ids:
-                buckets_to_display[partner_id] = {}
-                for line in buckets[partner_id]:
-                    currency = self.env['res.currency'].browse(
-                        line['currency_id'])
-                    if currency not in buckets_to_display[partner_id]:
-                        buckets_to_display[partner_id][currency] = []
-                    buckets_to_display[partner_id][currency] = line
 
         return {
             'doc_ids': partner_ids,

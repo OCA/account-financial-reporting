@@ -14,6 +14,7 @@
         'account_invoicing',
     ],
     'data': [
+        'views/account_payment_term.xml',
         'views/statement.xml',
         'wizard/customer_activity_statement_wizard.xml',
     ],
