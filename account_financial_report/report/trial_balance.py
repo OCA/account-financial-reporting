@@ -24,18 +24,26 @@ class TrialBalanceReport(models.TransientModel):
     date_to = fields.Date()
     fy_start_date = fields.Date()
     only_posted_moves = fields.Boolean()
-    hide_account_balance_at_0 = fields.Boolean()
+    hide_account_at_0 = fields.Boolean()
     foreign_currency = fields.Boolean()
     company_id = fields.Many2one(comodel_name='res.company')
     filter_account_ids = fields.Many2many(comodel_name='account.account')
     filter_partner_ids = fields.Many2many(comodel_name='res.partner')
     filter_journal_ids = fields.Many2many(comodel_name='account.journal')
     show_partner_details = fields.Boolean()
-    hierarchy_on = fields.Selection([('computed', 'Computed Accounts'),
-                                     ('relation', 'Child Accounts')],
-                                    string='Hierarchy On',
-                                    required=True,
-                                    default='computed')
+    hierarchy_on = fields.Selection(
+        [('computed', 'Computed Accounts'),
+         ('relation', 'Child Accounts'),
+         ('none', 'No hierarchy')],
+        string='Hierarchy On',
+        required=True,
+        default='computed',
+        help="""Computed Accounts: Use when the account group have codes
+        that represent prefixes of the actual accounts.\n
+        Child Accounts: Use when your account groups are hierarchical.\n
+        No hierarchy: Use to display just the accounts, without any grouping.
+        """,
+    )
 
     # General Ledger Report Data fields,
     # used as base for compute the data reports
@@ -94,6 +102,7 @@ class TrialBalanceReportAccount(models.TransientModel):
     initial_balance_foreign_currency = fields.Float(digits=(16, 2))
     debit = fields.Float(digits=(16, 2))
     credit = fields.Float(digits=(16, 2))
+    period_balance = fields.Float(digits=(16, 2))
     final_balance = fields.Float(digits=(16, 2))
     final_balance_foreign_currency = fields.Float(digits=(16, 2))
 
@@ -128,6 +137,7 @@ class TrialBalanceReportPartner(models.TransientModel):
     initial_balance_foreign_currency = fields.Float(digits=(16, 2))
     debit = fields.Float(digits=(16, 2))
     credit = fields.Float(digits=(16, 2))
+    period_balance = fields.Float(digits=(16, 2))
     final_balance = fields.Float(digits=(16, 2))
     final_balance_foreign_currency = fields.Float(digits=(16, 2))
 
@@ -186,7 +196,7 @@ class TrialBalanceReportCompute(models.TransientModel):
             'date_from': self.date_from,
             'date_to': self.date_to,
             'only_posted_moves': self.only_posted_moves,
-            'hide_account_balance_at_0': self.hide_account_balance_at_0,
+            'hide_account_at_0': self.hide_account_at_0,
             'foreign_currency': self.foreign_currency,
             'company_id': self.company_id.id,
             'filter_account_ids': [(6, 0, account_ids.ids)],
@@ -220,18 +230,28 @@ class TrialBalanceReportCompute(models.TransientModel):
             self._inject_partner_values()
         if not self.filter_account_ids:
             self._inject_account_group_values()
-            if self.hierarchy_on == 'computed':
-                self._update_account_group_computed_values()
-            else:
-                self._update_account_group_child_values()
-            self._update_account_sequence()
-            self._add_account_group_account_values()
+            if self.hierarchy_on != 'none':
+                if self.hierarchy_on == 'computed':
+                    self._update_account_group_computed_values()
+                else:
+                    self._update_account_group_child_values()
+                self._update_account_sequence()
+                self._add_account_group_account_values()
         self.refresh()
-        if not self.filter_account_ids:
+        if not self.filter_account_ids and self.hierarchy_on != 'none':
             self._compute_group_accounts()
         else:
             for line in self.account_ids:
                 line.write({'level': 0})
+        if self.hide_account_at_0:
+            self.env.cr.execute("""
+            DELETE FROM report_trial_balance_account
+            WHERE report_id=%s
+            AND (initial_balance IS NULL OR initial_balance = 0)
+            AND (debit IS NULL OR debit = 0)
+            AND (credit IS NULL OR credit = 0)
+            AND (final_balance IS NULL OR final_balance = 0)
+            """, [self.id])
 
     def _inject_account_values(self, account_ids):
         """Inject report values for report_trial_balance_account"""
@@ -249,6 +269,7 @@ INSERT INTO
     initial_balance,
     debit,
     credit,
+    period_balance,
     final_balance,
     currency_id,
     initial_balance_foreign_currency,
@@ -265,6 +286,7 @@ SELECT
     coalesce(rag.initial_balance, 0) AS initial_balance,
     coalesce(rag.final_debit - rag.initial_debit, 0) AS debit,
     coalesce(rag.final_credit - rag.initial_credit, 0) AS credit,
+    coalesce(rag.final_balance - rag.initial_balance, 0) AS period_balance,
     coalesce(rag.final_balance, 0) AS final_balance,
     rag.currency_id AS currency_id,
     coalesce(rag.initial_balance_foreign_currency, 0)
@@ -278,9 +300,6 @@ FROM
 WHERE
     acc.id in %s
         """
-        if self.hide_account_balance_at_0:
-            query_inject_account += """ AND
-    final_balance IS NOT NULL AND final_balance != 0"""
         query_inject_account_params = (
             self.id,
             self.env.uid,
@@ -304,6 +323,7 @@ INSERT INTO
     initial_balance_foreign_currency,
     debit,
     credit,
+    period_balance,
     final_balance,
     final_balance_foreign_currency
     )
@@ -317,6 +337,7 @@ SELECT
     rpg.initial_balance_foreign_currency AS initial_balance_foreign_currency,
     rpg.final_debit - rpg.initial_debit AS debit,
     rpg.final_credit - rpg.initial_credit AS credit,
+    rpg.final_balance - rpg.initial_balance AS period_balance,
     rpg.final_balance AS final_balance,
     rpg.final_balance_foreign_currency AS final_balance_foreign_currency
 FROM
