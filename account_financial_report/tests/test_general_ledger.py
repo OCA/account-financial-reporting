@@ -54,8 +54,6 @@ class TestGeneralLedger(a_t_f_c.AbstractTestForeignCurrency):
         ]
 
 
-@common.at_install(False)
-@common.post_install(True)
 class TestGeneralLedgerReport(common.TransactionCase):
 
     def setUp(self):
@@ -344,10 +342,10 @@ class TestGeneralLedgerReport(common.TransactionCase):
 
         # Check the initial and final balance
         self.assertEqual(lines['unaffected'].initial_debit, 0)
-        self.assertEqual(lines['unaffected'].initial_credit, 0)
+        self.assertEqual(lines['unaffected'].initial_credit, 1000)
         self.assertEqual(lines['unaffected'].initial_balance, -1000)
-        self.assertEqual(lines['unaffected'].final_debit, -0)
-        self.assertEqual(lines['unaffected'].final_credit, 0)
+        self.assertEqual(lines['unaffected'].final_debit, 0)
+        self.assertEqual(lines['unaffected'].final_credit, 1000)
         self.assertEqual(lines['unaffected'].final_balance, -1000)
 
         # Add reversale move of the initial move the first day of fiscal year
@@ -369,11 +367,11 @@ class TestGeneralLedgerReport(common.TransactionCase):
 
         # Check the initial and final balance
         self.assertEqual(lines['unaffected'].initial_debit, 0)
-        self.assertEqual(lines['unaffected'].initial_credit, 0)
+        self.assertEqual(lines['unaffected'].initial_credit, 1000)
         self.assertEqual(lines['unaffected'].initial_balance, -1000)
-        self.assertEqual(lines['unaffected'].final_debit, 0)
-        self.assertEqual(lines['unaffected'].final_credit, 0)
-        self.assertEqual(lines['unaffected'].final_balance, -1000)
+        self.assertEqual(lines['unaffected'].final_debit, 1000)
+        self.assertEqual(lines['unaffected'].final_credit, 1000)
+        self.assertEqual(lines['unaffected'].final_balance, 0)
 
         # Add another move at the end day of fiscal year
         # to check that it correctly used on report
@@ -393,11 +391,11 @@ class TestGeneralLedgerReport(common.TransactionCase):
 
         # Check the initial and final balance
         self.assertEqual(lines['unaffected'].initial_debit, 0)
-        self.assertEqual(lines['unaffected'].initial_credit, 0)
+        self.assertEqual(lines['unaffected'].initial_credit, 1000)
         self.assertEqual(lines['unaffected'].initial_balance, -1000)
-        self.assertEqual(lines['unaffected'].final_debit, 0)
-        self.assertEqual(lines['unaffected'].final_credit, 0)
-        self.assertEqual(lines['unaffected'].final_balance, -4000)
+        self.assertEqual(lines['unaffected'].final_debit, 1000)
+        self.assertEqual(lines['unaffected'].final_credit, 4000)
+        self.assertEqual(lines['unaffected'].final_balance, -3000)
 
     def test_04_unaffected_account_balance_2_years(self):
         # Generate the general ledger line
@@ -427,10 +425,10 @@ class TestGeneralLedgerReport(common.TransactionCase):
         self.assertEqual(len(lines['unaffected']), 1)
 
         # Check the initial and final balance
-        self.assertEqual(lines['unaffected'].initial_debit, 0)
+        self.assertEqual(lines['unaffected'].initial_debit, 1000)
         self.assertEqual(lines['unaffected'].initial_credit, 0)
         self.assertEqual(lines['unaffected'].initial_balance, 1000)
-        self.assertEqual(lines['unaffected'].final_debit, 0)
+        self.assertEqual(lines['unaffected'].final_debit, 1000)
         self.assertEqual(lines['unaffected'].final_credit, 0)
         self.assertEqual(lines['unaffected'].final_balance, 1000)
 
@@ -460,9 +458,9 @@ class TestGeneralLedgerReport(common.TransactionCase):
         self.assertEqual(len(lines['unaffected']), 1)
 
         # Check the initial and final balance
-        self.assertEqual(lines['unaffected'].initial_debit, 0)
+        self.assertEqual(lines['unaffected'].initial_debit, 500)
         self.assertEqual(lines['unaffected'].initial_credit, 0)
         self.assertEqual(lines['unaffected'].initial_balance, 500)
-        self.assertEqual(lines['unaffected'].final_debit, 0)
+        self.assertEqual(lines['unaffected'].final_debit, 500)
         self.assertEqual(lines['unaffected'].final_credit, 0)
         self.assertEqual(lines['unaffected'].final_balance, 500)
