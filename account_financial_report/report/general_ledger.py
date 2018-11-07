@@ -1287,173 +1287,9 @@ ORDER BY
             query_inject_move_line_centralized_params
         )
 
-    def _get_unaffected_earnings_account_sub_subquery_sum_initial(
-            self
-    ):
-        """ Return subquery used to compute sum amounts on
-        unaffected earnings accounts """
-        sub_subquery_sum_amounts = """
-        SELECT
-            SUM(ml.balance) AS initial_balance,
-            0.0 AS final_balance
-        FROM
-            account_account a
-        INNER JOIN
-            account_account_type at ON a.user_type_id = at.id
-        INNER JOIN
-            account_move_line ml
-                ON a.id = ml.account_id
-                AND ml.date < %(date_from)s
-            """
-        if self.only_posted_moves:
-            sub_subquery_sum_amounts += """
-        INNER JOIN
-            account_move m ON ml.move_id = m.id AND m.state = 'posted'
-            """
-        if self.filter_cost_center_ids:
-            sub_subquery_sum_amounts += """
-        INNER JOIN
-            account_analytic_account aa
-                ON
-                    ml.analytic_account_id = aa.id
-                    AND aa.id IN %(cost_center_ids)s
-            """
-        sub_subquery_sum_amounts += """
-        WHERE
-            a.company_id = %(company_id)s
-        AND
-            a.id IN %(unaffected_earnings_account_ids)s
-        """
-        if self.filter_journal_ids:
-            sub_subquery_sum_amounts += """
-        AND
-            ml.journal_id in %(filter_journal_ids)s
-        """
-        return sub_subquery_sum_amounts
-
-    def _get_unaffected_earnings_account_sub_subquery_sum_final(self):
-        """ Return subquery used to compute sum amounts on
-                unaffected earnings accounts """
-
-        sub_subquery_sum_amounts = """
-            SELECT
-                0.0 AS initial_balance,
-                SUM(ml.balance) AS final_balance
-                """
-        sub_subquery_sum_amounts += """
-                FROM
-                    account_account a
-                INNER JOIN
-                    account_account_type at ON a.user_type_id = at.id
-                INNER JOIN
-                    account_move_line ml
-                        ON a.id = ml.account_id
-                        AND ml.date <= %(date_to)s
-                """
-        if self.only_posted_moves:
-            sub_subquery_sum_amounts += """
-                INNER JOIN
-                    account_move m ON ml.move_id = m.id AND m.state = 'posted'
-                    """
-        if self.filter_cost_center_ids:
-            sub_subquery_sum_amounts += """
-                INNER JOIN
-                    account_analytic_account aa
-                        ON
-                            ml.analytic_account_id = aa.id
-                            AND aa.id IN %(cost_center_ids)s
-                    """
-        sub_subquery_sum_amounts += """
-        WHERE
-            a.company_id = %(company_id)s
-        AND
-            a.id IN %(unaffected_earnings_account_ids)s
-        """
-        if self.filter_journal_ids:
-            sub_subquery_sum_amounts += """
-        AND
-            ml.journal_id in %(filter_journal_ids)s
-        """
-        return sub_subquery_sum_amounts
-
     def _inject_unaffected_earnings_account_values(self):
         """Inject the report values of the unaffected earnings account
         for report_general_ledger_account."""
-        subquery_sum_amounts = """
-            SELECT
-                SUM(COALESCE(sub.initial_balance, 0.0)) AS initial_balance,
-                SUM(COALESCE(sub.final_balance, 0.0)) AS final_balance
-            FROM
-            (
-        """
-        # Initial balances
-        subquery_sum_amounts += \
-            self._get_unaffected_earnings_account_sub_subquery_sum_initial()
-        subquery_sum_amounts += """
-                UNION
-        """
-        subquery_sum_amounts += \
-            self._get_unaffected_earnings_account_sub_subquery_sum_final()
-        subquery_sum_amounts += """
-            ) sub
-        """
-
-        # pylint: disable=sql-injection
-        query_inject_account = """
-        WITH
-            sum_amounts AS ( """ + subquery_sum_amounts + """ )
-        INSERT INTO
-            report_general_ledger_account
-            (
-            report_id,
-            create_uid,
-            create_date,
-            account_id,
-            code,
-            name,
-            is_partner_account,
-            initial_balance,
-            final_balance,
-            currency_id
-            )
-        SELECT
-            %(report_id)s AS report_id,
-            %(user_id)s AS create_uid,
-            NOW() AS create_date,
-            a.id AS account_id,
-            a.code,
-            a.name,
-            False AS is_partner_account,
-            COALESCE(i.initial_balance, 0.0) AS initial_balance,
-            COALESCE(i.final_balance, 0.0) AS final_balance,
-            c.id as currency_id
-        FROM
-            account_account a
-        LEFT JOIN
-            res_currency c ON c.id = a.currency_id,
-            sum_amounts i
-        WHERE
-            a.company_id = %(company_id)s
-        AND a.id = %(unaffected_earnings_account_id)s
-                """
-        query_inject_account_params = {
-            'date_from': self.date_from,
-            'date_to': self.date_to,
-            'fy_start_date': self.fy_start_date,
-        }
-        if self.filter_cost_center_ids:
-            query_inject_account_params['cost_center_ids'] = \
-                tuple(self.filter_cost_center_ids.ids)
-        query_inject_account_params['company_id'] = self.company_id.id
-        query_inject_account_params['unaffected_earnings_account_id'] = \
-            self.unaffected_earnings_account.id
-        query_inject_account_params['report_id'] = self.id
-        query_inject_account_params['user_id'] = self.env.uid
-
-        if self.filter_journal_ids:
-            query_inject_account_params['filter_journal_ids'] = (tuple(
-                self.filter_journal_ids.ids,
-            ),)
         # Fetch the profit and loss accounts
         query_unaffected_earnings_account_ids = """
             SELECT a.id
@@ -1464,7 +1300,155 @@ ORDER BY
         """
         self.env.cr.execute(query_unaffected_earnings_account_ids)
         pl_account_ids = [r[0] for r in self.env.cr.fetchall()]
-        query_inject_account_params['unaffected_earnings_account_ids'] = \
-            tuple(pl_account_ids + [self.unaffected_earnings_account.id])
+        unaffected_earnings_account_ids = \
+            pl_account_ids + [self.unaffected_earnings_account.id]
+        # Fetch the current fiscal year start date
+        date = fields.Datetime.from_string(self.date_from)
+        res = self.company_id.compute_fiscalyear_dates(date)
+        fy_start_date = res['date_from']
+        query_select_previous_fy_unaffected_earnings_params = {
+            'date_to': fy_start_date,
+            'company_id': self.company_id.id,
+            'account_ids': tuple(unaffected_earnings_account_ids),
+        }
+        query_select_previous_fy_unaffected_earnings = """
+            SELECT  sum(aml.balance) as balance
+            FROM account_move_line as aml
+            INNER JOIN account_move as am
+            ON am.id = aml.move_id
+            INNER JOIN account_journal j
+            ON am.journal_id = j.id
+        """
+        if self.filter_cost_center_ids:
+            query_select_previous_fy_unaffected_earnings += """
+                INNER JOIN account_analytic_account aa
+                ON aml.analytic_account_id = aa.id
+                AND aa.id IN %(cost_center_ids)s
+            """
+            query_select_previous_fy_unaffected_earnings_params[
+                'cost_center_ids'] = tuple(self.filter_cost_center_ids.ids)
+
+        query_select_previous_fy_unaffected_earnings += """
+            WHERE aml.date < %(date_to)s
+            AND aml.company_id = %(company_id)s
+            AND aml.account_id IN %(account_ids)s
+        """
+        if self.filter_journal_ids:
+            query_select_previous_fy_unaffected_earnings += """
+                AND j.id IN %(journal_ids)s
+            """
+            query_select_previous_fy_unaffected_earnings_params[
+                'journal_ids'] = tuple(self.filter_journal_ids.ids)
+        if self.only_posted_moves:
+            query_select_previous_fy_unaffected_earnings += """
+                AND am.state = 'posted'
+            """
+        self.env.cr.execute(
+            query_select_previous_fy_unaffected_earnings,
+            query_select_previous_fy_unaffected_earnings_params)
+        res = self.env.cr.fetchone()
+        unaffected_earnings_initial_balance = res[0] or 0.0
+        # Now select the current period unaffected earnings,
+        # excluding the current period P&L.
+        query_select_period_unaffected_earnings_params = {
+            'date_from': self.date_from,
+            'date_to': self.date_to,
+            'company_id': self.company_id.id,
+            'unaffected_earnings_id': self.unaffected_earnings_account.id,
+        }
+        query_select_period_unaffected_earnings = """
+            SELECT
+                sum(aml.debit) as sum_debit,
+                sum(aml.credit) as sum_credit,
+                sum(aml.balance) as balance
+                FROM account_move_line as aml
+                INNER JOIN account_move as am
+                ON am.id = aml.move_id
+                INNER JOIN account_journal j
+                ON am.journal_id = j.id
+        """
+        if self.filter_cost_center_ids:
+            query_select_period_unaffected_earnings += """
+                INNER JOIN account_analytic_account aa
+                ON aml.analytic_account_id = aa.id
+                AND aa.id IN %(cost_center_ids)s
+            """
+            query_select_period_unaffected_earnings_params[
+                'cost_center_ids'] = tuple(self.filter_cost_center_ids.ids)
+        query_select_period_unaffected_earnings += """
+            WHERE am.date >= %(date_from)s
+            AND aml.date <= %(date_to)s
+            AND aml.company_id = %(company_id)s
+            AND aml.account_id = %(unaffected_earnings_id)s
+        """
+        if self.filter_journal_ids:
+            query_select_period_unaffected_earnings += """
+                AND j.id IN %(journal_ids)s
+            """
+            query_select_period_unaffected_earnings_params[
+                'journal_ids'] = tuple(self.filter_journal_ids.ids)
+        if self.only_posted_moves:
+            query_select_period_unaffected_earnings += """
+                                        AND am.state = 'posted'
+                                    """
+        self.env.cr.execute(query_select_period_unaffected_earnings,
+                            query_select_period_unaffected_earnings_params)
+        res = self.env.cr.fetchone()
+        unaffected_earnings_period_debit = res[0] or 0.0
+        unaffected_earnings_period_credit = res[1] or 0.0
+        unaffected_earnings_period_balance = res[2] or 0.0
+        # pylint: disable=sql-injection
+        query_inject_account = """
+            INSERT INTO
+                report_general_ledger_account (
+                report_id,
+                create_uid,
+                create_date,
+                account_id,
+                code,
+                name,
+                is_partner_account,
+                initial_debit,
+                initial_credit,
+                initial_balance,
+                final_debit,
+                final_credit,
+                final_balance
+            )
+            VALUES (
+                %(report_id)s,
+                %(user_id)s,
+                NOW(),
+                %(account_id)s,
+                %(code)s,
+                %(name)s,
+                False,
+                %(initial_debit)s,
+                %(initial_credit)s,
+                %(initial_balance)s,
+                %(final_debit)s,
+                %(final_credit)s,
+                %(final_balance)s
+            )
+        """
+        initial_debit = unaffected_earnings_initial_balance >= 0 and \
+            unaffected_earnings_initial_balance or 0
+        initial_credit = unaffected_earnings_initial_balance < 0 and \
+            -1 * unaffected_earnings_initial_balance or 0
+        final_balance = unaffected_earnings_initial_balance + \
+            unaffected_earnings_period_balance
+        query_inject_account_params = {
+            'report_id': self.id,
+            'user_id': self.env.uid,
+            'account_id': self.unaffected_earnings_account.id,
+            'code': self.unaffected_earnings_account.code,
+            'name': self.unaffected_earnings_account.name,
+            'initial_debit': initial_debit,
+            'initial_credit': initial_credit,
+            'initial_balance': unaffected_earnings_initial_balance,
+            'final_debit': initial_debit + unaffected_earnings_period_debit,
+            'final_credit': initial_credit + unaffected_earnings_period_credit,
+            'final_balance': final_balance,
+        }
         self.env.cr.execute(query_inject_account,
                             query_inject_account_params)
