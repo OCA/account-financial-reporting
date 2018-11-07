@@ -21,6 +21,7 @@ class AbstractReportXslx(models.AbstractModel):
 
         # Formats
         self.format_right = None
+        self.format_left = None
         self.format_right_bold_italic = None
         self.format_bold = None
         self.format_header_left = None
@@ -41,6 +42,7 @@ class AbstractReportXslx(models.AbstractModel):
         self._define_formats(workbook)
 
         report_name = self._get_report_name()
+        report_footer = self._get_report_footer()
         filters = self._get_report_filters(report)
         self.columns = self._get_report_columns(report)
         self.workbook = workbook
@@ -53,6 +55,8 @@ class AbstractReportXslx(models.AbstractModel):
         self._write_filters(filters)
 
         self._generate_report_content(workbook, report)
+
+        self._write_report_footer(report_footer)
 
     def _define_formats(self, workbook):
         """ Add cell formats to current workbook.
@@ -71,6 +75,7 @@ class AbstractReportXslx(models.AbstractModel):
         """
         self.format_bold = workbook.add_format({'bold': True})
         self.format_right = workbook.add_format({'align': 'right'})
+        self.format_left = workbook.add_format({'align': 'left'})
         self.format_right_bold_italic = workbook.add_format(
             {'align': 'right', 'bold': True, 'italic': True}
         )
@@ -119,6 +124,18 @@ class AbstractReportXslx(models.AbstractModel):
             title, self.format_bold
         )
         self.row_pos += 3
+
+    def _write_report_footer(self, footer):
+        """Write report footer .
+        Columns are defined with `_get_report_columns` method.
+        """
+        if footer:
+            self.row_pos += 1
+            self.sheet.merge_range(
+                self.row_pos, 0, self.row_pos, len(self.columns) - 1,
+                footer, self.format_left
+            )
+            self.row_pos += 1
 
     def _write_filters(self, filters):
         """Write one line per filters on starting on current line.
@@ -321,6 +338,13 @@ class AbstractReportXslx(models.AbstractModel):
             :return: the report name
         """
         raise NotImplementedError()
+
+    def _get_report_footer(self):
+        """
+            Allow to define the report footer.
+            :return: the report footer
+        """
+        return False
 
     def _get_report_columns(self, report):
         """
