@@ -1299,8 +1299,6 @@ ORDER BY
         FROM
             account_account a
         INNER JOIN
-            account_account_type at ON a.user_type_id = at.id
-        INNER JOIN
             account_move_line ml
                 ON a.id = ml.account_id
                 AND ml.date < %(date_from)s
@@ -1339,12 +1337,8 @@ ORDER BY
             SELECT
                 0.0 AS initial_balance,
                 SUM(ml.balance) AS final_balance
-                """
-        sub_subquery_sum_amounts += """
                 FROM
                     account_account a
-                INNER JOIN
-                    account_account_type at ON a.user_type_id = at.id
                 INNER JOIN
                     account_move_line ml
                         ON a.id = ml.account_id
