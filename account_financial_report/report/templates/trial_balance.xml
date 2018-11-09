@@ -99,7 +99,14 @@
                         </div>
                     </t>
                 </t>
+                <!-- Display filters -->
+                <t t-call="account_financial_report.report_trial_balance_footer"/>
             </div>
+    </template>
+    <template id="account_financial_report.report_trial_balance_footer">
+        (*) This report automates the application of the current period Profit and Loss balances to the Undistributed Profit/Loss account.
+        Therefore to check the correctness of the Trial Balance, consider that the Total Ending Balance is
+        going to be equal to the period's total Profit &amp; Loss, instead of zero.
     </template>
 
     <template id="account_financial_report.report_trial_balance_filters">
