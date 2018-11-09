@@ -308,6 +308,64 @@ WHERE
         )
         self.env.cr.execute(query_inject_account, query_inject_account_params)
 
+        # Inject current period debits and credits for the unaffected earnings
+        # account.
+        account_type = self.env.ref('account.data_unaffected_earnings')
+        unaffected_earnings_account = self.env['account.account'].search(
+            [
+                ('user_type_id', '=', account_type.id),
+                ('company_id', '=', self.company_id.id)
+            ])
+
+        query_unaffected_earnings_account_ids = """
+                    SELECT a.id
+                    FROM account_account as a
+                    INNER JOIN account_account_type as at
+                    ON at.id = a.user_type_id
+                    WHERE at.include_initial_balance = FALSE
+                """
+        self.env.cr.execute(query_unaffected_earnings_account_ids)
+        pl_account_ids = [r[0] for r in self.env.cr.fetchall()]
+        unaffected_earnings_account_ids = pl_account_ids + [
+            unaffected_earnings_account.id]
+        query_select_period_balances = """
+            SELECT  sum(aml.debit) as sum_debit,
+                    sum(aml.credit) as sum_credit
+            FROM account_move_line as aml
+            WHERE date >= %(date_from)s
+            AND date <= %(date_to)s
+            AND company_id = %(company_id)s
+            AND account_id IN %(account_ids)s
+        """
+        query_select_period_balances_params = {
+            'date_from': self.date_from,
+            'date_to': self.date_to,
+            'company_id': self.company_id.id,
+            'account_ids': tuple(unaffected_earnings_account_ids)
+        }
+        self.env.cr.execute(query_select_period_balances,
+                            query_select_period_balances_params)
+        sum_debit, sum_credit = self.env.cr.fetchone()
+        unaffected_earnings_account_name = \
+            '%s (*)' % unaffected_earnings_account.name
+        query_update_unaffected_earnings_account = """
+            UPDATE report_trial_balance_account
+            SET
+                name = %(unaffected_earnings_account_name)s,
+                debit = %(sum_debit)s,
+                credit = %(sum_credit)s
+            WHERE account_id = %(unaffected_earning_account_id)s
+        """
+        query_update_unaffected_earnings_account_params = {
+            'sum_debit': sum_debit,
+            'sum_credit': sum_credit,
+            'unaffected_earning_account_id': unaffected_earnings_account.id,
+            'unaffected_earnings_account_name':
+                unaffected_earnings_account_name
+        }
+        self.env.cr.execute(query_update_unaffected_earnings_account,
+                            query_update_unaffected_earnings_account_params)
+
     def _inject_partner_values(self):
         """Inject report values for report_trial_balance_partner"""
         query_inject_partner = """
