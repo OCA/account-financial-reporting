@@ -63,8 +63,6 @@ class TestTrialBalance(a_t_f_c.AbstractTestForeignCurrency):
         return 'show_partner_details' in filters
 
 
-@common.at_install(False)
-@common.post_install(True)
 class TestTrialBalanceReport(common.TransactionCase):
 
     def setUp(self):
@@ -500,3 +498,112 @@ class TestTrialBalanceReport(common.TransactionCase):
         self.assertEqual(lines['partner_receivable'].debit, 0)
         self.assertEqual(lines['partner_receivable'].credit, 2000)
         self.assertEqual(lines['partner_receivable'].final_balance, -1000)
+
+    def test_04_undistributed_pl(self):
+        # Generate the trial balance and check that we have 2 lines for the
+        # undistributed P&L.
+        move_name = 'journal previous fy'
+        journal = self.env['account.journal'].search([], limit=1)
+        move_vals = {
+            'journal_id': journal.id,
+            'name': move_name,
+            'date': self.previous_fy_date_end,
+            'line_ids': [
+                (0, 0, {
+                    'name': move_name,
+                    'debit': 0.0,
+                    'credit': 1000.0,
+                    'account_id': self.account100.id}),
+                (0, 0, {
+                    'name': move_name,
+                    'debit': 1000.0,
+                    'credit': 0.0,
+                    'account_id': self.account110.id})
+                ]}
+        move = self.env['account.move'].create(move_vals)
+        move.post()
+
+        # Generate the trial balance line
+        report_account_model = self.env['report_trial_balance_account']
+        company = self.env.ref('base.main_company')
+        trial_balance = self.env['report_trial_balance'].create({
+            'date_from': self.date_start,
+            'date_to': self.date_end,
+            'only_posted_moves': True,
+            'hide_account_balance_at_0': False,
+            'hierarchy_on': 'none',
+            'company_id': company.id,
+            'fy_start_date': self.fy_date_start,
+            })
+        trial_balance.compute_data_for_report()
+
+        unaffected_balance_lines = report_account_model.search([
+            ('report_id', '=', trial_balance.id),
+            ('account_id', '=', self.account110.id),
+        ])
+        self.assertEqual(len(unaffected_balance_lines), 2)
+        self.assertEqual(unaffected_balance_lines[0].initial_balance, 1000)
+        self.assertEqual(unaffected_balance_lines[0].debit, 0)
+        self.assertEqual(unaffected_balance_lines[0].credit, 0)
+        self.assertEqual(unaffected_balance_lines[0].final_balance, 1000)
+        # Test P&L Allocation
+        self.assertEqual(unaffected_balance_lines[1].initial_balance, 0)
+        self.assertEqual(unaffected_balance_lines[1].debit, 0)
+        self.assertEqual(unaffected_balance_lines[1].credit, 0)
+        self.assertEqual(unaffected_balance_lines[1].final_balance, 0)
+        # Add a P&L Move
+        move_name = 'current year pl move'
+        journal = self.env['account.journal'].search([], limit=1)
+        move_vals = {
+            'journal_id': journal.id,
+            'name': move_name,
+            'date': self.date_start,
+            'line_ids': [
+                (0, 0, {
+                    'name': move_name,
+                    'debit': 0.0,
+                    'credit': 1000.0,
+                    'account_id': self.account300.id}),
+                (0, 0, {
+                    'name': move_name,
+                    'debit': 1000.0,
+                    'credit': 0.0,
+                    'account_id': self.account100.id})
+                ]}
+        move = self.env['account.move'].create(move_vals)
+        move.post()
+        # Re Generate the trial balance line
+        trial_balance = self.env['report_trial_balance'].create({
+            'date_from': self.date_start,
+            'date_to': self.date_end,
+            'only_posted_moves': True,
+            'hide_account_balance_at_0': False,
+            'hierarchy_on': 'none',
+            'company_id': company.id,
+            'fy_start_date': self.fy_date_start,
+        })
+        trial_balance.compute_data_for_report()
+        unaffected_balance_lines = report_account_model.search([
+            ('report_id', '=', trial_balance.id),
+            ('account_id', '=', self.account110.id),
+        ])
+        # The unaffected earnings account is affected by this new entry
+        self.assertEqual(len(unaffected_balance_lines), 2)
+        self.assertEqual(unaffected_balance_lines[0].initial_balance, 1000)
+        self.assertEqual(unaffected_balance_lines[0].debit, 0)
+        self.assertEqual(unaffected_balance_lines[0].credit, 1000)
+        self.assertEqual(unaffected_balance_lines[0].final_balance, 0)
+        # The P&L is affected by this new entry, basically reversing the
+        # P&L balances.
+        self.assertEqual(unaffected_balance_lines[1].initial_balance, 0)
+        self.assertEqual(unaffected_balance_lines[1].debit, 1000)
+        self.assertEqual(unaffected_balance_lines[1].credit, 0)
+        self.assertEqual(unaffected_balance_lines[1].final_balance, 1000)
+        # The totals for the Trial Balance are zero
+        all_lines = report_account_model.search([
+            ('report_id', '=', trial_balance.id),
+        ])
+        self.assertEqual(sum(all_lines.mapped('initial_balance')), 0)
+        self.assertEqual(sum(all_lines.mapped('final_balance')), 0)
+        self.assertEqual(sum(all_lines.mapped('debit')),
+                         sum(all_lines.mapped('credit')))
