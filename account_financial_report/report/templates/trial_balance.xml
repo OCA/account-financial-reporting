@@ -99,15 +99,8 @@
                         </div>
                     </t>
                 </t>
-                <!-- Display filters -->
-                <t t-call="account_financial_report.report_trial_balance_footer"/>
             </div>
     </template>
-    <template id="account_financial_report.report_trial_balance_footer">
-        (*) This report applies the current year Profit and Loss balances to the Undistributed Profit/Loss account.
-        To ensure that the Trial Balance totals total to zero, this line represents the reversal of the current year P &amp; L Balance.
-    </template>
-
     <template id="account_financial_report.report_trial_balance_filters">
         <div class="act_as_table data_table" style="width: 100%;">
             <div class="act_as_row labels">

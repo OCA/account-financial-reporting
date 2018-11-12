@@ -13,13 +13,6 @@ class TrialBalanceXslx(models.AbstractModel):
     def _get_report_name(self):
         return _('Trial Balance')
 
-    def _get_report_footer(self):
-        return _('(*) This report applies the current year Profit and Loss '
-                 'balances to the Undistributed Profit/Loss account.'
-                 'To ensure that the Trial Balance totals total to zero, '
-                 'this line represents the reversal of the current year '
-                 'P&L Balance.')
-
     def _get_report_columns(self, report):
         if not report.show_partner_details:
             res = {
