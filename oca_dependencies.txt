@@ -1,3 +1,2 @@
 server-ux
-reporting-engine https://github.com/OCA/reporting-engine
-server-ux https://github.com/OCA/server-ux
+reporting-engine
