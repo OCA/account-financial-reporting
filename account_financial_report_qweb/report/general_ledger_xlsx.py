@@ -33,14 +33,17 @@ class GeneralLedgerXslx(abstract_report_xlsx.AbstractReportXslx):
             7: {'header': _('Cost center'),
                 'field': 'cost_center',
                 'width': 15},
-            8: {'header': _('Rec.'), 'field': 'matching_number', 'width': 5},
-            9: {'header': _('Debit'),
-                'field': 'debit',
-                'field_initial_balance': 'initial_debit',
-                'field_final_balance': 'final_debit',
-                'type': 'amount',
-                'width': 14},
-            10: {
+            8: {'header': _('Tags'),
+                'field': 'tags',
+                'width': 10},
+            9: {'header': _('Rec.'), 'field': 'matching_number', 'width': 5},
+            10: {'header': _('Debit'),
+                 'field': 'debit',
+                 'field_initial_balance': 'initial_debit',
+                 'field_final_balance': 'final_debit',
+                 'type': 'amount',
+                 'width': 14},
+            11: {
                 'header': _('Credit'),
                 'field': 'credit',
                 'field_initial_balance': 'initial_credit',
@@ -48,7 +51,7 @@ class GeneralLedgerXslx(abstract_report_xlsx.AbstractReportXslx):
                 'type': 'amount',
                 'width': 14
             },
-            11: {'header': _('Cumul. Bal.'),
+            12: {'header': _('Cumul. Bal.'),
                  'field': 'cumul_balance',
                  'field_initial_balance': 'initial_balance',
                  'field_final_balance': 'final_balance',
@@ -57,12 +60,12 @@ class GeneralLedgerXslx(abstract_report_xlsx.AbstractReportXslx):
         }
         if report.foreign_currency:
             foreign_currency = {
-                12: {'header': _('Cur.'),
+                13: {'header': _('Cur.'),
                      'field': 'currency_id',
                      'field_currency_balance': 'currency_id',
                      'type': 'many2one',
                      'width': 7},
-                13: {'header': _('Amount cur.'),
+                14: {'header': _('Amount cur.'),
                      'field': 'amount_currency',
                      'field_initial_balance':
                          'initial_balance_foreign_currency',
@@ -75,17 +78,31 @@ class GeneralLedgerXslx(abstract_report_xlsx.AbstractReportXslx):
 
     def _get_report_filters(self, report):
         return [
-            [_('Date range filter'),
-             _('From: %s To: %s') % (report.date_from, report.date_to)],
-            [_('Target moves filter'),
-             _('All posted entries') if report.only_posted_moves else _(
-                 'All entries')],
-            [_('Account balance at 0 filter'),
-             _('Hide') if report.hide_account_balance_at_0 else _('Show')],
-            [_('Centralize filter'),
-             _('Yes') if report.centralize else _('No')],
-            [_('Show foreign currency'),
-             _('Yes') if report.foreign_currency else _('No')],
+            [
+                _('Date range filter'),
+                _('From: %s To: %s') % (report.date_from, report.date_to),
+            ],
+            [
+                _('Target moves filter'),
+                _('All posted entries') if report.only_posted_moves
+                else _('All entries'),
+            ],
+            [
+                _('Account balance at 0 filter'),
+                _('Hide') if report.hide_account_balance_at_0 else _('Show'),
+            ],
+            [
+                _('Centralize filter'),
+                _('Yes') if report.centralize else _('No'),
+            ],
+            [
+                _('Show analytic tags'),
+                _('Yes') if report.show_analytic_tags else _('No'),
+            ],
+            [
+                _('Show foreign currency'),
+                _('Yes') if report.foreign_currency else _('No')
+            ],
         ]
 
     def _get_col_count_filter_name(self):
