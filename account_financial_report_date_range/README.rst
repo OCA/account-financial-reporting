@@ -2,9 +2,9 @@
    :target: https://www.gnu.org/licenses/agpl
    :alt: License: AGPL-3
 
-====================================
-Date Range Year on Financial Reports
-====================================
+===================================
+Account Financial Report Date Range
+===================================
 
 This module adds the 'Date Range' field to the Odoo CE standard addons
 financial reports wizard.
@@ -19,7 +19,7 @@ Configuration and Usage
 
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
    :alt: Try me on Runbot
-   :target: https://runbot.odoo-community.org/runbot/91/10.0
+   :target: https://runbot.odoo-community.org/runbot/91/11.0
 
 Bug Tracker
 ===========
