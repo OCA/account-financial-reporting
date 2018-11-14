@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+  <record id="accounting_report_view" model="ir.ui.view">
+    <field name="name">accounting.report.form.date_range</field>
+    <field name="model">accounting.report</field>
+    <field name="inherit_id" ref="account.accounting_report_view"/>
+    <field name="arch" type="xml">
+      <field name="date_from" position="before">
+        <field name="date_range_id" options="{'no_create_edit': True, 'no_create': True}"/>
+        <newline/>
+      </field>
+    </field>
+  </record>
+
+</odoo>
