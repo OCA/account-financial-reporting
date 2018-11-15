@@ -229,8 +229,8 @@ class TrialBalanceReportCompute(models.TransientModel):
         if self.show_partner_details:
             self._inject_partner_values()
         if not self.filter_account_ids:
-            self._inject_account_group_values()
             if self.hierarchy_on != 'none':
+                self._inject_account_group_values()
                 if self.hierarchy_on == 'computed':
                     self._update_account_group_computed_values()
                 else:
