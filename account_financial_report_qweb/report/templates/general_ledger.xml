@@ -323,7 +323,7 @@
                                t-att-data-res-model="res_model"
                                class="o_account_financial_reports_web_action underline-on-hover"
                                style="color: black; cursor: pointer;">
-                                <t t-raw="line.date"/></a>
+                                <t t-raw="line.date" t-options="{'widget': 'date'}"/></a>
                         </span>
                     </div>
                     <!--## move-->
