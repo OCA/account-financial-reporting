@@ -1,5 +1,6 @@
 .act_as_table {
     display: table !important;
+    background-color: white;
 }
 .act_as_row  {
     display: table-row !important;
