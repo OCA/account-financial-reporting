@@ -323,7 +323,8 @@
                                t-att-data-res-model="res_model"
                                class="o_account_financial_reports_web_action underline-on-hover"
                                style="color: black; cursor: pointer;">
-                                <span t-field="line.date"/></a>
+                            <!--## We don't use t-field because it throws an error on click -->
+                                <t t-esc="line.date" t-options="{'widget': 'date'}"/></a>
                         </span>
                     </div>
                     <!--## move-->
