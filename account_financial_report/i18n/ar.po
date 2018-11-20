@@ -113,9 +113,14 @@ msgid "Account Type"
 msgstr "نوع الحساب"
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:108
+#, fuzzy, python-format
+msgid "Account at 0 filter"
+msgstr "الحسابات برصيد صفر"
+
+#. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:76
 #: code:addons/account_financial_report/report/open_items_xlsx.py:61
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:100
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_filters
 #: model:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
@@ -190,25 +195,29 @@ msgstr "‫‫‫â¤ 90 يوم."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-msgid "Age ≤ 120\n"
+msgid ""
+"Age ≤ 120\n"
 "                        d."
 msgstr "≤ 120 يوم."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-msgid "Age ≤ 30\n"
+msgid ""
+"Age ≤ 30\n"
 "                        d."
 msgstr "المدة ≤ 30 يوم."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-msgid "Age ≤ 60\n"
+msgid ""
+"Age ≤ 60\n"
 "                        d."
 msgstr "المدة ≤ 60 يوم."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-msgid "Age ≤ 90\n"
+msgid ""
+"Age ≤ 90\n"
 "                        d."
 msgstr "المدة ≤ 90 يوم."
 
@@ -260,7 +269,7 @@ msgstr "المرحّلة فقط"
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:124
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:74
 #: code:addons/account_financial_report/report/open_items_xlsx.py:59
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:98
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:106
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_filters
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_filters
@@ -273,7 +282,7 @@ msgstr "كل القيود"
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:124
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:74
 #: code:addons/account_financial_report/report/open_items_xlsx.py:59
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:98
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:106
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_filters
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_filters
@@ -401,7 +410,7 @@ msgid "Centralized"
 msgstr "مجمّع"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger.py:1218
+#: code:addons/account_financial_report/report/general_ledger.py:1237
 #, python-format
 msgid "Centralized Entries"
 msgstr "القيود المجمّعة"
@@ -466,8 +475,23 @@ msgid "Computed Accounts"
 msgstr "حسابات محسوبة"
 
 #. module: account_financial_report
+#: model:ir.model.fields,help:account_financial_report.field_report_trial_balance_hierarchy_on
+#: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard_hierarchy_on
+msgid ""
+"Computed Accounts: Use when the account group have codes\n"
+"        that represent prefixes of the actual accounts.\n"
+"\n"
+"        Child Accounts: Use when your account groups are hierarchical.\n"
+"\n"
+"        No hierarchy: Use to display just the accounts, without any "
+"grouping.\n"
+"        "
+msgstr ""
+
+#. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
-msgid "Cost\n"
+msgid ""
+"Cost\n"
 "                            center"
 msgstr "مركز التكلفة"
 
@@ -556,7 +580,7 @@ msgstr "أنشئ في"
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:38
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:65
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:29
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:66
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:70
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_move_line_credit
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_journal_credit
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_move_line_credit
@@ -621,8 +645,8 @@ msgstr "الرصيد التراكمي."
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:53
 #: code:addons/account_financial_report/report/open_items_xlsx.py:36
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:40
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:77
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:44
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:85
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #: model:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_lines
@@ -756,7 +780,7 @@ msgstr "الفترة"
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:71
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:168
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:95
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:103
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 #: model:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 #, python-format
@@ -773,7 +797,7 @@ msgstr "‫تاريخ الانتهاء"
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:32
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:59
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:25
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:62
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:66
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_move_line_debit
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_journal_debit
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_move_line_debit
@@ -802,6 +826,7 @@ msgid "Detail Taxes"
 msgstr "تفصيل الضرائب"
 
 #. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract_display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard_display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard_display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard_display_name
@@ -847,13 +872,17 @@ msgstr "اسم العرض"
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard_foreign_currency
 #: model:ir.model.fields,help:account_financial_report.field_open_items_report_wizard_foreign_currency
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard_foreign_currency
-msgid "Display foreign currency for move lines, unless account currency is not setup through chart of accounts will display initial and final balance in that currency."
+msgid ""
+"Display foreign currency for move lines, unless account currency is not "
+"setup through chart of accounts will display initial and final balance in "
+"that currency."
 msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_lines
-msgid "Due\n"
+msgid ""
+"Due\n"
 "                        date"
 msgstr "تاريخ الاستحقاق"
 
@@ -876,17 +905,18 @@ msgstr "تاريخ الانتهاء"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_ending_cumul
-msgid "Ending\n"
+msgid ""
+"Ending\n"
 "                        balance"
 msgstr "الرصيد الختامي"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:162
 #: code:addons/account_financial_report/report/open_items_xlsx.py:117
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:33
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:48
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:70
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:85
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:37
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:52
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:78
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:93
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_ending_cumul
 #: model:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
 #, python-format
@@ -961,6 +991,13 @@ msgid "Filter Cost Center"
 msgstr "ترشيح مراكز التكلفة"
 
 #. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_filter_journal_ids
+#: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_filter_journal_ids
+#, fuzzy
+msgid "Filter Journal"
+msgstr "ترشيح الحسابات"
+
+#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_filter_partner_ids
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_filter_partner_ids
 #: model:ir.model.fields,field_description:account_financial_report.field_report_open_items_filter_partner_ids
@@ -980,6 +1017,12 @@ msgstr "‫ترشيح الحسابات"
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard_cost_center_ids
 msgid "Filter cost centers"
 msgstr "‫ترشيح مراكز التكلفة"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard_account_journal_ids
+#, fuzzy
+msgid "Filter journals"
+msgstr "‫ترشيح الحسابات"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard_partner_ids
@@ -1059,7 +1102,7 @@ msgstr "من:"
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:72
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:169
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:96
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:104
 #, python-format
 msgid "From: %s To: %s"
 msgstr "من: %s إلى: %s"
@@ -1097,7 +1140,9 @@ msgstr "الأستاذ العام إكسل"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
-msgid "General Ledger can be computed only if selected company have only one unaffected earnings account."
+msgid ""
+"General Ledger can be computed only if selected company have only one "
+"unaffected earnings account."
 msgstr ""
 
 #. module: account_financial_report
@@ -1113,7 +1158,7 @@ msgstr "تجميع القيود حسب"
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:77
 #: code:addons/account_financial_report/report/open_items_xlsx.py:62
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:101
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:109
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_filters
 #: model:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
@@ -1122,17 +1167,27 @@ msgid "Hide"
 msgstr "إخفاء"
 
 #. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_hide_account_at_0
+#, fuzzy
+msgid "Hide Account At 0"
+msgstr "تجاهل الحسابات برصيد صفر"
+
+#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_hide_account_balance_at_0
 #: model:ir.model.fields,field_description:account_financial_report.field_report_open_items_hide_account_balance_at_0
-#: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_hide_account_balance_at_0
 msgid "Hide Account Balance At 0"
 msgstr "تجاهل الحسابات برصيد صفر"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard_hide_account_balance_at_0
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard_hide_account_balance_at_0
-#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_hide_account_balance_at_0
 msgid "Hide account ending balance at 0"
+msgstr "تجاهل الحسابات برصيد صفر"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_hide_account_at_0
+#, fuzzy
+msgid "Hide accounts at 0"
 msgstr "تجاهل الحسابات برصيد صفر"
 
 #. module: account_financial_report
@@ -1142,6 +1197,7 @@ msgid "Hierarchy On"
 msgstr "الشجرة مبنية على"
 
 #. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract_id
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard_id
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard_id
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard_id
@@ -1185,12 +1241,15 @@ msgstr "المعرف"
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_account_account_centralized
-msgid "If flagged, no details will be displayed in the General Ledger report (the webkit one only), only centralized amounts per period."
+msgid ""
+"If flagged, no details will be displayed in the General Ledger report (the "
+"webkit one only), only centralized amounts per period."
 msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
-msgid "Initial\n"
+msgid ""
+"Initial\n"
 "                    balance"
 msgstr "الرصيد الافتتاحي"
 
@@ -1225,9 +1284,9 @@ msgstr "المدين الافتتاحي"
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:150
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:21
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:44
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:58
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:81
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:48
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:62
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:89
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #, python-format
 msgid "Initial balance"
@@ -1254,6 +1313,7 @@ msgstr "حساب شريك"
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_journal_ids
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_journal_journal_id
 #: model:ir.model.fields,field_description:account_financial_report.field_report_open_items_move_line_journal
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_journal_ids
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_lines
@@ -1299,6 +1359,7 @@ msgid "Label"
 msgstr "البيان"
 
 #. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract___last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard___last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard___last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard___last_update
@@ -1489,7 +1550,7 @@ msgstr "الصافي"
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:79
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:81
 #: code:addons/account_financial_report/report/open_items_xlsx.py:64
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:103
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:111
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 #, python-format
 msgid "No"
@@ -1502,10 +1563,17 @@ msgid "No group"
 msgstr "بدون تجميع"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger.py:681
-#: code:addons/account_financial_report/report/general_ledger.py:978
-#: code:addons/account_financial_report/report/open_items.py:302
-#: code:addons/account_financial_report/report/open_items.py:551
+#: selection:report_trial_balance,hierarchy_on:0
+#: selection:trial.balance.report.wizard,hierarchy_on:0
+#, fuzzy
+msgid "No hierarchy"
+msgstr "الشجرة مبنية على"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger.py:688
+#: code:addons/account_financial_report/report/general_ledger.py:985
+#: code:addons/account_financial_report/report/open_items.py:306
+#: code:addons/account_financial_report/report/open_items.py:555
 #, python-format
 msgid "No partner allocated"
 msgstr "لم يتم تخصيص شريك"
@@ -1596,7 +1664,7 @@ msgstr "الرئيسي"
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:26
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:44
 #: code:addons/account_financial_report/report/open_items_xlsx.py:21
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:57
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:61
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_account_partner_ids
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_line_partner
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_move_line_partner
@@ -1623,7 +1691,8 @@ msgstr "الشريك"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_partner_ending_cumul
-msgid "Partner\n"
+msgid ""
+"Partner\n"
 "                    cumul aged balance"
 msgstr "إجمالي الرصيد التراكمي"
 
@@ -1695,6 +1764,21 @@ msgid "Percents"
 msgstr ""
 
 #. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_account_period_balance
+#: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_partner_period_balance
+#, fuzzy
+msgid "Period Balance"
+msgstr "الرصيد الأساسي"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:33
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:74
+#: model:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
+#, fuzzy, python-format
+msgid "Period balance"
+msgstr "رصيد الشريك الافتتاحي"
+
+#. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.journal_ledger_wizard
 msgid "Periods"
 msgstr ""
@@ -1724,7 +1808,8 @@ msgstr ""
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_lines
-msgid "Ref -\n"
+msgid ""
+"Ref -\n"
 "                        Label"
 msgstr ""
 
@@ -1825,7 +1910,7 @@ msgstr ""
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:77
 #: code:addons/account_financial_report/report/open_items_xlsx.py:62
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:101
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:109
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_filters
 #: model:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
@@ -1853,7 +1938,7 @@ msgstr ""
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:80
 #: code:addons/account_financial_report/report/open_items_xlsx.py:63
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:102
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:110
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard_foreign_currency
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard_foreign_currency
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard_foreign_currency
@@ -1894,7 +1979,7 @@ msgstr ""
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:73
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:172
 #: code:addons/account_financial_report/report/open_items_xlsx.py:58
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:97
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:105
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_filters
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_filters
@@ -2044,7 +2129,9 @@ msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
-msgid "Trial Balance can be computed only if selected company have only one unaffected earnings account."
+msgid ""
+"Trial Balance can be computed only if selected company have only one "
+"unaffected earnings account."
 msgstr ""
 
 #. module: account_financial_report
@@ -2055,8 +2142,10 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard_hide_account_balance_at_0
 #: model:ir.model.fields,help:account_financial_report.field_open_items_report_wizard_hide_account_balance_at_0
-#: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard_hide_account_balance_at_0
-msgid "Use this filter to hide an account or a partner with an ending balance at 0. If partners are filtered, debits and credits totals will not match the trial balance."
+msgid ""
+"Use this filter to hide an account or a partner with an ending balance at 0. "
+"If partners are filtered, debits and credits totals will not match the trial "
+"balance."
 msgstr ""
 
 #. module: account_financial_report
@@ -2092,6 +2181,13 @@ msgid "View"
 msgstr ""
 
 #. module: account_financial_report
+#: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard_hide_account_at_0
+msgid ""
+"When this option is enabled, the trial balance will not display accounts "
+"that have initial balance = debit = credit = end balance = 0"
+msgstr ""
+
+#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard_with_account_name
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_with_account_name
 msgid "With Account Name"
@@ -2101,7 +2197,7 @@ msgstr ""
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:79
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:81
 #: code:addons/account_financial_report/report/open_items_xlsx.py:64
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:103
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:111
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 #, python-format
 msgid "Yes"
@@ -2110,6 +2206,11 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_group
 msgid "account.group"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_account_financial_report_abstract
+msgid "account_financial_report_abstract"
 msgstr ""
 
 #. module: account_financial_report
