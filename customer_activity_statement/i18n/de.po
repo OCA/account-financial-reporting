@@ -9,44 +9,45 @@ msgstr ""
 "Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-04-26 02:44+0000\n"
-"PO-Revision-Date: 2017-04-26 02:44+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2017\n"
+"PO-Revision-Date: 2018-11-21 21:13+0000\n"
+"Last-Translator: Peter Schubert <psc@saco.info>\n"
 "Language-Team: German (https://www.transifex.com/oca/teams/23907/de/)\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.2.2\n"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "+120 Days Due"
-msgstr ""
+msgstr "+120 Tage Fälligkeit"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "1-30 Days Due"
-msgstr ""
+msgstr "1-30 Tage Fälligkeit"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "30-60 Days Due"
-msgstr ""
+msgstr "30-60 Tage Fälligkeit"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "60-90 Days Due"
-msgstr ""
+msgstr "60-90 Tage Fälligkeit"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "90-120 Days Due"
-msgstr ""
+msgstr "90-120 Tage Fälligkeit"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "<strong>The partner doesn't have due entries.</strong>"
-msgstr ""
+msgstr "<strong>Der Partner hat keine fälligen Einträge.</strong>"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
@@ -74,12 +75,12 @@ msgstr ""
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Amount"
-msgstr ""
+msgstr "Betrag"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Balance"
-msgstr ""
+msgstr "Saldo"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
@@ -114,7 +115,7 @@ msgstr "Angelegt am"
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Current Due"
-msgstr ""
+msgstr "Aktuell Fällig"
 
 #. module: customer_activity_statement
 #: model:ir.actions.act_window,name:customer_activity_statement.customer_activity_statement_wizard_action
