@@ -20,6 +20,16 @@ msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "+                                Customer Outstanding Statement at"
+msgstr ""
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "+                                Supplier Outstanding Statement at"
+msgstr ""
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "+120 Days Due"
 msgstr ""
 
@@ -49,6 +59,11 @@ msgid "<strong>The partner doesn't have due entries.</strong>"
 msgstr ""
 
 #. module: customer_outstanding_statement
+#: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_account_type
+msgid "Account type"
+msgstr ""
+
+#. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Aging Report at"
 msgstr ""
@@ -57,8 +72,8 @@ msgstr ""
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
 msgid ""
 "Aging details can be shown in the report, expressed in aging                 "
-"buckets (30 days due, ...), so the customer can review how much is open, due "
-"or overdue."
+"buckets (30 days due, ...), so the customer or vendor can review how much is "
+"open, due or overdue."
 msgstr ""
 
 #. module: customer_outstanding_statement
@@ -94,11 +109,6 @@ msgstr "Gecreëerd op"
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Current Due"
-msgstr ""
-
-#. module: customer_outstanding_statement
-#: model:ir.actions.act_window,name:customer_outstanding_statement.customer_outstanding_statement_wizard_action
-msgid "Customer Outstanding Statement"
 msgstr ""
 
 #. module: customer_outstanding_statement
@@ -200,13 +210,23 @@ msgid "Outstanding Statement"
 msgstr ""
 
 #. module: customer_outstanding_statement
-#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
-msgid "Outstanding Statement at"
+#: model:ir.actions.act_window,name:customer_outstanding_statement.customer_outstanding_statement_wizard_action
+msgid "Partner Outstanding Statement"
 msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Partner ref:"
+msgstr ""
+
+#. module: customer_outstanding_statement
+#: selection:customer.outstanding.statement.wizard,account_type:0
+msgid "Payable"
+msgstr ""
+
+#. module: customer_outstanding_statement
+#: selection:customer.outstanding.statement.wizard,account_type:0
+msgid "Receivable"
 msgstr ""
 
 #. module: customer_outstanding_statement
@@ -222,10 +242,11 @@ msgstr ""
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
 msgid ""
-"The outstanding statement provides details of all outstanding         "
-"customer receivables up to a particular date. This includes all unpaid "
-"invoices, unclaimed         refunds and outstanding payments. The list is "
-"displayed in chronological order and is         split by currencies."
+"The outstanding statement provides details of all partner's "
+"outstanding         receivables and payables up to a particular date. This "
+"includes all unpaid invoices, unclaimed         refunds and outstanding "
+"payments. The list is displayed in chronological order and is         split "
+"by currencies."
 msgstr ""
 
 #. module: customer_outstanding_statement

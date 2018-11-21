@@ -22,6 +22,17 @@ msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+#, fuzzy
+msgid "+                                Customer Outstanding Statement at"
+msgstr "Postes ouverts des partenaires"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "+                                Supplier Outstanding Statement at"
+msgstr ""
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "+120 Days Due"
 msgstr "+120 jours d'arriérés"
 
@@ -52,16 +63,22 @@ msgstr ""
 "<strong>Le partenaire n'a pas d'écriture en attente de paiement.</strong>"
 
 #. module: customer_outstanding_statement
+#: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_account_type
+msgid "Account type"
+msgstr ""
+
+#. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Aging Report at"
 msgstr "Balance âgée au"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
+#, fuzzy
 msgid ""
 "Aging details can be shown in the report, expressed in aging                 "
-"buckets (30 days due, ...), so the customer can review how much is open, due "
-"or overdue."
+"buckets (30 days due, ...), so the customer or vendor can review how much is "
+"open, due or overdue."
 msgstr ""
 "Le détail des arriérés peut être affiché dans le rapport, exprimé par "
 "tranche (30 jours d'arriérés, ...), de telle sorte que le destinataire "
@@ -101,11 +118,6 @@ msgstr "Créé le"
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Current Due"
 msgstr "Dû en ce moment"
-
-#. module: customer_outstanding_statement
-#: model:ir.actions.act_window,name:customer_outstanding_statement.customer_outstanding_statement_wizard_action
-msgid "Customer Outstanding Statement"
-msgstr "Postes ouverts des partenaires"
 
 #. module: customer_outstanding_statement
 #: model:ir.model,name:customer_outstanding_statement.model_customer_outstanding_statement_wizard
@@ -206,14 +218,25 @@ msgid "Outstanding Statement"
 msgstr "Relevé des postes ouverts"
 
 #. module: customer_outstanding_statement
-#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
-msgid "Outstanding Statement at"
-msgstr "Relevé des postes ouverts au"
+#: model:ir.actions.act_window,name:customer_outstanding_statement.customer_outstanding_statement_wizard_action
+#, fuzzy
+msgid "Partner Outstanding Statement"
+msgstr "Postes ouverts des partenaires"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Partner ref:"
 msgstr "Ref. partenaire :"
+
+#. module: customer_outstanding_statement
+#: selection:customer.outstanding.statement.wizard,account_type:0
+msgid "Payable"
+msgstr ""
+
+#. module: customer_outstanding_statement
+#: selection:customer.outstanding.statement.wizard,account_type:0
+msgid "Receivable"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
@@ -227,11 +250,13 @@ msgstr "Export du relevé des postes ouverts en PDF"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
+#, fuzzy
 msgid ""
-"The outstanding statement provides details of all outstanding         "
-"customer receivables up to a particular date. This includes all unpaid "
-"invoices, unclaimed         refunds and outstanding payments. The list is "
-"displayed in chronological order and is         split by currencies."
+"The outstanding statement provides details of all partner's "
+"outstanding         receivables and payables up to a particular date. This "
+"includes all unpaid invoices, unclaimed         refunds and outstanding "
+"payments. The list is displayed in chronological order and is         split "
+"by currencies."
 msgstr ""
 "Le relevé des postes ouverts détaille tous les montants dû à une date "
 "donnée. Ceci inclus toutes les factures non payées, remboursements non "
@@ -252,3 +277,6 @@ msgstr "ou"
 #: model:ir.model,name:customer_outstanding_statement.model_report_customer_outstanding_statement_statement
 msgid "report.customer_outstanding_statement.statement"
 msgstr "report.customer_outstanding_statement.statement"
+
+#~ msgid "Outstanding Statement at"
+#~ msgstr "Relevé des postes ouverts au"

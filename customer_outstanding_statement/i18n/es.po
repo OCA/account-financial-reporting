@@ -23,6 +23,17 @@ msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+#, fuzzy
+msgid "+                                Customer Outstanding Statement at"
+msgstr "Informe de Saldos Abiertos"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "+                                Supplier Outstanding Statement at"
+msgstr ""
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "+120 Days Due"
 msgstr "+120 Días"
 
@@ -52,16 +63,22 @@ msgid "<strong>The partner doesn't have due entries.</strong>"
 msgstr "<strong>Este cliente no tiene pagos pendientes</strong>"
 
 #. module: customer_outstanding_statement
+#: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_account_type
+msgid "Account type"
+msgstr ""
+
+#. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Aging Report at"
 msgstr "Reporte de vencidos al"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
+#, fuzzy
 msgid ""
 "Aging details can be shown in the report, expressed in aging                 "
-"buckets (30 days due, ...), so the customer can review how much is open, due "
-"or overdue."
+"buckets (30 days due, ...), so the customer or vendor can review how much is "
+"open, due or overdue."
 msgstr ""
 "Detalles de vencidos pueden ser mostrados en el reporte, expresados en "
 "rangos……de mora (30 días, …), para que el cliente pueda revisar cuando está "
@@ -101,11 +118,6 @@ msgstr "Creado en"
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Current Due"
 msgstr "Saldo a la Fecha"
-
-#. module: customer_outstanding_statement
-#: model:ir.actions.act_window,name:customer_outstanding_statement.customer_outstanding_statement_wizard_action
-msgid "Customer Outstanding Statement"
-msgstr "Informe de Saldos Abiertos"
 
 #. module: customer_outstanding_statement
 #: model:ir.model,name:customer_outstanding_statement.model_customer_outstanding_statement_wizard
@@ -206,14 +218,25 @@ msgid "Outstanding Statement"
 msgstr "Estado de Cuenta"
 
 #. module: customer_outstanding_statement
-#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
-msgid "Outstanding Statement at"
-msgstr "Estado de Cuenta al"
+#: model:ir.actions.act_window,name:customer_outstanding_statement.customer_outstanding_statement_wizard_action
+#, fuzzy
+msgid "Partner Outstanding Statement"
+msgstr "Informe de Saldos Abiertos"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Partner ref:"
 msgstr "Ref. de Cliente:"
+
+#. module: customer_outstanding_statement
+#: selection:customer.outstanding.statement.wizard,account_type:0
+msgid "Payable"
+msgstr ""
+
+#. module: customer_outstanding_statement
+#: selection:customer.outstanding.statement.wizard,account_type:0
+msgid "Receivable"
+msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
@@ -227,11 +250,13 @@ msgstr "Acción Estado a PDF"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
+#, fuzzy
 msgid ""
-"The outstanding statement provides details of all outstanding         "
-"customer receivables up to a particular date. This includes all unpaid "
-"invoices, unclaimed         refunds and outstanding payments. The list is "
-"displayed in chronological order and is         split by currencies."
+"The outstanding statement provides details of all partner's "
+"outstanding         receivables and payables up to a particular date. This "
+"includes all unpaid invoices, unclaimed         refunds and outstanding "
+"payments. The list is displayed in chronological order and is         split "
+"by currencies."
 msgstr ""
 "El estado de cuenta proporciona detalles de todas las cuentas por cobrar "
 "pendientes…… de clientes hasta una fecha determinada. Esto incluye todas las "
@@ -252,3 +277,6 @@ msgstr "o"
 #: model:ir.model,name:customer_outstanding_statement.model_report_customer_outstanding_statement_statement
 msgid "report.customer_outstanding_statement.statement"
 msgstr "informe.estado_de_cuenta_de_cliente"
+
+#~ msgid "Outstanding Statement at"
+#~ msgstr "Estado de Cuenta al"
