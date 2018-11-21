@@ -52,6 +52,12 @@ msgstr ""
 "<strong>Le partenaire n'a pas d'écriture en attente de paiement.</strong>"
 
 #. module: customer_activity_statement
+#: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_account_type
+msgid "Account type"
+msgstr ""
+
+#. module: customer_activity_statement
+#: model:ir.actions.report,name:customer_activity_statement.action_print_customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Activity Statement"
 msgstr "Relevé de compte"
@@ -68,10 +74,11 @@ msgstr "Balance âgée au"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.customer_activity_statement_wizard_view
+#, fuzzy
 msgid ""
 "Aging details can be shown in the report, expressed in aging         buckets "
-"(30 days due, ...), so the customer can review how much is open, due or "
-"overdue."
+"(30 days due, ...), so the customer or vendor can review how much is open, "
+"due or overdue."
 msgstr ""
 "Le détail des arriérés peut être affiché dans le rapport, exprimé par "
 "tranche (30 jours d'arriérés, ...), de telle sorte que le destinataire "
@@ -121,11 +128,6 @@ msgstr "Créé le"
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Current Due"
 msgstr "Dû en ce moment"
-
-#. module: customer_activity_statement
-#: model:ir.actions.act_window,name:customer_activity_statement.customer_activity_statement_wizard_action
-msgid "Customer Activity Statement"
-msgstr "Relevé de compte des partenaires"
 
 #. module: customer_activity_statement
 #: model:ir.model,name:customer_activity_statement.model_customer_activity_statement_wizard
@@ -211,9 +213,25 @@ msgid "Number Partner"
 msgstr "Numéro du partenaire"
 
 #. module: customer_activity_statement
+#: model:ir.actions.act_window,name:customer_activity_statement.customer_activity_statement_wizard_action
+#, fuzzy
+msgid "Partner Activity Statement"
+msgstr "Relevé de compte des partenaires"
+
+#. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Partner ref:"
 msgstr "Réf. partenaire :"
+
+#. module: customer_activity_statement
+#: selection:customer.activity.statement.wizard,account_type:0
+msgid "Payable"
+msgstr ""
+
+#. module: customer_activity_statement
+#: selection:customer.activity.statement.wizard,account_type:0
+msgid "Receivable"
+msgstr ""
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
@@ -221,19 +239,15 @@ msgid "Reference number"
 msgstr "Numéro de référence"
 
 #. module: customer_activity_statement
-#: model:ir.actions.report,name:customer_activity_statement.action_print_customer_activity_statement
-msgid "Statement Action to PDF"
-msgstr "Export du relevé de compte en PDF"
-
-#. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.customer_activity_statement_wizard_view
+#, fuzzy
 msgid ""
-"The activity statement provides details of all activity on         the "
-"customer receivables between two selected dates. This includes all "
-"invoices,         refunds and payments. Any outstanding balance dated prior "
-"to the chosen statement         period will appear as a forward balance at "
-"the top of the statement. The list is         displayed in chronological "
-"order and is split by currencies."
+"The activity statement provides details of all activity on         a "
+"partner's receivables and payables between two selected dates. This includes "
+"all invoices,         refunds and payments. Any outstanding balance dated "
+"prior to the chosen statement         period will appear as a forward "
+"balance at the top of the statement. The list is         displayed in "
+"chronological order and is split by currencies."
 msgstr ""
 "Le relevé de compte présente le détail des activités des débiteurs ou "
 "créanciers entre deux dates choisies. Ceci inclus toute facture, note de "
@@ -260,3 +274,6 @@ msgstr "ou"
 #: model:ir.model,name:customer_activity_statement.model_report_customer_activity_statement_statement
 msgid "report.customer_activity_statement.statement"
 msgstr "report.customer_activity_statement.statement"
+
+#~ msgid "Statement Action to PDF"
+#~ msgstr "Export du relevé de compte en PDF"
