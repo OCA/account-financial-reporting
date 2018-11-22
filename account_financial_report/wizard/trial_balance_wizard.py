@@ -1,11 +1,13 @@
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA
 # Copyright 2017 Akretion - Alexis de Lattre
+# Copyright 2018 Eficent Business and IT Consuting Services, S.L.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import models, fields, api
+from odoo import api, fields, models, _
 from odoo.tools.safe_eval import safe_eval
 from odoo.tools import pycompat
+from odoo.exceptions import UserError
 
 
 class TrialBalanceReportWizard(models.TransientModel):
@@ -44,6 +46,9 @@ class TrialBalanceReportWizard(models.TransientModel):
         No hierarchy: Use to display just the accounts, without any grouping.
         """,
     )
+    limit_hierarchy_level = fields.Boolean('Limit hierarchy levels')
+    show_hierarchy_level = fields.Integer('Hierarchy Levels to display',
+                                          default=1)
     account_ids = fields.Many2many(
         comodel_name='account.account',
         string='Filter accounts',
@@ -76,6 +81,14 @@ class TrialBalanceReportWizard(models.TransientModel):
              'account currency is not setup through chart of accounts '
              'will display initial and final balance in that currency.'
     )
+
+    @api.multi
+    @api.constrains('hierarchy_on', 'show_hierarchy_level')
+    def _check_show_hierarchy_level(self):
+        for rec in self:
+            if rec.hierarchy_on != 'none' and rec.show_hierarchy_level <= 0:
+                raise UserError(_('The hierarchy level to filter on must be '
+                                  'greater than 0.'))
 
     @api.depends('date_from')
     def _compute_fy_start_date(self):
@@ -168,6 +181,8 @@ class TrialBalanceReportWizard(models.TransientModel):
             'filter_journal_ids': [(6, 0, self.journal_ids.ids)],
             'fy_start_date': self.fy_start_date,
             'hierarchy_on': self.hierarchy_on,
+            'limit_hierarchy_level': self.limit_hierarchy_level,
+            'show_hierarchy_level': self.show_hierarchy_level,
             'show_partner_details': self.show_partner_details,
         }
 
