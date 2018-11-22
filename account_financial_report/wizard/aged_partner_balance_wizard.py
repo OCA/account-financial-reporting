@@ -3,7 +3,6 @@
 # Copyright 2016 Camptocamp SA, Onestein B.V.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from datetime import datetime
 from odoo import api, fields, models
 from odoo.tools.safe_eval import safe_eval
 from odoo.tools import pycompat
@@ -21,7 +20,7 @@ class AgedPartnerBalanceWizard(models.TransientModel):
         string='Company'
     )
     date_at = fields.Date(required=True,
-                          default=fields.Date.to_string(datetime.today()))
+                          default=fields.Date.context_today)
     target_move = fields.Selection([('posted', 'All Posted Entries'),
                                     ('all', 'All Entries')],
                                    string='Target Moves',

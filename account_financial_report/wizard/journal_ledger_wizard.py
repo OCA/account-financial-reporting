@@ -38,7 +38,7 @@ class JournalLedgerReportWizard(models.TransientModel):
         comodel_name='account.journal',
         string="Journals",
         domain="[('company_id', '=', company_id)]",
-        required=True,
+        required=False,
     )
     move_target = fields.Selection(
         selection='_get_move_targets',
@@ -121,13 +121,18 @@ class JournalLedgerReportWizard(models.TransientModel):
     @api.multi
     def _prepare_report_journal_ledger(self):
         self.ensure_one()
+        journals = self.journal_ids
+        if not journals:
+            # Not selecting a journal means that we'll display all journals
+            journals = self.env['account.journal'].search(
+                [('company_id', '=', self.company_id.id)])
         return {
             'date_from': self.date_from,
             'date_to': self.date_to,
             'move_target': self.move_target,
             'foreign_currency': self.foreign_currency,
             'company_id': self.company_id.id,
-            'journal_ids': [(6, 0, self.journal_ids.ids)],
+            'journal_ids': [(6, 0, journals.ids)],
             'sort_option': self.sort_option,
             'group_option': self.group_option,
             'with_account_name': self.with_account_name,

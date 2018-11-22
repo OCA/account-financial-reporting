@@ -41,18 +41,25 @@ class GeneralLedgerReportWizard(models.TransientModel):
     )
     centralize = fields.Boolean(string='Activate centralization',
                                 default=True)
-    hide_account_balance_at_0 = fields.Boolean(
+    hide_account_at_0 = fields.Boolean(
         string='Hide account ending balance at 0',
         help='Use this filter to hide an account or a partner '
              'with an ending balance at 0. '
              'If partners are filtered, '
              'debits and credits totals will not match the trial balance.'
     )
+    show_analytic_tags = fields.Boolean(
+        string='Show analytic tags',
+    )
     receivable_accounts_only = fields.Boolean()
     payable_accounts_only = fields.Boolean()
     partner_ids = fields.Many2many(
         comodel_name='res.partner',
         string='Filter partners',
+    )
+    analytic_tag_ids = fields.Many2many(
+        comodel_name='account.analytic.tag',
+        string='Filter accounts',
     )
     account_journal_ids = fields.Many2many(
         comodel_name='account.journal',
@@ -156,12 +163,14 @@ class GeneralLedgerReportWizard(models.TransientModel):
             'date_from': self.date_from,
             'date_to': self.date_to,
             'only_posted_moves': self.target_move == 'posted',
-            'hide_account_balance_at_0': self.hide_account_balance_at_0,
+            'hide_account_at_0': self.hide_account_at_0,
             'foreign_currency': self.foreign_currency,
+            'show_analytic_tags': self.show_analytic_tags,
             'company_id': self.company_id.id,
             'filter_account_ids': [(6, 0, self.account_ids.ids)],
             'filter_partner_ids': [(6, 0, self.partner_ids.ids)],
             'filter_cost_center_ids': [(6, 0, self.cost_center_ids.ids)],
+            'filter_analytic_tag_ids': [(6, 0, self.analytic_tag_ids.ids)],
             'filter_journal_ids': [(6, 0, self.account_journal_ids.ids)],
             'centralize': self.centralize,
             'fy_start_date': self.fy_start_date,
