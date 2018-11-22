@@ -3,7 +3,6 @@
 # Copyright 2016 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from datetime import datetime
 from odoo import models, fields, api
 from odoo.tools.safe_eval import safe_eval
 from odoo.tools import pycompat
@@ -21,7 +20,7 @@ class OpenItemsReportWizard(models.TransientModel):
         string='Company'
     )
     date_at = fields.Date(required=True,
-                          default=fields.Date.to_string(datetime.today()))
+                          default=fields.Date.context_today)
     target_move = fields.Selection([('posted', 'All Posted Entries'),
                                     ('all', 'All Entries')],
                                    string='Target Moves',
@@ -32,8 +31,8 @@ class OpenItemsReportWizard(models.TransientModel):
         string='Filter accounts',
         domain=[('reconcile', '=', True)],
     )
-    hide_account_balance_at_0 = fields.Boolean(
-        string='Hide account ending balance at 0',
+    hide_account_at_0 = fields.Boolean(
+        string='Hide account ending balance at 0', default=True,
         help='Use this filter to hide an account or a partner '
              'with an ending balance at 0. '
              'If partners are filtered, '
@@ -102,7 +101,7 @@ class OpenItemsReportWizard(models.TransientModel):
         return {
             'date_at': self.date_at,
             'only_posted_moves': self.target_move == 'posted',
-            'hide_account_balance_at_0': self.hide_account_balance_at_0,
+            'hide_account_at_0': self.hide_account_at_0,
             'foreign_currency': self.foreign_currency,
             'company_id': self.company_id.id,
             'filter_account_ids': [(6, 0, self.account_ids.ids)],
