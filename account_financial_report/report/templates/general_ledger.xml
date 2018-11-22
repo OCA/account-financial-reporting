@@ -13,6 +13,7 @@
 
     <template id="report_general_ledger_base">
         <!-- Saved flag fields into variables, used to define columns display -->
+        <t t-set="show_analytic_tags" t-value="o.show_analytic_tags"/>
         <t t-set="show_cost_center" t-value="o.show_cost_center"/>
         <t t-set="foreign_currency" t-value="o.foreign_currency"/>
         <!-- Defines global variables used by internal layout -->
@@ -81,6 +82,7 @@
                 <div class="act_as_cell">Target moves filter</div>
                 <div class="act_as_cell">Account balance at 0 filter</div>
                 <div class="act_as_cell">Centralize filter</div>
+                <div class="act_as_cell">Show analytic tags</div>
             </div>
             <div class="act_as_row">
                 <div class="act_as_cell">
@@ -91,12 +93,16 @@
                     <t t-if="not o.only_posted_moves">All entries</t>
                 </div>
                 <div class="act_as_cell">
-                    <t t-if="o.hide_account_balance_at_0">Hide</t>
-                    <t t-if="not o.hide_account_balance_at_0">Show</t>
+                    <t t-if="o.hide_account_at_0">Hide</t>
+                    <t t-if="not o.hide_account_at_0">Show</t>
                 </div>
                 <div class="act_as_cell">
                     <t t-if="o.centralize">Yes</t>
                     <t t-if="not o.centralize">No</t>
+                </div>
+                <div class="act_as_cell">
+                    <t t-if="o.show_analytic_tags">Yes</t>
+                    <t t-if="not o.show_analytic_tags">No</t>
                 </div>
             </div>
         </div>
@@ -129,6 +135,10 @@
                         <!--## cost_center-->
                         <div class="act_as_cell" style="width: 8.03%;">Cost
                             center</div>
+                    </t>
+                    <t t-if="show_analytic_tags">
+                        <!--## analytic tags-->
+                        <div class="act_as_cell" style="width: 4.75%;">Tags</div>
                     </t>
                     <!--## matching_number-->
                     <div class="act_as_cell" style="width: 2.41%;">Rec.</div>
@@ -166,6 +176,10 @@
                 <t t-if="show_cost_center">
                     <!--## cost_center-->
                     <div class="act_as_cell"/>
+                </t>
+                <t t-if="show_analytic_tags">
+                    <!--## analytic tags-->
+                    <div class="act_as_cell"></div>
                 </t>
                 <!--## matching_number-->
                 <div class="act_as_cell"/>
@@ -381,6 +395,10 @@
                             </span>
                         </div>
                     </t>
+                    <t t-if="show_analytic_tags">
+                        <!--## analytic tags-->
+                        <div class="act_as_cell left"><span t-field="line.tags"/></div>
+                    </t>
                     <!--## matching_number-->
                     <div class="act_as_cell">
                         <t t-set="res_model" t-value="'account.full.reconcile'"/>
@@ -474,6 +492,10 @@
                 <t t-if="show_cost_center">
                     <!--## cost_center-->
                     <div class="act_as_cell" style="width: 8.03%"/>
+                </t>
+                <t t-if="show_analytic_tags">
+                    <!--## analytic tags-->
+                    <div class="act_as_cell" style="width: 4.75%;"></div>
                 </t>
                 <!--## matching_number-->
                 <div class="act_as_cell" style="width: 2.41%;"/>
