@@ -23,6 +23,8 @@
                             <field name="hide_account_at_0"/>
                             <field name="show_partner_details"/>
                             <field name="hierarchy_on" widget="radio" attrs="{'invisible':[('show_partner_details','=',True)]}"/>
+                            <field name="limit_hierarchy_level" attrs="{'invisible':['|', ('hierarchy_on','=','none'),('show_partner_details','=',True)]}"/>
+                            <field name="show_hierarchy_level" attrs="{'invisible':[('limit_hierarchy_level','=', False)]}"/>
                             <field name="foreign_currency"/>
                         </group>
                     </group>
@@ -31,6 +33,7 @@
                     <label for="journal_ids"/>
                     <field name="journal_ids" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
                     <group attrs="{'invisible':[('show_partner_details','!=',True)]}"/>
+                    <div/>
                     <label for="account_ids"/>
                     <group col="4">
                         <field name="receivable_accounts_only"/>
