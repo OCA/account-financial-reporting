@@ -103,6 +103,9 @@ class AbstractReportXslx(models.AbstractModel):
         self.format_amount = workbook.add_format()
         self.format_amount.set_num_format(
             '#,##0.'+'0'*currency_id.decimal_places)
+        self.format_amount_bold = workbook.add_format({'bold': True})
+        self.format_amount_bold.set_num_format(
+            '#,##0.' + '0' * currency_id.decimal_places)
         self.format_percent_bold_italic = workbook.add_format(
             {'bold': True, 'italic': True}
         )
@@ -190,10 +193,20 @@ class AbstractReportXslx(models.AbstractModel):
                 self.sheet.write_string(
                     self.row_pos, col_pos, value.name or '', self.format_right)
             elif cell_type == 'string':
-                self.sheet.write_string(self.row_pos, col_pos, value or '')
+                if hasattr(line_object, 'account_group_id') and \
+                        line_object.account_group_id:
+                    self.sheet.write_string(self.row_pos, col_pos, value or '',
+                                            self.format_bold)
+                else:
+                    self.sheet.write_string(self.row_pos, col_pos, value or '')
             elif cell_type == 'amount':
+                if hasattr(line_object, 'account_group_id') and \
+                        line_object.account_group_id:
+                    cell_format = self.format_amount_bold
+                else:
+                    cell_format = self.format_amount
                 self.sheet.write_number(
-                    self.row_pos, col_pos, float(value), self.format_amount
+                    self.row_pos, col_pos, float(value), cell_format
                 )
             elif cell_type == 'amount_currency':
                 if line_object.currency_id:
@@ -291,10 +304,16 @@ class AbstractReportXslx(models.AbstractModel):
 
     def _get_currency_amt_format(self, line_object):
         """ Return amount format specific for each currency. """
-        format_amt = getattr(self, 'format_amount')
+        if hasattr(line_object, 'account_group_id') and \
+                line_object.account_group_id:
+            format_amt = getattr(self, 'format_amount_bold')
+            field_prefix = 'format_amount_bold'
+        else:
+            format_amt = getattr(self, 'format_amount')
+            field_prefix = 'format_amount'
         if line_object.currency_id:
             field_name = \
-                'format_amount_%s' % line_object.currency_id.name
+                '%s_%s' % (field_prefix, line_object.currency_id.name)
             if hasattr(self, field_name):
                 format_amt = getattr(self, field_name)
             else:
