@@ -36,6 +36,6 @@ class TestOpenItems(a_t_f_c.AbstractTestForeignCurrency):
     def _getAdditionalFiltersToBeTested(self):
         return [
             {'only_posted_moves': True},
-            {'hide_account_balance_at_0': True},
-            {'only_posted_moves': True, 'hide_account_balance_at_0': True},
+            {'hide_account_at_0': True},
+            {'only_posted_moves': True, 'hide_account_at_0': True},
         ]
