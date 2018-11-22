@@ -75,8 +75,8 @@
                     <t t-if="not o.only_posted_moves">All entries</t>
                 </div>
                 <div class="act_as_cell">
-                    <t t-if="o.hide_account_balance_at_0">Hide</t>
-                    <t t-if="not o.hide_account_balance_at_0">Show</t>
+                    <t t-if="o.hide_account_at_0">Hide</t>
+                    <t t-if="not o.hide_account_at_0">Show</t>
                 </div>
             </div>
         </div>

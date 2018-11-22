@@ -22,7 +22,7 @@ class OpenItemsReport(models.TransientModel):
     # Filters fields, used for data computation
     date_at = fields.Date()
     only_posted_moves = fields.Boolean()
-    hide_account_balance_at_0 = fields.Boolean()
+    hide_account_at_0 = fields.Boolean()
     foreign_currency = fields.Boolean()
     company_id = fields.Many2one(comodel_name='res.company')
     filter_account_ids = fields.Many2many(comodel_name='account.account')
@@ -188,7 +188,7 @@ class OpenItemsReportCompute(models.TransientModel):
         self._inject_line_values(only_empty_partner_line=True)
         self._clean_partners_and_accounts()
         self._compute_partners_and_accounts_cumul()
-        if self.hide_account_balance_at_0:
+        if self.hide_account_at_0:
             self._clean_partners_and_accounts(
                 only_delete_account_balance_at_0=True
             )

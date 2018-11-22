@@ -38,7 +38,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
     )
     centralize = fields.Boolean(string='Activate centralization',
                                 default=True)
-    hide_account_balance_at_0 = fields.Boolean(
+    hide_account_at_0 = fields.Boolean(
         string='Hide account ending balance at 0',
         help='Use this filter to hide an account or a partner '
              'with an ending balance at 0. '
@@ -181,7 +181,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
             'date_from': self.date_from,
             'date_to': self.date_to,
             'only_posted_moves': self.target_move == 'posted',
-            'hide_account_balance_at_0': self.hide_account_balance_at_0,
+            'hide_account_at_0': self.hide_account_at_0,
             'foreign_currency': self.foreign_currency,
             'show_analytic_tags': self.show_analytic_tags,
             'company_id': self.company_id.id,

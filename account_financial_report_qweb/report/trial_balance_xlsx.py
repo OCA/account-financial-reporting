@@ -35,7 +35,11 @@ class TrialBalanceXslx(abstract_report_xlsx.AbstractReportXslx):
                     'field': 'credit',
                     'type': 'amount',
                     'width': 14},
-                5: {'header': _('Ending balance'),
+                5: {'header': _('Period balance'),
+                    'field': 'period_balance',
+                    'type': 'amount',
+                    'width': 14},
+                6: {'header': _('Ending balance'),
                     'field': 'final_balance',
                     'type': 'amount',
                     'width': 14},
@@ -72,7 +76,11 @@ class TrialBalanceXslx(abstract_report_xlsx.AbstractReportXslx):
                     'field': 'credit',
                     'type': 'amount',
                     'width': 14},
-                4: {'header': _('Ending balance'),
+                4: {'header': _('Period balance'),
+                    'field': 'period_balance',
+                    'type': 'amount',
+                    'width': 14},
+                5: {'header': _('Ending balance'),
                     'field': 'final_balance',
                     'type': 'amount',
                     'width': 14},
@@ -103,9 +111,12 @@ class TrialBalanceXslx(abstract_report_xlsx.AbstractReportXslx):
                 _('All posted entries') if report.only_posted_moves
                 else _('All entries')],
             [_('Account balance at 0 filter'),
-                _('Hide') if report.hide_account_balance_at_0 else _('Show')],
+                _('Hide') if report.hide_account_at_0 else _('Show')],
             [_('Show foreign currency'),
              _('Yes') if report.foreign_currency else _('No')],
+            [_('Limit hierarchy levels'),
+             _('Level %s' % report.show_hierarchy_level) if
+             report.limit_hierarchy_level else _('No limit')],
         ]
 
     def _get_col_count_filter_name(self):
@@ -121,7 +132,7 @@ class TrialBalanceXslx(abstract_report_xlsx.AbstractReportXslx):
             self.write_array_header()
 
         # For each account
-        for account in report.account_ids:
+        for account in report.account_ids.filtered(lambda a: not a.hide_line):
             if not report.show_partner_details:
                 # Display account lines
                 self.write_line(account, 'account')
