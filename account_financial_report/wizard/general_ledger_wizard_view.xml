@@ -32,16 +32,16 @@
                                 <field name="receivable_accounts_only"/>
                                 <field name="payable_accounts_only"/>
                             </group>
-                            <field name="account_ids" nolabel="1" options="{'no_create': True}"/>
+                            <field name="account_ids" nolabel="1" widget="many2many_tags" options="{'no_create': True}"/>
                         </page>
                         <page string="Filter partners">
-                            <field name="partner_ids" nolabel="1" options="{'no_create': True}"/>
+                            <field name="partner_ids" nolabel="1" widget="many2many_tags" options="{'no_create': True}"/>
                         </page>
                         <page string="Filter cost centers" groups="analytic.group_analytic_accounting">
                             <field name="cost_center_ids" nolabel="1" options="{'no_create': True}" groups="analytic.group_analytic_accounting"/>
                         </page>
                         <page string="Filter analytic tags">
-                            <field name="analytic_tag_ids" nolabel="1" options="{'no_create': True}"/>
+                            <field name="analytic_tag_ids" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
                         </page>
                     </notebook>
                 </div>
