@@ -130,36 +130,13 @@ class TrialBalanceReportWizard(models.TransientModel):
         else:
             self.account_ids = None
 
-    @api.model
-    def create(self, vals):
-        """
-        This is a workaround for bug https://github.com/odoo/odoo/issues/14761
-        This bug impacts M2M fields in wizards filled-up via onchange
-        It replaces the workaround widget="many2many_tags" on
-        field name="account_ids" which prevented from selecting several
-        accounts at the same time (quite useful when you want to select
-        an interval of accounts for example)
-        """
-        if 'account_ids' in vals and isinstance(vals['account_ids'], list):
-            account_ids = []
-            for account in vals['account_ids']:
-                if account[0] in (1, 4):
-                    account_ids.append(account[1])
-                elif account[0] == 6 and isinstance(account[2], list):
-                    account_ids += account[2]
-            vals['account_ids'] = [(6, 0, account_ids)]
-        res = super(TrialBalanceReportWizard, self).create(vals)
-        return res
-
     @api.onchange('show_partner_details')
     def onchange_show_partner_details(self):
         """Handle partners change."""
         if self.show_partner_details:
             self.receivable_accounts_only = self.payable_accounts_only = True
-            self.hide_account_at_0 = True
         else:
             self.receivable_accounts_only = self.payable_accounts_only = False
-            self.hide_account_at_0 = False
 
     @api.multi
     def button_export_html(self):

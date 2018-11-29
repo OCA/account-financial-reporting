@@ -117,27 +117,6 @@ class GeneralLedgerReportWizard(models.TransientModel):
         else:
             self.account_ids = None
 
-    @api.model
-    def create(self, vals):
-        """
-        This is a workaround for bug https://github.com/odoo/odoo/issues/14761
-        This bug impacts M2M fields in wizards filled-up via onchange
-        It replaces the workaround widget="many2many_tags" on
-        field name="account_ids" which prevented from selecting several
-        accounts at the same time (quite useful when you want to select
-        an interval of accounts for example)
-        """
-        if 'account_ids' in vals and isinstance(vals['account_ids'], list):
-            account_ids = []
-            for account in vals['account_ids']:
-                if account[0] in (1, 4):
-                    account_ids.append(account[1])
-                elif account[0] == 6 and isinstance(account[2], list):
-                    account_ids += account[2]
-            vals['account_ids'] = [(6, 0, account_ids)]
-        res = super(GeneralLedgerReportWizard, self).create(vals)
-        return res
-
     @api.onchange('partner_ids')
     def onchange_partner_ids(self):
         """Handle partners change."""
