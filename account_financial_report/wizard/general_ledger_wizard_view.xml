@@ -21,24 +21,29 @@
                         <group name="other_filters">
                             <field name="target_move" widget="radio"/>
                             <field name="centralize"/>
-                            <field name="hide_account_balance_at_0"/>
+                            <field name="hide_account_at_0"/>
                             <field name="foreign_currency"/>
+                            <field name="show_analytic_tags"/>
                         </group>
                     </group>
-                    <label for="cost_center_ids" groups="analytic.group_analytic_accounting"/>
-                    <field name="cost_center_ids" nolabel="1" options="{'no_create': True}" groups="analytic.group_analytic_accounting"/>
-                    <group/>
-                    <label for="partner_ids"/>
-                    <field name="partner_ids" nolabel="1" options="{'no_create': True}"/>
-                    <label for="account_journal_ids"/>
-                    <field name="account_journal_ids" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
-                    <group/>
-                    <label for="account_ids"/>
-                    <group col="4">
-                        <field name="receivable_accounts_only"/>
-                        <field name="payable_accounts_only"/>
-                    </group>
-                    <field name="account_ids" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                    <notebook>
+                        <page string="Filter accounts">
+                            <group col="4">
+                                <field name="receivable_accounts_only"/>
+                                <field name="payable_accounts_only"/>
+                            </group>
+                            <field name="account_ids" nolabel="1" widget="many2many_tags" options="{'no_create': True}"/>
+                        </page>
+                        <page string="Filter partners">
+                            <field name="partner_ids" nolabel="1" widget="many2many_tags" options="{'no_create': True}"/>
+                        </page>
+                        <page string="Filter cost centers" groups="analytic.group_analytic_accounting">
+                            <field name="cost_center_ids" nolabel="1" options="{'no_create': True}" groups="analytic.group_analytic_accounting"/>
+                        </page>
+                        <page string="Filter analytic tags">
+                            <field name="analytic_tag_ids" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                        </page>
+                    </notebook>
                 </div>
                 <div attrs="{'invisible': [('not_only_one_unaffected_earnings_account', '=', False)]}">
                     <field name="not_only_one_unaffected_earnings_account" invisible="1"/>

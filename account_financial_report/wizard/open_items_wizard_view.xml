@@ -16,19 +16,20 @@
                     </group>
                     <group name="other_filters">
                         <field name="target_move" widget="radio"/>
-                        <field name="hide_account_balance_at_0"/>
+                        <field name="hide_account_at_0"/>
                         <field name="foreign_currency"/>
                     </group>
                 </group>
-                <label for="partner_ids"/>
-                <field name="partner_ids" nolabel="1" options="{'no_create': True}"/>
-                <group/>
-                <label for="account_ids"/>
-                <group col="4">
+                <group name="partner_filter" col="1">
+                    <label for="partner_ids"/>
+                    <field name="partner_ids" nolabel="1" widget="many2many_tags" options="{'no_create': True}"/>
+                </group>
+                <group name="account_filter" col="4">
+                    <label for="account_ids" colspan="4"/>
                     <field name="receivable_accounts_only"/>
                     <field name="payable_accounts_only"/>
+                    <field name="account_ids" nolabel="1" widget="many2many_tags" options="{'no_create': True}" colspan="4"/>
                 </group>
-                <field name="account_ids" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
                 <footer>
                     <button name="button_export_html" string="View"
                             type="object" default_focus="1" class="oe_highlight"/>

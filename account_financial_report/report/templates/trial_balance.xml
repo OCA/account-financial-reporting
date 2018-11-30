@@ -18,6 +18,8 @@
             <!-- Defines global variables used by internal layout -->
             <t t-set="title">Trial Balance</t>
             <t t-set="company_name" t-value="o.company_id.name"/>
+            <t t-set="res_company" t-value="o.company_id"/>
+
             <div class="page">
                 <!-- Display filters -->
                 <t t-call="account_financial_report.report_trial_balance_filters"/>
@@ -30,7 +32,7 @@
                         <t t-call="account_financial_report.report_trial_balance_lines_header"/>
                         
                         <!-- Display each lines -->
-                        <t t-foreach="o.account_ids" t-as="line">
+                        <t t-foreach="o.account_ids.filtered(lambda a: not a.hide_line)" t-as="line">
                             <t t-set="type" t-value='"account_type"'/>                                                                    
                             <!-- Adapt -->
                             <t t-set="style" t-value="'font-size:8px;'"/>
@@ -38,7 +40,7 @@
                             <t t-if="o.hide_account_at_0">
                                 <t t-set="style" t-value="'font-size: 14px;'"/>
                             </t>
-                            <t t-if="not o.hide_account_at_0">
+                            <t t-if="o.hierarchy_on != 'none'">
                                 <t t-set="style" t-value="'font-size: ' + str(14 - line.level) + 'px; margin-left: ' + str(line.level * 4) + 'px;'"/>
                             </t>
                             <t t-if="line.account_group_id">
@@ -106,7 +108,8 @@
             <div class="act_as_row labels">
                 <div class="act_as_cell">Date range filter</div>
                 <div class="act_as_cell">Target moves filter</div>
-                <div class="act_as_cell">Account balance at 0 filter</div>
+                <div class="act_as_cell">Account at 0 filter</div>
+                <div class="act_as_cell">Limit hierarchy levels</div>
             </div>
             <div class="act_as_row">
                 <div class="act_as_cell">
@@ -120,6 +123,14 @@
                     <t t-if="o.hide_account_at_0">Hide</t>
                     <t t-if="not o.hide_account_at_0">Show</t>
                 </div>
+                <div class="act_as_cell">
+                    <t t-if="o.limit_hierarchy_level">
+                        Level <span t-field="o.show_hierarchy_level"/>
+                    </t>
+                    <t t-if="not o.limit_hierarchy_level">
+                        No limit
+                    </t>
+                </div>
             </div>
         </div>
     </template>
@@ -132,12 +143,12 @@
                     <!--## Code-->
                     <div class="act_as_cell" style="width: 8.86%;">Code</div>
                     <!--## Account-->
-                    <div class="act_as_cell" style="width: 52.58%;">Account
+                    <div class="act_as_cell" style="width: 37.58%;">Account
                     </div>
                 </t>
                 <t t-if="show_partner_details">
                     <!--## Partner-->
-                    <div class="act_as_cell" style="width: 61.44%;">Partner
+                    <div class="act_as_cell" style="width: 46.44%;">Partner
                     </div>
                 </t>
                 <!--## Initial balance-->
@@ -377,6 +388,19 @@
                             <a t-att-data-domain="domain"
                                t-att-data-res-model="'account.move.line'"
                                class="o_account_financial_reports_web_action_monetary_multi"
+                               t-att-style="style">
+                            <t t-att-style="style" t-raw="line.period_balance" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></a>
+                        </span>
+                    </t>
+                    <t t-if="line.account_group_id">
+                        <t t-set="domain"
+                           t-value="[('account_id', 'in', line.compute_account_ids.ids),
+                                     ('date', '&gt;=', line.report_id.date_from),
+                                     ('date', '&lt;=', line.report_id.date_to)]"/>
+                        <span>
+                            <a t-att-data-domain="domain"
+                               t-att-data-res-model="'account.move.line'"
+                               class="o_account_financial_reports_web_action_multi"
                                t-att-style="style">
                             <t t-att-style="style" t-raw="line.period_balance" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></a>
                         </span>

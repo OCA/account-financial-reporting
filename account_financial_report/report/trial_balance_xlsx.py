@@ -82,15 +82,15 @@ class TrialBalanceXslx(models.AbstractModel):
             }
             if report.foreign_currency:
                 foreign_currency = {
-                    5: {'header': _('Cur.'),
+                    6: {'header': _('Cur.'),
                         'field': 'currency_id',
                         'field_currency_balance': 'currency_id',
                         'type': 'many2one', 'width': 7},
-                    6: {'header': _('Initial balance'),
+                    7: {'header': _('Initial balance'),
                         'field': 'initial_balance_foreign_currency',
                         'type': 'amount_currency',
                         'width': 14},
-                    7: {'header': _('Ending balance'),
+                    8: {'header': _('Ending balance'),
                         'field': 'final_balance_foreign_currency',
                         'type': 'amount_currency',
                         'width': 14},
@@ -109,6 +109,9 @@ class TrialBalanceXslx(models.AbstractModel):
              _('Hide') if report.hide_account_at_0 else _('Show')],
             [_('Show foreign currency'),
              _('Yes') if report.foreign_currency else _('No')],
+            [_('Limit hierarchy levels'),
+             _('Level %s' % report.show_hierarchy_level) if
+             report.limit_hierarchy_level else _('No limit')],
         ]
 
     def _get_col_count_filter_name(self):
@@ -124,7 +127,7 @@ class TrialBalanceXslx(models.AbstractModel):
             self.write_array_header()
 
         # For each account
-        for account in report.account_ids:
+        for account in report.account_ids.filtered(lambda a: not a.hide_line):
             if not report.show_partner_details:
                 # Display account lines
                 self.write_line(account, 'account')
