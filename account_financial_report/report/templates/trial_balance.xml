@@ -108,7 +108,7 @@
             <div class="act_as_row labels">
                 <div class="act_as_cell">Date range filter</div>
                 <div class="act_as_cell">Target moves filter</div>
-                <div class="act_as_cell">Account balance at 0 filter</div>
+                <div class="act_as_cell">Account at 0 filter</div>
                 <div class="act_as_cell">Limit hierarchy levels</div>
             </div>
             <div class="act_as_row">
@@ -143,12 +143,12 @@
                     <!--## Code-->
                     <div class="act_as_cell" style="width: 8.86%;">Code</div>
                     <!--## Account-->
-                    <div class="act_as_cell" style="width: 52.58%;">Account
+                    <div class="act_as_cell" style="width: 37.58%;">Account
                     </div>
                 </t>
                 <t t-if="show_partner_details">
                     <!--## Partner-->
-                    <div class="act_as_cell" style="width: 61.44%;">Partner
+                    <div class="act_as_cell" style="width: 46.44%;">Partner
                     </div>
                 </t>
                 <!--## Initial balance-->
