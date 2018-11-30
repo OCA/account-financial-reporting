@@ -24,14 +24,29 @@ class TrialBalanceReport(models.TransientModel):
     date_to = fields.Date()
     fy_start_date = fields.Date()
     only_posted_moves = fields.Boolean()
-    hide_account_balance_at_0 = fields.Boolean()
+    hide_account_at_0 = fields.Boolean()
     foreign_currency = fields.Boolean()
     company_id = fields.Many2one(comodel_name='res.company')
     filter_account_ids = fields.Many2many(comodel_name='account.account')
     filter_partner_ids = fields.Many2many(comodel_name='res.partner')
     filter_journal_ids = fields.Many2many(comodel_name='account.journal')
     show_partner_details = fields.Boolean()
-
+    hierarchy_on = fields.Selection(
+        [('computed', 'Computed Accounts'),
+         ('relation', 'Child Accounts'),
+         ('none', 'No hierarchy')],
+        string='Hierarchy On',
+        required=True,
+        default='computed',
+        help="""Computed Accounts: Use when the account group have codes
+        that represent prefixes of the actual accounts.\n
+        Child Accounts: Use when your account groups are hierarchical.\n
+        No hierarchy: Use to display just the accounts, without any grouping.
+        """, period_balance=fields.Float(digits=(16, 2))
+    )
+    limit_hierarchy_level = fields.Boolean('Limit hierarchy levels')
+    show_hierarchy_level = fields.Integer('Hierarchy Levels to display',
+                                          default=1)
     # General Ledger Report Data fields,
     # used as base for compute the data reports
     general_ledger_id = fields.Many2one(
@@ -49,23 +64,37 @@ class TrialBalanceReportAccount(models.TransientModel):
 
     _name = 'report_trial_balance_qweb_account'
     _inherit = 'report_qweb_abstract'
-    _order = 'code ASC'
+    _order = 'sequence, code ASC, name'
 
     report_id = fields.Many2one(
         comodel_name='report_trial_balance_qweb',
         ondelete='cascade',
         index=True
     )
-
+    hide_line = fields.Boolean(compute='_compute_hide_line')
     # Data fields, used to keep link with real object
-    sequence = fields.Integer(index=True, default=0)
-    level = fields.Integer(index=True, default=0)
+    sequence = fields.Integer(index=True, default=1)
+    level = fields.Integer(index=True, default=1)
 
     # Data fields, used to keep link with real object
     account_id = fields.Many2one(
         'account.account',
         index=True
     )
+
+    account_group_id = fields.Many2one(
+        'account.group',
+        index=True
+    )
+    parent_id = fields.Many2one(
+        'account.group',
+        index=True
+    )
+    child_account_ids = fields.Char(
+        string="Accounts")
+    compute_account_ids = fields.Many2many(
+        'account.account',
+        string="Accounts", store=True)
 
     # Data fields, used for report display
     code = fields.Char()
@@ -75,6 +104,7 @@ class TrialBalanceReportAccount(models.TransientModel):
     initial_balance_foreign_currency = fields.Float(digits=(16, 2))
     debit = fields.Float(digits=(16, 2))
     credit = fields.Float(digits=(16, 2))
+    period_balance = fields.Float(digits=(16, 2))
     currency_id = fields.Many2one(comodel_name='res.currency')
     final_balance = fields.Float(digits=(16, 2))
     final_balance_foreign_currency = fields.Float(digits=(16, 2))
@@ -84,6 +114,21 @@ class TrialBalanceReportAccount(models.TransientModel):
         comodel_name='report_trial_balance_qweb_partner',
         inverse_name='report_account_id'
     )
+
+    @api.multi
+    def _compute_hide_line(self):
+        for rec in self:
+            report = rec.report_id
+            rec.hide_line = False
+            if report.hide_account_at_0 and (
+                    not rec.initial_balance and
+                    not rec.final_balance and
+                    not rec.debit and
+                    not rec.credit):
+                rec.hide_line = True
+            elif report.limit_hierarchy_level and \
+                    rec.level > report.show_hierarchy_level:
+                rec.hide_line = True
 
 
 class TrialBalanceReportPartner(models.TransientModel):
@@ -110,6 +155,7 @@ class TrialBalanceReportPartner(models.TransientModel):
     initial_balance_foreign_currency = fields.Float(digits=(16, 2))
     debit = fields.Float(digits=(16, 2))
     credit = fields.Float(digits=(16, 2))
+    period_balance = fields.Float(digits=(16, 2))
     currency_id = fields.Many2one(comodel_name='res.currency')
     final_balance = fields.Float(digits=(16, 2))
     final_balance_foreign_currency = fields.Float(digits=(16, 2))
@@ -169,7 +215,7 @@ class TrialBalanceReportCompute(models.TransientModel):
             'date_from': self.date_from,
             'date_to': self.date_to,
             'only_posted_moves': self.only_posted_moves,
-            'hide_account_balance_at_0': self.hide_account_balance_at_0,
+            'hide_account_at_0': self.hide_account_at_0,
             'foreign_currency': self.foreign_currency,
             'company_id': self.company_id.id,
             'filter_account_ids': [(6, 0, account_ids.ids)],
@@ -201,8 +247,21 @@ class TrialBalanceReportCompute(models.TransientModel):
         self._inject_account_values(account_ids)
         if self.show_partner_details:
             self._inject_partner_values()
-        # Refresh cache because all data are computed with SQL requests
-        self.invalidate_cache()
+        if not self.filter_account_ids:
+            if self.hierarchy_on != 'none':
+                self._inject_account_group_values()
+                if self.hierarchy_on == 'computed':
+                    self._update_account_group_computed_values()
+                else:
+                    self._update_account_group_child_values()
+                self._update_account_sequence()
+                self._add_account_group_account_values()
+        self.refresh()
+        if not self.filter_account_ids and self.hierarchy_on != 'none':
+            self._compute_group_accounts()
+        else:
+            for line in self.account_ids:
+                line.write({'level': 0})
 
     def _inject_account_values(self, account_ids):
         """Inject report values for report_trial_balance_qweb_account"""
@@ -214,11 +273,13 @@ INSERT INTO
     create_uid,
     create_date,
     account_id,
+    parent_id,
     code,
     name,
     initial_balance,
     debit,
     credit,
+    period_balance,
     final_balance,
     currency_id,
     initial_balance_foreign_currency,
@@ -229,11 +290,13 @@ SELECT
     %s AS create_uid,
     NOW() AS create_date,
     acc.id,
+    acc.group_id,
     acc.code,
     acc.name,
     coalesce(rag.initial_balance, 0) AS initial_balance,
     coalesce(rag.final_debit - rag.initial_debit, 0) AS debit,
     coalesce(rag.final_credit - rag.initial_credit, 0) AS credit,
+    coalesce(rag.final_balance - rag.initial_balance, 0) AS period_balance,
     coalesce(rag.final_balance, 0) AS final_balance,
     rag.currency_id AS currency_id,
     coalesce(rag.initial_balance_foreign_currency, 0)
@@ -247,9 +310,6 @@ FROM
 WHERE
     acc.id in %s
         """
-        if self.hide_account_balance_at_0:
-            query_inject_account += """ AND
-    final_balance IS NOT NULL AND final_balance != 0"""
         query_inject_account_params = (
             self.id,
             self.env.uid,
@@ -273,6 +333,7 @@ INSERT INTO
     initial_balance_foreign_currency,
     debit,
     credit,
+    period_balance,
     final_balance,
     final_balance_foreign_currency
     )
@@ -286,6 +347,7 @@ SELECT
     rpg.initial_balance_foreign_currency AS initial_balance_foreign_currency,
     rpg.final_debit - rpg.initial_debit AS debit,
     rpg.final_credit - rpg.initial_credit AS credit,
+    rpg.final_balance - rpg.initial_balance AS period_balance,
     rpg.final_balance AS final_balance,
     rpg.final_balance_foreign_currency AS final_balance_foreign_currency
 FROM
@@ -304,3 +366,207 @@ AND ra.report_id = %s
             self.id,
         )
         self.env.cr.execute(query_inject_partner, query_inject_partner_params)
+
+    def _inject_account_group_values(self):
+        """Inject report values for report_trial_balance_qweb_account"""
+        query_inject_account_group = """
+INSERT INTO
+    report_trial_balance_qweb_account
+    (
+    report_id,
+    create_uid,
+    create_date,
+    account_group_id,
+    parent_id,
+    code,
+    name,
+    sequence,
+    level
+    )
+SELECT
+    %s AS report_id,
+    %s AS create_uid,
+    NOW() AS create_date,
+    accgroup.id,
+    accgroup.parent_id,
+    coalesce(accgroup.code_prefix, accgroup.name),
+    accgroup.name,
+    accgroup.parent_left * 100000,
+    accgroup.level
+FROM
+    account_group accgroup"""
+        query_inject_account_params = (
+            self.id,
+            self.env.uid,
+        )
+        self.env.cr.execute(query_inject_account_group,
+                            query_inject_account_params)
+
+    def _update_account_group_child_values(self):
+        """Compute values for report_trial_balance_qweb_account group
+        in child."""
+        query_update_account_group = """
+WITH computed AS (WITH RECURSIVE cte AS (
+   SELECT account_group_id, code, account_group_id AS parent_id,
+    initial_balance, initial_balance_foreign_currency, debit, credit,
+    period_balance, final_balance, final_balance_foreign_currency
+   FROM   report_trial_balance_qweb_account
+   WHERE report_id = %s
+   GROUP BY report_trial_balance_qweb_account.id
+
+   UNION  ALL
+   SELECT c.account_group_id, c.code, p.account_group_id,
+    p.initial_balance, p.initial_balance_foreign_currency, p.debit, p.credit,
+    p.period_balance, p.final_balance, p.final_balance_foreign_currency
+   FROM   cte c
+   JOIN   report_trial_balance_qweb_account p USING (parent_id)
+    WHERE p.report_id = %s
+)
+SELECT account_group_id, code,
+    sum(initial_balance) AS initial_balance,
+    sum(initial_balance_foreign_currency) AS initial_balance_foreign_currency,
+    sum(debit) AS debit,
+    sum(credit) AS credit,
+    sum(debit) - sum(credit) AS period_balance,
+    sum(final_balance) AS final_balance,
+    sum(final_balance_foreign_currency) AS final_balance_foreign_currency
+FROM   cte
+GROUP BY cte.account_group_id, cte.code
+ORDER BY account_group_id
+)
+UPDATE report_trial_balance_qweb_account
+SET initial_balance = computed.initial_balance,
+    initial_balance_foreign_currency =
+        computed.initial_balance_foreign_currency,
+    debit = computed.debit,
+    credit = computed.credit,
+    period_balance = computed.period_balance,
+    final_balance = computed.final_balance,
+    final_balance_foreign_currency =
+        computed.final_balance_foreign_currency
+FROM computed
+WHERE report_trial_balance_qweb_account.account_group_id =
+computed.account_group_id
+    AND report_trial_balance_qweb_account.report_id = %s
+"""
+        query_update_account_params = (self.id, self.id, self.id,)
+        self.env.cr.execute(query_update_account_group,
+                            query_update_account_params)
+
+    def _add_account_group_account_values(self):
+        """Compute values for report_trial_balance_qweb_account group in
+        child."""
+        query_update_account_group = """
+DROP AGGREGATE IF EXISTS array_concat_agg(anyarray);
+CREATE AGGREGATE array_concat_agg(anyarray) (
+  SFUNC = array_cat,
+  STYPE = anyarray
+);
+WITH aggr AS(WITH computed AS (WITH RECURSIVE cte AS (
+   SELECT account_group_id, account_group_id AS parent_id,
+    ARRAY[account_id]::int[] as child_account_ids
+   FROM   report_trial_balance_qweb_account
+   WHERE report_id = %s
+   GROUP BY report_trial_balance_qweb_account.id
+
+   UNION  ALL
+   SELECT c.account_group_id, p.account_group_id, ARRAY[p.account_id]::int[]
+   FROM   cte c
+   JOIN   report_trial_balance_qweb_account p USING (parent_id)
+    WHERE p.report_id = %s
+)
+SELECT account_group_id,
+    array_concat_agg(DISTINCT child_account_ids)::int[] as child_account_ids
+FROM   cte
+GROUP BY cte.account_group_id, cte.child_account_ids
+ORDER BY account_group_id
+)
+SELECT account_group_id,
+    array_concat_agg(DISTINCT child_account_ids)::int[]
+        AS child_account_ids from computed
+GROUP BY account_group_id)
+UPDATE report_trial_balance_qweb_account
+SET child_account_ids = aggr.child_account_ids
+FROM aggr
+WHERE report_trial_balance_qweb_account.account_group_id =
+    aggr.account_group_id
+    AND report_trial_balance_qweb_account.report_id = %s
+"""
+        query_update_account_params = (self.id, self.id, self.id,)
+        self.env.cr.execute(query_update_account_group,
+                            query_update_account_params)
+
+    def _update_account_group_computed_values(self):
+        """Compute values for report_trial_balance_qweb_account group
+        in compute."""
+        query_update_account_group = """
+WITH RECURSIVE accgroup AS
+(SELECT
+    accgroup.id,
+    sum(coalesce(ra.initial_balance, 0)) as initial_balance,
+    sum(coalesce(ra.initial_balance_foreign_currency, 0))
+        as initial_balance_foreign_currency,
+    sum(coalesce(ra.debit, 0)) as debit,
+    sum(coalesce(ra.credit, 0)) as credit,
+    sum(coalesce(ra.debit, 0)) - sum(coalesce(ra.credit, 0)) as period_balance,
+    sum(coalesce(ra.final_balance, 0)) as final_balance,
+    sum(coalesce(ra.final_balance_foreign_currency, 0))
+        as final_balance_foreign_currency
+ FROM
+    account_group accgroup
+    LEFT OUTER JOIN account_account AS acc
+        ON strpos(acc.code, accgroup.code_prefix) = 1
+    LEFT OUTER JOIN report_trial_balance_qweb_account AS ra
+        ON ra.account_id = acc.id
+ WHERE ra.report_id = %s
+ GROUP BY accgroup.id
+)
+UPDATE report_trial_balance_qweb_account
+SET initial_balance = accgroup.initial_balance,
+    initial_balance_foreign_currency =
+        accgroup.initial_balance_foreign_currency,
+    debit = accgroup.debit,
+    credit = accgroup.credit,
+    period_balance = accgroup.period_balance,
+    final_balance = accgroup.final_balance,
+    final_balance_foreign_currency =
+        accgroup.final_balance_foreign_currency
+FROM accgroup
+WHERE report_trial_balance_qweb_account.account_group_id = accgroup.id
+"""
+        query_update_account_params = (self.id,)
+        self.env.cr.execute(query_update_account_group,
+                            query_update_account_params)
+
+    def _update_account_sequence(self):
+        """Compute sequence, level for report_trial_balance_qweb_
+        account account."""
+        query_update_account_group = """
+UPDATE report_trial_balance_qweb_account
+SET sequence = newline.sequence + 1,
+    level = newline.level + 1
+FROM report_trial_balance_qweb_account as newline
+WHERE newline.account_group_id = report_trial_balance_qweb_account.parent_id
+    AND report_trial_balance_qweb_account.report_id = newline.report_id
+    AND report_trial_balance_qweb_account.account_id is not null
+    AND report_trial_balance_qweb_account.report_id = %s"""
+        query_update_account_params = (self.id,)
+        self.env.cr.execute(query_update_account_group,
+                            query_update_account_params)
+
+    def _compute_group_accounts(self):
+        groups = self.account_ids.filtered(
+            lambda a: a.account_group_id is not False)
+        for group in groups:
+            if self.hierarchy_on == 'compute':
+                group.compute_account_ids = \
+                    group.account_group_id.compute_account_ids
+            else:
+                if group.child_account_ids:
+                    chacc = group.child_account_ids.replace(
+                        '}', '').replace('{', '').split(',')
+                    if 'NULL' in chacc:
+                        chacc.remove('NULL')
+                    if chacc:
+                        group.compute_account_ids = [
+                            (6, 0, [int(g) for g in chacc])]

@@ -89,7 +89,7 @@ class GeneralLedgerXslx(abstract_report_xlsx.AbstractReportXslx):
             ],
             [
                 _('Account balance at 0 filter'),
-                _('Hide') if report.hide_account_balance_at_0 else _('Show'),
+                _('Hide') if report.hide_account_at_0 else _('Show'),
             ],
             [
                 _('Centralize filter'),

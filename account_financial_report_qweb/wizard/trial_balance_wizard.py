@@ -2,10 +2,12 @@
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA
 # Copyright 2017 Akretion - Alexis de Lattre
+# Copyright 2018 Eficent Business and IT Consuting Services, S.L.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import models, fields, api
+from odoo import api, fields, models, _
 from odoo.tools.safe_eval import safe_eval
+from odoo.exceptions import UserError
 
 
 class TrialBalanceReportWizard(models.TransientModel):
@@ -31,16 +33,31 @@ class TrialBalanceReportWizard(models.TransientModel):
                                    string='Target Moves',
                                    required=True,
                                    default='all')
+    hierarchy_on = fields.Selection(
+        [('computed', 'Computed Accounts'),
+         ('relation', 'Child Accounts'),
+         ('none', 'No hierarchy')],
+        string='Hierarchy On',
+        required=True,
+        default='computed',
+        help="""Computed Accounts: Use when the account group have codes
+        that represent prefixes of the actual accounts.\n
+        Child Accounts: Use when your account groups are hierarchical.\n
+        No hierarchy: Use to display just the accounts, without any grouping.
+        """,
+    )
+    limit_hierarchy_level = fields.Boolean('Limit hierarchy levels')
+    show_hierarchy_level = fields.Integer('Hierarchy Levels to display',
+                                          default=1)
     account_ids = fields.Many2many(
         comodel_name='account.account',
         string='Filter accounts',
     )
-    hide_account_balance_at_0 = fields.Boolean(
-        string='Hide account ending balance at 0',
-        help='Use this filter to hide an account or a partner '
-             'with an ending balance at 0. '
-             'If partners are filtered, '
-             'debits and credits totals will not match the trial balance.'
+    hide_account_at_0 = fields.Boolean(
+        string='Hide accounts at 0', default=True,
+        help='When this option is enabled, the trial balance will '
+             'not display accounts that have initial balance = '
+             'debit = credit = end balance = 0',
     )
     receivable_accounts_only = fields.Boolean()
     payable_accounts_only = fields.Boolean()
@@ -65,6 +82,14 @@ class TrialBalanceReportWizard(models.TransientModel):
              'account currency is not setup through chart of accounts '
              'will display initial and final balance in that currency.'
     )
+
+    @api.multi
+    @api.constrains('hierarchy_on', 'show_hierarchy_level')
+    def _check_show_hierarchy_level(self):
+        for rec in self:
+            if rec.hierarchy_on != 'none' and rec.show_hierarchy_level <= 0:
+                raise UserError(_('The hierarchy level to filter on must be '
+                                  'greater than 0.'))
 
     @api.depends('date_from')
     def _compute_fy_start_date(self):
@@ -105,36 +130,13 @@ class TrialBalanceReportWizard(models.TransientModel):
         else:
             self.account_ids = None
 
-    @api.model
-    def create(self, vals):
-        """
-        This is a workaround for bug https://github.com/odoo/odoo/issues/14761
-        This bug impacts M2M fields in wizards filled-up via onchange
-        It replaces the workaround widget="many2many_tags" on
-        field name="account_ids" which prevented from selecting several
-        accounts at the same time (quite useful when you want to select
-        an interval of accounts for example)
-        """
-        if 'account_ids' in vals and isinstance(vals['account_ids'], list):
-            account_ids = []
-            for account in vals['account_ids']:
-                if account[0] in (1, 4):
-                    account_ids.append(account[1])
-                elif account[0] == 6 and isinstance(account[2], list):
-                    account_ids += account[2]
-            vals['account_ids'] = [(6, 0, account_ids)]
-        res = super(TrialBalanceReportWizard, self).create(vals)
-        return res
-
     @api.onchange('show_partner_details')
     def onchange_show_partner_details(self):
         """Handle partners change."""
         if self.show_partner_details:
             self.receivable_accounts_only = self.payable_accounts_only = True
-            self.hide_account_balance_at_0 = True
         else:
             self.receivable_accounts_only = self.payable_accounts_only = False
-            self.hide_account_balance_at_0 = False
 
     @api.multi
     def button_export_html(self):
@@ -171,13 +173,16 @@ class TrialBalanceReportWizard(models.TransientModel):
             'date_from': self.date_from,
             'date_to': self.date_to,
             'only_posted_moves': self.target_move == 'posted',
-            'hide_account_balance_at_0': self.hide_account_balance_at_0,
+            'hide_account_at_0': self.hide_account_at_0,
             'foreign_currency': self.foreign_currency,
             'company_id': self.company_id.id,
             'filter_account_ids': [(6, 0, self.account_ids.ids)],
             'filter_partner_ids': [(6, 0, self.partner_ids.ids)],
             'filter_journal_ids': [(6, 0, self.journal_ids.ids)],
             'fy_start_date': self.fy_start_date,
+            'hierarchy_on': self.hierarchy_on,
+            'limit_hierarchy_level': self.limit_hierarchy_level,
+            'show_hierarchy_level': self.show_hierarchy_level,
             'show_partner_details': self.show_partner_details,
         }
 

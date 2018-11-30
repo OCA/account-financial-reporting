@@ -35,6 +35,51 @@ class TrialBalanceXslx(abstract_report_xlsx.AbstractReportXslx):
                     'field': 'credit',
                     'type': 'amount',
                     'width': 14},
+                5: {'header': _('Period balance'),
+                    'field': 'period_balance',
+                    'type': 'amount',
+                    'width': 14},
+                6: {'header': _('Ending balance'),
+                    'field': 'final_balance',
+                    'type': 'amount',
+                    'width': 14},
+            }
+            if report.foreign_currency:
+                foreign_currency = {
+                    7: {'header': _('Cur.'),
+                        'field': 'currency_id',
+                        'field_currency_balance': 'currency_id',
+                        'type': 'many2one', 'width': 7},
+                    8: {'header': _('Initial balance'),
+                        'field': 'initial_balance_foreign_currency',
+                        'type': 'amount_currency',
+                        'width': 14},
+                    9: {'header': _('Ending balance'),
+                        'field': 'final_balance_foreign_currency',
+                        'type': 'amount_currency',
+                        'width': 14},
+                }
+                res = dict(res.items() + foreign_currency.items())
+            return res
+        else:
+            res = {
+                0: {'header': _('Partner'), 'field': 'name', 'width': 70},
+                1: {'header': _('Initial balance'),
+                    'field': 'initial_balance',
+                    'type': 'amount',
+                    'width': 14},
+                2: {'header': _('Debit'),
+                    'field': 'debit',
+                    'type': 'amount',
+                    'width': 14},
+                3: {'header': _('Credit'),
+                    'field': 'credit',
+                    'type': 'amount',
+                    'width': 14},
+                4: {'header': _('Period balance'),
+                    'field': 'period_balance',
+                    'type': 'amount',
+                    'width': 14},
                 5: {'header': _('Ending balance'),
                     'field': 'final_balance',
                     'type': 'amount',
@@ -57,43 +102,6 @@ class TrialBalanceXslx(abstract_report_xlsx.AbstractReportXslx):
                 }
                 res = dict(res.items() + foreign_currency.items())
             return res
-        else:
-            res = {
-                0: {'header': _('Partner'), 'field': 'name', 'width': 70},
-                1: {'header': _('Initial balance'),
-                    'field': 'initial_balance',
-                    'type': 'amount',
-                    'width': 14},
-                2: {'header': _('Debit'),
-                    'field': 'debit',
-                    'type': 'amount',
-                    'width': 14},
-                3: {'header': _('Credit'),
-                    'field': 'credit',
-                    'type': 'amount',
-                    'width': 14},
-                4: {'header': _('Ending balance'),
-                    'field': 'final_balance',
-                    'type': 'amount',
-                    'width': 14},
-            }
-            if report.foreign_currency:
-                foreign_currency = {
-                    5: {'header': _('Cur.'),
-                        'field': 'currency_id',
-                        'field_currency_balance': 'currency_id',
-                        'type': 'many2one', 'width': 7},
-                    6: {'header': _('Initial balance'),
-                        'field': 'initial_balance_foreign_currency',
-                        'type': 'amount_currency',
-                        'width': 14},
-                    7: {'header': _('Ending balance'),
-                        'field': 'final_balance_foreign_currency',
-                        'type': 'amount_currency',
-                        'width': 14},
-                }
-                res = dict(res.items() + foreign_currency.items())
-            return res
 
     def _get_report_filters(self, report):
         return [
@@ -102,10 +110,13 @@ class TrialBalanceXslx(abstract_report_xlsx.AbstractReportXslx):
             [_('Target moves filter'),
                 _('All posted entries') if report.only_posted_moves
                 else _('All entries')],
-            [_('Account balance at 0 filter'),
-                _('Hide') if report.hide_account_balance_at_0 else _('Show')],
+            [_('Account at 0 filter'),
+                _('Hide') if report.hide_account_at_0 else _('Show')],
             [_('Show foreign currency'),
              _('Yes') if report.foreign_currency else _('No')],
+            [_('Limit hierarchy levels'),
+             _('Level %s' % report.show_hierarchy_level) if
+             report.limit_hierarchy_level else _('No limit')],
         ]
 
     def _get_col_count_filter_name(self):
@@ -121,7 +132,7 @@ class TrialBalanceXslx(abstract_report_xlsx.AbstractReportXslx):
             self.write_array_header()
 
         # For each account
-        for account in report.account_ids:
+        for account in report.account_ids.filtered(lambda a: not a.hide_line):
             if not report.show_partner_details:
                 # Display account lines
                 self.write_line(account, 'account')

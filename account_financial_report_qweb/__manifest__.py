@@ -5,7 +5,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     'name': 'QWeb Financial Reports',
-    'version': '10.0.1.5.3',
+    'version': '10.0.2.0.0',
     'category': 'Reporting',
     'summary': 'OCA Financial Reports',
     'author': 'Camptocamp SA,'
@@ -16,9 +16,11 @@
     "website": "https://odoo-community.org/",
     'depends': [
         'account',
+        'account_group',    # account-financial-tools
         'date_range',
         'report_xlsx',
         'report',
+        'web_widget_many2many_tags_multi_selection',
     ],
     'data': [
         'wizard/aged_partner_balance_wizard_view.xml',

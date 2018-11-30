@@ -4,7 +4,6 @@
 # Copyright 2016 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from datetime import datetime
 from odoo import models, fields, api
 from odoo.tools.safe_eval import safe_eval
 
@@ -21,7 +20,7 @@ class OpenItemsReportWizard(models.TransientModel):
         string='Company'
     )
     date_at = fields.Date(required=True,
-                          default=fields.Date.to_string(datetime.today()))
+                          default=fields.Date.context_today)
     target_move = fields.Selection([('posted', 'All Posted Entries'),
                                     ('all', 'All Entries')],
                                    string='Target Moves',
@@ -32,7 +31,7 @@ class OpenItemsReportWizard(models.TransientModel):
         string='Filter accounts',
         domain=[('reconcile', '=', True)],
     )
-    hide_account_balance_at_0 = fields.Boolean(
+    hide_account_at_0 = fields.Boolean(
         string='Hide account ending balance at 0',
         help='Use this filter to hide an account or a partner '
              'with an ending balance at 0. '
@@ -66,27 +65,6 @@ class OpenItemsReportWizard(models.TransientModel):
             self.account_ids = self.env['account.account'].search(domain)
         else:
             self.account_ids = None
-
-    @api.model
-    def create(self, vals):
-        """
-        This is a workaround for bug https://github.com/odoo/odoo/issues/14761
-        This bug impacts M2M fields in wizards filled-up via onchange
-        It replaces the workaround widget="many2many_tags" on
-        field name="account_ids" which prevented from selecting several
-        accounts at the same time (quite useful when you want to select
-        an interval of accounts for example)
-        """
-        if 'account_ids' in vals and isinstance(vals['account_ids'], list):
-            account_ids = []
-            for account in vals['account_ids']:
-                if account[0] in (1, 4):
-                    account_ids.append(account[1])
-                elif account[0] == 6 and isinstance(account[2], list):
-                    account_ids += account[2]
-            vals['account_ids'] = [(6, 0, account_ids)]
-        res = super(OpenItemsReportWizard, self).create(vals)
-        return res
 
     @api.multi
     def button_export_html(self):
@@ -122,7 +100,7 @@ class OpenItemsReportWizard(models.TransientModel):
         return {
             'date_at': self.date_at,
             'only_posted_moves': self.target_move == 'posted',
-            'hide_account_balance_at_0': self.hide_account_balance_at_0,
+            'hide_account_at_0': self.hide_account_at_0,
             'foreign_currency': self.foreign_currency,
             'company_id': self.company_id.id,
             'filter_account_ids': [(6, 0, self.account_ids.ids)],

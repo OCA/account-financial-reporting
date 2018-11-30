@@ -63,7 +63,7 @@ class OpenItemsXslx(abstract_report_xlsx.AbstractReportXslx):
              _('All posted entries') if report.only_posted_moves else _(
                  'All entries')],
             [_('Account balance at 0 filter'),
-             _('Hide') if report.hide_account_balance_at_0 else _('Show')],
+             _('Hide') if report.hide_account_at_0 else _('Show')],
             [_('Show foreign currency'),
              _('Yes') if report.foreign_currency else _('No')],
         ]
