@@ -166,6 +166,7 @@ Contributors
 * Guewen Baconnier
 * David Dufresne <david.dufresne@savoirfairelinux.com>
 * Luc De Meyer <luc.demeyer@noviat.com>
+* Jairo Llopis <jairo.llopis@tecnativa.com>
 
 Maintainer
 ----------

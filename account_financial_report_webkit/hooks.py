@@ -1,23 +1,28 @@
 # -*- coding: utf-8 -*-
 # © 2017 Therp BV <http://therp.nl>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+from psycopg2 import ProgrammingError
+
 from .models.account_move_line import AccountMoveLine
 
 
 def pre_init_hook(cr):
-    with cr.savepoint():
-        # don't break if column exists
-        cr.execute(
-            'alter table account_move_line add column last_rec_date date',
-        )
-        cr.execute(
-            'comment on column account_move_line.last_rec_date is %s',
-            (AccountMoveLine.last_rec_date.string,),
-        )
-        cr.execute(
-            'create index account_move_line_last_rec_date_index '
-            'on account_move_line (last_rec_date)',
-        )
+    # don't break if column exists
+    try:
+        with cr.savepoint():
+            cr.execute(
+                'alter table account_move_line add column last_rec_date date',
+            )
+            cr.execute(
+                'comment on column account_move_line.last_rec_date is %s',
+                (AccountMoveLine.last_rec_date.string,),
+            )
+            cr.execute(
+                'create index account_move_line_last_rec_date_index '
+                'on account_move_line (last_rec_date)',
+            )
+    except ProgrammingError:
+        pass
     # but still do the initialization
     cr.execute(
         """update account_move_line
