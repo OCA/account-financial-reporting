@@ -198,7 +198,7 @@ class BankReconciliationXlsx(ReportXlsx):
                         row, 3, bline.partner_id.display_name or '', regular)
                     sheet.write(row, 4, bline.amount, regular_currency)
                     sheet.write(
-                        row, 5, bline.statement_id.name or '',
+                        row, 5, bline.statement_id.display_name or '',
                         regular_currency)
                 formula += '+SUM(E%d:E%d)' % (b_start_row + 1, b_end_row + 1)
 

@@ -13,7 +13,9 @@ class BankReconciliationReportWizard(models.TransientModel):
     def _default_journal_ids(self):
         journals = self.env['account.journal'].search([
             ('type', '=', 'bank'),
-            ('company_id', '=', self.env.user.company_id.id)])
+            ('bank_account_id', '!=', False),
+            ('company_id', '=', self.env.user.company_id.id),
+            ])
         return journals
 
     date = fields.Date(
