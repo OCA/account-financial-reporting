@@ -19,6 +19,31 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: account_financial_report_qweb
+#: model:ir.ui.view,arch_db:account_financial_report_qweb.report_aged_partner_balance_qweb_lines_header
+msgid "&gt; 120 d."
+msgstr ""
+
+#. module: account_financial_report_qweb
+#: model:ir.ui.view,arch_db:account_financial_report_qweb.report_aged_partner_balance_qweb_lines_header
+msgid "1 - 30 d."
+msgstr ""
+
+#. module: account_financial_report_qweb
+#: model:ir.ui.view,arch_db:account_financial_report_qweb.report_aged_partner_balance_qweb_lines_header
+msgid "31 - 60 d."
+msgstr ""
+
+#. module: account_financial_report_qweb
+#: model:ir.ui.view,arch_db:account_financial_report_qweb.report_aged_partner_balance_qweb_lines_header
+msgid "61 - 90 d."
+msgstr ""
+
+#. module: account_financial_report_qweb
+#: model:ir.ui.view,arch_db:account_financial_report_qweb.report_aged_partner_balance_qweb_lines_header
+msgid "91 - 120 d."
+msgstr ""
+
+#. module: account_financial_report_qweb
 #: code:addons/account_financial_report_qweb/report/aged_partner_balance_xlsx.py:72
 #: code:addons/account_financial_report_qweb/report/general_ledger_xlsx.py:27
 #: code:addons/account_financial_report_qweb/report/open_items_xlsx.py:26
@@ -94,7 +119,6 @@ msgstr ""
 #. module: account_financial_report_qweb
 #: code:addons/account_financial_report_qweb/report/aged_partner_balance_xlsx.py:54
 #: code:addons/account_financial_report_qweb/report/aged_partner_balance_xlsx.py:110
-#: model:ir.ui.view,arch_db:account_financial_report_qweb.report_aged_partner_balance_qweb_lines_header
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_aged_partner_balance_qweb_move_lines
 #, python-format
 msgid "Age ≤ 120 d."
@@ -103,7 +127,6 @@ msgstr ""
 #. module: account_financial_report_qweb
 #: code:addons/account_financial_report_qweb/report/aged_partner_balance_xlsx.py:36
 #: code:addons/account_financial_report_qweb/report/aged_partner_balance_xlsx.py:89
-#: model:ir.ui.view,arch_db:account_financial_report_qweb.report_aged_partner_balance_qweb_lines_header
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_aged_partner_balance_qweb_move_lines
 #, python-format
 msgid "Age ≤ 30 d."
@@ -112,7 +135,6 @@ msgstr ""
 #. module: account_financial_report_qweb
 #: code:addons/account_financial_report_qweb/report/aged_partner_balance_xlsx.py:42
 #: code:addons/account_financial_report_qweb/report/aged_partner_balance_xlsx.py:96
-#: model:ir.ui.view,arch_db:account_financial_report_qweb.report_aged_partner_balance_qweb_lines_header
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_aged_partner_balance_qweb_move_lines
 #, python-format
 msgid "Age ≤ 60 d."
@@ -121,7 +143,6 @@ msgstr ""
 #. module: account_financial_report_qweb
 #: code:addons/account_financial_report_qweb/report/aged_partner_balance_xlsx.py:48
 #: code:addons/account_financial_report_qweb/report/aged_partner_balance_xlsx.py:103
-#: model:ir.ui.view,arch_db:account_financial_report_qweb.report_aged_partner_balance_qweb_lines_header
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_aged_partner_balance_qweb_move_lines
 #, python-format
 msgid "Age ≤ 90 d."
@@ -249,7 +270,7 @@ msgid "Centralized"
 msgstr ""
 
 #. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:1147
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:1151
 #, python-format
 msgid "Centralized Entries"
 msgstr ""
@@ -431,7 +452,6 @@ msgstr ""
 #: code:addons/account_financial_report_qweb/report/aged_partner_balance_xlsx.py:82
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_aged_partner_balance_qweb_line_current
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_aged_partner_balance_qweb_move_line_current
-#: model:ir.ui.view,arch_db:account_financial_report_qweb.report_aged_partner_balance_qweb_lines_header
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_aged_partner_balance_qweb_move_lines
 #, python-format
 msgid "Current"
@@ -535,6 +555,7 @@ msgstr "Deure "
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_open_items_qweb_display_name
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_open_items_qweb_move_line_display_name
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_open_items_qweb_partner_display_name
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_qweb_abstract_display_name
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_account_display_name
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_display_name
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_partner_display_name
@@ -762,6 +783,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_open_items_qweb_id
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_open_items_qweb_move_line_id
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_open_items_qweb_partner_id
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_qweb_abstract_id
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_account_id
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_id
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_partner_id
@@ -846,6 +868,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_open_items_qweb_account___last_update
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_open_items_qweb_move_line___last_update
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_open_items_qweb_partner___last_update
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_qweb_abstract___last_update
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb___last_update
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_account___last_update
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_partner___last_update
@@ -946,12 +969,17 @@ msgid "No"
 msgstr ""
 
 #. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:641
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:910
-#: code:addons/account_financial_report_qweb/report/open_items.py:283
-#: code:addons/account_financial_report_qweb/report/open_items.py:529
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:645
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:914
+#: code:addons/account_financial_report_qweb/report/open_items.py:287
+#: code:addons/account_financial_report_qweb/report/open_items.py:533
 #, python-format
 msgid "No partner allocated"
+msgstr ""
+
+#. module: account_financial_report_qweb
+#: model:ir.ui.view,arch_db:account_financial_report_qweb.report_aged_partner_balance_qweb_lines_header
+msgid "Not due"
 msgstr ""
 
 #. module: account_financial_report_qweb
@@ -970,7 +998,6 @@ msgstr ""
 #: code:addons/account_financial_report_qweb/report/aged_partner_balance_xlsx.py:117
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_aged_partner_balance_qweb_line_older
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_aged_partner_balance_qweb_move_line_older
-#: model:ir.ui.view,arch_db:account_financial_report_qweb.report_aged_partner_balance_qweb_lines_header
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_aged_partner_balance_qweb_move_lines
 #, python-format
 msgid "Older"
@@ -1358,6 +1385,11 @@ msgstr ""
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_open_items_qweb_partner
 msgid "report_open_items_qweb_partner"
+msgstr ""
+
+#. module: account_financial_report_qweb
+#: model:ir.model,name:account_financial_report_qweb.model_report_qweb_abstract
+msgid "report_qweb_abstract"
 msgstr ""
 
 #. module: account_financial_report_qweb
