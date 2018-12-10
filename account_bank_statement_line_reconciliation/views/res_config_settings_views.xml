@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="extra_account_mass_reconcile_view_account_config" model="ir.ui.view">
+        <field name="name">extra.account.mass.reconcile.view.account.config</field>
+        <field name="model">account.config.settings</field>
+        <field name="inherit_id" ref="account_mass_reconcile.view_account_config"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//div[@name='reconciliation_config']" position="inside">
+              <div>
+                <label for="account_bank_reconciliation_start"/>
+                <field name="account_bank_reconciliation_start" class="oe_inline"/>
+              </div>
+            </xpath>
+
+        </field>
+     </record>
+</odoo>
