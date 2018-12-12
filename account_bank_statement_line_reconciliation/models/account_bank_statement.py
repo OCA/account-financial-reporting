@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
-from odoo import models, fields, api
-from odoo.osv import expression
+from odoo import models, api
+
 
 class AccountBankStatementLine(models.Model):
     _inherit = "account.bank.statement.line"
-
 
     def get_move_lines_for_reconciliation(
         self, excluded_ids=None, str=False, offset=0, limit=None,
