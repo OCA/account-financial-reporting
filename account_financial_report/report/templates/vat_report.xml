@@ -12,15 +12,15 @@
     </template>
 
     <template id="account_financial_report.report_vat_report_base">
+        <t t-set="title">VAT Report - <t t-raw="o.company_id.name"/> - <t t-raw="o.company_id.currency_id.name"/></t>
+        <t t-set="company_name" t-value="o.company_id.name"/>
         <div class="page data_table">
-            <t t-set="title">VAT Report</t>
             <div class="row">
                 <h4 class="mt0" t-esc="title or 'Odoo Report'"/>
             </div>
             <!-- Display filters -->
             <t t-call="account_financial_report.report_vat_report_filters"/>
             <div class="page_break"/>
-
             <div class="act_as_table data_table" style="width: 100%;">
                 <!-- Display table headers for lines -->
                 <div class="act_as_thead">
