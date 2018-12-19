@@ -2,16 +2,6 @@
 <odoo>
 
     <template id="account_financial_report.internal_layout">
-        <div class="header">
-            <div class="row">
-                <div class="col-xs-6">
-                    <span t-esc="title"/>
-                </div>
-                <div class="col-xs-6 text-right">
-                    <span t-esc="company_name"/>
-                </div>
-            </div>
-        </div>
         <div class="article">
             <link href="/account_financial_report/static/src/css/report.css" rel="stylesheet"/>
           <t t-raw="0" />

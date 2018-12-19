@@ -15,93 +15,95 @@
         <!-- Saved flag fields into variables, used to define columns display -->
         <t t-set="show_partner_details" t-value="o.show_partner_details"/>
         <t t-set="foreign_currency" t-value="o.foreign_currency"/>
-            <!-- Defines global variables used by internal layout -->
-            <t t-set="title">Trial Balance</t>
-            <t t-set="company_name" t-value="o.company_id.name"/>
-            <t t-set="res_company" t-value="o.company_id"/>
+        <!-- Defines global variables used by internal layout -->
+        <t t-set="title">Trial Balance - <t t-raw="o.company_id.name"/> - <t t-raw="o.company_id.currency_id.name"/></t>
+        <t t-set="company_name" t-value="o.company_id.name"/>
+        <t t-set="res_company" t-value="o.company_id"/>
+        <div class="page data_table">
+            <div class="row">
+                <h4 class="mt0" t-esc="title or 'Odoo Report'"/>
+            </div>
+            <!-- Display filters -->
+            <t t-call="account_financial_report.report_trial_balance_filters"/>
+            <div class="act_as_table list_table" style="margin-top: 10px;"/>
 
-            <div class="page">
-                <!-- Display filters -->
-                <t t-call="account_financial_report.report_trial_balance_filters"/>
-                <div class="act_as_table list_table" style="margin-top: 10px;"/>
+            <!-- Display account lines -->
+            <t t-if="not show_partner_details">
+                <div class="act_as_table data_table" style="width: 100%;">
+                    <!-- Display account header -->
+                    <t t-call="account_financial_report.report_trial_balance_lines_header"/>
 
-                <!-- Display account lines -->
-                <t t-if="not show_partner_details">
-                    <div class="act_as_table data_table" style="width: 100%;">
-                        <!-- Display account header -->
-                        <t t-call="account_financial_report.report_trial_balance_lines_header"/>
-                        
-                        <!-- Display each lines -->
-                        <t t-foreach="o.account_ids.filtered(lambda a: not a.hide_line)" t-as="line">
-                            <t t-set="type" t-value='"account_type"'/>                                                                    
-                            <!-- Adapt -->
-                            <t t-set="style" t-value="'font-size:8px;'"/>
-                            <t t-set="padding" t-value="line.level * 4"/>
-                            <t t-if="o.hide_account_at_0">
-                                <t t-set="style" t-value="'font-size: 14px;'"/>
-                            </t>
-                            <t t-if="o.hierarchy_on != 'none'">
-                                <t t-set="style" t-value="'font-size: ' + str(14 - line.level) + 'px; margin-left: ' + str(line.level * 4) + 'px;'"/>
-                            </t>
-                            <t t-if="line.account_group_id">
-                                <t t-set="style" t-value="style + 'font-weight: bold; color: blue;'"/>
-                            </t>              
-                            
-                            <!-- Display account lines -->
-                            <t t-call="account_financial_report.report_trial_balance_line"/>
-                            <!-- Adapt style -->
+                    <!-- Display each lines -->
+                    <t t-foreach="o.account_ids.filtered(lambda a: not a.hide_line)" t-as="line">
+                        <t t-set="type" t-value='"account_type"'/>
+                        <!-- Adapt -->
+                        <t t-set="style" t-value="'font-size:8px;'"/>
+                        <t t-set="padding" t-value="line.level * 4"/>
+                        <t t-if="o.hide_account_at_0">
+                            <t t-set="style" t-value="'font-size: 14px;'"/>
                         </t>
+                        <t t-if="o.hierarchy_on != 'none'">
+                            <t t-set="style" t-value="'font-size: ' + str(14 - line.level) + 'px; margin-left: ' + str(line.level * 4) + 'px;'"/>
+                        </t>
+                        <t t-if="line.account_group_id">
+                            <t t-set="style" t-value="style + 'font-weight: bold; color: blue;'"/>
+                        </t>
+
+                        <!-- Display account lines -->
+                        <t t-call="account_financial_report.report_trial_balance_line"/>
+                        <!-- Adapt style -->
+                    </t>
+                </div>
+            </t>
+
+            <!-- Display partner lines -->
+            <t t-if="show_partner_details">
+                <t t-set="padding" t-value="0"/>
+                <t t-foreach="o.account_ids" t-as="account">
+                    <div class="page_break">
+                        <t t-set="style" t-value="'font-size:8px;'"/>
+                        <t t-set="padding" t-value="account.level * 4"/>
+                        <t t-set="style" t-value="'font-size: ' + str(14 - account.level) + 'px; margin-left: ' + str(account.level * 4) + 'px;'"/>
+
+                        <!-- Display account header -->
+                        <div class="act_as_table list_table" style="margin-top: 10px;"/>
+                        <div class="act_as_caption account_title"
+                             style="width: 100%;">
+                            <t t-set="res_model" t-value="'account.account'"/>
+                            <span>
+                                <a t-att-data-active-id="account.account_id.id"
+                                   t-att-data-res-model="res_model"
+                                   class="o_account_financial_reports_web_action"
+                                   t-att-style="style">
+                                    <t t-raw="account.code"/> - <t t-raw="account.name"/></a>
+                            </span>
+                        </div>
+
+                        <div class="act_as_table data_table"
+                             style="width: 100%;">
+                            <!-- Display account/partner header -->
+                            <t t-call="account_financial_report.report_trial_balance_lines_header"/>
+
+                            <!-- Adapt style -->
+                            <t t-set="padding" t-value="padding+4"/>
+
+                            <!-- Display each partners -->
+                            <t t-foreach="account.partner_ids" t-as="line">
+                                <t t-set="type" t-value='"partner_type"'/>
+                                <!-- Display partner line -->
+                                <t t-call="account_financial_report.report_trial_balance_line"/>
+                            </t>
+                            <t t-set="padding" t-value="padding-4"/>
+                        </div>
+
+                        <!-- Display account footer -->
+                        <t t-set="type" t-value='"account_type"'/>
+                        <t t-call="account_financial_report.report_trial_balance_account_footer"/>
+
                     </div>
                 </t>
-
-                <!-- Display partner lines -->
-                <t t-if="show_partner_details">
-                    <t t-set="padding" t-value="0"/>
-                    <t t-foreach="o.account_ids" t-as="account">
-                        <div class="page_break">
-                            <t t-set="style" t-value="'font-size:8px;'"/>
-                            <t t-set="padding" t-value="account.level * 4"/>
-                            <t t-set="style" t-value="'font-size: ' + str(14 - account.level) + 'px; margin-left: ' + str(account.level * 4) + 'px;'"/>
-                            
-                            <!-- Display account header -->
-                            <div class="act_as_table list_table" style="margin-top: 10px;"/>
-                            <div class="act_as_caption account_title"
-                                 style="width: 100%;">
-                                <t t-set="res_model" t-value="'account.account'"/>
-                                <span>
-                                    <a t-att-data-active-id="account.account_id.id"
-                                       t-att-data-res-model="res_model"
-                                       class="o_account_financial_reports_web_action"
-                                       t-att-style="style">
-                                        <t t-raw="account.code"/> - <t t-raw="account.name"/></a>
-                                </span>
-                            </div>
-
-                            <div class="act_as_table data_table"
-                                 style="width: 100%;">
-                                <!-- Display account/partner header -->
-                                <t t-call="account_financial_report.report_trial_balance_lines_header"/>
-
-                                <!-- Adapt style -->
-                                <t t-set="padding" t-value="padding+4"/>
-                                
-                                <!-- Display each partners -->
-                                <t t-foreach="account.partner_ids" t-as="line">
-                                    <t t-set="type" t-value='"partner_type"'/>
-                                    <!-- Display partner line -->
-                                    <t t-call="account_financial_report.report_trial_balance_line"/>
-                                </t>
-                                <t t-set="padding" t-value="padding-4"/>
-                            </div>
-
-                            <!-- Display account footer -->
-                            <t t-set="type" t-value='"account_type"'/>                                                                    
-                            <t t-call="account_financial_report.report_trial_balance_account_footer"/>                           
-                            
-                        </div>
-                    </t>
-                </t>
-            </div>
+            </t>
+        </div>
     </template>
     <template id="account_financial_report.report_trial_balance_filters">
         <div class="act_as_table data_table" style="width: 100%;">
