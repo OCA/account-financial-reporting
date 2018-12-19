@@ -8,8 +8,10 @@ class VATReportXslx(models.AbstractModel):
     _name = 'report.a_f_r.report_vat_report_xlsx'
     _inherit = 'report.account_financial_report.abstract_report_xlsx'
 
-    def _get_report_name(self):
-        return _('VAT Report')
+    def _get_report_name(self, objects):
+        report = objects
+        return _('VAT Report - %s - %s') % (
+            report.company_id.name, report.company_id.currency_id.name)
 
     def _get_report_columns(self, report):
         return {
