@@ -4,7 +4,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     'name': 'Account Financial Reports',
-    'version': '11.0.2.3.1',
+    'version': '11.0.2.4.1',
     'category': 'Reporting',
     'summary': 'OCA Financial Reports',
     'author': 'Camptocamp SA,'
@@ -14,7 +14,6 @@
               'Odoo Community Association (OCA)',
     "website": "https://odoo-community.org/",
     'depends': [
-        'account',
         'account_invoicing',
         'date_range',
         'report_xlsx',
