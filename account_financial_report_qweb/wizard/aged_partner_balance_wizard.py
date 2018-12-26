@@ -35,6 +35,7 @@ class AgedPartnerBalance(models.TransientModel):
     partner_ids = fields.Many2many(
         comodel_name='res.partner',
         string='Filter partners',
+        domain="[('parent_id','=', False)]",
     )
     show_move_line_details = fields.Boolean()
 

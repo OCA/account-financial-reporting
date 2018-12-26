@@ -43,6 +43,7 @@ class OpenItemsReportWizard(models.TransientModel):
     partner_ids = fields.Many2many(
         comodel_name='res.partner',
         string='Filter partners',
+        domain="[('parent_id','=', False)]",
     )
     foreign_currency = fields.Boolean(
         string='Show foreign currency',

@@ -53,6 +53,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
     partner_ids = fields.Many2many(
         comodel_name='res.partner',
         string='Filter partners',
+        domain="[('parent_id','=', False)]",
     )
     journal_ids = fields.Many2many(
         comodel_name="account.journal",
