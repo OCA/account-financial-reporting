@@ -43,14 +43,38 @@ class OpenItemsReportWizard(models.TransientModel):
     partner_ids = fields.Many2many(
         comodel_name='res.partner',
         string='Filter partners',
+        default=lambda self: self._init_partners(),
         domain="[('parent_id','=', False)]",
     )
     foreign_currency = fields.Boolean(
         string='Show foreign currency',
+        default=lambda self: self._init_state(),
         help='Display foreign currency for move lines, unless '
              'account currency is not setup through chart of accounts '
              'will display initial and final balance in that currency.'
     )
+
+    def _init_state(self):
+        """methods initialize field due to context from w/ view and w/ current
+        user open wizard
+        """
+        context = self.env.context
+        if context.get('active_model') == 'res.partner' and \
+                self.env.user.has_group('base.group_multi_currency'):
+            return True
+
+    def _init_partners(self):
+        context = self.env.context
+        if context.get('active_ids'):
+            partner_ids = context['active_ids']
+            corp_partners = self.env['res.partner'].search([
+                ('id', 'in', context['active_ids']),
+                ('parent_id', '!=', False)
+            ])
+            for rec in corp_partners:
+                partner_ids.remove(rec.id)
+                partner_ids.append(rec.parent_id.id)
+            return partner_ids
 
     @api.onchange('receivable_accounts_only', 'payable_accounts_only')
     def onchange_type_accounts_only(self):
