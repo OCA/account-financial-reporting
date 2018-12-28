@@ -334,8 +334,8 @@
                             <a t-att-data-active-id="line.move_line_id.move_id.id"
                                t-att-data-res-model="res_model"
                                class="o_account_financial_reports_web_action underline-on-hover"
-                               style="color: black; cursor: pointer;">
-                                <t t-raw="line.entry"/></a>
+                               t-att-style="style">
+                                <t t-att-style="style" t-raw="line.entry"/></a>
                         </span>
                     </div>
                     <!--## journal-->
