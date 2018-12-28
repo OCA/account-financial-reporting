@@ -7,7 +7,7 @@
 
 from odoo import models, fields, api
 from odoo.tools.safe_eval import safe_eval
-
+import time
 
 class GeneralLedgerReportWizard(models.TransientModel):
     """General ledger report wizard."""
@@ -24,8 +24,10 @@ class GeneralLedgerReportWizard(models.TransientModel):
         comodel_name='date.range',
         string='Date range'
     )
-    date_from = fields.Date(required=True)
-    date_to = fields.Date(required=True)
+    date_from = fields.Date(required=True,
+                            default=lambda self: self._init_date_from())
+    date_to = fields.Date(required=True,
+                          default=fields.Date.context_today)
     fy_start_date = fields.Date(compute='_compute_fy_start_date')
     target_move = fields.Selection([('posted', 'All Posted Entries'),
                                     ('all', 'All Entries')],
@@ -54,6 +56,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
         comodel_name='res.partner',
         string='Filter partners',
         domain="[('parent_id','=', False)]",
+        default=lambda self: self._init_partners(),
     )
     journal_ids = fields.Many2many(
         comodel_name="account.journal",
@@ -70,6 +73,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
     )
     foreign_currency = fields.Boolean(
         string='Show foreign currency',
+        default=lambda self: self._init_state(),
         help='Display foreign currency for move lines, unless '
              'account currency is not setup through chart of accounts '
              'will display initial and final balance in that currency.'
@@ -78,6 +82,42 @@ class GeneralLedgerReportWizard(models.TransientModel):
         comodel_name='account.analytic.tag',
         string='Filter accounts',
     )
+
+    def _init_state(self):
+        """methods initialize field due to context from w/ view and w/ current
+        user open wizard
+        """
+        context = self.env.context
+        if context.get('active_model') == 'res.partner' and \
+                self.env.user.has_group('base.group_multi_currency'):
+            return True
+
+    def _init_date_from(self):
+        """set start date to 01/01/2018 if today's date is 12 dec 2018 and
+        that fiscalyear_last_month end up on 31/12 as per accounting settings -
+         in the account_config_settings"""
+        today = fields.Date.context_today(self)
+        cur_month = int(fields.Date.from_string(today).strftime('%m'))
+        cur_day = int(fields.Date.from_string(today).strftime('%d'))
+        fsc_month = self.env.user.company_id.fiscalyear_last_month
+        fsc_day = self.env.user.company_id.fiscalyear_last_day
+
+        if cur_month < fsc_month \
+                or cur_month == fsc_month and cur_day <= fsc_day:
+            return time.strftime('%Y-01-01')
+
+    def _init_partners(self):
+        context = self.env.context
+        if context.get('active_ids'):
+            partner_ids = context['active_ids']
+            corp_partners = self.env['res.partner'].search([
+                ('id', 'in', context['active_ids']),
+                ('parent_id', '!=', False)
+            ])
+            for rec in corp_partners:
+                partner_ids.remove(rec.id)
+                partner_ids.append(rec.parent_id.id)
+            return partner_ids
 
     @api.depends('date_from')
     def _compute_fy_start_date(self):
@@ -100,8 +140,9 @@ class GeneralLedgerReportWizard(models.TransientModel):
     @api.onchange('date_range_id')
     def onchange_date_range_id(self):
         """Handle date range change."""
-        self.date_from = self.date_range_id.date_start
-        self.date_to = self.date_range_id.date_end
+        if self.date_range_id:
+            self.date_from = self.date_range_id.date_start
+            self.date_to = self.date_range_id.date_end
 
     @api.onchange('receivable_accounts_only', 'payable_accounts_only')
     def onchange_type_accounts_only(self):
