@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-28 10:11+0000\n"
-"PO-Revision-Date: 2018-12-24 20:58+0000\n"
+"PO-Revision-Date: 2018-12-29 23:40+0000\n"
 "Last-Translator: Sergio Zanchetta <primes2h@gmail.com>\n"
 "Language-Team: Italian (https://www.transifex.com/oca/teams/23907/it/)\n"
 "Language: it\n"
@@ -117,9 +117,8 @@ msgstr "ID"
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_account_move
-#, fuzzy
 msgid "Journal Entries"
-msgstr "Movimento contabile"
+msgstr "Registrazioni contabili"
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_account_move_line
@@ -143,7 +142,6 @@ msgstr "Ultimo aggiornamento il"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_move__move_type
-#, fuzzy
 msgid "Move Type"
 msgstr "Tipo movimento"
 
