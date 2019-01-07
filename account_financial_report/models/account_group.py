@@ -25,15 +25,13 @@ class AccountGroup(models.Model):
         string="Accounts", store=True)
 
     @api.multi
-    @api.depends('parent_id')
+    @api.depends('parent_id', 'parent_id.level')
     def _compute_level(self):
         for group in self:
-            level = 0
-            new_group = group
-            while new_group.parent_id:
-                level += 1
-                new_group = new_group.parent_id
-            group.level = level
+            if not group.parent_id:
+                group.level = 0
+            else:
+                group.level = group.parent_id.level + 1
 
     @api.multi
     @api.depends('code_prefix', 'account_ids', 'account_ids.code',
