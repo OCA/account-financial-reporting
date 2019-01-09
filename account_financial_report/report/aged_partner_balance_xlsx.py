@@ -10,8 +10,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
     _name = 'report.a_f_r.report_aged_partner_balance_xlsx'
     _inherit = 'report.account_financial_report.abstract_report_xlsx'
 
-    def _get_report_name(self, objects):
-        report = objects
+    def _get_report_name(self, report):
         return _('Aged Partner Balance - %s - %s') % (
             report.company_id.name, report.company_id.currency_id.name)
 
