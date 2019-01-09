@@ -22,7 +22,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
     company_id = fields.Many2one(
         comodel_name='res.company',
         default=lambda self: self.env.user.company_id,
-        required=True,
+        required=False,
         string='Company'
     )
     date_range_id = fields.Many2one(
@@ -108,11 +108,34 @@ class GeneralLedgerReportWizard(models.TransientModel):
                 lambda p: p.company_id == self.company_id or
                 not p.company_id)
         if self.company_id and self.account_ids:
-            self.account_ids = self.account_ids.filtered(
-                lambda a: a.company_id == self.company_id)
+            if self.receivable_accounts_only or self.payable_accounts_only:
+                self.onchange_type_accounts_only()
+            else:
+                self.account_ids = self.account_ids.filtered(
+                    lambda a: a.company_id == self.company_id)
         if self.company_id and self.cost_center_ids:
             self.cost_center_ids = self.cost_center_ids.filtered(
                 lambda c: c.company_id == self.company_id)
+        res = {'domain': {'account_ids': [],
+                          'partner_ids': [],
+                          'cost_center_ids': [],
+                          'date_range_id': []
+                          }
+               }
+        if not self.company_id:
+            return res
+        else:
+            res['domain']['account_ids'] += [
+                ('company_id', '=', self.company_id.id)]
+            res['domain']['partner_ids'] += [
+                '|', ('company_id', '=', self.company_id.id),
+                ('company_id', '=', False)]
+            res['domain']['cost_center_ids'] += [
+                ('company_id', '=', self.company_id.id)]
+            res['domain']['date_range_id'] += [
+                '|', ('company_id', '=', self.company_id.id),
+                ('company_id', '=', False)]
+        return res
 
     @api.onchange('date_range_id')
     def onchange_date_range_id(self):
