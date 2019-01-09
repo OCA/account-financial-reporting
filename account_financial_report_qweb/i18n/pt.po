@@ -1301,6 +1301,12 @@ msgid "Journal"
 msgstr "Diário"
 
 #. module: account_financial_report_qweb
+#: model:ir.model,name:account_financial_report_qweb.model_account_move_line
+#, fuzzy
+msgid "Journal Item"
+msgstr "Diário"
+
+#. module: account_financial_report_qweb
 #: model:ir.ui.menu,name:account_financial_report_qweb.journal_report_wizard_menu
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_journal_qweb_base
 msgid "Journal Ledger"
