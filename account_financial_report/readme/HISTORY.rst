@@ -1,3 +1,10 @@
+11.0.2.4.1 (2019-01-08)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* Handle better multicompany behaviour
+* Improve how title appears in the reports
+
+
 11.0.2.3.1 (2018-11-29)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
