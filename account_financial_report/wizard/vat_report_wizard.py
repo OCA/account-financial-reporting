@@ -13,7 +13,7 @@ class VATReportWizard(models.TransientModel):
     company_id = fields.Many2one(
         comodel_name='res.company',
         default=lambda self: self.env.user.company_id,
-        required=True,
+        required=False,
         string='Company'
     )
     date_range_id = fields.Many2one(
@@ -34,6 +34,16 @@ class VATReportWizard(models.TransientModel):
         if self.company_id and self.date_range_id.company_id and \
                 self.date_range_id.company_id != self.company_id:
             self.date_range_id = False
+        res = {'domain': {'date_range_id': [],
+                          }
+               }
+        if not self.company_id:
+            return res
+        else:
+            res['domain']['date_range_id'] += [
+                '|', ('company_id', '=', self.company_id.id),
+                ('company_id', '=', False)]
+        return res
 
     @api.onchange('date_range_id')
     def onchange_date_range_id(self):
