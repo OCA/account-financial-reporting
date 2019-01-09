@@ -253,7 +253,7 @@ msgid "Aged Partner Balance XLSX"
 msgstr "‫تحليل رصيد الشركاء إكسل"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:68
+#: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:64
 #, python-format
 msgid "All"
 msgstr "الكل"
@@ -419,7 +419,7 @@ msgid "Centralized"
 msgstr "مجمّع"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger.py:1433
+#: code:addons/account_financial_report/report/general_ledger.py:1432
 #, python-format
 msgid "Centralized Entries"
 msgstr "القيود المجمّعة"
@@ -714,7 +714,7 @@ msgstr "الحالي"
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:21
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:26
 #: code:addons/account_financial_report/report/open_items_xlsx.py:19
-#: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:77
+#: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:73
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_move_line_date
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_move_line_date
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_move_line_date
@@ -961,7 +961,7 @@ msgid "Entry"
 msgstr "القيد"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:76
+#: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:72
 #, python-format
 msgid "Entry number"
 msgstr "رقم القيد"
@@ -1348,7 +1348,7 @@ msgstr "حساب شريك"
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:67
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:23
 #: code:addons/account_financial_report/report/open_items_xlsx.py:21
-#: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:83
+#: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:79
 #: model:ir.actions.client,name:account_financial_report.action_report_journal_ledger
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_move_line_journal
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_move_line_journal
@@ -1625,7 +1625,7 @@ msgid "No"
 msgstr "لا"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:84
+#: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:80
 #, python-format
 msgid "No group"
 msgstr "بدون تجميع"
@@ -1645,8 +1645,8 @@ msgid "No limit"
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger.py:758
-#: code:addons/account_financial_report/report/general_ledger.py:1137
+#: code:addons/account_financial_report/report/general_ledger.py:757
+#: code:addons/account_financial_report/report/general_ledger.py:1136
 #: code:addons/account_financial_report/report/open_items.py:306
 #: code:addons/account_financial_report/report/open_items.py:555
 #, python-format
@@ -1654,7 +1654,7 @@ msgid "No partner allocated"
 msgstr "لم يتم تخصيص شريك"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:70
+#: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:66
 #, python-format
 msgid "Not Posted"
 msgstr "غير مرحّل"
@@ -1868,7 +1868,7 @@ msgid "Periods"
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:69
+#: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:65
 #, python-format
 msgid "Posted"
 msgstr ""
@@ -2197,7 +2197,7 @@ msgid "Taxtags"
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/wizard/general_ledger_wizard.py:130
+#: code:addons/account_financial_report/wizard/general_ledger_wizard.py:153
 #, python-format
 msgid ""
 "The Company in the General Ledger Report Wizard and in Date Range must be "
@@ -2205,7 +2205,7 @@ msgid ""
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/wizard/trial_balance_wizard.py:135
+#: code:addons/account_financial_report/wizard/trial_balance_wizard.py:161
 #, python-format
 msgid ""
 "The Company in the Trial Balance Report Wizard and in Date Range must be the "
@@ -2213,7 +2213,7 @@ msgid ""
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/wizard/vat_report_wizard.py:51
+#: code:addons/account_financial_report/wizard/vat_report_wizard.py:61
 #, python-format
 msgid ""
 "The Company in the Vat Report Wizard and in Date Range must be the same."

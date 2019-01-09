@@ -11,7 +11,7 @@
             </group>
             <group name="filters">
                 <group name="date_range">
-                    <field name="date_range_id" domain="['|',('company_id','=',company_id), ('company_id','=',False)]"/>
+                    <field name="date_range_id"/>
                     <field name="date_from"/>
                     <field name="date_to"/>
                 </group>
