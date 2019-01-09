@@ -24,7 +24,6 @@
                     <label for="partner_ids"/>
                     <field name="partner_ids"
                            nolabel="1"
-                           domain="['|',('company_id','=',company_id), ('company_id','=',False)]"
                            widget="many2many_tags"
                            options="{'no_create': True}"/>
                 </group>
@@ -34,7 +33,6 @@
                     <field name="account_ids"
                            nolabel="1"
                            widget="many2many_tags"
-                           domain="[('company_id','=',company_id)]"
                            options="{'no_create': True}"
                            colspan="4"/>
                 </group>

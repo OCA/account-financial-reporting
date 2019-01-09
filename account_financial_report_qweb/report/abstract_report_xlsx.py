@@ -43,7 +43,7 @@ class AbstractReportXslx(ReportXlsx):
 
         self._define_formats(workbook)
 
-        report_name = self._get_report_name(objects)
+        report_name = self._get_report_name(report)
         report_footer = self._get_report_footer()
         filters = self._get_report_filters(report)
         self.columns = self._get_report_columns(report)

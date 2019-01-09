@@ -15,8 +15,7 @@ class TrialBalanceXslx(abstract_report_xlsx.AbstractReportXslx):
         super(TrialBalanceXslx, self).__init__(
             name, table, rml, parser, header, store)
 
-    def _get_report_name(self, objects):
-        report = objects
+    def _get_report_name(self, report):
         return _('Trial Balance - %s - %s') % (
             report.company_id.name, report.company_id.currency_id.name)
 
