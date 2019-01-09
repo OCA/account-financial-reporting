@@ -14,15 +14,12 @@ class JournalReportWizard(models.TransientModel):
         comodel_name='res.company',
         default=lambda self: self.env.user.company_id,
         string='Company',
-        required=True,
+        required=False,
         ondelete='cascade',
     )
     date_range_id = fields.Many2one(
         comodel_name='date.range',
-        string='Date range',
-        domain="['|', "
-               "('company_id', '=', False),"
-               "('company_id', '=', company_id)]",
+        string='Date range'
     )
     date_from = fields.Date(
         string="Start date",
@@ -35,7 +32,6 @@ class JournalReportWizard(models.TransientModel):
     journal_ids = fields.Many2many(
         comodel_name='account.journal',
         string="Journals",
-        domain="[('company_id', '=', company_id)]",
         required=False,
     )
     move_target = fields.Selection(
@@ -86,6 +82,23 @@ class JournalReportWizard(models.TransientModel):
     def onchange_date_range_id(self):
         self.date_from = self.date_range_id.date_start
         self.date_to = self.date_range_id.date_end
+
+    @api.onchange('company_id')
+    def onchange_company_id(self):
+        """Handle company change."""
+        if self.company_id and self.date_range_id.company_id and \
+                self.date_range_id.company_id != self.company_id:
+            self.date_range_id = False
+        if self.company_id and self.journal_ids:
+            self.journal_ids = self.journal_ids.filtered(
+                lambda p: p.company_id == self.company_id or not p.company_id)
+        res = {'domain': {'journal_ids': []}}
+        if not self.company_id:
+            return res
+        else:
+            res['domain']['journal_ids'] += [
+                ('company_id', '=', self.company_id.id)]
+        return res
 
     @api.multi
     def button_export_html(self):

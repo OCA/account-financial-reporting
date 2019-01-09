@@ -16,8 +16,9 @@ class GeneralLedgerXslx(abstract_report_xlsx.AbstractReportXslx):
         super(GeneralLedgerXslx, self).__init__(
             name, table, rml, parser, header, store)
 
-    def _get_report_name(self):
-        return _('General Ledger')
+    def _get_report_name(self, report):
+        return _('General Ledger - %s - %s') % (
+            report.company_id.name, report.company_id.currency_id.name)
 
     def _get_report_columns(self, report):
         res = {

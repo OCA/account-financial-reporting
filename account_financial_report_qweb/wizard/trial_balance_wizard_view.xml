@@ -13,7 +13,7 @@
                 <div attrs="{'invisible': [('not_only_one_unaffected_earnings_account', '=', True)]}">
                     <group name="filters">
                         <group name="date_range">
-                            <field name="date_range_id" domain="['|',('company_id','=',company_id), ('company_id','=',False)]"/>
+                            <field name="date_range_id"/>
                             <field name="date_from"/>
                             <field name="date_to"/>
                             <field name="fy_start_date" invisible="1"/>
@@ -31,13 +31,22 @@
                     </group>
                     <group name="partner_filter" attrs="{'invisible':[('show_partner_details','!=',True)]}" col="1">
                         <label for="partner_ids"/>
-                        <field name="partner_ids" nolabel="1" widget="many2many_tags" options="{'no_create': True}"/>
+                        <field name="partner_ids"
+                               nolabel="1"
+                               widget="many2many_tags"
+                               options="{'no_create': True}"/>
                     </group>
+                    <group attrs="{'invisible':[('show_partner_details','!=',True)]}"/>
+                    <div/>
                     <group name="account_filter" col="4">
                         <label for="account_ids" colspan="4"/>
                         <field name="receivable_accounts_only"/>
                         <field name="payable_accounts_only"/>
-                        <field name="account_ids" nolabel="1" widget="many2many_tags" options="{'no_create': True}" colspan="4"/>
+                        <field name="account_ids"
+                               nolabel="1"
+                               widget="many2many_tags"
+                               options="{'no_create': True}"
+                               colspan="4"/>
                     </group>
                 </div>
                 <div attrs="{'invisible': [('not_only_one_unaffected_earnings_account', '=', False)]}">

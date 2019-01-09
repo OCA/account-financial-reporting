@@ -15,6 +15,7 @@
 * Alexis de Lattre <alexis@via.ecp.fr>
 * Mihai Fekete <feketemihai@gmail.com>
 * Benjamin Willig <benjamin.willig@acsone.eu>
+* Miquel Raïch <miquel.raich@eficent.com>
 
 Much of the work in this module was done at a sprint in Sorrento, Italy in
 April 2016.

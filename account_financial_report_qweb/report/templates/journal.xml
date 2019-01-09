@@ -12,12 +12,15 @@
     </template>
 
     <template id="report_journal_qweb_base">
-        <t t-set="title">Journal Ledger</t>
+        <t t-set="title" >Journal Ledger - <t t-raw="o.company_id.name"/> - <t t-raw="o.company_id.currency_id.name"/></t>
         <t t-set="company_name" t-value="o.company_id.name"/>
         <t t-set="display_currency" t-value="o.foreign_currency"/>
         <t t-set="display_account_name" t-value="o.with_account_name"/>
-
+        <t t-set="company_name" t-value="o.company_id.name"/>
         <div class="page">
+            <div class="row">
+                <h4 class="mt0" t-esc="title or 'Odoo Report'" style="text-align: center;"/>
+            </div>
             <t t-if="o.group_option == 'none'">
                 <div class="page_break">
                     <t t-call="account_financial_report_qweb.report_journal_qweb_all"/>
