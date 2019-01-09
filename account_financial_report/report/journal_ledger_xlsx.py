@@ -10,8 +10,7 @@ class JournalLedgerXslx(models.AbstractModel):
     _name = 'report.a_f_r.report_journal_ledger_xlsx'
     _inherit = 'report.account_financial_report.abstract_report_xlsx'
 
-    def _get_report_name(self, objects):
-        report = objects
+    def _get_report_name(self, report):
         return _('Journal Ledger - %s - %s') % (
             report.company_id.name, report.company_id.currency_id.name)
 
