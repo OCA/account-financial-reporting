@@ -103,6 +103,10 @@ class GeneralLedgerReportWizard(models.TransientModel):
         if self.company_id and self.date_range_id.company_id and \
                 self.date_range_id.company_id != self.company_id:
             self.date_range_id = False
+        if self.company_id and self.account_journal_ids:
+            self.account_journal_ids = self.account_journal_ids.filtered(
+                lambda p: p.company_id == self.company_id or
+                not p.company_id)
         if self.company_id and self.partner_ids:
             self.partner_ids = self.partner_ids.filtered(
                 lambda p: p.company_id == self.company_id or
@@ -118,6 +122,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
                 lambda c: c.company_id == self.company_id)
         res = {'domain': {'account_ids': [],
                           'partner_ids': [],
+                          'account_journal_ids': [],
                           'cost_center_ids': [],
                           'date_range_id': []
                           }
@@ -126,6 +131,8 @@ class GeneralLedgerReportWizard(models.TransientModel):
             return res
         else:
             res['domain']['account_ids'] += [
+                ('company_id', '=', self.company_id.id)]
+            res['domain']['account_journal_ids'] += [
                 ('company_id', '=', self.company_id.id)]
             res['domain']['partner_ids'] += [
                 '|', ('company_id', '=', self.company_id.id),
