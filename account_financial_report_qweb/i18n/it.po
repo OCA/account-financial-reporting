@@ -230,11 +230,13 @@ msgid "Age ≤ 90 d."
 msgstr "Da ≤ 90 g."
 
 #. module: account_financial_report_qweb
+#: code:addons/account_financial_report_qweb/report/aged_partner_balance_xlsx.py:19
 #: model:ir.actions.act_window,name:account_financial_report_qweb.action_aged_partner_balance_wizard
 #: model:ir.actions.client,name:account_financial_report_qweb.action_report_aged_partner_balance
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_aged_partner_balance_html
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_aged_partner_balance_qweb
 #: model:ir.ui.menu,name:account_financial_report_qweb.menu_aged_partner_balance_wizard
+#, python-format
 msgid "Aged Partner Balance"
 msgstr "Bilancio partner storico"
 
@@ -242,12 +244,6 @@ msgstr "Bilancio partner storico"
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_aged_partner_balance_base
 #, fuzzy
 msgid "Aged Partner Balance -"
-msgstr "Bilancio partner storico"
-
-#. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/aged_partner_balance_xlsx.py:19
-#, fuzzy, python-format
-msgid "Aged Partner Balance - %s - %s"
 msgstr "Bilancio partner storico"
 
 #. module: account_financial_report_qweb
@@ -1097,11 +1093,13 @@ msgid "Fy start date"
 msgstr ""
 
 #. module: account_financial_report_qweb
+#: code:addons/account_financial_report_qweb/report/general_ledger_xlsx.py:20
 #: model:ir.actions.act_window,name:account_financial_report_qweb.action_general_ledger_wizard
 #: model:ir.actions.client,name:account_financial_report_qweb.action_report_general_ledger
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_general_ledger_html
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_general_ledger_qweb
 #: model:ir.ui.menu,name:account_financial_report_qweb.menu_general_ledger_wizard
+#, python-format
 msgid "General Ledger"
 msgstr "Stampa mastrino"
 
@@ -1109,12 +1107,6 @@ msgstr "Stampa mastrino"
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_general_ledger_base
 #, fuzzy
 msgid "General Ledger -"
-msgstr "Stampa mastrino"
-
-#. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger_xlsx.py:20
-#, fuzzy, python-format
-msgid "General Ledger - %s - %s"
 msgstr "Stampa mastrino"
 
 #. module: account_financial_report_qweb
@@ -1319,7 +1311,9 @@ msgid "Journal Item"
 msgstr "Sezionale"
 
 #. module: account_financial_report_qweb
+#: code:addons/account_financial_report_qweb/report/journal_report_xlsx.py:21
 #: model:ir.ui.menu,name:account_financial_report_qweb.journal_report_wizard_menu
+#, python-format
 msgid "Journal Ledger"
 msgstr ""
 
@@ -1328,12 +1322,6 @@ msgstr ""
 #, fuzzy
 msgid "Journal Ledger -"
 msgstr "Stampa mastrino"
-
-#. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/journal_report_xlsx.py:21
-#, python-format
-msgid "Journal Ledger - %s - %s"
-msgstr ""
 
 #. module: account_financial_report_qweb
 #: model:ir.actions.act_window,name:account_financial_report_qweb.journal_report_wizard_act_window
@@ -1626,11 +1614,13 @@ msgid "Only posted moves"
 msgstr "Solo registrazioni validate"
 
 #. module: account_financial_report_qweb
+#: code:addons/account_financial_report_qweb/report/open_items_xlsx.py:19
 #: model:ir.actions.act_window,name:account_financial_report_qweb.action_open_items_wizard
 #: model:ir.actions.client,name:account_financial_report_qweb.action_report_open_items
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_open_items_html
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_open_items_qweb
 #: model:ir.ui.menu,name:account_financial_report_qweb.menu_open_items_wizard
+#, python-format
 msgid "Open Items"
 msgstr "Poste aperte"
 
@@ -1638,12 +1628,6 @@ msgstr "Poste aperte"
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_open_items_base
 #, fuzzy
 msgid "Open Items -"
-msgstr "Poste aperte"
-
-#. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/open_items_xlsx.py:19
-#, fuzzy, python-format
-msgid "Open Items - %s - %s"
 msgstr "Poste aperte"
 
 #. module: account_financial_report_qweb
@@ -2140,11 +2124,13 @@ msgid "Total"
 msgstr "Totale"
 
 #. module: account_financial_report_qweb
+#: code:addons/account_financial_report_qweb/report/trial_balance_xlsx.py:19
 #: model:ir.actions.act_window,name:account_financial_report_qweb.action_trial_balance_wizard
 #: model:ir.actions.client,name:account_financial_report_qweb.action_report_trial_balance
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_trial_balance_html
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_trial_balance_qweb
 #: model:ir.ui.menu,name:account_financial_report_qweb.menu_trial_balance_wizard
+#, python-format
 msgid "Trial Balance"
 msgstr "Bilancino"
 
@@ -2152,12 +2138,6 @@ msgstr "Bilancino"
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_trial_balance_base
 #, fuzzy
 msgid "Trial Balance -"
-msgstr "Bilancino"
-
-#. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/trial_balance_xlsx.py:19
-#, fuzzy, python-format
-msgid "Trial Balance - %s - %s"
 msgstr "Bilancino"
 
 #. module: account_financial_report_qweb
@@ -2387,6 +2367,22 @@ msgstr ""
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_journal_qweb_journal_table_header
 msgid "width: 75px;"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Aged Partner Balance - %s - %s"
+#~ msgstr "Bilancio partner storico"
+
+#, fuzzy
+#~ msgid "General Ledger - %s - %s"
+#~ msgstr "Stampa mastrino"
+
+#, fuzzy
+#~ msgid "Open Items - %s - %s"
+#~ msgstr "Poste aperte"
+
+#, fuzzy
+#~ msgid "Trial Balance - %s - %s"
+#~ msgstr "Bilancino"
 
 #~ msgid "Has second currency"
 #~ msgstr "Seconda valuta"

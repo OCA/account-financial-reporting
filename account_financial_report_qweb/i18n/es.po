@@ -238,11 +238,13 @@ msgid "Age ≤ 90 d."
 msgstr "Edad <= 90 d."
 
 #. module: account_financial_report_qweb
+#: code:addons/account_financial_report_qweb/report/aged_partner_balance_xlsx.py:19
 #: model:ir.actions.act_window,name:account_financial_report_qweb.action_aged_partner_balance_wizard
 #: model:ir.actions.client,name:account_financial_report_qweb.action_report_aged_partner_balance
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_aged_partner_balance_html
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_aged_partner_balance_qweb
 #: model:ir.ui.menu,name:account_financial_report_qweb.menu_aged_partner_balance_wizard
+#, python-format
 msgid "Aged Partner Balance"
 msgstr "Calidad de la deuda"
 
@@ -250,12 +252,6 @@ msgstr "Calidad de la deuda"
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_aged_partner_balance_base
 #, fuzzy
 msgid "Aged Partner Balance -"
-msgstr "Calidad de la deuda"
-
-#. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/aged_partner_balance_xlsx.py:19
-#, fuzzy, python-format
-msgid "Aged Partner Balance - %s - %s"
 msgstr "Calidad de la deuda"
 
 #. module: account_financial_report_qweb
@@ -1109,11 +1105,13 @@ msgid "Fy start date"
 msgstr "Fecha inicio ejercicio fiscal"
 
 #. module: account_financial_report_qweb
+#: code:addons/account_financial_report_qweb/report/general_ledger_xlsx.py:20
 #: model:ir.actions.act_window,name:account_financial_report_qweb.action_general_ledger_wizard
 #: model:ir.actions.client,name:account_financial_report_qweb.action_report_general_ledger
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_general_ledger_html
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_general_ledger_qweb
 #: model:ir.ui.menu,name:account_financial_report_qweb.menu_general_ledger_wizard
+#, python-format
 msgid "General Ledger"
 msgstr "Libro mayor"
 
@@ -1121,12 +1119,6 @@ msgstr "Libro mayor"
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_general_ledger_base
 #, fuzzy
 msgid "General Ledger -"
-msgstr "Libro mayor"
-
-#. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger_xlsx.py:20
-#, fuzzy, python-format
-msgid "General Ledger - %s - %s"
 msgstr "Libro mayor"
 
 #. module: account_financial_report_qweb
@@ -1332,7 +1324,9 @@ msgid "Journal Item"
 msgstr "Diario"
 
 #. module: account_financial_report_qweb
+#: code:addons/account_financial_report_qweb/report/journal_report_xlsx.py:21
 #: model:ir.ui.menu,name:account_financial_report_qweb.journal_report_wizard_menu
+#, python-format
 msgid "Journal Ledger"
 msgstr "Libro diario"
 
@@ -1340,12 +1334,6 @@ msgstr "Libro diario"
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_journal_qweb_base
 #, fuzzy
 msgid "Journal Ledger -"
-msgstr "Libro diario"
-
-#. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/journal_report_xlsx.py:21
-#, fuzzy, python-format
-msgid "Journal Ledger - %s - %s"
 msgstr "Libro diario"
 
 #. module: account_financial_report_qweb
@@ -1639,11 +1627,13 @@ msgid "Only posted moves"
 msgstr "Sólo asientos asentados"
 
 #. module: account_financial_report_qweb
+#: code:addons/account_financial_report_qweb/report/open_items_xlsx.py:19
 #: model:ir.actions.act_window,name:account_financial_report_qweb.action_open_items_wizard
 #: model:ir.actions.client,name:account_financial_report_qweb.action_report_open_items
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_open_items_html
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_open_items_qweb
 #: model:ir.ui.menu,name:account_financial_report_qweb.menu_open_items_wizard
+#, python-format
 msgid "Open Items"
 msgstr "Efectos abiertos"
 
@@ -1651,12 +1641,6 @@ msgstr "Efectos abiertos"
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_open_items_base
 #, fuzzy
 msgid "Open Items -"
-msgstr "Efectos abiertos"
-
-#. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/open_items_xlsx.py:19
-#, fuzzy, python-format
-msgid "Open Items - %s - %s"
 msgstr "Efectos abiertos"
 
 #. module: account_financial_report_qweb
@@ -2156,11 +2140,13 @@ msgid "Total"
 msgstr "Total"
 
 #. module: account_financial_report_qweb
+#: code:addons/account_financial_report_qweb/report/trial_balance_xlsx.py:19
 #: model:ir.actions.act_window,name:account_financial_report_qweb.action_trial_balance_wizard
 #: model:ir.actions.client,name:account_financial_report_qweb.action_report_trial_balance
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_trial_balance_html
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_trial_balance_qweb
 #: model:ir.ui.menu,name:account_financial_report_qweb.menu_trial_balance_wizard
+#, python-format
 msgid "Trial Balance"
 msgstr "Balance de sumas y saldos"
 
@@ -2168,12 +2154,6 @@ msgstr "Balance de sumas y saldos"
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_trial_balance_base
 #, fuzzy
 msgid "Trial Balance -"
-msgstr "Balance de sumas y saldos"
-
-#. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/trial_balance_xlsx.py:19
-#, fuzzy, python-format
-msgid "Trial Balance - %s - %s"
 msgstr "Balance de sumas y saldos"
 
 #. module: account_financial_report_qweb
@@ -2404,6 +2384,26 @@ msgstr "ancho: 360px;"
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_journal_qweb_journal_table_header
 msgid "width: 75px;"
 msgstr "ancho: 75px;"
+
+#, fuzzy
+#~ msgid "Aged Partner Balance - %s - %s"
+#~ msgstr "Calidad de la deuda"
+
+#, fuzzy
+#~ msgid "General Ledger - %s - %s"
+#~ msgstr "Libro mayor"
+
+#, fuzzy
+#~ msgid "Journal Ledger - %s - %s"
+#~ msgstr "Libro diario"
+
+#, fuzzy
+#~ msgid "Open Items - %s - %s"
+#~ msgstr "Efectos abiertos"
+
+#, fuzzy
+#~ msgid "Trial Balance - %s - %s"
+#~ msgstr "Balance de sumas y saldos"
 
 #~ msgid "Export"
 #~ msgstr "Exportar"

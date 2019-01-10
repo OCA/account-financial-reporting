@@ -237,11 +237,13 @@ msgid "Age ≤ 90 d."
 msgstr "Vv. ≤ 90 d."
 
 #. module: account_financial_report_qweb
+#: code:addons/account_financial_report_qweb/report/aged_partner_balance_xlsx.py:19
 #: model:ir.actions.act_window,name:account_financial_report_qweb.action_aged_partner_balance_wizard
 #: model:ir.actions.client,name:account_financial_report_qweb.action_report_aged_partner_balance
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_aged_partner_balance_html
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_aged_partner_balance_qweb
 #: model:ir.ui.menu,name:account_financial_report_qweb.menu_aged_partner_balance_wizard
+#, python-format
 msgid "Aged Partner Balance"
 msgstr "Ouderdomsanalyse"
 
@@ -249,12 +251,6 @@ msgstr "Ouderdomsanalyse"
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_aged_partner_balance_base
 #, fuzzy
 msgid "Aged Partner Balance -"
-msgstr "Ouderdomsanalyse"
-
-#. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/aged_partner_balance_xlsx.py:19
-#, fuzzy, python-format
-msgid "Aged Partner Balance - %s - %s"
 msgstr "Ouderdomsanalyse"
 
 #. module: account_financial_report_qweb
@@ -1103,11 +1099,13 @@ msgid "Fy start date"
 msgstr "Start boekjaar"
 
 #. module: account_financial_report_qweb
+#: code:addons/account_financial_report_qweb/report/general_ledger_xlsx.py:20
 #: model:ir.actions.act_window,name:account_financial_report_qweb.action_general_ledger_wizard
 #: model:ir.actions.client,name:account_financial_report_qweb.action_report_general_ledger
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_general_ledger_html
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_general_ledger_qweb
 #: model:ir.ui.menu,name:account_financial_report_qweb.menu_general_ledger_wizard
+#, python-format
 msgid "General Ledger"
 msgstr "Grootboek"
 
@@ -1115,12 +1113,6 @@ msgstr "Grootboek"
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_general_ledger_base
 #, fuzzy
 msgid "General Ledger -"
-msgstr "Grootboek"
-
-#. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger_xlsx.py:20
-#, fuzzy, python-format
-msgid "General Ledger - %s - %s"
 msgstr "Grootboek"
 
 #. module: account_financial_report_qweb
@@ -1324,7 +1316,9 @@ msgid "Journal Item"
 msgstr "Dagboek"
 
 #. module: account_financial_report_qweb
+#: code:addons/account_financial_report_qweb/report/journal_report_xlsx.py:21
 #: model:ir.ui.menu,name:account_financial_report_qweb.journal_report_wizard_menu
+#, python-format
 msgid "Journal Ledger"
 msgstr "Dagboekrapportage"
 
@@ -1332,12 +1326,6 @@ msgstr "Dagboekrapportage"
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_journal_qweb_base
 #, fuzzy
 msgid "Journal Ledger -"
-msgstr "Dagboekrapportage"
-
-#. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/journal_report_xlsx.py:21
-#, fuzzy, python-format
-msgid "Journal Ledger - %s - %s"
 msgstr "Dagboekrapportage"
 
 #. module: account_financial_report_qweb
@@ -1631,11 +1619,13 @@ msgid "Only posted moves"
 msgstr "Alleen mutaties"
 
 #. module: account_financial_report_qweb
+#: code:addons/account_financial_report_qweb/report/open_items_xlsx.py:19
 #: model:ir.actions.act_window,name:account_financial_report_qweb.action_open_items_wizard
 #: model:ir.actions.client,name:account_financial_report_qweb.action_report_open_items
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_open_items_html
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_open_items_qweb
 #: model:ir.ui.menu,name:account_financial_report_qweb.menu_open_items_wizard
+#, python-format
 msgid "Open Items"
 msgstr "Openstaande posten"
 
@@ -1643,12 +1633,6 @@ msgstr "Openstaande posten"
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_open_items_base
 #, fuzzy
 msgid "Open Items -"
-msgstr "Openstaande posten"
-
-#. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/open_items_xlsx.py:19
-#, fuzzy, python-format
-msgid "Open Items - %s - %s"
 msgstr "Openstaande posten"
 
 #. module: account_financial_report_qweb
@@ -2144,11 +2128,13 @@ msgid "Total"
 msgstr "Totaal"
 
 #. module: account_financial_report_qweb
+#: code:addons/account_financial_report_qweb/report/trial_balance_xlsx.py:19
 #: model:ir.actions.act_window,name:account_financial_report_qweb.action_trial_balance_wizard
 #: model:ir.actions.client,name:account_financial_report_qweb.action_report_trial_balance
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_trial_balance_html
 #: model:ir.actions.report.xml,name:account_financial_report_qweb.action_report_trial_balance_qweb
 #: model:ir.ui.menu,name:account_financial_report_qweb.menu_trial_balance_wizard
+#, python-format
 msgid "Trial Balance"
 msgstr "Saldibalans"
 
@@ -2156,12 +2142,6 @@ msgstr "Saldibalans"
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_trial_balance_base
 #, fuzzy
 msgid "Trial Balance -"
-msgstr "Saldibalans"
-
-#. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/trial_balance_xlsx.py:19
-#, fuzzy, python-format
-msgid "Trial Balance - %s - %s"
 msgstr "Saldibalans"
 
 #. module: account_financial_report_qweb
@@ -2391,3 +2371,23 @@ msgstr "width: 360px;"
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_journal_qweb_journal_table_header
 msgid "width: 75px;"
 msgstr "width: 75px;"
+
+#, fuzzy
+#~ msgid "Aged Partner Balance - %s - %s"
+#~ msgstr "Ouderdomsanalyse"
+
+#, fuzzy
+#~ msgid "General Ledger - %s - %s"
+#~ msgstr "Grootboek"
+
+#, fuzzy
+#~ msgid "Journal Ledger - %s - %s"
+#~ msgstr "Dagboekrapportage"
+
+#, fuzzy
+#~ msgid "Open Items - %s - %s"
+#~ msgstr "Openstaande posten"
+
+#, fuzzy
+#~ msgid "Trial Balance - %s - %s"
+#~ msgstr "Saldibalans"
