@@ -16,8 +16,8 @@ class TrialBalanceXslx(abstract_report_xlsx.AbstractReportXslx):
             name, table, rml, parser, header, store)
 
     def _get_report_name(self, report):
-        return _('Trial Balance - %s - %s') % (
-            report.company_id.name, report.company_id.currency_id.name)
+        report_name = _('Trial Balance')
+        return self._get_report_complete_name(report, report_name)
 
     def _get_report_columns(self, report):
         if not report.show_partner_details:

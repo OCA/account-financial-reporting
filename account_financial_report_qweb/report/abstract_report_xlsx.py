@@ -360,6 +360,13 @@ class AbstractReportXslx(ReportXlsx):
     def _generate_report_content(self, workbook, report):
         pass
 
+    def _get_report_complete_name(self, report, prefix):
+        if report.company_id:
+            suffix = ' - %s - %s' % (
+                report.company_id.name, report.company_id.currency_id.name)
+            return prefix + suffix
+        return prefix
+
     def _get_report_name(self, objects):
         """
             Allow to define the report name.
