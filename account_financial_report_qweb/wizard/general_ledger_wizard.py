@@ -55,6 +55,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
     partner_ids = fields.Many2many(
         comodel_name='res.partner',
         string='Filter partners',
+        default=lambda self: self._default_partners(),
     )
     journal_ids = fields.Many2many(
         comodel_name="account.journal",
@@ -71,6 +72,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
     )
     foreign_currency = fields.Boolean(
         string='Show foreign currency',
+        default=lambda self: self._default_foreign_currency(),
         help='Display foreign currency for move lines, unless '
              'account currency is not setup through chart of accounts '
              'will display initial and final balance in that currency.'
@@ -79,6 +81,24 @@ class GeneralLedgerReportWizard(models.TransientModel):
         comodel_name='account.analytic.tag',
         string='Filter accounts',
     )
+
+    def _default_foreign_currency(self):
+        if self.env.user.has_group('base.group_multi_currency'):
+            return True
+
+    def _default_partners(self):
+        context = self.env.context
+
+        if context.get('active_ids') and context.get('active_model') \
+                == 'res.partner':
+            partner_ids = context['active_ids']
+            corp_partners = self.env['res.partner'].browse(partner_ids). \
+                filtered(lambda p: p.parent_id)
+
+            partner_ids = set(partner_ids) - set(corp_partners.ids)
+            partner_ids |= set(corp_partners.mapped('parent_id.id'))
+
+            return list(partner_ids)
 
     @api.depends('date_from')
     def _compute_fy_start_date(self):
