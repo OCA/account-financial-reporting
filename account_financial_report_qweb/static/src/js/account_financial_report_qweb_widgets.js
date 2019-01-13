@@ -47,7 +47,7 @@ odoo.define('account_financial_report_qweb.account_financial_report_widget', fun
         boundLinkMonetary: function (e) {
             var res_model = $(e.target).data('res-model');
             var res_id = $(e.target).data('active-id');
-            // check if we call on appropriate element, amount been wrapped in
+            // Check if we call on appropriate element, amount been wrapped in
             // a span by a monetary widget
             if (e.target.localName === 'span' ) {
                 res_model = $(e.target.parentElement).data('res-model');
@@ -64,7 +64,7 @@ odoo.define('account_financial_report_qweb.account_financial_report_widget', fun
         boundLinkMonetarymulti: function (e) {
             var res_model = $(e.target).data('res-model');
             var domain = $(e.target).data('domain');
-            // check if we call on appropriate element, amount been wrapped in
+            // Check if we call on appropriate element, amount been wrapped in
             // a span by a monetary widget
             if (e.target.localName === 'span' ) {
                 res_model = $(e.target.parentElement).data('res-model');
