@@ -9,6 +9,7 @@ from odoo import api, fields, models, _
 from odoo.tools.safe_eval import safe_eval
 from odoo.exceptions import ValidationError
 
+import time
 
 class GeneralLedgerReportWizard(models.TransientModel):
     """General ledger report wizard."""
@@ -26,8 +27,10 @@ class GeneralLedgerReportWizard(models.TransientModel):
         comodel_name='date.range',
         string='Date range'
     )
-    date_from = fields.Date(required=True)
-    date_to = fields.Date(required=True)
+    date_from = fields.Date(required=True,
+                            default=lambda self: self._init_date_from())
+    date_to = fields.Date(required=True,
+                          default=fields.Date.context_today)
     fy_start_date = fields.Date(compute='_compute_fy_start_date')
     target_move = fields.Selection([('posted', 'All Posted Entries'),
                                     ('all', 'All Entries')],
@@ -55,6 +58,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
     partner_ids = fields.Many2many(
         comodel_name='res.partner',
         string='Filter partners',
+        default=lambda self: self._init_partners(),
     )
     journal_ids = fields.Many2many(
         comodel_name="account.journal",
@@ -79,6 +83,21 @@ class GeneralLedgerReportWizard(models.TransientModel):
         comodel_name='account.analytic.tag',
         string='Filter accounts',
     )
+
+
+    def _init_date_from(self):
+        """set start date to 01/01/2018 if today's date is 12 dec 2018 and
+        that fiscalyear_last_month end up on 31/12 as per accounting settings -
+         in the account_config_settings"""
+        today = fields.Date.context_today(self)
+        cur_month = int(fields.Date.from_string(today).strftime('%m'))
+        cur_day = int(fields.Date.from_string(today).strftime('%d'))
+        fsc_month = self.env.user.company_id.fiscalyear_last_month
+        fsc_day = self.env.user.company_id.fiscalyear_last_day
+
+        if cur_month < fsc_month \
+                or cur_month == fsc_month and cur_day <= fsc_day:
+            return time.strftime('%Y-01-01')
 
     @api.depends('date_from')
     def _compute_fy_start_date(self):
@@ -144,8 +163,9 @@ class GeneralLedgerReportWizard(models.TransientModel):
     @api.onchange('date_range_id')
     def onchange_date_range_id(self):
         """Handle date range change."""
-        self.date_from = self.date_range_id.date_start
-        self.date_to = self.date_range_id.date_end
+        if self.date_range_id:
+            self.date_from = self.date_range_id.date_start
+            self.date_to = self.date_range_id.date_end
 
     @api.multi
     @api.constrains('company_id', 'date_range_id')
