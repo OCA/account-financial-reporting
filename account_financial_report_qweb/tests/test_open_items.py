@@ -51,9 +51,10 @@ class TestOpenItems(a_t_f_c.AbstractTestForeignCurrency):
         partner_3.write({'is_company': False})
 
         expected_list = [partner_2.id, partner_3.id, partner_4.id]
-        context = {'active_ids':
-                       [partner_1.id, partner_2.id, partner_3.id, partner_4.id],
-                   'active_model': 'res.partner'}
+        context = {'active_ids': [
+            partner_1.id, partner_2.id, partner_3.id, partner_4.id
+        ],
+            'active_model': 'res.partner'}
 
         wizard = self.env["open.items.report.wizard"].with_context(context)
         self.assertEqual(wizard._default_partners(), expected_list)

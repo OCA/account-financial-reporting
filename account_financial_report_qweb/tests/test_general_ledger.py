@@ -4,6 +4,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import time
+from odoo.api import Environment
 
 from odoo.tests import common
 from . import abstract_test_foreign_currency as a_t_f_c
@@ -510,9 +511,44 @@ class TestGeneralLedgerReport(common.TransactionCase):
         partner_3.write({'is_company': False})
 
         expected_list = [partner_2.id, partner_3.id, partner_4.id]
-        context = {'active_ids':
-                       [partner_1.id, partner_2.id, partner_3.id, partner_4.id],
-                   'active_model': 'res.partner'}
+        context = {'active_ids': [
+            partner_1.id, partner_2.id, partner_3.id, partner_4.id
+        ],
+            'active_model': 'res.partner'}
 
         wizard = self.env["general.ledger.report.wizard"].with_context(context)
         self.assertEqual(wizard._default_partners(), expected_list)
+
+    def test_validate_date(self):
+        company_id = self.env.ref('base.main_company')
+        company_id.write({
+            'fiscalyear_last_day': 31,
+            'fiscalyear_last_month': 12,
+        })
+        cr = self.registry.cursor()
+        user = self.env.ref('base.user_root').with_context({
+            'company_id': company_id.id})
+        env = Environment(cr, user.id, {})
+        wizard = env["general.ledger.report.wizard"]
+        self.assertEqual(wizard._init_date_from(),
+                         time.strftime('%Y') + '-01-01')
+
+    def test_validate_date_range(self):
+        type = self.env['date.range.type'].create({
+            'name': 'Fiscal year',
+            'company_id': False,
+            'allow_overlap': False
+        })
+
+        dr = self.env['date.range'].create({
+            'name': 'FS2015',
+            'date_start': '2018-01-01',
+            'date_end': '2018-12-31',
+            'type_id': type.id,
+        })
+
+        wizard = self.env["general.ledger.report.wizard"].create({
+            'date_range_id': dr.id})
+        wizard.onchange_date_range_id()
+        self.assertEqual(wizard.date_from, '2018-01-01')
+        self.assertEqual(wizard.date_to, '2018-12-31')
