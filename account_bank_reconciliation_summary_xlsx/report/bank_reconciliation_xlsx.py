@@ -67,7 +67,9 @@ class BankReconciliationXlsx(ReportXlsx):
 
             sheet = workbook.add_worksheet(o.code or o.name)
             sheet.write(
-                0, 0, _('%s - Bank Reconciliation') % o.display_name,
+                0, 0,
+                _('%s - %s - Bank Reconciliation') % (
+                    o.company_id.name, o.display_name),
                 doc_title)
             sheet.set_row(0, 26)
             sheet.set_row(1, 25)
