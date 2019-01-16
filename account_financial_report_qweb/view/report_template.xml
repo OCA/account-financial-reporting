@@ -4,7 +4,7 @@
     <template id="account_financial_report_assets_backend"
               name="account_financial_report assets" inherit_id="web.assets_backend">
         <xpath expr="." position="inside">
-            <link href="/account_financial_report_qweb/static/src/css/report.css" rel="stylesheet"/>
+            <link href="/account_financial_report_qweb/static/src/less/report.less" rel="stylesheet"/>
             <script type="text/javascript"
                     src="/account_financial_report_qweb/static/src/js/account_financial_report_qweb_backend.js"/>
             <script type="text/javascript"
