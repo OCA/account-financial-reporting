@@ -5,6 +5,7 @@
 import time
 
 from odoo.tests import common
+from datetime import date, datetime
 from . import abstract_test_foreign_currency as a_t_f_c
 
 
@@ -31,10 +32,10 @@ class TestGeneralLedger(a_t_f_c.AbstractTestForeignCurrency):
 
     def _getBaseFilters(self):
         return {
-            'date_from': time.strftime('%Y-01-01'),
-            'date_to': time.strftime('%Y-12-31'),
+            'date_from': date(date.today().year, 1, 1),
+            'date_to': date(date.today().year, 12, 31),
             'company_id': self.company.id,
-            'fy_start_date': time.strftime('%Y-01-01'),
+            'fy_start_date': date(date.today().year, 1, 1),
             'foreign_currency': True,
         }
 
@@ -87,11 +88,11 @@ class TestGeneralLedgerReport(common.TransactionCase):
 
     def setUp(self):
         super(TestGeneralLedgerReport, self).setUp()
-        self.before_previous_fy_year = '2014-05-05'
-        self.previous_fy_date_start = '2015-01-01'
-        self.previous_fy_date_end = '2015-12-31'
-        self.fy_date_start = '2016-01-01'
-        self.fy_date_end = '2016-12-31'
+        self.before_previous_fy_year = datetime.strptime('2014-05-05', '%Y-%m-%d')
+        self.previous_fy_date_start = datetime.strptime('2015-01-01', '%Y-%m-%d')
+        self.previous_fy_date_end = datetime.strptime('2015-12-31', '%Y-%m-%d')
+        self.fy_date_start = datetime.strptime('2016-01-01', '%Y-%m-%d')
+        self.fy_date_end = datetime.strptime('2016-12-31', '%Y-%m-%d')
         self.receivable_account = self.env['account.account'].search([
             ('user_type_id.name', '=', 'Receivable')
             ], limit=1)

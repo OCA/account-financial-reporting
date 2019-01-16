@@ -112,7 +112,7 @@ class VATReportCompute(models.TransientModel):
         action = self.env['ir.actions.report'].search(
             [('report_name', '=', report_name),
              ('report_type', '=', report_type)], limit=1)
-        return action.with_context(context).report_action(self)
+        return action.with_context(context).report_action(self, config=False)
 
     def _get_html(self):
         result = {}

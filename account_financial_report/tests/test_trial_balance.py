@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import time
-
+from datetime import date
 from odoo.tests import common
 from . import abstract_test_foreign_currency as a_t_f_c
 
@@ -30,10 +30,10 @@ class TestTrialBalance(a_t_f_c.AbstractTestForeignCurrency):
 
     def _getBaseFilters(self):
         return {
-            'date_from': time.strftime('%Y-01-01'),
-            'date_to': time.strftime('%Y-12-31'),
+            'date_from': date(date.today().year, 1, 1),
+            'date_to': date(date.today().year, 12, 31),
             'company_id': self.company.id,
-            'fy_start_date': time.strftime('%Y-01-01'),
+            'fy_start_date': date(date.today().year, 1, 1),
             'foreign_currency': True,
             'show_partner_details': True,
         }
