@@ -195,7 +195,7 @@ class AgedPartnerBalanceReportCompute(models.TransientModel):
         report = self.env['ir.actions.report'].search(
             [('report_name', '=', report_name),
              ('report_type', '=', report_type)], limit=1)
-        return report.report_action(self)
+        return report.report_action(self, config=False)
 
     def _get_html(self):
         result = {}
