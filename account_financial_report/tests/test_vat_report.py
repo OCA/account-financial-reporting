@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import time
-
+from datetime import date
 from odoo.tests import common
 from . import abstract_test_tax_report
 
@@ -29,8 +29,8 @@ class TestVAT(abstract_test_tax_report.AbstractTest):
 
     def _getBaseFilters(self):
         return {
-            'date_from': time.strftime('%Y-01-01'),
-            'date_to': time.strftime('%Y-12-31'),
+            'date_from': date(date.today().year, 1, 1),
+            'date_to': date(date.today().year, 12, 31),
             'company_id': self.env.user.company_id.id,
         }
 
@@ -157,7 +157,7 @@ class TestVATReport(common.TransactionCase):
 
     def _get_report_lines(self):
         self.cbinvoice.pay_and_reconcile(
-            self.bank_journal.id, 300, time.strftime('%Y-%m-10'))
+            self.bank_journal.id, 300, date(date.today().year, date.today().month, 10))
         vat_report = self.env['report_vat_report'].create({
             'date_from': self.date_from,
             'date_to': self.date_to,
@@ -274,8 +274,8 @@ class TestVATReport(common.TransactionCase):
              'date_to': time.strftime('%Y-%m-01'),
              'tax_detail': True})
         wizard.onchange_date_range_id()
-        self.assertEqual(wizard.date_from, time.strftime('%Y-%m-01'))
-        self.assertEqual(wizard.date_to, time.strftime('%Y-%m-28'))
+        self.assertEqual(wizard.date_from, date(date.today().year, 1, 1))
+        self.assertEqual(wizard.date_to, date(date.today().year, date.today().month, 28))
         wizard._export('qweb-pdf')
         wizard.button_export_html()
         wizard.button_export_pdf()
@@ -287,8 +287,8 @@ class TestVATReport(common.TransactionCase):
              'based_on': 'taxgroups',
              'tax_detail': True})
         wizard.onchange_date_range_id()
-        self.assertEqual(wizard.date_from, time.strftime('%Y-%m-01'))
-        self.assertEqual(wizard.date_to, time.strftime('%Y-%m-28'))
+        self.assertEqual(wizard.date_from, date(date.today().year, 1, 1))
+        self.assertEqual(wizard.date_to, date(date.today().year, date.today().month, 28))
         wizard._export('qweb-pdf')
         wizard.button_export_html()
         wizard.button_export_pdf()
