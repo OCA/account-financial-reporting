@@ -6,9 +6,9 @@
 
 from odoo import api, fields, models, _
 from odoo.tools.safe_eval import safe_eval
-from odoo.tools import pycompat
+from odoo.tools import pycompat, DEFAULT_SERVER_DATE_FORMAT
 from odoo.exceptions import UserError, ValidationError
-
+from datetime import datetime
 
 class TrialBalanceReportWizard(models.TransientModel):
     """Trial balance report wizard."""
@@ -96,7 +96,7 @@ class TrialBalanceReportWizard(models.TransientModel):
         for wiz in self.filtered('date_from'):
             date = fields.Datetime.from_string(wiz.date_from)
             res = self.company_id.compute_fiscalyear_dates(date)
-            wiz.fy_start_date = res['date_from']
+            wiz.fy_start_date = datetime.strftime(res['date_from'], DEFAULT_SERVER_DATE_FORMAT)
 
     @api.onchange('company_id')
     def onchange_company_id(self):

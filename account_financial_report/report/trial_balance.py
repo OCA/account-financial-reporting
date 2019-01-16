@@ -200,7 +200,7 @@ class TrialBalanceReportCompute(models.TransientModel):
                           'report_trial_balance_qweb'
         return self.env['ir.actions.report'].search(
             [('report_name', '=', report_name),
-             ('report_type', '=', report_type)], limit=1).report_action(self)
+             ('report_type', '=', report_type)], limit=1).report_action(self, config=False)
 
     def _get_html(self):
         result = {}
@@ -401,7 +401,7 @@ SELECT
     accgroup.parent_id,
     coalesce(accgroup.code_prefix, accgroup.name),
     accgroup.name,
-    accgroup.parent_left * 100000,
+    accgroup.id * 100000,
     accgroup.level
 FROM
     account_group accgroup"""
