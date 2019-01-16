@@ -14,9 +14,9 @@ class AbstractReport(models.AbstractModel):
         # Never delete rows used in last 5 minutes
         seconds = max(seconds, 300)
         query = """
-DELETE FROM """ + self._table + """
+DELETE FROM %s
 WHERE COALESCE(
     write_date, create_date, (now() at time zone 'UTC'))::timestamp
     < ((now() at time zone 'UTC') - interval %s)
 """
-        self.env.cr.execute(query, ("%s seconds" % seconds,))
+        self.env.cr.execute(query, (self._table, "%s seconds" % seconds,))
