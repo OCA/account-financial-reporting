@@ -23,7 +23,7 @@ odoo.define('account_financial_report.account_financial_report_backend', functio
             if (action.context.context) {
                 this.given_context = action.context.context;
             }
-            this.given_context.active_id = action.context.active_id || 
+            this.given_context.active_id = action.context.active_id ||
                 action.params.active_id;
             this.given_context.model = action.context.active_model || false;
             this.given_context.ttype = action.context.ttype || false;
@@ -57,13 +57,38 @@ odoo.define('account_financial_report.account_financial_report_backend', functio
                 args: [self.given_context],
                 context: self.odoo_context,
             })
-            .then(function (result) {
-                self.html = result.html;
-                defs.push(self.update_cp());
-                return $.when.apply($, defs);
+                .then(function (result) {
+                    self.html = result.html;
+                    defs.push(self.update_cp());
+                    return $.when.apply($, defs);
+                });
+        },
+        // Updates the control panel and render the elements that have yet to be rendered
+        update_cp: function() {
+            if (this.$buttons) {
+                var status = {
+                    breadcrumbs: this.actionManager.get_breadcrumbs(),
+                    cp_content: {$buttons: this.$buttons},
+                };
+                return this.update_control_panel(status);
+            }
+        },
+        do_show: function() {
+            this._super();
+            this.update_cp();
+        },
+        print: function() {
+            var self = this;
+            this._rpc({
+                model: this.given_context.model,
+                method: 'print_report',
+                args: [this.given_context.active_id, 'qweb-pdf'],
+                context: self.odoo_context,
+            }).then(function(result){
+                self.do_action(result);
             });
         },
-        // Updates the control panel and render the elements that have yet 
+        // Updates the control panel and render the elements that have yet
         // to be rendered
         update_cp: function () {
             if (this.$buttons) {
@@ -100,6 +125,9 @@ odoo.define('account_financial_report.account_financial_report_backend', functio
             .then(function(result){
                 self.do_action(result);
             });
+        },
+        canBeRemoved: function () {
+            return $.when();
         },
     });
 

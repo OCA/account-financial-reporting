@@ -58,6 +58,7 @@
         groups="base.group_erp_manager"
         />
 
+    <!--
     <menuitem
         id="account.menu_general_ledger"
         name="General Ledger"
@@ -96,6 +97,6 @@
         action="account.action_account_aged_balance_view"
         parent="account.menu_finance_legal_statement"
         groups="base.group_erp_manager"
-        />
+        />-->
 
 </odoo>
