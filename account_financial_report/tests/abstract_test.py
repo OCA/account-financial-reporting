@@ -36,7 +36,7 @@ class AbstractTest(common.TransactionCase):
             'bank_account_code_prefix': 1014,
             'cash_account_code_prefix': 1014,
             'currency_id': self.ref('base.USD'),
-            'transfer_account_id': transfer_account_id.id,
+            'transfer_account_code_prefix': '000',
         })
         transfer_account_id.update({
             'chart_template_id': self.chart.id,
@@ -98,7 +98,6 @@ class AbstractTest(common.TransactionCase):
     def _add_chart_of_accounts(self):
         self.company = self.env['res.company'].create({
             'name': 'Spanish test company',
-            'external_report_layout': 'standard',
         })
         self.env.ref('base.group_multi_company').write({
             'users': [(4, self.env.uid)],
@@ -109,15 +108,7 @@ class AbstractTest(common.TransactionCase):
         })
         self.with_context(
             company_id=self.company.id, force_company=self.company.id)
-        wizard = self.env['wizard.multi.charts.accounts'].create({
-            'company_id': self.company.id,
-            'chart_template_id': self.chart.id,
-            'code_digits': 4,
-            'currency_id': self.ref('base.USD'),
-            'transfer_account_id': self.chart.transfer_account_id.id,
-        })
-        wizard.onchange_chart_template_id()
-        wizard.execute()
+        self.chart.try_loading_for_current_company()
         self.revenue = self.env['account.account'].search(
             [('user_type_id', '=', self.ref(
                 "account.data_account_type_revenue"))], limit=1)

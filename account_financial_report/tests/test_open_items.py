@@ -2,7 +2,7 @@
 # Copyright 2016 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-import time
+from datetime import date
 from . import abstract_test_foreign_currency as a_t_f_c
 
 
@@ -28,7 +28,7 @@ class TestOpenItems(a_t_f_c.AbstractTestForeignCurrency):
 
     def _getBaseFilters(self):
         return {
-            'date_at': time.strftime('%Y-12-31'),
+            'date_at': date(date.today().year, 12, 31),
             'company_id': self.company.id,
             'foreign_currency': True,
         }
