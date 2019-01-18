@@ -13,6 +13,7 @@ class AbstractReport(models.AbstractModel):
             "Model %s is not transient, it cannot be vacuumed!" % self._name
         # Never delete rows used in last 5 minutes
         seconds = max(seconds, 300)
+        # pylint: disable=sql-injection
         query = """
 DELETE FROM """ + self._table + """
 WHERE

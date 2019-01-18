@@ -336,8 +336,8 @@
                             <a t-att-data-active-id="line.move_line_id.move_id.id"
                                t-att-data-res-model="res_model"
                                class="o_account_financial_reports_web_action underline-on-hover"
-                               style="color: black; cursor: pointer;">
-                                <t t-raw="line.entry"/></a>
+                               t-att-style="style">
+                                <t t-att-style="style" t-raw="line.entry"/></a>
                         </span>
                     </div>
                     <!--## journal-->
@@ -403,12 +403,12 @@
                     </t>
                     <!--## matching_number-->
                     <div class="act_as_cell">
-                        <t t-set="res_model" t-value="'account_full_reconcile'"/>
-                        <span t-if="line.matching_number">
-                            <a t-att-data-active-id="line.move_line_id.full_reconcile_id.id"
+                        <t t-set="res_model" t-value="'account.full.reconcile'"/>
+                        <span t-if="line.matched_ml_id">
+                            <a t-att-data-active-id="line.matched_ml_id.id"
                                t-att-data-res-model="res_model"
-                               class="o_account_financial_reports_web_action underline-on-hover"
-                               style="color: black; cursor: pointer;"><t t-raw="line.matching_number"/></a>
+                               class="o_account_financial_reports_web_action underline-on-hover">
+                                <t  t-att-style="style" t-raw="line.matched_ml_id.name"/></a>
                         </span>
                     </div>
                     <!--## debit-->
