@@ -73,8 +73,10 @@ class OpenItemsReportWizard(models.TransientModel):
             res['domain']['account_ids'] += [
                 ('company_id', '=', self.company_id.id)]
             res['domain']['partner_ids'] += [
+                '&',
                 '|', ('company_id', '=', self.company_id.id),
-                ('company_id', '=', False)]
+                ('company_id', '=', False),
+                ('parent_id', '=', False)]
         return res
 
     @api.onchange('receivable_accounts_only', 'payable_accounts_only')
