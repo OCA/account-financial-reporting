@@ -58,4 +58,16 @@
                 view_id="open_items_wizard"
                 target="new" />
 
+    <!--Add to res.partner action-->
+    <act_window id="act_action_open_items_wizard_partner_relation"
+                name="Open Items Partner"
+                res_model="open.items.report.wizard"
+                src_model="res.partner"
+                view_mode="form"
+                context="{
+                    'default_receivable_accounts_only':1,
+                    'default_payable_accounts_only':1,
+                    }"
+                key2="client_action_multi"
+                target="new" />
 </odoo>
