@@ -138,8 +138,10 @@ class TrialBalanceReportWizard(models.TransientModel):
             res['domain']['account_ids'] += [
                 ('company_id', '=', self.company_id.id)]
             res['domain']['partner_ids'] += [
+                '&',
                 '|', ('company_id', '=', self.company_id.id),
-                ('company_id', '=', False)]
+                ('company_id', '=', False),
+                ('parent_id', '=', False)]
             res['domain']['date_range_id'] += [
                 '|', ('company_id', '=', self.company_id.id),
                 ('company_id', '=', False)]
