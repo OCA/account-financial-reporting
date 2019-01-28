@@ -1167,6 +1167,7 @@ msgstr "Fj startdatum"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:15
+#: model:ir.actions.act_window,name:account_financial_report.act_action_general_ledger_wizard_partner_relation
 #: model:ir.actions.act_window,name:account_financial_report.action_general_ledger_wizard
 #: model:ir.actions.client,name:account_financial_report.action_report_general_ledger
 #: model:ir.actions.report,name:account_financial_report.action_report_general_ledger_html
@@ -1741,6 +1742,12 @@ msgid "Open Items -"
 msgstr "Openstaande posten"
 
 #. module: account_financial_report
+#: model:ir.actions.act_window,name:account_financial_report.act_action_open_items_wizard_partner_relation
+#, fuzzy
+msgid "Open Items Partner"
+msgstr "Openstaande posten"
+
+#. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_open_items_report_wizard
 msgid "Open Items Report Wizard"
 msgstr "Openstaande posten lijst wizard"
@@ -2226,7 +2233,7 @@ msgid "Taxtags"
 msgstr "Belasting labels"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/wizard/general_ledger_wizard.py:160
+#: code:addons/account_financial_report/wizard/general_ledger_wizard.py:196
 #, python-format
 msgid ""
 "The Company in the General Ledger Report Wizard and in Date Range must be "
@@ -2234,7 +2241,7 @@ msgid ""
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/wizard/trial_balance_wizard.py:163
+#: code:addons/account_financial_report/wizard/trial_balance_wizard.py:165
 #, python-format
 msgid ""
 "The Company in the Trial Balance Report Wizard and in Date Range must be the "
