@@ -638,6 +638,7 @@ ORDER BY
         self._compute_account_cumul()
 
     def _compute_partner_cumul(self):
+        # pylint: disable=sql-injection
         where_condition_partner_by_account = """
 WHERE
     id IN
