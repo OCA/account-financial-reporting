@@ -11,6 +11,7 @@ from odoo import api, fields, models, _
 from odoo.tools.safe_eval import safe_eval
 from odoo.tools import pycompat
 from odoo.exceptions import ValidationError
+import time
 
 
 class GeneralLedgerReportWizard(models.TransientModel):
@@ -29,8 +30,10 @@ class GeneralLedgerReportWizard(models.TransientModel):
         comodel_name='date.range',
         string='Date range'
     )
-    date_from = fields.Date(required=True)
-    date_to = fields.Date(required=True)
+    date_from = fields.Date(required=True,
+                            default=lambda self: self._init_date_from())
+    date_to = fields.Date(required=True,
+                          default=fields.Date.context_today)
     fy_start_date = fields.Date(compute='_compute_fy_start_date')
     target_move = fields.Selection([('posted', 'All Posted Entries'),
                                     ('all', 'All Entries')],
@@ -84,7 +87,19 @@ class GeneralLedgerReportWizard(models.TransientModel):
              'will display initial and final balance in that currency.',
         default=lambda self: self._default_foreign_currency(),
     )
+
+    def _init_date_from(self):
+        """set start date to begin of current year if fiscal year running"""
+        today = fields.Date.context_today(self)
+        cur_month = fields.Date.from_string(today).month
+        cur_day = fields.Date.from_string(today).day
+        last_fsc_month = self.env.user.company_id.fiscalyear_last_month
+        last_fsc_day = self.env.user.company_id.fiscalyear_last_day
     
+        if cur_month < last_fsc_month \
+                or cur_month == last_fsc_month and cur_day <= last_fsc_day:
+            return time.strftime('%Y-01-01')
+
     def _default_foreign_currency(self):
         return self.env.user.has_group('base.group_multi_currency')
 
@@ -167,8 +182,9 @@ class GeneralLedgerReportWizard(models.TransientModel):
     @api.onchange('date_range_id')
     def onchange_date_range_id(self):
         """Handle date range change."""
-        self.date_from = self.date_range_id.date_start
-        self.date_to = self.date_range_id.date_end
+        if self.date_range_id:
+            self.date_from = self.date_range_id.date_start
+            self.date_to = self.date_range_id.date_end
 
     @api.multi
     @api.constrains('company_id', 'date_range_id')
