@@ -95,7 +95,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
         cur_day = fields.Date.from_string(today).day
         last_fsc_month = self.env.user.company_id.fiscalyear_last_month
         last_fsc_day = self.env.user.company_id.fiscalyear_last_day
-    
+
         if cur_month < last_fsc_month \
                 or cur_month == last_fsc_month and cur_day <= last_fsc_day:
             return time.strftime('%Y-01-01')

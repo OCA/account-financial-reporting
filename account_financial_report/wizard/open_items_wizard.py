@@ -59,13 +59,13 @@ class OpenItemsReportWizard(models.TransientModel):
 
     def _default_partners(self):
         context = self.env.context
-    
+
         if context.get('active_ids') and context.get('active_model') \
                 == 'res.partner':
             partner_ids = context['active_ids']
             corp_partners = self.env['res.partner'].browse(partner_ids). \
                 filtered(lambda p: p.parent_id)
-        
+
             partner_ids = set(partner_ids) - set(corp_partners.ids)
             partner_ids |= set(corp_partners.mapped('parent_id.id'))
             return list(partner_ids)

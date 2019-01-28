@@ -39,7 +39,7 @@ class TestOpenItems(a_t_f_c.AbstractTestForeignCurrency):
             {'hide_account_at_0': True},
             {'only_posted_moves': True, 'hide_account_at_0': True},
         ]
-    
+
     def test_partner_filter(self):
         partner_1 = self.env.ref('base.res_partner_1')
         partner_2 = self.env.ref('base.res_partner_2')
@@ -50,9 +50,12 @@ class TestOpenItems(a_t_f_c.AbstractTestForeignCurrency):
         partner_3.write({'is_company': False})
 
         expected_list = [partner_2.id, partner_3.id, partner_4.id]
-        context = {'active_ids': [
-            partner_1.id, partner_2.id, partner_3.id, partner_4.id],
-                   'active_model': 'res.partner'}
+        context = {
+            'active_ids': [
+                partner_1.id, partner_2.id, partner_3.id, partner_4.id
+                ],
+            'active_model': 'res.partner'
+            }
 
         wizard = self.env["open.items.report.wizard"].with_context(context)
         self.assertEqual(wizard._default_partners(), expected_list)
