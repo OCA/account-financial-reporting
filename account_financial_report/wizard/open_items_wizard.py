@@ -44,13 +44,31 @@ class OpenItemsReportWizard(models.TransientModel):
     partner_ids = fields.Many2many(
         comodel_name='res.partner',
         string='Filter partners',
+        default=lambda self: self._default_partners(),
     )
     foreign_currency = fields.Boolean(
         string='Show foreign currency',
         help='Display foreign currency for move lines, unless '
              'account currency is not setup through chart of accounts '
-             'will display initial and final balance in that currency.'
+             'will display initial and final balance in that currency.',
+        default=lambda self: self._default_foreign_currency(),
     )
+
+    def _default_foreign_currency(self):
+        return self.env.user.has_group('base.group_multi_currency')
+
+    def _default_partners(self):
+        context = self.env.context
+    
+        if context.get('active_ids') and context.get('active_model') \
+                == 'res.partner':
+            partner_ids = context['active_ids']
+            corp_partners = self.env['res.partner'].browse(partner_ids). \
+                filtered(lambda p: p.parent_id)
+        
+            partner_ids = set(partner_ids) - set(corp_partners.ids)
+            partner_ids |= set(corp_partners.mapped('parent_id.id'))
+            return list(partner_ids)
 
     @api.onchange('company_id')
     def onchange_company_id(self):
