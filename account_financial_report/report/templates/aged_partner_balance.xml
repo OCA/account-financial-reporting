@@ -288,7 +288,7 @@
                     <!--## amount_residual-->
                     <div class="act_as_cell amount">
                         <span>
-                            <a t-att-data-domain="[('id', 'in', list(filter(lambda x: x != 'False', [str(line.move_line_id.id), str(line.move_line_id.matched_debit_ids.debit_move_id.id), str(line.move_line_id.matched_credit_ids.credit_move_id.id)])))]"
+                            <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
                                t-att-data-res-model="'account.move.line'"
                                class="o_account_financial_reports_web_action_multi"
                                style="color: black;">
@@ -299,7 +299,7 @@
                     <div class="act_as_cell amount">
                         <t t-if="line.current != 0">
                             <span>
-                                <a t-att-data-domain="[('id', 'in', list(filter(lambda x: x != 'False', [str(line.move_line_id.id), str(line.move_line_id.matched_debit_ids.debit_move_id.id), str(line.move_line_id.matched_credit_ids.credit_move_id.id)])))]"
+                                <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
                                    t-att-data-res-model="'account.move.line'"
                                    class="o_account_financial_reports_web_action_multi"
                                    style="color: black;">
@@ -314,7 +314,7 @@
                     <div class="act_as_cell amount">
                         <t t-if="line.age_30_days != 0">
                             <span>
-                                <a t-att-data-domain="[('id', 'in', list(filter(lambda x: x != 'False', [str(line.move_line_id.id), str(line.move_line_id.matched_debit_ids.debit_move_id.id), str(line.move_line_id.matched_credit_ids.credit_move_id.id)])))]"
+                                <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
                                    t-att-data-res-model="'account.move.line'"
                                    class="o_account_financial_reports_web_action_multi"
                                    style="color: black;">
@@ -329,7 +329,7 @@
                     <div class="act_as_cell amount">
                         <t t-if="line.age_60_days != 0">
                             <span>
-                                <a t-att-data-domain="[('id', 'in', list(filter(lambda x: x != 'False', [str(line.move_line_id.id), str(line.move_line_id.matched_debit_ids.debit_move_id.id), str(line.move_line_id.matched_credit_ids.credit_move_id.id)])))]"
+                                <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
                                    t-att-data-res-model="'account.move.line'"
                                    class="o_account_financial_reports_web_action_multi"
                                    style="color: black;">
@@ -344,7 +344,7 @@
                     <div class="act_as_cell amount">
                         <t t-if="line.age_90_days != 0">
                             <span>
-                                <a t-att-data-domain="[('id', 'in', list(filter(lambda x: x != 'False', [str(line.move_line_id.id), str(line.move_line_id.matched_debit_ids.debit_move_id.id), str(line.move_line_id.matched_credit_ids.credit_move_id.id)])))]"
+                                <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
                                    t-att-data-res-model="'account.move.line'"
                                    class="o_account_financial_reports_web_action_multi"
                                    style="color: black;">
@@ -359,7 +359,7 @@
                     <div class="act_as_cell amount">
                         <t t-if="line.age_120_days != 0">
                             <span>
-                                <a t-att-data-domain="[('id', 'in', list(filter(lambda x: x != 'False', [str(line.move_line_id.id), str(line.move_line_id.matched_debit_ids.debit_move_id.id), str(line.move_line_id.matched_credit_ids.credit_move_id.id)])))]"
+                                <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
                                    t-att-data-res-model="'account.move.line'"
                                    class="o_account_financial_reports_web_action_multi"
                                    style="color: black;">
@@ -374,7 +374,7 @@
                     <div class="act_as_cell amount">
                         <t t-if="line.older != 0">
                             <span>
-                                <a t-att-data-domain="[('id', 'in', list(filter(lambda x: x != 'False', [str(line.move_line_id.id), str(line.move_line_id.matched_debit_ids.debit_move_id.id), str(line.move_line_id.matched_credit_ids.credit_move_id.id)])))]"
+                                <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
                                    t-att-data-res-model="'account.move.line'"
                                    class="o_account_financial_reports_web_action_multi"
                                    style="color: black;">
