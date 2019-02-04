@@ -11,15 +11,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-22 16:14+0000\n"
-"PO-Revision-Date: 2018-10-23 03:45+0000\n"
-"Last-Translator: Jordi Ballester Alomar <jordi.ballester@eficent.com>\n"
+"PO-Revision-Date: 2019-02-04 10:50+0000\n"
+"Last-Translator: Marta Vázquez Rodríguez <vazrodmar@gmail.com>\n"
 "Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.2.1\n"
+"X-Generator: Weblate 3.4\n"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
@@ -54,7 +54,7 @@ msgstr "<strong>Este cliente no tiene pagos pendietes</strong>"
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_account_type
 msgid "Account type"
-msgstr ""
+msgstr "Tipo de cuenta"
 
 #. module: customer_activity_statement
 #: model:ir.actions.report,name:customer_activity_statement.action_print_customer_activity_statement
@@ -226,12 +226,12 @@ msgstr "Ref. de Cliente:"
 #. module: customer_activity_statement
 #: selection:customer.activity.statement.wizard,account_type:0
 msgid "Payable"
-msgstr ""
+msgstr "A pagar"
 
 #. module: customer_activity_statement
 #: selection:customer.activity.statement.wizard,account_type:0
 msgid "Receivable"
-msgstr ""
+msgstr "A cobrar"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
@@ -240,7 +240,6 @@ msgstr "Número de Referencia"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.customer_activity_statement_wizard_view
-#, fuzzy
 msgid ""
 "The activity statement provides details of all activity on         a "
 "partner's receivables and payables between two selected dates. This includes "
@@ -249,11 +248,12 @@ msgid ""
 "balance at the top of the statement. The list is         displayed in "
 "chronological order and is split by currencies."
 msgstr ""
-"El estado de cuenta provee detalles de toda la actividad en……las cuentas por "
-"cobrar del cliente entre dos fechas seleccionadas. Esto incluye todas las "
-"facturas,……reembolsos y pagos. Cualquier saldo pendiente fechado antes del……"
-"periodo elegido aparecerá como un saldo arrastrado arriba del estado de "
-"cuenta. La lista es……mostrada en orden cronológico y es dividido por monedas."
+"El estado de cuenta provee detalles de toda la actividad en……las cuentas a "
+"pagar y a cobrar del cliente entre dos fechas seleccionadas. Esto incluye "
+"todas las facturas,……reembolsos y pagos. Cualquier saldo pendiente fechado "
+"antes del……periodo elegido aparecerá como un saldo arrastrado arriba del "
+"estado de cuenta. La lista es……mostrada en orden cronológico y es dividido "
+"por monedas."
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
