@@ -7,15 +7,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-05-02 14:48+0200\n"
-"PO-Revision-Date: 2017-05-02 14:48+0200\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2019-02-04 10:50+0000\n"
+"Last-Translator: Marta Vázquez Rodríguez <vazrodmar@gmail.com>\n"
 "Language-Team: \n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.4\n"
 
 #. module: account_journal_report
 #: code:addons/account_journal_report/report/journal_ledger_report_xlsx.py:74
@@ -256,7 +256,7 @@ msgstr "o"
 #. module: account_journal_report
 #: model:ir.model,name:account_journal_report.model_report_account_journal_report_journal_ledger
 msgid "report.account_journal_report.journal_ledger"
-msgstr ""
+msgstr "'report.account_journal_report.journal_ledger'"
 
 #. module: account_journal_report
 #: model:ir.ui.view,arch_db:account_journal_report.journal_ledger
