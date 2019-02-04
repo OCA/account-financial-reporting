@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-19 01:37+0000\n"
-"PO-Revision-Date: 2018-09-24 19:53+0000\n"
-"Last-Translator: Jimmy Ramos <jimmybanegas93@gmail.com>\n"
+"PO-Revision-Date: 2019-02-04 10:50+0000\n"
+"Last-Translator: Marta Vázquez Rodríguez <vazrodmar@gmail.com>\n"
 "Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.1.1\n"
+"X-Generator: Weblate 3.4\n"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
@@ -117,9 +117,8 @@ msgstr "ID"
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_account_move
-#, fuzzy
 msgid "Journal Entries"
-msgstr "Diario"
+msgstr "Entradas diario"
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_account_move_line
@@ -143,9 +142,8 @@ msgstr "Última actualización en"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_move__move_type
-#, fuzzy
 msgid "Move Type"
-msgstr "Tipo de operación"
+msgstr "Tipo de movimiento"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_account_move_filter
@@ -250,9 +248,8 @@ msgstr "Ver líneas de cuota de operaciones corrientes"
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_wizard_open_tax_balances
-#, fuzzy
 msgid "Wizard Open Tax Balances"
-msgstr "wizard.open.tax.balances"
+msgstr "Asistente apertura balance de impuestos"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
