@@ -235,11 +235,13 @@ msgstr ""
 "                        T."
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:14
 #: model:ir.actions.act_window,name:account_financial_report.action_aged_partner_balance_wizard
 #: model:ir.actions.client,name:account_financial_report.action_report_aged_partner_balance
 #: model:ir.actions.report,name:account_financial_report.action_report_aged_partner_balance_html
 #: model:ir.actions.report,name:account_financial_report.action_report_aged_partner_balance_qweb
 #: model:ir.ui.menu,name:account_financial_report.menu_aged_partner_balance_wizard
+#, python-format
 msgid "Aged Partner Balance"
 msgstr "Partnersalden nach Alter"
 
@@ -247,12 +249,6 @@ msgstr "Partnersalden nach Alter"
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_base
 #, fuzzy
 msgid "Aged Partner Balance -"
-msgstr "Partnersalden nach Alter"
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:14
-#, fuzzy, python-format
-msgid "Aged Partner Balance - %s - %s"
 msgstr "Partnersalden nach Alter"
 
 #. module: account_financial_report
@@ -1167,12 +1163,14 @@ msgid "Fy Start Date"
 msgstr "GJ Anfangsdatum"
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:15
 #: model:ir.actions.act_window,name:account_financial_report.action_general_ledger_wizard
 #: model:ir.actions.client,name:account_financial_report.action_report_general_ledger
 #: model:ir.actions.report,name:account_financial_report.action_report_general_ledger_html
 #: model:ir.actions.report,name:account_financial_report.action_report_general_ledger_qweb
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_general_ledger_id
 #: model:ir.ui.menu,name:account_financial_report.menu_general_ledger_wizard
+#, python-format
 msgid "General Ledger"
 msgstr "Hauptbuch"
 
@@ -1180,12 +1178,6 @@ msgstr "Hauptbuch"
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_base
 #, fuzzy
 msgid "General Ledger -"
-msgstr "Hauptbuch"
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger_xlsx.py:15
-#, fuzzy, python-format
-msgid "General Ledger - %s - %s"
 msgstr "Hauptbuch"
 
 #. module: account_financial_report
@@ -1402,11 +1394,12 @@ msgid "Journal Item"
 msgstr "Journal"
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:14
 #: model:ir.actions.act_window,name:account_financial_report.action_journal_ledger_wizard
 #: model:ir.actions.report,name:account_financial_report.action_report_journal_ledger_html
 #: model:ir.actions.report,name:account_financial_report.action_report_journal_ledger_qweb
 #: model:ir.ui.menu,name:account_financial_report.menu_journal_ledger_wizard
-#, fuzzy
+#, fuzzy, python-format
 msgid "Journal Ledger"
 msgstr "Hauptbuch"
 
@@ -1414,12 +1407,6 @@ msgstr "Hauptbuch"
 #: model:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_base
 #, fuzzy
 msgid "Journal Ledger -"
-msgstr "Hauptbuch"
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:14
-#, fuzzy, python-format
-msgid "Journal Ledger - %s - %s"
 msgstr "Hauptbuch"
 
 #. module: account_financial_report
@@ -1737,12 +1724,14 @@ msgid "Only Posted Moves"
 msgstr "Nur gebuchte Posten"
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/open_items_xlsx.py:13
 #: model:ir.actions.act_window,name:account_financial_report.action_open_items_wizard
 #: model:ir.actions.client,name:account_financial_report.action_report_open_items
 #: model:ir.actions.report,name:account_financial_report.action_report_open_items_html
 #: model:ir.actions.report,name:account_financial_report.action_report_open_items_qweb
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_open_items_id
 #: model:ir.ui.menu,name:account_financial_report.menu_open_items_wizard
+#, python-format
 msgid "Open Items"
 msgstr "Offene Posten"
 
@@ -1750,12 +1739,6 @@ msgstr "Offene Posten"
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_base
 #, fuzzy
 msgid "Open Items -"
-msgstr "Offene Posten"
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/open_items_xlsx.py:13
-#, fuzzy, python-format
-msgid "Open Items - %s - %s"
 msgstr "Offene Posten"
 
 #. module: account_financial_report
@@ -2293,11 +2276,13 @@ msgid "Total"
 msgstr "Gesamt"
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:14
 #: model:ir.actions.act_window,name:account_financial_report.action_trial_balance_wizard
 #: model:ir.actions.client,name:account_financial_report.action_report_trial_balance
 #: model:ir.actions.report,name:account_financial_report.action_report_trial_balance_html
 #: model:ir.actions.report,name:account_financial_report.action_report_trial_balance_qweb
 #: model:ir.ui.menu,name:account_financial_report.menu_trial_balance_wizard
+#, python-format
 msgid "Trial Balance"
 msgstr "Stichtagssaldo"
 
@@ -2305,12 +2290,6 @@ msgstr "Stichtagssaldo"
 #: model:ir.ui.view,arch_db:account_financial_report.report_trial_balance_base
 #, fuzzy
 msgid "Trial Balance -"
-msgstr "Stichtagssaldo"
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:14
-#, fuzzy, python-format
-msgid "Trial Balance - %s - %s"
 msgstr "Stichtagssaldo"
 
 #. module: account_financial_report
@@ -2350,11 +2329,13 @@ msgstr ""
 "Stichtagssaldo entsprechen."
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/vat_report_xlsx.py:12
 #: model:ir.actions.act_window,name:account_financial_report.action_vat_report_wizard
 #: model:ir.actions.client,name:account_financial_report.action_report_vat_report
 #: model:ir.actions.report,name:account_financial_report.action_report_vat_report_html
 #: model:ir.actions.report,name:account_financial_report.action_report_vat_report_qweb
 #: model:ir.ui.menu,name:account_financial_report.menu_vat_report_wizard
+#, python-format
 msgid "VAT Report"
 msgstr "Steuerbericht"
 
@@ -2362,12 +2343,6 @@ msgstr "Steuerbericht"
 #: model:ir.ui.view,arch_db:account_financial_report.report_vat_report_base
 #, fuzzy
 msgid "VAT Report -"
-msgstr "Steuerbericht"
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/vat_report_xlsx.py:12
-#, fuzzy, python-format
-msgid "VAT Report - %s - %s"
 msgstr "Steuerbericht"
 
 #. module: account_financial_report
@@ -2632,6 +2607,30 @@ msgstr ""
 #: model:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 8.11%;"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Aged Partner Balance - %s - %s"
+#~ msgstr "Partnersalden nach Alter"
+
+#, fuzzy
+#~ msgid "General Ledger - %s - %s"
+#~ msgstr "Hauptbuch"
+
+#, fuzzy
+#~ msgid "Journal Ledger - %s - %s"
+#~ msgstr "Hauptbuch"
+
+#, fuzzy
+#~ msgid "Open Items - %s - %s"
+#~ msgstr "Offene Posten"
+
+#, fuzzy
+#~ msgid "Trial Balance - %s - %s"
+#~ msgstr "Stichtagssaldo"
+
+#, fuzzy
+#~ msgid "VAT Report - %s - %s"
+#~ msgstr "Steuerbericht"
 
 #~ msgid "Hide Account Balance At 0"
 #~ msgstr "Verberge Konten mit 0-Saldo"
