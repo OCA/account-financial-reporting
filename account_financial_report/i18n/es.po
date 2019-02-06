@@ -11,15 +11,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-18 22:19+0000\n"
-"PO-Revision-Date: 2018-12-14 12:58+0000\n"
-"Last-Translator: Jordi Ballester Alomar <jordi.ballester@eficent.com>\n"
+"PO-Revision-Date: 2019-02-06 10:50+0000\n"
+"Last-Translator: Marta V??zquez Rodr??guez <vazrodmar@gmail.com>\n"
 "Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.3\n"
+"X-Generator: Weblate 3.4\n"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
@@ -227,25 +227,20 @@ msgid ""
 msgstr "??? 90 d."
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:14
 #: model:ir.actions.act_window,name:account_financial_report.action_aged_partner_balance_wizard
 #: model:ir.actions.client,name:account_financial_report.action_report_aged_partner_balance
 #: model:ir.actions.report,name:account_financial_report.action_report_aged_partner_balance_html
 #: model:ir.actions.report,name:account_financial_report.action_report_aged_partner_balance_qweb
 #: model:ir.ui.menu,name:account_financial_report.menu_aged_partner_balance_wizard
+#, python-format
 msgid "Aged Partner Balance"
 msgstr "Saldo vencidos de empresa"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_base
-#, fuzzy
 msgid "Aged Partner Balance -"
-msgstr "Saldo vencidos de empresa"
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:14
-#, fuzzy, python-format
-msgid "Aged Partner Balance - %s - %s"
-msgstr "Saldo vencidos de empresa"
+msgstr "Balance Empresa Vencido"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_aged_partner_balance_wizard
@@ -1157,25 +1152,20 @@ msgid "Fy Start Date"
 msgstr "Fecha Inicio"
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:15
 #: model:ir.actions.act_window,name:account_financial_report.action_general_ledger_wizard
 #: model:ir.actions.client,name:account_financial_report.action_report_general_ledger
 #: model:ir.actions.report,name:account_financial_report.action_report_general_ledger_html
 #: model:ir.actions.report,name:account_financial_report.action_report_general_ledger_qweb
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_general_ledger_id
 #: model:ir.ui.menu,name:account_financial_report.menu_general_ledger_wizard
+#, python-format
 msgid "General Ledger"
 msgstr "Libro mayor"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_base
-#, fuzzy
 msgid "General Ledger -"
-msgstr "Libro mayor"
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger_xlsx.py:15
-#, fuzzy, python-format
-msgid "General Ledger - %s - %s"
 msgstr "Libro mayor"
 
 #. module: account_financial_report
@@ -1384,29 +1374,23 @@ msgstr "Diario"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_move_line
-#, fuzzy
 msgid "Journal Item"
-msgstr "Diario"
+msgstr "Entrada de Diario"
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:14
 #: model:ir.actions.act_window,name:account_financial_report.action_journal_ledger_wizard
 #: model:ir.actions.report,name:account_financial_report.action_report_journal_ledger_html
 #: model:ir.actions.report,name:account_financial_report.action_report_journal_ledger_qweb
 #: model:ir.ui.menu,name:account_financial_report.menu_journal_ledger_wizard
+#, python-format
 msgid "Journal Ledger"
 msgstr "Libro diario"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_base
-#, fuzzy
 msgid "Journal Ledger -"
-msgstr "Libro diario"
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:14
-#, fuzzy, python-format
-msgid "Journal Ledger - %s - %s"
-msgstr "Libro diario"
+msgstr "Diario de contabilidad -"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_journal_ledger_report_wizard
@@ -1718,26 +1702,21 @@ msgid "Only Posted Moves"
 msgstr "Solo Asientos Posteados"
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/open_items_xlsx.py:13
 #: model:ir.actions.act_window,name:account_financial_report.action_open_items_wizard
 #: model:ir.actions.client,name:account_financial_report.action_report_open_items
 #: model:ir.actions.report,name:account_financial_report.action_report_open_items_html
 #: model:ir.actions.report,name:account_financial_report.action_report_open_items_qweb
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_open_items_id
 #: model:ir.ui.menu,name:account_financial_report.menu_open_items_wizard
+#, python-format
 msgid "Open Items"
 msgstr "Partidas abiertas"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_base
-#, fuzzy
 msgid "Open Items -"
-msgstr "Partidas abiertas"
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/open_items_xlsx.py:13
-#, fuzzy, python-format
-msgid "Open Items - %s - %s"
-msgstr "Partidas abiertas"
+msgstr "Partidas abiertas -"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_open_items_report_wizard
@@ -2226,6 +2205,8 @@ msgid ""
 "The Company in the General Ledger Report Wizard and in Date Range must be "
 "the same."
 msgstr ""
+"La empresa en el Asistente de informe de Contabilidad General y de rango de "
+"fechas debe ser la misma."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/wizard/trial_balance_wizard.py:161
@@ -2234,6 +2215,8 @@ msgid ""
 "The Company in the Trial Balance Report Wizard and in Date Range must be the "
 "same."
 msgstr ""
+"La empresa en el Asistente de informe de Balance de comprobaci??n y en rango "
+"de fechas debe ser la misma."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/wizard/vat_report_wizard.py:61
@@ -2241,6 +2224,8 @@ msgstr ""
 msgid ""
 "The Company in the Vat Report Wizard and in Date Range must be the same."
 msgstr ""
+"La empresa en el Asistente para informes de IVA y en rango de fechas debe "
+"ser la misma."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/wizard/trial_balance_wizard.py:91
@@ -2263,25 +2248,20 @@ msgid "Total"
 msgstr "Total"
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:14
 #: model:ir.actions.act_window,name:account_financial_report.action_trial_balance_wizard
 #: model:ir.actions.client,name:account_financial_report.action_report_trial_balance
 #: model:ir.actions.report,name:account_financial_report.action_report_trial_balance_html
 #: model:ir.actions.report,name:account_financial_report.action_report_trial_balance_qweb
 #: model:ir.ui.menu,name:account_financial_report.menu_trial_balance_wizard
+#, python-format
 msgid "Trial Balance"
 msgstr "Balance de Sumas y Saldos"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_trial_balance_base
-#, fuzzy
 msgid "Trial Balance -"
-msgstr "Balance de Sumas y Saldos"
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:14
-#, fuzzy, python-format
-msgid "Trial Balance - %s - %s"
-msgstr "Balance de Sumas y Saldos"
+msgstr "Balance de Sumas y Saldos -"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_trial_balance_report_wizard
@@ -2320,25 +2300,20 @@ msgstr ""
 "balance de sumas y saldos."
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/vat_report_xlsx.py:12
 #: model:ir.actions.act_window,name:account_financial_report.action_vat_report_wizard
 #: model:ir.actions.client,name:account_financial_report.action_report_vat_report
 #: model:ir.actions.report,name:account_financial_report.action_report_vat_report_html
 #: model:ir.actions.report,name:account_financial_report.action_report_vat_report_qweb
 #: model:ir.ui.menu,name:account_financial_report.menu_vat_report_wizard
+#, python-format
 msgid "VAT Report"
 msgstr "Informe de impuestos"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_vat_report_base
-#, fuzzy
 msgid "VAT Report -"
-msgstr "Informe de impuestos"
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/vat_report_xlsx.py:12
-#, fuzzy, python-format
-msgid "VAT Report - %s - %s"
-msgstr "Informe de impuestos"
+msgstr "Informe de impuestos -"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.vat_report_wizard
@@ -2394,7 +2369,7 @@ msgstr "cuenta.grupo"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_financial_report_abstract
 msgid "account_financial_report_abstract"
-msgstr ""
+msgstr "'account_financial_report_abstract'"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
@@ -2595,6 +2570,24 @@ msgstr "ancho: 38.92%;"
 #: model:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 8.11%;"
 msgstr "ancho: 8.11%;"
+
+#~ msgid "Aged Partner Balance - %s - %s"
+#~ msgstr "Balance vencido empresa - %s - %s"
+
+#~ msgid "General Ledger - %s - %s"
+#~ msgstr "Libro mayor - %s - %s"
+
+#~ msgid "Journal Ledger - %s - %s"
+#~ msgstr "Libro diario - %s - %s"
+
+#~ msgid "Open Items - %s - %s"
+#~ msgstr "Partidas abiertas - %s - %s"
+
+#~ msgid "Trial Balance - %s - %s"
+#~ msgstr "Balance de Sumas y Saldos - %s - %s"
+
+#~ msgid "VAT Report - %s - %s"
+#~ msgstr "Informe de impuestos - %s - %s"
 
 #~ msgid "Hide Account Balance At 0"
 #~ msgstr "Ocultar saldos con valor a 0"
