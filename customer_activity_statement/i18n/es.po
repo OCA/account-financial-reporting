@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-22 16:14+0000\n"
-"PO-Revision-Date: 2019-02-04 10:50+0000\n"
+"PO-Revision-Date: 2019-02-06 10:50+0000\n"
 "Last-Translator: Marta Vázquez Rodríguez <vazrodmar@gmail.com>\n"
 "Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
 "Language: es\n"
@@ -74,15 +74,14 @@ msgstr "Reporte de vencidos al"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.customer_activity_statement_wizard_view
-#, fuzzy
 msgid ""
 "Aging details can be shown in the report, expressed in aging         buckets "
 "(30 days due, ...), so the customer or vendor can review how much is open, "
 "due or overdue."
 msgstr ""
-"Los detalles de saldos vencidos pueden ser mostrados en reporte, mostrados "
-"en periodos.… (30 días, ...), para que el cliente pueda revisar cuánto está "
-"abierto, a tiempo o vencido."
+"Los detalles de saldos vencidos pueden ser mostrados en reporte, expresados "
+"en periodos.… (30 días vencidos, ...), para que el cliente o proveedor pueda "
+"revisar cuánto está abierto, a tiempo o vencido."
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
@@ -214,9 +213,8 @@ msgstr "Número de Cliente"
 
 #. module: customer_activity_statement
 #: model:ir.actions.act_window,name:customer_activity_statement.customer_activity_statement_wizard_action
-#, fuzzy
 msgid "Partner Activity Statement"
-msgstr "Estado de Cuenta de Cliente"
+msgstr "Declaración actividad Empresa"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
