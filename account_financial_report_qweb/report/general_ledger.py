@@ -1621,7 +1621,7 @@ WITH move_lines_on_tags AS
         if self.filter_cost_center_ids:
             query_select_previous_fy_unaffected_earnings += """
                 INNER JOIN account_analytic_account aa
-                ON aml.analytic_account_id = aa.id
+                ON ml.analytic_account_id = aa.id
                 AND aa.id IN %(cost_center_ids)s
             """
             query_select_previous_fy_unaffected_earnings_params[
@@ -1677,7 +1677,7 @@ WITH move_lines_on_tags AS
         if self.filter_cost_center_ids:
             query_select_period_unaffected_earnings += """
                 INNER JOIN account_analytic_account aa
-                ON aml.analytic_account_id = aa.id
+                ON ml.analytic_account_id = aa.id
                 AND aa.id IN %(cost_center_ids)s
             """
             query_select_period_unaffected_earnings_params[
