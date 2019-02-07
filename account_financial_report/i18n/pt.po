@@ -226,11 +226,13 @@ msgid ""
 msgstr ""
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:14
 #: model:ir.actions.act_window,name:account_financial_report.action_aged_partner_balance_wizard
 #: model:ir.actions.client,name:account_financial_report.action_report_aged_partner_balance
 #: model:ir.actions.report,name:account_financial_report.action_report_aged_partner_balance_html
 #: model:ir.actions.report,name:account_financial_report.action_report_aged_partner_balance_qweb
 #: model:ir.ui.menu,name:account_financial_report.menu_aged_partner_balance_wizard
+#, python-format
 msgid "Aged Partner Balance"
 msgstr ""
 
@@ -239,12 +241,6 @@ msgstr ""
 #, fuzzy
 msgid "Aged Partner Balance -"
 msgstr "Cancelar"
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:14
-#, python-format
-msgid "Aged Partner Balance - %s - %s"
-msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_aged_partner_balance_wizard
@@ -1143,24 +1139,20 @@ msgid "Fy Start Date"
 msgstr ""
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:15
 #: model:ir.actions.act_window,name:account_financial_report.action_general_ledger_wizard
 #: model:ir.actions.client,name:account_financial_report.action_report_general_ledger
 #: model:ir.actions.report,name:account_financial_report.action_report_general_ledger_html
 #: model:ir.actions.report,name:account_financial_report.action_report_general_ledger_qweb
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_general_ledger_id
 #: model:ir.ui.menu,name:account_financial_report.menu_general_ledger_wizard
+#, python-format
 msgid "General Ledger"
 msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_base
 msgid "General Ledger -"
-msgstr ""
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger_xlsx.py:15
-#, python-format
-msgid "General Ledger - %s - %s"
 msgstr ""
 
 #. module: account_financial_report
@@ -1367,22 +1359,18 @@ msgid "Journal Item"
 msgstr ""
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:14
 #: model:ir.actions.act_window,name:account_financial_report.action_journal_ledger_wizard
 #: model:ir.actions.report,name:account_financial_report.action_report_journal_ledger_html
 #: model:ir.actions.report,name:account_financial_report.action_report_journal_ledger_qweb
 #: model:ir.ui.menu,name:account_financial_report.menu_journal_ledger_wizard
+#, python-format
 msgid "Journal Ledger"
 msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_base
 msgid "Journal Ledger -"
-msgstr ""
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:14
-#, python-format
-msgid "Journal Ledger - %s - %s"
 msgstr ""
 
 #. module: account_financial_report
@@ -1695,24 +1683,20 @@ msgid "Only Posted Moves"
 msgstr ""
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/open_items_xlsx.py:13
 #: model:ir.actions.act_window,name:account_financial_report.action_open_items_wizard
 #: model:ir.actions.client,name:account_financial_report.action_report_open_items
 #: model:ir.actions.report,name:account_financial_report.action_report_open_items_html
 #: model:ir.actions.report,name:account_financial_report.action_report_open_items_qweb
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_open_items_id
 #: model:ir.ui.menu,name:account_financial_report.menu_open_items_wizard
+#, python-format
 msgid "Open Items"
 msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_base
 msgid "Open Items -"
-msgstr ""
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/open_items_xlsx.py:13
-#, python-format
-msgid "Open Items - %s - %s"
 msgstr ""
 
 #. module: account_financial_report
@@ -2242,11 +2226,13 @@ msgid "Total"
 msgstr "Total"
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:14
 #: model:ir.actions.act_window,name:account_financial_report.action_trial_balance_wizard
 #: model:ir.actions.client,name:account_financial_report.action_report_trial_balance
 #: model:ir.actions.report,name:account_financial_report.action_report_trial_balance_html
 #: model:ir.actions.report,name:account_financial_report.action_report_trial_balance_qweb
 #: model:ir.ui.menu,name:account_financial_report.menu_trial_balance_wizard
+#, python-format
 msgid "Trial Balance"
 msgstr ""
 
@@ -2255,12 +2241,6 @@ msgstr ""
 #, fuzzy
 msgid "Trial Balance -"
 msgstr "Cancelar"
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/trial_balance_xlsx.py:14
-#, python-format
-msgid "Trial Balance - %s - %s"
-msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_trial_balance_report_wizard
@@ -2294,11 +2274,13 @@ msgid ""
 msgstr ""
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/vat_report_xlsx.py:12
 #: model:ir.actions.act_window,name:account_financial_report.action_vat_report_wizard
 #: model:ir.actions.client,name:account_financial_report.action_report_vat_report
 #: model:ir.actions.report,name:account_financial_report.action_report_vat_report_html
 #: model:ir.actions.report,name:account_financial_report.action_report_vat_report_qweb
 #: model:ir.ui.menu,name:account_financial_report.menu_vat_report_wizard
+#, python-format
 msgid "VAT Report"
 msgstr ""
 
@@ -2307,12 +2289,6 @@ msgstr ""
 #, fuzzy
 msgid "VAT Report -"
 msgstr "Movimentos alvo"
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/vat_report_xlsx.py:12
-#, python-format
-msgid "VAT Report - %s - %s"
-msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.vat_report_wizard
