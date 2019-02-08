@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-02-01 16:44+0000\n"
-"PO-Revision-Date: 2019-02-04 10:50+0000\n"
+"PO-Revision-Date: 2019-02-08 09:50+0000\n"
 "Last-Translator: Marta Vázquez Rodríguez <vazrodmar@gmail.com>\n"
 "Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
 "Language: es\n"
@@ -216,7 +216,7 @@ msgstr "Todos los asientos asentados"
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_general_ledger_qweb_lines
 #, python-format
 msgid "Amount cur."
-msgstr "Imp. moneda"
+msgstr "Imp. moneda."
 
 #. module: account_financial_report_qweb
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_move_line_amount_currency
@@ -984,9 +984,8 @@ msgstr "Sin empresa asignada"
 
 #. module: account_financial_report_qweb
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_aged_partner_balance_qweb_lines_header
-#, fuzzy
 msgid "Not due"
-msgstr "Fecha vencimiento"
+msgstr "No vencido"
 
 #. module: account_financial_report_qweb
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_general_ledger_report_wizard_not_only_one_unaffected_earnings_account
@@ -1336,62 +1335,62 @@ msgstr "o"
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_aged_partner_balance_qweb
 msgid "report_aged_partner_balance_qweb"
-msgstr "report_aged_partner_balance_qweb"
+msgstr "'report_aged_partner_balance_qweb'"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_aged_partner_balance_qweb_account
 msgid "report_aged_partner_balance_qweb_account"
-msgstr "report_aged_partner_balance_qweb_account"
+msgstr "'report_aged_partner_balance_qweb_account'"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_aged_partner_balance_qweb_line
 msgid "report_aged_partner_balance_qweb_line"
-msgstr "report_aged_partner_balance_qweb_line"
+msgstr "'report_aged_partner_balance_qweb_line'"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_aged_partner_balance_qweb_move_line
 msgid "report_aged_partner_balance_qweb_move_line"
-msgstr "report_aged_partner_balance_qweb_move_line"
+msgstr "'report_aged_partner_balance_qweb_move_line'"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_aged_partner_balance_qweb_partner
 msgid "report_aged_partner_balance_qweb_partner"
-msgstr "report_aged_partner_balance_qweb_partner"
+msgstr "'report_aged_partner_balance_qweb_partner'"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_general_ledger_qweb
 msgid "report_general_ledger_qweb"
-msgstr "report_general_ledger_qweb"
+msgstr "'report_general_ledger_qweb'"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_general_ledger_qweb_account
 msgid "report_general_ledger_qweb_account"
-msgstr "report_general_ledger_qweb_account"
+msgstr "'report_general_ledger_qweb_account'"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_general_ledger_qweb_move_line
 msgid "report_general_ledger_qweb_move_line"
-msgstr "report_general_ledger_qweb_move_line"
+msgstr "'report_general_ledger_qweb_move_line'"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_general_ledger_qweb_partner
 msgid "report_general_ledger_qweb_partner"
-msgstr "report_general_ledger_qweb_partner"
+msgstr "'report_general_ledger_qweb_partner'"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_open_items_qweb
 msgid "report_open_items_qweb"
-msgstr "report_open_items_qweb"
+msgstr "'report_open_items_qweb'"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_open_items_qweb_account
 msgid "report_open_items_qweb_account"
-msgstr "report_open_items_qweb_account"
+msgstr "'report_open_items_qweb_account'"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_open_items_qweb_move_line
 msgid "report_open_items_qweb_move_line"
-msgstr "report_open_items_qweb_move_line"
+msgstr "'report_open_items_qweb_move_line'"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_open_items_qweb_partner
