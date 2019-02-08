@@ -108,7 +108,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            <p>
+                            <p t-if="Show_Buckets">
                                 Aging Report at <span t-esc="Date_end[o.id]"/> in <span t-esc="Currencies[o.id][currency].name"/>:
                             </p>
                             <table class="table table-condensed table-statement" t-if="Show_Buckets">
