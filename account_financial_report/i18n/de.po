@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-01 22:18+0000\n"
-"PO-Revision-Date: 2019-02-14 09:47+0000\n"
+"PO-Revision-Date: 2019-02-14 13:16+0000\n"
 "Last-Translator: Thorsten Vocks <thorsten.vocks@big-consulting.net>\n"
 "Language-Team: German (https://www.transifex.com/oca/teams/23907/de/)\n"
 "Language: de\n"
@@ -144,7 +144,7 @@ msgstr "Konten"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard_centralize
 msgid "Activate centralization"
-msgstr "Abstimmung aktivieren"
+msgstr "Zusammenfassung aktivieren"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_line_age_120_days
@@ -414,25 +414,25 @@ msgstr "Abbrechen"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_centralize
 msgid "Centralize"
-msgstr "Abstimmen"
+msgstr "Zusammenfassen"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:89
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 #, python-format
 msgid "Centralize filter"
-msgstr "Abstimmungsfilter"
+msgstr "Zusammenfassung Filter"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_account_centralized
 msgid "Centralized"
-msgstr "Abgestimmt"
+msgstr "Zusammengefasst"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger.py:1432
 #, python-format
 msgid "Centralized Entries"
-msgstr "Abgestimmte Posten"
+msgstr "Zusammengefasste Buchungen"
 
 #. module: account_financial_report
 #: selection:report_trial_balance,hierarchy_on:0
@@ -1299,8 +1299,8 @@ msgid ""
 "If flagged, no details will be displayed in the General Ledger report (the "
 "webkit one only), only centralized amounts per period."
 msgstr ""
-"Wenn gekennzeichnet, werden im (Webkit) Hauptbuch-Bericht nur Abstimmsummen "
-"pro Periode ausgewiesen."
+"Wenn gekennzeichnet, werden im (Webkit) Hauptbuch-Bericht nur "
+"zusammengefasste Abstimmsummen pro Periode ausgewiesen."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
