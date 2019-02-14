@@ -91,7 +91,7 @@
             <div class="act_as_thead">
                 <div class="act_as_row labels">
                     <!--## date-->
-                    <div class="act_as_cell first_column" style="width: 4.51%;">
+                    <div class="act_as_cell first_column" style="width: 5.74%;">
                         Date</div>
                     <!--## move-->
                     <div class="act_as_cell" style="width: 9.76%;">Entry</div>
@@ -100,13 +100,13 @@
                     <!--## account code-->
                     <div class="act_as_cell" style="width: 5.38%;">Account</div>
                     <!--## partner-->
-                    <div class="act_as_cell" style="width: 15.07%;">Partner
+                    <div class="act_as_cell" style="width: 14.57%;">Partner
                     </div>
                     <!--## ref - label-->
                     <div class="act_as_cell" style="width: 25.5%;">Ref -
                         Label</div>
                     <!--## date_due-->
-                    <div class="act_as_cell" style="width: 6.47%;">Due
+                    <div class="act_as_cell" style="width: 5.74%;">Due
                         date</div>
                     <!--## amount_total_due-->
                     <div class="act_as_cell" style="width: 6.57%;">Original
