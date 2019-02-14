@@ -215,10 +215,11 @@ class GeneralLedgerReportWizard(models.TransientModel):
     @api.onchange('partner_ids')
     def onchange_partner_ids(self):
         """Handle partners change."""
-        if self.partner_ids:
+        if (
+                self.partner_ids and
+                not self.receivable_accounts_only and
+                not self.payable_accounts_only):
             self.receivable_accounts_only = self.payable_accounts_only = True
-        else:
-            self.receivable_accounts_only = self.payable_accounts_only = False
 
     @api.multi
     def button_export_html(self):
