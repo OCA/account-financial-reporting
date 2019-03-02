@@ -24,7 +24,7 @@ msgstr "%s - Rapprochement bancaire"
 #. module: account_bank_reconciliation_summary_xlsx
 #: model:ir.ui.view,arch_db:account_bank_reconciliation_summary_xlsx.account_journal_dashboard_kanban_view
 msgid "<span>Report</span>"
-msgstr "<span>Raport</span>"
+msgstr "<span>Rapport</span>"
 
 #. module: account_bank_reconciliation_summary_xlsx
 #: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:129
@@ -55,7 +55,7 @@ msgstr "Rapprochement bancaire"
 #: model:ir.ui.view,arch_db:account_bank_reconciliation_summary_xlsx.bank_reconciliation_report_wizard_form
 #: model:ir.ui.view,arch_db:account_bank_reconciliation_summary_xlsx.view_bank_statement_form
 msgid "Bank Reconciliation Report"
-msgstr "Raport rapprochement bancaire"
+msgstr "Rapport rapprochement bancaire"
 
 #. module: account_bank_reconciliation_summary_xlsx
 #: model:ir.model,name:account_bank_reconciliation_summary_xlsx.model_bank_reconciliation_report_wizard
@@ -65,7 +65,7 @@ msgstr "Wizard raport rapprochement bancaire"
 #. module: account_bank_reconciliation_summary_xlsx
 #: model:ir.actions.report.xml,name:account_bank_reconciliation_summary_xlsx.bank_reconciliation_xlsx
 msgid "Bank Reconciliation XLSX"
-msgstr "XLSX rapprochement bancaire"
+msgstr "Rapprochement bancaire XLSX"
 
 #. module: account_bank_reconciliation_summary_xlsx
 #: model:ir.ui.view,arch_db:account_bank_reconciliation_summary_xlsx.bank_reconciliation_report_wizard_form
@@ -76,7 +76,7 @@ msgstr "Annuler"
 #: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:210
 #, python-format
 msgid "Computed Bank Account Balance at the Bank:"
-msgstr "Solde calculé du compte bancaire :"
+msgstr "Solde théorique du compte bancaire :"
 
 #. module: account_bank_reconciliation_summary_xlsx
 #: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:130
@@ -106,7 +106,7 @@ msgstr "Date "
 #: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:83
 #, python-format
 msgid "Date:"
-msgstr "Date:"
+msgstr "Date :"
 
 #. module: account_bank_reconciliation_summary_xlsx
 #: model:ir.model.fields,field_description:account_bank_reconciliation_summary_xlsx.field_bank_reconciliation_report_wizard_display_name
@@ -117,7 +117,7 @@ msgstr "Nom affiché"
 #: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:169
 #, python-format
 msgid "Draft bank statement lines:"
-msgstr "Lines non validées du relevé bancaire:"
+msgstr "Lignes non validées du relevé bancaire :"
 
 #. module: account_bank_reconciliation_summary_xlsx
 #: model:ir.ui.view,arch_db:account_bank_reconciliation_summary_xlsx.bank_reconciliation_report_wizard_form
@@ -138,7 +138,7 @@ msgstr "Écriture comptable"
 #: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:113
 #, python-format
 msgid "Journal items of account %s not linked to a bank statement line:"
-msgstr "Ecritures comptables du compte %s not liés à une ligne de relevé bancaire :"
+msgstr "Ecritures comptables du compte %s non liées à une ligne de relevé bancaire :"
 
 #. module: account_bank_reconciliation_summary_xlsx
 #: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:128
@@ -166,7 +166,7 @@ msgstr "Mis à jour le"
 #: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:129
 #, python-format
 msgid "Move Number"
-msgstr "Numéro pièce comptables"
+msgstr "Numéro de pièce"
 
 #. module: account_bank_reconciliation_summary_xlsx
 #: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:124
