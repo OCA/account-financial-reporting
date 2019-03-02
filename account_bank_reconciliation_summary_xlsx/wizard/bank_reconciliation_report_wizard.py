@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
-# © 2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# Copyright 2017-2019 Akretion France (http://www.akretion.com/)
+# @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models
@@ -24,18 +24,11 @@ class BankReconciliationReportWizard(models.TransientModel):
     journal_ids = fields.Many2many(
         'account.journal', string='Bank Journals',
         domain=[('type', '=', 'bank')], required=True,
-        default=_default_journal_ids)
+        default=lambda self: self._default_journal_ids())
 
     def open_xlsx(self):
-        action = {
-            'type': 'ir.actions.report.xml',
-            'report_name': 'bank.reconciliation.xlsx',
-            'datas': {
-                'model': self._name,
-                'ids': self.ids,
-                'journal_ids': self.journal_ids.ids,
-                'date': self.date,
-                },
-            'context': self._context,
-            }
+        report = self.env.ref(
+            'account_bank_reconciliation_summary_xlsx.'
+            'bank_reconciliation_xlsx')
+        action = report.report_action(self)
         return action

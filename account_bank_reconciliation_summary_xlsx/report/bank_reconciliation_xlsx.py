@@ -1,14 +1,76 @@
-# -*- coding: utf-8 -*-
-# © 2017 Akretion France (Alexis de Lattre <alexis.delattre@akretion.com>)
+# Copyright 2017-2019 Akretion France (http://www.akretion.com/)
+# @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo.addons.report_xlsx.report.report_xlsx import ReportXlsx
-from odoo import fields, _
-from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
-from datetime import datetime
+from odoo import _, fields, models
 
 
-class BankReconciliationXlsx(ReportXlsx):
+class BankReconciliationXlsx(models.AbstractModel):
+    _name = 'report.bank.reconciliation.xlsx'
+    _inherit = 'report.report_xlsx.abstract'
+
+    def _compute_account_balance(self, journal, date):
+        bank_account = journal.default_debit_account_id
+        amount_field = 'balance'
+        # TODO: add support for bank accounts in foreign currency
+        # if not o.currency_id else 'amount_currency'
+        query = """
+            SELECT sum(%s) FROM account_move_line
+            WHERE account_id=%%s AND date <= %%s""" % (amount_field, )
+        self.env.cr.execute(query, (bank_account.id, date))
+        query_results = self.env.cr.dictfetchall()
+        if query_results:
+            account_bal = query_results[0].get('sum') or 0.0
+        else:
+            account_bal = 0.0
+        return account_bal
+
+    def _prepare_move_lines(self, journal, date):
+        bank_account = journal.default_debit_account_id
+        mlines = self.env['account.move.line'].search([
+            ('account_id', '=', bank_account.id),
+            ('journal_id', '=', journal.id),  # to avoid initial line
+            ('date', '<=', date),
+            '|', ('statement_line_date', '=', False),
+            ('statement_line_date', '>', date)])
+        res = []
+        for mline in mlines:
+            move = mline.move_id
+            cpart = []
+            for line in move.line_ids:
+                if (
+                        line.account_id != bank_account and
+                        line.account_id.code not in cpart):
+                    cpart.append(line.account_id.code)
+            counterpart = ' ,'.join(cpart)
+            res.append({
+                'date': mline.date,
+                'label': mline.name,
+                'ref': mline.ref or '',
+                'partner': mline.partner_id.display_name or '',
+                'amount': mline.balance,
+                'statement_line_date': mline.statement_line_date or '',
+                'move_number': move.name,
+                'counterpart': counterpart,
+                })
+        return res
+
+    def _prepare_draft_statement_lines(self, journal, date):
+        blines = self.env['account.bank.statement.line'].search([
+            ('journal_entry_ids', '=', False),
+            ('journal_id', '=', journal.id),
+            ('date', '<=', date)])
+        res = []
+        for bline in blines:
+            res.append({
+                'date': bline.date,
+                'label': bline.name,
+                'ref': bline.ref or '',
+                'partner': bline.partner_id.display_name or '',
+                'amount': bline.amount,
+                'statement_ref': bline.statement_id.display_name,
+                })
+        return res
 
     def generate_xlsx_report(self, workbook, data, wizard):
         date = wizard.date
@@ -92,18 +154,7 @@ class BankReconciliationXlsx(ReportXlsx):
             sheet.write(
                 row, 3,
                 _('Balance %s:') % bank_account.code, title_right)
-            amount_field = 'balance'
-            # TODO: add support for bank accounts in foreign currency
-            # if not o.currency_id else 'amount_currency'
-            query = """
-                SELECT sum(%s) FROM account_move_line
-                WHERE account_id=%%s AND date <= %%s""" % (amount_field, )
-            self.env.cr.execute(query, (bank_account.id, date))
-            query_results = self.env.cr.dictfetchall()
-            if query_results:
-                account_bal = query_results[0].get('sum') or 0.0
-            else:
-                account_bal = 0.0
+            account_bal = self._compute_account_balance(o, date)
 
             sheet.write(row, 4, account_bal, regular_currency_bg)
             bank_bal = account_bal
@@ -116,12 +167,7 @@ class BankReconciliationXlsx(ReportXlsx):
                     'Journal items of account %s not linked to a bank '
                     'statement line:') % bank_account.code,
                 label_bold)
-            mlines = self.env['account.move.line'].search([
-                ('account_id', '=', bank_account.id),
-                ('journal_id', '=', o.id),  # to avoid initial line
-                ('date', '<=', date),
-                '|', ('statement_line_date', '=', False),
-                ('statement_line_date', '>', date)])
+            mlines = self._prepare_move_lines(o, date)
             if not mlines:
                 sheet.write(row, 4, _('NONE'), none)
             else:
@@ -138,30 +184,16 @@ class BankReconciliationXlsx(ReportXlsx):
                 for mline in mlines:
                     row += 1
                     m_end_row = row
-                    move = mline.move_id
-                    bank_bal -= mline.balance
-                    date_dt = fields.Date.from_string(mline.date)
-                    sheet.write(row, 0, date_dt, regular_date)
-                    sheet.write(row, 1, mline.name, regular)
-                    sheet.write(row, 2, mline.ref or '', regular)
+                    bank_bal -= mline['amount']
+                    sheet.write(row, 0, mline['date'], regular_date)
+                    sheet.write(row, 1, mline['label'], regular)
+                    sheet.write(row, 2, mline['ref'], regular)
+                    sheet.write(row, 3, mline['partner'], regular)
+                    sheet.write(row, 4, mline['amount'], regular_currency)
                     sheet.write(
-                        row, 3, mline.partner_id.display_name or '', regular)
-                    sheet.write(row, 4, mline.balance, regular_currency)
-                    if mline.statement_line_date:
-                        stl_date_dt = fields.Date.from_string(
-                            mline.statement_line_date)
-                    else:
-                        stl_date_dt = ''
-                    sheet.write(row, 5, stl_date_dt, regular_date)
-                    sheet.write(row, 6, move.name, regular)
-                    # counter-part accounts
-                    cpart = []
-                    for line in move.line_ids:
-                        if (
-                                line.account_id != bank_account and
-                                line.account_id.code not in cpart):
-                            cpart.append(line.account_id.code)
-                    sheet.write(row, 7, ' ,'.join(cpart), regular)
+                        row, 5, mline['statement_line_date'], regular_date)
+                    sheet.write(row, 6, mline['move_number'], regular)
+                    sheet.write(row, 7, mline['counterpart'], regular)
 
                 formula += '-SUM(E%d:E%d)' % (m_start_row + 1, m_end_row + 1)
 
@@ -171,10 +203,7 @@ class BankReconciliationXlsx(ReportXlsx):
                 row, 0, _(
                     'Draft bank statement lines:'),
                 label_bold)
-            blines = self.env['account.bank.statement.line'].search([
-                ('journal_entry_ids', '=', False),
-                ('journal_id', '=', o.id),
-                ('date', '<=', date)])
+            blines = self._prepare_draft_statement_lines(o, date)
             if not blines:
                 sheet.write(row, 4, _('NONE'), none)
             else:
@@ -190,18 +219,14 @@ class BankReconciliationXlsx(ReportXlsx):
                 for bline in blines:
                     row += 1
                     b_end_row = row
-                    bank_bal += bline.amount
-                    date_dt = datetime.strptime(
-                        bline.date, DEFAULT_SERVER_DATE_FORMAT)
-                    sheet.write(row, 0, date_dt, regular_date)
-                    sheet.write(row, 1, bline.name, regular)
-                    sheet.write(row, 2, bline.ref or '', regular)
+                    bank_bal += bline['amount']
+                    sheet.write(row, 0, bline['date'], regular_date)
+                    sheet.write(row, 1, bline['label'], regular)
+                    sheet.write(row, 2, bline['ref'], regular)
+                    sheet.write(row, 3, bline['partner'], regular)
+                    sheet.write(row, 4, bline['amount'], regular_currency)
                     sheet.write(
-                        row, 3, bline.partner_id.display_name or '', regular)
-                    sheet.write(row, 4, bline.amount, regular_currency)
-                    sheet.write(
-                        row, 5, bline.statement_id.display_name or '',
-                        regular_currency)
+                        row, 5, bline['statement_ref'], regular_currency)
                 formula += '+SUM(E%d:E%d)' % (b_start_row + 1, b_end_row + 1)
 
             # 4) Theoric bank account balance at the bank
@@ -222,7 +247,3 @@ class BankReconciliationXlsx(ReportXlsx):
                 0, 0, _(
                     "No bank journal selected. "
                     "This report is only for bank journals."), warn_msg)
-
-
-BankReconciliationXlsx(
-    'report.bank.reconciliation.xlsx', 'bank.reconciliation.report.wizard')
