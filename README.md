@@ -19,6 +19,7 @@ Available addons
 ----------------
 addon | version | summary
 --- | --- | ---
+[account_bank_statement_line_reconciliation](account_bank_statement_line_reconciliation/) | 10.0.1.0.0 | OCA Financial Reports
 [account_financial_report_date_range](account_financial_report_date_range/) | 10.0.1.0.0 | Add Date Range field to the Odoo OE standard addons financial reports wizard.
 [account_financial_report_horizontal](account_financial_report_horizontal/) | 10.0.1.0.0 | Accounting Financial Report Horizontal
 [account_financial_report_qweb](account_financial_report_qweb/) | 10.0.3.0.1 | OCA Financial Reports
