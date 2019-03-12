@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="extra_view_account_config_settings" model="ir.ui.view">
+        <field name="name">extra.view.account.config.settings</field>
+        <field name="model">account.config.settings</field>
+        <field name="inherit_id" ref="account.view_account_config_settings"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//group[@groups='account.group_account_user']" position="inside">
+            <label for="id" string="Bank Reconciliation Threshold"/>
+              <div>
+                  <div>
+                      <label for="account_bank_reconciliation_start"/>
+                      <field name="account_bank_reconciliation_start" class="oe_inline"/>
+                  </div>
+              </div>
+            </xpath>
+
+        </field>
+     </record>
+</odoo>
