@@ -1,0 +1,124 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* account_bank_statement_line_reconciliation
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: account_bank_statement_line_reconciliation
+#: model:ir.model.fields,field_description:account_bank_statement_line_reconciliation.field_account_config_settings_account_bank_reconciliation_start
+#: model:ir.model.fields,field_description:account_bank_statement_line_reconciliation.field_res_company_account_bank_reconciliation_start
+#: model:ir.ui.view,arch_db:account_bank_statement_line_reconciliation.extra_view_account_config_settings
+msgid "Bank Reconciliation Threshold"
+msgstr ""
+
+#. module: account_bank_statement_line_reconciliation
+#: model:ir.model,name:account_bank_statement_line_reconciliation.model_account_bank_statement_line
+msgid "Bank Statement Line"
+msgstr ""
+
+#. module: account_bank_statement_line_reconciliation
+#: model:ir.actions.act_window,name:account_bank_statement_line_reconciliation.action_account_bank_statement_line_reconciliation_wizard
+#: model:ir.ui.view,arch_db:account_bank_statement_line_reconciliation.account_bank_statement_line_reconciliation_wizard
+msgid "Bank reconcile report change"
+msgstr ""
+
+#. module: account_bank_statement_line_reconciliation
+#: model:ir.ui.view,arch_db:account_bank_statement_line_reconciliation.account_bank_statement_line_reconciliation_wizard
+msgid "Cancel"
+msgstr ""
+
+#. module: account_bank_statement_line_reconciliation
+#: model:ir.model,name:account_bank_statement_line_reconciliation.model_res_company
+msgid "Companies"
+msgstr ""
+
+#. module: account_bank_statement_line_reconciliation
+#: model:ir.model.fields,field_description:account_bank_statement_line_reconciliation.field_account_bank_statement_line_reconciliation_wizard_create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: account_bank_statement_line_reconciliation
+#: model:ir.model.fields,field_description:account_bank_statement_line_reconciliation.field_account_bank_statement_line_reconciliation_wizard_create_date
+msgid "Created on"
+msgstr ""
+
+#. module: account_bank_statement_line_reconciliation
+#: model:ir.model.fields,field_description:account_bank_statement_line_reconciliation.field_account_bank_statement_line_reconciliation_wizard_statement_line_ids
+msgid "Current values"
+msgstr ""
+
+#. module: account_bank_statement_line_reconciliation
+#: model:ir.model.fields,field_description:account_bank_statement_line_reconciliation.field_account_bank_statement_line_reconciliation_wizard_display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: account_bank_statement_line_reconciliation
+#: model:ir.ui.view,arch_db:account_bank_statement_line_reconciliation.account_bank_statement_line_reconciliation_wizard
+msgid "Entry"
+msgstr ""
+
+#. module: account_bank_statement_line_reconciliation
+#: model:ir.model.fields,field_description:account_bank_statement_line_reconciliation.field_account_bank_statement_line_reconciliation_wizard_id
+msgid "ID"
+msgstr ""
+
+#. module: account_bank_statement_line_reconciliation
+#: model:ir.model.fields,field_description:account_bank_statement_line_reconciliation.field_account_bank_statement_line_reconciliation_wizard___last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: account_bank_statement_line_reconciliation
+#: model:ir.model.fields,field_description:account_bank_statement_line_reconciliation.field_account_bank_statement_line_reconciliation_wizard_write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: account_bank_statement_line_reconciliation
+#: model:ir.model.fields,field_description:account_bank_statement_line_reconciliation.field_account_bank_statement_line_reconciliation_wizard_write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: account_bank_statement_line_reconciliation
+#: model:ir.model.fields,field_description:account_bank_statement_line_reconciliation.field_account_bank_statement_line_reconciliation_wizard_new_statement_line_id
+msgid "New value"
+msgstr ""
+
+#. module: account_bank_statement_line_reconciliation
+#: code:addons/account_bank_statement_line_reconciliation/wizard/account_bank_statement_line_reconciliation_wizard.py:31
+#, python-format
+msgid "Please only select Journal entries that belongs to the same bank journal"
+msgstr ""
+
+#. module: account_bank_statement_line_reconciliation
+#: model:ir.ui.view,arch_db:account_bank_statement_line_reconciliation.account_bank_statement_line_reconciliation_wizard
+msgid "Set value"
+msgstr ""
+
+#. module: account_bank_statement_line_reconciliation
+#: model:ir.model.fields,help:account_bank_statement_line_reconciliation.field_res_company_account_bank_reconciliation_start
+msgid "The bank reconciliation widget won't ask to reconcile         payments older than this date.        This is useful if you install accounting after having used invoicing         for some time and don't want to reconcile all         the past payments with bank statements."
+msgstr ""
+
+#. module: account_bank_statement_line_reconciliation
+#: model:ir.model.fields,help:account_bank_statement_line_reconciliation.field_account_config_settings_account_bank_reconciliation_start
+msgid "The bank reconciliation widget won't ask to reconcile         payments older than this date.        This is useful if you install accounting after having used invoicing         for some time and don't want to reconcile all the past payments         with bank statements."
+msgstr ""
+
+#. module: account_bank_statement_line_reconciliation
+#: model:ir.model,name:account_bank_statement_line_reconciliation.model_account_bank_statement_line_reconciliation_wizard
+msgid "account.bank.statement.line.reconciliation.wizard"
+msgstr ""
+
+#. module: account_bank_statement_line_reconciliation
+#: model:ir.model,name:account_bank_statement_line_reconciliation.model_account_config_settings
+msgid "account.config.settings"
+msgstr ""
+
