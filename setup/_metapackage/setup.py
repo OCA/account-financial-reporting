@@ -8,6 +8,7 @@ setuptools.setup(
     description="Meta package for oca-account-financial-reporting Odoo addons",
     version=version,
     install_requires=[
+        'odoo10-addon-account_bank_statement_line_reconciliation',
         'odoo10-addon-account_financial_report_date_range',
         'odoo10-addon-account_financial_report_horizontal',
         'odoo10-addon-account_financial_report_qweb',
