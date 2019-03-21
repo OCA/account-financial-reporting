@@ -18,7 +18,6 @@
 }
 .list_table, .data_table, .totals_table{
     width: 100% !important;
-    table-layout: fixed !important;
 }
 .act_as_row.labels {
     background-color:#F0F0F0 !important;
