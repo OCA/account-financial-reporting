@@ -215,7 +215,6 @@ class TrialBalanceReportCompute(models.TransientModel):
             'date_from': self.date_from,
             'date_to': self.date_to,
             'only_posted_moves': self.only_posted_moves,
-            'hide_account_at_0': self.hide_account_at_0,
             'foreign_currency': self.foreign_currency,
             'company_id': self.company_id.id,
             'filter_account_ids': [(6, 0, account_ids.ids)],
