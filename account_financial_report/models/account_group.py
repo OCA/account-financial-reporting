@@ -22,7 +22,7 @@ class AccountGroup(models.Model):
     compute_account_ids = fields.Many2many(
         'account.account',
         compute='_compute_group_accounts',
-        string="Accounts", store=True)
+        string="Compute accounts", store=True)
 
     @api.multi
     @api.depends('parent_id', 'parent_id.level')
