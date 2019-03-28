@@ -9,6 +9,7 @@ from odoo.exceptions import ValidationError
 
 class VATReportWizard(models.TransientModel):
     _name = "vat.report.wizard"
+    _description = "VAT Report Wizard"
 
     company_id = fields.Many2one(
         comodel_name='res.company',
