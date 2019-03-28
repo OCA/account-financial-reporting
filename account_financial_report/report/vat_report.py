@@ -64,7 +64,8 @@ class VATReportTaxTags(models.TransientModel):
     # Data fields, used to browse report data
     tax_ids = fields.One2many(
         comodel_name='report_vat_report_tax',
-        inverse_name='report_tax_id'
+        inverse_name='report_tax_id',
+        string='Taxes'
     )
 
 
@@ -82,7 +83,8 @@ class VATReportTax(models.TransientModel):
     # Data fields, used to keep link with real object
     tax_id = fields.Many2one(
         'account.tax',
-        index=True
+        index=True,
+        string='Tax ID',
     )
 
     # Data fields, used for report display

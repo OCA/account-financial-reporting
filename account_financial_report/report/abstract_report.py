@@ -6,6 +6,7 @@ from odoo import models
 
 class AbstractReport(models.AbstractModel):
     _name = 'account_financial_report_abstract'
+    _description = 'Abstract Report'
 
     def _transient_clean_rows_older_than(self, seconds):
         assert self._transient, \
