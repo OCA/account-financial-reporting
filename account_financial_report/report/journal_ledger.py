@@ -715,7 +715,8 @@ class ReportJournalLedgerMoveLine(models.TransientModel):
         ondelete='cascade',
     )
     account_id = fields.Many2one(
-        comodel_name='account.account'
+        comodel_name='account.account',
+        string='Account ID',
     )
     account = fields.Char()
     account_code = fields.Char()
@@ -723,6 +724,7 @@ class ReportJournalLedgerMoveLine(models.TransientModel):
     partner = fields.Char()
     partner_id = fields.Many2one(
         comodel_name='res.partner',
+        string='Partner ID',
     )
     date = fields.Date()
     entry = fields.Char()
