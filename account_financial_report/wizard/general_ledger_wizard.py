@@ -61,7 +61,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
     )
     analytic_tag_ids = fields.Many2many(
         comodel_name='account.analytic.tag',
-        string='Filter accounts',
+        string='Filter analytic tags',
     )
     account_journal_ids = fields.Many2many(
         comodel_name='account.journal',
