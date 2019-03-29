@@ -91,10 +91,10 @@ class TrialBalanceReportAccount(models.TransientModel):
         index=True
     )
     child_account_ids = fields.Char(
-        string="Accounts")
+        string="Child accounts")
     compute_account_ids = fields.Many2many(
         'account.account',
-        string="Accounts", store=True)
+        string="Compute accounts", store=True)
 
     # Data fields, used for report display
     code = fields.Char()
