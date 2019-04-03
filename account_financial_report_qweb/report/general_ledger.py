@@ -553,10 +553,8 @@ WHERE
     )
         """
         if self.hide_account_at_0:
-            query_inject_account += """
-AND
-    f.balance IS NOT NULL AND f.balance != 0
-            """
+            query_inject_account += """ AND (f.balance IS NOT NULL AND f.balance != 0) OR 
+            (i.balance IS NOT NULL AND i.balance != 0) """
         query_inject_account_params = ()
         if self.filter_cost_center_ids:
             query_inject_account_params += (
