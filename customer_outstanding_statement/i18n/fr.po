@@ -23,37 +23,31 @@ msgstr ""
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 #, fuzzy
-msgid "+                                Customer Outstanding Statement at"
-msgstr "Postes ouverts des partenaires"
-
-#. module: customer_outstanding_statement
-#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
-msgid "+                                Supplier Outstanding Statement at"
-msgstr ""
-
-#. module: customer_outstanding_statement
-#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
-msgid "+120 Days Due"
+msgid "+120 Days"
 msgstr "+120 jours d'arriérés"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
-msgid "1-30 Days Due"
+#, fuzzy
+msgid "1-30 Days"
 msgstr "1-30 jours d'arriérés"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
-msgid "30-60 Days Due"
+#, fuzzy
+msgid "30-60 Days"
 msgstr "30-60 jours d'arriérés"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
-msgid "60-90 Days Due"
+#, fuzzy
+msgid "60-90 Days"
 msgstr "60-90 jours d'arriérés"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
-msgid "90-120 Days Due"
+#, fuzzy
+msgid "90-120 Days"
 msgstr "90-120 jours d'arriérés"
 
 #. module: customer_outstanding_statement
@@ -213,9 +207,15 @@ msgid "Original Amount"
 msgstr "Montant original"
 
 #. module: customer_outstanding_statement
+#: model:ir.actions.report,name:customer_outstanding_statement.action_print_customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Outstanding Statement"
 msgstr "Relevé des postes ouverts"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "Outstanding Statement at"
+msgstr "Relevé des postes ouverts au"
 
 #. module: customer_outstanding_statement
 #: model:ir.actions.act_window,name:customer_outstanding_statement.customer_outstanding_statement_wizard_action
@@ -242,11 +242,6 @@ msgstr ""
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Reference number"
 msgstr "Numéro de référence"
-
-#. module: customer_outstanding_statement
-#: model:ir.actions.report,name:customer_outstanding_statement.action_print_customer_outstanding_statement
-msgid "Statement Action to PDF"
-msgstr "Export du relevé des postes ouverts en PDF"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
@@ -278,5 +273,9 @@ msgstr "ou"
 msgid "report.customer_outstanding_statement.statement"
 msgstr "report.customer_outstanding_statement.statement"
 
-#~ msgid "Outstanding Statement at"
-#~ msgstr "Relevé des postes ouverts au"
+#, fuzzy
+#~ msgid "+                                Customer Outstanding Statement at"
+#~ msgstr "Postes ouverts des partenaires"
+
+#~ msgid "Statement Action to PDF"
+#~ msgstr "Export du relevé des postes ouverts en PDF"

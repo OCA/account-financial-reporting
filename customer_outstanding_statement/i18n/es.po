@@ -24,37 +24,31 @@ msgstr ""
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 #, fuzzy
-msgid "+                                Customer Outstanding Statement at"
-msgstr "Informe de Saldos Abiertos"
-
-#. module: customer_outstanding_statement
-#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
-msgid "+                                Supplier Outstanding Statement at"
-msgstr ""
-
-#. module: customer_outstanding_statement
-#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
-msgid "+120 Days Due"
+msgid "+120 Days"
 msgstr "+120 Días"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
-msgid "1-30 Days Due"
+#, fuzzy
+msgid "1-30 Days"
 msgstr "1-30 Días"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
-msgid "30-60 Days Due"
+#, fuzzy
+msgid "30-60 Days"
 msgstr "30-60 Días"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
-msgid "60-90 Days Due"
+#, fuzzy
+msgid "60-90 Days"
 msgstr "60-90 Días"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
-msgid "90-120 Days Due"
+#, fuzzy
+msgid "90-120 Days"
 msgstr "90-120 Días"
 
 #. module: customer_outstanding_statement
@@ -213,9 +207,15 @@ msgid "Original Amount"
 msgstr "Saldo Original"
 
 #. module: customer_outstanding_statement
+#: model:ir.actions.report,name:customer_outstanding_statement.action_print_customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Outstanding Statement"
 msgstr "Estado de Cuenta"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "Outstanding Statement at"
+msgstr "Estado de Cuenta al"
 
 #. module: customer_outstanding_statement
 #: model:ir.actions.act_window,name:customer_outstanding_statement.customer_outstanding_statement_wizard_action
@@ -242,11 +242,6 @@ msgstr ""
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Reference number"
 msgstr "Número de Referencia"
-
-#. module: customer_outstanding_statement
-#: model:ir.actions.report,name:customer_outstanding_statement.action_print_customer_outstanding_statement
-msgid "Statement Action to PDF"
-msgstr "Acción Estado a PDF"
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
@@ -278,5 +273,9 @@ msgstr "o"
 msgid "report.customer_outstanding_statement.statement"
 msgstr "informe.estado_de_cuenta_de_cliente"
 
-#~ msgid "Outstanding Statement at"
-#~ msgstr "Estado de Cuenta al"
+#, fuzzy
+#~ msgid "+                                Customer Outstanding Statement at"
+#~ msgstr "Informe de Saldos Abiertos"
+
+#~ msgid "Statement Action to PDF"
+#~ msgstr "Acción Estado a PDF"

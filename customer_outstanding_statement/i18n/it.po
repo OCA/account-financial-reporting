@@ -20,37 +20,27 @@ msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
-msgid "+                                Customer Outstanding Statement at"
+msgid "+120 Days"
 msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
-msgid "+                                Supplier Outstanding Statement at"
+msgid "1-30 Days"
 msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
-msgid "+120 Days Due"
+msgid "30-60 Days"
 msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
-msgid "1-30 Days Due"
+msgid "60-90 Days"
 msgstr ""
 
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
-msgid "30-60 Days Due"
-msgstr ""
-
-#. module: customer_outstanding_statement
-#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
-msgid "60-90 Days Due"
-msgstr ""
-
-#. module: customer_outstanding_statement
-#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
-msgid "90-120 Days Due"
+msgid "90-120 Days"
 msgstr ""
 
 #. module: customer_outstanding_statement
@@ -206,8 +196,14 @@ msgid "Original Amount"
 msgstr ""
 
 #. module: customer_outstanding_statement
+#: model:ir.actions.report,name:customer_outstanding_statement.action_print_customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Outstanding Statement"
+msgstr ""
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "Outstanding Statement at"
 msgstr ""
 
 #. module: customer_outstanding_statement
@@ -233,11 +229,6 @@ msgstr ""
 #. module: customer_outstanding_statement
 #: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
 msgid "Reference number"
-msgstr ""
-
-#. module: customer_outstanding_statement
-#: model:ir.actions.report,name:customer_outstanding_statement.action_print_customer_outstanding_statement
-msgid "Statement Action to PDF"
 msgstr ""
 
 #. module: customer_outstanding_statement
