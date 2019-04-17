@@ -90,11 +90,15 @@ class OpenItemsReportWizard(models.TransientModel):
         else:
             res['domain']['account_ids'] += [
                 ('company_id', '=', self.company_id.id)]
-            res['domain']['partner_ids'] += [
-                '&',
-                '|', ('company_id', '=', self.company_id.id),
-                ('company_id', '=', False),
-                ('parent_id', '=', False)]
+            if self.env.ref('base.res_partner_rule').active:
+                res['domain']['partner_ids'] += [
+                    '&',
+                    '|', ('company_id', '=', self.company_id.id),
+                    ('company_id', '=', False),
+                    ('parent_id', '=', False)]
+            else:
+                res['domain']['partner_ids'] += [
+                    ('parent_id', '=', False)]
         return res
 
     @api.onchange('receivable_accounts_only', 'payable_accounts_only')

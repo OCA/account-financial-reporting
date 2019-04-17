@@ -167,11 +167,15 @@ class GeneralLedgerReportWizard(models.TransientModel):
                 ('company_id', '=', self.company_id.id)]
             res['domain']['account_journal_ids'] += [
                 ('company_id', '=', self.company_id.id)]
-            res['domain']['partner_ids'] += [
-                '&',
-                '|', ('company_id', '=', self.company_id.id),
-                ('company_id', '=', False),
-                ('parent_id', '=', False)]
+            if self.env.ref('base.res_partner_rule').active:
+                res['domain']['partner_ids'] += [
+                    '&',
+                    '|', ('company_id', '=', self.company_id.id),
+                    ('company_id', '=', False),
+                    ('parent_id', '=', False)]
+            else:
+                res['domain']['partner_ids'] += [
+                    ('parent_id', '=', False)]
             res['domain']['cost_center_ids'] += [
                 ('company_id', '=', self.company_id.id)]
             res['domain']['date_range_id'] += [
