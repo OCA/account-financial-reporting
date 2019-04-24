@@ -29,25 +29,27 @@ class GeneralLedgerXslx(abstract_report_xlsx.AbstractReportXslx):
             4: {'header': _('Taxes'),
                 'field': 'taxes_description',
                 'width': 15},
-            5: {'header': _('Partner'), 'field': 'partner', 'width': 25},
-            6: {'header': _('Ref - Label'), 'field': 'label', 'width': 40},
-            7: {'header': _('Cost center'),
+            5: {'header': _('Opposite accounts'),
+                'field': 'opposite_accounts', 'width': 25},
+            6: {'header': _('Partner'), 'field': 'partner', 'width': 25},
+            7: {'header': _('Ref - Label'), 'field': 'label', 'width': 40},
+            8: {'header': _('Cost center'),
                 'field': 'cost_center',
                 'width': 15},
-            8: {'header': _('Tags'),
+            9: {'header': _('Tags'),
                 'field': 'tags',
                 'width': 10},
-            9: {'header': _('Rec.'),
-                'field': 'matched_ml_id',
-                'type': 'many2one',
-                'width': 5},
-            10: {'header': _('Debit'),
+            10: {'header': _('Rec.'),
+                 'field': 'matched_ml_id',
+                 'type': 'many2one',
+                 'width': 5},
+            11: {'header': _('Debit'),
                  'field': 'debit',
                  'field_initial_balance': 'initial_debit',
                  'field_final_balance': 'final_debit',
                  'type': 'amount',
                  'width': 14},
-            11: {
+            12: {
                 'header': _('Credit'),
                 'field': 'credit',
                 'field_initial_balance': 'initial_credit',
@@ -55,7 +57,7 @@ class GeneralLedgerXslx(abstract_report_xlsx.AbstractReportXslx):
                 'type': 'amount',
                 'width': 14
             },
-            12: {'header': _('Cumul. Bal.'),
+            13: {'header': _('Cumul. Bal.'),
                  'field': 'cumul_balance',
                  'field_initial_balance': 'initial_balance',
                  'field_final_balance': 'final_balance',
@@ -64,12 +66,12 @@ class GeneralLedgerXslx(abstract_report_xlsx.AbstractReportXslx):
         }
         if report.foreign_currency:
             foreign_currency = {
-                13: {'header': _('Cur.'),
+                14: {'header': _('Cur.'),
                      'field': 'currency_id',
                      'field_currency_balance': 'currency_id',
                      'type': 'many2one',
                      'width': 7},
-                14: {'header': _('Amount cur.'),
+                15: {'header': _('Amount cur.'),
                      'field': 'amount_currency',
                      'field_initial_balance':
                          'initial_balance_foreign_currency',
@@ -116,13 +118,13 @@ class GeneralLedgerXslx(abstract_report_xlsx.AbstractReportXslx):
         return 2
 
     def _get_col_pos_initial_balance_label(self):
-        return 5
+        return 6
 
     def _get_col_count_final_balance_name(self):
-        return 5
+        return 6
 
     def _get_col_pos_final_balance_label(self):
-        return 5
+        return 6
 
     def _generate_report_content(self, workbook, report):
         # For each account

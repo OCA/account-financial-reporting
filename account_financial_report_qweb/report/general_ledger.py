@@ -203,6 +203,7 @@ class GeneralLedgerReportMoveLine(models.TransientModel):
     cumul_balance = fields.Float(digits=(16, 2))
     currency_id = fields.Many2one(comodel_name='res.currency')
     amount_currency = fields.Float(digits=(16, 2))
+    opposite_accounts = fields.Char()
 
 
 class GeneralLedgerReportCompute(models.TransientModel):
@@ -1089,7 +1090,8 @@ INSERT INTO
     credit,
     cumul_balance,
     currency_id,
-    amount_currency
+    amount_currency,
+    opposite_accounts
     )
 SELECT
         """
@@ -1178,7 +1180,13 @@ SELECT
             """
         query_inject_move_line += """
     c.id AS currency_id,
-    ml.amount_currency
+    ml.amount_currency,
+    (SELECT string_agg(DISTINCT oa.code, ', ')
+        FROM account_move_line oml
+        INNER JOIN account_account oa
+            ON oml.account_id = oa.id
+        WHERE oml.move_id = ml.move_id
+            AND sign(oml.balance) != sign(ml.balance)) AS opposite_accounts
 FROM
         """
         if is_account_line:
