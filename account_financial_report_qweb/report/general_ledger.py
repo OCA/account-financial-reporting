@@ -395,7 +395,7 @@ WITH
             SELECT
                 a.id,
                 a.code,
-                a.name,
+                coalesce(t.value, a.name) AS name,
                 a.internal_type IN ('payable', 'receivable')
                     AS is_partner_account,
                 a.user_type_id,
@@ -435,6 +435,14 @@ WITH
                     ON
                         atml.account_analytic_tag_id = aat.id
                         AND aat.id IN %s
+            """
+        query_inject_account += """
+            LEFT JOIN
+                ir_translation t
+                    ON
+                        a.id = t.res_id
+                        AND t.name = 'account.account,name'
+                        AND t.lang = %s
             """
         query_inject_account += """
             WHERE
@@ -567,6 +575,7 @@ AND
                 tuple(self.filter_analytic_tag_ids.ids),
             )
         query_inject_account_params += (
+            self.env.user.lang,
             self.company_id.id,
             self.unaffected_earnings_account.id,
         )
