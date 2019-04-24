@@ -291,7 +291,7 @@ class ReportJournalQweb(models.TransientModel):
                 rjqm.id as report_move_id,
                 aml.id as move_line_id,
                 aml.account_id as account_id,
-                aa.name as account,
+                coalesce(t.value, aa.name) as account,
                 aa.code as account_code,
                 aa.internal_type as account_type,
                 aml.partner_id as partner_id,
@@ -337,6 +337,12 @@ class ReportJournalQweb(models.TransientModel):
                 account_account aa
                     on (aa.id = aml.account_id)
             LEFT JOIN
+                ir_translation t
+                    ON
+                        aa.id = t.res_id
+                        AND t.name = 'account.account,name'
+                        AND t.lang = %s
+            LEFT JOIN
                 res_partner p
                     on (p.id = aml.partner_id)
             LEFT JOIN
@@ -350,6 +356,7 @@ class ReportJournalQweb(models.TransientModel):
         """
         params = (
             self.env.uid,
+            self.env.user.lang,
             self.id,
         )
         self.env.cr.execute(sql, params)
