@@ -204,13 +204,19 @@ WITH
             SELECT
                 a.id,
                 a.code,
-                a.name,
+                coalesce (t.value, a.name) AS name,
                 a.user_type_id,
                 c.id as currency_id
             FROM
                 account_account a
             INNER JOIN
                 account_move_line ml ON a.id = ml.account_id AND ml.date <= %s
+            LEFT JOIN
+                ir_translation t
+                    ON
+                        a.id = t.res_id
+                        AND t.name = 'account.account,name'
+                        AND t.lang = %s
             LEFT JOIN
                 res_currency c ON a.currency_id = c.id
             """
@@ -241,7 +247,7 @@ WITH
             """
         query_inject_account += """
             GROUP BY
-                a.id, c.id
+                a.id, c.id, t.value
         )
 INSERT INTO
     report_open_items_qweb_account
@@ -267,6 +273,7 @@ FROM
         """
         query_inject_account_params = (
             self.date_at,
+            self.env.user.lang,
             self.company_id.id,
         )
         if self.filter_account_ids:
