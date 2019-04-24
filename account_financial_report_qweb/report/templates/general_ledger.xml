@@ -127,6 +127,9 @@
                     <div class="act_as_cell" style="width: 4.70%;">Account</div>
                     <!--## account code-->
                     <div class="act_as_cell" style="width: 8.89%;">Taxes</div>
+                    <!--## opposite accounts-->
+                    <div class="act_as_cell" style="width: 10.0%;">Opposite accounts
+                    </div>
                     <!--## partner-->
                     <div class="act_as_cell" style="width: 10.0%;">Partner
                     </div>
@@ -170,6 +173,8 @@
                 <!--## account code-->
                 <div class="act_as_cell"/>
                 <!--## taxes-->
+                <div class="act_as_cell"/>
+                <!--## opposite accounts-->
                 <div class="act_as_cell"/>
                 <!--## partner-->
                 <div class="act_as_cell"/>
@@ -364,6 +369,7 @@
                     </div>
                     <!--## taxes-->
                     <div class="act_as_cell left"><span t-field="line.taxes_description"/></div>
+                    <div class="act_as_cell left"><span t-field="line.opposite_accounts"/></div>
                     <!--## partner-->
                     <div class="act_as_cell left">
                         <t t-set="res_model" t-value="'res.partner'"/>

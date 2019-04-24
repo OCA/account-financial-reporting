@@ -1651,6 +1651,14 @@ msgid "Open items id"
 msgstr "Open items id"
 
 #. module: account_financial_report_qweb
+#: code:addons/account_financial_report_qweb/report/general_ledger_xlsx.py:32
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_move_line_opposite_accounts
+#: model:ir.ui.view,arch_db:account_financial_report_qweb.report_general_ledger_lines
+#, python-format
+msgid "Opposite accounts"
+msgstr "Contreparties"
+
+#. module: account_financial_report_qweb
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.journal_report_wizard_form_view
 msgid "Options"
 msgstr ""

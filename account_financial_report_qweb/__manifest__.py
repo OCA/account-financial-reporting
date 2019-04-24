@@ -5,7 +5,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     'name': 'QWeb Financial Reports',
-    'version': '10.0.3.0.1',
+    'version': '10.0.3.0.2',
     'category': 'Reporting',
     'summary': 'OCA Financial Reports',
     'author': 'Camptocamp SA,'
@@ -16,7 +16,7 @@
     "website": "https://odoo-community.org/",
     'depends': [
         'account',
-        'account_group',    # account-financial-tools
+        'account_group',  # account-financial-tools
         'date_range',
         'report_xlsx',
         'report',
