@@ -47,6 +47,8 @@ class TrialBalanceReport(models.TransientModel):
     limit_hierarchy_level = fields.Boolean('Limit hierarchy levels')
     show_hierarchy_level = fields.Integer('Hierarchy Levels to display',
                                           default=1)
+    hide_parent_hierarchy_level = fields.Boolean(
+        'Do not display parent levels', default=False)
     # General Ledger Report Data fields,
     # used as base for compute the data reports
     general_ledger_id = fields.Many2one(
@@ -126,9 +128,16 @@ class TrialBalanceReportAccount(models.TransientModel):
                     not rec.debit and
                     not rec.credit):
                 rec.hide_line = True
-            elif report.limit_hierarchy_level and \
-                    rec.level > report.show_hierarchy_level:
-                rec.hide_line = True
+            elif report.limit_hierarchy_level and report.show_hierarchy_level:
+                if report.hide_parent_hierarchy_level:
+                    distinct_level = rec.level != report.show_hierarchy_level
+                    if rec.account_group_id and distinct_level:
+                        rec.hide_line = True
+                    elif rec.level and distinct_level:
+                        rec.hide_line = True
+                elif not report.hide_parent_hierarchy_level and \
+                        rec.level > report.show_hierarchy_level:
+                    rec.hide_line = True
 
 
 class TrialBalanceReportPartner(models.TransientModel):

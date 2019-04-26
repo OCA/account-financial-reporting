@@ -50,13 +50,10 @@ currency balances are not available.
 Changelog
 =========
 
-10.0.3.0.0 (2019-01-09)
+10.0.3.1.0 (2019-04-26)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-* Improve multicompany related usability.
-* Improve performance in the General Ledger.
-* The reports now display an improved title that includes report name,
-  company and currency.
+* In the Trial Balance you have an option to hide parent hierarchy levels
 
 
 10.0.2.0.0 (2018-11-29)
