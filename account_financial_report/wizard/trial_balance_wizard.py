@@ -50,6 +50,8 @@ class TrialBalanceReportWizard(models.TransientModel):
     limit_hierarchy_level = fields.Boolean('Limit hierarchy levels')
     show_hierarchy_level = fields.Integer('Hierarchy Levels to display',
                                           default=1)
+    hide_parent_hierarchy_level = fields.Boolean(
+        'Do not display parent levels', default=False)
     account_ids = fields.Many2many(
         comodel_name='account.account',
         string='Filter accounts',
@@ -230,6 +232,7 @@ class TrialBalanceReportWizard(models.TransientModel):
             'hierarchy_on': self.hierarchy_on,
             'limit_hierarchy_level': self.limit_hierarchy_level,
             'show_hierarchy_level': self.show_hierarchy_level,
+            'hide_parent_hierarchy_level': self.hide_parent_hierarchy_level,
             'show_partner_details': self.show_partner_details,
         }
 
