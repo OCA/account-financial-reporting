@@ -56,6 +56,15 @@ Changelog
 * In the Trial Balance you have an option to hide parent hierarchy levels
 
 
+10.0.3.0.0 (2019-01-09)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* Improve multicompany related usability.
+* Improve performance in the General Ledger.
+* The reports now display an improved title that includes report name,
+  company and currency.
+
+
 10.0.2.0.0 (2018-11-29)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
