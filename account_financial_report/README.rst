@@ -50,6 +50,12 @@ currency balances are not available.
 Changelog
 =========
 
+11.0.2.5.0 (2019-04-26)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* In the Trial Balance you have an option to hide parent hierarchy levels
+
+
 11.0.2.4.1 (2019-01-08)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
