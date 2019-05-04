@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-23 15:26+0000\n"
-"PO-Revision-Date: 2019-05-04 06:02+0000\n"
+"PO-Revision-Date: 2019-05-04 20:02+0000\n"
 "Last-Translator: Katerina Katapodi <katerinakatapodi@gmail.com>\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "Language: fr\n"
@@ -1528,7 +1528,7 @@ msgstr "Identifiants des lignes d'écriture"
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_journal_report_wizard_move_target
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_journal_qweb_move_target
 msgid "Move target"
-msgstr ""
+msgstr "Faites bouger destinataire"
 
 #. module: account_financial_report_qweb
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_journal_qweb_journal
@@ -2229,12 +2229,14 @@ msgid ""
 "When this option is enabled, the trial balance will not display accounts "
 "that have initial balance = debit = credit = end balance = 0"
 msgstr ""
+"Quand cette option est activee, le solde d'essai na va pas montrer des "
+"comptes avec solde initial=debit=credit=solde final=0"
 
 #. module: account_financial_report_qweb
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_journal_report_wizard_with_account_name
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_journal_qweb_with_account_name
 msgid "With account name"
-msgstr ""
+msgstr "Avec titulaire du compte"
 
 #. module: account_financial_report_qweb
 #: code:addons/account_financial_report_qweb/report/general_ledger_xlsx.py:100
@@ -2250,7 +2252,7 @@ msgstr "Oui"
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_journal_report_wizard
 msgid "journal.report.wizard"
-msgstr ""
+msgstr "journal.report.mage"
 
 #. module: account_financial_report_qweb
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.aged_partner_balance_wizard
@@ -2309,32 +2311,32 @@ msgstr "report_general_ledger_qweb_partner"
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_journal_qweb
 msgid "report_journal_qweb"
-msgstr ""
+msgstr "report_journal_qweb"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_journal_qweb_journal
 msgid "report_journal_qweb_journal"
-msgstr ""
+msgstr "report_journal_qnet_journal"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_journal_qweb_journal_tax_line
 msgid "report_journal_qweb_journal_tax_line"
-msgstr ""
+msgstr "report_journal_qnet_journal_taxe_ligne"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_journal_qweb_move
 msgid "report_journal_qweb_move"
-msgstr ""
+msgstr "report_journal_qnet_deplacement"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_journal_qweb_move_line
 msgid "report_journal_qweb_move_line"
-msgstr ""
+msgstr "report_journal_qnet_deplacement_ligne"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_journal_qweb_report_tax_line
 msgid "report_journal_qweb_report_tax_line"
-msgstr ""
+msgstr "report_journal_qnet_report_taxe_ligne"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_open_items_qweb
@@ -2358,9 +2360,8 @@ msgstr "report_open_items_qweb_partner"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_qweb_abstract
-#, fuzzy
 msgid "report_qweb_abstract"
-msgstr "report_open_items_qweb_account"
+msgstr "report_qnet_abstrait"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_report_trial_balance_qweb
@@ -2380,27 +2381,27 @@ msgstr "report_trial_balance_qweb_partner"
 #. module: account_financial_report_qweb
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_journal_qweb_journal
 msgid "to"
-msgstr ""
+msgstr "a"
 
 #. module: account_financial_report_qweb
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_journal_qweb_journal_table_header
 msgid "width: 215px;"
-msgstr ""
+msgstr "ampleur: 215px"
 
 #. module: account_financial_report_qweb
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_journal_qweb_journal_table_header
 msgid "width: 220px;"
-msgstr ""
+msgstr "ampleur: 220px;"
 
 #. module: account_financial_report_qweb
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_journal_qweb_journal_table_header
 msgid "width: 360px;"
-msgstr ""
+msgstr "ampleur: 360px;"
 
 #. module: account_financial_report_qweb
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_journal_qweb_journal_table_header
 msgid "width: 75px;"
-msgstr ""
+msgstr "ampleur: 75px;"
 
 #~ msgid "Matching number"
 #~ msgstr "Matching number"
