@@ -34,8 +34,13 @@ class TestAccountTaxBalance(HttpCase):
         self.range = self.env['date.range']
 
     def test_tax_balance(self):
-        tax_account_id = self.env['account.account'].search(
-            [('name', '=', 'Tax Paid')], limit=1).id
+        tax_account_id = self.env['account.account'].create({
+            'name': 'Tax Paid',
+            'code': 'TAXTEST',
+            'user_type_id': self.env.ref(
+                'account.data_account_type_current_liabilities'
+            ).id,
+        }).id
         tax = self.env['account.tax'].create({
             'name': 'Tax 10.0%',
             'amount': 10.0,
