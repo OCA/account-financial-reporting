@@ -46,9 +46,13 @@ class TestAccountTaxBalance(HttpCase):
             [('user_type_id', '=', self.env.ref(
                 'account.data_account_type_receivable'
             ).id)], limit=1).id
-        invoice_line_account_id = self.env['account.account'].search(
-            [('user_type_id', '=', self.env.ref(
-                'account.data_account_type_expenses').id)], limit=1).id
+        invoice_line_account_id = self.env['account.account'].create({
+            'user_type_id': self.env.ref(
+                'account.data_account_type_expenses'
+            ).id,
+            'code': 'EXPTEST',
+            'name': 'Test expense account',
+        }).id
         invoice = self.env['account.invoice'].create({
             'partner_id': self.env.ref('base.res_partner_2').id,
             'account_id': invoice_account_id,
