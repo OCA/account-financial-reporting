@@ -572,7 +572,7 @@ WHERE newline.account_group_id = report_trial_balance_account.parent_id
         groups = self.account_ids.filtered(
             lambda a: a.account_group_id is not False)
         for group in groups:
-            if self.hierarchy_on == 'compute':
+            if self.hierarchy_on == 'computed':
                 group.compute_account_ids = \
                     group.account_group_id.compute_account_ids
             else:
