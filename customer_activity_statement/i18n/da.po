@@ -6,58 +6,60 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2019-05-15 22:09+0000\n"
+"Last-Translator: Hans Henrik Gabelgaard <hhg@gabelgaard.org>\n"
 "Language-Team: none\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.6.1\n"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "+120 Days Due"
-msgstr ""
+msgstr "+120 dages forfald"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "1-30 Days Due"
-msgstr ""
+msgstr "1-30 dages forfald"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "30-60 Days Due"
-msgstr ""
+msgstr "30-60 dages forfald"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "60-90 Days Due"
-msgstr ""
+msgstr "60-90 dages forfald"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "90-120 Days Due"
-msgstr ""
+msgstr "90-120 dages forfald"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "<strong>The partner doesn't have due entries.</strong>"
-msgstr ""
+msgstr "<strong>Partneren har ingen forfaldne postering.</strong>"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Activity Statement"
-msgstr ""
+msgstr "Kontoudtog"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Activity Statement between"
-msgstr ""
+msgstr "Kontoudtog for"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Aging Report at"
-msgstr ""
+msgstr "Forfaldsrapport pr"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.customer_activity_statement_wizard_view
@@ -67,103 +69,103 @@ msgstr ""
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Amount"
-msgstr ""
+msgstr "Beløb"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Balance"
-msgstr ""
+msgstr "Saldo"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Balance Due"
-msgstr ""
+msgstr "Forfalden saldo"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Balance Forward"
-msgstr ""
+msgstr "Overført saldo"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.customer_activity_statement_wizard_view
 msgid "Cancel"
-msgstr ""
+msgstr "Annuller"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_company_id
 msgid "Company"
-msgstr ""
+msgstr "Virksomhed"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Oprettet af"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_create_date
 msgid "Created on"
-msgstr ""
+msgstr "Oprettet d."
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Current Due"
-msgstr ""
+msgstr "Aktuel forfalden"
 
 #. module: customer_activity_statement
 #: model:ir.actions.act_window,name:customer_activity_statement.customer_activity_statement_wizard_action
 msgid "Customer Activity Statement"
-msgstr ""
+msgstr "Kunde kontoudtog"
 
 #. module: customer_activity_statement
 #: model:ir.model,name:customer_activity_statement.model_customer_activity_statement_wizard
 msgid "Customer Activity Statement Wizard"
-msgstr ""
+msgstr "Kunde kontoudtog guide"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Date"
-msgstr ""
+msgstr "Dato"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_date_end
 msgid "Date end"
-msgstr ""
+msgstr "Slut dato"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_date_start
 msgid "Date start"
-msgstr ""
+msgstr "Start dato"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Date:"
-msgstr ""
+msgstr "Dato:"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Description"
-msgstr ""
+msgstr "Beskrivelse"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_display_name
 #: model:ir.model.fields,field_description:customer_activity_statement.field_report_customer_activity_statement_statement_display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Vist navn"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_filter_partners_non_due
 msgid "Don't show partners with no due entries"
-msgstr ""
+msgstr "Vis ikke partnere med ingenforfaldne poster"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Ending Balance"
-msgstr ""
+msgstr "Slut saldo"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.customer_activity_statement_wizard_view
 msgid "Export PDF"
-msgstr ""
+msgstr "Eksport PDF"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_id
@@ -174,23 +176,23 @@ msgstr ""
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_show_aging_buckets
 msgid "Include Aging Buckets"
-msgstr ""
+msgstr "Inkluder forfalden fordeling"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard___last_update
 #: model:ir.model.fields,field_description:customer_activity_statement.field_report_customer_activity_statement_statement___last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Senest opdateret"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Senest opdateret af"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Senest opdateret"
 
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_number_partner_ids
@@ -205,7 +207,7 @@ msgstr ""
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "Reference number"
-msgstr ""
+msgstr "Bilagsnr"
 
 #. module: customer_activity_statement
 #: model:ir.actions.report.xml,name:customer_activity_statement.action_print_customer_activity_statement
@@ -220,17 +222,17 @@ msgstr ""
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "and"
-msgstr ""
+msgstr "og"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
 msgid "in"
-msgstr ""
+msgstr "i"
 
 #. module: customer_activity_statement
 #: model:ir.ui.view,arch_db:customer_activity_statement.customer_activity_statement_wizard_view
 msgid "or"
-msgstr ""
+msgstr "eller"
 
 #. module: customer_activity_statement
 #: model:ir.model,name:customer_activity_statement.model_report_customer_activity_statement_statement
