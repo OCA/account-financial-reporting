@@ -18,31 +18,6 @@ class CustomerOutstandingStatement(models.AbstractModel):
         date = datetime.strptime(str_date, DEFAULT_SERVER_DATE_FORMAT).date()
         return date.strftime(lang.date_format)
 
-    def _display_lines_sql_q0(self, date_end):
-        return """
-            SELECT l1.id,
-            CASE WHEN l1.reconciled = TRUE and l1.balance > 0.0
-                                THEN max(pd.max_date)
-                WHEN l1.reconciled = TRUE and l1.balance < 0.0
-                                THEN max(pc.max_date)
-                ELSE null
-            END as reconciled_date
-            FROM account_move_line l1
-            LEFT JOIN (SELECT pr.*
-                FROM account_partial_reconcile pr
-                INNER JOIN account_move_line l2
-                ON pr.credit_move_id = l2.id
-                WHERE l2.date <= '%s'
-            ) as pd ON pd.debit_move_id = l1.id
-            LEFT JOIN (SELECT pr.*
-                FROM account_partial_reconcile pr
-                INNER JOIN account_move_line l2
-                ON pr.debit_move_id = l2.id
-                WHERE l2.date <= '%s'
-            ) as pc ON pc.credit_move_id = l1.id
-            GROUP BY l1.id
-        """ % (date_end, date_end)
-
     def _display_lines_sql_q1(self, partners, date_end, account_type):
         return """
             SELECT m.name as move_id, l.partner_id, l.date, l.name,
@@ -70,7 +45,6 @@ class CustomerOutstandingStatement(models.AbstractModel):
             FROM account_move_line l
             JOIN account_account_type at ON (at.id = l.user_type_id)
             JOIN account_move m ON (l.move_id = m.id)
-            LEFT JOIN Q0 ON Q0.id = l.id
             LEFT JOIN (SELECT pr.*
                 FROM account_partial_reconcile pr
                 INNER JOIN account_move_line l2
@@ -84,13 +58,18 @@ class CustomerOutstandingStatement(models.AbstractModel):
                 WHERE l2.date <= '%s'
             ) as pc ON pc.credit_move_id = l.id
             WHERE l.partner_id IN (%s) AND at.type = '%s'
-                                AND (Q0.reconciled_date is null or
-                                    Q0.reconciled_date > '%s')
-                                AND l.date <= '%s'
+                                AND (
+                                  (pd.id IS NOT NULL AND
+                                      pd.max_date <= '%s') OR
+                                  (pc.id IS NOT NULL AND
+                                      pc.max_date <= '%s') OR
+                                  (pd.id IS NULL AND pc.id IS NULL)
+                                ) AND l.date <= '%s'
             GROUP BY l.partner_id, m.name, l.date, l.date_maturity, l.name,
                                 l.ref, l.blocked, l.currency_id,
                                 l.balance, l.amount_currency, l.company_id
-        """ % (date_end, date_end, partners, account_type, date_end, date_end)
+        """ % (date_end, date_end, partners, account_type, date_end,
+               date_end, date_end)
 
     def _display_lines_sql_q2(self):
         return """
@@ -124,43 +103,17 @@ class CustomerOutstandingStatement(models.AbstractModel):
             date_end, DEFAULT_SERVER_DATE_FORMAT).date()
         # pylint: disable=E8103
         self.env.cr.execute("""
-        WITH Q0 as (%s), Q1 AS (%s), Q2 AS (%s), Q3 AS (%s)
+        WITH Q1 AS (%s), Q2 AS (%s), Q3 AS (%s)
         SELECT partner_id, currency_id, move_id, date, date_maturity, debit,
                             credit, amount, open_amount, name, ref, blocked
         FROM Q3
         ORDER BY date, date_maturity, move_id""" % (
-            self._display_lines_sql_q0(date_end),
             self._display_lines_sql_q1(partners, date_end, account_type),
             self._display_lines_sql_q2(),
             self._display_lines_sql_q3(company_id)))
         for row in self.env.cr.dictfetchall():
             res[row.pop('partner_id')].append(row)
         return res
-
-    def _show_buckets_sql_q0(self, date_end):
-        return """
-            SELECT l1.id,
-            CASE WHEN l1.reconciled = TRUE and l1.balance > 0.0
-                                THEN max(pd.max_date)
-                WHEN l1.reconciled = TRUE and l1.balance < 0.0
-                                THEN max(pc.max_date)
-                ELSE null
-            END as reconciled_date
-            FROM account_move_line l1
-            LEFT JOIN (SELECT pr.*
-                FROM account_partial_reconcile pr
-                INNER JOIN account_move_line l2
-                ON pr.credit_move_id = l2.id
-                WHERE l2.date <= '%s'
-            ) as pd ON pd.debit_move_id = l1.id
-            LEFT JOIN (SELECT pr.*
-                FROM account_partial_reconcile pr
-                INNER JOIN account_move_line l2
-                ON pr.debit_move_id = l2.id
-                WHERE l2.date <= '%s'
-            ) as pc ON pc.credit_move_id = l1.id
-            GROUP BY l1.id
-        """ % (date_end, date_end)
 
     def _show_buckets_sql_q1(self, partners, date_end, account_type):
         return """
@@ -180,7 +133,6 @@ class CustomerOutstandingStatement(models.AbstractModel):
             FROM account_move_line l
             JOIN account_account_type at ON (at.id = l.user_type_id)
             JOIN account_move m ON (l.move_id = m.id)
-            LEFT JOIN Q0 ON Q0.id = l.id
             LEFT JOIN (SELECT pr.*
                 FROM account_partial_reconcile pr
                 INNER JOIN account_move_line l2
@@ -194,13 +146,18 @@ class CustomerOutstandingStatement(models.AbstractModel):
                 WHERE l2.date <= '%s'
             ) as pc ON pc.credit_move_id = l.id
             WHERE l.partner_id IN (%s) AND at.type = '%s'
-                                AND (Q0.reconciled_date is null or
-                                    Q0.reconciled_date > '%s')
-                                AND l.date <= '%s' AND not l.blocked
+                                AND (
+                                  (pd.id IS NOT NULL AND
+                                      pd.max_date <= '%s') OR
+                                  (pc.id IS NOT NULL AND
+                                      pc.max_date <= '%s') OR
+                                  (pd.id IS NULL AND pc.id IS NULL)
+                                ) AND l.date <= '%s' AND not l.blocked
             GROUP BY l.partner_id, l.currency_id, l.date, l.date_maturity,
                                 l.amount_currency, l.balance, l.move_id,
                                 l.company_id
-        """ % (date_end, date_end, partners, account_type, date_end, date_end)
+        """ % (date_end, date_end, partners, account_type, date_end,
+               date_end, date_end)
 
     def _show_buckets_sql_q2(self, date_end, minus_30, minus_60, minus_90,
                              minus_120):
@@ -301,7 +258,7 @@ class CustomerOutstandingStatement(models.AbstractModel):
         full_dates = self._get_bucket_dates(date_end)
         # pylint: disable=E8103
         self.env.cr.execute("""
-        WITH Q0 AS (%s), Q1 AS (%s), Q2 AS (%s), Q3 AS (%s), Q4 AS (%s)
+        WITH Q1 AS (%s), Q2 AS (%s), Q3 AS (%s), Q4 AS (%s)
         SELECT partner_id, currency_id, current, b_1_30, b_30_60, b_60_90,
                             b_90_120, b_over_120,
                             current+b_1_30+b_30_60+b_60_90+b_90_120+b_over_120
@@ -309,7 +266,6 @@ class CustomerOutstandingStatement(models.AbstractModel):
         FROM Q4
         GROUP BY partner_id, currency_id, current, b_1_30, b_30_60, b_60_90,
         b_90_120, b_over_120""" % (
-            self._show_buckets_sql_q0(date_end),
             self._show_buckets_sql_q1(partners, date_end, account_type),
             self._show_buckets_sql_q2(
                 full_dates['date_end'],
