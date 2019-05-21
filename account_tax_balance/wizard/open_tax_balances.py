@@ -46,8 +46,10 @@ class WizardOpenTaxBalances(models.TransientModel):
                  'company': self.company_id.name}
         # name of action which is displayed in breacrumb
         vals["name"] = _(
-            "%(name)s: %(target)s from %(from)s to %(to)s"
-            " (%(company)s)") % infos
+            "%(name)s: %(target)s from %(from)s to %(to)s") % infos
+        multi_cpny_grp = self.env.ref('base.group_multi_company')
+        if multi_cpny_grp in self.env.user.groups_id:
+            vals['name'] = '%s (%s)' % (vals['name'], self.company_id.name)
         vals['context'] = {
             'from_date': self.from_date,
             'to_date': self.to_date,
