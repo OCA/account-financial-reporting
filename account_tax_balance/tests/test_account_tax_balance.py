@@ -105,8 +105,6 @@ class TestAccountTaxBalance(HttpCase):
             action['context']['from_date'], current_range[0].date_start)
         self.assertEqual(
             action['context']['to_date'], current_range[0].date_end)
-        self.assertEqual(
-            action['xml_id'], 'account_tax_balance.action_tax_balances_tree')
 
         # exercise search has_moves = True
         taxes = self.env['account.tax'].search([('has_moves', '=', True)])
