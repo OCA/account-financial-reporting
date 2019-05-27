@@ -21,6 +21,12 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #. module: account_tax_balance
+#: code:addons/account_tax_balance/wizard/open_tax_balances.py:48
+#, python-format
+msgid "%(name)s: %(target)s from %(from)s to %(to)s"
+msgstr ""
+
+#. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
 msgid "Account"
 msgstr "Konto"
