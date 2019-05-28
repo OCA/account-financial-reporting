@@ -36,8 +36,15 @@ odoo.define('account_financial_report.account_financial_report_widget', function
         boundLinkmulti: function (e) {
             var res_model = $(e.target).data('res-model');
             var domain = $(e.target).data('domain');
+            if (!res_model) {
+                res_model = $(e.target.parentElement).data('res-model');
+            }
+            if (!domain) {
+                domain = $(e.target.parentElement).data('domain');
+            }
             return this.do_action({
                 type: 'ir.actions.act_window',
+                name: this._toTitleCase(res_model.split('.').join(' ')),
                 res_model: res_model,
                 domain: domain,
                 views: [[false, "list"], [false, "form"]],
@@ -64,6 +71,11 @@ odoo.define('account_financial_report.account_financial_report_widget', function
                 domain: domain,
                 views: [[false, "list"], [false, "form"]],
                 target: 'current',
+            });
+        },
+        _toTitleCase: function(str) {
+            return str.replace(/\w\S*/g, function(txt){
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
             });
         },
     });
