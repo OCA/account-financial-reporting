@@ -84,7 +84,8 @@ class OpenItemsReportWizard(models.TransientModel):
                 self.account_ids = self.account_ids.filtered(
                     lambda a: a.company_id == self.company_id)
         res = {'domain': {'account_ids': [],
-                          'partner_ids': []}}
+                          'partner_ids': ['|', ('active', '=', False),
+                                          ('active', '=', True)]}}
         if not self.company_id:
             return res
         else:
