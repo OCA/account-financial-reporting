@@ -9,6 +9,7 @@ setuptools.setup(
     version=version,
     install_requires=[
         'odoo12-addon-account_tax_balance',
+        'odoo12-addon-partner_statement',
     ],
     classifiers=[
         'Programming Language :: Python',
