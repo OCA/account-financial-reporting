@@ -594,7 +594,8 @@ class ReportJournalLedger(models.TransientModel):
                           'report_journal_ledger_qweb'
         return self.env['ir.actions.report'].search(
             [('report_name', '=', report_name),
-             ('report_type', '=', report_type)], limit=1).report_action(self, config=False)
+             ('report_type', '=', report_type)],
+            limit=1).report_action(self, config=False)
 
     def _get_html(self):
         result = {}
