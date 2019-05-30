@@ -74,8 +74,10 @@ class TrialBalanceReportAccount(models.TransientModel):
         index=True
     )
     hide_line = fields.Boolean(compute='_compute_hide_line')
-    # Data fields, used to keep link with real object
-    sequence = fields.Integer(index=True, default=1)
+    # Data fields, used to keep link with real object.
+    # Sequence is a Char later built with 'parent_path' for groups
+    # and parent_path + account code for accounts
+    sequence = fields.Char(index=True, default='1')
     level = fields.Integer(index=True, default=1)
 
     # Data fields, used to keep link with real object
@@ -209,7 +211,8 @@ class TrialBalanceReportCompute(models.TransientModel):
                           'report_trial_balance_qweb'
         return self.env['ir.actions.report'].search(
             [('report_name', '=', report_name),
-             ('report_type', '=', report_type)], limit=1).report_action(self, config=False)
+             ('report_type', '=', report_type)],
+            limit=1).report_action(self, config=False)
 
     def _get_html(self):
         result = {}
@@ -410,7 +413,7 @@ SELECT
     accgroup.parent_id,
     coalesce(accgroup.code_prefix, accgroup.name),
     accgroup.name,
-    accgroup.id * 100000,
+    accgroup.parent_path,
     accgroup.level
 FROM
     account_group accgroup"""
@@ -557,7 +560,7 @@ WHERE report_trial_balance_account.account_group_id = accgroup.id
         """Compute sequence, level for report_trial_balance_account account."""
         query_update_account_group = """
 UPDATE report_trial_balance_account
-SET sequence = newline.sequence + 1,
+SET sequence = CONCAT(newline.sequence, newline.code),
     level = newline.level + 1
 FROM report_trial_balance_account as newline
 WHERE newline.account_group_id = report_trial_balance_account.parent_id

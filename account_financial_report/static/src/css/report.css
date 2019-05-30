@@ -95,8 +95,6 @@
 }
 
 .o_account_financial_reports_page {
-    background-color: @odoo-view-background-color;
-    color: @odoo-main-text-color;
     padding-top: 10px;
     width: 90%;
     margin-right: auto;

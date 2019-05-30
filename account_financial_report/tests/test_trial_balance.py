@@ -2,7 +2,6 @@
 # Copyright 2016 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-import time
 from datetime import date
 from odoo.tests import common
 from . import abstract_test_foreign_currency as a_t_f_c
@@ -131,7 +130,6 @@ class TestTrialBalanceReport(common.TransactionCase):
         partner = self.env.ref('base.res_partner_12')
         move_vals = {
             'journal_id': journal.id,
-            'partner_id': partner.id,
             'name': move_name,
             'date': date,
             'line_ids': [
@@ -139,26 +137,31 @@ class TestTrialBalanceReport(common.TransactionCase):
                     'name': move_name,
                     'debit': receivable_debit,
                     'credit': receivable_credit,
+                    'partner_id': partner.id,
                     'account_id': self.account100.id}),
                 (0, 0, {
                     'name': move_name,
                     'debit': income_debit,
                     'credit': income_credit,
+                    'partner_id': partner.id,
                     'account_id': self.account200.id}),
                 (0, 0, {
                     'name': move_name,
                     'debit': unaffected_debit,
                     'credit': unaffected_credit,
+                    'partner_id': partner.id,
                     'account_id': self.account110.id}),
                 (0, 0, {
                     'name': move_name,
                     'debit': receivable_debit,
                     'credit': receivable_credit,
+                    'partner_id': partner.id,
                     'account_id': self.account300.id}),
                 (0, 0, {
                     'name': move_name,
                     'debit': receivable_credit,
                     'credit': receivable_debit,
+                    'partner_id': partner.id,
                     'account_id': self.account301.id})
                 ]}
         move = self.env['account.move'].create(move_vals)

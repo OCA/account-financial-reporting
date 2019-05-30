@@ -246,7 +246,7 @@
                     <t t-if="line.account_id">
                         <t t-set="domain"
                            t-value="[('account_id', '=', line.account_id.id),
-                                     ('date', '&lt;', o.date_from)]"/>
+                                     ('date', '&lt;', o.date_from.strftime('%Y-%m-%d'))]"/>
                         <span>
                             <a t-att-data-domain="domain"
                                t-att-data-res-model="'account.move.line'"
@@ -258,7 +258,7 @@
                     <t t-if="line.account_group_id">
                         <t t-set="domain"
                            t-value="[('account_id', 'in', line.compute_account_ids.ids),
-                                     ('date', '&lt;', o.date_from)]"/>
+                                     ('date', '&lt;', o.date_from.strftime('%Y-%m-%d'))]"/>
                         <span>
                             <a t-att-data-domain="domain"
                                t-att-data-res-model="'account.move.line'"
@@ -272,7 +272,7 @@
                     <t t-set="domain"
                        t-value="[('account_id', '=', line.report_account_id.account_id.id),
                                  ('partner_id', '=', line.partner_id.id),
-                                 ('date', '&lt;', o.date_from)]"/>
+                                 ('date', '&lt;', o.date_from.strftime('%Y-%m-%d'))]"/>
                     <span>
                         <a t-att-data-domain="domain"
                            t-att-data-res-model="'account.move.line'"
@@ -288,8 +288,8 @@
                     <t t-if="line.account_id">
                         <t t-set="domain"
                            t-value="[('account_id', '=', line.account_id.id),
-                                     ('date', '&gt;=', line.report_id.date_from),
-                                     ('date', '&lt;=', line.report_id.date_to),
+                                     ('date', '&gt;=', line.report_id.date_from.strftime('%Y-%m-%d')),
+                                     ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d')),
                                      ('debit', '&lt;&gt;', 0)]"/>
                         <span>
                             <a t-att-data-domain="domain"
@@ -302,8 +302,8 @@
                     <t t-if="line.account_group_id">
                         <t t-set="domain"
                            t-value="[('account_id', 'in', line.compute_account_ids.ids),
-                                     ('date', '&gt;=', line.report_id.date_from),
-                                     ('date', '&lt;=', line.report_id.date_to),
+                                     ('date', '&gt;=', line.report_id.date_from.strftime('%Y-%m-%d')),
+                                     ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d')),
                                      ('debit', '&lt;&gt;', 0)]"/>
                         <span>
                             <a t-att-data-domain="domain"
@@ -318,8 +318,8 @@
                     <t t-set="domain"
                        t-value="[('account_id', '=', line.report_account_id.account_id.id),
                                  ('partner_id', '=', line.partner_id.id),
-                                 ('date', '&gt;=', line.report_account_id.report_id.date_from),
-                                 ('date', '&lt;=', line.report_account_id.report_id.date_to),
+                                 ('date', '&gt;=', line.report_account_id.report_id.date_from.strftime('%Y-%m-%d')),
+                                 ('date', '&lt;=', line.report_account_id.report_id.date_to.strftime('%Y-%m-%d')),
                                  ('debit', '&lt;&gt;', 0)]"/>
                     <span>
                         <a t-att-data-domain="domain"
@@ -336,8 +336,8 @@
                     <t t-if="line.account_id">
                         <t t-set="domain"
                            t-value="[('account_id', '=', line.account_id.id),
-                                     ('date', '&gt;=', line.report_id.date_from),
-                                     ('date', '&lt;=', line.report_id.date_to),
+                                     ('date', '&gt;=', line.report_id.date_from.strftime('%Y-%m-%d')),
+                                     ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d')),
                                      ('credit', '&lt;&gt;', 0)]"/>
                         <span>
                             <a t-att-data-domain="domain"
@@ -350,8 +350,8 @@
                     <t t-if="line.account_group_id">
                         <t t-set="domain"
                            t-value="[('account_id', 'in', line.compute_account_ids.ids),
-                                     ('date', '&gt;=', line.report_id.date_from),
-                                     ('date', '&lt;=', line.report_id.date_to),
+                                     ('date', '&gt;=', line.report_id.date_from.strftime('%Y-%m-%d')),
+                                     ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d')),
                                      ('credit', '&lt;&gt;', 0)]"/>
                         <span>
                             <a t-att-data-domain="domain"
@@ -366,8 +366,8 @@
                     <t t-set="domain"
                        t-value="[('account_id', '=', line.report_account_id.account_id.id),
                                  ('partner_id', '=', line.partner_id.id),
-                                 ('date', '&gt;=', line.report_account_id.report_id.date_from),
-                                 ('date', '&lt;=', line.report_account_id.report_id.date_to),
+                                 ('date', '&gt;=', line.report_account_id.report_id.date_from.strftime('%Y-%m-%d')),
+                                 ('date', '&lt;=', line.report_account_id.report_id.date_to.strftime('%Y-%m-%d')),
                                  ('credit', '&lt;&gt;', 0)]"/>
                     <span>
                         <a t-att-data-domain="domain"
@@ -384,8 +384,8 @@
                     <t t-if="line.account_id">
                         <t t-set="domain"
                            t-value="[('account_id', '=', line.account_id.id),
-                                     ('date', '&gt;=', line.report_id.date_from),
-                                     ('date', '&lt;=', line.report_id.date_to)]"/>
+                                     ('date', '&gt;=', line.report_id.date_from.strftime('%Y-%m-%d')),
+                                     ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d'))]"/>
                         <span>
                             <a t-att-data-domain="domain"
                                t-att-data-res-model="'account.move.line'"
@@ -397,8 +397,8 @@
                     <t t-if="line.account_group_id">
                         <t t-set="domain"
                            t-value="[('account_id', 'in', line.compute_account_ids.ids),
-                                     ('date', '&gt;=', line.report_id.date_from),
-                                     ('date', '&lt;=', line.report_id.date_to)]"/>
+                                     ('date', '&gt;=', line.report_id.date_from.strftime('%Y-%m-%d')),
+                                     ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d'))]"/>
                         <span>
                             <a t-att-data-domain="domain"
                                t-att-data-res-model="'account.move.line'"
@@ -412,8 +412,8 @@
                     <t t-set="domain"
                        t-value="[('account_id', '=', line.report_account_id.account_id.id),
                                  ('partner_id', '=', line.partner_id.id),
-                                 ('date', '&gt;=', line.report_account_id.report_id.date_from),
-                                 ('date', '&lt;=', line.report_account_id.report_id.date_to)]"/>
+                                 ('date', '&gt;=', line.report_account_id.report_id.date_from.strftime('%Y-%m-%d')),
+                                 ('date', '&lt;=', line.report_account_id.report_id.date_to.strftime('%Y-%m-%d'))]"/>
                     <span>
                         <a t-att-data-domain="domain"
                            t-att-data-res-model="'account.move.line'"
@@ -576,7 +576,7 @@
                 <div class="act_as_cell amount" style="width: 9.64%;">
                     <t t-set="domain"
                         t-value="[('account_id', '=', account.account_id.id),
-                                  ('date', '&lt;', o.date_from)]"/>
+                                  ('date', '&lt;', o.date_from.strftime('%Y-%m-%d'))]"/>
                     <span>
                         <a t-att-data-domain="domain"
                            t-att-data-res-model="'account.move.line'"
@@ -589,8 +589,8 @@
                 <div class="act_as_cell amount" style="width: 9.64%;">
                     <t t-set="domain"
                         t-value="[('account_id', '=', account.account_id.id),
-                                  ('date', '&gt;=', account.report_id.date_from),
-                                  ('date', '&lt;=', account.report_id.date_to),
+                                  ('date', '&gt;=', account.report_id.date_from.strftime('%Y-%m-%d')),
+                                  ('date', '&lt;=', account.report_id.date_to.strftime('%Y-%m-%d')),
                                   ('debit', '&lt;&gt;', 0)]"/>
                     <span>
                         <a t-att-data-domain="domain"
@@ -604,8 +604,8 @@
                 <div class="act_as_cell amount" style="width: 9.64%;">
                     <t t-set="domain"
                         t-value="[('account_id', '=', account.account_id.id),
-                                  ('date', '&gt;=', account.report_id.date_from),
-                                  ('date', '&lt;=', account.report_id.date_to),
+                                  ('date', '&gt;=', account.report_id.date_from.strftime('%Y-%m-%d')),
+                                  ('date', '&lt;=', account.report_id.date_to.strftime('%Y-%m-%d')),
                                   ('credit', '&lt;&gt;', 0)]"/>
                     <span>
                         <a t-att-data-domain="domain"
@@ -619,8 +619,8 @@
                 <div class="act_as_cell amount" style="width: 9.64%;">
                     <t t-set="domain"
                         t-value="[('account_id', '=', account.account_id.id),
-                                  ('date', '&gt;=', account.report_id.date_from),
-                                  ('date', '&lt;=', account.report_id.date_to),
+                                  ('date', '&gt;=', account.report_id.date_from.strftime('%Y-%m-%d')),
+                                  ('date', '&lt;=', account.report_id.date_to.strftime('%Y-%m-%d')),
                                   ('period_balance', '&lt;&gt;', 0)]"/>
                     <span>
                         <a t-att-data-domain="domain"
@@ -654,7 +654,7 @@
                         <div class="act_as_cell amount" style="width: 8.86%;">
                             <t t-set="domain"
                             t-value="[('account_id', '=', account.account_id.id),
-                                      ('date', '&lt;', o.date_from)]"/>
+                                      ('date', '&lt;', o.date_from.strftime('%Y-%m-%d'))]"/>
                             <span>
                                 <a t-att-data-domain="domain"
                                    t-att-data-res-model="'account.move.line'"
