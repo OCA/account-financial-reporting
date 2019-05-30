@@ -9,7 +9,7 @@
 * Robert Rottermann <robert@redcor.ch>
 * Ciro Urselli <c.urselli@apuliasoftware.it>
 * Francesco Apruzzese <opencode@e-ware.org>
-* Lorenzo Battistini <lorenzo.battistini@agilebg.com>
+* Lorenzo Battistini <https://github.com/eLBati>
 * Julien Coux <julien.coux@camptocamp.com>
 * Akim Juillerat <akim.juillerat@camptocamp.com>
 * Alexis de Lattre <alexis@via.ecp.fr>
