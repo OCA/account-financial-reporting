@@ -189,7 +189,7 @@
                     <t t-if="type == 'account_type'">
                         <t t-set="domain"
                            t-value="[('account_id', '=', account_or_partner_object.account_id.id),
-                                     ('date', '&lt;', o.date_from),
+                                     ('date', '&lt;', o.date_from.strftime('%Y-%m-%d')),
                                      ('debit', '&lt;&gt;', 0)]"/>
                         <span>
                             <a t-att-data-domain="domain"
@@ -203,7 +203,7 @@
                         <t t-set="domain"
                            t-value="[('account_id', '=', account_or_partner_object.report_account_id.account_id.id),
                                      ('partner_id', '=', account_or_partner_object.partner_id.id),
-                                     ('date', '&lt;', o.date_from),
+                                     ('date', '&lt;', o.date_from.strftime('%Y-%m-%d')),
                                      ('debit', '&lt;&gt;', 0)]"/>
                         <span>
                             <a t-att-data-domain="domain"
@@ -219,7 +219,7 @@
                     <t t-if="type == 'account_type'">
                         <t t-set="domain"
                            t-value="[('account_id', '=', account_or_partner_object.account_id.id),
-                                     ('date', '&lt;', o.date_from),
+                                     ('date', '&lt;', o.date_from.strftime('%Y-%m-%d')),
                                      ('credit', '&lt;&gt;', 0)]"/>
                         <span>
                             <a t-att-data-domain="domain"
@@ -233,7 +233,7 @@
                         <t t-set="domain"
                            t-value="[('account_id', '=', account_or_partner_object.report_account_id.account_id.id),
                                      ('partner_id', '=', account_or_partner_object.partner_id.id),
-                                     ('date', '&lt;', o.date_from),
+                                     ('date', '&lt;', o.date_from.strftime('%Y-%m-%d')),
                                      ('credit', '&lt;&gt;', 0)]"/>
                         <span>
                             <a t-att-data-domain="domain"
@@ -249,7 +249,7 @@
                     <t t-if="type == 'account_type'">
                         <t t-set="domain"
                            t-value="[('account_id', '=', account_or_partner_object.account_id.id),
-                                     ('date', '&lt;', o.date_from)]"/>
+                                     ('date', '&lt;', o.date_from.strftime('%Y-%m-%d'))]"/>
                         <span>
                             <a t-att-data-domain="domain"
                                t-att-data-res-model="'account.move.line'"
@@ -262,7 +262,7 @@
                         <t t-set="domain"
                            t-value="[('account_id', '=', account_or_partner_object.report_account_id.account_id.id),
                                      ('partner_id', '=', account_or_partner_object.partner_id.id),
-                                     ('date', '&lt;', o.date_from)]"/>
+                                     ('date', '&lt;', o.date_from.strftime('%Y-%m-%d'))]"/>
                         <span>
                             <a t-att-data-domain="domain"
                                t-att-data-res-model="'account.move.line'"
