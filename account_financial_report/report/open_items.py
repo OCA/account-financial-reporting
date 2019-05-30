@@ -160,7 +160,8 @@ class OpenItemsReportCompute(models.TransientModel):
                           'report_open_items_qweb'
         return self.env['ir.actions.report'].search(
             [('report_name', '=', report_name),
-             ('report_type', '=', report_type)], limit=1).report_action(self, config=False)
+             ('report_type', '=', report_type)],
+            limit=1).report_action(self, config=False)
 
     def _get_html(self):
         result = {}
@@ -638,21 +639,6 @@ ORDER BY
         self._compute_account_cumul()
 
     def _compute_partner_cumul(self):
-        # pylint: disable=sql-injection
-        where_condition_partner_by_account = """
-WHERE
-    id IN
-        (
-            SELECT
-                rp.id
-            FROM
-                report_open_items_account ra
-            INNER JOIN
-                report_open_items_partner rp
-                    ON ra.id = rp.report_account_id
-            WHERE
-                ra.report_id = %s
-        )"""
         query_computer_partner_residual_cumul = """
 UPDATE
     report_open_items_partner
@@ -666,7 +652,20 @@ SET
             WHERE
                 rml.report_partner_id = report_open_items_partner.id
         )
-""" + where_condition_partner_by_account
+WHERE
+    id IN
+        (
+            SELECT
+                rp.id
+            FROM
+                report_open_items_account ra
+            INNER JOIN
+                report_open_items_partner rp
+                    ON ra.id = rp.report_account_id
+            WHERE
+                ra.report_id = %s
+        )
+"""
         params_compute_partners_residual_cumul = (self.id,)
         self.env.cr.execute(query_computer_partner_residual_cumul,
                             params_compute_partners_residual_cumul)
@@ -684,13 +683,6 @@ SET
             WHERE
                 rml.report_partner_id = report_open_items_partner.id
         )
-""" + where_condition_partner_by_account
-        params_compute_partner_due_cumul = (self.id,)
-        self.env.cr.execute(query_compute_partners_due_cumul,
-                            params_compute_partner_due_cumul)
-
-        # Manage currency in partner
-        where_condition_partner_by_account_cur = """
 WHERE
     id IN
         (
@@ -702,9 +694,14 @@ WHERE
                 report_open_items_partner rp
                     ON ra.id = rp.report_account_id
             WHERE
-                ra.report_id = %s AND ra.currency_id IS NOT NULL
+                ra.report_id = %s
         )
-        """
+"""
+        params_compute_partner_due_cumul = (self.id,)
+        self.env.cr.execute(query_compute_partners_due_cumul,
+                            params_compute_partner_due_cumul)
+
+        # Manage currency in partner
         query_compute_partners_cur_id_cumul = """
 UPDATE
     report_open_items_partner
@@ -718,7 +715,20 @@ SET
             WHERE
                 rml.report_partner_id = report_open_items_partner.id
         )
-""" + where_condition_partner_by_account_cur
+WHERE
+    id IN
+        (
+            SELECT
+                rp.id
+            FROM
+                report_open_items_account ra
+            INNER JOIN
+                report_open_items_partner rp
+                    ON ra.id = rp.report_account_id
+            WHERE
+                ra.report_id = %s AND ra.currency_id IS NOT NULL
+        )
+"""
         params_compute_partners_cur_id_cumul = (self.id,)
         self.env.cr.execute(query_compute_partners_cur_id_cumul,
                             params_compute_partners_cur_id_cumul)
@@ -737,7 +747,20 @@ SET
             WHERE
                 rml.report_partner_id = report_open_items_partner.id
         )
-""" + where_condition_partner_by_account_cur
+WHERE
+    id IN
+        (
+            SELECT
+                rp.id
+            FROM
+                report_open_items_account ra
+            INNER JOIN
+                report_open_items_partner rp
+                    ON ra.id = rp.report_account_id
+            WHERE
+                ra.report_id = %s AND ra.currency_id IS NOT NULL
+        )
+"""
         params_compute_partners_cur_residual_cumul = (self.id,)
         self.env.cr.execute(query_compute_partners_cur_residual_cumul,
                             params_compute_partners_cur_residual_cumul)
@@ -756,7 +779,20 @@ SET
             WHERE
                 rml.report_partner_id = report_open_items_partner.id
         )
-""" + where_condition_partner_by_account_cur
+WHERE
+    id IN
+        (
+            SELECT
+                rp.id
+            FROM
+                report_open_items_account ra
+            INNER JOIN
+                report_open_items_partner rp
+                    ON ra.id = rp.report_account_id
+            WHERE
+                ra.report_id = %s AND ra.currency_id IS NOT NULL
+        )
+"""
         params_compute_partners_cur_due_cumul = (self.id,)
         self.env.cr.execute(query_compute_partners_cur_due_cumul,
                             params_compute_partners_cur_due_cumul)

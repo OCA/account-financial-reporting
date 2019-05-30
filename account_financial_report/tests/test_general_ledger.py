@@ -5,7 +5,8 @@
 import time
 
 from odoo.tests import common
-from datetime import date, datetime
+from odoo import fields
+from datetime import date
 from . import abstract_test_foreign_currency as a_t_f_c
 
 
@@ -88,11 +89,11 @@ class TestGeneralLedgerReport(common.TransactionCase):
 
     def setUp(self):
         super(TestGeneralLedgerReport, self).setUp()
-        self.before_previous_fy_year = datetime.strptime('2014-05-05', '%Y-%m-%d')
-        self.previous_fy_date_start = datetime.strptime('2015-01-01', '%Y-%m-%d')
-        self.previous_fy_date_end = datetime.strptime('2015-12-31', '%Y-%m-%d')
-        self.fy_date_start = datetime.strptime('2016-01-01', '%Y-%m-%d')
-        self.fy_date_end = datetime.strptime('2016-12-31', '%Y-%m-%d')
+        self.before_previous_fy_year = fields.Date.from_string('2014-05-05')
+        self.previous_fy_date_start = fields.Date.from_string('2015-01-01')
+        self.previous_fy_date_end = fields.Date.from_string('2015-12-31')
+        self.fy_date_start = fields.Date.from_string('2016-01-01')
+        self.fy_date_end = fields.Date.from_string('2016-12-31')
         self.receivable_account = self.env['account.account'].search([
             ('user_type_id.name', '=', 'Receivable')
             ], limit=1)
@@ -121,7 +122,6 @@ class TestGeneralLedgerReport(common.TransactionCase):
         partner = self.env.ref('base.res_partner_12')
         move_vals = {
             'journal_id': journal.id,
-            'partner_id': partner.id,
             'name': move_name,
             'date': date,
             'line_ids': [
@@ -129,17 +129,20 @@ class TestGeneralLedgerReport(common.TransactionCase):
                     'name': move_name,
                     'debit': receivable_debit,
                     'credit': receivable_credit,
-                    'account_id': self.receivable_account.id}),
+                    'account_id': self.receivable_account.id,
+                    'partner_id': partner.id}),
                 (0, 0, {
                     'name': move_name,
                     'debit': income_debit,
                     'credit': income_credit,
-                    'account_id': self.income_account.id}),
+                    'account_id': self.income_account.id,
+                    'partner_id': partner.id}),
                 (0, 0, {
                     'name': move_name,
                     'debit': unaffected_debit,
                     'credit': unaffected_credit,
-                    'account_id': self.unaffected_account.id}),
+                    'account_id': self.unaffected_account.id,
+                    'partner_id': partner.id}),
                 ]}
         move = self.env['account.move'].create(move_vals)
         move.post()
@@ -546,5 +549,5 @@ class TestGeneralLedgerReport(common.TransactionCase):
         wizard = self.env["general.ledger.report.wizard"].create({
             'date_range_id': dr.id})
         wizard.onchange_date_range_id()
-        self.assertEqual(wizard.date_from, '2018-01-01')
-        self.assertEqual(wizard.date_to, '2018-12-31')
+        self.assertEqual(wizard.date_from, date(2018, 1, 1))
+        self.assertEqual(wizard.date_to, date(2018, 12, 31))
