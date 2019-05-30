@@ -6,15 +6,16 @@
 
 from odoo import api, fields, models, _
 from odoo.tools.safe_eval import safe_eval
-from odoo.tools import pycompat, DEFAULT_SERVER_DATE_FORMAT
+from odoo.tools import pycompat
 from odoo.exceptions import UserError, ValidationError
-from datetime import datetime
+
 
 class TrialBalanceReportWizard(models.TransientModel):
     """Trial balance report wizard."""
 
     _name = "trial.balance.report.wizard"
     _description = "Trial Balance Report Wizard"
+    _inherit = 'account_financial_report_abstract_wizard'
 
     company_id = fields.Many2one(
         comodel_name='res.company',
@@ -98,7 +99,7 @@ class TrialBalanceReportWizard(models.TransientModel):
         for wiz in self.filtered('date_from'):
             date = fields.Datetime.from_string(wiz.date_from)
             res = self.company_id.compute_fiscalyear_dates(date)
-            wiz.fy_start_date = datetime.strftime(res['date_from'], DEFAULT_SERVER_DATE_FORMAT)
+            wiz.fy_start_date = fields.Date.to_string(res['date_from'])
 
     @api.onchange('company_id')
     def onchange_company_id(self):
@@ -137,11 +138,7 @@ class TrialBalanceReportWizard(models.TransientModel):
         else:
             res['domain']['account_ids'] += [
                 ('company_id', '=', self.company_id.id)]
-            res['domain']['partner_ids'] += [
-                '&',
-                '|', ('company_id', '=', self.company_id.id),
-                ('company_id', '=', False),
-                ('parent_id', '=', False)]
+            res['domain']['partner_ids'] += self._get_partner_ids_domain()
             res['domain']['date_range_id'] += [
                 '|', ('company_id', '=', self.company_id.id),
                 ('company_id', '=', False)]

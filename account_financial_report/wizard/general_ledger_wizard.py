@@ -9,10 +9,9 @@
 
 from odoo import api, fields, models, _
 from odoo.tools.safe_eval import safe_eval
-from odoo.tools import pycompat, DEFAULT_SERVER_DATE_FORMAT
+from odoo.tools import pycompat
 from odoo.exceptions import ValidationError
 import time
-from datetime import datetime
 
 
 class GeneralLedgerReportWizard(models.TransientModel):
@@ -20,6 +19,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
 
     _name = "general.ledger.report.wizard"
     _description = "General Ledger Report Wizard"
+    _inherit = 'account_financial_report_abstract_wizard'
 
     company_id = fields.Many2one(
         comodel_name='res.company',
@@ -104,25 +104,12 @@ class GeneralLedgerReportWizard(models.TransientModel):
     def _default_foreign_currency(self):
         return self.env.user.has_group('base.group_multi_currency')
 
-    def _default_partners(self):
-        context = self.env.context
-
-        if context.get('active_ids') and context.get('active_model') \
-                == 'res.partner':
-            partner_ids = context['active_ids']
-            corp_partners = self.env['res.partner'].browse(partner_ids). \
-                filtered(lambda p: p.parent_id)
-
-            partner_ids = set(partner_ids) - set(corp_partners.ids)
-            partner_ids |= set(corp_partners.mapped('parent_id.id'))
-            return list(partner_ids)
-
     @api.depends('date_from')
     def _compute_fy_start_date(self):
         for wiz in self.filtered('date_from'):
             date = fields.Datetime.from_string(wiz.date_from)
             res = self.company_id.compute_fiscalyear_dates(date)
-            wiz.fy_start_date = datetime.strftime(res['date_from'], DEFAULT_SERVER_DATE_FORMAT)
+            wiz.fy_start_date = fields.Date.to_string(res['date_from'])
 
     @api.onchange('company_id')
     def onchange_company_id(self):
@@ -168,11 +155,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
                 ('company_id', '=', self.company_id.id)]
             res['domain']['account_journal_ids'] += [
                 ('company_id', '=', self.company_id.id)]
-            res['domain']['partner_ids'] += [
-                '&',
-                '|', ('company_id', '=', self.company_id.id),
-                ('company_id', '=', False),
-                ('parent_id', '=', False)]
+            res['domain']['partner_ids'] += self._get_partner_ids_domain()
             res['domain']['cost_center_ids'] += [
                 ('company_id', '=', self.company_id.id)]
             res['domain']['date_range_id'] += [

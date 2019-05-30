@@ -1,8 +1,6 @@
 # Copyright 2017 ACSONE SA/NV
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-import time
-
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 

@@ -13,6 +13,7 @@ class AgedPartnerBalanceWizard(models.TransientModel):
 
     _name = 'aged.partner.balance.wizard'
     _description = 'Aged Partner Balance Wizard'
+    _inherit = 'account_financial_report_abstract_wizard'
 
     company_id = fields.Many2one(
         comodel_name='res.company',
@@ -59,11 +60,7 @@ class AgedPartnerBalanceWizard(models.TransientModel):
         else:
             res['domain']['account_ids'] += [
                 ('company_id', '=', self.company_id.id)]
-            res['domain']['partner_ids'] += [
-                '&',
-                '|', ('company_id', '=', self.company_id.id),
-                ('company_id', '=', False),
-                ('parent_id', '=', False)]
+            res['domain']['partner_ids'] += self._get_partner_ids_domain()
         return res
 
     @api.onchange('receivable_accounts_only', 'payable_accounts_only')
