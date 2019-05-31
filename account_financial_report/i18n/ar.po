@@ -166,39 +166,19 @@ msgid "Age 90 Days"
 msgstr "90 يوم"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:50
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:105
-#, python-format
-msgid "Age â¤ 120 d."
-msgstr "‫â¤ 120 يوم."
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:32
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:84
-#, python-format
-msgid "Age â¤ 30 d."
-msgstr "‫â¤ 30 يوم."
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:38
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:91
-#, python-format
-msgid "Age â¤ 60 d."
-msgstr "‫‫‫â¤ 60 يوم."
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:44
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:98
-#, python-format
-msgid "Age â¤ 90 d."
-msgstr "‫‫‫â¤ 90 يوم."
-
-#. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid ""
 "Age ≤ 120\n"
 "                        d."
 msgstr "≤ 120 يوم."
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:50
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:105
+#, fuzzy, python-format
+#| msgid "Age â¤ 120 d."
+msgid "Age ≤ 120 d."
+msgstr "‫â¤ 120 يوم."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -208,6 +188,14 @@ msgid ""
 msgstr "المدة ≤ 30 يوم."
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:32
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:84
+#, fuzzy, python-format
+#| msgid "Age â¤ 30 d."
+msgid "Age ≤ 30 d."
+msgstr "‫â¤ 30 يوم."
+
+#. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid ""
 "Age ≤ 60\n"
@@ -215,11 +203,27 @@ msgid ""
 msgstr "المدة ≤ 60 يوم."
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:38
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:91
+#, fuzzy, python-format
+#| msgid "Age â¤ 60 d."
+msgid "Age ≤ 60 d."
+msgstr "‫‫‫â¤ 60 يوم."
+
+#. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid ""
 "Age ≤ 90\n"
 "                        d."
 msgstr "المدة ≤ 90 يوم."
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:44
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:98
+#, fuzzy, python-format
+#| msgid "Age â¤ 90 d."
+msgid "Age ≤ 90 d."
+msgstr "‫‫‫â¤ 90 يوم."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:14
