@@ -190,7 +190,7 @@ class CustomerActivityStatement(models.AbstractModel):
                                 ) AND l.date <= '%s' AND not l.blocked
             GROUP BY l.partner_id, l.currency_id, l.date, l.date_maturity,
                                 l.amount_currency, l.balance, l.move_id,
-                                l.company_id
+                                l.company_id, l.id
         """ % (self._get_reconcile_date(), date_end,
                self._get_reconcile_date(), date_end, partners,
                date_end, date_end, date_end)
