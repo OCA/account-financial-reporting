@@ -2201,7 +2201,7 @@ msgid "Taxtags"
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/wizard/general_ledger_wizard.py:196
+#: code:addons/account_financial_report/wizard/general_ledger_wizard.py:197
 #, python-format
 msgid ""
 "The Company in the General Ledger Report Wizard and in Date Range must be "
@@ -2209,7 +2209,7 @@ msgid ""
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/wizard/trial_balance_wizard.py:165
+#: code:addons/account_financial_report/wizard/trial_balance_wizard.py:166
 #, python-format
 msgid ""
 "The Company in the Trial Balance Report Wizard and in Date Range must be the "
