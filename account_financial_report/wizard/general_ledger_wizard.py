@@ -154,7 +154,8 @@ class GeneralLedgerReportWizard(models.TransientModel):
             self.cost_center_ids = self.cost_center_ids.filtered(
                 lambda c: c.company_id == self.company_id)
         res = {'domain': {'account_ids': [],
-                          'partner_ids': [],
+                          'partner_ids': ['|', ('active', '=', False),
+                                          ('active', '=', True)],
                           'account_journal_ids': [],
                           'cost_center_ids': [],
                           'date_range_id': []

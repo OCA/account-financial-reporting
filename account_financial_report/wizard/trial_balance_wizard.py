@@ -127,7 +127,8 @@ class TrialBalanceReportWizard(models.TransientModel):
                 self.account_ids = self.account_ids.filtered(
                     lambda a: a.company_id == self.company_id)
         res = {'domain': {'account_ids': [],
-                          'partner_ids': [],
+                          'partner_ids': ['|', ('active', '=', False),
+                                          ('active', '=', True)],
                           'date_range_id': [],
                           'journal_ids': [],
                           }
