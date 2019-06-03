@@ -2230,7 +2230,7 @@ msgid "Taxtags"
 msgstr "Steuer-Stichwörter"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/wizard/general_ledger_wizard.py:197
+#: code:addons/account_financial_report/wizard/general_ledger_wizard.py:196
 #, python-format
 msgid ""
 "The Company in the General Ledger Report Wizard and in Date Range must be "
@@ -2240,7 +2240,7 @@ msgstr ""
 "identisch sein."
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/wizard/trial_balance_wizard.py:166
+#: code:addons/account_financial_report/wizard/trial_balance_wizard.py:165
 #, python-format
 msgid ""
 "The Company in the Trial Balance Report Wizard and in Date Range must be the "
