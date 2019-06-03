@@ -326,7 +326,7 @@ class TestTrialBalanceReport(common.TransactionCase):
         self.assertEqual(lines['group2'].debit, 2000)
         self.assertEqual(lines['group2'].credit, 0)
         self.assertEqual(lines['group2'].final_balance, 2000)
-        self.assertEqual(len(lines['group2'].compute_account_ids), 9)
+        self.assertGreaterEqual(len(lines['group2'].compute_account_ids), 9)
 
     def test_02_account_balance_hierarchy(self):
         # Generate the general ledger line
