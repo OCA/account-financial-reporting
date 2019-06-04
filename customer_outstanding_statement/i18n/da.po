@@ -1,0 +1,235 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* customer_outstanding_statement
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2019-05-09 14:19+0000\n"
+"Last-Translator: Hans Henrik Gabelgaard <hhg@gabelgaard.org>\n"
+"Language-Team: none\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.5.1\n"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "+120 Days Due"
+msgstr "+120 dages forfald"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "1-30 Days Due"
+msgstr "1-30 dages forfald"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "30-60 Days Due"
+msgstr "30-60 dages forfald"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "60-90 Days Due"
+msgstr "60-90 dages forfald"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "90-120 Days Due"
+msgstr "90-120 dages forfald"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "<strong>The partner doesn't have due entries.</strong>"
+msgstr "<strong>Partneren har ingen forfaldne postering.</strong>"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "Aging Report at"
+msgstr "Forfaldsrapport pr"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
+msgid "Aging details can be shown in the report, expressed in aging                 buckets (30 days due, ...), so the customer can review how much is open, due or overdue."
+msgstr ""
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "Balance"
+msgstr "Balance"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "Balance Due"
+msgstr "Forfalden balance"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
+msgid "Cancel"
+msgstr "Annuller"
+
+#. module: customer_outstanding_statement
+#: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_company_id
+msgid "Company"
+msgstr "Firma"
+
+#. module: customer_outstanding_statement
+#: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_create_uid
+msgid "Created by"
+msgstr "Oprettet af"
+
+#. module: customer_outstanding_statement
+#: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_create_date
+msgid "Created on"
+msgstr "Oprettelsesdato"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "Current Due"
+msgstr "Forfalden saldo"
+
+#. module: customer_outstanding_statement
+#: model:ir.actions.act_window,name:customer_outstanding_statement.customer_outstanding_statement_wizard_action
+msgid "Customer Outstanding Statement"
+msgstr "Kunde kontoudtog"
+
+#. module: customer_outstanding_statement
+#: model:ir.model,name:customer_outstanding_statement.model_customer_outstanding_statement_wizard
+msgid "Customer Outstanding Statement Wizard"
+msgstr "Kunde kontoudtog guide"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "Date"
+msgstr "Dato"
+
+#. module: customer_outstanding_statement
+#: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_date_end
+msgid "Date end"
+msgstr "Slutdato"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "Date:"
+msgstr "Dato:"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "Description"
+msgstr "Beskrivelse"
+
+#. module: customer_outstanding_statement
+#: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_display_name
+#: model:ir.model.fields,field_description:customer_outstanding_statement.field_report_customer_outstanding_statement_statement_display_name
+msgid "Display Name"
+msgstr "Vist navn"
+
+#. module: customer_outstanding_statement
+#: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_filter_partners_non_due
+msgid "Don't show partners with no due entries"
+msgstr "Vis ikke partnere uden forfaldne posteringer"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "Due Date"
+msgstr "Forfaldsdato"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "Ending Balance"
+msgstr "Slut balance"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
+msgid "Export PDF"
+msgstr "Export PDF"
+
+#. module: customer_outstanding_statement
+#: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_id
+#: model:ir.model.fields,field_description:customer_outstanding_statement.field_report_customer_outstanding_statement_statement_id
+msgid "ID"
+msgstr "ID"
+
+#. module: customer_outstanding_statement
+#: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_show_aging_buckets
+msgid "Include Aging Buckets"
+msgstr "Inkluder forfalden gruppering"
+
+#. module: customer_outstanding_statement
+#: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard___last_update
+#: model:ir.model.fields,field_description:customer_outstanding_statement.field_report_customer_outstanding_statement_statement___last_update
+msgid "Last Modified on"
+msgstr "Senest rettet"
+
+#. module: customer_outstanding_statement
+#: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_write_uid
+msgid "Last Updated by"
+msgstr "Senest rettet af"
+
+#. module: customer_outstanding_statement
+#: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_write_date
+msgid "Last Updated on"
+msgstr "Senest rettet"
+
+#. module: customer_outstanding_statement
+#: model:ir.model.fields,field_description:customer_outstanding_statement.field_customer_outstanding_statement_wizard_number_partner_ids
+msgid "Number partner ids"
+msgstr "Antal partnere"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "Open Amount"
+msgstr "Åben saldo"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "Original Amount"
+msgstr "Oprindeligt beløb"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "Outstanding Statement"
+msgstr "Kontoudtog"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "Outstanding Statement at"
+msgstr "Kontoudtog pr"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "Partner ref:"
+msgstr "Partner ref:"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "Reference number"
+msgstr "Bilagsnumer"
+
+#. module: customer_outstanding_statement
+#: model:ir.actions.report.xml,name:customer_outstanding_statement.action_print_customer_outstanding_statement
+msgid "Statement Action to PDF"
+msgstr ""
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
+msgid "The outstanding statement provides details of all outstanding         customer receivables up to a particular date. This includes all unpaid invoices, unclaimed         refunds and outstanding payments. The list is displayed in chronological order and is         split by currencies."
+msgstr ""
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.statement_document
+msgid "in"
+msgstr "i"
+
+#. module: customer_outstanding_statement
+#: model:ir.ui.view,arch_db:customer_outstanding_statement.customer_outstanding_statement_wizard_view
+msgid "or"
+msgstr "eller"
+
+#. module: customer_outstanding_statement
+#: model:ir.model,name:customer_outstanding_statement.model_report_customer_outstanding_statement_statement
+msgid "report.customer_outstanding_statement.statement"
+msgstr ""

@@ -841,6 +841,12 @@ msgid ""
 msgstr ""
 
 #. module: account_financial_report_qweb
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_trial_balance_qweb_hide_parent_hierarchy_level
+#: model:ir.model.fields,field_description:account_financial_report_qweb.field_trial_balance_report_wizard_hide_parent_hierarchy_level
+msgid "Do not display parent levels"
+msgstr ""
+
+#. module: account_financial_report_qweb
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_aged_partner_balance_move_lines
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_open_items_qweb_lines
 msgid ""
@@ -2098,7 +2104,7 @@ msgid ""
 msgstr ""
 
 #. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/wizard/trial_balance_wizard.py:164
+#: code:addons/account_financial_report_qweb/wizard/trial_balance_wizard.py:166
 #, python-format
 msgid ""
 "The Company in the Trial Balance Report Wizard and in Date Range must be the "
@@ -2106,7 +2112,7 @@ msgid ""
 msgstr ""
 
 #. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/wizard/trial_balance_wizard.py:92
+#: code:addons/account_financial_report_qweb/wizard/trial_balance_wizard.py:94
 #, python-format
 msgid "The hierarchy level to filter on must be greater than 0."
 msgstr ""

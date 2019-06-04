@@ -26,6 +26,7 @@
                             <field name="hierarchy_on" widget="radio" attrs="{'invisible':[('show_partner_details','=',True)]}"/>
                             <field name="limit_hierarchy_level" attrs="{'invisible':['|', ('hierarchy_on','=','none'),('show_partner_details','=',True)]}"/>
                             <field name="show_hierarchy_level" attrs="{'invisible':[('limit_hierarchy_level','=', False)]}"/>
+                            <field name="hide_parent_hierarchy_level" attrs="{'invisible':[('limit_hierarchy_level','=', False)]}"/>
                             <field name="foreign_currency"/>
                         </group>
                     </group>
