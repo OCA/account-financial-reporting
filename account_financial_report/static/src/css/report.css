@@ -57,6 +57,8 @@
 .account_title {
     font-size:11px;
     font-weight:bold;
+    width: 100%;
+    margin-top: 10px;
 }
 .account_title.labels {
     background-color:#F0F0F0 !important;
@@ -77,6 +79,12 @@
 .list_table .act_as_cell.first_column {
     padding-left: 0px;
 /*    border-left:1px solid lightGrey; uncomment to active column lines */
+}
+.act_as_cell.tax_column {
+    width: 6.89%;
+}
+.act_as_cell.rec_column {
+    width: 4.41%;
 }
 .overflow_ellipsis {
     text-overflow: ellipsis;

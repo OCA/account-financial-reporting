@@ -17,7 +17,7 @@
       model="report_general_ledger"
       string="General Ledger"
       report_type="qweb-html"
-      name="account_financial_report.report_general_ledger_qweb"
+      name="account_financial_report.report_general_ledger_html_qweb"
       file="account_financial_report.report_general_ledger_html"
       />
     
@@ -129,8 +129,24 @@
         <field name="dpi">110</field>
     </record>
 
+    <record id="paperformat_report_landscape" model="report.paperformat">
+        <field name="name">Account financial report qweb paperformat Landscape</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">12</field>
+        <field name="margin_bottom">8</field>
+        <field name="margin_left">3</field>
+        <field name="margin_right">3</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">10</field>
+        <field name="dpi">110</field>
+    </record>
+
     <record id="action_report_general_ledger_qweb" model="ir.actions.report">
-        <field name="paperformat_id" ref="report_qweb_paperformat"/>
+        <field name="paperformat_id" ref="paperformat_report_landscape"/>
     </record>
 
     <record id="action_report_trial_balance_qweb" model="ir.actions.report">

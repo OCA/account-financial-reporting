@@ -27,10 +27,9 @@
             <t t-call="account_financial_report.report_general_ledger_filters"/>
             <t t-foreach="o.account_ids" t-as="account">
                 <div class="page_break">
-                    <!-- Display account header -->
-                    <div class="act_as_table list_table" style="margin-top: 10px;"/>
-                    <div class="act_as_caption account_title"
-                         style="width: 100%">
+                  <!-- Display account header -->
+                  <div class="act_as_table list_table"/>
+                    <div class="account_title">
                         <span t-field="account.code"/> - <span t-field="account.name"/>
                     </div>
 
@@ -48,7 +47,7 @@
                             <t t-set="type" t-value='"partner_type"'/>
                             <div class="page_break">
                                 <!-- Display partner header -->
-                                <div class="act_as_caption account_title">
+                                <div class="account_title">
                                     <span t-field="partner.name"/>
                                 </div>
 
@@ -67,9 +66,12 @@
                     </t>
 
                     <!-- Display account footer -->
-                    <t t-call="account_financial_report.report_general_ledger_ending_cumul">
-                        <t t-set="account_or_partner_object" t-value="account"/>
-                        <t t-set="type" t-value='"account_type"'/>
+                    <t t-if="not o.filter_partner_ids and account.account_id.user_type_id.type not in [payable, recevable] ">
+                    <!-- do not display the account ending balance on payable/recevable account type when filtering on partners -->
+                      <t t-call="account_financial_report.report_general_ledger_ending_cumul">
+                          <t t-set="account_or_partner_object" t-value="account"/>
+                          <t t-set="type" t-value='"account_type"'/>
+                      </t>
                     </t>
                 </div>
             </t>
@@ -125,7 +127,7 @@
                     <!--## account code-->
                     <div class="act_as_cell" style="width: 4.75%;">Account</div>
                     <!--## account code-->
-                    <div class="act_as_cell" style="width: 8.89%;">Taxes</div>
+                    <div class="act_as_cell tax_column">Taxes</div>
                     <!--## partner-->
                     <div class="act_as_cell" style="width: 12.01%;">Partner
                     </div>
@@ -142,7 +144,7 @@
                         <div class="act_as_cell" style="width: 4.75%;">Tags</div>
                     </t>
                     <!--## matching_number-->
-                    <div class="act_as_cell" style="width: 2.41%;">Rec.</div>
+                    <div class="act_as_cell rec_column">Rec.</div>
                     <!--## debit-->
                     <div class="act_as_cell amount" style="width: 6.02%;">Debit</div>
                     <!--## credit-->
@@ -196,7 +198,7 @@
                                t-att-data-res-model="'account.move.line'"
                                class="o_account_financial_reports_web_action_monetary_multi"
                                style="color: black;">
-                            <t t-raw="account_or_partner_object.initial_debit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></a>
+                            <t t-raw="account_or_partner_object.initial_debit" t-options="{'widget': 'float', 'precision': res_company.currency_id.decimal_places}"/></a>
                         </span>
                     </t>
                     <t t-if="type == 'partner_type'">
@@ -210,7 +212,7 @@
                                t-att-data-res-model="'account.move.line'"
                                class="o_account_financial_reports_web_action_monetary_multi"
                                style="color: black;">
-                            <t t-raw="account_or_partner_object.initial_debit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></a>
+                            <t t-raw="account_or_partner_object.initial_debit"/></a>
                         </span>
                     </t>
                 </div>
@@ -226,7 +228,7 @@
                                t-att-data-res-model="'account.move.line'"
                                class="o_account_financial_reports_web_action_monetary_multi"
                                style="color: black;">
-                            <t t-raw="account_or_partner_object.initial_credit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></a>
+                            <t t-raw="account_or_partner_object.initial_credit" t-options="{'widget': 'float', 'precision': res_company.currency_id.decimal_places}"/></a>
                         </span>
                     </t>
                     <t t-if="type == 'partner_type'">
@@ -240,7 +242,7 @@
                                t-att-data-res-model="'account.move.line'"
                                class="o_account_financial_reports_web_action_monetary_multi"
                                style="color: black;">
-                            <t t-raw="account_or_partner_object.initial_credit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></a>
+                            <t t-raw="account_or_partner_object.initial_credit" t-options="{'widget': 'float', 'precision': res_company.currency_id.decimal_places}"/></a>
                         </span>
                     </t>
                 </div>
@@ -255,7 +257,7 @@
                                t-att-data-res-model="'account.move.line'"
                                class="o_account_financial_reports_web_action_monetary_multi"
                                style="color: black;">
-                            <t t-raw="account_or_partner_object.initial_balance" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></a>
+                            <t t-raw="account_or_partner_object.initial_balance" t-options="{'widget': 'float', 'precision': res_company.currency_id.decimal_places}"/></a>
                         </span>
                     </t>
                     <t t-if="type == 'partner_type'">
@@ -268,7 +270,7 @@
                                t-att-data-res-model="'account.move.line'"
                                class="o_account_financial_reports_web_action_monetary_multi"
                                style="color: black;">
-                            <t t-raw="account_or_partner_object.initial_balance" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></a>
+                            <t t-raw="account_or_partner_object.initial_balance" t-options="{'widget': 'float', 'precision': res_company.currency_id.decimal_places}"/></a>
                         </span>
                     </t>
                 </div>
@@ -325,7 +327,7 @@
                                class="o_account_financial_reports_web_action"
                                style="color: black;">
                             <!--## We don't use t-field because it throws an error on click -->
-                                <t t-esc="line.date" t-options="{'widget': 'date'}"/></a>
+                                <t t-esc="line.date" t-options="{'widget': 'date', 'format': 'dd/MM/YY'}"/></a>
                         </span>
                     </div>
                     <!--## move-->
@@ -418,7 +420,7 @@
                                t-att-data-res-model="res_model"
                                class="o_account_financial_reports_web_action_monetary"
                                style="color: black;">
-                                <t t-raw="line.debit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></a>
+                                <t t-raw="line.debit" t-options="{'widget': 'float', 'precision': res_company.currency_id.decimal_places}"/></a>
                         </span>
                     </div>
                     <!--## credit-->
@@ -429,7 +431,7 @@
                                t-att-data-res-model="res_model"
                                class="o_account_financial_reports_web_action_monetary"
                                style="color: black;">
-                                <t t-raw="line.credit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></a>
+                                <t t-raw="line.credit" t-options="{'widget': 'float', 'precision': res_company.currency_id.decimal_places}"/></a>
                         </span>
                     </div>
 
@@ -441,7 +443,7 @@
                                t-att-data-res-model="res_model"
                                class="o_account_financial_reports_web_action_monetary"
                                style="color: black;">
-                                <t t-raw="line.cumul_balance" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></a>
+                                <t t-raw="line.cumul_balance" t-options="{'widget': 'float', 'precision': res_company.currency_id.decimal_places}"/></a>
                         </span>
                     </div>
                     <t t-if="foreign_currency">
@@ -458,7 +460,7 @@
                                        t-att-data-res-model="res_model"
                                        class="o_account_financial_reports_web_action"
                                        style="color: black;">
-                                        <t t-raw="line.amount_currency" t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/></a>
+                                        <t t-raw="line.amount_currency" t-options="{'widget': 'float', 'precision': res_company.currency_id.decimal_places}"/></a>
                                 </span>
                             </div>
                         </t>
@@ -502,15 +504,15 @@
                 <div class="act_as_cell" style="width: 2.41%;"/>
                 <!--## debit-->
                 <div class="act_as_cell amount" style="width: 6.02%;">
-                    <span t-field="account_or_partner_object.final_debit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    <span t-field="account_or_partner_object.final_debit"  t-options="{'widget': 'float', 'precision': res_company.currency_id.decimal_places}"/>
                 </div>
                 <!--## credit-->
                 <div class="act_as_cell amount" style="width: 6.02%;">
-                    <span t-field="account_or_partner_object.final_credit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    <span t-field="account_or_partner_object.final_credit"  t-options="{'widget': 'float', 'precision': res_company.currency_id.decimal_places}"/>
                 </div>
                 <!--## balance cumulated-->
                 <div class="act_as_cell amount" style="width: 6.02%;">
-                    <span t-field="account_or_partner_object.final_balance" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    <span t-field="account_or_partner_object.final_balance" t-options="{'widget': 'float', 'precision': res_company.currency_id.decimal_places}"/>
                 </div>
                 <!--## currency_name + amount_currency-->
                 <t t-if="foreign_currency">
