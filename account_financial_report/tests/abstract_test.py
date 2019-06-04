@@ -213,6 +213,7 @@ class AbstractTest(common.TransactionCase):
         self.model = self._getReportModel()
 
         self.qweb_report_name = self._getQwebReportName()
+        self.html_report_name = self._getHtmlReportName()
         self.xlsx_report_name = self._getXlsxReportName()
         self.xlsx_action_name = self._getXlsxReportActionName()
 
@@ -226,7 +227,7 @@ class AbstractTest(common.TransactionCase):
 
     def test_html(self):
         test_reports.try_report(self.env.cr, self.env.uid,
-                                self.qweb_report_name,
+                                self.html_report_name,
                                 [self.report.id],
                                 report_type='qweb-html')
 
@@ -255,7 +256,7 @@ class AbstractTest(common.TransactionCase):
         self.assertDictContainsSubset(
             {
                 'type': 'ir.actions.report',
-                'report_name': self.qweb_report_name,
+                'report_name': self.html_report_name,
                 'report_type': 'qweb-html',
             },
             report_action
@@ -263,7 +264,7 @@ class AbstractTest(common.TransactionCase):
 
         # Check if report template is correct
         report = self.env['ir.actions.report'].search(
-            [('report_name', '=', self.qweb_report_name),
+            [('report_name', '=', self.html_report_name),
              ('report_type', '=', report_type)], limit=1)
         self.assertEqual(report.report_type, 'qweb-html')
 
@@ -374,6 +375,12 @@ class AbstractTest(common.TransactionCase):
     def _getQwebReportName(self):
         """
             :return: the qweb report name
+        """
+        raise NotImplementedError()
+
+    def _getHtmlReportName(self):
+        """
+            :return: the html report name
         """
         raise NotImplementedError()
 
