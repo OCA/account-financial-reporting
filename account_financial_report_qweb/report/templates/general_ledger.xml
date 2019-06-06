@@ -131,8 +131,7 @@
                     <div class="act_as_cell" style="width: 10.0%;">Partner
                     </div>
                     <!--## ref - label-->
-                    <div class="act_as_cell" style="width: 17.0%;">Ref -
-                        Label</div>
+                    <div class="act_as_cell" style="width: 17.0%;">Supplier Ref - Payment Ref - Label</div>
                     <t t-if="show_cost_center">
                         <!--## cost_center-->
                         <div class="act_as_cell" style="width: 7.03%;">Cost

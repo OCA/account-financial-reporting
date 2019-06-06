@@ -1138,7 +1138,12 @@ SELECT
     '""" + _('No partner allocated') + """' AS partner,
             """
         query_inject_move_line += """
-    CONCAT_WS(' - ', NULLIF(ml.ref, ''), NULLIF(ml.name, '')) AS label,
+    CONCAT_WS(
+        ' - ',
+        NULLIF(ai.supplier_invoice_number, ''),
+        NULLIF(ml.ref, ''),
+        NULLIF(ml.name, '')
+    ) AS label,
     aa.name AS cost_center,
     ml.debit,
     ml.credit,
@@ -1191,6 +1196,8 @@ INNER JOIN
     account_journal j ON ml.journal_id = j.id
 INNER JOIN
     account_account a ON ml.account_id = a.id
+LEFT JOIN
+    account_invoice ai ON ml.move_id = ai.move_id
 LEFT JOIN
     account_tax at ON ml.tax_line_id = at.id
         """
