@@ -31,8 +31,8 @@
             <t t-call="account_financial_report.report_general_ledger_filters"/>
             <t t-foreach="o.account_ids" t-as="account">
                 <div class="page_break">
-                  <!-- Display account header -->
-                  <div class="act_as_table list_table"/>
+                    <!-- Display account header -->
+                    <div class="act_as_table list_table"/>
                     <div class="account_title">
                         <span t-field="account.code"/> - <span t-field="account.name"/>
                     </div>
@@ -72,10 +72,10 @@
                     <!-- Display account footer -->
                     <t t-if="not o.filter_partner_ids and account.account_id.user_type_id.type not in [payable, recevable] ">
                     <!-- do not display the account ending balance on payable/recevable account type when filtering on partners -->
-                      <t t-call="account_financial_report.report_general_ledger_ending_cumul">
-                          <t t-set="account_or_partner_object" t-value="account"/>
-                          <t t-set="type" t-value='"account_type"'/>
-                      </t>
+                        <t t-call="account_financial_report.report_general_ledger_ending_cumul">
+                            <t t-set="account_or_partner_object" t-value="account"/>
+                            <t t-set="type" t-value='"account_type"'/>
+                        </t>
                     </t>
                 </div>
             </t>
@@ -508,11 +508,11 @@
                 <div class="act_as_cell" style="width: 2.41%;"/>
                 <!--## debit-->
                 <div class="act_as_cell amount" style="width: 6.02%;">
-                    <span t-field="account_or_partner_object.final_debit"  t-options="{'widget': 'float', 'precision': res_company.currency_id.decimal_places}"/>
+                    <span t-field="account_or_partner_object.final_debit" t-options="{'widget': 'float', 'precision': res_company.currency_id.decimal_places}"/>
                 </div>
                 <!--## credit-->
                 <div class="act_as_cell amount" style="width: 6.02%;">
-                    <span t-field="account_or_partner_object.final_credit"  t-options="{'widget': 'float', 'precision': res_company.currency_id.decimal_places}"/>
+                    <span t-field="account_or_partner_object.final_credit" t-options="{'widget': 'float', 'precision': res_company.currency_id.decimal_places}"/>
                 </div>
                 <!--## balance cumulated-->
                 <div class="act_as_cell amount" style="width: 6.02%;">
