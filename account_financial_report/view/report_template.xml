@@ -4,11 +4,20 @@
     <template id="account_financial_report_assets_backend"
               name="account_financial_report assets" inherit_id="web.assets_backend">
         <xpath expr="." position="inside">
-            <link href="/account_financial_report/static/src/less/report.less" rel="stylesheet"/>
             <script type="text/javascript"
                     src="/account_financial_report/static/src/js/account_financial_report_backend.js"/>        
             <script type="text/javascript"
                     src="/account_financial_report/static/src/js/account_financial_report_widgets.js"/>
+        </xpath>
+    </template>
+    <template id="account_financial_report_assets_common" name="account_financial_report_assets_common" inherit_id="web.assets_common">
+        <xpath expr="." position="inside">
+            <link href="/account_financial_report/static/src/less/report.less" rel="stylesheet"/>
+        </xpath>
+    </template>
+    <template id="account_financial_report_assets_common_report" name="account_financial_report_assets_common" inherit_id="web.report_assets_common">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" href="/account_financial_report/static/src/less/report.less" />
         </xpath>
     </template>
     <template id="report_buttons">
