@@ -3,7 +3,7 @@
 
     <template id="account_financial_report.internal_layout">
         <div class="article">
-            <link href="/account_financial_report/static/src/css/report.css" rel="stylesheet"/>
+            <link href="/account_financial_report/static/src/less/report.less" rel="stylesheet"/>
           <t t-raw="0" />
         </div>
 
