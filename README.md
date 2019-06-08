@@ -1,3 +1,4 @@
+[![Runbot Status](https://runbot.odoo-community.org/runbot/badge/flat/91/12.0.svg)](https://runbot.odoo-community.org/runbot/repo/github-com-oca-account-financial-reporting-91)
 [![Build Status](https://travis-ci.org/OCA/account-financial-reporting.svg?branch=12.0)](https://travis-ci.org/OCA/account-financial-reporting)
 [![Coverage Status](https://coveralls.io/repos/OCA/account-financial-reporting/badge.png?branch=12.0)](https://coveralls.io/r/OCA/account-financial-reporting?branch=12.0)
 
