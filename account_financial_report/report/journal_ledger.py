@@ -708,6 +708,7 @@ class ReportJournalLedgerMoveLine(models.TransientModel):
         comodel_name='report_journal_ledger_move',
         required=True,
         ondelete='cascade',
+        index=True,
     )
     move_line_id = fields.Many2one(
         comodel_name='account.move.line',
