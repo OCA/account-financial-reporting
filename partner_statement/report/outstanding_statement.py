@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo import api, models
+from odoo.tests import Form
 
 
 class OutstandingStatement(models.AbstractModel):
@@ -119,9 +120,9 @@ class OutstandingStatement(models.AbstractModel):
         if not data:
             data = {}
         if 'company_id' not in data:
-            wiz = self.env["outstanding.statement.wizard"].with_context(
+            wiz = Form(self.env["outstanding.statement.wizard"].with_context(
                 active_ids=docids, model="res.partner"
-            )
-            data.update(wiz.create({})._prepare_statement())
+                )).save()
+            data.update(wiz._prepare_statement())
         data['amount_field'] = 'open_amount'
         return super()._get_report_values(docids, data)

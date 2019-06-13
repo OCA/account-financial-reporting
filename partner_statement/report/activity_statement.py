@@ -4,6 +4,7 @@
 
 from odoo import api, models
 from collections import defaultdict
+from odoo.tests import Form
 
 
 class ActivityStatement(models.AbstractModel):
@@ -140,9 +141,9 @@ class ActivityStatement(models.AbstractModel):
         if not data:
             data = {}
         if 'company_id' not in data:
-            wiz = self.env["activity.statement.wizard"].with_context(
+            wiz = Form(self.env["activity.statement.wizard"].with_context(
                 active_ids=docids, model="res.partner"
-            )
-            data.update(wiz.create({})._prepare_statement())
+                )).save()
+            data.update(wiz._prepare_statement())
         data['amount_field'] = 'amount'
         return super()._get_report_values(docids, data)
