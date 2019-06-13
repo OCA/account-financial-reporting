@@ -6,8 +6,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-03 12:06+0000\n"
-"PO-Revision-Date: 2019-06-03 12:06+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -64,6 +62,11 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_financial_report_abstract
 msgid "Abstract Report"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_account_financial_report_abstract_wizard
+msgid "Abstract Wizard"
 msgstr ""
 
 #. module: account_financial_report
@@ -172,37 +175,16 @@ msgid "Age 90 Days"
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:50
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:105
-#, python-format
-msgid "Age â¤ 120 d."
-msgstr ""
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:32
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:84
-#, python-format
-msgid "Age â¤ 30 d."
-msgstr ""
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:38
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:91
-#, python-format
-msgid "Age â¤ 60 d."
-msgstr ""
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:44
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:98
-#, python-format
-msgid "Age â¤ 90 d."
-msgstr ""
-
-#. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid "Age ≤ 120\n"
 "                        d."
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:50
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:105
+#, python-format
+msgid "Age ≤ 120 d."
 msgstr ""
 
 #. module: account_financial_report
@@ -212,15 +194,36 @@ msgid "Age ≤ 30\n"
 msgstr ""
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:32
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:84
+#, python-format
+msgid "Age ≤ 30 d."
+msgstr ""
+
+#. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid "Age ≤ 60\n"
 "                        d."
 msgstr ""
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:38
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:91
+#, python-format
+msgid "Age ≤ 60 d."
+msgstr ""
+
+#. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid "Age ≤ 90\n"
 "                        d."
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:44
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:98
+#, python-format
+msgid "Age ≤ 90 d."
 msgstr ""
 
 #. module: account_financial_report
@@ -337,11 +340,6 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #, python-format
 msgid "Amount cur."
-msgstr ""
-
-#. module: account_financial_report
-#: model:ir.model.fields,help:account_financial_report.field_account_group__account_ids
-msgid "Assigned accounts."
 msgstr ""
 
 #. module: account_financial_report
@@ -846,6 +844,7 @@ msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract__display_name
+#: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract_wizard__display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard__display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__display_name
@@ -1238,6 +1237,7 @@ msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract__id
+#: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract_wizard__id
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard__id
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__id
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__id
@@ -1406,6 +1406,7 @@ msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract____last_update
+#: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract_wizard____last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard____last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard____last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard____last_update
@@ -2196,13 +2197,13 @@ msgid "Taxtags"
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/wizard/general_ledger_wizard.py:198
+#: code:addons/account_financial_report/wizard/general_ledger_wizard.py:180
 #, python-format
 msgid "The Company in the General Ledger Report Wizard and in Date Range must be the same."
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/wizard/trial_balance_wizard.py:167
+#: code:addons/account_financial_report/wizard/trial_balance_wizard.py:162
 #, python-format
 msgid "The Company in the Trial Balance Report Wizard and in Date Range must be the same."
 msgstr ""
