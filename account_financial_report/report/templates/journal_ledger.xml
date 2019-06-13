@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+     <template id="report_journal_ledger_qweb">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="account_financial_report.internal_layout">
+                    <t t-call="account_financial_report.report_journal_ledger_base"/>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_journal_ledger_base">
+        <t t-set="display_currency" t-value="o.foreign_currency"/>
+        <t t-set="display_account_name" t-value="o.with_account_name"/>
+        <t t-set="title">Journal Ledger - <t t-raw="o.company_id.name"/> - <t t-raw="o.company_id.currency_id.name"/></t>
+        <t t-set="company_name" t-value="o.company_id.name"/>
+        <div class="page">
+            <div class="row">
+                <h4 class="mt0" t-esc="title or 'Odoo Report'" style="text-align: center;"/>
+            </div>
+            <t t-if="o.group_option == 'none'">
+                <div class="page_break">
+                    <t t-call="account_financial_report.report_journal_all"/>
+                    <br/>
+                    <t t-call="account_financial_report.report_journal_all_taxes"/>
+                </div>
+            </t>
+            <t t-if="o.group_option == 'journal'">
+                <t t-foreach="o.report_journal_ledger_ids" t-as="journal">
+                    <div class="page_break">
+                        <t t-call="account_financial_report.report_journal_ledger_journal"/>
+                        <br/>
+                        <t t-call="account_financial_report.report_journal_ledger_journal_taxes"/>
+                        <br/>
+                    </div>
+                </t>
+            </t>
+        </div>
+    </template>
+
+    <template id="account_financial_report.report_journal_all">
+        <div class="act_as_table list_table" style="margin-top: 10px;"/>
+        <div class="act_as_table data_table" style="width: 100%;">
+            <t t-call="account_financial_report.report_journal_ledger_journal_table_header"/>
+            <t t-foreach="o.report_move_ids" t-as="move">
+                <t t-call="account_financial_report.report_journal_move"/>
+            </t>
+        </div>
+    </template>
+
+    <template id="account_financial_report.report_journal_ledger_journal">
+        <div class="act_as_table list_table" style="margin-top: 10px;"/>
+        <div class="act_as_caption account_title" style="width: 100%;">
+            <span t-field="journal.name"/> (<span t-field="journal.currency_id.display_name"/>) - <span t-field="o.date_from"/> to <span t-field="o.date_to"/> - <span t-field="o.move_target"/> Moves
+        </div>
+
+        <div class="act_as_table data_table" style="width: 100%;">
+            <t t-call="account_financial_report.report_journal_ledger_journal_table_header"/>
+            <t t-call="account_financial_report.report_journal_ledger_journal_first_line"/>
+            <t t-foreach="journal.report_move_ids" t-as="move">
+                <t t-call="account_financial_report.report_journal_move"/>
+            </t>
+        </div>
+    </template>
+
+    <template id="account_financial_report.report_journal_ledger_journal_table_header">
+        <t t-if="not display_account_name">
+            <t t-set="account_column_style">
+                width: 8.11%;
+            </t>
+            <t t-set="label_column_style">
+                width: 38.92%;
+            </t>
+        </t>
+        <t t-else="">
+            <t t-set="account_column_style">
+                width: 23.78%;
+            </t>
+            <t t-set="label_column_style">
+                width: 23.24%;
+            </t>
+        </t>
+
+        <div class="act_as_thead">
+            <div class="act_as_row labels">
+                <div class="act_as_cell first_column"
+                     name="entry"
+                     style="width: 7.57%;">
+                    Entry
+                </div>
+                <div class="act_as_cell"
+                     name="date"
+                     style="width: 5.41%;">
+                    Date
+                </div>
+                <div class="act_as_cell"
+                     name="account" t-att-style="account_column_style">
+                    Account
+                </div>
+                <div class="act_as_cell"
+                     name="partner"
+                     style="width: 15.14%;">
+                    Partner
+                </div>
+                <div class="act_as_cell"
+                     name="label" t-att-style="label_column_style">
+                    Ref - Label
+                </div>
+                <div class="act_as_cell"
+                     name="taxes"
+                     style="width: 7.57%;">
+                    Taxes
+                </div>
+                <div class="act_as_cell"
+                     name="debit"
+                     style="width: 8.65%;">
+                    Debit
+                </div>
+                <div class="act_as_cell"
+                     name="credit"
+                     style="width: 8.65%;">
+                    Credit
+                </div>
+                <t t-if="display_currency">
+                    <div class="act_as_cell"
+                         name="currency_name"
+                         style="width: 2.16%;">
+                        Cur.
+                    </div>
+                    <div class="act_as_cell"
+                         name="amount_currency"
+                         style="width: 6.49%;">
+                        Amount Cur.
+                    </div>
+                </t>
+            </div>
+        </div>
+    </template>
+
+    <template id="account_financial_report.report_journal_ledger_journal_first_line">
+        <div class="act_as_row lines">
+            <div class="act_as_cell"
+                 name="entry"/>
+            <div class="act_as_cell"
+                 name="date"/>
+            <div class="act_as_cell"
+                 name="account"/>
+            <div class="act_as_cell"
+                 name="partner"/>
+            <div class="act_as_cell"
+                 name="label"/>
+            <div class="act_as_cell"
+                 name="taxes"/>
+            <div class="act_as_cell amount"
+                 name="debit">
+                <b><span t-field="journal.debit"/></b>
+            </div>
+            <div class="act_as_cell amount"
+                 name="credit">
+                <b><span t-field="journal.credit"/></b>
+            </div>
+            <t t-if="display_currency">
+                <div class="act_as_cell"
+                     name="currency_name">
+                </div>
+                <div class="act_as_cell amount"
+                     name="amount_currency">
+                </div>
+            </t>
+        </div>
+        <div style="width: 100%"/>
+    </template>
+
+    <template id="account_financial_report.report_journal_move">
+        <t t-set="display_move_info" t-value="True"/>
+        <t t-set="last_partner" t-eval="None"/>
+        <t t-set="display_partner" t-eval="True"/>
+        <t t-foreach="move.report_move_line_ids" t-as="move_line">
+            <div class="act_as_row lines">
+                <t t-set="current_partner" t-value="move_line.partner_id"/>
+                <t t-set="display_partner" t-value="current_partner != last_partner"/>
+                <t t-call="account_financial_report.report_journal_move_line"/>
+                <t t-set="last_partner" t-value="current_partner"/>
+                <t t-set="display_move_info" t-value="False"/>
+            </div>
+        </t>
+    </template>
+
+    <template id="account_financial_report.report_journal_move_line">
+        <div class="act_as_cell left"
+             name="entry">
+            <span t-if="display_move_info" t-field="move_line.entry"/>
+        </div>
+        <div class="act_as_cell left"
+             name="date">
+            <span t-if="display_move_info" t-field="move_line.date"/>
+        </div>
+        <div class="act_as_cell left"
+             name="account">
+            <span t-field="move_line.account_code"/>
+            <span t-if="display_account_name">
+                - <span t-field="move_line.account"/>
+            </span>
+        </div>
+        <div class="act_as_cell left"
+             name="partner">
+            <span t-if="display_partner" t-field="move_line.partner"/>
+        </div>
+        <div class="act_as_cell left"
+             name="label">
+            <span t-field="move_line.label"/>
+        </div>
+        <div class="act_as_cell left"
+             name="taxes">
+            <span t-field="move_line.taxes_description"/>
+        </div>
+        <div class="act_as_cell amount"
+             name="debit">
+            <t t-if="move_line.debit">
+                <span t-field="move_line.debit"/>
+            </t>
+        </div>
+        <div class="act_as_cell amount"
+             name="credit">
+            <t t-if="move_line.credit">
+                <span t-field="move_line.credit"/>
+            </t>
+        </div>
+        <t t-if="display_currency">
+            <div class="act_as_cell"
+                     name="currency_name">
+                <t t-if="move_line.currency_name">
+                    <span t-field="move_line.currency_name"/>
+                </t>
+            </div>
+            <div class="act_as_cell amount"
+                 name="amount_currency">
+                <t t-if="move_line.amount_currency">
+                    <span t-field="move_line.amount_currency"/>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <template id="account_financial_report.report_journal_ledger_journal_taxes">
+        <b>Taxes summary</b>
+        <div class="act_as_table data_table" style="width: 100%;">
+            <div class="act_as_thead">
+                <div class="act_as_row labels">
+                    <div class="act_as_cell first_column"
+                         name="name"
+                         style="width: 30.97%;">
+                        Name
+                    </div>
+                    <div class="act_as_cell"
+                         name="description"
+                         style="width: 13.27%;">
+                        Description
+                    </div>
+                    <div class="act_as_cell"
+                         name="base_amount"
+                         style="width: 27.88%;">
+                        Base Amount
+                    </div>
+                    <div class="act_as_cell"
+                         name="tax_amount"
+                         style="width: 27.88%;">
+                        Tax Amount
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="act_as_table data_table" style="width: 100%;">
+            <div class="act_as_row labels">
+                <div class="act_as_cell first_column"
+                     name="name"
+                     style="width: 30.97%;"/>
+                <div class="act_as_cell"
+                     name="description"
+                     style="width: 13.27%;"/>
+                <div class="act_as_cell"
+                     name="base_debit"
+                     style="width: 9.29%;">
+                    Debit
+                </div>
+                <div class="act_as_cell"
+                     name="base_credit"
+                     style="width: 9.29%;">
+                    Credit
+                </div>
+                <div class="act_as_cell"
+                     name="base_balance"
+                     style="width: 9.29%;">
+                    Balance
+                </div>
+                <div class="act_as_cell"
+                     name="tax_debit"
+                     style="width: 9.29%;">
+                    Debit
+                </div>
+                <div class="act_as_cell"
+                     name="tax_credit"
+                     style="width: 9.29%;">
+                    Credit
+                </div>
+                <div class="act_as_cell"
+                     name="tax_balance"
+                     style="width: 9.29%;">
+                    Balance
+                </div>
+            </div>
+
+            <t t-foreach="journal.report_tax_line_ids" t-as="tax_line">
+                 <div class="act_as_row lines">
+                     <div class="act_as_cell left"
+                         name="tax_name">
+                        <span t-field="tax_line.tax_name"/>
+                     </div>
+                     <div class="act_as_cell left"
+                         name="tax_code">
+                        <span t-field="tax_line.tax_code"/>
+                     </div>
+                     <div class="act_as_cell amount"
+                         name="base_debit">
+                        <span t-field="tax_line.base_debit"/>
+                     </div>
+                     <div class="act_as_cell amount"
+                         name="base_credit">
+                        <span t-field="tax_line.base_credit"/>
+                     </div>
+                     <div class="act_as_cell amount"
+                         name="base_balance">
+                        <span t-field="tax_line.base_balance"/>
+                     </div>
+                     <div class="act_as_cell amount"
+                         name="tax_debit">
+                        <span t-field="tax_line.tax_debit"/>
+                     </div>
+                     <div class="act_as_cell amount"
+                         name="tax_credit">
+                        <span t-field="tax_line.tax_credit"/>
+                     </div>
+                     <div class="act_as_cell amount"
+                         name="tax_balance">
+                        <span t-field="tax_line.tax_balance"/>
+                     </div>
+                 </div>
+            </t>
+        </div>
+    </template>
+
+    <template id="account_financial_report.report_journal_all_taxes">
+        <b>Taxes summary</b>
+        <div class="act_as_table data_table" style="width: 100%;">
+            <div class="act_as_thead">
+                <div class="act_as_row labels">
+                    <div class="act_as_cell first_column"
+                         name="name"
+                         style="width: 30.97%;">
+                        Name
+                    </div>
+                    <div class="act_as_cell"
+                         name="description"
+                         style="width: 13.27%;">
+                        Description
+                    </div>
+                    <div class="act_as_cell"
+                         name="base_amount"
+                         style="width: 27.88%;">
+                        Base Amount
+                    </div>
+                    <div class="act_as_cell"
+                         name="tax_amount"
+                         style="width: 27.88%;">
+                        Tax Amount
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="act_as_table data_table" style="width: 100%;">10
+            <div class="act_as_row labels">
+                <div class="act_as_cell first_column"
+                     name="name"
+                     style="width: 30.97%;"/>
+                <div class="act_as_cell"
+                     name="description"
+                     style="width: 13.27%;"/>
+                <div class="act_as_cell"
+                     name="base_debit"
+                     style="width: 9.29%;">
+                    Debit
+                </div>
+                <div class="act_as_cell"
+                     name="base_credit"
+                     style="width: 9.29%;">
+                    Credit
+                </div>
+                <div class="act_as_cell"
+                     name="base_balance"
+                     style="width: 9.29%;">
+                    Balance
+                </div>
+                <div class="act_as_cell"
+                     name="tax_debit"
+                     style="width: 9.29%;">
+                    Debit
+                </div>
+                <div class="act_as_cell"
+                     name="tax_credit"
+                     style="width: 9.29%;">
+                    Credit
+                </div>
+                <div class="act_as_cell"
+                     name="tax_balance"
+                     style="width: 9.29%;">
+                    Balance
+                </div>
+            </div>
+
+            <t t-foreach="o.report_tax_line_ids" t-as="tax_line">
+                 <div class="act_as_row lines">
+                     <div class="act_as_cell left"
+                         name="tax_name">
+                        <span t-field="tax_line.tax_name"/>
+                     </div>
+                     <div class="act_as_cell left"
+                         name="tax_code">
+                        <span t-field="tax_line.tax_code"/>
+                     </div>
+                     <div class="act_as_cell amount"
+                         name="base_debit">
+                        <span t-field="tax_line.base_debit"/>
+                     </div>
+                     <div class="act_as_cell amount"
+                         name="base_credit">
+                        <span t-field="tax_line.base_credit"/>
+                     </div>
+                     <div class="act_as_cell amount"
+                         name="base_balance">
+                        <span t-field="tax_line.base_balance"/>
+                     </div>
+                     <div class="act_as_cell amount"
+                         name="tax_debit">
+                        <span t-field="tax_line.tax_debit"/>
+                     </div>
+                     <div class="act_as_cell amount"
+                         name="tax_credit">
+                        <span t-field="tax_line.tax_credit"/>
+                     </div>
+                     <div class="act_as_cell amount"
+                         name="tax_balance">
+                        <span t-field="tax_line.tax_balance"/>
+                     </div>
+                 </div>
+            </t>
+        </div>
+    </template>
+
+</odoo>
