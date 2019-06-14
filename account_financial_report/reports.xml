@@ -71,7 +71,7 @@
       model="report_open_items"
       string="Open Items"
       report_type="qweb-html"
-      name="account_financial_report.report_open_items_qweb"
+      name="account_financial_report.report_open_items_html_qweb"
       file="account_financial_report.report_open_items_html"
     />
 

@@ -11,6 +11,10 @@
         </t>
     </template>
 
+    <template id="account_financial_report.report_open_items_html_qweb">
+        <t t-call="account_financial_report.report_open_items_qweb"/>
+    </template>
+
     <template id="account_financial_report.report_open_items_base">
         <!-- Saved flag fields into variables, used to define columns display -->
         <t t-set="foreign_currency" t-value="o.foreign_currency"/>
