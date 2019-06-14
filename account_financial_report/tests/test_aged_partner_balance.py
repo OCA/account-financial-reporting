@@ -17,6 +17,9 @@ class TestAgedPartnerBalance(abstract_test.AbstractTest):
     def _getQwebReportName(self):
         return 'account_financial_report.report_aged_partner_balance_qweb'
 
+    def _getHtmlReportName(self):
+        return 'account_financial_report.report_aged_partner_balance_html_qweb'
+
     def _getXlsxReportName(self):
         return 'a_f_r.report_aged_partner_balance_xlsx'
 
