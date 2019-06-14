@@ -53,7 +53,7 @@
       model="report_trial_balance"
       string="Trial Balance"
       report_type="qweb-html"
-      name="account_financial_report.report_trial_balance_qweb"
+      name="account_financial_report.report_trial_balance_html_qweb"
       file="account_financial_report.report_trial_balance_html"
       />
 
