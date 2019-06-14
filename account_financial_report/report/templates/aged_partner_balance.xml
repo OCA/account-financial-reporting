@@ -11,6 +11,10 @@
         </t>
     </template>
 
+    <template id="report_aged_partner_balance_html_qweb">
+        <t t-call="account_financial_report.report_aged_partner_balance_qweb"/>
+    </template>
+
     <template id="report_aged_partner_balance_base">
         <!-- Saved flag fields into variables, used to define columns display -->
         <t t-set="show_move_line_details" t-value="o.show_move_line_details"/>

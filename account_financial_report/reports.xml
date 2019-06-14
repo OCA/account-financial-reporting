@@ -89,7 +89,7 @@
       model="report_aged_partner_balance"
       string="Aged Partner Balance"
       report_type="qweb-html"
-      name="account_financial_report.report_aged_partner_balance_qweb"
+      name="account_financial_report.report_aged_partner_balance_html_qweb"
       file="account_financial_report.report_aged_partner_balance_html"
     />
 
