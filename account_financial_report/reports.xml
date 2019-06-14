@@ -35,7 +35,7 @@
       model="report_journal_ledger"
       string="Journal Ledger"
       report_type="qweb-html"
-      name="account_financial_report.report_journal_ledger_qweb"
+      name="account_financial_report.report_journal_ledger_html_qweb"
       file="account_financial_report.report_journal_ledger_html"
       />
 

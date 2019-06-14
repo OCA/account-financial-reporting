@@ -22,6 +22,9 @@ class TestJournalLedger(a_t_f_c.AbstractTestForeignCurrency):
     def _getQwebReportName(self):
         return 'account_financial_report.report_journal_ledger_qweb'
 
+    def _getHtmlReportName(self):
+        return 'account_financial_report.report_journal_ledger_html_qweb'
+
     def _getXlsxReportName(self):
         return 'a_f_r.report_journal_ledger_xlsx'
 
@@ -58,7 +61,7 @@ class TestJournalLedger(a_t_f_c.AbstractTestForeignCurrency):
         self.assertDictContainsSubset(
             {
                 'type': 'ir.actions.report',
-                'report_name': self.qweb_report_name,
+                'report_name': self.html_report_name,
                 'report_type': 'qweb-html',
             },
             report_action
@@ -66,7 +69,7 @@ class TestJournalLedger(a_t_f_c.AbstractTestForeignCurrency):
 
         # Check if report template is correct
         report = self.env['ir.actions.report'].search(
-            [('report_name', '=', self.qweb_report_name),
+            [('report_name', '=', self.html_report_name),
              ('report_type', '=', report_type)], limit=1)
         self.assertEqual(report.report_type, 'qweb-html')
 

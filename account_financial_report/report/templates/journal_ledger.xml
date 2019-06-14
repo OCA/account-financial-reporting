@@ -11,6 +11,10 @@
         </t>
     </template>
 
+     <template id="report_journal_ledger_html_qweb">
+        <t t-call="account_financial_report.report_journal_ledger_qweb"/>
+    </template>
+
     <template id="report_journal_ledger_base">
         <t t-set="display_currency" t-value="o.foreign_currency"/>
         <t t-set="display_account_name" t-value="o.with_account_name"/>
