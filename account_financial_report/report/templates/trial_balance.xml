@@ -11,6 +11,10 @@
         </t>
     </template>
 
+    <template id="report_trial_balance_html_qweb">
+        <t t-call="account_financial_report.report_trial_balance_qweb"/>
+    </template>
+
     <template id="account_financial_report.report_trial_balance_base">
         <!-- Saved flag fields into variables, used to define columns display -->
         <t t-set="show_partner_details" t-value="o.show_partner_details"/>

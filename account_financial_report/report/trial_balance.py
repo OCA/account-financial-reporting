@@ -204,6 +204,9 @@ class TrialBalanceReportCompute(models.TransientModel):
         self.ensure_one()
         if report_type == 'xlsx':
             report_name = 'a_f_r.report_trial_balance_xlsx'
+        elif report_type == 'qweb-html':
+            report_name = 'account_financial_report.' \
+                          'report_trial_balance_html_qweb'
         else:
             report_name = 'account_financial_report.' \
                           'report_trial_balance_qweb'
