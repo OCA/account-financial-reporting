@@ -17,6 +17,9 @@ class TestOpenItems(a_t_f_c.AbstractTestForeignCurrency):
     def _getQwebReportName(self):
         return 'account_financial_report.report_open_items_qweb'
 
+    def _getHtmlReportName(self):
+        return 'account_financial_report.report_open_items_html_qweb'
+
     def _getXlsxReportName(self):
         return 'a_f_r.report_open_items_xlsx'
 
