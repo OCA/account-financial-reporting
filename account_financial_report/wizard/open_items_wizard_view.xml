@@ -68,6 +68,7 @@
                     'default_receivable_accounts_only':1,
                     'default_payable_accounts_only':1,
                     }"
+                groups="account.group_account_manager"
                 key2="client_action_multi"
                 target="new" />
 
