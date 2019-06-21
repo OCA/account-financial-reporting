@@ -9,14 +9,14 @@
 
         <div class="footer">
             <div class="row">
-                <div class="col-xs-6 custom_footer">
+                <div class="col-6 custom_footer">
                     <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
                 </div>
-                <div class="col-xs-6 text-right custom_footer">
+                <div class="col-6 text-right custom_footer">
                     <ul class="list-inline">
-                        <li><span class="page"/></li>
-                        <li>/</li>
-                        <li><span class="topage"/></li>
+                        <li class="list-inline-item"><span class="page"/></li>
+                        <li class="list-inline-item">/</li>
+                        <li class="list-inline-item"><span class="topage"/></li>
                     </ul>
                 </div>
             </div>
