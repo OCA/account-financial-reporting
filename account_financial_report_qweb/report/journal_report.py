@@ -715,6 +715,7 @@ class ReportJournalQwebMoveLine(models.TransientModel):
         comodel_name='report_journal_qweb_move',
         required=True,
         ondelete='cascade',
+        index=True,
     )
     move_line_id = fields.Many2one(
         comodel_name='account.move.line',
