@@ -16,7 +16,8 @@
     "website": "https://odoo-community.org/",
     'depends': [
         'account',
-        'account_group',    # account-financial-tools
+        'account_group',                        # account-financial-tools
+        'account_invoice_supplier_ref_unique',  # account-invoicing
         'date_range',
         'report_xlsx',
         'report',
