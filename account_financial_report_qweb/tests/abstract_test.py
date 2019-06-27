@@ -269,8 +269,8 @@ class AbstractTest(common.TransactionCase):
             report2 = self.model.create(current_filter)
             report2.compute_data_for_report()
 
-            self.assertEqual(len(report2.account_ids), 1)
-            self.assertEqual(report2.account_ids.name,
+            self.assertGreaterEqual(len(report2.account_ids), 1)
+            self.assertEqual(report2.account_ids[0].name,
                              report.account_ids[0].name)
 
             if self._partner_test_is_possible(filters):
