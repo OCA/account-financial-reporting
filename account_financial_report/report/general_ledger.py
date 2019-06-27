@@ -219,6 +219,9 @@ class GeneralLedgerReportCompute(models.TransientModel):
         self.ensure_one()
         if report_type == 'xlsx':
             report_name = 'a_f_r.report_general_ledger_xlsx'
+        elif report_type == 'qweb-html':
+            report_name = 'account_financial_report.' \
+                          'report_general_ledger_html_qweb'
         else:
             report_name = 'account_financial_report.' \
                           'report_general_ledger_qweb'
@@ -1224,7 +1227,7 @@ LEFT JOIN
     account_analytic_account aa ON ml.analytic_account_id = aa.id
             """
         if self.filter_analytic_tag_ids:
-                query_inject_move_line += """
+            query_inject_move_line += """
         INNER JOIN
             move_lines_on_tags ON ml.id = move_lines_on_tags.ml_id
                     """

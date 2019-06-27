@@ -11,6 +11,10 @@
         </t>
     </template>
 
+    <template id="report_general_ledger_html_qweb">
+        <t t-call="account_financial_report.report_general_ledger_qweb"/>
+    </template>
+
     <template id="report_general_ledger_base">
         <!-- Saved flag fields into variables, used to define columns display -->
         <t t-set="show_analytic_tags" t-value="o.show_analytic_tags"/>

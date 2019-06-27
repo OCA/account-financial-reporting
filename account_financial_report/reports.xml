@@ -17,10 +17,10 @@
       model="report_general_ledger"
       string="General Ledger"
       report_type="qweb-html"
-      name="account_financial_report.report_general_ledger_qweb"
+      name="account_financial_report.report_general_ledger_html_qweb"
       file="account_financial_report.report_general_ledger_html"
       />
-    
+
     <!-- Journal Ledger -->
     <report
       id="action_report_journal_ledger_qweb"
@@ -110,7 +110,7 @@
       name="account_financial_report.report_vat_report_qweb"
       file="account_financial_report.report_vat_report_html"
     />
-    
+
     <!-- PDF REPORTS : paperformat -->
 
     <record id="report_qweb_paperformat" model="report.paperformat">
@@ -145,7 +145,7 @@
             model="ir.actions.report">
         <field name="paperformat_id" ref="report_qweb_paperformat"/>
     </record>
-    
+
     <record id="action_report_vat_report_qweb"
             model="ir.actions.report">
         <field name="paperformat_id" ref="report_qweb_paperformat"/>
@@ -197,7 +197,7 @@
         <field name="report_type">xlsx</field>
         <field name="report_file">report_aged_partner_balance</field>
     </record>
-    
+
     <record id="action_report_vat_report_xlsx" model="ir.actions.report">
         <field name="name">VAT Report XLSX</field>
         <field name="model">report_vat_report</field>

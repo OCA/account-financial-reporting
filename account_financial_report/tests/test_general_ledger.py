@@ -19,6 +19,9 @@ class TestGeneralLedger(a_t_f_c.AbstractTestForeignCurrency):
     def _getQwebReportName(self):
         return 'account_financial_report.report_general_ledger_qweb'
 
+    def _getHtmlReportName(self):
+        return 'account_financial_report.report_general_ledger_html_qweb'
+
     def _getXlsxReportName(self):
         return 'a_f_r.report_general_ledger_xlsx'
 
