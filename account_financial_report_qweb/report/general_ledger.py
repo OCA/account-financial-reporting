@@ -467,7 +467,7 @@ WITH
         ):
             query_inject_account += """
             GROUP BY
-                a.id
+                a.id, t.value
             """
         query_inject_account += """
         ),
