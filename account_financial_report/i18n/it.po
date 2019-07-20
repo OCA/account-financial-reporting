@@ -69,6 +69,13 @@ msgid "Abstract Report"
 msgstr "Report astratto"
 
 #. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_account_financial_report_abstract_wizard
+#, fuzzy
+#| msgid "Abstract Report"
+msgid "Abstract Wizard"
+msgstr "Report astratto"
+
+#. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:67
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:23
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:30
@@ -174,34 +181,6 @@ msgid "Age 90 Days"
 msgstr "Età 90 giorni"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:50
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:105
-#, python-format
-msgid "Age â¤ 120 d."
-msgstr "Età â¤ 120 g."
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:32
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:84
-#, python-format
-msgid "Age â¤ 30 d."
-msgstr "Età â¤ 30 g."
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:38
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:91
-#, python-format
-msgid "Age â¤ 60 d."
-msgstr "Età â¤ 60 g."
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:44
-#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:98
-#, python-format
-msgid "Age â¤ 90 d."
-msgstr "Età â¤ 90 g."
-
-#. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid ""
 "Age ≤ 120\n"
@@ -209,6 +188,14 @@ msgid ""
 msgstr ""
 "Età ≤ 120\n"
 "                        g."
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:50
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:105
+#, fuzzy, python-format
+#| msgid "Age â¤ 120 d."
+msgid "Age ≤ 120 d."
+msgstr "Età â¤ 120 g."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -220,6 +207,14 @@ msgstr ""
 "                        g."
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:32
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:84
+#, fuzzy, python-format
+#| msgid "Age â¤ 30 d."
+msgid "Age ≤ 30 d."
+msgstr "Età â¤ 30 g."
+
+#. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid ""
 "Age ≤ 60\n"
@@ -229,6 +224,14 @@ msgstr ""
 "                        g."
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:38
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:91
+#, fuzzy, python-format
+#| msgid "Age â¤ 60 d."
+msgid "Age ≤ 60 d."
+msgstr "Età â¤ 60 g."
+
+#. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid ""
 "Age ≤ 90\n"
@@ -236,6 +239,14 @@ msgid ""
 msgstr ""
 "Età ≤ 90\n"
 "                        g."
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:44
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:98
+#, fuzzy, python-format
+#| msgid "Age â¤ 90 d."
+msgid "Age ≤ 90 d."
+msgstr "Età â¤ 90 g."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:14
@@ -352,11 +363,6 @@ msgstr "Importo totale dovuto in valuta"
 #, python-format
 msgid "Amount cur."
 msgstr "Importo val."
-
-#. module: account_financial_report
-#: model:ir.model.fields,help:account_financial_report.field_account_group__account_ids
-msgid "Assigned accounts."
-msgstr "Conti assegnati."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
@@ -519,7 +525,8 @@ msgid ""
 "\n"
 "        Child Accounts: Use when your account groups are hierarchical.\n"
 "\n"
-"        No hierarchy: Use to display just the accounts, without any grouping.\n"
+"        No hierarchy: Use to display just the accounts, without any "
+"grouping.\n"
 "        "
 msgstr ""
 "Conti calcolati: utilizzato quando i gruppi di conti hanno codici\n"
@@ -527,7 +534,8 @@ msgstr ""
 "\n"
 "        Conti figli: utilizzato quando i gruppi di conti sono gerarchici.\n"
 "\n"
-"        Nessuna gerarchia: utilizzato per visualizzare solo i conti, senza alcun raggruppo.\n"
+"        Nessuna gerarchia: utilizzato per visualizzare solo i conti, senza "
+"alcun raggruppo.\n"
 "        "
 
 #. module: account_financial_report
@@ -871,6 +879,7 @@ msgstr "Dettaglio imposte"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract__display_name
+#: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract_wizard__display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard__display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__display_name
@@ -916,7 +925,10 @@ msgstr "Nome visualizzato"
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__foreign_currency
 #: model:ir.model.fields,help:account_financial_report.field_open_items_report_wizard__foreign_currency
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__foreign_currency
-msgid "Display foreign currency for move lines, unless account currency is not setup through chart of accounts will display initial and final balance in that currency."
+msgid ""
+"Display foreign currency for move lines, unless account currency is not "
+"setup through chart of accounts will display initial and final balance in "
+"that currency."
 msgstr ""
 
 #. module: account_financial_report
@@ -1208,7 +1220,9 @@ msgstr "Mastrino XLSX"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
-msgid "General Ledger can be computed only if selected company have only one unaffected earnings account."
+msgid ""
+"General Ledger can be computed only if selected company have only one "
+"unaffected earnings account."
 msgstr ""
 
 #. module: account_financial_report
@@ -1269,6 +1283,7 @@ msgstr "Gerarchia su"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract__id
+#: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract_wizard__id
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard__id
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__id
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__id
@@ -1312,7 +1327,9 @@ msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_account_account__centralized
-msgid "If flagged, no details will be displayed in the General Ledger report (the webkit one only), only centralized amounts per period."
+msgid ""
+"If flagged, no details will be displayed in the General Ledger report (the "
+"webkit one only), only centralized amounts per period."
 msgstr ""
 
 #. module: account_financial_report
@@ -1438,6 +1455,7 @@ msgstr "Etichetta"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract____last_update
+#: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract_wizard____last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard____last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard____last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard____last_update
@@ -1800,10 +1818,16 @@ msgstr ""
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_partner_ending_cumul
+#, fuzzy
+#| msgid ""
+#| "Ending\n"
+#| "                        balance"
 msgid ""
 "Partner\n"
-"                    Saldo progressivo"
+"                    cumul aged balance"
 msgstr ""
+"Saldo\n"
+"                        finale"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_move_line__partner_id
@@ -2232,21 +2256,26 @@ msgid "Taxtags"
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/wizard/general_ledger_wizard.py:198
+#: code:addons/account_financial_report/wizard/general_ledger_wizard.py:180
 #, python-format
-msgid "The Company in the General Ledger Report Wizard and in Date Range must be the same."
+msgid ""
+"The Company in the General Ledger Report Wizard and in Date Range must be "
+"the same."
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/wizard/trial_balance_wizard.py:167
+#: code:addons/account_financial_report/wizard/trial_balance_wizard.py:162
 #, python-format
-msgid "The Company in the Trial Balance Report Wizard and in Date Range must be the same."
+msgid ""
+"The Company in the Trial Balance Report Wizard and in Date Range must be the "
+"same."
 msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/wizard/vat_report_wizard.py:62
 #, python-format
-msgid "The Company in the Vat Report Wizard and in Date Range must be the same."
+msgid ""
+"The Company in the Vat Report Wizard and in Date Range must be the same."
 msgstr ""
 
 #. module: account_financial_report
@@ -2297,7 +2326,9 @@ msgstr "Bilancio di verifica XLSX"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
-msgid "Trial Balance can be computed only if selected company have only one unaffected earnings account."
+msgid ""
+"Trial Balance can be computed only if selected company have only one "
+"unaffected earnings account."
 msgstr ""
 
 #. module: account_financial_report
@@ -2308,7 +2339,10 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__hide_account_at_0
 #: model:ir.model.fields,help:account_financial_report.field_open_items_report_wizard__hide_account_at_0
-msgid "Use this filter to hide an account or a partner with an ending balance at 0. If partners are filtered, debits and credits totals will not match the trial balance."
+msgid ""
+"Use this filter to hide an account or a partner with an ending balance at 0. "
+"If partners are filtered, debits and credits totals will not match the trial "
+"balance."
 msgstr ""
 
 #. module: account_financial_report
@@ -2354,7 +2388,9 @@ msgstr "Visualizza"
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__hide_account_at_0
-msgid "When this option is enabled, the trial balance will not display accounts that have initial balance = debit = credit = end balance = 0"
+msgid ""
+"When this option is enabled, the trial balance will not display accounts "
+"that have initial balance = debit = credit = end balance = 0"
 msgstr ""
 
 #. module: account_financial_report
@@ -2568,3 +2604,6 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 8.11%;"
 msgstr ""
+
+#~ msgid "Assigned accounts."
+#~ msgstr "Conti assegnati."
