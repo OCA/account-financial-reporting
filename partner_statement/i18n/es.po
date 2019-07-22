@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-22 16:14+0000\n"
-"PO-Revision-Date: 2019-07-22 21:43+0000\n"
+"PO-Revision-Date: 2019-07-23 01:43+0000\n"
 "Last-Translator: Josep M <jmyepes@mac.com>\n"
 "Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
 "Language: es\n"
@@ -91,7 +91,7 @@ msgstr "<strong>Código Cliente:</strong>"
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
 msgid "<strong>The partner doesn't have due entries.</strong>"
-msgstr "<strong>Este cliente no tiene pagos pendientes</strong>"
+msgstr "<strong>Este cliente no tiene asientos vencidos</strong>"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__account_type
@@ -103,18 +103,17 @@ msgstr "Tipo de cuenta"
 #. module: partner_statement
 #: model:ir.actions.report,name:partner_statement.action_print_activity_statement
 msgid "Activity Statement"
-msgstr "Extracto de movimientos"
+msgstr "Estado de la cuenta"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_activity_statement_wizard
 msgid "Activity Statement Wizard"
-msgstr "Asistente de Extracto de movimientos"
+msgstr "Asistente de Estado de la cuenta"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
 msgid "Activity Statements show all transactions between two dates."
-msgstr ""
-"El extracto de movimientos muestra todas las operaciones entre dos fechas."
+msgstr "El estado de la cuenta muestra todas las operaciones entre dos fechas."
 
 #. module: partner_statement
 #: selection:activity.statement.wizard,aging_type:0
@@ -122,7 +121,7 @@ msgstr ""
 #: selection:res.config.settings,default_aging_type:0
 #: selection:statement.common.wizard,aging_type:0
 msgid "Age by Days"
-msgstr "Tiempo en días"
+msgstr "Antigüedad en días"
 
 #. module: partner_statement
 #: selection:activity.statement.wizard,aging_type:0
@@ -130,7 +129,7 @@ msgstr "Tiempo en días"
 #: selection:res.config.settings,default_aging_type:0
 #: selection:statement.common.wizard,aging_type:0
 msgid "Age by Months"
-msgstr "Tiempo en meses"
+msgstr "Antigüedad en meses"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__aging_type
@@ -138,12 +137,12 @@ msgstr "Tiempo en meses"
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__default_aging_type
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__aging_type
 msgid "Aging Method"
-msgstr "Forma de vencimiento"
+msgstr "Tipo de antigüedad"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.aging_buckets
 msgid "Aging Report at"
-msgstr "Informe de vencimientos a"
+msgstr "Informe de antigüedad a"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
@@ -151,14 +150,14 @@ msgid ""
 "Aging details can be shown in the report, expressed in aging         "
 "buckets, so the partner can review how much is open, due or overdue."
 msgstr ""
-"Los detalles de vencimientos pueden ser mostrados en el informe, mostrados "
-"en tramos         vencidos, para que el cliente pueda revisar cuánto está "
-"pendiente, vencido o sobrepasado."
+"Los detalles de antigüedad pueden mostrarse en el informe en forma de "
+"rangos         de antigüedad, de tal forma que el cliente pueda revisar "
+"cuánto está pendiente, vencido o sobrepasado."
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
 msgid "Amount"
-msgstr "Total"
+msgstr "Importe"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
@@ -169,7 +168,7 @@ msgstr "Saldo"
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
 msgid "Balance Forward"
-msgstr "Saldo hacia adelante"
+msgstr "Saldo arrastrado"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
@@ -205,7 +204,7 @@ msgstr "Creado en"
 #: code:addons/partner_statement/report/report_statement_common.py:252
 #, python-format
 msgid "Current"
-msgstr "Saldo a la fecha"
+msgstr "Actual"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
@@ -246,7 +245,7 @@ msgstr "Nombre a mostrar"
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__filter_partners_non_due
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__filter_partners_non_due
 msgid "Don't show partners with no due entries"
-msgstr "No mostrar clientes sin saldos pendientes"
+msgstr "No mostrar clientes sin asientos vencidos"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
@@ -256,12 +255,12 @@ msgstr "Fecha Vencimiento"
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__group_activity_statement
 msgid "Enable OCA Activity Statements"
-msgstr "Activar Informe OCA extracto de movimientos"
+msgstr "Activar Informe OCA Estado Cuenta"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__group_outstanding_statement
 msgid "Enable OCA Outstanding Statements"
-msgstr "Activar Informe OCA extracto de pendientes"
+msgstr "Activar Informe OCA Pendientes Cuenta"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
@@ -280,7 +279,7 @@ msgstr "Excluir saldos negativos"
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__default_filter_partners_non_due
 msgid "Exclude partners with no due entries"
-msgstr "Excluir clientes sin saldos pendientes"
+msgstr "Excluir clientes sin asientos vencidos"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
@@ -342,7 +341,7 @@ msgstr "Anterior"
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
 msgid "Open Amount"
-msgstr "Total"
+msgstr "Importe pendiente"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
@@ -352,34 +351,35 @@ msgstr "Original"
 #. module: partner_statement
 #: model:ir.actions.report,name:partner_statement.action_print_outstanding_statement
 msgid "Outstanding Statement"
-msgstr "Informe de pendientes"
+msgstr "Estado pendientes"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_outstanding_statement_wizard
 msgid "Outstanding Statement Wizard"
-msgstr "Asistente de pendientes"
+msgstr "Asistente de estado pendientes"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
 msgid "Outstanding Statements show all transactions up to a date."
-msgstr "Los pendientes muestran todas las transacciones hasta una fecha."
+msgstr ""
+"Los pendientes de la cuenta muestran todas las transacciones hasta una fecha."
 
 #. module: partner_statement
 #: model:ir.actions.act_window,name:partner_statement.activity_statement_wizard_action
 msgid "Partner Activity Statement"
-msgstr "Extracto de Cliente"
+msgstr "Estado de la cuenta del cliente"
 
 #. module: partner_statement
 #: model:ir.actions.act_window,name:partner_statement.outstanding_statement_wizard_action
 msgid "Partner Outstanding Statement"
-msgstr "Pendiente de Cliente"
+msgstr "Estado de los pendientes de la cuenta del cliente"
 
 #. module: partner_statement
 #: selection:activity.statement.wizard,account_type:0
 #: selection:outstanding.statement.wizard,account_type:0
 #: selection:statement.common.wizard,account_type:0
 msgid "Payable"
-msgstr "Pagadero"
+msgstr "A pagar"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
@@ -389,14 +389,14 @@ msgstr "Pago"
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
 msgid "Please set defaults under Activity Statements."
-msgstr "Por favor establezca los valores por defecto de los extractos."
+msgstr "Por favor establezca los valores por defecto en estado de la cuenta."
 
 #. module: partner_statement
 #: selection:activity.statement.wizard,account_type:0
 #: selection:outstanding.statement.wizard,account_type:0
 #: selection:statement.common.wizard,account_type:0
 msgid "Receivable"
-msgstr "Por pagar"
+msgstr "Por cobrar"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
@@ -410,17 +410,17 @@ msgstr "Número de Referencia"
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__default_show_aging_buckets
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__show_aging_buckets
 msgid "Show Aging Buckets"
-msgstr "Mostrar tramos vencimientos"
+msgstr "Mostrar rangos antigüedad"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_statement_common
 msgid "Statement Reports Common"
-msgstr "Informe conjunto"
+msgstr "Informe Estado de la cuenta"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_statement_common_wizard
 msgid "Statement Reports Common Wizard"
-msgstr "Asistente para Informe conjunto"
+msgstr "Asistente para Informe Estado de la cuenta"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
@@ -431,7 +431,7 @@ msgstr "Informe entre"
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
 msgid "Statement of Account"
-msgstr "Informe de la Cuenta"
+msgstr "Estado de la cuenta"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
@@ -458,9 +458,10 @@ msgstr ""
 "en                     las cuentas por cobrar y por pagar del cliente entre "
 "dos fechas seleccionadas. Esto incluye todas las "
 "facturas,                     reembolsos y pagos. Cualquier saldo pendiente "
-"con fecha anterior al                     período elegido aparecerá como un "
-"saldo arrastrado en la parte superior del estado de la cuenta. La lista "
-"es                     mostrada en orden cronológico y dividida por monedas."
+"con fecha anterior al                     período seleccionado aparecerá "
+"como un saldo arrastrado en la parte superior del estado de la cuenta. La "
+"lista es                     mostrada en orden cronológico y separada por "
+"monedas."
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_wizard_view
@@ -471,11 +472,11 @@ msgid ""
 "payments. The list is displayed in chronological order and is         split "
 "by currencies."
 msgstr ""
-"El estado de cuenta pendiente proporciona detalles de todas las "
-"cuentas         por cobrar y por pagar hasta una fecha en particular. Esto "
-"incluye todas las facturas impagadas, los reembolsos         no reclamados y "
-"pagos pendientes. La lista es         es mostrada en orden cronológico y "
-"dividido por monedas."
+"El pendiente del estado de cuenta proporciona detalles de todas las cuentas "
+"pendientes         por cobrar y por pagar hasta una fecha en particular. "
+"Esto incluye todas las facturas impagadas, los reembolsos         no "
+"reclamados y pagos pendientes. La lista          es mostrada en orden "
+"cronológico y separada por monedas."
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:247
@@ -487,12 +488,12 @@ msgstr "Total"
 #. module: partner_statement
 #: model:res.groups,name:partner_statement.group_activity_statement
 msgid "Use activity statements"
-msgstr "Usar estado de cuenta"
+msgstr "Usar estado de la cuenta"
 
 #. module: partner_statement
 #: model:res.groups,name:partner_statement.group_outstanding_statement
 msgid "Use outstanding statements"
-msgstr "Usar estado de cuenta pendiente"
+msgstr "Usar pendientes en el estado de la cuenta"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
