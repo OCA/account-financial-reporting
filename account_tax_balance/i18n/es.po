@@ -9,21 +9,21 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-19 01:37+0000\n"
-"PO-Revision-Date: 2019-02-04 10:50+0000\n"
-"Last-Translator: Marta Vázquez Rodríguez <vazrodmar@gmail.com>\n"
+"PO-Revision-Date: 2019-07-22 21:43+0000\n"
+"Last-Translator: Josep M <jmyepes@mac.com>\n"
 "Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.4\n"
+"X-Generator: Weblate 3.7.1\n"
 
 #. module: account_tax_balance
 #: code:addons/account_tax_balance/wizard/open_tax_balances.py:48
 #, python-format
 msgid "%(name)s: %(target)s from %(from)s to %(to)s"
-msgstr ""
+msgstr "%(name)s: %(target)s desde %(from)s a %(to)s"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
