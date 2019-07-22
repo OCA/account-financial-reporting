@@ -11,15 +11,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-18 22:19+0000\n"
-"PO-Revision-Date: 2019-05-27 11:19+0000\n"
-"Last-Translator: Pedro M. Baeza <pedro.baeza@gmail.com>\n"
+"PO-Revision-Date: 2019-07-22 21:43+0000\n"
+"Last-Translator: Josep M <jmyepes@mac.com>\n"
 "Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.6.1\n"
+"X-Generator: Weblate 3.7.1\n"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
@@ -69,15 +69,13 @@ msgstr "<span class=\"fa fa-print\"/>Imprimir"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_financial_report_abstract
-#, fuzzy
-#| msgid "VAT Report"
 msgid "Abstract Report"
-msgstr "Informe de impuestos"
+msgstr "Informe Resumen"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_financial_report_abstract_wizard
 msgid "Abstract Wizard"
-msgstr ""
+msgstr "Asistente de Resumen"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:67
@@ -120,10 +118,8 @@ msgstr "Grupo de cuentas"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_move_line__account_id
-#, fuzzy
-#| msgid "Account"
 msgid "Account ID"
-msgstr "Cuenta"
+msgstr "Nº Cuenta"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:38
@@ -196,10 +192,9 @@ msgstr "≤ 120 d."
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:50
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:105
-#, fuzzy, python-format
-#| msgid "Age â¤ 120 d."
+#, python-format
 msgid "Age ≤ 120 d."
-msgstr "120 d."
+msgstr "Tiempo ≤ 120 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -211,10 +206,9 @@ msgstr "≤ 30 d."
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:32
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:84
-#, fuzzy, python-format
-#| msgid "Age â¤ 30 d."
+#, python-format
 msgid "Age ≤ 30 d."
-msgstr "30 d."
+msgstr "Tiempo ≤ 30 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -226,10 +220,9 @@ msgstr "≤ 60 d."
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:38
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:91
-#, fuzzy, python-format
-#| msgid "Age â¤ 60 d."
+#, python-format
 msgid "Age ≤ 60 d."
-msgstr "60 d."
+msgstr "Tiempo ≤ 60 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -241,10 +234,9 @@ msgstr "≤ 90 d."
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:44
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:98
-#, fuzzy, python-format
-#| msgid "Age â¤ 90 d."
+#, python-format
 msgid "Age ≤ 90 d."
-msgstr "90 d."
+msgstr "Tiempo ≤ 90 d."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:14
@@ -457,8 +449,6 @@ msgstr "Grupos Hijos"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_account__child_account_ids
-#, fuzzy
-#| msgid "Child Accounts"
 msgid "Child accounts"
 msgstr "Cuentas Hijas"
 
@@ -507,10 +497,8 @@ msgstr "Moneda de Empresa"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__compute_account_ids
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_account__compute_account_ids
-#, fuzzy
-#| msgid "Computed Accounts"
 msgid "Compute accounts"
-msgstr "Cuentas Calculadas"
+msgstr "Cuentas calculadas"
 
 #. module: account_financial_report
 #: selection:report_trial_balance,hierarchy_on:0
@@ -1765,10 +1753,8 @@ msgstr "Partidas abiertas -"
 
 #. module: account_financial_report
 #: model:ir.actions.act_window,name:account_financial_report.act_action_open_items_wizard_partner_relation
-#, fuzzy
-#| msgid "Open Items -"
 msgid "Open Items Partner"
-msgstr "Partidas abiertas -"
+msgstr "Extracto - Cliente"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_open_items_report_wizard
@@ -1836,10 +1822,8 @@ msgstr "Saldo Acumulado de Empresa"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_move_line__partner_id
-#, fuzzy
-#| msgid "Partner"
 msgid "Partner ID"
-msgstr "Empresa"
+msgstr "Cliente"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:165
@@ -2214,10 +2198,8 @@ msgstr "Grupo de impuestos"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_vat_report_tax__tax_id
-#, fuzzy
-#| msgid "Tax Debit"
 msgid "Tax ID"
-msgstr "Debe"
+msgstr "Impuesto"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_journal_tax_line__tax_name
@@ -2386,10 +2368,8 @@ msgstr "Opciones Informes de impuestos"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_vat_report_wizard
-#, fuzzy
-#| msgid "VAT Report -"
 msgid "VAT Report Wizard"
-msgstr "Informe de impuestos -"
+msgstr "Asistente Informe de impuestos"
 
 #. module: account_financial_report
 #: model:ir.actions.report,name:account_financial_report.action_report_vat_report_xlsx
