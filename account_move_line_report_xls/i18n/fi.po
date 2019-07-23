@@ -6,218 +6,220 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2019-07-23 13:43+0000\n"
+"Last-Translator: Jarmo Kortetjärvi <jarmo.kortetjarvi@gmail.com>\n"
 "Language-Team: none\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.7.1\n"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:89
 #, python-format
 msgid "Account"
-msgstr ""
+msgstr "Tili"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:208
 #, python-format
 msgid "Am. Currency"
-msgstr ""
+msgstr "Määrä valuutassa"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:263
 #, python-format
 msgid "Analytic Account"
-msgstr ""
+msgstr "Kustannuspaikka"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:252
 #, python-format
 msgid "Analytic Account Reference"
-msgstr ""
+msgstr "Kustannuspaikan viite"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:142
 #, python-format
 msgid "Balance"
-msgstr ""
+msgstr "Saldo"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:240
 #, python-format
 msgid "Comp. Curr."
-msgstr ""
+msgstr "Laske tämänh."
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:126
 #, python-format
 msgid "Credit"
-msgstr ""
+msgstr "Kredit"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:219
 #, python-format
 msgid "Curr."
-msgstr ""
+msgstr "Tämänhetk."
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:110
 #, python-format
 msgid "Debit"
-msgstr ""
+msgstr "Debet"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:58
 #, python-format
 msgid "Effective Date"
-msgstr ""
+msgstr "Voimaantulopäivä"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:31
 #, python-format
 msgid "Entry"
-msgstr ""
+msgstr "Vienti"
 
 #. module: account_move_line_report_xls
 #: model:ir.actions.report.xml,name:account_move_line_report_xls.action_move_line_list_xls
 msgid "Export Selected Lines"
-msgstr ""
+msgstr "Vie valitut rivit"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:378
 #, python-format
 msgid "Id"
-msgstr ""
+msgstr "Id"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:326
 #, python-format
 msgid "Invoice"
-msgstr ""
+msgstr "Lasku"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:231
 #, python-format
 msgid "Journal"
-msgstr ""
+msgstr "Päiväkirja"
 
 #. module: account_move_line_report_xls
 #: model:ir.model,name:account_move_line_report_xls.model_account_move_line
 msgid "Journal Item"
-msgstr ""
+msgstr "Päiväkirjatapahtuma"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:390
 #, python-format
 msgid "Journal Items"
-msgstr ""
+msgstr "Päiväkirjan tapahtumat"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:367
 #, python-format
 msgid "Lit."
-msgstr ""
+msgstr "Tod."
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:196
 #, python-format
 msgid "Matched Credits"
-msgstr ""
+msgstr "Täsmäävät kreditit"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:184
 #, python-format
 msgid "Matched Debits"
-msgstr ""
+msgstr "Täsmäävät debetit"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:99
 #, python-format
 msgid "Maturity Date"
-msgstr ""
+msgstr "Eräpäivä"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:40
 #, python-format
 msgid "Name"
-msgstr ""
+msgstr "Nimi"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:358
 #, python-format
 msgid "Notes"
-msgstr ""
+msgstr "Muistiinpanot"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:69
 #, python-format
 msgid "Partner"
-msgstr ""
+msgstr "Kumppani"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:79
 #, python-format
 msgid "Partner Reference"
-msgstr ""
+msgstr "Kumppanin viite"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:274
 #, python-format
 msgid "Product"
-msgstr ""
+msgstr "Tuote"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:284
 #, python-format
 msgid "Product Reference"
-msgstr ""
+msgstr "Tuotteen viite"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:305
 #, python-format
 msgid "Qty"
-msgstr ""
+msgstr "Määrä"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:158
 #, python-format
 msgid "Rec."
-msgstr ""
+msgstr "Tietue"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:171
 #, python-format
 msgid "Reconcile Amount"
-msgstr ""
+msgstr "Hyvityksen määrä"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:49
 #, python-format
 msgid "Reference"
-msgstr ""
+msgstr "Viite"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:347
 #, python-format
 msgid "Res. Am. in Curr."
-msgstr ""
+msgstr "Määrä valuutassa."
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:336
 #, python-format
 msgid "Residual Amount"
-msgstr ""
+msgstr "Ylijäämä"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:316
 #, python-format
 msgid "Statement"
-msgstr ""
+msgstr "Tiliote"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/move_line_list_xls.py:295
 #, python-format
 msgid "Unit of Measure"
-msgstr ""
+msgstr "Mittayksikkö"
