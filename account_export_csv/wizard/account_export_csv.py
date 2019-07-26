@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
 # Copyright 2013 Camptocamp SA
 # Copyright 2017 ACSONE SA/NV
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import itertools
 import tempfile
-from cStringIO import StringIO
+from io import StringIO, BytesIO
 import base64
 
 import csv
@@ -14,7 +13,7 @@ import codecs
 from odoo import api, fields, models, _
 
 
-class AccountUnicodeWriter(object):
+class AccountingWriter(object):
 
     """
     A CSV writer which will write rows to CSV file "f",
@@ -31,16 +30,11 @@ class AccountUnicodeWriter(object):
 
     def writerow(self, row):
         # we ensure that we do not try to encode none or bool
-        row = (x or u'' for x in row)
-
-        encoded_row = [
-            c.encode("utf-8") if isinstance(c, unicode) else c for c in row]
-
-        self.writer.writerow(encoded_row)
+        row = (x or '' for x in row)
+        self.writer.writerow(row)
         # Fetch UTF-8 output from the queue ...
         data = self.queue.getvalue()
-        data = data.decode("utf-8")
-        # ... and reencode it into the target encoding
+        # ... and reencode it into the target encoding as BytesIO
         data = self.encoder.encode(data)
         # write to the target stream
         self.stream.write(data)
@@ -65,11 +59,16 @@ class AccountCSVExport(models.TransientModel):
     date_range_id = fields.Many2one(
         comodel_name='date.range', string='Date range')
     journal_ids = fields.Many2many(
-        comodel_name='account.journal', relation='rel_wizard_journal',
-        column1='wizard_id', column2='journal_id', string='Journals',
+        comodel_name='account.journal', string='Journals',
+        default=lambda s: s._get_journal_default(),
         help='If empty, use all journals, only used for journal entries')
     export_filename = fields.Char(
         string='Export CSV Filename', size=128, default='account_export.csv')
+
+    @api.model
+    def _get_journal_default(self):
+        """ Implements your own default """
+        return False
 
     @api.model
     def _get_company_default(self):
@@ -88,13 +87,12 @@ class AccountCSVExport(models.TransientModel):
                     self.date_end != self.date_range_id.date_end:
                 self.date_range_id = False
 
-    @api.multi
     def action_manual_export_account(self):
         self.ensure_one()
-        rows = self.get_data("account")
-        file_data = StringIO()
+        rows = self._get_data("account")
+        file_data = BytesIO()
         try:
-            writer = AccountUnicodeWriter(file_data)
+            writer = AccountingWriter(file_data)
             writer.writerows(rows)
             file_value = file_data.getvalue()
             self.write({'data': base64.encodestring(file_value)})
@@ -104,7 +102,6 @@ class AccountCSVExport(models.TransientModel):
             'type': 'ir.actions.act_window',
             'res_model': 'account.csv.export',
             'view_mode': 'form',
-            'view_type': 'form',
             'res_id': self.id,
             'views': [(False, 'form')],
             'target': 'new',
@@ -112,11 +109,11 @@ class AccountCSVExport(models.TransientModel):
 
     def _get_header_account(self):
         return [
-            _(u'CODE'),
-            _(u'NAME'),
-            _(u'DEBIT'),
-            _(u'CREDIT'),
-            _(u'BALANCE'),
+            _('CODE'),
+            _('NAME'),
+            _('DEBIT'),
+            _('CREDIT'),
+            _('BALANCE'),
         ]
 
     def _get_rows_account(self, journal_ids):
@@ -146,10 +143,10 @@ class AccountCSVExport(models.TransientModel):
 
     def action_manual_export_analytic(self):
         self.ensure_one()
-        rows = self.get_data("analytic")
-        file_data = StringIO()
+        rows = self._get_data("analytic")
+        file_data = BytesIO()
         try:
-            writer = AccountUnicodeWriter(file_data)
+            writer = AccountingWriter(file_data)
             writer.writerows(rows)
             file_value = file_data.getvalue()
             self.write({'data': base64.encodestring(file_value)})
@@ -167,13 +164,13 @@ class AccountCSVExport(models.TransientModel):
 
     def _get_header_analytic(self):
         return [
-            _(u'ANALYTIC CODE'),
-            _(u'ANALYTIC NAME'),
-            _(u'CODE'),
-            _(u'ACCOUNT NAME'),
-            _(u'DEBIT'),
-            _(u'CREDIT'),
-            _(u'BALANCE'),
+            _('ANALYTIC CODE'),
+            _('ANALYTIC NAME'),
+            _('CODE'),
+            _('ACCOUNT NAME'),
+            _('DEBIT'),
+            _('CREDIT'),
+            _('BALANCE'),
         ]
 
     def _get_rows_analytic(self, journal_ids):
@@ -207,7 +204,7 @@ class AccountCSVExport(models.TransientModel):
 
     def action_manual_export_journal_entries(self):
         """
-        Here we use TemporaryFile to avoid full filling the OpenERP worker
+        Here we use TemporaryFile to avoid full filling the Odoo worker
         Memory
         We also write the data to the wizard with SQL query as write seems
         to use too much memory as well.
@@ -220,14 +217,14 @@ class AccountCSVExport(models.TransientModel):
 
         To be able to export bigger volume of data, it is advised to set
         limit_memory_hard to 2097152000 (2 GB) to generate the file and let
-        OpenERP load it in the wizard when trying to download it.
+        Odoo load it in the wizard when trying to download it.
 
         Tested with up to a generation of 700k entry lines
         """
         self.ensure_one()
-        rows = self.get_data("journal_entries")
+        rows = self._get_data("journal_entries")
         with tempfile.TemporaryFile() as file_data:
-            writer = AccountUnicodeWriter(file_data)
+            writer = AccountingWriter(file_data)
             writer.writerows(rows)
             with tempfile.TemporaryFile() as base64_data:
                 file_data.seek(0)
@@ -241,7 +238,6 @@ class AccountCSVExport(models.TransientModel):
             'type': 'ir.actions.act_window',
             'res_model': 'account.csv.export',
             'view_mode': 'form',
-            'view_type': 'form',
             'res_id': self.id,
             'views': [(False, 'form')],
             'target': 'new',
@@ -250,31 +246,30 @@ class AccountCSVExport(models.TransientModel):
     def _get_header_journal_entries(self):
         return [
             # Standard Sage export fields
-            _(u'DATE'),
-            _(u'JOURNAL CODE'),
-            _(u'ACCOUNT CODE'),
-            _(u'PARTNER NAME'),
-            _(u'REF'),
-            _(u'DESCRIPTION'),
-            _(u'DEBIT'),
-            _(u'CREDIT'),
-            _(u'FULL RECONCILE'),
-            _(u'ANALYTIC ACCOUNT CODE'),
+            _('DATE'),
+            _('JOURNAL CODE'),
+            _('ACCOUNT CODE'),
+            _('PARTNER NAME'),
+            _('REF'),
+            _('DESCRIPTION'),
+            _('DEBIT'),
+            _('CREDIT'),
+            _('FULL RECONCILE'),
+            _('ANALYTIC ACCOUNT CODE'),
 
             # Other fields
-            _(u'ENTRY NUMBER'),
-            _(u'ACCOUNT NAME'),
-            _(u'BALANCE'),
-            _(u'AMOUNT CURRENCY'),
-            _(u'CURRENCY'),
-            _(u'ANALYTIC ACCOUNT NAME'),
-            _(u'JOURNAL'),
-            _(u'TAX CODE'),
-            _(u'TAX NAME'),
-            _(u'BANK STATEMENT'),
+            _('ENTRY NUMBER'),
+            _('ACCOUNT NAME'),
+            _('BALANCE'),
+            _('AMOUNT CURRENCY'),
+            _('CURRENCY'),
+            _('ANALYTIC ACCOUNT NAME'),
+            _('JOURNAL'),
+            _('TAX CODE'),
+            _('TAX NAME'),
+            _('BANK STATEMENT'),
         ]
 
-    @api.multi
     def _get_rows_journal_entries(self, journal_ids):
         """
         Create a generator of rows of the CSV file
@@ -339,7 +334,7 @@ class AccountCSVExport(models.TransientModel):
             for row in rows:
                 yield row
 
-    def get_data(self, result_type):
+    def _get_data(self, result_type):
         self.ensure_one()
         get_header_func = getattr(
             self, ("_get_header_%s" % (result_type)), None)

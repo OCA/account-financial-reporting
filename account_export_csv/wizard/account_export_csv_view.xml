@@ -4,14 +4,11 @@
     <record id="account_csv_export_view" model="ir.ui.view">
          <field name="name">Accounting Entries CSV Export</field>
          <field name="model">account.csv.export</field>
-         <field name="type">form</field>
          <field name="arch" type="xml">
             <form string="Accounting CSV Export">
                 <group>
                     <group>
                         <field name="company_id" />
-                    </group>
-                    <group>
                     </group>
                  </group>
                 <group>
@@ -20,7 +17,7 @@
                         <label for="date_start" string="Date" class="oe_inline"/>
                         <div>
                             <field name="date_start" class="oe_inline"/>
-                            <label string="-" class="oe_inline"/>
+                            <span string="-" class="oe_inline"/>
                             <field name="date_end" class="oe_inline"/>
                         </div>
                     </group>
@@ -34,7 +31,7 @@
                <separator string ="Report" colspan="4"/>
                 <group colspan="4">
                     <field name="data" filename="export_filename"/>
-                 </group>
+                </group>
                 <footer>
                     <button name="action_manual_export_account" string="Trial Balance" type="object" icon="fa-cog" class="oe_highlight"/>
                     <button name="action_manual_export_analytic" string="Analytic Balance (with accounts)" type="object" icon="fa-cog" class="oe_highlight"/>
@@ -51,10 +48,8 @@
          <field name="name">Accounting CSV Export</field>
          <field name="res_model">account.csv.export</field>
          <field name="type">ir.actions.act_window</field>
-         <field name="view_type">form</field>
-         <field name="view_mode">tree,form</field>
+         <field name="view_mode">form</field>
          <field name="view_id" ref="account_csv_export_view"/>
-         <field name="context">{}</field>
          <field name="target">new</field>
    </record>
 
