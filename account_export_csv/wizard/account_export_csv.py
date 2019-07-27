@@ -38,12 +38,17 @@ class AccountingWriter(object):
         data = self.encoder.encode(data)
         # write to the target stream
         self.stream.write(data)
-        # empty queue
-        self.queue.truncate(0)
+        # empty queue with seek() instead of truncate()
+        # see https://stackoverflow.com/a/9729516
+        # also problems with seek() if next line is shorter than previous
+        # chars of previous line are kept in the new one
+        self.queue.flush()
 
     def writerows(self, rows):
         for row in rows:
             self.writerow(row)
+        # https://docs.python.org/3/library/io.html#io.IOBase.close
+        self.queue.close()
 
 
 class AccountCSVExport(models.TransientModel):
