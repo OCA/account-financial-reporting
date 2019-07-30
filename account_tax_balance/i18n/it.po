@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-28 10:11+0000\n"
-"PO-Revision-Date: 2018-12-05 21:09+0000\n"
+"PO-Revision-Date: 2019-07-30 15:43+0000\n"
 "Last-Translator: Sergio Zanchetta <primes2h@gmail.com>\n"
 "Language-Team: Italian (https://www.transifex.com/oca/teams/23907/it/)\n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.3\n"
+"X-Generator: Weblate 3.7.1\n"
 
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
@@ -73,7 +73,7 @@ msgstr ""
 #. module: account_tax_balance
 #: model:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "Cancel"
-msgstr "Cancellare"
+msgstr "Annulla"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances_company_id
