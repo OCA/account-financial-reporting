@@ -6,97 +6,99 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2019-08-02 09:44+0000\n"
+"Last-Translator: Marcel Savegnago <marcel.savegnago@gmail.com>\n"
 "Language-Team: none\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 3.7.1\n"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:242
 #, python-format
 msgid "1 - 30 Days"
-msgstr ""
+msgstr "1 - 30 Dias"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:253
 #, python-format
 msgid "1 Month"
-msgstr ""
+msgstr "1 Mês"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:246
 #, python-format
 msgid "121 Days +"
-msgstr ""
+msgstr "121 Dias +"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:254
 #, python-format
 msgid "2 Months"
-msgstr ""
+msgstr "2 Meses"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:255
 #, python-format
 msgid "3 Months"
-msgstr ""
+msgstr "3 Meses"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:243
 #, python-format
 msgid "31 - 60 Days"
-msgstr ""
+msgstr "31 - 60 Dias"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:256
 #, python-format
 msgid "4 Months"
-msgstr ""
+msgstr "4 Meses"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:244
 #, python-format
 msgid "61 - 90 Days"
-msgstr ""
+msgstr "61 - 90 Dias"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:245
 #, python-format
 msgid "91 - 120 Days"
-msgstr ""
+msgstr "91 - 120 Dias"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
 msgid "<strong>Date:</strong>"
-msgstr ""
+msgstr "<strong>Data:</strong>"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
 msgid "<strong>Partner Code:</strong>"
-msgstr ""
+msgstr "<strong>Código do Parceiro:</strong>"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
 msgid "<strong>The partner doesn't have due entries.</strong>"
-msgstr ""
+msgstr "<strong>O parceiro não tem registros vencidos.</strong>"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__account_type
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__account_type
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__account_type
 msgid "Account type"
-msgstr ""
+msgstr "Tipo de Conta"
 
 #. module: partner_statement
 #: model:ir.actions.report,name:partner_statement.action_print_activity_statement
 msgid "Activity Statement"
-msgstr ""
+msgstr "Relatório de Atividade"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_activity_statement_wizard
