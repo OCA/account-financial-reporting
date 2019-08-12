@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # © 2016 Therp BV <http://therp.nl>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 from lxml import etree
@@ -12,9 +11,10 @@ class TestAccountFinancialReportHorizontal(TransactionCase):
             active_model='ir.ui.view',
         ).create({}).check_report()
         data = action['data']
-        html = self.env['report'].with_context(action['context']).get_html(
+        report = self.env['ir.actions.report']._get_report_from_name(
+            action['report_name'])
+        html = report.with_context(action['context']).render_qweb_html(
             self.env[data['model']].browse(data['ids']),
-            report_name=action['report_name'],
             data=data,
-        )
-        self.assertTrue(etree.fromstring(html).xpath('//div[@class="row"]'))
+        )[0]
+        self.assertTrue(etree.fromstring(html).xpath("//div[hasclass('row')]"))
