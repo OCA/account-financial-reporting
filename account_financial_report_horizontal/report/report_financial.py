@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # © 2016 Therp BV <http://therp.nl>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 from odoo import api, models
@@ -21,9 +20,9 @@ class ReportFinancial(models.AbstractModel):
         return self.get_account_lines(data, side='right')
 
     @api.multi
-    def render_html(self, docids, data):
+    def get_report_values(self, docids, data):
         data.setdefault('form', {}).update(
             get_left_lines=self.get_left_lines,
             get_right_lines=self.get_right_lines,
         )
-        return super(ReportFinancial, self).render_html(docids, data)
+        return super(ReportFinancial, self).get_report_values(docids, data)
