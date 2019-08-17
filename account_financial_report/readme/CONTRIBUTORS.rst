@@ -15,6 +15,10 @@
 * Alexis de Lattre <alexis@via.ecp.fr>
 * Mihai Fekete <feketemihai@gmail.com>
 * Miquel Raïch <miquel.raich@eficent.com>
+* `Tecnativa <https://www.tecnativa.com>`__:
+
+  * Pedro M. Baeza
+  * Sergio Teruel
 
 Much of the work in this module was done at a sprint in Sorrento, Italy in
 April 2016.
