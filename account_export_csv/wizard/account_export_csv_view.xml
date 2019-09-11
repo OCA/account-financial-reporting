@@ -33,9 +33,9 @@
                     <field name="data" filename="export_filename"/>
                 </group>
                 <footer>
-                    <button name="action_manual_export_account" string="Trial Balance" type="object" icon="fa-cog" class="oe_highlight"/>
-                    <button name="action_manual_export_analytic" string="Analytic Balance (with accounts)" type="object" icon="fa-cog" class="oe_highlight"/>
-                    <button name="action_manual_export_journal_entries" string="Journal Entries" type="object" icon="fa-cog" class="oe_highlight"/>
+                    <button name="action_manual_export_account" string="Trial Balance" type="object" icon="fa-cog"/>
+                    <button name="action_manual_export_analytic" string="Analytic Balance (with accounts)" type="object" icon="fa-cog"/>
+                    <button name="action_manual_export_journal_entries" string="Journal Entries" type="object" icon="fa-cog"/>
                     or
                     <button string="Close" class="oe_link" special="cancel" />
                 </footer>
