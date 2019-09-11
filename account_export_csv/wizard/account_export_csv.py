@@ -38,11 +38,9 @@ class AccountingWriter(object):
         data = self.encoder.encode(data)
         # write to the target stream
         self.stream.write(data)
-        # empty queue with seek() instead of truncate()
-        # see https://stackoverflow.com/a/9729516
-        # also problems with seek() if next line is shorter than previous
-        # chars of previous line are kept in the new one
-        self.queue.flush()
+        # seek() or truncate() have side effect then we reinitialize StringIO
+        # https://stackoverflow.com/questions/4330812/how-do-i-clear-a-stringio-object
+        self.queue = StringIO()
 
     def writerows(self, rows):
         for row in rows:
