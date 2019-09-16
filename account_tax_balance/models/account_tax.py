@@ -37,7 +37,7 @@ class AccountTax(models.Model):
         return (
             context.get('from_date', fields.Date.context_today(self)),
             context.get('to_date', fields.Date.context_today(self)),
-            context.get('company_id', self.env.user.company_id.id),
+            context.get('company_ids', [self.env.user.company_id.id]),
             context.get('target_move', 'posted'),
         )
 
@@ -49,17 +49,19 @@ class AccountTax(models.Model):
         Caveat: this ignores record rules and ACL but it is good
         enough for filtering taxes with activity during the period.
         """
+        from_date, to_date, company_ids, _ = self.get_context_values()
+        company_ids = tuple(company_ids)
         req = """
             SELECT id
             FROM account_tax at
             WHERE
-            company_id = %s AND
+            company_id in %s AND
             EXISTS (
               SELECT 1 FROM account_move_Line aml
               WHERE
                 date >= %s AND
                 date <= %s AND
-                company_id = %s AND (
+                company_id in %s AND (
                   tax_line_id = at.id OR
                   EXISTS (
                     SELECT 1 FROM account_move_line_account_tax_rel
@@ -69,9 +71,8 @@ class AccountTax(models.Model):
                 )
             )
         """
-        from_date, to_date, company_id, target_move = self.get_context_values()
         self.env.cr.execute(
-            req, (company_id, from_date, to_date, company_id))
+            req, (company_ids, from_date, to_date, company_ids))
         return [r[0] for r in self.env.cr.fetchall()]
 
     @api.multi
@@ -121,11 +122,11 @@ class AccountTax(models.Model):
             state = []
         return state
 
-    def get_move_line_partial_domain(self, from_date, to_date, company_id):
+    def get_move_line_partial_domain(self, from_date, to_date, company_ids):
         return [
             ('date', '<=', to_date),
             ('date', '>=', from_date),
-            ('company_id', '=', company_id),
+            ('company_id', 'in', company_ids),
         ]
 
     def compute_balance(self, tax_or_base='tax', move_type=None):
@@ -161,11 +162,12 @@ class AccountTax(models.Model):
         return domain
 
     def get_move_lines_domain(self, tax_or_base='tax', move_type=None):
-        from_date, to_date, company_id, target_move = self.get_context_values()
+        from_date, to_date, company_ids, target_move = \
+            self.get_context_values()
         state_list = self.get_target_state_list(target_move)
         type_list = self.get_target_type_list(move_type)
         domain = self.get_move_line_partial_domain(
-            from_date, to_date, company_id)
+            from_date, to_date, company_ids)
         balance_domain = []
         if tax_or_base == 'tax':
             balance_domain = self.get_balance_domain(state_list, type_list)
