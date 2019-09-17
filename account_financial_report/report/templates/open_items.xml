@@ -27,8 +27,8 @@
             <t t-foreach="o.account_ids" t-as="account">
                 <div class="page_break">
                     <!-- Display account header -->
-                    <div class="act_as_table list_table" style="margin-top: 10px;"/>
-                    <div class="act_as_caption account_title"
+                    <div class="act_as_table list_table" style="margin-top: 10px;" />
+                    <div class="account_title"
                          style="width: 100%;">
                         <span t-field="account.code"/>
                         -
@@ -39,7 +39,7 @@
                     <t t-foreach="account.partner_ids" t-as="partner">
                         <div class="page_break">
                             <!-- Display partner header -->
-                            <div class="act_as_caption account_title">
+                            <div class="account_title">
                                 <span t-field="partner.name"/>
                             </div>
 
@@ -93,7 +93,7 @@
             <div class="act_as_thead">
                 <div class="act_as_row labels">
                     <!--## date-->
-                    <div class="act_as_cell first_column" style="width: 4.51%;">
+                    <div class="act_as_cell first_column" style="width: 5.51%;">
                         Date</div>
                     <!--## move-->
                     <div class="act_as_cell" style="width: 9.76%;">Entry</div>
@@ -105,7 +105,7 @@
                     <div class="act_as_cell" style="width: 15.07%;">Partner
                     </div>
                     <!--## ref - label-->
-                    <div class="act_as_cell" style="width: 25.5%;">Ref -
+                    <div class="act_as_cell" style="width: 24.5%;">Ref -
                         Label</div>
                     <!--## date_due-->
                     <div class="act_as_cell" style="width: 6.47%;">Due
