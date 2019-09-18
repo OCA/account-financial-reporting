@@ -75,8 +75,8 @@ class TrialBalanceReportAccount(models.TransientModel):
     )
     hide_line = fields.Boolean(compute='_compute_hide_line')
     # Data fields, used to keep link with real object.
-    # Sequence is a Char later built with 'parent_path' for groups
-    # and parent_path + account code for accounts
+    # Sequence is a Char later built with 'code_prefix' for groups
+    # and code_prefix + account code for accounts
     sequence = fields.Char(index=True, default='1')
     level = fields.Integer(index=True, default=1)
 
@@ -413,7 +413,7 @@ SELECT
     accgroup.parent_id,
     coalesce(accgroup.code_prefix, accgroup.name),
     accgroup.name,
-    accgroup.parent_path,
+    accgroup.code_prefix,
     accgroup.level
 FROM
     account_group accgroup"""
