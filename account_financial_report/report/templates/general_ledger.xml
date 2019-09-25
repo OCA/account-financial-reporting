@@ -67,7 +67,7 @@
                     </t>
 
                     <!-- Display account footer -->
-                    <t t-call="account_financial_report.report_general_ledger_ending_cumul">
+                    <t t-if="not o.filter_partner_ids" t-call="account_financial_report.report_general_ledger_ending_cumul">
                         <t t-set="account_or_partner_object" t-value="account"/>
                         <t t-set="type" t-value='"account_type"'/>
                     </t>
