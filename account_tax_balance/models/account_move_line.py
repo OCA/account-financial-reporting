@@ -1,16 +1,15 @@
 # Copyright 2017 ACSONE SA/NV
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, models
+from odoo import models
 
 
 class AccountMoveLine(models.Model):
 
     _inherit = 'account.move.line'
 
-    @api.model_cr
     def init(self):
-        res = super(AccountMoveLine, self).init()
+        res = super().init()
         self._cr.execute("""
             SELECT indexname FROM pg_indexes
             WHERE indexname = 'account_move_line_date_tax_line_id_idx'

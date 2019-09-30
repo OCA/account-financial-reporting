@@ -27,7 +27,6 @@ class WizardOpenTaxBalances(models.TransientModel):
         else:
             self.from_date = self.to_date = None
 
-    @api.multi
     def open_taxes(self):
         self.ensure_one()
         action = self.env.ref('account_tax_balance.action_tax_balances_tree')
