@@ -22,7 +22,6 @@ class AccountMove(models.Model):
         selection='_selection_move_type',
         compute='_compute_move_type', store=True, readonly=True)
 
-    @api.multi
     @api.depends(
         'line_ids.account_id.internal_type', 'line_ids.balance',
         'line_ids.account_id.user_type_id.type'

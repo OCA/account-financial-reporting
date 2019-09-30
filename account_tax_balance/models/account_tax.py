@@ -75,7 +75,6 @@ class AccountTax(models.Model):
             req, (company_ids, from_date, to_date, company_ids))
         return [r[0] for r in self.env.cr.fetchall()]
 
-    @api.multi
     def _compute_has_moves(self):
         ids_with_moves = set(self._account_tax_ids_with_moves())
         for tax in self:
@@ -186,32 +185,26 @@ class AccountTax(models.Model):
         vals['domain'] = domain
         return vals
 
-    @api.multi
     def view_tax_lines(self):
         self.ensure_one()
         return self.get_lines_action(tax_or_base='tax')
 
-    @api.multi
     def view_base_lines(self):
         self.ensure_one()
         return self.get_lines_action(tax_or_base='base')
 
-    @api.multi
     def view_tax_regular_lines(self):
         self.ensure_one()
         return self.get_lines_action(tax_or_base='tax', move_type='regular')
 
-    @api.multi
     def view_base_regular_lines(self):
         self.ensure_one()
         return self.get_lines_action(tax_or_base='base', move_type='regular')
 
-    @api.multi
     def view_tax_refund_lines(self):
         self.ensure_one()
         return self.get_lines_action(tax_or_base='tax', move_type='refund')
 
-    @api.multi
     def view_base_refund_lines(self):
         self.ensure_one()
         return self.get_lines_action(tax_or_base='base', move_type='refund')
