@@ -9,23 +9,32 @@ class WizardOpenTaxBalances(models.TransientModel):
     _description = 'Wizard Open Tax Balances'
 
     company_id = fields.Many2one(
-        'res.company', 'Company', required=True,
+        'res.company', required=True,
         default=lambda self: self.env.user.company_id)
-    from_date = fields.Date('From date', required=True)
-    to_date = fields.Date('To date', required=True)
-    date_range_id = fields.Many2one('date.range', 'Date range')
+    from_date = fields.Date(
+        required=True,
+        store=True,
+        readonly=False,
+        compute='_compute_date_range')
+    to_date = fields.Date(
+        required=True,
+        store=True,
+        readonly=False,
+        compute='_compute_date_range')
+    date_range_id = fields.Many2one('date.range')
     target_move = fields.Selection([
         ('posted', 'All Posted Entries'),
         ('all', 'All Entries'),
     ], 'Target Moves', required=True, default='posted')
 
-    @api.onchange('date_range_id')
-    def onchange_date_range_id(self):
-        if self.date_range_id:
-            self.from_date = self.date_range_id.date_start
-            self.to_date = self.date_range_id.date_end
-        else:
-            self.from_date = self.to_date = None
+    @api.depends('date_range_id')
+    def _compute_date_range(self):
+        for wizard in self:
+            if wizard.date_range_id:
+                wizard.from_date = wizard.date_range_id.date_start
+                wizard.to_date = wizard.date_range_id.date_end
+            else:
+                wizard.from_date = wizard.to_date = None
 
     def open_taxes(self):
         self.ensure_one()
