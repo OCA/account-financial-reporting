@@ -1,5 +1,6 @@
-# © 2016 Lorenzo Battistini - Agile Business Group
-# © 2016 Giovanni Capalbo <giovanni@therp.nl>
+# Copyright 2016 Lorenzo Battistini - Agile Business Group
+# Copyright 2016 Giovanni Capalbo <giovanni@therp.nl>
+# Copyright 2019 Andrea Stirpe <a.stirpe@onestein.nl>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from datetime import datetime
@@ -15,7 +16,7 @@ from odoo.tests.common import HttpCase
 class TestAccountTaxBalance(HttpCase):
 
     def setUp(self):
-        super(TestAccountTaxBalance, self).setUp()
+        super().setUp()
         self.range_type = self.env['date.range.type'].create(
             {'name': 'Fiscal year',
              'company_id': False,
@@ -28,7 +29,7 @@ class TestAccountTaxBalance(HttpCase):
             'name_prefix': '%s-' % self.current_year,
             'type_id': self.range_type.id,
             'duration_count': 1,
-            'unit_of_time': MONTHLY,
+            'unit_of_time': str(MONTHLY),
             'count': 12})
         range_generator.action_apply()
         self.range = self.env['date.range']
@@ -45,12 +46,7 @@ class TestAccountTaxBalance(HttpCase):
             'name': 'Tax 10.0%',
             'amount': 10.0,
             'amount_type': 'percent',
-            'account_id': tax_account_id,
         })
-        invoice_account_id = self.env['account.account'].search(
-            [('user_type_id', '=', self.env.ref(
-                'account.data_account_type_receivable'
-            ).id)], limit=1).id
         invoice_line_account_id = self.env['account.account'].create({
             'user_type_id': self.env.ref(
                 'account.data_account_type_expenses'
@@ -58,27 +54,28 @@ class TestAccountTaxBalance(HttpCase):
             'code': 'EXPTEST',
             'name': 'Test expense account',
         }).id
-        invoice = self.env['account.invoice'].create({
+        product = self.env.ref('product.product_product_4')
+        invoice = self.env['account.move'].create({
             'partner_id': self.env.ref('base.res_partner_2').id,
-            'account_id': invoice_account_id,
             'type': 'out_invoice',
+            'invoice_line_ids': [
+                (0, None, {
+                    'product_id': product.id,
+                    'quantity': 1.0,
+                    'price_unit': 100.0,
+                    'name': 'product that cost 100',
+                    'account_id': invoice_line_account_id,
+                    'tax_ids': [(6, 0, [tax.id])],
+                }),
+            ]
         })
 
-        self.env['account.invoice.line'].create({
-            'product_id': self.env.ref('product.product_product_4').id,
-            'quantity': 1.0,
-            'price_unit': 100.0,
-            'invoice_id': invoice.id,
-            'name': 'product that cost 100',
-            'account_id': invoice_line_account_id,
-            'invoice_line_tax_ids': [(6, 0, [tax.id])],
-        })
         invoice._onchange_invoice_line_ids()
         invoice._convert_to_write(invoice._cache)
         self.assertEqual(invoice.state, 'draft')
 
         # change the state of invoice to open by clicking Validate button
-        invoice.action_invoice_open()
+        invoice.action_post()
 
         self.assertEqual(tax.base_balance, 100.)
         self.assertEqual(tax.balance, 10.)
@@ -116,12 +113,12 @@ class TestAccountTaxBalance(HttpCase):
         base_action = tax.view_base_lines()
         tax_action_move_lines = self.env['account.move.line'].\
             search(tax_action['domain'])
-        self.assertTrue(invoice.move_id.line_ids & tax_action_move_lines)
+        self.assertTrue(invoice.line_ids & tax_action_move_lines)
         self.assertEqual(
             tax_action['xml_id'], 'account.action_account_moves_all_tree')
         base_action_move_lines = self.env['account.move.line'].\
             search(base_action['domain'])
-        self.assertTrue(invoice.move_id.line_ids & base_action_move_lines)
+        self.assertTrue(invoice.line_ids & base_action_move_lines)
         self.assertEqual(
             base_action['xml_id'], 'account.action_account_moves_all_tree')
 
@@ -131,27 +128,28 @@ class TestAccountTaxBalance(HttpCase):
         state_list = tax.get_target_state_list(target_move='whatever')
         self.assertEqual(state_list, [])
 
-        refund = self.env['account.invoice'].create({
+        product = self.env.ref('product.product_product_2')
+        refund = self.env['account.move'].create({
             'partner_id': self.env.ref('base.res_partner_2').id,
-            'account_id': invoice_account_id,
             'type': 'out_refund',
+            'invoice_line_ids': [
+                (0, None, {
+                    'product_id': product.id,
+                    'quantity': 1.0,
+                    'price_unit': 25.0,
+                    'name': 'returned product that cost 25',
+                    'account_id': invoice_line_account_id,
+                    'tax_ids': [(6, 0, [tax.id])],
+                }),
+            ]
         })
 
-        self.env['account.invoice.line'].create({
-            'product_id': self.env.ref('product.product_product_2').id,
-            'quantity': 1.0,
-            'price_unit': 25.0,
-            'invoice_id': refund.id,
-            'name': 'returned product that cost 25',
-            'account_id': invoice_line_account_id,
-            'invoice_line_tax_ids': [(6, 0, [tax.id])],
-        })
         refund._onchange_invoice_line_ids()
         refund._convert_to_write(invoice._cache)
         self.assertEqual(refund.state, 'draft')
 
         # change the state of refund to open by clicking Validate button
-        refund.action_invoice_open()
+        refund.action_post()
 
         # force the _compute_balance() to be triggered
         tax._compute_balance()
@@ -164,9 +162,12 @@ class TestAccountTaxBalance(HttpCase):
         self.assertEqual(tax.balance_refund, -2.5)
 
         # Taxes on liquidity type moves are included
+        tax_repartition_line = tax.invoice_repartition_line_ids\
+            .filtered(lambda line: line.repartition_type == 'tax')
         liquidity_account_id = self.env['account.account'].search(
             [('internal_type', '=', 'liquidity')], limit=1).id
-        self.env['account.move'].create({
+        move = self.env['account.move'].create({
+            'type': 'entry',
             'date': Date.context_today(self.env.user),
             'journal_id': self.env['account.journal'].search(
                 [('type', '=', 'bank')], limit=1).id,
@@ -183,13 +184,14 @@ class TestAccountTaxBalance(HttpCase):
                 'name': 'Bank Fees',
                 'tax_ids': [(4, tax.id)]
             }), (0, 0, {
-                'account_id': tax.account_id.id,
+                'account_id': tax_account_id,
                 'debit': 0,
                 'credit': 10,
                 'name': 'Bank Fees',
-                'tax_line_id': tax.id,
+                'tax_repartition_line_id': tax_repartition_line.id,
             })],
-        }).post()
+        })
+        move.action_post()
         tax.refresh()
         self.assertEqual(tax.base_balance, 175.)
         self.assertEqual(tax.balance, 17.5)
