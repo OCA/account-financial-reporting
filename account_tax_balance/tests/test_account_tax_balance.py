@@ -95,8 +95,8 @@ class TestAccountTaxBalance(HttpCase):
         wizard = self.env['wizard.open.tax.balances'].new({
             'date_range_id': current_range[0].id,
         })
-        wizard.onchange_date_range_id()
-        wizard._convert_to_write(wizard._cache)
+        self.assertEqual(wizard.from_date, current_range[0].date_start)
+        self.assertEqual(wizard.to_date, current_range[0].date_end)
         action = wizard.open_taxes()
         self.assertEqual(
             action['context']['from_date'], current_range[0].date_start)
