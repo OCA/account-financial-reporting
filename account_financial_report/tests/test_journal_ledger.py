@@ -84,7 +84,7 @@ class TestJournalReport(TransactionCase):
     def setUp(self):
         super(TestJournalReport, self).setUp()
         self.AccountObj = self.env['account.account']
-        self.InvoiceObj = self.env['account.invoice']
+        self.InvoiceObj = self.env['account.move']
         self.JournalObj = self.env['account.journal']
         self.JournalReportObj = self.env['journal.ledger.report.wizard']
         self.MoveObj = self.env['account.move']

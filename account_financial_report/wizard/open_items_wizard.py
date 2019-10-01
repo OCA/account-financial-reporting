@@ -96,7 +96,6 @@ class OpenItemsReportWizard(models.TransientModel):
         else:
             self.account_ids = None
 
-    @api.multi
     def button_export_html(self):
         self.ensure_one()
         action = self.env.ref(
@@ -114,13 +113,11 @@ class OpenItemsReportWizard(models.TransientModel):
         vals['context'] = context1
         return vals
 
-    @api.multi
     def button_export_pdf(self):
         self.ensure_one()
         report_type = 'qweb-pdf'
         return self._export(report_type)
 
-    @api.multi
     def button_export_xlsx(self):
         self.ensure_one()
         report_type = 'xlsx'

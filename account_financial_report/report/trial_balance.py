@@ -201,7 +201,6 @@ class TrialBalanceReportCompute(models.TransientModel):
 
     _inherit = 'report_trial_balance'
 
-    @api.multi
     def print_report(self, report_type):
         self.ensure_one()
         if report_type == 'xlsx':
@@ -246,7 +245,6 @@ class TrialBalanceReportCompute(models.TransientModel):
             'fy_start_date': self.fy_start_date,
         }
 
-    @api.multi
     def compute_data_for_report(self):
         self.ensure_one()
         # Compute General Ledger Report Data.

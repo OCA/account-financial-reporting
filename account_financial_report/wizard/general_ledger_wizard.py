@@ -170,7 +170,6 @@ class GeneralLedgerReportWizard(models.TransientModel):
             self.date_from = self.date_range_id.date_start
             self.date_to = self.date_range_id.date_end
 
-    @api.multi
     @api.constrains('company_id', 'date_range_id')
     def _check_company_id_date_range_id(self):
         for rec in self.sudo():
@@ -203,7 +202,6 @@ class GeneralLedgerReportWizard(models.TransientModel):
         else:
             self.receivable_accounts_only = self.payable_accounts_only = False
 
-    @api.multi
     def button_export_html(self):
         self.ensure_one()
         action = self.env.ref(
@@ -220,13 +218,11 @@ class GeneralLedgerReportWizard(models.TransientModel):
         action_data['context'] = context1
         return action_data
 
-    @api.multi
     def button_export_pdf(self):
         self.ensure_one()
         report_type = 'qweb-pdf'
         return self._export(report_type)
 
-    @api.multi
     def button_export_xlsx(self):
         self.ensure_one()
         report_type = 'xlsx'

@@ -6,7 +6,7 @@ from odoo import api, models
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
-    @api.model_cr
+    # need to other replacement for model_cr -?
     def init(self):
         """
             The join between accounts_partners subquery and account_move_line

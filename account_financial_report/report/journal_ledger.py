@@ -76,7 +76,6 @@ class ReportJournalLedger(models.TransientModel):
     def _get_group_options(self):
         return self.env['journal.ledger.report.wizard']._get_group_options()
 
-    @api.multi
     def compute_data_for_report(self):
         self.ensure_one()
         self._inject_journal_values()
@@ -91,7 +90,6 @@ class ReportJournalLedger(models.TransientModel):
         # Refresh cache because all data are computed with SQL requests
         self.invalidate_cache()
 
-    @api.multi
     def _inject_journal_values(self):
         self.ensure_one()
         sql = """
@@ -142,7 +140,6 @@ class ReportJournalLedger(models.TransientModel):
         )
         self.env.cr.execute(sql, params)
 
-    @api.multi
     def _inject_move_values(self):
         self.ensure_one()
         sql = """
@@ -161,7 +158,6 @@ class ReportJournalLedger(models.TransientModel):
         params = self._get_inject_move_params()
         self.env.cr.execute(sql, params)
 
-    @api.multi
     def _get_inject_move_insert(self):
         return """
             INSERT INTO report_journal_ledger_move (
@@ -175,7 +171,6 @@ class ReportJournalLedger(models.TransientModel):
             )
         """
 
-    @api.multi
     def _get_inject_move_select(self):
         return """
             SELECT
@@ -193,7 +188,6 @@ class ReportJournalLedger(models.TransientModel):
                     on (rjqj.journal_id = am.journal_id)
         """
 
-    @api.multi
     def _get_inject_move_where_clause(self):
         self.ensure_one()
         where_clause = """
@@ -211,7 +205,6 @@ class ReportJournalLedger(models.TransientModel):
             """
         return where_clause
 
-    @api.multi
     def _get_inject_move_order_by(self):
         self.ensure_one()
         order_by = """
@@ -223,7 +216,6 @@ class ReportJournalLedger(models.TransientModel):
             order_by += " am.date, am.name"
         return order_by
 
-    @api.multi
     def _get_inject_move_params(self):
         params = [
             self.env.uid,
@@ -237,7 +229,6 @@ class ReportJournalLedger(models.TransientModel):
 
         return tuple(params)
 
-    @api.multi
     def _inject_move_line_values(self):
         self.ensure_one()
         sql = """
@@ -347,7 +338,6 @@ class ReportJournalLedger(models.TransientModel):
         )
         self.env.cr.execute(sql, params)
 
-    @api.multi
     def _inject_report_tax_values(self):
         self.ensure_one()
         sql_distinct_tax_id = """
@@ -435,7 +425,6 @@ class ReportJournalLedger(models.TransientModel):
             )
             self.env.cr.execute(sql, params)
 
-    @api.multi
     def _inject_journal_tax_values(self):
         self.ensure_one()
         sql = """
@@ -562,7 +551,6 @@ class ReportJournalLedger(models.TransientModel):
                 )
                 self.env.cr.execute(sql, params)
 
-    @api.multi
     def _update_journal_report_total_values(self):
         self.ensure_one()
         sql = """
@@ -584,7 +572,6 @@ class ReportJournalLedger(models.TransientModel):
         """
         self.env.cr.execute(sql, (self.id,))
 
-    @api.multi
     def print_report(self, report_type):
         self.ensure_one()
         if report_type == 'xlsx':
@@ -794,12 +781,10 @@ class ReportJournalLedgerReportTaxLine(models.TransientModel):
         compute='_compute_tax_balance'
     )
 
-    @api.multi
     def _compute_base_balance(self):
         for rec in self:
             rec.base_balance = rec.base_debit - rec.base_credit
 
-    @api.multi
     def _compute_tax_balance(self):
         for rec in self:
             rec.tax_balance = rec.tax_debit - rec.tax_credit

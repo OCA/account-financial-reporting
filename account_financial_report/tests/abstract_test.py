@@ -64,6 +64,7 @@ class AbstractTest(common.TransactionCase):
             'user_type_id': self.ref("account.data_account_type_revenue"),
             'chart_template_id': self.chart.id,
             'reconcile': True,
+            'internal_group': 'expense',
         })
         self.env['ir.model.data'].create({
             'res_id': act.id,
@@ -162,7 +163,7 @@ class AbstractTest(common.TransactionCase):
             'quantity': 2.0,
             'price_unit': 25.0,
         })]
-        self.invoice_out = self.env['account.invoice'].create({
+        self.invoice_out = self.env['account.move'].create({
             'partner_id': self.partner.id,
             'type': 'out_invoice',
             'invoice_line_ids': customer_invoice_lines,
@@ -183,7 +184,7 @@ class AbstractTest(common.TransactionCase):
             'quantity': 2.0,
             'price_unit': 25.0,
         })]
-        self.invoice_in = self.env['account.invoice'].create({
+        self.invoice_in = self.env['account.move'].create({
             'partner_id': self.partner.id,
             'type': 'in_invoice',
             'invoice_line_ids': vendor_invoice_lines,

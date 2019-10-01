@@ -115,7 +115,7 @@ class TestVATReport(common.TransactionCase):
             'tag_ids': [(6, 0, [self.tax_tag_02.id, self.tax_tag_03.id])]
         })
 
-        invoice = self.env['account.invoice'].create({
+        invoice = self.env['account.move'].create({
             'partner_id': self.env.ref('base.res_partner_2').id,
             'account_id': self.receivable_account.id,
             'company_id': self.company.id,
@@ -123,7 +123,7 @@ class TestVATReport(common.TransactionCase):
             'type': 'out_invoice',
         })
 
-        self.env['account.invoice.line'].create({
+        self.env['account.move.line'].create({
             'product_id': self.env.ref('product.product_product_4').id,
             'quantity': 1.0,
             'price_unit': 100.0,
@@ -135,7 +135,7 @@ class TestVATReport(common.TransactionCase):
         invoice.compute_taxes()
         invoice.action_invoice_open()
 
-        self.cbinvoice = self.env['account.invoice'].create({
+        self.cbinvoice = self.env['account.move'].create({
             'partner_id': self.env.ref('base.res_partner_2').id,
             'account_id': self.receivable_account.id,
             'company_id': self.company.id,
@@ -143,7 +143,7 @@ class TestVATReport(common.TransactionCase):
             'type': 'out_invoice',
         })
 
-        self.env['account.invoice.line'].create({
+        self.env['account.move.line'].create({
             'product_id': self.env.ref('product.product_product_4').id,
             'quantity': 1.0,
             'price_unit': 500.0,

@@ -67,7 +67,7 @@ class AbstractTestForeignCurrency(abstract_test.AbstractTest):
             'price_unit': 25.0,
             'currency_id': self.foreign_currency_id.id,
         })]
-        self.foreign_invoice_in = self.env['account.invoice'].create({
+        self.foreign_invoice_in = self.env['account.move'].create({
             'partner_id': self.partner.id,
             'type': 'in_invoice',
             'invoice_line_ids': foreign_vendor_invoice_lines,
