@@ -3,7 +3,7 @@
 
 {
     'name': 'MIS Builder Cash Flow',
-    'version': '12.0.1.1.0',
+    'version': '11.0.1.1.0',
     'license': 'LGPL-3',
     'author': 'ADHOC SA, '
               'Odoo Community Association (OCA)',
