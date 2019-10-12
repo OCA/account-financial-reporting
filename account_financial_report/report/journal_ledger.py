@@ -612,6 +612,19 @@ class ReportJournalLedger(models.TransientModel):
     def get_html(self, given_context=None):
         return self._get_html()
 
+    @api.model
+    def _transient_vacuum(self, force=False):
+        """Remove journal ledger subtables first for avoiding a costly
+        ondelete operation.
+        """
+        # Next 3 lines adapted from super method for mimicking behavior
+        cls = type(self)
+        if not force and (cls._transient_check_count < 21):
+            return True  # no vacuum cleaning this time
+        self.env.cr.execute("DELETE FROM report_journal_ledger_move_line")
+        self.env.cr.execute("DELETE FROM report_journal_ledger_move")
+        return super(ReportJournalLedger, self)._transient_vacuum(force=force)
+
 
 class ReportJournalLedgerJournal(models.TransientModel):
 
