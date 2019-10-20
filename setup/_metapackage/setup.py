@@ -10,6 +10,7 @@ setuptools.setup(
     install_requires=[
         'odoo12-addon-account_financial_report',
         'odoo12-addon-account_tax_balance',
+        'odoo12-addon-mis_builder_cash_flow',
         'odoo12-addon-partner_statement',
     ],
     classifiers=[
