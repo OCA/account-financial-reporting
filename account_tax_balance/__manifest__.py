@@ -10,19 +10,14 @@
     "category": "Invoices & Payments",
     "website": "https://github.com/OCA/account-financial-reporting",
     "author": "Agile Business Group, Therp BV, Tecnativa, ACSONE SA/NV, "
-              "Odoo Community Association (OCA)",
+    "Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "installable": True,
-    "depends": [
-        "account",
-        "date_range",
-    ],
+    "depends": ["account", "date_range"],
     "data": [
         "wizard/open_tax_balances_view.xml",
         "views/account_move_view.xml",
         "views/account_tax_view.xml",
     ],
-    "images": [
-        "images/tax_balance.png",
-    ]
+    "images": ["images/tax_balance.png"],
 }
