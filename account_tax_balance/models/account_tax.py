@@ -6,25 +6,17 @@ from odoo import _, api, fields, models
 
 
 class AccountTax(models.Model):
-    _inherit = 'account.tax'
+    _inherit = "account.tax"
 
-    balance = fields.Float(
-        string="Total Balance", compute="_compute_balance",
-    )
-    base_balance = fields.Float(
-        string="Total Base Balance", compute="_compute_balance",
-    )
-    balance_regular = fields.Float(
-        string="Balance", compute="_compute_balance",
-    )
+    balance = fields.Float(string="Total Balance", compute="_compute_balance")
+    base_balance = fields.Float(string="Total Base Balance", compute="_compute_balance")
+    balance_regular = fields.Float(string="Balance", compute="_compute_balance")
     base_balance_regular = fields.Float(
-        string="Base Balance", compute="_compute_balance",
+        string="Base Balance", compute="_compute_balance"
     )
-    balance_refund = fields.Float(
-        string="Balance Refund", compute="_compute_balance",
-    )
+    balance_refund = fields.Float(string="Balance Refund", compute="_compute_balance")
     base_balance_refund = fields.Float(
-        string="Base Balance Refund", compute="_compute_balance",
+        string="Base Balance Refund", compute="_compute_balance"
     )
     has_moves = fields.Boolean(
         string="Has balance in period",
@@ -35,10 +27,10 @@ class AccountTax(models.Model):
     def get_context_values(self):
         context = self.env.context
         return (
-            context.get('from_date', fields.Date.context_today(self)),
-            context.get('to_date', fields.Date.context_today(self)),
-            context.get('company_ids', [self.env.user.company_id.id]),
-            context.get('target_move', 'posted'),
+            context.get("from_date", fields.Date.context_today(self)),
+            context.get("to_date", fields.Date.context_today(self)),
+            context.get("company_ids", [self.env.user.company_id.id]),
+            context.get("target_move", "posted"),
         )
 
     def _account_tax_ids_with_moves(self):
@@ -71,8 +63,7 @@ class AccountTax(models.Model):
                 )
             )
         """
-        self.env.cr.execute(
-            req, (company_ids, from_date, to_date, company_ids))
+        self.env.cr.execute(req, (company_ids, from_date, to_date, company_ids))
         return [r[0] for r in self.env.cr.fetchall()]
 
     def _compute_has_moves(self):
@@ -82,129 +73,132 @@ class AccountTax(models.Model):
 
     @api.model
     def _is_unsupported_search_operator(self, operator):
-        return operator != '='
+        return operator != "="
 
     @api.model
     def _search_has_moves(self, operator, value):
         if self._is_unsupported_search_operator(operator) or not value:
             raise ValueError(_("Unsupported search operator"))
         ids_with_moves = self._account_tax_ids_with_moves()
-        return [('id', 'in', ids_with_moves)]
+        return [("id", "in", ids_with_moves)]
 
     def _compute_balance(self):
         for tax in self:
             tax.balance_regular = tax.compute_balance(
-                tax_or_base='tax', move_type='regular')
+                tax_or_base="tax", move_type="regular"
+            )
             tax.base_balance_regular = tax.compute_balance(
-                tax_or_base='base', move_type='regular')
+                tax_or_base="base", move_type="regular"
+            )
             tax.balance_refund = tax.compute_balance(
-                tax_or_base='tax', move_type='refund')
+                tax_or_base="tax", move_type="refund"
+            )
             tax.base_balance_refund = tax.compute_balance(
-                tax_or_base='base', move_type='refund')
+                tax_or_base="base", move_type="refund"
+            )
             tax.balance = tax.balance_regular + tax.balance_refund
-            tax.base_balance = (
-                tax.base_balance_regular + tax.base_balance_refund)
+            tax.base_balance = tax.base_balance_regular + tax.base_balance_refund
 
     def get_target_type_list(self, move_type=None):
-        if move_type == 'refund':
-            return ['receivable_refund', 'payable_refund']
-        elif move_type == 'regular':
-            return ['receivable', 'payable', 'liquidity', 'other']
+        if move_type == "refund":
+            return ["receivable_refund", "payable_refund"]
+        elif move_type == "regular":
+            return ["receivable", "payable", "liquidity", "other"]
         return []
 
     def get_target_state_list(self, target_move="posted"):
-        if target_move == 'posted':
-            state = ['posted']
-        elif target_move == 'all':
-            state = ['posted', 'draft']
+        if target_move == "posted":
+            state = ["posted"]
+        elif target_move == "all":
+            state = ["posted", "draft"]
         else:
             state = []
         return state
 
     def get_move_line_partial_domain(self, from_date, to_date, company_ids):
         return [
-            ('date', '<=', to_date),
-            ('date', '>=', from_date),
-            ('company_id', 'in', company_ids),
+            ("date", "<=", to_date),
+            ("date", ">=", from_date),
+            ("company_id", "in", company_ids),
         ]
 
-    def compute_balance(self, tax_or_base='tax', move_type=None):
+    def compute_balance(self, tax_or_base="tax", move_type=None):
         self.ensure_one()
         domain = self.get_move_lines_domain(
-            tax_or_base=tax_or_base, move_type=move_type)
+            tax_or_base=tax_or_base, move_type=move_type
+        )
         # balance is debit - credit whereas on tax return you want to see what
         # vat has to be paid so:
         # VAT on sales (credit) - VAT on purchases (debit).
 
-        balance = self.env['account.move.line'].\
-            read_group(domain, ['balance'], [])[0]['balance']
+        balance = self.env["account.move.line"].read_group(domain, ["balance"], [])[0][
+            "balance"
+        ]
         return balance and -balance or 0
 
     def get_balance_domain(self, state_list, type_list):
         domain = [
-            ('move_id.state', 'in', state_list),
-            ('tax_line_id', '=', self.id),
-            ('tax_exigible', '=', True)
+            ("move_id.state", "in", state_list),
+            ("tax_line_id", "=", self.id),
+            ("tax_exigible", "=", True),
         ]
         if type_list:
-            domain.append(('move_id.move_type', 'in', type_list))
+            domain.append(("move_id.move_type", "in", type_list))
         return domain
 
     def get_base_balance_domain(self, state_list, type_list):
         domain = [
-            ('move_id.state', 'in', state_list),
-            ('tax_ids', 'in', self.id),
-            ('tax_exigible', '=', True)
+            ("move_id.state", "in", state_list),
+            ("tax_ids", "in", self.id),
+            ("tax_exigible", "=", True),
         ]
         if type_list:
-            domain.append(('move_id.move_type', 'in', type_list))
+            domain.append(("move_id.move_type", "in", type_list))
         return domain
 
-    def get_move_lines_domain(self, tax_or_base='tax', move_type=None):
-        from_date, to_date, company_ids, target_move = \
-            self.get_context_values()
+    def get_move_lines_domain(self, tax_or_base="tax", move_type=None):
+        from_date, to_date, company_ids, target_move = self.get_context_values()
         state_list = self.get_target_state_list(target_move)
         type_list = self.get_target_type_list(move_type)
-        domain = self.get_move_line_partial_domain(
-            from_date, to_date, company_ids)
+        domain = self.get_move_line_partial_domain(from_date, to_date, company_ids)
         balance_domain = []
-        if tax_or_base == 'tax':
+        if tax_or_base == "tax":
             balance_domain = self.get_balance_domain(state_list, type_list)
-        elif tax_or_base == 'base':
-            balance_domain = self.get_base_balance_domain(
-                state_list, type_list)
+        elif tax_or_base == "base":
+            balance_domain = self.get_base_balance_domain(state_list, type_list)
         domain.extend(balance_domain)
         return domain
 
-    def get_lines_action(self, tax_or_base='tax', move_type=None):
+    def get_lines_action(self, tax_or_base="tax", move_type=None):
         domain = self.get_move_lines_domain(
-            tax_or_base=tax_or_base, move_type=move_type)
-        action = self.env.ref('account.action_account_moves_all_tree')
+            tax_or_base=tax_or_base, move_type=move_type
+        )
+        action = self.env.ref("account.action_account_moves_all_tree")
         vals = action.read()[0]
-        vals['context'] = {}
-        vals['domain'] = domain
+        vals["context"] = {}
+        vals["domain"] = domain
         return vals
 
     def view_tax_lines(self):
         self.ensure_one()
-        return self.get_lines_action(tax_or_base='tax')
+        return self.get_lines_action(tax_or_base="tax")
 
     def view_base_lines(self):
         self.ensure_one()
-        return self.get_lines_action(tax_or_base='base')
+        return self.get_lines_action(tax_or_base="base")
 
     def view_tax_regular_lines(self):
         self.ensure_one()
-        return self.get_lines_action(tax_or_base='tax', move_type='regular')
+        return self.get_lines_action(tax_or_base="tax", move_type="regular")
 
     def view_base_regular_lines(self):
         self.ensure_one()
-        return self.get_lines_action(tax_or_base='base', move_type='regular')
+        return self.get_lines_action(tax_or_base="base", move_type="regular")
 
     def view_tax_refund_lines(self):
         self.ensure_one()
-        return self.get_lines_action(tax_or_base='tax', move_type='refund')
+        return self.get_lines_action(tax_or_base="tax", move_type="refund")
 
     def view_base_refund_lines(self):
         self.ensure_one()
-        return self.get_lines_action(tax_or_base='base', move_type='refund')
+        return self.get_lines_action(tax_or_base="base", move_type="refund")
