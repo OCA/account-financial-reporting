@@ -33,8 +33,6 @@ class BankReconciliationReportWizard(models.TransientModel):
             'datas': {
                 'model': self._name,
                 'ids': self.ids,
-                'journal_ids': self.journal_ids.ids,
-                'date': self.date,
                 },
             'context': self._context,
             }
