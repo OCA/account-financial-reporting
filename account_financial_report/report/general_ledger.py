@@ -108,7 +108,7 @@ class GeneralLedgerReportAccount(models.TransientModel):
     final_balance_foreign_currency = fields.Float(digits=(16, 2))
 
     # Flag fields, used for report display and for data computation
-    is_partner_account = fields.Boolean()
+    is_partner_account = fields.Boolean(index=True)
 
     # Data fields, used to browse report data
     move_line_ids = fields.One2many(
@@ -405,15 +405,10 @@ WITH
             FROM
                 account_account a
             """
-        if (
-            self.filter_partner_ids or
-            self.filter_cost_center_ids or
-            self.filter_analytic_tag_ids
-        ):
-            query_inject_account += """
-            INNER JOIN
-                account_move_line ml ON a.id = ml.account_id
-            """
+        query_inject_account += """
+        INNER JOIN
+            account_move_line ml ON a.id = ml.account_id
+        """
         if self.filter_partner_ids:
             query_inject_account += """
             INNER JOIN
@@ -441,6 +436,8 @@ WITH
         query_inject_account += """
             WHERE
                 a.company_id = %s
+            AND ml.date <= %s
+            AND ml.date >= %s
             AND a.id != %s
                     """
         if self.filter_account_ids:
@@ -453,15 +450,10 @@ WITH
             AND
                 p.id IN %s
             """
-        if (
-                self.filter_partner_ids or
-                self.filter_cost_center_ids or
-                self.filter_analytic_tag_ids
-        ):
-            query_inject_account += """
-            GROUP BY
-                a.id
-            """
+        query_inject_account += """
+        GROUP BY
+            a.id
+        """
         query_inject_account += """
         ),
         """
@@ -569,6 +561,8 @@ AND
             )
         query_inject_account_params += (
             self.company_id.id,
+            self.date_to,
+            self.date_from,
             self.unaffected_earnings_account.id,
         )
         if self.filter_account_ids:
@@ -791,6 +785,10 @@ WITH
                 ra.report_id = %s
             AND
                 ra.is_partner_account = TRUE
+            AND
+                ml.date <= %s
+            AND
+                ml.date >= %s
         """
         if not only_empty_partner:
             query_inject_partner += """
@@ -950,6 +948,8 @@ AND
             )
         query_inject_partner_params += (
             self.id,
+            self.date_to,
+            self.date_from,
         )
         if self.filter_partner_ids:
             query_inject_partner_params += (

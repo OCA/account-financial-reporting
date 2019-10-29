@@ -196,19 +196,6 @@ class TestGeneralLedgerReport(common.TransactionCase):
             income_credit=1000
         )
 
-        # Re Generate the general ledger line
-        lines = self._get_report_lines()
-        self.assertEqual(len(lines['receivable']), 1)
-        self.assertEqual(len(lines['income']), 0)
-
-        # Check the initial and final balance
-        self.assertEqual(lines['receivable'].initial_debit, 1000)
-        self.assertEqual(lines['receivable'].initial_credit, 0)
-        self.assertEqual(lines['receivable'].initial_balance, 1000)
-        self.assertEqual(lines['receivable'].final_debit, 1000)
-        self.assertEqual(lines['receivable'].final_credit, 0)
-        self.assertEqual(lines['receivable'].final_balance, 1000)
-
         # Add reversale move of the initial move the first day of fiscal year
         # to check the first day of fiscal year is not used
         # to compute the initial balance
@@ -284,18 +271,6 @@ class TestGeneralLedgerReport(common.TransactionCase):
             income_debit=0,
             income_credit=1000
         )
-
-        # Re Generate the general ledger line
-        lines = self._get_report_lines(with_partners=True)
-        self.assertEqual(len(lines['partner_receivable']), 1)
-
-        # Check the initial and final balance
-        self.assertEqual(lines['partner_receivable'].initial_debit, 1000)
-        self.assertEqual(lines['partner_receivable'].initial_credit, 0)
-        self.assertEqual(lines['partner_receivable'].initial_balance, 1000)
-        self.assertEqual(lines['partner_receivable'].final_debit, 1000)
-        self.assertEqual(lines['partner_receivable'].final_credit, 0)
-        self.assertEqual(lines['partner_receivable'].final_balance, 1000)
 
         # Add reversale move of the initial move the first day of fiscal year
         # to check the first day of fiscal year is not used

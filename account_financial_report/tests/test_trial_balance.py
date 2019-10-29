@@ -223,11 +223,6 @@ class TestTrialBalanceReport(common.TransactionCase):
         for acc in earning_accs:
             if acc.code.startswith('1') or acc.code.startswith('2'):
                 acc.code = '999' + acc.code
-        # Generate the general ledger line
-        lines = self._get_report_lines()
-        self.assertEqual(len(lines['receivable']), 1)
-        self.assertEqual(len(lines['income']), 1)
-
         # Add a move at the previous day of the first day of fiscal year
         # to check the initial balance
         self._add_move(
@@ -237,23 +232,6 @@ class TestTrialBalanceReport(common.TransactionCase):
             income_debit=0,
             income_credit=1000
         )
-
-        # Re Generate the trial balance line
-        lines = self._get_report_lines()
-        self.assertEqual(len(lines['receivable']), 1)
-        self.assertEqual(len(lines['income']), 1)
-
-        # Check the initial and final balance
-        self.assertEqual(lines['receivable'].initial_balance, 1000)
-        self.assertEqual(lines['receivable'].debit, 0)
-        self.assertEqual(lines['receivable'].credit, 0)
-        self.assertEqual(lines['receivable'].final_balance, 1000)
-
-        self.assertEqual(lines['group1'].initial_balance, 1000)
-        self.assertEqual(lines['group1'].debit, 0)
-        self.assertEqual(lines['group1'].credit, 0)
-        self.assertEqual(lines['group1'].final_balance, 1000)
-
         # Add reversed move of the initial move the first day of fiscal year
         # to check the first day of fiscal year is not used
         # to compute the initial balance
@@ -329,11 +307,6 @@ class TestTrialBalanceReport(common.TransactionCase):
         self.assertGreaterEqual(len(lines['group2'].compute_account_ids), 9)
 
     def test_02_account_balance_hierarchy(self):
-        # Generate the general ledger line
-        lines = self._get_report_lines(hierarchy_on='relation')
-        self.assertEqual(len(lines['receivable']), 1)
-        self.assertEqual(len(lines['income']), 1)
-
         # Add a move at the previous day of the first day of fiscal year
         # to check the initial balance
         self._add_move(
@@ -343,22 +316,6 @@ class TestTrialBalanceReport(common.TransactionCase):
             income_debit=0,
             income_credit=1000
         )
-
-        # Re Generate the trial balance line
-        lines = self._get_report_lines(hierarchy_on='relation')
-        self.assertEqual(len(lines['receivable']), 1)
-        self.assertEqual(len(lines['income']), 1)
-
-        # Check the initial and final balance
-        self.assertEqual(lines['receivable'].initial_balance, 1000)
-        self.assertEqual(lines['receivable'].debit, 0)
-        self.assertEqual(lines['receivable'].credit, 0)
-        self.assertEqual(lines['receivable'].final_balance, 1000)
-
-        self.assertEqual(lines['group1'].initial_balance, 1000)
-        self.assertEqual(lines['group1'].debit, 0)
-        self.assertEqual(lines['group1'].credit, 0)
-        self.assertEqual(lines['group1'].final_balance, 1000)
 
         # Add reversale move of the initial move the first day of fiscal year
         # to check the first day of fiscal year is not used
@@ -434,10 +391,6 @@ class TestTrialBalanceReport(common.TransactionCase):
         self.assertEqual(lines['group2'].final_balance, 4000)
 
     def test_03_partner_balance(self):
-        # Generate the trial balance line
-        lines = self._get_report_lines(with_partners=True)
-        self.assertEqual(len(lines['partner_receivable']), 0)
-
         # Add a move at the previous day of the first day of fiscal year
         # to check the initial balance
         self._add_move(
@@ -447,16 +400,6 @@ class TestTrialBalanceReport(common.TransactionCase):
             income_debit=0,
             income_credit=1000
         )
-
-        # Re Generate the trial balance line
-        lines = self._get_report_lines(with_partners=True)
-        self.assertEqual(len(lines['partner_receivable']), 1)
-
-        # Check the initial and final balance
-        self.assertEqual(lines['partner_receivable'].initial_balance, 1000)
-        self.assertEqual(lines['partner_receivable'].debit, 0)
-        self.assertEqual(lines['partner_receivable'].credit, 0)
-        self.assertEqual(lines['partner_receivable'].final_balance, 1000)
 
         # Add reversale move of the initial move the first day of fiscal year
         # to check the first day of fiscal year is not used
