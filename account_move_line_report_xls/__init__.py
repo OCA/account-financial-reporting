@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from . import models
 try:
     from . import report

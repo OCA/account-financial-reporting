@@ -1,2 +1,1 @@
-# -*- coding: utf-8 -*-
-from . import move_line_list_xls
+from . import report_account_move_line_xlsx

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright 2020 initOS GmbH <https://initos.com>
+License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl)
+-->
+<odoo>
+
+    <report
+        id="account_move_line_xlsx"
+        model="account.move.line"
+        string="Export Selected Lines"
+        report_type="xlsx"
+        name="account_move_line_report_xls.account_move_line_xlsx"
+        file="Export Selected Lines"
+        attachment_use="False"
+    />
+
+</odoo>

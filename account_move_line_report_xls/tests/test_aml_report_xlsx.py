@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
 # Copyright 2009-2018 Noviat.
+# Copyright 2020 initOS GmbH <https://initos.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo.tests.common import TransactionCase
@@ -9,13 +9,29 @@ class TestAmlReportXlsx(TransactionCase):
 
     def setUp(self):
         super(TestAmlReportXlsx, self).setUp()
-        ctx = {'xlsx_export': True}
-        self.report = self.env['ir.actions.report.xml'].with_context(ctx)
-        self.report_name = 'move.line.list.xls'
-        inv = self.env.ref('l10n_generic_coa.demo_invoice_1')
-        self.amls = inv.move_id.line_ids
+        self.report = self.env.ref(
+            'account_move_line_report_xls.action_account_move_line_xlsx')
+        sale_journal = self.env['account.journal'].search(
+            [('type', '=', 'sale')])[0]
+        ar = self.env['account.account'].search(
+            [('internal_type', '=', 'receivable')])[0]
+        aml_vals = [
+            {'name': 'debit',
+             'debit': 100,
+             'account_id': ar.id,
+             },
+            {'name': 'credit',
+             'credit': 100,
+             'account_id': ar.id,
+             },
+        ]
+        am = self.env['account.move'].create({
+            'name': 'test',
+            'journal_id': sale_journal.id,
+            'line_ids': [(0, 0, x) for x in aml_vals],
+        })
+        self.amls = am.line_ids
 
     def test_aml_report_xlsx(self):
-        report_xls = self.report.render_report(
-            self.amls.ids, self.report_name, {})
+        report_xls = self.report.render_xlsx(self.amls.ids, None)
         self.assertEqual(report_xls[1], 'xlsx')
