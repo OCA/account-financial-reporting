@@ -1,7 +1,7 @@
 
 # © 2016 Julien Coux (Camptocamp)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
-
+from datetime import timedelta
 from odoo import models, fields, api, _
 
 
@@ -1557,6 +1557,66 @@ WHERE
         }
         self.env.cr.execute(query_update_analytic_tags, params)
 
+    def _get_period_unaffected_earnings(
+            self, date_from, date_to, q_analytic_tags):
+        query_select_period_unaffected_earnings_params = {
+            'date_from': date_from,
+            'date_to': date_to,
+            'company_id': self.company_id.id,
+            'unaffected_earnings_id': self.unaffected_earnings_account.id,
+            'analytic_tag_ids': tuple(self.filter_analytic_tag_ids.ids),
+        }
+        query_select_period_unaffected_earnings = ''
+        if self.filter_analytic_tag_ids:
+            query_select_period_unaffected_earnings += q_analytic_tags
+        query_select_period_unaffected_earnings += """
+                    SELECT
+                        sum(ml.debit) as sum_debit,
+                        sum(ml.credit) as sum_credit,
+                        sum(ml.balance) as balance
+                        FROM account_move_line as ml
+                        INNER JOIN account_move as am
+                        ON am.id = ml.move_id
+                        INNER JOIN account_journal j
+                        ON am.journal_id = j.id
+                """
+        if self.filter_cost_center_ids:
+            query_select_period_unaffected_earnings += """
+                        INNER JOIN account_analytic_account aa
+                        ON ml.analytic_account_id = aa.id
+                        AND aa.id IN %(cost_center_ids)s
+                    """
+            query_select_period_unaffected_earnings_params[
+                'cost_center_ids'] = tuple(self.filter_cost_center_ids.ids)
+        if self.filter_analytic_tag_ids:
+            query_select_period_unaffected_earnings += """
+                        INNER JOIN move_lines_on_tags
+                        ON ml.id = move_lines_on_tags.ml_id
+                        """
+        query_select_period_unaffected_earnings += """
+                    WHERE am.date >= %(date_from)s
+                    AND ml.date <= %(date_to)s
+                    AND ml.company_id = %(company_id)s
+                    AND ml.account_id = %(unaffected_earnings_id)s
+                """
+        if self.filter_journal_ids:
+            query_select_period_unaffected_earnings += """
+                        AND j.id IN %(journal_ids)s
+                    """
+            query_select_period_unaffected_earnings_params[
+                'journal_ids'] = tuple(self.filter_journal_ids.ids)
+        if self.only_posted_moves:
+            query_select_period_unaffected_earnings += """
+                                                AND am.state = 'posted'
+                                            """
+        self.env.cr.execute(query_select_period_unaffected_earnings,
+                            query_select_period_unaffected_earnings_params)
+        res = self.env.cr.fetchone()
+        debit = res[0] or 0.0
+        credit = res[1] or 0.0
+        balance = res[2] or 0.0
+        return debit, credit, balance
+
     def _inject_unaffected_earnings_account_values(self):
         """Inject the report values of the unaffected earnings account
         for report_general_ledger_account."""
@@ -1649,64 +1709,20 @@ WITH move_lines_on_tags AS
             query_select_previous_fy_unaffected_earnings_params)
         res = self.env.cr.fetchone()
         unaffected_earnings_initial_balance = res[0] or 0.0
-        # Now select the current period unaffected earnings,
+        # Now select the unaffected earnings for the current year,
+        # prior to the reporting date, excluding the P&L.
+        date_from = fields.Datetime.from_string(self.date_from)
+        debit, credit, balance = self._get_period_unaffected_earnings(
+            self.fy_start_date, (date_from-timedelta(days=1)).date(),
+            q_analytic_tags)
+        unaffected_earnings_initial_balance += balance
+        # Now select the reporting period unaffected earnings,
         # excluding the current period P&L.
-        query_select_period_unaffected_earnings_params = {
-            'date_from': self.date_from,
-            'date_to': self.date_to,
-            'company_id': self.company_id.id,
-            'unaffected_earnings_id': self.unaffected_earnings_account.id,
-            'analytic_tag_ids': tuple(self.filter_analytic_tag_ids.ids),
-        }
-        query_select_period_unaffected_earnings = ''
-        if self.filter_analytic_tag_ids:
-            query_select_period_unaffected_earnings += q_analytic_tags
-        query_select_period_unaffected_earnings += """
-            SELECT
-                sum(ml.debit) as sum_debit,
-                sum(ml.credit) as sum_credit,
-                sum(ml.balance) as balance
-                FROM account_move_line as ml
-                INNER JOIN account_move as am
-                ON am.id = ml.move_id
-                INNER JOIN account_journal j
-                ON am.journal_id = j.id
-        """
-        if self.filter_cost_center_ids:
-            query_select_period_unaffected_earnings += """
-                INNER JOIN account_analytic_account aa
-                ON ml.analytic_account_id = aa.id
-                AND aa.id IN %(cost_center_ids)s
-            """
-            query_select_period_unaffected_earnings_params[
-                'cost_center_ids'] = tuple(self.filter_cost_center_ids.ids)
-        if self.filter_analytic_tag_ids:
-            query_select_period_unaffected_earnings += """
-                INNER JOIN move_lines_on_tags
-                ON ml.id = move_lines_on_tags.ml_id
-                """
-        query_select_period_unaffected_earnings += """
-            WHERE am.date >= %(date_from)s
-            AND ml.date <= %(date_to)s
-            AND ml.company_id = %(company_id)s
-            AND ml.account_id = %(unaffected_earnings_id)s
-        """
-        if self.filter_journal_ids:
-            query_select_period_unaffected_earnings += """
-                AND j.id IN %(journal_ids)s
-            """
-            query_select_period_unaffected_earnings_params[
-                'journal_ids'] = tuple(self.filter_journal_ids.ids)
-        if self.only_posted_moves:
-            query_select_period_unaffected_earnings += """
-                                        AND am.state = 'posted'
-                                    """
-        self.env.cr.execute(query_select_period_unaffected_earnings,
-                            query_select_period_unaffected_earnings_params)
-        res = self.env.cr.fetchone()
-        unaffected_earnings_period_debit = res[0] or 0.0
-        unaffected_earnings_period_credit = res[1] or 0.0
-        unaffected_earnings_period_balance = res[2] or 0.0
+        unaffected_earnings_period_debit, \
+            unaffected_earnings_period_credit, \
+            unaffected_earnings_period_balance = \
+            self._get_period_unaffected_earnings(
+                self.date_from, self.date_to, q_analytic_tags)
         # pylint: disable=sql-injection
         query_inject_account = """
             INSERT INTO
