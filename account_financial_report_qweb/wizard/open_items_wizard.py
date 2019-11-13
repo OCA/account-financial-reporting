@@ -153,6 +153,7 @@ class OpenItemsReportWizard(models.TransientModel):
             'company_id': self.company_id.id,
             'filter_account_ids': [(6, 0, self.account_ids.ids)],
             'filter_partner_ids': [(6, 0, self.partner_ids.ids)],
+            'is_today': self.date_at == fields.Date.context_today(self),
         }
 
     def _export(self, report_type):

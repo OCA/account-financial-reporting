@@ -58,3 +58,7 @@ class TestOpenItems(a_t_f_c.AbstractTestForeignCurrency):
 
         wizard = self.env["open.items.report.wizard"].with_context(context)
         self.assertEqual(wizard._default_partners(), expected_list)
+
+    def test_filter_is_today(self):
+        wizard = self.env["open.items.report.wizard"].create({})
+        self.assertTrue(wizard._prepare_report_open_items()['is_today'])

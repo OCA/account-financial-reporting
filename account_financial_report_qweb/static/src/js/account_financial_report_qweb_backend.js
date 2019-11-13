@@ -5,7 +5,7 @@ odoo.define('account_financial_report_qweb.account_financial_report_backend', fu
     var Widget = require('web.Widget');
     var ControlPanelMixin = require('web.ControlPanelMixin');
     var ReportWidget = require(
-    'account_financial_report_qweb.account_financial_report_widget');
+        'account_financial_report_qweb.account_financial_report_widget');
     var Model = require('web.Model');
 
 

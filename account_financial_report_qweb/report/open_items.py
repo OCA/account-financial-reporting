@@ -27,6 +27,7 @@ class OpenItemsReport(models.TransientModel):
     company_id = fields.Many2one(comodel_name='res.company')
     filter_account_ids = fields.Many2many(comodel_name='account.account')
     filter_partner_ids = fields.Many2many(comodel_name='res.partner')
+    is_today = fields.Boolean()
 
     # Data fields, used to browse report data
     account_ids = fields.One2many(
@@ -239,6 +240,10 @@ WITH
             AND
                 p.id IN %s
             """
+        if self.is_today:
+            query_inject_account += """
+            AND ml.reconciled = False
+            """
         query_inject_account += """
             GROUP BY
                 a.id, c.id
@@ -314,6 +319,10 @@ WITH
             INNER JOIN
                 account_move_line ml ON a.id = ml.account_id AND ml.date <= %s
         """
+        if self.is_today:
+            query_inject_partner += """
+            AND ml.reconciled = False
+            """
         if self.only_posted_moves:
             query_inject_partner += """
             INNER JOIN
@@ -401,6 +410,10 @@ FROM
                 account_move_line ml
                     ON ra.account_id = ml.account_id
         """
+        if self.is_today:
+            sub_query += """
+                    AND ml.reconciled = False
+            """
         if not only_empty_partner_line:
             sub_query += """
                     AND rp.partner_id = ml.partner_id
@@ -606,6 +619,10 @@ AND
     ml.partner_id IS NULL
 AND
     rp.partner_id IS NULL
+        """
+        if self.is_today:
+            query_inject_move_line += """
+AND ml.reconciled = False
         """
         if not only_empty_partner_line:
             query_inject_move_line += """

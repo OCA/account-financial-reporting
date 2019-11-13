@@ -534,7 +534,7 @@ class TestGeneralLedgerReport(common.TransactionCase):
                          time.strftime('%Y') + '-01-01')
 
     def test_validate_date_range(self):
-        type = self.env['date.range.type'].create({
+        date_range_type = self.env['date.range.type'].create({
             'name': 'Fiscal year',
             'company_id': False,
             'allow_overlap': False
@@ -544,7 +544,7 @@ class TestGeneralLedgerReport(common.TransactionCase):
             'name': 'FS2015',
             'date_start': '2018-01-01',
             'date_end': '2018-12-31',
-            'type_id': type.id,
+            'type_id': date_range_type.id,
         })
 
         wizard = self.env["general.ledger.report.wizard"].create({
