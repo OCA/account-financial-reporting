@@ -8,9 +8,9 @@ class VATReportXslx(models.AbstractModel):
     _name = 'report.a_f_r.report_vat_report_xlsx'
     _inherit = 'report.account_financial_report.abstract_report_xlsx'
 
-    def _get_report_name(self, report):
+    def _get_report_name(self, report, data=False):
         report_name = _('VAT Report')
-        return self._get_report_complete_name(report, report_name)
+        return self._get_report_complete_name(report, report_name, data=data)
 
     def _get_report_columns(self, report):
         return {
@@ -39,7 +39,7 @@ class VATReportXslx(models.AbstractModel):
     def _get_col_count_filter_value(self):
         return 2
 
-    def _generate_report_content(self, workbook, report):
+    def _generate_report_content(self, workbook, report, data):
         # For each taxtag
         self.write_array_header()
         for taxtag in report.taxtags_ids:

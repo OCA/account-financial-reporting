@@ -10,9 +10,9 @@ class TrialBalanceXslx(models.AbstractModel):
     _name = 'report.a_f_r.report_trial_balance_xlsx'
     _inherit = 'report.account_financial_report.abstract_report_xlsx'
 
-    def _get_report_name(self, report):
+    def _get_report_name(self, report, data=False):
         report_name = _('Trial Balance')
-        return self._get_report_complete_name(report, report_name)
+        return self._get_report_complete_name(report, report_name, data=data)
 
     def _get_report_columns(self, report):
         if not report.show_partner_details:
@@ -121,7 +121,7 @@ class TrialBalanceXslx(models.AbstractModel):
     def _get_col_count_filter_value(self):
         return 3
 
-    def _generate_report_content(self, workbook, report):
+    def _generate_report_content(self, workbook, report, data):
 
         if not report.show_partner_details:
             # Display array header for account lines
