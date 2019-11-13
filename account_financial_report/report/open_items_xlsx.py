@@ -9,9 +9,9 @@ class OpenItemsXslx(models.AbstractModel):
     _name = 'report.a_f_r.report_open_items_xlsx'
     _inherit = 'report.account_financial_report.abstract_report_xlsx'
 
-    def _get_report_name(self, report):
+    def _get_report_name(self, report, data=False):
         report_name = _('Open Items')
-        return self._get_report_complete_name(report, report_name)
+        return self._get_report_complete_name(report, report_name, data=data)
 
     def _get_report_columns(self, report):
         res = {
@@ -77,7 +77,7 @@ class OpenItemsXslx(models.AbstractModel):
     def _get_col_pos_final_balance_label(self):
         return 5
 
-    def _generate_report_content(self, workbook, report):
+    def _generate_report_content(self, workbook, report, data):
         # For each account
         for account in report.account_ids:
             # Write account title

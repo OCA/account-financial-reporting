@@ -8,7 +8,6 @@ from odoo import models, fields, api, _
 class GeneralLedgerReport(models.TransientModel):
     """ Here, we just define class fields.
     For methods, go more bottom at this file.
-
     The class hierarchy is :
     * GeneralLedgerReport
     ** GeneralLedgerReportAccount
@@ -700,7 +699,6 @@ AND
         """Return final subquery used to compute sum amounts on partners"""
 
         subquery_sum_amounts = """
-
             SELECT
                 sub.account_id AS account_id,
                 sub.partner_id AS partner_id,
@@ -734,7 +732,6 @@ AND
 
     def _inject_partner_values(self, only_empty_partner=False):
         """ Inject report values for report_general_ledger_partner.
-
         Only for "partner" accounts (payable and receivable).
         """
         # pylint: disable=sql-injection
@@ -1002,13 +999,10 @@ AND
             only_empty_partner_line=False,
             only_unaffected_earnings_account=False):
         """ Inject report values for report_general_ledger_move_line.
-
         If centralized option have been chosen,
         only non centralized accounts are computed.
-
         In function of `is_account_line` and `is_partner_line` values,
         the move_line link is made either with account or either with partner.
-
         The "only_empty_partner_line" value is used
         to compute data without partner.
         """
@@ -1324,7 +1318,6 @@ ORDER BY
 
     def _inject_line_centralized_values(self):
         """ Inject report values for report_general_ledger_move_line.
-
         Only centralized accounts are computed.
         """
         if self.filter_analytic_tag_ids:

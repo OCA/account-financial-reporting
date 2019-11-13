@@ -42,7 +42,7 @@ class AbstractReportXslx(models.AbstractModel):
 
         self._define_formats(workbook)
 
-        report_name = self._get_report_name(report)
+        report_name = self._get_report_name(report, data=data)
         report_footer = self._get_report_footer()
         filters = self._get_report_filters(report)
         self.columns = self._get_report_columns(report)
@@ -55,7 +55,7 @@ class AbstractReportXslx(models.AbstractModel):
 
         self._write_filters(filters)
 
-        self._generate_report_content(workbook, report)
+        self._generate_report_content(workbook, report, data)
 
         self._write_report_footer(report_footer)
 
@@ -219,6 +219,42 @@ class AbstractReportXslx(models.AbstractModel):
                     )
         self.row_pos += 1
 
+    def write_line_from_dict(self, line_dict):
+        """Write a line on current line
+        """
+        for col_pos, column in self.columns.items():
+            value = line_dict.get(column['field'], False)
+            cell_type = column.get('type', 'string')
+            if cell_type == 'string':
+                if (line_dict.get('account_group_id', False) and
+                        line_dict['account_group_id']):
+                    self.sheet.write_string(
+                        self.row_pos, col_pos, value or '',
+                        self.format_bold)
+                else:
+                    self.sheet.write_string(
+                        self.row_pos, col_pos, value or '')
+            elif cell_type == 'amount':
+                if line_dict.get('account_group_id', False) and \
+                        line_dict['account_group_id']:
+                    cell_format = self.format_amount_bold
+                else:
+                    cell_format = self.format_amount
+                self.sheet.write_number(
+                    self.row_pos, col_pos, float(value), cell_format
+                )
+            elif cell_type == 'amount_currency':
+                if line_dict.get('currency_id', False):
+                    format_amt = self._get_currency_amt_format_dict(
+                        line_dict)
+                    self.sheet.write_number(
+                        self.row_pos, col_pos, float(value), format_amt
+                    )
+            elif cell_type == 'currency_name':
+                self.sheet.write_string(
+                    self.row_pos, col_pos, value or '', self.format_right)
+        self.row_pos += 1
+
     def write_initial_balance(self, my_object, label):
         """Write a specific initial balance line on current line
         using defined columns field_initial_balance name.
@@ -327,6 +363,30 @@ class AbstractReportXslx(models.AbstractModel):
                 format_amt.set_num_format(format_amount)
         return format_amt
 
+    def _get_currency_amt_format_dict(self, line_dict):
+        """ Return amount format specific for each currency. """
+        if line_dict.get('account_group_id', False) and \
+                line_dict['account_group_id']:
+            format_amt = getattr(self, 'format_amount_bold')
+            field_prefix = 'format_amount_bold'
+        else:
+            format_amt = getattr(self, 'format_amount')
+            field_prefix = 'format_amount'
+        if line_dict.get('currency_id', False) and line_dict['currency_id']:
+            currency = self.env['res.currency'].browse(
+                line_dict['currency_id'])
+            field_name = \
+                '%s_%s' % (field_prefix, currency.name)
+            if hasattr(self, field_name):
+                format_amt = getattr(self, field_name)
+            else:
+                format_amt = self.workbook.add_format()
+                setattr(self, 'field_name', format_amt)
+                format_amount = \
+                    '#,##0.' + ('0' * currency.decimal_places)
+                format_amt.set_num_format(format_amount)
+        return format_amt
+
     def _get_currency_amt_header_format(self, line_object):
         """ Return amount header format for each currency. """
         format_amt = getattr(self, 'format_header_amount')
@@ -346,20 +406,20 @@ class AbstractReportXslx(models.AbstractModel):
                 format_amt.set_num_format(format_amount)
         return format_amt
 
-    def _generate_report_content(self, workbook, report):
+    def _generate_report_content(self, workbook, report, data):
         """
             Allow to fetch report content to be displayed.
         """
         raise NotImplementedError()
 
-    def _get_report_complete_name(self, report, prefix):
+    def _get_report_complete_name(self, report, prefix, data=None):
         if report.company_id:
             suffix = ' - %s - %s' % (
                 report.company_id.name, report.company_id.currency_id.name)
             return prefix + suffix
         return prefix
 
-    def _get_report_name(self, report):
+    def _get_report_name(self, report, data=False):
         """
             Allow to define the report name.
             Report name will be used as sheet name and as report title.
