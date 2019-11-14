@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="account_csv_export_view" model="ir.ui.view">
+         <field name="name">Accounting Entries CSV Export</field>
+         <field name="model">account.csv.export</field>
+         <field name="arch" type="xml">
+            <form string="Accounting CSV Export">
+                <group>
+                    <group>
+                        <field name="company_id" />
+                    </group>
+                 </group>
+                <group>
+                    <group>
+                        <field name="date_range_id"  domain="['|', ('company_id', '=', company_id), ('company_id', '=', False)]"/>
+                        <label for="date_start" string="Date" class="oe_inline"/>
+                        <div>
+                            <field name="date_start" class="oe_inline"/>
+                            <span string="-" class="oe_inline"/>
+                            <field name="date_end" class="oe_inline"/>
+                        </div>
+                    </group>
+                    <group>
+                    </group>
+                </group>
+                <div>
+                    <label for="journal_ids" />
+                    <field name="journal_ids"/>
+                </div>
+               <separator string ="Report" colspan="4"/>
+                <group colspan="4">
+                    <field name="data" filename="export_filename"/>
+                </group>
+                <footer>
+                    <button name="action_manual_export_account" string="Trial Balance" type="object" icon="fa-cog"/>
+                    <button name="action_manual_export_analytic" string="Analytic Balance (with accounts)" type="object" icon="fa-cog"/>
+                    <button name="action_manual_export_journal_entries" string="Journal Entries" type="object" icon="fa-cog"/>
+                    or
+                    <button string="Close" class="oe_link" special="cancel" />
+                </footer>
+
+            </form>
+         </field>
+     </record>
+
+    <record id="action_account_csv_export" model="ir.actions.act_window">
+         <field name="name">Accounting CSV Export</field>
+         <field name="res_model">account.csv.export</field>
+         <field name="type">ir.actions.act_window</field>
+         <field name="view_mode">form</field>
+         <field name="view_id" ref="account_csv_export_view"/>
+         <field name="target">new</field>
+   </record>
+
+    <menuitem
+        name="Accounting CSV Export"
+        action="action_account_csv_export"
+        id="menu_account_csv_export"
+        parent="account.menu_finance_reports"
+        sequence="110"
+        />
+
+</odoo>
