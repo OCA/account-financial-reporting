@@ -63,12 +63,7 @@ class ActivityStatement(models.AbstractModel):
                 THEN l.name
                 ELSE '/'
             END as name,
-       CASE WHEN (aj.type IN ('sale', 'purchase'))
-                THEN l.ref
-           WHEN (aj.type in ('bank', 'cash'))
-                THEN 'Payment'
-                ELSE ''
-            END as ref,
+            l.ref as ref,
             l.blocked, l.currency_id, l.company_id,
             CASE WHEN (l.currency_id is not null AND l.amount_currency > 0.0)
                 THEN sum(l.amount_currency)
@@ -95,12 +90,7 @@ class ActivityStatement(models.AbstractModel):
                     THEN l.name
                     ELSE '/'
                 END,
-                CASE WHEN (aj.type IN ('sale', 'purchase'))
-                    THEN l.ref
-                WHEN (aj.type in ('bank', 'cash'))
-                    THEN 'Payment'
-                    ELSE ''
-                END,
+                l.ref,
                 l.blocked, l.currency_id, l.amount_currency, l.company_id
         """, locals()), "utf-8")
 
