@@ -248,7 +248,8 @@ class TrialBalanceReportCompute(models.TransientModel):
             self._prepare_report_general_ledger(account_ids)
         )
         self.general_ledger_id.compute_data_for_report(
-            with_line_details=False, with_partners=self.show_partner_details
+            with_line_details=False, with_partners=self.show_partner_details,
+            trial_balance=True,
         )
 
         # Compute report data

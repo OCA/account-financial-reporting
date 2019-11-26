@@ -242,12 +242,54 @@ class GeneralLedgerReportCompute(models.TransientModel):
 
     @api.multi
     def compute_data_for_report(
-            self, with_line_details=True, with_partners=True):
+            self, with_line_details=True, with_partners=True,
+            trial_balance=False):
         self.ensure_one()
         # Compute report data
+        if not trial_balance:
+            # In order to improve performance, only compute the report for
+            # the accounts that have actual moves in the selected period.
+            domain = [
+                ('company_id', '=', self.company_id.id),
+                ('date', '>=', self.date_from),
+                ('date', '<=', self.date_to),
+            ]
+            if self.filter_account_ids:
+                domain += [('account_id', 'in', self.filter_account_ids.ids)]
+            groups = self.env['account.move.line'].read_group(
+                domain, ['account_id'], ['account_id'])
+            account_ids = []
+            for group in groups:
+                account_ids.append(group['account_id'][0])
+            if account_ids:
+                accounts = self.env['account.account'].browse(account_ids)
+                if not self.filter_account_ids:
+                    self.filter_account_ids = accounts
+
         self._inject_account_values()
 
         if with_partners:
+            if not trial_balance:
+                # In order to improve performance, only compute the report for
+                # the partners that have actual moves in the selected period.
+                domain = [
+                    ('company_id', '=', self.company_id.id),
+                    ('date', '>=', self.date_from),
+                    ('date', '<=', self.date_to),
+                    ('partner_id', '!=', False),
+                ]
+                if self.filter_account_ids:
+                    domain += [('account_id', 'in',
+                                self.filter_account_ids.ids)]
+                groups = self.env['account.move.line'].read_group(
+                    domain, ['partner_id'], ['partner_id'])
+                partner_ids = []
+                for group in groups:
+                    partner_ids.append(group['partner_id'][0])
+                if partner_ids:
+                    partners = self.env['res.partner'].browse(partner_ids)
+                    if not self.filter_partner_ids:
+                        self.filter_partner_ids = partners
             self._inject_partner_values()
             if not self.filter_partner_ids:
                 self._inject_partner_values(only_empty_partner=True)
