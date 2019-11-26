@@ -32,6 +32,7 @@ class ChartOfAccountsReport(models.TransientModel):
         'Chart of Accounts',
         help='Select Charts of Accounts',
         required=True,
+        ondelete="cascade",
         domain=([('parent_id', '=', False)]))
 
     @api.multi
