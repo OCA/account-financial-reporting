@@ -21,22 +21,39 @@ class AccountMove(models.Model):
     @api.multi
     @api.depends('line_ids.account_id.internal_type', 'line_ids.balance')
     def _compute_move_type(self):
-        def _balance_get(line_ids, internal_type):
-            return sum(line_ids.filtered(
-                lambda x: x.account_id.internal_type == internal_type).mapped(
-                    'balance'))
-
-        for move in self:
-            internal_types = move.line_ids.mapped('account_id.internal_type')
-            if 'liquidity' in internal_types:
-                move.move_type = 'liquidity'
-            elif 'payable' in internal_types:
-                balance = _balance_get(move.line_ids, 'payable')
-                move.move_type = (
-                    'payable' if balance < 0 else 'payable_refund')
-            elif 'receivable' in internal_types:
-                balance = _balance_get(move.line_ids, 'receivable')
-                move.move_type = (
-                    'receivable' if balance > 0 else 'receivable_refund')
-            else:
-                move.move_type = 'other'
+        sequence = (
+            ("liquidity", lambda balance: "liquidity"),
+            ("payable", lambda balance: ('payable' if balance < 0
+                                         else 'payable_refund')),
+            ("receivable", lambda balance: ('receivable' if balance > 0
+                                            else 'receivable_refund')),
+            (False, lambda balance: "other"),
+        )
+        chunked_self = (
+            self[i:i + models.PREFETCH_MAX]
+            for i in range(0, len(self), models.PREFETCH_MAX)
+        )
+        for chunk in chunked_self:
+            move_ids = set(chunk.ids)
+            for internal_type, criteria in sequence:
+                if not move_ids:
+                    break
+                # Find balances of the expected type for this move
+                domain = [
+                    ("move_id", "in", list(move_ids)),
+                ]
+                if internal_type:
+                    domain += [
+                        ("account_id.internal_type", "=", internal_type),
+                    ]
+                balances = self.env["account.move.line"].read_group(
+                    domain=domain,
+                    fields=["move_id", "balance"],
+                    groupby=["move_id"],
+                )
+                for balance in balances:
+                    move = self.browse(balance["move_id"][0])
+                    # Discard the move for next searches
+                    move_ids.discard(move.id)
+                    # Update its type
+                    move.move_type = criteria(balance["balance"])
