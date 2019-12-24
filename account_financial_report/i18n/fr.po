@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-16 08:14+0000\n"
-"PO-Revision-Date: 2019-12-24 09:19+0000\n"
+"PO-Revision-Date: 2019-12-24 09:25+0000\n"
 "Last-Translator: Martronic SA <info@martronic.ch>\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "Language: fr\n"
@@ -245,22 +245,22 @@ msgstr "≤ 90 j."
 #: model:ir.ui.menu,name:account_financial_report.menu_aged_partner_balance_wizard
 #, python-format
 msgid "Aged Partner Balance"
-msgstr "Balance Âgée partenaire"
+msgstr "Balance âgée des tiers"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_base
 msgid "Aged Partner Balance -"
-msgstr "Balance Âgée partenaire -"
+msgstr "Balance âgée des tiers -"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_aged_partner_balance_wizard
 msgid "Aged Partner Balance Wizard"
-msgstr "Assistant balance Âgée partenaire"
+msgstr "Assistant balance âgée des tiers"
 
 #. module: account_financial_report
 #: model:ir.actions.report,name:account_financial_report.action_report_aged_partner_balance_xlsx
 msgid "Aged Partner Balance XLSX"
-msgstr "Balance Âgée partenaire XLSX"
+msgstr "Balance âgée des tiers XLSX"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:64
