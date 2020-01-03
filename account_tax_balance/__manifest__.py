@@ -20,4 +20,5 @@
         "views/account_tax_view.xml",
     ],
     "images": ["images/tax_balance.png"],
+    "pre_init_hook": "pre_init_hook",
 }
