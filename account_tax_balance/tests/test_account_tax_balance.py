@@ -108,8 +108,7 @@ class TestAccountTaxBalance(HttpCase):
 
         # exercise search has_moves = True
         taxes = self.env['account.tax'].search([('has_moves', '=', True)])
-        self.assertEqual(len(taxes), 1)
-        self.assertEqual(taxes[0].name, "Tax 10.0%")
+        self.assertLessEqual(tax, taxes)
 
         # testing buttons
         tax_action = tax.view_tax_lines()
