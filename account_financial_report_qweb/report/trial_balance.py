@@ -75,7 +75,7 @@ class TrialBalanceReportAccount(models.TransientModel):
     )
     hide_line = fields.Boolean(compute='_compute_hide_line')
     # Data fields, used to keep link with real object
-    sequence = fields.Integer(index=True, default=1)
+    sequence = fields.Char(index=True, )
     level = fields.Integer(index=True, default=1)
 
     # Data fields, used to keep link with real object
