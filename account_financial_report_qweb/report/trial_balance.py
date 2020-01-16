@@ -551,7 +551,7 @@ WHERE report_trial_balance_qweb_account.account_group_id = accgroup.id
         account account."""
         query_update_account_group = """
 UPDATE report_trial_balance_qweb_account
-SET sequence = CONCAT(newline.sequence, newline.code),,
+SET sequence = CONCAT(newline.sequence, newline.code),
     level = newline.level + 1
 FROM report_trial_balance_qweb_account as newline
 WHERE newline.account_group_id = report_trial_balance_qweb_account.parent_id
