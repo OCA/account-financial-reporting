@@ -399,7 +399,7 @@ SELECT
     accgroup.parent_id,
     coalesce(accgroup.code_prefix, accgroup.name),
     accgroup.name,
-    accgroup.parent_left * 100000,
+    accgroup.code_prefix,
     accgroup.level
 FROM
     account_group accgroup"""
