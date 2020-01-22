@@ -204,21 +204,23 @@ class GeneralLedgerReportWizard(models.TransientModel):
             self.receivable_accounts_only = self.payable_accounts_only = False
 
     @api.multi
+    def _print_report(self, report_type):
+        self.ensure_one()
+        data = self._prepare_report_general_ledger()
+        if report_type == 'xlsx':
+            report_name = 'a_f_r.report_general_ledger_xlsx'
+        else:
+            report_name = 'account_financial_report.general_ledger'
+        return self.env['ir.actions.report'].search(
+            [('report_name', '=', report_name),
+             ('report_type', '=', report_type)], limit=1).report_action(
+            self, data=data)
+
+    @api.multi
     def button_export_html(self):
         self.ensure_one()
-        action = self.env.ref(
-            'account_financial_report.action_report_general_ledger')
-        action_data = action.read()[0]
-        context1 = action_data.get('context', {})
-        if isinstance(context1, pycompat.string_types):
-            context1 = safe_eval(context1)
-        model = self.env['report_general_ledger']
-        report = model.create(self._prepare_report_general_ledger())
-        report.compute_data_for_report()
-        context1['active_id'] = report.id
-        context1['active_ids'] = report.ids
-        action_data['context'] = context1
-        return action_data
+        report_type = 'qweb-html'
+        return self._export(report_type)
 
     @api.multi
     def button_export_pdf(self):
@@ -235,6 +237,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
     def _prepare_report_general_ledger(self):
         self.ensure_one()
         return {
+            'wizard_id': self.id,
             'date_from': self.date_from,
             'date_to': self.date_to,
             'only_posted_moves': self.target_move == 'posted',
@@ -242,18 +245,15 @@ class GeneralLedgerReportWizard(models.TransientModel):
             'foreign_currency': self.foreign_currency,
             'show_analytic_tags': self.show_analytic_tags,
             'company_id': self.company_id.id,
-            'filter_account_ids': [(6, 0, self.account_ids.ids)],
-            'filter_partner_ids': [(6, 0, self.partner_ids.ids)],
-            'filter_cost_center_ids': [(6, 0, self.cost_center_ids.ids)],
-            'filter_analytic_tag_ids': [(6, 0, self.analytic_tag_ids.ids)],
-            'filter_journal_ids': [(6, 0, self.account_journal_ids.ids)],
+            'account_ids': self.account_ids.ids,
+            'partner_ids': self.partner_ids.ids,
+            'cost_center_ids': self.cost_center_ids.ids,
+            'analytic_tag_ids': self.analytic_tag_ids.ids,
+            'journal_ids': self.account_journal_ids.ids,
             'centralize': self.centralize,
             'fy_start_date': self.fy_start_date,
         }
 
     def _export(self, report_type):
         """Default export is PDF."""
-        model = self.env['report_general_ledger']
-        report = model.create(self._prepare_report_general_ledger())
-        report.compute_data_for_report()
-        return report.print_report(report_type)
+        return self._print_report(report_type)
