@@ -1,88 +1,13 @@
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA
+# Copyright 2020 ForgeFlow S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import time
 
 from odoo.tests import common
-from odoo import fields
+from odoo import fields, api
 from datetime import date
-from . import abstract_test_foreign_currency as a_t_f_c
-
-
-class TestGeneralLedger(a_t_f_c.AbstractTestForeignCurrency):
-    """
-        Technical tests for General Ledger Report.
-    """
-
-    def _getReportModel(self):
-        return self.env['report_general_ledger']
-
-    def _getQwebReportName(self):
-        return 'account_financial_report.report_general_ledger_qweb'
-
-    def _getXlsxReportName(self):
-        return 'a_f_r.report_general_ledger_xlsx'
-
-    def _getXlsxReportActionName(self):
-        return 'account_financial_report.' \
-               'action_report_general_ledger_xlsx'
-
-    def _getReportTitle(self):
-        return 'Odoo'
-
-    def _getBaseFilters(self):
-        return {
-            'date_from': date(date.today().year, 1, 1),
-            'date_to': date(date.today().year, 12, 31),
-            'company_id': self.company.id,
-            'fy_start_date': date(date.today().year, 1, 1),
-            'foreign_currency': True,
-        }
-
-    def _getAdditionalFiltersToBeTested(self):
-
-        additional_filters = [
-            {'only_posted_moves': True},
-            {'hide_account_at_0': True},
-            {'centralize': True},
-            {'only_posted_moves': True, 'hide_account_at_0': True},
-            {'only_posted_moves': True, 'centralize': True},
-            {'hide_account_at_0': True, 'centralize': True},
-            {
-                'only_posted_moves': True,
-                'hide_account_at_0': True,
-                'centralize': True
-            },
-        ]
-        # Add `show_analytic_tags` filter on each cases
-        additional_filters_with_show_tags = []
-        for additional_filter in additional_filters:
-            additional_filter['show_analytic_tags'] = True
-            additional_filters_with_show_tags.append(
-                additional_filter
-            )
-        additional_filters += additional_filters_with_show_tags
-        # Add `filter_analytic_tag_ids` filter on each cases
-        analytic_tag = self.env['account.analytic.tag'].create({
-            'name': 'TEST tag'
-        })
-        # Define all move lines on this tag
-        # (this test just check with the all filters, all works technically)
-        move_lines = self.env['account.move.line'].search([])
-        move_lines.write({
-            'analytic_tag_ids': [(6, False, analytic_tag.ids)],
-        })
-        additional_filters_with_filter_tags = []
-        for additional_filter in additional_filters:
-            additional_filter['filter_analytic_tag_ids'] = [
-                (6, False, analytic_tag.ids)
-            ]
-            additional_filters_with_filter_tags.append(
-                additional_filter
-            )
-        additional_filters += additional_filters_with_filter_tags
-        return additional_filters
 
 
 class TestGeneralLedgerReport(common.TransactionCase):
@@ -106,6 +31,7 @@ class TestGeneralLedgerReport(common.TransactionCase):
                 '=',
                 self.env.ref('account.data_unaffected_earnings').id
             )], limit=1)
+        self.partner = self.env.ref('base.res_partner_12')
 
     def _add_move(
             self,
@@ -148,47 +74,92 @@ class TestGeneralLedgerReport(common.TransactionCase):
         move.post()
 
     def _get_report_lines(self, with_partners=False):
+        centralize = True
+        if with_partners:
+            centralize = False
         company = self.env.ref('base.main_company')
-        general_ledger = self.env['report_general_ledger'].create({
+        general_ledger = self.env['general.ledger.report.wizard'].create({
             'date_from': self.fy_date_start,
             'date_to': self.fy_date_end,
-            'only_posted_moves': True,
+            'target_move': 'posted',
             'hide_account_at_0': False,
             'company_id': company.id,
             'fy_start_date': self.fy_date_start,
+            'centralize': centralize,
             })
-        general_ledger.compute_data_for_report(
-            with_line_details=True, with_partners=with_partners
-        )
-        lines = {}
-        report_account_model = self.env['report_general_ledger_account']
-        lines['receivable'] = report_account_model.search([
-            ('report_id', '=', general_ledger.id),
-            ('account_id', '=', self.receivable_account.id),
-        ])
-        lines['income'] = report_account_model.search([
-            ('report_id', '=', general_ledger.id),
-            ('account_id', '=', self.income_account.id),
-        ])
-        lines['unaffected'] = report_account_model.search([
-            ('report_id', '=', general_ledger.id),
-            ('account_id', '=', self.unaffected_account.id),
-        ])
-        if with_partners:
-            report_partner_model = self.env[
-                'report_general_ledger_partner'
-            ]
-            lines['partner_receivable'] = report_partner_model.search([
-                ('report_account_id', '=', lines['receivable'].id),
-                ('partner_id', '=', self.env.ref('base.res_partner_12').id),
-            ])
-        return lines
+        data = general_ledger._prepare_report_general_ledger()
+        res_data = self.env[
+            'report.account_financial_report.general_ledger'
+        ]._get_report_values(general_ledger, data)
+        return res_data
+
+    @api.model
+    def check_account_in_report(self, account_id, general_ledger):
+        account_in_report = False
+        for account in general_ledger:
+            if account['id'] == account_id:
+                account_in_report = True
+                break
+        return account_in_report
+
+    @api.model
+    def check_partner_in_report(self, account_id, partner_id, general_ledger):
+        partner_in_report = False
+        for account in general_ledger:
+            if account['id'] == account_id and account['partners']:
+                for partner in account['list_partner']:
+                    if partner['id'] == partner_id:
+                        partner_in_report = True
+        return partner_in_report
+
+    @api.model
+    def _get_initial_balance(self, account_id, general_ledger):
+        initial_balance = False
+        for account in general_ledger:
+            if account['id'] == account_id:
+                initial_balance = account['init_bal']
+        return initial_balance
+
+    @api.model
+    def _get_partner_initial_balance(self, account_id, partner_id,
+                                     general_ledger):
+        initial_balance = False
+        for account in general_ledger:
+            if account['id'] == account_id and account['partners']:
+                for partner in account['list_partner']:
+                    if partner['id'] == partner_id:
+                        initial_balance = partner['init_bal']
+        return initial_balance
+
+    @api.model
+    def _get_final_balance(self, account_id, general_ledger):
+        final_balance = False
+        for account in general_ledger:
+            if account['id'] == account_id:
+                final_balance = account['fin_bal']
+        return final_balance
+
+    @api.model
+    def _get_partner_final_balance(
+            self, account_id, partner_id, general_ledger):
+        final_balance = False
+        for account in general_ledger:
+            if account['id'] == account_id and account['partners']:
+                for partner in account['list_partner']:
+                    if partner['id'] == partner_id:
+                        final_balance = partner['fin_bal']
+        return final_balance
 
     def test_01_account_balance(self):
         # Generate the general ledger line
-        lines = self._get_report_lines()
-        self.assertEqual(len(lines['receivable']), 0)
-        self.assertEqual(len(lines['income']), 0)
+        res_data = self._get_report_lines()
+        general_ledger = res_data['general_ledger']
+        check_receivable_account = self.check_account_in_report(
+            self.receivable_account.id, general_ledger)
+        self.assertFalse(check_receivable_account)
+        check_income_account = self.check_account_in_report(
+            self.income_account.id, general_ledger)
+        self.assertFalse(check_income_account)
 
         # Add a move at the previous day of the first day of fiscal year
         # to check the initial balance
@@ -201,17 +172,27 @@ class TestGeneralLedgerReport(common.TransactionCase):
         )
 
         # Re Generate the general ledger line
-        lines = self._get_report_lines()
-        self.assertEqual(len(lines['receivable']), 1)
-        self.assertEqual(len(lines['income']), 0)
+        res_data = self._get_report_lines()
+        general_ledger = res_data['general_ledger']
+        check_receivable_account = self.check_account_in_report(
+            self.receivable_account.id, general_ledger)
+        self.assertTrue(check_receivable_account)
+        check_income_account = self.check_account_in_report(
+            self.income_account.id, general_ledger)
+        self.assertFalse(check_income_account)
 
         # Check the initial and final balance
-        self.assertEqual(lines['receivable'].initial_debit, 1000)
-        self.assertEqual(lines['receivable'].initial_credit, 0)
-        self.assertEqual(lines['receivable'].initial_balance, 1000)
-        self.assertEqual(lines['receivable'].final_debit, 1000)
-        self.assertEqual(lines['receivable'].final_credit, 0)
-        self.assertEqual(lines['receivable'].final_balance, 1000)
+        receivable_init_balance = self._get_initial_balance(
+            self.receivable_account.id, general_ledger)
+        receivable_fin_balance = self._get_final_balance(
+            self.receivable_account.id, general_ledger)
+
+        self.assertEqual(receivable_init_balance['debit'], 1000)
+        self.assertEqual(receivable_init_balance['credit'], 0)
+        self.assertEqual(receivable_init_balance['balance'], 1000)
+        self.assertEqual(receivable_fin_balance['debit'], 1000)
+        self.assertEqual(receivable_fin_balance['credit'], 0)
+        self.assertEqual(receivable_fin_balance['balance'], 1000)
 
         # Add reversale move of the initial move the first day of fiscal year
         # to check the first day of fiscal year is not used
@@ -225,24 +206,38 @@ class TestGeneralLedgerReport(common.TransactionCase):
         )
 
         # Re Generate the general ledger line
-        lines = self._get_report_lines()
-        self.assertEqual(len(lines['receivable']), 1)
-        self.assertEqual(len(lines['income']), 1)
+        res_data = self._get_report_lines()
+        general_ledger = res_data['general_ledger']
+        check_receivable_account = self.check_account_in_report(
+            self.receivable_account.id, general_ledger)
+        self.assertTrue(check_receivable_account)
+        check_income_account = self.check_account_in_report(
+            self.income_account.id, general_ledger)
+        self.assertTrue(check_income_account)
 
         # Check the initial and final balance
-        self.assertEqual(lines['receivable'].initial_debit, 1000)
-        self.assertEqual(lines['receivable'].initial_credit, 0)
-        self.assertEqual(lines['receivable'].initial_balance, 1000)
-        self.assertEqual(lines['receivable'].final_debit, 1000)
-        self.assertEqual(lines['receivable'].final_credit, 1000)
-        self.assertEqual(lines['receivable'].final_balance, 0)
+        receivable_init_balance = self._get_initial_balance(
+            self.receivable_account.id, general_ledger)
+        receivable_fin_balance = self._get_final_balance(
+            self.receivable_account.id, general_ledger)
+        income_init_balance = self._get_initial_balance(
+            self.income_account.id, general_ledger)
+        income_fin_balance = self._get_final_balance(
+            self.income_account.id, general_ledger)
 
-        self.assertEqual(lines['income'].initial_debit, 0)
-        self.assertEqual(lines['income'].initial_credit, 0)
-        self.assertEqual(lines['income'].initial_balance, 0)
-        self.assertEqual(lines['income'].final_debit, 1000)
-        self.assertEqual(lines['income'].final_credit, 0)
-        self.assertEqual(lines['income'].final_balance, 1000)
+        self.assertEqual(receivable_init_balance['debit'], 1000)
+        self.assertEqual(receivable_init_balance['credit'], 0)
+        self.assertEqual(receivable_init_balance['balance'], 1000)
+        self.assertEqual(receivable_fin_balance['debit'], 1000)
+        self.assertEqual(receivable_fin_balance['credit'], 1000)
+        self.assertEqual(receivable_fin_balance['balance'], 0)
+
+        self.assertEqual(income_init_balance['debit'], 0)
+        self.assertEqual(income_init_balance['credit'], 0)
+        self.assertEqual(income_init_balance['balance'], 0)
+        self.assertEqual(income_fin_balance['debit'], 1000)
+        self.assertEqual(income_fin_balance['credit'], 0)
+        self.assertEqual(income_fin_balance['balance'], 1000)
 
         # Add another move at the end day of fiscal year
         # to check that it correctly used on report
@@ -255,29 +250,46 @@ class TestGeneralLedgerReport(common.TransactionCase):
         )
 
         # Re Generate the general ledger line
-        lines = self._get_report_lines()
-        self.assertEqual(len(lines['receivable']), 1)
-        self.assertEqual(len(lines['income']), 1)
+        res_data = self._get_report_lines()
+        general_ledger = res_data['general_ledger']
+        check_receivable_account = self.check_account_in_report(
+            self.receivable_account.id, general_ledger)
+        self.assertTrue(check_receivable_account)
+        check_income_account = self.check_account_in_report(
+            self.income_account.id, general_ledger)
+        self.assertTrue(check_income_account)
 
         # Check the initial and final balance
-        self.assertEqual(lines['receivable'].initial_debit, 1000)
-        self.assertEqual(lines['receivable'].initial_credit, 0)
-        self.assertEqual(lines['receivable'].initial_balance, 1000)
-        self.assertEqual(lines['receivable'].final_debit, 1000)
-        self.assertEqual(lines['receivable'].final_credit, 2000)
-        self.assertEqual(lines['receivable'].final_balance, -1000)
+        receivable_init_balance = self._get_initial_balance(
+            self.receivable_account.id, general_ledger)
+        receivable_fin_balance = self._get_final_balance(
+            self.receivable_account.id, general_ledger)
+        income_init_balance = self._get_initial_balance(
+            self.income_account.id, general_ledger)
+        income_fin_balance = self._get_final_balance(
+            self.income_account.id, general_ledger)
 
-        self.assertEqual(lines['income'].initial_debit, 0)
-        self.assertEqual(lines['income'].initial_credit, 0)
-        self.assertEqual(lines['income'].initial_balance, 0)
-        self.assertEqual(lines['income'].final_debit, 2000)
-        self.assertEqual(lines['income'].final_credit, 0)
-        self.assertEqual(lines['income'].final_balance, 2000)
+        self.assertEqual(receivable_init_balance['debit'], 1000)
+        self.assertEqual(receivable_init_balance['credit'], 0)
+        self.assertEqual(receivable_init_balance['balance'], 1000)
+        self.assertEqual(receivable_fin_balance['debit'], 1000)
+        self.assertEqual(receivable_fin_balance['credit'], 2000)
+        self.assertEqual(receivable_fin_balance['balance'], -1000)
+
+        self.assertEqual(income_init_balance['debit'], 0)
+        self.assertEqual(income_init_balance['credit'], 0)
+        self.assertEqual(income_init_balance['balance'], 0)
+        self.assertEqual(income_fin_balance['debit'], 2000)
+        self.assertEqual(income_fin_balance['credit'], 0)
+        self.assertEqual(income_fin_balance['balance'], 2000)
 
     def test_02_partner_balance(self):
         # Generate the general ledger line
-        lines = self._get_report_lines(with_partners=True)
-        self.assertEqual(len(lines['partner_receivable']), 0)
+        res_data = self._get_report_lines(with_partners=True)
+        general_ledger = res_data['general_ledger']
+        check_partner = self.check_partner_in_report(
+            self.receivable_account.id, self.partner.id, general_ledger)
+        self.assertFalse(check_partner)
 
         # Add a move at the previous day of the first day of fiscal year
         # to check the initial balance
@@ -290,16 +302,26 @@ class TestGeneralLedgerReport(common.TransactionCase):
         )
 
         # Re Generate the general ledger line
-        lines = self._get_report_lines(with_partners=True)
-        self.assertEqual(len(lines['partner_receivable']), 1)
+        res_data = self._get_report_lines(with_partners=True)
+        general_ledger = res_data['general_ledger']
+        check_partner = self.check_partner_in_report(
+            self.receivable_account.id, self.partner.id, general_ledger)
+        self.assertTrue(check_partner)
 
         # Check the initial and final balance
-        self.assertEqual(lines['partner_receivable'].initial_debit, 1000)
-        self.assertEqual(lines['partner_receivable'].initial_credit, 0)
-        self.assertEqual(lines['partner_receivable'].initial_balance, 1000)
-        self.assertEqual(lines['partner_receivable'].final_debit, 1000)
-        self.assertEqual(lines['partner_receivable'].final_credit, 0)
-        self.assertEqual(lines['partner_receivable'].final_balance, 1000)
+        partner_initial_balance = self._get_partner_initial_balance(
+            self.receivable_account.id, self.partner.id, general_ledger
+        )
+        partner_final_balance = self._get_partner_final_balance(
+            self.receivable_account.id, self.partner.id, general_ledger
+        )
+
+        self.assertEqual(partner_initial_balance['debit'], 1000)
+        self.assertEqual(partner_initial_balance['credit'], 0)
+        self.assertEqual(partner_initial_balance['balance'], 1000)
+        self.assertEqual(partner_final_balance['debit'], 1000)
+        self.assertEqual(partner_final_balance['credit'], 0)
+        self.assertEqual(partner_final_balance['balance'], 1000)
 
         # Add reversale move of the initial move the first day of fiscal year
         # to check the first day of fiscal year is not used
@@ -313,16 +335,26 @@ class TestGeneralLedgerReport(common.TransactionCase):
         )
 
         # Re Generate the general ledger line
-        lines = self._get_report_lines(with_partners=True)
-        self.assertEqual(len(lines['partner_receivable']), 1)
+        res_data = self._get_report_lines(with_partners=True)
+        general_ledger = res_data['general_ledger']
+        check_partner = self.check_partner_in_report(
+            self.receivable_account.id, self.partner.id, general_ledger)
+        self.assertTrue(check_partner)
 
         # Check the initial and final balance
-        self.assertEqual(lines['partner_receivable'].initial_debit, 1000)
-        self.assertEqual(lines['partner_receivable'].initial_credit, 0)
-        self.assertEqual(lines['partner_receivable'].initial_balance, 1000)
-        self.assertEqual(lines['partner_receivable'].final_debit, 1000)
-        self.assertEqual(lines['partner_receivable'].final_credit, 1000)
-        self.assertEqual(lines['partner_receivable'].final_balance, 0)
+        partner_initial_balance = self._get_partner_initial_balance(
+            self.receivable_account.id, self.partner.id, general_ledger
+        )
+        partner_final_balance = self._get_partner_final_balance(
+            self.receivable_account.id, self.partner.id, general_ledger
+        )
+
+        self.assertEqual(partner_initial_balance['debit'], 1000)
+        self.assertEqual(partner_initial_balance['credit'], 0)
+        self.assertEqual(partner_initial_balance['balance'], 1000)
+        self.assertEqual(partner_final_balance['debit'], 1000)
+        self.assertEqual(partner_final_balance['credit'], 1000)
+        self.assertEqual(partner_final_balance['balance'], 0)
 
         # Add another move at the end day of fiscal year
         # to check that it correctly used on report
@@ -335,29 +367,47 @@ class TestGeneralLedgerReport(common.TransactionCase):
         )
 
         # Re Generate the general ledger line
-        lines = self._get_report_lines(with_partners=True)
-        self.assertEqual(len(lines['partner_receivable']), 1)
+        res_data = self._get_report_lines(with_partners=True)
+        general_ledger = res_data['general_ledger']
+        check_partner = self.check_partner_in_report(
+            self.receivable_account.id, self.partner.id, general_ledger)
+        self.assertTrue(check_partner)
 
         # Check the initial and final balance
-        self.assertEqual(lines['partner_receivable'].initial_debit, 1000)
-        self.assertEqual(lines['partner_receivable'].initial_credit, 0)
-        self.assertEqual(lines['partner_receivable'].initial_balance, 1000)
-        self.assertEqual(lines['partner_receivable'].final_debit, 1000)
-        self.assertEqual(lines['partner_receivable'].final_credit, 2000)
-        self.assertEqual(lines['partner_receivable'].final_balance, -1000)
+        partner_initial_balance = self._get_partner_initial_balance(
+            self.receivable_account.id, self.partner.id, general_ledger
+        )
+        partner_final_balance = self._get_partner_final_balance(
+            self.receivable_account.id, self.partner.id, general_ledger
+        )
+
+        self.assertEqual(partner_initial_balance['debit'], 1000)
+        self.assertEqual(partner_initial_balance['credit'], 0)
+        self.assertEqual(partner_initial_balance['balance'], 1000)
+        self.assertEqual(partner_final_balance['debit'], 1000)
+        self.assertEqual(partner_final_balance['credit'], 2000)
+        self.assertEqual(partner_final_balance['balance'], -1000)
 
     def test_03_unaffected_account_balance(self):
         # Generate the general ledger line
-        lines = self._get_report_lines()
-        self.assertEqual(len(lines['unaffected']), 1)
+        res_data = self._get_report_lines()
+        general_ledger = res_data['general_ledger']
+        check_unaffected_account = self.check_account_in_report(
+            self.unaffected_account.id, general_ledger)
+        self.assertTrue(check_unaffected_account)
 
         # Check the initial and final balance
-        self.assertEqual(lines['unaffected'].initial_debit, 0)
-        self.assertEqual(lines['unaffected'].initial_credit, 0)
-        self.assertEqual(lines['unaffected'].initial_balance, 0)
-        self.assertEqual(lines['unaffected'].final_debit, 0)
-        self.assertEqual(lines['unaffected'].final_credit, 0)
-        self.assertEqual(lines['unaffected'].final_balance, 0)
+        unaffected_init_balance = self._get_initial_balance(
+            self.unaffected_account.id, general_ledger)
+        unaffected_fin_balance = self._get_final_balance(
+            self.unaffected_account.id, general_ledger)
+
+        self.assertEqual(unaffected_init_balance['debit'], 0)
+        self.assertEqual(unaffected_init_balance['credit'], 0)
+        self.assertEqual(unaffected_init_balance['balance'], 0)
+        self.assertEqual(unaffected_fin_balance['debit'], 0)
+        self.assertEqual(unaffected_fin_balance['credit'], 0)
+        self.assertEqual(unaffected_fin_balance['balance'], 0)
 
         # Add a move at the previous day of the first day of fiscal year
         # to check the initial balance
@@ -370,16 +420,24 @@ class TestGeneralLedgerReport(common.TransactionCase):
         )
 
         # Re Generate the general ledger line
-        lines = self._get_report_lines()
-        self.assertEqual(len(lines['unaffected']), 1)
+        res_data = self._get_report_lines()
+        general_ledger = res_data['general_ledger']
+        check_unaffected_account = self.check_account_in_report(
+            self.unaffected_account.id, general_ledger)
+        self.assertTrue(check_unaffected_account)
 
         # Check the initial and final balance
-        self.assertEqual(lines['unaffected'].initial_debit, 0)
-        self.assertEqual(lines['unaffected'].initial_credit, 1000)
-        self.assertEqual(lines['unaffected'].initial_balance, -1000)
-        self.assertEqual(lines['unaffected'].final_debit, 0)
-        self.assertEqual(lines['unaffected'].final_credit, 1000)
-        self.assertEqual(lines['unaffected'].final_balance, -1000)
+        unaffected_init_balance = self._get_initial_balance(
+            self.unaffected_account.id, general_ledger)
+        unaffected_fin_balance = self._get_final_balance(
+            self.unaffected_account.id, general_ledger)
+
+        self.assertEqual(unaffected_init_balance['debit'], 0)
+        self.assertEqual(unaffected_init_balance['credit'], 1000)
+        self.assertEqual(unaffected_init_balance['balance'], -1000)
+        self.assertEqual(unaffected_fin_balance['debit'], 0)
+        self.assertEqual(unaffected_fin_balance['credit'], 1000)
+        self.assertEqual(unaffected_fin_balance['balance'], -1000)
 
         # Add reversale move of the initial move the first day of fiscal year
         # to check the first day of fiscal year is not used
@@ -395,16 +453,24 @@ class TestGeneralLedgerReport(common.TransactionCase):
         )
 
         # Re Generate the general ledger line
-        lines = self._get_report_lines()
-        self.assertEqual(len(lines['unaffected']), 1)
+        res_data = self._get_report_lines()
+        general_ledger = res_data['general_ledger']
+        check_unaffected_account = self.check_account_in_report(
+            self.unaffected_account.id, general_ledger)
+        self.assertTrue(check_unaffected_account)
 
         # Check the initial and final balance
-        self.assertEqual(lines['unaffected'].initial_debit, 0)
-        self.assertEqual(lines['unaffected'].initial_credit, 1000)
-        self.assertEqual(lines['unaffected'].initial_balance, -1000)
-        self.assertEqual(lines['unaffected'].final_debit, 1000)
-        self.assertEqual(lines['unaffected'].final_credit, 1000)
-        self.assertEqual(lines['unaffected'].final_balance, 0)
+        unaffected_init_balance = self._get_initial_balance(
+            self.unaffected_account.id, general_ledger)
+        unaffected_fin_balance = self._get_final_balance(
+            self.unaffected_account.id, general_ledger)
+
+        self.assertEqual(unaffected_init_balance['debit'], 0)
+        self.assertEqual(unaffected_init_balance['credit'], 1000)
+        self.assertEqual(unaffected_init_balance['balance'], -1000)
+        self.assertEqual(unaffected_fin_balance['debit'], 1000)
+        self.assertEqual(unaffected_fin_balance['credit'], 1000)
+        self.assertEqual(unaffected_fin_balance['balance'], 0)
 
         # Add another move at the end day of fiscal year
         # to check that it correctly used on report
@@ -419,29 +485,45 @@ class TestGeneralLedgerReport(common.TransactionCase):
         )
 
         # Re Generate the general ledger line
-        lines = self._get_report_lines()
-        self.assertEqual(len(lines['unaffected']), 1)
+        res_data = self._get_report_lines()
+        general_ledger = res_data['general_ledger']
+        check_unaffected_account = self.check_account_in_report(
+            self.unaffected_account.id, general_ledger)
+        self.assertTrue(check_unaffected_account)
 
         # Check the initial and final balance
-        self.assertEqual(lines['unaffected'].initial_debit, 0)
-        self.assertEqual(lines['unaffected'].initial_credit, 1000)
-        self.assertEqual(lines['unaffected'].initial_balance, -1000)
-        self.assertEqual(lines['unaffected'].final_debit, 1000)
-        self.assertEqual(lines['unaffected'].final_credit, 4000)
-        self.assertEqual(lines['unaffected'].final_balance, -3000)
+        unaffected_init_balance = self._get_initial_balance(
+            self.unaffected_account.id, general_ledger)
+        unaffected_fin_balance = self._get_final_balance(
+            self.unaffected_account.id, general_ledger)
+
+        self.assertEqual(unaffected_init_balance['debit'], 0)
+        self.assertEqual(unaffected_init_balance['credit'], 1000)
+        self.assertEqual(unaffected_init_balance['balance'], -1000)
+        self.assertEqual(unaffected_fin_balance['debit'], 1000)
+        self.assertEqual(unaffected_fin_balance['credit'], 4000)
+        self.assertEqual(unaffected_fin_balance['balance'], -3000)
 
     def test_04_unaffected_account_balance_2_years(self):
         # Generate the general ledger line
-        lines = self._get_report_lines()
-        self.assertEqual(len(lines['unaffected']), 1)
+        res_data = self._get_report_lines()
+        general_ledger = res_data['general_ledger']
+        check_unaffected_account = self.check_account_in_report(
+            self.unaffected_account.id, general_ledger)
+        self.assertTrue(check_unaffected_account)
 
         # Check the initial and final balance
-        self.assertEqual(lines['unaffected'].initial_debit, 0)
-        self.assertEqual(lines['unaffected'].initial_credit, 0)
-        self.assertEqual(lines['unaffected'].initial_balance, 0)
-        self.assertEqual(lines['unaffected'].final_debit, 0)
-        self.assertEqual(lines['unaffected'].final_credit, 0)
-        self.assertEqual(lines['unaffected'].final_balance, 0)
+        unaffected_init_balance = self._get_initial_balance(
+            self.unaffected_account.id, general_ledger)
+        unaffected_fin_balance = self._get_final_balance(
+            self.unaffected_account.id, general_ledger)
+
+        self.assertEqual(unaffected_init_balance['debit'], 0)
+        self.assertEqual(unaffected_init_balance['credit'], 0)
+        self.assertEqual(unaffected_init_balance['balance'], 0)
+        self.assertEqual(unaffected_fin_balance['debit'], 0)
+        self.assertEqual(unaffected_fin_balance['credit'], 0)
+        self.assertEqual(unaffected_fin_balance['balance'], 0)
 
         # Add a move at any date 2 years before the balance
         # (to create an historic)
@@ -454,16 +536,24 @@ class TestGeneralLedgerReport(common.TransactionCase):
         )
 
         # Re Generate the general ledger line
-        lines = self._get_report_lines()
-        self.assertEqual(len(lines['unaffected']), 1)
+        res_data = self._get_report_lines()
+        general_ledger = res_data['general_ledger']
+        check_unaffected_account = self.check_account_in_report(
+            self.unaffected_account.id, general_ledger)
+        self.assertTrue(check_unaffected_account)
 
         # Check the initial and final balance
-        self.assertEqual(lines['unaffected'].initial_debit, 1000)
-        self.assertEqual(lines['unaffected'].initial_credit, 0)
-        self.assertEqual(lines['unaffected'].initial_balance, 1000)
-        self.assertEqual(lines['unaffected'].final_debit, 1000)
-        self.assertEqual(lines['unaffected'].final_credit, 0)
-        self.assertEqual(lines['unaffected'].final_balance, 1000)
+        unaffected_init_balance = self._get_initial_balance(
+            self.unaffected_account.id, general_ledger)
+        unaffected_fin_balance = self._get_final_balance(
+            self.unaffected_account.id, general_ledger)
+
+        self.assertEqual(unaffected_init_balance['debit'], 1000)
+        self.assertEqual(unaffected_init_balance['credit'], 0)
+        self.assertEqual(unaffected_init_balance['balance'], 1000)
+        self.assertEqual(unaffected_fin_balance['debit'], 1000)
+        self.assertEqual(unaffected_fin_balance['credit'], 0)
+        self.assertEqual(unaffected_fin_balance['balance'], 1000)
 
         # Affect the company's result last year
         self._add_move(
@@ -486,17 +576,26 @@ class TestGeneralLedgerReport(common.TransactionCase):
             unaffected_debit=0,
             unaffected_credit=0
         )
+
         # Re Generate the general ledger line
-        lines = self._get_report_lines()
-        self.assertEqual(len(lines['unaffected']), 1)
+        res_data = self._get_report_lines()
+        general_ledger = res_data['general_ledger']
+        check_unaffected_account = self.check_account_in_report(
+            self.unaffected_account.id, general_ledger)
+        self.assertTrue(check_unaffected_account)
 
         # Check the initial and final balance
-        self.assertEqual(lines['unaffected'].initial_debit, 500)
-        self.assertEqual(lines['unaffected'].initial_credit, 0)
-        self.assertEqual(lines['unaffected'].initial_balance, 500)
-        self.assertEqual(lines['unaffected'].final_debit, 500)
-        self.assertEqual(lines['unaffected'].final_credit, 0)
-        self.assertEqual(lines['unaffected'].final_balance, 500)
+        unaffected_init_balance = self._get_initial_balance(
+            self.unaffected_account.id, general_ledger)
+        unaffected_fin_balance = self._get_final_balance(
+            self.unaffected_account.id, general_ledger)
+
+        self.assertEqual(unaffected_init_balance['debit'], 1500)
+        self.assertEqual(unaffected_init_balance['credit'], 1000)
+        self.assertEqual(unaffected_init_balance['balance'], 500)
+        self.assertEqual(unaffected_fin_balance['debit'], 1500)
+        self.assertEqual(unaffected_fin_balance['credit'], 1000)
+        self.assertEqual(unaffected_fin_balance['balance'], 500)
 
     def test_partner_filter(self):
         partner_1 = self.env.ref('base.res_partner_1')

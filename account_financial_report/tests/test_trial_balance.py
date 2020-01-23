@@ -1,65 +1,9 @@
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA
+# Copyright 2020 ForgeFlow S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from datetime import date
 from odoo.tests import common
-from . import abstract_test_foreign_currency as a_t_f_c
-
-
-class TestTrialBalance(a_t_f_c.AbstractTestForeignCurrency):
-    """
-        Technical tests for Trial Balance Report.
-    """
-
-    def _getReportModel(self):
-        return self.env['report_trial_balance']
-
-    def _getQwebReportName(self):
-        return 'account_financial_report.report_trial_balance_qweb'
-
-    def _getXlsxReportName(self):
-        return 'a_f_r.report_trial_balance_xlsx'
-
-    def _getXlsxReportActionName(self):
-        return 'account_financial_report.action_report_trial_balance_xlsx'
-
-    def _getReportTitle(self):
-        return 'Odoo'
-
-    def _getBaseFilters(self):
-        return {
-            'date_from': date(date.today().year, 1, 1),
-            'date_to': date(date.today().year, 12, 31),
-            'company_id': self.company.id,
-            'fy_start_date': date(date.today().year, 1, 1),
-            'foreign_currency': True,
-            'show_partner_details': True,
-        }
-
-    def _getAdditionalFiltersToBeTested(self):
-        return [
-            {'only_posted_moves': True},
-            {'hide_account_at_0': True},
-            {'show_partner_details': True},
-            {'hierarchy_on': 'computed'},
-            {'hierarchy_on': 'relation'},
-            {'only_posted_moves': True, 'hide_account_at_0': True,
-             'hierarchy_on': 'computed'},
-            {'only_posted_moves': True, 'hide_account_at_0': True,
-             'hierarchy_on': 'relation'},
-            {'only_posted_moves': True, 'hide_account_at_0': True},
-            {'only_posted_moves': True, 'show_partner_details': True},
-            {'hide_account_at_0': True, 'show_partner_details': True},
-            {
-                'only_posted_moves': True,
-                'hide_account_at_0': True,
-                'show_partner_details': True
-            },
-        ]
-
-    def _partner_test_is_possible(self, filters):
-        return 'show_partner_details' in filters
 
 
 class TestTrialBalanceReport(common.TransactionCase):
@@ -114,6 +58,13 @@ class TestTrialBalanceReport(common.TransactionCase):
         self.fy_date_end = '2016-12-31'
         self.date_start = '2016-01-01'
         self.date_end = '2016-12-31'
+        self.partner = self.env.ref('base.res_partner_12')
+        self.unaffected_account = self.env['account.account'].search([
+            (
+                'user_type_id',
+                '=',
+                self.env.ref('account.data_unaffected_earnings').id
+            )], limit=1)
 
     def _add_move(
             self,
@@ -169,48 +120,80 @@ class TestTrialBalanceReport(common.TransactionCase):
 
     def _get_report_lines(self, with_partners=False, hierarchy_on='computed'):
         company = self.env.ref('base.main_company')
-        trial_balance = self.env['report_trial_balance'].create({
+        trial_balance = self.env['trial.balance.report.wizard'].create({
             'date_from': self.date_start,
             'date_to': self.date_end,
-            'only_posted_moves': True,
-            'hide_account_at_0': False,
+            'target_move': 'posted',
+            'hide_account_at_0': True,
             'hierarchy_on': hierarchy_on,
             'company_id': company.id,
             'fy_start_date': self.fy_date_start,
             'show_partner_details': with_partners,
             })
-        trial_balance.compute_data_for_report()
-        lines = {}
-        report_account_model = self.env['report_trial_balance_account']
-        lines['receivable'] = report_account_model.search([
-            ('report_id', '=', trial_balance.id),
-            ('account_id', '=', self.account100.id),
-        ])
-        lines['income'] = report_account_model.search([
-            ('report_id', '=', trial_balance.id),
-            ('account_id', '=', self.account200.id),
-        ])
-        lines['unaffected'] = report_account_model.search([
-            ('report_id', '=', trial_balance.id),
-            ('account_id', '=', self.account110.id),
-        ])
-        lines['group1'] = report_account_model.search([
-            ('report_id', '=', trial_balance.id),
-            ('account_group_id', '=', self.group1.id),
-        ])
-        lines['group2'] = report_account_model.search([
-            ('report_id', '=', trial_balance.id),
-            ('account_group_id', '=', self.group2.id),
-        ])
-        if with_partners:
-            report_partner_model = self.env[
-                'report_trial_balance_partner'
-            ]
-            lines['partner_receivable'] = report_partner_model.search([
-                ('report_account_id', '=', lines['receivable'].id),
-                ('partner_id', '=', self.env.ref('base.res_partner_12').id),
-            ])
+        data = trial_balance._prepare_report_trial_balance()
+        res_data = self.env[
+            'report.account_financial_report.trial_balance']._get_report_values(
+            trial_balance, data)
+        return res_data
+
+    def check_account_in_report(self, account_id, trial_balance):
+        account_in_report = False
+        for account in trial_balance:
+            if account['id'] == account_id and account['type'] == 'account_type':
+                account_in_report = True
+                break
+        return account_in_report
+
+    def _get_account_lines(self, account_id, trial_balance):
+        lines = False
+        for account in trial_balance:
+            if account['id'] == account_id and account['type'] == 'account_type':
+                lines = {
+                    'initial_balance': account['initial_balance'],
+                    'debit': account['debit'],
+                    'credit': account['credit'],
+                    'final_balance': account['ending_balance']
+                }
         return lines
+
+    def _get_group_lines(self, group_id, trial_balance):
+        lines = False
+        for group in trial_balance:
+            if group['id'] == group_id and group['type'] == 'group_type':
+                lines = {
+                    'initial_balance': group['initial_balance'],
+                    'debit': group['debit'],
+                    'credit': group['credit'],
+                    'final_balance': group['ending_balance']
+                }
+        return lines
+
+    def check_partner_in_report(self, account_id, partner_id, total_amount):
+        partner_in_report = False
+        if account_id in total_amount.keys():
+            if partner_id in total_amount[account_id]:
+                partner_in_report = True
+        return partner_in_report
+
+    def _get_partner_lines(self, account_id, partner_id, total_amount):
+        acc_id = account_id
+        prt_id = partner_id
+        lines = {
+            'initial_balance': total_amount[acc_id][prt_id]['initial_balance'],
+            'debit': total_amount[acc_id][prt_id]['debit'],
+            'credit': total_amount[acc_id][prt_id]['credit'],
+            'final_balance': total_amount[acc_id][prt_id]['ending_balance'],
+        }
+        return lines
+
+    def _sum_all_accounts(self, trial_balance, feature):
+        total = 0.0
+        for account in trial_balance:
+            if account['type'] == 'account_type':
+                for key in account.keys():
+                    if key == feature:
+                        total += account[key]
+        return total
 
     def test_00_account_group(self):
         self.assertGreaterEqual(len(self.group1.compute_account_ids), 19)
@@ -227,9 +210,15 @@ class TestTrialBalanceReport(common.TransactionCase):
             if acc.code.startswith('1') or acc.code.startswith('2'):
                 acc.code = '999' + acc.code
         # Generate the general ledger line
-        lines = self._get_report_lines()
-        self.assertEqual(len(lines['receivable']), 1)
-        self.assertEqual(len(lines['income']), 1)
+        res_data = self._get_report_lines()
+        trial_balance = res_data['trial_balance']
+
+        check_receivable_account = self.check_account_in_report(
+            self.account100.id, trial_balance)
+        self.assertFalse(check_receivable_account)
+        check_income_account = self.check_account_in_report(
+            self.account200.id, trial_balance)
+        self.assertFalse(check_income_account)
 
         # Add a move at the previous day of the first day of fiscal year
         # to check the initial balance
@@ -242,20 +231,29 @@ class TestTrialBalanceReport(common.TransactionCase):
         )
 
         # Re Generate the trial balance line
-        lines = self._get_report_lines()
-        self.assertEqual(len(lines['receivable']), 1)
-        self.assertEqual(len(lines['income']), 1)
+        res_data = self._get_report_lines()
+        trial_balance = res_data['trial_balance']
+        check_receivable_account = self.check_account_in_report(
+            self.account100.id, trial_balance)
+        self.assertTrue(check_receivable_account)
+        check_income_account = self.check_account_in_report(
+            self.account200.id, trial_balance)
+        self.assertFalse(check_income_account)
 
         # Check the initial and final balance
-        self.assertEqual(lines['receivable'].initial_balance, 1000)
-        self.assertEqual(lines['receivable'].debit, 0)
-        self.assertEqual(lines['receivable'].credit, 0)
-        self.assertEqual(lines['receivable'].final_balance, 1000)
+        account_receivable_lines = self._get_account_lines(
+            self.account100.id, trial_balance)
+        group1_lines = self._get_group_lines(self.group1.id, trial_balance)
 
-        self.assertEqual(lines['group1'].initial_balance, 1000)
-        self.assertEqual(lines['group1'].debit, 0)
-        self.assertEqual(lines['group1'].credit, 0)
-        self.assertEqual(lines['group1'].final_balance, 1000)
+        self.assertEqual(account_receivable_lines['initial_balance'], 1000)
+        self.assertEqual(account_receivable_lines['debit'], 0)
+        self.assertEqual(account_receivable_lines['credit'], 0)
+        self.assertEqual(account_receivable_lines['final_balance'], 1000)
+
+        self.assertEqual(group1_lines['initial_balance'], 1000)
+        self.assertEqual(group1_lines['debit'], 0)
+        self.assertEqual(group1_lines['credit'], 0)
+        self.assertEqual(group1_lines['final_balance'], 1000)
 
         # Add reversed move of the initial move the first day of fiscal year
         # to check the first day of fiscal year is not used
@@ -269,30 +267,42 @@ class TestTrialBalanceReport(common.TransactionCase):
         )
 
         # Re Generate the trial balance line
-        lines = self._get_report_lines()
-        self.assertEqual(len(lines['receivable']), 1)
-        self.assertEqual(len(lines['income']), 1)
+        res_data = self._get_report_lines()
+        trial_balance = res_data['trial_balance']
+        check_receivable_account = self.check_account_in_report(
+            self.account100.id, trial_balance)
+        self.assertTrue(check_receivable_account)
+        check_income_account = self.check_account_in_report(
+            self.account200.id, trial_balance)
+        self.assertTrue(check_income_account)
 
         # Check the initial and final balance
-        self.assertEqual(lines['receivable'].initial_balance, 1000)
-        self.assertEqual(lines['receivable'].debit, 0)
-        self.assertEqual(lines['receivable'].credit, 1000)
-        self.assertEqual(lines['receivable'].final_balance, 0)
+        account_receivable_lines = self._get_account_lines(
+            self.account100.id, trial_balance)
+        account_income_lines = self._get_account_lines(
+            self.account200.id, trial_balance)
+        group1_lines = self._get_group_lines(self.group1.id, trial_balance)
+        group2_lines = self._get_group_lines(self.group2.id, trial_balance)
 
-        self.assertEqual(lines['income'].initial_balance, 0)
-        self.assertEqual(lines['income'].debit, 1000)
-        self.assertEqual(lines['income'].credit, 0)
-        self.assertEqual(lines['income'].final_balance, 1000)
+        self.assertEqual(account_receivable_lines['initial_balance'], 1000)
+        self.assertEqual(account_receivable_lines['debit'], 0)
+        self.assertEqual(account_receivable_lines['credit'], 1000)
+        self.assertEqual(account_receivable_lines['final_balance'], 0)
 
-        self.assertEqual(lines['group1'].initial_balance, 1000)
-        self.assertEqual(lines['group1'].debit, 0)
-        self.assertEqual(lines['group1'].credit, 1000)
-        self.assertEqual(lines['group1'].final_balance, 0)
+        self.assertEqual(account_income_lines['initial_balance'], 0)
+        self.assertEqual(account_income_lines['debit'], 1000)
+        self.assertEqual(account_income_lines['credit'], 0)
+        self.assertEqual(account_income_lines['final_balance'], 1000)
 
-        self.assertEqual(lines['group2'].initial_balance, 0)
-        self.assertEqual(lines['group2'].debit, 1000)
-        self.assertEqual(lines['group2'].credit, 0)
-        self.assertEqual(lines['group2'].final_balance, 1000)
+        self.assertEqual(group1_lines['initial_balance'], 1000)
+        self.assertEqual(group1_lines['debit'], 0)
+        self.assertEqual(group1_lines['credit'], 1000)
+        self.assertEqual(group1_lines['final_balance'], 0)
+
+        self.assertEqual(group2_lines['initial_balance'], 0)
+        self.assertEqual(group2_lines['debit'], 1000)
+        self.assertEqual(group2_lines['credit'], 0)
+        self.assertEqual(group2_lines['final_balance'], 1000)
 
         # Add another move at the end day of fiscal year
         # to check that it correctly used on report
@@ -305,37 +315,53 @@ class TestTrialBalanceReport(common.TransactionCase):
         )
 
         # Re Generate the trial balance line
-        lines = self._get_report_lines()
-        self.assertEqual(len(lines['receivable']), 1)
-        self.assertEqual(len(lines['income']), 1)
+        res_data = self._get_report_lines()
+        trial_balance = res_data['trial_balance']
+        check_receivable_account = self.check_account_in_report(
+            self.account100.id, trial_balance)
+        self.assertTrue(check_receivable_account)
+        check_income_account = self.check_account_in_report(
+            self.account200.id, trial_balance)
+        self.assertTrue(check_income_account)
 
         # Check the initial and final balance
-        self.assertEqual(lines['receivable'].initial_balance, 1000)
-        self.assertEqual(lines['receivable'].debit, 0)
-        self.assertEqual(lines['receivable'].credit, 2000)
-        self.assertEqual(lines['receivable'].final_balance, -1000)
+        account_receivable_lines = self._get_account_lines(
+            self.account100.id, trial_balance)
+        account_income_lines = self._get_account_lines(
+            self.account200.id, trial_balance)
+        group1_lines = self._get_group_lines(self.group1.id, trial_balance)
+        group2_lines = self._get_group_lines(self.group2.id, trial_balance)
 
-        self.assertEqual(lines['income'].initial_balance, 0)
-        self.assertEqual(lines['income'].debit, 2000)
-        self.assertEqual(lines['income'].credit, 0)
-        self.assertEqual(lines['income'].final_balance, 2000)
+        self.assertEqual(account_receivable_lines['initial_balance'], 1000)
+        self.assertEqual(account_receivable_lines['debit'], 0)
+        self.assertEqual(account_receivable_lines['credit'], 2000)
+        self.assertEqual(account_receivable_lines['final_balance'], -1000)
 
-        self.assertEqual(lines['group1'].initial_balance, 1000)
-        self.assertEqual(lines['group1'].debit, 0)
-        self.assertEqual(lines['group1'].credit, 2000)
-        self.assertEqual(lines['group1'].final_balance, -1000)
+        self.assertEqual(account_income_lines['initial_balance'], 0)
+        self.assertEqual(account_income_lines['debit'], 2000)
+        self.assertEqual(account_income_lines['credit'], 0)
+        self.assertEqual(account_income_lines['final_balance'], 2000)
 
-        self.assertEqual(lines['group2'].initial_balance, 0)
-        self.assertEqual(lines['group2'].debit, 2000)
-        self.assertEqual(lines['group2'].credit, 0)
-        self.assertEqual(lines['group2'].final_balance, 2000)
-        self.assertGreaterEqual(len(lines['group2'].compute_account_ids), 9)
+        self.assertEqual(group1_lines['initial_balance'], 1000)
+        self.assertEqual(group1_lines['debit'], 0)
+        self.assertEqual(group1_lines['credit'], 2000)
+        self.assertEqual(group1_lines['final_balance'], -1000)
+
+        self.assertEqual(group2_lines['initial_balance'], 0)
+        self.assertEqual(group2_lines['debit'], 2000)
+        self.assertEqual(group2_lines['credit'], 0)
+        self.assertEqual(group2_lines['final_balance'], 2000)
 
     def test_02_account_balance_hierarchy(self):
         # Generate the general ledger line
-        lines = self._get_report_lines(hierarchy_on='relation')
-        self.assertEqual(len(lines['receivable']), 1)
-        self.assertEqual(len(lines['income']), 1)
+        res_data = self._get_report_lines(hierarchy_on='relation')
+        trial_balance = res_data['trial_balance']
+        check_receivable_account = self.check_account_in_report(
+            self.account100.id, trial_balance)
+        self.assertFalse(check_receivable_account)
+        check_income_account = self.check_account_in_report(
+            self.account200.id, trial_balance)
+        self.assertFalse(check_income_account)
 
         # Add a move at the previous day of the first day of fiscal year
         # to check the initial balance
@@ -348,20 +374,29 @@ class TestTrialBalanceReport(common.TransactionCase):
         )
 
         # Re Generate the trial balance line
-        lines = self._get_report_lines(hierarchy_on='relation')
-        self.assertEqual(len(lines['receivable']), 1)
-        self.assertEqual(len(lines['income']), 1)
+        res_data = self._get_report_lines(hierarchy_on='relation')
+        trial_balance = res_data['trial_balance']
+        check_receivable_account = self.check_account_in_report(
+            self.account100.id, trial_balance)
+        self.assertTrue(check_receivable_account)
+        check_income_account = self.check_account_in_report(
+            self.account200.id, trial_balance)
+        self.assertFalse(check_income_account)
 
         # Check the initial and final balance
-        self.assertEqual(lines['receivable'].initial_balance, 1000)
-        self.assertEqual(lines['receivable'].debit, 0)
-        self.assertEqual(lines['receivable'].credit, 0)
-        self.assertEqual(lines['receivable'].final_balance, 1000)
+        account_receivable_lines = self._get_account_lines(
+            self.account100.id, trial_balance)
+        group1_lines = self._get_group_lines(self.group1.id, trial_balance)
 
-        self.assertEqual(lines['group1'].initial_balance, 1000)
-        self.assertEqual(lines['group1'].debit, 0)
-        self.assertEqual(lines['group1'].credit, 0)
-        self.assertEqual(lines['group1'].final_balance, 1000)
+        self.assertEqual(account_receivable_lines['initial_balance'], 1000)
+        self.assertEqual(account_receivable_lines['debit'], 0)
+        self.assertEqual(account_receivable_lines['credit'], 0)
+        self.assertEqual(account_receivable_lines['final_balance'], 1000)
+
+        self.assertEqual(group1_lines['initial_balance'], 1000)
+        self.assertEqual(group1_lines['debit'], 0)
+        self.assertEqual(group1_lines['credit'], 0)
+        self.assertEqual(group1_lines['final_balance'], 1000)
 
         # Add reversale move of the initial move the first day of fiscal year
         # to check the first day of fiscal year is not used
@@ -375,31 +410,43 @@ class TestTrialBalanceReport(common.TransactionCase):
         )
 
         # Re Generate the trial balance line
-        lines = self._get_report_lines(hierarchy_on='relation')
-        self.assertEqual(len(lines['receivable']), 1)
-        self.assertEqual(len(lines['income']), 1)
+        res_data = self._get_report_lines(hierarchy_on='relation')
+        trial_balance = res_data['trial_balance']
+        check_receivable_account = self.check_account_in_report(
+            self.account100.id, trial_balance)
+        self.assertTrue(check_receivable_account)
+        check_income_account = self.check_account_in_report(
+            self.account200.id, trial_balance)
+        self.assertTrue(check_income_account)
 
         # Check the initial and final balance
-        self.assertEqual(lines['receivable'].initial_balance, 1000)
-        self.assertEqual(lines['receivable'].debit, 0)
-        self.assertEqual(lines['receivable'].credit, 1000)
-        self.assertEqual(lines['receivable'].final_balance, 0)
+        account_receivable_lines = self._get_account_lines(
+            self.account100.id, trial_balance)
+        account_income_lines = self._get_account_lines(
+            self.account200.id, trial_balance)
+        group1_lines = self._get_group_lines(self.group1.id, trial_balance)
+        group2_lines = self._get_group_lines(self.group2.id, trial_balance)
 
-        self.assertEqual(lines['income'].initial_balance, 0)
-        self.assertEqual(lines['income'].debit, 1000)
-        self.assertEqual(lines['income'].credit, 0)
-        self.assertEqual(lines['income'].final_balance, 1000)
+        self.assertEqual(account_receivable_lines['initial_balance'], 1000)
+        self.assertEqual(account_receivable_lines['debit'], 0)
+        self.assertEqual(account_receivable_lines['credit'], 1000)
+        self.assertEqual(account_receivable_lines['final_balance'], 0)
 
-        self.assertEqual(lines['group1'].initial_balance, 1000)
-        self.assertEqual(lines['group1'].debit, 0)
-        self.assertEqual(lines['group1'].credit, 1000)
-        self.assertEqual(lines['group1'].final_balance, 0)
+        self.assertEqual(account_income_lines['initial_balance'], 0)
+        self.assertEqual(account_income_lines['debit'], 1000)
+        self.assertEqual(account_income_lines['credit'], 0)
+        self.assertEqual(account_income_lines['final_balance'], 1000)
 
-        self.assertEqual(lines['group2'].initial_balance, 0)
-        self.assertEqual(lines['group2'].debit, 2000)
-        self.assertEqual(lines['group2'].credit, 0)
-        self.assertEqual(lines['group2'].final_balance, 2000)
-        self.assertEqual(len(lines['group2'].compute_account_ids), 2)
+        self.assertEqual(group1_lines['initial_balance'], 1000)
+        self.assertEqual(group1_lines['debit'], 0)
+        self.assertEqual(group1_lines['credit'], 1000)
+        self.assertEqual(group1_lines['final_balance'], 0)
+
+        self.assertEqual(group2_lines['initial_balance'], 0)
+        self.assertEqual(group2_lines['debit'], 2000)
+        self.assertEqual(group2_lines['credit'], 0)
+        self.assertEqual(group2_lines['final_balance'], 2000)
+
         # Add another move at the end day of fiscal year
         # to check that it correctly used on report
         self._add_move(
@@ -411,35 +458,50 @@ class TestTrialBalanceReport(common.TransactionCase):
         )
 
         # Re Generate the trial balance line
-        lines = self._get_report_lines(hierarchy_on='relation')
-        self.assertEqual(len(lines['receivable']), 1)
-        self.assertEqual(len(lines['income']), 1)
+        res_data = self._get_report_lines(hierarchy_on='relation')
+        trial_balance = res_data['trial_balance']
+        check_receivable_account = self.check_account_in_report(
+            self.account100.id, trial_balance)
+        self.assertTrue(check_receivable_account)
+        check_income_account = self.check_account_in_report(
+            self.account200.id, trial_balance)
+        self.assertTrue(check_income_account)
 
         # Check the initial and final balance
-        self.assertEqual(lines['receivable'].initial_balance, 1000)
-        self.assertEqual(lines['receivable'].debit, 0)
-        self.assertEqual(lines['receivable'].credit, 2000)
-        self.assertEqual(lines['receivable'].final_balance, -1000)
+        account_receivable_lines = self._get_account_lines(
+            self.account100.id, trial_balance)
+        account_income_lines = self._get_account_lines(
+            self.account200.id, trial_balance)
+        group1_lines = self._get_group_lines(self.group1.id, trial_balance)
+        group2_lines = self._get_group_lines(self.group2.id, trial_balance)
 
-        self.assertEqual(lines['income'].initial_balance, 0)
-        self.assertEqual(lines['income'].debit, 2000)
-        self.assertEqual(lines['income'].credit, 0)
-        self.assertEqual(lines['income'].final_balance, 2000)
+        self.assertEqual(account_receivable_lines['initial_balance'], 1000)
+        self.assertEqual(account_receivable_lines['debit'], 0)
+        self.assertEqual(account_receivable_lines['credit'], 2000)
+        self.assertEqual(account_receivable_lines['final_balance'], -1000)
 
-        self.assertEqual(lines['group1'].initial_balance, 1000)
-        self.assertEqual(lines['group1'].debit, 0)
-        self.assertEqual(lines['group1'].credit, 2000)
-        self.assertEqual(lines['group1'].final_balance, -1000)
+        self.assertEqual(account_income_lines['initial_balance'], 0)
+        self.assertEqual(account_income_lines['debit'], 2000)
+        self.assertEqual(account_income_lines['credit'], 0)
+        self.assertEqual(account_income_lines['final_balance'], 2000)
 
-        self.assertEqual(lines['group2'].initial_balance, 0)
-        self.assertEqual(lines['group2'].debit, 4000)
-        self.assertEqual(lines['group2'].credit, 0)
-        self.assertEqual(lines['group2'].final_balance, 4000)
+        self.assertEqual(group1_lines['initial_balance'], 1000)
+        self.assertEqual(group1_lines['debit'], 0)
+        self.assertEqual(group1_lines['credit'], 2000)
+        self.assertEqual(group1_lines['final_balance'], -1000)
+
+        self.assertEqual(group2_lines['initial_balance'], 0)
+        self.assertEqual(group2_lines['debit'], 4000)
+        self.assertEqual(group2_lines['credit'], 0)
+        self.assertEqual(group2_lines['final_balance'], 4000)
 
     def test_03_partner_balance(self):
         # Generate the trial balance line
-        lines = self._get_report_lines(with_partners=True)
-        self.assertEqual(len(lines['partner_receivable']), 0)
+        res_data = self._get_report_lines(with_partners=True)
+        total_amount = res_data['total_amount']
+        check_partner_receivable = self.check_partner_in_report(
+            self.account100.id, self.partner.id, total_amount)
+        self.assertFalse(check_partner_receivable)
 
         # Add a move at the previous day of the first day of fiscal year
         # to check the initial balance
@@ -452,14 +514,20 @@ class TestTrialBalanceReport(common.TransactionCase):
         )
 
         # Re Generate the trial balance line
-        lines = self._get_report_lines(with_partners=True)
-        self.assertEqual(len(lines['partner_receivable']), 1)
+        res_data = self._get_report_lines(with_partners=True)
+        total_amount = res_data['total_amount']
+        check_partner_receivable = self.check_partner_in_report(
+            self.account100.id, self.partner.id, total_amount)
+        self.assertTrue(check_partner_receivable)
 
         # Check the initial and final balance
-        self.assertEqual(lines['partner_receivable'].initial_balance, 1000)
-        self.assertEqual(lines['partner_receivable'].debit, 0)
-        self.assertEqual(lines['partner_receivable'].credit, 0)
-        self.assertEqual(lines['partner_receivable'].final_balance, 1000)
+        partner_lines = self._get_partner_lines(
+            self.account100.id, self.partner.id, total_amount)
+
+        self.assertEqual(partner_lines['initial_balance'], 1000)
+        self.assertEqual(partner_lines['debit'], 0)
+        self.assertEqual(partner_lines['credit'], 0)
+        self.assertEqual(partner_lines['final_balance'], 1000)
 
         # Add reversale move of the initial move the first day of fiscal year
         # to check the first day of fiscal year is not used
@@ -473,14 +541,20 @@ class TestTrialBalanceReport(common.TransactionCase):
         )
 
         # Re Generate the trial balance line
-        lines = self._get_report_lines(with_partners=True)
-        self.assertEqual(len(lines['partner_receivable']), 1)
+        res_data = self._get_report_lines(with_partners=True)
+        total_amount = res_data['total_amount']
+        check_partner_receivable = self.check_partner_in_report(
+            self.account100.id, self.partner.id, total_amount)
+        self.assertTrue(check_partner_receivable)
 
         # Check the initial and final balance
-        self.assertEqual(lines['partner_receivable'].initial_balance, 1000)
-        self.assertEqual(lines['partner_receivable'].debit, 0)
-        self.assertEqual(lines['partner_receivable'].credit, 1000)
-        self.assertEqual(lines['partner_receivable'].final_balance, 0)
+        partner_lines = self._get_partner_lines(
+            self.account100.id, self.partner.id, total_amount)
+
+        self.assertEqual(partner_lines['initial_balance'], 1000)
+        self.assertEqual(partner_lines['debit'], 0)
+        self.assertEqual(partner_lines['credit'], 1000)
+        self.assertEqual(partner_lines['final_balance'], 0)
 
         # Add another move at the end day of fiscal year
         # to check that it correctly used on report
@@ -493,14 +567,20 @@ class TestTrialBalanceReport(common.TransactionCase):
         )
 
         # Re Generate the trial balance line
-        lines = self._get_report_lines(with_partners=True)
-        self.assertEqual(len(lines['partner_receivable']), 1)
+        res_data = self._get_report_lines(with_partners=True)
+        total_amount = res_data['total_amount']
+        check_partner_receivable = self.check_partner_in_report(
+            self.account100.id, self.partner.id, total_amount)
+        self.assertTrue(check_partner_receivable)
 
         # Check the initial and final balance
-        self.assertEqual(lines['partner_receivable'].initial_balance, 1000)
-        self.assertEqual(lines['partner_receivable'].debit, 0)
-        self.assertEqual(lines['partner_receivable'].credit, 2000)
-        self.assertEqual(lines['partner_receivable'].final_balance, -1000)
+        partner_lines = self._get_partner_lines(
+            self.account100.id, self.partner.id, total_amount)
+
+        self.assertEqual(partner_lines['initial_balance'], 1000)
+        self.assertEqual(partner_lines['debit'], 0)
+        self.assertEqual(partner_lines['credit'], 2000)
+        self.assertEqual(partner_lines['final_balance'], -1000)
 
     def test_04_undistributed_pl(self):
         # Add a P&L Move in the previous FY
@@ -525,28 +605,33 @@ class TestTrialBalanceReport(common.TransactionCase):
         move = self.env['account.move'].create(move_vals)
         move.post()
         # Generate the trial balance line
-        report_account_model = self.env['report_trial_balance_account']
         company = self.env.ref('base.main_company')
-        trial_balance = self.env['report_trial_balance'].create({
+        trial_balance = self.env['trial.balance.report.wizard'].create({
             'date_from': self.date_start,
             'date_to': self.date_end,
-            'only_posted_moves': True,
+            'target_move': 'posted',
             'hide_account_at_0': False,
             'hierarchy_on': 'none',
             'company_id': company.id,
             'fy_start_date': self.fy_date_start,
             })
-        trial_balance.compute_data_for_report()
+        data = trial_balance._prepare_report_trial_balance()
+        res_data = self.env[
+            'report.account_financial_report.trial_balance']._get_report_values(
+            trial_balance, data)
+        trial_balance = res_data['trial_balance']
 
-        unaffected_balance_lines = report_account_model.search([
-            ('report_id', '=', trial_balance.id),
-            ('account_id', '=', self.account110.id),
-        ])
-        self.assertEqual(len(unaffected_balance_lines), 1)
-        self.assertEqual(unaffected_balance_lines[0].initial_balance, -1000)
-        self.assertEqual(unaffected_balance_lines[0].debit, 0)
-        self.assertEqual(unaffected_balance_lines[0].credit, 0)
-        self.assertEqual(unaffected_balance_lines[0].final_balance, -1000)
+        check_unaffected_account = self.check_account_in_report(
+            self.unaffected_account.id, trial_balance)
+        self.assertTrue(check_unaffected_account)
+
+        unaffected_lines = self._get_account_lines(
+            self.unaffected_account.id, trial_balance)
+
+        self.assertEqual(unaffected_lines['initial_balance'], -1000)
+        self.assertEqual(unaffected_lines['debit'], 0)
+        self.assertEqual(unaffected_lines['credit'], 0)
+        self.assertEqual(unaffected_lines['final_balance'], -1000)
         # Add a P&L Move to the current FY
         move_name = 'current year pl move'
         journal = self.env['account.journal'].search([], limit=1)
@@ -569,27 +654,33 @@ class TestTrialBalanceReport(common.TransactionCase):
         move = self.env['account.move'].create(move_vals)
         move.post()
         # Re Generate the trial balance line
-        trial_balance = self.env['report_trial_balance'].create({
+        trial_balance = self.env['trial.balance.report.wizard'].create({
             'date_from': self.date_start,
             'date_to': self.date_end,
-            'only_posted_moves': True,
+            'target_move': 'posted',
             'hide_account_at_0': False,
             'hierarchy_on': 'none',
             'company_id': company.id,
             'fy_start_date': self.fy_date_start,
         })
-        trial_balance.compute_data_for_report()
-        unaffected_balance_lines = report_account_model.search([
-            ('report_id', '=', trial_balance.id),
-            ('account_id', '=', self.account110.id),
-        ])
+        data = trial_balance._prepare_report_trial_balance()
+        res_data = self.env[
+            'report.account_financial_report.trial_balance']._get_report_values(
+            trial_balance, data)
+        trial_balance = res_data['trial_balance']
         # The unaffected earnings account is not affected by a journal entry
         # made to the P&L in the current fiscal year.
-        self.assertEqual(len(unaffected_balance_lines), 1)
-        self.assertEqual(unaffected_balance_lines[0].initial_balance, -1000)
-        self.assertEqual(unaffected_balance_lines[0].debit, 0)
-        self.assertEqual(unaffected_balance_lines[0].credit, 0)
-        self.assertEqual(unaffected_balance_lines[0].final_balance, -1000)
+        check_unaffected_account = self.check_account_in_report(
+            self.unaffected_account.id, trial_balance)
+        self.assertTrue(check_unaffected_account)
+
+        unaffected_lines = self._get_account_lines(
+            self.unaffected_account.id, trial_balance)
+
+        self.assertEqual(unaffected_lines['initial_balance'], -1000)
+        self.assertEqual(unaffected_lines['debit'], 0)
+        self.assertEqual(unaffected_lines['credit'], 0)
+        self.assertEqual(unaffected_lines['final_balance'], -1000)
         # Add a Move including Unaffected Earnings to the current FY
         move_name = 'current year unaffected earnings move'
         journal = self.env['account.journal'].search([], limit=1)
@@ -612,32 +703,42 @@ class TestTrialBalanceReport(common.TransactionCase):
         move = self.env['account.move'].create(move_vals)
         move.post()
         # Re Generate the trial balance line
-        trial_balance = self.env['report_trial_balance'].create({
+        trial_balance = self.env['trial.balance.report.wizard'].create({
             'date_from': self.date_start,
             'date_to': self.date_end,
-            'only_posted_moves': True,
+            'target_move': 'posted',
             'hide_account_at_0': False,
             'hierarchy_on': 'none',
             'company_id': company.id,
             'fy_start_date': self.fy_date_start,
         })
-        trial_balance.compute_data_for_report()
+        data = trial_balance._prepare_report_trial_balance()
+        res_data = self.env[
+            'report.account_financial_report.trial_balance']._get_report_values(
+            trial_balance, data)
+        trial_balance = res_data['trial_balance']
         # The unaffected earnings account affected by a journal entry
         # made to the unaffected earnings in the current fiscal year.
-        unaffected_balance_lines = report_account_model.search([
-            ('report_id', '=', trial_balance.id),
-            ('account_id', '=', self.account110.id),
-        ])
-        self.assertEqual(len(unaffected_balance_lines), 1)
-        self.assertEqual(unaffected_balance_lines[0].initial_balance, -1000)
-        self.assertEqual(unaffected_balance_lines[0].debit, 0)
-        self.assertEqual(unaffected_balance_lines[0].credit, 1000)
-        self.assertEqual(unaffected_balance_lines[0].final_balance, -2000)
+        check_unaffected_account = self.check_account_in_report(
+            self.unaffected_account.id, trial_balance)
+        self.assertTrue(check_unaffected_account)
+
+        unaffected_lines = self._get_account_lines(
+            self.unaffected_account.id, trial_balance)
+
+        self.assertEqual(unaffected_lines['initial_balance'], -1000)
+        self.assertEqual(unaffected_lines['debit'], 0)
+        self.assertEqual(unaffected_lines['credit'], 1000)
+        self.assertEqual(unaffected_lines['final_balance'], -2000)
+
         # The totals for the Trial Balance are zero
-        all_lines = report_account_model.search([
-            ('report_id', '=', trial_balance.id),
-        ])
-        self.assertEqual(sum(all_lines.mapped('initial_balance')), 0)
-        self.assertEqual(sum(all_lines.mapped('final_balance')), 0)
-        self.assertEqual(sum(all_lines.mapped('debit')),
-                         sum(all_lines.mapped('credit')))
+        total_initial_balance = self._sum_all_accounts(trial_balance,
+                                                       'initial_balance')
+        total_final_balance = self._sum_all_accounts(trial_balance,
+                                                     'ending_balance')
+        total_debit = self._sum_all_accounts(trial_balance, 'debit')
+        total_credit = self._sum_all_accounts(trial_balance, 'credit')
+
+        self.assertEqual(total_initial_balance, 0)
+        self.assertEqual(total_final_balance, 0)
+        self.assertEqual(total_debit, total_credit)

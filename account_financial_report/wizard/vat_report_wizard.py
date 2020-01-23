@@ -2,8 +2,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import api, fields, models, _
-from odoo.tools.safe_eval import safe_eval
-from odoo.tools import pycompat
 from odoo.exceptions import ValidationError
 
 
@@ -63,21 +61,23 @@ class VATReportWizard(models.TransientModel):
                       'Date Range must be the same.'))
 
     @api.multi
+    def _print_report(self, report_type):
+        self.ensure_one()
+        data = self._prepare_vat_report()
+        if report_type == 'xlsx':
+            report_name = 'a_f_r.report_vat_report_xlsx'
+        else:
+            report_name = 'account_financial_report.vat_report'
+        return self.env['ir.actions.report'].search(
+            [('report_name', '=', report_name),
+             ('report_type', '=', report_type)], limit=1).report_action(
+            self, data=data)
+
+    @api.multi
     def button_export_html(self):
         self.ensure_one()
-        action = self.env.ref(
-            'account_financial_report.action_report_vat_report')
-        vals = action.read()[0]
-        context1 = vals.get('context', {})
-        if isinstance(context1, pycompat.string_types):
-            context1 = safe_eval(context1)
-        model = self.env['report_vat_report']
-        report = model.create(self._prepare_vat_report())
-        report.compute_data_for_report()
-        context1['active_id'] = report.id
-        context1['active_ids'] = report.ids
-        vals['context'] = context1
-        return vals
+        report_type = 'qweb-html'
+        return self._export(report_type)
 
     @api.multi
     def button_export_pdf(self):
@@ -94,6 +94,7 @@ class VATReportWizard(models.TransientModel):
     def _prepare_vat_report(self):
         self.ensure_one()
         return {
+            'wizard_id': self.id,
             'company_id': self.company_id.id,
             'date_from': self.date_from,
             'date_to': self.date_to,
@@ -103,7 +104,4 @@ class VATReportWizard(models.TransientModel):
 
     def _export(self, report_type):
         """Default export is PDF."""
-        model = self.env['report_vat_report']
-        report = model.create(self._prepare_vat_report())
-        report.compute_data_for_report()
-        return report.print_report(report_type)
+        return self._print_report(report_type)

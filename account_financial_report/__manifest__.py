@@ -1,16 +1,17 @@
 # Author: Damien Crier
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA
+# Copyright 2020 ForgeFlow S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     'name': 'Account Financial Reports',
-    'version': '12.0.1.2.2',
+    'version': '12.0.2.0.0',
     'category': 'Reporting',
     'summary': 'OCA Financial Reports',
     'author': 'Camptocamp SA,'
               'initOS GmbH,'
               'redCOR AG,'
-              'Eficent,'
+              'ForgeFlow,'
               'Odoo Community Association (OCA)',
     "website": "https://odoo-community.org/",
     'depends': [
@@ -43,6 +44,11 @@
         'view/report_aged_partner_balance.xml',
         'view/report_vat_report.xml',
     ],
+    "external_dependencies": {
+        "python": ['natsort',
+                   'pandas',
+                   ],
+    },
     'installable': True,
     'application': True,
     'auto_install': False,

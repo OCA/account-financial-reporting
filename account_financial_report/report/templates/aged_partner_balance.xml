@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <template id="report_aged_partner_balance_qweb">
+    <template id="aged_partner_balance">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
                 <t t-call="account_financial_report.internal_layout">
@@ -13,10 +13,9 @@
 
     <template id="report_aged_partner_balance_base">
         <!-- Saved flag fields into variables, used to define columns display -->
-        <t t-set="show_move_line_details" t-value="o.show_move_line_details"/>
+        <t t-set="show_move_line_details" t-value="show_move_line_details"/>
         <!-- Defines global variables used by internal layout -->
-        <t t-set="title">Aged Partner Balance - <t t-raw="o.company_id.name"/> - <t t-raw="o.company_id.currency_id.name"/></t>
-        <t t-set="company_name" t-value="o.company_id.name"/>
+        <t t-set="title">Aged Partner Balance - <t t-raw="company_name"/> - <t t-raw="currency_name"/></t>
         <div class="page">
             <div class="row">
                 <h4 class="mt0" t-esc="title or 'Odoo Report'" style="text-align: center;"/>
@@ -24,15 +23,15 @@
             <!-- Display filters -->
             <t t-call="account_financial_report.report_aged_partner_balance_filters"/>
 
-            <t t-foreach="o.account_ids" t-as="account">
+            <t t-foreach="aged_partner_balance" t-as="account">
                 <div class="page_break">
                     <!-- Display account header -->
                     <div class="act_as_table list_table" style="margin-top: 10px;"/>
                     <div class="act_as_caption account_title"
                          style="width: 100%;">
-                        <span t-field="account.code"/>
+                        <span t-esc="account['code']"/>
                         -
-                        <span t-field="account.name"/>
+                        <span t-esc="account['name']"/>
                     </div>
 
                     <!-- Display account lines -->
@@ -42,8 +41,7 @@
                             <!-- Display account header -->
                             <t t-call="account_financial_report.report_aged_partner_balance_lines_header"/>
 
-                            <t t-foreach="account.partner_ids" t-as="partner">
-
+                            <t t-foreach="account['partners']" t-as="partner">
                                 <!-- Display one line per partner -->
                                 <t t-call="account_financial_report.report_aged_partner_balance_lines"/>
                             </t>
@@ -57,11 +55,11 @@
                     <t t-if="show_move_line_details">
 
                         <!-- Display account partners -->
-                        <t t-foreach="account.partner_ids" t-as="partner">
+                        <t t-foreach="account['partners']" t-as="partner">
                             <div class="page_break">
                                 <!-- Display partner header -->
                                 <div class="act_as_caption account_title">
-                                    <span t-field="partner.name"/>
+                                    <span t-esc="partner['name']"/>
                                 </div>
 
                                 <!-- Display partner move lines -->
@@ -69,7 +67,7 @@
 
                                 <!-- Display partner footer -->
                                 <t t-call="account_financial_report.report_aged_partner_balance_partner_ending_cumul">
-                                    <t t-set="partner_cumul_line" t-value="partner.line_ids"/>
+                                    <t t-set="partner_cumul_line" t-value="partner"/>
                                 </t>
                             </div>
                         </t>
@@ -90,11 +88,11 @@
             </div>
             <div class="act_as_row">
                 <div class="act_as_cell">
-                    <span t-field="o.date_at"/>
+                    <span t-esc="date_at"/>
                 </div>
                 <div class="act_as_cell">
-                    <t t-if="o.only_posted_moves">All posted entries</t>
-                    <t t-if="not o.only_posted_moves">All entries</t>
+                    <t t-if="only_posted_moves">All posted entries</t>
+                    <t t-if="not only_posted_moves">All entries</t>
                 </div>
             </div>
         </div>
@@ -125,44 +123,41 @@
     </template>
 
     <template id="report_aged_partner_balance_lines">
-        <!-- Display each lines -->
-        <t t-foreach="partner.line_ids" t-as="line">
-            <!-- # lines -->
-            <div class="act_as_row lines">
-                <!--## partner-->
-                <div class="act_as_cell left">
-                    <span t-field="line.partner"/>
-                </div>
-                <!--## amount_residual-->
-                <div class="act_as_cell amount">
-                    <span t-field="line.amount_residual" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
-                </div>
-                <!--## current-->
-                <div class="act_as_cell amount">
-                    <span t-field="line.current" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
-                </div>
-                <!--## age_30_days-->
-                <div class="act_as_cell amount">
-                    <span t-field="line.age_30_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
-                </div>
-                <!--## age_60_days-->
-                <div class="act_as_cell amount">
-                    <span t-field="line.age_60_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
-                </div>
-                <!--## age_90_days-->
-                <div class="act_as_cell amount">
-                    <span t-field="line.age_90_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
-                </div>
-                <!--## age_120_days-->
-                <div class="act_as_cell amount">
-                    <span t-field="line.age_120_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
-                </div>
-                <!--## older-->
-                <div class="act_as_cell amount">
-                    <span t-field="line.older" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
-                </div>
+        <!-- Display each partner lines -->
+        <div class="act_as_row lines">
+            <!--## partner-->
+            <div class="act_as_cell left">
+                <span t-esc="partner['name']"/>
             </div>
-        </t>
+            <!--## amount_residual-->
+            <div class="act_as_cell amount">
+                <span t-esc="partner['residual']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+            </div>
+            <!--## current-->
+            <div class="act_as_cell amount">
+                <span t-esc="partner['current']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+            </div>
+            <!--## age_30_days-->
+            <div class="act_as_cell amount">
+                <span t-esc="partner['30_days']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+            </div>
+            <!--## age_60_days-->
+            <div class="act_as_cell amount">
+                <span t-esc="partner['60_days']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+            </div>
+            <!--## age_90_days-->
+            <div class="act_as_cell amount">
+                <span t-esc="partner['90_days']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+            </div>
+            <!--## age_120_days-->
+            <div class="act_as_cell amount">
+                <span t-esc="partner['120_days']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+            </div>
+            <!--## older-->
+            <div class="act_as_cell amount">
+                <span t-esc="partner['older']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+            </div>
+        </div>
     </template>
 
     <template id="report_aged_partner_balance_move_lines">
@@ -210,180 +205,194 @@
                 </div>
             </div>
             <!-- Display each move lines -->
-            <t t-foreach="partner.move_line_ids" t-as="line">
+            <t t-foreach="partner['move_lines']" t-as="line">
                 <!-- # lines or centralized lines -->
                 <div class="act_as_row lines">
                     <!--## date-->
                     <div class="act_as_cell left">
-                        <span>
-                            <a t-att-data-active-id="line.move_line_id.id"
-                               t-att-data-res-model="'account.move.line'"
-                               class="o_account_financial_reports_web_action"
-                               style="color: black;">
+<!--                        <span>-->
+<!--                            <a t-att-data-active-id="line.move_line_id.id"-->
+<!--                               t-att-data-res-model="'account.move.line'"-->
+<!--                               class="o_account_financial_reports_web_action"-->
+<!--                               style="color: black;">-->
                             <!--## We don't use t-field because it throws an error on click -->
-                            <t t-esc="line.date" t-options="{'widget': 'date'}"/></a>
-                        </span>
+                            <t t-esc="line['date']" t-options="{'widget': 'date'}"/>
+<!--                            </a>-->
+<!--                        </span>-->
                     </div>
                     <!--## move-->
                     <div class="act_as_cell left">
-                        <span>
-                            <a t-att-data-active-id="line.move_line_id.move_id.id"
-                               t-att-data-res-model="'account.move'"
-                               class="o_account_financial_reports_web_action"
-                               style="color: black;">
-                            <t t-raw="line.entry"/></a>
-                        </span>
+<!--                        <span>-->
+<!--                            <a t-att-data-active-id="line.move_line_id.move_id.id"-->
+<!--                               t-att-data-res-model="'account.move'"-->
+<!--                               class="o_account_financial_reports_web_action"-->
+<!--                               style="color: black;">-->
+                            <t t-raw="line['entry']"/>
+<!--                            </a>-->
+<!--                        </span>-->
                     </div>
                     <!--## journal-->
                     <div class="act_as_cell left">
-                        <span>
-                            <a t-att-data-active-id="line.move_line_id.move_id.journal_id.id"
-                               t-att-data-res-model="'account.journal'"
-                               class="o_account_financial_reports_web_action"
-                               style="color: black;">
-                            <t t-raw="line.journal"/></a>
-                        </span>
+<!--                        <span>-->
+<!--                            <a t-att-data-active-id="line.move_line_id.move_id.journal_id.id"-->
+<!--                               t-att-data-res-model="'account.journal'"-->
+<!--                               class="o_account_financial_reports_web_action"-->
+<!--                               style="color: black;">-->
+                            <t t-raw="line['journal']"/>
+<!--                            </a>-->
+<!--                        </span>-->
                     </div>
                     <!--## account code-->
                     <div class="act_as_cell left">
-                        <span>
-                            <a t-att-data-active-id="line.move_line_id.account_id.id"
-                               t-att-data-res-model="'account.account'"
-                               class="o_account_financial_reports_web_action"
-                               style="color: black;">
-                            <t t-raw="line.account"/></a>
-                        </span>
+<!--                        <span>-->
+<!--                            <a t-att-data-active-id="line.move_line_id.account_id.id"-->
+<!--                               t-att-data-res-model="'account.account'"-->
+<!--                               class="o_account_financial_reports_web_action"-->
+<!--                               style="color: black;">-->
+                            <t t-raw="line['account']"/>
+<!--                            </a>-->
+<!--                        </span>-->
                     </div>
                     <!--## partner-->
                     <div class="act_as_cell left">
-                        <span>
-                            <a t-att-data-active-id="line.move_line_id.partner_id.id"
-                               t-att-data-res-model="'res.partner'"
-                               class="o_account_financial_reports_web_action"
-                               style="color: black;">
-                            <t t-raw="line.partner"/></a>
-                        </span>
+<!--                        <span>-->
+<!--                            <a t-att-data-active-id="line.move_line_id.partner_id.id"-->
+<!--                               t-att-data-res-model="'res.partner'"-->
+<!--                               class="o_account_financial_reports_web_action"-->
+<!--                               style="color: black;">-->
+                            <t t-raw="line['partner']"/>
+<!--                            </a>-->
+<!--                        </span>-->
                     </div>
                     <!--## ref - label-->
                     <div class="act_as_cell left">
-                        <span>
-                            <a t-att-data-active-id="line.move_line_id.id"
-                               t-att-data-res-model="'account.move.line'"
-                               class="o_account_financial_reports_web_action"
-                               style="color: black;">
-                            <t t-raw="line.label"/></a>
-                        </span>
+<!--                        <span>-->
+<!--                            <a t-att-data-active-id="line.move_line_id.id"-->
+<!--                               t-att-data-res-model="'account.move.line'"-->
+<!--                               class="o_account_financial_reports_web_action"-->
+<!--                               style="color: black;">-->
+                            <t t-raw="line['ref']"/>
+<!--                            </a>-->
+<!--                        </span>-->
                     </div>
                     <!--## date_due-->
                     <div class="act_as_cell left">
-                        <span>
-                            <a t-att-data-active-id="line.move_line_id.id"
-                               t-att-data-res-model="'account.move.line'"
-                               class="o_account_financial_reports_web_action"
-                               style="color: black;">
+<!--                        <span>-->
+<!--                            <a t-att-data-active-id="line.move_line_id.id"-->
+<!--                               t-att-data-res-model="'account.move.line'"-->
+<!--                               class="o_account_financial_reports_web_action"-->
+<!--                               style="color: black;">-->
                             <!--## We don't use t-field because it throws an error on click -->
-                            <t t-esc="line.date_due" t-options="{'widget': 'date'}"/></a>
-                        </span>
+                            <t t-esc="line['due_date']" t-options="{'widget': 'date'}"/>
+<!--                            </a>-->
+<!--                        </span>-->
                     </div>
                     <!--## amount_residual-->
                     <div class="act_as_cell amount">
-                        <span>
-                            <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
-                               t-att-data-res-model="'account.move.line'"
-                               class="o_account_financial_reports_web_action_multi"
-                               style="color: black;">
-                            <t t-raw="line.amount_residual" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></a>
-                        </span>
+<!--                        <span>-->
+<!--                            <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"-->
+<!--                               t-att-data-res-model="'account.move.line'"-->
+<!--                               class="o_account_financial_reports_web_action_multi"-->
+<!--                               style="color: black;">-->
+                            <t t-raw="line['residual']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+<!--                            </a>-->
+<!--                        </span>-->
                     </div>
                     <!--## current-->
                     <div class="act_as_cell amount">
-                        <t t-if="line.current != 0">
-                            <span>
-                                <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
-                                   t-att-data-res-model="'account.move.line'"
-                                   class="o_account_financial_reports_web_action_multi"
-                                   style="color: black;">
-                                <t t-raw="line.current" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></a>
-                            </span>
-                        </t>
-                        <t t-if="line.current == 0">
-                            <span t-field="line.current" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
-                        </t>
+<!--                        <t t-if="line.current != 0">-->
+<!--                            <span>-->
+<!--                                <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"-->
+<!--                                   t-att-data-res-model="'account.move.line'"-->
+<!--                                   class="o_account_financial_reports_web_action_multi"-->
+<!--                                   style="color: black;">-->
+                                <t t-raw="line['current']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+<!--                                </a>-->
+<!--                            </span>-->
+<!--                        </t>-->
+<!--                        <t t-if="line.current == 0">-->
+<!--                            <span t-field="line.current" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>-->
+<!--                        </t>-->
                     </div>
                     <!--## age_30_days-->
                     <div class="act_as_cell amount">
-                        <t t-if="line.age_30_days != 0">
-                            <span>
-                                <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
-                                   t-att-data-res-model="'account.move.line'"
-                                   class="o_account_financial_reports_web_action_multi"
-                                   style="color: black;">
-                                <t t-raw="line.age_30_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></a>
-                            </span>
-                        </t>
-                        <t t-if="line.age_30_days == 0">
-                            <span t-field="line.age_30_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
-                        </t>
+<!--                        <t t-if="line.age_30_days != 0">-->
+<!--                            <span>-->
+<!--                                <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"-->
+<!--                                   t-att-data-res-model="'account.move.line'"-->
+<!--                                   class="o_account_financial_reports_web_action_multi"-->
+<!--                                   style="color: black;">-->
+                                <t t-raw="line['30_days']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+<!--                                </a>-->
+<!--                            </span>-->
+<!--                        </t>-->
+<!--                        <t t-if="line.age_30_days == 0">-->
+<!--                            <span t-field="line.age_30_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>-->
+<!--                        </t>-->
                     </div>
                     <!--## age_60_days-->
                     <div class="act_as_cell amount">
-                        <t t-if="line.age_60_days != 0">
-                            <span>
-                                <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
-                                   t-att-data-res-model="'account.move.line'"
-                                   class="o_account_financial_reports_web_action_multi"
-                                   style="color: black;">
-                                <t t-raw="line.age_60_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></a>
-                            </span>
-                        </t>
-                        <t t-if="line.age_60_days == 0">
-                            <span t-field="line.age_60_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
-                        </t>
+<!--                        <t t-if="line.age_60_days != 0">-->
+<!--                            <span>-->
+<!--                                <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"-->
+<!--                                   t-att-data-res-model="'account.move.line'"-->
+<!--                                   class="o_account_financial_reports_web_action_multi"-->
+<!--                                   style="color: black;">-->
+                                <t t-raw="line['60_days']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+<!--                                </a>-->
+<!--                            </span>-->
+<!--                        </t>-->
+<!--                        <t t-if="line.age_60_days == 0">-->
+<!--                            <span t-field="line.age_60_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>-->
+<!--                        </t>-->
                     </div>
                     <!--## age_90_days-->
                     <div class="act_as_cell amount">
-                        <t t-if="line.age_90_days != 0">
-                            <span>
-                                <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
-                                   t-att-data-res-model="'account.move.line'"
-                                   class="o_account_financial_reports_web_action_multi"
-                                   style="color: black;">
-                                <t t-raw="line.age_90_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></a>
-                            </span>
-                        </t>
-                        <t t-if="line.age_90_days == 0">
-                            <span t-field="line.age_90_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
-                        </t>
+<!--                        <t t-if="line.age_90_days != 0">-->
+<!--                            <span>-->
+<!--                                <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"-->
+<!--                                   t-att-data-res-model="'account.move.line'"-->
+<!--                                   class="o_account_financial_reports_web_action_multi"-->
+<!--                                   style="color: black;">-->
+                                <t t-raw="line['90_days']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+<!--                                </a>-->
+<!--                            </span>-->
+<!--                        </t>-->
+<!--                        <t t-if="line.age_90_days == 0">-->
+<!--                            <span t-field="line.age_90_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>-->
+<!--                        </t>-->
                     </div>
                     <!--## age_120_days-->
                     <div class="act_as_cell amount">
-                        <t t-if="line.age_120_days != 0">
-                            <span>
-                                <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
-                                   t-att-data-res-model="'account.move.line'"
-                                   class="o_account_financial_reports_web_action_multi"
-                                   style="color: black;">
-                                <t t-raw="line.age_120_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></a>
-                            </span>
-                        </t>
-                        <t t-if="line.age_120_days == 0">
-                            <span t-field="line.age_120_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
-                        </t>
+<!--                        <t t-if="line.age_120_days != 0">-->
+<!--                            <span>-->
+<!--                                <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"-->
+<!--                                   t-att-data-res-model="'account.move.line'"-->
+<!--                                   class="o_account_financial_reports_web_action_multi"-->
+<!--                                   style="color: black;">-->
+                                <t t-raw="line['120_days']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+<!--                                </a>-->
+<!--                            </span>-->
+<!--                        </t>-->
+<!--                        <t t-if="line.age_120_days == 0">-->
+<!--                            <span t-field="line.age_120_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>-->
+<!--                        </t>-->
                     </div>
                     <!--## older-->
                     <div class="act_as_cell amount">
-                        <t t-if="line.older != 0">
-                            <span>
-                                <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
-                                   t-att-data-res-model="'account.move.line'"
-                                   class="o_account_financial_reports_web_action_multi"
-                                   style="color: black;">
-                                <t t-raw="line.older" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></a>
-                            </span>
-                        </t>
-                        <t t-if="line.older == 0">
-                            <span t-field="line.older" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
-                        </t>
+<!--                        <t t-if="line.older != 0">-->
+<!--                            <span>-->
+<!--                                <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"-->
+<!--                                   t-att-data-res-model="'account.move.line'"-->
+<!--                                   class="o_account_financial_reports_web_action_multi"-->
+<!--                                   style="color: black;">-->
+                                <t t-raw="line['older']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+<!--                                </a>-->
+<!--                            </span>-->
+<!--                        </t>-->
+<!--                        <t t-if="line.older == 0">-->
+<!--                            <span t-field="line.older" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>-->
+<!--                        </t>-->
                     </div>
                 </div>
             </t>
@@ -401,31 +410,31 @@
                 <div class="act_as_cell" style="width: 6.00%;"/>
                 <!--## amount_residual-->
                 <div class="act_as_cell amount" style="width: 6.00%;">
-                    <span t-field="partner_cumul_line.amount_residual" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    <span t-esc="partner_cumul_line['residual']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                 </div>
                 <!--## current-->
                 <div class="act_as_cell amount" style="width: 6.00%;">
-                    <span t-field="partner_cumul_line.current" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    <span t-esc="partner_cumul_line['current']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                 </div>
                 <!--## age_30_days-->
                 <div class="act_as_cell amount" style="width: 6.00%;">
-                    <span t-field="partner_cumul_line.age_30_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    <span t-esc="partner_cumul_line['30_days']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                 </div>
                 <!--## age_60_days-->
                 <div class="act_as_cell amount" style="width: 6.00%;">
-                    <span t-field="partner_cumul_line.age_60_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    <span t-esc="partner_cumul_line['60_days']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                 </div>
                 <!--## age_90_days-->
                 <div class="act_as_cell amount" style="width: 6.00%;">
-                    <span t-field="partner_cumul_line.age_90_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    <span t-esc="partner_cumul_line['90_days']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                 </div>
                 <!--## age_120_days-->
                 <div class="act_as_cell amount" style="width: 6.00%;">
-                    <span t-field="partner_cumul_line.age_120_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    <span t-esc="partner_cumul_line['120_days']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                 </div>
                 <!--## older-->
                 <div class="act_as_cell amount" style="width: 6.00%;">
-                    <span t-field="partner_cumul_line.older" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    <span t-esc="partner_cumul_line['older']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                 </div>
             </div>
         </div>
@@ -440,31 +449,31 @@
                     <div class="act_as_cell right" style="width: 32.52%;">Total</div>
                     <!--## amount_residual-->
                     <div class="act_as_cell amount" style="width: 9.64%;">
-                        <span t-field="account.cumul_amount_residual" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                        <span t-esc="account['residual']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                     </div>
                     <!--## current-->
                     <div class="act_as_cell amount" style="width: 9.64%;">
-                        <span t-field="account.cumul_current" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                        <span t-esc="account['current']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                     </div>
                     <!--## age_30_days-->
                     <div class="act_as_cell amount" style="width: 9.64%;">
-                        <span t-field="account.cumul_age_30_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                        <span t-esc="account['30_days']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                     </div>
                     <!--## age_60_days-->
                     <div class="act_as_cell amount" style="width: 9.64%;">
-                        <span t-field="account.cumul_age_60_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                        <span t-esc="account['60_days']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                     </div>
                     <!--## age_90_days-->
                     <div class="act_as_cell amount" style="width: 9.64%;">
-                        <span t-field="account.cumul_age_90_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                        <span t-esc="account['90_days']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                     </div>
                     <!--## age_120_days-->
                     <div class="act_as_cell amount" style="width: 9.64%;">
-                        <span t-field="account.cumul_age_120_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                        <span t-esc="account['120_days']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                     </div>
                     <!--## older-->
                     <div class="act_as_cell amount" style="width: 9.64%;">
-                        <span t-field="account.cumul_older" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                        <span t-esc="account['older']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                     </div>
                 </t>
                 <t t-if="show_move_line_details">
@@ -474,31 +483,31 @@
                     <div class="act_as_cell" style="width: 6.00%;"/>
                     <!--## amount_residual-->
                     <div class="act_as_cell amount" style="width: 6.00%">
-                        <span t-field="account.cumul_amount_residual" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                        <span t-esc="account['residual']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                     </div>
                     <!--## current-->
                     <div class="act_as_cell amount" style="width: 6.00%">
-                        <span t-field="account.cumul_current" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                        <span t-esc="account['current']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                     </div>
                     <!--## age_30_days-->
                     <div class="act_as_cell amount" style="width: 6.00%">
-                        <span t-field="account.cumul_age_30_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                        <span t-esc="account['30_days']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                     </div>
                     <!--## age_60_days-->
                     <div class="act_as_cell amount" style="width: 6.00%">
-                        <span t-field="account.cumul_age_60_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                        <span t-esc="account['60_days']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                     </div>
                     <!--## age_90_days-->
                     <div class="act_as_cell amount" style="width: 6.00%">
-                        <span t-field="account.cumul_age_90_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                        <span t-esc="account['90_days']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                     </div>
                     <!--## age_120_days-->
                     <div class="act_as_cell amount" style="width: 6.00%">
-                        <span t-field="account.cumul_age_120_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                        <span t-esc="account['120_days']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                     </div>
                     <!--## older-->
                     <div class="act_as_cell amount" style="width: 6.00%">
-                        <span t-field="account.cumul_older" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                        <span t-esc="account['older']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                     </div>
                 </t>
             </div>
@@ -510,23 +519,22 @@
                     <!--## amount_residual-->
                     <div class="act_as_cell amount" style="width: 9.64%;"/>
                     <!--## current-->
-                    <div class="act_as_cell amount" style="width: 9.64%;"><span t-field="account.percent_current"/>%
+                    <div class="act_as_cell amount" style="width: 9.64%;"><span t-esc="account['percent_current']"/>%
                     </div>
                     <!--## age_30_days-->
-                    <div class="act_as_cell amount" style="width: 9.64%;"><span t-field="account.percent_age_30_days"/>%
+                    <div class="act_as_cell amount" style="width: 9.64%;"><span t-esc="account['percent_30_days']"/>%
                     </div>
                     <!--## age_60_days-->
-                    <div class="act_as_cell amount" style="width: 9.64%;"><span t-field="account.percent_age_60_days"/>%
+                    <div class="act_as_cell amount" style="width: 9.64%;"><span t-esc="account['percent_60_days']"/>%
                     </div>
                     <!--## age_90_days-->
-                    <div class="act_as_cell amount" style="width: 9.64%;"><span t-field="account.percent_age_90_days"/>%
+                    <div class="act_as_cell amount" style="width: 9.64%;"><span t-esc="account['percent_90_days']"/>%
                     </div>
                     <!--## age_120_days-->
-                    <div class="act_as_cell amount" style="width: 9.64%;"><span t-field="account.percent_age_120_days"/>
-                        %
+                    <div class="act_as_cell amount" style="width: 9.64%;"><span t-esc="account['percent_120_days']"/>%
                     </div>
                     <!--## older-->
-                    <div class="act_as_cell amount" style="width: 9.64%;"><span t-field="account.percent_older"/>%
+                    <div class="act_as_cell amount" style="width: 9.64%;"><span t-esc="account['percent_older']"/>%
                     </div>
                 </t>
                 <t t-if="show_move_line_details">
@@ -538,22 +546,22 @@
                     <!--## amount_residual-->
                     <div class="act_as_cell amount" style="width: 6.00%"/>
                     <!--## current-->
-                    <div class="act_as_cell amount" style="width: 6.00%"><span t-field="account.percent_current"/>%
+                    <div class="act_as_cell amount" style="width: 6.00%"><span t-esc="account['percent_current']"/>%
                     </div>
                     <!--## age_30_days-->
-                    <div class="act_as_cell amount" style="width: 6.00%"><span t-field="account.percent_age_30_days"/>%
+                    <div class="act_as_cell amount" style="width: 6.00%"><span t-esc="account['percent_30_days']"/>%
                     </div>
                     <!--## age_60_days-->
-                    <div class="act_as_cell amount" style="width: 6.00%"><span t-field="account.percent_age_60_days"/>%
+                    <div class="act_as_cell amount" style="width: 6.00%"><span t-esc="account['percent_60_days']"/>%
                     </div>
                     <!--## age_90_days-->
-                    <div class="act_as_cell amount" style="width: 6.00%"><span t-field="account.percent_age_90_days"/>%
+                    <div class="act_as_cell amount" style="width: 6.00%"><span t-esc="account['percent_90_days']"/>%
                     </div>
                     <!--## age_120_days-->
-                    <div class="act_as_cell amount" style="width: 6.00%"><span t-field="account.percent_age_120_days"/>%
+                    <div class="act_as_cell amount" style="width: 6.00%"><span t-esc="account['percent_120_days']"/>%
                     </div>
                     <!--## older-->
-                    <div class="act_as_cell amount" style="width: 6.00%"><span t-field="account.percent_older"/>%
+                    <div class="act_as_cell amount" style="width: 6.00%"><span t-esc="account['percent_older']"/>%
                     </div>
                 </t>
             </div>
