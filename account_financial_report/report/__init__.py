@@ -17,3 +17,5 @@ from . import trial_balance
 from . import trial_balance_xlsx
 from . import vat_report
 from . import vat_report_xlsx
+
+from . import journal_ledger_report

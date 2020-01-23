@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_journal_ledger_report" model="ir.actions.act_window">
+        <field name="name">Journal Ledger</field>
+        <field name="res_model">journal.ledger.report</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">graph,pivot</field>
+        <field name="view_id"></field>  <!-- force empty -->
+        <field name="context">{'group_by':[]}</field>
+        <field name="help">PoC Journal Ledger.</field>
+    </record>
+
+    <menuitem
+        parent="menu_oca_reports"
+        action="action_journal_ledger_report"
+        id="menu_journal_ledger_report"
+        sequence="100"
+        />
+</odoo>

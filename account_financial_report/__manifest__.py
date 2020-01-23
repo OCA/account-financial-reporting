@@ -19,6 +19,7 @@
         'report_xlsx',
     ],
     'data': [
+        'security/ir.model.access.csv',
         'wizard/aged_partner_balance_wizard_view.xml',
         'wizard/general_ledger_wizard_view.xml',
         'wizard/journal_ledger_wizard_view.xml',
@@ -34,6 +35,7 @@
         'report/templates/open_items.xml',
         'report/templates/trial_balance.xml',
         'report/templates/vat_report.xml',
+        'report/journal_ledger_report.xml',
         'view/account_view.xml',
         'view/report_template.xml',
         'view/report_general_ledger.xml',
