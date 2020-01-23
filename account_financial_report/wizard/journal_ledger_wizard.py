@@ -2,8 +2,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models, _
-from odoo.tools.safe_eval import safe_eval
-from odoo.tools import pycompat
 
 
 class JournalLedgerReportWizard(models.TransientModel):
@@ -103,25 +101,26 @@ class JournalLedgerReportWizard(models.TransientModel):
         return res
 
     @api.multi
+    def _print_report(self, report_type):
+        self.ensure_one()
+        data = self._prepare_report_journal_ledger()
+        if report_type == 'xlsx':
+            report_name = 'a_f_r.report_journal_ledger_xlsx'
+        else:
+            report_name = 'account_financial_report.journal_ledger'
+        return self.env['ir.actions.report'].search(
+            [('report_name', '=', report_name),
+             ('report_type', '=', report_type)], limit=1).report_action(
+            self, data=data)
+
+    @api.multi
     def button_export_html(self):
         self.ensure_one()
-        action = self.env.ref(
-            'account_financial_report.action_report_journal_ledger')
-        vals = action.read()[0]
-        context1 = vals.get('context', {})
-        if isinstance(context1, pycompat.string_types):
-            context1 = safe_eval(context1)
-        model = self.env['report_journal_ledger']
-        report = model.create(self._prepare_report_journal_ledger())
-        report.compute_data_for_report()
-        context1['active_id'] = report.id
-        context1['active_ids'] = report.ids
-        vals['context'] = context1
-        return vals
+        report_type = 'qweb-html'
+        return self._export(report_type)
 
     @api.multi
     def button_export_pdf(self):
-        self.ensure_one()
         report_type = 'qweb-pdf'
         return self._export(report_type)
 
@@ -140,12 +139,13 @@ class JournalLedgerReportWizard(models.TransientModel):
             journals = self.env['account.journal'].search(
                 [('company_id', '=', self.company_id.id)])
         return {
+            'wizard_id': self.id,
             'date_from': self.date_from,
             'date_to': self.date_to,
             'move_target': self.move_target,
             'foreign_currency': self.foreign_currency,
             'company_id': self.company_id.id,
-            'journal_ids': [(6, 0, journals.ids)],
+            'journal_ids': journals.ids,
             'sort_option': self.sort_option,
             'group_option': self.group_option,
             'with_account_name': self.with_account_name,
@@ -154,7 +154,44 @@ class JournalLedgerReportWizard(models.TransientModel):
     def _export(self, report_type):
         """Default export is PDF."""
         self.ensure_one()
-        model = self.env['report_journal_ledger']
-        report = model.create(self._prepare_report_journal_ledger())
-        report.compute_data_for_report()
-        return report.print_report(report_type)
+        return self._print_report(report_type)
+
+    @api.model
+    def _get_ml_tax_description(
+            self, move_line_data, tax_line_data, move_line_taxes_data):
+        taxes_description = ''
+        if move_line_data['tax_line_id']:
+            taxes_description = tax_line_data['description'] or \
+                tax_line_data['name']
+        elif move_line_taxes_data:
+            tax_names = []
+            for tax_key in move_line_taxes_data:
+                tax = move_line_taxes_data[tax_key]
+                tax_names.append(
+                    tax['description'] or tax['name'])
+            taxes_description = ','.join(tax_names)
+        return taxes_description
+
+    @api.model
+    def _get_partner_name(self, partner_id, partner_data):
+        if str(partner_id) in partner_data.keys():
+            return partner_data[str(partner_id)]['name']
+        else:
+            return ''
+
+    @api.model
+    def _get_atr_from_dict(self, obj_id, data, key):
+        try:
+            return data[obj_id][key]
+        except KeyError:
+            return data[str(obj_id)][key]
+
+    @api.model
+    def _get_data_from_dict(self, obj_id, data):
+        if data:
+            if isinstance(list(data.keys())[0], int):
+                return data.get(obj_id, False)
+            else:
+                return data.get(obj_id(obj_id), False)
+        else:
+            return False
