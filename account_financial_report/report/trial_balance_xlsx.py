@@ -10,9 +10,15 @@ class TrialBalanceXslx(models.AbstractModel):
     _name = 'report.a_f_r.report_trial_balance_xlsx'
     _inherit = 'report.account_financial_report.abstract_report_xlsx'
 
-    def _get_report_name(self, report):
+    def _get_report_name(self, report, data=False):
+        company_id = data.get('company_id', False)
         report_name = _('Trial Balance')
-        return self._get_report_complete_name(report, report_name)
+        if company_id:
+            company = self.env['res.company'].browse(company_id)
+            suffix = ' - %s - %s' % (
+                company.name, company.currency_id.name)
+            report_name = report_name + suffix
+        return report_name
 
     def _get_report_columns(self, report):
         if not report.show_partner_details:
@@ -73,11 +79,11 @@ class TrialBalanceXslx(models.AbstractModel):
                     'type': 'amount',
                     'width': 14},
                 4: {'header': _('Period balance'),
-                    'field': 'period_balance',
+                    'field': 'balance',
                     'type': 'amount',
                     'width': 14},
                 5: {'header': _('Ending balance'),
-                    'field': 'final_balance',
+                    'field': 'ending_balance',
                     'type': 'amount',
                     'width': 14},
             }
@@ -88,11 +94,11 @@ class TrialBalanceXslx(models.AbstractModel):
                         'field_currency_balance': 'currency_id',
                         'type': 'many2one', 'width': 7},
                     7: {'header': _('Initial balance'),
-                        'field': 'initial_balance_foreign_currency',
+                        'field': 'initial_currency_balance',
                         'type': 'amount_currency',
                         'width': 14},
                     8: {'header': _('Ending balance'),
-                        'field': 'final_balance_foreign_currency',
+                        'field': 'ending_currency_balance',
                         'type': 'amount_currency',
                         'width': 14},
                 }
@@ -104,7 +110,7 @@ class TrialBalanceXslx(models.AbstractModel):
             [_('Date range filter'),
              _('From: %s To: %s') % (report.date_from, report.date_to)],
             [_('Target moves filter'),
-             _('All posted entries') if report.only_posted_moves else _(
+             _('All posted entries') if report.target_move == 'all' else _(
                  'All entries')],
             [_('Account at 0 filter'),
              _('Hide') if report.hide_account_at_0 else _('Show')],
@@ -121,36 +127,86 @@ class TrialBalanceXslx(models.AbstractModel):
     def _get_col_count_filter_value(self):
         return 3
 
-    def _generate_report_content(self, workbook, report):
-
-        if not report.show_partner_details:
+    def _generate_report_content(self, workbook, report, data):
+        res_data = self.env[
+            'report.account_financial_report.trial_balance']._get_report_values(
+            report, data)
+        trial_balance = res_data['trial_balance']
+        total_amount = res_data['total_amount']
+        partners_data = res_data['partners_data']
+        accounts_data = res_data['accounts_data']
+        hierarchy_on = res_data['hierarchy_on']
+        show_partner_details = res_data['show_partner_details']
+        show_hierarchy_level = res_data['show_hierarchy_level']
+        foreign_currency = res_data['foreign_currency']
+        limit_hierarchy_level = res_data['limit_hierarchy_level']
+        if not show_partner_details:
             # Display array header for account lines
             self.write_array_header()
 
         # For each account
-        for account in report.account_ids.filtered(lambda a: not a.hide_line):
-            if not report.show_partner_details:
-                # Display account lines
-                self.write_line(account, 'account')
-
-            else:
+        if not show_partner_details:
+            for balance in trial_balance:
+                if hierarchy_on == 'relation':
+                    if limit_hierarchy_level:
+                        if show_hierarchy_level > balance['level']:
+                            # Display account lines
+                            self.write_line_from_dict(balance)
+                    else:
+                        self.write_line_from_dict(balance)
+                elif hierarchy_on == 'computed':
+                    if balance['type'] == 'account_type':
+                        if limit_hierarchy_level:
+                            if show_hierarchy_level > balance['level']:
+                                # Display account lines
+                                self.write_line_from_dict(balance)
+                        else:
+                            self.write_line_from_dict(balance)
+                else:
+                    self.write_line_from_dict(balance)
+        else:
+            for account_id in total_amount:
                 # Write account title
-                self.write_array_title(account.code + ' - ' + account.name)
-
+                self.write_array_title(accounts_data[account_id]['code'] + '- '
+                                       + accounts_data[account_id]['name'])
                 # Display array header for partner lines
                 self.write_array_header()
 
                 # For each partner
-                for partner in account.partner_ids:
-                    # Display partner lines
-                    self.write_line(partner, 'partner')
+                for partner_id in total_amount[account_id]:
+                    if isinstance(partner_id, int):
+                        # Display partner lines
+                        self.write_line_from_dict_order(
+                            total_amount[account_id][partner_id],
+                            partners_data[partner_id])
 
                 # Display account footer line
-                self.write_account_footer(account,
-                                          account.code + ' - ' + account.name)
+                accounts_data[account_id].update({
+                    'initial_balance': total_amount[account_id][
+                        'initial_balance'],
+                    'credit': total_amount[account_id]['credit'],
+                    'debit': total_amount[account_id]['debit'],
+                    'balance': total_amount[account_id]['balance'],
+                    'ending_balance': total_amount[account_id]['ending_balance']
+                })
+                if foreign_currency:
+                    accounts_data[account_id].update({
+                        'initial_currency_balance': total_amount[account_id][
+                            'initial_currency_balance'],
+                        'ending_currency_balance': total_amount[account_id][
+                            'ending_currency_balance']
+                    })
+                self.write_account_footer(accounts_data[account_id],
+                                          accounts_data[account_id][
+                                              'code'] + '- '
+                                          + accounts_data[account_id]['name'])
 
                 # Line break
                 self.row_pos += 2
+
+    def write_line_from_dict_order(self, total_amount, partner_data):
+        total_amount.update({'name': str(partner_data['name'])})
+        self.write_line_from_dict(total_amount)
 
     def write_line(self, line_object, type_object):
         """Write a line on current line using all defined columns field name.
@@ -164,12 +220,12 @@ class TrialBalanceXslx(models.AbstractModel):
 
     def write_account_footer(self, account, name_value):
         """Specific function to write account footer for Trial Balance"""
-        format_amt = self._get_currency_amt_header_format(account)
+        format_amt = self._get_currency_amt_header_format_dict(account)
         for col_pos, column in self.columns.items():
             if column['field'] == 'name':
                 value = name_value
             else:
-                value = getattr(account, column['field'])
+                value = account[column['field']]
             cell_type = column.get('type', 'string')
             if cell_type == 'string':
                 self.sheet.write_string(self.row_pos, col_pos, value or '',
@@ -177,11 +233,11 @@ class TrialBalanceXslx(models.AbstractModel):
             elif cell_type == 'amount':
                 self.sheet.write_number(self.row_pos, col_pos, float(value),
                                         self.format_header_amount)
-            elif cell_type == 'many2one':
+            elif cell_type == 'many2one' and account['currency_id']:
                 self.sheet.write_string(
                     self.row_pos, col_pos, value.name or '',
                     self.format_header_right)
-            elif cell_type == 'amount_currency' and account.currency_id:
+            elif cell_type == 'amount_currency' and account['currency_id']:
                 self.sheet.write_number(
                     self.row_pos, col_pos, float(value),
                     format_amt)
