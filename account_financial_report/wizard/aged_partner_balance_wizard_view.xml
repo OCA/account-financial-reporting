@@ -4,7 +4,7 @@
     <!-- AGED PARTNER BALANCE -->
     <record id="aged_partner_balance_wizard" model="ir.ui.view">
         <field name="name">Aged Partner Balance</field>
-        <field name="model">aged.partner.balance.wizard</field>
+        <field name="model">aged.partner.balance.report.wizard</field>
         <field name="arch" type="xml">
             <form>
                 <group name="main_info">
@@ -50,7 +50,7 @@
 
     <act_window id="action_aged_partner_balance_wizard"
                 name="Aged Partner Balance"
-                res_model="aged.partner.balance.wizard"
+                res_model="aged.partner.balance.report.wizard"
                 view_type="form"
                 view_mode="form"
                 view_id="aged_partner_balance_wizard"

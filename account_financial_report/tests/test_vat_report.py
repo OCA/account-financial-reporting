@@ -1,47 +1,10 @@
 # Copyright  2018 Forest and Biomass Romania
+# Copyright 2020 ForgeFlow S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import time
 from datetime import date
 from odoo.tests import common
-from . import abstract_test_tax_report
-
-
-class TestVAT(abstract_test_tax_report.AbstractTest):
-    """
-        Technical tests for VAT Report.
-    """
-
-    def _getReportModel(self):
-        return self.env['report_vat_report']
-
-    def _getQwebReportName(self):
-        return 'account_financial_report.report_vat_report_qweb'
-
-    def _getXlsxReportName(self):
-        return 'a_f_r.report_vat_report_xlsx'
-
-    def _getXlsxReportActionName(self):
-        return 'account_financial_report.action_report_vat_report_xlsx'
-
-    def _getReportTitle(self):
-        return 'Odoo'
-
-    def _getBaseFilters(self):
-        return {
-            'date_from': date(date.today().year, 1, 1),
-            'date_to': date(date.today().year, 12, 31),
-            'company_id': self.env.user.company_id.id,
-        }
-
-    def _getAdditionalFiltersToBeTested(self):
-        return [
-            {'based_on': 'taxtags'},
-            {'based_on': 'taxgroups'},
-            {'tax_details': True},
-            {'based_on': 'taxtags', 'tax_details': True},
-            {'based_on': 'taxgroups', 'tax_details': True},
-        ]
 
 
 class TestVATReport(common.TransactionCase):
@@ -155,106 +118,142 @@ class TestVATReport(common.TransactionCase):
         self.cbinvoice.compute_taxes()
         self.cbinvoice.action_invoice_open()
 
-    def _get_report_lines(self):
         self.cbinvoice.pay_and_reconcile(
             self.bank_journal.id, 300, date(
                 date.today().year, date.today().month, 10))
-        vat_report = self.env['report_vat_report'].create({
+
+    def _get_report_lines(self, taxgroups=False):
+        based_on = 'taxtags'
+        if taxgroups:
+            based_on = 'taxgroups'
+        vat_report = self.env['vat.report.wizard'].create({
             'date_from': self.date_from,
             'date_to': self.date_to,
             'company_id': self.company.id,
-            'based_on': 'taxtags',
+            'based_on': based_on,
             'tax_detail': True,
             })
-        vat_report.compute_data_for_report()
-        lines = {}
-        vat_taxtag_model = self.env['report_vat_report_taxtag']
-        lines['tag_01'] = vat_taxtag_model.search([
-            ('report_id', '=', vat_report.id),
-            ('taxtag_id', '=', self.tax_tag_01.id),
-        ])
-        lines['tag_02'] = vat_taxtag_model.search([
-            ('report_id', '=', vat_report.id),
-            ('taxtag_id', '=', self.tax_tag_02.id),
-        ])
-        lines['tag_03'] = vat_taxtag_model.search([
-            ('report_id', '=', vat_report.id),
-            ('taxtag_id', '=', self.tax_tag_03.id),
-        ])
-        vat_tax_model = self.env['report_vat_report_tax']
-        lines['tax_10'] = vat_tax_model.search([
-            ('report_tax_id', '=', lines['tag_02'].id),
-            ('tax_id', '=', self.tax_10.id),
-        ])
-        lines['tax_20'] = vat_tax_model.search([
-            ('report_tax_id', '=', lines['tag_02'].id),
-            ('tax_id', '=', self.tax_20.id),
-        ])
-        vat_report['based_on'] = 'taxgroups'
-        vat_report.compute_data_for_report()
-        lines['group_10'] = vat_taxtag_model.search([
-            ('report_id', '=', vat_report.id),
-            ('taxgroup_id', '=', self.tax_group_10.id),
-        ])
-        lines['group_20'] = vat_taxtag_model.search([
-            ('report_id', '=', vat_report.id),
-            ('taxgroup_id', '=', self.tax_group_20.id),
-        ])
-        vat_tax_model = self.env['report_vat_report_tax']
-        lines['tax_group_10'] = vat_tax_model.search([
-            ('report_tax_id', '=', lines['group_10'].id),
-            ('tax_id', '=', self.tax_10.id),
-        ])
-        lines['tax_group_20'] = vat_tax_model.search([
-            ('report_tax_id', '=', lines['group_20'].id),
-            ('tax_id', '=', self.tax_20.id),
-        ])
-        return lines
+        data = vat_report._prepare_vat_report()
+        res_data = self.env[
+            'report.account_financial_report.vat_report'
+        ]._get_report_values(vat_report, data)
+        return res_data
+
+    def check_tag_or_group_in_report(self, tag_or_group_name, vat_report):
+        tag_or_group_in_report = False
+        for tag_or_group in vat_report:
+            if tag_or_group['name'] == tag_or_group_name:
+                tag_or_group_in_report = True
+                break
+        return tag_or_group_in_report
+
+    def check_tax_in_report(self, tax_name, vat_report):
+        tax_in_report = False
+        for tag_or_group in vat_report:
+            if tag_or_group['taxes']:
+                for tax in tag_or_group['taxes']:
+                    if tax['name'] == tax_name:
+                        tax_in_report = True
+        return tax_in_report
+
+    def _get_tag_or_group_line(self, tag_or_group_name, vat_report):
+        tag_or_group_net = False
+        tag_or_group_tax = False
+        for tag_or_group in vat_report:
+            if tag_or_group['name'] == tag_or_group_name:
+                tag_or_group_net = tag_or_group['net']
+                tag_or_group_tax = tag_or_group['tax']
+        return tag_or_group_net, tag_or_group_tax
+
+    def _get_tax_line(self, tax_name, vat_report):
+        tax_net = False
+        tax_tax = False
+        for tag_or_group in vat_report:
+            if tag_or_group['taxes']:
+                for tax in tag_or_group['taxes']:
+                    if tax['name'] == tax_name:
+                        tax_net = tax['net']
+                        tax_tax = tax['tax']
+        return tax_net, tax_tax
 
     def test_01_compute(self):
         # Generate the vat lines
-        lines = self._get_report_lines()
+        res_data = self._get_report_lines()
+        vat_report = res_data['vat_report']
 
         # Check report based on taxtags
-        self.assertEqual(len(lines['tag_01']), 1)
-        self.assertEqual(len(lines['tag_02']), 1)
-        self.assertEqual(len(lines['tag_03']), 1)
-        self.assertEqual(len(lines['tax_10']), 1)
-        self.assertEqual(len(lines['tax_20']), 1)
-        self.assertEqual(lines['tag_01'].net, 100)
-        self.assertEqual(lines['tag_01'].tax, 10)
-        self.assertEqual(lines['tag_02'].net, 350)
-        self.assertEqual(lines['tag_02'].tax, 60)
-        self.assertEqual(lines['tag_03'].net, 250)
-        self.assertEqual(lines['tag_03'].tax, 50)
-        self.assertEqual(lines['tax_10'].net, 100)
-        self.assertEqual(lines['tax_10'].tax, 10)
-        self.assertEqual(lines['tax_20'].net, 250)
-        self.assertEqual(lines['tax_20'].tax, 50)
+        check_tax_tag_01 = self.check_tag_or_group_in_report(
+            self.tax_tag_01.name, vat_report)
+        self.assertTrue(check_tax_tag_01)
+        check_tax_tag_02 = self.check_tag_or_group_in_report(
+            self.tax_tag_02.name, vat_report)
+        self.assertTrue(check_tax_tag_02)
+        check_tax_tag_03 = self.check_tag_or_group_in_report(
+            self.tax_tag_03.name, vat_report)
+        self.assertTrue(check_tax_tag_03)
+        check_tax_10 = self.check_tax_in_report(
+            self.tax_10.name, vat_report)
+        self.assertTrue(check_tax_10)
+        check_tax_20 = self.check_tax_in_report(
+            self.tax_20.name, vat_report)
+        self.assertTrue(check_tax_20)
+
+        tag_01_net, tag_01_tax = self._get_tag_or_group_line(
+            self.tax_tag_01.name, vat_report)
+        tag_02_net, tag_02_tax = self._get_tag_or_group_line(
+            self.tax_tag_02.name, vat_report)
+        tag_03_net, tag_03_tax = self._get_tag_or_group_line(
+            self.tax_tag_03.name, vat_report)
+        tax_10_net, tax_10_tax = self._get_tax_line(
+            self.tax_10.name, vat_report)
+        tax_20_net, tax_20_tax = self._get_tax_line(
+            self.tax_20.name, vat_report)
+
+        self.assertEqual(tag_01_net, 100)
+        self.assertEqual(tag_01_tax, 10)
+        self.assertEqual(tag_02_net, 350)
+        self.assertEqual(tag_02_tax, 60)
+        self.assertEqual(tag_03_net, 250)
+        self.assertEqual(tag_03_tax, 50)
+        self.assertEqual(tax_10_net, 100)
+        self.assertEqual(tax_10_tax, 10)
+        self.assertEqual(tax_20_net, 250)
+        self.assertEqual(tax_20_tax, 50)
 
         # Check report based on taxgroups
-        self.assertEqual(len(lines['group_10']), 1)
-        self.assertEqual(len(lines['group_20']), 1)
-        self.assertEqual(len(lines['tax_group_10']), 1)
-        self.assertEqual(len(lines['tax_group_20']), 1)
-        self.assertEqual(lines['group_10'].net, 100)
-        self.assertEqual(lines['group_10'].tax, 10)
-        self.assertEqual(lines['group_20'].net, 250)
-        self.assertEqual(lines['group_20'].tax, 50)
-        self.assertEqual(lines['tax_group_10'].net, 100)
-        self.assertEqual(lines['tax_group_10'].tax, 10)
-        self.assertEqual(lines['tax_group_20'].net, 250)
-        self.assertEqual(lines['tax_group_20'].tax, 50)
+        res_data = self._get_report_lines(taxgroups=True)
+        vat_report = res_data['vat_report']
 
-    def test_get_report_html(self):
-        vat_report = self.env['report_vat_report'].create({
-            'date_from': self.date_from,
-            'date_to': self.date_to,
-            'company_id': self.company.id,
-            'tax_detail': True,
-            })
-        vat_report.compute_data_for_report()
-        vat_report.get_html(given_context={})
+        check_group_10 = self.check_tag_or_group_in_report(
+            self.tax_group_10.name, vat_report)
+        self.assertTrue(check_group_10)
+        check_group_20 = self.check_tag_or_group_in_report(
+            self.tax_group_20.name, vat_report)
+        self.assertTrue(check_group_20)
+        check_tax_10 = self.check_tax_in_report(
+            self.tax_10.name, vat_report)
+        self.assertTrue(check_tax_10)
+        check_tax_20 = self.check_tax_in_report(
+            self.tax_20.name, vat_report)
+        self.assertTrue(check_tax_20)
+
+        group_10_net, group_10_tax = self._get_tag_or_group_line(
+            self.tax_group_10.name, vat_report)
+        group_20_net, group_20_tax = self._get_tag_or_group_line(
+            self.tax_group_20.name, vat_report)
+        tax_10_net, tax_10_tax = self._get_tax_line(
+            self.tax_10.name, vat_report)
+        tax_20_net, tax_20_tax = self._get_tax_line(
+            self.tax_20.name, vat_report)
+
+        self.assertEqual(group_10_net, 100)
+        self.assertEqual(group_10_tax, 10)
+        self.assertEqual(group_20_net, 250)
+        self.assertEqual(group_20_tax, 50)
+        self.assertEqual(tax_10_net, 100)
+        self.assertEqual(tax_10_tax, 10)
+        self.assertEqual(tax_20_net, 250)
+        self.assertEqual(tax_20_tax, 50)
 
     def test_wizard_date_range(self):
         vat_wizard = self.env['vat.report.wizard']

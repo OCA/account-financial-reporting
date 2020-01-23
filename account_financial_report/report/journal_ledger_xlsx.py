@@ -10,9 +10,15 @@ class JournalLedgerXslx(models.AbstractModel):
     _name = 'report.a_f_r.report_journal_ledger_xlsx'
     _inherit = 'report.account_financial_report.abstract_report_xlsx'
 
-    def _get_report_name(self, report):
+    def _get_report_name(self, report, data=False):
+        company_id = data.get('company_id', False)
         report_name = _('Journal Ledger')
-        return self._get_report_complete_name(report, report_name)
+        if company_id:
+            company = self.env['res.company'].browse(company_id)
+            suffix = ' - %s - %s' % (
+                company.name, company.currency_id.name)
+            report_name = report_name + suffix
+        return report_name
 
     def _get_report_columns(self, report):
         columns = [
@@ -36,7 +42,7 @@ class JournalLedgerXslx(models.AbstractModel):
         if report.with_account_name:
             columns.append({
                 'header': _('Account Name'),
-                'field': 'account',
+                'field': 'account_name',
                 'width': 15
             })
 
@@ -74,9 +80,9 @@ class JournalLedgerXslx(models.AbstractModel):
             columns += [
                 {
                     'header': _('Currency'),
-                    'field': 'currency_id',
-                    'type': 'many2one',
-                    'width': 14
+                    'field': 'currency_name',
+                    'width': 14,
+                    'type': 'currency_name',
                 },
                 {
                     'header': _('Amount Currency'),
@@ -181,51 +187,61 @@ class JournalLedgerXslx(models.AbstractModel):
                 _('Journals'),
                 ', '.join([
                     "%s - %s" % (report_journal.code, report_journal.name)
-                    for report_journal in report.report_journal_ledger_ids
+                    for report_journal in report.journal_ids
                 ])
 
             ]
         ]
 
-    def _generate_report_content(self, workbook, report):
+    def _generate_report_content(self, workbook, report, data):
+        res_data = self.env[
+            'report.account_financial_report.journal_ledger'
+        ]._get_report_values(report, data)
         group_option = report.group_option
         if group_option == 'journal':
-            for report_journal in report.report_journal_ledger_ids:
-                self._generate_journal_content(workbook, report_journal)
+            for ledger in res_data['Journal_Ledgers']:
+                self._generate_journal_content(workbook, report, res_data,
+                                               ledger)
         elif group_option == 'none':
-            self._generate_no_group_content(workbook, report)
+            self._generate_no_group_content(workbook, report,
+                                            res_data)
 
-    def _generate_no_group_content(self, workbook, report):
+    def _generate_no_group_content(self, workbook, report, res_data):
         self._generate_moves_content(
-            workbook, report, "Report", report.report_move_ids)
-        self._generate_no_group_taxes_summary(workbook, report)
+            workbook, "Report", report, res_data, res_data['Moves'])
+        self._generate_no_group_taxes_summary(workbook, report, res_data)
 
-    def _generate_journal_content(self, workbook, report_journal):
+    def _generate_journal_content(self, workbook, report, res_data, ledger):
+        journal = self.env['account.journal'].browse(ledger['id'])
+        currency_name = journal.currency_id and journal.currency_id.name or \
+            journal.company_id.currency_id.name
         sheet_name = "%s (%s) - %s" % (
-            report_journal.code,
-            report_journal.currency_id.name,
-            report_journal.name,
+            journal.code,
+            currency_name,
+            journal.name,
         )
         self._generate_moves_content(
-            workbook, report_journal.report_id, sheet_name,
-            report_journal.report_move_ids)
-        self._generate_journal_taxes_summary(workbook, report_journal)
+            workbook, sheet_name, report, res_data, ledger['report_moves'])
+        self._generate_journal_taxes_summary(workbook, ledger)
 
-    def _generate_no_group_taxes_summary(self, workbook, report):
+    def _generate_no_group_taxes_summary(self, workbook, report, res_data):
         self._generate_taxes_summary(
-            workbook, report, "Tax Report", report.report_tax_line_ids)
+            workbook, "Tax Report", res_data['tax_line_data'])
 
-    def _generate_journal_taxes_summary(self, workbook, report_journal):
+    def _generate_journal_taxes_summary(self, workbook, ledger):
+        journal = self.env['account.journal'].browse(ledger['id'])
+        currency_name = journal.currency_id and journal.currency_id.name or \
+            journal.company_id.currency_id.name
         sheet_name = "Tax - %s (%s) - %s" % (
-            report_journal.code,
-            report_journal.currency_id.name,
-            report_journal.name,
+            journal.code,
+            currency_name,
+            journal.name,
         )
-        report = report_journal.report_id
         self._generate_taxes_summary(
-            workbook, report, sheet_name, report_journal.report_tax_line_ids)
+            workbook, sheet_name, ledger['tax_lines'])
 
-    def _generate_moves_content(self, workbook, report, sheet_name, moves):
+    def _generate_moves_content(self, workbook, sheet_name, report, res_data,
+                                moves):
         self.workbook = workbook
         self.sheet = workbook.add_worksheet(sheet_name)
         self._set_column_width()
@@ -236,15 +252,45 @@ class JournalLedgerXslx(models.AbstractModel):
         self.row_pos += 2
 
         self.write_array_header()
+        account_ids_data = res_data['account_ids_data']
+        partner_ids_data = res_data['partner_ids_data']
+        currency_ids_data = res_data['currency_ids_data']
+        move_ids_data = res_data['move_ids_data']
         for move in moves:
-            for line in move.report_move_line_ids:
-                self.write_line(line)
+            for line in move['report_move_lines']:
+                currency_data = currency_ids_data.get(
+                    line['currency_id'], False)
+                currency_name = currency_data and currency_data['name'] or ''
+                account_data = account_ids_data.get(line['account_id'], False)
+                account_name = account_data and account_data['name'] or ''
+                account_code = account_data and account_data['code'] or ''
+                move_data = move_ids_data.get(line['move_id'], False)
+                move_entry = move_data and move_data['entry'] or ''
+                line['partner'] = self._get_partner_name(line['partner_id'],
+                                                         partner_ids_data)
+                line['account_code'] = account_code
+                line['account_name'] = account_name
+                line['currency_name'] = currency_name
+                line['entry'] = move_entry
+                line['taxes_description'] = \
+                    report._get_ml_tax_description(
+                        line, res_data['tax_line_data'].get(
+                            line['tax_line_id']),
+                        res_data['move_line_ids_taxes_data'].get(
+                            line['move_line_id'], False))
+                self.write_line_from_dict(line)
             self.row_pos += 1
 
-    def _generate_taxes_summary(self, workbook, report, sheet_name, tax_lines):
+    def _generate_taxes_summary(self, workbook, sheet_name, tax_lines_dict):
         self.workbook = workbook
         self.sheet = workbook.add_worksheet(sheet_name)
 
         self.row_pos = 1
         self.write_array_title(sheet_name)
         self.row_pos += 2
+
+    def _get_partner_name(self, partner_id, partner_data):
+        if partner_id in partner_data.keys():
+            return partner_data[partner_id]['name']
+        else:
+            return ''

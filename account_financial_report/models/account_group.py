@@ -23,6 +23,28 @@ class AccountGroup(models.Model):
         'account.account',
         compute='_compute_group_accounts',
         string="Compute accounts", store=True)
+    complete_name = fields.Char("Full Name",
+                                compute='_compute_complete_name')
+    complete_code = fields.Char("Full Code",
+                                compute='_compute_complete_code')
+
+    @api.depends('name', 'parent_id.complete_name')
+    def _compute_complete_name(self):
+        """ Forms complete name of location from parent location to child location. """
+        if self.parent_id.complete_name:
+            self.complete_name = '%s/%s' % (self.parent_id.complete_name,
+                                            self.name)
+        else:
+            self.complete_name = self.name
+
+    @api.depends('code_prefix', 'parent_id.complete_code')
+    def _compute_complete_code(self):
+        """ Forms complete code of location from parent location to child location. """
+        if self.parent_id.complete_code:
+            self.complete_code = '%s/%s' % (self.parent_id.complete_code,
+                                            self.code_prefix)
+        else:
+            self.complete_code = self.code_prefix
 
     @api.multi
     @api.depends('parent_id', 'parent_id.level')

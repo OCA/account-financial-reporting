@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <template id="account_financial_report.report_open_items_qweb">
+    <template id="open_items">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
                 <t t-call="account_financial_report.internal_layout">
@@ -13,10 +13,10 @@
 
     <template id="account_financial_report.report_open_items_base">
         <!-- Saved flag fields into variables, used to define columns display -->
-        <t t-set="foreign_currency" t-value="o.foreign_currency"/>
+        <t t-set="foreign_currency" t-value="foreign_currency"/>
         <!-- Defines global variables used by internal layout -->
-        <t t-set="title">Open Items - <t t-raw="o.company_id.name"/> - <t t-raw="o.company_id.currency_id.name"/></t>
-        <t t-set="company_name" t-value="o.company_id.name"/>
+        <t t-set="title">Open Items - <t t-raw="company_name"/> - <t t-raw="currency_name"/></t>
+        <t t-set="company_name" t-value="Company_Name"/>
         <div class="page">
             <div class="row">
                 <h4 class="mt0" t-esc="title or 'Odoo Report'" style="text-align: center;"/>
@@ -24,23 +24,23 @@
             <!-- Display filters -->
             <t t-call="account_financial_report.report_open_items_filters"/>
 
-            <t t-foreach="o.account_ids" t-as="account">
+            <t t-foreach="Open_Items.keys()" t-as="account_id">
                 <div class="page_break">
                     <!-- Display account header -->
                     <div class="act_as_table list_table" style="margin-top: 10px;" />
                     <div class="account_title"
                          style="width: 100%;">
-                        <span t-field="account.code"/>
+                        <span t-esc="accounts_data[account_id]['code']"/>
                         -
-                        <span t-field="account.name"/>
+                        <span t-esc="accounts_data[account_id]['name']"/>
                     </div>
 
                     <!-- Display account partners -->
-                    <t t-foreach="account.partner_ids" t-as="partner">
+                    <t t-foreach="Open_Items[account_id]" t-as="partner_id"  >
                         <div class="page_break">
                             <!-- Display partner header -->
-                            <div class="account_title">
-                                <span t-field="partner.name"/>
+                            <div class="act_as_caption account_title">
+                                <span t-esc="partners_data[partner_id]['name']"/>
                             </div>
 
                             <!-- Display partner move lines -->
@@ -48,7 +48,8 @@
 
                             <!-- Display partner footer -->
                             <t t-call="account_financial_report.report_open_items_ending_cumul">
-                                <t t-set="account_or_partner_object" t-value="partner"/>
+                                <t t-set="account_or_partner_id" t-value="partners_data[partner_id]"/>
+                                <t t-set="currency_id" t-value="accounts_data[account_id]['currency_name']"/>
                                 <t t-set="type" t-value='"partner_type"'/>
                             </t>
                         </div>
@@ -56,7 +57,8 @@
 
                     <!-- Display account footer -->
                     <t t-call="account_financial_report.report_open_items_ending_cumul">
-                        <t t-set="account_or_partner_object" t-value="account"/>
+                        <t t-set="account_or_partner_id" t-value="accounts_data[account_id]"/>
+                        <t t-set="currency_id" t-value="accounts_data[account_id]['currency_name']"/>
                         <t t-set="type" t-value='"account_type"'/>
                     </t>
                 </div>
@@ -73,15 +75,15 @@
             </div>
             <div class="act_as_row">
                 <div class="act_as_cell">
-                    <span t-field="o.date_at"/>
+                    <span t-esc="date_at"/>
                 </div>
                 <div class="act_as_cell">
-                    <t t-if="o.only_posted_moves">All posted entries</t>
-                    <t t-if="not o.only_posted_moves">All entries</t>
+                    <t t-if="target_move == 'posted'">All posted entries</t>
+                    <t t-if="target_move == 'all'">All entries</t>
                 </div>
                 <div class="act_as_cell">
-                    <t t-if="o.hide_account_at_0">Hide</t>
-                    <t t-if="not o.hide_account_at_0">Show</t>
+                    <t t-if="hide_account_at_0">Hide</t>
+                    <t t-if="not hide_account_at_0">Show</t>
                 </div>
             </div>
         </div>
@@ -127,78 +129,71 @@
             </div>
 
             <!-- Display each lines -->
-            <t t-foreach="partner.move_line_ids" t-as="line">
+            <t t-foreach="Open_Items[account_id][partner_id]" t-as="line"  >
                 <!-- # lines or centralized lines -->
                 <div class="act_as_row lines">
                     <!--## date-->
                     <div class="act_as_cell left">
-                        <span t-field="line.date"/>
+                        <span t-raw="line['date']"/>
                     </div>
                     <!--## move-->
                     <div class="act_as_cell left">
                         <t t-set="res_model" t-value="'account.move'"/>
                         <span>
-                            <a t-att-data-active-id="line.move_line_id.move_id.id"
+                            <a t-att-data-active-id="line['move_id']"
                                t-att-data-res-model="res_model"
                                class="o_account_financial_reports_web_action"
                                style="color: black;">
-                                <t t-raw="line.entry"/>
+                                <t t-esc="line['move_name']"/>
                             </a>
                         </span>
                     </div>
                     <!--## journal-->
                     <div class="act_as_cell left">
-                        <span t-field="line.journal"/>
+                        <span t-esc="line['journal']"/>
                     </div>
                     <!--## account code-->
                     <div class="act_as_cell left">
-                        <span t-field="line.account"/>
+                        <span t-esc="line['account']"/>
                     </div>
                     <!--## partner-->
                     <div class="act_as_cell left">
-                        <t t-set="res_model" t-value="'res.partner'"/>
-                        <span t-if="line.partner">
-                            <a t-att-data-active-id="line.move_line_id.partner_id.id"
-                               t-att-data-res-model="res_model"
-                               class="o_account_financial_reports_web_action"
-                               style="color: black;">
-                                <t t-raw="line.partner"/>
-                            </a>
-                        </span>
+<!--                        <span t-if="line.get('partner_id', False)" t-esc="line['partner_id']"/>-->
+                        <span t-esc="line['partner_name']"/>
                     </div>
                     <!--## ref - label-->
                     <div class="act_as_cell left">
-                        <span t-field="line.label"/>
+                        <span t-esc="line['ref']"/>
                     </div>
                     <!--## date_due-->
                     <div class="act_as_cell left">
-                        <span t-field="line.date_due"/>
+                        <span t-esc="line['date_maturity']"/>
                     </div>
                     <!--## amount_total_due-->
                     <div class="act_as_cell amount">
-                        <span t-field="line.amount_total_due" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                        <span t-if="line.get('original', False)" t-esc="line['original']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                     </div>
                     <!--## amount_residual-->
                     <div class="act_as_cell amount">
-                        <span t-field="line.amount_residual" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                        <span t-esc="line['amount_residual']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                     </div>
                     <t t-if="foreign_currency">
-                        <t t-if="line.currency_id.id">
+                        <t t-if="line['currency_id']">
                             <!--## currency_name-->
                             <div class="act_as_cell amount">
-                                <span t-field="line.currency_id.display_name"/>
+                                <span t-esc="line['currency_name']"/>
                             </div>
                             <!--## amount_total_due_currency-->
                             <div class="act_as_cell amount">
-                                <span t-field="line.amount_total_due_currency" t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/>
+                                <span t-esc="line['amount_currency']"/>
                             </div>
                             <!--## amount_residual_currency-->
                             <div class="act_as_cell amount">
-                                <span t-field="line.amount_residual_currency" t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/>
+                                <span t-esc="line['amount_residual_currency']"/>
                             </div>
                         </t>
-                        <t t-if="not line.currency_id.id">
-                            <!--## currency_name-->
+                        <t t-if="not line['currency_id']">
+                             <!--## currency_name-->
                             <div class="act_as_cell"/>
                             <!--## amount_total_due_currency-->
                             <div class="act_as_cell"/>
@@ -218,9 +213,9 @@
                 <!--## date-->
                 <t t-if='type == "account_type"'>
                     <div class="act_as_cell first_column" style="width: 36.34%;">
-                        <span t-field="account_or_partner_object.code"/>
+                        <span t-esc="accounts_data[account_id]['code']"/>
                         -
-                        <span t-field="account_or_partner_object.name"/>
+                        <span t-esc="accounts_data[account_id]['name']"/>
                     </div>
                     <div class="act_as_cell right" style="width: 28.66%;">Ending
                         balance</div>
@@ -237,32 +232,21 @@
                 <div class="act_as_cell amount" style="width: 6.57%;"/>
                 <!--## amount_currency-->
                 <div class="act_as_cell amount" style="width: 6.57%;">
-                    <span t-field="account_or_partner_object.final_amount_residual" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    <t t-if='type == "account_type"'>
+                        <span t-esc="total_amount[account_id]['residual']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    </t>
+                    <t t-if='type == "partner_type"'>
+                        <span t-esc="total_amount[account_id][partner_id]['residual']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    </t>
                 </div>
                 <!--## amount_total_due_currency + amount_residual_currency -->
                 <t t-if="foreign_currency">
-                    <t t-if="account_or_partner_object.currency_id.id">
-                        <!--## currency_name-->
-                        <div class="act_as_cell amount" style="width: 2.25%;">
-                            <span t-field="account_or_partner_object.currency_id.display_name"/>
-                        </div>
-                        <!--## amount_total_due_currency-->
-                        <div class="act_as_cell amount" style="width: 6.57%;">
-                            <span t-field="account_or_partner_object.final_amount_total_due_currency" t-options="{'widget': 'monetary', 'display_currency': account_or_partner_object.currency_id}"/>
-                        </div>
-                        <!--## amount_residual_currency-->
-                        <div class="act_as_cell amount" style="width: 6.57%;">
-                            <span t-field="account_or_partner_object.final_amount_residual_currency" t-options="{'widget': 'monetary', 'display_currency': account_or_partner_object.currency_id}"/>
-                        </div>
-                    </t>
-                    <t t-if="not account_or_partner_object.currency_id.id">
                         <!--## currency_name-->
                         <div class="act_as_cell"/>
                         <!--## amount_total_due_currency-->
                         <div class="act_as_cell"/>
                         <!--## amount_residual_currency-->
                         <div class="act_as_cell"/>
-                    </t>
                 </t>
             </div>
         </div>

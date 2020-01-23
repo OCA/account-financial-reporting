@@ -5,8 +5,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import api, fields, models, _
-from odoo.tools.safe_eval import safe_eval
-from odoo.tools import pycompat
 from odoo.exceptions import UserError, ValidationError
 
 
@@ -41,7 +39,7 @@ class TrialBalanceReportWizard(models.TransientModel):
          ('none', 'No hierarchy')],
         string='Hierarchy On',
         required=True,
-        default='computed',
+        default='none',
         help="""Computed Accounts: Use when the account group have codes
         that represent prefixes of the actual accounts.\n
         Child Accounts: Use when your account groups are hierarchical.\n
@@ -183,25 +181,45 @@ class TrialBalanceReportWizard(models.TransientModel):
         if self.show_partner_details:
             self.receivable_accounts_only = self.payable_accounts_only = True
         else:
-            self.receivable_accounts_only = self.payable_accounts_only = False
+            self.receivable_accounts_only = self.\
+                payable_accounts_only = False
+
+    @api.multi
+    @api.depends('company_id')
+    def _compute_unaffected_earnings_account(self):
+        account_type = self.env.ref('account.data_unaffected_earnings')
+        for record in self:
+            record.unaffected_earnings_account = self.env[
+                'account.account'].search(
+                [
+                    ('user_type_id', '=', account_type.id),
+                    ('company_id', '=', record.company_id.id)
+                ])
+
+    unaffected_earnings_account = fields.Many2one(
+        comodel_name='account.account',
+        compute='_compute_unaffected_earnings_account',
+        store=True
+    )
+
+    @api.multi
+    def _print_report(self, report_type):
+        self.ensure_one()
+        data = self._prepare_report_trial_balance()
+        if report_type == 'xlsx':
+            report_name = 'a_f_r.report_trial_balance_xlsx'
+        else:
+            report_name = 'account_financial_report.trial_balance'
+        return self.env['ir.actions.report'].search(
+            [('report_name', '=', report_name),
+             ('report_type', '=', report_type)], limit=1).report_action(
+            self, data=data)
 
     @api.multi
     def button_export_html(self):
         self.ensure_one()
-        action = self.env.ref(
-            'account_financial_report.action_report_trial_balance')
-        vals = action.read()[0]
-        context1 = vals.get('context', {})
-        if isinstance(context1, pycompat.string_types):
-            context1 = safe_eval(context1)
-        model = self.env['report_trial_balance']
-        report = model.create(self._prepare_report_trial_balance())
-        report.compute_data_for_report()
-
-        context1['active_id'] = report.id
-        context1['active_ids'] = report.ids
-        vals['context'] = context1
-        return vals
+        report_type = 'qweb-html'
+        return self._export(report_type)
 
     @api.multi
     def button_export_pdf(self):
@@ -218,26 +236,25 @@ class TrialBalanceReportWizard(models.TransientModel):
     def _prepare_report_trial_balance(self):
         self.ensure_one()
         return {
+            'wizard_id': self.id,
             'date_from': self.date_from,
             'date_to': self.date_to,
             'only_posted_moves': self.target_move == 'posted',
             'hide_account_at_0': self.hide_account_at_0,
             'foreign_currency': self.foreign_currency,
             'company_id': self.company_id.id,
-            'filter_account_ids': [(6, 0, self.account_ids.ids)],
-            'filter_partner_ids': [(6, 0, self.partner_ids.ids)],
-            'filter_journal_ids': [(6, 0, self.journal_ids.ids)],
+            'account_ids': self.account_ids.ids or [],
+            'partner_ids': self.partner_ids.ids or [],
+            'journal_ids': self.journal_ids.ids or [],
             'fy_start_date': self.fy_start_date,
             'hierarchy_on': self.hierarchy_on,
             'limit_hierarchy_level': self.limit_hierarchy_level,
             'show_hierarchy_level': self.show_hierarchy_level,
             'hide_parent_hierarchy_level': self.hide_parent_hierarchy_level,
             'show_partner_details': self.show_partner_details,
+            'unaffected_earnings_account': self.unaffected_earnings_account.id,
         }
 
     def _export(self, report_type):
         """Default export is PDF."""
-        model = self.env['report_trial_balance']
-        report = model.create(self._prepare_report_trial_balance())
-        report.compute_data_for_report()
-        return report.print_report(report_type)
+        return self._print_report(report_type)
