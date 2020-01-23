@@ -1,957 +1,296 @@
-
 # © 2016 Julien Coux (Camptocamp)
+# Copyright 2020 ForgeFlow S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import models, fields, api, _
+from odoo import models, api
+from odoo.tools import float_is_zero
+from odoo.osv import expression
+from datetime import date, datetime
+import pandas as pd
 
 
-class OpenItemsReport(models.TransientModel):
-    """ Here, we just define class fields.
-    For methods, go more bottom at this file.
-
-    The class hierarchy is :
-    * OpenItemsReport
-    ** OpenItemsReportAccount
-    *** OpenItemsReportPartner
-    **** OpenItemsReportMoveLine
-    """
-
-    _name = 'report_open_items'
-    _inherit = 'account_financial_report_abstract'
-
-    # Filters fields, used for data computation
-    date_at = fields.Date()
-    only_posted_moves = fields.Boolean()
-    hide_account_at_0 = fields.Boolean()
-    foreign_currency = fields.Boolean()
-    company_id = fields.Many2one(comodel_name='res.company')
-    filter_account_ids = fields.Many2many(comodel_name='account.account')
-    filter_partner_ids = fields.Many2many(comodel_name='res.partner')
-
-    # Data fields, used to browse report data
-    account_ids = fields.One2many(
-        comodel_name='report_open_items_account',
-        inverse_name='report_id'
-    )
-
-
-class OpenItemsReportAccount(models.TransientModel):
-
-    _name = 'report_open_items_account'
-    _inherit = 'account_financial_report_abstract'
-    _order = 'code ASC'
-
-    report_id = fields.Many2one(
-        comodel_name='report_open_items',
-        ondelete='cascade',
-        index=True
-    )
-
-    # Data fields, used to keep link with real object
-    account_id = fields.Many2one(
-        'account.account',
-        index=True
-    )
-
-    # Data fields, used for report display
-    code = fields.Char()
-    name = fields.Char()
-    currency_id = fields.Many2one('res.currency')
-    final_amount_residual = fields.Float(digits=(16, 2))
-    final_amount_total_due = fields.Float(digits=(16, 2))
-    final_amount_residual_currency = fields.Float(digits=(16, 2))
-    final_amount_total_due_currency = fields.Float(digits=(16, 2))
-
-    # Data fields, used to browse report data
-    partner_ids = fields.One2many(
-        comodel_name='report_open_items_partner',
-        inverse_name='report_account_id'
-    )
-
-
-class OpenItemsReportPartner(models.TransientModel):
-
-    _name = 'report_open_items_partner'
-    _inherit = 'account_financial_report_abstract'
-
-    report_account_id = fields.Many2one(
-        comodel_name='report_open_items_account',
-        ondelete='cascade',
-        index=True
-    )
-
-    # Data fields, used to keep link with real object
-    partner_id = fields.Many2one(
-        'res.partner',
-        index=True
-    )
-
-    # Data fields, used for report display
-    name = fields.Char()
-    currency_id = fields.Many2one('res.currency')
-    final_amount_residual = fields.Float(digits=(16, 2))
-    final_amount_total_due = fields.Float(digits=(16, 2))
-    final_amount_residual_currency = fields.Float(digits=(16, 2))
-    final_amount_total_due_currency = fields.Float(digits=(16, 2))
-
-    # Data fields, used to browse report data
-    move_line_ids = fields.One2many(
-        comodel_name='report_open_items_move_line',
-        inverse_name='report_partner_id'
-    )
-
-    @api.model
-    def _generate_order_by(self, order_spec, query):
-        """Custom order to display "No partner allocated" at last position."""
-        return """
-ORDER BY
-    CASE
-        WHEN "report_open_items_partner"."partner_id" IS NOT NULL
-        THEN 0
-        ELSE 1
-    END,
-    "report_open_items_partner"."name"
-        """
-
-
-class OpenItemsReportMoveLine(models.TransientModel):
-
-    _name = 'report_open_items_move_line'
-    _inherit = 'account_financial_report_abstract'
-
-    report_partner_id = fields.Many2one(
-        comodel_name='report_open_items_partner',
-        ondelete='cascade',
-        index=True
-    )
-
-    # Data fields, used to keep link with real object
-    move_line_id = fields.Many2one('account.move.line')
-
-    # Data fields, used for report display
-    date = fields.Date()
-    date_due = fields.Date()
-    entry = fields.Char()
-    journal = fields.Char()
-    account = fields.Char()
-    partner = fields.Char()
-    label = fields.Char()
-    amount_total_due = fields.Float(digits=(16, 2))
-    amount_residual = fields.Float(digits=(16, 2))
-    currency_id = fields.Many2one('res.currency')
-    amount_total_due_currency = fields.Float(digits=(16, 2))
-    amount_residual_currency = fields.Float(digits=(16, 2))
-
-
-class OpenItemsReportCompute(models.TransientModel):
-    """ Here, we just define methods.
-    For class fields, go more top at this file.
-    """
-
-    _inherit = 'report_open_items'
-
-    @api.multi
-    def print_report(self, report_type):
-        self.ensure_one()
-        if report_type == 'xlsx':
-            report_name = 'a_f_r.report_open_items_xlsx'
-        else:
-            report_name = 'account_financial_report.' \
-                          'report_open_items_qweb'
-        return self.env['ir.actions.report'].search(
-            [('report_name', '=', report_name),
-             ('report_type', '=', report_type)],
-            limit=1).report_action(self, config=False)
-
-    def _get_html(self):
-        result = {}
-        rcontext = {}
-        context = dict(self.env.context)
-        report = self.browse(context.get('active_id'))
-        if report:
-            rcontext['o'] = report
-            result['html'] = self.env.ref(
-                'account_financial_report.report_open_items').render(
-                    rcontext)
-        return result
+class OpenItemsReport(models.AbstractModel):
+    _name = 'report.account_financial_report.open_items'
+    _description = "Open Items Report"
 
     @api.model
     def get_html(self, given_context=None):
         return self._get_html()
 
-    @api.multi
-    def compute_data_for_report(self):
-        self.ensure_one()
-        # Compute report data
-        self._inject_account_values()
-        self._inject_partner_values()
-        self._inject_line_values()
-        self._inject_line_values(only_empty_partner_line=True)
-        self._clean_partners_and_accounts()
-        self._compute_partners_and_accounts_cumul()
-        if self.hide_account_at_0:
-            self._clean_partners_and_accounts(
-                only_delete_account_balance_at_0=True
-            )
-        # Refresh cache because all data are computed with SQL requests
-        self.invalidate_cache()
+    def _get_html(self):
+        result = {}
+        rcontext = {}
+        context = dict(self.env.context)
+        rcontext.update(context.get('data'))
+        active_id = context.get('active_id')
+        wiz = self.env['open.items.report.wizard'].browse(active_id)
+        rcontext['o'] = wiz
+        result['html'] = self.env.ref(
+            'account_financial_report.report_open_items').render(rcontext)
+        return result
 
-    def _inject_account_values(self):
-        """Inject report values for report_open_items_account."""
-        query_inject_account = """
-WITH
-    accounts AS
-        (
-            SELECT
-                a.id,
-                a.code,
-                a.name,
-                a.user_type_id,
-                c.id as currency_id
-            FROM
-                account_account a
-            INNER JOIN
-                account_move_line ml ON a.id = ml.account_id AND ml.date <= %s
-            LEFT JOIN
-                res_currency c ON a.currency_id = c.id
-            """
-        if self.filter_partner_ids:
-            query_inject_account += """
-            INNER JOIN
-                res_partner p ON ml.partner_id = p.id
-            """
-        if self.only_posted_moves:
-            query_inject_account += """
-            INNER JOIN
-                account_move m ON ml.move_id = m.id AND m.state = 'posted'
-            """
-        query_inject_account += """
-            WHERE
-                a.company_id = %s
-            AND a.reconcile IS true
-            """
-        if self.filter_account_ids:
-            query_inject_account += """
-            AND
-                a.id IN %s
-            """
-        if self.filter_partner_ids:
-            query_inject_account += """
-            AND
-                p.id IN %s
-            """
-        query_inject_account += """
-            GROUP BY
-                a.id, c.id
-        )
-INSERT INTO
-    report_open_items_account
-    (
-    report_id,
-    create_uid,
-    create_date,
-    account_id,
-    currency_id,
-    code,
-    name
-    )
-SELECT
-    %s AS report_id,
-    %s AS create_uid,
-    NOW() AS create_date,
-    a.id AS account_id,
-    a.currency_id,
-    a.code,
-    a.name
-FROM
-    accounts a
-        """
-        query_inject_account_params = (
-            self.date_at,
-            self.company_id.id,
-        )
-        if self.filter_account_ids:
-            query_inject_account_params += (
-                tuple(self.filter_account_ids.ids),
+    def _get_account_partial_reconciled(self, move_lines_data, date_at_object):
+        reconciled_ids = []
+        for move_line in move_lines_data:
+            if move_line['reconciled']:
+                reconciled_ids += [move_line['id']]
+        domain = [('max_date', '>=', date_at_object)]
+        domain += expression.OR(
+            [[('debit_move_id', 'in', reconciled_ids)],
+             [('credit_move_id', 'in', reconciled_ids)]])
+        fields = ['debit_move_id', 'credit_move_id', 'amount']
+        accounts_partial_reconcile = \
+            self.env['account.partial.reconcile'].search_read(
+                domain=domain,
+                fields=fields
             )
-        if self.filter_partner_ids:
-            query_inject_account_params += (
-                tuple(self.filter_partner_ids.ids),
-            )
-        query_inject_account_params += (
-            self.id,
-            self.env.uid,
-        )
-        self.env.cr.execute(query_inject_account, query_inject_account_params)
+        debit_accounts_partial_amount = {}
+        credit_accounts_partial_amount = {}
+        for account_partial_reconcile_data in accounts_partial_reconcile:
+            debit_move_id = account_partial_reconcile_data['debit_move_id'][0]
+            credit_move_id = account_partial_reconcile_data['credit_move_id'][0]
+            if debit_move_id not in debit_accounts_partial_amount.keys():
+                debit_accounts_partial_amount[debit_move_id] = 0.0
+            debit_accounts_partial_amount[debit_move_id] += \
+                account_partial_reconcile_data['amount']
+            if credit_move_id not in credit_accounts_partial_amount.keys():
+                credit_accounts_partial_amount[credit_move_id] = 0.0
+            credit_accounts_partial_amount[credit_move_id] += \
+                account_partial_reconcile_data['amount']
+            account_partial_reconcile_data.update({
+                'debit_move_id': debit_move_id,
+                'credit_move_id': credit_move_id,
+            })
+        return accounts_partial_reconcile, debit_accounts_partial_amount, \
+            credit_accounts_partial_amount
 
-    def _inject_partner_values(self):
-        """ Inject report values for report_open_items_partner. """
-        # pylint: disable=sql-injection
-        query_inject_partner = """
-WITH
-    accounts_partners AS
-        (
-            SELECT
-                ra.id AS report_account_id,
-                a.id AS account_id,
-                at.include_initial_balance AS include_initial_balance,
-                p.id AS partner_id,
-                COALESCE(
-                    CASE
-                        WHEN
-                            NULLIF(p.name, '') IS NOT NULL
-                            AND NULLIF(p.ref, '') IS NOT NULL
-                        THEN p.name || ' (' || p.ref || ')'
-                        ELSE p.name
-                    END,
-                    '""" + _('No partner allocated') + """'
-                ) AS partner_name
-            FROM
-                report_open_items_account ra
-            INNER JOIN
-                account_account a ON ra.account_id = a.id
-            INNER JOIN
-                account_account_type at ON a.user_type_id = at.id
-            INNER JOIN
-                account_move_line ml ON a.id = ml.account_id AND ml.date <= %s
-        """
-        if self.only_posted_moves:
-            query_inject_partner += """
-            INNER JOIN
-                account_move m ON ml.move_id = m.id AND m.state = 'posted'
-            """
-        query_inject_partner += """
-            LEFT JOIN
-                res_partner p ON ml.partner_id = p.id
-            WHERE
-                ra.report_id = %s
-                        """
-        if self.filter_partner_ids:
-            query_inject_partner += """
-            AND
-                p.id IN %s
-            """
-        query_inject_partner += """
-            GROUP BY
-                ra.id,
-                a.id,
-                p.id,
-                at.include_initial_balance
-        )
-INSERT INTO
-    report_open_items_partner
-    (
-    report_account_id,
-    create_uid,
-    create_date,
-    partner_id,
-    name
-    )
-SELECT
-    ap.report_account_id,
-    %s AS create_uid,
-    NOW() AS create_date,
-    ap.partner_id,
-    ap.partner_name
-FROM
-    accounts_partners ap
-        """
-        query_inject_partner_params = (
-            self.date_at,
-            self.id,
-        )
-        if self.filter_partner_ids:
-            query_inject_partner_params += (
-                tuple(self.filter_partner_ids.ids),
-            )
-        query_inject_partner_params += (
-            self.env.uid,
-        )
-        self.env.cr.execute(query_inject_partner, query_inject_partner_params)
-
-    def _get_line_sub_query_move_lines(self,
-                                       only_empty_partner_line=False,
-                                       positive_balance=True):
-        """ Return subquery used to compute sum amounts on lines """
-        sub_query = """
-            SELECT
-                ml.id,
-                ml.balance,
-                SUM(
-                    CASE
-                        WHEN ml_past.id IS NOT NULL
-                        THEN pr.amount
-                        ELSE NULL
-                    END
-                ) AS partial_amount,
-                ml.amount_currency,
-                SUM(
-                    CASE
-                        WHEN ml_past.id IS NOT NULL
-                        THEN pr.amount_currency
-                        ELSE NULL
-                    END
-                ) AS partial_amount_currency,
-                ml.currency_id
-            FROM
-                report_open_items_partner rp
-            INNER JOIN
-                report_open_items_account ra
-                    ON rp.report_account_id = ra.id
-            INNER JOIN
-                account_move_line ml
-                    ON ra.account_id = ml.account_id
-        """
-        if not only_empty_partner_line:
-            sub_query += """
-                    AND rp.partner_id = ml.partner_id
-            """
-        elif only_empty_partner_line:
-            sub_query += """
-                    AND ml.partner_id IS NULL
-            """
-        if not positive_balance:
-            sub_query += """
-            LEFT JOIN
-                account_partial_reconcile pr
-                    ON ml.balance < 0 AND pr.credit_move_id = ml.id
-            LEFT JOIN
-                account_move_line ml_future
-                    ON ml.balance < 0 AND pr.debit_move_id = ml_future.id
-                    AND ml_future.date > %s
-            LEFT JOIN
-                account_move_line ml_past
-                    ON ml.balance < 0 AND pr.debit_move_id = ml_past.id
-                    AND ml_past.date <= %s
-            """
+    @api.model
+    def _get_query_domain(self, account_ids, partner_ids, date_at_object,
+                          target_move, company_id, date_from):
+        query = """
+            WHERE aml.account_id in %s and aml.company_id = %s
+        """ % (tuple(account_ids) if len(account_ids) > 1 else "(%s)" %
+               account_ids[0], company_id)
+        if date_from:
+            query += " and aml.date >= '%s'" % date_from
+        if partner_ids:
+            query += " and aml.partner_id in %s" % (tuple(partner_ids),)
+        if target_move == 'posted':
+            query += " and am.state = 'posted'"
+        if date_at_object >= date.today():
+            query += " and aml.reconciled IS FALSE"
         else:
-            sub_query += """
-            LEFT JOIN
-                account_partial_reconcile pr
-                    ON ml.balance > 0 AND pr.debit_move_id = ml.id
-            LEFT JOIN
-                account_move_line ml_future
-                    ON ml.balance > 0 AND pr.credit_move_id = ml_future.id
-                    AND ml_future.date > %s
-            LEFT JOIN
-                account_move_line ml_past
-                    ON ml.balance > 0 AND pr.credit_move_id = ml_past.id
-                    AND ml_past.date <= %s
-        """
-        sub_query += """
-            WHERE
-                ra.report_id = %s
-            GROUP BY
-                ml.id,
-                ml.balance,
-                ml.amount_currency
-            HAVING
-                (
-                    ml.full_reconcile_id IS NULL
-                    OR MAX(ml_future.id) IS NOT NULL
-                )
-        """
-        return sub_query
+            query += """ and ((aml.reconciled IS FALSE OR aml.date >= '%s')
+            OR aml.full_reconcile_id IS NOT NULL)""" % date_at_object
+        return query
 
-    def _inject_line_values(self, only_empty_partner_line=False):
-        """ Inject report values for report_open_items_move_line.
+    @api.model
+    def _get_query(self, account_ids, partner_ids, date_at_object,
+                   target_move, company_id, date_from):
+        aml_fields = [
+            'id', 'date', 'move_id', 'journal_id', 'account_id', 'partner_id',
+            'ref', 'date_maturity', 'amount_residual', 'amount_currency',
+            'amount_residual_currency', 'debit', 'credit', 'currency_id',
+            'reconciled', 'full_reconcile_id']
+        query = ""
 
-        The "only_empty_partner_line" value is used
-        to compute data without partner.
-        """
-        query_inject_move_line = """
-WITH
-    move_lines_amount AS
-        (
-        """
-        query_inject_move_line += self._get_line_sub_query_move_lines(
-            only_empty_partner_line=only_empty_partner_line,
-            positive_balance=True
-        )
-        query_inject_move_line += """
-            UNION
-        """
-        query_inject_move_line += self._get_line_sub_query_move_lines(
-            only_empty_partner_line=only_empty_partner_line,
-            positive_balance=False
-        )
-        query_inject_move_line += """
-        ),
-    move_lines AS
-        (
-            SELECT
-                id,
-                CASE
-                    WHEN SUM(partial_amount) > 0
-                    THEN
-                        CASE
-                            WHEN balance > 0
-                            THEN balance - SUM(partial_amount)
-                            ELSE balance + SUM(partial_amount)
-                        END
-                    ELSE balance
-                END AS amount_residual,
-                CASE
-                    WHEN SUM(partial_amount_currency) > 0
-                    THEN
-                        CASE
-                            WHEN amount_currency > 0
-                            THEN amount_currency - SUM(partial_amount_currency)
-                            ELSE amount_currency + SUM(partial_amount_currency)
-                        END
-                    ELSE amount_currency
-                END AS amount_residual_currency,
-                currency_id
-            FROM
-                move_lines_amount
-            GROUP BY
-                id,
-                balance,
-                amount_currency,
-                currency_id
-        )
-INSERT INTO
-    report_open_items_move_line
-    (
-    report_partner_id,
-    create_uid,
-    create_date,
-    move_line_id,
-    date,
-    date_due,
-    entry,
-    journal,
-    account,
-    partner,
-    label,
-    amount_total_due,
-    amount_residual,
-    currency_id,
-    amount_total_due_currency,
-    amount_residual_currency
-    )
-SELECT
-    rp.id AS report_partner_id,
-    %s AS create_uid,
-    NOW() AS create_date,
-    ml.id AS move_line_id,
-    ml.date,
-    ml.date_maturity,
-    m.name AS entry,
-    j.code AS journal,
-    a.code AS account,
-        """
-        if not only_empty_partner_line:
-            query_inject_move_line += """
-    CASE
-        WHEN
-            NULLIF(p.name, '') IS NOT NULL
-            AND NULLIF(p.ref, '') IS NOT NULL
-        THEN p.name || ' (' || p.ref || ')'
-        ELSE p.name
-    END AS partner,
-            """
-        elif only_empty_partner_line:
-            query_inject_move_line += """
-    '""" + _('No partner allocated') + """' AS partner,
-            """
-        query_inject_move_line += """
-    CONCAT_WS(' - ', NULLIF(ml.ref, ''), NULLIF(ml.name, '')) AS label,
-    ml.balance,
-    ml2.amount_residual,
-    c.id AS currency_id,
-    ml.amount_currency,
-    ml2.amount_residual_currency
-FROM
-    report_open_items_partner rp
-INNER JOIN
-    report_open_items_account ra ON rp.report_account_id = ra.id
-INNER JOIN
-    account_move_line ml ON ra.account_id = ml.account_id
-INNER JOIN
-    move_lines ml2
-        ON ml.id = ml2.id
-        AND ml2.amount_residual IS NOT NULL
-        AND ml2.amount_residual != 0
-INNER JOIN
-    account_move m ON ml.move_id = m.id
-INNER JOIN
-    account_journal j ON ml.journal_id = j.id
-INNER JOIN
-    account_account a ON ml.account_id = a.id
-        """
-        if not only_empty_partner_line:
-            query_inject_move_line += """
-INNER JOIN
-    res_partner p
-        ON ml.partner_id = p.id AND rp.partner_id = p.id
-            """
-        query_inject_move_line += """
-LEFT JOIN
-    account_full_reconcile fr ON ml.full_reconcile_id = fr.id
-LEFT JOIN
-    res_currency c ON ml2.currency_id = c.id
-WHERE
-    ra.report_id = %s
-AND
-    ml.date <= %s
-        """
-        if self.only_posted_moves:
-            query_inject_move_line += """
-AND
-    m.state = 'posted'
-        """
-        if only_empty_partner_line:
-            query_inject_move_line += """
-AND
-    ml.partner_id IS NULL
-AND
-    rp.partner_id IS NULL
-        """
-        if not only_empty_partner_line:
-            query_inject_move_line += """
-ORDER BY
-    a.code, p.name, ml.date, ml.id
-            """
-        elif only_empty_partner_line:
-            query_inject_move_line += """
-ORDER BY
-    a.code, ml.date, ml.id
-            """
-        self.env.cr.execute(
-            query_inject_move_line,
-            (self.date_at,
-             self.date_at,
-             self.id,
-             self.date_at,
-             self.date_at,
-             self.id,
-             self.env.uid,
-             self.id,
-             self.date_at,)
-        )
+        # SELECT
+        for field in aml_fields:
+            if not query:
+                query = "SELECT aml.%s" % field
+            else:
+                query += ", aml.%s" % field
+        # name from res_partner
+        query += ", rp.name as partner_name"
+        # name from res_currency
+        query += ", rc.name as currency_name"
+        # state and name from account_move
+        query += ", am.state, am.name as move_name"
 
-    def _compute_partners_and_accounts_cumul(self):
-        """ Compute cumulative amount for
-        report_open_items_partner and report_open_items_account.
+        # FROM
+        query += """
+            FROM account_move_line as aml
+            LEFT JOIN res_partner as rp
+                ON aml.partner_id = rp.id
+            LEFT JOIN res_currency as rc
+                ON aml.currency_id = rc.id
+            LEFT JOIN account_move as am
+                ON am.id = aml.move_id
         """
-        self._compute_partner_cumul()
-        self._compute_account_cumul()
 
-    def _compute_partner_cumul(self):
-        query_computer_partner_residual_cumul = """
-UPDATE
-    report_open_items_partner
-SET
-    final_amount_residual =
-        (
-            SELECT
-                SUM(rml.amount_residual) AS final_amount_residual
-            FROM
-                report_open_items_move_line rml
-            WHERE
-                rml.report_partner_id = report_open_items_partner.id
-        )
-WHERE
-    id IN
-        (
-            SELECT
-                rp.id
-            FROM
-                report_open_items_account ra
-            INNER JOIN
-                report_open_items_partner rp
-                    ON ra.id = rp.report_account_id
-            WHERE
-                ra.report_id = %s
-        )
-"""
-        params_compute_partners_residual_cumul = (self.id,)
-        self.env.cr.execute(query_computer_partner_residual_cumul,
-                            params_compute_partners_residual_cumul)
+        # WHERE
+        query += self._get_query_domain(account_ids, partner_ids,
+                                        date_at_object, target_move,
+                                        company_id, date_from)
+        return query
 
-        query_compute_partners_due_cumul = """
-UPDATE
-    report_open_items_partner
-SET
-    final_amount_total_due =
-        (
-            SELECT
-                SUM(rml.amount_total_due) AS final_amount_total_due
-            FROM
-                report_open_items_move_line rml
-            WHERE
-                rml.report_partner_id = report_open_items_partner.id
-        )
-WHERE
-    id IN
-        (
-            SELECT
-                rp.id
-            FROM
-                report_open_items_account ra
-            INNER JOIN
-                report_open_items_partner rp
-                    ON ra.id = rp.report_account_id
-            WHERE
-                ra.report_id = %s
-        )
-"""
-        params_compute_partner_due_cumul = (self.id,)
-        self.env.cr.execute(query_compute_partners_due_cumul,
-                            params_compute_partner_due_cumul)
+    def _get_accounts_data(self, accounts_ids):
+        accounts = self.env['account.account'].browse(accounts_ids)
+        accounts_data = {}
+        for account in accounts:
+            accounts_data.update({account.id: {
+                'id': account.id,
+                'code': account.code,
+                'name': account.name,
+                'hide_account': False,
+                'currency_id': account.currency_id or False,
+                'currency_name': account.currency_id.name}
+            })
+        return accounts_data
 
-        # Manage currency in partner
-        query_compute_partners_cur_id_cumul = """
-UPDATE
-    report_open_items_partner
-SET
-    currency_id =
-        (
-            SELECT
-                MAX(currency_id) as currency_id
-            FROM
-                report_open_items_move_line rml
-            WHERE
-                rml.report_partner_id = report_open_items_partner.id
-        )
-WHERE
-    id IN
-        (
-            SELECT
-                rp.id
-            FROM
-                report_open_items_account ra
-            INNER JOIN
-                report_open_items_partner rp
-                    ON ra.id = rp.report_account_id
-            WHERE
-                ra.report_id = %s AND ra.currency_id IS NOT NULL
-        )
-"""
-        params_compute_partners_cur_id_cumul = (self.id,)
-        self.env.cr.execute(query_compute_partners_cur_id_cumul,
-                            params_compute_partners_cur_id_cumul)
+    def _get_journals_data(self, journals_ids):
+        journals = self.env['account.journal'].browse(journals_ids)
+        journals_data = {}
+        for journal in journals:
+            journals_data.update({journal.id: {'id': journal.id,
+                                               'code': journal.code}})
+        return journals_data
 
-        query_compute_partners_cur_residual_cumul = """
-UPDATE
-    report_open_items_partner
-SET
-    final_amount_residual_currency =
-        (
-            SELECT
-                SUM(rml.amount_residual_currency)
-                    AS final_amount_residual_currency
-            FROM
-                report_open_items_move_line rml
-            WHERE
-                rml.report_partner_id = report_open_items_partner.id
-        )
-WHERE
-    id IN
-        (
-            SELECT
-                rp.id
-            FROM
-                report_open_items_account ra
-            INNER JOIN
-                report_open_items_partner rp
-                    ON ra.id = rp.report_account_id
-            WHERE
-                ra.report_id = %s AND ra.currency_id IS NOT NULL
-        )
-"""
-        params_compute_partners_cur_residual_cumul = (self.id,)
-        self.env.cr.execute(query_compute_partners_cur_residual_cumul,
-                            params_compute_partners_cur_residual_cumul)
+    def _get_data(self, account_ids, partner_ids, date_at_object, target_move,
+                  company_id, date_from):
+        query = self._get_query(account_ids, partner_ids, date_at_object,
+                                target_move, company_id, date_from)
+        self._cr.execute(query)
+        move_lines_data = pd.DataFrame(self._cr.dictfetchall())
+        account_ids = set(move_lines_data.account_id.to_list())
+        accounts_data = self._get_accounts_data(list(account_ids))
+        journal_ids = set(move_lines_data.journal_id.to_list())
+        journals_data = self._get_journals_data(list(journal_ids))
+        move_lines_data = move_lines_data.fillna(0).to_dict(orient='records')
 
-        query_compute_partners_cur_due_cumul = """
-UPDATE
-    report_open_items_partner
-SET
-    final_amount_total_due_currency =
-        (
-            SELECT
-                SUM(rml.amount_total_due_currency)
-                    AS  final_amount_total_due_currency
-            FROM
-                report_open_items_move_line rml
-            WHERE
-                rml.report_partner_id = report_open_items_partner.id
-        )
-WHERE
-    id IN
-        (
-            SELECT
-                rp.id
-            FROM
-                report_open_items_account ra
-            INNER JOIN
-                report_open_items_partner rp
-                    ON ra.id = rp.report_account_id
-            WHERE
-                ra.report_id = %s AND ra.currency_id IS NOT NULL
-        )
-"""
-        params_compute_partners_cur_due_cumul = (self.id,)
-        self.env.cr.execute(query_compute_partners_cur_due_cumul,
-                            params_compute_partners_cur_due_cumul)
+        if date_at_object < date.today():
+            accounts_partial_reconcile, debit_accounts_partial_amount, \
+                credit_accounts_partial_amount = \
+                self._get_account_partial_reconciled(move_lines_data,
+                                                     date_at_object)
+            if accounts_partial_reconcile:
+                accounts_partial_reconcile_data = pd.DataFrame(
+                    accounts_partial_reconcile)
+                debit_ids = set(accounts_partial_reconcile_data.debit_move_id
+                                .to_list())
+                credit_ids = set(
+                    accounts_partial_reconcile_data.credit_move_id.to_list())
+                for move_line in move_lines_data:
+                    if move_line['id'] in debit_ids:
+                        move_line['amount_residual'] += \
+                            debit_accounts_partial_amount[move_line['id']]
+                    if move_line['id'] in credit_ids:
+                        move_line['amount_residual'] -= \
+                            credit_accounts_partial_amount[move_line['id']]
+            moves_lines_to_remove = []
+            for move_line in move_lines_data:
+                if move_line['date'] > date_at_object or float_is_zero(
+                        move_line['amount_residual'], precision_digits=2):
+                    moves_lines_to_remove.append(move_line)
+            if len(moves_lines_to_remove) > 0:
+                for move_line_to_remove in moves_lines_to_remove:
+                    move_lines_data.remove(move_line_to_remove)
+        partners_data = {
+            0: {
+                'id': 0,
+                'name': 'Missing Partner'
+            }
+        }
+        open_items_move_lines_data = {}
+        for move_line in move_lines_data:
+            no_partner = True
+            # Partners data
+            if move_line['partner_id'] and not pd.isna(move_line['partner_id']):
+                no_partner = False
+                partners_data.update({
+                    move_line['partner_id']: {
+                        'id': move_line['partner_id'],
+                        'name': move_line['partner_name'],
+                        'currency_id': accounts_data[move_line[
+                            'account_id']]['currency_id'],
+                    }
+                })
+            else:
+                partners_data[0]['currency_id'] = accounts_data[move_line[
+                    'account_id']]['currency_id']
 
-    def _compute_account_cumul(self):
-        query_compute_accounts_residual_cumul = """
-UPDATE
-    report_open_items_account
-SET
-    final_amount_residual =
-        (
-            SELECT
-                SUM(rp.final_amount_residual) AS final_amount_residual
-            FROM
-                report_open_items_partner rp
-            WHERE
-                rp.report_account_id = report_open_items_account.id
-        )
-WHERE
-    report_id  = %s
-        """
-        params_compute_accounts_residual_cumul = (self.id,)
-        self.env.cr.execute(query_compute_accounts_residual_cumul,
-                            params_compute_accounts_residual_cumul)
+            # Move line update
+            original = 0
 
-        query_compute_accounts_cur_residual_cumul = """
-UPDATE
-    report_open_items_account
-SET
-    final_amount_residual_currency =
-        (
-            SELECT
-                SUM(rp.final_amount_residual_currency)
-                    AS final_amount_residual_currency
-            FROM
-                report_open_items_partner rp
-            WHERE
-                rp.report_account_id = report_open_items_account.id
-        )
-WHERE
-    report_id = %s
-        """
-        params_compute_accounts_cur_residual_cumul = (self.id,)
-        self.env.cr.execute(query_compute_accounts_cur_residual_cumul,
-                            params_compute_accounts_cur_residual_cumul)
+            if not float_is_zero(move_line['credit'], precision_digits=2):
+                original = move_line['credit']*(-1)
+            if not float_is_zero(move_line['debit'], precision_digits=2):
+                original = move_line['debit']
 
-        query_compute_accounts_due_cumul = """
-UPDATE
-    report_open_items_account
-SET
-    final_amount_total_due =
-        (
-            SELECT
-                SUM(rp.final_amount_total_due) AS final_amount_total_due
-            FROM
-                report_open_items_partner rp
-            WHERE
-                rp.report_account_id = report_open_items_account.id
-        )
-WHERE
-    report_id = %s
-        """
-        params_compute_accounts_due_cumul = (self.id,)
-        self.env.cr.execute(query_compute_accounts_due_cumul,
-                            params_compute_accounts_due_cumul)
+            move_line.update({
+                'date': move_line['date'].strftime("%d/%m/%Y"),
+                'date_maturity': move_line['date_maturity'].strftime("%d/%m/%Y"),
+                'original': original,
+                'partner_id': 0 if no_partner else move_line['partner_id'],
+                'partner_name': '' if no_partner else move_line['partner_name'],
+                'ref': '' if not move_line['ref'] else move_line['ref'],
+                'account': accounts_data[move_line['account_id']]['code'],
+                'journal': journals_data[move_line['journal_id']]['code'],
+            })
 
-        query_compute_accounts_cur_due_cumul = """
-UPDATE
-    report_open_items_account
-SET
-    final_amount_total_due_currency =
-        (
-            SELECT
-                SUM(rp.final_amount_total_due_currency)
-                    AS final_amount_total_due_currency
-            FROM
-                report_open_items_partner rp
-            WHERE
-                rp.report_account_id = report_open_items_account.id
-        )
-WHERE
-    report_id = %s
-        """
-        params_compute_accounts_cur_due_cumul = (self.id,)
-        self.env.cr.execute(query_compute_accounts_cur_due_cumul,
-                            params_compute_accounts_cur_due_cumul)
+            # Open Items Move Lines Data
+            if move_line['account_id'] not in open_items_move_lines_data.keys():
+                open_items_move_lines_data[move_line['account_id']] = {
+                    move_line['partner_id']: [move_line]}
+            else:
+                if move_line['partner_id'] not in \
+                        open_items_move_lines_data[move_line[
+                            'account_id']].keys():
+                    open_items_move_lines_data[move_line['account_id']][
+                        move_line['partner_id']] = [move_line]
+                else:
+                    open_items_move_lines_data[move_line['account_id']][
+                        move_line['partner_id']].append(move_line)
+        return move_lines_data, partners_data, journals_data, accounts_data, \
+            open_items_move_lines_data
 
-    def _clean_partners_and_accounts(self,
-                                     only_delete_account_balance_at_0=False):
-        """ Delete empty data for
-        report_open_items_partner and report_open_items_account.
+    @api.model
+    def _calculate_amounts(self, open_items_move_lines_data):
+        total_amount = {}
+        for account_id in open_items_move_lines_data.keys():
+            total_amount[account_id] = {}
+            total_amount[account_id]['residual'] = 0.0
+            for partner_id in open_items_move_lines_data[account_id].keys():
+                total_amount[account_id][partner_id] = {}
+                total_amount[account_id][partner_id]['residual'] = 0.0
+                for move_line in open_items_move_lines_data[account_id][
+                        partner_id]:
+                    total_amount[account_id][partner_id]['residual'] += \
+                        move_line['amount_residual']
+                    total_amount[account_id]['residual'] += move_line[
+                        'amount_residual']
+        return total_amount
 
-        The "only_delete_account_balance_at_0" value is used
-        to delete also the data with cumulative amounts at 0.
-        """
-        query_clean_partners = """
-DELETE FROM
-    report_open_items_partner
-WHERE
-    id IN
-        (
-            SELECT
-                DISTINCT rp.id
-            FROM
-                report_open_items_account ra
-            INNER JOIN
-                report_open_items_partner rp
-                    ON ra.id = rp.report_account_id
-            LEFT JOIN
-                report_open_items_move_line rml
-                    ON rp.id = rml.report_partner_id
-            WHERE
-                ra.report_id = %s
-        """
-        if not only_delete_account_balance_at_0:
-            query_clean_partners += """
-            AND rml.id IS NULL
-            """
-        elif only_delete_account_balance_at_0:
-            query_clean_partners += """
-            AND (
-                rp.final_amount_residual IS NULL
-                OR rp.final_amount_residual = 0
-                )
-            """
-        query_clean_partners += """
-        )
-        """
-        params_clean_partners = (self.id,)
-        self.env.cr.execute(query_clean_partners, params_clean_partners)
-        query_clean_accounts = """
-DELETE FROM
-    report_open_items_account
-WHERE
-    id IN
-        (
-            SELECT
-                DISTINCT ra.id
-            FROM
-                report_open_items_account ra
-            LEFT JOIN
-                report_open_items_partner rp
-                    ON ra.id = rp.report_account_id
-            WHERE
-                ra.report_id = %s
-        """
-        if not only_delete_account_balance_at_0:
-            query_clean_accounts += """
-            AND rp.id IS NULL
-            """
-        elif only_delete_account_balance_at_0:
-            query_clean_accounts += """
-            AND (
-                ra.final_amount_residual IS NULL
-                OR ra.final_amount_residual = 0
-                )
-            """
-        query_clean_accounts += """
-        )
-        """
-        params_clean_accounts = (self.id,)
-        self.env.cr.execute(query_clean_accounts, params_clean_accounts)
+    @api.multi
+    def _get_report_values(self, docids, data):
+        wizard_id = data['wizard_id']
+        company = self.env['res.company'].browse(data['company_id'])
+        company_id = data['company_id']
+        account_ids = data['account_ids']
+        partner_ids = data['partner_ids']
+        date_at = data['date_at']
+        date_at_object = datetime.strptime(date_at, '%Y-%m-%d').date()
+        date_from = data['date_from']
+        target_move = data['target_move']
+
+        move_lines_data, partners_data, journals_data, accounts_data, \
+            open_items_move_lines_data = self._get_data(
+                account_ids, partner_ids, date_at_object,
+                target_move, company_id, date_from)
+
+        total_amount = self._calculate_amounts(open_items_move_lines_data)
+        return{
+            'doc_ids': [wizard_id],
+            'doc_model': 'open.items.report.wizard',
+            'docs': self.env['open.items.report.wizard'].browse(wizard_id),
+            'foreign_currency': data['foreign_currency'],
+            'company_name': company.display_name,
+            'currency_name': company.currency_id.name,
+            'date_at': date_at_object.strftime("%d/%m/%Y"),
+            'hide_account_at_0': data['hide_account_at_0'],
+            'target_move': data['target_move'],
+            'partners_data': partners_data,
+            'accounts_data': accounts_data,
+            'total_amount': total_amount,
+            'Open_Items': open_items_move_lines_data,
+        }

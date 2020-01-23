@@ -1,831 +1,351 @@
-# Copyright 2017 ACSONE SA/NV
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# Copyright 2019-20 ForgeFlow S.L. (https://www.forgeflow.com)
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import models, fields, api
+from odoo import api, models
+import operator
+import itertools
 
-DIGITS = (16, 2)
 
+class JournalLedgerReport(models.AbstractModel):
+    _name = 'report.account_financial_report.journal_ledger'
+    _description = "Journal Ledger Report"
 
-class ReportJournalLedger(models.TransientModel):
+    def _get_journal_ledger_data(self, journal):
+        return {
+            'id': journal.id,
+            'name': journal.name,
+            'currency_id': journal.currency_id.id,
+            'currency_name': journal.currency_id and
+            journal.currency_id.name or
+            journal.company_id.currency_id.name,
+            'debit': 0.0,
+            'credit': 0.0,
+        }
 
-    _name = 'report_journal_ledger'
-    _inherit = 'account_financial_report_abstract'
+    def _get_journal_ledgers_domain(self, wizard, journal_ids, company):
+        domain = []
+        if company:
+            domain += [('company_id', '=', company.id)]
+        if journal_ids:
+            domain += [('id', 'in', journal_ids)]
+        return domain
 
-    date_from = fields.Date(
-        required=True
-    )
-    date_to = fields.Date(
-        required=True
-    )
-    company_id = fields.Many2one(
-        comodel_name='res.company',
-        required=True,
-        ondelete='cascade'
-    )
-    move_target = fields.Selection(
-        selection='_get_move_targets',
-        default='all',
-        required=True,
-    )
-    sort_option = fields.Selection(
-        selection='_get_sort_options',
-        default='move_name',
-        required=True,
-    )
-    group_option = fields.Selection(
-        selection='_get_group_options',
-        default='journal',
-        required=True,
-    )
-    journal_ids = fields.Many2many(
-        comodel_name='account.journal',
-        required=True,
-    )
-    report_journal_ledger_ids = fields.One2many(
-        comodel_name='report_journal_ledger_journal',
-        inverse_name='report_id',
-    )
-    report_move_ids = fields.One2many(
-        comodel_name='report_journal_ledger_move',
-        inverse_name='report_id',
-    )
-    report_move_line_ids = fields.One2many(
-        comodel_name='report_journal_ledger_move_line',
-        inverse_name='report_id',
-    )
-    report_journal_ledger_tax_line_ids = fields.One2many(
-        comodel_name='report_journal_ledger_journal_tax_line',
-        inverse_name='report_id',
-    )
-    report_tax_line_ids = fields.One2many(
-        comodel_name='report_journal_ledger_report_tax_line',
-        inverse_name='report_id',
-    )
-    foreign_currency = fields.Boolean()
-    with_account_name = fields.Boolean()
+    def _get_journal_ledgers(self, wizard, journal_ids, company):
+        journals = self.env['account.journal'].search(
+            self._get_journal_ledgers_domain(wizard, journal_ids, company),
+            order='name asc')
+        journal_ledgers_data = []
+        for journal in journals:
+            journal_ledgers_data.append(
+                self._get_journal_ledger_data(journal))
+        return journal_ledgers_data
 
-    @api.model
-    def _get_move_targets(self):
-        return self.env['journal.ledger.report.wizard']._get_move_targets()
+    def _get_moves_domain(self, wizard, journal_ids):
+        domain = [
+            ('journal_id', 'in', journal_ids),
+            ('date', '>=', wizard.date_from),
+            ('date', '<=', wizard.date_to),
+        ]
+        if wizard.move_target != 'all':
+            domain += [('state', '=', wizard.move_target)]
+        return domain
 
-    @api.model
-    def _get_sort_options(self):
-        return self.env['journal.ledger.report.wizard']._get_sort_options()
+    def _get_moves_order(self, wizard, journal_ids):
+        search_order = ''
+        if wizard.sort_option == 'move_name':
+            search_order = 'name asc'
+        elif wizard.sort_option == 'date':
+            search_order = 'date asc, name asc'
+        return search_order
 
-    @api.model
-    def _get_group_options(self):
-        return self.env['journal.ledger.report.wizard']._get_group_options()
+    def _get_moves_data(self, move):
+        return {
+            'move_id': move.id,
+            'journal_id': move.journal_id.id,
+            'entry': move.name,
+        }
 
-    @api.multi
-    def compute_data_for_report(self):
-        self.ensure_one()
-        self._inject_journal_values()
-        self._inject_move_values()
-        self._inject_move_line_values()
-        self._inject_journal_tax_values()
-        self._update_journal_report_total_values()
+    def _get_moves(self, wizard, journal_ids):
+        moves = self.env['account.move'].search(
+            self._get_moves_domain(wizard, journal_ids),
+            order=self._get_moves_order(wizard, journal_ids))
+        Moves = []
+        move_data = {}
+        for move in moves:
+            move_data[move.id] = self._get_moves_data(move)
+            Moves.append(move_data[move.id])
+        return moves.ids, Moves, move_data
 
-        if self.group_option == 'none':
-            self._inject_report_tax_values()
+    def _get_move_lines_domain(self, move_ids, wizard, journal_ids):
 
-        # Refresh cache because all data are computed with SQL requests
-        self.invalidate_cache()
-
-    @api.multi
-    def _inject_journal_values(self):
-        self.ensure_one()
-        sql = """
-            DELETE
-            FROM report_journal_ledger_journal
-            WHERE report_id = %s
-        """
-        params = (
-            self.id,
-        )
-        self.env.cr.execute(sql, params)
-        sql = """
-            INSERT INTO report_journal_ledger_journal (
-                create_uid,
-                create_date,
-                report_id,
-                journal_id,
-                name,
-                code,
-                company_id,
-                currency_id
-            )
-            SELECT
-                %s as create_uid,
-                NOW() as create_date,
-                %s as report_id,
-                aj.id as journal_id,
-                aj.name as name,
-                aj.code as code,
-                aj.company_id as company_id,
-                COALESCE(aj.currency_id, company.currency_id) as currency_id
-            FROM
-                account_journal aj
-            LEFT JOIN
-                res_company company on (company.id = aj.company_id)
-            WHERE
-                aj.id in %s
-            AND
-                aj.company_id = %s
-            ORDER BY
-                aj.name
-        """
-        params = (
-            self.env.uid,
-            self.id,
-            tuple(self.journal_ids.ids),
-            self.company_id.id,
-        )
-        self.env.cr.execute(sql, params)
-
-    @api.multi
-    def _inject_move_values(self):
-        self.ensure_one()
-        sql = """
-            DELETE
-            FROM report_journal_ledger_move
-            WHERE report_id = %s
-        """
-        params = (
-            self.id,
-        )
-        self.env.cr.execute(sql, params)
-        sql = self._get_inject_move_insert()
-        sql += self._get_inject_move_select()
-        sql += self._get_inject_move_where_clause()
-        sql += self._get_inject_move_order_by()
-        params = self._get_inject_move_params()
-        self.env.cr.execute(sql, params)
-
-    @api.multi
-    def _get_inject_move_insert(self):
-        return """
-            INSERT INTO report_journal_ledger_move (
-                create_uid,
-                create_date,
-                report_id,
-                report_journal_ledger_id,
-                move_id,
-                name,
-                company_id
-            )
-        """
-
-    @api.multi
-    def _get_inject_move_select(self):
-        return """
-            SELECT
-                %s as create_uid,
-                NOW() as create_date,
-                rjqj.report_id as report_id,
-                rjqj.id as report_journal_ledger_id,
-                am.id as move_id,
-                am.name as name,
-                am.company_id as company_id
-            FROM
-                account_move am
-            INNER JOIN
-                report_journal_ledger_journal rjqj
-                    on (rjqj.journal_id = am.journal_id)
-        """
-
-    @api.multi
-    def _get_inject_move_where_clause(self):
-        self.ensure_one()
-        where_clause = """
-            WHERE
-                rjqj.report_id = %s
-            AND
-                am.date >= %s
-            AND
-                am.date <= %s
-        """
-        if self.move_target != 'all':
-            where_clause += """
-                AND
-                    am.state = %s
-            """
-        return where_clause
-
-    @api.multi
-    def _get_inject_move_order_by(self):
-        self.ensure_one()
-        order_by = """
-            ORDER BY
-        """
-        if self.sort_option == 'move_name':
-            order_by += " am.name"
-        elif self.sort_option == 'date':
-            order_by += " am.date, am.name"
-        return order_by
-
-    @api.multi
-    def _get_inject_move_params(self):
-        params = [
-            self.env.uid,
-            self.id,
-            self.date_from,
-            self.date_to
+        return [
+            ('move_id', 'in', move_ids),
         ]
 
-        if self.move_target != 'all':
-            params.append(self.move_target)
+    def _get_move_lines_order(self, move_ids, wizard, journal_ids):
+        return ''
 
-        return tuple(params)
+    def _get_move_lines_data(self, ml, wizard, ml_taxes):
+            base_debit = base_credit = tax_debit = tax_credit = \
+                base_balance = tax_balance = 0.0
+            if ml.tax_exigible:
+                base_debit = ml_taxes and ml.debit or 0.0
+                base_credit = ml_taxes and ml.credit or 0.0
+                base_balance = ml_taxes and ml.balance or 0.0
+                tax_debit = ml.tax_line_id and ml.debit or 0.0
+                tax_credit = ml.tax_line_id and ml.credit or 0.0
+                tax_balance = ml.tax_line_id and ml.balance or 0.0
+            return {
+                'move_line_id': ml.id,
+                'move_id': ml.move_id.id,
+                'date': ml.date,
+                'journal_id': ml.journal_id.id,
+                'account_id': ml.account_id.id,
+                'partner_id': ml.partner_id.id,
+                'label': ml.name,
+                'debit': ml.debit,
+                'credit': ml.credit,
+                'company_currency_id': ml.company_currency_id.id,
+                'amount_currency': ml.amount_currency,
+                'currency_id': ml.currency_id.id,
+                'tax_line_id': ml.tax_line_id.id,
+                'tax_ids': list(ml_taxes.keys()),
+                'base_debit': base_debit,
+                'base_credit': base_credit,
+                'tax_debit': tax_debit,
+                'tax_credit': tax_credit,
+                'base_balance': base_balance,
+                'tax_balance': tax_balance,
+            }
 
-    @api.multi
-    def _inject_move_line_values(self):
-        self.ensure_one()
-        sql = """
-            DELETE
-            FROM report_journal_ledger_move_line
-            WHERE report_id = %s
-        """
-        params = (
-            self.id,
-        )
-        self.env.cr.execute(sql, params)
-        sql = """
-            INSERT INTO report_journal_ledger_move_line (
-                create_uid,
-                create_date,
-                report_id,
-                report_journal_ledger_id,
-                report_move_id,
-                move_line_id,
-                account_id,
-                account,
-                account_code,
-                account_type,
-                partner_id,
-                partner,
-                date,
-                entry,
-                label,
-                debit,
-                credit,
-                company_currency_id,
-                amount_currency,
-                currency_id,
-                currency_name,
-                tax_id,
-                taxes_description,
-                company_id
-            )
-            SELECT
-                %s as create_uid,
-                NOW() as create_date,
-                rjqm.report_id as report_id,
-                rjqm.report_journal_ledger_id as report_journal_ledger_id,
-                rjqm.id as report_move_id,
-                aml.id as move_line_id,
-                aml.account_id as account_id,
-                aa.name as account,
-                aa.code as account_code,
-                aa.internal_type as account_type,
-                aml.partner_id as partner_id,
-                p.name as partner,
-                aml.date as date,
-                rjqm.name as entry,
-                aml.name as label,
-                aml.debit as debit,
-                aml.credit as credit,
-                aml.company_currency_id as currency_id,
-                aml.amount_currency as amount_currency,
-                aml.currency_id as currency_id,
-                currency.name as currency_name,
-                aml.tax_line_id as tax_id,
-                CASE
-                    WHEN
-                      aml.tax_line_id is not null
-                THEN
-                    COALESCE(at.description, at.name)
-                WHEN
-                    aml.tax_line_id is null
-                THEN
-                    (SELECT
-                      array_to_string(
-                          array_agg(COALESCE(at.description, at.name)
-                      ), ', ')
-                    FROM
-                        account_move_line_account_tax_rel aml_at_rel
-                    LEFT JOIN
-                        account_tax at on (at.id = aml_at_rel.account_tax_id)
-                    WHERE
-                        aml_at_rel.account_move_line_id = aml.id)
-                ELSE
-                    ''
-                END as taxes_description,
-                aml.company_id as company_id
-            FROM
-                account_move_line aml
-            INNER JOIN
-                report_journal_ledger_move rjqm
-                    on (rjqm.move_id = aml.move_id)
+    def _get_account_data(self, accounts):
+        data = {}
+        for account in accounts:
+            data[account.id] = self._get_account_id_data(account)
+        return data
+
+    def _get_account_id_data(self, account):
+        return {
+            'name': account.name,
+            'code': account.code,
+            'internal_type': account.internal_type,
+        }
+
+    def _get_partner_data(self, partners):
+        data = {}
+        for partner in partners:
+            data[partner.id] = self._get_partner_id_data(partner)
+        return data
+
+    def _get_partner_id_data(self, partner):
+        return {
+            'name': partner.name,
+        }
+
+    def _get_currency_data(self, currencies):
+        data = {}
+        for currency in currencies:
+            data[currency.id] = self._get_currency_id_data(currency)
+        return data
+
+    def _get_currency_id_data(self, currency):
+        return {
+            'name': currency.name,
+        }
+
+    def _get_tax_line_data(self, taxes):
+        data = {}
+        for tax in taxes:
+            data[tax.id] = self._get_tax_line_id_data(tax)
+        return data
+
+    def _get_tax_line_id_data(self, tax):
+        return {
+            'name': tax.name,
+            'description': tax.description,
+        }
+
+    def _get_query_taxes(self):
+        return """
+            SELECT aml_at_rel.account_move_line_id, aml_at_rel.account_tax_id,
+            at.description, at.name
+            FROM account_move_line_account_tax_rel AS aml_at_rel
             LEFT JOIN
-                account_account aa
-                    on (aa.id = aml.account_id)
-            LEFT JOIN
-                res_partner p
-                    on (p.id = aml.partner_id)
-            LEFT JOIN
-                account_tax at
-                    on (at.id = aml.tax_line_id)
-            LEFT JOIN
-                res_currency currency
-                    on (currency.id = aml.currency_id)
-            WHERE
-                rjqm.report_id = %s
+                account_tax AS at on (at.id = aml_at_rel.account_tax_id)
+            WHERE account_move_line_id IN %(move_line_ids)s
         """
-        params = (
-            self.env.uid,
-            self.id,
-        )
-        self.env.cr.execute(sql, params)
+
+    def _get_query_taxes_params(self, move_lines):
+        return {
+            'move_line_ids': tuple(move_lines.ids),
+        }
+
+    def _get_move_lines(self, move_ids, wizard, journal_ids):
+        move_lines = self.env['account.move.line'].search(
+            self._get_move_lines_domain(move_ids, wizard, journal_ids),
+            order=self._get_move_lines_order(move_ids, wizard, journal_ids))
+        # Get the taxes ids for the move lines
+        query_taxes_params = self._get_query_taxes_params(move_lines)
+        query_taxes = self._get_query_taxes()
+        move_line_ids_taxes_data = {}
+        self.env.cr.execute(query_taxes,
+                            query_taxes_params)
+        # Fetch the taxes associated to the move line
+        for move_line_id, account_tax_id, tax_description, tax_name in \
+                self.env.cr.fetchall():
+            if move_line_id not in move_line_ids_taxes_data.keys():
+                move_line_ids_taxes_data[move_line_id] = {}
+            move_line_ids_taxes_data[move_line_id][account_tax_id] = {
+                'name': tax_name,
+                'description': tax_description
+            }
+        Move_Lines = {}
+        accounts = self.env['account.account']
+        partners = self.env['res.partner']
+        currencies = self.env['res.currency']
+        tax_lines = self.env['account.tax']
+        for ml in move_lines:
+            if ml.account_id not in accounts:
+                accounts |= ml.account_id
+            if ml.partner_id not in partners:
+                partners |= ml.partner_id
+            if ml.currency_id not in currencies:
+                currencies |= ml.currency_id
+            if ml.tax_line_id not in tax_lines:
+                tax_lines |= ml.tax_line_id
+            if ml.move_id.id not in Move_Lines.keys():
+                Move_Lines[ml.move_id.id] = []
+            taxes = ml.id in move_line_ids_taxes_data.keys() and \
+                move_line_ids_taxes_data[ml.id] or {}
+            Move_Lines[ml.move_id.id].append(self._get_move_lines_data(
+                ml, wizard, taxes))
+        account_ids_data = self._get_account_data(accounts)
+        partner_ids_data = self._get_partner_data(partners)
+        currency_ids_data = self._get_currency_data(currencies)
+        tax_line_ids_data = self._get_tax_line_data(tax_lines)
+        return move_lines.ids, Move_Lines, account_ids_data, \
+            partner_ids_data, currency_ids_data, tax_line_ids_data, \
+            move_line_ids_taxes_data
+
+    def _get_journal_tax_lines(self, wizard, moves_data):
+        journals_taxes_data = {}
+        for move_data in moves_data:
+            report_move_lines = move_data['report_move_lines']
+            for report_move_line in report_move_lines:
+                ml_data = report_move_line
+                tax_ids = []
+                if ml_data['tax_line_id']:
+                    tax_ids.append(ml_data['tax_line_id'])
+                if ml_data['tax_ids']:
+                    tax_ids += ml_data['tax_ids']
+                tax_ids = list(set(tax_ids))
+                journal_id = ml_data['journal_id']
+                if journal_id not in journals_taxes_data.keys():
+                    journals_taxes_data[journal_id] = {}
+                taxes = self.env['account.tax'].browse(tax_ids)
+                for tax in taxes:
+                    if tax.id not in journals_taxes_data[journal_id]:
+                        journals_taxes_data[journal_id][tax.id] = {
+                            'base_debit': 0.0,
+                            'base_credit': 0.0,
+                            'base_balance': 0.0,
+                            'tax_debit': 0.0,
+                            'tax_credit': 0.0,
+                            'tax_balance': 0.0,
+                            'tax_name': tax.name,
+                            'tax_code': tax.description,
+                        }
+                    field_keys = ['base_debit', 'base_credit', 'base_balance',
+                                  'tax_debit', 'tax_credit', 'tax_balance',
+                                  ]
+                    for field_key in field_keys:
+                        journals_taxes_data[journal_id][tax.id][field_key] += \
+                            ml_data[field_key]
+        journals_taxes_data_2 = {}
+        for journal_id in journals_taxes_data.keys():
+            journals_taxes_data_2[journal_id] = []
+            for tax_id in journals_taxes_data[journal_id].keys():
+                journals_taxes_data_2[journal_id] += \
+                    [journals_taxes_data[journal_id][tax_id]]
+        return journals_taxes_data_2
 
     @api.multi
-    def _inject_report_tax_values(self):
-        self.ensure_one()
-        sql_distinct_tax_id = """
-            SELECT
-                distinct(jrqjtl.tax_id)
-            FROM
-                report_journal_ledger_journal_tax_line jrqjtl
-            WHERE
-                jrqjtl.report_id = %s
-        """
-        self.env.cr.execute(sql_distinct_tax_id, (self.id,))
-        rows = self.env.cr.fetchall()
-        tax_ids = set([row[0] for row in rows])
-
-        sql = """
-            INSERT INTO report_journal_ledger_report_tax_line (
-                create_uid,
-                create_date,
-                report_id,
-                tax_id,
-                tax_name,
-                tax_code,
-                base_debit,
-                base_credit,
-                tax_debit,
-                tax_credit
-            )
-            SELECT
-                %s as create_uid,
-                NOW() as create_date,
-                %s as report_id,
-                %s as tax_id,
-                at.name as tax_name,
-                at.description as tax_code,
-                (
-                    SELECT sum(base_debit)
-                    FROM report_journal_ledger_journal_tax_line jrqjtl2
-                    WHERE jrqjtl2.report_id = %s
-                    AND jrqjtl2.tax_id = %s
-                ) as base_debit,
-                (
-                    SELECT sum(base_credit)
-                    FROM report_journal_ledger_journal_tax_line jrqjtl2
-                    WHERE jrqjtl2.report_id = %s
-                    AND jrqjtl2.tax_id = %s
-                ) as base_credit,
-                (
-                    SELECT sum(tax_debit)
-                    FROM report_journal_ledger_journal_tax_line jrqjtl2
-                    WHERE jrqjtl2.report_id = %s
-                    AND jrqjtl2.tax_id = %s
-                ) as tax_debit,
-                (
-                    SELECT sum(tax_credit)
-                    FROM report_journal_ledger_journal_tax_line jrqjtl2
-                    WHERE jrqjtl2.report_id = %s
-                    AND jrqjtl2.tax_id = %s
-                ) as tax_credit
-            FROM
-                report_journal_ledger_journal_tax_line jrqjtl
-            LEFT JOIN
-                account_tax at
-                    on (at.id = jrqjtl.tax_id)
-            WHERE
-                jrqjtl.report_id = %s
-            AND
-                jrqjtl.tax_id = %s
-        """
-
-        for tax_id in tax_ids:
-            params = (
-                self.env.uid,
-                self.id,
-                tax_id,
-                self.id,
-                tax_id,
-                self.id,
-                tax_id,
-                self.id,
-                tax_id,
-                self.id,
-                tax_id,
-                self.id,
-                tax_id,
-            )
-            self.env.cr.execute(sql, params)
-
-    @api.multi
-    def _inject_journal_tax_values(self):
-        self.ensure_one()
-        sql = """
-            DELETE
-            FROM report_journal_ledger_journal_tax_line
-            WHERE report_id = %s
-        """
-        params = (
-            self.id,
-        )
-        self.env.cr.execute(sql, params)
-        sql_distinct_tax_id = """
-            SELECT
-                distinct(jrqml.tax_id)
-            FROM
-                report_journal_ledger_move_line jrqml
-            WHERE
-                jrqml.report_journal_ledger_id = %s
-        """
-
-        tax_ids_by_journal_id = {}
-        for report_journal in self.report_journal_ledger_ids:
-            if report_journal.id not in tax_ids_by_journal_id:
-                tax_ids_by_journal_id[report_journal.id] = []
-            self.env.cr.execute(sql_distinct_tax_id, (report_journal.id,))
-            rows = self.env.cr.fetchall()
-            tax_ids_by_journal_id[report_journal.id].extend([
-                row[0] for row in rows if row[0]
-            ])
-
-        sql = """
-            INSERT INTO report_journal_ledger_journal_tax_line (
-                create_uid,
-                create_date,
-                report_id,
-                report_journal_ledger_id,
-                tax_id,
-                tax_name,
-                tax_code,
-                base_debit,
-                base_credit,
-                tax_debit,
-                tax_credit
-            )
-            SELECT
-                %s as create_uid,
-                NOW() as create_date,
-                %s as report_id,
-                %s as report_journal_ledger_id,
-                %s as tax_id,
-                at.name as tax_name,
-                at.description as tax_code,
-                (
-                    SELECT sum(debit)
-                    FROM report_journal_ledger_move_line jrqml2
-                    WHERE jrqml2.report_journal_ledger_id = %s
-                    AND (
-                        SELECT
-                            count(*)
-                        FROM
-                            account_move_line_account_tax_rel aml_at_rel
-                        WHERE
-                            aml_at_rel.account_move_line_id =
-                                jrqml2.move_line_id
-                        AND
-                            aml_at_rel.account_tax_id = %s
-                    ) > 0
-                ) as base_debit,
-                (
-                    SELECT sum(credit)
-                    FROM report_journal_ledger_move_line jrqml2
-                    WHERE jrqml2.report_journal_ledger_id = %s
-                    AND (
-                        SELECT
-                            count(*)
-                        FROM
-                            account_move_line_account_tax_rel aml_at_rel
-                        WHERE
-                            aml_at_rel.account_move_line_id =
-                                jrqml2.move_line_id
-                        AND
-                            aml_at_rel.account_tax_id = %s
-                    ) > 0
-                ) as base_credit,
-                (
-                    SELECT sum(debit)
-                    FROM report_journal_ledger_move_line jrqml2
-                    WHERE jrqml2.report_journal_ledger_id = %s
-                    AND jrqml2.tax_id = %s
-                ) as tax_debit,
-                (
-                    SELECT sum(credit)
-                    FROM report_journal_ledger_move_line jrqml2
-                    WHERE jrqml2.report_journal_ledger_id = %s
-                    AND jrqml2.tax_id = %s
-                ) as tax_credit
-            FROM
-                report_journal_ledger_journal rjqj
-            LEFT JOIN
-                account_tax at
-                    on (at.id = %s)
-            WHERE
-                rjqj.id = %s
-        """
-
-        for report_journal_ledger_id in tax_ids_by_journal_id:
-            tax_ids = tax_ids_by_journal_id[report_journal_ledger_id]
-            for tax_id in tax_ids:
-                params = (
-                    self.env.uid,
-                    self.id,
-                    report_journal_ledger_id,
-                    tax_id,
-                    report_journal_ledger_id,
-                    tax_id,
-                    report_journal_ledger_id,
-                    tax_id,
-                    report_journal_ledger_id,
-                    tax_id,
-                    report_journal_ledger_id,
-                    tax_id,
-                    tax_id,
-                    report_journal_ledger_id,
-                )
-                self.env.cr.execute(sql, params)
-
-    @api.multi
-    def _update_journal_report_total_values(self):
-        self.ensure_one()
-        sql = """
-            UPDATE
-                report_journal_ledger_journal rjqj
-            SET
-                debit = (
-                    SELECT sum(rjqml.debit)
-                    FROM report_journal_ledger_move_line rjqml
-                    WHERE rjqml.report_journal_ledger_id = rjqj.id
-                ),
-                credit = (
-                    SELECT sum(rjqml.credit)
-                    FROM report_journal_ledger_move_line rjqml
-                    WHERE rjqml.report_journal_ledger_id = rjqj.id
-                )
-            WHERE
-                rjqj.report_id = %s
-        """
-        self.env.cr.execute(sql, (self.id,))
-
-    @api.multi
-    def print_report(self, report_type):
-        self.ensure_one()
-        if report_type == 'xlsx':
-            report_name = 'a_f_r.report_journal_ledger_xlsx'
-        else:
-            report_name = 'account_financial_report.' \
-                          'report_journal_ledger_qweb'
-        return self.env['ir.actions.report'].search(
-            [('report_name', '=', report_name),
-             ('report_type', '=', report_type)],
-            limit=1).report_action(self, config=False)
-
-    def _get_html(self):
-        result = {}
-        rcontext = {}
-        context = dict(self.env.context)
-        report = self.browse(context.get('active_id'))
-        if report:
-            rcontext['o'] = report
-            result['html'] = self.env.ref(
-                'account_financial_report.report_journal_ledger').render(
-                    rcontext)
-        return result
-
-    @api.model
-    def get_html(self, given_context=None):
-        return self._get_html()
-
-    @api.model
-    def _transient_vacuum(self, force=False):
-        """Remove journal ledger subtables first for avoiding a costly
-        ondelete operation.
-        """
-        # Next 3 lines adapted from super method for mimicking behavior
-        cls = type(self)
-        if not force and (cls._transient_check_count < 21):
-            return True  # no vacuum cleaning this time
-        self.env.cr.execute("DELETE FROM report_journal_ledger_move_line")
-        self.env.cr.execute("DELETE FROM report_journal_ledger_move")
-        return super(ReportJournalLedger, self)._transient_vacuum(force=force)
-
-
-class ReportJournalLedgerJournal(models.TransientModel):
-
-    _name = 'report_journal_ledger_journal'
-    _inherit = 'account_financial_report_abstract'
-
-    name = fields.Char(
-        required=True,
-    )
-    code = fields.Char()
-    report_id = fields.Many2one(
-        comodel_name='report_journal_ledger',
-        required=True,
-        ondelete='cascade'
-    )
-    journal_id = fields.Many2one(
-        comodel_name='account.journal',
-        required=True,
-        ondelete='cascade',
-    )
-    report_move_ids = fields.One2many(
-        comodel_name='report_journal_ledger_move',
-        inverse_name='report_journal_ledger_id',
-    )
-    report_tax_line_ids = fields.One2many(
-        comodel_name='report_journal_ledger_journal_tax_line',
-        inverse_name='report_journal_ledger_id',
-    )
-    debit = fields.Float(
-        digits=DIGITS,
-    )
-    credit = fields.Float(
-        digits=DIGITS,
-    )
-    company_id = fields.Many2one(
-        comodel_name='res.company',
-        required=True,
-        ondelete='cascade'
-    )
-    currency_id = fields.Many2one(
-        comodel_name='res.currency',
-    )
-
-
-class ReportJournalLedgerMove(models.TransientModel):
-
-    _name = 'report_journal_ledger_move'
-    _inherit = 'account_financial_report_abstract'
-
-    report_id = fields.Many2one(
-        comodel_name='report_journal_ledger',
-        required=True,
-        ondelete='cascade'
-    )
-    report_journal_ledger_id = fields.Many2one(
-        comodel_name='report_journal_ledger_journal',
-        required=True,
-        ondelete='cascade',
-    )
-    move_id = fields.Many2one(
-        comodel_name='account.move',
-        required=True,
-        ondelete='cascade',
-    )
-    report_move_line_ids = fields.One2many(
-        comodel_name='report_journal_ledger_move_line',
-        inverse_name='report_move_id',
-    )
-    name = fields.Char()
-    company_id = fields.Many2one(
-        comodel_name='res.company',
-        required=True,
-        ondelete='cascade'
-    )
-
-
-class ReportJournalLedgerMoveLine(models.TransientModel):
-
-    _name = 'report_journal_ledger_move_line'
-    _inherit = 'account_financial_report_abstract'
-    _order = 'partner_id desc, account_id desc'
-
-    report_id = fields.Many2one(
-        comodel_name='report_journal_ledger',
-        required=True,
-        ondelete='cascade'
-    )
-    report_journal_ledger_id = fields.Many2one(
-        comodel_name='report_journal_ledger_journal',
-        required=True,
-        ondelete='cascade',
-    )
-    report_move_id = fields.Many2one(
-        comodel_name='report_journal_ledger_move',
-        required=True,
-        ondelete='cascade',
-    )
-    move_line_id = fields.Many2one(
-        comodel_name='account.move.line',
-        required=True,
-        ondelete='cascade',
-    )
-    account_id = fields.Many2one(
-        comodel_name='account.account',
-        string='Account ID',
-    )
-    account = fields.Char()
-    account_code = fields.Char()
-    account_type = fields.Char()
-    partner = fields.Char()
-    partner_id = fields.Many2one(
-        comodel_name='res.partner',
-        string='Partner ID',
-    )
-    date = fields.Date()
-    entry = fields.Char()
-    label = fields.Char()
-    debit = fields.Float(
-        digits=DIGITS,
-    )
-    credit = fields.Float(
-        digits=DIGITS,
-    )
-    company_currency_id = fields.Many2one(
-        comodel_name='res.currency',
-    )
-    amount_currency = fields.Monetary(
-        currency_field='currency_id',
-    )
-    currency_id = fields.Many2one(
-        comodel_name='res.currency',
-    )
-    currency_name = fields.Char()
-    taxes_description = fields.Char()
-    tax_id = fields.Many2one(
-        comodel_name='account.tax'
-    )
-    company_id = fields.Many2one(
-        comodel_name='res.company',
-        required=True,
-        ondelete='cascade'
-    )
-
-
-class ReportJournalLedgerReportTaxLine(models.TransientModel):
-
-    _name = 'report_journal_ledger_report_tax_line'
-    _inherit = 'account_financial_report_abstract'
-    _order = 'tax_code'
-
-    report_id = fields.Many2one(
-        comodel_name='report_journal_ledger',
-        required=True,
-        ondelete='cascade'
-    )
-    tax_id = fields.Many2one(
-        comodel_name='account.tax'
-    )
-    tax_name = fields.Char()
-    tax_code = fields.Char()
-    base_debit = fields.Float(
-        digits=DIGITS,
-    )
-    base_credit = fields.Float(
-        digits=DIGITS,
-    )
-    base_balance = fields.Float(
-        digits=DIGITS,
-        compute='_compute_base_balance',
-    )
-    tax_debit = fields.Float(
-        digits=DIGITS,
-    )
-    tax_credit = fields.Float(
-        digits=DIGITS,
-    )
-    tax_balance = fields.Float(
-        digits=DIGITS,
-        compute='_compute_tax_balance'
-    )
-
-    @api.multi
-    def _compute_base_balance(self):
-        for rec in self:
-            rec.base_balance = rec.base_debit - rec.base_credit
-
-    @api.multi
-    def _compute_tax_balance(self):
-        for rec in self:
-            rec.tax_balance = rec.tax_debit - rec.tax_credit
-
-
-class ReportJournalLedgerJournalTaxLine(models.TransientModel):
-
-    _name = 'report_journal_ledger_journal_tax_line'
-    _inherit = 'report_journal_ledger_report_tax_line'
-    _order = 'tax_code'
-
-    report_journal_ledger_id = fields.Many2one(
-        comodel_name='report_journal_ledger_journal',
-        required=True,
-        ondelete='cascade',
-    )
+    def _get_report_values(self, docids, data):
+        wizard_id = data['wizard_id']
+        wizard = self.env['journal.ledger.report.wizard'].browse(wizard_id)
+        company = self.env['res.company'].browse(data['company_id'])
+        journal_ids = data['journal_ids']
+        journal_ledgers_data = self._get_journal_ledgers(
+            wizard, journal_ids, company)
+        move_ids, moves_data, move_ids_data = self._get_moves(
+            wizard, journal_ids)
+        journal_moves_data = {}
+        for key, items in itertools.groupby(
+                moves_data, operator.itemgetter('journal_id')):
+            if key not in journal_moves_data.keys():
+                journal_moves_data[key] = []
+            journal_moves_data[key] += list(items)
+        move_lines_data = account_ids_data = partner_ids_data = \
+            currency_ids_data = tax_line_ids_data = \
+            move_line_ids_taxes_data = {}
+        if move_ids:
+            move_line_ids, move_lines_data, account_ids_data, \
+                partner_ids_data, currency_ids_data, tax_line_ids_data, \
+                move_line_ids_taxes_data = self._get_move_lines(
+                    move_ids, wizard, journal_ids)
+        for move_data in moves_data:
+            move_id = move_data['move_id']
+            move_data['report_move_lines'] = []
+            if move_id in move_lines_data.keys():
+                move_data['report_move_lines'] += move_lines_data[move_id]
+        journals_taxes_data = {}
+        if moves_data:
+            journals_taxes_data = self._get_journal_tax_lines(
+                wizard, moves_data)
+        for journal_ledger_data in journal_ledgers_data:
+            journal_id = journal_ledger_data['id']
+            journal_ledger_data['tax_lines'] = \
+                journals_taxes_data.get(journal_id, [])
+        journal_totals = {}
+        for move_id in move_lines_data.keys():
+            for move_line_data in move_lines_data[move_id]:
+                journal_id = move_line_data['journal_id']
+                if journal_id not in journal_totals.keys():
+                    journal_totals[journal_id] = {
+                        'debit': 0.0,
+                        'credit': 0.0,
+                    }
+                for item in ['debit', 'credit']:
+                    journal_totals[journal_id][item] += move_line_data[item]
+        for journal_ledger_data in journal_ledgers_data:
+            journal_id = journal_ledger_data['id']
+            if journal_id in journal_moves_data.keys():
+                journal_ledger_data['report_moves'] = \
+                    journal_moves_data[journal_id]
+            else:
+                journal_ledger_data['report_moves'] = []
+            if journal_id in journal_totals.keys():
+                for item in ['debit', 'credit']:
+                    journal_ledger_data[item] += \
+                        journal_totals[journal_id][item]
+        return {
+            'doc_ids': [wizard_id],
+            'doc_model': 'journal.ledger.report.wizard',
+            'docs': self.env['journal.ledger.report.wizard'].browse(wizard_id),
+            'group_option': data['group_option'],
+            'foreign_currency': data['foreign_currency'],
+            'with_account_name': data['with_account_name'],
+            'company_name': company.display_name,
+            'currency_name': company.currency_id.name,
+            'date_from': data['date_from'],
+            'date_to': data['date_to'],
+            'move_target': data['move_target'],
+            'account_ids_data': account_ids_data,
+            'partner_ids_data': partner_ids_data,
+            'currency_ids_data': currency_ids_data,
+            'move_ids_data': move_ids_data,
+            'tax_line_data': tax_line_ids_data,
+            'move_line_ids_taxes_data': move_line_ids_taxes_data,
+            'Journal_Ledgers': journal_ledgers_data,
+            'Moves': moves_data,
+        }

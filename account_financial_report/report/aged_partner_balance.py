@@ -1,633 +1,375 @@
 # © 2016 Julien Coux (Camptocamp)
+# Copyright 2020 ForgeFlow S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import models, fields, api
+from odoo import models, api
+from odoo.tools import float_is_zero
+from datetime import date, datetime, timedelta
+import pandas as pd
 
 
-class AgedPartnerBalanceReport(models.TransientModel):
-    """ Here, we just define class fields.
-    For methods, go more bottom at this file.
-
-    The class hierarchy is :
-    * AgedPartnerBalanceReport
-    ** AgedPartnerBalanceReportAccount
-    *** AgedPartnerBalanceReportPartner
-    **** AgedPartnerBalanceReportLine
-    **** AgedPartnerBalanceReportMoveLine
-            If "show_move_line_details" is selected
-    """
-
-    _name = 'report_aged_partner_balance'
-    _inherit = 'account_financial_report_abstract'
-
-    # Filters fields, used for data computation
-    date_at = fields.Date()
-    only_posted_moves = fields.Boolean()
-    company_id = fields.Many2one(comodel_name='res.company')
-    filter_account_ids = fields.Many2many(comodel_name='account.account')
-    filter_partner_ids = fields.Many2many(comodel_name='res.partner')
-    show_move_line_details = fields.Boolean()
-
-    # Open Items Report Data fields, used as base for compute the data reports
-    open_items_id = fields.Many2one(comodel_name='report_open_items')
-
-    # Data fields, used to browse report data
-    account_ids = fields.One2many(
-        comodel_name='report_aged_partner_balance_account',
-        inverse_name='report_id'
-    )
-
-
-class AgedPartnerBalanceReportAccount(models.TransientModel):
-    _name = 'report_aged_partner_balance_account'
-    _inherit = 'account_financial_report_abstract'
-    _order = 'code ASC'
-
-    report_id = fields.Many2one(
-        comodel_name='report_aged_partner_balance',
-        ondelete='cascade',
-        index=True
-    )
-
-    # Data fields, used to keep link with real object
-    account_id = fields.Many2one(
-        'account.account',
-        index=True
-    )
-
-    # Data fields, used for report display
-    code = fields.Char()
-    name = fields.Char()
-
-    cumul_amount_residual = fields.Float(digits=(16, 2))
-    cumul_current = fields.Float(digits=(16, 2))
-    cumul_age_30_days = fields.Float(digits=(16, 2))
-    cumul_age_60_days = fields.Float(digits=(16, 2))
-    cumul_age_90_days = fields.Float(digits=(16, 2))
-    cumul_age_120_days = fields.Float(digits=(16, 2))
-    cumul_older = fields.Float(digits=(16, 2))
-
-    percent_current = fields.Float(digits=(16, 2))
-    percent_age_30_days = fields.Float(digits=(16, 2))
-    percent_age_60_days = fields.Float(digits=(16, 2))
-    percent_age_90_days = fields.Float(digits=(16, 2))
-    percent_age_120_days = fields.Float(digits=(16, 2))
-    percent_older = fields.Float(digits=(16, 2))
-
-    # Data fields, used to browse report data
-    partner_ids = fields.One2many(
-        comodel_name='report_aged_partner_balance_partner',
-        inverse_name='report_account_id'
-    )
-
-
-class AgedPartnerBalanceReportPartner(models.TransientModel):
-    _name = 'report_aged_partner_balance_partner'
-    _inherit = 'account_financial_report_abstract'
-
-    report_account_id = fields.Many2one(
-        comodel_name='report_aged_partner_balance_account',
-        ondelete='cascade',
-        index=True
-    )
-
-    # Data fields, used to keep link with real object
-    partner_id = fields.Many2one(
-        'res.partner',
-        index=True
-    )
-
-    # Data fields, used for report display
-    name = fields.Char()
-
-    # Data fields, used to browse report data
-    move_line_ids = fields.One2many(
-        comodel_name='report_aged_partner_balance_move_line',
-        inverse_name='report_partner_id'
-    )
-    line_ids = fields.One2many(
-        comodel_name='report_aged_partner_balance_line',
-        inverse_name='report_partner_id'
-    )
+class AgedPartnerBalanceReport(models.AbstractModel):
+    _name = 'report.account_financial_report.aged_partner_balance'
+    _description = "Aged Partner Balance Report"
 
     @api.model
-    def _generate_order_by(self, order_spec, query):
-        """Custom order to display "No partner allocated" at last position."""
-        return """
-ORDER BY
-    CASE
-        WHEN
-            "report_aged_partner_balance_partner"."partner_id" IS NOT NULL
-        THEN 0
-        ELSE 1
-    END,
-    "report_aged_partner_balance_partner"."name"
-        """
+    def _initialize_account(self, ag_pb_data, acc_id):
+        ag_pb_data[acc_id] = {}
+        ag_pb_data[acc_id]['id'] = acc_id
+        ag_pb_data[acc_id]['residual'] = 0.0
+        ag_pb_data[acc_id]['current'] = 0.0
+        ag_pb_data[acc_id]['30_days'] = 0.0
+        ag_pb_data[acc_id]['60_days'] = 0.0
+        ag_pb_data[acc_id]['90_days'] = 0.0
+        ag_pb_data[acc_id]['120_days'] = 0.0
+        ag_pb_data[acc_id]['older'] = 0.0
+        return ag_pb_data
 
+    @api.model
+    def _initialize_partner(self, ag_pb_data, acc_id, prt_id):
+        ag_pb_data[acc_id][prt_id] = {}
+        ag_pb_data[acc_id][prt_id]['id'] = acc_id
+        ag_pb_data[acc_id][prt_id]['residual'] = 0.0
+        ag_pb_data[acc_id][prt_id]['current'] = 0.0
+        ag_pb_data[acc_id][prt_id]['30_days'] = 0.0
+        ag_pb_data[acc_id][prt_id]['60_days'] = 0.0
+        ag_pb_data[acc_id][prt_id]['90_days'] = 0.0
+        ag_pb_data[acc_id][prt_id]['120_days'] = 0.0
+        ag_pb_data[acc_id][prt_id]['older'] = 0.0
+        ag_pb_data[acc_id][prt_id]['move_lines'] = []
+        return ag_pb_data
 
-class AgedPartnerBalanceReportLine(models.TransientModel):
-    _name = 'report_aged_partner_balance_line'
-    _inherit = 'account_financial_report_abstract'
+    def _get_journals_data(self, journals_ids):
+        journals = self.env['account.journal'].browse(journals_ids)
+        journals_data = {}
+        for journal in journals:
+            journals_data.update({journal.id: {'id': journal.id,
+                                               'code': journal.code}})
+        return journals_data
 
-    report_partner_id = fields.Many2one(
-        comodel_name='report_aged_partner_balance_partner',
-        ondelete='cascade',
-        index=True
-    )
+    def _get_accounts_data(self, accounts_ids):
+        accounts = self.env['account.account'].browse(accounts_ids)
+        accounts_data = {}
+        for account in accounts:
+            accounts_data.update({account.id: {'id': account.id,
+                                               'code': account.code,
+                                               'name': account.name}})
+        return accounts_data
 
-    # Data fields, used for report display
-    partner = fields.Char()
-    amount_residual = fields.Float(digits=(16, 2))
-    current = fields.Float(digits=(16, 2))
-    age_30_days = fields.Float(digits=(16, 2))
-    age_60_days = fields.Float(digits=(16, 2))
-    age_90_days = fields.Float(digits=(16, 2))
-    age_120_days = fields.Float(digits=(16, 2))
-    older = fields.Float(digits=(16, 2))
+    @api.model
+    def _get_move_lines_domain(self, company_id, account_ids, partner_ids,
+                               only_posted_moves):
+        domain = [('account_id', 'in', account_ids),
+                  ('company_id', '=', company_id),
+                  ('reconciled', '=', False)]
+        if partner_ids:
+            domain += [('partner_id', 'in', partner_ids)]
+        if only_posted_moves:
+            domain += [('move_id.state', '=', 'posted')]
+        return domain
 
-
-class AgedPartnerBalanceReportMoveLine(models.TransientModel):
-    _name = 'report_aged_partner_balance_move_line'
-    _inherit = 'account_financial_report_abstract'
-
-    report_partner_id = fields.Many2one(
-        comodel_name='report_aged_partner_balance_partner',
-        ondelete='cascade',
-        index=True
-    )
-
-    # Data fields, used to keep link with real object
-    move_line_id = fields.Many2one('account.move.line')
-
-    # Data fields, used for report display
-    date = fields.Date()
-    date_due = fields.Date()
-    entry = fields.Char()
-    journal = fields.Char()
-    account = fields.Char()
-    partner = fields.Char()
-    label = fields.Char()
-
-    amount_residual = fields.Float(digits=(16, 2))
-    current = fields.Float(digits=(16, 2))
-    age_30_days = fields.Float(digits=(16, 2))
-    age_60_days = fields.Float(digits=(16, 2))
-    age_90_days = fields.Float(digits=(16, 2))
-    age_120_days = fields.Float(digits=(16, 2))
-    older = fields.Float(digits=(16, 2))
-
-
-class AgedPartnerBalanceReportCompute(models.TransientModel):
-    """ Here, we just define methods.
-    For class fields, go more top at this file.
-    """
-
-    _inherit = 'report_aged_partner_balance'
-
-    @api.multi
-    def print_report(self, report_type):
-        self.ensure_one()
-        if report_type == 'xlsx':
-            report_name = 'a_f_r.report_aged_partner_balance_xlsx'
+    @api.model
+    def _calculate_amounts(self, ag_pb_data, acc_id, prt_id, residual,
+                           due_date, date_at_object):
+        ag_pb_data[acc_id]['residual'] += residual
+        ag_pb_data[acc_id][prt_id]['residual'] += residual
+        today = date_at_object
+        if not due_date or today <= due_date:
+            ag_pb_data[acc_id]['current'] += residual
+            ag_pb_data[acc_id][prt_id]['current'] += residual
+        elif today <= due_date + timedelta(days=30):
+            ag_pb_data[acc_id]['30_days'] += residual
+            ag_pb_data[acc_id][prt_id]['30_days'] += residual
+        elif today <= due_date + timedelta(days=60):
+            ag_pb_data[acc_id]['60_days'] += residual
+            ag_pb_data[acc_id][prt_id]['60_days'] += residual
+        elif today <= due_date + timedelta(days=90):
+            ag_pb_data[acc_id]['90_days'] += residual
+            ag_pb_data[acc_id][prt_id]['90_days'] += residual
+        elif today <= due_date + timedelta(days=120):
+            ag_pb_data[acc_id]['120_days'] += residual
+            ag_pb_data[acc_id][prt_id]['120_days'] += residual
         else:
-            report_name = 'account_financial_report.' \
-                          'report_aged_partner_balance_qweb'
-        report = self.env['ir.actions.report'].search(
-            [('report_name', '=', report_name),
-             ('report_type', '=', report_type)], limit=1)
-        return report.report_action(self, config=False)
+            ag_pb_data[acc_id]['older'] += residual
+            ag_pb_data[acc_id][prt_id]['older'] += residual
+        return ag_pb_data
 
-    def _get_html(self):
-        result = {}
-        rcontext = {}
-        context = dict(self.env.context)
-        report = self.browse(context.get('active_id'))
-        if report:
-            rcontext['o'] = report
-            result['html'] = self.env.ref(
-                'account_financial_report.report_aged_partner_balance').render(
-                    rcontext)
-        return result
+    def _get_account_partial_reconciled(self, company_id, date_at_object):
+        domain = [('max_date', '>=', date_at_object),
+                  ('company_id', '=', company_id)]
+        fields = ['debit_move_id', 'credit_move_id', 'amount']
+        accounts_partial_reconcile = \
+            self.env['account.partial.reconcile'].search_read(
+                domain=domain,
+                fields=fields
+            )
+        debit_amount = {}
+        credit_amount = {}
+        for account_partial_reconcile_data in accounts_partial_reconcile:
+            debit_move_id = account_partial_reconcile_data['debit_move_id'][0]
+            credit_move_id = account_partial_reconcile_data['credit_move_id'][0]
+            if debit_move_id not in debit_amount.keys():
+                debit_amount[debit_move_id] = 0.0
+            debit_amount[debit_move_id] += \
+                account_partial_reconcile_data['amount']
+            if credit_move_id not in credit_amount.keys():
+                credit_amount[credit_move_id] = 0.0
+            credit_amount[credit_move_id] += \
+                account_partial_reconcile_data['amount']
+            account_partial_reconcile_data.update({
+                'debit_move_id': debit_move_id,
+                'credit_move_id': credit_move_id,
+            })
+        return accounts_partial_reconcile, debit_amount, credit_amount
 
     @api.model
-    def get_html(self, given_context=None):
-        return self._get_html()
+    def _get_new_move_lines_domain(self, new_ml_ids, account_ids, company_id,
+                                   partner_ids, only_posted_moves):
+        domain = [('account_id', 'in', account_ids),
+                  ('company_id', '=', company_id),
+                  ('id', 'in', new_ml_ids)]
+        if partner_ids:
+            domain += [('partner_id', 'in', partner_ids)]
+        if only_posted_moves:
+            domain += [('move_id.state', '=', 'posted')]
+        return domain
 
-    def _prepare_report_open_items(self):
-        self.ensure_one()
-        return {
-            'date_at': self.date_at,
-            'only_posted_moves': self.only_posted_moves,
-            'company_id': self.company_id.id,
-            'filter_account_ids': [(6, 0, self.filter_account_ids.ids)],
-            'filter_partner_ids': [(6, 0, self.filter_partner_ids.ids)],
-        }
+    def _recalculate_move_lines(self, move_lines, debit_ids, credit_ids,
+                                debit_amount, credit_amount, ml_ids,
+                                account_ids, company_id, partner_ids,
+                                only_posted_moves):
+        reconciled_ids = list(debit_ids) + list(credit_ids)
+        new_ml_ids = []
+        for reconciled_id in reconciled_ids:
+            if reconciled_id not in ml_ids and reconciled_id not in new_ml_ids:
+                new_ml_ids += [reconciled_id]
+        new_domain = self._get_new_move_lines_domain(new_ml_ids, account_ids,
+                                                     company_id, partner_ids,
+                                                     only_posted_moves)
+        ml_fields = [
+            'id', 'name', 'date', 'move_id', 'journal_id', 'account_id',
+            'partner_id', 'amount_residual', 'date_maturity', 'ref',
+            'reconciled']
+        new_move_lines = self.env['account.move.line'].search_read(
+            domain=new_domain, fields=ml_fields
+        )
+        move_lines = move_lines + new_move_lines
+        for move_line in move_lines:
+            ml_id = move_line['id']
+            if ml_id in debit_ids:
+                move_line['amount_residual'] += debit_amount[ml_id]
+            if ml_id in credit_ids:
+                move_line['amount_residual'] -= credit_amount[ml_id]
+        return move_lines
+
+    def _get_move_lines_data(
+            self, company_id, account_ids, partner_ids, date_at_object,
+            only_posted_moves, show_move_line_details):
+        domain = self._get_move_lines_domain(company_id, account_ids,
+                                             partner_ids, only_posted_moves)
+        ml_fields = [
+            'id', 'name', 'date', 'move_id', 'journal_id', 'account_id',
+            'partner_id', 'amount_residual', 'date_maturity', 'ref',
+            'reconciled']
+        move_lines = self.env['account.move.line'].search_read(
+            domain=domain, fields=ml_fields
+        )
+        ml_ids = set(pd.DataFrame(move_lines).id.to_list())
+        journals_ids = set()
+        partners_ids = set()
+        partners_data = {}
+        ag_pb_data = {}
+        if date_at_object < date.today():
+            acc_partial_rec, debit_amount, credit_amount = \
+                self._get_account_partial_reconciled(company_id, date_at_object)
+            if acc_partial_rec:
+                acc_partial_rec_data = pd.DataFrame(acc_partial_rec)
+                debit_ids = set(acc_partial_rec_data.debit_move_id.to_list())
+                credit_ids = set(acc_partial_rec_data.credit_move_id.to_list())
+                move_lines = self._recalculate_move_lines(
+                    move_lines, debit_ids, credit_ids,
+                    debit_amount, credit_amount, ml_ids, account_ids,
+                    company_id, partner_ids, only_posted_moves
+                )
+            moves_lines_to_remove = []
+            for move_line in move_lines:
+                if move_line['date'] > date_at_object or \
+                    float_is_zero(move_line['amount_residual'],
+                                  precision_digits=2):
+                    moves_lines_to_remove.append(move_line)
+            if len(moves_lines_to_remove) > 0:
+                for move_line_to_remove in moves_lines_to_remove:
+                    move_lines.remove(move_line_to_remove)
+        for move_line in move_lines:
+            journals_ids.add(move_line['journal_id'][0])
+            acc_id = move_line['account_id'][0]
+            if move_line['partner_id']:
+                prt_id = move_line['partner_id'][0]
+                prt_name = move_line['partner_id'][1]
+            else:
+                prt_id = 0
+                prt_name = ""
+            if prt_id not in partners_ids:
+                partners_data.update({
+                    prt_id: {'id': prt_id, 'name': prt_name}
+                })
+                partners_ids.add(prt_id)
+            if acc_id not in ag_pb_data.keys():
+                ag_pb_data = self._initialize_account(ag_pb_data, acc_id)
+            if prt_id not in ag_pb_data[acc_id]:
+                ag_pb_data = self._initialize_partner(ag_pb_data, acc_id,
+                                                      prt_id)
+            move_line_data = {}
+            if show_move_line_details:
+                move_line_data.update({
+                    'date': move_line['date'],
+                    'entry': move_line['move_id'][1],
+                    'jnl_id': move_line['journal_id'][0],
+                    'acc_id': acc_id,
+                    'partner': prt_name,
+                    'ref': move_line['ref'],
+                    'due_date': move_line['date_maturity'],
+                    'residual': move_line['amount_residual'],
+                })
+                ag_pb_data[acc_id][prt_id]['move_lines'].append(move_line_data)
+            ag_pb_data = self._calculate_amounts(
+                ag_pb_data, acc_id, prt_id, move_line['amount_residual'],
+                move_line['date_maturity'], date_at_object)
+        journals_data = self._get_journals_data(list(journals_ids))
+        accounts_data = self._get_accounts_data(ag_pb_data.keys())
+        return ag_pb_data, accounts_data, partners_data, journals_data
+
+    @api.model
+    def _compute_maturity_date(self, ml, date_at_object):
+        ml.update({
+            'current': 0.0,
+            '30_days': 0.0,
+            '60_days': 0.0,
+            '90_days': 0.0,
+            '120_days': 0.0,
+            'older': 0.0,
+        })
+        due_date = ml['due_date']
+        amount = ml['residual']
+        today = date_at_object
+        if not due_date or today <= due_date:
+            ml['current'] += amount
+        elif today <= due_date + timedelta(days=30):
+            ml['30_days'] += amount
+        elif today <= due_date + timedelta(days=60):
+            ml['60_days'] += amount
+        elif today <= due_date + timedelta(days=90):
+            ml['90_days'] += amount
+        elif today <= due_date + timedelta(days=120):
+            ml['120_days'] += amount
+        else:
+            ml['older'] += amount
+
+    def _create_account_list(
+            self, ag_pb_data, accounts_data, partners_data, journals_data,
+            show_move_line_details, date_at_oject):
+        aged_partner_data = []
+        for account in accounts_data.values():
+            acc_id = account['id']
+            account.update({
+                'residual': ag_pb_data[acc_id]['residual'],
+                'current': ag_pb_data[acc_id]['current'],
+                '30_days': ag_pb_data[acc_id]['30_days'],
+                '60_days': ag_pb_data[acc_id]['60_days'],
+                '90_days': ag_pb_data[acc_id]['90_days'],
+                '120_days': ag_pb_data[acc_id]['120_days'],
+                'older': ag_pb_data[acc_id]['older'],
+                'partners': [],
+            })
+            for prt_id in ag_pb_data[acc_id]:
+                if isinstance(prt_id, int):
+                    partner = {
+                        'name': partners_data[prt_id]['name'],
+                        'residual': ag_pb_data[acc_id][prt_id]['residual'],
+                        'current': ag_pb_data[acc_id][prt_id]['current'],
+                        '30_days': ag_pb_data[acc_id][prt_id]['30_days'],
+                        '60_days': ag_pb_data[acc_id][prt_id]['60_days'],
+                        '90_days': ag_pb_data[acc_id][prt_id]['90_days'],
+                        '120_days': ag_pb_data[acc_id][prt_id]['120_days'],
+                        'older': ag_pb_data[acc_id][prt_id]['older'],
+                    }
+                    if show_move_line_details:
+                        move_lines = []
+                        for ml in ag_pb_data[acc_id][prt_id]['move_lines']:
+                            ml.update({
+                                'journal': journals_data[ml['jnl_id']]['code'],
+                                'account': accounts_data[ml['acc_id']]['code'],
+                            })
+                            self._compute_maturity_date(ml, date_at_oject)
+                            move_lines.append(ml)
+                        partner.update({
+                            'move_lines': move_lines
+                        })
+                    account['partners'].append(partner)
+            aged_partner_data.append(account)
+        return aged_partner_data
+
+    @api.model
+    def _calculate_percent(self, aged_partner_data):
+        for account in aged_partner_data:
+            if abs(account['residual']) > 0.01:
+                total = account['residual']
+                account.update({
+                    'percent_current': abs(
+                        round((account['current'] / total) * 100, 2)),
+                    'percent_30_days': abs(
+                        round((account['30_days'] / total) * 100,
+                              2)),
+                    'percent_60_days': abs(
+                        round((account['60_days'] / total) * 100,
+                              2)),
+                    'percent_90_days': abs(
+                        round((account['90_days'] / total) * 100,
+                              2)),
+                    'percent_120_days': abs(
+                        round((account['120_days'] / total) * 100,
+                              2)),
+                    'percent_older': abs(
+                        round((account['older'] / total) * 100, 2)),
+                })
+            else:
+                account.update({
+                    'percent_current': 0.0,
+                    'percent_30_days': 0.0,
+                    'percent_60_days': 0.0,
+                    'percent_90_days': 0.0,
+                    'percent_120_days': 0.0,
+                    'percent_older': 0.0,
+                })
+        return aged_partner_data
 
     @api.multi
-    def compute_data_for_report(self):
-        self.ensure_one()
-        # Compute Open Items Report Data.
-        # The data of Aged Partner Balance Report
-        # are based on Open Items Report data.
-        model = self.env['report_open_items']
-        self.open_items_id = model.create(self._prepare_report_open_items())
-        self.open_items_id.compute_data_for_report()
-
-        # Compute report data
-        self._inject_account_values()
-        self._inject_partner_values()
-        self._inject_line_values()
-        self._inject_line_values(only_empty_partner_line=True)
-        if self.show_move_line_details:
-            self._inject_move_line_values()
-            self._inject_move_line_values(only_empty_partner_line=True)
-        self._compute_accounts_cumul()
-        # Refresh cache because all data are computed with SQL requests
-        self.invalidate_cache()
-
-    def _inject_account_values(self):
-        """Inject report values for report_aged_partner_balance_account"""
-        query_inject_account = """
-INSERT INTO
-    report_aged_partner_balance_account
-    (
-    report_id,
-    create_uid,
-    create_date,
-    account_id,
-    code,
-    name
-    )
-SELECT
-    %s AS report_id,
-    %s AS create_uid,
-    NOW() AS create_date,
-    rao.account_id,
-    rao.code,
-    rao.name
-FROM
-    report_open_items_account rao
-WHERE
-    rao.report_id = %s
-        """
-        query_inject_account_params = (
-            self.id,
-            self.env.uid,
-            self.open_items_id.id,
-        )
-        self.env.cr.execute(query_inject_account, query_inject_account_params)
-
-    def _inject_partner_values(self):
-        """Inject report values for report_aged_partner_balance_partner"""
-        query_inject_partner = """
-INSERT INTO
-    report_aged_partner_balance_partner
-    (
-    report_account_id,
-    create_uid,
-    create_date,
-    partner_id,
-    name
-    )
-SELECT
-    ra.id AS report_account_id,
-    %s AS create_uid,
-    NOW() AS create_date,
-    rpo.partner_id,
-    rpo.name
-FROM
-    report_open_items_partner rpo
-INNER JOIN
-    report_open_items_account rao ON rpo.report_account_id = rao.id
-INNER JOIN
-    report_aged_partner_balance_account ra ON rao.code = ra.code
-WHERE
-    rao.report_id = %s
-AND ra.report_id = %s
-        """
-        query_inject_partner_params = (
-            self.env.uid,
-            self.open_items_id.id,
-            self.id,
-        )
-        self.env.cr.execute(query_inject_partner, query_inject_partner_params)
-
-    def _inject_line_values(self, only_empty_partner_line=False):
-        """ Inject report values for report_aged_partner_balance_line.
-
-        The "only_empty_partner_line" value is used
-        to compute data without partner.
-        """
-        query_inject_line = """
-WITH
-    date_range AS
-        (
-            SELECT
-                DATE %s AS date_current,
-                DATE %s - INTEGER '30' AS date_less_30_days,
-                DATE %s - INTEGER '60' AS date_less_60_days,
-                DATE %s - INTEGER '90' AS date_less_90_days,
-                DATE %s - INTEGER '120' AS date_less_120_days
-        )
-INSERT INTO
-    report_aged_partner_balance_line
-    (
-        report_partner_id,
-        create_uid,
-        create_date,
-        partner,
-        amount_residual,
-        current,
-        age_30_days,
-        age_60_days,
-        age_90_days,
-        age_120_days,
-        older
-    )
-SELECT
-    rp.id AS report_partner_id,
-    %s AS create_uid,
-    NOW() AS create_date,
-    rp.name,
-    SUM(rlo.amount_residual) AS amount_residual,
-    SUM(
-        CASE
-            WHEN rlo.date_due >= date_range.date_current
-            THEN rlo.amount_residual
-        END
-    ) AS current,
-    SUM(
-        CASE
-            WHEN
-                rlo.date_due >= date_range.date_less_30_days
-                AND rlo.date_due < date_range.date_current
-            THEN rlo.amount_residual
-        END
-    ) AS age_30_days,
-    SUM(
-        CASE
-            WHEN
-                rlo.date_due >= date_range.date_less_60_days
-                AND rlo.date_due < date_range.date_less_30_days
-            THEN rlo.amount_residual
-        END
-    ) AS age_60_days,
-    SUM(
-        CASE
-            WHEN
-                rlo.date_due >= date_range.date_less_90_days
-                AND rlo.date_due < date_range.date_less_60_days
-            THEN rlo.amount_residual
-        END
-    ) AS age_90_days,
-    SUM(
-        CASE
-            WHEN
-                rlo.date_due >= date_range.date_less_120_days
-                AND rlo.date_due < date_range.date_less_90_days
-            THEN rlo.amount_residual
-        END
-    ) AS age_120_days,
-    SUM(
-        CASE
-            WHEN rlo.date_due < date_range.date_less_120_days
-            THEN rlo.amount_residual
-        END
-    ) AS older
-FROM
-    date_range,
-    report_open_items_move_line rlo
-INNER JOIN
-    report_open_items_partner rpo ON rlo.report_partner_id = rpo.id
-INNER JOIN
-    report_open_items_account rao ON rpo.report_account_id = rao.id
-INNER JOIN
-    report_aged_partner_balance_account ra ON rao.code = ra.code
-INNER JOIN
-    report_aged_partner_balance_partner rp
-        ON
-            ra.id = rp.report_account_id
-        """
-        if not only_empty_partner_line:
-            query_inject_line += """
-        AND rpo.partner_id = rp.partner_id
-            """
-        elif only_empty_partner_line:
-            query_inject_line += """
-        AND rpo.partner_id IS NULL
-        AND rp.partner_id IS NULL
-            """
-        query_inject_line += """
-WHERE
-    rao.report_id = %s
-AND ra.report_id = %s
-GROUP BY
-    rp.id
-        """
-        query_inject_line_params = (self.date_at,) * 5
-        query_inject_line_params += (
-            self.env.uid,
-            self.open_items_id.id,
-            self.id,
-        )
-        self.env.cr.execute(query_inject_line, query_inject_line_params)
-
-    def _inject_move_line_values(self, only_empty_partner_line=False):
-        """ Inject report values for report_aged_partner_balance_move_line
-
-        The "only_empty_partner_line" value is used
-        to compute data without partner.
-        """
-        query_inject_move_line = """
-WITH
-    date_range AS
-        (
-            SELECT
-                DATE %s AS date_current,
-                DATE %s - INTEGER '30' AS date_less_30_days,
-                DATE %s - INTEGER '60' AS date_less_60_days,
-                DATE %s - INTEGER '90' AS date_less_90_days,
-                DATE %s - INTEGER '120' AS date_less_120_days
-        )
-INSERT INTO
-    report_aged_partner_balance_move_line
-    (
-        report_partner_id,
-        create_uid,
-        create_date,
-        move_line_id,
-        date,
-        date_due,
-        entry,
-        journal,
-        account,
-        partner,
-        label,
-        amount_residual,
-        current,
-        age_30_days,
-        age_60_days,
-        age_90_days,
-        age_120_days,
-        older
-    )
-SELECT
-    rp.id AS report_partner_id,
-    %s AS create_uid,
-    NOW() AS create_date,
-    rlo.move_line_id,
-    rlo.date,
-    rlo.date_due,
-    rlo.entry,
-    rlo.journal,
-    rlo.account,
-    rlo.partner,
-    rlo.label,
-    rlo.amount_residual AS amount_residual,
-    CASE
-        WHEN rlo.date_due >= date_range.date_current
-        THEN rlo.amount_residual
-    END AS current,
-    CASE
-        WHEN
-            rlo.date_due >= date_range.date_less_30_days
-            AND rlo.date_due < date_range.date_current
-        THEN rlo.amount_residual
-    END AS age_30_days,
-    CASE
-        WHEN
-            rlo.date_due >= date_range.date_less_60_days
-            AND rlo.date_due < date_range.date_less_30_days
-        THEN rlo.amount_residual
-    END AS age_60_days,
-    CASE
-        WHEN
-            rlo.date_due >= date_range.date_less_90_days
-            AND rlo.date_due < date_range.date_less_60_days
-        THEN rlo.amount_residual
-    END AS age_90_days,
-    CASE
-        WHEN
-            rlo.date_due >= date_range.date_less_120_days
-            AND rlo.date_due < date_range.date_less_90_days
-        THEN rlo.amount_residual
-    END AS age_120_days,
-    CASE
-        WHEN rlo.date_due < date_range.date_less_120_days
-        THEN rlo.amount_residual
-    END AS older
-FROM
-    date_range,
-    report_open_items_move_line rlo
-INNER JOIN
-    report_open_items_partner rpo ON rlo.report_partner_id = rpo.id
-INNER JOIN
-    report_open_items_account rao ON rpo.report_account_id = rao.id
-INNER JOIN
-    report_aged_partner_balance_account ra ON rao.code = ra.code
-INNER JOIN
-    report_aged_partner_balance_partner rp
-        ON
-            ra.id = rp.report_account_id
-        """
-        if not only_empty_partner_line:
-            query_inject_move_line += """
-        AND rpo.partner_id = rp.partner_id
-            """
-        elif only_empty_partner_line:
-            query_inject_move_line += """
-        AND rpo.partner_id IS NULL
-        AND rp.partner_id IS NULL
-            """
-        query_inject_move_line += """
-WHERE
-    rao.report_id = %s
-AND ra.report_id = %s
-        """
-        query_inject_move_line_params = (self.date_at,) * 5
-        query_inject_move_line_params += (
-            self.env.uid,
-            self.open_items_id.id,
-            self.id,
-        )
-        self.env.cr.execute(query_inject_move_line,
-                            query_inject_move_line_params)
-
-    def _compute_accounts_cumul(self):
-        """ Compute cumulative amount for
-        report_aged_partner_balance_account.
-        """
-        query_compute_accounts_cumul = """
-WITH
-    cumuls AS
-        (
-            SELECT
-                ra.id AS report_account_id,
-                SUM(rl.amount_residual) AS cumul_amount_residual,
-                SUM(rl.current) AS cumul_current,
-                SUM(rl.age_30_days) AS cumul_age_30_days,
-                SUM(rl.age_60_days) AS cumul_age_60_days,
-                SUM(rl.age_90_days) AS cumul_age_90_days,
-                SUM(rl.age_120_days) AS cumul_age_120_days,
-                SUM(rl.older) AS cumul_older
-            FROM
-                report_aged_partner_balance_line rl
-            INNER JOIN
-                report_aged_partner_balance_partner rp
-                    ON rl.report_partner_id = rp.id
-            INNER JOIN
-                report_aged_partner_balance_account ra
-                    ON rp.report_account_id = ra.id
-            WHERE
-                ra.report_id = %s
-            GROUP BY
-                ra.id
-        )
-UPDATE
-    report_aged_partner_balance_account
-SET
-    cumul_amount_residual = c.cumul_amount_residual,
-    cumul_current = c.cumul_current,
-    cumul_age_30_days = c.cumul_age_30_days,
-    cumul_age_60_days = c.cumul_age_60_days,
-    cumul_age_90_days = c.cumul_age_90_days,
-    cumul_age_120_days = c.cumul_age_120_days,
-    cumul_older = c.cumul_older,
-    percent_current =
-        CASE
-            WHEN c.cumul_amount_residual != 0
-            THEN 100 * c.cumul_current / c.cumul_amount_residual
-        END,
-    percent_age_30_days =
-        CASE
-            WHEN c.cumul_amount_residual != 0
-            THEN 100 * c.cumul_age_30_days / c.cumul_amount_residual
-        END,
-    percent_age_60_days =
-        CASE
-            WHEN c.cumul_amount_residual != 0
-            THEN 100 * c.cumul_age_60_days / c.cumul_amount_residual
-        END,
-    percent_age_90_days =
-        CASE
-            WHEN c.cumul_amount_residual != 0
-            THEN 100 * c.cumul_age_90_days / c.cumul_amount_residual
-        END,
-    percent_age_120_days =
-        CASE
-            WHEN c.cumul_amount_residual != 0
-            THEN 100 * c.cumul_age_120_days / c.cumul_amount_residual
-        END,
-    percent_older =
-        CASE
-            WHEN c.cumul_amount_residual != 0
-            THEN 100 * c.cumul_older / c.cumul_amount_residual
-        END
-FROM
-    cumuls c
-WHERE
-    id = c.report_account_id
-        """
-        params_compute_accounts_cumul = (self.id,)
-        self.env.cr.execute(query_compute_accounts_cumul,
-                            params_compute_accounts_cumul)
+    def _get_report_values(self, docids, data):
+        wizard_id = data['wizard_id']
+        company = self.env['res.company'].browse(data['company_id'])
+        company_id = data['company_id']
+        account_ids = data['account_ids']
+        partner_ids = data['partner_ids']
+        date_at = data['date_at']
+        date_at_object = datetime.strptime(date_at, '%Y-%m-%d').date()
+        only_posted_moves = data['only_posted_moves']
+        show_move_line_details = data['show_move_line_details']
+        ag_pb_data, accounts_data, partners_data, \
+            journals_data = self._get_move_lines_data(
+                company_id, account_ids, partner_ids, date_at_object,
+                only_posted_moves, show_move_line_details)
+        aged_partner_data = self._create_account_list(
+            ag_pb_data, accounts_data, partners_data, journals_data,
+            show_move_line_details, date_at_object)
+        aged_partner_data = self._calculate_percent(aged_partner_data)
+        return {
+            'doc_ids': [wizard_id],
+            'doc_model': 'open.items.report.wizard',
+            'docs': self.env['open.items.report.wizard'].browse(wizard_id),
+            'company_name': company.display_name,
+            'currency_name': company.currency_id.name,
+            'date_at': date_at,
+            'only_posted_moves': only_posted_moves,
+            'aged_partner_balance': aged_partner_data,
+            'show_move_lines_details': show_move_line_details,
+        }

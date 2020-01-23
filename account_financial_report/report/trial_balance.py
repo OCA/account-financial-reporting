@@ -1,589 +1,642 @@
 # © 2016 Julien Coux (Camptocamp)
 # © 2018 Forest and Biomass Romania SA
+# Copyright 2020 ForgeFlow S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import models, fields, api
-from odoo.tools import float_is_zero
+from odoo import models, api
+from operator import itemgetter
+from natsort import natsorted
 
 
-class TrialBalanceReport(models.TransientModel):
-    """ Here, we just define class fields.
-    For methods, go more bottom at this file.
-
-    The class hierarchy is :
-    * TrialBalanceReport
-    *** TrialBalanceReportAccount
-    **** TrialBalanceReportPartner
-            If "show_partner_details" is selected
-    """
-
-    _name = 'report_trial_balance'
-    _inherit = 'account_financial_report_abstract'
-
-    # Filters fields, used for data computation
-    date_from = fields.Date()
-    date_to = fields.Date()
-    fy_start_date = fields.Date()
-    only_posted_moves = fields.Boolean()
-    hide_account_at_0 = fields.Boolean()
-    foreign_currency = fields.Boolean()
-    company_id = fields.Many2one(comodel_name='res.company')
-    filter_account_ids = fields.Many2many(comodel_name='account.account')
-    filter_partner_ids = fields.Many2many(comodel_name='res.partner')
-    filter_journal_ids = fields.Many2many(comodel_name='account.journal')
-    show_partner_details = fields.Boolean()
-    hierarchy_on = fields.Selection(
-        [('computed', 'Computed Accounts'),
-         ('relation', 'Child Accounts'),
-         ('none', 'No hierarchy')],
-        string='Hierarchy On',
-        required=True,
-        default='computed',
-        help="""Computed Accounts: Use when the account group have codes
-        that represent prefixes of the actual accounts.\n
-        Child Accounts: Use when your account groups are hierarchical.\n
-        No hierarchy: Use to display just the accounts, without any grouping.
-        """,
-    )
-    limit_hierarchy_level = fields.Boolean('Limit hierarchy levels')
-    show_hierarchy_level = fields.Integer('Hierarchy Levels to display',
-                                          default=1)
-    hide_parent_hierarchy_level = fields.Boolean(
-        'Do not display parent levels', default=False)
-    # General Ledger Report Data fields,
-    # used as base for compute the data reports
-    general_ledger_id = fields.Many2one(
-        comodel_name='report_general_ledger'
-    )
-
-    # Data fields, used to browse report data
-    account_ids = fields.One2many(
-        comodel_name='report_trial_balance_account',
-        inverse_name='report_id'
-    )
-
-
-class TrialBalanceReportAccount(models.TransientModel):
-    _name = 'report_trial_balance_account'
-    _inherit = 'account_financial_report_abstract'
-    _order = 'sequence, code ASC, name'
-
-    report_id = fields.Many2one(
-        comodel_name='report_trial_balance',
-        ondelete='cascade',
-        index=True
-    )
-    hide_line = fields.Boolean(compute='_compute_hide_line')
-    # Data fields, used to keep link with real object.
-    # Sequence is a Char later built with 'code_prefix' for groups
-    # and code_prefix + account code for accounts
-    sequence = fields.Char(index=True, default='1')
-    level = fields.Integer(index=True, default=1)
-
-    # Data fields, used to keep link with real object
-    account_id = fields.Many2one(
-        'account.account',
-        index=True
-    )
-
-    account_group_id = fields.Many2one(
-        'account.group',
-        index=True
-    )
-    parent_id = fields.Many2one(
-        'account.group',
-        index=True
-    )
-    child_account_ids = fields.Char(
-        string="Child accounts")
-    compute_account_ids = fields.Many2many(
-        'account.account',
-        string="Compute accounts", store=True)
-
-    # Data fields, used for report display
-    code = fields.Char()
-    name = fields.Char()
-
-    currency_id = fields.Many2one('res.currency')
-    initial_balance = fields.Float(digits=(16, 2))
-    initial_balance_foreign_currency = fields.Float(digits=(16, 2))
-    debit = fields.Float(digits=(16, 2))
-    credit = fields.Float(digits=(16, 2))
-    period_balance = fields.Float(digits=(16, 2))
-    final_balance = fields.Float(digits=(16, 2))
-    final_balance_foreign_currency = fields.Float(digits=(16, 2))
-
-    # Data fields, used to browse report data
-    partner_ids = fields.One2many(
-        comodel_name='report_trial_balance_partner',
-        inverse_name='report_account_id'
-    )
-
-    @api.depends(
-        'currency_id',
-        'report_id',
-        'report_id.hide_account_at_0',
-        'report_id.limit_hierarchy_level',
-        'report_id.show_hierarchy_level',
-        'initial_balance',
-        'final_balance',
-        'debit',
-        'credit',
-    )
-    def _compute_hide_line(self):
-        for rec in self:
-            report = rec.report_id
-            r = (rec.currency_id or report.company_id.currency_id).rounding
-            if report.hide_account_at_0 and (
-                    float_is_zero(rec.initial_balance, precision_rounding=r)
-                    and float_is_zero(rec.final_balance, precision_rounding=r)
-                    and float_is_zero(rec.debit, precision_rounding=r)
-                    and float_is_zero(rec.credit, precision_rounding=r)):
-                rec.hide_line = True
-            elif report.limit_hierarchy_level and report.show_hierarchy_level:
-                if report.hide_parent_hierarchy_level:
-                    distinct_level = rec.level != report.show_hierarchy_level
-                    if rec.account_group_id and distinct_level:
-                        rec.hide_line = True
-                    elif rec.level and distinct_level:
-                        rec.hide_line = True
-                elif not report.hide_parent_hierarchy_level and \
-                        rec.level > report.show_hierarchy_level:
-                    rec.hide_line = True
-
-
-class TrialBalanceReportPartner(models.TransientModel):
-    _name = 'report_trial_balance_partner'
-    _inherit = 'account_financial_report_abstract'
-
-    report_account_id = fields.Many2one(
-        comodel_name='report_trial_balance_account',
-        ondelete='cascade',
-        index=True
-    )
-
-    # Data fields, used to keep link with real object
-    partner_id = fields.Many2one(
-        'res.partner',
-        index=True
-    )
-
-    # Data fields, used for report display
-    name = fields.Char()
-
-    currency_id = fields.Many2one('res.currency')
-    initial_balance = fields.Float(digits=(16, 2))
-    initial_balance_foreign_currency = fields.Float(digits=(16, 2))
-    debit = fields.Float(digits=(16, 2))
-    credit = fields.Float(digits=(16, 2))
-    period_balance = fields.Float(digits=(16, 2))
-    final_balance = fields.Float(digits=(16, 2))
-    final_balance_foreign_currency = fields.Float(digits=(16, 2))
-
-    @api.model
-    def _generate_order_by(self, order_spec, query):
-        """Custom order to display "No partner allocated" at last position."""
-        return """
-ORDER BY
-    CASE
-        WHEN "report_trial_balance_partner"."partner_id" IS NOT NULL
-        THEN 0
-        ELSE 1
-    END,
-    "report_trial_balance_partner"."name"
-        """
-
-
-class TrialBalanceReportCompute(models.TransientModel):
-    """ Here, we just define methods.
-    For class fields, go more top at this file.
-    """
-
-    _inherit = 'report_trial_balance'
-
-    @api.multi
-    def print_report(self, report_type):
-        self.ensure_one()
-        if report_type == 'xlsx':
-            report_name = 'a_f_r.report_trial_balance_xlsx'
-        else:
-            report_name = 'account_financial_report.' \
-                          'report_trial_balance_qweb'
-        return self.env['ir.actions.report'].search(
-            [('report_name', '=', report_name),
-             ('report_type', '=', report_type)],
-            limit=1).report_action(self, config=False)
-
-    def _get_html(self):
-        result = {}
-        rcontext = {}
-        context = dict(self.env.context)
-        report = self.browse(context.get('active_id'))
-        if report:
-            rcontext['o'] = report
-            result['html'] = self.env.ref(
-                'account_financial_report.report_trial_balance').render(
-                    rcontext)
-        return result
+class TrialBalanceReport(models.AbstractModel):
+    _name = 'report.account_financial_report.trial_balance'
+    _description = "Trial Balance Report"
 
     @api.model
     def get_html(self, given_context=None):
         return self._get_html()
 
-    def _prepare_report_general_ledger(self, account_ids):
-        self.ensure_one()
-        return {
-            'date_from': self.date_from,
-            'date_to': self.date_to,
-            'only_posted_moves': self.only_posted_moves,
-            # This is postprocessed later with a computed field
-            'hide_account_at_0': False,
-            'foreign_currency': self.foreign_currency,
-            'company_id': self.company_id.id,
-            'filter_account_ids': [(6, 0, account_ids.ids)],
-            'filter_partner_ids': [(6, 0, self.filter_partner_ids.ids)],
-            'filter_journal_ids': [(6, 0, self.filter_journal_ids.ids)],
-            'fy_start_date': self.fy_start_date,
-        }
+    def _get_html(self):
+        result = {}
+        rcontext = {}
+        context = dict(self.env.context)
+        rcontext.update(context.get('data'))
+        active_id = context.get('active_id')
+        wiz = self.env['open.items.report.wizard'].browse(active_id)
+        rcontext['o'] = wiz
+        result['html'] = self.env.ref(
+            'account_financial_report.report_trial_balance').render(rcontext)
+        return result
+
+    def _get_accounts_data(self, account_ids):
+        accounts = self.env['account.account'].browse(account_ids)
+        accounts_data = {}
+        for account in accounts:
+            accounts_data.update({account.id: {
+                'id': account.id,
+                'code': account.code,
+                'name': account.name,
+                'group_id': account.group_id.id,
+                'hide_account': False,
+                'currency_id': account.currency_id or False,
+                'currency_name': account.currency_id.name}
+            })
+        return accounts_data
+
+    def _get_initial_balances_bs_ml_domain(
+            self, account_ids, journal_ids, partner_ids, company_id, date_from,
+            only_posted_moves, show_partner_details):
+        accounts_domain = [
+            ('company_id', '=', company_id),
+            ('user_type_id.include_initial_balance', '=', True)]
+        if account_ids:
+            accounts_domain += [('id', 'in', account_ids)]
+        domain = [('date', '<', date_from)]
+        accounts = self.env['account.account'].search(accounts_domain)
+        domain += [('account_id', 'in', accounts.ids)]
+        if company_id:
+            domain += [('company_id', '=', company_id)]
+        if journal_ids:
+            domain += [('journal_id', 'in', journal_ids)]
+        if partner_ids:
+            domain += [('partner_id', 'in', partner_ids)]
+        if only_posted_moves:
+            domain += [('move_id.state', '=', 'posted')]
+        if show_partner_details:
+            domain += [('account_id.internal_type', 'in',
+                        ['receivable', 'payable'])]
+        return domain
+
+    def _get_initial_balances_pl_ml_domain(
+            self, account_ids, journal_ids, partner_ids, company_id, date_from,
+            only_posted_moves, show_partner_details, fy_start_date):
+        accounts_domain = [
+            ('company_id', '=', company_id),
+            ('user_type_id.include_initial_balance', '=', False)]
+        if account_ids:
+            accounts_domain += [('id', 'in', account_ids)]
+        domain = [('date', '<', date_from),
+                  ('date', '>=', fy_start_date)
+                  ]
+        accounts = self.env['account.account'].search(accounts_domain)
+        domain += [('account_id', 'in', accounts.ids)]
+        if company_id:
+            domain += [('company_id', '=', company_id)]
+        if journal_ids:
+            domain += [('journal_id', 'in', journal_ids)]
+        if partner_ids:
+            domain += [('partner_id', 'in', partner_ids)]
+        if only_posted_moves:
+            domain += [('move_id.state', '=', 'posted')]
+        if show_partner_details:
+            domain += [('account_id.internal_type', 'in', [
+                'receivable', 'payable'])]
+        return domain
+
+    @api.model
+    def _get_period_ml_domain(
+            self, account_ids, journal_ids, partner_ids, company_id, date_to,
+            date_from, only_posted_moves, show_partner_details):
+        domain = ['&', ('date', '>=', date_from), ('date', '<=', date_to)]
+        if company_id:
+            domain += [('company_id', '=', company_id)]
+        if account_ids:
+            domain += [('account_id', 'in', account_ids)]
+        if journal_ids:
+            domain += [('journal_id', 'in', journal_ids)]
+        if partner_ids:
+            domain += [('partner_id', 'in', partner_ids)]
+        if only_posted_moves:
+            domain += [('move_id.state', '=', 'posted')]
+        if show_partner_details:
+            domain += [('account_id.internal_type', 'in', [
+                'receivable', 'payable'])]
+        return domain
+
+    def _get_initial_balance_fy_pl_ml_domain(
+            self, account_ids, journal_ids, partner_ids, company_id,
+            fy_start_date, only_posted_moves, show_partner_details):
+        accounts_domain = [
+            ('company_id', '=', company_id),
+            ('user_type_id.include_initial_balance', '=', False)]
+        if account_ids:
+            accounts_domain += [('id', 'in', account_ids)]
+        domain = [('date', '<', fy_start_date)]
+        accounts = self.env['account.account'].search(accounts_domain)
+        domain += [('account_id', 'in', accounts.ids)]
+        if company_id:
+            domain += [('company_id', '=', company_id)]
+        if journal_ids:
+            domain += [('journal_id', 'in', journal_ids)]
+        if partner_ids:
+            domain += [('partner_id', 'in', partner_ids)]
+        if only_posted_moves:
+            domain += [('move_id.state', '=', 'posted')]
+        if show_partner_details:
+            domain += [('account_id.internal_type', 'in',
+                        ['receivable', 'payable'])]
+        return domain
+
+    def _get_pl_initial_balance(
+            self, account_ids, journal_ids, partner_ids, company_id,
+            fy_start_date, only_posted_moves, show_partner_details,
+            foreign_currency):
+        domain = self._get_initial_balance_fy_pl_ml_domain(
+            account_ids, journal_ids, partner_ids, company_id, fy_start_date,
+            only_posted_moves, show_partner_details)
+        initial_balances = self.env['account.move.line'].read_group(
+            domain=domain,
+            fields=[
+                'account_id',
+                'balance',
+                'amount_currency'],
+            groupby=['account_id'])
+        pl_initial_balance = 0.0
+        pl_initial_currency_balance = 0.0
+        for initial_balance in initial_balances:
+            pl_initial_balance += initial_balance['balance']
+            if foreign_currency:
+                pl_initial_currency_balance += initial_balance[
+                    'amount_currency']
+        return pl_initial_balance, pl_initial_currency_balance
+
+    def _get_data(self, account_ids, journal_ids, partner_ids,
+                  company_id, date_to, date_from, foreign_currency,
+                  only_posted_moves, show_partner_details, hide_account_at_0,
+                  unaffected_earnings_account, fy_start_date):
+        initial_domain_bs = self._get_initial_balances_bs_ml_domain(
+            account_ids, journal_ids, partner_ids,
+            company_id, date_from, only_posted_moves, show_partner_details)
+        tb_initial_acc_bs = self.env['account.move.line'].read_group(
+            domain=initial_domain_bs,
+            fields=[
+                'account_id',
+                'balance',
+                'amount_currency'],
+            groupby=['account_id'])
+        initial_domain_pl = self._get_initial_balances_pl_ml_domain(
+            account_ids, journal_ids, partner_ids,
+            company_id, date_from, only_posted_moves, show_partner_details,
+            fy_start_date)
+        tb_initial_acc_pl = self.env['account.move.line'].read_group(
+            domain=initial_domain_pl,
+            fields=[
+                'account_id',
+                'balance',
+                'amount_currency'],
+            groupby=['account_id'])
+        tb_initial_acc = tb_initial_acc_bs + tb_initial_acc_pl
+        if hide_account_at_0:
+            tb_initial_acc = [p for p in tb_initial_acc if p['balance'] != 0]
+
+        period_domain = self._get_period_ml_domain(
+            account_ids, journal_ids, partner_ids, company_id, date_to,
+            date_from, only_posted_moves, show_partner_details)
+        tb_period_acc = self.env['account.move.line'].read_group(
+            domain=period_domain,
+            fields=[
+                'account_id',
+                'debit',
+                'credit',
+                'balance',
+                'amount_currency'],
+            groupby=['account_id'])
+
+        if show_partner_details:
+            tb_initial_prt_bs = self.env['account.move.line'].read_group(
+                domain=initial_domain_bs,
+                fields=[
+                    'account_id',
+                    'partner_id',
+                    'balance',
+                    'amount_currency'],
+                groupby=['account_id', 'partner_id'], lazy=False)
+            tb_initial_prt_pl = self.env['account.move.line'].read_group(
+                domain=initial_domain_pl,
+                fields=[
+                    'account_id',
+                    'partner_id',
+                    'balance',
+                    'amount_currency'],
+                groupby=['account_id', 'partner_id'])
+            tb_initial_prt = tb_initial_prt_bs + tb_initial_prt_pl
+            if hide_account_at_0:
+                tb_initial_prt = \
+                    [p for p in tb_initial_prt if p['balance'] != 0]
+            tb_period_prt = self.env['account.move.line'].read_group(
+                domain=period_domain,
+                fields=[
+                    'account_id',
+                    'partner_id',
+                    'debit',
+                    'credit',
+                    'balance',
+                    'amount_currency'],
+                groupby=['account_id', 'partner_id'], lazy=False)
+        total_amount = {}
+        partners_data = []
+        for tb in tb_period_acc:
+            acc_id = tb['account_id'][0]
+            total_amount[acc_id] = {}
+            total_amount[acc_id]['credit'] = tb['credit']
+            total_amount[acc_id]['debit'] = tb['debit']
+            total_amount[acc_id]['balance'] = tb['balance']
+            total_amount[acc_id]['initial_balance'] = 0.0
+            total_amount[acc_id]['ending_balance'] = tb['balance']
+            if foreign_currency:
+                total_amount[acc_id]['initial_currency_balance'] =\
+                    0.0
+                total_amount[acc_id]['ending_currency_balance'] =\
+                    tb['amount_currency']
+        for tb in tb_initial_acc:
+            acc_id = tb['account_id'][0]
+            if acc_id not in total_amount.keys():
+                total_amount[acc_id] = {}
+                total_amount[acc_id]['credit'] = 0.0
+                total_amount[acc_id]['debit'] = 0.0
+                total_amount[acc_id]['balance'] = 0.0
+                total_amount[acc_id]['initial_balance'] = tb['balance']
+                total_amount[acc_id]['ending_balance'] = tb['balance']
+                if foreign_currency:
+                    total_amount[acc_id]['initial_currency_balance'] = tb[
+                        'amount_currency']
+                    total_amount[acc_id]['ending_currency_balance'] = tb[
+                        'amount_currency']
+            else:
+                total_amount[acc_id]['initial_balance'] = tb['balance']
+                total_amount[acc_id]['ending_balance'] += tb['balance']
+                if foreign_currency:
+                    total_amount[acc_id]['initial_currency_balance'] = tb[
+                        'amount_currency']
+                    total_amount[acc_id]['ending_currency_balance'] += tb[
+                        'amount_currency']
+        if show_partner_details:
+            partners_ids = set()
+            partners_data = {}
+            for tb in tb_period_prt:
+                acc_id = tb['account_id'][0]
+                if tb['partner_id']:
+                    prt_id = tb['partner_id'][0]
+                    if tb['partner_id'] not in partners_ids:
+                        partners_data.update({
+                            prt_id: {
+                                'id': prt_id,
+                                'name': tb['partner_id'][1],
+                            }
+                        })
+                    total_amount[acc_id][prt_id] = {}
+                    total_amount[acc_id][prt_id]['credit'] = tb['credit']
+                    total_amount[acc_id][prt_id]['debit'] = tb['debit']
+                    total_amount[acc_id][prt_id]['balance'] = tb['balance']
+                    total_amount[acc_id][prt_id]['initial_balance'] = 0.0
+                    total_amount[acc_id][prt_id]['ending_balance'] = tb[
+                        'balance']
+                    if foreign_currency:
+                        total_amount[acc_id][prt_id][
+                            'initial_currency_balance'] = 0.0
+                        total_amount[acc_id][prt_id][
+                            'ending_currency_balance'] = tb['amount_currency']
+                        partners_ids.add(tb['partner_id'])
+            for tb in tb_initial_prt:
+                acc_id = tb['account_id'][0]
+                if tb['partner_id']:
+                    prt_id = tb['partner_id'][0]
+                    if tb['partner_id'] not in partners_ids:
+                        partners_data.update({
+                            prt_id: {
+                                'id': prt_id,
+                                'name': tb['partner_id'][1],
+                            }
+                        })
+                    if acc_id not in total_amount.keys():
+                        total_amount[acc_id][prt_id] = {}
+                        total_amount[acc_id][prt_id]['credit'] = 0.0
+                        total_amount[acc_id][prt_id]['debit'] = 0.0
+                        total_amount[acc_id][prt_id]['balance'] = 0.0
+                        total_amount[acc_id][prt_id]['initial_balance'] = tb[
+                            'balance']
+                        total_amount[acc_id][prt_id]['ending_balance'] = tb[
+                            'balance']
+                        if foreign_currency:
+                            total_amount[acc_id][prt_id][
+                                'initial_currency_balance'] = tb[
+                                'amount_currency']
+                            total_amount[acc_id][prt_id][
+                                'ending_currency_balance'] = tb[
+                                'amount_currency']
+                        partners_ids.add(tb['partner_id'])
+                    elif prt_id not in total_amount[acc_id].keys():
+                        total_amount[acc_id][prt_id] = {}
+                        total_amount[acc_id][prt_id]['credit'] = 0.0
+                        total_amount[acc_id][prt_id]['debit'] = 0.0
+                        total_amount[acc_id][prt_id]['balance'] = 0.0
+                        total_amount[acc_id][prt_id]['initial_balance'] = tb[
+                            'balance']
+                        total_amount[acc_id][prt_id]['ending_balance'] = tb[
+                            'balance']
+                        if foreign_currency:
+                            total_amount[acc_id][prt_id][
+                                'initial_currency_balance'] = tb[
+                                'amount_currency']
+                            total_amount[acc_id][prt_id][
+                                'ending_currency_balance'] = tb[
+                                'amount_currency']
+                        partners_ids.add(tb['partner_id'])
+                    else:
+                        total_amount[acc_id][prt_id]['initial_balance'] += \
+                            tb['balance']
+                        total_amount[acc_id][prt_id]['ending_balance'] += tb[
+                            'balance']
+                        if foreign_currency:
+                            total_amount[acc_id][prt_id][
+                                'initial_currency_balance'] += tb[
+                                'amount_currency']
+                            total_amount[acc_id][prt_id][
+                                'ending_currency_balance'] += tb[
+                                'amount_currency']
+        accounts_ids = list(total_amount.keys())
+        unaffected_id = unaffected_earnings_account
+        if unaffected_id not in accounts_ids:
+            accounts_ids.append(unaffected_id)
+            total_amount[unaffected_id] = {}
+            total_amount[unaffected_id]['initial_balance'] = 0.0
+            total_amount[unaffected_id]['balance'] = 0.0
+            total_amount[unaffected_id]['credit'] = 0.0
+            total_amount[unaffected_id]['debit'] = 0.0
+            total_amount[unaffected_id]['ending_balance'] = 0.0
+            if foreign_currency:
+                total_amount[unaffected_id]['initial_currency_balance'] =\
+                    0.0
+                total_amount[unaffected_id]['ending_currency_balance'] = 0.0
+        accounts_data = self._get_accounts_data(accounts_ids)
+        pl_initial_balance, pl_initial_currency_balance = \
+            self._get_pl_initial_balance(
+                account_ids, journal_ids, partner_ids, company_id,
+                fy_start_date, only_posted_moves, show_partner_details,
+                foreign_currency)
+        total_amount[unaffected_id]['ending_balance'] += pl_initial_balance
+        total_amount[unaffected_id]['initial_balance'] += pl_initial_balance
+        if foreign_currency:
+            total_amount[unaffected_id]['ending_currency_balance'] += \
+                pl_initial_currency_balance
+            total_amount[unaffected_id]['initial_currency_balance'] += \
+                pl_initial_currency_balance
+        return total_amount, accounts_data, partners_data
+
+    def _get_hierarchy_groups(self, group_ids, groups_data, old_groups_ids,
+                              foreign_currency):
+        new_parents = False
+        for group_id in group_ids:
+            if groups_data[group_id]['parent_id']:
+                new_parents = True
+                nw_id = groups_data[group_id]['parent_id']
+                if nw_id in groups_data.keys():
+                    groups_data[nw_id]['initial_balance'] += groups_data[
+                        group_id]['initial_balance']
+                    groups_data[nw_id]['debit'] += groups_data[group_id][
+                        'debit']
+                    groups_data[nw_id]['credit'] += groups_data[group_id][
+                        'credit']
+                    groups_data[nw_id]['balance'] += groups_data[group_id][
+                        'balance']
+                    groups_data[nw_id]['ending_balance'] += groups_data[
+                        group_id]['ending_balance']
+                    if foreign_currency:
+                        groups_data[nw_id]['initial_currency_balance'] += \
+                            groups_data[group_id]['initial_currency_balance']
+                        groups_data[nw_id]['ending_currency_balance'] += \
+                            groups_data[group_id]['ending_currency_balance']
+                else:
+                    groups_data[nw_id] = {}
+                    groups_data[nw_id]['initial_balance'] = groups_data[
+                        group_id]['initial_balance']
+                    groups_data[nw_id]['debit'] = groups_data[group_id]['debit']
+                    groups_data[nw_id]['credit'] = groups_data[group_id][
+                        'credit']
+                    groups_data[nw_id]['balance'] = groups_data[group_id][
+                        'balance']
+                    groups_data[nw_id]['ending_balance'] = groups_data[
+                        group_id]['ending_balance']
+                    if foreign_currency:
+                        groups_data[nw_id]['initial_currency_balance'] = \
+                            groups_data[group_id]['initial_currency_balance']
+                        groups_data[nw_id]['ending_currency_balance'] = \
+                            groups_data[group_id]['ending_currency_balance']
+        if new_parents:
+            nw_groups_ids = []
+            for group_id in list(groups_data.keys()):
+                if group_id not in old_groups_ids:
+                    nw_groups_ids.append(group_id)
+                    old_groups_ids.append(group_id)
+            groups = self.env['account.group'].browse(nw_groups_ids)
+            for group in groups:
+                groups_data[group.id].update({
+                    'id': group.id,
+                    'code': group.code_prefix,
+                    'name': group.name,
+                    'parent_id': group.parent_id.id,
+                    'parent_path': group.parent_path,
+                    'complete_code': group.complete_code,
+                    'account_ids': group.compute_account_ids.ids,
+                    'type': 'group_type'})
+            groups_data = self._get_hierarchy_groups(
+                nw_groups_ids, groups_data, old_groups_ids, foreign_currency
+            )
+        return groups_data
+
+    def _get_groups_data(self, accounts_data, total_amount, foreign_currency):
+        accounts_ids = list(accounts_data.keys())
+        accounts = self.env['account.account'].browse(accounts_ids)
+        account_group_relation = {}
+        for account in accounts:
+            accounts_data[account.id]['complete_code'] = \
+                account.group_id.complete_code if account.group_id.id else ""
+            if account.group_id.id:
+                if account.group_id.id not in account_group_relation.keys():
+                    account_group_relation.update({account.group_id.id: [
+                        account.id]})
+                else:
+                    account_group_relation[account.group_id.id].append(
+                        account.id)
+        groups = self.env['account.group'].browse(account_group_relation.keys())
+        groups_data = {}
+        for group in groups:
+            groups_data.update({group.id: {
+                'id': group.id,
+                'code': group.code_prefix,
+                'name': group.name,
+                'parent_id': group.parent_id.id,
+                'parent_path': group.parent_path,
+                'type': 'group_type',
+                'complete_code': group.complete_code,
+                'account_ids': group.compute_account_ids.ids,
+                'initial_balance': 0.0,
+                'credit': 0.0,
+                'debit': 0.0,
+                'balance': 0.0,
+                'ending_balance': 0.0}
+            })
+            if foreign_currency:
+                groups_data[group.id]['initial_currency_balance'] = 0.0
+                groups_data[group.id]['ending_currency_balance'] = 0.0
+        for group_id in account_group_relation.keys():
+            for account_id in account_group_relation[group_id]:
+                groups_data[group_id]['initial_balance'] += total_amount[
+                    account_id]['initial_balance']
+                groups_data[group_id]['debit'] += total_amount[
+                    account_id]['debit']
+                groups_data[group_id]['credit'] += total_amount[
+                    account_id]['credit']
+                groups_data[group_id]['balance'] += total_amount[
+                    account_id]['balance']
+                groups_data[group_id]['ending_balance'] += total_amount[
+                    account_id]['ending_balance']
+                if foreign_currency:
+                    groups_data[group_id]['initial_currency_balance'] += \
+                        total_amount[account_id]['initial_currency_balance']
+                    groups_data[group_id]['ending_currency_balance'] += \
+                        total_amount[account_id]['ending_currency_balance']
+        group_ids = list(groups_data.keys())
+        old_group_ids = list(groups_data.keys())
+        groups_data = self._get_hierarchy_groups(
+            group_ids, groups_data, old_group_ids, foreign_currency
+        )
+        return groups_data
+
+    def _get_computed_groups_data(self, accounts_data, total_amount,
+                                  foreign_currency):
+        groups = self.env['account.group'].search([('id', '!=', False)])
+        groups_data = {}
+        for group in groups:
+            len_group_code = len(group.code_prefix)
+            groups_data.update({group.id: {'id': group.id,
+                                           'code': group.code_prefix,
+                                           'name': group.name,
+                                           'parent_id': group.parent_id.id,
+                                           'parent_path': group.parent_path,
+                                           'type': 'group_type',
+                                           'complete_code': group.complete_code,
+                                           'account_ids':
+                                               group.compute_account_ids.ids,
+                                           'initial_balance': 0.0,
+                                           'credit': 0.0,
+                                           'debit': 0.0,
+                                           'balance': 0.0,
+                                           'ending_balance': 0.0}})
+            if foreign_currency:
+                groups_data[group.id]['initial_currency_balance'] = 0.0
+                groups_data[group.id]['ending_currency_balance'] = 0.0
+            for account in accounts_data.values():
+                if group.code_prefix == account['code'][:len_group_code]:
+                    acc_id = account['id']
+                    group_id = group.id
+                    groups_data[group_id]['initial_balance'] += total_amount[
+                        acc_id]['initial_balance']
+                    groups_data[group_id]['debit'] += total_amount[
+                        acc_id]['debit']
+                    groups_data[group_id]['credit'] += total_amount[
+                        acc_id]['credit']
+                    groups_data[group_id]['balance'] += total_amount[
+                        acc_id]['balance']
+                    groups_data[group_id]['ending_balance'] += total_amount[
+                        acc_id]['ending_balance']
+                    if foreign_currency:
+                        groups_data[group_id]['initial_currency_balance'] += \
+                            total_amount[acc_id]['initial_currency_balance']
+                        groups_data[group_id]['ending_currency_balance'] += \
+                            total_amount[acc_id]['ending_currency_balance']
+        return groups_data
 
     @api.multi
-    def compute_data_for_report(self):
-        self.ensure_one()
-        # Compute General Ledger Report Data.
-        # The data of Trial Balance Report
-        # are based on General Ledger Report data.
-        model = self.env['report_general_ledger']
-        if self.filter_account_ids:
-            account_ids = self.filter_account_ids
+    def _get_report_values(self, docids, data):
+        show_partner_details = data['show_partner_details']
+        wizard_id = data['wizard_id']
+        company = self.env['res.company'].browse(data['company_id'])
+        company_id = data['company_id']
+        partner_ids = data['partner_ids']
+        journal_ids = data['journal_ids']
+        account_ids = data['account_ids']
+        date_to = data['date_to']
+        date_from = data['date_from']
+        hide_account_at_0 = data['hide_account_at_0']
+        hierarchy_on = data['hierarchy_on']
+        show_hierarchy_level = data['show_hierarchy_level']
+        foreign_currency = data['foreign_currency']
+        only_posted_moves = data['only_posted_moves']
+        unaffected_earnings_account = data['unaffected_earnings_account']
+        fy_start_date = data['fy_start_date']
+        total_amount, accounts_data, partners_data = self._get_data(
+            account_ids, journal_ids, partner_ids, company_id, date_to,
+            date_from, foreign_currency, only_posted_moves,
+            show_partner_details, hide_account_at_0,
+            unaffected_earnings_account, fy_start_date)
+        trial_balance = []
+        if not show_partner_details:
+            for account_id in accounts_data.keys():
+                accounts_data[account_id].update({
+                    'initial_balance': total_amount[account_id][
+                        'initial_balance'],
+                    'credit': total_amount[account_id]['credit'],
+                    'debit': total_amount[account_id]['debit'],
+                    'balance': total_amount[account_id]['balance'],
+                    'ending_balance': total_amount[account_id][
+                        'ending_balance'],
+                    'type': 'account_type',
+                })
+                if foreign_currency:
+                    accounts_data[account_id].update({
+                        'ending_currency_balance': total_amount[account_id][
+                            'ending_currency_balance'],
+                        'initial_currency_balance': total_amount[account_id][
+                            'initial_currency_balance']
+                    })
+            if hierarchy_on == 'relation':
+                groups_data = self._get_groups_data(
+                    accounts_data, total_amount, foreign_currency)
+                trial_balance = list(groups_data.values())
+                trial_balance += list(accounts_data.values())
+                trial_balance = natsorted(trial_balance,
+                                          key=itemgetter('complete_code',
+                                                         'code'))
+                for trial in trial_balance:
+                    counter = trial['complete_code'].count('/')
+                    trial['level'] = counter
+            if hierarchy_on == 'computed':
+                groups_data = self._get_computed_groups_data(
+                    accounts_data, total_amount, foreign_currency)
+                trial_balance = list(groups_data.values())
+                trial_balance += list(accounts_data.values())
+                trial_balance = natsorted(trial_balance,
+                                          key=itemgetter('code'))
+            if hierarchy_on == 'none':
+                trial_balance = list(accounts_data.values())
+                trial_balance = natsorted(trial_balance,
+                                          key=itemgetter('code'))
         else:
-            account_ids = self.env['account.account'].search(
-                [('company_id', '=', self.company_id.id)])
-        self.general_ledger_id = model.create(
-            self._prepare_report_general_ledger(account_ids)
-        )
-        self.general_ledger_id.compute_data_for_report(
-            with_line_details=False, with_partners=self.show_partner_details
-        )
-
-        # Compute report data
-        self._inject_account_values(account_ids)
-        if self.show_partner_details:
-            self._inject_partner_values()
-        if not self.filter_account_ids:
-            if self.hierarchy_on != 'none':
-                self._inject_account_group_values()
-                if self.hierarchy_on == 'computed':
-                    self._update_account_group_computed_values()
-                else:
-                    self._update_account_group_child_values()
-                self._update_account_sequence()
-                self._add_account_group_account_values()
-        self.refresh()
-        if not self.filter_account_ids and self.hierarchy_on != 'none':
-            self._compute_group_accounts()
-        else:
-            for line in self.account_ids:
-                line.write({'level': 0})
-
-    def _inject_account_values(self, account_ids):
-        """Inject report values for report_trial_balance_account"""
-        query_inject_account = """
-INSERT INTO
-    report_trial_balance_account
-    (
-    report_id,
-    create_uid,
-    create_date,
-    account_id,
-    parent_id,
-    code,
-    name,
-    initial_balance,
-    debit,
-    credit,
-    period_balance,
-    final_balance,
-    currency_id,
-    initial_balance_foreign_currency,
-    final_balance_foreign_currency
-    )
-SELECT
-    %s AS report_id,
-    %s AS create_uid,
-    NOW() AS create_date,
-    acc.id,
-    acc.group_id,
-    acc.code,
-    acc.name,
-    coalesce(rag.initial_balance, 0) AS initial_balance,
-    coalesce(rag.final_debit - rag.initial_debit, 0) AS debit,
-    coalesce(rag.final_credit - rag.initial_credit, 0) AS credit,
-    coalesce(rag.final_balance - rag.initial_balance, 0) AS period_balance,
-    coalesce(rag.final_balance, 0) AS final_balance,
-    rag.currency_id AS currency_id,
-    coalesce(rag.initial_balance_foreign_currency, 0)
-        AS initial_balance_foreign_currency,
-    coalesce(rag.final_balance_foreign_currency, 0)
-        AS final_balance_foreign_currency
-FROM
-    account_account acc
-    LEFT OUTER JOIN report_general_ledger_account AS rag
-        ON rag.account_id = acc.id AND rag.report_id = %s
-WHERE
-    acc.id in %s
-        """
-        query_inject_account_params = (
-            self.id,
-            self.env.uid,
-            self.general_ledger_id.id,
-            account_ids._ids,
-        )
-        self.env.cr.execute(query_inject_account, query_inject_account_params)
-
-    def _inject_partner_values(self):
-        """Inject report values for report_trial_balance_partner"""
-        query_inject_partner = """
-INSERT INTO
-    report_trial_balance_partner
-    (
-    report_account_id,
-    create_uid,
-    create_date,
-    partner_id,
-    name,
-    initial_balance,
-    initial_balance_foreign_currency,
-    debit,
-    credit,
-    period_balance,
-    final_balance,
-    final_balance_foreign_currency
-    )
-SELECT
-    ra.id AS report_account_id,
-    %s AS create_uid,
-    NOW() AS create_date,
-    rpg.partner_id,
-    rpg.name,
-    rpg.initial_balance AS initial_balance,
-    rpg.initial_balance_foreign_currency AS initial_balance_foreign_currency,
-    rpg.final_debit - rpg.initial_debit AS debit,
-    rpg.final_credit - rpg.initial_credit AS credit,
-    rpg.final_balance - rpg.initial_balance AS period_balance,
-    rpg.final_balance AS final_balance,
-    rpg.final_balance_foreign_currency AS final_balance_foreign_currency
-FROM
-    report_general_ledger_partner rpg
-INNER JOIN
-    report_general_ledger_account rag ON rpg.report_account_id = rag.id
-INNER JOIN
-    report_trial_balance_account ra ON rag.code = ra.code
-WHERE
-    rag.report_id = %s
-AND ra.report_id = %s
-        """
-        query_inject_partner_params = (
-            self.env.uid,
-            self.general_ledger_id.id,
-            self.id,
-        )
-        self.env.cr.execute(query_inject_partner, query_inject_partner_params)
-
-    def _inject_account_group_values(self):
-        """Inject report values for report_trial_balance_account"""
-        query_inject_account_group = """
-INSERT INTO
-    report_trial_balance_account
-    (
-    report_id,
-    create_uid,
-    create_date,
-    account_group_id,
-    parent_id,
-    code,
-    name,
-    sequence,
-    level
-    )
-SELECT
-    %s AS report_id,
-    %s AS create_uid,
-    NOW() AS create_date,
-    accgroup.id,
-    accgroup.parent_id,
-    coalesce(accgroup.code_prefix, accgroup.name),
-    accgroup.name,
-    accgroup.code_prefix,
-    accgroup.level
-FROM
-    account_group accgroup"""
-        query_inject_account_params = (
-            self.id,
-            self.env.uid,
-        )
-        self.env.cr.execute(query_inject_account_group,
-                            query_inject_account_params)
-
-    def _update_account_group_child_values(self):
-        """Compute values for report_trial_balance_account group in child."""
-        query_update_account_group = """
-WITH computed AS (WITH RECURSIVE cte AS (
-   SELECT account_group_id, code, account_group_id AS parent_id,
-    initial_balance, initial_balance_foreign_currency, debit, credit,
-    period_balance, final_balance, final_balance_foreign_currency
-   FROM   report_trial_balance_account
-   WHERE report_id = %s
-   GROUP BY report_trial_balance_account.id
-
-   UNION  ALL
-   SELECT c.account_group_id, c.code, p.account_group_id,
-    p.initial_balance, p.initial_balance_foreign_currency, p.debit, p.credit,
-    p.period_balance, p.final_balance, p.final_balance_foreign_currency
-   FROM   cte c
-   JOIN   report_trial_balance_account p USING (parent_id)
-    WHERE p.report_id = %s
-)
-SELECT account_group_id, code,
-    sum(initial_balance) AS initial_balance,
-    sum(initial_balance_foreign_currency) AS initial_balance_foreign_currency,
-    sum(debit) AS debit,
-    sum(credit) AS credit,
-    sum(debit) - sum(credit) AS period_balance,
-    sum(final_balance) AS final_balance,
-    sum(final_balance_foreign_currency) AS final_balance_foreign_currency
-FROM   cte
-GROUP BY cte.account_group_id, cte.code
-ORDER BY account_group_id
-)
-UPDATE report_trial_balance_account
-SET initial_balance = computed.initial_balance,
-    initial_balance_foreign_currency =
-        computed.initial_balance_foreign_currency,
-    debit = computed.debit,
-    credit = computed.credit,
-    period_balance = computed.period_balance,
-    final_balance = computed.final_balance,
-    final_balance_foreign_currency =
-        computed.final_balance_foreign_currency
-FROM computed
-WHERE report_trial_balance_account.account_group_id = computed.account_group_id
-    AND report_trial_balance_account.report_id = %s
-"""
-        query_update_account_params = (self.id, self.id, self.id,)
-        self.env.cr.execute(query_update_account_group,
-                            query_update_account_params)
-
-    def _add_account_group_account_values(self):
-        """Compute values for report_trial_balance_account group in child."""
-        query_update_account_group = """
-DROP AGGREGATE IF EXISTS array_concat_agg(anyarray);
-CREATE AGGREGATE array_concat_agg(anyarray) (
-  SFUNC = array_cat,
-  STYPE = anyarray
-);
-WITH aggr AS(WITH computed AS (WITH RECURSIVE cte AS (
-   SELECT account_group_id, account_group_id AS parent_id,
-    ARRAY[account_id]::int[] as child_account_ids
-   FROM   report_trial_balance_account
-   WHERE report_id = %s
-   GROUP BY report_trial_balance_account.id
-
-   UNION  ALL
-   SELECT c.account_group_id, p.account_group_id, ARRAY[p.account_id]::int[]
-   FROM   cte c
-   JOIN   report_trial_balance_account p USING (parent_id)
-    WHERE p.report_id = %s
-)
-SELECT account_group_id,
-    array_concat_agg(DISTINCT child_account_ids)::int[] as child_account_ids
-FROM   cte
-GROUP BY cte.account_group_id, cte.child_account_ids
-ORDER BY account_group_id
-)
-SELECT account_group_id,
-    array_concat_agg(DISTINCT child_account_ids)::int[]
-        AS child_account_ids from computed
-GROUP BY account_group_id)
-UPDATE report_trial_balance_account
-SET child_account_ids = aggr.child_account_ids
-FROM aggr
-WHERE report_trial_balance_account.account_group_id = aggr.account_group_id
-    AND report_trial_balance_account.report_id = %s
-"""
-        query_update_account_params = (self.id, self.id, self.id,)
-        self.env.cr.execute(query_update_account_group,
-                            query_update_account_params)
-
-    def _update_account_group_computed_values(self):
-        """Compute values for report_trial_balance_account group in compute."""
-        query_update_account_group = """
-WITH RECURSIVE accgroup AS
-(SELECT
-    accgroup.id,
-    sum(coalesce(ra.initial_balance, 0)) as initial_balance,
-    sum(coalesce(ra.initial_balance_foreign_currency, 0))
-        as initial_balance_foreign_currency,
-    sum(coalesce(ra.debit, 0)) as debit,
-    sum(coalesce(ra.credit, 0)) as credit,
-    sum(coalesce(ra.debit, 0)) - sum(coalesce(ra.credit, 0)) as period_balance,
-    sum(coalesce(ra.final_balance, 0)) as final_balance,
-    sum(coalesce(ra.final_balance_foreign_currency, 0))
-        as final_balance_foreign_currency
- FROM
-    account_group accgroup
-    LEFT OUTER JOIN account_account AS acc
-        ON strpos(acc.code, accgroup.code_prefix) = 1
-    LEFT OUTER JOIN report_trial_balance_account AS ra
-        ON ra.account_id = acc.id
- WHERE ra.report_id = %s
- GROUP BY accgroup.id
-)
-UPDATE report_trial_balance_account
-SET initial_balance = accgroup.initial_balance,
-    initial_balance_foreign_currency =
-        accgroup.initial_balance_foreign_currency,
-    debit = accgroup.debit,
-    credit = accgroup.credit,
-    period_balance = accgroup.period_balance,
-    final_balance = accgroup.final_balance,
-    final_balance_foreign_currency =
-        accgroup.final_balance_foreign_currency
-
-FROM accgroup
-WHERE report_trial_balance_account.account_group_id = accgroup.id
-"""
-        query_update_account_params = (self.id,)
-        self.env.cr.execute(query_update_account_group,
-                            query_update_account_params)
-
-    def _update_account_sequence(self):
-        """Compute sequence, level for report_trial_balance_account account."""
-        query_update_account_group = """
-UPDATE report_trial_balance_account
-SET sequence = CONCAT(newline.sequence, newline.code),
-    level = newline.level + 1
-FROM report_trial_balance_account as newline
-WHERE newline.account_group_id = report_trial_balance_account.parent_id
-    AND report_trial_balance_account.report_id = newline.report_id
-    AND report_trial_balance_account.account_id is not null
-    AND report_trial_balance_account.report_id = %s"""
-        query_update_account_params = (self.id,)
-        self.env.cr.execute(query_update_account_group,
-                            query_update_account_params)
-
-    def _compute_group_accounts(self):
-        groups = self.account_ids.filtered(
-            lambda a: a.account_group_id is not False)
-        for group in groups:
-            if self.hierarchy_on == 'computed':
-                group.compute_account_ids = \
-                    group.account_group_id.compute_account_ids
-            else:
-                if group.child_account_ids:
-                    chacc = group.child_account_ids.replace(
-                        '}', '').replace('{', '').split(',')
-                    if 'NULL' in chacc:
-                        chacc.remove('NULL')
-                    if chacc:
-                        group.compute_account_ids = [
-                            (6, 0, [int(g) for g in chacc])]
+            if foreign_currency:
+                for account_id in accounts_data.keys():
+                    total_amount[account_id]['currency_id'] = accounts_data[
+                        account_id]['currency_id']
+                    total_amount[account_id]['currency_name'] = accounts_data[
+                        account_id]['currency_name']
+        return {
+            'doc_ids': [wizard_id],
+            'doc_model': 'trial.balance.report.wizard',
+            'docs': self.env['trial.balance.report.wizard'].browse(wizard_id),
+            'foreign_currency': data['foreign_currency'],
+            'company_name': company.display_name,
+            'company_currency':  company.currency_id,
+            'currency_name': company.currency_id.name,
+            'date_from': data['date_from'],
+            'date_to': data['date_to'],
+            'only_posted_moves': data['only_posted_moves'],
+            'hide_account_at_0': data['hide_account_at_0'],
+            'show_partner_details': data['show_partner_details'],
+            'limit_hierarchy_level': data['limit_hierarchy_level'],
+            'hierarchy_on': hierarchy_on,
+            'trial_balance': trial_balance,
+            'total_amount': total_amount,
+            'accounts_data': accounts_data,
+            'partners_data': partners_data,
+            'show_hierarchy_level': show_hierarchy_level,
+        }
