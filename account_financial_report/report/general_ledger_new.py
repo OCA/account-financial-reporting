@@ -50,18 +50,29 @@ class GeneralLedgerReport(models.AbstractModel):
             if not account_data.get(account_partner['account_id'][0], False):
                 account_data[account_partner['account_id'][0]] = self._get_account_id_data(account_partner['account_id'][0])
                 account_ids.append(account_partner['account_id'][0])
-                account_data[account_partner['account_id'][0]]['partners'] = {}
-            if account_partner['partner_id']:
+                if account_data[account_partner['account_id'][0]]['is_partner_account']:
+                    account_data[account_partner['account_id'][0]]['partners'] = {}
+            if account_partner['partner_id'] and account_data[account_partner['account_id'][0]]['is_partner_account']:
                 account_data[account_partner['account_id'][0]]['partners'][account_partner['partner_id'][0]] = {}
                 partner_ids.add(account_partner['partner_id'][0])
+            elif not account_partner['partner_id'] and account_data[account_partner['account_id'][0]]['is_partner_account']\
+                and account_data[account_partner['account_id'][0]]['partners'].get(0, False):
+                account_data[account_partner['account_id'][0]]['partners'][0] = {}
+                account_data[account_partner['account_id'][0]]['partner_account_with_empty_partners'] = True
+            if not account_partner['partner_id'] and not account_data[account_partner['account_id'][0]].get('move_lines', False):
+                account_data[account_partner['account_id'][0]]['move_lines'] = {}
         return account_data, account_ids, list(partner_ids)
 
-    def _get_move_lines_domain(self, account_ids, partner_ids, data):
-        return [
+    def _get_move_lines_domain(self, account_ids, partner_ids, date_from, date_to):
+        domain = [
             ('account_id', 'in', account_ids),
             ('partner_id', 'in', partner_ids + [False]),
-            ('date', '<=', data['date_to']),
         ]
+        if date_from:
+            domain += [('date', '>=', date_from)]
+        if date_to:
+            domain += [('date', '<=', date_to)]
+        return domain
 
     def _get_move_lines_order(self):
             return 'account_id, partner_id, date'
@@ -70,8 +81,10 @@ class GeneralLedgerReport(models.AbstractModel):
             return {
                 'move_line_id': ml.id,
                 'date': ml.date,
-                'journal_id': ml.journal_id.id,
+                'journal_name': ml.journal_id.name,
                 'account_id': ml.account_id.id,
+                'account_code': ml.account_id.code,
+                'partner_name': ml.partner_id.display_name,
                 'partner_id': ml.partner_id.id,
                 'label': ml.name,
                 'debit': ml.debit,
@@ -79,44 +92,127 @@ class GeneralLedgerReport(models.AbstractModel):
                 'company_currency_id': ml.company_currency_id.id,
                 'amount_currency': ml.amount_currency,
                 'currency_id': ml.currency_id.id,
-                'tax_line_id': ml.tax_line_id.id,
+                'tax_line_name': ml.tax_line_id.name,
                 'base_debit': ml.debit,
                 'base_credit': ml.credit,
                 'base_balance': ml.balance,
             }
 
-    def _get_move_lines(self, data, account_ids, partner_ids):
+    def _get_move_lines(self, account_ids, partner_ids, date_from=None, date_to=None):
         move_lines = self.env['account.move.line'].search(
-            self._get_move_lines_domain(account_ids, partner_ids, data),
+            self._get_move_lines_domain(account_ids, partner_ids, date_from, date_to),
             order=self._get_move_lines_order())
         move_lines_data = []
         for ml in move_lines:
             move_lines_data.append(self._get_move_lines_data(ml))
         return move_lines_data
 
+    def _update_partner_account_header(self, account_data, date_to=None):
+        for account in account_data:
+            if account_data[account]['is_partner_account']:
+                for partner in account_data[account]['partners']:
+                    initial_debit_balance = initial_credit_balance = initial_cumul_balance = 0.0
+                    move_line_data = self._get_move_lines([account,], [partner,], date_to=date_to)
+                    if move_line_data:
+                        initial_debit_balance = sum([x['base_debit'] for x in move_line_data])
+                        initial_credit_balance = sum([x['base_credit'] for x in move_line_data])
+                        initial_cumul_balance = initial_debit_balance - initial_credit_balance
+                    account_data[account]['partners'][partner]['init_header'] = \
+                        {
+                            'initial_debit_balance': initial_debit_balance,
+                            'initial_credit_balance': initial_credit_balance,
+                            'initial_cumul_balance': initial_cumul_balance,
+                        }
+                if account_data[account].get('partner_account_with_empty_partners', False):
+                    initial_debit_balance = initial_credit_balance = initial_cumul_balance = 0.0
+                    move_line_data = self._get_move_lines([account,], [False,], date_to=date_to)
+                    if move_line_data:
+                        initial_debit_balance = sum([x['base_debit'] for x in move_line_data])
+                        initial_credit_balance = sum([x['base_credit'] for x in move_line_data])
+                        initial_cumul_balance = initial_debit_balance - initial_credit_balance
+                    account_data[account]['partners'][False]['init_header'] = \
+                        {
+                            'initial_debit_balance': initial_debit_balance,
+                            'initial_credit_balance': initial_credit_balance,
+                            'initial_cumul_balance': initial_cumul_balance,
+                        }
+            else:
+                initial_debit_balance = 0.0
+                initial_credit_balance = 0.0
+                initial_cumul_balance = 0.0
+                move_line_data = self._get_move_lines([account,], [partner for partner in account_data[account]['partners']] if account_data[account].get('partners', False) else [], date_to=date_to)
+                if move_line_data:
+                    initial_debit_balance = sum(
+                        [x['base_debit'] for x in move_line_data])
+                    initial_credit_balance = sum(
+                        [x['base_credit'] for x in move_line_data])
+                    initial_cumul_balance = initial_debit_balance - initial_credit_balance
+                account_data[account]['init_header'] = \
+                    {
+                        'initial_debit_balance': initial_debit_balance,
+                        'initial_credit_balance': initial_credit_balance,
+                        'initial_cumul_balance': initial_cumul_balance,
+                    }
+        return account_data
+
+
     @api.multi
     def _get_report_values(self, docids, data):
+        date_to = data['date_to']
+        date_from = data['date_from']
         wizard_id = data['wizard_id']
         wizard = self.env['general.ledger.report.wizard'].browse(wizard_id)
         company = self.env['res.company'].browse(data['company_id'])
 
         account_data, account_ids, partner_ids = self._get_partner_accounts(
             wizard, data, company)
-        move_line_ids_data = self._get_move_lines(data, account_ids, partner_ids)
+        # Fill Headers to Partners/Accounts
+        account_data = self._update_partner_account_header(account_data, date_to=date_from)
+        # Get Move Lines Data
+        move_line_ids_data = self._get_move_lines(account_ids, partner_ids, date_from=date_from, date_to=date_to)
         # Add all move lines to account,partner pair related lists.
         for key_acc, items_acc in itertools.groupby(
             move_line_ids_data, operator.itemgetter('account_id')):
-            for key_par, items_par in itertools.groupby(
-                items_acc, operator.itemgetter('partner_id')
-            ):
-                if key_par:
-                    account_data[key_acc]['partners'][key_par]['move_lines'] = list(items_par)
-                else:
-                    account_data[key_acc]['partners']['no_partner'] = {}
-                    account_data[key_acc]['partners']['no_partner']['move_lines'] = list(items_par)
-        # Fill headers for account or partners
-        # TODO:
-        for account_id in account_ids:
-            if account_data[account_id]['is_partner_account']:
-                for partner_id in account_data[account_id]['partners']:
+            if account_data[key_acc]['is_partner_account']:
+                for key_par, items_par in itertools.groupby(
+                    items_acc, operator.itemgetter('partner_id')
+                ):
+                    if key_par:
+                        account_data[key_acc]['partners'][key_par]['move_lines'] = list(items_par)
+                    else:
+                        account_data[key_acc]['partners'][0]['move_lines'] = list(items_par)
+            else:
+                account_data[key_acc]['move_lines'] = list(items_acc)
+        for account in account_ids:
+            if account_data[account]['is_partner_account']:
+                final_debit = 0.0
+                final_credit = 0.0
+                final_cumul_balance = 0.0
+                if account_data[account].get('partners', False):
+                    for partner_id in account_data[account]['partners']:
+                        init_header = account_data[account]['partners'][partner_id]['init_header']
+                        final_partner_debit = init_header['initial_debit_balance']
+                        final_partner_credit = init_header['initial_credit_balance']
+                        previous_partner_cumul_balance = init_header['initial_cumul_balance']
+                        for key, move_line in account_data[account]['partners'][partner_id].items():
+                            account_data[account]['partners'][partner_id][key]['cumul_balance'] += previous_partner_cumul_balance
+                            previous_partner_cumul_balance = account_data[account]['partners'][partner_id][key]['cumul_balance']
+                            final_partner_debit += account_data[account]['partners'][partner_id][key]['initial_debit_balance']
+                            final_partner_credit += account_data[account]['partners'][partner_id][key]['initial_credit_balance']
+                        account_data[account]['partners'][partner_id]['final_header'] = {
+                            'final_partner_debit': final_partner_debit,
+                            'final_partner_credit': final_partner_credit,
+                            'final_cumul_balance': previous_partner_cumul_balance
+                        }
+                        final_debit += final_partner_debit
+                        final_credit += final_partner_credit
+                        final_cumul_balance += previous_partner_cumul_balance
+                # Account has move lines with no partner defined
+                # if account_data[account]['move_lines']:
+                #     previous_cumul_balance =
+                #     for key, move_line in account_data[account]['move_lines'].items():
+        # Prepare Cumul. Balance
+        print(account_data)
+        from sys import getsizeof
+        print(getsizeof(account_data))
 
