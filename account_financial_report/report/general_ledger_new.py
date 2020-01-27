@@ -194,11 +194,11 @@ class GeneralLedgerReport(models.AbstractModel):
                         final_partner_debit = init_header['initial_debit_balance']
                         final_partner_credit = init_header['initial_credit_balance']
                         previous_partner_cumul_balance = init_header['initial_cumul_balance']
-                        for key, move_line in account_data[account]['partners'][partner_id].items():
-                            account_data[account]['partners'][partner_id][key]['cumul_balance'] += previous_partner_cumul_balance
-                            previous_partner_cumul_balance = account_data[account]['partners'][partner_id][key]['cumul_balance']
-                            final_partner_debit += account_data[account]['partners'][partner_id][key]['initial_debit_balance']
-                            final_partner_credit += account_data[account]['partners'][partner_id][key]['initial_credit_balance']
+                        for num, move_line in enumerate(account_data[account]['partners'][partner_id]['move_lines']):
+                            account_data[account]['partners'][partner_id][num]['base_balance'] += previous_partner_cumul_balance
+                            previous_partner_cumul_balance = account_data[account]['partners'][partner_id][num]['base_balance']
+                            final_partner_debit += account_data[account]['partners'][partner_id][num]['initial_debit_balance']
+                            final_partner_credit += account_data[account]['partners'][partner_id][num]['initial_credit_balance']
                         account_data[account]['partners'][partner_id]['final_header'] = {
                             'final_partner_debit': final_partner_debit,
                             'final_partner_credit': final_partner_credit,
