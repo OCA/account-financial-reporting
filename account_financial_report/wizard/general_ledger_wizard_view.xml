@@ -28,14 +28,14 @@
                     </group>
                     <notebook>
                         <page string="Filter accounts">
-                            <group col="4">
-                                <field name="receivable_accounts_only"/>
-                                <field name="payable_accounts_only"/>
+                            <group>
+                                <group>
+                                    <field name="account_type_ids" widget="many2many_checkboxes" nolabel="1"/>
+                                </group>
+                                <group>
+                                    <field name="account_ids" widget="many2many_tags" options="{'no_create': True}" nolabel="1"/>
+                                </group>
                             </group>
-                            <field name="account_ids"
-                                   nolabel="1"
-                                   widget="many2many_tags"
-                                   options="{'no_create': True}"/>
                         </page>
                         <page string="Filter partners">
                             <field name="partner_ids" nolabel="1"
@@ -91,10 +91,6 @@
                 res_model="general.ledger.report.wizard"
                 src_model="res.partner"
                 view_mode="form"
-                context="{
-                    'default_receivable_accounts_only':1,
-                    'default_payable_accounts_only':1,
-                    }"
                 groups="account.group_account_manager"
                 key2="client_action_multi"
                 target="new" />
