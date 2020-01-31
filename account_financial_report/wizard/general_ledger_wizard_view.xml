@@ -20,10 +20,26 @@
                         </group>
                         <group name="other_filters">
                             <field name="target_move" widget="radio"/>
-                            <field name="centralize"/>
-                            <field name="hide_account_at_0"/>
-                            <field name="foreign_currency"/>
-                            <field name="show_analytic_tags"/>
+                            <label string="Other options" for="centralize"/>
+                            <div>
+                                <field name="centralize" nolabel="1" class="oe_inline"/>
+                                <label for="centralize" class="oe_inline"/>
+                            </div>
+                            <label string=" " for="hide_account_at_0"/>
+                            <div>
+                                <field name="hide_account_at_0" nolabel="1" class="oe_inline"/>
+                                <label for="hide_account_at_0" class="oe_inline"/>
+                            </div>
+                            <label string=" " for="foreign_currency"/>
+                            <div>
+                                <field name="foreign_currency" nolabel="1" class="oe_inline"/>
+                                <label for="foreign_currency" class="oe_inline"/>
+                            </div>
+                            <label string=" " for="show_analytic_tags"/>
+                            <div>
+                                <field name="show_analytic_tags" nolabel="1" class="oe_inline"/>
+                                <label for="show_analytic_tags" class="oe_inline"/>
+                            </div>
                         </group>
                     </group>
                     <notebook>
