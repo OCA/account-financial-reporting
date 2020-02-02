@@ -187,6 +187,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
     def _onchange_account_type_ids(self):
         if self.account_type_ids:
             self.account_ids = self.env['account.account'].search([
+                ('company_id', '=', self.company_id.id),
                 ('user_type_id', 'in', self.account_type_ids.ids)])
         else:
             self.account_ids = None
