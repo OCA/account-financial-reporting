@@ -27,7 +27,8 @@ class ActivityStatement(models.AbstractModel):
             JOIN account_account_type at ON (at.id = l.user_type_id)
             JOIN account_move m ON (l.move_id = m.id)
             WHERE l.partner_id IN %(partners)s AND at.type = %(account_type)s
-                                AND l.date < %(date_start)s AND not l.blocked AND m.state IN ('posted')
+                                AND l.date < %(date_start)s AND not l.blocked
+                                AND m.state IN ('posted')
             GROUP BY l.partner_id, l.currency_id, l.amount_currency,
                                 l.company_id
         """, locals()), "utf-8")
