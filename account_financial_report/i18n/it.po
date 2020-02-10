@@ -926,7 +926,7 @@ msgid ""
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger_xlsx.py:180
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:181
 #: code:addons/account_financial_report/report/open_items_xlsx.py:118
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:38
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:53
@@ -1325,7 +1325,7 @@ msgid "Initial Debit"
 msgstr "Saldo Dare"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger_xlsx.py:168
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:169
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:22
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:49
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:63
@@ -1784,7 +1784,7 @@ msgid ""
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger_xlsx.py:165
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:166
 #, python-format
 msgid "Partner Initial balance"
 msgstr "Partner - Saldo iniziale"
@@ -1796,7 +1796,7 @@ msgid "Partner cumul aged balance"
 msgstr "Partner - Saldo progressivo"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger_xlsx.py:177
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:178
 #: code:addons/account_financial_report/report/open_items_xlsx.py:114
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_ending_cumul
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_ending_cumul

@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* account_financial_report
+# 	* account_financial_report
 #
 msgid ""
 msgstr ""
@@ -13,8 +13,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
-"n%100==4 ? 2 : 3;\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
+"%100==4 ? 2 : 3;\n"
 "X-Generator: Weblate 3.7.1\n"
 
 #. module: account_financial_report
@@ -168,7 +168,8 @@ msgstr "Obdobje 90 dni"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-msgid "Age ≤ 120\n"
+msgid ""
+"Age ≤ 120\n"
 "                        d."
 msgstr ""
 "Obdobje ≤ 120\n"
@@ -183,7 +184,8 @@ msgstr "Obdobje  ≤ 120 d."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-msgid "Age ≤ 30\n"
+msgid ""
+"Age ≤ 30\n"
 "                        d."
 msgstr ""
 "Obdobje ≤ 30\n"
@@ -198,7 +200,8 @@ msgstr "Obdobje  ≤ 30 d."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-msgid "Age ≤ 60\n"
+msgid ""
+"Age ≤ 60\n"
 "                        d."
 msgstr ""
 "Obdobje  ≤ 60\n"
@@ -213,7 +216,8 @@ msgstr "Obdobje  ≤ 60 d."
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-msgid "Age ≤ 90\n"
+msgid ""
+"Age ≤ 90\n"
 "                        d."
 msgstr ""
 "Obdobje  ≤ 90\n"
@@ -486,12 +490,14 @@ msgstr "Obdelani konti"
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_report_trial_balance_hierarchy_on
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard_hierarchy_on
-msgid "Computed Accounts: Use when the account group have codes\n"
+msgid ""
+"Computed Accounts: Use when the account group have codes\n"
 "        that represent prefixes of the actual accounts.\n"
 "\n"
 "        Child Accounts: Use when your account groups are hierarchical.\n"
 "\n"
-"        No hierarchy: Use to display just the accounts, without any grouping.\n"
+"        No hierarchy: Use to display just the accounts, without any "
+"grouping.\n"
 "        "
 msgstr ""
 "Obdelani konti: Uporabi kadar ima kontna skupina kode,\n"
@@ -505,7 +511,8 @@ msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
-msgid "Cost\n"
+msgid ""
+"Cost\n"
 "                            center"
 msgstr ""
 "Stroškovni\n"
@@ -888,7 +895,10 @@ msgstr "Prikazani naziv"
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard_foreign_currency
 #: model:ir.model.fields,help:account_financial_report.field_open_items_report_wizard_foreign_currency
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard_foreign_currency
-msgid "Display foreign currency for move lines, unless account currency is not setup through chart of accounts will display initial and final balance in that currency."
+msgid ""
+"Display foreign currency for move lines, unless account currency is not "
+"setup through chart of accounts will display initial and final balance in "
+"that currency."
 msgstr ""
 "Prikaz tuje valuto za vknjižbe, razen če konto tuje valute ni nastavljen v "
 "kontnem planu, prikaže začetno in končno stanje v tej valuti."
@@ -902,7 +912,8 @@ msgstr "Ne prikaži nadrejenih nivojev"
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_lines
-msgid "Due\n"
+msgid ""
+"Due\n"
 "                        date"
 msgstr ""
 "Datum\n"
@@ -927,14 +938,15 @@ msgstr "Končni datum"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_ending_cumul
-msgid "Ending\n"
+msgid ""
+"Ending\n"
 "                        balance"
 msgstr ""
 "Zaključna\n"
 "                        bilanca"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger_xlsx.py:180
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:181
 #: code:addons/account_financial_report/report/open_items_xlsx.py:118
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:38
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:53
@@ -1180,7 +1192,9 @@ msgstr "Glavna knjiga XLSX"
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
-msgid "General Ledger can be computed only if selected company have only one unaffected earnings account."
+msgid ""
+"General Ledger can be computed only if selected company have only one "
+"unaffected earnings account."
 msgstr ""
 "Glavna knjiga je lahko obdelana le, če izbrana družba ima le en neprizadet "
 "konto dobička."
@@ -1286,12 +1300,15 @@ msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_account_account_centralized
-msgid "If flagged, no details will be displayed in the General Ledger report (the webkit one only), only centralized amounts per period."
+msgid ""
+"If flagged, no details will be displayed in the General Ledger report (the "
+"webkit one only), only centralized amounts per period."
 msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
-msgid "Initial\n"
+msgid ""
+"Initial\n"
 "                    balance"
 msgstr ""
 
@@ -1324,7 +1341,7 @@ msgid "Initial Debit"
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger_xlsx.py:168
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:169
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:22
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:49
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:63
@@ -1774,12 +1791,13 @@ msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_partner_ending_cumul
-msgid "Partner\n"
+msgid ""
+"Partner\n"
 "                    cumul aged balance"
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger_xlsx.py:165
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:166
 #, python-format
 msgid "Partner Initial balance"
 msgstr ""
@@ -1791,7 +1809,7 @@ msgid "Partner cumul aged balance"
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger_xlsx.py:177
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:178
 #: code:addons/account_financial_report/report/open_items_xlsx.py:114
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_ending_cumul
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_ending_cumul
@@ -1889,7 +1907,8 @@ msgstr ""
 #: model:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 #: model:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #: model:ir.ui.view,arch_db:account_financial_report.report_open_items_lines
-msgid "Ref -\n"
+msgid ""
+"Ref -\n"
 "                        Label"
 msgstr ""
 
@@ -2195,19 +2214,24 @@ msgstr ""
 #. module: account_financial_report
 #: code:addons/account_financial_report/wizard/general_ledger_wizard.py:196
 #, python-format
-msgid "The Company in the General Ledger Report Wizard and in Date Range must be the same."
+msgid ""
+"The Company in the General Ledger Report Wizard and in Date Range must be "
+"the same."
 msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/wizard/trial_balance_wizard.py:165
 #, python-format
-msgid "The Company in the Trial Balance Report Wizard and in Date Range must be the same."
+msgid ""
+"The Company in the Trial Balance Report Wizard and in Date Range must be the "
+"same."
 msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/wizard/vat_report_wizard.py:61
 #, python-format
-msgid "The Company in the Vat Report Wizard and in Date Range must be the same."
+msgid ""
+"The Company in the Vat Report Wizard and in Date Range must be the same."
 msgstr ""
 
 #. module: account_financial_report
@@ -2258,7 +2282,9 @@ msgstr ""
 
 #. module: account_financial_report
 #: model:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
-msgid "Trial Balance can be computed only if selected company have only one unaffected earnings account."
+msgid ""
+"Trial Balance can be computed only if selected company have only one "
+"unaffected earnings account."
 msgstr ""
 
 #. module: account_financial_report
@@ -2269,7 +2295,10 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard_hide_account_at_0
 #: model:ir.model.fields,help:account_financial_report.field_open_items_report_wizard_hide_account_at_0
-msgid "Use this filter to hide an account or a partner with an ending balance at 0. If partners are filtered, debits and credits totals will not match the trial balance."
+msgid ""
+"Use this filter to hide an account or a partner with an ending balance at 0. "
+"If partners are filtered, debits and credits totals will not match the trial "
+"balance."
 msgstr ""
 
 #. module: account_financial_report
@@ -2310,7 +2339,9 @@ msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard_hide_account_at_0
-msgid "When this option is enabled, the trial balance will not display accounts that have initial balance = debit = credit = end balance = 0"
+msgid ""
+"When this option is enabled, the trial balance will not display accounts "
+"that have initial balance = debit = credit = end balance = 0"
 msgstr ""
 
 #. module: account_financial_report
