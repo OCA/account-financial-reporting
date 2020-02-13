@@ -68,6 +68,7 @@ class CustomerActivityStatement(models.AbstractModel):
         return """
             SELECT m.name AS move_id, l.partner_id, l.date, l.name,
                                 l.ref, l.blocked, l.currency_id, l.company_id,
+                                ai.date_due,
             CASE WHEN (l.currency_id is not null AND l.amount_currency > 0.0)
                 THEN sum(l.amount_currency)
                 ELSE sum(l.debit)
@@ -83,18 +84,19 @@ class CustomerActivityStatement(models.AbstractModel):
             FROM account_move_line l
             JOIN account_account_type at ON (at.id = l.user_type_id)
             JOIN account_move m ON (l.move_id = m.id)
+            LEFT JOIN account_invoice ai ON (ai.id = l.invoice_id)
             WHERE l.partner_id IN (%s) AND at.type = '%s'
                                 AND '%s' <= l.date AND l.date <= '%s'
             GROUP BY l.partner_id, m.name, l.date, l.date_maturity, l.name,
                                 l.ref, l.blocked, l.currency_id,
-                                l.amount_currency, l.company_id
+                                l.amount_currency, l.company_id, ai.date_due
         """ % (partners, account_type, date_start, date_end)
 
     def _display_lines_sql_q2(self, company_id):
         return """
             SELECT Q1.partner_id, Q1.move_id, Q1.date, Q1.date_maturity,
                 Q1.name, Q1.ref, Q1.debit, Q1.credit,
-                Q1.debit-Q1.credit as amount, Q1.blocked,
+                Q1.debit-Q1.credit as amount, Q1.blocked, Q1.date_due,
                 COALESCE(Q1.currency_id, c.currency_id) AS currency_id
             FROM Q1
             JOIN res_company c ON (c.id = Q1.company_id)
@@ -112,7 +114,7 @@ class CustomerActivityStatement(models.AbstractModel):
         # pylint: disable=E8103
         self.env.cr.execute("""WITH Q1 AS (%s), Q2 AS (%s)
         SELECT partner_id, move_id, date, date_maturity, name, ref, debit,
-                            credit, amount, blocked, currency_id
+                            credit, amount, blocked, currency_id, date_due
         FROM Q2
         ORDER BY date, date_maturity, move_id""" % (
             self._display_lines_sql_q1(partners, date_start, date_end,
@@ -339,6 +341,8 @@ class CustomerActivityStatement(models.AbstractModel):
                 line['balance'] = amount_due[partner_id][currency]
                 line['date'] = self._format_date_to_partner_lang(
                     line['date'], partner_id)
+                line['date_due'] = self._format_date_to_partner_lang(
+                    line['date_due'], partner_id) if line['date_due'] else ""
                 line['date_maturity'] = self._format_date_to_partner_lang(
                     line['date_maturity'], partner_id)
                 lines_to_display[partner_id][currency].append(line)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-16 08:14+0000\n"
+"POT-Creation-Date: 2020-02-13 14:51+0000\n"
 "PO-Revision-Date: 2018-11-30 09:01+0000\n"
 "Last-Translator: Dorin Hongu <dhongu@gmail.com>\n"
 "Language-Team: Romanian (https://www.transifex.com/oca/teams/23907/ro/)\n"
@@ -163,6 +163,11 @@ msgstr "Nume afișat"
 #. module: customer_activity_statement
 #: model:ir.model.fields,field_description:customer_activity_statement.field_customer_activity_statement_wizard_filter_partners_non_due
 msgid "Don't show partners with no due entries"
+msgstr ""
+
+#. module: customer_activity_statement
+#: model:ir.ui.view,arch_db:customer_activity_statement.statement_document
+msgid "Due date"
 msgstr ""
 
 #. module: customer_activity_statement
