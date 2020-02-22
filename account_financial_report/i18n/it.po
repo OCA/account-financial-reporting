@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-06-03 12:07+0000\n"
-"PO-Revision-Date: 2020-02-22 23:01+0000\n"
+"PO-Revision-Date: 2020-02-22 23:46+0000\n"
 "Last-Translator: Sergio Zanchetta <primes2h@gmail.com>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -152,7 +152,7 @@ msgstr "Conti"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__centralize
 msgid "Activate centralization"
-msgstr "Attivare centralizzazione"
+msgstr "Attiva centralizzazione"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_line__age_120_days
@@ -270,13 +270,13 @@ msgstr "Procedura scadenzario clienti/fornitori"
 #. module: account_financial_report
 #: model:ir.actions.report,name:account_financial_report.action_report_aged_partner_balance_xlsx
 msgid "Aged Partner Balance XLSX"
-msgstr "Scadenzario clienti/fornitori XLSX"
+msgstr "Scadenzario clienti/fornitori in XLSX"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:64
 #, python-format
 msgid "All"
-msgstr "Tutte le"
+msgstr "Tutti"
 
 #. module: account_financial_report
 #: selection:aged.partner.balance.wizard,target_move:0
@@ -1260,7 +1260,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__hide_account_at_0
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__hide_account_at_0
 msgid "Hide account ending balance at 0"
-msgstr "Nascondere i conti con saldo finale a 0"
+msgstr "Nascondi conti con saldo finale a 0"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__hide_account_at_0
@@ -1699,7 +1699,7 @@ msgstr ""
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:66
 #, python-format
 msgid "Not Posted"
-msgstr "Non confermate"
+msgstr "Non confermati"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
@@ -1922,7 +1922,7 @@ msgstr "Periodi"
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:65
 #, python-format
 msgid "Posted"
-msgstr "Confermate"
+msgstr "Confermati"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:35
@@ -1947,7 +1947,7 @@ msgid ""
 "Ref -\n"
 "                        Label"
 msgstr ""
-"Rif -\n"
+"Rif. -\n"
 "                        Etichetta"
 
 #. module: account_financial_report
@@ -1958,7 +1958,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 #, python-format
 msgid "Ref - Label"
-msgstr "Rif - Etichetta"
+msgstr "Rif. - Etichetta"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_account__report_id
@@ -2058,7 +2058,7 @@ msgstr "Vedi"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger__show_analytic_tags
 msgid "Show Analytic Tags"
-msgstr "Mostrare tag analitici"
+msgstr "Mostra etichette analitiche"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger__show_cost_center
@@ -2083,7 +2083,7 @@ msgstr "Mostra dettagli partner"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 #, python-format
 msgid "Show analytic tags"
-msgstr "Mostrare tag analitici"
+msgstr "Mostra etichette analitiche"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:97
@@ -2094,7 +2094,7 @@ msgstr "Mostrare tag analitici"
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__foreign_currency
 #, python-format
 msgid "Show foreign currency"
-msgstr "Mostrare valuta estera"
+msgstr "Mostra valuta estera"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger__sort_option
@@ -2130,7 +2130,7 @@ msgstr "Etichette"
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__target_move
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__target_move
 msgid "Target Moves"
-msgstr "Obiettivo"
+msgstr "Movimenti obiettivo"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:124
@@ -2315,12 +2315,12 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_trial_balance_report_wizard
 msgid "Trial Balance Report Wizard"
-msgstr "Wizard bilancio di verifica"
+msgstr "Procedura bilancio di verifica"
 
 #. module: account_financial_report
 #: model:ir.actions.report,name:account_financial_report.action_report_trial_balance_xlsx
 msgid "Trial Balance XLSX"
-msgstr "Bilancio di verifica XLSX"
+msgstr "Bilancio di verifica in XLSX"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
@@ -2398,7 +2398,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__with_account_name
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger__with_account_name
 msgid "With Account Name"
-msgstr ""
+msgstr "Con nome conto"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:90
