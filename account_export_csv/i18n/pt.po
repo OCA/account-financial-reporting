@@ -1,0 +1,294 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* account_export_csv
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+
+#. module: account_export_csv
+#: model_terms:ir.ui.view,arch_db:account_export_csv.account_csv_export_view
+msgid "<span string=\"-\" class=\"oe_inline\"/>"
+msgstr ""
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:254
+#, python-format
+msgid "ACCOUNT CODE"
+msgstr ""
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:173
+#: code:addons/account_export_csv/wizard/account_export_csv.py:265
+#, python-format
+msgid "ACCOUNT NAME"
+msgstr ""
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:267
+#, python-format
+msgid "AMOUNT CURRENCY"
+msgstr ""
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:261
+#, python-format
+msgid "ANALYTIC ACCOUNT CODE"
+msgstr ""
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:269
+#, python-format
+msgid "ANALYTIC ACCOUNT NAME"
+msgstr ""
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:170
+#, python-format
+msgid "ANALYTIC CODE"
+msgstr ""
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:171
+#, python-format
+msgid "ANALYTIC NAME"
+msgstr ""
+
+#. module: account_export_csv
+#: model:ir.actions.act_window,name:account_export_csv.action_account_csv_export
+#: model:ir.ui.menu,name:account_export_csv.menu_account_csv_export
+#: model_terms:ir.ui.view,arch_db:account_export_csv.account_csv_export_view
+msgid "Accounting CSV Export"
+msgstr ""
+
+#. module: account_export_csv
+#: model_terms:ir.ui.view,arch_db:account_export_csv.account_csv_export_view
+msgid "Analytic Balance (with accounts)"
+msgstr ""
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:119
+#: code:addons/account_export_csv/wizard/account_export_csv.py:176
+#: code:addons/account_export_csv/wizard/account_export_csv.py:266
+#, python-format
+msgid "BALANCE"
+msgstr ""
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:273
+#, python-format
+msgid "BANK STATEMENT"
+msgstr ""
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:115
+#: code:addons/account_export_csv/wizard/account_export_csv.py:172
+#, python-format
+msgid "CODE"
+msgstr ""
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:118
+#: code:addons/account_export_csv/wizard/account_export_csv.py:175
+#: code:addons/account_export_csv/wizard/account_export_csv.py:259
+#, python-format
+msgid "CREDIT"
+msgstr ""
+
+#. module: account_export_csv
+#: model:ir.model.fields,field_description:account_export_csv.field_account_csv_export__data
+msgid "CSV"
+msgstr ""
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:268
+#, python-format
+msgid "CURRENCY"
+msgstr ""
+
+#. module: account_export_csv
+#: model_terms:ir.ui.view,arch_db:account_export_csv.account_csv_export_view
+msgid "Close"
+msgstr ""
+
+#. module: account_export_csv
+#: model:ir.model.fields,field_description:account_export_csv.field_account_csv_export__company_id
+msgid "Company"
+msgstr ""
+
+#. module: account_export_csv
+#: model:ir.model.fields,field_description:account_export_csv.field_account_csv_export__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: account_export_csv
+#: model:ir.model.fields,field_description:account_export_csv.field_account_csv_export__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:252
+#, python-format
+msgid "DATE"
+msgstr ""
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:117
+#: code:addons/account_export_csv/wizard/account_export_csv.py:174
+#: code:addons/account_export_csv/wizard/account_export_csv.py:258
+#, python-format
+msgid "DEBIT"
+msgstr ""
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:257
+#, python-format
+msgid "DESCRIPTION"
+msgstr ""
+
+#. module: account_export_csv
+#: model_terms:ir.ui.view,arch_db:account_export_csv.account_csv_export_view
+msgid "Date"
+msgstr ""
+
+#. module: account_export_csv
+#: model:ir.model.fields,field_description:account_export_csv.field_account_csv_export__date_end
+msgid "Date End"
+msgstr ""
+
+#. module: account_export_csv
+#: model:ir.model.fields,field_description:account_export_csv.field_account_csv_export__date_start
+msgid "Date Start"
+msgstr ""
+
+#. module: account_export_csv
+#: model:ir.model.fields,field_description:account_export_csv.field_account_csv_export__date_range_id
+msgid "Date range"
+msgstr ""
+
+#. module: account_export_csv
+#: model:ir.model.fields,field_description:account_export_csv.field_account_csv_export__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:264
+#, python-format
+msgid "ENTRY NUMBER"
+msgstr ""
+
+#. module: account_export_csv
+#: model:ir.model,name:account_export_csv.model_account_csv_export
+msgid "Export Accounting"
+msgstr ""
+
+#. module: account_export_csv
+#: model:ir.model.fields,field_description:account_export_csv.field_account_csv_export__export_filename
+msgid "Export CSV Filename"
+msgstr ""
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:260
+#, python-format
+msgid "FULL RECONCILE"
+msgstr ""
+
+#. module: account_export_csv
+#: model:ir.model.fields,field_description:account_export_csv.field_account_csv_export__id
+msgid "ID"
+msgstr ""
+
+#. module: account_export_csv
+#: model:ir.model.fields,help:account_export_csv.field_account_csv_export__journal_ids
+msgid "If empty, use all journals, only used for journal entries"
+msgstr ""
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:270
+#, python-format
+msgid "JOURNAL"
+msgstr ""
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:253
+#, python-format
+msgid "JOURNAL CODE"
+msgstr ""
+
+#. module: account_export_csv
+#: model_terms:ir.ui.view,arch_db:account_export_csv.account_csv_export_view
+msgid "Journal Entries"
+msgstr ""
+
+#. module: account_export_csv
+#: model:ir.model.fields,field_description:account_export_csv.field_account_csv_export__journal_ids
+msgid "Journals"
+msgstr ""
+
+#. module: account_export_csv
+#: model:ir.model.fields,field_description:account_export_csv.field_account_csv_export____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: account_export_csv
+#: model:ir.model.fields,field_description:account_export_csv.field_account_csv_export__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: account_export_csv
+#: model:ir.model.fields,field_description:account_export_csv.field_account_csv_export__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:116
+#, python-format
+msgid "NAME"
+msgstr ""
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:255
+#, python-format
+msgid "PARTNER NAME"
+msgstr ""
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:256
+#, python-format
+msgid "REF"
+msgstr ""
+
+#. module: account_export_csv
+#: model_terms:ir.ui.view,arch_db:account_export_csv.account_csv_export_view
+msgid "Report"
+msgstr ""
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:271
+#, python-format
+msgid "TAX CODE"
+msgstr ""
+
+#. module: account_export_csv
+#: code:addons/account_export_csv/wizard/account_export_csv.py:272
+#, python-format
+msgid "TAX NAME"
+msgstr ""
+
+#. module: account_export_csv
+#: model_terms:ir.ui.view,arch_db:account_export_csv.account_csv_export_view
+msgid "Trial Balance"
+msgstr ""
+
+#. module: account_export_csv
+#: model_terms:ir.ui.view,arch_db:account_export_csv.account_csv_export_view
+msgid "or"
+msgstr ""
