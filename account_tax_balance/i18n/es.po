@@ -1,0 +1,284 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * account_tax_balance
+#
+# Translators:
+# OCA Transbot <transbot@odoo-community.org>, 2017
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-01-19 01:37+0000\n"
+"PO-Revision-Date: 2019-07-22 21:43+0000\n"
+"Last-Translator: Josep M <jmyepes@mac.com>\n"
+"Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.7.1\n"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/wizard/open_tax_balances.py:48
+#, python-format
+msgid "%(name)s: %(target)s from %(from)s to %(to)s"
+msgstr "%(name)s: %(target)s desde %(from)s a %(to)s"
+
+#. module: account_tax_balance
+#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
+msgid "Account"
+msgstr "Cuenta"
+
+#. module: account_tax_balance
+#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
+#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
+msgid "Account Tax"
+msgstr "Cuenta de impuesto"
+
+#. module: account_tax_balance
+#: selection:wizard.open.tax.balances,target_move:0
+msgid "All Entries"
+msgstr "Todos los asientos"
+
+#. module: account_tax_balance
+#: selection:wizard.open.tax.balances,target_move:0
+msgid "All Posted Entries"
+msgstr "Todos los asientos asentados"
+
+#. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__balance_regular
+msgid "Balance"
+msgstr "Cuota"
+
+#. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__balance_refund
+msgid "Balance Refund"
+msgstr "Cuota devoluciones"
+
+#. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__base_balance_regular
+msgid "Base Balance"
+msgstr "Base imponible"
+
+#. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__base_balance_refund
+msgid "Base Balance Refund"
+msgstr "Base devoluciones"
+
+#. module: account_tax_balance
+#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
+msgid "Base Total"
+msgstr "Base total"
+
+#. module: account_tax_balance
+#: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__create_date
+msgid "Created on"
+msgstr "Creado en"
+
+#. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__date_range_id
+msgid "Date range"
+msgstr "Periodo"
+
+#. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__display_name
+msgid "Display Name"
+msgstr "Nombre a mostrar"
+
+#. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__from_date
+msgid "From date"
+msgstr "Desde"
+
+#. module: account_tax_balance
+#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
+msgid "Group By"
+msgstr "Agrupar por"
+
+#. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__has_moves
+msgid "Has balance in period"
+msgstr "Tiene saldo en periodo"
+
+#. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__id
+msgid "ID"
+msgstr "ID"
+
+#. module: account_tax_balance
+#: model:ir.model,name:account_tax_balance.model_account_move
+msgid "Journal Entries"
+msgstr "Entradas diario"
+
+#. module: account_tax_balance
+#: model:ir.model,name:account_tax_balance.model_account_move_line
+msgid "Journal Item"
+msgstr "Diario"
+
+#. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances____last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__write_uid
+msgid "Last Updated by"
+msgstr "Última modificación por"
+
+#. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__write_date
+msgid "Last Updated on"
+msgstr "Última actualización en"
+
+#. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_move__move_type
+msgid "Move Type"
+msgstr "Tipo de movimiento"
+
+#. module: account_tax_balance
+#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_account_move_filter
+msgid "Move type"
+msgstr "Tipo de operación"
+
+#. module: account_tax_balance
+#: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
+msgid "Open Taxes"
+msgstr "Ver impuestos"
+
+#. module: account_tax_balance
+#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
+#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
+msgid "Short Name"
+msgstr "Nombre corto"
+
+#. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__target_move
+msgid "Target Moves"
+msgstr "Movimientos destino"
+
+#. module: account_tax_balance
+#: model:ir.model,name:account_tax_balance.model_account_tax
+msgid "Tax"
+msgstr "Impuesto"
+
+#. module: account_tax_balance
+#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
+msgid "Tax Group"
+msgstr "Grupo del impuesto"
+
+#. module: account_tax_balance
+#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
+msgid "Tax Scope"
+msgstr "Uso del impuesto"
+
+#. module: account_tax_balance
+#: model:ir.actions.act_window,name:account_tax_balance.action_open_tax_balances
+#: model:ir.actions.act_window,name:account_tax_balance.action_tax_balances_tree
+#: model:ir.ui.menu,name:account_tax_balance.menu_action_open_tax_balances
+#: model:ir.ui.menu,name:account_tax_balance.menu_tax_balances
+#: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
+msgid "Taxes Balance"
+msgstr "Tabla de impuestos"
+
+#. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__to_date
+msgid "To date"
+msgstr "Hasta"
+
+#. module: account_tax_balance
+#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
+msgid "Total"
+msgstr "Total"
+
+#. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__balance
+msgid "Total Balance"
+msgstr "Total cuota"
+
+#. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__base_balance
+msgid "Total Base Balance"
+msgstr "Total base imponible"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_tax.py:90
+#, python-format
+msgid "Unsupported search operator"
+msgstr "Operador de búsqueda no soportado"
+
+#. module: account_tax_balance
+#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
+msgid "View base lines"
+msgstr "Ver líneas de base imponible"
+
+#. module: account_tax_balance
+#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
+msgid "View base refund lines"
+msgstr "Ver líneas de base imponible de devoluciones"
+
+#. module: account_tax_balance
+#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
+msgid "View base regular lines"
+msgstr "Ver líneas de base imponible de operaciones corrientes"
+
+#. module: account_tax_balance
+#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
+msgid "View tax lines"
+msgstr "Ver líneas de cuota"
+
+#. module: account_tax_balance
+#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
+msgid "View tax refund lines"
+msgstr "Ver líneas de cuota de devoluciones"
+
+#. module: account_tax_balance
+#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
+msgid "View tax regular lines"
+msgstr "Ver líneas de cuota de operaciones corrientes"
+
+#. module: account_tax_balance
+#: model:ir.model,name:account_tax_balance.model_wizard_open_tax_balances
+msgid "Wizard Open Tax Balances"
+msgstr "Asistente apertura balance de impuestos"
+
+#. module: account_tax_balance
+#: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
+msgid "or"
+msgstr "o"
+
+#~ msgid "Account Entry"
+#~ msgstr "Asiento contable"
+
+#~ msgid "Liquidity"
+#~ msgstr "Liquidez"
+
+#~ msgid "Other"
+#~ msgstr "Otro"
+
+#~ msgid "Payable"
+#~ msgstr "A pagar"
+
+#~ msgid "Payable refund"
+#~ msgstr "Devoluciones a cobrar"
+
+#~ msgid "Receivable"
+#~ msgstr "A cobrar"
+
+#~ msgid "Receivable refund"
+#~ msgstr "Devoluciones a pagar"
