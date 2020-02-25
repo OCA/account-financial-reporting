@@ -83,10 +83,7 @@ class AnalyticEntriesReport(models.Model):
                    (AsIs(self._table), AsIs(str(statement)[:-1])))
 
     @api.model
-    def read_group(self, domain, fields, groupby, offset=0, limit=None,
-                   orderby=False, lazy=True):
-        '''Override read_group to respect filters whose domain can't be
-        computed on the client side'''
+    def _apply_custom_operators(self, domain):
         adjusted_domain = []
 
         for proposition in domain:
@@ -98,11 +95,11 @@ class AnalyticEntriesReport(models.Model):
                 adjusted_domain.append(proposition)
                 continue
             field, operator, value = proposition
-            if field == 'fiscalyear_id' and operator == 'offset':
+            if field.endswith('fiscalyear_id') and operator == 'offset':
                 date = datetime.date.today() + relativedelta(years=value)
                 fiscalyear_id = self.env['account.fiscalyear'].find(dt=date)
-                adjusted_domain.append(('fiscalyear_id', '=', fiscalyear_id))
-            elif field == 'period_id' and operator == 'offset':
+                adjusted_domain.append((field, '=', fiscalyear_id))
+            elif field.endswith('period_id') and operator == 'offset':
                 current_period = self.env['account.period'].with_context(
                     account_period_prefer_normal=True).find()
 
@@ -118,10 +115,18 @@ class AnalyticEntriesReport(models.Model):
                     ('asc' if direction == '>=' else 'desc')
                 )
 
-                adjusted_domain.append(('period_id', '=', periods[value].id))
+                adjusted_domain.append((field, '=', periods[value].id))
             else:
                 adjusted_domain.append(proposition)
 
+        return adjusted_domain
+
+    @api.model
+    def read_group(self, domain, fields, groupby, offset=0, limit=None,
+                   orderby=False, lazy=True):
+        '''Override read_group to respect filters whose domain can't be
+        computed on the client side'''
+        adjusted_domain = self._apply_custom_operators(domain)
         return super(AnalyticEntriesReport, self).read_group(
             adjusted_domain, fields, groupby,
             offset=offset, limit=limit, orderby=orderby, lazy=lazy)
