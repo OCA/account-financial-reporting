@@ -8,7 +8,7 @@
     <field name="arch" type="xml">
         <form string="Taxes Balance">
             <group>
-                <field name="company_id"/>
+                <field name="company_ids" widget="many2many_tags" groups="base.group_multi_company"/>
                 <field name="date_range_id"/>
                 <field name="from_date"></field>
                 <field name="to_date"></field>
