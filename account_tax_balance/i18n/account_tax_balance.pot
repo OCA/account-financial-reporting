@@ -66,8 +66,8 @@ msgid "Cancel"
 msgstr ""
 
 #. module: account_tax_balance
-#: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__company_id
-msgid "Company"
+#: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__company_ids
+msgid "Companies"
 msgstr ""
 
 #. module: account_tax_balance
