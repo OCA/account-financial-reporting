@@ -26,10 +26,11 @@ class AccountTax(models.Model):
 
     def get_context_values(self):
         context = self.env.context
+        actual_company_id = context.get("company_id", self.env.company.id)
         return (
             context.get("from_date", fields.Date.context_today(self)),
             context.get("to_date", fields.Date.context_today(self)),
-            context.get("company_ids", [self.env.user.company_id.id]),
+            context.get("company_ids", [actual_company_id]),
             context.get("target_move", "posted"),
         )
 
