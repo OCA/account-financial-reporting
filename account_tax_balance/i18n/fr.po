@@ -20,15 +20,10 @@ msgstr ""
 "X-Generator: Weblate 3.5.1\n"
 
 #. module: account_tax_balance
-#: code:addons/account_tax_balance/wizard/open_tax_balances.py:48
+#: code:addons/account_tax_balance/wizard/open_tax_balances.py:0
 #, python-format
 msgid "%(name)s: %(target)s from %(from)s to %(to)s"
 msgstr ""
-
-#. module: account_tax_balance
-#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
-msgid "Account"
-msgstr "Compte"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
@@ -37,12 +32,12 @@ msgid "Account Tax"
 msgstr "Impot de Compte"
 
 #. module: account_tax_balance
-#: selection:wizard.open.tax.balances,target_move:0
+#: model:ir.model.fields.selection,name:account_tax_balance.selection__wizard_open_tax_balances__target_move__all
 msgid "All Entries"
 msgstr "Écritures comptabilisées + non-comptabilisées"
 
 #. module: account_tax_balance
-#: selection:wizard.open.tax.balances,target_move:0
+#: model:ir.model.fields.selection,name:account_tax_balance.selection__wizard_open_tax_balances__target_move__posted
 msgid "All Posted Entries"
 msgstr "Écritures comptabilisées seulement"
 
@@ -77,8 +72,10 @@ msgid "Cancel"
 msgstr "Annuler"
 
 #. module: account_tax_balance
-#: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__company_id
-msgid "Company"
+#: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__company_ids
+#, fuzzy
+#| msgid "Company"
+msgid "Companies"
 msgstr "Société"
 
 #. module: account_tax_balance
@@ -93,7 +90,9 @@ msgstr "Créé le"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__date_range_id
-msgid "Date range"
+#, fuzzy
+#| msgid "Date range"
+msgid "Date Range"
 msgstr "Plage de date"
 
 #. module: account_tax_balance
@@ -103,7 +102,9 @@ msgstr "Nom affiché"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__from_date
-msgid "From date"
+#, fuzzy
+#| msgid "From date"
+msgid "From Date"
 msgstr "A partir de la date"
 
 #. module: account_tax_balance
@@ -199,8 +200,8 @@ msgstr "Taxes Totaux"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__to_date
-msgid "To date"
-msgstr "jusqu'au jour"
+msgid "To Date"
+msgstr ""
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
@@ -218,7 +219,7 @@ msgid "Total Base Balance"
 msgstr "Solde de Base Total"
 
 #. module: account_tax_balance
-#: code:addons/account_tax_balance/models/account_tax.py:90
+#: code:addons/account_tax_balance/models/account_tax.py:0
 #, python-format
 msgid "Unsupported search operator"
 msgstr "Gestionnaire de Recherche Non-appuye"
@@ -262,3 +263,9 @@ msgstr "Mage Soldes de Taxes Ouverts"
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "or"
 msgstr "ou"
+
+#~ msgid "Account"
+#~ msgstr "Compte"
+
+#~ msgid "To date"
+#~ msgstr "jusqu'au jour"
