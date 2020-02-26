@@ -19,15 +19,10 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: account_tax_balance
-#: code:addons/account_tax_balance/wizard/open_tax_balances.py:48
+#: code:addons/account_tax_balance/wizard/open_tax_balances.py:0
 #, python-format
 msgid "%(name)s: %(target)s from %(from)s to %(to)s"
 msgstr ""
-
-#. module: account_tax_balance
-#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
-msgid "Account"
-msgstr "Account"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
@@ -36,12 +31,12 @@ msgid "Account Tax"
 msgstr "Accountbelasting"
 
 #. module: account_tax_balance
-#: selection:wizard.open.tax.balances,target_move:0
+#: model:ir.model.fields.selection,name:account_tax_balance.selection__wizard_open_tax_balances__target_move__all
 msgid "All Entries"
 msgstr "Alle Vermeldingen"
 
 #. module: account_tax_balance
-#: selection:wizard.open.tax.balances,target_move:0
+#: model:ir.model.fields.selection,name:account_tax_balance.selection__wizard_open_tax_balances__target_move__posted
 msgid "All Posted Entries"
 msgstr "Alle Geposte Vermeldingen"
 
@@ -76,8 +71,10 @@ msgid "Cancel"
 msgstr "Annuleren"
 
 #. module: account_tax_balance
-#: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__company_id
-msgid "Company"
+#: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__company_ids
+#, fuzzy
+#| msgid "Company"
+msgid "Companies"
 msgstr "Bedrijf"
 
 #. module: account_tax_balance
@@ -92,7 +89,9 @@ msgstr "Gecreëerd op"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__date_range_id
-msgid "Date range"
+#, fuzzy
+#| msgid "Date range"
+msgid "Date Range"
 msgstr "Datumreeks"
 
 #. module: account_tax_balance
@@ -102,7 +101,9 @@ msgstr "Weergavenaam"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__from_date
-msgid "From date"
+#, fuzzy
+#| msgid "From date"
+msgid "From Date"
 msgstr "Vanaf datum"
 
 #. module: account_tax_balance
@@ -199,8 +200,8 @@ msgstr "Belastingbalans"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__to_date
-msgid "To date"
-msgstr "Tot datum"
+msgid "To Date"
+msgstr ""
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
@@ -218,7 +219,7 @@ msgid "Total Base Balance"
 msgstr "Totale basissaldo"
 
 #. module: account_tax_balance
-#: code:addons/account_tax_balance/models/account_tax.py:90
+#: code:addons/account_tax_balance/models/account_tax.py:0
 #, python-format
 msgid "Unsupported search operator"
 msgstr "Ongeldige zoekoperatie"
@@ -262,6 +263,12 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "or"
 msgstr "of"
+
+#~ msgid "Account"
+#~ msgstr "Account"
+
+#~ msgid "To date"
+#~ msgstr "Tot datum"
 
 #~ msgid "Account Entry"
 #~ msgstr "Account Post"
