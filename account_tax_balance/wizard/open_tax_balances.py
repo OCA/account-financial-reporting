@@ -8,8 +8,12 @@ class WizardOpenTaxBalances(models.TransientModel):
     _name = "wizard.open.tax.balances"
     _description = "Wizard Open Tax Balances"
 
-    company_id = fields.Many2one(
-        "res.company", required=True, default=lambda self: self.env.user.company_id
+    company_ids = fields.Many2many(
+        comodel_name="res.company",
+        string="Companies",
+        required=True,
+        domain=lambda self: [("id", "in", self.env.companies.ids)],
+        default=lambda self: self.env.companies.ids,
     )
     from_date = fields.Date(
         required=True, store=True, readonly=False, compute="_compute_date_range"
@@ -63,17 +67,17 @@ class WizardOpenTaxBalances(models.TransientModel):
             "target": _(self.target_move),
             "from": self.from_date.strftime(date_format),
             "to": self.to_date.strftime(date_format),
-            "company": self.company_id.name,
         }
         # name of action which is displayed in breacrumb
         vals["name"] = _("%(name)s: %(target)s from %(from)s to %(to)s") % infos
         multi_cpny_grp = self.env.ref("base.group_multi_company")
         if multi_cpny_grp in self.env.user.groups_id:
-            vals["name"] = "{} ({})".format(vals["name"], self.company_id.name)
+            company_names = self.company_ids.mapped("name")
+            vals["name"] = "{} ({})".format(vals["name"], ", ".join(company_names))
         vals["context"] = {
             "from_date": self.from_date,
             "to_date": self.to_date,
             "target_move": self.target_move,
-            "company_id": self.company_id.id,
+            "company_ids": self.company_ids.ids,
         }
         return vals
