@@ -4,8 +4,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import models, api
-from operator import itemgetter
-from natsort import natsorted
 
 
 class TrialBalanceReport(models.AbstractModel):
@@ -595,9 +593,8 @@ class TrialBalanceReport(models.AbstractModel):
                     accounts_data, total_amount, foreign_currency)
                 trial_balance = list(groups_data.values())
                 trial_balance += list(accounts_data.values())
-                trial_balance = natsorted(trial_balance,
-                                          key=itemgetter('complete_code',
-                                                         'code'))
+                trial_balance = sorted(trial_balance, key=lambda k: k[
+                    'complete_code'])
                 for trial in trial_balance:
                     counter = trial['complete_code'].count('/')
                     trial['level'] = counter
@@ -606,12 +603,10 @@ class TrialBalanceReport(models.AbstractModel):
                     accounts_data, total_amount, foreign_currency)
                 trial_balance = list(groups_data.values())
                 trial_balance += list(accounts_data.values())
-                trial_balance = natsorted(trial_balance,
-                                          key=itemgetter('code'))
+                trial_balance = sorted(trial_balance, key=lambda k: k['code'])
             if hierarchy_on == 'none':
                 trial_balance = list(accounts_data.values())
-                trial_balance = natsorted(trial_balance,
-                                          key=itemgetter('code'))
+                trial_balance = sorted(trial_balance, key=lambda k: k['code'])
         else:
             if foreign_currency:
                 for account_id in accounts_data.keys():

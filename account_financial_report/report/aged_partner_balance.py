@@ -5,7 +5,7 @@
 from odoo import models, api
 from odoo.tools import float_is_zero
 from datetime import date, datetime, timedelta
-import pandas as pd
+import operator
 
 
 class AgedPartnerBalanceReport(models.AbstractModel):
@@ -174,7 +174,6 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         move_lines = self.env['account.move.line'].search_read(
             domain=domain, fields=ml_fields
         )
-        ml_ids = set(pd.DataFrame(move_lines).id.to_list())
         journals_ids = set()
         partners_ids = set()
         partners_data = {}
@@ -183,9 +182,11 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             acc_partial_rec, debit_amount, credit_amount = \
                 self._get_account_partial_reconciled(company_id, date_at_object)
             if acc_partial_rec:
-                acc_partial_rec_data = pd.DataFrame(acc_partial_rec)
-                debit_ids = set(acc_partial_rec_data.debit_move_id.to_list())
-                credit_ids = set(acc_partial_rec_data.credit_move_id.to_list())
+                ml_ids = map(operator.itemgetter('id'), move_lines)
+                debit_ids = map(operator.itemgetter('debit_move_id'),
+                                acc_partial_rec)
+                credit_ids = map(operator.itemgetter('credit_move_id'),
+                                 acc_partial_rec)
                 move_lines = self._recalculate_move_lines(
                     move_lines, debit_ids, credit_ids,
                     debit_amount, credit_amount, ml_ids, account_ids,

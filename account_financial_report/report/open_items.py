@@ -6,7 +6,7 @@ from odoo import models, api
 from odoo.tools import float_is_zero
 from odoo.osv import expression
 from datetime import date, datetime
-import pandas as pd
+import operator
 
 
 class OpenItemsReport(models.AbstractModel):
@@ -151,12 +151,11 @@ class OpenItemsReport(models.AbstractModel):
         query = self._get_query(account_ids, partner_ids, date_at_object,
                                 target_move, company_id, date_from)
         self._cr.execute(query)
-        move_lines_data = pd.DataFrame(self._cr.dictfetchall())
-        account_ids = set(move_lines_data.account_id.to_list())
+        move_lines_data = self._cr.dictfetchall()
+        account_ids = map(operator.itemgetter('account_id'), move_lines_data)
         accounts_data = self._get_accounts_data(list(account_ids))
-        journal_ids = set(move_lines_data.journal_id.to_list())
+        journal_ids = map(operator.itemgetter('journal_id'), move_lines_data)
         journals_data = self._get_journals_data(list(journal_ids))
-        move_lines_data = move_lines_data.fillna(0).to_dict(orient='records')
 
         if date_at_object < date.today():
             accounts_partial_reconcile, debit_accounts_partial_amount, \
@@ -164,12 +163,10 @@ class OpenItemsReport(models.AbstractModel):
                 self._get_account_partial_reconciled(move_lines_data,
                                                      date_at_object)
             if accounts_partial_reconcile:
-                accounts_partial_reconcile_data = pd.DataFrame(
-                    accounts_partial_reconcile)
-                debit_ids = set(accounts_partial_reconcile_data.debit_move_id
-                                .to_list())
-                credit_ids = set(
-                    accounts_partial_reconcile_data.credit_move_id.to_list())
+                debit_ids = map(operator.itemgetter('debit_move_id'),
+                                accounts_partial_reconcile)
+                credit_ids = map(operator.itemgetter('credit_move_id'),
+                                 accounts_partial_reconcile)
                 for move_line in move_lines_data:
                     if move_line['id'] in debit_ids:
                         move_line['amount_residual'] += \
@@ -195,7 +192,7 @@ class OpenItemsReport(models.AbstractModel):
         for move_line in move_lines_data:
             no_partner = True
             # Partners data
-            if move_line['partner_id'] and not pd.isna(move_line['partner_id']):
+            if move_line['partner_id']:
                 no_partner = False
                 partners_data.update({
                     move_line['partner_id']: {
@@ -219,7 +216,8 @@ class OpenItemsReport(models.AbstractModel):
 
             move_line.update({
                 'date': move_line['date'].strftime("%d/%m/%Y"),
-                'date_maturity': move_line['date_maturity'].strftime("%d/%m/%Y"),
+                'date_maturity': move_line["date_maturity"]
+                and move_line["date_maturity"].strftime("%d/%m/%Y"),
                 'original': original,
                 'partner_id': 0 if no_partner else move_line['partner_id'],
                 'partner_name': '' if no_partner else move_line['partner_name'],

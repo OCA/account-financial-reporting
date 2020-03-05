@@ -44,11 +44,6 @@
         'view/report_aged_partner_balance.xml',
         'view/report_vat_report.xml',
     ],
-    "external_dependencies": {
-        "python": ['natsort',
-                   'pandas',
-                   ],
-    },
     'installable': True,
     'application': True,
     'auto_install': False,

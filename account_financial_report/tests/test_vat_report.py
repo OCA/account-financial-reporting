@@ -34,15 +34,18 @@ class TestVATReport(common.TransactionCase):
             ], limit=1)
         self.tax_tag_01 = self.env['account.account.tag'].create({
             'name': 'Tag 01',
-            'applicability': 'taxes'
+            'applicability': 'taxes',
+            'country_id': self.company.country_id.id,
         })
         self.tax_tag_02 = self.env['account.account.tag'].create({
             'name': 'Tag 02',
-            'applicability': 'taxes'
+            'applicability': 'taxes',
+            'country_id': self.company.country_id.id,
         })
         self.tax_tag_03 = self.env['account.account.tag'].create({
             'name': 'Tag 03',
-            'applicability': 'taxes'
+            'applicability': 'taxes',
+            'country_id': self.company.country_id.id,
         })
         self.tax_group_10 = self.env['account.tax.group'].create({
             'name': 'Tax 10%',

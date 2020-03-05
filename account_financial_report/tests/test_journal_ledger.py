@@ -184,7 +184,8 @@ class TestJournalReport(TransactionCase):
             'date_from': self.fy_date_start,
             'date_to': self.fy_date_end,
             'company_id': self.company.id,
-            'journal_ids': [(6, 0, self.journal_sale.ids)]
+            'journal_ids': [(6, 0, self.journal_sale.ids)],
+            'move_target': "all",
         })
         data = wiz._prepare_report_journal_ledger()
         res_data = self.JournalLedgerReport._get_report_values(wiz, data)

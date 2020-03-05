@@ -36,7 +36,7 @@ class JournalLedgerReportWizard(models.TransientModel):
     )
     move_target = fields.Selection(
         selection='_get_move_targets',
-        default='all',
+        default='posted',
         required=True,
     )
     foreign_currency = fields.Boolean()

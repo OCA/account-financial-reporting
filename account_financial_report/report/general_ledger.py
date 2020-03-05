@@ -3,8 +3,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import models, api
-from operator import itemgetter
-from natsort import natsorted
 import calendar
 import datetime
 
@@ -472,6 +470,7 @@ class GeneralLedgerReport(models.AbstractModel):
                         account.update({ml_id: gen_led_data[acc_id][ml_id]})
                     else:
                         move_lines += [gen_led_data[acc_id][ml_id]]
+                move_lines = sorted(move_lines, key=lambda k: (k['date']))
                 account.update({'move_lines': move_lines})
             else:
                 list_partner = []
@@ -488,6 +487,8 @@ class GeneralLedgerReport(models.AbstractModel):
                             else:
                                 move_lines += [
                                     gen_led_data[acc_id][prt_id][ml_id]]
+                        move_lines = sorted(move_lines,
+                                            key=lambda k: (k['date']))
                         partner.update({'move_lines': move_lines})
                         list_partner += [partner]
                 account.update({'list_partner': list_partner})
@@ -584,7 +585,7 @@ class GeneralLedgerReport(models.AbstractModel):
                     account['move_lines'] = centralized_ml
                     account['partners'] = False
                     del account['list_partner']
-        general_ledger = natsorted(general_ledger, key=itemgetter('code'))
+        general_ledger = sorted(general_ledger, key=lambda k: k['code'])
         return {
             'doc_ids': [wizard_id],
             'doc_model': 'general.ledger.report.wizard',

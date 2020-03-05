@@ -184,21 +184,22 @@ class JournalLedgerReport(models.AbstractModel):
         move_lines = self.env['account.move.line'].search(
             self._get_move_lines_domain(move_ids, wizard, journal_ids),
             order=self._get_move_lines_order(move_ids, wizard, journal_ids))
-        # Get the taxes ids for the move lines
-        query_taxes_params = self._get_query_taxes_params(move_lines)
-        query_taxes = self._get_query_taxes()
         move_line_ids_taxes_data = {}
-        self.env.cr.execute(query_taxes,
-                            query_taxes_params)
-        # Fetch the taxes associated to the move line
-        for move_line_id, account_tax_id, tax_description, tax_name in \
-                self.env.cr.fetchall():
-            if move_line_id not in move_line_ids_taxes_data.keys():
-                move_line_ids_taxes_data[move_line_id] = {}
-            move_line_ids_taxes_data[move_line_id][account_tax_id] = {
-                'name': tax_name,
-                'description': tax_description
-            }
+        if move_lines:
+            # Get the taxes ids for the move lines
+            query_taxes_params = self._get_query_taxes_params(move_lines)
+            query_taxes = self._get_query_taxes()
+            self.env.cr.execute(query_taxes,
+                                query_taxes_params)
+            # Fetch the taxes associated to the move line
+            for move_line_id, account_tax_id, tax_description, tax_name in \
+                    self.env.cr.fetchall():
+                if move_line_id not in move_line_ids_taxes_data.keys():
+                    move_line_ids_taxes_data[move_line_id] = {}
+                move_line_ids_taxes_data[move_line_id][account_tax_id] = {
+                    'name': tax_name,
+                    'description': tax_description
+                }
         Move_Lines = {}
         accounts = self.env['account.account']
         partners = self.env['res.partner']

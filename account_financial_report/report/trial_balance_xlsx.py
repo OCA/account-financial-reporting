@@ -38,11 +38,11 @@ class TrialBalanceXslx(models.AbstractModel):
                     'type': 'amount',
                     'width': 14},
                 5: {'header': _('Period balance'),
-                    'field': 'period_balance',
+                    'field': 'balance',
                     'type': 'amount',
                     'width': 14},
                 6: {'header': _('Ending balance'),
-                    'field': 'final_balance',
+                    'field': 'ending_balance',
                     'type': 'amount',
                     'width': 14},
             }

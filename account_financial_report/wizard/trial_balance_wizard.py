@@ -32,7 +32,7 @@ class TrialBalanceReportWizard(models.TransientModel):
                                     ('all', 'All Entries')],
                                    string='Target Moves',
                                    required=True,
-                                   default='all')
+                                   default='posted')
     hierarchy_on = fields.Selection(
         [('computed', 'Computed Accounts'),
          ('relation', 'Child Accounts'),
