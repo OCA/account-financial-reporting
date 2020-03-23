@@ -18,6 +18,7 @@ class TestGeneralLedgerReport(common.TransactionCase):
         self.previous_fy_date_end = fields.Date.from_string("2015-12-31")
         self.fy_date_start = fields.Date.from_string("2016-01-01")
         self.fy_date_end = fields.Date.from_string("2016-12-31")
+
         self.receivable_account = self.env["account.account"].search(
             [("user_type_id.name", "=", "Receivable")], limit=1
         )
@@ -46,19 +47,16 @@ class TestGeneralLedgerReport(common.TransactionCase):
         unaffected_debit=0,
         unaffected_credit=0,
     ):
-        move_name = "expense accrual"
         journal = self.env["account.journal"].search([], limit=1)
         partner = self.env.ref("base.res_partner_12")
         move_vals = {
             "journal_id": journal.id,
-            "name": move_name,
             "date": date,
             "line_ids": [
                 (
                     0,
                     0,
                     {
-                        "name": move_name,
                         "debit": receivable_debit,
                         "credit": receivable_credit,
                         "account_id": self.receivable_account.id,
@@ -69,7 +67,6 @@ class TestGeneralLedgerReport(common.TransactionCase):
                     0,
                     0,
                     {
-                        "name": move_name,
                         "debit": income_debit,
                         "credit": income_credit,
                         "account_id": self.income_account.id,
@@ -80,7 +77,6 @@ class TestGeneralLedgerReport(common.TransactionCase):
                     0,
                     0,
                     {
-                        "name": move_name,
                         "debit": unaffected_debit,
                         "credit": unaffected_credit,
                         "account_id": self.unaffected_account.id,
@@ -678,9 +674,7 @@ class TestGeneralLedgerReport(common.TransactionCase):
 
     def test_validate_date(self):
         company_id = self.env.ref("base.main_company")
-        company_id.write(
-            {"fiscalyear_last_day": 31, "fiscalyear_last_month": 12,}
-        )
+        company_id.write({"fiscalyear_last_day": 31, "fiscalyear_last_month": "12"})
         user = self.env.ref("base.user_root").with_context(company_id=company_id.id)
         wizard = self.env["general.ledger.report.wizard"].with_context(user=user.id)
         self.assertEqual(wizard._init_date_from(), time.strftime("%Y") + "-01-01")
