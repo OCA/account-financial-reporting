@@ -73,7 +73,6 @@
         id="action_aged_partner_balance_wizard"
         name="Aged Partner Balance"
         res_model="aged.partner.balance.report.wizard"
-        view_type="form"
         view_mode="form"
         view_id="aged_partner_balance_wizard"
         target="new"

@@ -17,14 +17,14 @@ class JournalLedgerReportWizard(models.TransientModel):
         required=False,
         ondelete="cascade",
     )
-    date_range_id = fields.Many2one(comodel_name="date.range", string="Date range",)
+    date_range_id = fields.Many2one(comodel_name="date.range", string="Date range")
     date_from = fields.Date(string="Start date", required=True)
     date_to = fields.Date(string="End date", required=True)
     journal_ids = fields.Many2many(
-        comodel_name="account.journal", string="Journals", required=False,
+        comodel_name="account.journal", string="Journals", required=False
     )
     move_target = fields.Selection(
-        selection="_get_move_targets", default="all", required=True,
+        selection="_get_move_targets", default="posted", required=True
     )
     foreign_currency = fields.Boolean()
     sort_option = fields.Selection(
@@ -39,7 +39,7 @@ class JournalLedgerReportWizard(models.TransientModel):
         default="journal",
         required=True,
     )
-    with_account_name = fields.Boolean(default=False,)
+    with_account_name = fields.Boolean(default=False)
 
     @api.model
     def _get_move_targets(self):
@@ -47,17 +47,11 @@ class JournalLedgerReportWizard(models.TransientModel):
 
     @api.model
     def _get_sort_options(self):
-        return [
-            ("move_name", _("Entry number")),
-            ("date", _("Date")),
-        ]
+        return [("move_name", _("Entry number")), ("date", _("Date"))]
 
     @api.model
     def _get_group_options(self):
-        return [
-            ("journal", _("Journal")),
-            ("none", _("No group")),
-        ]
+        return [("journal", _("Journal")), ("none", _("No group"))]
 
     @api.onchange("date_range_id")
     def onchange_date_range_id(self):
@@ -84,7 +78,6 @@ class JournalLedgerReportWizard(models.TransientModel):
             res["domain"]["journal_ids"] += [("company_id", "=", self.company_id.id)]
         return res
 
-    @api.multi
     def _print_report(self, report_type):
         self.ensure_one()
         data = self._prepare_report_journal_ledger()
@@ -101,24 +94,20 @@ class JournalLedgerReportWizard(models.TransientModel):
             .report_action(self, data=data)
         )
 
-    @api.multi
     def button_export_html(self):
         self.ensure_one()
         report_type = "qweb-html"
         return self._export(report_type)
 
-    @api.multi
     def button_export_pdf(self):
         report_type = "qweb-pdf"
         return self._export(report_type)
 
-    @api.multi
     def button_export_xlsx(self):
         self.ensure_one()
         report_type = "xlsx"
         return self._export(report_type)
 
-    @api.multi
     def _prepare_report_journal_ledger(self):
         self.ensure_one()
         journals = self.journal_ids

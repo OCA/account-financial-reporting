@@ -1,12 +1,11 @@
 # Copyright 2019 ACSONE SA/NV (<http://acsone.eu>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).-
-from odoo import api, models
+from odoo import models
 
 
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
-    @api.model_cr
     def init(self):
         """
             The join between accounts_partners subquery and account_move_line

@@ -29,7 +29,7 @@ class TrialBalanceReportWizard(models.TransientModel):
         [("posted", "All Posted Entries"), ("all", "All Entries")],
         string="Target Moves",
         required=True,
-        default="all",
+        default="posted",
     )
     hierarchy_on = fields.Selection(
         [
@@ -52,7 +52,7 @@ class TrialBalanceReportWizard(models.TransientModel):
         "Do not display parent levels", default=False
     )
     account_ids = fields.Many2many(
-        comodel_name="account.account", string="Filter accounts",
+        comodel_name="account.account", string="Filter accounts"
     )
     hide_account_at_0 = fields.Boolean(
         string="Hide accounts at 0",
@@ -64,10 +64,8 @@ class TrialBalanceReportWizard(models.TransientModel):
     receivable_accounts_only = fields.Boolean()
     payable_accounts_only = fields.Boolean()
     show_partner_details = fields.Boolean()
-    partner_ids = fields.Many2many(
-        comodel_name="res.partner", string="Filter partners",
-    )
-    journal_ids = fields.Many2many(comodel_name="account.journal",)
+    partner_ids = fields.Many2many(comodel_name="res.partner", string="Filter partners")
+    journal_ids = fields.Many2many(comodel_name="account.journal")
 
     not_only_one_unaffected_earnings_account = fields.Boolean(
         readonly=True, string="Not only one unaffected earnings account"
@@ -80,7 +78,6 @@ class TrialBalanceReportWizard(models.TransientModel):
         "will display initial and final balance in that currency.",
     )
 
-    @api.multi
     @api.constrains("hierarchy_on", "show_hierarchy_level")
     def _check_show_hierarchy_level(self):
         for rec in self:
@@ -91,10 +88,12 @@ class TrialBalanceReportWizard(models.TransientModel):
 
     @api.depends("date_from")
     def _compute_fy_start_date(self):
-        for wiz in self.filtered("date_from"):
-            date = fields.Datetime.from_string(wiz.date_from)
-            res = self.company_id.compute_fiscalyear_dates(date)
-            wiz.fy_start_date = fields.Date.to_string(res["date_from"])
+        for wiz in self:
+            if wiz.date_from:
+                res = self.company_id.compute_fiscalyear_dates(wiz.date_from)
+                wiz.fy_start_date = res["date_from"]
+            else:
+                wiz.fy_start_date = False
 
     @api.onchange("company_id")
     def onchange_company_id(self):
@@ -155,7 +154,6 @@ class TrialBalanceReportWizard(models.TransientModel):
         self.date_from = self.date_range_id.date_start
         self.date_to = self.date_range_id.date_end
 
-    @api.multi
     @api.constrains("company_id", "date_range_id")
     def _check_company_id_date_range_id(self):
         for rec in self.sudo():
@@ -194,7 +192,6 @@ class TrialBalanceReportWizard(models.TransientModel):
         else:
             self.receivable_accounts_only = self.payable_accounts_only = False
 
-    @api.multi
     @api.depends("company_id")
     def _compute_unaffected_earnings_account(self):
         account_type = self.env.ref("account.data_unaffected_earnings")
@@ -212,7 +209,6 @@ class TrialBalanceReportWizard(models.TransientModel):
         store=True,
     )
 
-    @api.multi
     def _print_report(self, report_type):
         self.ensure_one()
         data = self._prepare_report_trial_balance()
@@ -229,19 +225,16 @@ class TrialBalanceReportWizard(models.TransientModel):
             .report_action(self, data=data)
         )
 
-    @api.multi
     def button_export_html(self):
         self.ensure_one()
         report_type = "qweb-html"
         return self._export(report_type)
 
-    @api.multi
     def button_export_pdf(self):
         self.ensure_one()
         report_type = "qweb-pdf"
         return self._export(report_type)
 
-    @api.multi
     def button_export_xlsx(self):
         self.ensure_one()
         report_type = "xlsx"

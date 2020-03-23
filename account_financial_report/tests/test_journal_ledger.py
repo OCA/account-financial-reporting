@@ -7,14 +7,14 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 from odoo.fields import Date
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import Form, TransactionCase
 
 
 class TestJournalReport(TransactionCase):
     def setUp(self):
         super(TestJournalReport, self).setUp()
         self.AccountObj = self.env["account.account"]
-        self.InvoiceObj = self.env["account.invoice"]
+        self.InvoiceObj = self.env["account.move"]
         self.JournalObj = self.env["account.journal"]
         self.MoveObj = self.env["account.move"]
         self.TaxObj = self.env["account.tax"]
@@ -24,6 +24,8 @@ class TestJournalReport(TransactionCase):
             "report.account_financial_report.journal_ledger"
         ]
         self.company = self.env.ref("base.main_company")
+        self.company.account_sale_tax_id = False
+        self.company.account_purchase_tax_id = False
 
         today = datetime.today()
         last_year = today - relativedelta(years=1)
@@ -38,6 +40,9 @@ class TestJournalReport(TransactionCase):
         )
         self.income_account = self.AccountObj.search(
             [("user_type_id.name", "=", "Income")], limit=1
+        )
+        self.expense_account = self.AccountObj.search(
+            [("user_type_id.name", "=", "Expenses")], limit=1
         )
         self.payable_account = self.AccountObj.search(
             [("user_type_id.name", "=", "Payable")], limit=1
@@ -55,7 +60,7 @@ class TestJournalReport(TransactionCase):
             {
                 "name": "Test journal purchase",
                 "code": "TST-JRNL-P",
-                "type": "sale",
+                "type": "purchase",
                 "company_id": self.company.id,
             }
         )
@@ -194,6 +199,7 @@ class TestJournalReport(TransactionCase):
                 "date_to": self.fy_date_end,
                 "company_id": self.company.id,
                 "journal_ids": [(6, 0, self.journal_sale.ids)],
+                "move_target": "all",
             }
         )
         data = wiz._prepare_report_journal_ledger()
@@ -227,39 +233,26 @@ class TestJournalReport(TransactionCase):
         self.check_report_journal_debit_credit(res_data, 300, 300)
 
     def test_02_test_taxes_out_invoice(self):
-        invoice_values = {
-            "journal_id": self.journal_sale.id,
-            "partner_id": self.partner_2.id,
-            "type": "out_invoice",
-            "invoice_line_ids": [
-                (
-                    0,
-                    0,
-                    {
-                        "quantity": 1.0,
-                        "price_unit": 100,
-                        "account_id": self.receivable_account.id,
-                        "name": "Test",
-                        "invoice_line_tax_ids": [(6, 0, [self.tax_15_s.id])],
-                    },
-                ),
-                (
-                    0,
-                    0,
-                    {
-                        "quantity": 1.0,
-                        "price_unit": 100,
-                        "account_id": self.receivable_account.id,
-                        "name": "Test",
-                        "invoice_line_tax_ids": [
-                            (6, 0, [self.tax_15_s.id, self.tax_20_s.id])
-                        ],
-                    },
-                ),
-            ],
-        }
-        invoice = self.InvoiceObj.create(invoice_values)
-        invoice.action_invoice_open()
+        move_form = Form(
+            self.env["account.move"].with_context(default_type="out_invoice")
+        )
+        move_form.partner_id = self.partner_2
+        move_form.journal_id = self.journal_sale
+        with move_form.invoice_line_ids.new() as line_form:
+            line_form.name = "test"
+            line_form.quantity = 1.0
+            line_form.price_unit = 100
+            line_form.account_id = self.income_account
+            line_form.tax_ids.add(self.tax_15_s)
+        with move_form.invoice_line_ids.new() as line_form:
+            line_form.name = "test"
+            line_form.quantity = 1.0
+            line_form.price_unit = 100
+            line_form.account_id = self.income_account
+            line_form.tax_ids.add(self.tax_15_s)
+            line_form.tax_ids.add(self.tax_20_s)
+        invoice = move_form.save()
+        invoice.post()
 
         wiz = self.JournalLedgerReportWizard.create(
             {
@@ -267,6 +260,7 @@ class TestJournalReport(TransactionCase):
                 "date_to": self.fy_date_end,
                 "company_id": self.company.id,
                 "journal_ids": [(6, 0, self.journal_sale.ids)],
+                "move_target": "all",
             }
         )
         data = wiz._prepare_report_journal_ledger()
@@ -275,46 +269,68 @@ class TestJournalReport(TransactionCase):
         self.check_report_journal_debit_credit_taxes(res_data, 0, 300, 0, 50)
 
     def test_03_test_taxes_in_invoice(self):
-        invoice_values = {
-            "journal_id": self.journal_sale.id,
-            "partner_id": self.partner_2.id,
-            "type": "in_invoice",
-            "invoice_line_ids": [
-                (
-                    0,
-                    0,
-                    {
-                        "quantity": 1.0,
-                        "price_unit": 100,
-                        "account_id": self.payable_account.id,
-                        "name": "Test",
-                        "invoice_line_tax_ids": [(6, 0, [self.tax_15_p.id])],
-                    },
-                ),
-                (
-                    0,
-                    0,
-                    {
-                        "quantity": 1.0,
-                        "price_unit": 100,
-                        "account_id": self.payable_account.id,
-                        "name": "Test",
-                        "invoice_line_tax_ids": [
-                            (6, 0, [self.tax_15_p.id, self.tax_20_p.id])
-                        ],
-                    },
-                ),
-            ],
-        }
-        invoice = self.InvoiceObj.create(invoice_values)
-        invoice.action_invoice_open()
+        # invoice_values = {
+        #     "journal_id": self.journal_purchase.id,
+        #     "partner_id": self.partner_2.id,
+        #     "type": "in_invoice",
+        #     "invoice_line_ids": [
+        #         (
+        #             0,
+        #             0,
+        #             {
+        #                 "quantity": 1.0,
+        #                 "price_unit": 100,
+        #                 "account_id": self.payable_account.id,
+        #                 "name": "Test",
+        #                 "tax_ids": [(6, 0, [self.tax_15_p.id])],
+        #             },
+        #         ),
+        #         (
+        #             0,
+        #             0,
+        #             {
+        #                 "quantity": 1.0,
+        #                 "price_unit": 100,
+        #                 "account_id": self.payable_account.id,
+        #                 "name": "Test",
+        #                 "tax_ids": [
+        #                     (6, 0, [self.tax_15_p.id, self.tax_20_p.id])
+        #                 ],
+        #             },
+        #         ),
+        #     ],
+        # }
+        # invoice = self.InvoiceObj.create(invoice_values)
+        # invoice.post()
+
+        move_form = Form(
+            self.env["account.move"].with_context(default_type="in_invoice")
+        )
+        move_form.partner_id = self.partner_2
+        move_form.journal_id = self.journal_purchase
+        with move_form.invoice_line_ids.new() as line_form:
+            line_form.name = "test"
+            line_form.quantity = 1.0
+            line_form.price_unit = 100
+            line_form.account_id = self.expense_account
+            line_form.tax_ids.add(self.tax_15_p)
+        with move_form.invoice_line_ids.new() as line_form:
+            line_form.name = "test"
+            line_form.quantity = 1.0
+            line_form.price_unit = 100
+            line_form.account_id = self.expense_account
+            line_form.tax_ids.add(self.tax_15_p)
+            line_form.tax_ids.add(self.tax_20_p)
+        invoice = move_form.save()
+        invoice.post()
 
         wiz = self.JournalLedgerReportWizard.create(
             {
                 "date_from": self.fy_date_start,
                 "date_to": self.fy_date_end,
                 "company_id": self.company.id,
-                "journal_ids": [(6, 0, self.journal_sale.ids)],
+                "journal_ids": [(6, 0, self.journal_purchase.ids)],
+                "move_target": "all",
             }
         )
         data = wiz._prepare_report_journal_ledger()

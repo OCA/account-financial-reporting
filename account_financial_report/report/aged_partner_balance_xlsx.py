@@ -7,6 +7,7 @@ from odoo import _, models
 
 class AgedPartnerBalanceXslx(models.AbstractModel):
     _name = "report.a_f_r.report_aged_partner_balance_xlsx"
+    _description = "Aged Partner Balance XLSL Report"
     _inherit = "report.account_financial_report.abstract_report_xlsx"
 
     def _get_report_name(self, report, data=False):

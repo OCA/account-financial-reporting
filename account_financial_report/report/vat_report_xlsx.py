@@ -6,6 +6,7 @@ from odoo import _, models
 
 class VATReportXslx(models.AbstractModel):
     _name = "report.a_f_r.report_vat_report_xlsx"
+    _description = "Vat Report XLSX Report"
     _inherit = "report.account_financial_report.abstract_report_xlsx"
 
     def _get_report_name(self, report, data):

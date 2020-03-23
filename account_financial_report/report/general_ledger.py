@@ -4,15 +4,13 @@
 
 import calendar
 import datetime
-from operator import itemgetter
-
-from natsort import natsorted
 
 from odoo import api, models
 
 
 class GeneralLedgerReport(models.AbstractModel):
     _name = "report.account_financial_report.general_ledger"
+    _description = "General Ledger Report"
 
     def _get_accounts_data(self, account_ids):
         accounts = self.env["account.account"].browse(account_ids)
@@ -601,7 +599,6 @@ class GeneralLedgerReport(models.AbstractModel):
             list_centralized_ml += list(centralized_ml[jnl_id].values())
         return list_centralized_ml
 
-    @api.multi
     def _get_report_values(self, docids, data):
         wizard_id = data["wizard_id"]
         company = self.env["res.company"].browse(data["company_id"])
@@ -669,7 +666,7 @@ class GeneralLedgerReport(models.AbstractModel):
                     account["move_lines"] = centralized_ml
                     account["partners"] = False
                     del account["list_partner"]
-        general_ledger = natsorted(general_ledger, key=itemgetter("code"))
+        general_ledger = sorted(general_ledger, key=lambda k: k["code"])
         return {
             "doc_ids": [wizard_id],
             "doc_model": "general.ledger.report.wizard",
