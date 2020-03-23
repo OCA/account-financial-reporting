@@ -4,7 +4,7 @@ from odoo import api, models
 
 
 class AccountMoveLine(models.Model):
-    _inherit = 'account.move.line'
+    _inherit = "account.move.line"
 
     @api.model_cr
     def init(self):
@@ -21,10 +21,13 @@ class AccountMoveLine(models.Model):
             By adding the following index, performances are strongly increased.
         :return:
         """
-        self._cr.execute('SELECT indexname FROM pg_indexes WHERE indexname = '
-                         '%s',
-                         ('account_move_line_account_id_partner_id_index',))
+        self._cr.execute(
+            "SELECT indexname FROM pg_indexes WHERE indexname = " "%s",
+            ("account_move_line_account_id_partner_id_index",),
+        )
         if not self._cr.fetchone():
-            self._cr.execute("""
+            self._cr.execute(
+                """
             CREATE INDEX account_move_line_account_id_partner_id_index
-            ON account_move_line (account_id, partner_id)""")
+            ON account_move_line (account_id, partner_id)"""
+            )
