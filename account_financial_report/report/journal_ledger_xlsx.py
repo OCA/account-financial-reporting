@@ -8,6 +8,7 @@ from odoo import _, models
 
 class JournalLedgerXslx(models.AbstractModel):
     _name = "report.a_f_r.report_journal_ledger_xlsx"
+    _description = "Journal Ledger XLSX Report"
     _inherit = "report.account_financial_report.abstract_report_xlsx"
 
     def _get_report_name(self, report, data=False):
@@ -35,7 +36,7 @@ class JournalLedgerXslx(models.AbstractModel):
             {"header": _("Partner"), "field": "partner", "width": 25},
             {"header": _("Ref - Label"), "field": "label", "width": 40},
             {"header": _("Taxes"), "field": "taxes_description", "width": 11},
-            {"header": _("Debit"), "field": "debit", "type": "amount", "width": 14,},
+            {"header": _("Debit"), "field": "debit", "type": "amount", "width": 14},
             {"header": _("Credit"), "field": "credit", "type": "amount", "width": 14},
         ]
 
@@ -188,7 +189,9 @@ class JournalLedgerXslx(models.AbstractModel):
             and journal.currency_id.name
             or journal.company_id.currency_id.name
         )
-        sheet_name = "Tax - {} ({}) - {}".format(journal.code, currency_name, journal.name)
+        sheet_name = "Tax - {} ({}) - {}".format(
+            journal.code, currency_name, journal.name
+        )
         self._generate_taxes_summary(workbook, sheet_name, ledger["tax_lines"])
 
     def _generate_moves_content(self, workbook, sheet_name, report, res_data, moves):

@@ -36,13 +36,11 @@ class AccountGroup(models.Model):
         """ Forms complete code of location from parent location to child location. """
         if self.parent_id.complete_code:
             self.complete_code = "{}/{}".format(
-                self.parent_id.complete_code,
-                self.code_prefix,
+                self.parent_id.complete_code, self.code_prefix
             )
         else:
             self.complete_code = self.code_prefix
 
-    @api.multi
     @api.depends("parent_id", "parent_id.level")
     def _compute_level(self):
         for group in self:
@@ -51,7 +49,6 @@ class AccountGroup(models.Model):
             else:
                 group.level = group.parent_id.level + 1
 
-    @api.multi
     @api.depends(
         "code_prefix",
         "account_ids",
