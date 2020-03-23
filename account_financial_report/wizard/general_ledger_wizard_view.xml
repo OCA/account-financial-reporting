@@ -124,7 +124,6 @@
         id="action_general_ledger_wizard"
         name="General Ledger"
         res_model="general.ledger.report.wizard"
-        view_type="form"
         view_mode="form"
         view_id="general_ledger_wizard"
         target="new"
@@ -134,14 +133,13 @@
         id="act_action_general_ledger_wizard_partner_relation"
         name="General Ledger"
         res_model="general.ledger.report.wizard"
-        src_model="res.partner"
+        binding_model="res.partner"
         view_mode="form"
         context="{
                     'default_receivable_accounts_only':1,
                     'default_payable_accounts_only':1,
                     }"
         groups="account.group_account_manager"
-        key2="client_action_multi"
         target="new"
     />
 </odoo>
