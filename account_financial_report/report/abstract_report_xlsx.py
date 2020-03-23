@@ -5,8 +5,8 @@ from odoo import models
 
 
 class AbstractReportXslx(models.AbstractModel):
-    _name = 'report.account_financial_report.abstract_report_xlsx'
-    _inherit = 'report.report_xlsx.abstract'
+    _name = "report.account_financial_report.abstract_report_xlsx"
+    _inherit = "report.report_xlsx.abstract"
 
     def __init__(self, pool, cr):
         # main sheet which will contains report
@@ -31,7 +31,7 @@ class AbstractReportXslx(models.AbstractModel):
         self.format_percent_bold_italic = None
 
     def get_workbook_options(self):
-        return {'constant_memory': True}
+        return {"constant_memory": True}
 
     def generate_xlsx_report(self, workbook, data, objects):
         report = objects
@@ -71,58 +71,57 @@ class AbstractReportXslx(models.AbstractModel):
          * format_amount
          * format_percent_bold_italic
         """
-        self.format_bold = workbook.add_format({'bold': True})
-        self.format_right = workbook.add_format({'align': 'right'})
-        self.format_left = workbook.add_format({'align': 'left'})
+        self.format_bold = workbook.add_format({"bold": True})
+        self.format_right = workbook.add_format({"align": "right"})
+        self.format_left = workbook.add_format({"align": "left"})
         self.format_right_bold_italic = workbook.add_format(
-            {'align': 'right', 'bold': True, 'italic': True}
+            {"align": "right", "bold": True, "italic": True}
         )
         self.format_header_left = workbook.add_format(
-            {'bold': True,
-             'border': True,
-             'bg_color': '#FFFFCC'})
-        self.format_header_center = workbook.add_format(
-            {'bold': True,
-             'align': 'center',
-             'border': True,
-             'bg_color': '#FFFFCC'})
-        self.format_header_right = workbook.add_format(
-            {'bold': True,
-             'align': 'right',
-             'border': True,
-             'bg_color': '#FFFFCC'})
-        self.format_header_amount = workbook.add_format(
-            {'bold': True,
-             'border': True,
-             'bg_color': '#FFFFCC'})
-        currency_id = self.env['res.company']._get_user_currency()
-        self.format_header_amount.set_num_format(
-            '#,##0.'+'0'*currency_id.decimal_places)
-        self.format_amount = workbook.add_format()
-        self.format_amount.set_num_format(
-            '#,##0.'+'0'*currency_id.decimal_places)
-        self.format_amount_bold = workbook.add_format({'bold': True})
-        self.format_amount_bold.set_num_format(
-            '#,##0.' + '0' * currency_id.decimal_places)
-        self.format_percent_bold_italic = workbook.add_format(
-            {'bold': True, 'italic': True}
+            {"bold": True, "border": True, "bg_color": "#FFFFCC"}
         )
-        self.format_percent_bold_italic.set_num_format('#,##0.00%')
+        self.format_header_center = workbook.add_format(
+            {"bold": True, "align": "center", "border": True, "bg_color": "#FFFFCC"}
+        )
+        self.format_header_right = workbook.add_format(
+            {"bold": True, "align": "right", "border": True, "bg_color": "#FFFFCC"}
+        )
+        self.format_header_amount = workbook.add_format(
+            {"bold": True, "border": True, "bg_color": "#FFFFCC"}
+        )
+        currency_id = self.env["res.company"]._get_user_currency()
+        self.format_header_amount.set_num_format(
+            "#,##0." + "0" * currency_id.decimal_places
+        )
+        self.format_amount = workbook.add_format()
+        self.format_amount.set_num_format("#,##0." + "0" * currency_id.decimal_places)
+        self.format_amount_bold = workbook.add_format({"bold": True})
+        self.format_amount_bold.set_num_format(
+            "#,##0." + "0" * currency_id.decimal_places
+        )
+        self.format_percent_bold_italic = workbook.add_format(
+            {"bold": True, "italic": True}
+        )
+        self.format_percent_bold_italic.set_num_format("#,##0.00%")
 
     def _set_column_width(self):
         """Set width for all defined columns.
         Columns are defined with `_get_report_columns` method.
         """
         for position, column in self.columns.items():
-            self.sheet.set_column(position, position, column['width'])
+            self.sheet.set_column(position, position, column["width"])
 
     def _write_report_title(self, title):
         """Write report title on current line using all defined columns width.
         Columns are defined with `_get_report_columns` method.
         """
         self.sheet.merge_range(
-            self.row_pos, 0, self.row_pos, len(self.columns) - 1,
-            title, self.format_bold
+            self.row_pos,
+            0,
+            self.row_pos,
+            len(self.columns) - 1,
+            title,
+            self.format_bold,
         )
         self.row_pos += 3
 
@@ -133,8 +132,12 @@ class AbstractReportXslx(models.AbstractModel):
         if footer:
             self.row_pos += 1
             self.sheet.merge_range(
-                self.row_pos, 0, self.row_pos, len(self.columns) - 1,
-                footer, self.format_left
+                self.row_pos,
+                0,
+                self.row_pos,
+                len(self.columns) - 1,
+                footer,
+                self.format_left,
             )
             self.row_pos += 1
 
@@ -151,13 +154,20 @@ class AbstractReportXslx(models.AbstractModel):
         col_value = col_name + col_count_filter_name + 1
         for title, value in filters:
             self.sheet.merge_range(
-                self.row_pos, col_name,
-                self.row_pos, col_name + col_count_filter_name - 1,
-                title, self.format_header_left)
+                self.row_pos,
+                col_name,
+                self.row_pos,
+                col_name + col_count_filter_name - 1,
+                title,
+                self.format_header_left,
+            )
             self.sheet.merge_range(
-                self.row_pos, col_value,
-                self.row_pos, col_value + col_count_filter_value - 1,
-                value)
+                self.row_pos,
+                col_value,
+                self.row_pos,
+                col_value + col_count_filter_value - 1,
+                value,
+            )
             self.row_pos += 1
         self.row_pos += 2
 
@@ -166,8 +176,12 @@ class AbstractReportXslx(models.AbstractModel):
         Columns are defined with `_get_report_columns` method.
         """
         self.sheet.merge_range(
-            self.row_pos, 0, self.row_pos, len(self.columns) - 1,
-            title, self.format_bold
+            self.row_pos,
+            0,
+            self.row_pos,
+            len(self.columns) - 1,
+            title,
+            self.format_bold,
         )
         self.row_pos += 1
 
@@ -176,8 +190,9 @@ class AbstractReportXslx(models.AbstractModel):
         Columns are defined with `_get_report_columns` method.
         """
         for col_pos, column in self.columns.items():
-            self.sheet.write(self.row_pos, col_pos, column['header'],
-                             self.format_header_center)
+            self.sheet.write(
+                self.row_pos, col_pos, column["header"], self.format_header_center
+            )
         self.row_pos += 1
 
     def write_line(self, line_object):
@@ -185,28 +200,34 @@ class AbstractReportXslx(models.AbstractModel):
         Columns are defined with `_get_report_columns` method.
         """
         for col_pos, column in self.columns.items():
-            value = getattr(line_object, column['field'])
-            cell_type = column.get('type', 'string')
-            if cell_type == 'many2one':
+            value = getattr(line_object, column["field"])
+            cell_type = column.get("type", "string")
+            if cell_type == "many2one":
                 self.sheet.write_string(
-                    self.row_pos, col_pos, value.name or '', self.format_right)
-            elif cell_type == 'string':
-                if hasattr(line_object, 'account_group_id') and \
-                        line_object.account_group_id:
-                    self.sheet.write_string(self.row_pos, col_pos, value or '',
-                                            self.format_bold)
+                    self.row_pos, col_pos, value.name or "", self.format_right
+                )
+            elif cell_type == "string":
+                if (
+                    hasattr(line_object, "account_group_id")
+                    and line_object.account_group_id
+                ):
+                    self.sheet.write_string(
+                        self.row_pos, col_pos, value or "", self.format_bold
+                    )
                 else:
-                    self.sheet.write_string(self.row_pos, col_pos, value or '')
-            elif cell_type == 'amount':
-                if hasattr(line_object, 'account_group_id') and \
-                        line_object.account_group_id:
+                    self.sheet.write_string(self.row_pos, col_pos, value or "")
+            elif cell_type == "amount":
+                if (
+                    hasattr(line_object, "account_group_id")
+                    and line_object.account_group_id
+                ):
                     cell_format = self.format_amount_bold
                 else:
                     cell_format = self.format_amount
                 self.sheet.write_number(
                     self.row_pos, col_pos, float(value), cell_format
                 )
-            elif cell_type == 'amount_currency':
+            elif cell_type == "amount_currency":
                 if line_object.currency_id:
                     format_amt = self._get_currency_amt_format(line_object)
                     self.sheet.write_number(
@@ -218,40 +239,45 @@ class AbstractReportXslx(models.AbstractModel):
         """Write a line on current line
         """
         for col_pos, column in self.columns.items():
-            value = line_dict.get(column['field'], False)
-            cell_type = column.get('type', 'string')
-            if cell_type == 'string':
-                if (line_dict.get('account_group_id', False) and
-                        line_dict['account_group_id']):
+            value = line_dict.get(column["field"], False)
+            cell_type = column.get("type", "string")
+            if cell_type == "string":
+                if (
+                    line_dict.get("account_group_id", False)
+                    and line_dict["account_group_id"]
+                ):
                     self.sheet.write_string(
-                        self.row_pos, col_pos, value or '',
-                        self.format_bold)
+                        self.row_pos, col_pos, value or "", self.format_bold
+                    )
                 else:
-                    if not isinstance(value, str) and \
-                        not isinstance(value, bool) and \
-                            not isinstance(value, int):
+                    if (
+                        not isinstance(value, str)
+                        and not isinstance(value, bool)
+                        and not isinstance(value, int)
+                    ):
                         value = value.strftime("%d/%m/%Y")
-                    self.sheet.write_string(
-                        self.row_pos, col_pos, value or '')
-            elif cell_type == 'amount':
-                if line_dict.get('account_group_id', False) and \
-                        line_dict['account_group_id']:
+                    self.sheet.write_string(self.row_pos, col_pos, value or "")
+            elif cell_type == "amount":
+                if (
+                    line_dict.get("account_group_id", False)
+                    and line_dict["account_group_id"]
+                ):
                     cell_format = self.format_amount_bold
                 else:
                     cell_format = self.format_amount
                 self.sheet.write_number(
                     self.row_pos, col_pos, float(value), cell_format
                 )
-            elif cell_type == 'amount_currency':
-                if line_dict.get('currency_name', False):
-                    format_amt = self._get_currency_amt_format_dict(
-                        line_dict)
+            elif cell_type == "amount_currency":
+                if line_dict.get("currency_name", False):
+                    format_amt = self._get_currency_amt_format_dict(line_dict)
                     self.sheet.write_number(
                         self.row_pos, col_pos, float(value), format_amt
                     )
-            elif cell_type == 'currency_name':
+            elif cell_type == "currency_name":
                 self.sheet.write_string(
-                    self.row_pos, col_pos, value or '', self.format_right)
+                    self.row_pos, col_pos, value or "", self.format_right
+                )
         self.row_pos += 1
 
     def write_initial_balance(self, my_object, label):
@@ -262,32 +288,28 @@ class AbstractReportXslx(models.AbstractModel):
         col_pos_label = self._get_col_pos_initial_balance_label()
         self.sheet.write(self.row_pos, col_pos_label, label, self.format_right)
         for col_pos, column in self.columns.items():
-            if column.get('field_initial_balance'):
-                value = getattr(my_object, column['field_initial_balance'])
-                cell_type = column.get('type', 'string')
-                if cell_type == 'string':
-                    self.sheet.write_string(self.row_pos, col_pos, value or '')
-                elif cell_type == 'amount':
+            if column.get("field_initial_balance"):
+                value = getattr(my_object, column["field_initial_balance"])
+                cell_type = column.get("type", "string")
+                if cell_type == "string":
+                    self.sheet.write_string(self.row_pos, col_pos, value or "")
+                elif cell_type == "amount":
                     self.sheet.write_number(
                         self.row_pos, col_pos, float(value), self.format_amount
                     )
-                elif cell_type == 'amount_currency':
+                elif cell_type == "amount_currency":
                     if my_object.currency_id:
-                        format_amt = self._get_currency_amt_format(
-                            my_object)
+                        format_amt = self._get_currency_amt_format(my_object)
                         self.sheet.write_number(
-                            self.row_pos, col_pos,
-                            float(value), format_amt
+                            self.row_pos, col_pos, float(value), format_amt
                         )
-            elif column.get('field_currency_balance'):
-                value = getattr(my_object, column['field_currency_balance'])
-                cell_type = column.get('type', 'string')
-                if cell_type == 'many2one':
+            elif column.get("field_currency_balance"):
+                value = getattr(my_object, column["field_currency_balance"])
+                cell_type = column.get("type", "string")
+                if cell_type == "many2one":
                     if my_object.currency_id:
                         self.sheet.write_string(
-                            self.row_pos, col_pos,
-                            value.name or '',
-                            self.format_right
+                            self.row_pos, col_pos, value.name or "", self.format_right
                         )
         self.row_pos += 1
 
@@ -299,32 +321,28 @@ class AbstractReportXslx(models.AbstractModel):
         col_pos_label = self._get_col_pos_initial_balance_label()
         self.sheet.write(self.row_pos, col_pos_label, label, self.format_right)
         for col_pos, column in self.columns.items():
-            if column.get('field_initial_balance'):
-                value = my_object.get(column['field_initial_balance'], False)
-                cell_type = column.get('type', 'string')
-                if cell_type == 'string':
-                    self.sheet.write_string(self.row_pos, col_pos, value or '')
-                elif cell_type == 'amount':
+            if column.get("field_initial_balance"):
+                value = my_object.get(column["field_initial_balance"], False)
+                cell_type = column.get("type", "string")
+                if cell_type == "string":
+                    self.sheet.write_string(self.row_pos, col_pos, value or "")
+                elif cell_type == "amount":
                     self.sheet.write_number(
                         self.row_pos, col_pos, float(value), self.format_amount
                     )
-                elif cell_type == 'amount_currency':
-                    if my_object['currency_id']:
-                        format_amt = self._get_currency_amt_format(
-                            my_object)
+                elif cell_type == "amount_currency":
+                    if my_object["currency_id"]:
+                        format_amt = self._get_currency_amt_format(my_object)
                         self.sheet.write_number(
-                            self.row_pos, col_pos,
-                            float(value), format_amt
+                            self.row_pos, col_pos, float(value), format_amt
                         )
-            elif column.get('field_currency_balance'):
-                value = my_object.get(column['field_currency_balance'], False)
-                cell_type = column.get('type', 'string')
-                if cell_type == 'many2one':
-                    if my_object['currency_id']:
+            elif column.get("field_currency_balance"):
+                value = my_object.get(column["field_currency_balance"], False)
+                cell_type = column.get("type", "string")
+                if cell_type == "many2one":
+                    if my_object["currency_id"]:
                         self.sheet.write_string(
-                            self.row_pos, col_pos,
-                            value.name or '',
-                            self.format_right
+                            self.row_pos, col_pos, value.name or "", self.format_right
                         )
         self.row_pos += 1
 
@@ -334,44 +352,46 @@ class AbstractReportXslx(models.AbstractModel):
         Columns are defined with `_get_report_columns` method.
         """
         for i in range(0, len(self.columns)):
-            self.sheet.write(self.row_pos, i, '', self.format_header_right)
+            self.sheet.write(self.row_pos, i, "", self.format_header_right)
         row_count_name = self._get_col_count_final_balance_name()
         col_pos_label = self._get_col_pos_final_balance_label()
         self.sheet.merge_range(
-            self.row_pos, 0, self.row_pos, row_count_name - 1, name,
-            self.format_header_left
+            self.row_pos,
+            0,
+            self.row_pos,
+            row_count_name - 1,
+            name,
+            self.format_header_left,
         )
-        self.sheet.write(self.row_pos, col_pos_label, label,
-                         self.format_header_right)
+        self.sheet.write(self.row_pos, col_pos_label, label, self.format_header_right)
         for col_pos, column in self.columns.items():
-            if column.get('field_final_balance'):
-                value = getattr(my_object, column['field_final_balance'])
-                cell_type = column.get('type', 'string')
-                if cell_type == 'string':
-                    self.sheet.write_string(self.row_pos, col_pos, value or '',
-                                            self.format_header_right)
-                elif cell_type == 'amount':
-                    self.sheet.write_number(
-                        self.row_pos, col_pos, float(value),
-                        self.format_header_amount
+            if column.get("field_final_balance"):
+                value = getattr(my_object, column["field_final_balance"])
+                cell_type = column.get("type", "string")
+                if cell_type == "string":
+                    self.sheet.write_string(
+                        self.row_pos, col_pos, value or "", self.format_header_right
                     )
-                elif cell_type == 'amount_currency':
+                elif cell_type == "amount":
+                    self.sheet.write_number(
+                        self.row_pos, col_pos, float(value), self.format_header_amount
+                    )
+                elif cell_type == "amount_currency":
                     if my_object.currency_id:
-                        format_amt = self._get_currency_amt_header_format(
-                            my_object)
+                        format_amt = self._get_currency_amt_header_format(my_object)
                         self.sheet.write_number(
-                            self.row_pos, col_pos, float(value),
-                            format_amt
+                            self.row_pos, col_pos, float(value), format_amt
                         )
-            elif column.get('field_currency_balance'):
-                value = getattr(my_object, column['field_currency_balance'])
-                cell_type = column.get('type', 'string')
-                if cell_type == 'many2one':
+            elif column.get("field_currency_balance"):
+                value = getattr(my_object, column["field_currency_balance"])
+                cell_type = column.get("type", "string")
+                if cell_type == "many2one":
                     if my_object.currency_id:
                         self.sheet.write_string(
-                            self.row_pos, col_pos,
-                            value.name or '',
-                            self.format_header_right
+                            self.row_pos,
+                            col_pos,
+                            value.name or "",
+                            self.format_header_right,
                         )
         self.row_pos += 1
 
@@ -381,129 +401,120 @@ class AbstractReportXslx(models.AbstractModel):
         Columns are defined with `_get_report_columns` method.
         """
         for i in range(0, len(self.columns)):
-            self.sheet.write(self.row_pos, i, '', self.format_header_right)
+            self.sheet.write(self.row_pos, i, "", self.format_header_right)
         row_count_name = self._get_col_count_final_balance_name()
         col_pos_label = self._get_col_pos_final_balance_label()
         self.sheet.merge_range(
-            self.row_pos, 0, self.row_pos, row_count_name - 1, name,
-            self.format_header_left
+            self.row_pos,
+            0,
+            self.row_pos,
+            row_count_name - 1,
+            name,
+            self.format_header_left,
         )
-        self.sheet.write(self.row_pos, col_pos_label, label,
-                         self.format_header_right)
+        self.sheet.write(self.row_pos, col_pos_label, label, self.format_header_right)
         for col_pos, column in self.columns.items():
-            if column.get('field_final_balance'):
-                value = my_object.get(column['field_final_balance'], False)
-                cell_type = column.get('type', 'string')
-                if cell_type == 'string':
-                    self.sheet.write_string(self.row_pos, col_pos,
-                                            value or '',
-                                            self.format_header_right)
-                elif cell_type == 'amount':
-                    self.sheet.write_number(
-                        self.row_pos, col_pos, float(value),
-                        self.format_header_amount
+            if column.get("field_final_balance"):
+                value = my_object.get(column["field_final_balance"], False)
+                cell_type = column.get("type", "string")
+                if cell_type == "string":
+                    self.sheet.write_string(
+                        self.row_pos, col_pos, value or "", self.format_header_right
                     )
-                elif cell_type == 'amount_currency':
-                    if my_object['currency_id'] and value:
-                        format_amt = self._get_currency_amt_format_dict(
-                            my_object)
+                elif cell_type == "amount":
+                    self.sheet.write_number(
+                        self.row_pos, col_pos, float(value), self.format_header_amount
+                    )
+                elif cell_type == "amount_currency":
+                    if my_object["currency_id"] and value:
+                        format_amt = self._get_currency_amt_format_dict(my_object)
                         self.sheet.write_number(
-                            self.row_pos, col_pos, float(value),
-                            format_amt
+                            self.row_pos, col_pos, float(value), format_amt
                         )
-            elif column.get('field_currency_balance'):
-                value = my_object.get(column['field_currency_balance'], False)
-                cell_type = column.get('type', 'string')
-                if cell_type == 'many2one':
-                    if my_object['currency_id']:
+            elif column.get("field_currency_balance"):
+                value = my_object.get(column["field_currency_balance"], False)
+                cell_type = column.get("type", "string")
+                if cell_type == "many2one":
+                    if my_object["currency_id"]:
                         self.sheet.write_string(
-                            self.row_pos, col_pos,
-                            value or '',
-                            self.format_header_right
+                            self.row_pos, col_pos, value or "", self.format_header_right
                         )
         self.row_pos += 1
 
     def _get_currency_amt_format(self, line_object):
         """ Return amount format specific for each currency. """
-        if hasattr(line_object, 'account_group_id') and \
-                line_object.account_group_id:
-            format_amt = getattr(self, 'format_amount_bold')
-            field_prefix = 'format_amount_bold'
+        if hasattr(line_object, "account_group_id") and line_object.account_group_id:
+            format_amt = getattr(self, "format_amount_bold")
+            field_prefix = "format_amount_bold"
         else:
-            format_amt = getattr(self, 'format_amount')
-            field_prefix = 'format_amount'
+            format_amt = getattr(self, "format_amount")
+            field_prefix = "format_amount"
         if line_object.currency_id:
-            field_name = \
-                '%s_%s' % (field_prefix, line_object.currency_id.name)
+            field_name = "{}_{}".format(field_prefix, line_object.currency_id.name)
             if hasattr(self, field_name):
                 format_amt = getattr(self, field_name)
             else:
                 format_amt = self.workbook.add_format()
-                setattr(self, 'field_name', format_amt)
-                format_amount = \
-                    '#,##0.' + ('0' * line_object.currency_id.decimal_places)
+                setattr(self, "field_name", format_amt)
+                format_amount = "#,##0." + (
+                    "0" * line_object.currency_id.decimal_places
+                )
                 format_amt.set_num_format(format_amount)
         return format_amt
 
     def _get_currency_amt_format_dict(self, line_dict):
         """ Return amount format specific for each currency. """
-        if line_dict.get('account_group_id', False) and \
-                line_dict['account_group_id']:
-            format_amt = getattr(self, 'format_amount_bold')
-            field_prefix = 'format_amount_bold'
+        if line_dict.get("account_group_id", False) and line_dict["account_group_id"]:
+            format_amt = getattr(self, "format_amount_bold")
+            field_prefix = "format_amount_bold"
         else:
-            format_amt = getattr(self, 'format_amount')
-            field_prefix = 'format_amount'
-        if line_dict.get('currency_id', False) and line_dict['currency_id']:
-            currency = self.env['res.currency'].browse(
-                [line_dict['currency_id']])
-            field_name = \
-                '%s_%s' % (field_prefix, currency.name)
+            format_amt = getattr(self, "format_amount")
+            field_prefix = "format_amount"
+        if line_dict.get("currency_id", False) and line_dict["currency_id"]:
+            currency = self.env["res.currency"].browse([line_dict["currency_id"]])
+            field_name = "{}_{}".format(field_prefix, currency.name)
             if hasattr(self, field_name):
                 format_amt = getattr(self, field_name)
             else:
                 format_amt = self.workbook.add_format()
-                setattr(self, 'field_name', format_amt)
-                format_amount = \
-                    '#,##0.' + ('0' * currency.decimal_places)
+                setattr(self, "field_name", format_amt)
+                format_amount = "#,##0." + ("0" * currency.decimal_places)
                 format_amt.set_num_format(format_amount)
         return format_amt
 
     def _get_currency_amt_header_format(self, line_object):
         """ Return amount header format for each currency. """
-        format_amt = getattr(self, 'format_header_amount')
+        format_amt = getattr(self, "format_header_amount")
         if line_object.currency_id:
-            field_name = \
-                'format_header_amount_%s' % line_object.currency_id.name
+            field_name = "format_header_amount_%s" % line_object.currency_id.name
             if hasattr(self, field_name):
                 format_amt = getattr(self, field_name)
             else:
                 format_amt = self.workbook.add_format(
-                    {'bold': True,
-                     'border': True,
-                     'bg_color': '#FFFFCC'})
-                setattr(self, 'field_name', format_amt)
-                format_amount = \
-                    '#,##0.' + ('0' * line_object.currency_id.decimal_places)
+                    {"bold": True, "border": True, "bg_color": "#FFFFCC"}
+                )
+                setattr(self, "field_name", format_amt)
+                format_amount = "#,##0." + (
+                    "0" * line_object.currency_id.decimal_places
+                )
                 format_amt.set_num_format(format_amount)
         return format_amt
 
     def _get_currency_amt_header_format_dict(self, line_object):
         """ Return amount header format for each currency. """
-        format_amt = getattr(self, 'format_header_amount')
-        if line_object['currency_id']:
-            field_name = \
-                'format_header_amount_%s' % line_object['currency_name']
+        format_amt = getattr(self, "format_header_amount")
+        if line_object["currency_id"]:
+            field_name = "format_header_amount_%s" % line_object["currency_name"]
             if hasattr(self, field_name):
                 format_amt = getattr(self, field_name)
             else:
                 format_amt = self.workbook.add_format(
-                    {'bold': True,
-                     'border': True,
-                     'bg_color': '#FFFFCC'})
-                setattr(self, 'field_name', format_amt)
-                format_amount = \
-                    '#,##0.' + ('0' * line_object['currency_id'].decimal_places)
+                    {"bold": True, "border": True, "bg_color": "#FFFFCC"}
+                )
+                setattr(self, "field_name", format_amt)
+                format_amount = "#,##0." + (
+                    "0" * line_object["currency_id"].decimal_places
+                )
                 format_amt.set_num_format(format_amount)
         return format_amt
 
@@ -515,8 +526,10 @@ class AbstractReportXslx(models.AbstractModel):
 
     def _get_report_complete_name(self, report, prefix, data=None):
         if report.company_id:
-            suffix = ' - %s - %s' % (
-                report.company_id.name, report.company_id.currency_id.name)
+            suffix = " - {} - {}".format(
+                report.company_id.name,
+                report.company_id.currency_id.name,
+            )
             return prefix + suffix
         return prefix
 
