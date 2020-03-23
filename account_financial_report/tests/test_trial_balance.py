@@ -92,19 +92,16 @@ class TestTrialBalanceReport(common.TransactionCase):
         unaffected_debit=0,
         unaffected_credit=0,
     ):
-        move_name = "expense accrual"
         journal = self.env["account.journal"].search([], limit=1)
         partner = self.env.ref("base.res_partner_12")
         move_vals = {
             "journal_id": journal.id,
-            "name": move_name,
             "date": date,
             "line_ids": [
                 (
                     0,
                     0,
                     {
-                        "name": move_name,
                         "debit": receivable_debit,
                         "credit": receivable_credit,
                         "partner_id": partner.id,
@@ -115,7 +112,6 @@ class TestTrialBalanceReport(common.TransactionCase):
                     0,
                     0,
                     {
-                        "name": move_name,
                         "debit": income_debit,
                         "credit": income_credit,
                         "partner_id": partner.id,
@@ -126,7 +122,6 @@ class TestTrialBalanceReport(common.TransactionCase):
                     0,
                     0,
                     {
-                        "name": move_name,
                         "debit": unaffected_debit,
                         "credit": unaffected_credit,
                         "partner_id": partner.id,
@@ -137,7 +132,6 @@ class TestTrialBalanceReport(common.TransactionCase):
                     0,
                     0,
                     {
-                        "name": move_name,
                         "debit": receivable_debit,
                         "credit": receivable_credit,
                         "partner_id": partner.id,
@@ -148,7 +142,6 @@ class TestTrialBalanceReport(common.TransactionCase):
                     0,
                     0,
                     {
-                        "name": move_name,
                         "debit": receivable_credit,
                         "credit": receivable_debit,
                         "partner_id": partner.id,
@@ -240,8 +233,8 @@ class TestTrialBalanceReport(common.TransactionCase):
         return total
 
     def test_00_account_group(self):
-        self.assertGreaterEqual(len(self.group1.compute_account_ids), 19)
-        self.assertGreaterEqual(len(self.group2.compute_account_ids), 9)
+        self.assertTrue(self.account100 in self.group1.compute_account_ids)
+        self.assertTrue(self.account200 in self.group2.compute_account_ids)
 
     def test_01_account_balance_computed(self):
         # Make sure there's no account of type "Current Year Earnings" in the
@@ -660,32 +653,20 @@ class TestTrialBalanceReport(common.TransactionCase):
 
     def test_04_undistributed_pl(self):
         # Add a P&L Move in the previous FY
-        move_name = "current year pl move"
         journal = self.env["account.journal"].search([], limit=1)
         move_vals = {
             "journal_id": journal.id,
-            "name": move_name,
             "date": self.previous_fy_date_end,
             "line_ids": [
                 (
                     0,
                     0,
-                    {
-                        "name": move_name,
-                        "debit": 0.0,
-                        "credit": 1000.0,
-                        "account_id": self.account300.id,
-                    },
+                    {"debit": 0.0, "credit": 1000.0, "account_id": self.account300.id},
                 ),
                 (
                     0,
                     0,
-                    {
-                        "name": move_name,
-                        "debit": 1000.0,
-                        "credit": 0.0,
-                        "account_id": self.account100.id,
-                    },
+                    {"debit": 1000.0, "credit": 0.0, "account_id": self.account100.id},
                 ),
             ],
         }
@@ -724,32 +705,20 @@ class TestTrialBalanceReport(common.TransactionCase):
         self.assertEqual(unaffected_lines["credit"], 0)
         self.assertEqual(unaffected_lines["final_balance"], -1000)
         # Add a P&L Move to the current FY
-        move_name = "current year pl move"
         journal = self.env["account.journal"].search([], limit=1)
         move_vals = {
             "journal_id": journal.id,
-            "name": move_name,
             "date": self.date_start,
             "line_ids": [
                 (
                     0,
                     0,
-                    {
-                        "name": move_name,
-                        "debit": 0.0,
-                        "credit": 1000.0,
-                        "account_id": self.account300.id,
-                    },
+                    {"debit": 0.0, "credit": 1000.0, "account_id": self.account300.id},
                 ),
                 (
                     0,
                     0,
-                    {
-                        "name": move_name,
-                        "debit": 1000.0,
-                        "credit": 0.0,
-                        "account_id": self.account100.id,
-                    },
+                    {"debit": 1000.0, "credit": 0.0, "account_id": self.account100.id},
                 ),
             ],
         }
@@ -788,32 +757,20 @@ class TestTrialBalanceReport(common.TransactionCase):
         self.assertEqual(unaffected_lines["credit"], 0)
         self.assertEqual(unaffected_lines["final_balance"], -1000)
         # Add a Move including Unaffected Earnings to the current FY
-        move_name = "current year unaffected earnings move"
         journal = self.env["account.journal"].search([], limit=1)
         move_vals = {
             "journal_id": journal.id,
-            "name": move_name,
             "date": self.date_start,
             "line_ids": [
                 (
                     0,
                     0,
-                    {
-                        "name": move_name,
-                        "debit": 0.0,
-                        "credit": 1000.0,
-                        "account_id": self.account110.id,
-                    },
+                    {"debit": 0.0, "credit": 1000.0, "account_id": self.account110.id},
                 ),
                 (
                     0,
                     0,
-                    {
-                        "name": move_name,
-                        "debit": 1000.0,
-                        "credit": 0.0,
-                        "account_id": self.account100.id,
-                    },
+                    {"debit": 1000.0, "credit": 0.0, "account_id": self.account100.id},
                 ),
             ],
         }

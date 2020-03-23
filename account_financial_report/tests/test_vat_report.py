@@ -45,13 +45,25 @@ class TestVATReport(common.TransactionCase):
             [("type", "=", "bank"), ("company_id", "=", self.company.id)], limit=1
         )
         self.tax_tag_01 = self.env["account.account.tag"].create(
-            {"name": "Tag 01", "applicability": "taxes"}
+            {
+                "name": "Tag 01",
+                "applicability": "taxes",
+                "country_id": self.company.country_id.id,
+            }
         )
         self.tax_tag_02 = self.env["account.account.tag"].create(
-            {"name": "Tag 02", "applicability": "taxes"}
+            {
+                "name": "Tag 02",
+                "applicability": "taxes",
+                "country_id": self.company.country_id.id,
+            }
         )
         self.tax_tag_03 = self.env["account.account.tag"].create(
-            {"name": "Tag 03", "applicability": "taxes"}
+            {
+                "name": "Tag 03",
+                "applicability": "taxes",
+                "country_id": self.company.country_id.id,
+            }
         )
         self.tax_group_10 = self.env["account.tax.group"].create(
             {"name": "Tax 10%", "sequence": 1}
@@ -65,11 +77,35 @@ class TestVATReport(common.TransactionCase):
                 "amount": 10.0,
                 "amount_type": "percent",
                 "type_tax_use": "sale",
-                "account_id": self.tax_account.id,
                 "company_id": self.company.id,
-                "refund_account_id": self.tax_account.id,
                 "tax_group_id": self.tax_group_10.id,
-                "tag_ids": [(6, 0, [self.tax_tag_01.id, self.tax_tag_02.id])],
+                "invoice_repartition_line_ids": [
+                    (0, 0, {"factor_percent": 100, "repartition_type": "base"}),
+                    (
+                        0,
+                        0,
+                        {
+                            "factor_percent": 100,
+                            "repartition_type": "tax",
+                            "account_id": self.tax_account.id,
+                            "tag_ids": [
+                                (6, 0, [self.tax_tag_01.id, self.tax_tag_02.id])
+                            ],
+                        },
+                    ),
+                ],
+                "refund_repartition_line_ids": [
+                    (0, 0, {"factor_percent": 100, "repartition_type": "base"}),
+                    (
+                        0,
+                        0,
+                        {
+                            "factor_percent": 100,
+                            "repartition_type": "tax",
+                            "account_id": self.tax_account.id,
+                        },
+                    ),
+                ],
             }
         )
         self.tax_20 = self.env["account.tax"].create(
@@ -79,67 +115,65 @@ class TestVATReport(common.TransactionCase):
                 "amount": 20.0,
                 "amount_type": "percent",
                 "type_tax_use": "sale",
-                "tax_exigibility": "on_payment",
-                "account_id": self.tax_account.id,
                 "company_id": self.company.id,
-                "refund_account_id": self.tax_account.id,
-                "cash_basis_account_id": self.tax_account.id,
+                "cash_basis_transition_account_id": self.tax_account.id,
                 "tax_group_id": self.tax_group_20.id,
-                "tag_ids": [(6, 0, [self.tax_tag_02.id, self.tax_tag_03.id])],
+                "invoice_repartition_line_ids": [
+                    (0, 0, {"factor_percent": 100, "repartition_type": "base"}),
+                    (
+                        0,
+                        0,
+                        {
+                            "factor_percent": 100,
+                            "repartition_type": "tax",
+                            "account_id": self.tax_account.id,
+                            "tag_ids": [
+                                (6, 0, [self.tax_tag_02.id, self.tax_tag_03.id])
+                            ],
+                        },
+                    ),
+                ],
+                "refund_repartition_line_ids": [
+                    (0, 0, {"factor_percent": 100, "repartition_type": "base"}),
+                    (
+                        0,
+                        0,
+                        {
+                            "factor_percent": 100,
+                            "repartition_type": "tax",
+                            "account_id": self.tax_account.id,
+                        },
+                    ),
+                ],
             }
         )
 
-        invoice = self.env["account.invoice"].create(
-            {
-                "partner_id": self.env.ref("base.res_partner_2").id,
-                "account_id": self.receivable_account.id,
-                "company_id": self.company.id,
-                "date_invoice": time.strftime("%Y-%m-03"),
-                "type": "out_invoice",
-            }
+        move_form = common.Form(
+            self.env["account.move"].with_context(default_type="out_invoice")
         )
+        move_form.partner_id = self.env.ref("base.res_partner_2")
+        move_form.invoice_date = time.strftime("%Y-%m-03")
+        with move_form.invoice_line_ids.new() as line_form:
+            line_form.product_id = self.env.ref("product.product_product_4")
+            line_form.quantity = 1.0
+            line_form.price_unit = 100.0
+            line_form.account_id = self.income_account
+            line_form.tax_ids.add(self.tax_10)
+        invoice = move_form.save()
+        invoice.post()
 
-        self.env["account.invoice.line"].create(
-            {
-                "product_id": self.env.ref("product.product_product_4").id,
-                "quantity": 1.0,
-                "price_unit": 100.0,
-                "invoice_id": invoice.id,
-                "name": "product",
-                "account_id": self.income_account.id,
-                "invoice_line_tax_ids": [(6, 0, [self.tax_10.id])],
-            }
+        move_form = common.Form(
+            self.env["account.move"].with_context(default_type="out_invoice")
         )
-        invoice.compute_taxes()
-        invoice.action_invoice_open()
-
-        self.cbinvoice = self.env["account.invoice"].create(
-            {
-                "partner_id": self.env.ref("base.res_partner_2").id,
-                "account_id": self.receivable_account.id,
-                "company_id": self.company.id,
-                "date_invoice": time.strftime("%Y-%m-05"),
-                "type": "out_invoice",
-            }
-        )
-
-        self.env["account.invoice.line"].create(
-            {
-                "product_id": self.env.ref("product.product_product_4").id,
-                "quantity": 1.0,
-                "price_unit": 500.0,
-                "invoice_id": self.cbinvoice.id,
-                "name": "product",
-                "account_id": self.income_account.id,
-                "invoice_line_tax_ids": [(6, 0, [self.tax_20.id])],
-            }
-        )
-        self.cbinvoice.compute_taxes()
-        self.cbinvoice.action_invoice_open()
-
-        self.cbinvoice.pay_and_reconcile(
-            self.bank_journal.id, 300, date(date.today().year, date.today().month, 10)
-        )
+        move_form.partner_id = self.env.ref("base.res_partner_2")
+        with move_form.invoice_line_ids.new() as line_form:
+            line_form.product_id = self.env.ref("product.product_product_4")
+            line_form.quantity = 1.0
+            line_form.price_unit = 250.0
+            line_form.account_id = self.income_account
+            line_form.tax_ids.add(self.tax_20)
+        self.cbinvoice = move_form.save()
+        self.cbinvoice.post()
 
     def _get_report_lines(self, taxgroups=False):
         based_on = "taxtags"

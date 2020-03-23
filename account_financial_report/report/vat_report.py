@@ -7,6 +7,7 @@ from odoo import api, models
 
 class VATReport(models.AbstractModel):
     _name = "report.account_financial_report.vat_report"
+    _description = "Vat Report Report"
 
     def _get_tax_data(self, tax_ids):
         taxes = self.env["account.tax"].browse(tax_ids)
@@ -18,7 +19,6 @@ class VATReport(models.AbstractModel):
                         "id": tax.id,
                         "name": tax.name,
                         "tax_group_id": tax.tax_group_id.id,
-                        "tags_ids": tax.tag_ids.ids,
                     }
                 }
             )
@@ -42,15 +42,19 @@ class VATReport(models.AbstractModel):
             "tax_base_amount",
             "balance",
             "tax_line_id",
+            "tax_repartition_line_id",
             "analytic_tag_ids",
         ]
         tax_move_lines = self.env["account.move.line"].search_read(
-            domain=domain, fields=ml_fields,
+            domain=domain, fields=ml_fields
         )
         vat_data = {}
         tax_ids = set()
         for tax_move_line in tax_move_lines:
             tax_ml_id = tax_move_line["id"]
+            repartition = self.env["account.tax.repartition.line"].browse(
+                tax_move_line["tax_repartition_line_id"][0]
+            )
             vat_data[tax_ml_id] = {}
             vat_data[tax_ml_id].update(
                 {
@@ -60,6 +64,7 @@ class VATReport(models.AbstractModel):
                     if tax_move_line["balance"] > 0
                     else (-1) * tax_move_line["balance"],
                     "tax_line_id": tax_move_line["tax_line_id"],
+                    "tags_ids": repartition.tag_ids.ids,
                 }
             )
             tax_ids.add(tax_move_line["tax_line_id"][0])
@@ -90,11 +95,11 @@ class VATReport(models.AbstractModel):
                 vat_report[tax_group_id] = {}
                 vat_report[tax_group_id]["net"] = 0.0
                 vat_report[tax_group_id]["tax"] = 0.0
-                vat_report[tax_group_id][tax_id] = tax_data[tax_id]
+                vat_report[tax_group_id][tax_id] = dict(tax_data[tax_id])
                 vat_report[tax_group_id][tax_id].update({"net": 0.0, "tax": 0.0})
             else:
                 if tax_id not in vat_report[tax_group_id].keys():
-                    vat_report[tax_group_id][tax_id] = tax_data[tax_id]
+                    vat_report[tax_group_id][tax_id] = dict(tax_data[tax_id])
                     vat_report[tax_group_id][tax_id].update({"net": 0.0, "tax": 0.0})
             vat_report[tax_group_id]["net"] += tax_move_line["net"]
             vat_report[tax_group_id]["tax"] += tax_move_line["tax"]
@@ -126,18 +131,18 @@ class VATReport(models.AbstractModel):
         vat_report = {}
         for tax_move_line in vat_report_data.values():
             tax_id = tax_move_line["tax_line_id"][0]
-            tags_ids = tax_data[tax_id]["tags_ids"]
+            tags_ids = tax_move_line["tags_ids"]
             if tags_ids:
                 for tag_id in tags_ids:
                     if tag_id not in vat_report.keys():
                         vat_report[tag_id] = {}
                         vat_report[tag_id]["net"] = 0.0
                         vat_report[tag_id]["tax"] = 0.0
-                        vat_report[tag_id][tax_id] = tax_data[tax_id]
+                        vat_report[tag_id][tax_id] = dict(tax_data[tax_id])
                         vat_report[tag_id][tax_id].update({"net": 0.0, "tax": 0.0})
                     else:
                         if tax_id not in vat_report[tag_id].keys():
-                            vat_report[tag_id][tax_id] = tax_data[tax_id]
+                            vat_report[tag_id][tax_id] = dict(tax_data[tax_id])
                             vat_report[tag_id][tax_id].update({"net": 0.0, "tax": 0.0})
                     vat_report[tag_id][tax_id]["net"] += tax_move_line["net"]
                     vat_report[tag_id][tax_id]["tax"] += tax_move_line["tax"]
@@ -156,7 +161,6 @@ class VATReport(models.AbstractModel):
             vat_report_list.append(vat_report[tag_id])
         return vat_report_list
 
-    @api.multi
     def _get_report_values(self, docids, data):
         wizard_id = data["wizard_id"]
         company = self.env["res.company"].browse(data["company_id"])
