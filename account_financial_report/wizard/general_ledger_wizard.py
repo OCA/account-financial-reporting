@@ -34,10 +34,10 @@ class GeneralLedgerReportWizard(models.TransientModel):
         [("posted", "All Posted Entries"), ("all", "All Entries")],
         string="Target Moves",
         required=True,
-        default="all",
+        default="posted",
     )
     account_ids = fields.Many2many(
-        comodel_name="account.account", string="Filter accounts",
+        comodel_name="account.account", string="Filter accounts"
     )
     centralize = fields.Boolean(string="Activate centralization", default=True)
     hide_account_at_0 = fields.Boolean(
@@ -47,7 +47,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
         "If partners are filtered, "
         "debits and credits totals will not match the trial balance.",
     )
-    show_analytic_tags = fields.Boolean(string="Show analytic tags",)
+    show_analytic_tags = fields.Boolean(string="Show analytic tags")
     receivable_accounts_only = fields.Boolean()
     payable_accounts_only = fields.Boolean()
     partner_ids = fields.Many2many(
@@ -56,13 +56,13 @@ class GeneralLedgerReportWizard(models.TransientModel):
         default=lambda self: self._default_partners(),
     )
     analytic_tag_ids = fields.Many2many(
-        comodel_name="account.analytic.tag", string="Filter analytic tags",
+        comodel_name="account.analytic.tag", string="Filter analytic tags"
     )
     account_journal_ids = fields.Many2many(
-        comodel_name="account.journal", string="Filter journals",
+        comodel_name="account.journal", string="Filter journals"
     )
     cost_center_ids = fields.Many2many(
-        comodel_name="account.analytic.account", string="Filter cost centers",
+        comodel_name="account.analytic.account", string="Filter cost centers"
     )
 
     not_only_one_unaffected_earnings_account = fields.Boolean(
@@ -79,27 +79,29 @@ class GeneralLedgerReportWizard(models.TransientModel):
     def _init_date_from(self):
         """set start date to begin of current year if fiscal year running"""
         today = fields.Date.context_today(self)
-        cur_month = fields.Date.from_string(today).month
-        cur_day = fields.Date.from_string(today).day
         last_fsc_month = self.env.user.company_id.fiscalyear_last_month
         last_fsc_day = self.env.user.company_id.fiscalyear_last_day
 
         if (
-            cur_month < last_fsc_month
-            or cur_month == last_fsc_month
-            and cur_day <= last_fsc_day
+            today.month < int(last_fsc_month)
+            or today.month == int(last_fsc_month)
+            and today.day <= last_fsc_day
         ):
             return time.strftime("%Y-01-01")
+        else:
+            return False
 
     def _default_foreign_currency(self):
         return self.env.user.has_group("base.group_multi_currency")
 
     @api.depends("date_from")
     def _compute_fy_start_date(self):
-        for wiz in self.filtered("date_from"):
-            date = fields.Datetime.from_string(wiz.date_from)
-            res = self.company_id.compute_fiscalyear_dates(date)
-            wiz.fy_start_date = fields.Date.to_string(res["date_from"])
+        for wiz in self:
+            if wiz.date_from:
+                res = self.company_id.compute_fiscalyear_dates(wiz.date_from)
+                wiz.fy_start_date = res["date_from"]
+            else:
+                wiz.fy_start_date = False
 
     @api.onchange("company_id")
     def onchange_company_id(self):
@@ -171,7 +173,6 @@ class GeneralLedgerReportWizard(models.TransientModel):
             self.date_from = self.date_range_id.date_start
             self.date_to = self.date_range_id.date_end
 
-    @api.multi
     @api.constrains("company_id", "date_range_id")
     def _check_company_id_date_range_id(self):
         for rec in self.sudo():
@@ -210,7 +211,6 @@ class GeneralLedgerReportWizard(models.TransientModel):
         else:
             self.receivable_accounts_only = self.payable_accounts_only = False
 
-    @api.multi
     @api.depends("company_id")
     def _compute_unaffected_earnings_account(self):
         account_type = self.env.ref("account.data_unaffected_earnings")
@@ -228,7 +228,6 @@ class GeneralLedgerReportWizard(models.TransientModel):
         store=True,
     )
 
-    @api.multi
     def _print_report(self, report_type):
         self.ensure_one()
         data = self._prepare_report_general_ledger()
@@ -245,19 +244,16 @@ class GeneralLedgerReportWizard(models.TransientModel):
             .report_action(self, data=data)
         )
 
-    @api.multi
     def button_export_html(self):
         self.ensure_one()
         report_type = "qweb-html"
         return self._export(report_type)
 
-    @api.multi
     def button_export_pdf(self):
         self.ensure_one()
         report_type = "qweb-pdf"
         return self._export(report_type)
 
-    @api.multi
     def button_export_xlsx(self):
         self.ensure_one()
         report_type = "xlsx"

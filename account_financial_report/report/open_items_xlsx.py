@@ -7,6 +7,7 @@ from odoo import _, models
 
 class OpenItemsXslx(models.AbstractModel):
     _name = "report.a_f_r.report_open_items_xlsx"
+    _description = "Open Items XLSX Report"
     _inherit = "report.account_financial_report.abstract_report_xlsx"
 
     def _get_report_name(self, report, data=False):
