@@ -24,16 +24,14 @@ class AgedPartnerBalanceWizard(models.TransientModel):
         [("posted", "All Posted Entries"), ("all", "All Entries")],
         string="Target Moves",
         required=True,
-        default="all",
+        default="posted",
     )
     account_ids = fields.Many2many(
-        comodel_name="account.account", string="Filter accounts",
+        comodel_name="account.account", string="Filter accounts"
     )
     receivable_accounts_only = fields.Boolean()
     payable_accounts_only = fields.Boolean()
-    partner_ids = fields.Many2many(
-        comodel_name="res.partner", string="Filter partners",
-    )
+    partner_ids = fields.Many2many(comodel_name="res.partner", string="Filter partners")
     show_move_line_details = fields.Boolean()
 
     @api.onchange("company_id")
@@ -73,7 +71,6 @@ class AgedPartnerBalanceWizard(models.TransientModel):
             domain += [("reconcile", "=", True)]
         self.account_ids = self.env["account.account"].search(domain)
 
-    @api.multi
     def _print_report(self, report_type):
         self.ensure_one()
         data = self._prepare_report_aged_partner_balance()
@@ -90,19 +87,16 @@ class AgedPartnerBalanceWizard(models.TransientModel):
             .report_action(self, data=data)
         )
 
-    @api.multi
     def button_export_html(self):
         self.ensure_one()
         report_type = "qweb-html"
         return self._export(report_type)
 
-    @api.multi
     def button_export_pdf(self):
         self.ensure_one()
         report_type = "qweb-pdf"
         return self._export(report_type)
 
-    @api.multi
     def button_export_xlsx(self):
         self.ensure_one()
         report_type = "xlsx"
