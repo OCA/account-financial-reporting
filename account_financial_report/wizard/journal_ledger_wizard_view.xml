@@ -68,7 +68,6 @@
         id="action_journal_ledger_wizard"
         name="Journal Ledger"
         res_model="journal.ledger.report.wizard"
-        view_type="form"
         view_mode="form"
         view_id="journal_ledger_wizard"
         target="new"

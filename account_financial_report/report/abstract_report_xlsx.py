@@ -6,6 +6,7 @@ from odoo import models
 
 class AbstractReportXslx(models.AbstractModel):
     _name = "report.account_financial_report.abstract_report_xlsx"
+    _description = "Abstract XLSX Account Financial Report"
     _inherit = "report.report_xlsx.abstract"
 
     def __init__(self, pool, cr):
@@ -255,7 +256,7 @@ class AbstractReportXslx(models.AbstractModel):
                         and not isinstance(value, bool)
                         and not isinstance(value, int)
                     ):
-                        value = value.strftime("%d/%m/%Y")
+                        value = value and value.strftime("%d/%m/%Y")
                     self.sheet.write_string(self.row_pos, col_pos, value or "")
             elif cell_type == "amount":
                 if (
@@ -444,10 +445,10 @@ class AbstractReportXslx(models.AbstractModel):
     def _get_currency_amt_format(self, line_object):
         """ Return amount format specific for each currency. """
         if hasattr(line_object, "account_group_id") and line_object.account_group_id:
-            format_amt = getattr(self, "format_amount_bold")
+            format_amt = self.format_amount_bold
             field_prefix = "format_amount_bold"
         else:
-            format_amt = getattr(self, "format_amount")
+            format_amt = self.format_amount
             field_prefix = "format_amount"
         if line_object.currency_id:
             field_name = "{}_{}".format(field_prefix, line_object.currency_id.name)
@@ -455,7 +456,7 @@ class AbstractReportXslx(models.AbstractModel):
                 format_amt = getattr(self, field_name)
             else:
                 format_amt = self.workbook.add_format()
-                setattr(self, "field_name", format_amt)
+                self.field_name = format_amt
                 format_amount = "#,##0." + (
                     "0" * line_object.currency_id.decimal_places
                 )
@@ -465,10 +466,10 @@ class AbstractReportXslx(models.AbstractModel):
     def _get_currency_amt_format_dict(self, line_dict):
         """ Return amount format specific for each currency. """
         if line_dict.get("account_group_id", False) and line_dict["account_group_id"]:
-            format_amt = getattr(self, "format_amount_bold")
+            format_amt = self.format_amount_bold
             field_prefix = "format_amount_bold"
         else:
-            format_amt = getattr(self, "format_amount")
+            format_amt = self.format_amount
             field_prefix = "format_amount"
         if line_dict.get("currency_id", False) and line_dict["currency_id"]:
             currency = self.env["res.currency"].browse([line_dict["currency_id"]])
@@ -477,14 +478,14 @@ class AbstractReportXslx(models.AbstractModel):
                 format_amt = getattr(self, field_name)
             else:
                 format_amt = self.workbook.add_format()
-                setattr(self, "field_name", format_amt)
+                self.field_name = format_amt
                 format_amount = "#,##0." + ("0" * currency.decimal_places)
                 format_amt.set_num_format(format_amount)
         return format_amt
 
     def _get_currency_amt_header_format(self, line_object):
         """ Return amount header format for each currency. """
-        format_amt = getattr(self, "format_header_amount")
+        format_amt = self.format_header_amount
         if line_object.currency_id:
             field_name = "format_header_amount_%s" % line_object.currency_id.name
             if hasattr(self, field_name):
@@ -493,7 +494,7 @@ class AbstractReportXslx(models.AbstractModel):
                 format_amt = self.workbook.add_format(
                     {"bold": True, "border": True, "bg_color": "#FFFFCC"}
                 )
-                setattr(self, "field_name", format_amt)
+                self.field_name = format_amt
                 format_amount = "#,##0." + (
                     "0" * line_object.currency_id.decimal_places
                 )
@@ -502,7 +503,7 @@ class AbstractReportXslx(models.AbstractModel):
 
     def _get_currency_amt_header_format_dict(self, line_object):
         """ Return amount header format for each currency. """
-        format_amt = getattr(self, "format_header_amount")
+        format_amt = self.format_header_amount
         if line_object["currency_id"]:
             field_name = "format_header_amount_%s" % line_object["currency_name"]
             if hasattr(self, field_name):
@@ -511,7 +512,7 @@ class AbstractReportXslx(models.AbstractModel):
                 format_amt = self.workbook.add_format(
                     {"bold": True, "border": True, "bg_color": "#FFFFCC"}
                 )
-                setattr(self, "field_name", format_amt)
+                self.field_name = format_amt
                 format_amount = "#,##0." + (
                     "0" * line_object["currency_id"].decimal_places
                 )
@@ -527,8 +528,7 @@ class AbstractReportXslx(models.AbstractModel):
     def _get_report_complete_name(self, report, prefix, data=None):
         if report.company_id:
             suffix = " - {} - {}".format(
-                report.company_id.name,
-                report.company_id.currency_id.name,
+                report.company_id.name, report.company_id.currency_id.name
             )
             return prefix + suffix
         return prefix
