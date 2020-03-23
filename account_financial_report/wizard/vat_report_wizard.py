@@ -34,7 +34,7 @@ class VATReportWizard(models.TransientModel):
             and self.date_range_id.company_id != self.company_id
         ):
             self.date_range_id = False
-        res = {"domain": {"date_range_id": [],}}
+        res = {"domain": {"date_range_id": []}}
         if not self.company_id:
             return res
         else:
@@ -51,7 +51,6 @@ class VATReportWizard(models.TransientModel):
         self.date_from = self.date_range_id.date_start
         self.date_to = self.date_range_id.date_end
 
-    @api.multi
     @api.constrains("company_id", "date_range_id")
     def _check_company_id_date_range_id(self):
         for rec in self.sudo():
@@ -67,7 +66,6 @@ class VATReportWizard(models.TransientModel):
                     )
                 )
 
-    @api.multi
     def _print_report(self, report_type):
         self.ensure_one()
         data = self._prepare_vat_report()
@@ -84,19 +82,16 @@ class VATReportWizard(models.TransientModel):
             .report_action(self, data=data)
         )
 
-    @api.multi
     def button_export_html(self):
         self.ensure_one()
         report_type = "qweb-html"
         return self._export(report_type)
 
-    @api.multi
     def button_export_pdf(self):
         self.ensure_one()
         report_type = "qweb-pdf"
         return self._export(report_type)
 
-    @api.multi
     def button_export_xlsx(self):
         self.ensure_one()
         report_type = "xlsx"

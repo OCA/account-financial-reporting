@@ -4,14 +4,13 @@
 
 from datetime import date, datetime, timedelta
 
-import pandas as pd
-
 from odoo import api, models
 from odoo.tools import float_is_zero
 
 
 class AgedPartnerBalanceReport(models.AbstractModel):
     _name = "report.account_financial_report.aged_partner_balance"
+    _description = "Aged Partner Balance Report"
 
     @api.model
     def _initialize_account(self, ag_pb_data, acc_id):
@@ -122,7 +121,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                 credit_amount[credit_move_id] = 0.0
             credit_amount[credit_move_id] += account_partial_reconcile_data["amount"]
             account_partial_reconcile_data.update(
-                {"debit_move_id": debit_move_id, "credit_move_id": credit_move_id,}
+                {"debit_move_id": debit_move_id, "credit_move_id": credit_move_id}
             )
         return accounts_partial_reconcile, debit_amount, credit_amount
 
@@ -215,7 +214,6 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         move_lines = self.env["account.move.line"].search_read(
             domain=domain, fields=ml_fields
         )
-        ml_ids = set(pd.DataFrame(move_lines).id.to_list())
         journals_ids = set()
         partners_ids = set()
         partners_data = {}
@@ -227,9 +225,9 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                 credit_amount,
             ) = self._get_account_partial_reconciled(company_id, date_at_object)
             if acc_partial_rec:
-                acc_partial_rec_data = pd.DataFrame(acc_partial_rec)
-                debit_ids = set(acc_partial_rec_data.debit_move_id.to_list())
-                credit_ids = set(acc_partial_rec_data.credit_move_id.to_list())
+                ml_ids = map(lambda r: r["id"], move_lines)
+                debit_ids = map(lambda r: r["debit_move_id"], acc_partial_rec)
+                credit_ids = map(lambda r: r["credit_move_id"], acc_partial_rec)
                 move_lines = self._recalculate_move_lines(
                     move_lines,
                     debit_ids,
@@ -414,7 +412,6 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                 )
         return aged_partner_data
 
-    @api.multi
     def _get_report_values(self, docids, data):
         wizard_id = data["wizard_id"]
         company = self.env["res.company"].browse(data["company_id"])
@@ -423,6 +420,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         partner_ids = data["partner_ids"]
         date_at = data["date_at"]
         date_at_object = datetime.strptime(date_at, "%Y-%m-%d").date()
+
         only_posted_moves = data["only_posted_moves"]
         show_move_line_details = data["show_move_line_details"]
         (

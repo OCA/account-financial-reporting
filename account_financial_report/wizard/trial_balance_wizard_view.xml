@@ -133,7 +133,6 @@
         id="action_trial_balance_wizard"
         name="Trial Balance"
         res_model="trial.balance.report.wizard"
-        view_type="form"
         view_mode="form"
         view_id="trial_balance_wizard"
         target="new"

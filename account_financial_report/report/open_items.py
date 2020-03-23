@@ -4,8 +4,6 @@
 
 from datetime import date, datetime
 
-import pandas as pd
-
 from odoo import api, models
 from odoo.osv import expression
 from odoo.tools import float_is_zero
@@ -13,6 +11,7 @@ from odoo.tools import float_is_zero
 
 class OpenItemsReport(models.AbstractModel):
     _name = "report.account_financial_report.open_items"
+    _description = "Open Items Report"
 
     @api.model
     def get_html(self, given_context=None):
@@ -63,7 +62,7 @@ class OpenItemsReport(models.AbstractModel):
                 credit_move_id
             ] += account_partial_reconcile_data["amount"]
             account_partial_reconcile_data.update(
-                {"debit_move_id": debit_move_id, "credit_move_id": credit_move_id,}
+                {"debit_move_id": debit_move_id, "credit_move_id": credit_move_id}
             )
         return (
             accounts_partial_reconcile,
@@ -188,6 +187,7 @@ class OpenItemsReport(models.AbstractModel):
             journals_data.update({journal.id: {"id": journal.id, "code": journal.code}})
         return journals_data
 
+    # flake8: noqa: C901
     def _get_data(
         self,
         account_ids,
@@ -201,12 +201,11 @@ class OpenItemsReport(models.AbstractModel):
             account_ids, partner_ids, date_at_object, target_move, company_id, date_from
         )
         self._cr.execute(query)
-        move_lines_data = pd.DataFrame(self._cr.dictfetchall())
-        account_ids = set(move_lines_data.account_id.to_list())
+        move_lines_data = self._cr.dictfetchall()
+        account_ids = map(lambda r: r["account_id"], move_lines_data)
         accounts_data = self._get_accounts_data(list(account_ids))
-        journal_ids = set(move_lines_data.journal_id.to_list())
+        journal_ids = map(lambda r: r["journal_id"], move_lines_data)
         journals_data = self._get_journals_data(list(journal_ids))
-        move_lines_data = move_lines_data.fillna(0).to_dict(orient="records")
 
         if date_at_object < date.today():
             (
@@ -215,12 +214,11 @@ class OpenItemsReport(models.AbstractModel):
                 credit_accounts_partial_amount,
             ) = self._get_account_partial_reconciled(move_lines_data, date_at_object)
             if accounts_partial_reconcile:
-                accounts_partial_reconcile_data = pd.DataFrame(
-                    accounts_partial_reconcile
+                debit_ids = map(
+                    operator.itemgetter("debit_move_id"), accounts_partial_reconcile
                 )
-                debit_ids = set(accounts_partial_reconcile_data.debit_move_id.to_list())
-                credit_ids = set(
-                    accounts_partial_reconcile_data.credit_move_id.to_list()
+                credit_ids = map(
+                    operator.itemgetter("credit_move_id"), accounts_partial_reconcile
                 )
                 for move_line in move_lines_data:
                     if move_line["id"] in debit_ids:
@@ -245,7 +243,7 @@ class OpenItemsReport(models.AbstractModel):
         for move_line in move_lines_data:
             no_partner = True
             # Partners data
-            if move_line["partner_id"] and not pd.isna(move_line["partner_id"]):
+            if move_line["partner_id"]:
                 no_partner = False
                 partners_data.update(
                     {
@@ -270,11 +268,11 @@ class OpenItemsReport(models.AbstractModel):
                 original = move_line["credit"] * (-1)
             if not float_is_zero(move_line["debit"], precision_digits=2):
                 original = move_line["debit"]
-
             move_line.update(
                 {
                     "date": move_line["date"].strftime("%d/%m/%Y"),
-                    "date_maturity": move_line["date_maturity"].strftime("%d/%m/%Y"),
+                    "date_maturity": move_line["date_maturity"]
+                    and move_line["date_maturity"].strftime("%d/%m/%Y"),
                     "original": original,
                     "partner_id": 0 if no_partner else move_line["partner_id"],
                     "partner_name": "" if no_partner else move_line["partner_name"],
@@ -325,7 +323,6 @@ class OpenItemsReport(models.AbstractModel):
                     total_amount[account_id]["residual"] += move_line["amount_residual"]
         return total_amount
 
-    @api.multi
     def _get_report_values(self, docids, data):
         wizard_id = data["wizard_id"]
         company = self.env["res.company"].browse(data["company_id"])

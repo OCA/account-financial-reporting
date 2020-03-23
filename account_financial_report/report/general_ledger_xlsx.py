@@ -8,6 +8,7 @@ from odoo import _, models
 
 class GeneralLedgerXslx(models.AbstractModel):
     _name = "report.a_f_r.report_general_ledger_xlsx"
+    _description = "General Ledger XLSL Report"
     _inherit = "report.account_financial_report.abstract_report_xlsx"
 
     def _get_report_name(self, report, data=False):
@@ -93,7 +94,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                 _("Account balance at 0 filter"),
                 _("Hide") if report.hide_account_at_0 else _("Show"),
             ],
-            [_("Centralize filter"), _("Yes") if report.centralize else _("No"),],
+            [_("Centralize filter"), _("Yes") if report.centralize else _("No")],
             [
                 _("Show analytic tags"),
                 _("Yes") if report.show_analytic_tags else _("No"),
@@ -119,6 +120,7 @@ class GeneralLedgerXslx(models.AbstractModel):
     def _get_col_pos_final_balance_label(self):
         return 5
 
+    # flake8: noqa: C901
     def _generate_report_content(self, workbook, report, data):
         res_data = self.env[
             "report.account_financial_report.general_ledger"
@@ -152,7 +154,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                 )
                 if foreign_currency:
                     account.update(
-                        {"initial_bal_curr": account["init_bal"]["bal_curr"],}
+                        {"initial_bal_curr": account["init_bal"]["bal_curr"]}
                     )
                 self.write_initial_balance_from_dict(account)
 
@@ -184,7 +186,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                         for tag_id in line["tag_ids"]:
                             tags += tags_data[tag_id]["name"] + " "
                         line.update(
-                            {"taxes_description": taxes_description, "tags": tags,}
+                            {"taxes_description": taxes_description, "tags": tags}
                         )
                     self.write_line_from_dict(line)
 
@@ -210,7 +212,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                     )
                     if foreign_currency:
                         partner.update(
-                            {"initial_bal_culrr": partner["init_bal"]["bal_curr"],}
+                            {"initial_bal_culrr": partner["init_bal"]["bal_curr"]}
                         )
                     self.write_initial_balance_from_dict(partner)
 
@@ -235,7 +237,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                             for tag_id in line["tag_ids"]:
                                 tags += tags_data[tag_id]["name"] + " "
                             line.update(
-                                {"taxes_description": taxes_description, "tags": tags,}
+                                {"taxes_description": taxes_description, "tags": tags}
                             )
                         self.write_line_from_dict(line)
 
@@ -249,7 +251,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                     )
                     if foreign_currency:
                         partner.update(
-                            {"final_bal_curr": partner["fin_bal"]["bal_curr"],}
+                            {"final_bal_curr": partner["fin_bal"]["bal_curr"]}
                         )
                     self.write_ending_balance_from_dict(partner)
 
@@ -266,9 +268,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                     }
                 )
                 if foreign_currency:
-                    account.update(
-                        {"final_bal_curr": account["fin_bal"]["bal_curr"],}
-                    )
+                    account.update({"final_bal_curr": account["fin_bal"]["bal_curr"]})
                 self.write_ending_balance_from_dict(account)
 
             # 2 lines break
