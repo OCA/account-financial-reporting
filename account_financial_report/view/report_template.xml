@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template
+        id="account_financial_report_assets_backend"
+        name="account_financial_report assets"
+        inherit_id="web.assets_backend"
+    >
+        <xpath expr="." position="inside">
+            <link
+                href="/account_financial_report/static/src/css/report.css"
+                rel="stylesheet"
+            />
+            <script
+                type="text/javascript"
+                src="/account_financial_report/static/src/js/account_financial_report_backend.js"
+            />
+            <script
+                type="text/javascript"
+                src="/account_financial_report/static/src/js/account_financial_report_widgets.js"
+            />
+        </xpath>
+    </template>
+    <template id="report_buttons">
+        <div class="button_row">
+            <button class="o_account_financial_reports_print btn btn-sm oe_button"><span
+                    class="fa fa-print"
+                /> Print</button>
+            <button
+                class="o_account_financial_reports_export btn btn-sm oe_button"
+            ><span class="fa fa-download" /> Export</button>
+        </div>
+    </template>
+    <record id="action_report_general_ledger" model="ir.actions.client">
+        <field name="name">General Ledger</field>
+        <field name="tag">account_financial_report_backend</field>
+        <field
+            name="context"
+            eval="{'model': 'report.account_financial_report.general_ledger'}"
+        />
+    </record>
+    <record id="action_report_journal_ledger" model="ir.actions.client">
+        <field name="name">Journal</field>
+        <field name="tag">account_financial_report_backend</field>
+        <field
+            name="context"
+            eval="{'model': 'report.account_financial_report.journal_ledger'}"
+        />
+    </record>
+    <record id="action_report_open_items" model="ir.actions.client">
+        <field name="name">Open Items</field>
+        <field name="tag">account_financial_report_backend</field>
+        <field
+            name="context"
+            eval="{'model': 'report.account_financial_report.open_items'}"
+        />
+    </record>
+    <record id="action_report_trial_balance" model="ir.actions.client">
+        <field name="name">Trial Balance</field>
+        <field name="tag">account_financial_report_backend</field>
+        <field
+            name="context"
+            eval="{'model': 'report.account_financial_report.trial_balance'}"
+        />
+    </record>
+    <record id="action_report_aged_partner_balance" model="ir.actions.client">
+        <field name="name">Aged Partner Balance</field>
+        <field name="tag">account_financial_report_backend</field>
+        <field
+            name="context"
+            eval="{'model': 'report.account_financial_report.aged_partner_balance'}"
+        />
+    </record>
+    <record id="action_report_vat_report" model="ir.actions.client">
+        <field name="name">VAT Report</field>
+        <field name="tag">account_financial_report_backend</field>
+        <field
+            name="context"
+            eval="{'model': 'report.account_financial_report.vat_report'}"
+        />
+    </record>
+</odoo>
