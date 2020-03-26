@@ -25,6 +25,11 @@ class MisCashFlow(models.Model):
         index=True,
         readonly=True,
     )
+    partner_id = fields.Many2one(
+        comodel_name='res.partner',
+        string='Partner',
+        readonly=True,
+    )
     move_line_id = fields.Many2one(
         comodel_name='account.move.line',
         string='Journal Item',
@@ -88,6 +93,7 @@ class MisCashFlow(models.Model):
                 END AS credit,
                 aml.reconciled as reconciled,
                 aml.full_reconcile_id as full_reconcile_id,
+                aml.partner_id as partner_id,
                 aml.company_id as company_id,
                 aml.user_type_id as user_type_id,
                 aml.name as name,
@@ -111,6 +117,7 @@ class MisCashFlow(models.Model):
                 END AS credit,
                 Null as reconciled,
                 Null as full_reconcile_id,
+                fl.partner_id as partner_id,
                 fl.company_id as company_id,
                 %i as user_type_id,
                 fl.name as name,

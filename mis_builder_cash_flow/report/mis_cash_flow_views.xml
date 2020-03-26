@@ -13,6 +13,7 @@
                 <field name="line_type"/>
                 <field name="date"/>
                 <field name="name"/>
+                <field name="partner_id" />
                 <field name="account_id"/>
                 <field name="debit" sum="Total"/>
                 <field name="credit" sum="Total"/>
@@ -30,6 +31,7 @@
                     <group>
                         <field name="date"/>
                         <field name="name"/>
+                        <field name="partner_id" />
                         <field name="account_id"/>
                         <field name="move_line_id"/>
                     </group>
@@ -55,6 +57,7 @@
                 <field name="name"/>
                 <field name="date"/>
                 <separator/>
+                <field name="partner_id" />
                 <field name="account_id"/>
                 <field name="company_id"
                     groups="base.group_multi_company"/>
