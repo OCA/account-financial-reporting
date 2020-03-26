@@ -20,6 +20,10 @@ class MisCashFlowForecastLine(models.Model):
         help='The account of the forecast line is only for informative '
         'purpose',
     )
+    partner_id = fields.Many2one(
+        comodel_name='res.partner',
+        string='Partner',
+    )
     name = fields.Char(
         required=True,
         default='/',
