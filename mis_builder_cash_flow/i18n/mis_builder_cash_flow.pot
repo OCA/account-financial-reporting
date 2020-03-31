@@ -251,12 +251,19 @@ msgid "PERIOD BALANCE"
 msgstr ""
 
 #. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__partner_id
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__partner_id
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_forecast_line_view_search
+msgid "Partner"
+msgstr ""
+
+#. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__reconciled
 msgid "Reconciled"
 msgstr ""
 
 #. module: mis_builder_cash_flow
-#: code:addons/mis_builder_cash_flow/models/mis_cash_flow_forecast_line.py:42
+#: code:addons/mis_builder_cash_flow/models/mis_cash_flow_forecast_line.py:46
 #, python-format
 msgid "The Company and the Company of the Account must be the same."
 msgstr ""
