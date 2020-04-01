@@ -178,6 +178,17 @@ class GeneralLedgerXslx(models.AbstractModel):
                             'tags': tags,
                         })
                     self.write_line_from_dict(line)
+                # Display ending balance line for account
+                account.update({
+                    'final_debit': account['fin_bal']['debit'],
+                    'final_credit': account['fin_bal']['credit'],
+                    'final_balance': account['fin_bal']['balance'],
+                })
+                if foreign_currency:
+                    account.update({
+                        'final_bal_curr': account['fin_bal']['bal_curr'],
+                    })
+                self.write_ending_balance_from_dict(account)
 
             else:
                 # For each partner
@@ -241,18 +252,17 @@ class GeneralLedgerXslx(models.AbstractModel):
                     # Line break
                     self.row_pos += 1
 
-            # Display ending balance line for account
-            if not filter_partner_ids:
-                account.update({
-                    'final_debit': account['fin_bal']['debit'],
-                    'final_credit': account['fin_bal']['credit'],
-                    'final_balance': account['fin_bal']['balance'],
-                })
-                if foreign_currency:
+                if not filter_partner_ids:
                     account.update({
-                        'final_bal_curr': account['fin_bal']['bal_curr'],
+                        'final_debit': account['fin_bal']['debit'],
+                        'final_credit': account['fin_bal']['credit'],
+                        'final_balance': account['fin_bal']['balance'],
                     })
-                self.write_ending_balance_from_dict(account)
+                    if foreign_currency:
+                        account.update({
+                            'final_bal_curr': account['fin_bal']['bal_curr'],
+                        })
+                    self.write_ending_balance_from_dict(account)
 
             # 2 lines break
             self.row_pos += 2

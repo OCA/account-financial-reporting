@@ -53,11 +53,11 @@ class TrialBalanceXslx(models.AbstractModel):
                         'field_currency_balance': 'currency_id',
                         'type': 'many2one', 'width': 7},
                     8: {'header': _('Initial balance'),
-                        'field': 'initial_balance_foreign_currency',
+                        'field': 'initial_currency_balance',
                         'type': 'amount_currency',
                         'width': 14},
                     9: {'header': _('Ending balance'),
-                        'field': 'final_balance_foreign_currency',
+                        'field': 'ending_currency_balance',
                         'type': 'amount_currency',
                         'width': 14},
                 }
