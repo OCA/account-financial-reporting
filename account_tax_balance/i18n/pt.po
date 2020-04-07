@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-27 12:02+0000\n"
-"PO-Revision-Date: 2020-02-26 18:13+0000\n"
+"PO-Revision-Date: 2020-04-07 19:19+0000\n"
 "Last-Translator: alvarorib <alvaro.ribeiro@exo.pt>\n"
 "Language-Team: Portuguese (https://www.transifex.com/oca/teams/23907/pt/)\n"
 "Language: pt\n"
@@ -170,7 +170,7 @@ msgstr "Nome curto"
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__target_move
 msgid "Target Moves"
-msgstr "Movimentos alvo"
+msgstr "Marcar Movimentos"
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_account_tax
