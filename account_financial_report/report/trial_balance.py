@@ -123,7 +123,11 @@ class TrialBalanceReport(models.AbstractModel):
         only_posted_moves,
         show_partner_details,
     ):
-        domain = ["&", ("date", ">=", date_from), ("date", "<=", date_to)]
+        domain = [
+            ("display_type", "=", False),
+            ("date", ">=", date_from),
+            ("date", "<=", date_to),
+        ]
         if company_id:
             domain += [("company_id", "=", company_id)]
         if account_ids:
