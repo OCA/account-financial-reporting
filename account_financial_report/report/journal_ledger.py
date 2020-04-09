@@ -79,8 +79,7 @@ class JournalLedgerReport(models.AbstractModel):
         return moves.ids, Moves, move_data
 
     def _get_move_lines_domain(self, move_ids, wizard, journal_ids):
-
-        return [("move_id", "in", move_ids)]
+        return [("display_type", "=", False), ("move_id", "in", move_ids)]
 
     def _get_move_lines_order(self, move_ids, wizard, journal_ids):
         return ""
