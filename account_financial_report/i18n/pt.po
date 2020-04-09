@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-16 08:14+0000\n"
-"PO-Revision-Date: 2020-02-26 21:13+0000\n"
-"Last-Translator: alvarorib <alvaro.ribeiro@exo.pt>\n"
+"PO-Revision-Date: 2020-04-09 12:19+0000\n"
+"Last-Translator: Pedro Castro Silva <pedrocs@exo.pt>\n"
 "Language-Team: Portuguese (https://www.transifex.com/oca/teams/23907/pt/)\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
@@ -73,7 +73,7 @@ msgstr "Relatório Resumo"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_financial_report_abstract_wizard
 msgid "Abstract Wizard"
-msgstr "Assistente Resumo"
+msgstr "Assistente Abstrato"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:67
@@ -245,7 +245,7 @@ msgstr "Antiguidade ≤ 90 d."
 #: model:ir.ui.menu,name:account_financial_report.menu_aged_partner_balance_wizard
 #, python-format
 msgid "Aged Partner Balance"
-msgstr "Antiguidade de Saldo de Prceiro"
+msgstr "Antiguidade de Saldo de Parceiro"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_base
@@ -274,7 +274,7 @@ msgstr "Todos"
 #: selection:open.items.report.wizard,target_move:0
 #: selection:trial.balance.report.wizard,target_move:0
 msgid "All Entries"
-msgstr "Todos os lançamentos"
+msgstr "Todos os Lançamentos"
 
 #. module: account_financial_report
 #: selection:aged.partner.balance.wizard,target_move:0
@@ -282,7 +282,7 @@ msgstr "Todos os lançamentos"
 #: selection:open.items.report.wizard,target_move:0
 #: selection:trial.balance.report.wizard,target_move:0
 msgid "All Posted Entries"
-msgstr "Todos os lançamentos publicados"
+msgstr "Todos os Lançamentos Publicados"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:125
@@ -313,7 +313,7 @@ msgstr "Todos os movimentos publicados"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "Amount Cur."
-msgstr "Montante em Moeda."
+msgstr "Montante em Moeda"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:82
@@ -2383,7 +2383,7 @@ msgstr "Relatório de IVA XLSX"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.vat_report_wizard
 msgid "View"
-msgstr "Vista"
+msgstr "Ver"
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__hide_account_at_0
