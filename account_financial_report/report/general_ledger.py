@@ -327,7 +327,11 @@ class GeneralLedgerReport(models.AbstractModel):
         analytic_tag_ids,
         cost_center_ids,
     ):
-        domain = [("date", ">=", date_from), ("date", "<=", date_to)]
+        domain = [
+            ("display_type", "=", False),
+            ("date", ">=", date_from),
+            ("date", "<=", date_to),
+        ]
         if account_ids:
             domain += [("account_id", "in", account_ids)]
         if company_id:
