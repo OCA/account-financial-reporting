@@ -25,6 +25,7 @@ class GeneralLedgerReport(models.AbstractModel):
                         "group_id": account.group_id.id,
                         "currency_id": account.currency_id or False,
                         "currency_name": account.currency_id.name,
+                        "centralized": account.centralized,
                     }
                 }
             )
@@ -235,6 +236,7 @@ class GeneralLedgerReport(models.AbstractModel):
                 else:
                     prt_id = gl["partner_id"][0]
                     prt_name = gl["partner_id"][1]
+                    prt_name = prt_name._value
                 if prt_id not in partners_ids:
                     partners_ids.add(prt_id)
                     partners_data.update({prt_id: {"id": prt_id, "name": prt_name}})
@@ -298,7 +300,7 @@ class GeneralLedgerReport(models.AbstractModel):
             "partner_name": move_line["partner_id"][1]
             if move_line["partner_id"]
             else "",
-            "ref": move_line["name"],
+            "ref": "" if not move_line["ref"] else move_line["ref"],
             "tax_ids": move_line["tax_ids"],
             "debit": move_line["debit"],
             "credit": move_line["credit"],
@@ -424,6 +426,7 @@ class GeneralLedgerReport(models.AbstractModel):
             "tax_ids",
             "analytic_tag_ids",
             "amount_currency",
+            "ref",
         ]
         move_lines = self.env["account.move.line"].search_read(
             domain=domain, fields=ml_fields
@@ -465,19 +468,9 @@ class GeneralLedgerReport(models.AbstractModel):
                 if not move_line["partner_id"]:
                     prt_id = 0
                     partner_name = "Missing Partner"
-                if gen_ld_data:
-                    if prt_id not in gen_ld_data[acc_id]:
-                        if prt_id not in partners_ids:
-                            partners_ids.append(prt_id)
-                            partners_data.update(
-                                {prt_id: {"id": prt_id, "name": partner_name}}
-                            )
-                        gen_ld_data = self._initialize_partner(
-                            gen_ld_data, acc_id, prt_id, foreign_currency
-                        )
-                else:
-                    partners_ids.append(prt_id)
-                    partners_data.update({prt_id: {"id": prt_id, "name": partner_name}})
+                partners_ids.append(prt_id)
+                partners_data.update({prt_id: {"id": prt_id, "name": partner_name}})
+                if prt_id not in gen_ld_data[acc_id]:
                     gen_ld_data = self._initialize_partner(
                         gen_ld_data, acc_id, prt_id, foreign_currency
                     )
@@ -515,6 +508,13 @@ class GeneralLedgerReport(models.AbstractModel):
         )
 
     @api.model
+    def _recalculate_cumul_balance(self, move_lines, last_cumul_balance):
+        for move_line in move_lines:
+            move_line["balance"] += last_cumul_balance
+            last_cumul_balance = move_line["balance"]
+        return move_lines
+
+    @api.model
     def _create_general_ledger(self, gen_led_data, accounts_data):
         general_ledger = []
         for acc_id in gen_led_data.keys():
@@ -525,6 +525,7 @@ class GeneralLedgerReport(models.AbstractModel):
                     "name": accounts_data[acc_id]["name"],
                     "type": "account",
                     "currency_id": accounts_data[acc_id]["currency_id"],
+                    "centralized": accounts_data[acc_id]["centralized"],
                 }
             )
             if not gen_led_data[acc_id]["partners"]:
@@ -534,6 +535,10 @@ class GeneralLedgerReport(models.AbstractModel):
                         account.update({ml_id: gen_led_data[acc_id][ml_id]})
                     else:
                         move_lines += [gen_led_data[acc_id][ml_id]]
+                move_lines = sorted(move_lines, key=lambda k: (k["date"]))
+                move_lines = self._recalculate_cumul_balance(
+                    move_lines, gen_led_data[acc_id]["init_bal"]["balance"]
+                )
                 account.update({"move_lines": move_lines})
             else:
                 list_partner = []
@@ -550,6 +555,11 @@ class GeneralLedgerReport(models.AbstractModel):
                                 )
                             else:
                                 move_lines += [gen_led_data[acc_id][prt_id][ml_id]]
+                        move_lines = sorted(move_lines, key=lambda k: (k["date"]))
+                        move_lines = self._recalculate_cumul_balance(
+                            move_lines,
+                            gen_led_data[acc_id][prt_id]["init_bal"]["balance"],
+                        )
                         partner.update({"move_lines": move_lines})
                         list_partner += [partner]
                 account.update({"list_partner": list_partner})
@@ -557,47 +567,60 @@ class GeneralLedgerReport(models.AbstractModel):
         return general_ledger
 
     @api.model
-    def _get_centralized_ml(self, partners, date_to):
+    def _calculate_centralization(self, centralized_ml, move_line, date_to):
+        jnl_id = move_line["journal_id"]
+        month = move_line["date"].month
+        if jnl_id not in centralized_ml.keys():
+            centralized_ml[jnl_id] = {}
+        if month not in centralized_ml[jnl_id].keys():
+            centralized_ml[jnl_id][month] = {}
+            last_day_month = calendar.monthrange(move_line["date"].year, month)
+            date = datetime.date(move_line["date"].year, month, last_day_month[1])
+            if date > date_to:
+                date = date_to
+            centralized_ml[jnl_id][month].update(
+                {
+                    "journal_id": jnl_id,
+                    "ref": "Centralized entries",
+                    "date": date,
+                    "debit": 0.0,
+                    "credit": 0.0,
+                    "balance": 0.0,
+                    "bal_curr": 0.0,
+                    "partner_id": False,
+                    "rec_id": 0,
+                    "entry_id": False,
+                    "tax_ids": [],
+                    "full_reconcile_id": False,
+                    "id": False,
+                    "tag_ids": False,
+                    "currency_id": False,
+                }
+            )
+        centralized_ml[jnl_id][month]["debit"] += move_line["debit"]
+        centralized_ml[jnl_id][month]["credit"] += move_line["credit"]
+        centralized_ml[jnl_id][month]["balance"] += (
+            move_line["debit"] - move_line["credit"]
+        )
+        centralized_ml[jnl_id][month]["bal_curr"] += move_line["bal_curr"]
+        return centralized_ml
+
+    @api.model
+    def _get_centralized_ml(self, account, date_to):
         centralized_ml = {}
         if isinstance(date_to, str):
             date_to = datetime.datetime.strptime(date_to, "%Y-%m-%d").date()
-        for partner in partners:
-            for move_line in partner["move_lines"]:
-                jnl_id = move_line["journal_id"]
-                month = move_line["date"].month
-                if jnl_id not in centralized_ml.keys():
-                    centralized_ml[jnl_id] = {}
-                if month not in centralized_ml[jnl_id].keys():
-                    centralized_ml[jnl_id][month] = {}
-                    last_day_month = calendar.monthrange(move_line["date"].year, month)
-                    date = datetime.date(
-                        move_line["date"].year, month, last_day_month[1]
+        if account["partners"]:
+            for partner in account["list_partner"]:
+                for move_line in partner["move_lines"]:
+                    centralized_ml = self._calculate_centralization(
+                        centralized_ml, move_line, date_to,
                     )
-                    if date > date_to:
-                        date = date_to
-                    centralized_ml[jnl_id][month].update(
-                        {
-                            "journal_id": jnl_id,
-                            "ref": "Centralized entries",
-                            "date": date,
-                            "debit": 0.0,
-                            "credit": 0.0,
-                            "balance": 0.0,
-                            "bal_curr": 0.0,
-                            "partner_id": False,
-                            "rec_id": 0,
-                            "entry_id": False,
-                            "tax_ids": [],
-                            "full_reconcile_id": False,
-                            "id": False,
-                            "tag_ids": False,
-                            "currency_id": False,
-                        }
-                    )
-                centralized_ml[jnl_id][month]["debit"] += move_line["debit"]
-                centralized_ml[jnl_id][month]["credit"] += move_line["credit"]
-                centralized_ml[jnl_id][month]["balance"] += move_line["balance"]
-                centralized_ml[jnl_id][month]["bal_curr"] += move_line["bal_curr"]
+        else:
+            for move_line in account["move_lines"]:
+                centralized_ml = self._calculate_centralization(
+                    centralized_ml, move_line, date_to,
+                )
         list_centralized_ml = []
         for jnl_id in centralized_ml.keys():
             list_centralized_ml += list(centralized_ml[jnl_id].values())
@@ -663,13 +686,16 @@ class GeneralLedgerReport(models.AbstractModel):
         general_ledger = self._create_general_ledger(gen_ld_data, accounts_data)
         if centralize:
             for account in general_ledger:
-                if account["partners"]:
-                    centralized_ml = self._get_centralized_ml(
-                        account["list_partner"], date_to
-                    )
+                if account["centralized"]:
+                    centralized_ml = self._get_centralized_ml(account, date_to)
                     account["move_lines"] = centralized_ml
-                    account["partners"] = False
-                    del account["list_partner"]
+                    account["move_lines"] = self._recalculate_cumul_balance(
+                        account["move_lines"],
+                        gen_ld_data[account["id"]]["init_bal"]["balance"],
+                    )
+                    if account["partners"]:
+                        account["partners"] = False
+                        del account["list_partner"]
         general_ledger = sorted(general_ledger, key=lambda k: k["code"])
         return {
             "doc_ids": [wizard_id],

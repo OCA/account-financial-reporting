@@ -45,13 +45,13 @@ class TrialBalanceXslx(models.AbstractModel):
                 },
                 5: {
                     "header": _("Period balance"),
-                    "field": "period_balance",
+                    "field": "balance",
                     "type": "amount",
                     "width": 14,
                 },
                 6: {
                     "header": _("Ending balance"),
-                    "field": "final_balance",
+                    "field": "ending_balance",
                     "type": "amount",
                     "width": 14,
                 },
@@ -67,13 +67,13 @@ class TrialBalanceXslx(models.AbstractModel):
                     },
                     8: {
                         "header": _("Initial balance"),
-                        "field": "initial_balance_foreign_currency",
+                        "field": "initial_currency_balance",
                         "type": "amount_currency",
                         "width": 14,
                     },
                     9: {
                         "header": _("Ending balance"),
-                        "field": "final_balance_foreign_currency",
+                        "field": "ending_currency_balance",
                         "type": "amount_currency",
                         "width": 14,
                     },
