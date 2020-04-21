@@ -10,6 +10,7 @@ setuptools.setup(
     install_requires=[
         'odoo13-addon-account_financial_report',
         'odoo13-addon-account_tax_balance',
+        'odoo13-addon-partner_statement',
     ],
     classifiers=[
         'Programming Language :: Python',
