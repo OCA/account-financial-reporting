@@ -23,7 +23,7 @@ Partner Statement
     :target: https://runbot.odoo-community.org/runbot/91/13.0
     :alt: Try me on Runbot
 
-|badge1| |badge2| |badge3| |badge4| |badge5|
+|badge1| |badge2| |badge3| |badge4| |badge5| 
 
 This module extends the functionality of Invoicing to support the printing of customer and vendor statements.
 There are two types of statements, Activity and Outstanding.  Aging details can be shown in the reports, expressed in aging buckets,
