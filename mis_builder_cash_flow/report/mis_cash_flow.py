@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from psycopg2.extensions import AsIs
 
-from odoo import api, fields, models, tools
+from odoo import fields, models, tools
 
 
 class MisCashFlow(models.Model):
@@ -47,15 +47,12 @@ class MisCashFlow(models.Model):
     full_reconcile_id = fields.Many2one(
         "account.full.reconcile", string="Matching Number", readonly=True, index=True,
     )
-    user_type_id = fields.Many2one(
-        "account.account.type", auto_join=True, readonly=True, index=True,
+    account_internal_type = fields.Selection(
+        related="account_id.user_type_id.type", readonly=True
     )
 
-    @api.model_cr
     def init(self):
-        account_type_receivable = self.env.ref("account.data_account_type_receivable")
-        query = (
-            """
+        query = """
             SELECT
                 -- we use negative id to avoid duplicates and we don't use
                 -- ROW_NUMBER() because the performance was very poor
@@ -77,15 +74,14 @@ class MisCashFlow(models.Model):
                 aml.full_reconcile_id as full_reconcile_id,
                 aml.partner_id as partner_id,
                 aml.company_id as company_id,
-                aml.user_type_id as user_type_id,
                 aml.name as name,
-                aml.date_maturity as date
+                COALESCE(aml.date_maturity, aml.date) as date
             FROM account_move_line as aml
             UNION ALL
             SELECT
                 fl.id as id,
                 CAST('forecast_line' AS varchar) as line_type,
-                Null as move_line_id,
+                NULL as move_line_id,
                 fl.account_id as account_id,
                 CASE
                     WHEN fl.balance > 0
@@ -97,23 +93,19 @@ class MisCashFlow(models.Model):
                     THEN -fl.balance
                     ELSE 0.0
                 END AS credit,
-                Null as reconciled,
-                Null as full_reconcile_id,
+                NULL as reconciled,
+                NULL as full_reconcile_id,
                 fl.partner_id as partner_id,
                 fl.company_id as company_id,
-                %i as user_type_id,
                 fl.name as name,
                 fl.date as date
             FROM mis_cash_flow_forecast_line as fl
         """
-            % account_type_receivable.id
-        )
         tools.drop_view_if_exists(self.env.cr, self._table)
         self._cr.execute(
-            "CREATE OR REPLACE VIEW %s AS %s", (AsIs(self._table), AsIs(query))
+            "CREATE OR REPLACE VIEW %s AS (%s)", (AsIs(self._table), AsIs(query))
         )
 
-    @api.multi
     def action_open_related_line(self):
         self.ensure_one()
         if self.line_type == "move_line":
