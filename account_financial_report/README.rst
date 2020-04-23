@@ -115,6 +115,9 @@ Contributors
 
   * Pedro M. Baeza
   * Sergio Teruel
+* `Druidoo <https://www.druidoo.io>`__:
+
+  * Iván Todorovich
 
 Much of the work in this module was done at a sprint in Sorrento, Italy in
 April 2016.
