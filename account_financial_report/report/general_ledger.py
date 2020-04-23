@@ -331,6 +331,11 @@ class GeneralLedgerReportCompute(models.TransientModel):
             sub_subquery_sum_amounts += """
                 AND at.include_initial_balance = TRUE
             """
+        if self.filter_journal_ids:
+            sub_subquery_sum_amounts += """
+            AND
+                ml.journal_id IN %s
+            """ % (tuple(self.filter_journal_ids.ids,),)
 
         if self.only_posted_moves:
             sub_subquery_sum_amounts += """
