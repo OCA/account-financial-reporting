@@ -5,8 +5,6 @@ from odoo import fields, models
 
 class AccountAccount(models.Model):
 
-    _inherit = 'account.account'
+    _inherit = "account.account"
 
-    hide_in_cash_flow = fields.Boolean(
-        string='Hide in Cash Flow?',
-    )
+    hide_in_cash_flow = fields.Boolean(string="Hide in Cash Flow?",)
