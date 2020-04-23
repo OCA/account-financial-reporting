@@ -16,7 +16,7 @@
         <field name="sequence">20</field>
         <field
             name="expression"
-        >bal[][('account_id.internal_type', '=', 'liquidity'), ('line_type', '=', 'move_line'), ('account_id.hide_in_cash_flow', '=', False)]</field>
+        >bal[][('account_internal_type', '=', 'liquidity'), ('line_type', '=', 'move_line'), ('account_id.hide_in_cash_flow', '=', False)]</field>
     </record>
     <record id="mis_kpi_in_total" model="mis.report.kpi">
         <field name="report_id" ref="mis_report_cash_flow" />
@@ -36,7 +36,7 @@
         <field name="sequence">50</field>
         <field
             name="expression"
-        >bal[][('account_id.internal_type', '=', 'receivable'), ('full_reconcile_id', '=', False), ('line_type', '=', 'move_line'), ('account_id.hide_in_cash_flow', '=', False)]</field>
+        >bal[][('account_internal_type', '=', 'receivable'), ('full_reconcile_id', '=', False), ('line_type', '=', 'move_line'), ('account_id.hide_in_cash_flow', '=', False)]</field>
     </record>
     <record id="mis_kpi_in_forecast" model="mis.report.kpi">
         <field name="report_id" ref="mis_report_cash_flow" />
@@ -68,7 +68,7 @@
         <field name="sequence">100</field>
         <field
             name="expression"
-        >bal[][('account_id.internal_type', '=', 'payable'), ('full_reconcile_id', '=', False), ('line_type', '=', 'move_line'), ('account_id.hide_in_cash_flow', '=', False)]</field>
+        >bal[][('account_internal_type', '=', 'payable'), ('full_reconcile_id', '=', False), ('line_type', '=', 'move_line'), ('account_id.hide_in_cash_flow', '=', False)]</field>
     </record>
     <record id="mis_kpi_out_forecast" model="mis.report.kpi">
         <field name="report_id" ref="mis_report_cash_flow" />
@@ -101,7 +101,7 @@
         <field name="sequence">150</field>
         <field
             name="expression"
-        >bale[][('account_id.hide_in_cash_flow', '=', False), '|', ('line_type', '=', 'forecast_line'), ('line_type', '=', 'move_line'), '|', ('account_id.internal_type', '=', 'liquidity'), ('account_id.internal_type', 'in', ('receivable', 'payable')), ('full_reconcile_id', '=', False)]</field>
+        >bale[][('account_id.hide_in_cash_flow', '=', False), '|', ('line_type', '=', 'forecast_line'), ('line_type', '=', 'move_line'), '|', ('account_internal_type', '=', 'liquidity'), ('account_internal_type', 'in', ('receivable', 'payable')), ('full_reconcile_id', '=', False)]</field>
         <field
             name="style_expression"
         >'Cash Flow - Good' if balance >= 0.0 else 'Cash Flow - Bad'</field>
