@@ -14,7 +14,7 @@ class MisCashFlowForecastLine(models.Model):
         comodel_name="account.account",
         string="Account",
         required=True,
-        help="The account of the forecast line is only for informative " "purpose",
+        help="The account of the forecast line is only for informative purpose",
     )
     partner_id = fields.Many2one(comodel_name="res.partner", string="Partner",)
     name = fields.Char(required=True, default="/",)
@@ -27,10 +27,9 @@ class MisCashFlowForecastLine(models.Model):
         index=True,
     )
 
-    @api.multi
     @api.constrains("company_id", "account_id")
     def _check_company_id_account_id(self):
         if self.filtered(lambda x: x.company_id != x.account_id.company_id):
             raise ValidationError(
-                _("The Company and the Company of the Account must be the " "same.")
+                _("The Company and the Company of the Account must be the same.")
             )
