@@ -5,12 +5,11 @@ from datetime import timedelta
 
 from odoo.exceptions import ValidationError
 from odoo.fields import Date
-from odoo.tests.common import TransactionCase, at_install, post_install
+from odoo.tests.common import TransactionCase, tagged
 from odoo.tools import mute_logger
 
 
-@at_install(False)
-@post_install(True)
+@tagged("post_install", "-at_install")
 class TestCashFlow(TransactionCase):
     def setUp(self):
         super().setUp()
@@ -61,7 +60,7 @@ class TestCashFlow(TransactionCase):
     def test_company_constrain(self):
         with self.assertRaises(ValidationError):
             self.env["mis.cash_flow.forecast_line"].create(
-                {"account_id": self.account.id, "date": Date.today(), "balance": 1000,}
+                {"account_id": self.account.id, "date": Date.today(), "balance": 1000}
             )
 
     def test_report_instance(self):
@@ -71,6 +70,7 @@ class TestCashFlow(TransactionCase):
                 "name": "Move",
                 "journal_id": self.journal.id,
                 "company_id": self.company.id,
+                "type": "entry",
                 "line_ids": [
                     (
                         0,
@@ -114,11 +114,11 @@ class TestCashFlow(TransactionCase):
             ],
             ignore_rows=["balance", "period_balance", "in_total"],
         )
-        date = Date.from_string(Date.today()) + timedelta(weeks=8)
+        date = Date.today() + timedelta(weeks=8)
         self.env["mis.cash_flow.forecast_line"].create(
             {
                 "account_id": self.account.id,
-                "date": Date.to_string(date),
+                "date": date,
                 "balance": 1000,
                 "company_id": self.company.id,
             }
@@ -133,7 +133,7 @@ class TestCashFlow(TransactionCase):
             ignore_rows=["balance", "period_balance", "in_total"],
         )
 
-    def check_matrix(self, args=False, ignore_rows=False):
+    def check_matrix(self, args=None, ignore_rows=None):
         if not args:
             args = []
         if not ignore_rows:
