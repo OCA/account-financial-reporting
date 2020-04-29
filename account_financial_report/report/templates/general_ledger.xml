@@ -68,15 +68,14 @@
                                     <t t-set="type" t-value='"partner_type"'/>
                                 </t>
 
-                                <!-- Display account footer -->
-                                <t t-if="not filter_partner_ids">
-                                    <t t-call="account_financial_report.report_general_ledger_ending_cumul">
-                                        <t t-set="account_or_partner_object" t-value="account"/>
-                                        <t t-set="type" t-value='"account_type"'/>
-                                    </t>
-                                </t>
-
                             </div>
+                        </t>
+                        <!-- Display account footer -->
+                        <t t-if="not filter_partner_ids">
+                            <t t-call="account_financial_report.report_general_ledger_ending_cumul">
+                                <t t-set="account_or_partner_object" t-value="account"/>
+                                <t t-set="type" t-value='"account_type"'/>
+                            </t>
                         </t>
                     </t>
                 </div>

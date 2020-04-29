@@ -53,6 +53,10 @@ class OpenItemsReportWizard(models.TransientModel):
              'will display initial and final balance in that currency.',
         default=lambda self: self._default_foreign_currency(),
     )
+    show_partner_details = fields.Boolean(
+        string='Show Partner Details',
+        default=True,
+    )
 
     def _default_foreign_currency(self):
         return self.env.user.has_group('base.group_multi_currency')
@@ -135,6 +139,7 @@ class OpenItemsReportWizard(models.TransientModel):
             'only_posted_moves': self.target_move == 'posted',
             'hide_account_at_0': self.hide_account_at_0,
             'foreign_currency': self.foreign_currency,
+            'show_partner_details': self.show_partner_details,
             'company_id': self.company_id.id,
             'target_move': self.target_move,
             'account_ids': self.account_ids.ids,

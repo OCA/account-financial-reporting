@@ -259,6 +259,19 @@ class OpenItemsReport(models.AbstractModel):
                         'amount_residual']
         return total_amount
 
+    @api.model
+    def _get_open_items_no_partners(self, open_items_move_lines_data):
+        new_open_items = {}
+        for acc_id in open_items_move_lines_data.keys():
+            new_open_items[acc_id] = {}
+            move_lines = []
+            for prt_id in open_items_move_lines_data[acc_id]:
+                for move_line in open_items_move_lines_data[acc_id][prt_id]:
+                    move_lines += [move_line]
+            move_lines = sorted(move_lines, key=lambda k: (k['date']))
+            new_open_items[acc_id] = move_lines
+        return new_open_items
+
     @api.multi
     def _get_report_values(self, docids, data):
         wizard_id = data['wizard_id']
@@ -270,6 +283,7 @@ class OpenItemsReport(models.AbstractModel):
         date_at_object = datetime.strptime(date_at, '%Y-%m-%d').date()
         date_from = data['date_from']
         target_move = data['target_move']
+        show_partner_details = data['show_partner_details']
 
         move_lines_data, partners_data, journals_data, accounts_data, \
             open_items_move_lines_data = self._get_data(
@@ -277,11 +291,16 @@ class OpenItemsReport(models.AbstractModel):
                 target_move, company_id, date_from)
 
         total_amount = self._calculate_amounts(open_items_move_lines_data)
+        if not show_partner_details:
+            open_items_move_lines_data = self._get_open_items_no_partners(
+                open_items_move_lines_data
+            )
         return{
             'doc_ids': [wizard_id],
             'doc_model': 'open.items.report.wizard',
             'docs': self.env['open.items.report.wizard'].browse(wizard_id),
             'foreign_currency': data['foreign_currency'],
+            'show_partner_details': data['show_partner_details'],
             'company_name': company.display_name,
             'currency_name': company.currency_id.name,
             'date_at': date_at_object.strftime("%d/%m/%Y"),

@@ -93,6 +93,7 @@ class OpenItemsXslx(models.AbstractModel):
         accounts_data = res_data['accounts_data']
         partners_data = res_data['partners_data']
         total_amount = res_data['total_amount']
+        show_partner_details = res_data['show_partner_details']
         for account_id in Open_items.keys():
             # Write account title
             self.write_array_title(accounts_data[account_id]['code'] + ' - ' +
@@ -100,25 +101,33 @@ class OpenItemsXslx(models.AbstractModel):
 
             # For each partner
             if Open_items[account_id]:
-                for partner_id in Open_items[account_id]:
-                    type_object = 'partner'
-                    # Write partner title
-                    self.write_array_title(partners_data[partner_id]['name'])
+                if show_partner_details:
+                    for partner_id in Open_items[account_id]:
+                        type_object = 'partner'
+                        # Write partner title
+                        self.write_array_title(partners_data[partner_id]['name'])
 
+                        # Display array header for move lines
+                        self.write_array_header()
+
+                        # Display account move lines
+                        for line in Open_items[account_id][partner_id]:
+                            self.write_line_from_dict(line)
+
+                        # Display ending balance line for partner
+                        self.write_ending_balance_from_dict(
+                            partners_data[partner_id], type_object, total_amount,
+                            account_id, partner_id)
+
+                        # Line break
+                        self.row_pos += 1
+                else:
                     # Display array header for move lines
                     self.write_array_header()
 
                     # Display account move lines
-                    for line in Open_items[account_id][partner_id]:
+                    for line in Open_items[account_id]:
                         self.write_line_from_dict(line)
-
-                    # Display ending balance line for partner
-                    self.write_ending_balance_from_dict(
-                        partners_data[partner_id], type_object, total_amount,
-                        account_id, partner_id)
-
-                    # Line break
-                    self.row_pos += 1
 
                 # Display ending balance line for account
                 type_object = 'account'

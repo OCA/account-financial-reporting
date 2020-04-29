@@ -17,6 +17,7 @@
                     </group>
                     <group name="other_filters">
                         <field name="target_move" widget="radio"/>
+                        <field name="show_partner_details"/>
                         <field name="hide_account_at_0"/>
                         <field name="foreign_currency"/>
                     </group>
