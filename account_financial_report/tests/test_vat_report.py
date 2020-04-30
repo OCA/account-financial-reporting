@@ -173,8 +173,8 @@ class TestVATReport(common.TransactionCase):
             line_form.price_unit = 250.0
             line_form.account_id = self.income_account
             line_form.tax_ids.add(self.tax_20)
-        self.cbinvoice = move_form.save()
-        self.cbinvoice.post()
+        invoice = move_form.save()
+        invoice.post()
 
     def _get_report_lines(self, taxgroups=False):
         based_on = "taxtags"
