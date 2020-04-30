@@ -83,6 +83,27 @@ class TrialBalanceReportWizard(models.TransientModel):
              'account currency is not setup through chart of accounts '
              'will display initial and final balance in that currency.'
     )
+    account_code_from = fields.Many2one(
+        comodel_name='account.account',
+        string='Account Code From',
+        help='Starting account in a range')
+    account_code_to = fields.Many2one(
+        comodel_name='account.account',
+        string='Account Code To',
+        help='Ending account in a range')
+
+    @api.onchange('account_code_from', 'account_code_to')
+    def on_change_account_range(self):
+        if self.account_code_from and self.account_code_from.code.isdigit() and \
+                self.account_code_to and self.account_code_to.code.isdigit():
+            start_range = int(self.account_code_from.code)
+            end_range = int(self.account_code_to.code)
+            self.account_ids = self.env['account.account'].search(
+                [('code', 'in', [
+                    x for x in range(start_range, end_range + 1)])])
+            if self.company_id:
+                self.account_ids = self.account_ids.filtered(
+                    lambda a: a.company_id == self.company_id)
 
     @api.multi
     @api.constrains('hierarchy_on', 'show_hierarchy_level')

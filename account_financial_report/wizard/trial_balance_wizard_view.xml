@@ -48,8 +48,20 @@
                         <label for="account_ids" colspan="4"/>
                         <field name="receivable_accounts_only"/>
                         <field name="payable_accounts_only"/>
-                        <field name="account_ids"
-                               nolabel="1"
+                        <label for="account_code_from" string="From Code"/>
+                        <div>
+                            <div class="o_row">
+                                <field name="account_code_from"
+                                       class="oe_inline"
+                                       options="{'no_create': True}"/>
+                                <span class="oe_inline">To</span>
+                                <field name="account_code_to"
+                                       class="oe_inline"
+                                       options="{'no_create': True}"
+                                />
+                            </div>
+                        </div>
+                        <field name="account_ids" nolabel="1"
                                widget="many2many_tags"
                                options="{'no_create': True}"
                                colspan="4"/>
