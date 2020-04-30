@@ -27,7 +27,10 @@ class AgedPartnerBalanceWizard(models.TransientModel):
         default="posted",
     )
     account_ids = fields.Many2many(
-        comodel_name="account.account", string="Filter accounts"
+        comodel_name='account.account',
+        string='Filter accounts',
+        domain=[('reconcile', '=', True)],
+        required=True,
     )
     receivable_accounts_only = fields.Boolean()
     payable_accounts_only = fields.Boolean()
@@ -56,7 +59,11 @@ class AgedPartnerBalanceWizard(models.TransientModel):
             res["domain"]["partner_ids"] += self._get_partner_ids_domain()
         return res
 
-    @api.onchange("receivable_accounts_only", "payable_accounts_only")
+    @api.onchange('account_ids')
+    def onchange_account_ids(self):
+        return {'domain': {'account_ids': [('reconcile', '=', True)]}}
+
+    @api.onchange('receivable_accounts_only', 'payable_accounts_only')
     def onchange_type_accounts_only(self):
         """Handle receivable/payable accounts only change."""
         domain = [("company_id", "=", self.company_id.id)]
@@ -66,10 +73,10 @@ class AgedPartnerBalanceWizard(models.TransientModel):
             elif self.receivable_accounts_only:
                 domain += [("internal_type", "=", "receivable")]
             elif self.payable_accounts_only:
-                domain += [("internal_type", "=", "payable")]
-        elif not self.receivable_accounts_only and not self.payable_accounts_only:
-            domain += [("reconcile", "=", True)]
-        self.account_ids = self.env["account.account"].search(domain)
+                domain += [('internal_type', '=', 'payable')]
+            self.account_ids = self.env['account.account'].search(domain)
+        else:
+            self.account_ids = None
 
     def _print_report(self, report_type):
         self.ensure_one()
