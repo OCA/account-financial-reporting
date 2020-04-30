@@ -28,9 +28,9 @@ class OpenItemsReportWizard(models.TransientModel):
         default="posted",
     )
     account_ids = fields.Many2many(
-        comodel_name='account.account',
-        string='Filter accounts',
-        domain=[('reconcile', '=', True)],
+        comodel_name="account.account",
+        string="Filter accounts",
+        domain=[("reconcile", "=", True)],
         required=True,
     )
     hide_account_at_0 = fields.Boolean(
@@ -55,6 +55,44 @@ class OpenItemsReportWizard(models.TransientModel):
         "will display initial and final balance in that currency.",
         default=lambda self: self._default_foreign_currency(),
     )
+    show_partner_details = fields.Boolean(string="Show Partner Details", default=True,)
+    account_code_from = fields.Many2one(
+        comodel_name="account.account",
+        string="Account Code From",
+        help="Starting account in a range",
+    )
+    account_code_to = fields.Many2one(
+        comodel_name="account.account",
+        string="Account Code To",
+        help="Ending account in a range",
+    )
+
+    @api.onchange("account_code_from", "account_code_to")
+    def on_change_account_range(self):
+        if (
+            self.account_code_from
+            and self.account_code_from.code.isdigit()
+            and self.account_code_to
+            and self.account_code_to.code.isdigit()
+        ):
+            start_range = int(self.account_code_from.code)
+            end_range = int(self.account_code_to.code)
+            self.account_ids = self.env["account.account"].search(
+                [
+                    ("code", "in", [x for x in range(start_range, end_range + 1)]),
+                    ("reconcile", "=", True),
+                ]
+            )
+            if self.company_id:
+                self.account_ids = self.account_ids.filtered(
+                    lambda a: a.company_id == self.company_id
+                )
+        return {
+            "domain": {
+                "account_code_from": [("reconcile", "=", True)],
+                "account_code_to": [("reconcile", "=", True)],
+            }
+        }
 
     def _default_foreign_currency(self):
         return self.env.user.has_group("base.group_multi_currency")
@@ -81,11 +119,11 @@ class OpenItemsReportWizard(models.TransientModel):
             res["domain"]["partner_ids"] += self._get_partner_ids_domain()
         return res
 
-    @api.onchange('account_ids')
+    @api.onchange("account_ids")
     def onchange_account_ids(self):
-        return {'domain': {'account_ids': [('reconcile', '=', True)]}}
+        return {"domain": {"account_ids": [("reconcile", "=", True)]}}
 
-    @api.onchange('receivable_accounts_only', 'payable_accounts_only')
+    @api.onchange("receivable_accounts_only", "payable_accounts_only")
     def onchange_type_accounts_only(self):
         """Handle receivable/payable accounts only change."""
         domain = [("company_id", "=", self.company_id.id)]
@@ -95,8 +133,8 @@ class OpenItemsReportWizard(models.TransientModel):
             elif self.receivable_accounts_only:
                 domain += [("internal_type", "=", "receivable")]
             elif self.payable_accounts_only:
-                domain += [('internal_type', '=', 'payable')]
-            self.account_ids = self.env['account.account'].search(domain)
+                domain += [("internal_type", "=", "payable")]
+            self.account_ids = self.env["account.account"].search(domain)
         else:
             self.account_ids = None
 
