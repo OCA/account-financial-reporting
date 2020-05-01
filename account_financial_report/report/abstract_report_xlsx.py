@@ -440,25 +440,29 @@ class AbstractReportXslx(models.AbstractModel):
                         self.sheet.write_string(
                             self.row_pos, col_pos, value or "", self.format_header_right
                         )
+                elif cell_type == "currency_name":
+                    self.sheet.write_string(
+                        self.row_pos, col_pos, value or "", self.format_header_right
+                    )
         self.row_pos += 1
 
     def _get_currency_amt_format(self, line_object):
         """ Return amount format specific for each currency. """
-        if hasattr(line_object, "account_group_id") and line_object.account_group_id:
-            format_amt = self.format_amount_bold
+        if "account_group_id" in line_object and line_object["account_group_id"]:
+            format_amt = getattr(self, "format_amount_bold")
             field_prefix = "format_amount_bold"
         else:
-            format_amt = self.format_amount
+            format_amt = getattr(self, "format_amount")
             field_prefix = "format_amount"
-        if line_object.currency_id:
-            field_name = "{}_{}".format(field_prefix, line_object.currency_id.name)
+        if "currency_id" in line_object and line_object.get("currency_id", False):
+            field_name = "{}_{}".format(field_prefix, line_object["currency_id"].name)
             if hasattr(self, field_name):
                 format_amt = getattr(self, field_name)
             else:
                 format_amt = self.workbook.add_format()
-                self.field_name = format_amt
+                setattr(self, "field_name", format_amt)
                 format_amount = "#,##0." + (
-                    "0" * line_object.currency_id.decimal_places
+                    "0" * line_object["currency_id"].decimal_places
                 )
                 format_amt.set_num_format(format_amount)
         return format_amt
@@ -469,10 +473,13 @@ class AbstractReportXslx(models.AbstractModel):
             format_amt = self.format_amount_bold
             field_prefix = "format_amount_bold"
         else:
-            format_amt = self.format_amount
+            format_amt = getattr(self, "format_amount")
             field_prefix = "format_amount"
         if line_dict.get("currency_id", False) and line_dict["currency_id"]:
-            currency = self.env["res.currency"].browse([line_dict["currency_id"]])
+            if isinstance(line_dict["currency_id"], int):
+                currency = self.env["res.currency"].browse(line_dict["currency_id"])
+            else:
+                currency = line_dict["currency_id"]
             field_name = "{}_{}".format(field_prefix, currency.name)
             if hasattr(self, field_name):
                 format_amt = getattr(self, field_name)
