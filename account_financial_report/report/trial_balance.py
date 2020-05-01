@@ -3,7 +3,6 @@
 # Copyright 2020 ForgeFlow S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from operator import itemgetter
 
 from odoo import api, models
 
@@ -203,10 +202,11 @@ class TrialBalanceReport(models.AbstractModel):
         for initial_balance in initial_balances:
             pl_initial_balance += initial_balance["balance"]
             if foreign_currency:
-                pl_initial_currency_balance += initial_balance["amount_currency"]
+                pl_initial_currency_balance += round(
+                    initial_balance["amount_currency"], 2
+                )
         return pl_initial_balance, pl_initial_currency_balance
 
-    # flake8: noqa: C901
     def _get_data(
         self,
         account_ids,
@@ -222,6 +222,15 @@ class TrialBalanceReport(models.AbstractModel):
         unaffected_earnings_account,
         fy_start_date,
     ):
+        accounts_domain = [("company_id", "=", company_id)]
+        if account_ids:
+            accounts_domain += [("id", "in", account_ids)]
+        accounts = self.env["account.account"].search(accounts_domain)
+        tb_initial_acc = []
+        for account in accounts:
+            tb_initial_acc.append(
+                {"account_id": account.id, "balance": 0.0, "amount_currency": 0.0}
+            )
         initial_domain_bs = self._get_initial_balances_bs_ml_domain(
             account_ids,
             journal_ids,
@@ -251,7 +260,18 @@ class TrialBalanceReport(models.AbstractModel):
             fields=["account_id", "balance", "amount_currency"],
             groupby=["account_id"],
         )
-        tb_initial_acc = tb_initial_acc_bs + tb_initial_acc_pl
+        tb_initial_acc_rg = tb_initial_acc_bs + tb_initial_acc_pl
+        for account_rg in tb_initial_acc_rg:
+            element = list(
+                filter(
+                    lambda acc_dict: acc_dict["account_id"]
+                    == account_rg["account_id"][0],
+                    tb_initial_acc,
+                )
+            )
+            if element:
+                element[0]["balance"] += account_rg["balance"]
+                element[0]["amount_currency"] += account_rg["amount_currency"]
         if hide_account_at_0:
             tb_initial_acc = [p for p in tb_initial_acc if p["balance"] != 0]
 
@@ -311,9 +331,11 @@ class TrialBalanceReport(models.AbstractModel):
             total_amount[acc_id]["ending_balance"] = tb["balance"]
             if foreign_currency:
                 total_amount[acc_id]["initial_currency_balance"] = 0.0
-                total_amount[acc_id]["ending_currency_balance"] = tb["amount_currency"]
+                total_amount[acc_id]["ending_currency_balance"] = round(
+                    tb["amount_currency"], 2
+                )
         for tb in tb_initial_acc:
-            acc_id = tb["account_id"][0]
+            acc_id = tb["account_id"]
             if acc_id not in total_amount.keys():
                 total_amount[acc_id] = {}
                 total_amount[acc_id]["credit"] = 0.0
@@ -322,22 +344,22 @@ class TrialBalanceReport(models.AbstractModel):
                 total_amount[acc_id]["initial_balance"] = tb["balance"]
                 total_amount[acc_id]["ending_balance"] = tb["balance"]
                 if foreign_currency:
-                    total_amount[acc_id]["initial_currency_balance"] = tb[
-                        "amount_currency"
-                    ]
-                    total_amount[acc_id]["ending_currency_balance"] = tb[
-                        "amount_currency"
-                    ]
+                    total_amount[acc_id]["initial_currency_balance"] = round(
+                        tb["amount_currency"], 2
+                    )
+                    total_amount[acc_id]["ending_currency_balance"] = round(
+                        tb["amount_currency"], 2
+                    )
             else:
                 total_amount[acc_id]["initial_balance"] = tb["balance"]
                 total_amount[acc_id]["ending_balance"] += tb["balance"]
                 if foreign_currency:
-                    total_amount[acc_id]["initial_currency_balance"] = tb[
-                        "amount_currency"
-                    ]
-                    total_amount[acc_id]["ending_currency_balance"] += tb[
-                        "amount_currency"
-                    ]
+                    total_amount[acc_id]["initial_currency_balance"] = round(
+                        tb["amount_currency"], 2
+                    )
+                    total_amount[acc_id]["ending_currency_balance"] += round(
+                        tb["amount_currency"], 2
+                    )
         if show_partner_details:
             partners_ids = set()
             partners_data = {}
@@ -357,9 +379,9 @@ class TrialBalanceReport(models.AbstractModel):
                     total_amount[acc_id][prt_id]["ending_balance"] = tb["balance"]
                     if foreign_currency:
                         total_amount[acc_id][prt_id]["initial_currency_balance"] = 0.0
-                        total_amount[acc_id][prt_id]["ending_currency_balance"] = tb[
-                            "amount_currency"
-                        ]
+                        total_amount[acc_id][prt_id]["ending_currency_balance"] = round(
+                            tb["amount_currency"], 2
+                        )
                         partners_ids.add(tb["partner_id"])
             for tb in tb_initial_prt:
                 acc_id = tb["account_id"][0]
@@ -379,10 +401,10 @@ class TrialBalanceReport(models.AbstractModel):
                         if foreign_currency:
                             total_amount[acc_id][prt_id][
                                 "initial_currency_balance"
-                            ] = tb["amount_currency"]
+                            ] = round(tb["amount_currency"], 2)
                             total_amount[acc_id][prt_id][
                                 "ending_currency_balance"
-                            ] = tb["amount_currency"]
+                            ] = round(tb["amount_currency"], 2)
                         partners_ids.add(tb["partner_id"])
                     elif prt_id not in total_amount[acc_id].keys():
                         total_amount[acc_id][prt_id] = {}
@@ -394,10 +416,10 @@ class TrialBalanceReport(models.AbstractModel):
                         if foreign_currency:
                             total_amount[acc_id][prt_id][
                                 "initial_currency_balance"
-                            ] = tb["amount_currency"]
+                            ] = round(tb["amount_currency"], 2)
                             total_amount[acc_id][prt_id][
                                 "ending_currency_balance"
-                            ] = tb["amount_currency"]
+                            ] = round(tb["amount_currency"], 2)
                         partners_ids.add(tb["partner_id"])
                     else:
                         total_amount[acc_id][prt_id]["initial_balance"] += tb["balance"]
@@ -405,10 +427,10 @@ class TrialBalanceReport(models.AbstractModel):
                         if foreign_currency:
                             total_amount[acc_id][prt_id][
                                 "initial_currency_balance"
-                            ] += tb["amount_currency"]
+                            ] += round(tb["amount_currency"], 2)
                             total_amount[acc_id][prt_id][
                                 "ending_currency_balance"
-                            ] += tb["amount_currency"]
+                            ] += round(tb["amount_currency"], 2)
         accounts_ids = list(total_amount.keys())
         unaffected_id = unaffected_earnings_account
         if unaffected_id not in accounts_ids:
