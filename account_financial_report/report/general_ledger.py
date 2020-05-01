@@ -4,6 +4,7 @@
 
 import calendar
 import datetime
+import operator
 
 from odoo import api, models
 
@@ -55,6 +56,7 @@ class GeneralLedgerReport(models.AbstractModel):
                         "id": tax.id,
                         "amount": tax.amount,
                         "amount_type": tax.amount_type,
+                        "display_name": tax.display_name,
                     }
                 }
             )
@@ -62,6 +64,13 @@ class GeneralLedgerReport(models.AbstractModel):
                 taxes_data[tax.id]["string"] = "%"
             else:
                 taxes_data[tax.id]["string"] = ""
+            taxes_data[tax.id]["tax_name"] = (
+                tax.display_name
+                + " ("
+                + str(tax.amount)
+                + taxes_data[tax.id]["string"]
+                + ")"
+            )
         return taxes_data
 
     def _get_acc_prt_accounts_ids(self, company_id):
@@ -301,6 +310,7 @@ class GeneralLedgerReport(models.AbstractModel):
             if move_line["partner_id"]
             else "",
             "ref": "" if not move_line["ref"] else move_line["ref"],
+            "name": "" if not move_line["name"] else move_line["name"],
             "tax_ids": move_line["tax_ids"],
             "debit": move_line["debit"],
             "credit": move_line["credit"],
@@ -315,6 +325,16 @@ class GeneralLedgerReport(models.AbstractModel):
             "tag_ids": move_line["analytic_tag_ids"],
             "currency_id": move_line["currency_id"],
         }
+        if (
+            move_line_data["ref"] == move_line_data["name"]
+            or move_line_data["ref"] == ""
+        ):
+            ref_label = move_line_data["name"]
+        elif move_line_data["name"] == "":
+            ref_label = move_line_data["ref"]
+        else:
+            ref_label = move_line_data["ref"] + str(" - ") + move_line_data["name"]
+        move_line_data.update({"ref_label": ref_label})
         return move_line_data
 
     @api.model
@@ -383,6 +403,22 @@ class GeneralLedgerReport(models.AbstractModel):
             gen_ld_data[acc_id]["fin_bal"]["bal_curr"] = 0.0
         return gen_ld_data
 
+    def _get_reconciled_after_date_to_ids(self, full_reconcile_ids, date_to):
+        full_reconcile_ids = list(full_reconcile_ids)
+        domain = [
+            ("max_date", ">", date_to),
+            ("full_reconcile_id", "in", full_reconcile_ids),
+        ]
+        fields = ["full_reconcile_id"]
+        reconciled_after_date_to = self.env["account.partial.reconcile"].search_read(
+            domain=domain, fields=fields
+        )
+        rec_after_date_to_ids = list(
+            map(operator.itemgetter("full_reconcile_id"), reconciled_after_date_to)
+        )
+        rec_after_date_to_ids = [i[0] for i in rec_after_date_to_ids]
+        return rec_after_date_to_ids
+
     def _get_period_ml_data(
         self,
         account_ids,
@@ -427,6 +463,7 @@ class GeneralLedgerReport(models.AbstractModel):
             "analytic_tag_ids",
             "amount_currency",
             "ref",
+            "name",
         ]
         move_lines = self.env["account.move.line"].search_read(
             domain=domain, fields=ml_fields
@@ -497,6 +534,9 @@ class GeneralLedgerReport(models.AbstractModel):
         accounts_data = self._get_accounts_data(gen_ld_data.keys())
         taxes_data = self._get_taxes_data(list(taxes_ids))
         tags_data = self._get_tags_data(list(tags_ids))
+        rec_after_date_to_ids = self._get_reconciled_after_date_to_ids(
+            full_reconcile_data.keys(), date_to
+        )
         return (
             gen_ld_data,
             accounts_data,
@@ -505,17 +545,24 @@ class GeneralLedgerReport(models.AbstractModel):
             full_reconcile_data,
             taxes_data,
             tags_data,
+            rec_after_date_to_ids,
         )
 
     @api.model
-    def _recalculate_cumul_balance(self, move_lines, last_cumul_balance):
+    def _recalculate_cumul_balance(
+        self, move_lines, last_cumul_balance, rec_after_date_to_ids
+    ):
         for move_line in move_lines:
             move_line["balance"] += last_cumul_balance
             last_cumul_balance = move_line["balance"]
+            if move_line["rec_id"] in rec_after_date_to_ids:
+                move_line["rec_name"] = str("*") + move_line["rec_name"]
         return move_lines
 
     @api.model
-    def _create_general_ledger(self, gen_led_data, accounts_data):
+    def _create_general_ledger(
+        self, gen_led_data, accounts_data, show_partner_details, rec_after_date_to_ids
+    ):
         general_ledger = []
         for acc_id in gen_led_data.keys():
             account = {}
@@ -537,32 +584,52 @@ class GeneralLedgerReport(models.AbstractModel):
                         move_lines += [gen_led_data[acc_id][ml_id]]
                 move_lines = sorted(move_lines, key=lambda k: (k["date"]))
                 move_lines = self._recalculate_cumul_balance(
-                    move_lines, gen_led_data[acc_id]["init_bal"]["balance"]
+                    move_lines,
+                    gen_led_data[acc_id]["init_bal"]["balance"],
+                    rec_after_date_to_ids,
                 )
                 account.update({"move_lines": move_lines})
             else:
-                list_partner = []
-                for prt_id in gen_led_data[acc_id].keys():
-                    partner = {}
+                if show_partner_details:
+                    list_partner = []
+                    for prt_id in gen_led_data[acc_id].keys():
+                        partner = {}
+                        move_lines = []
+                        if not isinstance(prt_id, int):
+                            account.update({prt_id: gen_led_data[acc_id][prt_id]})
+                        else:
+                            for ml_id in gen_led_data[acc_id][prt_id].keys():
+                                if not isinstance(ml_id, int):
+                                    partner.update(
+                                        {ml_id: gen_led_data[acc_id][prt_id][ml_id]}
+                                    )
+                                else:
+                                    move_lines += [gen_led_data[acc_id][prt_id][ml_id]]
+                            move_lines = sorted(move_lines, key=lambda k: (k["date"]))
+                            move_lines = self._recalculate_cumul_balance(
+                                move_lines,
+                                gen_led_data[acc_id][prt_id]["init_bal"]["balance"],
+                                rec_after_date_to_ids,
+                            )
+                            partner.update({"move_lines": move_lines})
+                            list_partner += [partner]
+                    account.update({"list_partner": list_partner})
+                else:
                     move_lines = []
-                    if not isinstance(prt_id, int):
-                        account.update({prt_id: gen_led_data[acc_id][prt_id]})
-                    else:
-                        for ml_id in gen_led_data[acc_id][prt_id].keys():
-                            if not isinstance(ml_id, int):
-                                partner.update(
-                                    {ml_id: gen_led_data[acc_id][prt_id][ml_id]}
-                                )
-                            else:
-                                move_lines += [gen_led_data[acc_id][prt_id][ml_id]]
-                        move_lines = sorted(move_lines, key=lambda k: (k["date"]))
-                        move_lines = self._recalculate_cumul_balance(
-                            move_lines,
-                            gen_led_data[acc_id][prt_id]["init_bal"]["balance"],
-                        )
-                        partner.update({"move_lines": move_lines})
-                        list_partner += [partner]
-                account.update({"list_partner": list_partner})
+                    for prt_id in gen_led_data[acc_id].keys():
+                        if not isinstance(prt_id, int):
+                            account.update({prt_id: gen_led_data[acc_id][prt_id]})
+                        else:
+                            for ml_id in gen_led_data[acc_id][prt_id].keys():
+                                if isinstance(ml_id, int):
+                                    move_lines += [gen_led_data[acc_id][prt_id][ml_id]]
+                    move_lines = sorted(move_lines, key=lambda k: (k["date"]))
+                    move_lines = self._recalculate_cumul_balance(
+                        move_lines,
+                        gen_led_data[acc_id]["init_bal"]["balance"],
+                        rec_after_date_to_ids,
+                    )
+                    account.update({"move_lines": move_lines, "partners": False})
             general_ledger += [account]
         return general_ledger
 
@@ -581,7 +648,7 @@ class GeneralLedgerReport(models.AbstractModel):
             centralized_ml[jnl_id][month].update(
                 {
                     "journal_id": jnl_id,
-                    "ref": "Centralized entries",
+                    "ref_label": "Centralized entries",
                     "date": date,
                     "debit": 0.0,
                     "credit": 0.0,
@@ -640,6 +707,7 @@ class GeneralLedgerReport(models.AbstractModel):
         account_ids = data["account_ids"]
         analytic_tag_ids = data["analytic_tag_ids"]
         cost_center_ids = data["cost_center_ids"]
+        show_partner_details = data["show_partner_details"]
         hide_account_at_0 = data["hide_account_at_0"]
         foreign_currency = data["foreign_currency"]
         only_posted_moves = data["only_posted_moves"]
@@ -667,6 +735,7 @@ class GeneralLedgerReport(models.AbstractModel):
             full_reconcile_data,
             taxes_data,
             tags_data,
+            rec_after_date_to_ids,
         ) = self._get_period_ml_data(
             account_ids,
             partner_ids,
@@ -683,7 +752,9 @@ class GeneralLedgerReport(models.AbstractModel):
             analytic_tag_ids,
             cost_center_ids,
         )
-        general_ledger = self._create_general_ledger(gen_ld_data, accounts_data)
+        general_ledger = self._create_general_ledger(
+            gen_ld_data, accounts_data, show_partner_details, rec_after_date_to_ids
+        )
         if centralize:
             for account in general_ledger:
                 if account["centralized"]:

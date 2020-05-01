@@ -6,7 +6,6 @@ import operator
 from datetime import date, datetime
 
 from odoo import api, models
-from odoo.osv import expression
 from odoo.tools import float_is_zero
 
 
@@ -31,137 +30,113 @@ class OpenItemsReport(models.AbstractModel):
         ).render(rcontext)
         return result
 
-    def _get_account_partial_reconciled(self, move_lines_data, date_at_object):
-        reconciled_ids = []
-        for move_line in move_lines_data:
-            if move_line["reconciled"]:
-                reconciled_ids += [move_line["id"]]
-        domain = [("max_date", ">=", date_at_object)]
-        domain += expression.OR(
-            [
-                [("debit_move_id", "in", reconciled_ids)],
-                [("credit_move_id", "in", reconciled_ids)],
-            ]
-        )
+    def _get_account_partial_reconciled(self, company_id, date_at_object):
+        domain = [("max_date", ">", date_at_object), ("company_id", "=", company_id)]
         fields = ["debit_move_id", "credit_move_id", "amount"]
         accounts_partial_reconcile = self.env["account.partial.reconcile"].search_read(
             domain=domain, fields=fields
         )
-        debit_accounts_partial_amount = {}
-        credit_accounts_partial_amount = {}
+        debit_amount = {}
+        credit_amount = {}
         for account_partial_reconcile_data in accounts_partial_reconcile:
             debit_move_id = account_partial_reconcile_data["debit_move_id"][0]
             credit_move_id = account_partial_reconcile_data["credit_move_id"][0]
-            if debit_move_id not in debit_accounts_partial_amount.keys():
-                debit_accounts_partial_amount[debit_move_id] = 0.0
-            debit_accounts_partial_amount[
-                debit_move_id
-            ] += account_partial_reconcile_data["amount"]
-            if credit_move_id not in credit_accounts_partial_amount.keys():
-                credit_accounts_partial_amount[credit_move_id] = 0.0
-            credit_accounts_partial_amount[
-                credit_move_id
-            ] += account_partial_reconcile_data["amount"]
+            if debit_move_id not in debit_amount.keys():
+                debit_amount[debit_move_id] = 0.0
+            debit_amount[debit_move_id] += account_partial_reconcile_data["amount"]
+            if credit_move_id not in credit_amount.keys():
+                credit_amount[credit_move_id] = 0.0
+            credit_amount[credit_move_id] += account_partial_reconcile_data["amount"]
             account_partial_reconcile_data.update(
                 {"debit_move_id": debit_move_id, "credit_move_id": credit_move_id}
             )
-        return (
-            accounts_partial_reconcile,
-            debit_accounts_partial_amount,
-            credit_accounts_partial_amount,
-        )
+        return accounts_partial_reconcile, debit_amount, credit_amount
 
     @api.model
-    def _get_query_domain(
-        self,
-        account_ids,
-        partner_ids,
-        date_at_object,
-        target_move,
-        company_id,
-        date_from,
+    def _get_new_move_lines_domain(
+        self, new_ml_ids, account_ids, company_id, partner_ids, target_moves
     ):
-        query = """
-            WHERE aml.account_id in %s and aml.company_id = %s
-        """ % (
-            tuple(account_ids) if len(account_ids) > 1 else "(%s)" % account_ids[0],
-            company_id,
-        )
-        if date_from:
-            query += " and aml.date >= '%s'" % date_from
+        domain = [
+            ("account_id", "in", account_ids),
+            ("company_id", "=", company_id),
+            ("id", "in", new_ml_ids),
+        ]
         if partner_ids:
-            query += " and aml.partner_id in {}".format(tuple(partner_ids))
-        if target_move == "posted":
-            query += " and am.state = 'posted'"
-        if date_at_object >= date.today():
-            query += " and aml.reconciled IS FALSE"
-        else:
-            query += (
-                """ and ((aml.reconciled IS FALSE OR aml.date >= '%s')
-            OR aml.full_reconcile_id IS NOT NULL)"""
-                % date_at_object
-            )
-        return query
+            domain += [("partner_id", "in", partner_ids)]
+        if target_moves == "posted":
+            domain += [("move_id.state", "=", "posted")]
+        return domain
 
-    @api.model
-    def _get_query(
+    def _recalculate_move_lines(
         self,
+        move_lines,
+        debit_ids,
+        credit_ids,
+        debit_amount,
+        credit_amount,
+        ml_ids,
         account_ids,
-        partner_ids,
-        date_at_object,
-        target_move,
         company_id,
-        date_from,
+        partner_ids,
+        target_moves,
     ):
-        aml_fields = [
+        debit_ids = set(debit_ids)
+        credit_ids = set(credit_ids)
+        in_credit_but_not_in_debit = credit_ids - debit_ids
+        reconciled_ids = list(debit_ids) + list(in_credit_but_not_in_debit)
+        reconciled_ids = set(reconciled_ids)
+        ml_ids = set(ml_ids)
+        new_ml_ids = reconciled_ids - ml_ids
+        new_ml_ids = list(new_ml_ids)
+        new_domain = self._get_new_move_lines_domain(
+            new_ml_ids, account_ids, company_id, partner_ids, target_moves
+        )
+        ml_fields = [
             "id",
+            "name",
             "date",
             "move_id",
             "journal_id",
             "account_id",
             "partner_id",
-            "ref",
-            "date_maturity",
             "amount_residual",
-            "amount_currency",
-            "amount_residual_currency",
+            "date_maturity",
+            "ref",
             "debit",
             "credit",
-            "currency_id",
             "reconciled",
-            "full_reconcile_id",
+            "currency_id",
+            "amount_currency",
+            "amount_residual_currency",
         ]
-        query = ""
-
-        # SELECT
-        for field in aml_fields:
-            if not query:
-                query = "SELECT aml.%s" % field
-            else:
-                query += ", aml.%s" % field
-        # name from res_partner
-        query += ", rp.name as partner_name"
-        # name from res_currency
-        query += ", rc.name as currency_name"
-        # state and name from account_move
-        query += ", am.state, am.name as move_name"
-
-        # FROM
-        query += """
-            FROM account_move_line as aml
-            LEFT JOIN res_partner as rp
-                ON aml.partner_id = rp.id
-            LEFT JOIN res_currency as rc
-                ON aml.currency_id = rc.id
-            LEFT JOIN account_move as am
-                ON am.id = aml.move_id
-        """
-
-        # WHERE
-        query += self._get_query_domain(
-            account_ids, partner_ids, date_at_object, target_move, company_id, date_from
+        new_move_lines = self.env["account.move.line"].search_read(
+            domain=new_domain, fields=ml_fields
         )
-        return query
+        move_lines = move_lines + new_move_lines
+        for move_line in move_lines:
+            ml_id = move_line["id"]
+            if ml_id in debit_ids:
+                move_line["amount_residual"] += debit_amount[ml_id]
+            if ml_id in credit_ids:
+                move_line["amount_residual"] -= credit_amount[ml_id]
+        return move_lines
+
+    @api.model
+    def _get_move_lines_domain(
+        self, company_id, account_ids, partner_ids, target_move, date_from
+    ):
+        domain = [
+            ("account_id", "in", account_ids),
+            ("company_id", "=", company_id),
+            ("reconciled", "=", False),
+        ]
+        if partner_ids:
+            domain += [("partner_id", "in", partner_ids)]
+        if target_move == "posted":
+            domain += [("move_id.state", "=", "posted")]
+        if date_from:
+            domain += [("date", ">", date_from)]
+        return domain
 
     def _get_accounts_data(self, accounts_ids):
         accounts = self.env["account.account"].browse(accounts_ids)
@@ -188,7 +163,6 @@ class OpenItemsReport(models.AbstractModel):
             journals_data.update({journal.id: {"id": journal.id, "code": journal.code}})
         return journals_data
 
-    # flake8: noqa: C901
     def _get_data(
         self,
         account_ids,
@@ -198,69 +172,80 @@ class OpenItemsReport(models.AbstractModel):
         company_id,
         date_from,
     ):
-        query = self._get_query(
-            account_ids, partner_ids, date_at_object, target_move, company_id, date_from
+        domain = self._get_move_lines_domain(
+            company_id, account_ids, partner_ids, target_move, date_from
         )
-        self._cr.execute(query)
-        move_lines_data = self._cr.dictfetchall()
-        account_ids = map(lambda r: r["account_id"], move_lines_data)
-        accounts_data = self._get_accounts_data(list(account_ids))
-        journal_ids = map(lambda r: r["journal_id"], move_lines_data)
-        journals_data = self._get_journals_data(list(journal_ids))
-
+        ml_fields = [
+            "id",
+            "name",
+            "date",
+            "move_id",
+            "journal_id",
+            "account_id",
+            "partner_id",
+            "amount_residual",
+            "date_maturity",
+            "ref",
+            "debit",
+            "credit",
+            "reconciled",
+            "currency_id",
+            "amount_currency",
+            "amount_residual_currency",
+        ]
+        move_lines = self.env["account.move.line"].search_read(
+            domain=domain, fields=ml_fields
+        )
+        journals_ids = set()
+        partners_ids = set()
+        partners_data = {}
         if date_at_object < date.today():
             (
-                accounts_partial_reconcile,
-                debit_accounts_partial_amount,
-                credit_accounts_partial_amount,
-            ) = self._get_account_partial_reconciled(move_lines_data, date_at_object)
-            if accounts_partial_reconcile:
-                debit_ids = map(
-                    operator.itemgetter("debit_move_id"), accounts_partial_reconcile
+                acc_partial_rec,
+                debit_amount,
+                credit_amount,
+            ) = self._get_account_partial_reconciled(company_id, date_at_object)
+            if acc_partial_rec:
+                ml_ids = list(map(operator.itemgetter("id"), move_lines))
+                debit_ids = list(
+                    map(operator.itemgetter("debit_move_id"), acc_partial_rec)
                 )
-                credit_ids = map(
-                    operator.itemgetter("credit_move_id"), accounts_partial_reconcile
+                credit_ids = list(
+                    map(operator.itemgetter("credit_move_id"), acc_partial_rec)
                 )
-                for move_line in move_lines_data:
-                    if move_line["id"] in debit_ids:
-                        move_line["amount_residual"] += debit_accounts_partial_amount[
-                            move_line["id"]
-                        ]
-                    if move_line["id"] in credit_ids:
-                        move_line["amount_residual"] -= credit_accounts_partial_amount[
-                            move_line["id"]
-                        ]
-            moves_lines_to_remove = []
-            for move_line in move_lines_data:
-                if move_line["date"] > date_at_object or float_is_zero(
-                    move_line["amount_residual"], precision_digits=2
-                ):
-                    moves_lines_to_remove.append(move_line)
-            if len(moves_lines_to_remove) > 0:
-                for move_line_to_remove in moves_lines_to_remove:
-                    move_lines_data.remove(move_line_to_remove)
-        partners_data = {0: {"id": 0, "name": "Missing Partner"}}
+                move_lines = self._recalculate_move_lines(
+                    move_lines,
+                    debit_ids,
+                    credit_ids,
+                    debit_amount,
+                    credit_amount,
+                    ml_ids,
+                    account_ids,
+                    company_id,
+                    partner_ids,
+                    target_move,
+                )
+            move_lines = [
+                move_line
+                for move_line in move_lines
+                if move_line["date"] <= date_at_object
+                and not float_is_zero(move_line["amount_residual"], precision_digits=2)
+            ]
+
         open_items_move_lines_data = {}
-        for move_line in move_lines_data:
-            no_partner = True
+        for move_line in move_lines:
+            journals_ids.add(move_line["journal_id"][0])
+            acc_id = move_line["account_id"][0]
             # Partners data
             if move_line["partner_id"]:
-                no_partner = False
-                partners_data.update(
-                    {
-                        move_line["partner_id"]: {
-                            "id": move_line["partner_id"],
-                            "name": move_line["partner_name"],
-                            "currency_id": accounts_data[move_line["account_id"]][
-                                "currency_id"
-                            ],
-                        }
-                    }
-                )
+                prt_id = move_line["partner_id"][0]
+                prt_name = move_line["partner_id"][1]
             else:
-                partners_data[0]["currency_id"] = accounts_data[
-                    move_line["account_id"]
-                ]["currency_id"]
+                prt_id = 0
+                prt_name = "Missing Partner"
+            if prt_id not in partners_ids:
+                partners_data.update({prt_id: {"id": prt_id, "name": prt_name}})
+                partners_ids.add(prt_id)
 
             # Move line update
             original = 0
@@ -269,39 +254,51 @@ class OpenItemsReport(models.AbstractModel):
                 original = move_line["credit"] * (-1)
             if not float_is_zero(move_line["debit"], precision_digits=2):
                 original = move_line["debit"]
+
+            if move_line["ref"] == move_line["name"]:
+                if move_line["ref"]:
+                    ref_label = move_line["ref"]
+                else:
+                    ref_label = ""
+            elif not move_line["ref"]:
+                ref_label = move_line["name"]
+            elif not move_line["name"]:
+                ref_label = move_line["ref"]
+            else:
+                ref_label = move_line["ref"] + str(" - ") + move_line["name"]
+
             move_line.update(
                 {
-                    "date": move_line["date"].strftime("%d/%m/%Y"),
+                    "date": move_line["date"],
                     "date_maturity": move_line["date_maturity"]
                     and move_line["date_maturity"].strftime("%d/%m/%Y"),
                     "original": original,
-                    "partner_id": 0 if no_partner else move_line["partner_id"],
-                    "partner_name": "" if no_partner else move_line["partner_name"],
-                    "ref": "" if not move_line["ref"] else move_line["ref"],
-                    "account": accounts_data[move_line["account_id"]]["code"],
-                    "journal": journals_data[move_line["journal_id"]]["code"],
+                    "partner_id": prt_id,
+                    "partner_name": prt_name,
+                    "ref_label": ref_label,
+                    "journal_id": move_line["journal_id"][0],
+                    "move_name": move_line["move_id"][1],
+                    "currency_id": move_line["currency_id"][0]
+                    if move_line["currency_id"]
+                    else False,
+                    "currency_name": move_line["currency_id"][1]
+                    if move_line["currency_id"]
+                    else False,
                 }
             )
 
             # Open Items Move Lines Data
-            if move_line["account_id"] not in open_items_move_lines_data.keys():
-                open_items_move_lines_data[move_line["account_id"]] = {
-                    move_line["partner_id"]: [move_line]
-                }
+            if acc_id not in open_items_move_lines_data.keys():
+                open_items_move_lines_data[acc_id] = {prt_id: [move_line]}
             else:
-                if (
-                    move_line["partner_id"]
-                    not in open_items_move_lines_data[move_line["account_id"]].keys()
-                ):
-                    open_items_move_lines_data[move_line["account_id"]][
-                        move_line["partner_id"]
-                    ] = [move_line]
+                if prt_id not in open_items_move_lines_data[acc_id].keys():
+                    open_items_move_lines_data[acc_id][prt_id] = [move_line]
                 else:
-                    open_items_move_lines_data[move_line["account_id"]][
-                        move_line["partner_id"]
-                    ].append(move_line)
+                    open_items_move_lines_data[acc_id][prt_id].append(move_line)
+        journals_data = self._get_journals_data(list(journals_ids))
+        accounts_data = self._get_accounts_data(open_items_move_lines_data.keys())
         return (
-            move_lines_data,
+            move_lines,
             partners_data,
             journals_data,
             accounts_data,
@@ -325,19 +322,31 @@ class OpenItemsReport(models.AbstractModel):
         return total_amount
 
     @api.model
-    def _get_open_items_no_partners(self, open_items_move_lines_data):
+    def _order_open_items_by_date(
+        self, open_items_move_lines_data, show_partner_details
+    ):
         new_open_items = {}
-        for acc_id in open_items_move_lines_data.keys():
-            new_open_items[acc_id] = {}
-            move_lines = []
-            for prt_id in open_items_move_lines_data[acc_id]:
-                for move_line in open_items_move_lines_data[acc_id][prt_id]:
-                    move_lines += [move_line]
-            move_lines = sorted(move_lines, key=lambda k: (k["date"]))
-            new_open_items[acc_id] = move_lines
+        if not show_partner_details:
+            for acc_id in open_items_move_lines_data.keys():
+                new_open_items[acc_id] = {}
+                move_lines = []
+                for prt_id in open_items_move_lines_data[acc_id]:
+                    for move_line in open_items_move_lines_data[acc_id][prt_id]:
+                        move_lines += [move_line]
+                move_lines = sorted(move_lines, key=lambda k: (k["date"]))
+                new_open_items[acc_id] = move_lines
+        else:
+            for acc_id in open_items_move_lines_data.keys():
+                new_open_items[acc_id] = {}
+                for prt_id in open_items_move_lines_data[acc_id]:
+                    new_open_items[acc_id][prt_id] = {}
+                    move_lines = []
+                    for move_line in open_items_move_lines_data[acc_id][prt_id]:
+                        move_lines += [move_line]
+                    move_lines = sorted(move_lines, key=lambda k: (k["date"]))
+                    new_open_items[acc_id][prt_id] = move_lines
         return new_open_items
 
-    @api.multi
     def _get_report_values(self, docids, data):
         wizard_id = data["wizard_id"]
         company = self.env["res.company"].browse(data["company_id"])
@@ -361,10 +370,9 @@ class OpenItemsReport(models.AbstractModel):
         )
 
         total_amount = self._calculate_amounts(open_items_move_lines_data)
-        if not show_partner_details:
-            open_items_move_lines_data = self._get_open_items_no_partners(
-                open_items_move_lines_data
-            )
+        open_items_move_lines_data = self._order_open_items_by_date(
+            open_items_move_lines_data, show_partner_details
+        )
         return {
             "doc_ids": [wizard_id],
             "doc_model": "open.items.report.wizard",
@@ -376,6 +384,7 @@ class OpenItemsReport(models.AbstractModel):
             "date_at": date_at_object.strftime("%d/%m/%Y"),
             "hide_account_at_0": data["hide_account_at_0"],
             "target_move": data["target_move"],
+            "journals_data": journals_data,
             "partners_data": partners_data,
             "accounts_data": accounts_data,
             "total_amount": total_amount,
