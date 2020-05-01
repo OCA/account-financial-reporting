@@ -20,6 +20,7 @@ class AgedPartnerBalanceWizard(models.TransientModel):
         string="Company",
     )
     date_at = fields.Date(required=True, default=fields.Date.context_today)
+    date_from = fields.Date(string="Date From")
     target_move = fields.Selection(
         [("posted", "All Posted Entries"), ("all", "All Entries")],
         string="Target Moves",
@@ -152,6 +153,7 @@ class AgedPartnerBalanceWizard(models.TransientModel):
         return {
             "wizard_id": self.id,
             "date_at": self.date_at,
+            "date_from": self.date_from or False,
             "only_posted_moves": self.target_move == "posted",
             "company_id": self.company_id.id,
             "account_ids": self.account_ids.ids,
