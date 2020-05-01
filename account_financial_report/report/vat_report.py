@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import models, api
+import operator
 
 
 class VATReport(models.AbstractModel):
@@ -18,7 +19,8 @@ class VATReport(models.AbstractModel):
                     'id': tax.id,
                     'name': tax.name,
                     'tax_group_id': tax.tax_group_id.id,
-                    'tags_ids': tax.tag_ids.ids
+                    'tags_ids': tax.tag_ids.ids,
+                    'type_tax_use': tax.type_tax_use
                 }
             })
         return tax_data
@@ -41,19 +43,21 @@ class VATReport(models.AbstractModel):
             fields=ml_fields,
         )
         vat_data = {}
-        tax_ids = set()
+        tax_ids = list(map(operator.itemgetter('tax_line_id'), tax_move_lines))
+        tax_ids = [i[0] for i in tax_ids]
+        tax_data = self._get_tax_data(tax_ids)
         for tax_move_line in tax_move_lines:
             tax_ml_id = tax_move_line['id']
+            tax_id = tax_move_line['tax_line_id'][0]
             vat_data[tax_ml_id] = {}
             vat_data[tax_ml_id].update({
                 'id': tax_ml_id,
                 'net': tax_move_line['tax_base_amount'],
-                'tax': tax_move_line['balance'] if tax_move_line[
-                    'balance'] > 0 else (-1) * tax_move_line['balance'],
+                'tax': (-1) * tax_move_line['balance']
+                if tax_data[tax_id]['type_tax_use'] == 'sale'
+                else tax_move_line['balance'],
                 'tax_line_id': tax_move_line['tax_line_id'],
             })
-            tax_ids.add(tax_move_line['tax_line_id'][0])
-        tax_data = self._get_tax_data(tax_ids)
         return vat_data, tax_data
 
     def _get_tax_group_data(self, tax_group_ids):

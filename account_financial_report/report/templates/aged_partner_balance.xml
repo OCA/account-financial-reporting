@@ -271,7 +271,7 @@
 <!--                               t-att-data-res-model="'account.move.line'"-->
 <!--                               class="o_account_financial_reports_web_action"-->
 <!--                               style="color: black;">-->
-                            <t t-raw="line['ref']"/>
+                            <t t-raw="line['ref_label']"/>
 <!--                            </a>-->
 <!--                        </span>-->
                     </div>

@@ -13,6 +13,7 @@
                 <group name="filters">
                     <group name="date_range">
                         <field name="date_at"/>
+                        <field name="date_from"/>
                     </group>
                     <group name="other_filters">
                         <field name="target_move" widget="radio"/>

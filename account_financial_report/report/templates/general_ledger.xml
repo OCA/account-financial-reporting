@@ -285,7 +285,7 @@
                 <t t-if="foreign_currency">
                     <t t-if="o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')">
                         <div class="act_as_cell amount" style="width: 2.08%;">
-                            <span t-field="o._get_atr_from_dict(account['id'], accounts_data, 'currency_name')"/>
+                            <span t-esc="o._get_atr_from_dict(account['id'], accounts_data, 'currency_name')"/>
                         </div>
                         <div class="act_as_cell amount" style="width: 5.19%;">
                             <t t-if="type == 'account_type'">
@@ -298,7 +298,7 @@
                                        class="o_account_financial_reports_web_action_monetary_multi"
                                        style="color: black;">
                                     <t
-                                        t-raw="account_or_partner_object['init_bal']['bal_curr']" t-options="{'widget': 'monetary', 'display_currency': account.account_id.currency_id}"/></a>
+                                        t-raw="account_or_partner_object['init_bal']['bal_curr']" t-options="{'widget': 'monetary', 'display_currency': o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')}"/></a>
                                 </span>
                             </t>
                             <t t-if="type == 'partner_type'">
@@ -311,7 +311,7 @@
                                        t-att-data-res-model="'account.move.line'"
                                        class="o_account_financial_reports_web_action_monetary_multi"
                                        style="color: black;">
-                                    <t t-raw="account_or_partner_object['init_bal']['bal_curr']" t-options="{'widget': 'monetary', 'display_currency': account.account_id.currency_id}"/></a>
+                                    <t t-raw="account_or_partner_object['init_bal']['bal_curr']" t-options="{'widget': 'monetary', 'display_currency': o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')}"/></a>
                                 </span>
                             </t>
                         </div>
@@ -386,7 +386,7 @@
                     <div class="act_as_cell left">
                         <t t-if="taxes_data and line['tax_ids']">
                             <t t-foreach="line['tax_ids']" t-as="tax_id">
-                                <span t-esc="o._get_atr_from_dict(tax_id, taxes_data, 'amount')"/> <span t-esc="o._get_atr_from_dict(tax_id, taxes_data, 'string')"/>
+                                <span t-esc="o._get_atr_from_dict(tax_id, taxes_data, 'tax_name')"/>
                             </t>
                         </t>
                     </div>
@@ -410,14 +410,14 @@
                                    t-att-data-res-model="res_model"
                                    class="o_account_financial_reports_web_action"
                                    style="color: black;">
-                                    <t t-raw="line['ref']"/></a>
+                                    <t t-raw="line['ref_label']"/></a>
                             </span>
                         </t>
                         <t t-if="not line['id']">
                             <span>
                                 <a class="o_account_financial_reports_web_action"
                                    style="color: black;">
-                                    <t t-raw="line['ref']"/></a>
+                                    <t t-raw="line['ref_label']"/></a>
                             </span>
                         </t>
                     </div>
@@ -589,7 +589,7 @@
                 <t t-if="foreign_currency">
                     <t t-if="o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')">
                         <div class="act_as_cell amount" style="width: 2.08%;">
-                            <span t-field="o._get_atr_from_dict(account['id'], accounts_data, 'currency_name')"/>
+                            <span t-esc="o._get_atr_from_dict(account['id'], accounts_data, 'currency_name')"/>
                         </div>
                         <div class="act_as_cell amount" style="width: 5.19%;">
                             <t t-if="type == 'account_type'">
@@ -602,7 +602,7 @@
                                        class="o_account_financial_reports_web_action_monetary_multi"
                                        style="color: black;">
                                     <t
-                                        t-raw="account_or_partner_object['fin_bal']['bal_curr']" t-options="{'widget': 'monetary', 'display_currency': account_or_partner_object.account_id.currency_id}"/></a>
+                                        t-raw="account_or_partner_object['fin_bal']['bal_curr']" t-options="{'widget': 'monetary', 'display_currency': o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')}"/></a>
                                 </span>
                             </t>
                             <t t-if="type == 'partner_type'">
@@ -614,7 +614,7 @@
                                        t-att-data-res-model="'account.move.line'"
                                        class="o_account_financial_reports_web_action_monetary_multi"
                                        style="color: black;">
-                                    <t t-raw="account_or_partner_object['fin_bal']['bal_curr']" t-options="{'widget': 'monetary', 'display_currency': account_or_partner_object.report_account_id.currency_id}"/></a>
+                                    <t t-raw="account_or_partner_object['fin_bal']['bal_curr']" t-options="{'widget': 'monetary', 'display_currency': o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')}"/></a>
                                 </span>
                             </t>
                         </div>

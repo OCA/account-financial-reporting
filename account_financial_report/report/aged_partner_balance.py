@@ -58,7 +58,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
 
     @api.model
     def _get_move_lines_domain(self, company_id, account_ids, partner_ids,
-                               only_posted_moves):
+                               only_posted_moves, date_from):
         domain = [('account_id', 'in', account_ids),
                   ('company_id', '=', company_id),
                   ('reconciled', '=', False)]
@@ -66,6 +66,8 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             domain += [('partner_id', 'in', partner_ids)]
         if only_posted_moves:
             domain += [('move_id.state', '=', 'posted')]
+        if date_from:
+            domain += [('date', '>', date_from)]
         return domain
 
     @api.model
@@ -95,7 +97,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         return ag_pb_data
 
     def _get_account_partial_reconciled(self, company_id, date_at_object):
-        domain = [('max_date', '>=', date_at_object),
+        domain = [('max_date', '>', date_at_object),
                   ('company_id', '=', company_id)]
         fields = ['debit_move_id', 'credit_move_id', 'amount']
         accounts_partial_reconcile = \
@@ -138,11 +140,14 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                                 debit_amount, credit_amount, ml_ids,
                                 account_ids, company_id, partner_ids,
                                 only_posted_moves):
-        reconciled_ids = list(debit_ids) + list(credit_ids)
-        new_ml_ids = []
-        for reconciled_id in reconciled_ids:
-            if reconciled_id not in ml_ids and reconciled_id not in new_ml_ids:
-                new_ml_ids += [reconciled_id]
+        debit_ids = set(debit_ids)
+        credit_ids = set(credit_ids)
+        in_credit_but_not_in_debit = credit_ids - debit_ids
+        reconciled_ids = list(debit_ids) + list(in_credit_but_not_in_debit)
+        reconciled_ids = set(reconciled_ids)
+        ml_ids = set(ml_ids)
+        new_ml_ids = reconciled_ids - ml_ids
+        new_ml_ids = list(new_ml_ids)
         new_domain = self._get_new_move_lines_domain(new_ml_ids, account_ids,
                                                      company_id, partner_ids,
                                                      only_posted_moves)
@@ -164,9 +169,10 @@ class AgedPartnerBalanceReport(models.AbstractModel):
 
     def _get_move_lines_data(
             self, company_id, account_ids, partner_ids, date_at_object,
-            only_posted_moves, show_move_line_details):
-        domain = self._get_move_lines_domain(company_id, account_ids,
-                                             partner_ids, only_posted_moves)
+            date_from, only_posted_moves, show_move_line_details):
+        domain = self._get_move_lines_domain(
+            company_id, account_ids, partner_ids, only_posted_moves, date_from
+        )
         ml_fields = [
             'id', 'name', 'date', 'move_id', 'journal_id', 'account_id',
             'partner_id', 'amount_residual', 'date_maturity', 'ref',
@@ -182,25 +188,20 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             acc_partial_rec, debit_amount, credit_amount = \
                 self._get_account_partial_reconciled(company_id, date_at_object)
             if acc_partial_rec:
-                ml_ids = map(operator.itemgetter('id'), move_lines)
-                debit_ids = map(operator.itemgetter('debit_move_id'),
-                                acc_partial_rec)
-                credit_ids = map(operator.itemgetter('credit_move_id'),
-                                 acc_partial_rec)
+                ml_ids = list(map(operator.itemgetter('id'), move_lines))
+                debit_ids = list(map(operator.itemgetter('debit_move_id'),
+                                     acc_partial_rec))
+                credit_ids = list(map(operator.itemgetter('credit_move_id'),
+                                      acc_partial_rec))
                 move_lines = self._recalculate_move_lines(
                     move_lines, debit_ids, credit_ids,
                     debit_amount, credit_amount, ml_ids, account_ids,
                     company_id, partner_ids, only_posted_moves
                 )
-            moves_lines_to_remove = []
-            for move_line in move_lines:
-                if move_line['date'] > date_at_object or \
-                    float_is_zero(move_line['amount_residual'],
-                                  precision_digits=2):
-                    moves_lines_to_remove.append(move_line)
-            if len(moves_lines_to_remove) > 0:
-                for move_line_to_remove in moves_lines_to_remove:
-                    move_lines.remove(move_line_to_remove)
+            move_lines = [move_line for move_line in move_lines if
+                          move_line['date'] <= date_at_object and not
+                          float_is_zero(move_line['amount_residual'],
+                                        precision_digits=2)]
         for move_line in move_lines:
             journals_ids.add(move_line['journal_id'][0])
             acc_id = move_line['account_id'][0]
@@ -222,13 +223,25 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                                                       prt_id)
             move_line_data = {}
             if show_move_line_details:
+                if move_line['ref'] == move_line['name']:
+                    if move_line['ref']:
+                        ref_label = move_line['ref']
+                    else:
+                        ref_label = ''
+                elif not move_line['ref']:
+                    ref_label = move_line['name']
+                elif not move_line['name']:
+                    ref_label = move_line['ref']
+                else:
+                    ref_label = move_line['ref'] + str(' - ') + move_line[
+                        'name']
                 move_line_data.update({
                     'date': move_line['date'],
                     'entry': move_line['move_id'][1],
                     'jnl_id': move_line['journal_id'][0],
                     'acc_id': acc_id,
                     'partner': prt_name,
-                    'ref': move_line['ref'],
+                    'ref_label': ref_label,
                     'due_date': move_line['date_maturity'],
                     'residual': move_line['amount_residual'],
                 })
@@ -353,11 +366,12 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         partner_ids = data['partner_ids']
         date_at = data['date_at']
         date_at_object = datetime.strptime(date_at, '%Y-%m-%d').date()
+        date_from = data['date_from']
         only_posted_moves = data['only_posted_moves']
         show_move_line_details = data['show_move_line_details']
         ag_pb_data, accounts_data, partners_data, \
             journals_data = self._get_move_lines_data(
-                company_id, account_ids, partner_ids, date_at_object,
+                company_id, account_ids, partner_ids, date_at_object, date_from,
                 only_posted_moves, show_move_line_details)
         aged_partner_data = self._create_account_list(
             ag_pb_data, accounts_data, partners_data, journals_data,

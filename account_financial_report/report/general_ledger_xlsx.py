@@ -31,7 +31,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                 'field': 'taxes_description',
                 'width': 15},
             5: {'header': _('Partner'), 'field': 'partner_name', 'width': 25},
-            6: {'header': _('Ref - Label'), 'field': 'ref', 'width': 40},
+            6: {'header': _('Ref - Label'), 'field': 'ref_label', 'width': 40},
             7: {'header': _('Cost center'),
                 'field': 'cost_center',
                 'width': 15},
@@ -165,12 +165,12 @@ class GeneralLedgerXslx(models.AbstractModel):
                             'currency_name': line['currency_id'][1],
                             'currency_id': line['currency_id'][0],
                         })
-                    if line['ref'] != 'Centralized entries':
+                    if line['ref_label'] != 'Centralized entries':
                         taxes_description = ""
                         tags = ""
                         for tax_id in line['tax_ids']:
-                            taxes_description += str(taxes_data[tax_id][
-                                'amount'])+" "+taxes_data[tax_id]['string']+" "
+                            taxes_description += taxes_data[tax_id][
+                                'tax_name'] + " "
                         for tag_id in line['tag_ids']:
                             tags += tags_data[tag_id]['name']+" "
                         line.update({
@@ -211,7 +211,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                     })
                     if foreign_currency:
                         partner.update({
-                            'initial_bal_culrr': partner['init_bal'][
+                            'initial_bal_curr': partner['init_bal'][
                                 'bal_curr'],
                         })
                     self.write_initial_balance_from_dict(partner)
@@ -222,13 +222,17 @@ class GeneralLedgerXslx(models.AbstractModel):
                             'account': account['code'],
                             'journal': journals_data[line['journal_id']]['code']
                         })
-                        if line['ref'] != 'Centralized entries':
+                        if line['currency_id']:
+                            line.update({
+                                'currency_name': line['currency_id'][1],
+                                'currency_id': line['currency_id'][0],
+                            })
+                        if line['ref_label'] != 'Centralized entries':
                             taxes_description = ""
                             tags = ""
                             for tax_id in line['tax_ids']:
-                                taxes_description += \
-                                    str(taxes_data[tax_id]['amount']) + " " + \
-                                    taxes_data[tax_id]['string'] + " "
+                                taxes_description += taxes_data[tax_id][
+                                    'tax_name'] + " "
                             for tag_id in line['tag_ids']:
                                 tags += tags_data[tag_id]['name'] + " "
                             line.update({
@@ -243,9 +247,11 @@ class GeneralLedgerXslx(models.AbstractModel):
                         'final_credit': partner['fin_bal']['credit'],
                         'final_balance': partner['fin_bal']['balance'],
                     })
-                    if foreign_currency:
+                    if foreign_currency and partner['currency_id']:
                         partner.update({
                             'final_bal_curr': partner['fin_bal']['bal_curr'],
+                            'currency_name': partner['currency_id'].name,
+                            'currency_id': partner['currency_id'].id,
                         })
                     self.write_ending_balance_from_dict(partner)
 
@@ -258,9 +264,11 @@ class GeneralLedgerXslx(models.AbstractModel):
                         'final_credit': account['fin_bal']['credit'],
                         'final_balance': account['fin_bal']['balance'],
                     })
-                    if foreign_currency:
+                    if foreign_currency and account['currency_id']:
                         account.update({
                             'final_bal_curr': account['fin_bal']['bal_curr'],
+                            'currency_name': account['currency_id'].name,
+                            'currency_id': account['currency_id'].id,
                         })
                     self.write_ending_balance_from_dict(account)
 
