@@ -22,11 +22,11 @@ class OpenItemsXslx(models.AbstractModel):
     def _get_report_columns(self, report):
         res = {
             0: {"header": _("Date"), "field": "date", "width": 11},
-            1: {"header": _("Entry"), "field": "move_id_name", "width": 18},
+            1: {"header": _("Entry"), "field": "move_name", "width": 18},
             2: {"header": _("Journal"), "field": "journal", "width": 8},
             3: {"header": _("Account"), "field": "account", "width": 9},
-            4: {"header": _("Partner"), "field": "partner", "width": 25},
-            5: {"header": _("Ref - Label"), "field": "ref", "width": 40},
+            4: {"header": _("Partner"), "field": "partner_name", "width": 25},
+            5: {"header": _("Ref - Label"), "field": "ref_label", "width": 40},
             6: {"header": _("Due date"), "field": "date_maturity", "width": 11},
             7: {
                 "header": _("Original"),
@@ -108,6 +108,7 @@ class OpenItemsXslx(models.AbstractModel):
         Open_items = res_data["Open_Items"]
         accounts_data = res_data["accounts_data"]
         partners_data = res_data["partners_data"]
+        journals_data = res_data["journals_data"]
         total_amount = res_data["total_amount"]
         show_partner_details = res_data["show_partner_details"]
         for account_id in Open_items.keys():
@@ -131,9 +132,25 @@ class OpenItemsXslx(models.AbstractModel):
 
                         # Display account move lines
                         for line in Open_items[account_id][partner_id]:
+                            line.update(
+                                {
+                                    "account": accounts_data[account_id]["code"],
+                                    "journal": journals_data[line["journal_id"]][
+                                        "code"
+                                    ],
+                                }
+                            )
                             self.write_line_from_dict(line)
 
                         # Display ending balance line for partner
+                        partners_data[partner_id].update(
+                            {
+                                "currency_id": accounts_data[account_id]["currency_id"],
+                                "currency_name": accounts_data[account_id][
+                                    "currency_name"
+                                ],
+                            }
+                        )
                         self.write_ending_balance_from_dict(
                             partners_data[partner_id],
                             type_object,
@@ -150,6 +167,12 @@ class OpenItemsXslx(models.AbstractModel):
 
                     # Display account move lines
                     for line in Open_items[account_id]:
+                        line.update(
+                            {
+                                "account": accounts_data[account_id]["code"],
+                                "journal": journals_data[line["journal_id"]]["code"],
+                            }
+                        )
                         self.write_line_from_dict(line)
 
                 # Display ending balance line for account
