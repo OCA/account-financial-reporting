@@ -66,8 +66,8 @@
                         <div class="act_as_cell amount" style="width: 15%;">
                             <t t-set="domain"
                                t-value="[('tax_ids', 'in', [tax.tax_id.id for tax in tag.tax_ids]),
-                                         ('date', '&gt;=', o.date_from),
-                                         ('date', '&lt;=', o.date_to)]"/>
+                                         ('date', '&gt;=', o.date_from.strftime('%Y-%m-%d')),
+                                         ('date', '&lt;=', o.date_to.strftime('%Y-%m-%d'))]"/>
                             <span>
                                 <a t-att-data-domain="domain"
                                     t-att-data-res-model="'account.move.line'"
@@ -80,8 +80,8 @@
                         <div class="act_as_cell amount" style="width: 15%;">
                             <t t-set="domain"
                                t-value="[('tax_line_id', 'in', [tax.tax_id.id for tax in tag.tax_ids]),
-                                         ('date', '&gt;=', o.date_from),
-                                         ('date', '&lt;=', o.date_to),
+                                         ('date', '&gt;=', o.date_from.strftime('%Y-%m-%d')),
+                                         ('date', '&lt;=', o.date_to.strftime('%Y-%m-%d')),
                                          ('tax_exigible', '=', True)]"/>
                             <span>
                                 <a t-att-data-domain="domain"
@@ -109,8 +109,8 @@
                                 <div class="act_as_cell amount" style="width: 15%;">
                                     <t t-set="domain"
                                        t-value="[('tax_ids', 'in', tax.tax_id.ids),
-                                                 ('date', '&gt;=', o.date_from),
-                                                 ('date', '&lt;=', o.date_to),
+                                                 ('date', '&gt;=', o.date_from.strftime('%Y-%m-%d')),
+                                                 ('date', '&lt;=', o.date_to.strftime('%Y-%m-%d')),
                                                  ('tax_exigible', '=', True)]"/>
                                     <span>
                                         <a t-att-data-domain="domain"
@@ -124,8 +124,8 @@
                                 <div class="act_as_cell amount" style="width: 15%;">
                                     <t t-set="domain"
                                        t-value="[('tax_line_id', '=', tax.tax_id.id),
-                                                 ('date', '&gt;=', o.date_from),
-                                                 ('date', '&lt;=', o.date_to),
+                                                 ('date', '&gt;=', o.date_from.strftime('%Y-%m-%d')),
+                                                 ('date', '&lt;=', o.date_to.strftime('%Y-%m-%d')),
                                                  ('tax_exigible', '=', True)]"/>
                                     <span>
                                         <a t-att-data-domain="domain"
