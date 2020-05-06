@@ -59,7 +59,7 @@
             <!-- Display partner lines -->
             <t t-if="show_partner_details">
                 <t t-set="padding" t-value="0"/>
-                <t t-foreach="o.account_ids" t-as="account">
+                <t t-foreach="o.account_ids.filtered(lambda a: not a.hide_line)" t-as="account">
                     <div class="page_break">
                         <t t-set="style" t-value="'font-size:8px;'"/>
                         <t t-set="padding" t-value="account.level * 4"/>
