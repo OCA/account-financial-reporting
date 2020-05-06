@@ -9,14 +9,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-27 12:02+0000\n"
-"PO-Revision-Date: 2018-03-27 12:02+0000\n"
-"Last-Translator: Rudolf Schnapka <rs@techno-flex.de>, 2017\n"
+"PO-Revision-Date: 2020-05-06 14:19+0000\n"
+"Last-Translator: Maria Sparenberg <maria.sparenberg@gmx.net>\n"
 "Language-Team: German (https://www.transifex.com/oca/teams/23907/de/)\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.10\n"
 
 #. module: account_tax_balance
 #: code:addons/account_tax_balance/wizard/open_tax_balances.py:48
@@ -122,9 +123,8 @@ msgstr "ID"
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_account_move
-#, fuzzy
 msgid "Journal Entries"
-msgstr "Journalposten"
+msgstr "Journalbuchungen"
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_account_move_line
@@ -255,9 +255,8 @@ msgstr "Reguläre Steuerpositionen betrachten"
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_wizard_open_tax_balances
-#, fuzzy
 msgid "Wizard Open Tax Balances"
-msgstr "wizard.open.tax.balances"
+msgstr "Assistent für offene Steuersalden"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
