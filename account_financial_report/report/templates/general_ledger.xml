@@ -174,7 +174,10 @@
                     <!--## credit-->
                     <div class="act_as_cell amount" style="width: 8.02%;">Credit</div>
                     <!--## balance cumulated-->
-                    <div class="act_as_cell amount" style="width: 8.02%;">Cumul. Bal.</div>
+                    <div
+                        class="act_as_cell amount"
+                        style="width: 8.02%;"
+                    >Cumul. Bal.</div>
                     <t t-if="foreign_currency">
                         <!--## currency_name-->
                         <div class="act_as_cell" style="width: 2.08%;">Cur.</div>
@@ -727,12 +730,17 @@
                         /> - <span
                             t-esc="o._get_atr_from_dict(account['id'], accounts_data, 'name')"
                         /></div>
-                    <div class="act_as_cell right"
-                         style="width: 16.9%;">Ending balance</div>
+                    <div
+                        class="act_as_cell right"
+                        style="width: 16.9%;"
+                    >Ending balance</div>
                 </t>
                 <t t-if='type == "partner_type"'>
-                    <div class="act_as_cell first_column" style="width: 41.32%;"/>
-                    <div class="act_as_cell right" style="width: 16.9%;">Partner ending balance</div>
+                    <div class="act_as_cell first_column" style="width: 41.32%;" />
+                    <div
+                        class="act_as_cell right"
+                        style="width: 16.9%;"
+                    >Partner ending balance</div>
                 </t>
                 <t t-if="show_cost_center">
                     <!--## cost_center-->
