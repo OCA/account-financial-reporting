@@ -4,7 +4,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Accounting Financial Report Horizontal",
-    "version": "11.0.1.0.0",
+    "version": "12.0.1.0.0",
     "author": "Therp BV,Agile Business Group,Odoo Community Association (OCA)",
     "category": 'Accounting & Finance',
     'website': 'https://github.com/OCA/account-financial-reporting',
