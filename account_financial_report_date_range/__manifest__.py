@@ -7,7 +7,7 @@
         Add Date Range field to the Odoo OE standard addons
         financial reports wizard.
     """,
-    'version': '11.0.1.0.0',
+    'version': '12.0.1.0.0',
     'category': 'Accounting & Finance',
     'website': 'https://github.com/OCA/account-financial-reporting',
     'author': 'Noviat,'
