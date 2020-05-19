@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2019 ADHOC SA
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record model="ir.ui.view" id="mis_cash_flow_forecast_line_view_form">
+        <field name="name">mis.cash_flow.forecast_line.tree</field>
+        <field name="model">mis.cash_flow.forecast_line</field>
+        <field name="arch" type="xml">
+            <form string="MIS Cash Flow Forecast Line">
+                <sheet>
+                    <group col="2">
+                        <field name="company_id" groups="base.group_multi_company" />
+                        <field name="date" />
+                        <field name="partner_id" />
+                        <field
+                            name="account_id"
+                            domain="[('company_id', '=', company_id)]"
+                        />
+                        <field name="name" />
+                        <field name="balance" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="mis_cash_flow_forecast_line_view_search">
+        <field name="name">mis.cash_flow.forecast_line.search</field>
+        <field name="model">mis.cash_flow.forecast_line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="date" />
+                <separator />
+                <field name="partner_id" />
+                <field name="account_id" />
+                <field name="company_id" groups="base.group_multi_company" />
+                <group>
+                    <filter
+                        string="Account"
+                        name="group_by_account_id"
+                        context="{'group_by':'account_id'}"
+                    />
+                    <filter
+                        string="Partner"
+                        name="group_by_partner_id"
+                        context="{'group_by':'partner_id'}"
+                    />
+                    <filter
+                        string="Date"
+                        name="group_by_date"
+                        context="{'group_by':'date'}"
+                    />
+                    <filter
+                        string="Company"
+                        name="group_by_company_id"
+                        context="{'group_by':'company_id'}"
+                        groups="base.group_multi_company"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="mis_cash_flow_forecast_line_view_tree">
+        <field name="name">mis.cash_flow.forecast_line.tree</field>
+        <field name="model">mis.cash_flow.forecast_line</field>
+        <field name="arch" type="xml">
+            <tree string="MIS Cash Flow Forecast Line" editable="top">
+                <field name="company_id" groups="base.group_multi_company" />
+                <field name="date" />
+                <field name="name" />
+                <field name="partner_id" />
+                <field
+                    name="account_id"
+                    domain="[('company_id', '=', company_id), ('deprecated', '=', False), ('hide_in_cash_flow', '=', False), ('internal_type', '=', ['receivable', 'payable', 'liquidity'])]"
+                />
+                <field name="balance" />
+            </tree>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="action_mis_cash_flow_forecast_line">
+        <field name="name">Cash Flow Forecast Line</field>
+        <field name="view_id" ref="mis_cash_flow_forecast_line_view_tree" />
+        <field name="res_model">mis.cash_flow.forecast_line</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem
+        id="menu_mis_cash_flow_forecast_line"
+        parent="mis_builder.mis_report_finance_menu"
+        action="action_mis_cash_flow_forecast_line"
+        sequence="23"
+    />
+</odoo>
