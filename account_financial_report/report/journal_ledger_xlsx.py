@@ -200,12 +200,14 @@ class JournalLedgerXslx(models.AbstractModel):
             workbook, report, "Report", report.report_move_ids)
         self._generate_no_group_taxes_summary(workbook, report)
 
+    def _get_sheet_name(self, report_journal, pre=None, post=None):
+        return "{}{} ({}) - {}{}".format(
+            pre or '', report_journal.code, report_journal.currency_id.name,
+            report_journal.name, post or '')
+
     def _generate_journal_content(self, workbook, report_journal):
-        sheet_name = "%s (%s) - %s" % (
-            report_journal.code,
-            report_journal.currency_id.name,
-            report_journal.name,
-        )
+        sheet_name = self._get_sheet_name(report_journal)
+
         self._generate_moves_content(
             workbook, report_journal.report_id, sheet_name,
             report_journal.report_move_ids)
@@ -216,11 +218,8 @@ class JournalLedgerXslx(models.AbstractModel):
             workbook, report, "Tax Report", report.report_tax_line_ids)
 
     def _generate_journal_taxes_summary(self, workbook, report_journal):
-        sheet_name = "Tax - %s (%s) - %s" % (
-            report_journal.code,
-            report_journal.currency_id.name,
-            report_journal.name,
-        )
+        sheet_name = self._get_sheet_name(report_journal, "Tax - ")
+
         report = report_journal.report_id
         self._generate_taxes_summary(
             workbook, report, sheet_name, report_journal.report_tax_line_ids)
