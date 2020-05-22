@@ -2,7 +2,7 @@
 # Copyright 2020 ForgeFlow S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import models, api
+from odoo import _, models, api
 import calendar
 import datetime
 import operator
@@ -484,7 +484,8 @@ class GeneralLedgerReport(models.AbstractModel):
             move_line['balance'] += last_cumul_balance
             last_cumul_balance = move_line['balance']
             if move_line['rec_id'] in rec_after_date_to_ids:
-                move_line['rec_name'] = str('*')+move_line['rec_name']
+                move_line['rec_name'] = '('+_('future')+') '+move_line[
+                    'rec_name']
         return move_lines
 
     @api.model
@@ -676,6 +677,7 @@ class GeneralLedgerReport(models.AbstractModel):
                     account["move_lines"] = self._recalculate_cumul_balance(
                         account["move_lines"],
                         gen_ld_data[account["id"]]["init_bal"]["balance"],
+                        rec_after_date_to_ids
                     )
                     if account['partners']:
                         account['partners'] = False

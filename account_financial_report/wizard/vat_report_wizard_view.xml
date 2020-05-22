@@ -16,6 +16,7 @@
                     <field name="date_to"/>
                 </group>
                 <group name="other_filters">
+                    <field name="target_move" widget="radio"/>
                     <field name="based_on" widget="radio"/>
                     <field name="tax_detail"/>
                 </group>

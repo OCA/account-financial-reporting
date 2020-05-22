@@ -212,16 +212,16 @@ class TestVATReport(common.TransactionCase):
         tax_20_net, tax_20_tax = self._get_tax_line(
             self.tax_20.name, vat_report)
 
-        self.assertEqual(tag_01_net, 100)
-        self.assertEqual(tag_01_tax, 10)
-        self.assertEqual(tag_02_net, 350)
-        self.assertEqual(tag_02_tax, 60)
-        self.assertEqual(tag_03_net, 250)
-        self.assertEqual(tag_03_tax, 50)
-        self.assertEqual(tax_10_net, 100)
-        self.assertEqual(tax_10_tax, 10)
-        self.assertEqual(tax_20_net, 250)
-        self.assertEqual(tax_20_tax, 50)
+        self.assertEqual(tag_01_net, -100)
+        self.assertEqual(tag_01_tax, -10)
+        self.assertEqual(tag_02_net, -350)
+        self.assertEqual(tag_02_tax, -60)
+        self.assertEqual(tag_03_net, -250)
+        self.assertEqual(tag_03_tax, -50)
+        self.assertEqual(tax_10_net, -100)
+        self.assertEqual(tax_10_tax, -10)
+        self.assertEqual(tax_20_net, -250)
+        self.assertEqual(tax_20_tax, -50)
 
         # Check report based on taxgroups
         res_data = self._get_report_lines(taxgroups=True)
@@ -249,14 +249,14 @@ class TestVATReport(common.TransactionCase):
         tax_20_net, tax_20_tax = self._get_tax_line(
             self.tax_20.name, vat_report)
 
-        self.assertEqual(group_10_net, 100)
-        self.assertEqual(group_10_tax, 10)
-        self.assertEqual(group_20_net, 250)
-        self.assertEqual(group_20_tax, 50)
-        self.assertEqual(tax_10_net, 100)
-        self.assertEqual(tax_10_tax, 10)
-        self.assertEqual(tax_20_net, 250)
-        self.assertEqual(tax_20_tax, 50)
+        self.assertEqual(group_10_net, -100)
+        self.assertEqual(group_10_tax, -10)
+        self.assertEqual(group_20_net, -250)
+        self.assertEqual(group_20_tax, -50)
+        self.assertEqual(tax_10_net, -100)
+        self.assertEqual(tax_10_tax, -10)
+        self.assertEqual(tax_20_net, -250)
+        self.assertEqual(tax_20_tax, -50)
 
     def test_wizard_date_range(self):
         vat_wizard = self.env['vat.report.wizard']

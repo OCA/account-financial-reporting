@@ -56,10 +56,8 @@ class GeneralLedgerReportWizard(models.TransientModel):
     show_analytic_tags = fields.Boolean(
         string='Show analytic tags',
     )
-    account_type_ids = fields.Many2many(
-        'account.account.type',
-        string='Account Types',
-    )
+    receivable_accounts_only = fields.Boolean()
+    payable_accounts_only = fields.Boolean()
     partner_ids = fields.Many2many(
         comodel_name='res.partner',
         string='Filter partners',
@@ -159,8 +157,8 @@ class GeneralLedgerReportWizard(models.TransientModel):
                 lambda p: p.company_id == self.company_id or
                 not p.company_id)
         if self.company_id and self.account_ids:
-            if self.account_type_ids:
-                self._onchange_account_type_ids()
+            if self.receivable_accounts_only or self.payable_accounts_only:
+                self.onchange_type_accounts_only()
             else:
                 self.account_ids = self.account_ids.filtered(
                     lambda a: a.company_id == self.company_id)
@@ -206,12 +204,18 @@ class GeneralLedgerReportWizard(models.TransientModel):
                     _('The Company in the General Ledger Report Wizard and in '
                       'Date Range must be the same.'))
 
-    @api.onchange('account_type_ids')
-    def _onchange_account_type_ids(self):
-        if self.account_type_ids:
-            self.account_ids = self.env['account.account'].search([
-                ('company_id', '=', self.company_id.id),
-                ('user_type_id', 'in', self.account_type_ids.ids)])
+    @api.onchange('receivable_accounts_only', 'payable_accounts_only')
+    def onchange_type_accounts_only(self):
+        """Handle receivable/payable accounts only change."""
+        if self.receivable_accounts_only or self.payable_accounts_only:
+            domain = [('company_id', '=', self.company_id.id)]
+            if self.receivable_accounts_only and self.payable_accounts_only:
+                domain += [('internal_type', 'in', ('receivable', 'payable'))]
+            elif self.receivable_accounts_only:
+                domain += [('internal_type', '=', 'receivable')]
+            elif self.payable_accounts_only:
+                domain += [('internal_type', '=', 'payable')]
+            self.account_ids = self.env['account.account'].search(domain)
         else:
             self.account_ids = None
 
@@ -219,12 +223,9 @@ class GeneralLedgerReportWizard(models.TransientModel):
     def onchange_partner_ids(self):
         """Handle partners change."""
         if self.partner_ids:
-            self.account_type_ids = self.env['account.account.type'].search([
-                ('type', 'in', ['receivable', 'payable'])])
+            self.receivable_accounts_only = self.payable_accounts_only = True
         else:
-            self.account_type_ids = None
-        # Somehow this is required to force onchange on _default_partners()
-        self._onchange_account_type_ids()
+            self.receivable_accounts_only = self.payable_accounts_only = False
 
     @api.multi
     @api.depends('company_id')

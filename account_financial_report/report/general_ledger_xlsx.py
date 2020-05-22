@@ -38,7 +38,7 @@ class GeneralLedgerXslx(models.AbstractModel):
             8: {'header': _('Tags'),
                 'field': 'tags',
                 'width': 10},
-            9: {'header': _('Rec.'), 'field': 'rec_name', 'width': 5},
+            9: {'header': _('Rec.'), 'field': 'rec_name', 'width': 15},
             10: {'header': _('Debit'),
                  'field': 'debit',
                  'field_initial_balance': 'initial_debit',

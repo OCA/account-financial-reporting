@@ -27,6 +27,11 @@ class VATReportWizard(models.TransientModel):
                                 required=True,
                                 default='taxtags')
     tax_detail = fields.Boolean('Detail Taxes')
+    target_move = fields.Selection([('posted', 'All Posted Entries'),
+                                    ('all', 'All Entries')],
+                                   string='Target Moves',
+                                   required=True,
+                                   default='posted')
 
     @api.onchange('company_id')
     def onchange_company_id(self):
@@ -99,6 +104,7 @@ class VATReportWizard(models.TransientModel):
             'date_from': self.date_from,
             'date_to': self.date_to,
             'based_on': self.based_on,
+            'only_posted_moves': self.target_move == 'posted',
             'tax_detail': self.tax_detail,
         }
 

@@ -316,6 +316,8 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                             })
                             self._compute_maturity_date(ml, date_at_oject)
                             move_lines.append(ml)
+                        move_lines = sorted(move_lines,
+                                            key=lambda k: (k['date']))
                         partner.update({
                             'move_lines': move_lines
                         })
