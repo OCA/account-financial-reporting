@@ -207,6 +207,128 @@ class TrialBalanceReport(models.AbstractModel):
                 )
         return pl_initial_balance, pl_initial_currency_balance
 
+    @api.model
+    def _compute_account_amount(
+        self, total_amount, tb_initial_acc, tb_period_acc, foreign_currency
+    ):
+        for tb in tb_period_acc:
+            acc_id = tb["account_id"][0]
+            total_amount[acc_id] = {}
+            total_amount[acc_id]["credit"] = tb["credit"]
+            total_amount[acc_id]["debit"] = tb["debit"]
+            total_amount[acc_id]["balance"] = tb["balance"]
+            total_amount[acc_id]["initial_balance"] = 0.0
+            total_amount[acc_id]["ending_balance"] = tb["balance"]
+            if foreign_currency:
+                total_amount[acc_id]["initial_currency_balance"] = 0.0
+                total_amount[acc_id]["ending_currency_balance"] = round(
+                    tb["amount_currency"], 2
+                )
+        for tb in tb_initial_acc:
+            acc_id = tb["account_id"]
+            if acc_id not in total_amount.keys():
+                total_amount[acc_id] = {}
+                total_amount[acc_id]["credit"] = 0.0
+                total_amount[acc_id]["debit"] = 0.0
+                total_amount[acc_id]["balance"] = 0.0
+                total_amount[acc_id]["initial_balance"] = tb["balance"]
+                total_amount[acc_id]["ending_balance"] = tb["balance"]
+                if foreign_currency:
+                    total_amount[acc_id]["initial_currency_balance"] = round(
+                        tb["amount_currency"], 2
+                    )
+                    total_amount[acc_id]["ending_currency_balance"] = round(
+                        tb["amount_currency"], 2
+                    )
+            else:
+                total_amount[acc_id]["initial_balance"] = tb["balance"]
+                total_amount[acc_id]["ending_balance"] += tb["balance"]
+                if foreign_currency:
+                    total_amount[acc_id]["initial_currency_balance"] = round(
+                        tb["amount_currency"], 2
+                    )
+                    total_amount[acc_id]["ending_currency_balance"] += round(
+                        tb["amount_currency"], 2
+                    )
+        return total_amount
+
+    @api.model
+    def _compute_partner_amount(
+        self, total_amount, tb_initial_prt, tb_period_prt, foreign_currency
+    ):
+        partners_ids = set()
+        partners_data = {}
+        for tb in tb_period_prt:
+            acc_id = tb["account_id"][0]
+            if tb["partner_id"]:
+                prt_id = tb["partner_id"][0]
+                if tb["partner_id"] not in partners_ids:
+                    partners_data.update(
+                        {prt_id: {"id": prt_id, "name": tb["partner_id"][1]}}
+                    )
+                total_amount[acc_id][prt_id] = {}
+                total_amount[acc_id][prt_id]["credit"] = tb["credit"]
+                total_amount[acc_id][prt_id]["debit"] = tb["debit"]
+                total_amount[acc_id][prt_id]["balance"] = tb["balance"]
+                total_amount[acc_id][prt_id]["initial_balance"] = 0.0
+                total_amount[acc_id][prt_id]["ending_balance"] = tb["balance"]
+                if foreign_currency:
+                    total_amount[acc_id][prt_id]["initial_currency_balance"] = 0.0
+                    total_amount[acc_id][prt_id]["ending_currency_balance"] = round(
+                        tb["amount_currency"], 2
+                    )
+                    partners_ids.add(tb["partner_id"])
+        for tb in tb_initial_prt:
+            acc_id = tb["account_id"][0]
+            if tb["partner_id"]:
+                prt_id = tb["partner_id"][0]
+                if tb["partner_id"] not in partners_ids:
+                    partners_data.update(
+                        {prt_id: {"id": prt_id, "name": tb["partner_id"][1]}}
+                    )
+                if acc_id not in total_amount.keys():
+                    total_amount[acc_id][prt_id] = {}
+                    total_amount[acc_id][prt_id]["credit"] = 0.0
+                    total_amount[acc_id][prt_id]["debit"] = 0.0
+                    total_amount[acc_id][prt_id]["balance"] = 0.0
+                    total_amount[acc_id][prt_id]["initial_balance"] = tb["balance"]
+                    total_amount[acc_id][prt_id]["ending_balance"] = tb["balance"]
+                    if foreign_currency:
+                        total_amount[acc_id][prt_id][
+                            "initial_currency_balance"
+                        ] = round(tb["amount_currency"], 2)
+                        total_amount[acc_id][prt_id]["ending_currency_balance"] = round(
+                            tb["amount_currency"], 2
+                        )
+                    partners_ids.add(tb["partner_id"])
+                elif prt_id not in total_amount[acc_id].keys():
+                    total_amount[acc_id][prt_id] = {}
+                    total_amount[acc_id][prt_id]["credit"] = 0.0
+                    total_amount[acc_id][prt_id]["debit"] = 0.0
+                    total_amount[acc_id][prt_id]["balance"] = 0.0
+                    total_amount[acc_id][prt_id]["initial_balance"] = tb["balance"]
+                    total_amount[acc_id][prt_id]["ending_balance"] = tb["balance"]
+                    if foreign_currency:
+                        total_amount[acc_id][prt_id][
+                            "initial_currency_balance"
+                        ] = round(tb["amount_currency"], 2)
+                        total_amount[acc_id][prt_id]["ending_currency_balance"] = round(
+                            tb["amount_currency"], 2
+                        )
+                    partners_ids.add(tb["partner_id"])
+                else:
+                    total_amount[acc_id][prt_id]["initial_balance"] += tb["balance"]
+                    total_amount[acc_id][prt_id]["ending_balance"] += tb["balance"]
+                    if foreign_currency:
+                        total_amount[acc_id][prt_id][
+                            "initial_currency_balance"
+                        ] += round(tb["amount_currency"], 2)
+                        total_amount[acc_id][prt_id][
+                            "ending_currency_balance"
+                        ] += round(tb["amount_currency"], 2)
+        return total_amount, partners_data
+
+    @api.model
     def _get_data(
         self,
         account_ids,
@@ -321,116 +443,13 @@ class TrialBalanceReport(models.AbstractModel):
             )
         total_amount = {}
         partners_data = []
-        for tb in tb_period_acc:
-            acc_id = tb["account_id"][0]
-            total_amount[acc_id] = {}
-            total_amount[acc_id]["credit"] = tb["credit"]
-            total_amount[acc_id]["debit"] = tb["debit"]
-            total_amount[acc_id]["balance"] = tb["balance"]
-            total_amount[acc_id]["initial_balance"] = 0.0
-            total_amount[acc_id]["ending_balance"] = tb["balance"]
-            if foreign_currency:
-                total_amount[acc_id]["initial_currency_balance"] = 0.0
-                total_amount[acc_id]["ending_currency_balance"] = round(
-                    tb["amount_currency"], 2
-                )
-        for tb in tb_initial_acc:
-            acc_id = tb["account_id"]
-            if acc_id not in total_amount.keys():
-                total_amount[acc_id] = {}
-                total_amount[acc_id]["credit"] = 0.0
-                total_amount[acc_id]["debit"] = 0.0
-                total_amount[acc_id]["balance"] = 0.0
-                total_amount[acc_id]["initial_balance"] = tb["balance"]
-                total_amount[acc_id]["ending_balance"] = tb["balance"]
-                if foreign_currency:
-                    total_amount[acc_id]["initial_currency_balance"] = round(
-                        tb["amount_currency"], 2
-                    )
-                    total_amount[acc_id]["ending_currency_balance"] = round(
-                        tb["amount_currency"], 2
-                    )
-            else:
-                total_amount[acc_id]["initial_balance"] = tb["balance"]
-                total_amount[acc_id]["ending_balance"] += tb["balance"]
-                if foreign_currency:
-                    total_amount[acc_id]["initial_currency_balance"] = round(
-                        tb["amount_currency"], 2
-                    )
-                    total_amount[acc_id]["ending_currency_balance"] += round(
-                        tb["amount_currency"], 2
-                    )
+        total_amount = self._compute_account_amount(
+            total_amount, tb_initial_acc, tb_period_acc, foreign_currency
+        )
         if show_partner_details:
-            partners_ids = set()
-            partners_data = {}
-            for tb in tb_period_prt:
-                acc_id = tb["account_id"][0]
-                if tb["partner_id"]:
-                    prt_id = tb["partner_id"][0]
-                    if tb["partner_id"] not in partners_ids:
-                        partners_data.update(
-                            {prt_id: {"id": prt_id, "name": tb["partner_id"][1]}}
-                        )
-                    total_amount[acc_id][prt_id] = {}
-                    total_amount[acc_id][prt_id]["credit"] = tb["credit"]
-                    total_amount[acc_id][prt_id]["debit"] = tb["debit"]
-                    total_amount[acc_id][prt_id]["balance"] = tb["balance"]
-                    total_amount[acc_id][prt_id]["initial_balance"] = 0.0
-                    total_amount[acc_id][prt_id]["ending_balance"] = tb["balance"]
-                    if foreign_currency:
-                        total_amount[acc_id][prt_id]["initial_currency_balance"] = 0.0
-                        total_amount[acc_id][prt_id]["ending_currency_balance"] = round(
-                            tb["amount_currency"], 2
-                        )
-                        partners_ids.add(tb["partner_id"])
-            for tb in tb_initial_prt:
-                acc_id = tb["account_id"][0]
-                if tb["partner_id"]:
-                    prt_id = tb["partner_id"][0]
-                    if tb["partner_id"] not in partners_ids:
-                        partners_data.update(
-                            {prt_id: {"id": prt_id, "name": tb["partner_id"][1]}}
-                        )
-                    if acc_id not in total_amount.keys():
-                        total_amount[acc_id][prt_id] = {}
-                        total_amount[acc_id][prt_id]["credit"] = 0.0
-                        total_amount[acc_id][prt_id]["debit"] = 0.0
-                        total_amount[acc_id][prt_id]["balance"] = 0.0
-                        total_amount[acc_id][prt_id]["initial_balance"] = tb["balance"]
-                        total_amount[acc_id][prt_id]["ending_balance"] = tb["balance"]
-                        if foreign_currency:
-                            total_amount[acc_id][prt_id][
-                                "initial_currency_balance"
-                            ] = round(tb["amount_currency"], 2)
-                            total_amount[acc_id][prt_id][
-                                "ending_currency_balance"
-                            ] = round(tb["amount_currency"], 2)
-                        partners_ids.add(tb["partner_id"])
-                    elif prt_id not in total_amount[acc_id].keys():
-                        total_amount[acc_id][prt_id] = {}
-                        total_amount[acc_id][prt_id]["credit"] = 0.0
-                        total_amount[acc_id][prt_id]["debit"] = 0.0
-                        total_amount[acc_id][prt_id]["balance"] = 0.0
-                        total_amount[acc_id][prt_id]["initial_balance"] = tb["balance"]
-                        total_amount[acc_id][prt_id]["ending_balance"] = tb["balance"]
-                        if foreign_currency:
-                            total_amount[acc_id][prt_id][
-                                "initial_currency_balance"
-                            ] = round(tb["amount_currency"], 2)
-                            total_amount[acc_id][prt_id][
-                                "ending_currency_balance"
-                            ] = round(tb["amount_currency"], 2)
-                        partners_ids.add(tb["partner_id"])
-                    else:
-                        total_amount[acc_id][prt_id]["initial_balance"] += tb["balance"]
-                        total_amount[acc_id][prt_id]["ending_balance"] += tb["balance"]
-                        if foreign_currency:
-                            total_amount[acc_id][prt_id][
-                                "initial_currency_balance"
-                            ] += round(tb["amount_currency"], 2)
-                            total_amount[acc_id][prt_id][
-                                "ending_currency_balance"
-                            ] += round(tb["amount_currency"], 2)
+            total_amount, partners_data = self._compute_partner_amount(
+                total_amount, tb_initial_prt, tb_period_prt, foreign_currency
+            )
         accounts_ids = list(total_amount.keys())
         unaffected_id = unaffected_earnings_account
         if unaffected_id not in accounts_ids:
