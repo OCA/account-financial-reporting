@@ -6,7 +6,7 @@ import calendar
 import datetime
 import operator
 
-from odoo import api, models
+from odoo import _, api, models
 
 
 class GeneralLedgerReport(models.AbstractModel):
@@ -556,7 +556,7 @@ class GeneralLedgerReport(models.AbstractModel):
             move_line["balance"] += last_cumul_balance
             last_cumul_balance = move_line["balance"]
             if move_line["rec_id"] in rec_after_date_to_ids:
-                move_line["rec_name"] = str("*") + move_line["rec_name"]
+                move_line["rec_name"] = "(" + _("future") + ") " + move_line["rec_name"]
         return move_lines
 
     @api.model
@@ -763,6 +763,7 @@ class GeneralLedgerReport(models.AbstractModel):
                     account["move_lines"] = self._recalculate_cumul_balance(
                         account["move_lines"],
                         gen_ld_data[account["id"]]["init_bal"]["balance"],
+                        rec_after_date_to_ids,
                     )
                     if account["partners"]:
                         account["partners"] = False
