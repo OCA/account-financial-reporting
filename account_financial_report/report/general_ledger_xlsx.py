@@ -31,7 +31,7 @@ class GeneralLedgerXslx(models.AbstractModel):
             6: {"header": _("Ref - Label"), "field": "ref_label", "width": 40},
             7: {"header": _("Cost center"), "field": "cost_center", "width": 15},
             8: {"header": _("Tags"), "field": "tags", "width": 10},
-            9: {"header": _("Rec."), "field": "rec_name", "width": 5},
+            9: {"header": _("Rec."), "field": "rec_name", "width": 15},
             10: {
                 "header": _("Debit"),
                 "field": "debit",

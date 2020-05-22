@@ -47,7 +47,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
         "If partners are filtered, "
         "debits and credits totals will not match the trial balance.",
     )
-    show_analytic_tags = fields.Boolean(string="Show analytic tags")
+    show_analytic_tags = fields.Boolean(string="Show analytic tags",)
     receivable_accounts_only = fields.Boolean()
     payable_accounts_only = fields.Boolean()
     partner_ids = fields.Many2many(
