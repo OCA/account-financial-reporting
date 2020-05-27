@@ -109,6 +109,9 @@
                     <!--## date-->
                     <div class="act_as_cell first_column" style="width: 5.51%;">
                         Date</div>
+                    <!--## invoice date-->
+                    <div class="act_as_cell first_column" style="width: 5.51%;">
+                        Invoice Date</div>
                     <!--## move-->
                     <div class="act_as_cell" style="width: 9.76%;">Entry</div>
                     <!--## journal-->
@@ -152,6 +155,10 @@
                     <!--## date-->
                     <div class="act_as_cell left">
                         <span t-raw="line['date']" />
+                    </div>
+                    <!--## invoice date-->
+                    <div class="act_as_cell left">
+                        <span t-raw="line['invoice_date']" />
                     </div>
                     <!--## move-->
                     <div class="act_as_cell left">

@@ -1,10 +1,16 @@
 # Copyright 2019 ACSONE SA/NV (<http://acsone.eu>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).-
-from odoo import models
+from odoo import models, fields
 
 
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
+
+    invoice_date = fields.Date(related='move_id.invoice_date',
+                               string='Invoice/Bill Date',
+                               readonly=True,
+                               store=True,
+                               index=True)
 
     def init(self):
         """

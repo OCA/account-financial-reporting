@@ -202,6 +202,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             "id",
             "name",
             "date",
+            "invoice_date",
             "move_id",
             "journal_id",
             "account_id",
@@ -270,6 +271,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                 move_line_data.update(
                     {
                         "date": move_line["date"],
+                        "invoice_date": move_line["invoice_date"],
                         "entry": move_line["move_id"][1],
                         "jnl_id": move_line["journal_id"][0],
                         "acc_id": acc_id,

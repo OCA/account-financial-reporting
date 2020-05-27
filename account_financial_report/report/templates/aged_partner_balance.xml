@@ -192,6 +192,9 @@
                     <!--## date-->
                     <div class="act_as_cell first_column" style="width: 6.00%;">
                         Date</div>
+                    <!--## invoice date-->
+                    <div class="act_as_cell first_column" style="width: 6.00%;">
+                        Invoice Date</div>
                     <!--## move-->
                     <div class="act_as_cell" style="width: 7.00%;">Entry</div>
                     <!--## journal-->
@@ -243,6 +246,10 @@
                         <t t-esc="line['date']" t-options="{'widget': 'date'}" />
                         <!--                            </a>-->
                         <!--                        </span>-->
+                    </div>
+                    <!--## invoice date-->
+                    <div class="act_as_cell left">
+                        <t t-esc="line['invoice_date']" t-options="{'widget': 'date'}" />
                     </div>
                     <!--## move-->
                     <div class="act_as_cell left">

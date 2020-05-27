@@ -116,6 +116,7 @@ class OpenItemsReport(models.AbstractModel):
         aml_fields = [
             "id",
             "date",
+            "invoice_date",
             "move_id",
             "journal_id",
             "account_id",
@@ -272,6 +273,7 @@ class OpenItemsReport(models.AbstractModel):
             move_line.update(
                 {
                     "date": move_line["date"].strftime("%d/%m/%Y"),
+                    "invoice_date": move_line["invoice_date"],
                     "date_maturity": move_line["date_maturity"]
                     and move_line["date_maturity"].strftime("%d/%m/%Y"),
                     "original": original,
