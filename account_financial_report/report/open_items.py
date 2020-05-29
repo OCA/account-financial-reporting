@@ -90,7 +90,10 @@ class OpenItemsReport(models.AbstractModel):
         if date_from:
             query += " and aml.date >= '%s'" % date_from
         if partner_ids:
-            query += " and aml.partner_id in {}".format(tuple(partner_ids))
+            p_domain = self.env.cr.mogrify(
+                " and aml.partner_id in %s", (tuple(partner_ids),)
+            )
+            query += str(p_domain, "utf-8")
         if target_move == "posted":
             query += " and am.state = 'posted'"
         if date_at_object >= date.today():
