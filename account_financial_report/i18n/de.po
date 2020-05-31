@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-01 22:18+0000\n"
-"PO-Revision-Date: 2020-05-30 18:19+0000\n"
+"PO-Revision-Date: 2020-05-31 08:19+0000\n"
 "Last-Translator: Ermin Trevisan <trevi@twanda.com>\n"
 "Language-Team: German (https://www.transifex.com/oca/teams/23907/de/)\n"
 "Language: de\n"
@@ -1051,7 +1051,7 @@ msgstr "Konten filtern"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger__filter_analytic_tag_ids
 msgid "Filter Analytic Tag"
-msgstr "Filter Kostenstellen"
+msgstr "Analytische Stichwörter filtern"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger__filter_cost_center_ids
@@ -1085,7 +1085,7 @@ msgstr "Konten filtern"
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__analytic_tag_ids
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
 msgid "Filter analytic tags"
-msgstr "Kostenstellen filtern"
+msgstr "Analytische Stichwörter filtern"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__cost_center_ids
@@ -1238,7 +1238,7 @@ msgstr "Gruppierungsoption"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__group_option
 msgid "Group entries by"
-msgstr "Gruppieren nach"
+msgstr "Posten gruppieren nach"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:86
@@ -1261,7 +1261,7 @@ msgstr "Ausgeglichene Konten ausblenden"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_account__hide_line
 msgid "Hide Line"
-msgstr "Buchung ausblenden"
+msgstr "Zeile ausblenden"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__hide_account_at_0
@@ -1337,14 +1337,16 @@ msgid ""
 "webkit one only), only centralized amounts per period."
 msgstr ""
 "Wenn gekennzeichnet, werden im (Webkit) Hauptbuch-Bericht nur "
-"zusammengefasste Abstimmsummen pro Periode ausgewiesen."
+"zusammengefasste Beträge pro Periode ausgewiesen."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
 msgid ""
 "Initial\n"
 "                    balance"
-msgstr "Anfangssaldo"
+msgstr ""
+"Anfangs-\n"
+"                    saldo"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_account__initial_balance
@@ -1458,7 +1460,7 @@ msgstr "Journale"
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_move_line__label
 #: model:ir.model.fields,field_description:account_financial_report.field_report_open_items_move_line__label
 msgid "Label"
-msgstr "Betitelung"
+msgstr "Bezeichnung"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract____last_update
@@ -1502,7 +1504,7 @@ msgstr "Betitelung"
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard____last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard____last_update
 msgid "Last Modified on"
-msgstr "Geändert am"
+msgstr "Zuletzt geändert am"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard__write_uid
@@ -1537,7 +1539,7 @@ msgstr "Geändert am"
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__write_uid
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__write_uid
 msgid "Last Updated by"
-msgstr "Aktualisiert durch"
+msgstr "Zuletzt aktualisiert von"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard__write_date
@@ -1572,7 +1574,7 @@ msgstr "Aktualisiert durch"
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__write_date
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__write_date
 msgid "Last Updated on"
-msgstr "Aktualisiert am"
+msgstr "Zuletzt aktualisiert am"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__level
@@ -1594,7 +1596,7 @@ msgstr "Ebene %s"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 #, python-format
 msgid "Limit hierarchy levels"
-msgstr "Ebenen festlegen"
+msgstr "Hierarchie-Ebenen beschränken"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_partner__line_ids
@@ -1604,7 +1606,7 @@ msgstr "Position"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger_move_line__matching_number
 msgid "Matching Number"
-msgstr "Ausgleich Nummer"
+msgstr "Übereinstimmende Nummer"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_move__move_id
@@ -1654,7 +1656,7 @@ msgstr "Buchungen"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_vat_report_base
 #, python-format
 msgid "Name"
-msgstr "Bezeichnung"
+msgstr "Name"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/vat_report_xlsx.py:19
@@ -1830,7 +1832,7 @@ msgid ""
 "                    cumul aged balance"
 msgstr ""
 "Partner\n"
-"                    kumm.  Stichtagssalden"
+"                    kum.  Alterssalden"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_move_line__partner_id
@@ -1847,7 +1849,7 @@ msgstr "Partner-Anfangssaldo"
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:225
 #, python-format
 msgid "Partner cumul aged balance"
-msgstr "Partner-Salden nach Alter"
+msgstr "Kumul. Partner-Salden nach Alter"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:178
@@ -1916,7 +1918,7 @@ msgstr "Perioden-Saldo"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
 #, python-format
 msgid "Period balance"
-msgstr "Endsaldo"
+msgstr "Periodensaldo"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.journal_ledger_wizard
@@ -1953,7 +1955,7 @@ msgid ""
 "                        Label"
 msgstr ""
 "Ref -\n"
-"                        Kennzeichen"
+"                        Titel"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:69
@@ -1999,7 +2001,7 @@ msgstr "Buchungsjournal Bericht"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger__report_journal_ledger_tax_line_ids
 msgid "Report Journal Ledger Tax Line"
-msgstr "Buchungsjournal Steuerbuchungen Report"
+msgstr "Bericht Hauptbuch Steuerbuchungen"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger__report_move_ids
@@ -2063,7 +2065,7 @@ msgstr "Anzeigen"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger__show_analytic_tags
 msgid "Show Analytic Tags"
-msgstr "Kosten-Stichwörter anzeigen"
+msgstr "Analyse-Stichwörter anzeigen"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger__show_cost_center
@@ -2074,7 +2076,7 @@ msgstr "Kostenstelle anzeigen"
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard__show_move_line_details
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance__show_move_line_details
 msgid "Show Move Line Details"
-msgstr "Buchungsdetails anzeigen"
+msgstr "Buchungszeilendetails anzeigen"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance__show_partner_details
@@ -2088,7 +2090,7 @@ msgstr "Partnerdetails anzeigen"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 #, python-format
 msgid "Show analytic tags"
-msgstr "Kostenstichwörter anzeigen"
+msgstr "Analysestichwörter anzeigen"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:97
@@ -2168,7 +2170,7 @@ msgstr "Steuer"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_taxes
 msgid "Tax Amount"
-msgstr "Steuer"
+msgstr "Steuerbetrag"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:137
@@ -2182,7 +2184,7 @@ msgstr "Steuersaldo"
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_journal_tax_line__tax_code
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_report_tax_line__tax_code
 msgid "Tax Code"
-msgstr "Steuerkennzahl"
+msgstr "Steuer-Code"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:131
@@ -2198,7 +2200,7 @@ msgstr "Steuer Haben"
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_report_tax_line__tax_debit
 #, python-format
 msgid "Tax Debit"
-msgstr "Soll"
+msgstr "Steuer Soll"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_vat_report__tax_detail
@@ -2276,8 +2278,8 @@ msgid ""
 "The Company in the Trial Balance Report Wizard and in Date Range must be the "
 "same."
 msgstr ""
-"Für den Stichtagsbilanz Berichtsassistenten und den Datumsbereich sollte das "
-"Unternehmen identisch sein."
+"Das Unternehmen für den Rohbilanz-Berichtsassistenten und den Datumsbereich "
+"muss identisch sein."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/wizard/vat_report_wizard.py:62
@@ -2285,14 +2287,14 @@ msgstr ""
 msgid ""
 "The Company in the Vat Report Wizard and in Date Range must be the same."
 msgstr ""
-"Für den Umsatzsteuer-Berichtsassistenten und den Datumsbereich sollte das "
-"Unternehmen identisch sein."
+"Das Unternehmen für den Umsatzsteuer-Berichtsassistenten und den "
+"Datumsbereich muss identisch sein."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/wizard/trial_balance_wizard.py:94
 #, python-format
 msgid "The hierarchy level to filter on must be greater than 0."
-msgstr "Die ausgewählte Ebenenanzahl sollte >0 sein."
+msgstr "Die ausgewählte Ebenenanzahl muss grösser 0 sein."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
@@ -2317,22 +2319,22 @@ msgstr "Gesamt"
 #: model:ir.ui.menu,name:account_financial_report.menu_trial_balance_wizard
 #, python-format
 msgid "Trial Balance"
-msgstr "Stichtagssaldo"
+msgstr "Rohbilanz"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_base
 msgid "Trial Balance -"
-msgstr "Stichtagssaldo -"
+msgstr "Rohbilanz -"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_trial_balance_report_wizard
 msgid "Trial Balance Report Wizard"
-msgstr "Stichtagssaldo-Berichtsassistent"
+msgstr "Rohbilanz-Berichtsassistent"
 
 #. module: account_financial_report
 #: model:ir.actions.report,name:account_financial_report.action_report_trial_balance_xlsx
 msgid "Trial Balance XLSX"
-msgstr "Stichtagssaldo XLSX"
+msgstr "Rohbilanz XLSX"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
@@ -2340,7 +2342,7 @@ msgid ""
 "Trial Balance can be computed only if selected company have only one "
 "unaffected earnings account."
 msgstr ""
-"Der Stichtagssaldo kann nur korrekt ermittelt werden, wenn für das gewählte "
+"Die Rohbilanz kann nur korrekt ermittelt werden, wenn für das gewählte "
 "Unternehmen nur ein unberührtes Überschusskonto existiert."
 
 #. module: account_financial_report
@@ -2357,8 +2359,8 @@ msgid ""
 "balance."
 msgstr ""
 "Nutzen Sie diese Eingrenzung, um Konten oder Partner mit Endsaldo 0 zu "
-"verbergen. Sind Partner ausgeblendet, werden Soll- und Habensummen nicht dem "
-"Stichtagssaldo entsprechen."
+"verbergen. Sind Partner ausgeblendet, werden Soll- und Habensummen nicht der "
+"Rohbilanz entsprechen."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/vat_report_xlsx.py:12
@@ -2407,7 +2409,7 @@ msgid ""
 "When this option is enabled, the trial balance will not display accounts "
 "that have initial balance = debit = credit = end balance = 0"
 msgstr ""
-"Durch Auswahl dieser Option, werden keine Konten angezeigt, für die gilt: "
+"Bei Auswahl dieser Option werden keine Konten angezeigt, für die gilt: "
 "Anfangssaldo = Soll = Haben = Endsaldo = 0"
 
 #. module: account_financial_report
