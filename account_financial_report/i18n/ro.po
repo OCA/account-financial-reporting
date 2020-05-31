@@ -141,6 +141,12 @@ msgid "Account Type"
 msgstr "Cont"
 
 #. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__account_type_ids
+#, fuzzy
+msgid "Account Types"
+msgstr "Cont"
+
+#. module: account_financial_report
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:109
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 #, fuzzy, python-format
@@ -1787,6 +1793,13 @@ msgid "Original"
 msgstr "Original"
 
 #. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
+#, fuzzy
+#| msgid "Options"
+msgid "Other options"
+msgstr "Opțiuni"
+
+#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_account__parent_id
 msgid "Parent"
 msgstr "Părinte"
@@ -1858,7 +1871,6 @@ msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard__payable_accounts_only
-#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__payable_accounts_only
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__payable_accounts_only
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__payable_accounts_only
 msgid "Payable Accounts Only"
@@ -1937,7 +1949,6 @@ msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard__receivable_accounts_only
-#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__receivable_accounts_only
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__receivable_accounts_only
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__receivable_accounts_only
 msgid "Receivable Accounts Only"
@@ -2258,7 +2269,7 @@ msgid "Taxtags"
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/wizard/general_ledger_wizard.py:180
+#: code:addons/account_financial_report/wizard/general_ledger_wizard.py:183
 #, python-format
 msgid ""
 "The Company in the General Ledger Report Wizard and in Date Range must be "
