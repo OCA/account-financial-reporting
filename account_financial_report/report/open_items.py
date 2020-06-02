@@ -230,15 +230,15 @@ class OpenItemsReport(models.AbstractModel):
                         move_line["amount_residual"] -= credit_accounts_partial_amount[
                             move_line["id"]
                         ]
-            moves_lines_to_remove = []
-            for move_line in move_lines_data:
-                if move_line["date"] > date_at_object or float_is_zero(
-                    move_line["amount_residual"], precision_digits=2
-                ):
-                    moves_lines_to_remove.append(move_line)
-            if len(moves_lines_to_remove) > 0:
-                for move_line_to_remove in moves_lines_to_remove:
-                    move_lines_data.remove(move_line_to_remove)
+        moves_lines_to_remove = []
+        for move_line in move_lines_data:
+            if move_line["date"] > date_at_object or float_is_zero(
+                move_line["amount_residual"], precision_digits=2
+            ):
+                moves_lines_to_remove.append(move_line)
+        if len(moves_lines_to_remove) > 0:
+            for move_line_to_remove in moves_lines_to_remove:
+                move_lines_data.remove(move_line_to_remove)
         partners_data = {0: {"id": 0, "name": "Missing Partner"}}
         open_items_move_lines_data = {}
         for move_line in move_lines_data:
