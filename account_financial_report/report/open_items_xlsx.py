@@ -22,10 +22,10 @@ class OpenItemsXslx(models.AbstractModel):
     def _get_report_columns(self, report):
         res = {
             0: {"header": _("Date"), "field": "date", "width": 11},
-            1: {"header": _("Entry"), "field": "move_id_name", "width": 18},
+            1: {"header": _("Entry"), "field": "move_name", "width": 18},
             2: {"header": _("Journal"), "field": "journal", "width": 8},
             3: {"header": _("Account"), "field": "account", "width": 9},
-            4: {"header": _("Partner"), "field": "partner", "width": 25},
+            4: {"header": _("Partner"), "field": "partner_name", "width": 25},
             5: {"header": _("Ref - Label"), "field": "ref", "width": 40},
             6: {"header": _("Due date"), "field": "date_maturity", "width": 11},
             7: {

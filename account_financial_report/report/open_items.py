@@ -144,7 +144,7 @@ class OpenItemsReport(models.AbstractModel):
         # name from res_currency
         query += ", rc.name as currency_name"
         # state and name from account_move
-        query += ", am.state, am.name as move_name"
+        query += ", am.state, am.name as move_name, am.invoice_payment_ref"
 
         # FROM
         query += """
@@ -269,6 +269,8 @@ class OpenItemsReport(models.AbstractModel):
                 original = move_line["credit"] * (-1)
             if not float_is_zero(move_line["debit"], precision_digits=2):
                 original = move_line["debit"]
+            refs = {move_line["ref"], move_line["invoice_payment_ref"]}
+            ref = " - ".join(x for x in refs if x)
             move_line.update(
                 {
                     "date": move_line["date"].strftime("%d/%m/%Y"),
@@ -277,7 +279,7 @@ class OpenItemsReport(models.AbstractModel):
                     "original": original,
                     "partner_id": 0 if no_partner else move_line["partner_id"],
                     "partner_name": "" if no_partner else move_line["partner_name"],
-                    "ref": "" if not move_line["ref"] else move_line["ref"],
+                    "ref": ref,
                     "account": accounts_data[move_line["account_id"]]["code"],
                     "journal": journals_data[move_line["journal_id"]]["code"],
                 }
