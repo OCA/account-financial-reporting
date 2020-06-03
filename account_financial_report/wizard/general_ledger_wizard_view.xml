@@ -20,22 +20,38 @@
                         </group>
                         <group name="other_filters">
                             <field name="target_move" widget="radio"/>
-                            <field name="centralize"/>
-                            <field name="hide_account_at_0"/>
-                            <field name="foreign_currency"/>
-                            <field name="show_analytic_tags"/>
+                            <label string="Other options" for="centralize"/>
+                            <div>
+                                <field name="centralize" nolabel="1" class="oe_inline"/>
+                                <label for="centralize" class="oe_inline"/>
+                            </div>
+                            <label string=" " for="hide_account_at_0"/>
+                            <div>
+                                <field name="hide_account_at_0" nolabel="1" class="oe_inline"/>
+                                <label for="hide_account_at_0" class="oe_inline"/>
+                            </div>
+                            <label string=" " for="foreign_currency"/>
+                            <div>
+                                <field name="foreign_currency" nolabel="1" class="oe_inline"/>
+                                <label for="foreign_currency" class="oe_inline"/>
+                            </div>
+                            <label string=" " for="show_analytic_tags"/>
+                            <div>
+                                <field name="show_analytic_tags" nolabel="1" class="oe_inline"/>
+                                <label for="show_analytic_tags" class="oe_inline"/>
+                            </div>
                         </group>
                     </group>
                     <notebook>
                         <page string="Filter accounts">
-                            <group col="4">
-                                <field name="receivable_accounts_only"/>
-                                <field name="payable_accounts_only"/>
+                            <group>
+                                <group>
+                                    <field name="account_type_ids" widget="many2many_checkboxes" nolabel="1"/>
+                                </group>
+                                <group>
+                                    <field name="account_ids" widget="many2many_tags" options="{'no_create': True}" nolabel="1"/>
+                                </group>
                             </group>
-                            <field name="account_ids"
-                                   nolabel="1"
-                                   widget="many2many_tags"
-                                   options="{'no_create': True}"/>
                         </page>
                         <page string="Filter partners">
                             <field name="partner_ids" nolabel="1"
@@ -91,10 +107,6 @@
                 res_model="general.ledger.report.wizard"
                 src_model="res.partner"
                 view_mode="form"
-                context="{
-                    'default_receivable_accounts_only':1,
-                    'default_payable_accounts_only':1,
-                    }"
                 groups="account.group_account_manager"
                 key2="client_action_multi"
                 target="new" />
