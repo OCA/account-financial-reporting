@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* account_financial_report
+# 	* account_financial_report
 #
 msgid ""
 msgstr ""
@@ -128,6 +128,13 @@ msgid "Account Type"
 msgstr "Type de Compte"
 
 #. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__account_type_ids
+#, fuzzy
+#| msgid "Account Type"
+msgid "Account Types"
+msgstr "Type de Compte"
+
+#. module: account_financial_report
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:109
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 #, python-format
@@ -179,7 +186,8 @@ msgstr "90 jours"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-msgid "Age ≤ 120\n"
+msgid ""
+"Age ≤ 120\n"
 "                        d."
 msgstr "≤ 120 jours"
 
@@ -192,7 +200,8 @@ msgstr "≤ 120 jours"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-msgid "Age ≤ 30\n"
+msgid ""
+"Age ≤ 30\n"
 "                        d."
 msgstr "≤ 30 jours"
 
@@ -205,7 +214,8 @@ msgstr "≤ 30 j."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-msgid "Age ≤ 60\n"
+msgid ""
+"Age ≤ 60\n"
 "                        d."
 msgstr "≤ 60 jours"
 
@@ -218,7 +228,8 @@ msgstr "≤ 60 j."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-msgid "Age ≤ 90\n"
+msgid ""
+"Age ≤ 90\n"
 "                        d."
 msgstr "≤ 90 j."
 
@@ -500,12 +511,14 @@ msgstr "Comptes calculés"
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_report_trial_balance__hierarchy_on
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__hierarchy_on
-msgid "Computed Accounts: Use when the account group have codes\n"
+msgid ""
+"Computed Accounts: Use when the account group have codes\n"
 "        that represent prefixes of the actual accounts.\n"
 "\n"
 "        Child Accounts: Use when your account groups are hierarchical.\n"
 "\n"
-"        No hierarchy: Use to display just the accounts, without any grouping.\n"
+"        No hierarchy: Use to display just the accounts, without any "
+"grouping.\n"
 "        "
 msgstr ""
 "Comptes calculés: À utiliser lorsque les groupes de comptes ont des codes\n"
@@ -520,7 +533,8 @@ msgstr ""
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
-msgid "Cost\n"
+msgid ""
+"Cost\n"
 "                            center"
 msgstr ""
 "Coût\n"
@@ -904,7 +918,10 @@ msgstr "Nom affiché"
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__foreign_currency
 #: model:ir.model.fields,help:account_financial_report.field_open_items_report_wizard__foreign_currency
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__foreign_currency
-msgid "Display foreign currency for move lines, unless account currency is not setup through chart of accounts will display initial and final balance in that currency."
+msgid ""
+"Display foreign currency for move lines, unless account currency is not "
+"setup through chart of accounts will display initial and final balance in "
+"that currency."
 msgstr ""
 "Afficher les devises étrangères pour les écritures comptables, à moins que "
 "la monnaie du compte comptable ne soit pas définie dans le plan comptable "
@@ -919,7 +936,8 @@ msgstr "Ne pas afficher les niveaux parent"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines
-msgid "Due\n"
+msgid ""
+"Due\n"
 "                        date"
 msgstr ""
 "Échéance\n"
@@ -944,7 +962,8 @@ msgstr "Date de fin"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_ending_cumul
-msgid "Ending\n"
+msgid ""
+"Ending\n"
 "                        balance"
 msgstr ""
 "Clôture\n"
@@ -1197,7 +1216,9 @@ msgstr "Grand livre XLSX"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
-msgid "General Ledger can be computed only if selected company have only one unaffected earnings account."
+msgid ""
+"General Ledger can be computed only if selected company have only one "
+"unaffected earnings account."
 msgstr ""
 "La comptabilité générale ne peut être calculée que si l'entreprise "
 "sélectionnée a un seul compte de résultat non affecté."
@@ -1304,14 +1325,17 @@ msgstr "ID"
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_account_account__centralized
-msgid "If flagged, no details will be displayed in the General Ledger report (the webkit one only), only centralized amounts per period."
+msgid ""
+"If flagged, no details will be displayed in the General Ledger report (the "
+"webkit one only), only centralized amounts per period."
 msgstr ""
-"Si coché, aucun détail ne sera affiché dans les rapport du Grand Livre ("
-"uniquement le webkit), seulement les montants centralisés par période."
+"Si coché, aucun détail ne sera affiché dans les rapport du Grand Livre "
+"(uniquement le webkit), seulement les montants centralisés par période."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
-msgid "Initial\n"
+msgid ""
+"Initial\n"
 "                    balance"
 msgstr ""
 "Solde\n"
@@ -1760,6 +1784,13 @@ msgid "Original"
 msgstr "Original"
 
 #. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
+#, fuzzy
+#| msgid "Options"
+msgid "Other options"
+msgstr "Options"
+
+#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_account__parent_id
 msgid "Parent"
 msgstr "Parent"
@@ -1796,7 +1827,8 @@ msgstr "Partenaire"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_partner_ending_cumul
-msgid "Partner\n"
+msgid ""
+"Partner\n"
 "                    cumul aged balance"
 msgstr ""
 "Partenaire\n"
@@ -1830,7 +1862,6 @@ msgstr "Solde de clôture du partenaire"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard__payable_accounts_only
-#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__payable_accounts_only
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__payable_accounts_only
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__payable_accounts_only
 msgid "Payable Accounts Only"
@@ -1908,7 +1939,6 @@ msgstr "Réc."
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard__receivable_accounts_only
-#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__receivable_accounts_only
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__receivable_accounts_only
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__receivable_accounts_only
 msgid "Receivable Accounts Only"
@@ -1918,7 +1948,8 @@ msgstr "Comptes débiteurs uniquement"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines
-msgid "Ref -\n"
+msgid ""
+"Ref -\n"
 "                        Label"
 msgstr ""
 "Ref -\n"
@@ -2228,9 +2259,11 @@ msgid "Taxtags"
 msgstr "Étiquettes de taxe"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/wizard/general_ledger_wizard.py:180
+#: code:addons/account_financial_report/wizard/general_ledger_wizard.py:183
 #, python-format
-msgid "The Company in the General Ledger Report Wizard and in Date Range must be the same."
+msgid ""
+"The Company in the General Ledger Report Wizard and in Date Range must be "
+"the same."
 msgstr ""
 "La société dans le dialogue du rapport du Grand livre et dans la plage de "
 "dates doit être la même."
@@ -2238,7 +2271,9 @@ msgstr ""
 #. module: account_financial_report
 #: code:addons/account_financial_report/wizard/trial_balance_wizard.py:162
 #, python-format
-msgid "The Company in the Trial Balance Report Wizard and in Date Range must be the same."
+msgid ""
+"The Company in the Trial Balance Report Wizard and in Date Range must be the "
+"same."
 msgstr ""
 "La société dans le rapport de balance générale et dans la plage de dates "
 "doivent être les mêmes."
@@ -2246,7 +2281,8 @@ msgstr ""
 #. module: account_financial_report
 #: code:addons/account_financial_report/wizard/vat_report_wizard.py:62
 #, python-format
-msgid "The Company in the Vat Report Wizard and in Date Range must be the same."
+msgid ""
+"The Company in the Vat Report Wizard and in Date Range must be the same."
 msgstr ""
 "La société dans le dialogue du rapport des taxes et dans la plage de dates "
 "doit être la même."
@@ -2299,7 +2335,9 @@ msgstr "Balance générale XLSX"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
-msgid "Trial Balance can be computed only if selected company have only one unaffected earnings account."
+msgid ""
+"Trial Balance can be computed only if selected company have only one "
+"unaffected earnings account."
 msgstr ""
 "La balance générale peut être calculée uniquement si la société sélectionnée "
 "n'a qu'un seul compte de bénéfices/pertes à reporter."
@@ -2312,7 +2350,10 @@ msgstr "Compte des Bénéfices/Pertes à reporter"
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__hide_account_at_0
 #: model:ir.model.fields,help:account_financial_report.field_open_items_report_wizard__hide_account_at_0
-msgid "Use this filter to hide an account or a partner with an ending balance at 0. If partners are filtered, debits and credits totals will not match the trial balance."
+msgid ""
+"Use this filter to hide an account or a partner with an ending balance at 0. "
+"If partners are filtered, debits and credits totals will not match the trial "
+"balance."
 msgstr ""
 "Utiliser ce filtre pour cacher un compte ou un partenaire avec un solde de "
 "clôture à 0. Si les partenaires sont filtrés, les totaux des débits et "
@@ -2361,7 +2402,9 @@ msgstr "Voir"
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__hide_account_at_0
-msgid "When this option is enabled, the trial balance will not display accounts that have initial balance = debit = credit = end balance = 0"
+msgid ""
+"When this option is enabled, the trial balance will not display accounts "
+"that have initial balance = debit = credit = end balance = 0"
 msgstr ""
 "Lorsque cette options est activée, la balance générale n'affichera pas les "
 "comptes qui ont balance initiale = débit = crédit = solde de clôture = 0"
