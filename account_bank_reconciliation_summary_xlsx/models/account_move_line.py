@@ -6,8 +6,8 @@ from odoo import fields, models
 
 
 class AccountMoveLine(models.Model):
-    _inherit = 'account.move.line'
+    _inherit = "account.move.line"
 
     statement_line_date = fields.Date(
-        string='Statement Line Date',
-        related='statement_line_id.date', store=True)
+        string="Statement Line Date", related="statement_line_id.date", store=True
+    )
