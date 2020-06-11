@@ -550,14 +550,14 @@
                     <t t-if="show_cost_center">
                         <div class="act_as_cell left">
                             <t t-set="res_model" t-value="'account.analytic.account'" />
-                            <span t-if="line.cost_center">
+                            <span t-if="line['analytic_account_id']">
                                 <a
-                                    t-att-data-active-id="line.move_line_id.analytic_account_id.id"
+                                    t-att-data-active-id="line['analytic_account_id']"
                                     t-att-data-res-model="res_model"
                                     class="o_account_financial_reports_web_action"
                                     style="color: black;"
                                 >
-                                    <t t-raw="line.cost_center" />
+                                    <t t-raw="line['analytic_account']" />
                                 </a>
                             </span>
                         </div>
