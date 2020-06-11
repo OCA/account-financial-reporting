@@ -87,6 +87,8 @@ class GeneralLedgerReportWizard(models.TransientModel):
     )
     show_partner_details = fields.Boolean(string="Show Partner Details", default=True,)
 
+    show_cost_center = fields.Boolean(string="Show Cost Center", default=True,)
+
     @api.onchange("account_code_from", "account_code_to")
     def on_change_account_range(self):
         if (
@@ -303,6 +305,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
             "partner_ids": self.partner_ids.ids,
             "show_partner_details": self.show_partner_details,
             "cost_center_ids": self.cost_center_ids.ids,
+            "show_cost_center": self.show_cost_center,
             "analytic_tag_ids": self.analytic_tag_ids.ids,
             "journal_ids": self.account_journal_ids.ids,
             "centralize": self.centralize,
