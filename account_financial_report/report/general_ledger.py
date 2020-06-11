@@ -324,6 +324,12 @@ class GeneralLedgerReport(models.AbstractModel):
             else "",
             "tag_ids": move_line["analytic_tag_ids"],
             "currency_id": move_line["currency_id"],
+            "analytic_account": move_line["analytic_account_id"][1]
+            if move_line["analytic_account_id"]
+            else "",
+            "analytic_account_id": move_line["analytic_account_id"][0]
+            if move_line["analytic_account_id"]
+            else False,
         }
         if (
             move_line_data["ref"] == move_line_data["name"]
@@ -464,6 +470,7 @@ class GeneralLedgerReport(models.AbstractModel):
             "amount_currency",
             "ref",
             "name",
+            "analytic_account_id",
         ]
         move_lines = self.env["account.move.line"].search_read(
             domain=domain, fields=ml_fields
@@ -662,6 +669,7 @@ class GeneralLedgerReport(models.AbstractModel):
                     "id": False,
                     "tag_ids": False,
                     "currency_id": False,
+                    "analytic_account_id": False,
                 }
             )
         centralized_ml[jnl_id][month]["debit"] += move_line["debit"]
@@ -782,6 +790,7 @@ class GeneralLedgerReport(models.AbstractModel):
             "only_posted_moves": data["only_posted_moves"],
             "hide_account_at_0": data["hide_account_at_0"],
             "show_analytic_tags": data["show_analytic_tags"],
+            "show_cost_center": data["show_cost_center"],
             "general_ledger": general_ledger,
             "accounts_data": accounts_data,
             "partners_data": partners_data,
