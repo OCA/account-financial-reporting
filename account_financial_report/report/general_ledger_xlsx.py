@@ -21,18 +21,26 @@ class GeneralLedgerXslx(models.AbstractModel):
         return report_name
 
     def _get_report_columns(self, report):
-        res = {
-            0: {"header": _("Date"), "field": "date", "width": 11},
-            1: {"header": _("Entry"), "field": "entry", "width": 18},
-            2: {"header": _("Journal"), "field": "journal", "width": 8},
-            3: {"header": _("Account"), "field": "account", "width": 9},
-            4: {"header": _("Taxes"), "field": "taxes_description", "width": 15},
-            5: {"header": _("Partner"), "field": "partner_name", "width": 25},
-            6: {"header": _("Ref - Label"), "field": "ref_label", "width": 40},
-            7: {"header": _("Cost center"), "field": "cost_center", "width": 15},
-            8: {"header": _("Tags"), "field": "tags", "width": 10},
-            9: {"header": _("Rec."), "field": "rec_name", "width": 15},
-            10: {
+        res = [
+            {"header": _("Date"), "field": "date", "width": 11},
+            {"header": _("Entry"), "field": "entry", "width": 18},
+            {"header": _("Journal"), "field": "journal", "width": 8},
+            {"header": _("Account"), "field": "account", "width": 9},
+            {"header": _("Taxes"), "field": "taxes_description", "width": 15},
+            {"header": _("Partner"), "field": "partner_name", "width": 25},
+            {"header": _("Ref - Label"), "field": "ref_label", "width": 40},
+        ]
+        if report.show_cost_center:
+            res += [
+                {"header": _("Cost center"), "field": "analytic_account", "width": 15},
+            ]
+        if report.show_analytic_tags:
+            res += [
+                {"header": _("Tags"), "field": "tags", "width": 10},
+            ]
+        res += [
+            {"header": _("Rec."), "field": "rec_name", "width": 15},
+            {
                 "header": _("Debit"),
                 "field": "debit",
                 "field_initial_balance": "initial_debit",
@@ -40,7 +48,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                 "type": "amount",
                 "width": 14,
             },
-            11: {
+            {
                 "header": _("Credit"),
                 "field": "credit",
                 "field_initial_balance": "initial_credit",
@@ -48,7 +56,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                 "type": "amount",
                 "width": 14,
             },
-            12: {
+            {
                 "header": _("Cumul. Bal."),
                 "field": "balance",
                 "field_initial_balance": "initial_balance",
@@ -56,17 +64,17 @@ class GeneralLedgerXslx(models.AbstractModel):
                 "type": "amount",
                 "width": 14,
             },
-        }
+        ]
         if report.foreign_currency:
-            foreign_currency = {
-                13: {
+            res += [
+                {
                     "header": _("Cur."),
                     "field": "currency_name",
                     "field_currency_balance": "currency_name",
                     "type": "currency_name",
                     "width": 7,
                 },
-                14: {
+                {
                     "header": _("Amount cur."),
                     "field": "bal_curr",
                     "field_initial_balance": "initial_bal_curr",
@@ -74,9 +82,11 @@ class GeneralLedgerXslx(models.AbstractModel):
                     "type": "amount_currency",
                     "width": 14,
                 },
-            }
-            res = {**res, **foreign_currency}
-        return res
+            ]
+        res_as_dict = {}
+        for i, column in enumerate(res):
+            res_as_dict[i] = column
+        return res_as_dict
 
     def _get_report_filters(self, report):
         return [
