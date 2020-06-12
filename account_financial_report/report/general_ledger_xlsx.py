@@ -32,7 +32,11 @@ class GeneralLedgerXslx(models.AbstractModel):
         ]
         if report.show_cost_center:
             res += [
-                {"header": _("Cost center"), "field": "analytic_account", "width": 15},
+                {
+                    "header": _("Analytic Account"),
+                    "field": "analytic_account",
+                    "width": 20,
+                },
             ]
         if report.show_analytic_tags:
             res += [

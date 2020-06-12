@@ -75,14 +75,14 @@
                             />
                         </page>
                         <page
-                            string="Filter cost centers"
+                            string="Filter analytic accounts"
                             groups="analytic.group_analytic_accounting"
                         >
                             <field
                                 name="cost_center_ids"
                                 nolabel="1"
+                                widget="many2many_tags"
                                 options="{'no_create': True}"
-                                groups="analytic.group_analytic_accounting"
                             />
                         </page>
                         <page string="Filter analytic tags">
