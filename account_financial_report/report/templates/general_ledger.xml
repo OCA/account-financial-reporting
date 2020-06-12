@@ -160,8 +160,10 @@
                         Label</div>
                     <t t-if="show_cost_center">
                         <!--## cost_center-->
-                        <div class="act_as_cell" style="width: 8.03%;">Cost
-                            center</div>
+                        <div
+                            class="act_as_cell"
+                            style="width: 8.03%;"
+                        >Analytic Account</div>
                     </t>
                     <t t-if="show_analytic_tags">
                         <!--## analytic tags-->
