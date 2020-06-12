@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-01 22:18+0000\n"
-"PO-Revision-Date: 2020-05-31 08:19+0000\n"
-"Last-Translator: Ermin Trevisan <trevi@twanda.com>\n"
+"PO-Revision-Date: 2020-06-12 14:19+0000\n"
+"Last-Translator: Maria Sparenberg <maria.sparenberg@gmx.net>\n"
 "Language-Team: German (https://www.transifex.com/oca/teams/23907/de/)\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -75,7 +75,7 @@ msgstr "Steuerbericht"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_financial_report_abstract_wizard
 msgid "Abstract Wizard"
-msgstr ""
+msgstr "Abstrakter Assistent"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:67
@@ -134,10 +134,8 @@ msgstr "Kontoart"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__account_type_ids
-#, fuzzy
-#| msgid "Account Type"
 msgid "Account Types"
-msgstr "Kontoart"
+msgstr "Kontoarten"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:109
@@ -1123,21 +1121,18 @@ msgstr "Abschließender Restbetrag"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_open_items_account__final_amount_residual_currency
 #: model:ir.model.fields,field_description:account_financial_report.field_report_open_items_partner__final_amount_residual_currency
-#, fuzzy
 msgid "Final Amount Residual Currency"
 msgstr "Restbetragswährung"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_open_items_account__final_amount_total_due
 #: model:ir.model.fields,field_description:account_financial_report.field_report_open_items_partner__final_amount_total_due
-#, fuzzy
 msgid "Final Amount Total Due"
 msgstr "Fälliger Gesamtbetrag"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_open_items_account__final_amount_total_due_currency
 #: model:ir.model.fields,field_description:account_financial_report.field_report_open_items_partner__final_amount_total_due_currency
-#, fuzzy
 msgid "Final Amount Total Due Currency"
 msgstr "Währung des fälligen Gesamtbetrags"
 
@@ -1799,10 +1794,8 @@ msgstr "Ursprünglich"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
-#, fuzzy
-#| msgid "Options"
 msgid "Other options"
-msgstr "Optionen"
+msgstr "Andere Optionen"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_account__parent_id
@@ -2132,9 +2125,8 @@ msgstr "Anfangsdatum"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__date_from
-#, fuzzy
 msgid "Start date"
-msgstr "Anfangsdatum"
+msgstr "Startdatum"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:32
@@ -2427,7 +2419,6 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__with_account_name
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger__with_account_name
-#, fuzzy
 msgid "With Account Name"
 msgstr "Mit Kontobezeichnung"
 
@@ -2454,13 +2445,11 @@ msgstr "oder"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_aged_partner_balance_xlsx
-#, fuzzy
 msgid "report.a_f_r.report_aged_partner_balance_xlsx"
 msgstr "report.a_f_r.report_aged_partner_balance_xlsx"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_general_ledger_xlsx
-#, fuzzy
 msgid "report.a_f_r.report_general_ledger_xlsx"
 msgstr "report.a_f_r.report_general_ledger_xlsx"
 
