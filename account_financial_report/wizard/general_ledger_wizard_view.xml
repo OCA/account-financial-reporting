@@ -61,10 +61,11 @@
                                    widget="many2many_tags"
                                    options="{'no_create': True}"/>
                         </page>
-                        <page string="Filter cost centers" groups="analytic.group_analytic_accounting">
+                        <page string="Filter analytic accounts" groups="analytic.group_analytic_accounting">
                             <field name="cost_center_ids" nolabel="1"
-                                   options="{'no_create': True}"
-                                   groups="analytic.group_analytic_accounting"/>
+                                   widget="many2many_tags"
+                                   options="{'no_create': True}"/>
+
                         </page>
                         <page string="Filter analytic tags">
                             <field name="analytic_tag_ids" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>

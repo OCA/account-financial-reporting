@@ -100,7 +100,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
         default=True,
     )
     show_cost_center = fields.Boolean(
-        string='Show Cost Center',
+        string='Show Analytic Account',
         default=True,
     )
 

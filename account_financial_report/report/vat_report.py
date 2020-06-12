@@ -44,7 +44,6 @@ class VATReport(models.AbstractModel):
         domain = [('company_id', '=', company_id),
                   ('date', '>=', date_from),
                   ('date', '<=', date_to),
-                  ('tax_ids', '!=', False),
                   ('tax_exigible', '=', True)]
         if only_posted_moves:
             domain += [('move_id.state', '=', 'posted')]
@@ -68,6 +67,8 @@ class VATReport(models.AbstractModel):
             domain=net_domain,
             fields=ml_fields,
         )
+        taxed_move_lines = list(
+            filter(lambda d: d['tax_ids'], taxed_move_lines))
         vat_data = []
         for tax_move_line in tax_move_lines:
             vat_data.append({
