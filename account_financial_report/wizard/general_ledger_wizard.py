@@ -86,8 +86,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
         help="Ending account in a range",
     )
     show_partner_details = fields.Boolean(string="Show Partner Details", default=True,)
-
-    show_cost_center = fields.Boolean(string="Show Cost Center", default=True,)
+    show_cost_center = fields.Boolean(string="Show Analytic Account", default=True,)
 
     @api.onchange("account_code_from", "account_code_to")
     def on_change_account_range(self):
