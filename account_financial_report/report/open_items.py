@@ -225,12 +225,12 @@ class OpenItemsReport(models.AbstractModel):
                     partner_ids,
                     target_move,
                 )
-            move_lines = [
-                move_line
-                for move_line in move_lines
-                if move_line["date"] <= date_at_object
-                and not float_is_zero(move_line["amount_residual"], precision_digits=2)
-            ]
+        move_lines = [
+            move_line
+            for move_line in move_lines
+            if move_line["date"] <= date_at_object
+            and not float_is_zero(move_line["amount_residual"], precision_digits=2)
+        ]
 
         open_items_move_lines_data = {}
         for move_line in move_lines:
