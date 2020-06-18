@@ -40,7 +40,8 @@ class AccountingWriter(object):
         self.stream.write(data)
         # seek() or truncate() have side effect then we reinitialize StringIO
         # https://stackoverflow.com/questions/4330812/how-do-i-clear-a-stringio-object
-        self.queue = StringIO()
+        self.queue.seek(0)
+        self.queue.truncate(0)
 
     def writerows(self, rows):
         for row in rows:
