@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import _, models, api
+from odoo.tools import float_is_zero
 import calendar
 import datetime
 import operator
@@ -160,9 +161,8 @@ class GeneralLedgerReport(models.AbstractModel):
 
     def _get_initial_balance_data(
             self, account_ids, partner_ids, company_id, date_from,
-            foreign_currency, only_posted_moves, hide_account_at_0,
-            unaffected_earnings_account, fy_start_date, analytic_tag_ids,
-            cost_center_ids):
+            foreign_currency, only_posted_moves, unaffected_earnings_account,
+            fy_start_date, analytic_tag_ids, cost_center_ids):
         base_domain = []
         if company_id:
             base_domain += [('company_id', '=', company_id)]
@@ -392,9 +392,8 @@ class GeneralLedgerReport(models.AbstractModel):
 
     def _get_period_ml_data(
             self, account_ids, partner_ids, company_id, foreign_currency,
-            only_posted_moves, hide_account_at_0, date_from, date_to,
-            partners_data, gen_ld_data, partners_ids, centralize,
-            analytic_tag_ids, cost_center_ids):
+            only_posted_moves, date_from, date_to, partners_data,
+            gen_ld_data, partners_ids, analytic_tag_ids, cost_center_ids):
         domain = self._get_period_domain(account_ids, partner_ids,
                                          company_id, only_posted_moves,
                                          date_to, date_from,
@@ -492,11 +491,11 @@ class GeneralLedgerReport(models.AbstractModel):
                     'rec_name']
         return move_lines
 
-    @api.model
     def _create_general_ledger(
             self, gen_led_data, accounts_data,
-            show_partner_details, rec_after_date_to_ids):
+            show_partner_details, rec_after_date_to_ids, hide_account_at_0):
         general_ledger = []
+        rounding = self.env.user.company_id.currency_id.rounding
         for acc_id in gen_led_data.keys():
             account = {}
             account.update({
@@ -505,7 +504,8 @@ class GeneralLedgerReport(models.AbstractModel):
                 'type': 'account',
                 'currency_id': accounts_data[acc_id]['currency_id'],
                 'centralized': accounts_data[acc_id]['centralized'],
-                })
+                }
+            )
             if not gen_led_data[acc_id]['partners']:
                 move_lines = []
                 for ml_id in gen_led_data[acc_id].keys():
@@ -518,6 +518,11 @@ class GeneralLedgerReport(models.AbstractModel):
                     move_lines, gen_led_data[acc_id]['init_bal']['balance'],
                     rec_after_date_to_ids)
                 account.update({'move_lines': move_lines})
+                if hide_account_at_0:
+                    if float_is_zero(gen_led_data[acc_id]['init_bal'][
+                        'balance'], precision_rounding=rounding) and \
+                            account['move_lines'] == []:
+                        continue
             else:
                 if show_partner_details:
                     list_partner = []
@@ -543,8 +548,19 @@ class GeneralLedgerReport(models.AbstractModel):
                                     'balance'],
                                 rec_after_date_to_ids)
                             partner.update({'move_lines': move_lines})
+                            if hide_account_at_0:
+                                if float_is_zero(gen_led_data[acc_id][prt_id][
+                                    'init_bal']['balance'],
+                                    precision_rounding=rounding) and \
+                                        partner['move_lines'] == []:
+                                    continue
                             list_partner += [partner]
                     account.update({'list_partner': list_partner})
+                    if hide_account_at_0:
+                        if float_is_zero(gen_led_data[acc_id]['init_bal'][
+                            'balance'], precision_rounding=rounding) and \
+                                account['list_partner'] == []:
+                            continue
                 else:
                     move_lines = []
                     for prt_id in gen_led_data[acc_id].keys():
@@ -564,6 +580,11 @@ class GeneralLedgerReport(models.AbstractModel):
                         'move_lines': move_lines,
                         'partners': False,
                     })
+                    if hide_account_at_0:
+                        if float_is_zero(gen_led_data[acc_id]['init_bal'][
+                            'balance'], precision_rounding=rounding) and \
+                                account['move_lines'] == []:
+                            continue
             general_ledger += [account]
         return general_ledger
 
@@ -657,7 +678,7 @@ class GeneralLedgerReport(models.AbstractModel):
         gen_ld_data, partners_data, partners_ids = \
             self._get_initial_balance_data(
                 account_ids, partner_ids, company_id, date_from,
-                foreign_currency, only_posted_moves, hide_account_at_0,
+                foreign_currency, only_posted_moves,
                 unaffected_earnings_account, fy_start_date, analytic_tag_ids,
                 cost_center_ids)
         centralize = data['centralize']
@@ -666,12 +687,12 @@ class GeneralLedgerReport(models.AbstractModel):
             tags_data, rec_after_date_to_ids =  \
             self._get_period_ml_data(
                 account_ids, partner_ids, company_id, foreign_currency,
-                only_posted_moves, hide_account_at_0, date_from, date_to,
+                only_posted_moves, date_from, date_to,
                 partners_data, gen_ld_data, partners_ids,
-                centralize, analytic_tag_ids, cost_center_ids)
+                analytic_tag_ids, cost_center_ids)
         general_ledger = self._create_general_ledger(
             gen_ld_data, accounts_data,
-            show_partner_details, rec_after_date_to_ids
+            show_partner_details, rec_after_date_to_ids, hide_account_at_0
         )
         if centralize:
             for account in general_ledger:
