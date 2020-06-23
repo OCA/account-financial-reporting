@@ -7,6 +7,7 @@ import datetime
 import operator
 
 from odoo import _, api, models
+from odoo.tools import float_is_zero
 
 
 class GeneralLedgerReport(models.AbstractModel):
@@ -177,7 +178,6 @@ class GeneralLedgerReport(models.AbstractModel):
         date_from,
         foreign_currency,
         only_posted_moves,
-        hide_account_at_0,
         unaffected_earnings_account,
         fy_start_date,
         analytic_tag_ids,
@@ -432,13 +432,11 @@ class GeneralLedgerReport(models.AbstractModel):
         company_id,
         foreign_currency,
         only_posted_moves,
-        hide_account_at_0,
         date_from,
         date_to,
         partners_data,
         gen_ld_data,
         partners_ids,
-        centralize,
         analytic_tag_ids,
         cost_center_ids,
     ):
@@ -566,11 +564,52 @@ class GeneralLedgerReport(models.AbstractModel):
                 move_line["rec_name"] = "(" + _("future") + ") " + move_line["rec_name"]
         return move_lines
 
-    @api.model
+    def _create_account(self, account, acc_id, gen_led_data, rec_after_date_to_ids):
+        move_lines = []
+        for ml_id in gen_led_data[acc_id].keys():
+            if not isinstance(ml_id, int):
+                account.update({ml_id: gen_led_data[acc_id][ml_id]})
+            else:
+                move_lines += [gen_led_data[acc_id][ml_id]]
+        move_lines = sorted(move_lines, key=lambda k: (k["date"]))
+        move_lines = self._recalculate_cumul_balance(
+            move_lines,
+            gen_led_data[acc_id]["init_bal"]["balance"],
+            rec_after_date_to_ids,
+        )
+        account.update({"move_lines": move_lines})
+        return account
+
+    def _create_account_not_show_partner(
+        self, account, acc_id, gen_led_data, rec_after_date_to_ids
+    ):
+        move_lines = []
+        for prt_id in gen_led_data[acc_id].keys():
+            if not isinstance(prt_id, int):
+                account.update({prt_id: gen_led_data[acc_id][prt_id]})
+            else:
+                for ml_id in gen_led_data[acc_id][prt_id].keys():
+                    if isinstance(ml_id, int):
+                        move_lines += [gen_led_data[acc_id][prt_id][ml_id]]
+        move_lines = sorted(move_lines, key=lambda k: (k["date"]))
+        move_lines = self._recalculate_cumul_balance(
+            move_lines,
+            gen_led_data[acc_id]["init_bal"]["balance"],
+            rec_after_date_to_ids,
+        )
+        account.update({"move_lines": move_lines, "partners": False})
+        return account
+
     def _create_general_ledger(
-        self, gen_led_data, accounts_data, show_partner_details, rec_after_date_to_ids
+        self,
+        gen_led_data,
+        accounts_data,
+        show_partner_details,
+        rec_after_date_to_ids,
+        hide_account_at_0,
     ):
         general_ledger = []
+        rounding = self.env.user.company_id.currency_id.rounding
         for acc_id in gen_led_data.keys():
             account = {}
             account.update(
@@ -583,19 +622,18 @@ class GeneralLedgerReport(models.AbstractModel):
                 }
             )
             if not gen_led_data[acc_id]["partners"]:
-                move_lines = []
-                for ml_id in gen_led_data[acc_id].keys():
-                    if not isinstance(ml_id, int):
-                        account.update({ml_id: gen_led_data[acc_id][ml_id]})
-                    else:
-                        move_lines += [gen_led_data[acc_id][ml_id]]
-                move_lines = sorted(move_lines, key=lambda k: (k["date"]))
-                move_lines = self._recalculate_cumul_balance(
-                    move_lines,
-                    gen_led_data[acc_id]["init_bal"]["balance"],
-                    rec_after_date_to_ids,
+                account = self._create_account(
+                    account, acc_id, gen_led_data, rec_after_date_to_ids
                 )
-                account.update({"move_lines": move_lines})
+                if (
+                    hide_account_at_0
+                    and float_is_zero(
+                        gen_led_data[acc_id]["init_bal"]["balance"],
+                        precision_rounding=rounding,
+                    )
+                    and account["move_lines"] == []
+                ):
+                    continue
             else:
                 if show_partner_details:
                     list_partner = []
@@ -619,24 +657,39 @@ class GeneralLedgerReport(models.AbstractModel):
                                 rec_after_date_to_ids,
                             )
                             partner.update({"move_lines": move_lines})
+                            if (
+                                hide_account_at_0
+                                and float_is_zero(
+                                    gen_led_data[acc_id][prt_id]["init_bal"]["balance"],
+                                    precision_rounding=rounding,
+                                )
+                                and partner["move_lines"] == []
+                            ):
+                                continue
                             list_partner += [partner]
                     account.update({"list_partner": list_partner})
+                    if (
+                        hide_account_at_0
+                        and float_is_zero(
+                            gen_led_data[acc_id]["init_bal"]["balance"],
+                            precision_rounding=rounding,
+                        )
+                        and account["list_partner"] == []
+                    ):
+                        continue
                 else:
-                    move_lines = []
-                    for prt_id in gen_led_data[acc_id].keys():
-                        if not isinstance(prt_id, int):
-                            account.update({prt_id: gen_led_data[acc_id][prt_id]})
-                        else:
-                            for ml_id in gen_led_data[acc_id][prt_id].keys():
-                                if isinstance(ml_id, int):
-                                    move_lines += [gen_led_data[acc_id][prt_id][ml_id]]
-                    move_lines = sorted(move_lines, key=lambda k: (k["date"]))
-                    move_lines = self._recalculate_cumul_balance(
-                        move_lines,
-                        gen_led_data[acc_id]["init_bal"]["balance"],
-                        rec_after_date_to_ids,
+                    account = self._create_account_not_show_partner(
+                        account, acc_id, gen_led_data, rec_after_date_to_ids
                     )
-                    account.update({"move_lines": move_lines, "partners": False})
+                    if (
+                        hide_account_at_0
+                        and float_is_zero(
+                            gen_led_data[acc_id]["init_bal"]["balance"],
+                            precision_rounding=rounding,
+                        )
+                        and account["move_lines"] == []
+                    ):
+                        continue
             general_ledger += [account]
         return general_ledger
 
@@ -728,7 +781,6 @@ class GeneralLedgerReport(models.AbstractModel):
             date_from,
             foreign_currency,
             only_posted_moves,
-            hide_account_at_0,
             unaffected_earnings_account,
             fy_start_date,
             analytic_tag_ids,
@@ -750,18 +802,20 @@ class GeneralLedgerReport(models.AbstractModel):
             company_id,
             foreign_currency,
             only_posted_moves,
-            hide_account_at_0,
             date_from,
             date_to,
             partners_data,
             gen_ld_data,
             partners_ids,
-            centralize,
             analytic_tag_ids,
             cost_center_ids,
         )
         general_ledger = self._create_general_ledger(
-            gen_ld_data, accounts_data, show_partner_details, rec_after_date_to_ids
+            gen_ld_data,
+            accounts_data,
+            show_partner_details,
+            rec_after_date_to_ids,
+            hide_account_at_0,
         )
         if centralize:
             for account in general_ledger:
