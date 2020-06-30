@@ -166,6 +166,7 @@ class TestVATReport(common.TransactionCase):
             self.env["account.move"].with_context(default_type="out_invoice")
         )
         move_form.partner_id = self.env.ref("base.res_partner_2")
+        move_form.invoice_date = time.strftime("%Y-%m-04")
         with move_form.invoice_line_ids.new() as line_form:
             line_form.product_id = self.env.ref("product.product_product_4")
             line_form.quantity = 1.0
