@@ -135,8 +135,8 @@ msgid "Display Name"
 msgstr "Exibir nome"
 
 #. module: mis_builder_cash_flow
+#: model:ir.model.fields.selection,name:mis_builder_cash_flow.selection__mis_cash_flow__line_type__forecast_line
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_search_view
-#: selection:mis.cash_flow,line_type:0
 msgid "Forecast Line"
 msgstr "Linha de Previsão"
 
@@ -168,8 +168,8 @@ msgstr "Em recebível"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__move_line_id
+#: model:ir.model.fields.selection,name:mis_builder_cash_flow.selection__mis_cash_flow__line_type__move_line
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_search_view
-#: selection:mis.cash_flow,line_type:0
 msgid "Journal Item"
 msgstr "Item de Diário"
 
@@ -266,7 +266,15 @@ msgid "Reconciled"
 msgstr "Reconciliado"
 
 #. module: mis_builder_cash_flow
-#: code:addons/mis_builder_cash_flow/models/mis_cash_flow_forecast_line.py:46
+#: model:ir.model.fields,help:mis_builder_cash_flow.field_mis_cash_flow__account_internal_type
+msgid ""
+"The 'Internal Type' is used for features available on different types of "
+"accounts: liquidity type is for cash or bank accounts, payable/receivable is "
+"for vendor/customer accounts."
+msgstr ""
+
+#. module: mis_builder_cash_flow
+#: code:addons/mis_builder_cash_flow/models/mis_cash_flow_forecast_line.py:0
 #, python-format
 msgid "The Company and the Company of the Account must be the same."
 msgstr "A Empresa e a Empresa da Conta devem ser as mesmas."
@@ -283,14 +291,16 @@ msgid "Total"
 msgstr "Total"
 
 #. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__account_internal_type
+#, fuzzy
+#| msgid "Line Type"
+msgid "Type"
+msgstr "Tipo de Linha"
+
+#. module: mis_builder_cash_flow
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_search_view
 msgid "Unreconciled"
 msgstr "Não Reconciliado"
-
-#. module: mis_builder_cash_flow
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__user_type_id
-msgid "User Type"
-msgstr "Tipo de Utilizador"
 
 #. module: mis_builder_cash_flow
 #: model:mis.report.instance.period,name:mis_builder_cash_flow.mis_period_plus_fourth_month
@@ -301,3 +311,6 @@ msgstr "quarto mês"
 #: model:mis.report.instance.period,name:mis_builder_cash_flow.mis_period_plus_third_month
 msgid "third month"
 msgstr "terceiro mês"
+
+#~ msgid "User Type"
+#~ msgstr "Tipo de Utilizador"
