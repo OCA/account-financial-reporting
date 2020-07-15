@@ -38,9 +38,11 @@ class AccountingWriter(object):
         data = self.encoder.encode(data)
         # write to the target stream
         self.stream.write(data)
-        # seek() or truncate() have side effect then we reinitialize StringIO
+        # seek() or truncate() have side effect if not used combinated
+        self.queue.truncate(0)
+        self.queue.seek(0)
         # https://stackoverflow.com/questions/4330812/how-do-i-clear-a-stringio-object
-        self.queue = StringIO()
+        # It fails when you use `self.queue = StringIO()` only add one line
 
     def writerows(self, rows):
         for row in rows:
