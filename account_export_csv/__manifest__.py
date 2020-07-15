@@ -5,7 +5,7 @@
 {
     'name': 'Account Export CSV',
     'summary': "Adds accounting CSV export",
-    'version': '12.0.1.1.0',
+    'version': '12.0.1.2.0',
     'depends': [
         'account',
         'date_range',
