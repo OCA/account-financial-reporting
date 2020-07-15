@@ -22,44 +22,44 @@ msgid "<span string=\"-\" class=\"oe_inline\"/>"
 msgstr ""
 
 #. module: account_export_csv
-#: code:addons/account_export_csv/wizard/account_export_csv.py:254
+#: code:addons/account_export_csv/wizard/account_export_csv.py:256
 #, python-format
 msgid "ACCOUNT CODE"
 msgstr ""
 
 #. module: account_export_csv
-#: code:addons/account_export_csv/wizard/account_export_csv.py:173
-#: code:addons/account_export_csv/wizard/account_export_csv.py:265
+#: code:addons/account_export_csv/wizard/account_export_csv.py:175
+#: code:addons/account_export_csv/wizard/account_export_csv.py:267
 #, python-format
 msgid "ACCOUNT NAME"
 msgstr ""
 
 #. module: account_export_csv
-#: code:addons/account_export_csv/wizard/account_export_csv.py:267
+#: code:addons/account_export_csv/wizard/account_export_csv.py:269
 #, python-format
 msgid "AMOUNT CURRENCY"
 msgstr ""
 
 #. module: account_export_csv
-#: code:addons/account_export_csv/wizard/account_export_csv.py:261
+#: code:addons/account_export_csv/wizard/account_export_csv.py:263
 #, python-format
 msgid "ANALYTIC ACCOUNT CODE"
 msgstr ""
 
 #. module: account_export_csv
-#: code:addons/account_export_csv/wizard/account_export_csv.py:269
+#: code:addons/account_export_csv/wizard/account_export_csv.py:271
 #, python-format
 msgid "ANALYTIC ACCOUNT NAME"
 msgstr ""
 
 #. module: account_export_csv
-#: code:addons/account_export_csv/wizard/account_export_csv.py:170
+#: code:addons/account_export_csv/wizard/account_export_csv.py:172
 #, python-format
 msgid "ANALYTIC CODE"
 msgstr ""
 
 #. module: account_export_csv
-#: code:addons/account_export_csv/wizard/account_export_csv.py:171
+#: code:addons/account_export_csv/wizard/account_export_csv.py:173
 #, python-format
 msgid "ANALYTIC NAME"
 msgstr ""
@@ -77,30 +77,30 @@ msgid "Analytic Balance (with accounts)"
 msgstr "Balance analytique (avec comptes)"
 
 #. module: account_export_csv
-#: code:addons/account_export_csv/wizard/account_export_csv.py:119
-#: code:addons/account_export_csv/wizard/account_export_csv.py:176
-#: code:addons/account_export_csv/wizard/account_export_csv.py:266
+#: code:addons/account_export_csv/wizard/account_export_csv.py:121
+#: code:addons/account_export_csv/wizard/account_export_csv.py:178
+#: code:addons/account_export_csv/wizard/account_export_csv.py:268
 #, python-format
 msgid "BALANCE"
 msgstr ""
 
 #. module: account_export_csv
-#: code:addons/account_export_csv/wizard/account_export_csv.py:273
+#: code:addons/account_export_csv/wizard/account_export_csv.py:275
 #, python-format
 msgid "BANK STATEMENT"
 msgstr ""
 
 #. module: account_export_csv
-#: code:addons/account_export_csv/wizard/account_export_csv.py:115
-#: code:addons/account_export_csv/wizard/account_export_csv.py:172
+#: code:addons/account_export_csv/wizard/account_export_csv.py:117
+#: code:addons/account_export_csv/wizard/account_export_csv.py:174
 #, python-format
 msgid "CODE"
 msgstr ""
 
 #. module: account_export_csv
-#: code:addons/account_export_csv/wizard/account_export_csv.py:118
-#: code:addons/account_export_csv/wizard/account_export_csv.py:175
-#: code:addons/account_export_csv/wizard/account_export_csv.py:259
+#: code:addons/account_export_csv/wizard/account_export_csv.py:120
+#: code:addons/account_export_csv/wizard/account_export_csv.py:177
+#: code:addons/account_export_csv/wizard/account_export_csv.py:261
 #, python-format
 msgid "CREDIT"
 msgstr ""
@@ -111,7 +111,7 @@ msgid "CSV"
 msgstr "CSV"
 
 #. module: account_export_csv
-#: code:addons/account_export_csv/wizard/account_export_csv.py:268
+#: code:addons/account_export_csv/wizard/account_export_csv.py:270
 #, python-format
 msgid "CURRENCY"
 msgstr ""
@@ -137,21 +137,21 @@ msgid "Created on"
 msgstr ""
 
 #. module: account_export_csv
-#: code:addons/account_export_csv/wizard/account_export_csv.py:252
+#: code:addons/account_export_csv/wizard/account_export_csv.py:254
 #, python-format
 msgid "DATE"
 msgstr ""
 
 #. module: account_export_csv
-#: code:addons/account_export_csv/wizard/account_export_csv.py:117
-#: code:addons/account_export_csv/wizard/account_export_csv.py:174
-#: code:addons/account_export_csv/wizard/account_export_csv.py:258
+#: code:addons/account_export_csv/wizard/account_export_csv.py:119
+#: code:addons/account_export_csv/wizard/account_export_csv.py:176
+#: code:addons/account_export_csv/wizard/account_export_csv.py:260
 #, python-format
 msgid "DEBIT"
 msgstr ""
 
 #. module: account_export_csv
-#: code:addons/account_export_csv/wizard/account_export_csv.py:257
+#: code:addons/account_export_csv/wizard/account_export_csv.py:259
 #, python-format
 msgid "DESCRIPTION"
 msgstr ""
@@ -182,7 +182,7 @@ msgid "Display Name"
 msgstr ""
 
 #. module: account_export_csv
-#: code:addons/account_export_csv/wizard/account_export_csv.py:264
+#: code:addons/account_export_csv/wizard/account_export_csv.py:266
 #, python-format
 msgid "ENTRY NUMBER"
 msgstr ""
@@ -198,7 +198,7 @@ msgid "Export CSV Filename"
 msgstr "Nom du fichier CSV d'export"
 
 #. module: account_export_csv
-#: code:addons/account_export_csv/wizard/account_export_csv.py:260
+#: code:addons/account_export_csv/wizard/account_export_csv.py:262
 #, python-format
 msgid "FULL RECONCILE"
 msgstr ""
@@ -214,13 +214,13 @@ msgid "If empty, use all journals, only used for journal entries"
 msgstr ""
 
 #. module: account_export_csv
-#: code:addons/account_export_csv/wizard/account_export_csv.py:270
+#: code:addons/account_export_csv/wizard/account_export_csv.py:272
 #, python-format
 msgid "JOURNAL"
 msgstr ""
 
 #. module: account_export_csv
-#: code:addons/account_export_csv/wizard/account_export_csv.py:253
+#: code:addons/account_export_csv/wizard/account_export_csv.py:255
 #, python-format
 msgid "JOURNAL CODE"
 msgstr ""
@@ -251,19 +251,19 @@ msgid "Last Updated on"
 msgstr ""
 
 #. module: account_export_csv
-#: code:addons/account_export_csv/wizard/account_export_csv.py:116
+#: code:addons/account_export_csv/wizard/account_export_csv.py:118
 #, python-format
 msgid "NAME"
 msgstr ""
 
 #. module: account_export_csv
-#: code:addons/account_export_csv/wizard/account_export_csv.py:255
+#: code:addons/account_export_csv/wizard/account_export_csv.py:257
 #, python-format
 msgid "PARTNER NAME"
 msgstr ""
 
 #. module: account_export_csv
-#: code:addons/account_export_csv/wizard/account_export_csv.py:256
+#: code:addons/account_export_csv/wizard/account_export_csv.py:258
 #, python-format
 msgid "REF"
 msgstr ""
@@ -274,13 +274,13 @@ msgid "Report"
 msgstr ""
 
 #. module: account_export_csv
-#: code:addons/account_export_csv/wizard/account_export_csv.py:271
+#: code:addons/account_export_csv/wizard/account_export_csv.py:273
 #, python-format
 msgid "TAX CODE"
 msgstr ""
 
 #. module: account_export_csv
-#: code:addons/account_export_csv/wizard/account_export_csv.py:272
+#: code:addons/account_export_csv/wizard/account_export_csv.py:274
 #, python-format
 msgid "TAX NAME"
 msgstr ""
