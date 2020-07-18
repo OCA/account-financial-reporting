@@ -156,7 +156,7 @@
                     <div class="act_as_cell" style="width: 12.01%;">Partner
                     </div>
                     <!--## ref - label-->
-                    <div class="act_as_cell" style="width: 22.9%;">Ref -
+                    <div class="act_as_cell" style="width: 16.9%;">Ref -
                         Label</div>
                     <t t-if="show_cost_center">
                         <!--## cost_center-->
@@ -170,13 +170,13 @@
                     <!--## matching_number-->
                     <div class="act_as_cell" style="width: 2.41%;">Rec.</div>
                     <!--## debit-->
-                    <div class="act_as_cell amount" style="width: 6.02%;">Debit</div>
+                    <div class="act_as_cell amount" style="width: 8.02%;">Debit</div>
                     <!--## credit-->
-                    <div class="act_as_cell amount" style="width: 6.02%;">Credit</div>
+                    <div class="act_as_cell amount" style="width: 8.02%;">Credit</div>
                     <!--## balance cumulated-->
                     <div
                         class="act_as_cell amount"
-                        style="width: 6.02%;"
+                        style="width: 8.02%;"
                     >Cumul. Bal.</div>
                     <t t-if="foreign_currency">
                         <!--## currency_name-->
@@ -732,14 +732,14 @@
                         /></div>
                     <div
                         class="act_as_cell right"
-                        style="width: 22.9%;"
+                        style="width: 16.9%;"
                     >Ending balance</div>
                 </t>
                 <t t-if='type == "partner_type"'>
                     <div class="act_as_cell first_column" style="width: 41.32%;" />
                     <div
                         class="act_as_cell right"
-                        style="width: 22.9%;"
+                        style="width: 16.9%;"
                     >Partner ending balance</div>
                 </t>
                 <t t-if="show_cost_center">
@@ -753,21 +753,21 @@
                 <!--## matching_number-->
                 <div class="act_as_cell" style="width: 2.41%;" />
                 <!--## debit-->
-                <div class="act_as_cell amount" style="width: 6.02%;">
+                <div class="act_as_cell amount" style="width: 8.02%;">
                     <span
                         t-esc="account_or_partner_object['fin_bal']['debit']"
                         t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                     />
                 </div>
                 <!--## credit-->
-                <div class="act_as_cell amount" style="width: 6.02%;">
+                <div class="act_as_cell amount" style="width: 8.02%;">
                     <span
                         t-esc="account_or_partner_object['fin_bal']['credit']"
                         t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                     />
                 </div>
                 <!--## balance cumulated-->
-                <div class="act_as_cell amount" style="width: 6.02%;">
+                <div class="act_as_cell amount" style="width: 8.02%;">
                     <span
                         t-esc="account_or_partner_object['fin_bal']['balance']"
                         t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
