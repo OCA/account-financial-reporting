@@ -444,7 +444,7 @@ msgid "Centralized"
 msgstr "Zusammengefasst"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger.py:1433
+#: code:addons/account_financial_report/report/general_ledger.py:1438
 #, python-format
 msgid "Centralized Entries"
 msgstr "Zusammengefasste Posten"
@@ -1700,8 +1700,8 @@ msgid "No limit"
 msgstr "Keine Einschränkung"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger.py:758
-#: code:addons/account_financial_report/report/general_ledger.py:1137
+#: code:addons/account_financial_report/report/general_ledger.py:763
+#: code:addons/account_financial_report/report/general_ledger.py:1142
 #: code:addons/account_financial_report/report/open_items.py:307
 #: code:addons/account_financial_report/report/open_items.py:556
 #, python-format
