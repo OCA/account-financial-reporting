@@ -13,6 +13,7 @@ setuptools.setup(
         'odoo11-addon-account_tax_balance',
         'odoo11-addon-customer_activity_statement',
         'odoo11-addon-customer_outstanding_statement',
+        'odoo11-addon-mis_builder_cash_flow',
     ],
     classifiers=[
         'Programming Language :: Python',
