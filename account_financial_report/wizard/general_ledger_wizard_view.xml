@@ -40,6 +40,11 @@
                                 <field name="show_analytic_tags" nolabel="1" class="oe_inline"/>
                                 <label for="show_analytic_tags" class="oe_inline"/>
                             </div>
+                            <label string=" " for="partner_ungrouped"/>
+                            <div>
+                                <field name="partner_ungrouped" nolabel="1" class="oe_inline"/>
+                                <label for="partner_ungrouped" class="oe_inline"/>
+                            </div>
                         </group>
                     </group>
                     <notebook>
