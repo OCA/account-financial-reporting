@@ -353,11 +353,11 @@ SELECT
     %s AS create_uid,
     NOW() AS create_date,
     rp.name,
-    SUM(rlo.amount_residual) AS amount_residual,
+    SUM(ROUND(rlo.amount_residual, 2)) AS amount_residual,
     SUM(
         CASE
             WHEN rlo.date_due >= date_range.date_current
-            THEN rlo.amount_residual
+            THEN ROUND(rlo.amount_residual, 2)
         END
     ) AS current,
     SUM(
@@ -365,7 +365,7 @@ SELECT
             WHEN
                 rlo.date_due >= date_range.date_less_30_days
                 AND rlo.date_due < date_range.date_current
-            THEN rlo.amount_residual
+            THEN ROUND(rlo.amount_residual, 2)
         END
     ) AS age_30_days,
     SUM(
@@ -373,7 +373,7 @@ SELECT
             WHEN
                 rlo.date_due >= date_range.date_less_60_days
                 AND rlo.date_due < date_range.date_less_30_days
-            THEN rlo.amount_residual
+            THEN ROUND(rlo.amount_residual, 2)
         END
     ) AS age_60_days,
     SUM(
@@ -381,7 +381,7 @@ SELECT
             WHEN
                 rlo.date_due >= date_range.date_less_90_days
                 AND rlo.date_due < date_range.date_less_60_days
-            THEN rlo.amount_residual
+            THEN ROUND(rlo.amount_residual, 2)
         END
     ) AS age_90_days,
     SUM(
@@ -389,13 +389,13 @@ SELECT
             WHEN
                 rlo.date_due >= date_range.date_less_120_days
                 AND rlo.date_due < date_range.date_less_90_days
-            THEN rlo.amount_residual
+            THEN ROUND(rlo.amount_residual, 2)
         END
     ) AS age_120_days,
     SUM(
         CASE
             WHEN rlo.date_due < date_range.date_less_120_days
-            THEN rlo.amount_residual
+            THEN ROUND(rlo.amount_residual, 2)
         END
     ) AS older
 FROM
@@ -567,13 +567,13 @@ WITH
         (
             SELECT
                 ra.id AS report_account_id,
-                SUM(rl.amount_residual) AS cumul_amount_residual,
-                SUM(rl.current) AS cumul_current,
-                SUM(rl.age_30_days) AS cumul_age_30_days,
-                SUM(rl.age_60_days) AS cumul_age_60_days,
-                SUM(rl.age_90_days) AS cumul_age_90_days,
-                SUM(rl.age_120_days) AS cumul_age_120_days,
-                SUM(rl.older) AS cumul_older
+                SUM(ROUND(rl.amount_residual, 2)) AS cumul_amount_residual,
+                SUM(ROUND(rl.current, 2)) AS cumul_current,
+                SUM(ROUND(rl.age_30_days, 2)) AS cumul_age_30_days,
+                SUM(ROUND(rl.age_60_days, 2)) AS cumul_age_60_days,
+                SUM(ROUND(rl.age_90_days, 2)) AS cumul_age_90_days,
+                SUM(ROUND(rl.age_120_days, 2)) AS cumul_age_120_days,
+                SUM(ROUND(rl.older, 2)) AS cumul_older
             FROM
                 report_aged_partner_balance_qweb_line rl
             INNER JOIN

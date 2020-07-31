@@ -390,25 +390,25 @@ class ReportJournalQweb(models.TransientModel):
                 at.name as tax_name,
                 at.description as tax_code,
                 (
-                    SELECT sum(base_debit)
+                    SELECT sum(round(base_debit, 2))
                     FROM report_journal_qweb_journal_tax_line jrqjtl2
                     WHERE jrqjtl2.report_id = %s
                     AND jrqjtl2.tax_id = %s
                 ) as base_debit,
                 (
-                    SELECT sum(base_credit)
+                    SELECT sum(round(base_credit, 2))
                     FROM report_journal_qweb_journal_tax_line jrqjtl2
                     WHERE jrqjtl2.report_id = %s
                     AND jrqjtl2.tax_id = %s
                 ) as base_credit,
                 (
-                    SELECT sum(tax_debit)
+                    SELECT sum(round(tax_debit, 2))
                     FROM report_journal_qweb_journal_tax_line jrqjtl2
                     WHERE jrqjtl2.report_id = %s
                     AND jrqjtl2.tax_id = %s
                 ) as tax_debit,
                 (
-                    SELECT sum(tax_credit)
+                    SELECT sum(round(tax_credit, 2))
                     FROM report_journal_qweb_journal_tax_line jrqjtl2
                     WHERE jrqjtl2.report_id = %s
                     AND jrqjtl2.tax_id = %s
@@ -496,7 +496,7 @@ class ReportJournalQweb(models.TransientModel):
                 at.name as tax_name,
                 at.description as tax_code,
                 (
-                    SELECT sum(debit)
+                    SELECT sum(round(debit, 2))
                     FROM report_journal_qweb_move_line jrqml2
                     WHERE jrqml2.report_journal_id = %s
                     AND (
@@ -512,7 +512,7 @@ class ReportJournalQweb(models.TransientModel):
                     ) > 0
                 ) as base_debit,
                 (
-                    SELECT sum(credit)
+                    SELECT sum(round(credit, 2))
                     FROM report_journal_qweb_move_line jrqml2
                     WHERE jrqml2.report_journal_id = %s
                     AND (
@@ -528,13 +528,13 @@ class ReportJournalQweb(models.TransientModel):
                     ) > 0
                 ) as base_credit,
                 (
-                    SELECT sum(debit)
+                    SELECT sum(round(debit, 2))
                     FROM report_journal_qweb_move_line jrqml2
                     WHERE jrqml2.report_journal_id = %s
                     AND jrqml2.tax_id = %s
                 ) as tax_debit,
                 (
-                    SELECT sum(credit)
+                    SELECT sum(round(credit, 2))
                     FROM report_journal_qweb_move_line jrqml2
                     WHERE jrqml2.report_journal_id = %s
                     AND jrqml2.tax_id = %s
@@ -577,12 +577,12 @@ class ReportJournalQweb(models.TransientModel):
                 report_journal_qweb_journal rjqj
             SET
                 debit = (
-                    SELECT sum(rjqml.debit)
+                    SELECT sum(round(rjqml.debit, 2))
                     FROM report_journal_qweb_move_line rjqml
                     WHERE rjqml.report_journal_id = rjqj.id
                 ),
                 credit = (
-                    SELECT sum(rjqml.credit)
+                    SELECT sum(round(rjqml.credit, 2))
                     FROM report_journal_qweb_move_line rjqml
                     WHERE rjqml.report_journal_id = rjqj.id
                 )

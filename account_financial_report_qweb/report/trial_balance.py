@@ -301,15 +301,15 @@ SELECT
     acc.group_id,
     acc.code,
     acc.name,
-    coalesce(rag.initial_balance, 0) AS initial_balance,
-    coalesce(rag.final_debit - rag.initial_debit, 0) AS debit,
-    coalesce(rag.final_credit - rag.initial_credit, 0) AS credit,
-    coalesce(rag.final_balance - rag.initial_balance, 0) AS period_balance,
-    coalesce(rag.final_balance, 0) AS final_balance,
+    round(coalesce(rag.initial_balance, 0), 2) AS initial_balance,
+    round(coalesce(rag.final_debit - rag.initial_debit, 0), 2) AS debit,
+    round(coalesce(rag.final_credit - rag.initial_credit, 0), 2) AS credit,
+    round(coalesce(rag.final_balance - rag.initial_balance, 0), 2) AS period_balance,
+    round(coalesce(rag.final_balance, 0), 2) AS final_balance,
     rag.currency_id AS currency_id,
-    coalesce(rag.initial_balance_foreign_currency, 0)
+    round(coalesce(rag.initial_balance_foreign_currency, 0), 2)
         AS initial_balance_foreign_currency,
-    coalesce(rag.final_balance_foreign_currency, 0)
+    round(coalesce(rag.final_balance_foreign_currency, 0), 2)
         AS final_balance_foreign_currency
 FROM
     account_account acc
@@ -351,13 +351,15 @@ SELECT
     NOW() AS create_date,
     rpg.partner_id,
     rpg.name,
-    rpg.initial_balance AS initial_balance,
-    rpg.initial_balance_foreign_currency AS initial_balance_foreign_currency,
-    rpg.final_debit - rpg.initial_debit AS debit,
-    rpg.final_credit - rpg.initial_credit AS credit,
-    rpg.final_balance - rpg.initial_balance AS period_balance,
-    rpg.final_balance AS final_balance,
-    rpg.final_balance_foreign_currency AS final_balance_foreign_currency
+    round(rpg.initial_balance, 2) AS initial_balance,
+    round(rpg.initial_balance_foreign_currency, 2)
+        AS initial_balance_foreign_currency,
+    round(rpg.final_debit - rpg.initial_debit, 2) AS debit,
+    round(rpg.final_credit - rpg.initial_credit, 2) AS credit,
+    round(rpg.final_balance - rpg.initial_balance, 2) AS period_balance,
+    round(rpg.final_balance, 2) AS final_balance,
+    round(rpg.final_balance_foreign_currency, 2)
+        AS final_balance_foreign_currency
 FROM
     report_general_ledger_qweb_partner rpg
 INNER JOIN
@@ -431,13 +433,15 @@ WITH computed AS (WITH RECURSIVE cte AS (
     WHERE p.report_id = %s
 )
 SELECT account_group_id, code,
-    sum(initial_balance) AS initial_balance,
-    sum(initial_balance_foreign_currency) AS initial_balance_foreign_currency,
-    sum(debit) AS debit,
-    sum(credit) AS credit,
-    sum(debit) - sum(credit) AS period_balance,
-    sum(final_balance) AS final_balance,
-    sum(final_balance_foreign_currency) AS final_balance_foreign_currency
+    sum(round(initial_balance, 2)) AS initial_balance,
+    sum(round(initial_balance_foreign_currency, 2))
+        AS initial_balance_foreign_currency,
+    sum(round(debit, 2)) AS debit,
+    sum(round(credit, 2)) AS credit,
+    sum(round(debit, 2)) - sum(round(credit, 2)) AS period_balance,
+    sum(round(final_balance, 2)) AS final_balance,
+    sum(round(final_balance_foreign_currency, 2))
+        AS final_balance_foreign_currency
 FROM   cte
 GROUP BY cte.account_group_id, cte.code
 ORDER BY account_group_id
@@ -511,14 +515,16 @@ WHERE report_trial_balance_qweb_account.account_group_id =
 WITH RECURSIVE accgroup AS
 (SELECT
     accgroup.id,
-    sum(coalesce(ra.initial_balance, 0)) as initial_balance,
-    sum(coalesce(ra.initial_balance_foreign_currency, 0))
+    sum(round(coalesce(ra.initial_balance, 0), 2)) as initial_balance,
+    sum(round(coalesce(ra.initial_balance_foreign_currency, 0), 2))
         as initial_balance_foreign_currency,
-    sum(coalesce(ra.debit, 0)) as debit,
-    sum(coalesce(ra.credit, 0)) as credit,
-    sum(coalesce(ra.debit, 0)) - sum(coalesce(ra.credit, 0)) as period_balance,
-    sum(coalesce(ra.final_balance, 0)) as final_balance,
-    sum(coalesce(ra.final_balance_foreign_currency, 0))
+    sum(round(coalesce(ra.debit, 0), 2)) as debit,
+    sum(round(coalesce(ra.credit, 0), 2)) as credit,
+    sum(round(coalesce(ra.debit, 0), 2)) -
+        sum(round(coalesce(ra.credit, 0), 2))
+        as period_balance,
+    sum(round(coalesce(ra.final_balance, 0), 2)) as final_balance,
+    sum(round(coalesce(ra.final_balance_foreign_currency, 0), 2))
         as final_balance_foreign_currency
  FROM
     account_group accgroup

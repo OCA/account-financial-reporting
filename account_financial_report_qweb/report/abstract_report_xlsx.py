@@ -2,6 +2,7 @@
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+from decimal import Decimal
 
 from odoo.addons.report_xlsx.report.report_xlsx import ReportXlsx
 
@@ -32,6 +33,22 @@ class AbstractReportXslx(ReportXlsx):
         self.format_header_amount = None
         self.format_amount = None
         self.format_percent_bold_italic = None
+        self.nb_decimals = None
+
+    def _number_as_decimal(self, value, decimal_places=None):
+        """convert a number to a Decimal, rounded at the specified decimal place.
+
+        If decimal place is omitted, use the precision of the currency of the
+        company.
+        """
+
+        if decimal_places is None:
+            if self.nb_decimals is None:
+                self.nb_decimals = (
+                    self.env.user.company_id.currency_id.decimal_places
+                )
+            decimal_places = self.nb_decimals
+        return Decimal('%.*f' % (decimal_places, float(value)))
 
     def get_workbook_options(self):
         return {'constant_memory': True}
@@ -221,13 +238,19 @@ class AbstractReportXslx(ReportXlsx):
                 else:
                     cell_format = self.format_amount
                 self.sheet.write_number(
-                    self.row_pos, col_pos, float(value), cell_format
+                    self.row_pos, col_pos,
+                    self._number_as_decimal(value),
+                    cell_format
                 )
             elif cell_type == 'amount_currency':
                 if line_object.currency_id:
                     format_amt = self._get_currency_amt_format(line_object)
                     self.sheet.write_number(
-                        self.row_pos, col_pos, float(value), format_amt)
+                        self.row_pos, col_pos,
+                        self._number_as_decimal(
+                            value,
+                            line_object.currency_id.decimal_places),
+                        format_amt)
             elif cell_type == 'many2one':
                 self.sheet.write_string(
                     self.row_pos, col_pos, value.name or '', self.format_right)
@@ -249,7 +272,9 @@ class AbstractReportXslx(ReportXlsx):
                     self.sheet.write_string(self.row_pos, col_pos, value or '')
                 elif cell_type == 'amount':
                     self.sheet.write_number(
-                        self.row_pos, col_pos, float(value), self.format_amount
+                        self.row_pos, col_pos,
+                        self._number_as_decimal(value),
+                        self.format_amount
                     )
                 elif cell_type == 'amount_currency':
                     if my_object.currency_id:
@@ -257,7 +282,7 @@ class AbstractReportXslx(ReportXlsx):
                             my_object)
                         self.sheet.write_number(
                             self.row_pos, col_pos,
-                            float(value), format_amt
+                            self._number_as_decimal(value), format_amt
                         )
             elif column.get('field_currency_balance'):
                 value = getattr(my_object, column['field_currency_balance'])
@@ -295,7 +320,7 @@ class AbstractReportXslx(ReportXlsx):
                                             self.format_header_right)
                 elif cell_type == 'amount':
                     self.sheet.write_number(
-                        self.row_pos, col_pos, float(value),
+                        self.row_pos, col_pos, self._number_as_decimal(value),
                         self.format_header_amount
                     )
                 elif cell_type == 'amount_currency':
@@ -304,7 +329,10 @@ class AbstractReportXslx(ReportXlsx):
                             my_object)
                         self.sheet.write_number(
                             self.row_pos, col_pos,
-                            float(value), format_amt
+                            self._number_as_decimal(
+                                value,
+                                my_object.currency_id.decimal_places),
+                            format_amt
                         )
             elif column.get('field_currency_balance'):
                 value = getattr(my_object, column['field_currency_balance'])

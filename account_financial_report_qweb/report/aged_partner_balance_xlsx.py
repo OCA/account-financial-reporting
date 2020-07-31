@@ -254,7 +254,7 @@ class AgedPartnerBalanceXslx(abstract_report_xlsx.AbstractReportXslx):
                     if amount_is_percent:
                         number /= 100
                     self.sheet.write_number(self.row_pos, col_pos,
-                                            number,
+                                            self._number_as_decimal(number),
                                             amount_format)
             else:
                 self.sheet.write_string(self.row_pos, col_pos, '',

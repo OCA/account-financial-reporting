@@ -380,7 +380,7 @@ FROM
                 SUM(
                     CASE
                         WHEN ml_past.id IS NOT NULL
-                        THEN pr.amount
+                        THEN ROUND(pr.amount, 2)
                         ELSE NULL
                     END
                 ) AS partial_amount,
@@ -388,7 +388,7 @@ FROM
                 SUM(
                     CASE
                         WHEN ml_past.id IS NOT NULL
-                        THEN pr.amount_currency
+                        THEN ROUND(pr.amount_currency, 2)
                         ELSE NULL
                     END
                 ) AS partial_amount_currency,
@@ -431,7 +431,8 @@ FROM
                     AND ml_past.date <= %s
         """
         sub_query += """
-            LEFT JOIN account_full_reconcile afr ON afr.id = ml.full_reconcile_id
+            LEFT JOIN account_full_reconcile afr
+                ON afr.id = ml.full_reconcile_id
             WHERE
                 ra.report_id = %s
             AND ml.full_reconcile_id IS NULL OR afr.create_date >= %s
@@ -471,22 +472,26 @@ WITH
             SELECT
                 id,
                 CASE
-                    WHEN SUM(partial_amount) > 0
+                    WHEN SUM(ROUND(partial_amount, 2)) > 0
                     THEN
                         CASE
                             WHEN balance > 0
-                            THEN balance - SUM(partial_amount)
-                            ELSE balance + SUM(partial_amount)
+                            THEN balance - SUM(ROUND(partial_amount, 2))
+                            ELSE balance + SUM(ROUND(partial_amount, 2))
                         END
                     ELSE balance
                 END AS amount_residual,
                 CASE
-                    WHEN SUM(partial_amount_currency) > 0
+                    WHEN SUM(ROUND(partial_amount_currency, 2)) > 0
                     THEN
                         CASE
                             WHEN amount_currency > 0
-                            THEN amount_currency - SUM(partial_amount_currency)
-                            ELSE amount_currency + SUM(partial_amount_currency)
+                            THEN amount_currency - SUM(
+                                 ROUND(partial_amount_currency, 2)
+                            )
+                            ELSE amount_currency + SUM(
+                                 ROUND(partial_amount_currency, 2)
+                            )
                         END
                     ELSE amount_currency
                 END AS amount_residual_currency,
@@ -653,7 +658,7 @@ SET
     final_amount_residual =
         (
             SELECT
-                SUM(rml.amount_residual) AS final_amount_residual
+                SUM(ROUND(rml.amount_residual, 2)) AS final_amount_residual
             FROM
                 report_open_items_qweb_move_line rml
             WHERE
@@ -671,7 +676,7 @@ SET
     final_amount_total_due =
         (
             SELECT
-                SUM(rml.amount_total_due) AS final_amount_total_due
+                SUM(ROUND(rml.amount_total_due, 2)) AS final_amount_total_due
             FROM
                 report_open_items_qweb_move_line rml
             WHERE
@@ -723,7 +728,7 @@ SET
     final_amount_residual_currency =
         (
             SELECT
-                SUM(rml.amount_residual_currency)
+                SUM(ROUND(rml.amount_residual_currency, 2))
                     AS final_amount_residual_currency
             FROM
                 report_open_items_qweb_move_line rml
@@ -742,7 +747,7 @@ SET
     final_amount_total_due_currency =
         (
             SELECT
-                SUM(rml.amount_total_due_currency)
+                SUM(ROUND(rml.amount_total_due_currency, 2))
                     AS final_amount_total_due_currency
             FROM
                 report_open_items_qweb_move_line rml
@@ -762,7 +767,8 @@ SET
     final_amount_residual =
         (
             SELECT
-                SUM(rp.final_amount_residual) AS final_amount_residual
+                SUM(ROUND(rp.final_amount_residual, 2))
+                    AS final_amount_residual
             FROM
                 report_open_items_qweb_partner rp
             WHERE
@@ -782,7 +788,7 @@ SET
     final_amount_residual_currency =
         (
             SELECT
-                SUM(rp.final_amount_residual_currency)
+                SUM(ROUND(rp.final_amount_residual_currency, 2))
                     AS final_amount_residual_currency
             FROM
                 report_open_items_qweb_partner rp
@@ -803,7 +809,8 @@ SET
     final_amount_total_due =
         (
             SELECT
-                SUM(rp.final_amount_total_due) AS final_amount_total_due
+                SUM(ROUND(rp.final_amount_total_due, 2))
+                    AS final_amount_total_due
             FROM
                 report_open_items_qweb_partner rp
             WHERE
@@ -823,7 +830,7 @@ SET
     final_amount_total_due_currency =
         (
             SELECT
-                SUM(rp.final_amount_total_due_currency)
+                SUM(ROUND(rp.final_amount_total_due_currency, 2))
                     AS final_amount_total_due_currency
             FROM
                 report_open_items_qweb_partner rp

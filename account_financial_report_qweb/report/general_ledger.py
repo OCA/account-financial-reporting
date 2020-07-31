@@ -293,13 +293,13 @@ class GeneralLedgerReportCompute(models.TransientModel):
         sub_subquery_sum_amounts = """
             SELECT
                 a.id AS account_id,
-                SUM(ml.debit) AS debit,
-                SUM(ml.credit) AS credit,
-                SUM(ml.balance) AS balance,
+                SUM(ROUND(ml.debit, 2)) AS debit,
+                SUM(ROUND(ml.credit,2)) AS credit,
+                SUM(ROUND(ml.balance,2)) AS balance,
                 c.id AS currency_id,
                 CASE
                     WHEN c.id IS NOT NULL
-                    THEN SUM(ml.amount_currency)
+                    THEN SUM(ROUND(ml.amount_currency, 2))
                     ELSE NULL
                 END AS balance_currency
             FROM
@@ -362,11 +362,11 @@ class GeneralLedgerReportCompute(models.TransientModel):
         subquery_sum_amounts = """
             SELECT
                 sub.account_id AS account_id,
-                SUM(COALESCE(sub.debit, 0.0)) AS debit,
-                SUM(COALESCE(sub.credit, 0.0)) AS credit,
-                SUM(COALESCE(sub.balance, 0.0)) AS balance,
+                SUM(ROUND(COALESCE(sub.debit, 0.0), 2)) AS debit,
+                SUM(ROUND(COALESCE(sub.credit, 0.0), 2)) AS credit,
+                SUM(ROUND(COALESCE(sub.balance, 0.0), 2)) AS balance,
                 MAX(sub.currency_id) AS currency_id,
-                SUM(COALESCE(sub.balance_currency, 0.0)) AS balance_currency
+                SUM(ROUND(COALESCE(sub.balance_currency, 0.0), 2)) AS balance_currency
             FROM
             (
         """
@@ -626,13 +626,13 @@ AND
             SELECT
                 ap.account_id AS account_id,
                 ap.partner_id AS partner_id,
-                SUM(ml.debit) AS debit,
-                SUM(ml.credit) AS credit,
-                SUM(ml.balance) AS balance,
+                SUM(ROUND(ml.debit,2)) AS debit,
+                SUM(ROUND(ml.credit,2)) AS credit,
+                SUM(ROUND(ml.balance,2)) AS balance,
                 c.id as currency_id,
                 CASE
                     WHEN c.id IS NOT NULL
-                    THEN SUM(ml.amount_currency)
+                    THEN SUM(ROUND(ml.amount_currency,2))
                     ELSE NULL
                 END AS balance_currency
             FROM
@@ -702,11 +702,12 @@ AND
             SELECT
                 sub.account_id AS account_id,
                 sub.partner_id AS partner_id,
-                SUM(COALESCE(sub.debit, 0.0)) AS debit,
-                SUM(COALESCE(sub.credit, 0.0)) AS credit,
-                SUM(COALESCE(sub.balance, 0.0)) AS balance,
+                SUM(ROUND(COALESCE(sub.debit, 0.0), 2)) AS debit,
+                SUM(ROUND(COALESCE(sub.credit, 0.0), 2)) AS credit,
+                SUM(ROUND(COALESCE(sub.balance, 0.0), 2)) AS balance,
                 MAX(sub.currency_id) AS currency_id,
-                SUM(COALESCE(sub.balance_currency, 0.0)) AS balance_currency
+                SUM(ROUND(COALESCE(sub.balance_currency, 0.0), 2))
+                    AS balance_currency
             FROM
             (
         """
@@ -1146,7 +1147,7 @@ SELECT
         if is_account_line:
             query_inject_move_line += """
     ra.initial_balance + (
-        SUM(ml.balance)
+        SUM(ROUND(ml.balance, 2))
         OVER (PARTITION BY a.code
               ORDER BY a.code, ml.date, ml.id)
     ) AS cumul_balance,
@@ -1154,7 +1155,7 @@ SELECT
         elif is_partner_line and not only_empty_partner_line:
             query_inject_move_line += """
     rp.initial_balance + (
-        SUM(ml.balance)
+        SUM(ROUND(ml.balance, 2))
         OVER (PARTITION BY a.code, p.name
               ORDER BY a.code, p.name, ml.date, ml.id)
     ) AS cumul_balance,
@@ -1162,7 +1163,7 @@ SELECT
         elif is_partner_line and only_empty_partner_line:
             query_inject_move_line += """
     rp.initial_balance + (
-        SUM(ml.balance)
+        SUM(ROUND(ml.balance, 2))
         OVER (PARTITION BY a.code
               ORDER BY a.code, ml.date, ml.id)
     ) AS cumul_balance,
@@ -1366,9 +1367,9 @@ WITH
                     DATE_TRUNC('month', ml.date) + interval '1 month'
                                                  - interval '1 day'
                 )::date AS date,
-                SUM(ml.debit) AS debit,
-                SUM(ml.credit) AS credit,
-                SUM(ml.balance) AS balance,
+                SUM(ROUND(ml.debit, 2)) AS debit,
+                SUM(ROUND(ml.credit, 2)) AS credit,
+                SUM(ROUND(ml.balance, 2)) AS balance,
                 ml.currency_id AS currency_id,
                 ml.journal_id as journal_id
             FROM
@@ -1435,7 +1436,7 @@ SELECT
     ml.debit AS debit,
     ml.credit AS credit,
     ra.initial_balance + (
-        SUM(ml.balance)
+        SUM(ROUND(ml.balance, 2))
         OVER (PARTITION BY a.code ORDER BY ml.date)
     ) AS cumul_balance
 FROM
@@ -1611,7 +1612,7 @@ WITH move_lines_on_tags AS
             query_select_previous_fy_unaffected_earnings += q_analytic_tags
 
         query_select_previous_fy_unaffected_earnings += """
-            SELECT  sum(ml.balance) as balance
+            SELECT  sum(ROUND(ml.balance, 2)) as balance
             FROM account_move_line as ml
             INNER JOIN account_move as am
             ON am.id = ml.move_id
@@ -1665,9 +1666,9 @@ WITH move_lines_on_tags AS
             query_select_period_unaffected_earnings += q_analytic_tags
         query_select_period_unaffected_earnings += """
             SELECT
-                sum(ml.debit) as sum_debit,
-                sum(ml.credit) as sum_credit,
-                sum(ml.balance) as balance
+                sum(ROUND(ml.debit, 2)) as sum_debit,
+                sum(ROUND(ml.credit, 2)) as sum_credit,
+                sum(ROUND(ml.balance, 2)) as balance
                 FROM account_move_line as ml
                 INNER JOIN account_move as am
                 ON am.id = ml.move_id

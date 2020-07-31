@@ -180,7 +180,8 @@ class TrialBalanceXslx(abstract_report_xlsx.AbstractReportXslx):
                 self.sheet.write_string(self.row_pos, col_pos, value or '',
                                         self.format_header_left)
             elif cell_type == 'amount':
-                self.sheet.write_number(self.row_pos, col_pos, float(value),
+                self.sheet.write_number(self.row_pos, col_pos,
+                                        self._number_as_decimal(value),
                                         self.format_header_amount)
             elif cell_type == 'many2one':
                 self.sheet.write_string(
@@ -188,7 +189,8 @@ class TrialBalanceXslx(abstract_report_xlsx.AbstractReportXslx):
                     self.format_header_right)
             elif cell_type == 'amount_currency' and account.currency_id:
                 self.sheet.write_number(
-                    self.row_pos, col_pos, float(value),
+                    self.row_pos, col_pos, self._number_as_decimal(
+                        value, account.currency_id.decimal_places),
                     format_amt)
             else:
                 self.sheet.write_string(
