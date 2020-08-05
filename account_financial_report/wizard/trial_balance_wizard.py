@@ -288,6 +288,7 @@ class TrialBalanceReportWizard(models.TransientModel):
             "hide_parent_hierarchy_level": self.hide_parent_hierarchy_level,
             "show_partner_details": self.show_partner_details,
             "unaffected_earnings_account": self.unaffected_earnings_account.id,
+            "account_financial_report_lang": self.env.lang,
         }
 
     def _export(self, report_type):

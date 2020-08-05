@@ -127,6 +127,7 @@ class JournalLedgerReportWizard(models.TransientModel):
             "sort_option": self.sort_option,
             "group_option": self.group_option,
             "with_account_name": self.with_account_name,
+            "account_financial_report_lang": self.env.lang,
         }
 
     def _export(self, report_type):

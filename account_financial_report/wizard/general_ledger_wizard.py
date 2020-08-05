@@ -310,6 +310,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
             "centralize": self.centralize,
             "fy_start_date": self.fy_start_date,
             "unaffected_earnings_account": self.unaffected_earnings_account.id,
+            "account_financial_report_lang": self.env.lang,
         }
 
     def _export(self, report_type):
