@@ -159,6 +159,7 @@ class AgedPartnerBalanceWizard(models.TransientModel):
             "account_ids": self.account_ids.ids,
             "partner_ids": self.partner_ids.ids,
             "show_move_line_details": self.show_move_line_details,
+            "account_financial_report_lang": self.env.lang,
         }
 
     def _export(self, report_type):
