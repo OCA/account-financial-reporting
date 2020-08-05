@@ -449,7 +449,7 @@ msgid "Centralized"
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger.py:1438
+#: code:addons/account_financial_report/report/general_ledger.py:1451
 #, python-format
 msgid "Centralized Entries"
 msgstr ""
@@ -1338,6 +1338,12 @@ msgid ""
 msgstr ""
 
 #. module: account_financial_report
+#: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__partner_ungrouped
+#: model:ir.model.fields,help:account_financial_report.field_report_general_ledger__partner_ungrouped
+msgid "If set moves are not grouped by partner in any case"
+msgstr ""
+
+#. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
 msgid ""
 "Initial\n"
@@ -1698,8 +1704,8 @@ msgid "No limit"
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger.py:763
-#: code:addons/account_financial_report/report/general_ledger.py:1142
+#: code:addons/account_financial_report/report/general_ledger.py:776
+#: code:addons/account_financial_report/report/general_ledger.py:1155
 #: code:addons/account_financial_report/report/open_items.py:307
 #: code:addons/account_financial_report/report/open_items.py:556
 #, python-format
@@ -1867,6 +1873,12 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_ending_cumul
 #, python-format
 msgid "Partner ending balance"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__partner_ungrouped
+#: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger__partner_ungrouped
+msgid "Partner ungrouped"
 msgstr ""
 
 #. module: account_financial_report
@@ -2269,7 +2281,7 @@ msgid "Taxtags"
 msgstr ""
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/wizard/general_ledger_wizard.py:183
+#: code:addons/account_financial_report/wizard/general_ledger_wizard.py:187
 #, python-format
 msgid ""
 "The Company in the General Ledger Report Wizard and in Date Range must be "

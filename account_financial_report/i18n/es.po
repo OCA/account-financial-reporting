@@ -270,16 +270,6 @@ msgid "Aged Partner Balance XLSX"
 msgstr "Saldos de empresa por antigüedad XLSX"
 
 #. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_aged_open_invoices_webkit
-msgid "Aged open invoices"
-msgstr ""
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_account_aged_trial_balance_webkit
-msgid "Aged partner balanced"
-msgstr ""
-
-#. module: account_financial_report
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:64
 #, python-format
 msgid "All"
@@ -482,11 +472,6 @@ msgstr "Cuentas Hijas"
 #, python-format
 msgid "Code"
 msgstr "Código"
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_account_common_balance_report
-msgid "Common Balance Report"
-msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:165
@@ -1220,11 +1205,6 @@ msgid "General Ledger -"
 msgstr "Libro mayor"
 
 #. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_general_ledger_webkit
-msgid "General Ledger Report"
-msgstr ""
-
-#. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_general_ledger_report_wizard
 msgid "General Ledger Report Wizard"
 msgstr "Asistente de informe de Libro Mayor"
@@ -1474,11 +1454,6 @@ msgstr "Libro diario XLSX"
 #, python-format
 msgid "Journals"
 msgstr "Diarios"
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_print_journal_webkit
-msgid "Journals Report"
-msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_move_line__label
@@ -1773,11 +1748,6 @@ msgid "Only Posted Moves"
 msgstr "Solo Asientos Posteados"
 
 #. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_open_invoices_webkit
-msgid "Open Invoices Report"
-msgstr ""
-
-#. module: account_financial_report
 #: code:addons/account_financial_report/report/open_items_xlsx.py:13
 #: model:ir.actions.act_window,name:account_financial_report.action_open_items_wizard
 #: model:ir.actions.client,name:account_financial_report.action_report_open_items
@@ -1869,11 +1839,6 @@ msgid ""
 msgstr "Saldo Acumulado de Empresa"
 
 #. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_partner_balance_webkit
-msgid "Partner Balance Report"
-msgstr ""
-
-#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_move_line__partner_id
 msgid "Partner ID"
 msgstr "Cliente"
@@ -1883,11 +1848,6 @@ msgstr "Cliente"
 #, python-format
 msgid "Partner Initial balance"
 msgstr "Saldo Inicial de empresa"
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_partners_ledger_webkit
-msgid "Partner Ledger Report"
-msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:225
@@ -2372,11 +2332,6 @@ msgid "Trial Balance -"
 msgstr "Balance de Sumas y Saldos -"
 
 #. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_trial_balance_webkit
-msgid "Trial Balance Report"
-msgstr ""
-
-#. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_trial_balance_report_wizard
 msgid "Trial Balance Report Wizard"
 msgstr "Asistente del informe de balance de sumas y saldos"
@@ -2480,11 +2435,6 @@ msgid "Yes"
 msgstr "Si"
 
 #. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_journal_report_wizard
-msgid "journal.report.wizard"
-msgstr ""
-
-#. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.journal_ledger_wizard
@@ -2555,31 +2505,6 @@ msgid "report_aged_partner_balance_partner"
 msgstr "informe_saldo_empresa_por_antigüedad"
 
 #. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_report_aged_partner_balance_qweb
-msgid "report_aged_partner_balance_qweb"
-msgstr ""
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_report_aged_partner_balance_qweb_account
-msgid "report_aged_partner_balance_qweb_account"
-msgstr ""
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_report_aged_partner_balance_qweb_line
-msgid "report_aged_partner_balance_qweb_line"
-msgstr ""
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_report_aged_partner_balance_qweb_move_line
-msgid "report_aged_partner_balance_qweb_move_line"
-msgstr ""
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_report_aged_partner_balance_qweb_partner
-msgid "report_aged_partner_balance_qweb_partner"
-msgstr ""
-
-#. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_general_ledger
 msgid "report_general_ledger"
 msgstr "informe_libro_mayor"
@@ -2598,26 +2523,6 @@ msgstr "informe_linea_asiento_libro_mayor"
 #: model:ir.model,name:account_financial_report.model_report_general_ledger_partner
 msgid "report_general_ledger_partner"
 msgstr "informe_libro_mayor_empresa"
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_report_general_ledger_qweb
-msgid "report_general_ledger_qweb"
-msgstr ""
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_report_general_ledger_qweb_account
-msgid "report_general_ledger_qweb_account"
-msgstr ""
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_report_general_ledger_qweb_move_line
-msgid "report_general_ledger_qweb_move_line"
-msgstr ""
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_report_general_ledger_qweb_partner
-msgid "report_general_ledger_qweb_partner"
-msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_journal_ledger
@@ -2650,36 +2555,6 @@ msgid "report_journal_ledger_report_tax_line"
 msgstr "informe_linea_impuesto_libro_diario"
 
 #. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_report_journal_qweb
-msgid "report_journal_qweb"
-msgstr ""
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_report_journal_qweb_journal
-msgid "report_journal_qweb_journal"
-msgstr ""
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_report_journal_qweb_journal_tax_line
-msgid "report_journal_qweb_journal_tax_line"
-msgstr ""
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_report_journal_qweb_move
-msgid "report_journal_qweb_move"
-msgstr ""
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_report_journal_qweb_move_line
-msgid "report_journal_qweb_move_line"
-msgstr ""
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_report_journal_qweb_report_tax_line
-msgid "report_journal_qweb_report_tax_line"
-msgstr ""
-
-#. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_open_items
 msgid "report_open_items"
 msgstr "informe_items_abiertos"
@@ -2700,31 +2575,6 @@ msgid "report_open_items_partner"
 msgstr "informe_elementos_abiertos_empresa"
 
 #. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_report_open_items_qweb
-msgid "report_open_items_qweb"
-msgstr ""
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_report_open_items_qweb_account
-msgid "report_open_items_qweb_account"
-msgstr ""
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_report_open_items_qweb_move_line
-msgid "report_open_items_qweb_move_line"
-msgstr ""
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_report_open_items_qweb_partner
-msgid "report_open_items_qweb_partner"
-msgstr ""
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_report_qweb_abstract
-msgid "report_qweb_abstract"
-msgstr ""
-
-#. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_trial_balance
 msgid "report_trial_balance"
 msgstr "informe_balance_de_sumas_y_saldos"
@@ -2738,21 +2588,6 @@ msgstr "informe_cuenta_balance_sumas_y_saldos"
 #: model:ir.model,name:account_financial_report.model_report_trial_balance_partner
 msgid "report_trial_balance_partner"
 msgstr "informe_balance_sumas_y_saldos_empresa"
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_report_trial_balance_qweb
-msgid "report_trial_balance_qweb"
-msgstr ""
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_report_trial_balance_qweb_account
-msgid "report_trial_balance_qweb_account"
-msgstr ""
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_report_trial_balance_qweb_partner
-msgid "report_trial_balance_qweb_partner"
-msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_vat_report
