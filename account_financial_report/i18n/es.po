@@ -10,16 +10,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-18 22:19+0000\n"
-"PO-Revision-Date: 2020-05-18 07:19+0000\n"
-"Last-Translator: Enric Tobella <etobella@creublanca.es>\n"
+"POT-Creation-Date: 2020-07-30 23:14+0000\n"
+"PO-Revision-Date: 2020-07-31 01:30+0200\n"
+"Last-Translator: Carlos Dauden <carlos.dauden@tecnativa.com>\n"
 "Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10\n"
+"X-Generator: Poedit 2.3\n"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
@@ -134,10 +134,8 @@ msgstr "Tipo de Cuenta"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__account_type_ids
-#, fuzzy
-#| msgid "Account Type"
 msgid "Account Types"
-msgstr "Tipo de Cuenta"
+msgstr "Tipos de cuenta"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:109
@@ -270,6 +268,16 @@ msgstr "Asistente Calidad de la deuda de las empresas"
 #: model:ir.actions.report,name:account_financial_report.action_report_aged_partner_balance_xlsx
 msgid "Aged Partner Balance XLSX"
 msgstr "Saldos de empresa por antigüedad XLSX"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_aged_open_invoices_webkit
+msgid "Aged open invoices"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_account_aged_trial_balance_webkit
+msgid "Aged partner balanced"
+msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:64
@@ -438,7 +446,7 @@ msgid "Centralized"
 msgstr "Centralizado"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger.py:1438
+#: code:addons/account_financial_report/report/general_ledger.py:1451
 #, python-format
 msgid "Centralized Entries"
 msgstr "Centralizar las entradas"
@@ -474,6 +482,11 @@ msgstr "Cuentas Hijas"
 #, python-format
 msgid "Code"
 msgstr "Código"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_account_common_balance_report
+msgid "Common Balance Report"
+msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:165
@@ -1207,6 +1220,11 @@ msgid "General Ledger -"
 msgstr "Libro mayor"
 
 #. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_general_ledger_webkit
+msgid "General Ledger Report"
+msgstr ""
+
+#. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_general_ledger_report_wizard
 msgid "General Ledger Report Wizard"
 msgstr "Asistente de informe de Libro Mayor"
@@ -1335,6 +1353,14 @@ msgstr ""
 "webkit), solo importes centralizados por período."
 
 #. module: account_financial_report
+#: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__partner_ungrouped
+#: model:ir.model.fields,help:account_financial_report.field_report_general_ledger__partner_ungrouped
+msgid "If set moves are not grouped by partner in any case"
+msgstr ""
+"Si esta establecido los movimientos aparecerán agrupados por empresa en "
+"ningún caso"
+
+#. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
 msgid ""
 "Initial\n"
@@ -1448,6 +1474,11 @@ msgstr "Libro diario XLSX"
 #, python-format
 msgid "Journals"
 msgstr "Diarios"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_print_journal_webkit
+msgid "Journals Report"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_aged_partner_balance_move_line__label
@@ -1693,8 +1724,8 @@ msgid "No limit"
 msgstr "Sin límite"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger.py:763
-#: code:addons/account_financial_report/report/general_ledger.py:1142
+#: code:addons/account_financial_report/report/general_ledger.py:776
+#: code:addons/account_financial_report/report/general_ledger.py:1155
 #: code:addons/account_financial_report/report/open_items.py:307
 #: code:addons/account_financial_report/report/open_items.py:556
 #, python-format
@@ -1742,6 +1773,11 @@ msgid "Only Posted Moves"
 msgstr "Solo Asientos Posteados"
 
 #. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_open_invoices_webkit
+msgid "Open Invoices Report"
+msgstr ""
+
+#. module: account_financial_report
 #: code:addons/account_financial_report/report/open_items_xlsx.py:13
 #: model:ir.actions.act_window,name:account_financial_report.action_open_items_wizard
 #: model:ir.actions.client,name:account_financial_report.action_report_open_items
@@ -1787,10 +1823,8 @@ msgstr "Inicial"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
-#, fuzzy
-#| msgid "Options"
 msgid "Other options"
-msgstr "Opciones"
+msgstr "Otras opciones"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_account__parent_id
@@ -1835,6 +1869,11 @@ msgid ""
 msgstr "Saldo Acumulado de Empresa"
 
 #. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_partner_balance_webkit
+msgid "Partner Balance Report"
+msgstr ""
+
+#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_move_line__partner_id
 msgid "Partner ID"
 msgstr "Cliente"
@@ -1844,6 +1883,11 @@ msgstr "Cliente"
 #, python-format
 msgid "Partner Initial balance"
 msgstr "Saldo Inicial de empresa"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_partners_ledger_webkit
+msgid "Partner Ledger Report"
+msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:225
@@ -1859,6 +1903,12 @@ msgstr "Saldo Acumulado de Empresa"
 #, python-format
 msgid "Partner ending balance"
 msgstr "Saldo final de empresa"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__partner_ungrouped
+#: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger__partner_ungrouped
+msgid "Partner ungrouped"
+msgstr "No agrupar por empresa"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard__payable_accounts_only
@@ -2257,7 +2307,7 @@ msgid "Taxtags"
 msgstr "Etiquetas de impuestos"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/wizard/general_ledger_wizard.py:183
+#: code:addons/account_financial_report/wizard/general_ledger_wizard.py:187
 #, python-format
 msgid ""
 "The Company in the General Ledger Report Wizard and in Date Range must be "
@@ -2320,6 +2370,11 @@ msgstr "Balance de Sumas y Saldos"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_base
 msgid "Trial Balance -"
 msgstr "Balance de Sumas y Saldos -"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_trial_balance_webkit
+msgid "Trial Balance Report"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_trial_balance_report_wizard
@@ -2425,6 +2480,11 @@ msgid "Yes"
 msgstr "Si"
 
 #. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_journal_report_wizard
+msgid "journal.report.wizard"
+msgstr ""
+
+#. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.journal_ledger_wizard
@@ -2495,6 +2555,31 @@ msgid "report_aged_partner_balance_partner"
 msgstr "informe_saldo_empresa_por_antigüedad"
 
 #. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_aged_partner_balance_qweb
+msgid "report_aged_partner_balance_qweb"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_aged_partner_balance_qweb_account
+msgid "report_aged_partner_balance_qweb_account"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_aged_partner_balance_qweb_line
+msgid "report_aged_partner_balance_qweb_line"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_aged_partner_balance_qweb_move_line
+msgid "report_aged_partner_balance_qweb_move_line"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_aged_partner_balance_qweb_partner
+msgid "report_aged_partner_balance_qweb_partner"
+msgstr ""
+
+#. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_general_ledger
 msgid "report_general_ledger"
 msgstr "informe_libro_mayor"
@@ -2513,6 +2598,26 @@ msgstr "informe_linea_asiento_libro_mayor"
 #: model:ir.model,name:account_financial_report.model_report_general_ledger_partner
 msgid "report_general_ledger_partner"
 msgstr "informe_libro_mayor_empresa"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_general_ledger_qweb
+msgid "report_general_ledger_qweb"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_general_ledger_qweb_account
+msgid "report_general_ledger_qweb_account"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_general_ledger_qweb_move_line
+msgid "report_general_ledger_qweb_move_line"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_general_ledger_qweb_partner
+msgid "report_general_ledger_qweb_partner"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_journal_ledger
@@ -2545,6 +2650,36 @@ msgid "report_journal_ledger_report_tax_line"
 msgstr "informe_linea_impuesto_libro_diario"
 
 #. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_journal_qweb
+msgid "report_journal_qweb"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_journal_qweb_journal
+msgid "report_journal_qweb_journal"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_journal_qweb_journal_tax_line
+msgid "report_journal_qweb_journal_tax_line"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_journal_qweb_move
+msgid "report_journal_qweb_move"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_journal_qweb_move_line
+msgid "report_journal_qweb_move_line"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_journal_qweb_report_tax_line
+msgid "report_journal_qweb_report_tax_line"
+msgstr ""
+
+#. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_open_items
 msgid "report_open_items"
 msgstr "informe_items_abiertos"
@@ -2565,6 +2700,31 @@ msgid "report_open_items_partner"
 msgstr "informe_elementos_abiertos_empresa"
 
 #. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_open_items_qweb
+msgid "report_open_items_qweb"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_open_items_qweb_account
+msgid "report_open_items_qweb_account"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_open_items_qweb_move_line
+msgid "report_open_items_qweb_move_line"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_open_items_qweb_partner
+msgid "report_open_items_qweb_partner"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_qweb_abstract
+msgid "report_qweb_abstract"
+msgstr ""
+
+#. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_trial_balance
 msgid "report_trial_balance"
 msgstr "informe_balance_de_sumas_y_saldos"
@@ -2578,6 +2738,21 @@ msgstr "informe_cuenta_balance_sumas_y_saldos"
 #: model:ir.model,name:account_financial_report.model_report_trial_balance_partner
 msgid "report_trial_balance_partner"
 msgstr "informe_balance_sumas_y_saldos_empresa"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_trial_balance_qweb
+msgid "report_trial_balance_qweb"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_trial_balance_qweb_account
+msgid "report_trial_balance_qweb_account"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_trial_balance_qweb_partner
+msgid "report_trial_balance_qweb_partner"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_vat_report
@@ -2618,33 +2793,3 @@ msgstr "ancho: 38.92%;"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 8.11%;"
 msgstr "ancho: 8.11%;"
-
-#~ msgid "account.group"
-#~ msgstr "cuenta.grupo"
-
-#~ msgid "account_financial_report_abstract"
-#~ msgstr "'account_financial_report_abstract'"
-
-#~ msgid "vat.report.wizard"
-#~ msgstr "asistente.reporte.impuestos"
-
-#~ msgid "Aged Partner Balance - %s - %s"
-#~ msgstr "Balance vencido empresa - %s - %s"
-
-#~ msgid "General Ledger - %s - %s"
-#~ msgstr "Libro mayor - %s - %s"
-
-#~ msgid "Journal Ledger - %s - %s"
-#~ msgstr "Libro diario - %s - %s"
-
-#~ msgid "Open Items - %s - %s"
-#~ msgstr "Partidas abiertas - %s - %s"
-
-#~ msgid "Trial Balance - %s - %s"
-#~ msgstr "Balance de Sumas y Saldos - %s - %s"
-
-#~ msgid "VAT Report - %s - %s"
-#~ msgstr "Informe de impuestos - %s - %s"
-
-#~ msgid "Hide Account Balance At 0"
-#~ msgstr "Ocultar saldos con valor a 0"

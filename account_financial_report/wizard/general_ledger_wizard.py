@@ -91,6 +91,10 @@ class GeneralLedgerReportWizard(models.TransientModel):
              'will display initial and final balance in that currency.',
         default=lambda self: self._default_foreign_currency(),
     )
+    partner_ungrouped = fields.Boolean(
+        string='Partner ungrouped',
+        help='If set moves are not grouped by partner in any case'
+    )
 
     def _init_date_from(self):
         """set start date to begin of current year if fiscal year running"""
@@ -249,6 +253,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
             'filter_journal_ids': [(6, 0, self.account_journal_ids.ids)],
             'centralize': self.centralize,
             'fy_start_date': self.fy_start_date,
+            'partner_ungrouped': self.partner_ungrouped,
         }
 
     def _export(self, report_type):
