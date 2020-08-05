@@ -183,6 +183,7 @@ class OpenItemsReportWizard(models.TransientModel):
             "target_move": self.target_move,
             "account_ids": self.account_ids.ids,
             "partner_ids": self.partner_ids.ids or [],
+            "account_financial_report_lang": self.env.lang,
         }
 
     def _export(self, report_type):

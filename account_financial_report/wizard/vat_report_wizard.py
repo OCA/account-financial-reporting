@@ -113,6 +113,7 @@ class VATReportWizard(models.TransientModel):
             "based_on": self.based_on,
             "only_posted_moves": self.target_move == "posted",
             "tax_detail": self.tax_detail,
+            "account_financial_report_lang": self.env.lang,
         }
 
     def _export(self, report_type):

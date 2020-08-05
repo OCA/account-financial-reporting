@@ -1422,6 +1422,11 @@ msgid "Ref - Label"
 msgstr "Ref - Libell??"
 
 #. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_ir_actions_report
+msgid "Report Action"
+msgstr ""
+
+#. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 #: code:addons/account_financial_report/report/open_items_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
