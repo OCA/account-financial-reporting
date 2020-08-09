@@ -293,7 +293,6 @@ msgstr "Total"
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__account_internal_type
 #, fuzzy
-#| msgid "Line Type"
 msgid "Type"
 msgstr "Tipo de Linha"
 
