@@ -29,7 +29,7 @@ class VATReport(models.AbstractModel):
         domain = [
             ("company_id", "=", company_id),
             ("date", ">=", date_from),
-            ("date", "<", date_to),
+            ("date", "<=", date_to),
             ("tax_line_id", "!=", False),
             ("tax_exigible", "=", True),
         ]
