@@ -330,7 +330,6 @@ msgstr ""
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #, fuzzy, python-format
-#| msgid "Account"
 msgid "Analytic Account"
 msgstr "Conta"
 

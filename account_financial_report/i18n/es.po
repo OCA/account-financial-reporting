@@ -245,7 +245,6 @@ msgstr "Asistente de Estado de Antig??edad de Saldos"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_aged_partner_balance_xlsx
 #, fuzzy
-#| msgid "Aged Partner Balance XLSX"
 msgid "Aged Partner Balance XLSL Report"
 msgstr "Saldo vencidos de empresa XLSX"
 
@@ -326,7 +325,6 @@ msgstr "Total Act."
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #, fuzzy, python-format
-#| msgid "Filter Account"
 msgid "Analytic Account"
 msgstr "Filtro Cuenta"
 
@@ -806,7 +804,6 @@ msgstr "Filtro Cuentas"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
 #, fuzzy
-#| msgid "Filter analytic tags"
 msgid "Filter analytic accounts"
 msgstr "Filtrar por etiquetas anal??ticas"
 
@@ -908,7 +905,6 @@ msgstr "Asistente de informe de Libro Mayor"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_general_ledger_xlsx
 #, fuzzy
-#| msgid "General Ledger XLSX"
 msgid "General Ledger XLSL Report"
 msgstr "Libro mayor XLSX"
 
@@ -1008,9 +1004,6 @@ msgstr ""
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
 #, fuzzy
-#| msgid ""
-#| "Initial\n"
-#| "                        balance cur."
 msgid ""
 "Initial\n"
 "                    balance"
@@ -1078,7 +1071,6 @@ msgstr "Libro diario XLSX"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_journal_ledger_xlsx
 #, fuzzy
-#| msgid "Journal Ledger Report"
 msgid "Journal Ledger XLSX Report"
 msgstr "Informe Diario de contabilidad"
 
@@ -1276,7 +1268,6 @@ msgstr "Partidas abiertas XLSX"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_open_items_xlsx
 #, fuzzy
-#| msgid "Open Items XLSX"
 msgid "Open Items XLSX Report"
 msgstr "Partidas abiertas XLSX"
 
@@ -1433,7 +1424,6 @@ msgstr "Mostrar"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__show_cost_center
 #, fuzzy
-#| msgid "Show analytic tags"
 msgid "Show Analytic Account"
 msgstr "Mostrar etiquetas anal??ticas"
 
@@ -1659,7 +1649,6 @@ msgstr "Balance de Sumas y Saldos XLSX"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_trial_balance_xlsx
 #, fuzzy
-#| msgid "Trial Balance XLSX"
 msgid "Trial Balance XLSX Report"
 msgstr "Balance de Sumas y Saldos XLSX"
 
@@ -1728,14 +1717,12 @@ msgstr "Informe de Impuestos"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_vat_report
 #, fuzzy
-#| msgid "Vat Report"
 msgid "Vat Report Report"
 msgstr "Informe de Impuestos"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_vat_report_xlsx
 #, fuzzy
-#| msgid "VAT Report XLSX"
 msgid "Vat Report XLSX Report"
 msgstr "Informe de impuestos XLSX"
 
