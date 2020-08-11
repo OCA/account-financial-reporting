@@ -244,7 +244,6 @@ msgstr ""
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
 #, fuzzy
-#| msgid "Date"
 msgid "Due Date"
 msgstr "Data"
 
@@ -337,7 +336,6 @@ msgstr ""
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
 #, fuzzy
-#| msgid "Amount"
 msgid "Open Amount"
 msgstr "Valoare"
 
