@@ -72,7 +72,6 @@ msgstr "<span class=\"fa fa-print\"/>Tipărește"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_financial_report_abstract
 #, fuzzy
-#| msgid "VAT Report"
 msgid "Abstract Report"
 msgstr "Raport TVA"
 
@@ -124,7 +123,6 @@ msgstr "Grup conturi"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_move_line__account_id
 #, fuzzy
-#| msgid "Account"
 msgid "Account ID"
 msgstr "Cont"
 
@@ -249,7 +247,6 @@ msgstr ""
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:44
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:98
 #, fuzzy, python-format
-#| msgid "61 - 90 d."
 msgid "Age ≤ 90 d."
 msgstr "61 - 90 d."
 
@@ -468,7 +465,6 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_account__child_account_ids
 #, fuzzy
-#| msgid "Filter accounts"
 msgid "Child accounts"
 msgstr "Contrui filtrate"
 
@@ -519,7 +515,6 @@ msgstr "Companie"
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__compute_account_ids
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_account__compute_account_ids
 #, fuzzy
-#| msgid "Computed Accounts"
 msgid "Compute accounts"
 msgstr "Conturi calculate"
 
@@ -1801,7 +1796,6 @@ msgstr "Original"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
 #, fuzzy
-#| msgid "Options"
 msgid "Other options"
 msgstr "Opțiuni"
 
@@ -1850,7 +1844,6 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_move_line__partner_id
 #, fuzzy
-#| msgid "Partner"
 msgid "Partner ID"
 msgstr "Partenr"
 

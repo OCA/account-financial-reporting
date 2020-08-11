@@ -131,7 +131,6 @@ msgstr "Tip konta"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__account_type_ids
 #, fuzzy
-#| msgid "Account Type"
 msgid "Account Types"
 msgstr "Tip konta"
 

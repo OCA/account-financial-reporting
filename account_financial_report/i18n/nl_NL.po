@@ -118,7 +118,6 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_move_line__account_id
 #, fuzzy
-#| msgid "Account"
 msgid "Account ID"
 msgstr "Rekening"
 

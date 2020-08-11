@@ -114,7 +114,6 @@ msgstr "مجموعة الحساب"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_move_line__account_id
 #, fuzzy
-#| msgid "Account"
 msgid "Account ID"
 msgstr "الحساب"
 
@@ -132,7 +131,6 @@ msgstr "نوع الحساب"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__account_type_ids
 #, fuzzy
-#| msgid "Account Type"
 msgid "Account Types"
 msgstr "نوع الحساب"
 
@@ -197,7 +195,6 @@ msgstr "≤ 120 يوم."
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:50
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:105
 #, fuzzy, python-format
-#| msgid "Age â¤ 120 d."
 msgid "Age ≤ 120 d."
 msgstr "‫â¤ 120 يوم."
 
@@ -212,7 +209,6 @@ msgstr "المدة ≤ 30 يوم."
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:32
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:84
 #, fuzzy, python-format
-#| msgid "Age â¤ 30 d."
 msgid "Age ≤ 30 d."
 msgstr "‫â¤ 30 يوم."
 
@@ -227,7 +223,6 @@ msgstr "المدة ≤ 60 يوم."
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:38
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:91
 #, fuzzy, python-format
-#| msgid "Age â¤ 60 d."
 msgid "Age ≤ 60 d."
 msgstr "‫‫‫â¤ 60 يوم."
 
@@ -242,7 +237,6 @@ msgstr "المدة ≤ 90 يوم."
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:44
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:98
 #, fuzzy, python-format
-#| msgid "Age â¤ 90 d."
 msgid "Age ≤ 90 d."
 msgstr "‫‫‫â¤ 90 يوم."
 
@@ -459,7 +453,6 @@ msgstr "مجموعات فرعية"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_account__child_account_ids
 #, fuzzy
-#| msgid "Child Accounts"
 msgid "Child accounts"
 msgstr "حسابات فرعية"
 
@@ -509,7 +502,6 @@ msgstr "عملة المؤسسة"
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__compute_account_ids
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_account__compute_account_ids
 #, fuzzy
-#| msgid "Computed Accounts"
 msgid "Compute accounts"
 msgstr "حسابات محسوبة"
 
@@ -1792,7 +1784,6 @@ msgstr "الإجمالي"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
 #, fuzzy
-#| msgid "Options"
 msgid "Other options"
 msgstr "الخيارات"
 
@@ -1841,7 +1832,6 @@ msgstr "إجمالي الرصيد التراكمي"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_journal_ledger_move_line__partner_id
 #, fuzzy
-#| msgid "Partner"
 msgid "Partner ID"
 msgstr "الشريك"
 
