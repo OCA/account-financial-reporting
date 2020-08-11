@@ -992,19 +992,6 @@ msgstr ""
 "                        inicial moneda"
 
 #. module: account_financial_report
-#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
-#, fuzzy
-#| msgid ""
-#| "Initial\n"
-#| "                    balance"
-msgid ""
-"Initial\n"
-"                        balance cur."
-msgstr ""
-"Saldo\n"
-"                    inicial"
-
-#. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:283
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:28
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:55
@@ -1843,8 +1830,3 @@ msgstr "ancho: 8.11%;"
 
 #~ msgid "Filter Cost Center"
 #~ msgstr "Filtro Centro de Costos"
-
-#. module: account_financial_report
-#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
-msgid "width: 8.11%;"
-msgstr "ancho: 8.11%;"
