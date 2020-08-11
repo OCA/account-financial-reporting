@@ -20,6 +20,7 @@ class AgedPartnerBalanceWizard(models.TransientModel):
         string="Company",
     )
     date_at = fields.Date(required=True, default=fields.Date.context_today)
+    date_from = fields.Date(string="Date From")
     target_move = fields.Selection(
         [("posted", "All Posted Entries"), ("all", "All Entries")],
         string="Target Moves",
@@ -27,12 +28,53 @@ class AgedPartnerBalanceWizard(models.TransientModel):
         default="posted",
     )
     account_ids = fields.Many2many(
-        comodel_name="account.account", string="Filter accounts"
+        comodel_name="account.account",
+        string="Filter accounts",
+        domain=[("reconcile", "=", True)],
+        required=True,
     )
     receivable_accounts_only = fields.Boolean()
     payable_accounts_only = fields.Boolean()
     partner_ids = fields.Many2many(comodel_name="res.partner", string="Filter partners")
     show_move_line_details = fields.Boolean()
+
+    account_code_from = fields.Many2one(
+        comodel_name="account.account",
+        string="Account Code From",
+        help="Starting account in a range",
+    )
+    account_code_to = fields.Many2one(
+        comodel_name="account.account",
+        string="Account Code To",
+        help="Ending account in a range",
+    )
+
+    @api.onchange("account_code_from", "account_code_to")
+    def on_change_account_range(self):
+        if (
+            self.account_code_from
+            and self.account_code_from.code.isdigit()
+            and self.account_code_to
+            and self.account_code_to.code.isdigit()
+        ):
+            start_range = int(self.account_code_from.code)
+            end_range = int(self.account_code_to.code)
+            self.account_ids = self.env["account.account"].search(
+                [
+                    ("code", "in", [x for x in range(start_range, end_range + 1)]),
+                    ("reconcile", "=", True),
+                ]
+            )
+            if self.company_id:
+                self.account_ids = self.account_ids.filtered(
+                    lambda a: a.company_id == self.company_id
+                )
+        return {
+            "domain": {
+                "account_code_from": [("reconcile", "=", True)],
+                "account_code_to": [("reconcile", "=", True)],
+            }
+        }
 
     @api.onchange("company_id")
     def onchange_company_id(self):
@@ -56,6 +98,10 @@ class AgedPartnerBalanceWizard(models.TransientModel):
             res["domain"]["partner_ids"] += self._get_partner_ids_domain()
         return res
 
+    @api.onchange("account_ids")
+    def onchange_account_ids(self):
+        return {"domain": {"account_ids": [("reconcile", "=", True)]}}
+
     @api.onchange("receivable_accounts_only", "payable_accounts_only")
     def onchange_type_accounts_only(self):
         """Handle receivable/payable accounts only change."""
@@ -67,9 +113,9 @@ class AgedPartnerBalanceWizard(models.TransientModel):
                 domain += [("internal_type", "=", "receivable")]
             elif self.payable_accounts_only:
                 domain += [("internal_type", "=", "payable")]
-        elif not self.receivable_accounts_only and not self.payable_accounts_only:
-            domain += [("reconcile", "=", True)]
-        self.account_ids = self.env["account.account"].search(domain)
+            self.account_ids = self.env["account.account"].search(domain)
+        else:
+            self.account_ids = None
 
     def _print_report(self, report_type):
         self.ensure_one()
@@ -107,6 +153,7 @@ class AgedPartnerBalanceWizard(models.TransientModel):
         return {
             "wizard_id": self.id,
             "date_at": self.date_at,
+            "date_from": self.date_from or False,
             "only_posted_moves": self.target_move == "posted",
             "company_id": self.company_id.id,
             "account_ids": self.account_ids.ids,

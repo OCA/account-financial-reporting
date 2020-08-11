@@ -85,19 +85,19 @@
                                     />
                                     <t t-set="type" t-value='"partner_type"' />
                                 </t>
-                                <!-- Display account footer -->
-                                <t t-if="not filter_partner_ids">
-                                    <t
-                                        t-call="account_financial_report.report_general_ledger_ending_cumul"
-                                    >
-                                        <t
-                                            t-set="account_or_partner_object"
-                                            t-value="account"
-                                        />
-                                        <t t-set="type" t-value='"account_type"' />
-                                    </t>
-                                </t>
                             </div>
+                        </t>
+                        <!-- Display account footer -->
+                        <t t-if="not filter_partner_ids">
+                            <t
+                                t-call="account_financial_report.report_general_ledger_ending_cumul"
+                            >
+                                <t
+                                    t-set="account_or_partner_object"
+                                    t-value="account"
+                                />
+                                <t t-set="type" t-value='"account_type"' />
+                            </t>
                         </t>
                     </t>
                 </div>
@@ -160,8 +160,10 @@
                         Label</div>
                     <t t-if="show_cost_center">
                         <!--## cost_center-->
-                        <div class="act_as_cell" style="width: 8.03%;">Cost
-                            center</div>
+                        <div
+                            class="act_as_cell"
+                            style="width: 8.03%;"
+                        >Analytic Account</div>
                     </t>
                     <t t-if="show_analytic_tags">
                         <!--## analytic tags-->
@@ -357,7 +359,7 @@
                     >
                         <div class="act_as_cell amount" style="width: 2.08%;">
                             <span
-                                t-field="o._get_atr_from_dict(account['id'], accounts_data, 'currency_name')"
+                                t-esc="o._get_atr_from_dict(account['id'], accounts_data, 'currency_name')"
                             />
                         </div>
                         <div class="act_as_cell amount" style="width: 5.19%;">
@@ -376,7 +378,7 @@
                                     >
                                         <t
                                             t-raw="account_or_partner_object['init_bal']['bal_curr']"
-                                            t-options="{'widget': 'monetary', 'display_currency': account.account_id.currency_id}"
+                                            t-options="{'widget': 'monetary', 'display_currency': o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')}"
                                         />
                                     </a>
                                 </span>
@@ -397,7 +399,7 @@
                                     >
                                         <t
                                             t-raw="account_or_partner_object['init_bal']['bal_curr']"
-                                            t-options="{'widget': 'monetary', 'display_currency': account.account_id.currency_id}"
+                                            t-options="{'widget': 'monetary', 'display_currency': o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')}"
                                         />
                                     </a>
                                 </span>
@@ -501,10 +503,7 @@
                         <t t-if="taxes_data and line['tax_ids']">
                             <t t-foreach="line['tax_ids']" t-as="tax_id">
                                 <span
-                                    t-esc="o._get_atr_from_dict(tax_id, taxes_data, 'amount')"
-                                />
-                                <span
-                                    t-esc="o._get_atr_from_dict(tax_id, taxes_data, 'string')"
+                                    t-esc="o._get_atr_from_dict(tax_id, taxes_data, 'tax_name')"
                                 />
                             </t>
                         </t>
@@ -534,7 +533,7 @@
                                     class="o_account_financial_reports_web_action"
                                     style="color: black;"
                                 >
-                                    <t t-raw="line['ref']" />
+                                    <t t-raw="line['ref_label']" />
                                 </a>
                             </span>
                         </t>
@@ -544,7 +543,7 @@
                                     class="o_account_financial_reports_web_action"
                                     style="color: black;"
                                 >
-                                    <t t-raw="line['ref']" />
+                                    <t t-raw="line['ref_label']" />
                                 </a>
                             </span>
                         </t>
@@ -553,14 +552,14 @@
                     <t t-if="show_cost_center">
                         <div class="act_as_cell left">
                             <t t-set="res_model" t-value="'account.analytic.account'" />
-                            <span t-if="line.cost_center">
+                            <span t-if="line['analytic_account_id']">
                                 <a
-                                    t-att-data-active-id="line.move_line_id.analytic_account_id.id"
+                                    t-att-data-active-id="line['analytic_account_id']"
                                     t-att-data-res-model="res_model"
                                     class="o_account_financial_reports_web_action"
                                     style="color: black;"
                                 >
-                                    <t t-raw="line.cost_center" />
+                                    <t t-raw="line['analytic_account']" />
                                 </a>
                             </span>
                         </div>
@@ -780,7 +779,7 @@
                     >
                         <div class="act_as_cell amount" style="width: 2.08%;">
                             <span
-                                t-field="o._get_atr_from_dict(account['id'], accounts_data, 'currency_name')"
+                                t-esc="o._get_atr_from_dict(account['id'], accounts_data, 'currency_name')"
                             />
                         </div>
                         <div class="act_as_cell amount" style="width: 5.19%;">
@@ -799,7 +798,7 @@
                                     >
                                         <t
                                             t-raw="account_or_partner_object['fin_bal']['bal_curr']"
-                                            t-options="{'widget': 'monetary', 'display_currency': account_or_partner_object.account_id.currency_id}"
+                                            t-options="{'widget': 'monetary', 'display_currency': o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')}"
                                         />
                                     </a>
                                 </span>
@@ -820,7 +819,7 @@
                                     >
                                         <t
                                             t-raw="account_or_partner_object['fin_bal']['bal_curr']"
-                                            t-options="{'widget': 'monetary', 'display_currency': account_or_partner_object.report_account_id.currency_id}"
+                                            t-options="{'widget': 'monetary', 'display_currency': o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')}"
                                         />
                                     </a>
                                 </span>

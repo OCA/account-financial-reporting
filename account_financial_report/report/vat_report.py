@@ -2,6 +2,8 @@
 # Copyright 2020 ForgeFlow S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+import operator
+
 from odoo import api, models
 
 
@@ -19,55 +21,82 @@ class VATReport(models.AbstractModel):
                         "id": tax.id,
                         "name": tax.name,
                         "tax_group_id": tax.tax_group_id.id,
+                        "type_tax_use": tax.type_tax_use,
+                        "amount_type": tax.amount_type,
+                        "tags_ids": tax.invoice_repartition_line_ids.tag_ids.ids,
                     }
                 }
             )
         return tax_data
 
     @api.model
-    def _get_vat_report_domain(self, company_id, date_from, date_to):
+    def _get_tax_report_domain(self, company_id, date_from, date_to, only_posted_moves):
         domain = [
             ("company_id", "=", company_id),
             ("date", ">=", date_from),
-            ("date", "<", date_to),
+            ("date", "<=", date_to),
             ("tax_line_id", "!=", False),
             ("tax_exigible", "=", True),
         ]
+        if only_posted_moves:
+            domain += [("move_id.state", "=", "posted")]
         return domain
 
-    def _get_vat_report_data(self, company_id, date_from, date_to):
-        domain = self._get_vat_report_domain(company_id, date_from, date_to)
+    @api.model
+    def _get_net_report_domain(self, company_id, date_from, date_to, only_posted_moves):
+        domain = [
+            ("company_id", "=", company_id),
+            ("date", ">=", date_from),
+            ("date", "<=", date_to),
+            ("tax_exigible", "=", True),
+        ]
+        if only_posted_moves:
+            domain += [("move_id.state", "=", "posted")]
+        return domain
+
+    def _get_vat_report_data(self, company_id, date_from, date_to, only_posted_moves):
+        tax_domain = self._get_tax_report_domain(
+            company_id, date_from, date_to, only_posted_moves
+        )
         ml_fields = [
             "id",
             "tax_base_amount",
             "balance",
             "tax_line_id",
-            "tax_repartition_line_id",
+            "tax_ids",
             "analytic_tag_ids",
+            "tag_ids",
         ]
         tax_move_lines = self.env["account.move.line"].search_read(
-            domain=domain, fields=ml_fields
+            domain=tax_domain, fields=ml_fields,
         )
-        vat_data = {}
-        tax_ids = set()
+        net_domain = self._get_net_report_domain(
+            company_id, date_from, date_to, only_posted_moves
+        )
+        taxed_move_lines = self.env["account.move.line"].search_read(
+            domain=net_domain, fields=ml_fields,
+        )
+        taxed_move_lines = list(filter(lambda d: d["tax_ids"], taxed_move_lines))
+        vat_data = []
         for tax_move_line in tax_move_lines:
-            tax_ml_id = tax_move_line["id"]
-            repartition = self.env["account.tax.repartition.line"].browse(
-                tax_move_line["tax_repartition_line_id"][0]
-            )
-            vat_data[tax_ml_id] = {}
-            vat_data[tax_ml_id].update(
+            vat_data.append(
                 {
-                    "id": tax_ml_id,
-                    "net": tax_move_line["tax_base_amount"],
-                    "tax": tax_move_line["balance"]
-                    if tax_move_line["balance"] > 0
-                    else (-1) * tax_move_line["balance"],
-                    "tax_line_id": tax_move_line["tax_line_id"],
-                    "tags_ids": repartition.tag_ids.ids,
+                    "net": 0.0,
+                    "tax": tax_move_line["balance"],
+                    "tax_line_id": tax_move_line["tax_line_id"][0],
                 }
             )
-            tax_ids.add(tax_move_line["tax_line_id"][0])
+        for taxed_move_line in taxed_move_lines:
+            for tax_id in taxed_move_line["tax_ids"]:
+                vat_data.append(
+                    {
+                        "net": taxed_move_line["balance"],
+                        "tax": 0.0,
+                        "tax_line_id": tax_id,
+                    }
+                )
+        tax_ids = list(map(operator.itemgetter("tax_line_id"), vat_data))
+        tax_ids = list(set(tax_ids))
         tax_data = self._get_tax_data(tax_ids)
         return vat_data, tax_data
 
@@ -88,23 +117,28 @@ class VATReport(models.AbstractModel):
 
     def _get_vat_report_group_data(self, vat_report_data, tax_data, tax_detail):
         vat_report = {}
-        for tax_move_line in vat_report_data.values():
-            tax_id = tax_move_line["tax_line_id"][0]
-            tax_group_id = tax_data[tax_id]["tax_group_id"]
-            if tax_group_id not in vat_report.keys():
-                vat_report[tax_group_id] = {}
-                vat_report[tax_group_id]["net"] = 0.0
-                vat_report[tax_group_id]["tax"] = 0.0
-                vat_report[tax_group_id][tax_id] = dict(tax_data[tax_id])
-                vat_report[tax_group_id][tax_id].update({"net": 0.0, "tax": 0.0})
+        for tax_move_line in vat_report_data:
+            tax_id = tax_move_line["tax_line_id"]
+            if tax_data[tax_id]["amount_type"] == "group":
+                pass
             else:
-                if tax_id not in vat_report[tax_group_id].keys():
+                tax_group_id = tax_data[tax_id]["tax_group_id"]
+                if tax_group_id not in vat_report.keys():
+                    vat_report[tax_group_id] = {}
+                    vat_report[tax_group_id]["net"] = 0.0
+                    vat_report[tax_group_id]["tax"] = 0.0
                     vat_report[tax_group_id][tax_id] = dict(tax_data[tax_id])
                     vat_report[tax_group_id][tax_id].update({"net": 0.0, "tax": 0.0})
-            vat_report[tax_group_id]["net"] += tax_move_line["net"]
-            vat_report[tax_group_id]["tax"] += tax_move_line["tax"]
-            vat_report[tax_group_id][tax_id]["net"] += tax_move_line["net"]
-            vat_report[tax_group_id][tax_id]["tax"] += tax_move_line["tax"]
+                else:
+                    if tax_id not in vat_report[tax_group_id].keys():
+                        vat_report[tax_group_id][tax_id] = dict(tax_data[tax_id])
+                        vat_report[tax_group_id][tax_id].update(
+                            {"net": 0.0, "tax": 0.0}
+                        )
+                vat_report[tax_group_id]["net"] += tax_move_line["net"]
+                vat_report[tax_group_id]["tax"] += tax_move_line["tax"]
+                vat_report[tax_group_id][tax_id]["net"] += tax_move_line["net"]
+                vat_report[tax_group_id][tax_id]["tax"] += tax_move_line["tax"]
         tax_group_data = self._get_tax_group_data(vat_report.keys())
         vat_report_list = []
         for tax_group_id in vat_report.keys():
@@ -129,25 +163,30 @@ class VATReport(models.AbstractModel):
 
     def _get_vat_report_tag_data(self, vat_report_data, tax_data, tax_detail):
         vat_report = {}
-        for tax_move_line in vat_report_data.values():
-            tax_id = tax_move_line["tax_line_id"][0]
-            tags_ids = tax_move_line["tags_ids"]
-            if tags_ids:
-                for tag_id in tags_ids:
-                    if tag_id not in vat_report.keys():
-                        vat_report[tag_id] = {}
-                        vat_report[tag_id]["net"] = 0.0
-                        vat_report[tag_id]["tax"] = 0.0
-                        vat_report[tag_id][tax_id] = dict(tax_data[tax_id])
-                        vat_report[tag_id][tax_id].update({"net": 0.0, "tax": 0.0})
-                    else:
-                        if tax_id not in vat_report[tag_id].keys():
+        for tax_move_line in vat_report_data:
+            tax_id = tax_move_line["tax_line_id"]
+            tags_ids = tax_data[tax_id]["tags_ids"]
+            if tax_data[tax_id]["amount_type"] == "group":
+                continue
+            else:
+                if tags_ids:
+                    for tag_id in tags_ids:
+                        if tag_id not in vat_report.keys():
+                            vat_report[tag_id] = {}
+                            vat_report[tag_id]["net"] = 0.0
+                            vat_report[tag_id]["tax"] = 0.0
                             vat_report[tag_id][tax_id] = dict(tax_data[tax_id])
                             vat_report[tag_id][tax_id].update({"net": 0.0, "tax": 0.0})
-                    vat_report[tag_id][tax_id]["net"] += tax_move_line["net"]
-                    vat_report[tag_id][tax_id]["tax"] += tax_move_line["tax"]
-                    vat_report[tag_id]["net"] += tax_move_line["net"]
-                    vat_report[tag_id]["tax"] += tax_move_line["tax"]
+                        else:
+                            if tax_id not in vat_report[tag_id].keys():
+                                vat_report[tag_id][tax_id] = dict(tax_data[tax_id])
+                                vat_report[tag_id][tax_id].update(
+                                    {"net": 0.0, "tax": 0.0}
+                                )
+                        vat_report[tag_id][tax_id]["net"] += tax_move_line["net"]
+                        vat_report[tag_id][tax_id]["tax"] += tax_move_line["tax"]
+                        vat_report[tag_id]["net"] += tax_move_line["net"]
+                        vat_report[tag_id]["tax"] += tax_move_line["tax"]
         tags_data = self._get_tags_data(vat_report.keys())
         vat_report_list = []
         for tag_id in vat_report.keys():
@@ -169,8 +208,9 @@ class VATReport(models.AbstractModel):
         date_to = data["date_to"]
         based_on = data["based_on"]
         tax_detail = data["tax_detail"]
+        only_posted_moves = data["only_posted_moves"]
         vat_report_data, tax_data = self._get_vat_report_data(
-            company_id, date_from, date_to
+            company_id, date_from, date_to, only_posted_moves
         )
         if based_on == "taxgroups":
             vat_report = self._get_vat_report_group_data(

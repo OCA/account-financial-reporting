@@ -26,23 +26,45 @@
                         <group name="other_filters">
                             <field name="target_move" widget="radio" />
                             <field name="centralize" />
+                            <field name="show_partner_details" />
                             <field name="hide_account_at_0" />
                             <field name="foreign_currency" />
                             <field name="show_analytic_tags" />
+                            <field name="show_cost_center" />
                         </group>
                     </group>
                     <notebook>
                         <page string="Filter accounts">
-                            <group col="4">
+                            <group name="account_filter" col="4">
+                                <label for="account_ids" colspan="4" />
                                 <field name="receivable_accounts_only" />
                                 <field name="payable_accounts_only" />
+                                <label for="account_code_from" string="From Code" />
+                                <div>
+                                    <div class="o_row">
+                                        <field
+                                            name="account_code_from"
+                                            class="oe_inline"
+                                            options="{'no_create': True}"
+                                        />
+                                        <span class="oe_inline">
+                                            To
+                                        </span>
+                                        <field
+                                            name="account_code_to"
+                                            class="oe_inline"
+                                            options="{'no_create': True}"
+                                        />
+                                    </div>
+                                </div>
+                                <field
+                                    name="account_ids"
+                                    nolabel="1"
+                                    widget="many2many_tags"
+                                    options="{'no_create': True}"
+                                    colspan="4"
+                                />
                             </group>
-                            <field
-                                name="account_ids"
-                                nolabel="1"
-                                widget="many2many_tags"
-                                options="{'no_create': True}"
-                            />
                         </page>
                         <page string="Filter partners">
                             <field
@@ -53,14 +75,14 @@
                             />
                         </page>
                         <page
-                            string="Filter cost centers"
+                            string="Filter analytic accounts"
                             groups="analytic.group_analytic_accounting"
                         >
                             <field
                                 name="cost_center_ids"
                                 nolabel="1"
+                                widget="many2many_tags"
                                 options="{'no_create': True}"
-                                groups="analytic.group_analytic_accounting"
                             />
                         </page>
                         <page string="Filter analytic tags">

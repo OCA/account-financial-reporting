@@ -47,7 +47,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
         "If partners are filtered, "
         "debits and credits totals will not match the trial balance.",
     )
-    show_analytic_tags = fields.Boolean(string="Show analytic tags")
+    show_analytic_tags = fields.Boolean(string="Show analytic tags",)
     receivable_accounts_only = fields.Boolean()
     payable_accounts_only = fields.Boolean()
     partner_ids = fields.Many2many(
@@ -75,6 +75,36 @@ class GeneralLedgerReportWizard(models.TransientModel):
         "will display initial and final balance in that currency.",
         default=lambda self: self._default_foreign_currency(),
     )
+    account_code_from = fields.Many2one(
+        comodel_name="account.account",
+        string="Account Code From",
+        help="Starting account in a range",
+    )
+    account_code_to = fields.Many2one(
+        comodel_name="account.account",
+        string="Account Code To",
+        help="Ending account in a range",
+    )
+    show_partner_details = fields.Boolean(string="Show Partner Details", default=True,)
+    show_cost_center = fields.Boolean(string="Show Analytic Account", default=True,)
+
+    @api.onchange("account_code_from", "account_code_to")
+    def on_change_account_range(self):
+        if (
+            self.account_code_from
+            and self.account_code_from.code.isdigit()
+            and self.account_code_to
+            and self.account_code_to.code.isdigit()
+        ):
+            start_range = int(self.account_code_from.code)
+            end_range = int(self.account_code_to.code)
+            self.account_ids = self.env["account.account"].search(
+                [("code", "in", [x for x in range(start_range, end_range + 1)])]
+            )
+            if self.company_id:
+                self.account_ids = self.account_ids.filtered(
+                    lambda a: a.company_id == self.company_id
+                )
 
     def _init_date_from(self):
         """set start date to begin of current year if fiscal year running"""
@@ -272,7 +302,9 @@ class GeneralLedgerReportWizard(models.TransientModel):
             "company_id": self.company_id.id,
             "account_ids": self.account_ids.ids,
             "partner_ids": self.partner_ids.ids,
+            "show_partner_details": self.show_partner_details,
             "cost_center_ids": self.cost_center_ids.ids,
+            "show_cost_center": self.show_cost_center,
             "analytic_tag_ids": self.analytic_tag_ids.ids,
             "journal_ids": self.account_journal_ids.ids,
             "centralize": self.centralize,
