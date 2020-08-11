@@ -119,7 +119,6 @@ msgstr "Compte"
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__account_code_from
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__account_code_from
 #, fuzzy
-#| msgid "Account Code"
 msgid "Account Code From"
 msgstr "Code du compte"
 
@@ -129,7 +128,6 @@ msgstr "Code du compte"
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__account_code_to
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__account_code_to
 #, fuzzy
-#| msgid "Account Code"
 msgid "Account Code To"
 msgstr "Code du compte"
 
@@ -241,7 +239,6 @@ msgstr "Balance ??g??e des tiers -"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_aged_partner_balance
 #, fuzzy
-#| msgid "Aged Partner Balance -"
 msgid "Aged Partner Balance Report"
 msgstr "Balance ??g??e des tiers -"
 
@@ -253,7 +250,6 @@ msgstr "Assistant balance ??g??e des tiers"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_aged_partner_balance_xlsx
 #, fuzzy
-#| msgid "Aged Partner Balance XLSX"
 msgid "Aged Partner Balance XLSL Report"
 msgstr "Balance ??g??e des tiers XLSX"
 
@@ -334,7 +330,6 @@ msgstr "Montant Devise"
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #, fuzzy, python-format
-#| msgid "Filter Account"
 msgid "Analytic Account"
 msgstr "Filtrer les comptes"
 
@@ -699,9 +694,6 @@ msgstr ""
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
 #, fuzzy
-#| msgid ""
-#| "Due\n"
-#| "                        date"
 msgid ""
 "Due\n"
 "                    date"
@@ -756,9 +748,6 @@ msgstr "Solde de cl??ture"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
 #, fuzzy
-#| msgid ""
-#| "Ending\n"
-#| "                        balance"
 msgid ""
 "Ending balance\n"
 "                        cur."
@@ -823,7 +812,6 @@ msgstr "Filtrer les comptes"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
 #, fuzzy
-#| msgid "Filter analytic tags"
 msgid "Filter analytic accounts"
 msgstr "Filtrer les ??tiquettes analytiques"
 
@@ -863,7 +851,6 @@ msgstr "Devise ??trang??re"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.open_items_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
 #, fuzzy
-#| msgid "Code"
 msgid "From Code"
 msgstr "Code"
 
@@ -884,14 +871,12 @@ msgstr "Du: %s au: %s"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__complete_code
 #, fuzzy
-#| msgid "Code"
 msgid "Full Code"
 msgstr "Code"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__complete_name
 #, fuzzy
-#| msgid "Name"
 msgid "Full Name"
 msgstr "Nom"
 
@@ -922,7 +907,6 @@ msgstr "Grand livre"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_general_ledger
 #, fuzzy
-#| msgid "General Ledger Report Wizard"
 msgid "General Ledger Report"
 msgstr "Assistant de rapport Grand livre"
 
@@ -934,7 +918,6 @@ msgstr "Assistant de rapport Grand livre"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_general_ledger_xlsx
 #, fuzzy
-#| msgid "General Ledger XLSX"
 msgid "General Ledger XLSL Report"
 msgstr "Grand livre XLSX"
 
@@ -1025,9 +1008,6 @@ msgstr ""
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
 #, fuzzy
-#| msgid ""
-#| "Initial\n"
-#| "                    balance"
 msgid ""
 "Initial\n"
 "                        balance cur."
@@ -1106,7 +1086,6 @@ msgstr "Livre des Journaux XLSX"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_journal_ledger_xlsx
 #, fuzzy
-#| msgid "Journal Ledger XLSX"
 msgid "Journal Ledger XLSX Report"
 msgstr "Livre des Journaux XLSX"
 
@@ -1289,7 +1268,6 @@ msgstr "Postes ouverts du partenaire"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_open_items
 #, fuzzy
-#| msgid "Open Items Report Wizard"
 msgid "Open Items Report"
 msgstr "Dialogue du rapport des postes ouverts"
 
@@ -1306,7 +1284,6 @@ msgstr "Postes ouverts XLSX"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_open_items_xlsx
 #, fuzzy
-#| msgid "Open Items XLSX"
 msgid "Open Items XLSX Report"
 msgstr "Postes ouverts XLSX"
 
@@ -1427,9 +1404,6 @@ msgstr ""
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
 #, fuzzy
-#| msgid ""
-#| "Ref -\n"
-#| "                        Label"
 msgid ""
 "Ref -\n"
 "                    Label"
@@ -1471,7 +1445,6 @@ msgstr "Afficher"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__show_cost_center
 #, fuzzy
-#| msgid "Show Analytic Tags"
 msgid "Show Analytic Account"
 msgstr "Afficher les ??tiquettes analytiques"
 
@@ -1651,7 +1624,6 @@ msgstr "Le niveau de hi??rarchie ?? filtrer doit ??tre plus rand que 0."
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 #, fuzzy
-#| msgid "To:"
 msgid "To"
 msgstr "Au:"
 
@@ -1684,7 +1656,6 @@ msgstr "Balance g??n??rale -"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_trial_balance
 #, fuzzy
-#| msgid "Trial Balance Report Wizard"
 msgid "Trial Balance Report"
 msgstr "Dialogue du rapport de balance g??n??rale"
 
@@ -1701,7 +1672,6 @@ msgstr "Balance g??n??rale XLSX"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_trial_balance_xlsx
 #, fuzzy
-#| msgid "Trial Balance XLSX"
 msgid "Trial Balance XLSX Report"
 msgstr "Balance g??n??rale XLSX"
 
@@ -1764,21 +1734,18 @@ msgstr "Rapport TVA XLSX"
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/vat_report_xlsx.py:0
 #, fuzzy, python-format
-#| msgid "VAT Report"
 msgid "Vat Report"
 msgstr "Rapport TVA"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_vat_report
 #, fuzzy
-#| msgid "VAT Report Options"
 msgid "Vat Report Report"
 msgstr "Options du rapport TVA"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_vat_report_xlsx
 #, fuzzy
-#| msgid "VAT Report XLSX"
 msgid "Vat Report XLSX Report"
 msgstr "Rapport TVA XLSX"
 
