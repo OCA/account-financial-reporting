@@ -117,7 +117,6 @@ msgstr "????????????"
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__account_code_from
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__account_code_from
 #, fuzzy
-#| msgid "Account Code"
 msgid "Account Code From"
 msgstr "?????????????????????"
 
@@ -127,7 +126,6 @@ msgstr "?????????????????????"
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__account_code_to
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__account_code_to
 #, fuzzy
-#| msgid "Account Code"
 msgid "Account Code To"
 msgstr "?????????????????????"
 
@@ -328,7 +326,6 @@ msgstr ""
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #, fuzzy, python-format
-#| msgid "Account"
 msgid "Analytic Account"
 msgstr "????????????"
 
@@ -1668,14 +1665,12 @@ msgstr ""
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/vat_report_xlsx.py:0
 #, fuzzy, python-format
-#| msgid "Abstract Report"
 msgid "Vat Report"
 msgstr "?????????????????????????????????"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_vat_report
 #, fuzzy
-#| msgid "Abstract Report"
 msgid "Vat Report Report"
 msgstr "?????????????????????????????????"
 
