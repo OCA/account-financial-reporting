@@ -227,7 +227,6 @@ msgstr ""
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:44
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:98
 #, fuzzy, python-format
-#| msgid "61 - 90 d."
 msgid "Age ≤ 90 d."
 msgstr "61 - 90 d."
 
