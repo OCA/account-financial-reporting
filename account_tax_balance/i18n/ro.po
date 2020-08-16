@@ -74,7 +74,6 @@ msgstr ""
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__company_ids
 #, fuzzy
-#| msgid "Company"
 msgid "Companies"
 msgstr "Companie"
 
@@ -91,7 +90,6 @@ msgstr ""
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__date_range_id
 #, fuzzy
-#| msgid "Date range"
 msgid "Date Range"
 msgstr "Interval"
 

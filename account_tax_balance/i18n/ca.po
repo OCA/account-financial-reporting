@@ -74,7 +74,6 @@ msgstr "Cancel·lar "
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__company_ids
 #, fuzzy
-#| msgid "Company"
 msgid "Companies"
 msgstr "Empresa "
 
@@ -91,7 +90,6 @@ msgstr "Creat a "
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__date_range_id
 #, fuzzy
-#| msgid "Date range"
 msgid "Date Range"
 msgstr "Interval de dates"
 
@@ -103,7 +101,6 @@ msgstr "Nom a mostrar "
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__from_date
 #, fuzzy
-#| msgid "From date"
 msgid "From Date"
 msgstr "Des de la data"
 
