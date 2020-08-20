@@ -28,3 +28,11 @@ class AccountMoveLine(models.Model):
             self._cr.execute("""
             CREATE INDEX account_move_line_account_id_partner_id_index
             ON account_move_line (account_id, partner_id)""")
+
+    @api.model
+    def search_count(self, args):
+        # In Big DataBase every time you change the domain widget this method
+        # takes a lot of time. This improves performance
+        if self.env.context.get("skip_search_count"):
+            return 0
+        return super(AccountMoveLine, self).search_count(args)

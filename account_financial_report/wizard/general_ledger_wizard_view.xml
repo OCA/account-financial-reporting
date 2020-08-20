@@ -71,7 +71,8 @@
                             <field name="analytic_tag_ids" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
                         </page>
                         <page string="Additional Filtering">
-                            <field name="domain" widget="domain" options="{'model': 'account.move.line', 'in_dialog': True}"/>
+                            <style>.o_domain_show_selection_button {display: none}</style>
+                            <field name="domain" widget="domain" options="{'model': 'account.move.line', 'in_dialog': True}" context="{'skip_search_count': 1}"/>
                         </page>
                     </notebook>
                 </div>
