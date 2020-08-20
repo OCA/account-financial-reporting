@@ -162,7 +162,7 @@ class GeneralLedgerReport(models.AbstractModel):
     def _get_initial_balance_data(
             self, account_ids, partner_ids, company_id, date_from,
             foreign_currency, only_posted_moves, unaffected_earnings_account,
-            fy_start_date, analytic_tag_ids, cost_center_ids):
+            fy_start_date, analytic_tag_ids, cost_center_ids, extra_domain):
         base_domain = []
         if company_id:
             base_domain += [('company_id', '=', company_id)]
@@ -174,6 +174,8 @@ class GeneralLedgerReport(models.AbstractModel):
             base_domain += [('analytic_tag_ids', 'in', analytic_tag_ids)]
         if cost_center_ids:
             base_domain += [('analytic_account_id', 'in', cost_center_ids)]
+        if extra_domain:
+            base_domain += extra_domain
         initial_domain_bs = self._get_initial_balances_bs_ml_domain(
             account_ids, company_id, date_from, base_domain
         )
@@ -393,11 +395,14 @@ class GeneralLedgerReport(models.AbstractModel):
     def _get_period_ml_data(
             self, account_ids, partner_ids, company_id, foreign_currency,
             only_posted_moves, date_from, date_to, partners_data,
-            gen_ld_data, partners_ids, analytic_tag_ids, cost_center_ids):
+            gen_ld_data, partners_ids, analytic_tag_ids, cost_center_ids,
+            extra_domain):
         domain = self._get_period_domain(account_ids, partner_ids,
                                          company_id, only_posted_moves,
                                          date_to, date_from,
                                          analytic_tag_ids, cost_center_ids)
+        if extra_domain:
+            domain += extra_domain
         ml_fields = [
             'id', 'name', 'date', 'move_id', 'journal_id', 'account_id',
             'partner_id', 'debit', 'credit', 'balance', 'currency_id',
@@ -675,12 +680,13 @@ class GeneralLedgerReport(models.AbstractModel):
         only_posted_moves = data['only_posted_moves']
         unaffected_earnings_account = data['unaffected_earnings_account']
         fy_start_date = data['fy_start_date']
+        extra_domain = data['domain']
         gen_ld_data, partners_data, partners_ids = \
             self._get_initial_balance_data(
                 account_ids, partner_ids, company_id, date_from,
                 foreign_currency, only_posted_moves,
                 unaffected_earnings_account, fy_start_date, analytic_tag_ids,
-                cost_center_ids)
+                cost_center_ids, extra_domain)
         centralize = data['centralize']
         gen_ld_data, accounts_data, partners_data, journals_data,  \
             full_reconcile_data, taxes_data, \
@@ -689,7 +695,7 @@ class GeneralLedgerReport(models.AbstractModel):
                 account_ids, partner_ids, company_id, foreign_currency,
                 only_posted_moves, date_from, date_to,
                 partners_data, gen_ld_data, partners_ids,
-                analytic_tag_ids, cost_center_ids)
+                analytic_tag_ids, cost_center_ids, extra_domain)
         general_ledger = self._create_general_ledger(
             gen_ld_data, accounts_data,
             show_partner_details, rec_after_date_to_ids, hide_account_at_0
