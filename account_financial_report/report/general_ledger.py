@@ -182,6 +182,7 @@ class GeneralLedgerReport(models.AbstractModel):
         fy_start_date,
         analytic_tag_ids,
         cost_center_ids,
+        extra_domain,
     ):
         base_domain = []
         if company_id:
@@ -194,6 +195,8 @@ class GeneralLedgerReport(models.AbstractModel):
             base_domain += [("analytic_tag_ids", "in", analytic_tag_ids)]
         if cost_center_ids:
             base_domain += [("analytic_account_id", "in", cost_center_ids)]
+        if extra_domain:
+            base_domain += extra_domain
         initial_domain_bs = self._get_initial_balances_bs_ml_domain(
             account_ids, company_id, date_from, base_domain
         )
@@ -439,6 +442,7 @@ class GeneralLedgerReport(models.AbstractModel):
         partners_ids,
         analytic_tag_ids,
         cost_center_ids,
+        extra_domain,
     ):
         domain = self._get_period_domain(
             account_ids,
@@ -450,6 +454,8 @@ class GeneralLedgerReport(models.AbstractModel):
             analytic_tag_ids,
             cost_center_ids,
         )
+        if extra_domain:
+            domain += extra_domain
         ml_fields = [
             "id",
             "name",
@@ -774,6 +780,7 @@ class GeneralLedgerReport(models.AbstractModel):
         only_posted_moves = data["only_posted_moves"]
         unaffected_earnings_account = data["unaffected_earnings_account"]
         fy_start_date = data["fy_start_date"]
+        extra_domain = data["domain"]
         gen_ld_data, partners_data, partners_ids = self._get_initial_balance_data(
             account_ids,
             partner_ids,
@@ -785,6 +792,7 @@ class GeneralLedgerReport(models.AbstractModel):
             fy_start_date,
             analytic_tag_ids,
             cost_center_ids,
+            extra_domain,
         )
         centralize = data["centralize"]
         (
@@ -809,6 +817,7 @@ class GeneralLedgerReport(models.AbstractModel):
             partners_ids,
             analytic_tag_ids,
             cost_center_ids,
+            extra_domain,
         )
         general_ledger = self._create_general_ledger(
             gen_ld_data,

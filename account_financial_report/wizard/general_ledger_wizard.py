@@ -8,6 +8,7 @@
 
 
 import time
+from ast import literal_eval
 
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
@@ -87,6 +88,16 @@ class GeneralLedgerReportWizard(models.TransientModel):
     )
     show_partner_details = fields.Boolean(string="Show Partner Details", default=True,)
     show_cost_center = fields.Boolean(string="Show Analytic Account", default=True,)
+    domain = fields.Char(
+        string="Journal Items Domain",
+        default=[],
+        help="This domain will be used to select specific domain for Journal " "Items",
+    )
+
+    @api.multi
+    def _get_account_move_lines_domain(self):
+        domain = literal_eval(self.domain) if self.domain else []
+        return domain
 
     @api.onchange("account_code_from", "account_code_to")
     def on_change_account_range(self):
@@ -311,6 +322,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
             "fy_start_date": self.fy_start_date,
             "unaffected_earnings_account": self.unaffected_earnings_account.id,
             "account_financial_report_lang": self.env.lang,
+            "domain": self._get_account_move_lines_domain(),
         }
 
     def _export(self, report_type):
