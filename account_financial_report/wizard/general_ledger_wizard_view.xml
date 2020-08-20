@@ -93,6 +93,13 @@
                                 options="{'no_create': True}"
                             />
                         </page>
+                        <page string="Additional Filtering">
+                            <field
+                                name="domain"
+                                widget="domain"
+                                options="{'model': 'account.move.line', 'in_dialog': True}"
+                            />
+                        </page>
                     </notebook>
                 </div>
                 <div
