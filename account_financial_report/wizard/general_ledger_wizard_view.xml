@@ -94,10 +94,13 @@
                             />
                         </page>
                         <page string="Additional Filtering">
+                            <style
+                            >.o_domain_show_selection_button {display: none}</style>
                             <field
                                 name="domain"
                                 widget="domain"
                                 options="{'model': 'account.move.line', 'in_dialog': True}"
+                                context="{'skip_search_count': 1}"
                             />
                         </page>
                     </notebook>
