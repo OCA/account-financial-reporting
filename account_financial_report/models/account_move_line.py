@@ -1,6 +1,6 @@
 # Copyright 2019 ACSONE SA/NV (<http://acsone.eu>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).-
-from odoo import models
+from odoo import api, models
 
 
 class AccountMoveLine(models.Model):
@@ -30,3 +30,11 @@ class AccountMoveLine(models.Model):
             CREATE INDEX account_move_line_account_id_partner_id_index
             ON account_move_line (account_id, partner_id)"""
             )
+
+    @api.model
+    def search_count(self, args):
+        # In Big DataBase every time you change the domain widget this method
+        # takes a lot of time. This improves performance
+        if self.env.context.get("skip_search_count"):
+            return 0
+        return super(AccountMoveLine, self).search_count(args)
