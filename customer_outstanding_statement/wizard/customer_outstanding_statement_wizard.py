@@ -8,10 +8,10 @@ from odoo import api, fields, models
 
 
 class CustomerOutstandingStatementWizard(models.TransientModel):
-    """Customer Outstanding Statement wizard."""
+    """Aging Statement wizard."""
 
     _name = 'customer.outstanding.statement.wizard'
-    _description = 'Customer Outstanding Statement Wizard'
+    _description = 'Aging Statement Wizard'
 
     company_id = fields.Many2one(
         comodel_name='res.company',

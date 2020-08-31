@@ -8,7 +8,7 @@ from odoo.tests.common import TransactionCase
 
 class TestCustomerOutstandingStatement(TransactionCase):
     """
-        Tests for Customer Outstanding Statement.
+        Tests for Aging Statement.
     """
     def setUp(self):
         super(TestCustomerOutstandingStatement, self).setUp()
@@ -26,7 +26,7 @@ class TestCustomerOutstandingStatement(TransactionCase):
             self.env['report.customer_outstanding_statement.statement']
         self.wiz = self.env['customer.outstanding.statement.wizard']
         self.report_name = 'customer_outstanding_statement.statement'
-        self.report_title = 'Customer Outstanding Statement'
+        self.report_title = 'Aging Statement'
 
     def _create_user(self, login, groups, company):
         group_ids = [group.id for group in groups]

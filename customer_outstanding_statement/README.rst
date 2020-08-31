@@ -2,11 +2,11 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-====================================
-Print Customer Outstanding Statement
-====================================
+=====================
+Print Aging Statement
+=====================
 
-The outstanding statement provides details of all outstanding customer receivables
+The aging statement provides details of all outstanding customer receivables
 up to a particular date. This includes all unpaid invoices, unclaimed refunds and
 outstanding payments. The list is displayed in chronological order and is split by currencies.
 
@@ -27,7 +27,7 @@ Usage
 To use this module, you need to:
 
 #. Go to Customers and select one or more
-#. Press 'Action > Customer Outstanding Statement'
+#. Press 'Action > Aging Statement'
 #. Indicate if you want to display aging buckets
 
 

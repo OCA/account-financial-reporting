@@ -9,7 +9,7 @@ from odoo import api, fields, models
 
 
 class CustomerOutstandingStatement(models.AbstractModel):
-    """Model of Customer Outstanding Statement"""
+    """Model of Aging Statement"""
 
     _name = 'report.customer_outstanding_statement.statement'
 

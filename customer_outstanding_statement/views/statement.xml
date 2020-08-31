@@ -10,7 +10,7 @@
                         <span t-field="o.vat"/>
                     </div>
                     <h4 style="padding-left:15em;padding-top:2em">
-                        Outstanding Statement
+                        Aging Statement
                     </h4>
                     <p>
                         Date: <span t-esc="Date[o.id]" /><br/><!--Today-->
@@ -22,7 +22,7 @@
                         <t t-foreach="Lines[o.id]" t-as="currency">
                             <br t-if="not currency_first" />
                             <p>
-                                Outstanding Statement at <span t-esc="Date_end[o.id]" /> in <span t-esc="Currencies[o.id][currency].name"/>:
+                                Aging Statement at <span t-esc="Date_end[o.id]" /> in <span t-esc="Currencies[o.id][currency].name"/>:
                             </p>
                             <table class="table table-condensed" style="border: 1px solid black; border-collapse: collapse;">
                                 <thead>

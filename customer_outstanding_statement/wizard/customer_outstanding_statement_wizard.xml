@@ -2,7 +2,7 @@
 <odoo>
     <!-- wizard action on res.partner -->
     <act_window id="customer_outstanding_statement_wizard_action"
-        name="Customer Outstanding Statement"
+        name="Aging Statement"
         src_model="res.partner"
         res_model="customer.outstanding.statement.wizard"
         view_type="form" view_mode="form"
@@ -11,7 +11,7 @@
 
     <!-- wizard view -->
     <record id="customer_outstanding_statement_wizard_view" model="ir.ui.view">
-        <field name="name">Customer Outstanding Statement Wizard</field>
+        <field name="name">Aging Statement Wizard</field>
         <field name="model">customer.outstanding.statement.wizard</field>
         <field name="arch" type="xml">
             <form name="Report Options">
