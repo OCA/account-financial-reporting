@@ -170,6 +170,11 @@ msgid "Activate centralization"
 msgstr "Activar centralizaci??n"
 
 #. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
+msgid "Additional Filtering"
+msgstr ""
+
+#. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid ""
 "Age ??? 120\n"
@@ -1040,6 +1045,11 @@ msgid "Journal Item"
 msgstr "Elemento del Diario"
 
 #. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__domain
+msgid "Journal Items Domain"
+msgstr ""
+
+#. module: account_financial_report
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 #: model:ir.actions.act_window,name:account_financial_report.action_journal_ledger_wizard
 #: model:ir.actions.report,name:account_financial_report.action_print_journal_ledger_wizard_html
@@ -1602,6 +1612,11 @@ msgstr ""
 #, python-format
 msgid "The hierarchy level to filter on must be greater than 0."
 msgstr "El nivel de jerarqu??a a filtrar debe ser mayor que 0."
+
+#. module: account_financial_report
+#: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__domain
+msgid "This domain will be used to select specific domain for Journal Items"
+msgstr ""
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters

@@ -94,7 +94,6 @@ class GeneralLedgerReportWizard(models.TransientModel):
         help="This domain will be used to select specific domain for Journal " "Items",
     )
 
-    @api.multi
     def _get_account_move_lines_domain(self):
         domain = literal_eval(self.domain) if self.domain else []
         return domain
