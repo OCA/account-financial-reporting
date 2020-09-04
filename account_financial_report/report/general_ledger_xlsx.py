@@ -101,7 +101,7 @@ class GeneralLedgerXslx(models.AbstractModel):
             [
                 _("Target moves filter"),
                 _("All posted entries")
-                if report.target_move == "all"
+                if report.target_move == "posted"
                 else _("All entries"),
             ],
             [
