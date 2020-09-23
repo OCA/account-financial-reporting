@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-16 08:14+0000\n"
-"PO-Revision-Date: 2020-09-23 13:00+0000\n"
+"PO-Revision-Date: 2020-09-23 17:00+0000\n"
 "Last-Translator: Dorin Hongu <dhongu@gmail.com>\n"
 "Language-Team: Romanian (https://www.transifex.com/oca/teams/23907/ro/)\n"
 "Language: ro\n"
@@ -356,7 +356,7 @@ msgstr "Cont analitic"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_taxes
 msgid "Balance"
-msgstr "Sold ini??ial"
+msgstr "Sold"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
@@ -368,19 +368,19 @@ msgstr "Valoare baz??"
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 #, python-format
 msgid "Base Balance"
-msgstr "Sold ini??ial"
+msgstr "Sold baz??"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 #, python-format
 msgid "Base Credit"
-msgstr "Credit ini??ial"
+msgstr "Credit baz??"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 #, python-format
 msgid "Base Debit"
-msgstr "Debit de baz??"
+msgstr "Debit baz??"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__based_on
@@ -701,11 +701,12 @@ msgstr ""
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
-#, fuzzy
 msgid ""
 "Due\n"
 "                    date"
-msgstr "Sold ini??ial"
+msgstr ""
+"Dat?? \n"
+"scadent??"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -730,6 +731,8 @@ msgid ""
 "Ending\n"
 "                        balance"
 msgstr ""
+"Sold \n"
+"final"
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_aged_partner_balance_report_wizard__account_code_to
@@ -897,13 +900,11 @@ msgstr "Carte mare"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_base
-#, fuzzy
 msgid "General Ledger -"
 msgstr "Carte mare"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_general_ledger
-#, fuzzy
 msgid "General Ledger Report"
 msgstr "Carte mare"
 
@@ -1640,15 +1641,13 @@ msgstr "Balan???? verificare"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_base
-#, fuzzy
 msgid "Trial Balance -"
 msgstr "Balan???? verificare"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_trial_balance
-#, fuzzy
 msgid "Trial Balance Report"
-msgstr "Balan???? verificare"
+msgstr "Raport Balan???? verificare"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_trial_balance_report_wizard
