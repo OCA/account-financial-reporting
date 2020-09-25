@@ -94,7 +94,7 @@
             </div>
             <div class="act_as_row">
                 <div class="act_as_cell">
-                    <span t-esc="date_at" />
+                    <span t-esc="date_at" t-options="{'widget': 'date'}" />
                 </div>
                 <div class="act_as_cell">
                     <t t-if="only_posted_moves">All posted entries</t>

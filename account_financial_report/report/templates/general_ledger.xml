@@ -115,7 +115,8 @@
             </div>
             <div class="act_as_row">
                 <div class="act_as_cell">
-                    From: <span t-esc="date_from" /> To: <span t-esc="date_to" />
+                    From: <span t-esc="date_from" t-options="{'widget': 'date'}" />
+                    To: <span t-esc="date_to" t-options="{'widget': 'date'}" />
                 </div>
                 <div class="act_as_cell">
                     <t t-if="only_posted_moves">All posted entries</t>
