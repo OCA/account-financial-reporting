@@ -353,7 +353,9 @@ class OpenItemsReport(models.AbstractModel):
         company_id = data["company_id"]
         account_ids = data["account_ids"]
         partner_ids = data["partner_ids"]
-        date_at = datetime.strptime(data["date_at"] , "%Y-%m-%d").date()  # data["date_at"]
+        date_at = datetime.strptime(
+            data["date_at"], "%Y-%m-%d"
+        ).date()  # data["date_at"]
         date_at_object = date_at  # datetime.strptime(date_at, "%Y-%m-%d").date()
         date_from = data["date_from"]
         target_move = data["target_move"]
