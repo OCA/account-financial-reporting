@@ -353,8 +353,8 @@ class OpenItemsReport(models.AbstractModel):
         company_id = data["company_id"]
         account_ids = data["account_ids"]
         partner_ids = data["partner_ids"]
-        date_at = data["date_at"]
-        date_at_object = datetime.strptime(date_at, "%Y-%m-%d").date()
+        date_at = datetime.strptime(data["date_at"] , "%Y-%m-%d").date()  # data["date_at"]
+        date_at_object = date_at  # datetime.strptime(date_at, "%Y-%m-%d").date()
         date_from = data["date_from"]
         target_move = data["target_move"]
         show_partner_details = data["show_partner_details"]
@@ -381,7 +381,7 @@ class OpenItemsReport(models.AbstractModel):
             "show_partner_details": data["show_partner_details"],
             "company_name": company.display_name,
             "currency_name": company.currency_id.name,
-            "date_at": date_at_object.strftime("%d/%m/%Y"),
+            "date_at": date_at_object,
             "hide_account_at_0": data["hide_account_at_0"],
             "target_move": data["target_move"],
             "journals_data": journals_data,

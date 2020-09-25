@@ -110,7 +110,7 @@
             </div>
             <div class="act_as_row">
                 <div class="act_as_cell">
-                    <span t-esc="date_at" />
+                    <span t-esc="date_at" t-options="{'widget': 'date'}"/>
                 </div>
                 <div class="act_as_cell">
                     <t t-if="target_move == 'posted'">All posted entries</t>
@@ -172,7 +172,7 @@
         <div class="act_as_row lines">
             <!--## date-->
             <div class="act_as_cell left">
-                <span t-raw="line['date'].strftime('%d/%m/%Y')" />
+                <span t-esc="line['date']" t-options="{'widget': 'date'}"/>
             </div>
             <!--## move-->
             <div class="act_as_cell left">
