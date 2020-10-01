@@ -35,7 +35,6 @@ addon | version | summary
 --- | --- | ---
 [account_chart_report](account_chart_report/) | 8.0.1.0.0 (unported) | Print chart of accounts
 [account_export_csv](account_export_csv/) | 8.0.1.1.0 (unported) | Account Export CSV
-[account_financial_report](account_financial_report/) | 2.0 (unported) | Common financial reports
 [account_journal_report_xls](account_journal_report_xls/) | 8.0.0.2.0 (unported) | Financial Journal reports
 
 [//]: # (end addons)
