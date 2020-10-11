@@ -14,9 +14,12 @@
     <template id="report_journal_ledger_base">
         <t t-set="display_currency" t-value="foreign_currency" />
         <t t-set="display_account_name" t-value="with_account_name" />
-        <t t-set="title">Journal Ledger - <t t-raw="company_name" /> - <t
-                t-raw="currency_name"
-            /></t>
+        <t t-set="title">
+            Journal Ledger -
+            <t t-raw="company_name" />
+            -
+            <t t-raw="currency_name" />
+        </t>
         <t t-set="company_name" t-value="Company_Name" />
         <div class="page">
             <div class="row">
@@ -63,12 +66,16 @@
     <template id="account_financial_report.report_journal_ledger_journal">
         <div class="act_as_table list_table" style="margin-top: 10px;" />
         <div class="act_as_caption account_title" style="width: 100%;">
-            <span t-esc="journal['name']" /> (<span
-                t-esc="journal['currency_name']"
-            />) - <span t-esc="date_from" t-options="{'widget': 'date'}" /> to <span
-                t-esc="date_to"
-                t-options="{'widget': 'date'}"
-            /> - <span t-esc="move_target" /> Moves
+            <span t-esc="journal['name']" />
+            (
+            <span t-esc="journal['currency_name']" />
+            ) -
+            <span t-esc="date_from" t-options="{'widget': 'date'}" />
+            to
+            <span t-esc="date_to" t-options="{'widget': 'date'}" />
+            -
+            <span t-esc="move_target" />
+            Moves
         </div>
         <div class="act_as_table data_table" style="width: 100%;">
             <t
@@ -84,20 +91,12 @@
     </template>
     <template id="account_financial_report.report_journal_ledger_journal_table_header">
         <t t-if="not display_account_name">
-            <t t-set="account_column_style">
-                width: 8.11%;
-            </t>
-            <t t-set="label_column_style">
-                width: 38.92%;
-            </t>
+            <t t-set="account_column_style">width: 8.11%;</t>
+            <t t-set="label_column_style">width: 38.92%;</t>
         </t>
         <t t-else="">
-            <t t-set="account_column_style">
-                width: 23.78%;
-            </t>
-            <t t-set="label_column_style">
-                width: 23.24%;
-            </t>
+            <t t-set="account_column_style">width: 23.78%;</t>
+            <t t-set="label_column_style">width: 23.24%;</t>
         </t>
         <div class="act_as_thead">
             <div class="act_as_row labels">
@@ -108,9 +107,7 @@
                 >
                     Entry
                 </div>
-                <div class="act_as_cell" name="date" style="width: 5.41%;">
-                    Date
-                </div>
+                <div class="act_as_cell" name="date" style="width: 5.41%;">Date</div>
                 <div
                     class="act_as_cell"
                     name="account"
@@ -124,12 +121,8 @@
                 <div class="act_as_cell" name="label" t-att-style="label_column_style">
                     Ref - Label
                 </div>
-                <div class="act_as_cell" name="taxes" style="width: 7.57%;">
-                    Taxes
-                </div>
-                <div class="act_as_cell" name="debit" style="width: 8.65%;">
-                    Debit
-                </div>
+                <div class="act_as_cell" name="taxes" style="width: 7.57%;">Taxes</div>
+                <div class="act_as_cell" name="debit" style="width: 8.65%;">Debit</div>
                 <div class="act_as_cell" name="credit" style="width: 8.65%;">
                     Credit
                 </div>
@@ -174,8 +167,10 @@
             </div>
             <t t-if="display_currency">
                 <div class="act_as_cell" name="currency_name">
+
                 </div>
                 <div class="act_as_cell amount" name="amount_currency">
+
                 </div>
             </t>
         </div>
@@ -226,7 +221,8 @@
                 t-esc="o._get_atr_from_dict(move_line['account_id'], account_ids_data, 'code')"
             />
             <span t-if="display_account_name">
-                - <span
+                -
+                <span
                     t-esc="o._get_atr_from_dict(move_line['account_id'], account_ids_data, 'name')"
                 />
             </span>
@@ -412,7 +408,8 @@
                 </div>
             </div>
         </div>
-        <div class="act_as_table data_table" style="width: 100%;">10
+        <div class="act_as_table data_table" style="width: 100%;">
+            10
             <div class="act_as_row labels">
                 <div
                     class="act_as_cell first_column"
@@ -439,7 +436,6 @@
                     Balance
                 </div>
             </div>
-
             <t t-foreach="ReportTaxLines" t-as="tax_line">
                 <div class="act_as_row lines">
                     <div class="act_as_cell left" name="tax_name">
