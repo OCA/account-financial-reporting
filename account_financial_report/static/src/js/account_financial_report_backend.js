@@ -1,4 +1,4 @@
-odoo.define("account_financial_report.account_financial_report_backend", function(
+odoo.define("account_financial_report.account_financial_report_backend", function (
     require
 ) {
     "use strict";
@@ -14,7 +14,7 @@ odoo.define("account_financial_report.account_financial_report_backend", functio
             "click .o_account_financial_reports_print": "print",
             "click .o_account_financial_reports_export": "export",
         },
-        init: function(parent, action) {
+        init: function (parent, action) {
             this.actionManager = parent;
             this.given_context = {};
             this.odoo_context = action.context;
@@ -28,27 +28,27 @@ odoo.define("account_financial_report.account_financial_report_backend", functio
             this.given_context.ttype = action.context.ttype || false;
             return this._super.apply(this, arguments);
         },
-        willStart: function() {
+        willStart: function () {
             return $.when(this.get_html());
         },
-        set_html: function() {
+        set_html: function () {
             var self = this;
             var def = $.when();
             if (!this.report_widget) {
                 this.report_widget = new ReportWidget(this, this.given_context);
                 def = this.report_widget.appendTo(this.$el);
             }
-            def.then(function() {
+            def.then(function () {
                 self.report_widget.$el.html(self.html);
             });
         },
-        start: function() {
+        start: function () {
             this.set_html();
             return this._super();
         },
         // Fetches the html and is previous report.context if any,
         // else create it
-        get_html: function() {
+        get_html: function () {
             var self = this;
             var defs = [];
             return this._rpc({
@@ -56,7 +56,7 @@ odoo.define("account_financial_report.account_financial_report_backend", functio
                 method: "get_html",
                 args: [self.given_context],
                 context: self.odoo_context,
-            }).then(function(result) {
+            }).then(function (result) {
                 self.html = result.html;
                 defs.push(self.update_cp());
                 return $.when.apply($, defs);
@@ -64,7 +64,7 @@ odoo.define("account_financial_report.account_financial_report_backend", functio
         },
         // Updates the control panel and render the elements that have yet
         // to be rendered
-        update_cp: function() {
+        update_cp: function () {
             if (this.$buttons) {
                 var status = {
                     breadcrumbs: this.actionManager.get_breadcrumbs(),
@@ -73,33 +73,33 @@ odoo.define("account_financial_report.account_financial_report_backend", functio
                 return this.update_control_panel(status);
             }
         },
-        do_show: function() {
+        do_show: function () {
             this._super();
             this.update_cp();
         },
-        print: function() {
+        print: function () {
             var self = this;
             this._rpc({
                 model: this.given_context.model,
                 method: "print_report",
                 args: [this.given_context.active_id, "qweb-pdf"],
                 context: self.odoo_context,
-            }).then(function(result) {
+            }).then(function (result) {
                 self.do_action(result);
             });
         },
-        export: function() {
+        export: function () {
             var self = this;
             this._rpc({
                 model: this.given_context.model,
                 method: "print_report",
                 args: [this.given_context.active_id, "xlsx"],
                 context: self.odoo_context,
-            }).then(function(result) {
+            }).then(function (result) {
                 self.do_action(result);
             });
         },
-        canBeRemoved: function() {
+        canBeRemoved: function () {
             return $.when();
         },
     });

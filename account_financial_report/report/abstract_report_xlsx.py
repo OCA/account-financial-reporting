@@ -59,7 +59,7 @@ class AbstractReportXslx(models.AbstractModel):
         self._write_report_footer(report_footer)
 
     def _define_formats(self, workbook):
-        """ Add cell formats to current workbook.
+        """Add cell formats to current workbook.
         Those formats can be used on all cell.
         Available formats are :
          * format_bold
@@ -237,8 +237,7 @@ class AbstractReportXslx(models.AbstractModel):
         self.row_pos += 1
 
     def write_line_from_dict(self, line_dict):
-        """Write a line on current line
-        """
+        """Write a line on current line"""
         for col_pos, column in self.columns.items():
             value = line_dict.get(column["field"], False)
             cell_type = column.get("type", "string")
@@ -528,7 +527,7 @@ class AbstractReportXslx(models.AbstractModel):
 
     def _generate_report_content(self, workbook, report, data):
         """
-            Allow to fetch report content to be displayed.
+        Allow to fetch report content to be displayed.
         """
         raise NotImplementedError()
 
@@ -542,74 +541,74 @@ class AbstractReportXslx(models.AbstractModel):
 
     def _get_report_name(self, report, data=False):
         """
-            Allow to define the report name.
-            Report name will be used as sheet name and as report title.
-            :return: the report name
+        Allow to define the report name.
+        Report name will be used as sheet name and as report title.
+        :return: the report name
         """
         raise NotImplementedError()
 
     def _get_report_footer(self):
         """
-            Allow to define the report footer.
-            :return: the report footer
+        Allow to define the report footer.
+        :return: the report footer
         """
         return False
 
     def _get_report_columns(self, report):
         """
-            Allow to define the report columns
-            which will be used to generate report.
-            :return: the report columns as dict
-            :Example:
-            {
-                0: {'header': 'Simple column',
-                    'field': 'field_name_on_my_object',
-                    'width': 11},
-                1: {'header': 'Amount column',
-                     'field': 'field_name_on_my_object',
-                     'type': 'amount',
-                     'width': 14},
-            }
+        Allow to define the report columns
+        which will be used to generate report.
+        :return: the report columns as dict
+        :Example:
+        {
+            0: {'header': 'Simple column',
+                'field': 'field_name_on_my_object',
+                'width': 11},
+            1: {'header': 'Amount column',
+                 'field': 'field_name_on_my_object',
+                 'type': 'amount',
+                 'width': 14},
+        }
         """
         raise NotImplementedError()
 
     def _get_report_filters(self, report):
         """
-            :return: the report filters as list
-            :Example:
-            [
-                ['first_filter_name', 'first_filter_value'],
-                ['second_filter_name', 'second_filter_value']
-            ]
+        :return: the report filters as list
+        :Example:
+        [
+            ['first_filter_name', 'first_filter_value'],
+            ['second_filter_name', 'second_filter_value']
+        ]
         """
         raise NotImplementedError()
 
     def _get_col_count_filter_name(self):
         """
-            :return: the columns number used for filter names.
+        :return: the columns number used for filter names.
         """
         raise NotImplementedError()
 
     def _get_col_count_filter_value(self):
         """
-            :return: the columns number used for filter values.
+        :return: the columns number used for filter values.
         """
         raise NotImplementedError()
 
     def _get_col_pos_initial_balance_label(self):
         """
-            :return: the columns position used for initial balance label.
+        :return: the columns position used for initial balance label.
         """
         raise NotImplementedError()
 
     def _get_col_count_final_balance_name(self):
         """
-            :return: the columns number used for final balance name.
+        :return: the columns number used for final balance name.
         """
         raise NotImplementedError()
 
     def _get_col_pos_final_balance_label(self):
         """
-            :return: the columns position used for final balance label.
+        :return: the columns position used for final balance label.
         """
         raise NotImplementedError()
