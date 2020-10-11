@@ -10,9 +10,12 @@
         </t>
     </template>
     <template id="account_financial_report.report_vat_report_base">
-        <t t-set="title">VAT Report - <t t-raw="company_name" /> - <t
-                t-raw="currency_name"
-            /></t>
+        <t t-set="title">
+            VAT Report -
+            <t t-raw="company_name" />
+            -
+            <t t-raw="currency_name" />
+        </t>
         <t t-set="company_name" t-value="company_name" />
         <div class="page">
             <div class="row">
@@ -30,10 +33,9 @@
                 <div class="act_as_thead">
                     <div class="act_as_row labels">
                         <!--## code-->
-                        <div
-                            class="act_as_cell first_column"
-                            style="width: 5%;"
-                        >Code</div>
+                        <div class="act_as_cell first_column" style="width: 5%;">
+                            Code
+                        </div>
                         <!--## name-->
                         <div class="act_as_cell" style="width: 65%;">Name</div>
                         <!--## net-->

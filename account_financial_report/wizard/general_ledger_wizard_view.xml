@@ -47,9 +47,7 @@
                                             class="oe_inline"
                                             options="{'no_create': True}"
                                         />
-                                        <span class="oe_inline">
-                                            To
-                                        </span>
+                                        <span class="oe_inline">To</span>
                                         <field
                                             name="account_code_to"
                                             class="oe_inline"
@@ -94,8 +92,9 @@
                             />
                         </page>
                         <page string="Additional Filtering">
-                            <style
-                            >.o_domain_show_selection_button {display: none}</style>
+                            <style>
+                                .o_domain_show_selection_button {display: none}
+                            </style>
                             <field
                                 name="domain"
                                 widget="domain"
@@ -113,8 +112,10 @@
                         invisible="1"
                     />
                     <group />
-                    <h4
-                    >General Ledger can be computed only if selected company have only one unaffected earnings account.</h4>
+                    <h4>
+                        General Ledger can be computed only if selected company have
+                        only one unaffected earnings account.
+                    </h4>
                     <group />
                 </div>
                 <footer>

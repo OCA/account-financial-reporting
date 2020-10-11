@@ -55,7 +55,10 @@ class OpenItemsReportWizard(models.TransientModel):
         "will display initial and final balance in that currency.",
         default=lambda self: self._default_foreign_currency(),
     )
-    show_partner_details = fields.Boolean(string="Show Partner Details", default=True,)
+    show_partner_details = fields.Boolean(
+        string="Show Partner Details",
+        default=True,
+    )
     account_code_from = fields.Many2one(
         comodel_name="account.account",
         string="Account Code From",

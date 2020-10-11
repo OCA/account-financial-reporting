@@ -195,7 +195,10 @@ class GeneralLedgerXslx(models.AbstractModel):
                         for tag_id in line["tag_ids"]:
                             tags += tags_data[tag_id]["name"] + " "
                         line.update(
-                            {"taxes_description": taxes_description, "tags": tags,}
+                            {
+                                "taxes_description": taxes_description,
+                                "tags": tags,
+                            }
                         )
                     self.write_line_from_dict(line)
                 # Display ending balance line for account
@@ -208,7 +211,9 @@ class GeneralLedgerXslx(models.AbstractModel):
                 )
                 if foreign_currency:
                     account.update(
-                        {"final_bal_curr": account["fin_bal"]["bal_curr"],}
+                        {
+                            "final_bal_curr": account["fin_bal"]["bal_curr"],
+                        }
                     )
                 self.write_ending_balance_from_dict(account)
 
@@ -234,7 +239,9 @@ class GeneralLedgerXslx(models.AbstractModel):
                     )
                     if foreign_currency:
                         partner.update(
-                            {"initial_bal_curr": partner["init_bal"]["bal_curr"],}
+                            {
+                                "initial_bal_curr": partner["init_bal"]["bal_curr"],
+                            }
                         )
                     self.write_initial_balance_from_dict(partner)
 
@@ -263,7 +270,10 @@ class GeneralLedgerXslx(models.AbstractModel):
                             for tag_id in line["tag_ids"]:
                                 tags += tags_data[tag_id]["name"] + " "
                             line.update(
-                                {"taxes_description": taxes_description, "tags": tags,}
+                                {
+                                    "taxes_description": taxes_description,
+                                    "tags": tags,
+                                }
                             )
                         self.write_line_from_dict(line)
 

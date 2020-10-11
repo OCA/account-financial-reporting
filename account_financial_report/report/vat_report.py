@@ -68,13 +68,15 @@ class VATReport(models.AbstractModel):
             "tag_ids",
         ]
         tax_move_lines = self.env["account.move.line"].search_read(
-            domain=tax_domain, fields=ml_fields,
+            domain=tax_domain,
+            fields=ml_fields,
         )
         net_domain = self._get_net_report_domain(
             company_id, date_from, date_to, only_posted_moves
         )
         taxed_move_lines = self.env["account.move.line"].search_read(
-            domain=net_domain, fields=ml_fields,
+            domain=net_domain,
+            fields=ml_fields,
         )
         taxed_move_lines = list(filter(lambda d: d["tax_ids"], taxed_move_lines))
         vat_data = []

@@ -14,9 +14,12 @@
         <t t-set="foreign_currency" t-value="foreign_currency" />
         <t t-set="filter_partner_ids" t-value="filter_partner_ids" />
         <!-- Defines global variables used by internal layout -->
-        <t t-set="title">General Ledger - <t t-raw="company_name" /> - <t
-                t-raw="currency_name"
-            /></t>
+        <t t-set="title">
+            General Ledger -
+            <t t-raw="company_name" />
+            -
+            <t t-raw="currency_name" />
+        </t>
         <div class="page">
             <div class="row">
                 <h4
@@ -34,7 +37,8 @@
                     <div class="act_as_caption account_title" style="width: 100%">
                         <span
                             t-esc="o._get_atr_from_dict(account['id'], accounts_data, 'code')"
-                        /> -
+                        />
+                        -
                         <span
                             t-esc="o._get_atr_from_dict(account['id'], accounts_data, 'name')"
                         />
@@ -115,7 +119,10 @@
             </div>
             <div class="act_as_row">
                 <div class="act_as_cell">
-                    From: <span t-esc="date_from" /> To: <span t-esc="date_to" />
+                    From:
+                    <span t-esc="date_from" />
+                    To:
+                    <span t-esc="date_to" />
                 </div>
                 <div class="act_as_cell">
                     <t t-if="only_posted_moves">All posted entries</t>
@@ -143,7 +150,8 @@
                 <div class="act_as_row labels">
                     <!--## date-->
                     <div class="act_as_cell first_column" style="width: 3.51%;">
-                        Date</div>
+                        Date
+                    </div>
                     <!--## move-->
                     <div class="act_as_cell" style="width: 8.03%">Entry</div>
                     <!--## journal-->
@@ -153,17 +161,17 @@
                     <!--## account code-->
                     <div class="act_as_cell" style="width: 8.89%;">Taxes</div>
                     <!--## partner-->
-                    <div class="act_as_cell" style="width: 12.01%;">Partner
-                    </div>
+                    <div class="act_as_cell" style="width: 12.01%;">Partner</div>
                     <!--## ref - label-->
-                    <div class="act_as_cell" style="width: 16.9%;">Ref -
-                        Label</div>
+                    <div class="act_as_cell" style="width: 16.9%;">
+                        Ref -
+                        Label
+                    </div>
                     <t t-if="show_cost_center">
                         <!--## cost_center-->
-                        <div
-                            class="act_as_cell"
-                            style="width: 8.03%;"
-                        >Analytic Account</div>
+                        <div class="act_as_cell" style="width: 8.03%;">
+                            Analytic Account
+                        </div>
                     </t>
                     <t t-if="show_analytic_tags">
                         <!--## analytic tags-->
@@ -176,18 +184,16 @@
                     <!--## credit-->
                     <div class="act_as_cell amount" style="width: 8.02%;">Credit</div>
                     <!--## balance cumulated-->
-                    <div
-                        class="act_as_cell amount"
-                        style="width: 8.02%;"
-                    >Cumul. Bal.</div>
+                    <div class="act_as_cell amount" style="width: 8.02%;">
+                        Cumul. Bal.
+                    </div>
                     <t t-if="foreign_currency">
                         <!--## currency_name-->
                         <div class="act_as_cell" style="width: 2.08%;">Cur.</div>
                         <!--## amount_currency-->
-                        <div
-                            class="act_as_cell amount"
-                            style="width: 5.19%;"
-                        >Amount cur.</div>
+                        <div class="act_as_cell amount" style="width: 5.19%;">
+                            Amount cur.
+                        </div>
                     </t>
                 </div>
             </div>
@@ -724,22 +730,24 @@
             <div class="act_as_row labels" style="font-weight: bold;">
                 <!--## date-->
                 <t t-if='type == "account_type"'>
-                    <div class="act_as_cell first_column" style="width: 41.32%;"><span
+                    <div class="act_as_cell first_column" style="width: 41.32%;">
+                        <span
                             t-esc="o._get_atr_from_dict(account['id'], accounts_data, 'code')"
-                        /> - <span
+                        />
+                        -
+                        <span
                             t-esc="o._get_atr_from_dict(account['id'], accounts_data, 'name')"
-                        /></div>
-                    <div
-                        class="act_as_cell right"
-                        style="width: 16.9%;"
-                    >Ending balance</div>
+                        />
+                    </div>
+                    <div class="act_as_cell right" style="width: 16.9%;">
+                        Ending balance
+                    </div>
                 </t>
                 <t t-if='type == "partner_type"'>
                     <div class="act_as_cell first_column" style="width: 41.32%;" />
-                    <div
-                        class="act_as_cell right"
-                        style="width: 16.9%;"
-                    >Partner ending balance</div>
+                    <div class="act_as_cell right" style="width: 16.9%;">
+                        Partner ending balance
+                    </div>
                 </t>
                 <t t-if="show_cost_center">
                     <!--## cost_center-->
