@@ -106,8 +106,10 @@
                         invisible="1"
                     />
                     <group />
-                    <h4
-                    >Trial Balance can be computed only if selected company have only one unaffected earnings account.</h4>
+                    <h4>
+                        Trial Balance can be computed only if selected company have only
+                        one unaffected earnings account.
+                    </h4>
                     <group />
                 </div>
                 <footer>

@@ -22,12 +22,14 @@
     </template>
     <template id="report_buttons">
         <div class="button_row">
-            <button class="o_account_financial_reports_print btn btn-sm oe_button"><span
-                    class="fa fa-print"
-                /> Print</button>
-            <button
-                class="o_account_financial_reports_export btn btn-sm oe_button"
-            ><span class="fa fa-download" /> Export</button>
+            <button class="o_account_financial_reports_print btn btn-sm oe_button">
+                <span class="fa fa-print" />
+                Print
+            </button>
+            <button class="o_account_financial_reports_export btn btn-sm oe_button">
+                <span class="fa fa-download" />
+                Export
+            </button>
         </div>
     </template>
     <record id="action_report_general_ledger" model="ir.actions.client">
