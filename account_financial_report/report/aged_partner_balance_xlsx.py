@@ -268,8 +268,8 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
 
     def write_ending_balance_from_dict(self, my_object):
         """
-            Specific function to write ending partner balance
-            for Aged Partner Balance
+        Specific function to write ending partner balance
+        for Aged Partner Balance
         """
         name = None
         label = _("Partner cumul aged balance")
@@ -288,7 +288,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
         amount_is_percent,
     ):
         """
-            Specific function to write account footer for Aged Partner Balance
+        Specific function to write account footer for Aged Partner Balance
         """
         col_pos_footer_label = self._get_col_pos_footer_label(report)
         for col_pos, column in self.columns.items():

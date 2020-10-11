@@ -45,9 +45,7 @@
                                 class="oe_inline"
                                 options="{'no_create': True}"
                             />
-                            <span class="oe_inline">
-                                To
-                            </span>
+                            <span class="oe_inline">To</span>
                             <field
                                 name="account_code_to"
                                 class="oe_inline"

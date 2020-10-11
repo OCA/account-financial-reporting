@@ -748,12 +748,16 @@ class GeneralLedgerReport(models.AbstractModel):
             for partner in account["list_partner"]:
                 for move_line in partner["move_lines"]:
                     centralized_ml = self._calculate_centralization(
-                        centralized_ml, move_line, date_to,
+                        centralized_ml,
+                        move_line,
+                        date_to,
                     )
         else:
             for move_line in account["move_lines"]:
                 centralized_ml = self._calculate_centralization(
-                    centralized_ml, move_line, date_to,
+                    centralized_ml,
+                    move_line,
+                    date_to,
                 )
         list_centralized_ml = []
         for jnl_id in centralized_ml.keys():
