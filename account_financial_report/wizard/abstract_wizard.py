@@ -1,7 +1,7 @@
 # Copyright 2019 Lorenzo Battistini @ TAKOBI
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import models
+from odoo import fields, models
 
 
 class AbstractWizard(models.AbstractModel):
@@ -27,3 +27,10 @@ class AbstractWizard(models.AbstractModel):
             partners -= corp_partners
             partners |= corp_partners.mapped("commercial_partner_id")
             return partners.ids
+
+    company_id = fields.Many2one(
+        comodel_name="res.company",
+        default=lambda self: self.env.company.id,
+        required=False,
+        string="Company",
+    )

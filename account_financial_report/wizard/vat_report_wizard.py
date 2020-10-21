@@ -11,7 +11,7 @@ class VATReportWizard(models.TransientModel):
 
     company_id = fields.Many2one(
         comodel_name="res.company",
-        default=lambda self: self.env.company,
+        default=lambda self: self.env.company.id,
         required=False,
         string="Company",
     )
