@@ -215,15 +215,15 @@ class TestJournalReport(TransactionCase):
         res_data = self.JournalLedgerReport._get_report_values(wiz, data)
         self.check_report_journal_debit_credit(res_data, 0, 0)
 
-        move1.post()
+        move1.action_post()
         res_data = self.JournalLedgerReport._get_report_values(wiz, data)
         self.check_report_journal_debit_credit(res_data, 100, 100)
 
-        move2.post()
+        move2.action_post()
         res_data = self.JournalLedgerReport._get_report_values(wiz, data)
         self.check_report_journal_debit_credit(res_data, 100, 100)
 
-        move3.post()
+        move3.action_post()
         res_data = self.JournalLedgerReport._get_report_values(wiz, data)
         self.check_report_journal_debit_credit(res_data, 200, 200)
 
@@ -234,7 +234,7 @@ class TestJournalReport(TransactionCase):
 
     def test_02_test_taxes_out_invoice(self):
         move_form = Form(
-            self.env["account.move"].with_context(default_type="out_invoice")
+            self.env["account.move"].with_context(default_move_type="out_invoice")
         )
         move_form.partner_id = self.partner_2
         move_form.journal_id = self.journal_sale
@@ -252,7 +252,7 @@ class TestJournalReport(TransactionCase):
             line_form.tax_ids.add(self.tax_15_s)
             line_form.tax_ids.add(self.tax_20_s)
         invoice = move_form.save()
-        invoice.post()
+        invoice.action_post()
 
         wiz = self.JournalLedgerReportWizard.create(
             {
@@ -301,10 +301,10 @@ class TestJournalReport(TransactionCase):
         #     ],
         # }
         # invoice = self.InvoiceObj.create(invoice_values)
-        # invoice.post()
+        # invoice.action_post()
 
         move_form = Form(
-            self.env["account.move"].with_context(default_type="in_invoice")
+            self.env["account.move"].with_context(default_move_type="in_invoice")
         )
         move_form.partner_id = self.partner_2
         move_form.journal_id = self.journal_purchase
@@ -322,7 +322,7 @@ class TestJournalReport(TransactionCase):
             line_form.tax_ids.add(self.tax_15_p)
             line_form.tax_ids.add(self.tax_20_p)
         invoice = move_form.save()
-        invoice.post()
+        invoice.action_post()
 
         wiz = self.JournalLedgerReportWizard.create(
             {

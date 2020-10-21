@@ -296,7 +296,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                     self.write_ending_balance_from_dict(partner)
 
                     # Line break
-                    self.row_pos += 1
+                    self.set_row_pos(self.row_pos + 1)
 
                 if not filter_partner_ids:
                     account.update(
@@ -317,7 +317,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                     self.write_ending_balance_from_dict(account)
 
             # 2 lines break
-            self.row_pos += 2
+            self.set_row_pos(self.row_pos + 2)
 
     def write_initial_balance_from_dict(self, my_object):
         """Specific function to write initial balance for General Ledger"""

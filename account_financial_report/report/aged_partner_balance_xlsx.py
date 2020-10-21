@@ -217,7 +217,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                 )
 
                 # 2 lines break
-                self.row_pos += 2
+                self.set_row_pos(self.row_pos + 2)
         else:
             # For each account
             for account in aged_partner_balance:
@@ -264,7 +264,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                 )
 
                 # 2 lines break
-                self.row_pos += 2
+                self.set_row_pos(self.row_pos + 2)
 
     def write_ending_balance_from_dict(self, my_object):
         """
@@ -312,4 +312,4 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
             else:
                 self.sheet.write_string(self.row_pos, col_pos, "", string_format)
 
-        self.row_pos += 1
+        self.set_row_pos(self.row_pos + 1)

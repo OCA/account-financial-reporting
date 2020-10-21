@@ -160,7 +160,7 @@ class OpenItemsXslx(models.AbstractModel):
                         )
 
                         # Line break
-                        self.row_pos += 1
+                        self.set_row_pos(self.row_pos + 1)
                 else:
                     # Display array header for move lines
                     self.write_array_header()
@@ -182,7 +182,7 @@ class OpenItemsXslx(models.AbstractModel):
                 )
 
                 # 2 lines break
-                self.row_pos += 2
+                self.set_row_pos(self.row_pos + 2)
 
     def write_ending_balance_from_dict(
         self, my_object, type_object, total_amount, account_id=False, partner_id=False

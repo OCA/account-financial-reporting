@@ -10,26 +10,90 @@ class AbstractReportXslx(models.AbstractModel):
     _inherit = "report.report_xlsx.abstract"
 
     def __init__(self, pool, cr):
+        self._set_default_attributes()
+
+    @classmethod
+    def _set_default_attributes(cls):
         # main sheet which will contains report
-        self.sheet = None
+        cls.sheet = None
 
         # columns of the report
-        self.columns = None
+        cls.columns = None
 
         # row_pos must be incremented at each writing lines
-        self.row_pos = None
+        cls.row_pos = None
 
         # Formats
-        self.format_right = None
-        self.format_left = None
-        self.format_right_bold_italic = None
-        self.format_bold = None
-        self.format_header_left = None
-        self.format_header_center = None
-        self.format_header_right = None
-        self.format_header_amount = None
-        self.format_amount = None
-        self.format_percent_bold_italic = None
+        cls.format_right = None
+        cls.format_left = None
+        cls.format_right_bold_italic = None
+        cls.format_bold = None
+        cls.format_header_left = None
+        cls.format_header_center = None
+        cls.format_header_right = None
+        cls.format_header_amount = None
+        cls.format_amount = None
+        cls.format_percent_bold_italic = None
+
+    @classmethod
+    def set_sheet(cls, sheet):
+        cls.sheet = sheet
+
+    @classmethod
+    def set_columns(cls, columns):
+        cls.columns = columns
+
+    @classmethod
+    def set_row_pos(cls, row_pos):
+        cls.row_pos = row_pos
+
+    @classmethod
+    def set_format_right(cls, format_right):
+        cls.format_right = format_right
+
+    @classmethod
+    def set_format_left(cls, format_left):
+        cls.format_left = format_left
+
+    @classmethod
+    def set_format_right_bold_italic(cls, format_right_bold_italic):
+        cls.format_right_bold_italic = format_right_bold_italic
+
+    @classmethod
+    def set_format_bold(cls, format_bold):
+        cls.format_bold = format_bold
+
+    @classmethod
+    def set_format_header_left(cls, format_header_left):
+        cls.format_header_left = format_header_left
+
+    @classmethod
+    def set_format_header_center(cls, format_header_center):
+        cls.format_header_center = format_header_center
+
+    @classmethod
+    def set_format_header_right(cls, format_header_right):
+        cls.format_header_right = format_header_right
+
+    @classmethod
+    def set_format_header_amount(cls, format_header_amount):
+        cls.format_header_amount = format_header_amount
+
+    @classmethod
+    def set_format_amount(cls, format_amount):
+        cls.format_amount = format_amount
+
+    @classmethod
+    def set_format_percent_bold_italic(cls, format_percent_bold_italic):
+        cls.format_percent_bold_italic = format_percent_bold_italic
+
+    @classmethod
+    def set_format_amount_bold(cls, format_amount_bold):
+        cls.format_amount_bold = format_amount_bold
+
+    @classmethod
+    def set_workbook(cls, workbook):
+        cls.workbook = workbook
 
     def get_workbook_options(self):
         return {"constant_memory": True}
@@ -37,16 +101,16 @@ class AbstractReportXslx(models.AbstractModel):
     def generate_xlsx_report(self, workbook, data, objects):
         report = objects
 
-        self.row_pos = 0
+        self.set_row_pos(0)
 
         self._define_formats(workbook)
 
         report_name = self._get_report_name(report, data=data)
         report_footer = self._get_report_footer()
         filters = self._get_report_filters(report)
-        self.columns = self._get_report_columns(report)
-        self.workbook = workbook
-        self.sheet = workbook.add_worksheet(report_name[:31])
+        self.set_columns(self._get_report_columns(report))
+        self.set_workbook(workbook)
+        self.set_sheet(workbook.add_worksheet(report_name[:31]))
 
         self._set_column_width()
 
@@ -72,36 +136,42 @@ class AbstractReportXslx(models.AbstractModel):
          * format_amount
          * format_percent_bold_italic
         """
-        self.format_bold = workbook.add_format({"bold": True})
-        self.format_right = workbook.add_format({"align": "right"})
-        self.format_left = workbook.add_format({"align": "left"})
-        self.format_right_bold_italic = workbook.add_format(
-            {"align": "right", "bold": True, "italic": True}
+        self.set_format_bold(workbook.add_format({"bold": True}))
+        self.set_format_right(workbook.add_format({"align": "right"}))
+        self.set_format_left(workbook.add_format({"align": "left"}))
+        self.set_format_right_bold_italic(
+            workbook.add_format({"align": "right", "bold": True, "italic": True})
         )
-        self.format_header_left = workbook.add_format(
-            {"bold": True, "border": True, "bg_color": "#FFFFCC"}
+        self.set_format_header_left(
+            workbook.add_format({"bold": True, "border": True, "bg_color": "#FFFFCC"})
         )
-        self.format_header_center = workbook.add_format(
-            {"bold": True, "align": "center", "border": True, "bg_color": "#FFFFCC"}
+        self.set_format_header_center(
+            workbook.add_format(
+                {"bold": True, "align": "center", "border": True, "bg_color": "#FFFFCC"}
+            )
         )
-        self.format_header_right = workbook.add_format(
-            {"bold": True, "align": "right", "border": True, "bg_color": "#FFFFCC"}
+        self.set_format_header_right(
+            workbook.add_format(
+                {"bold": True, "align": "right", "border": True, "bg_color": "#FFFFCC"}
+            )
         )
-        self.format_header_amount = workbook.add_format(
-            {"bold": True, "border": True, "bg_color": "#FFFFCC"}
+        self.set_format_header_amount(
+            workbook.add_format({"bold": True, "border": True, "bg_color": "#FFFFCC"})
         )
-        currency_id = self.env["res.company"]._get_user_currency()
+        currency_id = (
+            self.env.company.currency_id
+        )  # self.env["res.company"]._get_user_currency()
         self.format_header_amount.set_num_format(
             "#,##0." + "0" * currency_id.decimal_places
         )
-        self.format_amount = workbook.add_format()
+        self.set_format_amount(workbook.add_format())
         self.format_amount.set_num_format("#,##0." + "0" * currency_id.decimal_places)
-        self.format_amount_bold = workbook.add_format({"bold": True})
+        self.set_format_amount_bold(workbook.add_format({"bold": True}))
         self.format_amount_bold.set_num_format(
             "#,##0." + "0" * currency_id.decimal_places
         )
-        self.format_percent_bold_italic = workbook.add_format(
-            {"bold": True, "italic": True}
+        self.set_format_percent_bold_italic(
+            workbook.add_format({"bold": True, "italic": True})
         )
         self.format_percent_bold_italic.set_num_format("#,##0.00%")
 
@@ -124,14 +194,14 @@ class AbstractReportXslx(models.AbstractModel):
             title,
             self.format_bold,
         )
-        self.row_pos += 3
+        self.set_row_pos(self.row_pos + 3)
 
     def _write_report_footer(self, footer):
         """Write report footer .
         Columns are defined with `_get_report_columns` method.
         """
         if footer:
-            self.row_pos += 1
+            self.set_row_pos(self.row_pos + 1)
             self.sheet.merge_range(
                 self.row_pos,
                 0,
@@ -140,7 +210,7 @@ class AbstractReportXslx(models.AbstractModel):
                 footer,
                 self.format_left,
             )
-            self.row_pos += 1
+            self.set_row_pos(self.row_pos + 1)
 
     def _write_filters(self, filters):
         """Write one line per filters on starting on current line.
@@ -169,8 +239,8 @@ class AbstractReportXslx(models.AbstractModel):
                 col_value + col_count_filter_value - 1,
                 value,
             )
-            self.row_pos += 1
-        self.row_pos += 2
+            self.set_row_pos(self.row_pos + 1)
+        self.set_row_pos(self.row_pos + 2)
 
     def write_array_title(self, title):
         """Write array title on current line using all defined columns width.
@@ -184,7 +254,7 @@ class AbstractReportXslx(models.AbstractModel):
             title,
             self.format_bold,
         )
-        self.row_pos += 1
+        self.set_row_pos(self.row_pos + 1)
 
     def write_array_header(self):
         """Write array header on current line using all defined columns name.
@@ -194,7 +264,7 @@ class AbstractReportXslx(models.AbstractModel):
             self.sheet.write(
                 self.row_pos, col_pos, column["header"], self.format_header_center
             )
-        self.row_pos += 1
+        self.set_row_pos(self.row_pos + 1)
 
     def write_line(self, line_object):
         """Write a line on current line using all defined columns field name.
@@ -234,7 +304,7 @@ class AbstractReportXslx(models.AbstractModel):
                     self.sheet.write_number(
                         self.row_pos, col_pos, float(value), format_amt
                     )
-        self.row_pos += 1
+        self.set_row_pos(self.row_pos + 1)
 
     def write_line_from_dict(self, line_dict):
         """Write a line on current line"""
@@ -278,7 +348,7 @@ class AbstractReportXslx(models.AbstractModel):
                 self.sheet.write_string(
                     self.row_pos, col_pos, value or "", self.format_right
                 )
-        self.row_pos += 1
+        self.set_row_pos(self.row_pos + 1)
 
     def write_initial_balance(self, my_object, label):
         """Write a specific initial balance line on current line
@@ -311,7 +381,7 @@ class AbstractReportXslx(models.AbstractModel):
                         self.sheet.write_string(
                             self.row_pos, col_pos, value.name or "", self.format_right
                         )
-        self.row_pos += 1
+        self.set_row_pos(self.row_pos + 1)
 
     def write_initial_balance_from_dict(self, my_object, label):
         """Write a specific initial balance line on current line
@@ -344,7 +414,7 @@ class AbstractReportXslx(models.AbstractModel):
                         self.sheet.write_string(
                             self.row_pos, col_pos, value.name or "", self.format_right
                         )
-        self.row_pos += 1
+        self.set_row_pos(self.row_pos + 1)
 
     def write_ending_balance(self, my_object, name, label):
         """Write a specific ending balance line on current line
@@ -393,7 +463,7 @@ class AbstractReportXslx(models.AbstractModel):
                             value.name or "",
                             self.format_header_right,
                         )
-        self.row_pos += 1
+        self.set_row_pos(self.row_pos + 1)
 
     def write_ending_balance_from_dict(self, my_object, name, label):
         """Write a specific ending balance line on current line
@@ -443,7 +513,7 @@ class AbstractReportXslx(models.AbstractModel):
                     self.sheet.write_string(
                         self.row_pos, col_pos, value or "", self.format_header_right
                     )
-        self.row_pos += 1
+        self.set_row_pos(self.row_pos + 1)
 
     def _get_currency_amt_format(self, line_object):
         """ Return amount format specific for each currency. """

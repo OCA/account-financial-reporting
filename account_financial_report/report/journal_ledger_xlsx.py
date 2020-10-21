@@ -195,14 +195,14 @@ class JournalLedgerXslx(models.AbstractModel):
         self._generate_taxes_summary(workbook, sheet_name, ledger["tax_lines"])
 
     def _generate_moves_content(self, workbook, sheet_name, report, res_data, moves):
-        self.workbook = workbook
-        self.sheet = workbook.add_worksheet(sheet_name)
+        self.set_workbook(workbook)
+        self.set_sheet(workbook.add_worksheet(sheet_name))
         self._set_column_width()
 
-        self.row_pos = 1
+        self.set_row_pos(self.row_pos + 1)
 
         self.write_array_title(sheet_name)
-        self.row_pos += 2
+        self.set_row_pos(self.row_pos + 2)
 
         self.write_array_header()
         account_ids_data = res_data["account_ids_data"]
@@ -233,15 +233,15 @@ class JournalLedgerXslx(models.AbstractModel):
                     ),
                 )
                 self.write_line_from_dict(line)
-            self.row_pos += 1
+            self.set_row_pos(self.row_pos + 1)
 
     def _generate_taxes_summary(self, workbook, sheet_name, tax_lines_dict):
-        self.workbook = workbook
-        self.sheet = workbook.add_worksheet(sheet_name)
+        self.set_workbook(workbook)
+        self.set_sheet(workbook.add_worksheet(sheet_name))
 
-        self.row_pos = 1
+        self.set_row_pos(1)
         self.write_array_title(sheet_name)
-        self.row_pos += 2
+        self.set_row_pos(self.row_pos + 2)
 
     def _get_partner_name(self, partner_id, partner_data):
         if partner_id in partner_data.keys():

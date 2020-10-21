@@ -11,11 +11,11 @@ class TestTrialBalanceReport(common.TransactionCase):
         super(TestTrialBalanceReport, self).setUp()
         group_obj = self.env["account.group"]
         acc_obj = self.env["account.account"]
-        self.group1 = group_obj.create({"code_prefix": "1", "name": "Group 1"})
+        self.group1 = group_obj.create({"code_prefix_start": "1", "name": "Group 1"})
         self.group11 = group_obj.create(
-            {"code_prefix": "11", "name": "Group 11", "parent_id": self.group1.id}
+            {"code_prefix_start": "11", "name": "Group 11", "parent_id": self.group1.id}
         )
-        self.group2 = group_obj.create({"code_prefix": "2", "name": "Group 2"})
+        self.group2 = group_obj.create({"code_prefix_start": "2", "name": "Group 2"})
         self.account100 = acc_obj.create(
             {
                 "code": "100",
@@ -151,7 +151,7 @@ class TestTrialBalanceReport(common.TransactionCase):
             ],
         }
         move = self.env["account.move"].create(move_vals)
-        move.post()
+        move.action_post()
 
     def _get_report_lines(self, with_partners=False, hierarchy_on="computed"):
         company = self.env.ref("base.main_company")
@@ -671,7 +671,7 @@ class TestTrialBalanceReport(common.TransactionCase):
             ],
         }
         move = self.env["account.move"].create(move_vals)
-        move.post()
+        move.action_post()
         # Generate the trial balance line
         company = self.env.ref("base.main_company")
         trial_balance = self.env["trial.balance.report.wizard"].create(
@@ -723,7 +723,7 @@ class TestTrialBalanceReport(common.TransactionCase):
             ],
         }
         move = self.env["account.move"].create(move_vals)
-        move.post()
+        move.action_post()
         # Re Generate the trial balance line
         trial_balance = self.env["trial.balance.report.wizard"].create(
             {
@@ -775,7 +775,7 @@ class TestTrialBalanceReport(common.TransactionCase):
             ],
         }
         move = self.env["account.move"].create(move_vals)
-        move.post()
+        move.action_post()
         # Re Generate the trial balance line
         trial_balance = self.env["trial.balance.report.wizard"].create(
             {
