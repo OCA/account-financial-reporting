@@ -13,12 +13,6 @@ class AgedPartnerBalanceWizard(models.TransientModel):
     _description = "Aged Partner Balance Wizard"
     _inherit = "account_financial_report_abstract_wizard"
 
-    company_id = fields.Many2one(
-        comodel_name="res.company",
-        default=lambda self: self.env.company,
-        required=False,
-        string="Company",
-    )
     date_at = fields.Date(required=True, default=fields.Date.context_today)
     date_from = fields.Date(string="Date From")
     target_move = fields.Selection(
