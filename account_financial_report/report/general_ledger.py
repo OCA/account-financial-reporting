@@ -191,6 +191,8 @@ class GeneralLedgerReport(models.AbstractModel):
             base_domain += [("partner_id", "in", partner_ids)]
         if only_posted_moves:
             base_domain += [("move_id.state", "=", "posted")]
+        else:
+            base_domain += [("move_id.state", "in", ["posted", "draft"])]
         if analytic_tag_ids:
             base_domain += [("analytic_tag_ids", "in", analytic_tag_ids)]
         if cost_center_ids:
@@ -371,6 +373,8 @@ class GeneralLedgerReport(models.AbstractModel):
             domain += [("partner_id", "in", partner_ids)]
         if only_posted_moves:
             domain += [("move_id.state", "=", "posted")]
+        else:
+            domain += [("move_id.state", "in", ["posted", "draft"])]
         if analytic_tag_ids:
             domain += [("analytic_tag_ids", "in", analytic_tag_ids)]
         if cost_center_ids:
