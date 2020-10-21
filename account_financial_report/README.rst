@@ -136,6 +136,8 @@ Contributors
   * Harald Panten
   * Valentin Vinagre
 
+* Lois Rilo <lois.rilo@forgeflow.com>
+
 Much of the work in this module was done at a sprint in Sorrento, Italy in
 April 2016.
 
