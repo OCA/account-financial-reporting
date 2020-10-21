@@ -628,7 +628,7 @@ class GeneralLedgerReport(models.AbstractModel):
         hide_account_at_0,
     ):
         general_ledger = []
-        rounding = self.env.user.company_id.currency_id.rounding
+        rounding = self.env.company.currency_id.rounding
         for acc_id in gen_led_data.keys():
             account = {}
             account.update(
