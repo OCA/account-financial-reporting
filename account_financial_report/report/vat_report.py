@@ -40,6 +40,8 @@ class VATReport(models.AbstractModel):
         ]
         if only_posted_moves:
             domain += [("move_id.state", "=", "posted")]
+        else:
+            domain += [("move_id.state", "in", ["posted", "draft"])]
         return domain
 
     @api.model
@@ -52,6 +54,8 @@ class VATReport(models.AbstractModel):
         ]
         if only_posted_moves:
             domain += [("move_id.state", "=", "posted")]
+        else:
+            domain += [("move_id.state", "in", ["posted", "draft"])]
         return domain
 
     def _get_vat_report_data(self, company_id, date_from, date_to, only_posted_moves):

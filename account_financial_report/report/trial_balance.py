@@ -74,6 +74,8 @@ class TrialBalanceReport(models.AbstractModel):
             domain += [("partner_id", "in", partner_ids)]
         if only_posted_moves:
             domain += [("move_id.state", "=", "posted")]
+        else:
+            domain += [("move_id.state", "in", ["posted", "draft"])]
         if show_partner_details:
             domain += [("account_id.internal_type", "in", ["receivable", "payable"])]
         return domain
@@ -106,6 +108,8 @@ class TrialBalanceReport(models.AbstractModel):
             domain += [("partner_id", "in", partner_ids)]
         if only_posted_moves:
             domain += [("move_id.state", "=", "posted")]
+        else:
+            domain += [("move_id.state", "in", ["posted", "draft"])]
         if show_partner_details:
             domain += [("account_id.internal_type", "in", ["receivable", "payable"])]
         return domain
@@ -137,6 +141,8 @@ class TrialBalanceReport(models.AbstractModel):
             domain += [("partner_id", "in", partner_ids)]
         if only_posted_moves:
             domain += [("move_id.state", "=", "posted")]
+        else:
+            domain += [("move_id.state", "in", ["posted", "draft"])]
         if show_partner_details:
             domain += [("account_id.internal_type", "in", ["receivable", "payable"])]
         return domain
@@ -168,6 +174,8 @@ class TrialBalanceReport(models.AbstractModel):
             domain += [("partner_id", "in", partner_ids)]
         if only_posted_moves:
             domain += [("move_id.state", "=", "posted")]
+        else:
+            domain += [("move_id.state", "in", ["posted", "draft"])]
         if show_partner_details:
             domain += [("account_id.internal_type", "in", ["receivable", "payable"])]
         return domain

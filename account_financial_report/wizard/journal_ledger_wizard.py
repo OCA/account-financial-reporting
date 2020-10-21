@@ -154,8 +154,8 @@ class JournalLedgerReportWizard(models.TransientModel):
 
     @api.model
     def _get_partner_name(self, partner_id, partner_data):
-        if str(partner_id) in partner_data.keys():
-            return partner_data[str(partner_id)]["name"]
+        if partner_id in partner_data.keys():
+            return partner_data[partner_id]["name"]
         else:
             return ""
 

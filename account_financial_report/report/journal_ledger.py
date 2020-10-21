@@ -49,6 +49,8 @@ class JournalLedgerReport(models.AbstractModel):
         ]
         if wizard.move_target != "all":
             domain += [("state", "=", wizard.move_target)]
+        else:
+            domain += [("state", "in", ["posted", "draft"])]
         return domain
 
     def _get_moves_order(self, wizard, journal_ids):
