@@ -54,7 +54,7 @@ class OpenItemsReport(models.AbstractModel):
 
     @api.model
     def _get_new_move_lines_domain(
-        self, new_ml_ids, account_ids, company_id, partner_ids, target_moves
+        self, new_ml_ids, account_ids, company_id, partner_ids, only_posted_moves
     ):
         domain = [
             ("account_id", "in", account_ids),
@@ -63,8 +63,10 @@ class OpenItemsReport(models.AbstractModel):
         ]
         if partner_ids:
             domain += [("partner_id", "in", partner_ids)]
-        if target_moves == "posted":
+        if only_posted_moves:
             domain += [("move_id.state", "=", "posted")]
+        else:
+            domain += [("move_id.state", "in", ["posted", "draft"])]
         return domain
 
     def _recalculate_move_lines(
@@ -78,7 +80,7 @@ class OpenItemsReport(models.AbstractModel):
         account_ids,
         company_id,
         partner_ids,
-        target_moves,
+        only_posted_moves,
     ):
         debit_ids = set(debit_ids)
         credit_ids = set(credit_ids)
@@ -89,7 +91,7 @@ class OpenItemsReport(models.AbstractModel):
         new_ml_ids = reconciled_ids - ml_ids
         new_ml_ids = list(new_ml_ids)
         new_domain = self._get_new_move_lines_domain(
-            new_ml_ids, account_ids, company_id, partner_ids, target_moves
+            new_ml_ids, account_ids, company_id, partner_ids, only_posted_moves
         )
         ml_fields = [
             "id",
@@ -123,7 +125,7 @@ class OpenItemsReport(models.AbstractModel):
 
     @api.model
     def _get_move_lines_domain(
-        self, company_id, account_ids, partner_ids, target_move, date_from
+        self, company_id, account_ids, partner_ids, only_posted_moves, date_from
     ):
         domain = [
             ("account_id", "in", account_ids),
@@ -132,8 +134,10 @@ class OpenItemsReport(models.AbstractModel):
         ]
         if partner_ids:
             domain += [("partner_id", "in", partner_ids)]
-        if target_move == "posted":
+        if only_posted_moves:
             domain += [("move_id.state", "=", "posted")]
+        else:
+            domain += [("move_id.state", "in", ["posted", "draft"])]
         if date_from:
             domain += [("date", ">", date_from)]
         return domain
@@ -168,12 +172,12 @@ class OpenItemsReport(models.AbstractModel):
         account_ids,
         partner_ids,
         date_at_object,
-        target_move,
+        only_posted_moves,
         company_id,
         date_from,
     ):
         domain = self._get_move_lines_domain(
-            company_id, account_ids, partner_ids, target_move, date_from
+            company_id, account_ids, partner_ids, only_posted_moves, date_from
         )
         ml_fields = [
             "id",
@@ -223,7 +227,7 @@ class OpenItemsReport(models.AbstractModel):
                     account_ids,
                     company_id,
                     partner_ids,
-                    target_move,
+                    only_posted_moves,
                 )
         move_lines = [
             move_line
@@ -357,7 +361,7 @@ class OpenItemsReport(models.AbstractModel):
         date_at = data["date_at"]
         date_at_object = datetime.strptime(date_at, "%Y-%m-%d").date()
         date_from = data["date_from"]
-        target_move = data["target_move"]
+        only_posted_moves = data["only_posted_moves"]
         show_partner_details = data["show_partner_details"]
 
         (
@@ -367,7 +371,12 @@ class OpenItemsReport(models.AbstractModel):
             accounts_data,
             open_items_move_lines_data,
         ) = self._get_data(
-            account_ids, partner_ids, date_at_object, target_move, company_id, date_from
+            account_ids,
+            partner_ids,
+            date_at_object,
+            only_posted_moves,
+            company_id,
+            date_from,
         )
 
         total_amount = self._calculate_amounts(open_items_move_lines_data)

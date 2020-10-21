@@ -75,6 +75,8 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             domain += [("partner_id", "in", partner_ids)]
         if only_posted_moves:
             domain += [("move_id.state", "=", "posted")]
+        else:
+            domain += [("move_id.state", "in", ["posted", "draft"])]
         if date_from:
             domain += [("date", ">", date_from)]
         return domain
@@ -141,6 +143,8 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             domain += [("partner_id", "in", partner_ids)]
         if only_posted_moves:
             domain += [("move_id.state", "=", "posted")]
+        else:
+            domain += [("move_id.state", "in", ["posted", "draft"])]
         return domain
 
     def _recalculate_move_lines(
