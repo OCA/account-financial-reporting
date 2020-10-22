@@ -7,11 +7,11 @@ from psycopg2 import sql
 
 
 def pre_init_hook(cr):
-    """ Precreate move_type and fill with appropriate values to prevent
+    """Precreate move_type and fill with appropriate values to prevent
     a MemoryError when the ORM attempts to call its compute method on a large
     amount of preexisting moves. Note that the order of the mapping is
     important as one move can have move lines on accounts of multiple types
-    and the move type is set in the order of precedence. """
+    and the move type is set in the order of precedence."""
     logger = logging.getLogger(__name__)
     logger.info("Add account_move.move_type column if it does not yet exist")
     cr.execute("ALTER TABLE account_move ADD COLUMN IF NOT EXISTS move_type VARCHAR")
