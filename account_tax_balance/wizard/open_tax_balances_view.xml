@@ -18,15 +18,15 @@
                     <field name="target_move" />
                 </group>
                 <footer>
-                <button
+                    <button
                         string="Open Taxes"
                         name="open_taxes"
                         type="object"
                         class="oe_highlight"
                     />
-                or
-                <button string="Cancel" class="oe_link" special="cancel" />
-            </footer>
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
             </form>
         </field>
     </record>

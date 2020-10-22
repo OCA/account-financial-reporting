@@ -35,7 +35,7 @@ class AccountTax(models.Model):
         )
 
     def _account_tax_ids_with_moves(self):
-        """ Return all account.tax ids for which there is at least
+        """Return all account.tax ids for which there is at least
         one account.move.line in the context period
         for the user company.
 
