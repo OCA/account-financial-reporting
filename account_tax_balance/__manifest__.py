@@ -6,7 +6,7 @@
 {
     "name": "Tax Balance",
     "summary": "Compute tax balances based on date range",
-    "version": "13.0.1.0.1",
+    "version": "14.0.1.0.0",
     "category": "Invoices & Payments",
     "website": "https://github.com/OCA/account-financial-reporting",
     "author": "Agile Business Group, Therp BV, Tecnativa, ACSONE SA/NV, "
@@ -18,6 +18,7 @@
         "wizard/open_tax_balances_view.xml",
         "views/account_move_view.xml",
         "views/account_tax_view.xml",
+        "security/ir.model.access.csv",
     ],
     "images": ["images/tax_balance.png"],
     "pre_init_hook": "pre_init_hook",

@@ -16,8 +16,10 @@ from odoo.tests.common import HttpCase
 class TestAccountTaxBalance(HttpCase):
     def setUp(self):
         super().setUp()
+
+        self.company = self.env.user.company_id
         self.range_type = self.env["date.range.type"].create(
-            {"name": "Fiscal year", "company_id": False, "allow_overlap": False}
+            {"name": "Fiscal year", "allow_overlap": False}
         )
         self.range_generator = self.env["date.range.generator"]
         self.current_year = datetime.now().year
@@ -69,7 +71,7 @@ class TestAccountTaxBalance(HttpCase):
         invoice = self.env["account.move"].create(
             {
                 "partner_id": self.env.ref("base.res_partner_2").id,
-                "type": "out_invoice",
+                "move_type": "out_invoice",
                 "invoice_line_ids": [
                     (
                         0,
@@ -152,7 +154,7 @@ class TestAccountTaxBalance(HttpCase):
         refund = self.env["account.move"].create(
             {
                 "partner_id": self.env.ref("base.res_partner_2").id,
-                "type": "out_refund",
+                "move_type": "out_refund",
                 "invoice_line_ids": [
                     (
                         0,
@@ -193,15 +195,24 @@ class TestAccountTaxBalance(HttpCase):
         )
         liquidity_account_id = (
             self.env["account.account"]
-            .search([("internal_type", "=", "liquidity")], limit=1)
+            .search(
+                [
+                    ("internal_type", "=", "liquidity"),
+                    ("company_id", "=", self.company.id),
+                ],
+                limit=1,
+            )
             .id
         )
         move = self.env["account.move"].create(
             {
-                "type": "entry",
+                "move_type": "entry",
                 "date": Date.context_today(self.env.user),
                 "journal_id": self.env["account.journal"]
-                .search([("type", "=", "bank")], limit=1)
+                .search(
+                    [("type", "=", "bank"), ("company_id", "=", self.company.id)],
+                    limit=1,
+                )
                 .id,
                 "name": "Test move",
                 "line_ids": [
