@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 13.0\n"
+"Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -86,8 +86,18 @@ msgid "Date Range"
 msgstr ""
 
 #. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_move__display_name
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_move_line__display_name
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__display_name
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__display_name
 msgid "Display Name"
+msgstr ""
+
+#. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_bank_statement_line__financial_type
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_move__financial_type
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_payment__financial_type
+msgid "Financial Type"
 msgstr ""
 
 #. module: account_tax_balance
@@ -106,13 +116,16 @@ msgid "Has balance in period"
 msgstr ""
 
 #. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_move__id
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_move_line__id
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__id
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__id
 msgid "ID"
 msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_account_move
-msgid "Journal Entries"
+msgid "Journal Entry"
 msgstr ""
 
 #. module: account_tax_balance
@@ -121,6 +134,9 @@ msgid "Journal Item"
 msgstr ""
 
 #. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_move____last_update
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_move_line____last_update
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax____last_update
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances____last_update
 msgid "Last Modified on"
 msgstr ""
@@ -133,11 +149,6 @@ msgstr ""
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__write_date
 msgid "Last Updated on"
-msgstr ""
-
-#. module: account_tax_balance
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_move__move_type
-msgid "Move Type"
 msgstr ""
 
 #. module: account_tax_balance
