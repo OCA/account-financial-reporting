@@ -8,7 +8,7 @@ class AccountMove(models.Model):
     _inherit = "account.move"
 
     @api.model
-    def _selection_move_type(self):
+    def _selection_financial_type(self):
         return [
             ("other", "Other"),
             ("liquidity", "Liquidity"),
@@ -18,9 +18,9 @@ class AccountMove(models.Model):
             ("payable_refund", "Payable refund"),
         ]
 
-    move_type = fields.Selection(
-        selection="_selection_move_type",
-        compute="_compute_move_type",
+    financial_type = fields.Selection(
+        selection="_selection_financial_type",
+        compute="_compute_financial_type",
         store=True,
         readonly=True,
     )
@@ -30,7 +30,7 @@ class AccountMove(models.Model):
         "line_ids.balance",
         "line_ids.account_id.user_type_id.type",
     )
-    def _compute_move_type(self):
+    def _compute_financial_type(self):
         def _balance_get(line_ids, internal_type):
             return sum(
                 line_ids.filtered(
@@ -41,12 +41,14 @@ class AccountMove(models.Model):
         for move in self:
             internal_types = move.line_ids.mapped("account_id.internal_type")
             if "liquidity" in internal_types:
-                move.move_type = "liquidity"
+                move.financial_type = "liquidity"
             elif "payable" in internal_types:
                 balance = _balance_get(move.line_ids, "payable")
-                move.move_type = "payable" if balance < 0 else "payable_refund"
+                move.financial_type = "payable" if balance < 0 else "payable_refund"
             elif "receivable" in internal_types:
                 balance = _balance_get(move.line_ids, "receivable")
-                move.move_type = "receivable" if balance > 0 else "receivable_refund"
+                move.financial_type = (
+                    "receivable" if balance > 0 else "receivable_refund"
+                )
             else:
-                move.move_type = "other"
+                move.financial_type = "other"

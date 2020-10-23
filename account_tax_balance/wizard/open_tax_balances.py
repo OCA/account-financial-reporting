@@ -41,7 +41,7 @@ class WizardOpenTaxBalances(models.TransientModel):
     def open_taxes(self):
         self.ensure_one()
         action = self.env.ref("account_tax_balance.action_tax_balances_tree")
-        act_vals = action.read()[0]
+        act_vals = action.sudo().read()[0]
         # override action name doesn't work in v12 or v10
         # we need to build a dynamic action on main keys
         vals = {
