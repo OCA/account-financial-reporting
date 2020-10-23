@@ -41,7 +41,7 @@ Accounting --> Reporting --> Taxes Balance
 
 Select the company, the date range, the target moves and 'open taxes'
 
-.. figure:: https://raw.githubusercontent.com/account_tax_balance/static/description/tax_balance.png
+.. figure:: https://user-images.githubusercontent.com/1336274/99388381-cd279300-28d5-11eb-9bb7-e8fe90d482af.png
 
 Bug Tracker
 ===========
@@ -73,6 +73,7 @@ Contributors
 * Tecnativa - Pedro M. Baeza
 * ACSONE SA/NV - Stéphane Bidoul
 * Andrea Stirpe <a.stirpe@onestein.nl>
+* Iván Antón <ozono@ozonomultimedia.com>
 
 Maintainers
 ~~~~~~~~~~~
