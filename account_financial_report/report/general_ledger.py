@@ -52,6 +52,10 @@ class GeneralLedgerReport(models.TransientModel):
             'analytic.group_analytic_accounting'
         )
     )
+    partner_ungrouped = fields.Boolean(
+        string='Partner ungrouped',
+        help='If set moves are not grouped by partner in any case'
+    )
 
     # Data fields, used to browse report data
     account_ids = fields.One2many(
@@ -331,6 +335,11 @@ class GeneralLedgerReportCompute(models.TransientModel):
             sub_subquery_sum_amounts += """
                 AND at.include_initial_balance = TRUE
             """
+        if self.filter_journal_ids:
+            sub_subquery_sum_amounts += """
+            AND
+                ml.journal_id IN %s
+            """ % (tuple(self.filter_journal_ids.ids,),)
 
         if self.only_posted_moves:
             sub_subquery_sum_amounts += """
@@ -399,8 +408,17 @@ WITH
                 a.id,
                 a.code,
                 a.name,
+            """
+        if self.partner_ungrouped:
+            query_inject_account += """
+                FALSE AS is_partner_account,
+            """
+        else:
+            query_inject_account += """
                 a.internal_type IN ('payable', 'receivable')
                     AS is_partner_account,
+                """
+        query_inject_account += """
                 a.user_type_id,
                 a.currency_id
             FROM

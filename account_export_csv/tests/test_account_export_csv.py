@@ -3,6 +3,7 @@
 
 from datetime import date
 from dateutil import relativedelta
+import base64
 
 from odoo.tests.common import TransactionCase
 from odoo import fields
@@ -38,3 +39,14 @@ class TestAccountExportCsv(TransactionCase):
             'date_end': self.report_date_end
         })
         report_wizard.action_manual_export_journal_entries()
+
+    def test_file_content(self):
+        report_wizard = self.report_wizard.create({
+            "date_start": "2000-01-01",
+            "date_end": "2200-01-01",
+        })
+        report_wizard.action_manual_export_journal_entries()
+        res = base64.decodestring(report_wizard.data)
+        line_number = self.env["account.move.line"].search_count([])
+        # check the number of lines in file: include header + EOF line
+        self.assertEqual(len(res.decode().split("\r\n")), line_number + 2)

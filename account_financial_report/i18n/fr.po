@@ -131,6 +131,12 @@ msgid "Account Type"
 msgstr "Type de Compte"
 
 #. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__account_type_ids
+#, fuzzy
+msgid "Account Types"
+msgstr "Type de Compte"
+
+#. module: account_financial_report
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:109
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 #, python-format
@@ -429,7 +435,7 @@ msgid "Centralized"
 msgstr "Centralisé"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger.py:1433
+#: code:addons/account_financial_report/report/general_ledger.py:1451
 #, python-format
 msgid "Centralized Entries"
 msgstr "Écritures centralisées"
@@ -1326,8 +1332,14 @@ msgid ""
 "If flagged, no details will be displayed in the General Ledger report (the "
 "webkit one only), only centralized amounts per period."
 msgstr ""
-"Si coché, aucun détail ne sera affiché dans les rapport du Grand Livre ("
-"uniquement le webkit), seulement les montants centralisés par période."
+"Si coché, aucun détail ne sera affiché dans les rapport du Grand Livre "
+"(uniquement le webkit), seulement les montants centralisés par période."
+
+#. module: account_financial_report
+#: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__partner_ungrouped
+#: model:ir.model.fields,help:account_financial_report.field_report_general_ledger__partner_ungrouped
+msgid "If set moves are not grouped by partner in any case"
+msgstr ""
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
@@ -1690,8 +1702,8 @@ msgid "No limit"
 msgstr "Sans limite"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger.py:758
-#: code:addons/account_financial_report/report/general_ledger.py:1137
+#: code:addons/account_financial_report/report/general_ledger.py:776
+#: code:addons/account_financial_report/report/general_ledger.py:1155
 #: code:addons/account_financial_report/report/open_items.py:307
 #: code:addons/account_financial_report/report/open_items.py:556
 #, python-format
@@ -1783,6 +1795,12 @@ msgid "Original"
 msgstr "Original"
 
 #. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
+#, fuzzy
+msgid "Other options"
+msgstr "Options"
+
+#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_report_trial_balance_account__parent_id
 msgid "Parent"
 msgstr "Parent"
@@ -1853,8 +1871,13 @@ msgid "Partner ending balance"
 msgstr "Solde de clôture du partenaire"
 
 #. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__partner_ungrouped
+#: model:ir.model.fields,field_description:account_financial_report.field_report_general_ledger__partner_ungrouped
+msgid "Partner ungrouped"
+msgstr ""
+
+#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard__payable_accounts_only
-#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__payable_accounts_only
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__payable_accounts_only
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__payable_accounts_only
 msgid "Payable Accounts Only"
@@ -1932,7 +1955,6 @@ msgstr "Réc."
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_wizard__receivable_accounts_only
-#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__receivable_accounts_only
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__receivable_accounts_only
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__receivable_accounts_only
 msgid "Receivable Accounts Only"
@@ -2255,7 +2277,7 @@ msgid "Taxtags"
 msgstr "Étiquettes de taxe"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/wizard/general_ledger_wizard.py:180
+#: code:addons/account_financial_report/wizard/general_ledger_wizard.py:187
 #, python-format
 msgid ""
 "The Company in the General Ledger Report Wizard and in Date Range must be "
