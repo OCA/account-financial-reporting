@@ -31,6 +31,26 @@ class VATReportWizard(models.TransientModel):
         required=True,
         default="posted",
     )
+    date_from = fields.Date("Start Date", required=True)
+    date_to = fields.Date("End Date", required=True)
+    based_on = fields.Selection(
+        [("taxtags", "Tax Tags"), ("taxgroups", "Tax Groups")],
+        string="Based On",
+        required=True,
+        default="taxtags",
+    )
+    tax_detail = fields.Boolean("Detail Taxes")
+    target_move = fields.Selection(
+        [("posted", "All Posted Entries"), ("all", "All Entries")],
+        string="Target Moves",
+        required=True,
+        default="posted",
+    )
+    hide_tax_at_zero = fields.Boolean(
+        string="Hide taxes with balance at 0",
+        default=True,
+        help="Use this filter to hide taxes with a balance at 0.",
+    )
 
     @api.onchange("company_id")
     def onchange_company_id(self):
@@ -113,7 +133,7 @@ class VATReportWizard(models.TransientModel):
             "based_on": self.based_on,
             "only_posted_moves": self.target_move == "posted",
             "tax_detail": self.tax_detail,
-            "account_financial_report_lang": self.env.lang,
+            "hide_tax_at_zero": self.hide_tax_at_zero,
         }
 
     def _export(self, report_type):
