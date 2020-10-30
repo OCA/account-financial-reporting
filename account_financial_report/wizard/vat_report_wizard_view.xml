@@ -19,6 +19,7 @@
                     <field name="target_move" widget="radio"/>
                     <field name="based_on" widget="radio"/>
                     <field name="tax_detail"/>
+                    <field name="hide_tax_at_zero"/>
                 </group>
             </group>
             <footer>
