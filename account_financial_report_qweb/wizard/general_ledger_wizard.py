@@ -85,6 +85,9 @@ class GeneralLedgerReportWizard(models.TransientModel):
         comodel_name='account.analytic.tag',
         string='Filter accounts',
     )
+    show_partial_reconciliations = fields.Boolean(
+        string='Display partial reconciliations',
+    )
 
     def _default_foreign_currency(self):
         if self.env.user.has_group('base.group_multi_currency'):
@@ -267,6 +270,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
             'filter_analytic_tag_ids': [(6, 0, self.analytic_tag_ids.ids)],
             'centralize': self.centralize,
             'fy_start_date': self.fy_start_date,
+            'show_partial_reconciliations': self.show_partial_reconciliations,
         }
 
     def _export(self, report_type):

@@ -32,6 +32,7 @@ class GeneralLedgerReport(models.TransientModel):
     hide_account_at_0 = fields.Boolean()
     foreign_currency = fields.Boolean()
     show_analytic_tags = fields.Boolean()
+    show_partial_reconciliations = fields.Boolean()
     company_id = fields.Many2one(comodel_name='res.company')
     filter_account_ids = fields.Many2many(comodel_name='account.account')
     filter_partner_ids = fields.Many2many(comodel_name='res.partner')
@@ -203,6 +204,28 @@ class GeneralLedgerReportMoveLine(models.TransientModel):
     cumul_balance = fields.Float(digits=(16, 2))
     currency_id = fields.Many2one(comodel_name='res.currency')
     amount_currency = fields.Float(digits=(16, 2))
+
+    # Display full or partial reconciliations
+    reconcile_string = fields.Char(
+        compute='_compute_reconcile', string='Reconcile')
+    partial_reconcile_ids = fields.Many2many(
+        comodel_name='account.partial.reconcile',
+        compute='_compute_reconcile',
+        string='Reconciliation move lines')
+
+    def _compute_reconcile(self):
+        for line in self:
+            ml = line.move_line_id
+            partial_recs = self.env['account.partial.reconcile']
+            if ml.full_reconcile_id:
+                rec_str = ml.full_reconcile_id.name
+            else:
+                rec_str = ', '.join([
+                    'a%d' % pr.id for pr in
+                    ml.matched_debit_ids + ml.matched_credit_ids])
+                partial_recs = ml.matched_debit_ids + ml.matched_credit_ids
+            line.reconcile_string = rec_str
+            line.partial_reconcile_ids = partial_recs
 
 
 class GeneralLedgerReportCompute(models.TransientModel):

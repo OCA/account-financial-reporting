@@ -410,6 +410,15 @@
                                class="o_account_financial_reports_web_action underline-on-hover">
                                 <t  t-att-style="style" t-raw="line.matched_ml_id.name"/></a>
                         </span>
+                        <span t-if="line.partial_reconcile_ids and not line.matched_ml_id and o.show_partial_reconciliations">
+                            <t t-set="domain" t-value="[('id', 'in', line.partial_reconcile_ids.ids)]"/>
+                            <a t-att-data-domain="domain"
+                               t-att-data-res-model="'account.partial.reconcile'"
+                               class="o_account_financial_reports_web_action_multi"
+                               t-att-style="style">
+                                <t  t-att-style="style" t-raw="line.reconcile_string"/>
+                            </a>
+                        </span>
                     </div>
                     <!--## debit-->
                     <div class="act_as_cell amount">
