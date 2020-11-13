@@ -202,8 +202,8 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                     account,
                     ("Total"),
                     "field_footer_total",
-                    self.format_header_right,
-                    self.format_header_amount,
+                    self.env.format_header_right,
+                    self.env.format_header_amount,
                     False,
                 )
                 self.write_account_footer_from_dict(
@@ -211,13 +211,13 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                     account,
                     ("Percents"),
                     "field_footer_percent",
-                    self.format_right_bold_italic,
-                    self.format_percent_bold_italic,
+                    self.env.format_right_bold_italic,
+                    self.env.format_percent_bold_italic,
                     True,
                 )
 
                 # 2 lines break
-                self.row_pos += 2
+                self.env.row_pos += 2
         else:
             # For each account
             for account in aged_partner_balance:
@@ -240,7 +240,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                     self.write_ending_balance_from_dict(partner)
 
                     # Line break
-                    self.row_pos += 1
+                    self.env.row_pos += 1
 
                 # Display account lines
                 self.write_account_footer_from_dict(
@@ -248,8 +248,8 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                     account,
                     ("Total"),
                     "field_footer_total",
-                    self.format_header_right,
-                    self.format_header_amount,
+                    self.env.format_header_right,
+                    self.env.format_header_amount,
                     False,
                 )
 
@@ -258,13 +258,13 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                     account,
                     ("Percents"),
                     "field_footer_percent",
-                    self.format_right_bold_italic,
-                    self.format_percent_bold_italic,
+                    self.env.format_right_bold_italic,
+                    self.env.format_percent_bold_italic,
                     True,
                 )
 
                 # 2 lines break
-                self.row_pos += 2
+                self.env.row_pos += 2
 
     def write_ending_balance_from_dict(self, my_object):
         """
@@ -291,7 +291,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
         Specific function to write account footer for Aged Partner Balance
         """
         col_pos_footer_label = self._get_col_pos_footer_label(report)
-        for col_pos, column in self.columns.items():
+        for col_pos, column in self.env.columns.items():
             if col_pos == col_pos_footer_label or column.get(field_name):
                 if col_pos == col_pos_footer_label:
                     value = label
@@ -299,17 +299,19 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                     value = account.get(column[field_name], False)
                 cell_type = column.get("type", "string")
                 if cell_type == "string" or col_pos == col_pos_footer_label:
-                    self.sheet.write_string(
-                        self.row_pos, col_pos, value or "", string_format
+                    self.env.sheet.write_string(
+                        self.env.row_pos, col_pos, value or "", string_format
                     )
                 elif cell_type == "amount":
                     number = float(value)
                     if amount_is_percent:
                         number /= 100
-                    self.sheet.write_number(
-                        self.row_pos, col_pos, number, amount_format
+                    self.env.sheet.write_number(
+                        self.env.row_pos, col_pos, number, amount_format
                     )
             else:
-                self.sheet.write_string(self.row_pos, col_pos, "", string_format)
+                self.env.sheet.write_string(
+                    self.env.row_pos, col_pos, "", string_format
+                )
 
-        self.row_pos += 1
+        self.env.row_pos += 1

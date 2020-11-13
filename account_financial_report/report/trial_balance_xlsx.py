@@ -259,7 +259,7 @@ class TrialBalanceXslx(models.AbstractModel):
                 )
 
                 # Line break
-                self.row_pos += 2
+                self.env.row_pos += 2
 
     def write_line_from_dict_order(self, total_amount, partner_data):
         total_amount.update({"name": str(partner_data["name"])})
@@ -278,28 +278,36 @@ class TrialBalanceXslx(models.AbstractModel):
     def write_account_footer(self, account, name_value):
         """Specific function to write account footer for Trial Balance"""
         format_amt = self._get_currency_amt_header_format_dict(account)
-        for col_pos, column in self.columns.items():
+        for col_pos, column in self.env.columns.items():
             if column["field"] == "name":
                 value = name_value
             else:
                 value = account[column["field"]]
             cell_type = column.get("type", "string")
             if cell_type == "string":
-                self.sheet.write_string(
-                    self.row_pos, col_pos, value or "", self.format_header_left
+                self.env.sheet.write_string(
+                    self.env.row_pos, col_pos, value or "", self.env.format_header_left
                 )
             elif cell_type == "amount":
-                self.sheet.write_number(
-                    self.row_pos, col_pos, float(value), self.format_header_amount
+                self.env.sheet.write_number(
+                    self.env.row_pos,
+                    col_pos,
+                    float(value),
+                    self.env.format_header_amount,
                 )
             elif cell_type == "many2one" and account["currency_id"]:
-                self.sheet.write_string(
-                    self.row_pos, col_pos, value.name or "", self.format_header_right
+                self.env.sheet.write_string(
+                    self.env.row_pos,
+                    col_pos,
+                    value.name or "",
+                    self.env.format_header_right,
                 )
             elif cell_type == "amount_currency" and account["currency_id"]:
-                self.sheet.write_number(self.row_pos, col_pos, float(value), format_amt)
-            else:
-                self.sheet.write_string(
-                    self.row_pos, col_pos, "", self.format_header_right
+                self.env.sheet.write_number(
+                    self.env.row_pos, col_pos, float(value), format_amt
                 )
-        self.row_pos += 1
+            else:
+                self.env.sheet.write_string(
+                    self.env.row_pos, col_pos, "", self.env.format_header_right
+                )
+        self.env.row_pos += 1
