@@ -90,6 +90,12 @@ msgstr "<strong>Código Cliente:</strong>"
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
+msgid "<strong>Partner Name:</strong>"
+msgstr ""
+
+#. module: partner_statement
+#: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
+#: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
 msgid "<strong>The partner doesn't have due entries.</strong>"
 msgstr "<strong>Este cliente no tiene asientos vencidos</strong>"
 
@@ -383,11 +389,6 @@ msgid "Payable"
 msgstr "A pagar"
 
 #. module: partner_statement
-#: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
-msgid "Payment"
-msgstr "Pago"
-
-#. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
 msgid "Please set defaults under Activity Statements."
 msgstr "Por favor establezca los valores por defecto en estado de la cuenta."
@@ -511,6 +512,9 @@ msgstr "en"
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
 msgid "or"
 msgstr "o"
+
+#~ msgid "Payment"
+#~ msgstr "Pago"
 
 #~ msgid "report.partner_statement.activity_statement"
 #~ msgstr "report.partner_statement.activity_statement"
