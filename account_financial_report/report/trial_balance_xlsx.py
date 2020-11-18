@@ -259,7 +259,7 @@ class TrialBalanceXslx(models.AbstractModel):
                 )
 
                 # Line break
-                self.row_pos += 2
+                self.set_row_pos(self.row_pos + 2)
 
     def write_line_from_dict_order(self, total_amount, partner_data):
         total_amount.update({"name": str(partner_data["name"])})
@@ -302,4 +302,4 @@ class TrialBalanceXslx(models.AbstractModel):
                 self.sheet.write_string(
                     self.row_pos, col_pos, "", self.format_header_right
                 )
-        self.row_pos += 1
+        self.row_pos(self.row_pos + 1)

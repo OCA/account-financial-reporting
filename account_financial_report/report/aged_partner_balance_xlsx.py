@@ -240,7 +240,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                     self.write_ending_balance_from_dict(partner)
 
                     # Line break
-                    self.row_pos += 1
+                    self.set_row_pos(self.row_pos + 1)
 
                 # Display account lines
                 self.write_account_footer_from_dict(
