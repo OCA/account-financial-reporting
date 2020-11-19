@@ -104,6 +104,12 @@ odoo.define('account_financial_report.account_financial_report_backend', functio
         canBeRemoved: function () {
             return $.when();
         },
+        on_attach_callback: function () {
+            this.isInDOM = true;
+        },
+        on_detach_callback: function () {
+            this.isInDOM = false;
+        },
     });
 
     core.action_registry.add(
