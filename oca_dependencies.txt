@@ -1,2 +1,3 @@
 # See https://github.com/OCA/odoo-community.org/blob/master/website/Contribution/CONTRIBUTING.rst#oca_dependencies-txt
-reporting-engine https://github.com/GrupoYACCK/reporting-engine 14.0-mig-report_xlsx
+reporting-engine
+server-ux
