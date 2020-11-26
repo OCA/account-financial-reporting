@@ -119,6 +119,7 @@ class TrialBalanceReportAccount(models.TransientModel):
     )
     def _compute_hide_line(self):
         for rec in self:
+            rec.hide_line = False
             report = rec.report_id
             r = (rec.currency_id or report.company_id.currency_id).rounding
             if report.hide_account_at_0 and (

@@ -4,17 +4,22 @@ odoo.define("account_financial_report.account_financial_report_backend", functio
     "use strict";
 
     var core = require("web.core");
-    var Widget = require("web.Widget");
-    var ControlPanelMixin = require("web.ControlPanelMixin");
+    var AbstractAction = require('web.AbstractAction');
     var ReportWidget = require("account_financial_report.account_financial_report_widget");
 
-    var report_backend = Widget.extend(ControlPanelMixin, {
+    var report_backend = AbstractAction.extend({
+        // TODO: why isnt the controlpanel shown?
+        hasControlPanel: true,
+        withSearchBar: true,
+        withBreadcrumbs: true,
+        loadControlPanel: true,
         // Stores all the parameters of the action.
         events: {
             "click .o_account_financial_reports_print": "print",
             "click .o_account_financial_reports_export": "export",
         },
         init: function(parent, action) {
+            var ret = this._super.apply(this, arguments);
             this.actionManager = parent;
             this.given_context = {};
             this.odoo_context = action.context;
@@ -26,7 +31,8 @@ odoo.define("account_financial_report.account_financial_report_backend", functio
                 action.context.active_id || action.params.active_id;
             this.given_context.model = action.context.active_model || false;
             this.given_context.ttype = action.context.ttype || false;
-            return this._super.apply(this, arguments);
+            this.controlPanelParams.modelName = 'account.bank.statement.line';
+            return ret;
         },
         willStart: function() {
             return Promise.resolve(this.get_html());
@@ -36,7 +42,7 @@ odoo.define("account_financial_report.account_financial_report_backend", functio
             var def = Promise.resolve();
             if (!this.report_widget) {
                 this.report_widget = new ReportWidget(this, this.given_context);
-                def = this.report_widget.appendTo(this.$el);
+                def = this.report_widget.appendTo(this.$('.o_content'));
             }
             def.then(function() {
                 self.report_widget.$el.html(self.html);
@@ -44,6 +50,7 @@ odoo.define("account_financial_report.account_financial_report_backend", functio
         },
         start: function() {
             this.set_html();
+            this.update_cp();
             return this._super();
         },
         // Fetches the html and is previous report.context if any,
@@ -59,19 +66,13 @@ odoo.define("account_financial_report.account_financial_report_backend", functio
             }).then(function(result) {
                 self.html = result.html;
                 defs.push(self.update_cp());
-                return Promise.resolve.apply(Promise, defs);
+                return Promise.all(defs);
             });
         },
         // Updates the control panel and render the elements that have yet
         // to be rendered
         update_cp: function() {
-            if (this.$buttons) {
-                var status = {
-                    breadcrumbs: this.actionManager.get_breadcrumbs(),
-                    cp_content: {$buttons: this.$buttons},
-                };
-                return this.update_control_panel(status);
-            }
+            return this.updateControlPanel({});
         },
         do_show: function() {
             this._super();
