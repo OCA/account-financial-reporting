@@ -21,6 +21,7 @@ class GeneralLedgerReport(models.TransientModel):
     """
 
     _name = "report_general_ledger"
+    _description = "General Ledger Report"
     _inherit = "account_financial_report_abstract"
 
     # Filters fields, used for data computation
@@ -194,7 +195,6 @@ class GeneralLedgerReportCompute(models.TransientModel):
 
     _inherit = "report_general_ledger"
 
-    @api.multi
     def print_report(self, report_type):
         self.ensure_one()
         if report_type == "xlsx":
@@ -226,7 +226,6 @@ class GeneralLedgerReportCompute(models.TransientModel):
     def get_html(self, given_context=None):
         return self._get_html()
 
-    @api.multi
     def compute_data_for_report(self, with_line_details=True, with_partners=True):
         self.ensure_one()
         # Compute report data

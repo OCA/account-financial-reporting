@@ -4,16 +4,16 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Account Financial Reports",
-    "version": "12.0.1.4.1",
+    "version": "13.0.2.0.0",
     "category": "Reporting",
     "summary": "OCA Financial Reports",
     "author": "Camptocamp SA,"
     "initOS GmbH,"
     "redCOR AG,"
-    "Eficent,"
+    "ForgeFlow,"
     "Odoo Community Association (OCA)",
     "website": "https://odoo-community.org/",
-    "depends": ["account", "date_range", "report_xlsx",],
+    "depends": ["account", "date_range", "report_xlsx"],
     "data": [
         "wizard/aged_partner_balance_wizard_view.xml",
         "wizard/general_ledger_wizard_view.xml",

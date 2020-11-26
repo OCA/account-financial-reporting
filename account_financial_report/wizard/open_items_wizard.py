@@ -17,7 +17,7 @@ class OpenItemsReportWizard(models.TransientModel):
 
     company_id = fields.Many2one(
         comodel_name="res.company",
-        default=lambda self: self.env.user.company_id,
+        default=lambda self: self.env.company,
         required=False,
         string="Company",
     )
@@ -26,7 +26,7 @@ class OpenItemsReportWizard(models.TransientModel):
         [("posted", "All Posted Entries"), ("all", "All Entries")],
         string="Target Moves",
         required=True,
-        default="all",
+        default="posted",
     )
     account_ids = fields.Many2many(
         comodel_name="account.account",
@@ -96,7 +96,6 @@ class OpenItemsReportWizard(models.TransientModel):
         else:
             self.account_ids = None
 
-    @api.multi
     def button_export_html(self):
         self.ensure_one()
         action = self.env.ref("account_financial_report.action_report_open_items")
@@ -113,13 +112,11 @@ class OpenItemsReportWizard(models.TransientModel):
         vals["context"] = context1
         return vals
 
-    @api.multi
     def button_export_pdf(self):
         self.ensure_one()
         report_type = "qweb-pdf"
         return self._export(report_type)
 
-    @api.multi
     def button_export_xlsx(self):
         self.ensure_one()
         report_type = "xlsx"

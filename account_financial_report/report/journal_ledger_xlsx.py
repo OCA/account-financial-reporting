@@ -8,6 +8,7 @@ from odoo import _, models
 
 class JournalLedgerXslx(models.AbstractModel):
     _name = "report.a_f_r.report_journal_ledger_xlsx"
+    _description = "Journal Ledger Report XLSX"
     _inherit = "report.account_financial_report.abstract_report_xlsx"
 
     def _get_report_name(self, report):

@@ -13,7 +13,7 @@ class VATReportWizard(models.TransientModel):
 
     company_id = fields.Many2one(
         comodel_name="res.company",
-        default=lambda self: self.env.user.company_id,
+        default=lambda self: self.env.company,
         required=False,
         string="Company",
     )
@@ -53,7 +53,6 @@ class VATReportWizard(models.TransientModel):
         self.date_from = self.date_range_id.date_start
         self.date_to = self.date_range_id.date_end
 
-    @api.multi
     @api.constrains("company_id", "date_range_id")
     def _check_company_id_date_range_id(self):
         for rec in self.sudo():
@@ -69,7 +68,6 @@ class VATReportWizard(models.TransientModel):
                     )
                 )
 
-    @api.multi
     def button_export_html(self):
         self.ensure_one()
         action = self.env.ref("account_financial_report.action_report_vat_report")
@@ -85,13 +83,11 @@ class VATReportWizard(models.TransientModel):
         vals["context"] = context1
         return vals
 
-    @api.multi
     def button_export_pdf(self):
         self.ensure_one()
         report_type = "qweb-pdf"
         return self._export(report_type)
 
-    @api.multi
     def button_export_xlsx(self):
         self.ensure_one()
         report_type = "xlsx"

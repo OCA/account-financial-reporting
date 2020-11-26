@@ -1,4 +1,4 @@
-* Jordi Ballester <jordi.ballester@eficient.com>
+* Jordi Ballester <jordi.ballester@forgeflow.com>
 * Yannick Vaucher <yannick.vaucher@camptocamp.com>
 * Simone Orsi <simone.orsi@abstract.com>
 * Leonardo Pistone <leonardo.pistone@camptocamp.com>
@@ -19,9 +19,13 @@
 
   * Pedro M. Baeza
   * Sergio Teruel
+  * Ernesto Tejeda
+
 * `Druidoo <https://www.druidoo.io>`__:
 
   * Iván Todorovich
+
+* Tom Blauwendraat <tom@sunflowerweb.nl>
 
 Much of the work in this module was done at a sprint in Sorrento, Italy in
 April 2016.

@@ -29,11 +29,11 @@ odoo.define("account_financial_report.account_financial_report_backend", functio
             return this._super.apply(this, arguments);
         },
         willStart: function() {
-            return $.when(this.get_html());
+            return Promise.resolve(this.get_html());
         },
         set_html: function() {
             var self = this;
-            var def = $.when();
+            var def = Promise.resolve();
             if (!this.report_widget) {
                 this.report_widget = new ReportWidget(this, this.given_context);
                 def = this.report_widget.appendTo(this.$el);
@@ -59,7 +59,7 @@ odoo.define("account_financial_report.account_financial_report_backend", functio
             }).then(function(result) {
                 self.html = result.html;
                 defs.push(self.update_cp());
-                return $.when.apply($, defs);
+                return Promise.resolve.apply(Promise, defs);
             });
         },
         // Updates the control panel and render the elements that have yet
@@ -100,7 +100,7 @@ odoo.define("account_financial_report.account_financial_report_backend", functio
             });
         },
         canBeRemoved: function() {
-            return $.when();
+            return Promise.resolve();
         },
     });
 

@@ -25,7 +25,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
 
     company_id = fields.Many2one(
         comodel_name="res.company",
-        default=lambda self: self.env.user.company_id,
+        default=lambda self: self.env.company,
         required=False,
         string="Company",
     )
@@ -37,7 +37,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
         [("posted", "All Posted Entries"), ("all", "All Entries")],
         string="Target Moves",
         required=True,
-        default="all",
+        default="posted",
     )
     account_ids = fields.Many2many(
         comodel_name="account.account", string="Filter accounts",
@@ -85,27 +85,29 @@ class GeneralLedgerReportWizard(models.TransientModel):
     def _init_date_from(self):
         """set start date to begin of current year if fiscal year running"""
         today = fields.Date.context_today(self)
-        cur_month = fields.Date.from_string(today).month
-        cur_day = fields.Date.from_string(today).day
-        last_fsc_month = self.env.user.company_id.fiscalyear_last_month
-        last_fsc_day = self.env.user.company_id.fiscalyear_last_day
+        last_fsc_month = self.env.company.fiscalyear_last_month
+        last_fsc_day = self.env.company.fiscalyear_last_day
 
         if (
-            cur_month < last_fsc_month
-            or cur_month == last_fsc_month
-            and cur_day <= last_fsc_day
+            today.month < int(last_fsc_month)
+            or today.month == int(last_fsc_month)
+            and today.day <= last_fsc_day
         ):
             return time.strftime("%Y-01-01")
+        else:
+            return False
 
     def _default_foreign_currency(self):
         return self.env.user.has_group("base.group_multi_currency")
 
     @api.depends("date_from")
     def _compute_fy_start_date(self):
-        for wiz in self.filtered("date_from"):
-            date = fields.Datetime.from_string(wiz.date_from)
-            res = self.company_id.compute_fiscalyear_dates(date)
-            wiz.fy_start_date = fields.Date.to_string(res["date_from"])
+        for wiz in self:
+            if wiz.date_from:
+                res = self.company_id.compute_fiscalyear_dates(wiz.date_from)
+                wiz.fy_start_date = res["date_from"]
+            else:
+                wiz.fy_start_date = False
 
     @api.onchange("company_id")
     def onchange_company_id(self):
@@ -177,7 +179,6 @@ class GeneralLedgerReportWizard(models.TransientModel):
             self.date_from = self.date_range_id.date_start
             self.date_to = self.date_range_id.date_end
 
-    @api.multi
     @api.constrains("company_id", "date_range_id")
     def _check_company_id_date_range_id(self):
         for rec in self.sudo():
@@ -217,7 +218,6 @@ class GeneralLedgerReportWizard(models.TransientModel):
         # Somehow this is required to force onchange on _default_partners()
         self._onchange_account_type_ids()
 
-    @api.multi
     def button_export_html(self):
         self.ensure_one()
         action = self.env.ref("account_financial_report.action_report_general_ledger")
@@ -233,13 +233,11 @@ class GeneralLedgerReportWizard(models.TransientModel):
         action_data["context"] = context1
         return action_data
 
-    @api.multi
     def button_export_pdf(self):
         self.ensure_one()
         report_type = "qweb-pdf"
         return self._export(report_type)
 
-    @api.multi
     def button_export_xlsx(self):
         self.ensure_one()
         report_type = "xlsx"

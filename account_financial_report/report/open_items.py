@@ -16,6 +16,7 @@ class OpenItemsReport(models.TransientModel):
     """
 
     _name = "report_open_items"
+    _description = "Open Items Report"
     _inherit = "account_financial_report_abstract"
 
     # Filters fields, used for data computation
@@ -134,7 +135,6 @@ class OpenItemsReportCompute(models.TransientModel):
 
     _inherit = "report_open_items"
 
-    @api.multi
     def print_report(self, report_type):
         self.ensure_one()
         if report_type == "xlsx":
@@ -166,7 +166,6 @@ class OpenItemsReportCompute(models.TransientModel):
     def get_html(self, given_context=None):
         return self._get_html()
 
-    @api.multi
     def compute_data_for_report(self):
         self.ensure_one()
         # Compute report data

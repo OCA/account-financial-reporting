@@ -9,6 +9,7 @@ from odoo.tools import format_date
 
 class AbstractReportXslx(models.AbstractModel):
     _name = "report.account_financial_report.abstract_report_xlsx"
+    _description = "Abstract XLSX Account Financial Report"
     _inherit = "report.report_xlsx.abstract"
 
     def __init__(self, pool, cr):
@@ -328,10 +329,10 @@ class AbstractReportXslx(models.AbstractModel):
     def _get_currency_amt_format(self, line_object):
         """ Return amount format specific for each currency. """
         if hasattr(line_object, "account_group_id") and line_object.account_group_id:
-            format_amt = getattr(self, "format_amount_bold")
+            format_amt = self.format_amount_bold
             field_prefix = "format_amount_bold"
         else:
-            format_amt = getattr(self, "format_amount")
+            format_amt = self.format_amount
             field_prefix = "format_amount"
         if line_object.currency_id:
             field_name = "{}_{}".format(field_prefix, line_object.currency_id.name)
@@ -339,7 +340,7 @@ class AbstractReportXslx(models.AbstractModel):
                 format_amt = getattr(self, field_name)
             else:
                 format_amt = self.workbook.add_format()
-                setattr(self, "field_name", format_amt)
+                self.field_name = format_amt
                 format_amount = "#,##0." + (
                     "0" * line_object.currency_id.decimal_places
                 )

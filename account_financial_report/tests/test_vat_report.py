@@ -33,7 +33,7 @@ class TestVAT(abstract_test_tax_report.AbstractTest):
         return {
             "date_from": date(date.today().year, 1, 1),
             "date_to": date(date.today().year, 12, 31),
-            "company_id": self.env.user.company_id.id,
+            "company_id": self.env.company.id,
         }
 
     def _getAdditionalFiltersToBeTested(self):

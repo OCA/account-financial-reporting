@@ -19,7 +19,7 @@ class TrialBalanceReportWizard(models.TransientModel):
 
     company_id = fields.Many2one(
         comodel_name="res.company",
-        default=lambda self: self.env.user.company_id,
+        default=lambda self: self.env.company,
         required=False,
         string="Company",
     )
@@ -31,7 +31,7 @@ class TrialBalanceReportWizard(models.TransientModel):
         [("posted", "All Posted Entries"), ("all", "All Entries")],
         string="Target Moves",
         required=True,
-        default="all",
+        default="posted",
     )
     hierarchy_on = fields.Selection(
         [
@@ -82,7 +82,6 @@ class TrialBalanceReportWizard(models.TransientModel):
         "will display initial and final balance in that currency.",
     )
 
-    @api.multi
     @api.constrains("hierarchy_on", "show_hierarchy_level")
     def _check_show_hierarchy_level(self):
         for rec in self:
@@ -93,10 +92,12 @@ class TrialBalanceReportWizard(models.TransientModel):
 
     @api.depends("date_from")
     def _compute_fy_start_date(self):
-        for wiz in self.filtered("date_from"):
-            date = fields.Datetime.from_string(wiz.date_from)
-            res = self.company_id.compute_fiscalyear_dates(date)
-            wiz.fy_start_date = fields.Date.to_string(res["date_from"])
+        for wiz in self:
+            if wiz.date_from:
+                res = self.company_id.compute_fiscalyear_dates(wiz.date_from)
+                wiz.fy_start_date = res["date_from"]
+            else:
+                wiz.fy_start_date = False
 
     @api.onchange("company_id")
     def onchange_company_id(self):
@@ -157,7 +158,6 @@ class TrialBalanceReportWizard(models.TransientModel):
         self.date_from = self.date_range_id.date_start
         self.date_to = self.date_range_id.date_end
 
-    @api.multi
     @api.constrains("company_id", "date_range_id")
     def _check_company_id_date_range_id(self):
         for rec in self.sudo():
@@ -196,7 +196,6 @@ class TrialBalanceReportWizard(models.TransientModel):
         else:
             self.receivable_accounts_only = self.payable_accounts_only = False
 
-    @api.multi
     def button_export_html(self):
         self.ensure_one()
         action = self.env.ref("account_financial_report.action_report_trial_balance")
@@ -213,13 +212,11 @@ class TrialBalanceReportWizard(models.TransientModel):
         vals["context"] = context1
         return vals
 
-    @api.multi
     def button_export_pdf(self):
         self.ensure_one()
         report_type = "qweb-pdf"
         return self._export(report_type)
 
-    @api.multi
     def button_export_xlsx(self):
         self.ensure_one()
         report_type = "xlsx"

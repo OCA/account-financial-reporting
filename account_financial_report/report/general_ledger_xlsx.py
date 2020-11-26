@@ -8,6 +8,7 @@ from odoo import _, models
 
 class GeneralLedgerXslx(models.AbstractModel):
     _name = "report.a_f_r.report_general_ledger_xlsx"
+    _description = "General Ledger XLSX Report"
     _inherit = "report.account_financial_report.abstract_report_xlsx"
 
     def _get_report_name(self, report):
