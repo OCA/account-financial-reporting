@@ -1,80 +1,60 @@
 # Copyright 2017 ACSONE SA/NV
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import models, fields, api
+from odoo import api, fields, models
 
 DIGITS = (16, 2)
 
 
 class ReportJournalLedger(models.TransientModel):
 
-    _name = 'report_journal_ledger'
-    _inherit = 'account_financial_report_abstract'
+    _name = "report_journal_ledger"
+    _inherit = "account_financial_report_abstract"
 
-    date_from = fields.Date(
-        required=True
-    )
-    date_to = fields.Date(
-        required=True
-    )
+    date_from = fields.Date(required=True)
+    date_to = fields.Date(required=True)
     company_id = fields.Many2one(
-        comodel_name='res.company',
-        required=True,
-        ondelete='cascade'
+        comodel_name="res.company", required=True, ondelete="cascade"
     )
     move_target = fields.Selection(
-        selection='_get_move_targets',
-        default='all',
-        required=True,
+        selection="_get_move_targets", default="all", required=True,
     )
     sort_option = fields.Selection(
-        selection='_get_sort_options',
-        default='move_name',
-        required=True,
+        selection="_get_sort_options", default="move_name", required=True,
     )
     group_option = fields.Selection(
-        selection='_get_group_options',
-        default='journal',
-        required=True,
+        selection="_get_group_options", default="journal", required=True,
     )
-    journal_ids = fields.Many2many(
-        comodel_name='account.journal',
-        required=True,
-    )
+    journal_ids = fields.Many2many(comodel_name="account.journal", required=True,)
     report_journal_ledger_ids = fields.One2many(
-        comodel_name='report_journal_ledger_journal',
-        inverse_name='report_id',
+        comodel_name="report_journal_ledger_journal", inverse_name="report_id",
     )
     report_move_ids = fields.One2many(
-        comodel_name='report_journal_ledger_move',
-        inverse_name='report_id',
+        comodel_name="report_journal_ledger_move", inverse_name="report_id",
     )
     report_move_line_ids = fields.One2many(
-        comodel_name='report_journal_ledger_move_line',
-        inverse_name='report_id',
+        comodel_name="report_journal_ledger_move_line", inverse_name="report_id",
     )
     report_journal_ledger_tax_line_ids = fields.One2many(
-        comodel_name='report_journal_ledger_journal_tax_line',
-        inverse_name='report_id',
+        comodel_name="report_journal_ledger_journal_tax_line", inverse_name="report_id",
     )
     report_tax_line_ids = fields.One2many(
-        comodel_name='report_journal_ledger_report_tax_line',
-        inverse_name='report_id',
+        comodel_name="report_journal_ledger_report_tax_line", inverse_name="report_id",
     )
     foreign_currency = fields.Boolean()
     with_account_name = fields.Boolean()
 
     @api.model
     def _get_move_targets(self):
-        return self.env['journal.ledger.report.wizard']._get_move_targets()
+        return self.env["journal.ledger.report.wizard"]._get_move_targets()
 
     @api.model
     def _get_sort_options(self):
-        return self.env['journal.ledger.report.wizard']._get_sort_options()
+        return self.env["journal.ledger.report.wizard"]._get_sort_options()
 
     @api.model
     def _get_group_options(self):
-        return self.env['journal.ledger.report.wizard']._get_group_options()
+        return self.env["journal.ledger.report.wizard"]._get_group_options()
 
     @api.multi
     def compute_data_for_report(self):
@@ -85,7 +65,7 @@ class ReportJournalLedger(models.TransientModel):
         self._inject_journal_tax_values()
         self._update_journal_report_total_values()
 
-        if self.group_option == 'none':
+        if self.group_option == "none":
             self._inject_report_tax_values()
 
         # Refresh cache because all data are computed with SQL requests
@@ -99,9 +79,7 @@ class ReportJournalLedger(models.TransientModel):
             FROM report_journal_ledger_journal
             WHERE report_id = %s
         """
-        params = (
-            self.id,
-        )
+        params = (self.id,)
         self.env.cr.execute(sql, params)
         sql = """
             INSERT INTO report_journal_ledger_journal (
@@ -150,9 +128,7 @@ class ReportJournalLedger(models.TransientModel):
             FROM report_journal_ledger_move
             WHERE report_id = %s
         """
-        params = (
-            self.id,
-        )
+        params = (self.id,)
         self.env.cr.execute(sql, params)
         sql = self._get_inject_move_insert()
         sql += self._get_inject_move_select()
@@ -204,7 +180,7 @@ class ReportJournalLedger(models.TransientModel):
             AND
                 am.date <= %s
         """
-        if self.move_target != 'all':
+        if self.move_target != "all":
             where_clause += """
                 AND
                     am.state = %s
@@ -217,22 +193,17 @@ class ReportJournalLedger(models.TransientModel):
         order_by = """
             ORDER BY
         """
-        if self.sort_option == 'move_name':
+        if self.sort_option == "move_name":
             order_by += " am.name"
-        elif self.sort_option == 'date':
+        elif self.sort_option == "date":
             order_by += " am.date, am.name"
         return order_by
 
     @api.multi
     def _get_inject_move_params(self):
-        params = [
-            self.env.uid,
-            self.id,
-            self.date_from,
-            self.date_to
-        ]
+        params = [self.env.uid, self.id, self.date_from, self.date_to]
 
-        if self.move_target != 'all':
+        if self.move_target != "all":
             params.append(self.move_target)
 
         return tuple(params)
@@ -245,9 +216,7 @@ class ReportJournalLedger(models.TransientModel):
             FROM report_journal_ledger_move_line
             WHERE report_id = %s
         """
-        params = (
-            self.id,
-        )
+        params = (self.id,)
         self.env.cr.execute(sql, params)
         sql = """
             INSERT INTO report_journal_ledger_move_line (
@@ -360,7 +329,7 @@ class ReportJournalLedger(models.TransientModel):
         """
         self.env.cr.execute(sql_distinct_tax_id, (self.id,))
         rows = self.env.cr.fetchall()
-        tax_ids = set([row[0] for row in rows])
+        tax_ids = {row[0] for row in rows}
 
         sql = """
             INSERT INTO report_journal_ledger_report_tax_line (
@@ -443,9 +412,7 @@ class ReportJournalLedger(models.TransientModel):
             FROM report_journal_ledger_journal_tax_line
             WHERE report_id = %s
         """
-        params = (
-            self.id,
-        )
+        params = (self.id,)
         self.env.cr.execute(sql, params)
         sql_distinct_tax_id = """
             SELECT
@@ -462,9 +429,9 @@ class ReportJournalLedger(models.TransientModel):
                 tax_ids_by_journal_id[report_journal.id] = []
             self.env.cr.execute(sql_distinct_tax_id, (report_journal.id,))
             rows = self.env.cr.fetchall()
-            tax_ids_by_journal_id[report_journal.id].extend([
-                row[0] for row in rows if row[0]
-            ])
+            tax_ids_by_journal_id[report_journal.id].extend(
+                [row[0] for row in rows if row[0]]
+            )
 
         sql = """
             INSERT INTO report_journal_ledger_journal_tax_line (
@@ -587,26 +554,29 @@ class ReportJournalLedger(models.TransientModel):
     @api.multi
     def print_report(self, report_type):
         self.ensure_one()
-        if report_type == 'xlsx':
-            report_name = 'a_f_r.report_journal_ledger_xlsx'
+        if report_type == "xlsx":
+            report_name = "a_f_r.report_journal_ledger_xlsx"
         else:
-            report_name = 'account_financial_report.' \
-                          'report_journal_ledger_qweb'
-        return self.env['ir.actions.report'].search(
-            [('report_name', '=', report_name),
-             ('report_type', '=', report_type)],
-            limit=1).report_action(self, config=False)
+            report_name = "account_financial_report." "report_journal_ledger_qweb"
+        return (
+            self.env["ir.actions.report"]
+            .search(
+                [("report_name", "=", report_name), ("report_type", "=", report_type)],
+                limit=1,
+            )
+            .report_action(self, config=False)
+        )
 
     def _get_html(self):
         result = {}
         rcontext = {}
         context = dict(self.env.context)
-        report = self.browse(context.get('active_id'))
+        report = self.browse(context.get("active_id"))
         if report:
-            rcontext['o'] = report
-            result['html'] = self.env.ref(
-                'account_financial_report.report_journal_ledger').render(
-                    rcontext)
+            rcontext["o"] = report
+            result["html"] = self.env.ref(
+                "account_financial_report.report_journal_ledger"
+            ).render(rcontext)
         return result
 
     @api.model
@@ -629,183 +599,114 @@ class ReportJournalLedger(models.TransientModel):
 
 class ReportJournalLedgerJournal(models.TransientModel):
 
-    _name = 'report_journal_ledger_journal'
-    _inherit = 'account_financial_report_abstract'
+    _name = "report_journal_ledger_journal"
+    _inherit = "account_financial_report_abstract"
 
-    name = fields.Char(
-        required=True,
-    )
+    name = fields.Char(required=True,)
     code = fields.Char()
     report_id = fields.Many2one(
-        comodel_name='report_journal_ledger',
-        required=True,
-        ondelete='cascade'
+        comodel_name="report_journal_ledger", required=True, ondelete="cascade"
     )
     journal_id = fields.Many2one(
-        comodel_name='account.journal',
-        required=True,
-        ondelete='cascade',
+        comodel_name="account.journal", required=True, ondelete="cascade",
     )
     report_move_ids = fields.One2many(
-        comodel_name='report_journal_ledger_move',
-        inverse_name='report_journal_ledger_id',
+        comodel_name="report_journal_ledger_move",
+        inverse_name="report_journal_ledger_id",
     )
     report_tax_line_ids = fields.One2many(
-        comodel_name='report_journal_ledger_journal_tax_line',
-        inverse_name='report_journal_ledger_id',
+        comodel_name="report_journal_ledger_journal_tax_line",
+        inverse_name="report_journal_ledger_id",
     )
-    debit = fields.Float(
-        digits=DIGITS,
-    )
-    credit = fields.Float(
-        digits=DIGITS,
-    )
+    debit = fields.Float(digits=DIGITS,)
+    credit = fields.Float(digits=DIGITS,)
     company_id = fields.Many2one(
-        comodel_name='res.company',
-        required=True,
-        ondelete='cascade'
+        comodel_name="res.company", required=True, ondelete="cascade"
     )
-    currency_id = fields.Many2one(
-        comodel_name='res.currency',
-    )
+    currency_id = fields.Many2one(comodel_name="res.currency",)
 
 
 class ReportJournalLedgerMove(models.TransientModel):
 
-    _name = 'report_journal_ledger_move'
-    _inherit = 'account_financial_report_abstract'
+    _name = "report_journal_ledger_move"
+    _inherit = "account_financial_report_abstract"
 
     report_id = fields.Many2one(
-        comodel_name='report_journal_ledger',
-        required=True,
-        ondelete='cascade'
+        comodel_name="report_journal_ledger", required=True, ondelete="cascade"
     )
     report_journal_ledger_id = fields.Many2one(
-        comodel_name='report_journal_ledger_journal',
-        required=True,
-        ondelete='cascade',
+        comodel_name="report_journal_ledger_journal", required=True, ondelete="cascade",
     )
     move_id = fields.Many2one(
-        comodel_name='account.move',
-        required=True,
-        ondelete='cascade',
+        comodel_name="account.move", required=True, ondelete="cascade",
     )
     report_move_line_ids = fields.One2many(
-        comodel_name='report_journal_ledger_move_line',
-        inverse_name='report_move_id',
+        comodel_name="report_journal_ledger_move_line", inverse_name="report_move_id",
     )
     name = fields.Char()
     company_id = fields.Many2one(
-        comodel_name='res.company',
-        required=True,
-        ondelete='cascade'
+        comodel_name="res.company", required=True, ondelete="cascade"
     )
 
 
 class ReportJournalLedgerMoveLine(models.TransientModel):
 
-    _name = 'report_journal_ledger_move_line'
-    _inherit = 'account_financial_report_abstract'
-    _order = 'partner_id desc, account_id desc'
+    _name = "report_journal_ledger_move_line"
+    _inherit = "account_financial_report_abstract"
+    _order = "partner_id desc, account_id desc"
 
     report_id = fields.Many2one(
-        comodel_name='report_journal_ledger',
-        required=True,
-        ondelete='cascade'
+        comodel_name="report_journal_ledger", required=True, ondelete="cascade"
     )
     report_journal_ledger_id = fields.Many2one(
-        comodel_name='report_journal_ledger_journal',
-        required=True,
-        ondelete='cascade',
+        comodel_name="report_journal_ledger_journal", required=True, ondelete="cascade",
     )
     report_move_id = fields.Many2one(
-        comodel_name='report_journal_ledger_move',
-        required=True,
-        ondelete='cascade',
+        comodel_name="report_journal_ledger_move", required=True, ondelete="cascade",
     )
     move_line_id = fields.Many2one(
-        comodel_name='account.move.line',
-        required=True,
-        ondelete='cascade',
+        comodel_name="account.move.line", required=True, ondelete="cascade",
     )
-    account_id = fields.Many2one(
-        comodel_name='account.account',
-        string='Account ID',
-    )
+    account_id = fields.Many2one(comodel_name="account.account", string="Account ID",)
     account = fields.Char()
     account_code = fields.Char()
     account_type = fields.Char()
     partner = fields.Char()
-    partner_id = fields.Many2one(
-        comodel_name='res.partner',
-        string='Partner ID',
-    )
+    partner_id = fields.Many2one(comodel_name="res.partner", string="Partner ID",)
     date = fields.Date()
     entry = fields.Char()
     label = fields.Char()
-    debit = fields.Float(
-        digits=DIGITS,
-    )
-    credit = fields.Float(
-        digits=DIGITS,
-    )
-    company_currency_id = fields.Many2one(
-        comodel_name='res.currency',
-    )
-    amount_currency = fields.Monetary(
-        currency_field='currency_id',
-    )
-    currency_id = fields.Many2one(
-        comodel_name='res.currency',
-    )
+    debit = fields.Float(digits=DIGITS,)
+    credit = fields.Float(digits=DIGITS,)
+    company_currency_id = fields.Many2one(comodel_name="res.currency",)
+    amount_currency = fields.Monetary(currency_field="currency_id",)
+    currency_id = fields.Many2one(comodel_name="res.currency",)
     currency_name = fields.Char()
     taxes_description = fields.Char()
-    tax_id = fields.Many2one(
-        comodel_name='account.tax'
-    )
+    tax_id = fields.Many2one(comodel_name="account.tax")
     company_id = fields.Many2one(
-        comodel_name='res.company',
-        required=True,
-        ondelete='cascade'
+        comodel_name="res.company", required=True, ondelete="cascade"
     )
 
 
 class ReportJournalLedgerReportTaxLine(models.TransientModel):
 
-    _name = 'report_journal_ledger_report_tax_line'
-    _inherit = 'account_financial_report_abstract'
-    _order = 'tax_code'
+    _name = "report_journal_ledger_report_tax_line"
+    _inherit = "account_financial_report_abstract"
+    _order = "tax_code"
 
     report_id = fields.Many2one(
-        comodel_name='report_journal_ledger',
-        required=True,
-        ondelete='cascade'
+        comodel_name="report_journal_ledger", required=True, ondelete="cascade"
     )
-    tax_id = fields.Many2one(
-        comodel_name='account.tax'
-    )
+    tax_id = fields.Many2one(comodel_name="account.tax")
     tax_name = fields.Char()
     tax_code = fields.Char()
-    base_debit = fields.Float(
-        digits=DIGITS,
-    )
-    base_credit = fields.Float(
-        digits=DIGITS,
-    )
-    base_balance = fields.Float(
-        digits=DIGITS,
-        compute='_compute_base_balance',
-    )
-    tax_debit = fields.Float(
-        digits=DIGITS,
-    )
-    tax_credit = fields.Float(
-        digits=DIGITS,
-    )
-    tax_balance = fields.Float(
-        digits=DIGITS,
-        compute='_compute_tax_balance'
-    )
+    base_debit = fields.Float(digits=DIGITS,)
+    base_credit = fields.Float(digits=DIGITS,)
+    base_balance = fields.Float(digits=DIGITS, compute="_compute_base_balance",)
+    tax_debit = fields.Float(digits=DIGITS,)
+    tax_credit = fields.Float(digits=DIGITS,)
+    tax_balance = fields.Float(digits=DIGITS, compute="_compute_tax_balance")
 
     @api.multi
     def _compute_base_balance(self):
@@ -820,12 +721,10 @@ class ReportJournalLedgerReportTaxLine(models.TransientModel):
 
 class ReportJournalLedgerJournalTaxLine(models.TransientModel):
 
-    _name = 'report_journal_ledger_journal_tax_line'
-    _inherit = 'report_journal_ledger_report_tax_line'
-    _order = 'tax_code'
+    _name = "report_journal_ledger_journal_tax_line"
+    _inherit = "report_journal_ledger_report_tax_line"
+    _order = "tax_code"
 
     report_journal_ledger_id = fields.Many2one(
-        comodel_name='report_journal_ledger_journal',
-        required=True,
-        ondelete='cascade',
+        comodel_name="report_journal_ledger_journal", required=True, ondelete="cascade",
     )

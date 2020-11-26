@@ -1,7 +1,7 @@
 # © 2016 Julien Coux (Camptocamp)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import models, fields, api
+from odoo import api, fields, models
 
 
 class AgedPartnerBalanceReport(models.TransientModel):
@@ -17,43 +17,37 @@ class AgedPartnerBalanceReport(models.TransientModel):
             If "show_move_line_details" is selected
     """
 
-    _name = 'report_aged_partner_balance'
-    _inherit = 'account_financial_report_abstract'
+    _name = "report_aged_partner_balance"
+    _inherit = "account_financial_report_abstract"
 
     # Filters fields, used for data computation
     date_at = fields.Date()
     only_posted_moves = fields.Boolean()
-    company_id = fields.Many2one(comodel_name='res.company')
-    filter_account_ids = fields.Many2many(comodel_name='account.account')
-    filter_partner_ids = fields.Many2many(comodel_name='res.partner')
+    company_id = fields.Many2one(comodel_name="res.company")
+    filter_account_ids = fields.Many2many(comodel_name="account.account")
+    filter_partner_ids = fields.Many2many(comodel_name="res.partner")
     show_move_line_details = fields.Boolean()
 
     # Open Items Report Data fields, used as base for compute the data reports
-    open_items_id = fields.Many2one(comodel_name='report_open_items')
+    open_items_id = fields.Many2one(comodel_name="report_open_items")
 
     # Data fields, used to browse report data
     account_ids = fields.One2many(
-        comodel_name='report_aged_partner_balance_account',
-        inverse_name='report_id'
+        comodel_name="report_aged_partner_balance_account", inverse_name="report_id"
     )
 
 
 class AgedPartnerBalanceReportAccount(models.TransientModel):
-    _name = 'report_aged_partner_balance_account'
-    _inherit = 'account_financial_report_abstract'
-    _order = 'code ASC'
+    _name = "report_aged_partner_balance_account"
+    _inherit = "account_financial_report_abstract"
+    _order = "code ASC"
 
     report_id = fields.Many2one(
-        comodel_name='report_aged_partner_balance',
-        ondelete='cascade',
-        index=True
+        comodel_name="report_aged_partner_balance", ondelete="cascade", index=True
     )
 
     # Data fields, used to keep link with real object
-    account_id = fields.Many2one(
-        'account.account',
-        index=True
-    )
+    account_id = fields.Many2one("account.account", index=True)
 
     # Data fields, used for report display
     code = fields.Char()
@@ -76,38 +70,35 @@ class AgedPartnerBalanceReportAccount(models.TransientModel):
 
     # Data fields, used to browse report data
     partner_ids = fields.One2many(
-        comodel_name='report_aged_partner_balance_partner',
-        inverse_name='report_account_id'
+        comodel_name="report_aged_partner_balance_partner",
+        inverse_name="report_account_id",
     )
 
 
 class AgedPartnerBalanceReportPartner(models.TransientModel):
-    _name = 'report_aged_partner_balance_partner'
-    _inherit = 'account_financial_report_abstract'
+    _name = "report_aged_partner_balance_partner"
+    _inherit = "account_financial_report_abstract"
 
     report_account_id = fields.Many2one(
-        comodel_name='report_aged_partner_balance_account',
-        ondelete='cascade',
-        index=True
+        comodel_name="report_aged_partner_balance_account",
+        ondelete="cascade",
+        index=True,
     )
 
     # Data fields, used to keep link with real object
-    partner_id = fields.Many2one(
-        'res.partner',
-        index=True
-    )
+    partner_id = fields.Many2one("res.partner", index=True)
 
     # Data fields, used for report display
     name = fields.Char()
 
     # Data fields, used to browse report data
     move_line_ids = fields.One2many(
-        comodel_name='report_aged_partner_balance_move_line',
-        inverse_name='report_partner_id'
+        comodel_name="report_aged_partner_balance_move_line",
+        inverse_name="report_partner_id",
     )
     line_ids = fields.One2many(
-        comodel_name='report_aged_partner_balance_line',
-        inverse_name='report_partner_id'
+        comodel_name="report_aged_partner_balance_line",
+        inverse_name="report_partner_id",
     )
 
     @api.model
@@ -126,13 +117,13 @@ ORDER BY
 
 
 class AgedPartnerBalanceReportLine(models.TransientModel):
-    _name = 'report_aged_partner_balance_line'
-    _inherit = 'account_financial_report_abstract'
+    _name = "report_aged_partner_balance_line"
+    _inherit = "account_financial_report_abstract"
 
     report_partner_id = fields.Many2one(
-        comodel_name='report_aged_partner_balance_partner',
-        ondelete='cascade',
-        index=True
+        comodel_name="report_aged_partner_balance_partner",
+        ondelete="cascade",
+        index=True,
     )
 
     # Data fields, used for report display
@@ -147,17 +138,17 @@ class AgedPartnerBalanceReportLine(models.TransientModel):
 
 
 class AgedPartnerBalanceReportMoveLine(models.TransientModel):
-    _name = 'report_aged_partner_balance_move_line'
-    _inherit = 'account_financial_report_abstract'
+    _name = "report_aged_partner_balance_move_line"
+    _inherit = "account_financial_report_abstract"
 
     report_partner_id = fields.Many2one(
-        comodel_name='report_aged_partner_balance_partner',
-        ondelete='cascade',
-        index=True
+        comodel_name="report_aged_partner_balance_partner",
+        ondelete="cascade",
+        index=True,
     )
 
     # Data fields, used to keep link with real object
-    move_line_id = fields.Many2one('account.move.line')
+    move_line_id = fields.Many2one("account.move.line")
 
     # Data fields, used for report display
     date = fields.Date()
@@ -182,31 +173,31 @@ class AgedPartnerBalanceReportCompute(models.TransientModel):
     For class fields, go more top at this file.
     """
 
-    _inherit = 'report_aged_partner_balance'
+    _inherit = "report_aged_partner_balance"
 
     @api.multi
     def print_report(self, report_type):
         self.ensure_one()
-        if report_type == 'xlsx':
-            report_name = 'a_f_r.report_aged_partner_balance_xlsx'
+        if report_type == "xlsx":
+            report_name = "a_f_r.report_aged_partner_balance_xlsx"
         else:
-            report_name = 'account_financial_report.' \
-                          'report_aged_partner_balance_qweb'
-        report = self.env['ir.actions.report'].search(
-            [('report_name', '=', report_name),
-             ('report_type', '=', report_type)], limit=1)
+            report_name = "account_financial_report." "report_aged_partner_balance_qweb"
+        report = self.env["ir.actions.report"].search(
+            [("report_name", "=", report_name), ("report_type", "=", report_type)],
+            limit=1,
+        )
         return report.report_action(self, config=False)
 
     def _get_html(self):
         result = {}
         rcontext = {}
         context = dict(self.env.context)
-        report = self.browse(context.get('active_id'))
+        report = self.browse(context.get("active_id"))
         if report:
-            rcontext['o'] = report
-            result['html'] = self.env.ref(
-                'account_financial_report.report_aged_partner_balance').render(
-                    rcontext)
+            rcontext["o"] = report
+            result["html"] = self.env.ref(
+                "account_financial_report.report_aged_partner_balance"
+            ).render(rcontext)
         return result
 
     @api.model
@@ -216,11 +207,11 @@ class AgedPartnerBalanceReportCompute(models.TransientModel):
     def _prepare_report_open_items(self):
         self.ensure_one()
         return {
-            'date_at': self.date_at,
-            'only_posted_moves': self.only_posted_moves,
-            'company_id': self.company_id.id,
-            'filter_account_ids': [(6, 0, self.filter_account_ids.ids)],
-            'filter_partner_ids': [(6, 0, self.filter_partner_ids.ids)],
+            "date_at": self.date_at,
+            "only_posted_moves": self.only_posted_moves,
+            "company_id": self.company_id.id,
+            "filter_account_ids": [(6, 0, self.filter_account_ids.ids)],
+            "filter_partner_ids": [(6, 0, self.filter_partner_ids.ids)],
         }
 
     @api.multi
@@ -229,7 +220,7 @@ class AgedPartnerBalanceReportCompute(models.TransientModel):
         # Compute Open Items Report Data.
         # The data of Aged Partner Balance Report
         # are based on Open Items Report data.
-        model = self.env['report_open_items']
+        model = self.env["report_open_items"]
         self.open_items_id = model.create(self._prepare_report_open_items())
         self.open_items_id.compute_data_for_report()
 
@@ -550,8 +541,7 @@ AND ra.report_id = %s
             self.open_items_id.id,
             self.id,
         )
-        self.env.cr.execute(query_inject_move_line,
-                            query_inject_move_line_params)
+        self.env.cr.execute(query_inject_move_line, query_inject_move_line_params)
 
     def _compute_accounts_cumul(self):
         """ Compute cumulative amount for
@@ -629,5 +619,4 @@ WHERE
     id = c.report_account_id
         """
         params_compute_accounts_cumul = (self.id,)
-        self.env.cr.execute(query_compute_accounts_cumul,
-                            params_compute_accounts_cumul)
+        self.env.cr.execute(query_compute_accounts_cumul, params_compute_accounts_cumul)

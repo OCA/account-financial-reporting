@@ -1,8 +1,7 @@
-
 # © 2016 Julien Coux (Camptocamp)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import models, fields, api, _
+from odoo import _, api, fields, models
 
 
 class OpenItemsReport(models.TransientModel):
@@ -16,47 +15,41 @@ class OpenItemsReport(models.TransientModel):
     **** OpenItemsReportMoveLine
     """
 
-    _name = 'report_open_items'
-    _inherit = 'account_financial_report_abstract'
+    _name = "report_open_items"
+    _inherit = "account_financial_report_abstract"
 
     # Filters fields, used for data computation
     date_at = fields.Date()
     only_posted_moves = fields.Boolean()
     hide_account_at_0 = fields.Boolean()
     foreign_currency = fields.Boolean()
-    company_id = fields.Many2one(comodel_name='res.company')
-    filter_account_ids = fields.Many2many(comodel_name='account.account')
-    filter_partner_ids = fields.Many2many(comodel_name='res.partner')
+    company_id = fields.Many2one(comodel_name="res.company")
+    filter_account_ids = fields.Many2many(comodel_name="account.account")
+    filter_partner_ids = fields.Many2many(comodel_name="res.partner")
 
     # Data fields, used to browse report data
     account_ids = fields.One2many(
-        comodel_name='report_open_items_account',
-        inverse_name='report_id'
+        comodel_name="report_open_items_account", inverse_name="report_id"
     )
 
 
 class OpenItemsReportAccount(models.TransientModel):
 
-    _name = 'report_open_items_account'
-    _inherit = 'account_financial_report_abstract'
-    _order = 'code ASC'
+    _name = "report_open_items_account"
+    _inherit = "account_financial_report_abstract"
+    _order = "code ASC"
 
     report_id = fields.Many2one(
-        comodel_name='report_open_items',
-        ondelete='cascade',
-        index=True
+        comodel_name="report_open_items", ondelete="cascade", index=True
     )
 
     # Data fields, used to keep link with real object
-    account_id = fields.Many2one(
-        'account.account',
-        index=True
-    )
+    account_id = fields.Many2one("account.account", index=True)
 
     # Data fields, used for report display
     code = fields.Char()
     name = fields.Char()
-    currency_id = fields.Many2one('res.currency')
+    currency_id = fields.Many2one("res.currency")
     final_amount_residual = fields.Float(digits=(16, 2))
     final_amount_total_due = fields.Float(digits=(16, 2))
     final_amount_residual_currency = fields.Float(digits=(16, 2))
@@ -64,31 +57,25 @@ class OpenItemsReportAccount(models.TransientModel):
 
     # Data fields, used to browse report data
     partner_ids = fields.One2many(
-        comodel_name='report_open_items_partner',
-        inverse_name='report_account_id'
+        comodel_name="report_open_items_partner", inverse_name="report_account_id"
     )
 
 
 class OpenItemsReportPartner(models.TransientModel):
 
-    _name = 'report_open_items_partner'
-    _inherit = 'account_financial_report_abstract'
+    _name = "report_open_items_partner"
+    _inherit = "account_financial_report_abstract"
 
     report_account_id = fields.Many2one(
-        comodel_name='report_open_items_account',
-        ondelete='cascade',
-        index=True
+        comodel_name="report_open_items_account", ondelete="cascade", index=True
     )
 
     # Data fields, used to keep link with real object
-    partner_id = fields.Many2one(
-        'res.partner',
-        index=True
-    )
+    partner_id = fields.Many2one("res.partner", index=True)
 
     # Data fields, used for report display
     name = fields.Char()
-    currency_id = fields.Many2one('res.currency')
+    currency_id = fields.Many2one("res.currency")
     final_amount_residual = fields.Float(digits=(16, 2))
     final_amount_total_due = fields.Float(digits=(16, 2))
     final_amount_residual_currency = fields.Float(digits=(16, 2))
@@ -96,8 +83,7 @@ class OpenItemsReportPartner(models.TransientModel):
 
     # Data fields, used to browse report data
     move_line_ids = fields.One2many(
-        comodel_name='report_open_items_move_line',
-        inverse_name='report_partner_id'
+        comodel_name="report_open_items_move_line", inverse_name="report_partner_id"
     )
 
     @api.model
@@ -116,17 +102,15 @@ ORDER BY
 
 class OpenItemsReportMoveLine(models.TransientModel):
 
-    _name = 'report_open_items_move_line'
-    _inherit = 'account_financial_report_abstract'
+    _name = "report_open_items_move_line"
+    _inherit = "account_financial_report_abstract"
 
     report_partner_id = fields.Many2one(
-        comodel_name='report_open_items_partner',
-        ondelete='cascade',
-        index=True
+        comodel_name="report_open_items_partner", ondelete="cascade", index=True
     )
 
     # Data fields, used to keep link with real object
-    move_line_id = fields.Many2one('account.move.line')
+    move_line_id = fields.Many2one("account.move.line")
 
     # Data fields, used for report display
     date = fields.Date()
@@ -138,7 +122,7 @@ class OpenItemsReportMoveLine(models.TransientModel):
     label = fields.Char()
     amount_total_due = fields.Float(digits=(16, 2))
     amount_residual = fields.Float(digits=(16, 2))
-    currency_id = fields.Many2one('res.currency')
+    currency_id = fields.Many2one("res.currency")
     amount_total_due_currency = fields.Float(digits=(16, 2))
     amount_residual_currency = fields.Float(digits=(16, 2))
 
@@ -148,31 +132,34 @@ class OpenItemsReportCompute(models.TransientModel):
     For class fields, go more top at this file.
     """
 
-    _inherit = 'report_open_items'
+    _inherit = "report_open_items"
 
     @api.multi
     def print_report(self, report_type):
         self.ensure_one()
-        if report_type == 'xlsx':
-            report_name = 'a_f_r.report_open_items_xlsx'
+        if report_type == "xlsx":
+            report_name = "a_f_r.report_open_items_xlsx"
         else:
-            report_name = 'account_financial_report.' \
-                          'report_open_items_qweb'
-        return self.env['ir.actions.report'].search(
-            [('report_name', '=', report_name),
-             ('report_type', '=', report_type)],
-            limit=1).report_action(self, config=False)
+            report_name = "account_financial_report." "report_open_items_qweb"
+        return (
+            self.env["ir.actions.report"]
+            .search(
+                [("report_name", "=", report_name), ("report_type", "=", report_type)],
+                limit=1,
+            )
+            .report_action(self, config=False)
+        )
 
     def _get_html(self):
         result = {}
         rcontext = {}
         context = dict(self.env.context)
-        report = self.browse(context.get('active_id'))
+        report = self.browse(context.get("active_id"))
         if report:
-            rcontext['o'] = report
-            result['html'] = self.env.ref(
-                'account_financial_report.report_open_items').render(
-                    rcontext)
+            rcontext["o"] = report
+            result["html"] = self.env.ref(
+                "account_financial_report.report_open_items"
+            ).render(rcontext)
         return result
 
     @api.model
@@ -190,9 +177,7 @@ class OpenItemsReportCompute(models.TransientModel):
         self._clean_partners_and_accounts()
         self._compute_partners_and_accounts_cumul()
         if self.hide_account_at_0:
-            self._clean_partners_and_accounts(
-                only_delete_account_balance_at_0=True
-            )
+            self._clean_partners_and_accounts(only_delete_account_balance_at_0=True)
         # Refresh cache because all data are computed with SQL requests
         self.invalidate_cache()
 
@@ -271,13 +256,9 @@ FROM
             self.company_id.id,
         )
         if self.filter_account_ids:
-            query_inject_account_params += (
-                tuple(self.filter_account_ids.ids),
-            )
+            query_inject_account_params += (tuple(self.filter_account_ids.ids),)
         if self.filter_partner_ids:
-            query_inject_account_params += (
-                tuple(self.filter_partner_ids.ids),
-            )
+            query_inject_account_params += (tuple(self.filter_partner_ids.ids),)
         query_inject_account_params += (
             self.id,
             self.env.uid,
@@ -287,7 +268,8 @@ FROM
     def _inject_partner_values(self):
         """ Inject report values for report_open_items_partner. """
         # pylint: disable=sql-injection
-        query_inject_partner = """
+        query_inject_partner = (
+            """
 WITH
     accounts_partners AS
         (
@@ -304,7 +286,9 @@ WITH
                         THEN p.name || ' (' || p.ref || ')'
                         ELSE p.name
                     END,
-                    '""" + _('No partner allocated') + """'
+                    '"""
+            + _("No partner allocated")
+            + """'
                 ) AS partner_name
             FROM
                 report_open_items_account ra
@@ -315,6 +299,7 @@ WITH
             INNER JOIN
                 account_move_line ml ON a.id = ml.account_id AND ml.date <= %s
         """
+        )
         if self.only_posted_moves:
             query_inject_partner += """
             INNER JOIN
@@ -361,17 +346,13 @@ FROM
             self.id,
         )
         if self.filter_partner_ids:
-            query_inject_partner_params += (
-                tuple(self.filter_partner_ids.ids),
-            )
-        query_inject_partner_params += (
-            self.env.uid,
-        )
+            query_inject_partner_params += (tuple(self.filter_partner_ids.ids),)
+        query_inject_partner_params += (self.env.uid,)
         self.env.cr.execute(query_inject_partner, query_inject_partner_params)
 
-    def _get_line_sub_query_move_lines(self,
-                                       only_empty_partner_line=False,
-                                       positive_balance=True):
+    def _get_line_sub_query_move_lines(
+        self, only_empty_partner_line=False, positive_balance=True
+    ):
         """ Return subquery used to compute sum amounts on lines """
         sub_query = """
             SELECT
@@ -465,15 +446,13 @@ WITH
         (
         """
         query_inject_move_line += self._get_line_sub_query_move_lines(
-            only_empty_partner_line=only_empty_partner_line,
-            positive_balance=True
+            only_empty_partner_line=only_empty_partner_line, positive_balance=True
         )
         query_inject_move_line += """
             UNION
         """
         query_inject_move_line += self._get_line_sub_query_move_lines(
-            only_empty_partner_line=only_empty_partner_line,
-            positive_balance=False
+            only_empty_partner_line=only_empty_partner_line, positive_balance=False
         )
         query_inject_move_line += """
         ),
@@ -552,9 +531,13 @@ SELECT
     END AS partner,
             """
         elif only_empty_partner_line:
-            query_inject_move_line += """
-    '""" + _('No partner allocated') + """' AS partner,
+            query_inject_move_line += (
+                """
+    '"""
+                + _("No partner allocated")
+                + """' AS partner,
             """
+            )
         query_inject_move_line += """
     CONCAT_WS(' - ', NULLIF(ml.ref, ''), NULLIF(ml.name, '')) AS label,
     ml.balance,
@@ -620,15 +603,17 @@ ORDER BY
             """
         self.env.cr.execute(
             query_inject_move_line,
-            (self.date_at,
-             self.date_at,
-             self.id,
-             self.date_at,
-             self.date_at,
-             self.id,
-             self.env.uid,
-             self.id,
-             self.date_at,)
+            (
+                self.date_at,
+                self.date_at,
+                self.id,
+                self.date_at,
+                self.date_at,
+                self.id,
+                self.env.uid,
+                self.id,
+                self.date_at,
+            ),
         )
 
     def _compute_partners_and_accounts_cumul(self):
@@ -667,8 +652,10 @@ WHERE
         )
 """
         params_compute_partners_residual_cumul = (self.id,)
-        self.env.cr.execute(query_computer_partner_residual_cumul,
-                            params_compute_partners_residual_cumul)
+        self.env.cr.execute(
+            query_computer_partner_residual_cumul,
+            params_compute_partners_residual_cumul,
+        )
 
         query_compute_partners_due_cumul = """
 UPDATE
@@ -698,8 +685,9 @@ WHERE
         )
 """
         params_compute_partner_due_cumul = (self.id,)
-        self.env.cr.execute(query_compute_partners_due_cumul,
-                            params_compute_partner_due_cumul)
+        self.env.cr.execute(
+            query_compute_partners_due_cumul, params_compute_partner_due_cumul
+        )
 
         # Manage currency in partner
         query_compute_partners_cur_id_cumul = """
@@ -730,8 +718,9 @@ WHERE
         )
 """
         params_compute_partners_cur_id_cumul = (self.id,)
-        self.env.cr.execute(query_compute_partners_cur_id_cumul,
-                            params_compute_partners_cur_id_cumul)
+        self.env.cr.execute(
+            query_compute_partners_cur_id_cumul, params_compute_partners_cur_id_cumul
+        )
 
         query_compute_partners_cur_residual_cumul = """
 UPDATE
@@ -762,8 +751,10 @@ WHERE
         )
 """
         params_compute_partners_cur_residual_cumul = (self.id,)
-        self.env.cr.execute(query_compute_partners_cur_residual_cumul,
-                            params_compute_partners_cur_residual_cumul)
+        self.env.cr.execute(
+            query_compute_partners_cur_residual_cumul,
+            params_compute_partners_cur_residual_cumul,
+        )
 
         query_compute_partners_cur_due_cumul = """
 UPDATE
@@ -794,8 +785,9 @@ WHERE
         )
 """
         params_compute_partners_cur_due_cumul = (self.id,)
-        self.env.cr.execute(query_compute_partners_cur_due_cumul,
-                            params_compute_partners_cur_due_cumul)
+        self.env.cr.execute(
+            query_compute_partners_cur_due_cumul, params_compute_partners_cur_due_cumul
+        )
 
     def _compute_account_cumul(self):
         query_compute_accounts_residual_cumul = """
@@ -815,8 +807,10 @@ WHERE
     report_id  = %s
         """
         params_compute_accounts_residual_cumul = (self.id,)
-        self.env.cr.execute(query_compute_accounts_residual_cumul,
-                            params_compute_accounts_residual_cumul)
+        self.env.cr.execute(
+            query_compute_accounts_residual_cumul,
+            params_compute_accounts_residual_cumul,
+        )
 
         query_compute_accounts_cur_residual_cumul = """
 UPDATE
@@ -836,8 +830,10 @@ WHERE
     report_id = %s
         """
         params_compute_accounts_cur_residual_cumul = (self.id,)
-        self.env.cr.execute(query_compute_accounts_cur_residual_cumul,
-                            params_compute_accounts_cur_residual_cumul)
+        self.env.cr.execute(
+            query_compute_accounts_cur_residual_cumul,
+            params_compute_accounts_cur_residual_cumul,
+        )
 
         query_compute_accounts_due_cumul = """
 UPDATE
@@ -856,8 +852,9 @@ WHERE
     report_id = %s
         """
         params_compute_accounts_due_cumul = (self.id,)
-        self.env.cr.execute(query_compute_accounts_due_cumul,
-                            params_compute_accounts_due_cumul)
+        self.env.cr.execute(
+            query_compute_accounts_due_cumul, params_compute_accounts_due_cumul
+        )
 
         query_compute_accounts_cur_due_cumul = """
 UPDATE
@@ -877,11 +874,11 @@ WHERE
     report_id = %s
         """
         params_compute_accounts_cur_due_cumul = (self.id,)
-        self.env.cr.execute(query_compute_accounts_cur_due_cumul,
-                            params_compute_accounts_cur_due_cumul)
+        self.env.cr.execute(
+            query_compute_accounts_cur_due_cumul, params_compute_accounts_cur_due_cumul
+        )
 
-    def _clean_partners_and_accounts(self,
-                                     only_delete_account_balance_at_0=False):
+    def _clean_partners_and_accounts(self, only_delete_account_balance_at_0=False):
         """ Delete empty data for
         report_open_items_partner and report_open_items_account.
 

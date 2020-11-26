@@ -2,7 +2,7 @@
 # © 2018 Forest and Biomass Romania SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import models, fields, api
+from odoo import api, fields, models
 from odoo.tools import float_is_zero
 
 
@@ -17,8 +17,8 @@ class TrialBalanceReport(models.TransientModel):
             If "show_partner_details" is selected
     """
 
-    _name = 'report_trial_balance'
-    _inherit = 'account_financial_report_abstract'
+    _name = "report_trial_balance"
+    _inherit = "account_financial_report_abstract"
 
     # Filters fields, used for data computation
     date_from = fields.Date()
@@ -27,84 +27,71 @@ class TrialBalanceReport(models.TransientModel):
     only_posted_moves = fields.Boolean()
     hide_account_at_0 = fields.Boolean()
     foreign_currency = fields.Boolean()
-    company_id = fields.Many2one(comodel_name='res.company')
-    filter_account_ids = fields.Many2many(comodel_name='account.account')
-    filter_partner_ids = fields.Many2many(comodel_name='res.partner')
-    filter_journal_ids = fields.Many2many(comodel_name='account.journal')
+    company_id = fields.Many2one(comodel_name="res.company")
+    filter_account_ids = fields.Many2many(comodel_name="account.account")
+    filter_partner_ids = fields.Many2many(comodel_name="res.partner")
+    filter_journal_ids = fields.Many2many(comodel_name="account.journal")
     show_partner_details = fields.Boolean()
     hierarchy_on = fields.Selection(
-        [('computed', 'Computed Accounts'),
-         ('relation', 'Child Accounts'),
-         ('none', 'No hierarchy')],
-        string='Hierarchy On',
+        [
+            ("computed", "Computed Accounts"),
+            ("relation", "Child Accounts"),
+            ("none", "No hierarchy"),
+        ],
+        string="Hierarchy On",
         required=True,
-        default='computed',
+        default="computed",
         help="""Computed Accounts: Use when the account group have codes
         that represent prefixes of the actual accounts.\n
         Child Accounts: Use when your account groups are hierarchical.\n
         No hierarchy: Use to display just the accounts, without any grouping.
         """,
     )
-    limit_hierarchy_level = fields.Boolean('Limit hierarchy levels')
-    show_hierarchy_level = fields.Integer('Hierarchy Levels to display',
-                                          default=1)
+    limit_hierarchy_level = fields.Boolean("Limit hierarchy levels")
+    show_hierarchy_level = fields.Integer("Hierarchy Levels to display", default=1)
     hide_parent_hierarchy_level = fields.Boolean(
-        'Do not display parent levels', default=False)
+        "Do not display parent levels", default=False
+    )
     # General Ledger Report Data fields,
     # used as base for compute the data reports
-    general_ledger_id = fields.Many2one(
-        comodel_name='report_general_ledger'
-    )
+    general_ledger_id = fields.Many2one(comodel_name="report_general_ledger")
 
     # Data fields, used to browse report data
     account_ids = fields.One2many(
-        comodel_name='report_trial_balance_account',
-        inverse_name='report_id'
+        comodel_name="report_trial_balance_account", inverse_name="report_id"
     )
 
 
 class TrialBalanceReportAccount(models.TransientModel):
-    _name = 'report_trial_balance_account'
-    _inherit = 'account_financial_report_abstract'
-    _order = 'sequence, code ASC, name'
+    _name = "report_trial_balance_account"
+    _inherit = "account_financial_report_abstract"
+    _order = "sequence, code ASC, name"
 
     report_id = fields.Many2one(
-        comodel_name='report_trial_balance',
-        ondelete='cascade',
-        index=True
+        comodel_name="report_trial_balance", ondelete="cascade", index=True
     )
-    hide_line = fields.Boolean(compute='_compute_hide_line')
+    hide_line = fields.Boolean(compute="_compute_hide_line")
     # Data fields, used to keep link with real object.
     # Sequence is a Char later built with 'code_prefix' for groups
     # and code_prefix + account code for accounts
-    sequence = fields.Char(index=True, default='1')
+    sequence = fields.Char(index=True, default="1")
     level = fields.Integer(index=True, default=1)
 
     # Data fields, used to keep link with real object
-    account_id = fields.Many2one(
-        'account.account',
-        index=True
-    )
+    account_id = fields.Many2one("account.account", index=True)
 
-    account_group_id = fields.Many2one(
-        'account.group',
-        index=True
-    )
-    parent_id = fields.Many2one(
-        'account.group',
-        index=True
-    )
-    child_account_ids = fields.Char(
-        string="Child accounts")
+    account_group_id = fields.Many2one("account.group", index=True)
+    parent_id = fields.Many2one("account.group", index=True)
+    child_account_ids = fields.Char(string="Child accounts")
     compute_account_ids = fields.Many2many(
-        'account.account',
-        string="Compute accounts", store=True)
+        "account.account", string="Compute accounts", store=True
+    )
 
     # Data fields, used for report display
     code = fields.Char()
     name = fields.Char()
 
-    currency_id = fields.Many2one('res.currency')
+    currency_id = fields.Many2one("res.currency")
     initial_balance = fields.Float(digits=(16, 2))
     initial_balance_foreign_currency = fields.Float(digits=(16, 2))
     debit = fields.Float(digits=(16, 2))
@@ -115,30 +102,30 @@ class TrialBalanceReportAccount(models.TransientModel):
 
     # Data fields, used to browse report data
     partner_ids = fields.One2many(
-        comodel_name='report_trial_balance_partner',
-        inverse_name='report_account_id'
+        comodel_name="report_trial_balance_partner", inverse_name="report_account_id"
     )
 
     @api.depends(
-        'currency_id',
-        'report_id',
-        'report_id.hide_account_at_0',
-        'report_id.limit_hierarchy_level',
-        'report_id.show_hierarchy_level',
-        'initial_balance',
-        'final_balance',
-        'debit',
-        'credit',
+        "currency_id",
+        "report_id",
+        "report_id.hide_account_at_0",
+        "report_id.limit_hierarchy_level",
+        "report_id.show_hierarchy_level",
+        "initial_balance",
+        "final_balance",
+        "debit",
+        "credit",
     )
     def _compute_hide_line(self):
         for rec in self:
             report = rec.report_id
             r = (rec.currency_id or report.company_id.currency_id).rounding
             if report.hide_account_at_0 and (
-                    float_is_zero(rec.initial_balance, precision_rounding=r)
-                    and float_is_zero(rec.final_balance, precision_rounding=r)
-                    and float_is_zero(rec.debit, precision_rounding=r)
-                    and float_is_zero(rec.credit, precision_rounding=r)):
+                float_is_zero(rec.initial_balance, precision_rounding=r)
+                and float_is_zero(rec.final_balance, precision_rounding=r)
+                and float_is_zero(rec.debit, precision_rounding=r)
+                and float_is_zero(rec.credit, precision_rounding=r)
+            ):
                 rec.hide_line = True
             elif report.limit_hierarchy_level and report.show_hierarchy_level:
                 if report.hide_parent_hierarchy_level:
@@ -147,31 +134,28 @@ class TrialBalanceReportAccount(models.TransientModel):
                         rec.hide_line = True
                     elif rec.level and distinct_level:
                         rec.hide_line = True
-                elif not report.hide_parent_hierarchy_level and \
-                        rec.level > report.show_hierarchy_level:
+                elif (
+                    not report.hide_parent_hierarchy_level
+                    and rec.level > report.show_hierarchy_level
+                ):
                     rec.hide_line = True
 
 
 class TrialBalanceReportPartner(models.TransientModel):
-    _name = 'report_trial_balance_partner'
-    _inherit = 'account_financial_report_abstract'
+    _name = "report_trial_balance_partner"
+    _inherit = "account_financial_report_abstract"
 
     report_account_id = fields.Many2one(
-        comodel_name='report_trial_balance_account',
-        ondelete='cascade',
-        index=True
+        comodel_name="report_trial_balance_account", ondelete="cascade", index=True
     )
 
     # Data fields, used to keep link with real object
-    partner_id = fields.Many2one(
-        'res.partner',
-        index=True
-    )
+    partner_id = fields.Many2one("res.partner", index=True)
 
     # Data fields, used for report display
     name = fields.Char()
 
-    currency_id = fields.Many2one('res.currency')
+    currency_id = fields.Many2one("res.currency")
     initial_balance = fields.Float(digits=(16, 2))
     initial_balance_foreign_currency = fields.Float(digits=(16, 2))
     debit = fields.Float(digits=(16, 2))
@@ -199,31 +183,34 @@ class TrialBalanceReportCompute(models.TransientModel):
     For class fields, go more top at this file.
     """
 
-    _inherit = 'report_trial_balance'
+    _inherit = "report_trial_balance"
 
     @api.multi
     def print_report(self, report_type):
         self.ensure_one()
-        if report_type == 'xlsx':
-            report_name = 'a_f_r.report_trial_balance_xlsx'
+        if report_type == "xlsx":
+            report_name = "a_f_r.report_trial_balance_xlsx"
         else:
-            report_name = 'account_financial_report.' \
-                          'report_trial_balance_qweb'
-        return self.env['ir.actions.report'].search(
-            [('report_name', '=', report_name),
-             ('report_type', '=', report_type)],
-            limit=1).report_action(self, config=False)
+            report_name = "account_financial_report." "report_trial_balance_qweb"
+        return (
+            self.env["ir.actions.report"]
+            .search(
+                [("report_name", "=", report_name), ("report_type", "=", report_type)],
+                limit=1,
+            )
+            .report_action(self, config=False)
+        )
 
     def _get_html(self):
         result = {}
         rcontext = {}
         context = dict(self.env.context)
-        report = self.browse(context.get('active_id'))
+        report = self.browse(context.get("active_id"))
         if report:
-            rcontext['o'] = report
-            result['html'] = self.env.ref(
-                'account_financial_report.report_trial_balance').render(
-                    rcontext)
+            rcontext["o"] = report
+            result["html"] = self.env.ref(
+                "account_financial_report.report_trial_balance"
+            ).render(rcontext)
         return result
 
     @api.model
@@ -233,17 +220,17 @@ class TrialBalanceReportCompute(models.TransientModel):
     def _prepare_report_general_ledger(self, account_ids):
         self.ensure_one()
         return {
-            'date_from': self.date_from,
-            'date_to': self.date_to,
-            'only_posted_moves': self.only_posted_moves,
+            "date_from": self.date_from,
+            "date_to": self.date_to,
+            "only_posted_moves": self.only_posted_moves,
             # This is postprocessed later with a computed field
-            'hide_account_at_0': False,
-            'foreign_currency': self.foreign_currency,
-            'company_id': self.company_id.id,
-            'filter_account_ids': [(6, 0, account_ids.ids)],
-            'filter_partner_ids': [(6, 0, self.filter_partner_ids.ids)],
-            'filter_journal_ids': [(6, 0, self.filter_journal_ids.ids)],
-            'fy_start_date': self.fy_start_date,
+            "hide_account_at_0": False,
+            "foreign_currency": self.foreign_currency,
+            "company_id": self.company_id.id,
+            "filter_account_ids": [(6, 0, account_ids.ids)],
+            "filter_partner_ids": [(6, 0, self.filter_partner_ids.ids)],
+            "filter_journal_ids": [(6, 0, self.filter_journal_ids.ids)],
+            "fy_start_date": self.fy_start_date,
         }
 
     @api.multi
@@ -252,12 +239,13 @@ class TrialBalanceReportCompute(models.TransientModel):
         # Compute General Ledger Report Data.
         # The data of Trial Balance Report
         # are based on General Ledger Report data.
-        model = self.env['report_general_ledger']
+        model = self.env["report_general_ledger"]
         if self.filter_account_ids:
             account_ids = self.filter_account_ids
         else:
-            account_ids = self.env['account.account'].search(
-                [('company_id', '=', self.company_id.id)])
+            account_ids = self.env["account.account"].search(
+                [("company_id", "=", self.company_id.id)]
+            )
         self.general_ledger_id = model.create(
             self._prepare_report_general_ledger(account_ids)
         )
@@ -270,20 +258,20 @@ class TrialBalanceReportCompute(models.TransientModel):
         if self.show_partner_details:
             self._inject_partner_values()
         if not self.filter_account_ids:
-            if self.hierarchy_on != 'none':
+            if self.hierarchy_on != "none":
                 self._inject_account_group_values()
-                if self.hierarchy_on == 'computed':
+                if self.hierarchy_on == "computed":
                     self._update_account_group_computed_values()
                 else:
                     self._update_account_group_child_values()
                 self._update_account_sequence()
                 self._add_account_group_account_values()
         self.refresh()
-        if not self.filter_account_ids and self.hierarchy_on != 'none':
+        if not self.filter_account_ids and self.hierarchy_on != "none":
             self._compute_group_accounts()
         else:
             for line in self.account_ids:
-                line.write({'level': 0})
+                line.write({"level": 0})
 
     def _inject_account_values(self, account_ids):
         """Inject report values for report_trial_balance_account"""
@@ -421,8 +409,7 @@ FROM
             self.id,
             self.env.uid,
         )
-        self.env.cr.execute(query_inject_account_group,
-                            query_inject_account_params)
+        self.env.cr.execute(query_inject_account_group, query_inject_account_params)
 
     def _update_account_group_child_values(self):
         """Compute values for report_trial_balance_account group in child."""
@@ -469,9 +456,12 @@ FROM computed
 WHERE report_trial_balance_account.account_group_id = computed.account_group_id
     AND report_trial_balance_account.report_id = %s
 """
-        query_update_account_params = (self.id, self.id, self.id,)
-        self.env.cr.execute(query_update_account_group,
-                            query_update_account_params)
+        query_update_account_params = (
+            self.id,
+            self.id,
+            self.id,
+        )
+        self.env.cr.execute(query_update_account_group, query_update_account_params)
 
     def _add_account_group_account_values(self):
         """Compute values for report_trial_balance_account group in child."""
@@ -510,9 +500,12 @@ FROM aggr
 WHERE report_trial_balance_account.account_group_id = aggr.account_group_id
     AND report_trial_balance_account.report_id = %s
 """
-        query_update_account_params = (self.id, self.id, self.id,)
-        self.env.cr.execute(query_update_account_group,
-                            query_update_account_params)
+        query_update_account_params = (
+            self.id,
+            self.id,
+            self.id,
+        )
+        self.env.cr.execute(query_update_account_group, query_update_account_params)
 
     def _update_account_group_computed_values(self):
         """Compute values for report_trial_balance_account group in compute."""
@@ -553,8 +546,7 @@ FROM accgroup
 WHERE report_trial_balance_account.account_group_id = accgroup.id
 """
         query_update_account_params = (self.id,)
-        self.env.cr.execute(query_update_account_group,
-                            query_update_account_params)
+        self.env.cr.execute(query_update_account_group, query_update_account_params)
 
     def _update_account_sequence(self):
         """Compute sequence, level for report_trial_balance_account account."""
@@ -568,22 +560,21 @@ WHERE newline.account_group_id = report_trial_balance_account.parent_id
     AND report_trial_balance_account.account_id is not null
     AND report_trial_balance_account.report_id = %s"""
         query_update_account_params = (self.id,)
-        self.env.cr.execute(query_update_account_group,
-                            query_update_account_params)
+        self.env.cr.execute(query_update_account_group, query_update_account_params)
 
     def _compute_group_accounts(self):
-        groups = self.account_ids.filtered(
-            lambda a: a.account_group_id is not False)
+        groups = self.account_ids.filtered(lambda a: a.account_group_id is not False)
         for group in groups:
-            if self.hierarchy_on == 'computed':
-                group.compute_account_ids = \
-                    group.account_group_id.compute_account_ids
+            if self.hierarchy_on == "computed":
+                group.compute_account_ids = group.account_group_id.compute_account_ids
             else:
                 if group.child_account_ids:
-                    chacc = group.child_account_ids.replace(
-                        '}', '').replace('{', '').split(',')
-                    if 'NULL' in chacc:
-                        chacc.remove('NULL')
+                    chacc = (
+                        group.child_account_ids.replace("}", "")
+                        .replace("{", "")
+                        .split(",")
+                    )
+                    if "NULL" in chacc:
+                        chacc.remove("NULL")
                     if chacc:
-                        group.compute_account_ids = [
-                            (6, 0, [int(g) for g in chacc])]
+                        group.compute_account_ids = [(6, 0, [int(g) for g in chacc])]

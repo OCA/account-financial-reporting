@@ -6,7 +6,7 @@ from odoo import api, fields, models
 
 class VATReport(models.TransientModel):
     _name = "report_vat_report"
-    _inherit = 'account_financial_report_abstract'
+    _inherit = "account_financial_report_abstract"
     """ Here, we just define class fields.
     For methods, go more bottom at this file.
 
@@ -17,43 +17,35 @@ class VATReport(models.TransientModel):
     """
 
     # Filters fields, used for data computation
-    company_id = fields.Many2one(comodel_name='res.company')
+    company_id = fields.Many2one(comodel_name="res.company")
     date_from = fields.Date()
     date_to = fields.Date()
-    based_on = fields.Selection([('taxtags', 'Tax Tags'),
-                                 ('taxgroups', 'Tax Groups')],
-                                string='Based On',
-                                required=True,
-                                default='taxtags')
-    tax_detail = fields.Boolean('Tax Detail')
+    based_on = fields.Selection(
+        [("taxtags", "Tax Tags"), ("taxgroups", "Tax Groups")],
+        string="Based On",
+        required=True,
+        default="taxtags",
+    )
+    tax_detail = fields.Boolean("Tax Detail")
 
     # Data fields, used to browse report data
     taxtags_ids = fields.One2many(
-        comodel_name='report_vat_report_taxtag',
-        inverse_name='report_id'
+        comodel_name="report_vat_report_taxtag", inverse_name="report_id"
     )
 
 
 class VATReportTaxTags(models.TransientModel):
-    _name = 'report_vat_report_taxtag'
-    _inherit = 'account_financial_report_abstract'
-    _order = 'code ASC'
+    _name = "report_vat_report_taxtag"
+    _inherit = "account_financial_report_abstract"
+    _order = "code ASC"
 
     report_id = fields.Many2one(
-        comodel_name='report_vat_report',
-        ondelete='cascade',
-        index=True
+        comodel_name="report_vat_report", ondelete="cascade", index=True
     )
 
     # Data fields, used to keep link with real object
-    taxtag_id = fields.Many2one(
-        'account.account.tag',
-        index=True
-    )
-    taxgroup_id = fields.Many2one(
-        'account.tax.group',
-        index=True
-    )
+    taxtag_id = fields.Many2one("account.account.tag", index=True)
+    taxgroup_id = fields.Many2one("account.tax.group", index=True)
 
     # Data fields, used for report display
     code = fields.Char()
@@ -63,29 +55,23 @@ class VATReportTaxTags(models.TransientModel):
 
     # Data fields, used to browse report data
     tax_ids = fields.One2many(
-        comodel_name='report_vat_report_tax',
-        inverse_name='report_tax_id',
-        string='Taxes'
+        comodel_name="report_vat_report_tax",
+        inverse_name="report_tax_id",
+        string="Taxes",
     )
 
 
 class VATReportTax(models.TransientModel):
-    _name = 'report_vat_report_tax'
-    _inherit = 'account_financial_report_abstract'
-    _order = 'name ASC'
+    _name = "report_vat_report_tax"
+    _inherit = "account_financial_report_abstract"
+    _order = "name ASC"
 
     report_tax_id = fields.Many2one(
-        comodel_name='report_vat_report_taxtag',
-        ondelete='cascade',
-        index=True
+        comodel_name="report_vat_report_taxtag", ondelete="cascade", index=True
     )
 
     # Data fields, used to keep link with real object
-    tax_id = fields.Many2one(
-        'account.tax',
-        index=True,
-        string='Tax ID',
-    )
+    tax_id = fields.Many2one("account.tax", index=True, string="Tax ID",)
 
     # Data fields, used for report display
     code = fields.Char()
@@ -99,31 +85,32 @@ class VATReportCompute(models.TransientModel):
     For class fields, go more top at this file.
     """
 
-    _inherit = 'report_vat_report'
+    _inherit = "report_vat_report"
 
     @api.multi
-    def print_report(self, report_type='qweb'):
+    def print_report(self, report_type="qweb"):
         self.ensure_one()
-        if report_type == 'xlsx':
-            report_name = 'a_f_r.report_vat_report_xlsx'
+        if report_type == "xlsx":
+            report_name = "a_f_r.report_vat_report_xlsx"
         else:
-            report_name = 'account_financial_report.report_vat_report_qweb'
+            report_name = "account_financial_report.report_vat_report_qweb"
         context = dict(self.env.context)
-        action = self.env['ir.actions.report'].search(
-            [('report_name', '=', report_name),
-             ('report_type', '=', report_type)], limit=1)
+        action = self.env["ir.actions.report"].search(
+            [("report_name", "=", report_name), ("report_type", "=", report_type)],
+            limit=1,
+        )
         return action.with_context(context).report_action(self, config=False)
 
     def _get_html(self):
         result = {}
         rcontext = {}
         context = dict(self.env.context)
-        report = self.browse(context.get('active_id'))
+        report = self.browse(context.get("active_id"))
         if report:
-            rcontext['o'] = report
-            result['html'] = self.env.ref(
-                'account_financial_report.report_vat_report').render(
-                    rcontext)
+            rcontext["o"] = report
+            result["html"] = self.env.ref(
+                "account_financial_report.report_vat_report"
+            ).render(rcontext)
         return result
 
     @api.model
@@ -134,10 +121,10 @@ class VATReportCompute(models.TransientModel):
     def compute_data_for_report(self):
         self.ensure_one()
         # Compute report data
-        if self.based_on == 'taxtags':
+        if self.based_on == "taxtags":
             self._inject_taxtags_values()
             self._inject_tax_taxtags_values()
-        elif self.based_on == 'taxgroups':
+        elif self.based_on == "taxgroups":
             self._inject_taxgroups_values()
             self._inject_tax_taxgroups_values()
         # Refresh cache because all data are computed with SQL requests
@@ -192,8 +179,13 @@ SELECT
 FROM
     taxtags tag
         """
-        query_inject_taxtags_params = (self.company_id.id, self.date_from,
-                                       self.date_to, self.id, self.env.uid)
+        query_inject_taxtags_params = (
+            self.company_id.id,
+            self.date_from,
+            self.date_to,
+            self.id,
+            self.env.uid,
+        )
         self.env.cr.execute(query_inject_taxtags, query_inject_taxtags_params)
 
     def _inject_taxgroups_values(self):
@@ -242,10 +234,14 @@ SELECT
 FROM
     taxgroups groups
         """
-        query_inject_taxgroups_params = (self.company_id.id, self.date_from,
-                                         self.date_to, self.id, self.env.uid)
-        self.env.cr.execute(query_inject_taxgroups,
-                            query_inject_taxgroups_params)
+        query_inject_taxgroups_params = (
+            self.company_id.id,
+            self.date_from,
+            self.date_to,
+            self.id,
+            self.env.uid,
+        )
+        self.env.cr.execute(query_inject_taxgroups, query_inject_taxgroups_params)
 
     def _inject_tax_taxtags_values(self):
         """ Inject report values for report_vat_report_tax. """
@@ -298,8 +294,13 @@ SELECT
 FROM
     taxtags_tax tt
         """
-        query_inject_tax_params = (self.id, self.company_id.id, self.date_from,
-                                   self.date_to, self.env.uid)
+        query_inject_tax_params = (
+            self.id,
+            self.company_id.id,
+            self.date_from,
+            self.date_to,
+            self.env.uid,
+        )
         self.env.cr.execute(query_inject_tax, query_inject_tax_params)
 
     def _inject_tax_taxgroups_values(self):
@@ -351,6 +352,11 @@ SELECT
 FROM
     taxtags_tax tt
         """
-        query_inject_tax_params = (self.id, self.company_id.id, self.date_from,
-                                   self.date_to, self.env.uid)
+        query_inject_tax_params = (
+            self.id,
+            self.company_id.id,
+            self.date_from,
+            self.date_to,
+            self.env.uid,
+        )
         self.env.cr.execute(query_inject_tax, query_inject_tax_params)

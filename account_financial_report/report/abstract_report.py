@@ -1,17 +1,19 @@
 # Copyright 2018 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import models
 from psycopg2.extensions import AsIs
+
+from odoo import models
 
 
 class AbstractReport(models.AbstractModel):
-    _name = 'account_financial_report_abstract'
-    _description = 'Abstract Report'
+    _name = "account_financial_report_abstract"
+    _description = "Abstract Report"
 
     def _transient_clean_rows_older_than(self, seconds):
-        assert self._transient, \
+        assert self._transient, (
             "Model %s is not transient, it cannot be vacuumed!" % self._name
+        )
         # Never delete rows used in last 5 minutes
         seconds = max(seconds, 300)
         query = (

@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from datetime import date
+
 from . import abstract_test
 
 
@@ -12,30 +13,29 @@ class TestAgedPartnerBalance(abstract_test.AbstractTest):
     """
 
     def _getReportModel(self):
-        return self.env['report_aged_partner_balance']
+        return self.env["report_aged_partner_balance"]
 
     def _getQwebReportName(self):
-        return 'account_financial_report.report_aged_partner_balance_qweb'
+        return "account_financial_report.report_aged_partner_balance_qweb"
 
     def _getXlsxReportName(self):
-        return 'a_f_r.report_aged_partner_balance_xlsx'
+        return "a_f_r.report_aged_partner_balance_xlsx"
 
     def _getXlsxReportActionName(self):
-        return 'account_financial_report.' \
-               'action_report_aged_partner_balance_xlsx'
+        return "account_financial_report." "action_report_aged_partner_balance_xlsx"
 
     def _getReportTitle(self):
-        return 'Odoo'
+        return "Odoo"
 
     def _getBaseFilters(self):
         return {
-            'date_at': date(date.today().year, 12, 31),
-            'company_id': self.company.id,
+            "date_at": date(date.today().year, 12, 31),
+            "company_id": self.company.id,
         }
 
     def _getAdditionalFiltersToBeTested(self):
         return [
-            {'only_posted_moves': True},
-            {'show_move_line_details': True},
-            {'only_posted_moves': True, 'show_move_line_details': True},
+            {"only_posted_moves": True},
+            {"show_move_line_details": True},
+            {"only_posted_moves": True, "show_move_line_details": True},
         ]
