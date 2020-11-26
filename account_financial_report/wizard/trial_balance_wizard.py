@@ -6,7 +6,6 @@
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
-from odoo.tools import pycompat
 from odoo.tools.safe_eval import safe_eval
 
 
@@ -201,7 +200,7 @@ class TrialBalanceReportWizard(models.TransientModel):
         action = self.env.ref("account_financial_report.action_report_trial_balance")
         vals = action.read()[0]
         context1 = vals.get("context", {})
-        if isinstance(context1, pycompat.string_types):
+        if isinstance(context1, str):
             context1 = safe_eval(context1)
         model = self.env["report_trial_balance"]
         report = model.create(self._prepare_report_trial_balance())
