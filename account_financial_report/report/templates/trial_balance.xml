@@ -294,6 +294,13 @@
                             t-value="[('account_id', '=', line.account_id.id),
                                      ('date', '&lt;', o.date_from.strftime('%Y-%m-%d'))]"
                         />
+                        <t t-if="o.only_posted_moves">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', '=', line.account_id.id),
+                                         ('date', '&lt;', o.date_from.strftime('%Y-%m-%d')),('parent_state','=','posted')]"
+                            />
+                        </t>
                         <span>
                             <a
                                 t-att-data-domain="domain"
@@ -315,6 +322,13 @@
                             t-value="[('account_id', 'in', line.compute_account_ids.ids),
                                      ('date', '&lt;', o.date_from.strftime('%Y-%m-%d'))]"
                         />
+                        <t t-if="o.only_posted_moves">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', 'in', line.compute_account_ids.ids),
+                                         ('date', '&lt;', o.date_from.strftime('%Y-%m-%d')),('parent_state','=','posted')]"
+                            />
+                        </t>
                         <span>
                             <a
                                 t-att-data-domain="domain"
@@ -338,6 +352,14 @@
                                  ('partner_id', '=', line.partner_id.id),
                                  ('date', '&lt;', o.date_from.strftime('%Y-%m-%d'))]"
                     />
+                    <t t-if="o.only_posted_moves">
+                        <t
+                            t-set="domain"
+                            t-value="[('account_id', '=', line.report_account_id.account_id.id),
+                                     ('partner_id', '=', line.partner_id.id),
+                                     ('date', '&lt;', o.date_from.strftime('%Y-%m-%d')),('parent_state','=','posted')]"
+                        />
+                    </t>
                     <span>
                         <a
                             t-att-data-domain="domain"
@@ -365,6 +387,15 @@
                                      ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d')),
                                      ('debit', '&lt;&gt;', 0)]"
                         />
+                        <t t-if="o.only_posted_moves">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', '=', line.account_id.id),
+                                         ('date', '&gt;=', line.report_id.date_from.strftime('%Y-%m-%d')),
+                                         ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d')),
+                                         ('debit', '&lt;&gt;', 0),('parent_state','=','posted')]"
+                            />
+                        </t>
                         <span>
                             <a
                                 t-att-data-domain="domain"
@@ -388,6 +419,15 @@
                                      ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d')),
                                      ('debit', '&lt;&gt;', 0)]"
                         />
+                        <t t-if="o.only_posted_moves">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', 'in', line.compute_account_ids.ids),
+                                         ('date', '&gt;=', line.report_id.date_from.strftime('%Y-%m-%d')),
+                                         ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d')),
+                                         ('debit', '&lt;&gt;', 0),('parent_state','=','posted')]"
+                            />
+                        </t>
                         <span>
                             <a
                                 t-att-data-domain="domain"
@@ -413,6 +453,16 @@
                                  ('date', '&lt;=', line.report_account_id.report_id.date_to.strftime('%Y-%m-%d')),
                                  ('debit', '&lt;&gt;', 0)]"
                     />
+                    <t t-if="o.only_posted_moves">
+                        <t
+                            t-set="domain"
+                            t-value="[('account_id', '=', line.report_account_id.account_id.id),
+                                     ('partner_id', '=', line.partner_id.id),
+                                     ('date', '&gt;=', line.report_account_id.report_id.date_from.strftime('%Y-%m-%d')),
+                                     ('date', '&lt;=', line.report_account_id.report_id.date_to.strftime('%Y-%m-%d')),
+                                     ('debit', '&lt;&gt;', 0),('parent_state','=','posted')]"
+                        />
+                    </t>
                     <span>
                         <a
                             t-att-data-domain="domain"
@@ -440,6 +490,15 @@
                                      ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d')),
                                      ('credit', '&lt;&gt;', 0)]"
                         />
+                        <t t-if="o.only_posted_moves">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', '=', line.account_id.id),
+                                         ('date', '&gt;=', line.report_id.date_from.strftime('%Y-%m-%d')),
+                                         ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d')),
+                                         ('credit', '&lt;&gt;', 0),('parent_state','=','posted')]"
+                            />
+                        </t>
                         <span>
                             <a
                                 t-att-data-domain="domain"
@@ -463,6 +522,15 @@
                                      ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d')),
                                      ('credit', '&lt;&gt;', 0)]"
                         />
+                        <t t-if="o.only_posted_moves">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', 'in', line.compute_account_ids.ids),
+                                         ('date', '&gt;=', line.report_id.date_from.strftime('%Y-%m-%d')),
+                                         ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d')),
+                                         ('credit', '&lt;&gt;', 0),('parent_state','=','posted')]"
+                            />
+                        </t>
                         <span>
                             <a
                                 t-att-data-domain="domain"
@@ -488,6 +556,16 @@
                                  ('date', '&lt;=', line.report_account_id.report_id.date_to.strftime('%Y-%m-%d')),
                                  ('credit', '&lt;&gt;', 0)]"
                     />
+                    <t t-if="o.only_posted_moves">
+                        <t
+                        t-set="domain"
+                        t-value="[('account_id', '=', line.report_account_id.account_id.id),
+                                 ('partner_id', '=', line.partner_id.id),
+                                 ('date', '&gt;=', line.report_account_id.report_id.date_from.strftime('%Y-%m-%d')),
+                                 ('date', '&lt;=', line.report_account_id.report_id.date_to.strftime('%Y-%m-%d')),
+                                 ('credit', '&lt;&gt;', 0),('parent_state','=','posted')]"
+                    />
+                    </t>
                     <span>
                         <a
                             t-att-data-domain="domain"
@@ -514,6 +592,15 @@
                                      ('date', '&gt;=', line.report_id.date_from.strftime('%Y-%m-%d')),
                                      ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d'))]"
                         />
+                        <t t-if="o.only_posted_moves">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', '=', line.account_id.id),
+                                         ('date', '&gt;=', line.report_id.date_from.strftime('%Y-%m-%d')),
+                                         ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d')),
+                                         ('parent_state','=','posted')]"
+                            />
+                        </t>
                         <span>
                             <a
                                 t-att-data-domain="domain"
@@ -536,6 +623,15 @@
                                      ('date', '&gt;=', line.report_id.date_from.strftime('%Y-%m-%d')),
                                      ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d'))]"
                         />
+                        <t t-if="o.only_posted_moves">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', 'in', line.compute_account_ids.ids),
+                                         ('date', '&gt;=', line.report_id.date_from.strftime('%Y-%m-%d')),
+                                         ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d')),
+                                         ('parent_state','=','posted')]"
+                            />
+                        </t>
                         <span>
                             <a
                                 t-att-data-domain="domain"
@@ -560,6 +656,16 @@
                                  ('date', '&gt;=', line.report_account_id.report_id.date_from.strftime('%Y-%m-%d')),
                                  ('date', '&lt;=', line.report_account_id.report_id.date_to.strftime('%Y-%m-%d'))]"
                     />
+                    <t t-if="o.only_posted_moves">
+                        <t
+                            t-set="domain"
+                            t-value="[('account_id', '=', line.report_account_id.account_id.id),
+                                     ('partner_id', '=', line.partner_id.id),
+                                     ('date', '&gt;=', line.report_account_id.report_id.date_from.strftime('%Y-%m-%d')),
+                                     ('date', '&lt;=', line.report_account_id.report_id.date_to.strftime('%Y-%m-%d')),
+                                     ('parent_state','=','posted')]"
+                        />
+                    </t>
                     <span>
                         <a
                             t-att-data-domain="domain"
@@ -584,6 +690,12 @@
                             t-set="domain"
                             t-value="[('account_id', '=', line.account_id.id)]"
                         />
+                        <t t-if="o.only_posted_moves">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', '=', line.account_id.id),('parent_state','=','posted')]"
+                            />
+                        </t>
                         <span>
                             <a
                                 t-att-data-domain="domain"
@@ -604,6 +716,12 @@
                             t-set="domain"
                             t-value="[('account_id', 'in', line.compute_account_ids.ids)]"
                         />
+                        <t t-if="o.only_posted_moves">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', 'in', line.compute_account_ids.ids),('parent_state','=','posted')]"
+                            />
+                        </t>
                         <span>
                             <a
                                 t-att-data-domain="domain"
@@ -626,6 +744,13 @@
                         t-value="[('account_id', '=', line.report_account_id.account_id.id),
                                  ('partner_id', '=', line.partner_id.id)]"
                     />
+                    <t t-if="o.only_posted_moves">
+                        <t
+                            t-set="domain"
+                            t-value="[('account_id', '=', line.report_account_id.account_id.id),
+                                     ('partner_id', '=', line.partner_id.id),('parent_state','=','posted')]"
+                        />
+                    </t>
                     <span>
                         <a
                             t-att-data-domain="domain"
@@ -724,6 +849,12 @@
                                     t-set="domain"
                                     t-value="[('account_id', '=', line.account_id.id)]"
                                 />
+                                <t t-if="o.only_posted_moves">
+                                    <t
+                                        t-set="domain"
+                                        t-value="[('account_id', '=', line.account_id.id),('parent_state','=','posted')]"
+                                    />
+                                </t>
                                 <span>
                                     <a
                                         t-att-data-domain="domain"
@@ -797,7 +928,7 @@
         <div class="act_as_table list_table" style="width: 100%;">
             <div class="act_as_row labels" style="font-weight: bold;">
                 <!--## Account-->
-                <div class="act_as_cell left" style="width: 61.44%;">
+                <div class="act_as_cell left" style="width: 46.44%;">
                     <t t-set="res_model" t-value="'account.account'" />
                     <span>
                         <a
@@ -819,6 +950,13 @@
                         t-value="[('account_id', '=', account.account_id.id),
                                   ('date', '&lt;', o.date_from.strftime('%Y-%m-%d'))]"
                     />
+                    <t t-if="o.only_posted_moves">
+                        <t
+                            t-set="domain"
+                            t-value="[('account_id', '=', account.account_id.id),
+                                      ('date', '&lt;', o.date_from.strftime('%Y-%m-%d')),('parent_state','=','posted')]"
+                        />
+                    </t>
                     <span>
                         <a
                             t-att-data-domain="domain"
@@ -843,6 +981,15 @@
                                   ('date', '&lt;=', account.report_id.date_to.strftime('%Y-%m-%d')),
                                   ('debit', '&lt;&gt;', 0)]"
                     />
+                    <t t-if="o.only_posted_moves">
+                        <t
+                            t-set="domain"
+                            t-value="[('account_id', '=', account.account_id.id),
+                                      ('date', '&gt;=', account.report_id.date_from.strftime('%Y-%m-%d')),
+                                      ('date', '&lt;=', account.report_id.date_to.strftime('%Y-%m-%d')),
+                                      ('debit', '&lt;&gt;', 0),('parent_state','=','posted')]"
+                        />
+                    </t>
                     <span>
                         <a
                             t-att-data-domain="domain"
@@ -867,6 +1014,15 @@
                                   ('date', '&lt;=', account.report_id.date_to.strftime('%Y-%m-%d')),
                                   ('credit', '&lt;&gt;', 0)]"
                     />
+                    <t t-if="o.only_posted_moves">
+                        <t
+                            t-set="domain"
+                            t-value="[('account_id', '=', account.account_id.id),
+                                      ('date', '&gt;=', account.report_id.date_from.strftime('%Y-%m-%d')),
+                                      ('date', '&lt;=', account.report_id.date_to.strftime('%Y-%m-%d')),
+                                      ('credit', '&lt;&gt;', 0),('parent_state','=','posted')]"
+                        />
+                    </t>
                     <span>
                         <a
                             t-att-data-domain="domain"
@@ -888,9 +1044,17 @@
                         t-set="domain"
                         t-value="[('account_id', '=', account.account_id.id),
                                   ('date', '&gt;=', account.report_id.date_from.strftime('%Y-%m-%d')),
-                                  ('date', '&lt;=', account.report_id.date_to.strftime('%Y-%m-%d')),
-                                  ('period_balance', '&lt;&gt;', 0)]"
+                                  ('date', '&lt;=', account.report_id.date_to.strftime('%Y-%m-%d'))]"
                     />
+                    <t t-if="o.only_posted_moves">
+                        <t
+                            t-set="domain"
+                            t-value="[('account_id', '=', account.account_id.id),
+                                      ('date', '&gt;=', account.report_id.date_from.strftime('%Y-%m-%d')),
+                                      ('date', '&lt;=', account.report_id.date_to.strftime('%Y-%m-%d')),
+                                      ('parent_state','=','posted')]"
+                        />
+                    </t>
                     <span>
                         <a
                             t-att-data-domain="domain"
@@ -912,6 +1076,12 @@
                         t-set="domain"
                         t-value="[('account_id', '=', account.account_id.id)]"
                     />
+                    <t t-if="o.only_posted_moves">
+                        <t
+                            t-set="domain"
+                            t-value="[('account_id', '=', account.account_id.id),('parent_state','=','posted')]"
+                        />
+                    </t>
                     <span>
                         <a
                             t-att-data-domain="domain"
