@@ -28,7 +28,7 @@ class OpenItemsReport(models.TransientModel):
     company_id = fields.Many2one(comodel_name='res.company')
     filter_account_ids = fields.Many2many(comodel_name='account.account')
     filter_partner_ids = fields.Many2many(comodel_name='res.partner')
-
+    show_reconciliations = fields.Boolean()
     # Data fields, used to browse report data
     account_ids = fields.One2many(
         comodel_name='report_open_items_qweb_account',
@@ -129,6 +129,14 @@ class OpenItemsReportMoveLine(models.TransientModel):
     # Data fields, used to keep link with real object
     move_line_id = fields.Many2one('account.move.line')
 
+    # Display full or partial reconciliations
+    reconcile_string = fields.Char(
+        compute='_compute_reconcile', string='Reconcile')
+    partial_reconcile_ids = fields.Many2many(
+        comodel_name='account.partial.reconcile',
+        compute='_compute_reconcile',
+        string='Reconciliation move lines')
+
     # Data fields, used for report display
     date = fields.Date()
     date_due = fields.Date()
@@ -142,6 +150,20 @@ class OpenItemsReportMoveLine(models.TransientModel):
     currency_id = fields.Many2one(comodel_name='res.currency')
     amount_total_due_currency = fields.Float(digits=(16, 2))
     amount_residual_currency = fields.Float(digits=(16, 2))
+
+    def _compute_reconcile(self):
+        for line in self:
+            ml = line.move_line_id
+            partial_recs = self.env['account.partial.reconcile']
+            if ml.full_reconcile_id:
+                rec_str = ml.full_reconcile_id.name
+            else:
+                rec_str = ', '.join([
+                    'a%d' % pr.id for pr in
+                    ml.matched_debit_ids + ml.matched_credit_ids])
+                partial_recs = ml.matched_debit_ids + ml.matched_credit_ids
+            line.reconcile_string = rec_str
+            line.partial_reconcile_ids = partial_recs
 
 
 class OpenItemsReportCompute(models.TransientModel):

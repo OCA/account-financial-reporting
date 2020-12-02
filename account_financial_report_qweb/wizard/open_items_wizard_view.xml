@@ -18,6 +18,7 @@
                         <field name="target_move" widget="radio"/>
                         <field name="hide_account_at_0"/>
                         <field name="foreign_currency"/>
+                        <field name="show_reconciliations"/>
                     </group>
                 </group>
                 <group name="partner_filter" col="1">

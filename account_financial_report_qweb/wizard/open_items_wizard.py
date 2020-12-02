@@ -53,6 +53,9 @@ class OpenItemsReportWizard(models.TransientModel):
              'account currency is not setup through chart of accounts '
              'will display initial and final balance in that currency.'
     )
+    show_reconciliations = fields.Boolean(
+        string='Display reconciliations',
+    )
 
     @api.onchange('company_id')
     def onchange_company_id(self):
@@ -153,6 +156,7 @@ class OpenItemsReportWizard(models.TransientModel):
             'company_id': self.company_id.id,
             'filter_account_ids': [(6, 0, self.account_ids.ids)],
             'filter_partner_ids': [(6, 0, self.partner_ids.ids)],
+            'show_reconciliations': self.show_reconciliations,
         }
 
     def _export(self, report_type):

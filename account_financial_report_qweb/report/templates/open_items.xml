@@ -105,6 +105,10 @@
                     <!--## ref - label-->
                     <div class="act_as_cell" style="width: 25.5%;">Ref -
                         Label</div>
+                    <t t-if="o.show_reconciliations">
+                        <!--## rec - label-->
+                        <div class="act_as_cell" style="width: 5.74%;">Rec.</div>
+                    </t>
                     <!--## date_due-->
                     <div class="act_as_cell" style="width: 5.74%;">Due
                         date</div>
@@ -160,6 +164,16 @@
                     </div>
                     <!--## ref - label-->
                     <div class="act_as_cell left"><span t-field="line.label"/></div>
+                    <!--## rec.-->
+                    <t t-if="o.show_reconciliations">
+                        <t t-set="domain" t-value="[('id', 'in', line.partial_reconcile_ids.ids)]"/>
+                        <a t-att-data-domain="domain"
+                           t-att-data-res-model="'account.partial.reconcile'"
+                           class="o_account_financial_reports_web_action_multi"
+                           style="color: black;">
+                            <t  t-raw="line.reconcile_string"/>
+                        </a>
+                    </t>
                     <!--## date_due-->
                     <div class="act_as_cell left"><span t-field="line.date_due"/></div>
                     <!--## amount_total_due-->
