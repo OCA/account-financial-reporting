@@ -151,21 +151,6 @@ class OpenItemsReportWizard(models.TransientModel):
             .report_action(self, data=data)
         )
 
-    def button_export_html(self):
-        self.ensure_one()
-        report_type = "qweb-html"
-        return self._export(report_type)
-
-    def button_export_pdf(self):
-        self.ensure_one()
-        report_type = "qweb-pdf"
-        return self._export(report_type)
-
-    def button_export_xlsx(self):
-        self.ensure_one()
-        report_type = "xlsx"
-        return self._export(report_type)
-
     def _prepare_report_open_items(self):
         self.ensure_one()
         return {
