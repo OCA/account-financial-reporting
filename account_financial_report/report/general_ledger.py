@@ -13,32 +13,7 @@ from odoo.tools import float_is_zero
 class GeneralLedgerReport(models.AbstractModel):
     _name = "report.account_financial_report.general_ledger"
     _description = "General Ledger Report"
-
-    def _get_accounts_data(self, account_ids):
-        accounts = self.env["account.account"].browse(account_ids)
-        accounts_data = {}
-        for account in accounts:
-            accounts_data.update(
-                {
-                    account.id: {
-                        "id": account.id,
-                        "code": account.code,
-                        "name": account.name,
-                        "group_id": account.group_id.id,
-                        "currency_id": account.currency_id or False,
-                        "currency_name": account.currency_id.name,
-                        "centralized": account.centralized,
-                    }
-                }
-            )
-        return accounts_data
-
-    def _get_journals_data(self, journals_ids):
-        journals = self.env["account.journal"].browse(journals_ids)
-        journals_data = {}
-        for journal in journals:
-            journals_data.update({journal.id: {"id": journal.id, "code": journal.code}})
-        return journals_data
+    _inherit = "report.account_financial_report.abstract_report"
 
     def _get_tags_data(self, tags_ids):
         tags = self.env["account.analytic.tag"].browse(tags_ids)
