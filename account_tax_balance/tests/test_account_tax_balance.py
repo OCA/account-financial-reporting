@@ -179,3 +179,71 @@ class TestAccountTaxBalance(TransactionCase):
         tax.refresh()
         self.assertEquals(tax.base_balance, 175.)
         self.assertEquals(tax.balance, 17.5)
+
+    def test_receivable_move_type(self):
+        """
+        Receivable moves linked to invoices are not considered as refunds.
+        Also, receivable moves coming from refunds are considered as such.
+        """
+        receivable_account = self.env['account.account'].search(
+            [('user_type_id', '=', self.env.ref(
+                'account.data_account_type_receivable'
+            ).id)], limit=1)
+        invoice = self.env['account.invoice'].create({
+            'partner_id': self.env.ref('base.res_partner_2').id,
+            'account_id': receivable_account.id,
+            'type': 'out_invoice',
+            'invoice_line_ids': [(0, 0, {
+                'product_id': self.env.ref('product.product_product_4').id,
+                'account_id': receivable_account.id,
+                'quantity': 1.0,
+                'price_unit': 100.0,
+                'name': 'product that costs 100',
+            }), (0, 0, {
+                'product_id': self.env.ref('product.product_product_4').id,
+                'account_id': receivable_account.id,
+                'quantity': 1.0,
+                'price_unit': -100.0,
+                'name': 'product that costs -100',
+            })]
+        })
+        invoice.action_invoice_open()
+        self.assertEqual(invoice.move_id.move_type, 'receivable')
+
+        refund = invoice.refund()
+        refund.action_invoice_open()
+        self.assertEqual(refund.move_id.move_type, 'receivable_refund')
+
+    def test_payable_move_type(self):
+        """
+        Payable moves linked to bills are not considered as refunds.
+        Also, payable moves coming from refunds are considered as such.
+        """
+        payable_account = self.env['account.account'].search(
+            [('user_type_id', '=', self.env.ref(
+                'account.data_account_type_payable'
+            ).id)], limit=1)
+        bill = self.env['account.invoice'].create({
+            'partner_id': self.env.ref('base.res_partner_2').id,
+            'account_id': payable_account.id,
+            'type': 'in_invoice',
+            'invoice_line_ids': [(0, 0, {
+                'product_id': self.env.ref('product.product_product_4').id,
+                'account_id': payable_account.id,
+                'quantity': 1.0,
+                'price_unit': 100.0,
+                'name': 'product that costs 100',
+            }), (0, 0, {
+                'product_id': self.env.ref('product.product_product_4').id,
+                'account_id': payable_account.id,
+                'quantity': 1.0,
+                'price_unit': -100.0,
+                'name': 'product that costs -100',
+            })]
+        })
+        bill.action_invoice_open()
+        self.assertEqual(bill.move_id.move_type, 'payable')
+
+        refund = bill.refund()
+        refund.action_invoice_open()
+        self.assertEqual(refund.move_id.move_type, 'payable_refund')
