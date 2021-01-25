@@ -64,12 +64,11 @@
             </form>
         </field>
     </record>
-    <act_window
-        id="action_journal_ledger_wizard"
-        name="Journal Ledger"
-        res_model="journal.ledger.report.wizard"
-        view_mode="form"
-        view_id="journal_ledger_wizard"
-        target="new"
-    />
+    <record id="action_journal_ledger_wizard" model="ir.actions.act_window">
+        <field name="name">Journal Ledger</field>
+        <field name="res_model">journal.ledger.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="journal_ledger_wizard" />
+        <field name="target">new</field>
+    </record>
 </odoo>
