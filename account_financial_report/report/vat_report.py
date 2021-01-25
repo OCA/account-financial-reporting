@@ -65,7 +65,6 @@ class VATReport(models.AbstractModel):
             "tax_line_id",
             "tax_ids",
             "analytic_tag_ids",
-            "tag_ids",
         ]
         tax_move_lines = self.env["account.move.line"].search_read(
             domain=tax_domain,

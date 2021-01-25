@@ -539,7 +539,7 @@ class TrialBalanceReport(models.AbstractModel):
                 groups_data[group.id].update(
                     {
                         "id": group.id,
-                        "code": group.code_prefix,
+                        "code": group.code_prefix_start,
                         "name": group.name,
                         "parent_id": group.parent_id.id,
                         "parent_path": group.parent_path,
@@ -573,7 +573,7 @@ class TrialBalanceReport(models.AbstractModel):
                 {
                     group.id: {
                         "id": group.id,
-                        "code": group.code_prefix,
+                        "code": group.code_prefix_start,
                         "name": group.name,
                         "parent_id": group.parent_id.id,
                         "parent_path": group.parent_path,
@@ -620,12 +620,12 @@ class TrialBalanceReport(models.AbstractModel):
         groups = self.env["account.group"].search([("id", "!=", False)])
         groups_data = {}
         for group in groups:
-            len_group_code = len(group.code_prefix)
+            len_group_code = len(group.code_prefix_start)
             groups_data.update(
                 {
                     group.id: {
                         "id": group.id,
-                        "code": group.code_prefix,
+                        "code": group.code_prefix_start,
                         "name": group.name,
                         "parent_id": group.parent_id.id,
                         "parent_path": group.parent_path,
@@ -644,7 +644,7 @@ class TrialBalanceReport(models.AbstractModel):
                 groups_data[group.id]["initial_currency_balance"] = 0.0
                 groups_data[group.id]["ending_currency_balance"] = 0.0
             for account in accounts_data.values():
-                if group.code_prefix == account["code"][:len_group_code]:
+                if group.code_prefix_start == account["code"][:len_group_code]:
                     acc_id = account["id"]
                     group_id = group.id
                     groups_data[group_id]["initial_balance"] += total_amount[acc_id][

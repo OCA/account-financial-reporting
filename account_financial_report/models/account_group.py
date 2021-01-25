@@ -10,7 +10,7 @@ class AccountGroup(models.Model):
     group_child_ids = fields.One2many(
         comodel_name="account.group", inverse_name="parent_id", string="Child Groups"
     )
-    level = fields.Integer(string="Level", compute="_compute_level", store=True)
+    level = fields.Integer(string="Level", compute="_compute_level")
     account_ids = fields.One2many(
         comodel_name="account.account", inverse_name="group_id", string="Accounts"
     )
@@ -31,15 +31,15 @@ class AccountGroup(models.Model):
         else:
             self.complete_name = self.name
 
-    @api.depends("code_prefix", "parent_id.complete_code")
+    @api.depends("code_prefix_start", "parent_id.complete_code")
     def _compute_complete_code(self):
         """ Forms complete code of location from parent location to child location. """
         if self.parent_id.complete_code:
             self.complete_code = "{}/{}".format(
-                self.parent_id.complete_code, self.code_prefix
+                self.parent_id.complete_code, self.code_prefix_start
             )
         else:
-            self.complete_code = self.code_prefix
+            self.complete_code = self.code_prefix_start
 
     @api.depends("parent_id", "parent_id.level")
     def _compute_level(self):
@@ -50,7 +50,7 @@ class AccountGroup(models.Model):
                 group.level = group.parent_id.level + 1
 
     @api.depends(
-        "code_prefix",
+        "code_prefix_start",
         "account_ids",
         "account_ids.code",
         "group_child_ids",
@@ -60,6 +60,6 @@ class AccountGroup(models.Model):
         account_obj = self.env["account.account"]
         accounts = account_obj.search([])
         for group in self:
-            prefix = group.code_prefix if group.code_prefix else group.name
+            prefix = group.code_prefix_start if group.code_prefix_start else group.name
             gr_acc = accounts.filtered(lambda a: a.code.startswith(prefix)).ids
             group.compute_account_ids = [(6, 0, gr_acc)]

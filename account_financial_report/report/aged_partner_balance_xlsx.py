@@ -1,5 +1,6 @@
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA
+# Copyright 2021 Tecnativa - Jo??o Marques
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import _, models
@@ -177,7 +178,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
     def _get_col_pos_final_balance_label(self):
         return 5
 
-    def _generate_report_content(self, workbook, report, data):
+    def _generate_report_content(self, workbook, report, data, report_data):
         res_data = self.env[
             "report.account_financial_report.aged_partner_balance"
         ]._get_report_values(report, data)
@@ -187,14 +188,16 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
             # For each account
             for account in aged_partner_balance:
                 # Write account title
-                self.write_array_title(account["code"] + " - " + account["name"])
+                self.write_array_title(
+                    account["code"] + " - " + account["name"], report_data
+                )
 
                 # Display array header for partners lines
-                self.write_array_header()
+                self.write_array_header(report_data)
 
                 # Display partner lines
                 for partner in account["partners"]:
-                    self.write_line_from_dict(partner)
+                    self.write_line_from_dict(partner, report_data)
 
                 # Display account lines
                 self.write_account_footer_from_dict(
@@ -202,45 +205,49 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                     account,
                     ("Total"),
                     "field_footer_total",
-                    self.format_header_right,
-                    self.format_header_amount,
+                    report_data["formats"]["format_header_right"],
+                    report_data["formats"]["format_header_amount"],
                     False,
+                    report_data,
                 )
                 self.write_account_footer_from_dict(
                     report,
                     account,
                     ("Percents"),
                     "field_footer_percent",
-                    self.format_right_bold_italic,
-                    self.format_percent_bold_italic,
+                    report_data["formats"]["format_right_bold_italic"],
+                    report_data["formats"]["format_percent_bold_italic"],
                     True,
+                    report_data,
                 )
 
                 # 2 lines break
-                self.row_pos += 2
+                report_data["row_pos"] += 2
         else:
             # For each account
             for account in aged_partner_balance:
                 # Write account title
-                self.write_array_title(account["code"] + " - " + account["name"])
+                self.write_array_title(
+                    account["code"] + " - " + account["name"], report_data
+                )
 
                 # For each partner
                 for partner in account["partners"]:
                     # Write partner title
-                    self.write_array_title(partner["name"])
+                    self.write_array_title(partner["name"], report_data)
 
                     # Display array header for move lines
-                    self.write_array_header()
+                    self.write_array_header(report_data)
 
                     # Display account move lines
                     for line in partner["move_lines"]:
-                        self.write_line_from_dict(line)
+                        self.write_line_from_dict(line, report_data)
 
                     # Display ending balance line for partner
-                    self.write_ending_balance_from_dict(partner)
+                    self.write_ending_balance_from_dict(partner, report_data)
 
                     # Line break
-                    self.row_pos += 1
+                    report_data["row_pos"] += 1
 
                 # Display account lines
                 self.write_account_footer_from_dict(
@@ -248,9 +255,10 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                     account,
                     ("Total"),
                     "field_footer_total",
-                    self.format_header_right,
-                    self.format_header_amount,
+                    report_data["formats"]["format_header_right"],
+                    report_data["formats"]["format_header_amount"],
                     False,
+                    report_data,
                 )
 
                 self.write_account_footer_from_dict(
@@ -258,24 +266,23 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                     account,
                     ("Percents"),
                     "field_footer_percent",
-                    self.format_right_bold_italic,
-                    self.format_percent_bold_italic,
+                    report_data["formats"]["format_right_bold_italic"],
+                    report_data["formats"]["format_percent_bold_italic"],
                     True,
+                    report_data,
                 )
 
                 # 2 lines break
-                self.row_pos += 2
+                report_data["row_pos"] += 2
 
-    def write_ending_balance_from_dict(self, my_object):
+    def write_ending_balance_from_dict(self, my_object, report_data):
         """
         Specific function to write ending partner balance
         for Aged Partner Balance
         """
         name = None
         label = _("Partner cumul aged balance")
-        super(AgedPartnerBalanceXslx, self).write_ending_balance_from_dict(
-            my_object, name, label
-        )
+        super().write_ending_balance_from_dict(my_object, name, label, report_data)
 
     def write_account_footer_from_dict(
         self,
@@ -286,12 +293,13 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
         string_format,
         amount_format,
         amount_is_percent,
+        report_data,
     ):
         """
         Specific function to write account footer for Aged Partner Balance
         """
         col_pos_footer_label = self._get_col_pos_footer_label(report)
-        for col_pos, column in self.columns.items():
+        for col_pos, column in report_data["columns"].items():
             if col_pos == col_pos_footer_label or column.get(field_name):
                 if col_pos == col_pos_footer_label:
                     value = label
@@ -299,17 +307,19 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                     value = account.get(column[field_name], False)
                 cell_type = column.get("type", "string")
                 if cell_type == "string" or col_pos == col_pos_footer_label:
-                    self.sheet.write_string(
-                        self.row_pos, col_pos, value or "", string_format
+                    report_data["sheet"].write_string(
+                        report_data["row_pos"], col_pos, value or "", string_format
                     )
                 elif cell_type == "amount":
                     number = float(value)
                     if amount_is_percent:
                         number /= 100
-                    self.sheet.write_number(
-                        self.row_pos, col_pos, number, amount_format
+                    report_data["sheet"].write_number(
+                        report_data["row_pos"], col_pos, number, amount_format
                     )
             else:
-                self.sheet.write_string(self.row_pos, col_pos, "", string_format)
+                report_data["sheet"].write_string(
+                    report_data["row_pos"], col_pos, "", string_format
+                )
 
-        self.row_pos += 1
+        report_data["row_pos"] += 1

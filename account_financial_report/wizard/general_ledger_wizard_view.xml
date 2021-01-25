@@ -153,26 +153,31 @@
             </form>
         </field>
     </record>
-    <act_window
-        id="action_general_ledger_wizard"
-        name="General Ledger"
-        res_model="general.ledger.report.wizard"
-        view_mode="form"
-        view_id="general_ledger_wizard"
-        target="new"
-    />
+    <record id="action_general_ledger_wizard" model="ir.actions.act_window">
+        <field name="name">General Ledger</field>
+        <field name="res_model">general.ledger.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="general_ledger_wizard" />
+        <field name="target">new</field>
+    </record>
     <!--Add to res.partner action-->
-    <act_window
+    <record
         id="act_action_general_ledger_wizard_partner_relation"
-        name="General Ledger"
-        res_model="general.ledger.report.wizard"
-        binding_model="res.partner"
-        view_mode="form"
-        context="{
-                    'default_receivable_accounts_only':1,
-                    'default_payable_accounts_only':1,
-                    }"
-        groups="account.group_account_manager"
-        target="new"
-    />
+        model="ir.actions.act_window"
+    >
+        <field name="name">General Ledger</field>
+        <field name="res_model">general.ledger.report.wizard</field>
+        <field name="binding_model_id" ref="base.model_res_partner" />
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="general_ledger_wizard" />
+        <field
+            name="context"
+            eval="{
+                'default_receivable_accounts_only':1,
+                'default_payable_accounts_only':1,
+            }"
+        />
+        <field name="groups_id" eval="[(4, ref('account.group_account_manager'))]" />
+        <field name="target">new</field>
+    </record>
 </odoo>

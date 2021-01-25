@@ -1,6 +1,7 @@
 # Author: Damien Crier
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA
+# Copyright 2021 Tecnativa - Jo??o Marques
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import _, models
@@ -135,7 +136,7 @@ class GeneralLedgerXslx(models.AbstractModel):
         return 5
 
     # flake8: noqa: C901
-    def _generate_report_content(self, workbook, report, data):
+    def _generate_report_content(self, workbook, report, data, report_data):
         res_data = self.env[
             "report.account_financial_report.general_ledger"
         ]._get_report_values(report, data)
@@ -151,12 +152,13 @@ class GeneralLedgerXslx(models.AbstractModel):
         for account in general_ledger:
             # Write account title
             self.write_array_title(
-                account["code"] + " - " + accounts_data[account["id"]]["name"]
+                account["code"] + " - " + accounts_data[account["id"]]["name"],
+                report_data,
             )
 
             if not account["partners"]:
                 # Display array header for move lines
-                self.write_array_header()
+                self.write_array_header(report_data)
 
                 # Display initial balance line for account
                 account.update(
@@ -170,7 +172,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                     account.update(
                         {"initial_bal_curr": account["init_bal"]["bal_curr"]}
                     )
-                self.write_initial_balance_from_dict(account)
+                self.write_initial_balance_from_dict(account, report_data)
 
                 # Display account move lines
                 for line in account["move_lines"]:
@@ -200,7 +202,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                                 "tags": tags,
                             }
                         )
-                    self.write_line_from_dict(line)
+                    self.write_line_from_dict(line, report_data)
                 # Display ending balance line for account
                 account.update(
                     {
@@ -215,16 +217,18 @@ class GeneralLedgerXslx(models.AbstractModel):
                             "final_bal_curr": account["fin_bal"]["bal_curr"],
                         }
                     )
-                self.write_ending_balance_from_dict(account)
+                self.write_ending_balance_from_dict(account, report_data)
 
             else:
                 # For each partner
                 for partner in account["list_partner"]:
                     # Write partner title
-                    self.write_array_title(partners_data[partner["id"]]["name"])
+                    self.write_array_title(
+                        partners_data[partner["id"]]["name"], report_data
+                    )
 
                     # Display array header for move lines
-                    self.write_array_header()
+                    self.write_array_header(report_data)
 
                     # Display initial balance line for partner
                     partner.update(
@@ -243,7 +247,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                                 "initial_bal_curr": partner["init_bal"]["bal_curr"],
                             }
                         )
-                    self.write_initial_balance_from_dict(partner)
+                    self.write_initial_balance_from_dict(partner, report_data)
 
                     # Display account move lines
                     for line in partner["move_lines"]:
@@ -275,7 +279,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                                     "tags": tags,
                                 }
                             )
-                        self.write_line_from_dict(line)
+                        self.write_line_from_dict(line, report_data)
 
                     # Display ending balance line for partner
                     partner.update(
@@ -293,10 +297,10 @@ class GeneralLedgerXslx(models.AbstractModel):
                                 "currency_id": partner["currency_id"].id,
                             }
                         )
-                    self.write_ending_balance_from_dict(partner)
+                    self.write_ending_balance_from_dict(partner, report_data)
 
                     # Line break
-                    self.row_pos += 1
+                    report_data["row_pos"] += 1
 
                 if not filter_partner_ids:
                     account.update(
@@ -314,20 +318,22 @@ class GeneralLedgerXslx(models.AbstractModel):
                                 "currency_id": account["currency_id"].id,
                             }
                         )
-                    self.write_ending_balance_from_dict(account)
+                    self.write_ending_balance_from_dict(account, report_data)
 
             # 2 lines break
-            self.row_pos += 2
+            report_data["row_pos"] += 2
 
-    def write_initial_balance_from_dict(self, my_object):
+    def write_initial_balance_from_dict(self, my_object, report_data):
         """Specific function to write initial balance for General Ledger"""
         if "partner" in my_object["type"]:
             label = _("Partner Initial balance")
         elif "account" in my_object["type"]:
             label = _("Initial balance")
-        super(GeneralLedgerXslx, self).write_initial_balance_from_dict(my_object, label)
+        super(GeneralLedgerXslx, self).write_initial_balance_from_dict(
+            my_object, label, report_data
+        )
 
-    def write_ending_balance_from_dict(self, my_object):
+    def write_ending_balance_from_dict(self, my_object, report_data):
         """Specific function to write ending balance for General Ledger"""
         if "partner" in my_object["type"]:
             name = my_object["name"]
@@ -336,5 +342,5 @@ class GeneralLedgerXslx(models.AbstractModel):
             name = my_object["code"] + " - " + my_object["name"]
             label = _("Ending balance")
         super(GeneralLedgerXslx, self).write_ending_balance_from_dict(
-            my_object, name, label
+            my_object, name, label, report_data
         )

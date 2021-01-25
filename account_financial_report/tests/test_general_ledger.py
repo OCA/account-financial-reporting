@@ -86,7 +86,7 @@ class TestGeneralLedgerReport(common.TransactionCase):
             ],
         }
         move = self.env["account.move"].create(move_vals)
-        move.post()
+        move.action_post()
 
     def _get_report_lines(self, with_partners=False):
         centralize = True

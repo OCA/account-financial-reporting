@@ -50,12 +50,11 @@
             </form>
         </field>
     </record>
-    <act_window
-        id="action_vat_report_wizard"
-        name="VAT Report"
-        res_model="vat.report.wizard"
-        view_mode="form"
-        view_id="vat_report_wizard"
-        target="new"
-    />
+    <record id="action_vat_report_wizard" model="ir.actions.act_window">
+        <field name="name">VAT Report</field>
+        <field name="res_model">vat.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="vat_report_wizard" />
+        <field name="target">new</field>
+    </record>
 </odoo>
