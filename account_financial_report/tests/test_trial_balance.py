@@ -10,13 +10,12 @@ class TestTrialBalanceReport(common.TransactionCase):
     def setUp(self):
         super(TestTrialBalanceReport, self).setUp()
         group_obj = self.env["account.group"]
-        acc_obj = self.env["account.account"]
-        self.group1 = group_obj.create({"code_prefix": "1", "name": "Group 1"})
+        self.group1 = group_obj.create({"code_prefix_start": "1", "name": "Group 1"})
         self.group11 = group_obj.create(
-            {"code_prefix": "11", "name": "Group 11", "parent_id": self.group1.id}
+            {"code_prefix_start": "11", "name": "Group 11", "parent_id": self.group1.id}
         )
-        self.group2 = group_obj.create({"code_prefix": "2", "name": "Group 2"})
-        self.account100 = acc_obj.create(
+        self.group2 = group_obj.create({"code_prefix_start": "2", "name": "Group 2"})
+        self.account100 = self._create_account_account(
             {
                 "code": "100",
                 "name": "Account 100",
@@ -35,7 +34,7 @@ class TestTrialBalanceReport(common.TransactionCase):
             ],
             limit=1,
         )
-        self.account200 = acc_obj.create(
+        self.account200 = self._create_account_account(
             {
                 "code": "200",
                 "name": "Account 200",
@@ -45,7 +44,7 @@ class TestTrialBalanceReport(common.TransactionCase):
                 ).id,
             }
         )
-        self.account300 = acc_obj.create(
+        self.account300 = self._create_account_account(
             {
                 "code": "300",
                 "name": "Account 300",
@@ -54,7 +53,7 @@ class TestTrialBalanceReport(common.TransactionCase):
                 ).id,
             }
         )
-        self.account301 = acc_obj.create(
+        self.account301 = self._create_account_account(
             {
                 "code": "301",
                 "name": "Account 301",
@@ -81,6 +80,12 @@ class TestTrialBalanceReport(common.TransactionCase):
             ],
             limit=1,
         )
+
+    def _create_account_account(self, vals):
+        item = self.env["account.account"].create(vals)
+        if "group_id" in vals:
+            item.group_id = vals["group_id"]
+        return item
 
     def _add_move(
         self,
@@ -151,7 +156,7 @@ class TestTrialBalanceReport(common.TransactionCase):
             ],
         }
         move = self.env["account.move"].create(move_vals)
-        move.post()
+        move.action_post()
 
     def _get_report_lines(self, with_partners=False, hierarchy_on="computed"):
         company = self.env.ref("base.main_company")
@@ -671,7 +676,7 @@ class TestTrialBalanceReport(common.TransactionCase):
             ],
         }
         move = self.env["account.move"].create(move_vals)
-        move.post()
+        move.action_post()
         # Generate the trial balance line
         company = self.env.ref("base.main_company")
         trial_balance = self.env["trial.balance.report.wizard"].create(
@@ -723,7 +728,7 @@ class TestTrialBalanceReport(common.TransactionCase):
             ],
         }
         move = self.env["account.move"].create(move_vals)
-        move.post()
+        move.action_post()
         # Re Generate the trial balance line
         trial_balance = self.env["trial.balance.report.wizard"].create(
             {
@@ -775,7 +780,7 @@ class TestTrialBalanceReport(common.TransactionCase):
             ],
         }
         move = self.env["account.move"].create(move_vals)
-        move.post()
+        move.action_post()
         # Re Generate the trial balance line
         trial_balance = self.env["trial.balance.report.wizard"].create(
             {

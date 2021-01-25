@@ -86,12 +86,11 @@
             </form>
         </field>
     </record>
-    <act_window
-        id="action_aged_partner_balance_wizard"
-        name="Aged Partner Balance"
-        res_model="aged.partner.balance.report.wizard"
-        view_mode="form"
-        view_id="aged_partner_balance_wizard"
-        target="new"
-    />
+    <record id="action_aged_partner_balance_wizard" model="ir.actions.act_window">
+        <field name="name">Aged Partner Balance</field>
+        <field name="res_model">aged.partner.balance.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="aged_partner_balance_wizard" />
+        <field name="target">new</field>
+    </record>
 </odoo>

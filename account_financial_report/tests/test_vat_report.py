@@ -149,7 +149,7 @@ class TestVATReport(common.TransactionCase):
         )
 
         move_form = common.Form(
-            self.env["account.move"].with_context(default_type="out_invoice")
+            self.env["account.move"].with_context(default_move_type="out_invoice")
         )
         move_form.partner_id = self.env.ref("base.res_partner_2")
         move_form.invoice_date = time.strftime("%Y-%m-03")
@@ -160,10 +160,10 @@ class TestVATReport(common.TransactionCase):
             line_form.account_id = self.income_account
             line_form.tax_ids.add(self.tax_10)
         invoice = move_form.save()
-        invoice.post()
+        invoice.action_post()
 
         move_form = common.Form(
-            self.env["account.move"].with_context(default_type="out_invoice")
+            self.env["account.move"].with_context(default_move_type="out_invoice")
         )
         move_form.partner_id = self.env.ref("base.res_partner_2")
         move_form.invoice_date = time.strftime("%Y-%m-04")
@@ -174,7 +174,7 @@ class TestVATReport(common.TransactionCase):
             line_form.account_id = self.income_account
             line_form.tax_ids.add(self.tax_20)
         invoice = move_form.save()
-        invoice.post()
+        invoice.action_post()
 
     def _get_report_lines(self, taxgroups=False):
         based_on = "taxtags"

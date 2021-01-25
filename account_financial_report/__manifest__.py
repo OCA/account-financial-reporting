@@ -2,10 +2,11 @@
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA
 # Copyright 2020 ForgeFlow S.L. (https://www.forgeflow.com)
+# Copyright 2021 Tecnativa - Jo??o Marques
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Account Financial Reports",
-    "version": "13.0.1.4.1",
+    "version": "14.0.1.0.0",
     "category": "Reporting",
     "summary": "OCA Financial Reports",
     "author": "Camptocamp SA,"
@@ -13,9 +14,10 @@
     "redCOR AG,"
     "ForgeFlow,"
     "Odoo Community Association (OCA)",
-    "website": "https://odoo-community.org/",
+    "website": "https://github.com/OCA/account-financial-reporting",
     "depends": ["account", "date_range", "report_xlsx"],
     "data": [
+        "security/ir.model.access.csv",
         "wizard/aged_partner_balance_wizard_view.xml",
         "wizard/general_ledger_wizard_view.xml",
         "wizard/journal_ledger_wizard_view.xml",
