@@ -1,5 +1,6 @@
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA
+# Copyright 2021 Tecnativa - Jo??o Marques
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import _, models
@@ -100,7 +101,7 @@ class OpenItemsXslx(models.AbstractModel):
     def _get_col_pos_final_balance_label(self):
         return 5
 
-    def _generate_report_content(self, workbook, report, data):
+    def _generate_report_content(self, workbook, report, data, report_data):
         res_data = self.env[
             "report.account_financial_report.open_items"
         ]._get_report_values(report, data)
@@ -116,7 +117,8 @@ class OpenItemsXslx(models.AbstractModel):
             self.write_array_title(
                 accounts_data[account_id]["code"]
                 + " - "
-                + accounts_data[account_id]["name"]
+                + accounts_data[account_id]["name"],
+                report_data,
             )
 
             # For each partner
@@ -125,10 +127,12 @@ class OpenItemsXslx(models.AbstractModel):
                     for partner_id in Open_items[account_id]:
                         type_object = "partner"
                         # Write partner title
-                        self.write_array_title(partners_data[partner_id]["name"])
+                        self.write_array_title(
+                            partners_data[partner_id]["name"], report_data
+                        )
 
                         # Display array header for move lines
-                        self.write_array_header()
+                        self.write_array_header(report_data)
 
                         # Display account move lines
                         for line in Open_items[account_id][partner_id]:
@@ -140,7 +144,7 @@ class OpenItemsXslx(models.AbstractModel):
                                     ],
                                 }
                             )
-                            self.write_line_from_dict(line)
+                            self.write_line_from_dict(line, report_data)
 
                         # Display ending balance line for partner
                         partners_data[partner_id].update(
@@ -155,15 +159,16 @@ class OpenItemsXslx(models.AbstractModel):
                             partners_data[partner_id],
                             type_object,
                             total_amount,
+                            report_data,
                             account_id,
                             partner_id,
                         )
 
                         # Line break
-                        self.row_pos += 1
+                        report_data["row_pos"] += 1
                 else:
                     # Display array header for move lines
-                    self.write_array_header()
+                    self.write_array_header(report_data)
 
                     # Display account move lines
                     for line in Open_items[account_id]:
@@ -173,19 +178,29 @@ class OpenItemsXslx(models.AbstractModel):
                                 "journal": journals_data[line["journal_id"]]["code"],
                             }
                         )
-                        self.write_line_from_dict(line)
+                        self.write_line_from_dict(line, report_data)
 
                 # Display ending balance line for account
                 type_object = "account"
                 self.write_ending_balance_from_dict(
-                    accounts_data[account_id], type_object, total_amount, account_id
+                    accounts_data[account_id],
+                    type_object,
+                    report_data,
+                    total_amount,
+                    account_id,
                 )
 
                 # 2 lines break
-                self.row_pos += 2
+                report_data["row_pos"] += 2
 
     def write_ending_balance_from_dict(
-        self, my_object, type_object, total_amount, account_id=False, partner_id=False
+        self,
+        my_object,
+        type_object,
+        total_amount,
+        report_data,
+        account_id=False,
+        partner_id=False,
     ):
         """Specific function to write ending balance for Open Items"""
         if type_object == "partner":
@@ -197,5 +212,5 @@ class OpenItemsXslx(models.AbstractModel):
             my_object["residual"] = total_amount[account_id]["residual"]
             label = _("Ending balance")
         super(OpenItemsXslx, self).write_ending_balance_from_dict(
-            my_object, name, label
+            my_object, name, label, report_data
         )

@@ -1,6 +1,7 @@
 # Author: Damien Crier
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA
+# Copyright 2021 Tecnativa - Jo??o Marques
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import _, models
@@ -149,24 +150,28 @@ class JournalLedgerXslx(models.AbstractModel):
             ],
         ]
 
-    def _generate_report_content(self, workbook, report, data):
+    def _generate_report_content(self, workbook, report, data, report_data):
         res_data = self.env[
             "report.account_financial_report.journal_ledger"
         ]._get_report_values(report, data)
         group_option = report.group_option
         if group_option == "journal":
             for ledger in res_data["Journal_Ledgers"]:
-                self._generate_journal_content(workbook, report, res_data, ledger)
+                self._generate_journal_content(
+                    workbook, report, res_data, ledger, report_data
+                )
         elif group_option == "none":
-            self._generate_no_group_content(workbook, report, res_data)
+            self._generate_no_group_content(workbook, report, res_data, report_data)
 
-    def _generate_no_group_content(self, workbook, report, res_data):
+    def _generate_no_group_content(self, workbook, report, res_data, report_data):
         self._generate_moves_content(
-            workbook, "Report", report, res_data, res_data["Moves"]
+            workbook, "Report", report, res_data, res_data["Moves"], report_data
         )
-        self._generate_no_group_taxes_summary(workbook, report, res_data)
+        self._generate_no_group_taxes_summary(workbook, report, res_data, report_data)
 
-    def _generate_journal_content(self, workbook, report, res_data, ledger):
+    def _generate_journal_content(
+        self, workbook, report, res_data, ledger, report_data
+    ):
         journal = self.env["account.journal"].browse(ledger["id"])
         currency_name = (
             journal.currency_id
@@ -175,14 +180,16 @@ class JournalLedgerXslx(models.AbstractModel):
         )
         sheet_name = "{} ({}) - {}".format(journal.code, currency_name, journal.name)
         self._generate_moves_content(
-            workbook, sheet_name, report, res_data, ledger["report_moves"]
+            workbook, sheet_name, report, res_data, ledger["report_moves"], report_data
         )
-        self._generate_journal_taxes_summary(workbook, ledger)
+        self._generate_journal_taxes_summary(workbook, ledger, report_data)
 
-    def _generate_no_group_taxes_summary(self, workbook, report, res_data):
-        self._generate_taxes_summary(workbook, "Tax Report", res_data["tax_line_data"])
+    def _generate_no_group_taxes_summary(self, workbook, report, res_data, report_data):
+        self._generate_taxes_summary(
+            workbook, "Tax Report", res_data["tax_line_data"], report_data
+        )
 
-    def _generate_journal_taxes_summary(self, workbook, ledger):
+    def _generate_journal_taxes_summary(self, workbook, ledger, report_data):
         journal = self.env["account.journal"].browse(ledger["id"])
         currency_name = (
             journal.currency_id
@@ -192,19 +199,23 @@ class JournalLedgerXslx(models.AbstractModel):
         sheet_name = "Tax - {} ({}) - {}".format(
             journal.code, currency_name, journal.name
         )
-        self._generate_taxes_summary(workbook, sheet_name, ledger["tax_lines"])
+        self._generate_taxes_summary(
+            workbook, sheet_name, ledger["tax_lines"], report_data
+        )
 
-    def _generate_moves_content(self, workbook, sheet_name, report, res_data, moves):
-        self.workbook = workbook
-        self.sheet = workbook.add_worksheet(sheet_name)
-        self._set_column_width()
+    def _generate_moves_content(
+        self, workbook, sheet_name, report, res_data, moves, report_data
+    ):
+        report_data["workbook"] = workbook
+        report_data["sheet"] = workbook.add_worksheet(sheet_name)
+        self._set_column_width(report_data)
 
-        self.row_pos = 1
+        report_data["row_pos"] = 1
 
-        self.write_array_title(sheet_name)
-        self.row_pos += 2
+        self.write_array_title(sheet_name, report_data)
+        report_data["row_pos"] += 2
 
-        self.write_array_header()
+        self.write_array_header(report_data)
         account_ids_data = res_data["account_ids_data"]
         partner_ids_data = res_data["partner_ids_data"]
         currency_ids_data = res_data["currency_ids_data"]
@@ -232,16 +243,18 @@ class JournalLedgerXslx(models.AbstractModel):
                         line["move_line_id"], False
                     ),
                 )
-                self.write_line_from_dict(line)
-            self.row_pos += 1
+                self.write_line_from_dict(line, report_data)
+            report_data["row_pos"] += 1
 
-    def _generate_taxes_summary(self, workbook, sheet_name, tax_lines_dict):
-        self.workbook = workbook
-        self.sheet = workbook.add_worksheet(sheet_name)
+    def _generate_taxes_summary(
+        self, workbook, sheet_name, tax_lines_dict, report_data
+    ):
+        report_data["workbook"] = workbook
+        report_data["sheet"] = workbook.add_worksheet(sheet_name)
 
-        self.row_pos = 1
-        self.write_array_title(sheet_name)
-        self.row_pos += 2
+        report_data["row_pos"] = 1
+        self.write_array_title(sheet_name, report_data)
+        report_data["row_pos"] += 2
 
     def _get_partner_name(self, partner_id, partner_data):
         if partner_id in partner_data.keys():
