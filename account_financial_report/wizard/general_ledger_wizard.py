@@ -12,6 +12,7 @@ from ast import literal_eval
 
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
+from odoo.tools import date_utils
 
 
 class GeneralLedgerReportWizard(models.TransientModel):
@@ -146,8 +147,12 @@ class GeneralLedgerReportWizard(models.TransientModel):
     def _compute_fy_start_date(self):
         for wiz in self:
             if wiz.date_from:
-                res = self.company_id.compute_fiscalyear_dates(wiz.date_from)
-                wiz.fy_start_date = res["date_from"]
+                date_from, date_to = date_utils.get_fiscal_year(
+                    wiz.date_from,
+                    day=self.company_id.fiscalyear_last_day,
+                    month=int(self.company_id.fiscalyear_last_month),
+                )
+                wiz.fy_start_date = date_from
             else:
                 wiz.fy_start_date = False
 
