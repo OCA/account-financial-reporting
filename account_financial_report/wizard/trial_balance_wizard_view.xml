@@ -147,12 +147,11 @@
             </form>
         </field>
     </record>
-    <act_window
-        id="action_trial_balance_wizard"
-        name="Trial Balance"
-        res_model="trial.balance.report.wizard"
-        view_mode="form"
-        view_id="trial_balance_wizard"
-        target="new"
-    />
+    <record id="action_trial_balance_wizard" model="ir.actions.act_window">
+        <field name="name">Trial Balance</field>
+        <field name="res_model">trial.balance.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="trial_balance_wizard" />
+        <field name="target">new</field>
+    </record>
 </odoo>

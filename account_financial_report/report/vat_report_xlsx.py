@@ -1,4 +1,5 @@
 # Copyright  2018 Forest and Biomass Romania
+# Copyright 2021 Tecnativa - João Marques
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import _, models
@@ -42,19 +43,19 @@ class VATReportXslx(models.AbstractModel):
     def _get_col_count_filter_value(self):
         return 2
 
-    def _generate_report_content(self, workbook, report, data):
+    def _generate_report_content(self, workbook, report, data, report_data):
         res_data = self.env[
             "report.account_financial_report.vat_report"
         ]._get_report_values(report, data)
         vat_report = res_data["vat_report"]
         tax_detail = res_data["tax_detail"]
         # For each tax_tag tax_group
-        self.write_array_header()
+        self.write_array_header(report_data)
         for tag_or_group in vat_report:
             # Write taxtag line
-            self.write_line_from_dict(tag_or_group)
+            self.write_line_from_dict(tag_or_group, report_data)
 
             # For each tax if detail taxes
             if tax_detail:
                 for tax in tag_or_group["taxes"]:
-                    self.write_line_from_dict(tax)
+                    self.write_line_from_dict(tax, report_data)
