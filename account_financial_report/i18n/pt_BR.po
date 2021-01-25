@@ -1,0 +1,2204 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* account_financial_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2019-08-02 09:44+0000\n"
+"Last-Translator: Marcel Savegnago <marcel.savegnago@gmail.com>\n"
+"Language-Team: none\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 3.7.1\n"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
+msgid "&gt; 120 d."
+msgstr "&gt; 120 d."
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
+msgid "1 - 30 d."
+msgstr "1 - 30 d."
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
+msgid "10"
+msgstr "10"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
+msgid "31 - 60 d."
+msgstr "31 - 60 d."
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
+msgid "61 - 90 d."
+msgstr "61 - 90 d."
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
+msgid "91 - 120 d."
+msgstr "91 - 120 d."
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_taxes
+msgid "<b>Taxes summary</b>"
+msgstr "<b>Resumo de Impostos</b>"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_buttons
+msgid "<span class=\"fa fa-download\"/> Export"
+msgstr "<span class=\"fa fa-download\"/> Exportar"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_buttons
+msgid "<span class=\"fa fa-print\"/> Print"
+msgstr "<span class=\"fa fa-print\"/> Imprimir"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
+msgid ""
+"<span class=\"oe_inline\">\n"
+"                                            To\n"
+"                                        </span>"
+msgstr ""
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.open_items_wizard
+msgid ""
+"<span class=\"oe_inline\">\n"
+"                                To\n"
+"                            </span>"
+msgstr ""
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
+msgid "<span class=\"oe_inline\">To</span>"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_account_financial_report_abstract_wizard
+msgid "Abstract Wizard"
+msgstr "Assistente de Resumo"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_account_financial_report_abstract_report_xlsx
+msgid "Abstract XLSX Account Financial Report"
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#: model:ir.model,name:account_financial_report.model_account_account
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
+#, python-format
+msgid "Account"
+msgstr "Conta"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__account_code_from
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__account_code_from
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__account_code_from
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__account_code_from
+#, fuzzy
+msgid "Account Code From"
+msgstr "Código de Conta"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__account_code_to
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__account_code_to
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__account_code_to
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__account_code_to
+#, fuzzy
+msgid "Account Code To"
+msgstr "Código de Conta"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_account_group
+msgid "Account Group"
+msgstr "Grupo de contas"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#, python-format
+msgid "Account Name"
+msgstr "Nome da Conta"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
+#, python-format
+msgid "Account at 0 filter"
+msgstr "Filtro de Conta Zerada"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_filters
+#, python-format
+msgid "Account balance at 0 filter"
+msgstr "Filtro de Saldo Zerado em Conta"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_account_group__account_ids
+msgid "Accounts"
+msgstr "Contas"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__centralize
+msgid "Activate centralization"
+msgstr "Ativar centralização"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
+msgid "Additional Filtering"
+msgstr ""
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
+msgid ""
+"Age ≤ 120\n"
+"                        d."
+msgstr ""
+"Idade ≤ 120\n"
+"                        d."
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
+#, python-format
+msgid "Age ≤ 120 d."
+msgstr "Idade ≤ 120 d."
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
+msgid ""
+"Age ≤ 30\n"
+"                        d."
+msgstr ""
+"Idade ≤ 30\n"
+"                        d."
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
+#, python-format
+msgid "Age ≤ 30 d."
+msgstr "Idade ≤ 30 d."
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
+msgid ""
+"Age ≤ 60\n"
+"                        d."
+msgstr ""
+"Idade ≤ 60\n"
+"                        d."
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
+#, python-format
+msgid "Age ≤ 60 d."
+msgstr "Idade ≤ 60 d."
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
+msgid ""
+"Age ≤ 90\n"
+"                        d."
+msgstr ""
+"Idade ≤ 90\n"
+"                        d."
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
+#, python-format
+msgid "Age ≤ 90 d."
+msgstr "Idade ≤ 90 d."
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
+#: model:ir.actions.act_window,name:account_financial_report.action_aged_partner_balance_wizard
+#: model:ir.actions.client,name:account_financial_report.action_report_aged_partner_balance
+#: model:ir.actions.report,name:account_financial_report.action_print_report_aged_partner_balance_html
+#: model:ir.actions.report,name:account_financial_report.action_print_report_aged_partner_balance_qweb
+#: model:ir.ui.menu,name:account_financial_report.menu_aged_partner_balance_wizard
+#, python-format
+msgid "Aged Partner Balance"
+msgstr "Fluxo por Parceiro"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_base
+msgid "Aged Partner Balance -"
+msgstr "Fluxo por Parceiro -"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_account_financial_report_aged_partner_balance
+#, fuzzy
+msgid "Aged Partner Balance Report"
+msgstr "Fluxo por Parceiro -"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_aged_partner_balance_report_wizard
+msgid "Aged Partner Balance Wizard"
+msgstr "Assistente de Fluxo por Parceiro"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_a_f_r_report_aged_partner_balance_xlsx
+#, fuzzy
+msgid "Aged Partner Balance XLSL Report"
+msgstr "Fluxo por Parceiro XLSX"
+
+#. module: account_financial_report
+#: model:ir.actions.report,name:account_financial_report.action_report_aged_partner_balance_xlsx
+msgid "Aged Partner Balance XLSX"
+msgstr "Fluxo por Parceiro XLSX"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
+#, python-format
+msgid "All"
+msgstr "Todos"
+
+#. module: account_financial_report
+#: model:ir.model.fields.selection,name:account_financial_report.selection__aged_partner_balance_report_wizard__target_move__all
+#: model:ir.model.fields.selection,name:account_financial_report.selection__general_ledger_report_wizard__target_move__all
+#: model:ir.model.fields.selection,name:account_financial_report.selection__open_items_report_wizard__target_move__all
+#: model:ir.model.fields.selection,name:account_financial_report.selection__trial_balance_report_wizard__target_move__all
+#: model:ir.model.fields.selection,name:account_financial_report.selection__vat_report_wizard__target_move__all
+msgid "All Entries"
+msgstr "Todos os lançamentos"
+
+#. module: account_financial_report
+#: model:ir.model.fields.selection,name:account_financial_report.selection__aged_partner_balance_report_wizard__target_move__posted
+#: model:ir.model.fields.selection,name:account_financial_report.selection__general_ledger_report_wizard__target_move__posted
+#: model:ir.model.fields.selection,name:account_financial_report.selection__open_items_report_wizard__target_move__posted
+#: model:ir.model.fields.selection,name:account_financial_report.selection__trial_balance_report_wizard__target_move__posted
+#: model:ir.model.fields.selection,name:account_financial_report.selection__vat_report_wizard__target_move__posted
+msgid "All Posted Entries"
+msgstr "Todas as movimentações lançadas"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_filters
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_filters
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
+#, python-format
+msgid "All entries"
+msgstr "Todos os lançamentos"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_filters
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_filters
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
+#, python-format
+msgid "All posted entries"
+msgstr "Todas as movimentações lançadas"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
+msgid "Amount Cur."
+msgstr "Saldo Inicial."
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#, python-format
+msgid "Amount Currency"
+msgstr "Moeda"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+#, python-format
+msgid "Amount cur."
+msgstr "Moeda."
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+#, fuzzy, python-format
+msgid "Analytic Account"
+msgstr "Filtrar Conta"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_taxes
+msgid "Balance"
+msgstr "Saldo"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_taxes
+msgid "Base Amount"
+msgstr "Valor Base"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#, python-format
+msgid "Base Balance"
+msgstr "Saldo Base"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#, python-format
+msgid "Base Credit"
+msgstr "Crédito Base"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#, python-format
+msgid "Base Debit"
+msgstr "Débito Base"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__based_on
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_vat_report_filters
+msgid "Based On"
+msgstr "Baseado em"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/vat_report_xlsx.py:0
+#, python-format
+msgid "Based on"
+msgstr "Baseado em"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.journal_ledger_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.open_items_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.vat_report_wizard
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
+#, python-format
+msgid "Centralize filter"
+msgstr "Filtro Centralizar"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_account_account__centralized
+msgid "Centralized"
+msgstr "Centralizado"
+
+#. module: account_financial_report
+#: model:ir.model.fields.selection,name:account_financial_report.selection__trial_balance_report_wizard__hierarchy_on__relation
+msgid "Child Accounts"
+msgstr "Contas Filhas"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_account_group__group_child_ids
+msgid "Child Groups"
+msgstr "Grupos Filhos"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#: code:addons/account_financial_report/report/vat_report_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_vat_report_base
+#, python-format
+msgid "Code"
+msgstr "Código"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__company_id
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__company_id
+#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__company_id
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__company_id
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__company_id
+#: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__company_id
+#, python-format
+msgid "Company"
+msgstr "Empresa"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_account_group__compute_account_ids
+msgid "Compute accounts"
+msgstr "Contas calculadas"
+
+#. module: account_financial_report
+#: model:ir.model.fields.selection,name:account_financial_report.selection__trial_balance_report_wizard__hierarchy_on__computed
+msgid "Computed Accounts"
+msgstr "Contas Calculadas"
+
+#. module: account_financial_report
+#: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__hierarchy_on
+msgid ""
+"Computed Accounts: Use when the account group have codes\n"
+"        that represent prefixes of the actual accounts.\n"
+"\n"
+"        Child Accounts: Use when your account groups are hierarchical.\n"
+"\n"
+"        No hierarchy: Use to display just the accounts, without any "
+"grouping.\n"
+"        "
+msgstr ""
+"Contas Calculadas: Utilize quando o grupo de contas possui códigos \n"
+"        que representam prefixos das contas do realizado.\n"
+"\n"
+"        Contas Filhas: Utilize quando o grupo de contas é hierárquico.\n"
+"\n"
+"        Sem hierarquia: Utilize para exibir apenas as contas, sem qualquer "
+"agrupamento.\n"
+"        "
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__create_uid
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__create_uid
+#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__create_uid
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__create_uid
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__create_uid
+#: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__create_uid
+msgid "Created by"
+msgstr "Criado por"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__create_date
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__create_date
+#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__create_date
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__create_date
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__create_date
+#: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__create_date
+msgid "Created on"
+msgstr "Criado em"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_taxes
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
+#, python-format
+msgid "Credit"
+msgstr "Crédito"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+#, python-format
+msgid "Cumul. Bal."
+msgstr "Saldo Acum."
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
+#, python-format
+msgid "Cur."
+msgstr "Moeda"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
+#, python-format
+msgid "Cur. Original"
+msgstr "Moeda Original"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
+#, python-format
+msgid "Cur. Residual"
+msgstr "Moeda Residual"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#, python-format
+msgid "Currency"
+msgstr "Moeda"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
+#, python-format
+msgid "Current"
+msgstr "Atual"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
+#, python-format
+msgid "Date"
+msgstr "Data"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__date_at
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__date_at
+msgid "Date At"
+msgstr "Até"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__date_from
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__date_from
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__date_from
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__date_from
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_vat_report_filters
+msgid "Date From"
+msgstr "Data Inicial"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__date_to
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__date_to
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_vat_report_filters
+msgid "Date To"
+msgstr "Data Final"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_filters
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_filters
+#, python-format
+msgid "Date at filter"
+msgstr "Filtro de Data"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/vat_report_xlsx.py:0
+#, python-format
+msgid "Date from"
+msgstr "Data Inicial"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__date_range_id
+#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__date_range_id
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__date_range_id
+#: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__date_range_id
+msgid "Date range"
+msgstr "Período"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
+#, python-format
+msgid "Date range filter"
+msgstr "Filtro de período"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/vat_report_xlsx.py:0
+#, python-format
+msgid "Date to"
+msgstr "Data Final"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_taxes
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
+#, python-format
+msgid "Debit"
+msgstr "Débito"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_taxes
+#, python-format
+msgid "Description"
+msgstr "Descrição"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__tax_detail
+msgid "Detail Taxes"
+msgstr "Detalhes dos Impostos"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract_wizard__display_name
+#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__display_name
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__display_name
+#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__display_name
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__display_name
+#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_aged_partner_balance_xlsx__display_name
+#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_general_ledger_xlsx__display_name
+#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_journal_ledger_xlsx__display_name
+#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_open_items_xlsx__display_name
+#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_trial_balance_xlsx__display_name
+#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_vat_report_xlsx__display_name
+#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_abstract_report_xlsx__display_name
+#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_aged_partner_balance__display_name
+#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_general_ledger__display_name
+#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_journal_ledger__display_name
+#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_open_items__display_name
+#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_trial_balance__display_name
+#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_vat_report__display_name
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__display_name
+#: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__display_name
+msgid "Display Name"
+msgstr "Nome de Exibição"
+
+#. module: account_financial_report
+#: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__foreign_currency
+#: model:ir.model.fields,help:account_financial_report.field_open_items_report_wizard__foreign_currency
+#: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__foreign_currency
+msgid ""
+"Display foreign currency for move lines, unless account currency is not "
+"setup through chart of accounts will display initial and final balance in "
+"that currency."
+msgstr ""
+"Exibir moeda estrangeira para linhas de movimentos contábeis, a menos que a "
+"moeda da conta não esteja configurada no plano de contas mostrará os saldos "
+"inicial e final desta moeda."
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__hide_parent_hierarchy_level
+msgid "Do not display parent levels"
+msgstr "Não exibir níveis pai"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
+msgid ""
+"Due\n"
+"                        date"
+msgstr ""
+"Data de\n"
+"                        vencimento"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
+#, fuzzy
+msgid ""
+"Due\n"
+"                    date"
+msgstr ""
+"Data de\n"
+"                        vencimento"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#, python-format
+msgid "Due date"
+msgstr "Data de vencimento"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__date_to
+msgid "End Date"
+msgstr "Data Final"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__date_to
+msgid "End date"
+msgstr "Data final"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_ending_cumul
+msgid ""
+"Ending\n"
+"                        balance"
+msgstr ""
+"Saldo\n"
+"                        final"
+
+#. module: account_financial_report
+#: model:ir.model.fields,help:account_financial_report.field_aged_partner_balance_report_wizard__account_code_to
+#: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__account_code_to
+#: model:ir.model.fields,help:account_financial_report.field_open_items_report_wizard__account_code_to
+#: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__account_code_to
+msgid "Ending account in a range"
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_ending_cumul
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
+#, python-format
+msgid "Ending balance"
+msgstr "Saldo final"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
+#, fuzzy
+msgid ""
+"Ending balance\n"
+"                        cur."
+msgstr ""
+"Saldo\n"
+"                        final"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#, python-format
+msgid "Entries sorted by"
+msgstr "Lançamentos ordenados por"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
+#, python-format
+msgid "Entry"
+msgstr "Lançamento"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
+#, python-format
+msgid "Entry number"
+msgstr "Número do lançamento"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.journal_ledger_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.open_items_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.vat_report_wizard
+msgid "Export PDF"
+msgstr "Exportar PDF"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.journal_ledger_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.open_items_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.vat_report_wizard
+msgid "Export XLSX"
+msgstr "Exportar XLSX"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__account_ids
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__account_ids
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__account_ids
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__account_ids
+#: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
+msgid "Filter accounts"
+msgstr "Filtrar Contas"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
+#, fuzzy
+msgid "Filter analytic accounts"
+msgstr "Filtrar etiquetas analíticas"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__analytic_tag_ids
+#: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
+msgid "Filter analytic tags"
+msgstr "Filtrar etiquetas analíticas"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__cost_center_ids
+msgid "Filter cost centers"
+msgstr "Filtrar centro de custos"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__account_journal_ids
+msgid "Filter journals"
+msgstr "Filtrar diários"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__partner_ids
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__partner_ids
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__partner_ids
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__partner_ids
+#: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
+msgid "Filter partners"
+msgstr "Filtrar parceiros"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__foreign_currency
+msgid "Foreign Currency"
+msgstr "Moeda Estrangeira"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.open_items_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
+#, fuzzy
+msgid "From Code"
+msgstr "Código"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
+msgid "From:"
+msgstr "De:"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#, python-format
+msgid "From: %s To: %s"
+msgstr "De: %s Até: %s"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_account_group__complete_code
+#, fuzzy
+msgid "Full Code"
+msgstr "Código"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_account_group__complete_name
+#, fuzzy
+msgid "Full Name"
+msgstr "Nome"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__fy_start_date
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__fy_start_date
+msgid "Fy Start Date"
+msgstr "Data Inicial"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: model:ir.actions.act_window,name:account_financial_report.act_action_general_ledger_wizard_partner_relation
+#: model:ir.actions.act_window,name:account_financial_report.action_general_ledger_wizard
+#: model:ir.actions.client,name:account_financial_report.action_report_general_ledger
+#: model:ir.actions.report,name:account_financial_report.action_print_report_general_ledger_html
+#: model:ir.actions.report,name:account_financial_report.action_print_report_general_ledger_qweb
+#: model:ir.ui.menu,name:account_financial_report.menu_general_ledger_wizard
+#, python-format
+msgid "General Ledger"
+msgstr "Razão Geral"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_base
+msgid "General Ledger -"
+msgstr "Razão Geral -"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_account_financial_report_general_ledger
+#, fuzzy
+msgid "General Ledger Report"
+msgstr "Assistente do Relatório de Razão Geral"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_general_ledger_report_wizard
+msgid "General Ledger Report Wizard"
+msgstr "Assistente do Relatório de Razão Geral"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_a_f_r_report_general_ledger_xlsx
+#, fuzzy
+msgid "General Ledger XLSL Report"
+msgstr "Razão Geral XLSX"
+
+#. module: account_financial_report
+#: model:ir.actions.report,name:account_financial_report.action_report_general_ledger_xlsx
+msgid "General Ledger XLSX"
+msgstr "Razão Geral XLSX"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
+msgid ""
+"General Ledger can be computed only if selected company have only one "
+"unaffected earnings account."
+msgstr ""
+"O Razão Geral somente pode ser calculado se a empresa selecionada tiver "
+"apenas uma conta de receitas não afetada."
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__group_option
+msgid "Group entries by"
+msgstr "Agrupar lançamentos por"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_filters
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
+#, python-format
+msgid "Hide"
+msgstr "Ocultar"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__hide_account_at_0
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__hide_account_at_0
+msgid "Hide account ending balance at 0"
+msgstr "Ocultar conta com saldo final zerado"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__hide_account_at_0
+msgid "Hide accounts at 0"
+msgstr "Ocultar contas zeradas"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__show_hierarchy_level
+msgid "Hierarchy Levels to display"
+msgstr "Níveis Hierárquicos para exibir"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__hierarchy_on
+msgid "Hierarchy On"
+msgstr "Hierarquia Habilitada"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract_wizard__id
+#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__id
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__id
+#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__id
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__id
+#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_aged_partner_balance_xlsx__id
+#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_general_ledger_xlsx__id
+#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_journal_ledger_xlsx__id
+#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_open_items_xlsx__id
+#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_trial_balance_xlsx__id
+#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_vat_report_xlsx__id
+#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_abstract_report_xlsx__id
+#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_aged_partner_balance__id
+#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_general_ledger__id
+#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_journal_ledger__id
+#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_open_items__id
+#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_trial_balance__id
+#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_vat_report__id
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__id
+#: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__id
+msgid "ID"
+msgstr "ID"
+
+#. module: account_financial_report
+#: model:ir.model.fields,help:account_financial_report.field_account_account__centralized
+msgid ""
+"If flagged, no details will be displayed in the General Ledger report (the "
+"webkit one only), only centralized amounts per period."
+msgstr ""
+"Se marcado, os detalhes não serão exibidos no relatório Razão Geral (somente "
+"no webkit), apenas valores centralizados por período."
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
+#, fuzzy
+msgid ""
+"Initial\n"
+"                        balance cur."
+msgstr ""
+"Saldo\n"
+"                    inicial"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
+msgid ""
+"Initial\n"
+"                    balance"
+msgstr ""
+"Saldo\n"
+"                    inicial"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+#, python-format
+msgid "Initial balance"
+msgstr "Saldo inicial"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
+#: model:ir.actions.client,name:account_financial_report.action_report_journal_ledger
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__journal_ids
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
+#, python-format
+msgid "Journal"
+msgstr "Diário"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_account_move_line
+msgid "Journal Item"
+msgstr "Item do Diário"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__domain
+msgid "Journal Items Domain"
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#: model:ir.actions.act_window,name:account_financial_report.action_journal_ledger_wizard
+#: model:ir.actions.report,name:account_financial_report.action_print_journal_ledger_wizard_html
+#: model:ir.actions.report,name:account_financial_report.action_print_journal_ledger_wizard_qweb
+#: model:ir.ui.menu,name:account_financial_report.menu_journal_ledger_wizard
+#, python-format
+msgid "Journal Ledger"
+msgstr "Razão por Diário"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_base
+msgid "Journal Ledger -"
+msgstr "Razão por Diário -"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_account_financial_report_journal_ledger
+#, fuzzy
+msgid "Journal Ledger Report"
+msgstr "Assistente de Relatório Razão por Diário"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_journal_ledger_report_wizard
+msgid "Journal Ledger Report Wizard"
+msgstr "Assistente de Relatório Razão por Diário"
+
+#. module: account_financial_report
+#: model:ir.actions.report,name:account_financial_report.action_report_journal_ledger_xlsx
+msgid "Journal Ledger XLSX"
+msgstr "Razão por Diário XLSX"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_a_f_r_report_journal_ledger_xlsx
+#, fuzzy
+msgid "Journal Ledger XLSX Report"
+msgstr "Razão por Diário XLSX"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__journal_ids
+#: model_terms:ir.ui.view,arch_db:account_financial_report.journal_ledger_wizard
+#, python-format
+msgid "Journals"
+msgstr "Diários"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract_wizard____last_update
+#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard____last_update
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard____last_update
+#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard____last_update
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard____last_update
+#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_aged_partner_balance_xlsx____last_update
+#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_general_ledger_xlsx____last_update
+#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_journal_ledger_xlsx____last_update
+#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_open_items_xlsx____last_update
+#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_trial_balance_xlsx____last_update
+#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_vat_report_xlsx____last_update
+#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_abstract_report_xlsx____last_update
+#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_aged_partner_balance____last_update
+#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_general_ledger____last_update
+#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_journal_ledger____last_update
+#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_open_items____last_update
+#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_trial_balance____last_update
+#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_vat_report____last_update
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard____last_update
+#: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard____last_update
+msgid "Last Modified on"
+msgstr "Última modificação em"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__write_uid
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__write_uid
+#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__write_uid
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__write_uid
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__write_uid
+#: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Última atualização por"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__write_date
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__write_date
+#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__write_date
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__write_date
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__write_date
+#: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__write_date
+msgid "Last Updated on"
+msgstr "Última atualização em"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_account_group__level
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
+msgid "Level"
+msgstr "Nível"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#, python-format
+msgid "Level %s"
+msgstr "Nível %s"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__limit_hierarchy_level
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
+#, python-format
+msgid "Limit hierarchy levels"
+msgstr "Limitar níveis hierárquicos"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__move_target
+msgid "Move Target"
+msgstr "Movimentação de Destino"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal
+msgid "Moves"
+msgstr "Movimentações"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/vat_report_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_taxes
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_vat_report_base
+#, python-format
+msgid "Name"
+msgstr "Nome"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/vat_report_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_vat_report_base
+#, python-format
+msgid "Net"
+msgstr "Líquido"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
+#, python-format
+msgid "No"
+msgstr "Não"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
+#, python-format
+msgid "No group"
+msgstr "Sem grupo"
+
+#. module: account_financial_report
+#: model:ir.model.fields.selection,name:account_financial_report.selection__trial_balance_report_wizard__hierarchy_on__none
+msgid "No hierarchy"
+msgstr "Sem hierarquia"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
+#, python-format
+msgid "No limit"
+msgstr "Sem limite"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
+#, python-format
+msgid "Not Posted"
+msgstr "Não lançado"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
+msgid "Not due"
+msgstr "A vencer"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__not_only_one_unaffected_earnings_account
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__not_only_one_unaffected_earnings_account
+msgid "Not only one unaffected earnings account"
+msgstr "Nenhuma conta de receita não afetada"
+
+#. module: account_financial_report
+#: model:ir.ui.menu,name:account_financial_report.menu_oca_reports
+msgid "OCA accounting reports"
+msgstr "Relatórios Contábeis OCA"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
+#, python-format
+msgid "Older"
+msgstr "Mais antigo"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: model:ir.actions.act_window,name:account_financial_report.action_open_items_wizard
+#: model:ir.actions.client,name:account_financial_report.action_report_open_items
+#: model:ir.actions.report,name:account_financial_report.action_print_report_open_items_html
+#: model:ir.actions.report,name:account_financial_report.action_print_report_open_items_qweb
+#: model:ir.ui.menu,name:account_financial_report.menu_open_items_wizard
+#, python-format
+msgid "Open Items"
+msgstr "Itens abertos"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_base
+msgid "Open Items -"
+msgstr "Itens Abertos -"
+
+#. module: account_financial_report
+#: model:ir.actions.act_window,name:account_financial_report.act_action_open_items_wizard_partner_relation
+msgid "Open Items Partner"
+msgstr "Parceiro de Itens Abertos"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_account_financial_report_open_items
+#, fuzzy
+msgid "Open Items Report"
+msgstr "Assistente de Relatório de Itens Abertos"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_open_items_report_wizard
+msgid "Open Items Report Wizard"
+msgstr "Assistente de Relatório de Itens Abertos"
+
+#. module: account_financial_report
+#: model:ir.actions.report,name:account_financial_report.action_report_open_items_xlsx
+msgid "Open Items XLSX"
+msgstr "Itens Abertos XLSX"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_a_f_r_report_open_items_xlsx
+#, fuzzy
+msgid "Open Items XLSX Report"
+msgstr "Itens Abertos XLSX"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.journal_ledger_wizard
+msgid "Options"
+msgstr "Opções"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
+#, python-format
+msgid "Original"
+msgstr "Original"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
+#, python-format
+msgid "Partner"
+msgstr "Parceiro"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_partner_ending_cumul
+msgid ""
+"Partner\n"
+"                    cumul aged balance"
+msgstr ""
+"Parceiro\n"
+"                    saldo periódico acumulado"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#, python-format
+msgid "Partner Initial balance"
+msgstr "Saldo inicial do parceiro"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
+#, python-format
+msgid "Partner cumul aged balance"
+msgstr "Saldo periódico acumulado do parceiro"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_ending_cumul
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_ending_cumul
+#, python-format
+msgid "Partner ending balance"
+msgstr "Saldo final do parceiro"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__payable_accounts_only
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__payable_accounts_only
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__payable_accounts_only
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__payable_accounts_only
+msgid "Payable Accounts Only"
+msgstr "Apenas Contas a Pagar"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_account_ending_cumul
+msgid "Percents"
+msgstr "Percentuais"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
+#, python-format
+msgid "Period balance"
+msgstr "Saldo do período"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.journal_ledger_wizard
+msgid "Periods"
+msgstr "Períodos"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
+#, python-format
+msgid "Posted"
+msgstr "Lançado"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+#, python-format
+msgid "Rec."
+msgstr "Rec."
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__receivable_accounts_only
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__receivable_accounts_only
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__receivable_accounts_only
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__receivable_accounts_only
+msgid "Receivable Accounts Only"
+msgstr "Apenas Contas a Receber"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+msgid ""
+"Ref -\n"
+"                        Label"
+msgstr ""
+"Ref -\n"
+"                        Rótulo"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
+#, fuzzy
+msgid ""
+"Ref -\n"
+"                    Label"
+msgstr ""
+"Ref -\n"
+"                        Rótulo"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
+#, python-format
+msgid "Ref - Label"
+msgstr "Ref - Rótulo"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_ir_actions_report
+msgid "Report Action"
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
+#, python-format
+msgid "Residual"
+msgstr "Residual"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_filters
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
+#, python-format
+msgid "Show"
+msgstr "Exibir"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__show_cost_center
+#, fuzzy
+msgid "Show Analytic Account"
+msgstr "Exibir Marcadores Analíticos"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__show_move_line_details
+msgid "Show Move Line Details"
+msgstr "Exibir Detalhes das Linhas de Movimentação"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__show_partner_details
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__show_partner_details
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__show_partner_details
+msgid "Show Partner Details"
+msgstr "Exibir Detalhes do Parceiro"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__show_analytic_tags
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
+#, python-format
+msgid "Show analytic tags"
+msgstr "Exibir marcadores analíticos"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__foreign_currency
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__foreign_currency
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__foreign_currency
+#, python-format
+msgid "Show foreign currency"
+msgstr "Exibir moeda estrangeira"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__sort_option
+msgid "Sort entries by"
+msgstr "Ordenar lançamentos por"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__date_from
+msgid "Start Date"
+msgstr "Data Inicial"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__date_from
+msgid "Start date"
+msgstr "Data inicial"
+
+#. module: account_financial_report
+#: model:ir.model.fields,help:account_financial_report.field_aged_partner_balance_report_wizard__account_code_from
+#: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__account_code_from
+#: model:ir.model.fields,help:account_financial_report.field_open_items_report_wizard__account_code_from
+#: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__account_code_from
+msgid "Starting account in a range"
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+#, python-format
+msgid "Tags"
+msgstr "Marcadores"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__target_move
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__target_move
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__target_move
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__target_move
+#: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__target_move
+msgid "Target Moves"
+msgstr "Movimentações de Destino"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_filters
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_filters
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
+#, python-format
+msgid "Target moves filter"
+msgstr "Filtro de movimentações de destino"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/vat_report_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_vat_report_base
+#, python-format
+msgid "Tax"
+msgstr "Imposto"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_taxes
+msgid "Tax Amount"
+msgstr "Valor do Imposto"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#, python-format
+msgid "Tax Balance"
+msgstr "Saldo de Impostos"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#, python-format
+msgid "Tax Credit"
+msgstr "Crédito de Impostos"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#, python-format
+msgid "Tax Debit"
+msgstr "Débito de Impostos"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/vat_report_xlsx.py:0
+#: model:ir.model.fields.selection,name:account_financial_report.selection__vat_report_wizard__based_on__taxgroups
+#, python-format
+msgid "Tax Groups"
+msgstr "Grupos de Impostos"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/vat_report_xlsx.py:0
+#: model:ir.model.fields.selection,name:account_financial_report.selection__vat_report_wizard__based_on__taxtags
+#, python-format
+msgid "Tax Tags"
+msgstr "Marcadores do Imposto"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
+#, python-format
+msgid "Taxes"
+msgstr "Impostos"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/wizard/general_ledger_wizard.py:0
+#, python-format
+msgid ""
+"The Company in the General Ledger Report Wizard and in Date Range must be "
+"the same."
+msgstr ""
+"A Empresa no Assistente de Relatório Razão Geral e no Intervalo de Datas "
+"deve ser a mesma."
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/wizard/trial_balance_wizard.py:0
+#, python-format
+msgid ""
+"The Company in the Trial Balance Report Wizard and in Date Range must be the "
+"same."
+msgstr ""
+"A empresa no Assistente de Relatório Balancete e o Intervalo de Datas deve "
+"ser a mesma."
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/wizard/vat_report_wizard.py:0
+#, python-format
+msgid ""
+"The Company in the Vat Report Wizard and in Date Range must be the same."
+msgstr ""
+"A empresa no Assistente de Relatório de Impostos e o Intervalo de Datas deve "
+"ser a mesma."
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/wizard/trial_balance_wizard.py:0
+#, python-format
+msgid "The hierarchy level to filter on must be greater than 0."
+msgstr "O filtro de nível hierárquico deve ser maior que zero."
+
+#. module: account_financial_report
+#: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__domain
+msgid "This domain will be used to select specific domain for Journal Items"
+msgstr ""
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
+#, fuzzy
+msgid "To"
+msgstr "Para:"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
+msgid "To:"
+msgstr "Para:"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_account_ending_cumul
+msgid "Total"
+msgstr "Total"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#: model:ir.actions.act_window,name:account_financial_report.action_trial_balance_wizard
+#: model:ir.actions.client,name:account_financial_report.action_report_trial_balance
+#: model:ir.actions.report,name:account_financial_report.action_report_trial_balance_html
+#: model:ir.actions.report,name:account_financial_report.action_report_trial_balance_qweb
+#: model:ir.ui.menu,name:account_financial_report.menu_trial_balance_wizard
+#, python-format
+msgid "Trial Balance"
+msgstr "Balancete"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_base
+msgid "Trial Balance -"
+msgstr "Balancete -"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_account_financial_report_trial_balance
+#, fuzzy
+msgid "Trial Balance Report"
+msgstr "Assistente de Relatório Balancete"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_trial_balance_report_wizard
+msgid "Trial Balance Report Wizard"
+msgstr "Assistente de Relatório Balancete"
+
+#. module: account_financial_report
+#: model:ir.actions.report,name:account_financial_report.action_report_trial_balance_xlsx
+msgid "Trial Balance XLSX"
+msgstr "Balancete XLSX"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_a_f_r_report_trial_balance_xlsx
+#, fuzzy
+msgid "Trial Balance XLSX Report"
+msgstr "Balancete XLSX"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
+msgid ""
+"Trial Balance can be computed only if selected company have only one "
+"unaffected earnings account."
+msgstr ""
+"O Balancete poderá ser calculado somente se a empresa selecionada tiver "
+"apenas uma conta de receitas não afetada."
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__unaffected_earnings_account
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__unaffected_earnings_account
+msgid "Unaffected Earnings Account"
+msgstr "Conta de Receitas Não Afetada"
+
+#. module: account_financial_report
+#: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__hide_account_at_0
+#: model:ir.model.fields,help:account_financial_report.field_open_items_report_wizard__hide_account_at_0
+msgid ""
+"Use this filter to hide an account or a partner with an ending balance at 0. "
+"If partners are filtered, debits and credits totals will not match the trial "
+"balance."
+msgstr ""
+"Utilize este filtro para ocultar as contas ou empresas com saldo final "
+"zerado. Se houver parceiros filtrados, os totais de débitos e créditos não "
+"coincidirão com o balancete."
+
+#. module: account_financial_report
+#: model:ir.actions.act_window,name:account_financial_report.action_vat_report_wizard
+#: model:ir.actions.client,name:account_financial_report.action_report_vat_report
+#: model:ir.actions.report,name:account_financial_report.action_print_report_vat_report_html
+#: model:ir.actions.report,name:account_financial_report.action_print_report_vat_report_qweb
+#: model:ir.ui.menu,name:account_financial_report.menu_vat_report_wizard
+msgid "VAT Report"
+msgstr "Relatório de Impostos"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_vat_report_base
+msgid "VAT Report -"
+msgstr "Relatório de Impostos -"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.vat_report_wizard
+msgid "VAT Report Options"
+msgstr "Opções do Relatório de Impostos"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_vat_report_wizard
+msgid "VAT Report Wizard"
+msgstr "Assistente de Relatório de Impostos"
+
+#. module: account_financial_report
+#: model:ir.actions.report,name:account_financial_report.action_report_vat_report_xlsx
+msgid "VAT Report XLSX"
+msgstr "Relatório de Impostos XLSX"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/vat_report_xlsx.py:0
+#, fuzzy, python-format
+msgid "Vat Report"
+msgstr "Relatório de Impostos"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_account_financial_report_vat_report
+#, fuzzy
+msgid "Vat Report Report"
+msgstr "Opções do Relatório de Impostos"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_a_f_r_report_vat_report_xlsx
+#, fuzzy
+msgid "Vat Report XLSX Report"
+msgstr "Relatório de Impostos XLSX"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.journal_ledger_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.open_items_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.vat_report_wizard
+msgid "View"
+msgstr "Visualizar"
+
+#. module: account_financial_report
+#: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__hide_account_at_0
+msgid ""
+"When this option is enabled, the trial balance will not display accounts "
+"that have initial balance = debit = credit = end balance = 0"
+msgstr ""
+"Quando esta opção estiver ativa, o balancete não exibirá contas com saldo "
+"inicial = débito = crédito = saldo final = 0"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__with_account_name
+msgid "With Account Name"
+msgstr "Com Nome de Conta"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
+#, python-format
+msgid "Yes"
+msgstr "Sim"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger.py:0
+#, python-format
+msgid "future"
+msgstr ""
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.journal_ledger_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.open_items_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.vat_report_wizard
+msgid "or"
+msgstr "ou"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal
+msgid "to"
+msgstr "para"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
+msgid "width: 23.24%;"
+msgstr "largura: 23.24%;"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
+msgid "width: 23.78%;"
+msgstr "largura: 23.78%;"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
+msgid "width: 38.92%;"
+msgstr "largura: 38.92%;"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
+msgid "width: 8.11%;"
+msgstr "largura: 8.11%;"
+
+#~ msgid ""
+#~ "Cost\n"
+#~ "                            center"
+#~ msgstr ""
+#~ "Centro\n"
+#~ "                            de Custos"
+
+#~ msgid "Cost center"
+#~ msgstr "Centro de Custos"
+
+#~ msgid "Abstract Report"
+#~ msgstr "Relatório Resumido"
+
+#~ msgid "Account ID"
+#~ msgstr "ID da Conta"
+
+#~ msgid "Account Type"
+#~ msgstr "Tipo de Conta"
+
+#~ msgid "Age 120 Days"
+#~ msgstr "120 Dias"
+
+#~ msgid "Age 30 Days"
+#~ msgstr "30 Dias"
+
+#~ msgid "Age 60 Days"
+#~ msgstr "60 Dias"
+
+#~ msgid "Age 90 Days"
+#~ msgstr "90 Dias"
+
+#~ msgid "Amount Residual"
+#~ msgstr "Saldo Inicial"
+
+#~ msgid "Amount Residual Currency"
+#~ msgstr "Moeda de Saldo Pendente"
+
+#~ msgid "Amount Total Due"
+#~ msgstr "Valor Total Devido"
+
+#~ msgid "Amount Total Due Currency"
+#~ msgstr "Moeda do Valor Total Vencido"
+
+#~ msgid "Centralize"
+#~ msgstr "Centralizar"
+
+#~ msgid "Centralized Entries"
+#~ msgstr "Lançamentos Centralizados"
+
+#~ msgid "Child accounts"
+#~ msgstr "Contas filhas"
+
+#~ msgid "Company Currency"
+#~ msgstr "Moeda da Empresa"
+
+#~ msgid "Cost Center"
+#~ msgstr "Centro de Custos"
+
+#~ msgid "Cumul Age 120 Days"
+#~ msgstr "Acumulado há 120 dias"
+
+#~ msgid "Cumul Age 30 Days"
+#~ msgstr "Acumulado há 30 dias"
+
+#~ msgid "Cumul Age 60 Days"
+#~ msgstr "Acumulado há 60 dias"
+
+#~ msgid "Cumul Age 90 Days"
+#~ msgstr "Acumulado há 90 dias"
+
+#~ msgid "Cumul Amount Residual"
+#~ msgstr "Valor Residual Acumulado"
+
+#~ msgid "Cumul Balance"
+#~ msgstr "Saldo Acumulado"
+
+#~ msgid "Cumul Current"
+#~ msgstr "Acumulado Atual"
+
+#~ msgid "Cumul Older"
+#~ msgstr "Acumulado Anterior"
+
+#~ msgid "Currency Name"
+#~ msgstr "Moeda"
+
+#~ msgid "Date Due"
+#~ msgstr "Data Vencimento"
+
+#~ msgid "Ending blance cur."
+#~ msgstr "Moeda do saldo final."
+
+#~ msgid "Filter Analytic Tag"
+#~ msgstr "Filtrar Marcador Analítico"
+
+#~ msgid "Filter Cost Center"
+#~ msgstr "Filtrar Centro de Custos"
+
+#~ msgid "Filter Journal"
+#~ msgstr "Filtrar Diário"
+
+#~ msgid "Filter Partner"
+#~ msgstr "Filtrar Parceiro"
+
+#~ msgid "Final Amount Residual"
+#~ msgstr "Valor Residual Final"
+
+#~ msgid "Final Amount Residual Currency"
+#~ msgstr "Moeda do Valor Residual Final"
+
+#~ msgid "Final Amount Total Due"
+#~ msgstr "Total Final Vencido"
+
+#~ msgid "Final Amount Total Due Currency"
+#~ msgstr "Moeda do Total Final Vencido"
+
+#~ msgid "Final Balance"
+#~ msgstr "Saldo Final"
+
+#~ msgid "Final Balance Foreign Currency"
+#~ msgstr "Saldo Final em Moeda Estrangeira"
+
+#~ msgid "Final Credit"
+#~ msgstr "Crédito Final"
+
+#~ msgid "Final Debit"
+#~ msgstr "Débito Final"
+
+#~ msgid "Group Option"
+#~ msgstr "Opção de Agrupamento"
+
+#~ msgid "Hide Account At 0"
+#~ msgstr "Ocultar Conta Zerada"
+
+#~ msgid "Hide Line"
+#~ msgstr "Ocultar Linha"
+
+#~ msgid "Initial Balance"
+#~ msgstr "Saldo Inicial"
+
+#~ msgid "Initial Balance Foreign Currency"
+#~ msgstr "Saldo Inicial em Moeda Estrangeira"
+
+#~ msgid "Initial Credit"
+#~ msgstr "Crédito Inicial"
+
+#~ msgid "Initial Debit"
+#~ msgstr "Débito Inicial"
+
+#~ msgid "Initial blance cur."
+#~ msgstr "Moeda saldo inicial."
+
+#~ msgid "Is Partner Account"
+#~ msgstr "É Conta de Parceiro"
+
+#~ msgid "Label"
+#~ msgstr "Rótulo"
+
+#~ msgid "Line"
+#~ msgstr "Linha"
+
+#~ msgid "Matching Number"
+#~ msgstr "Número coincidente"
+
+#~ msgid "Move"
+#~ msgstr "Movimentação"
+
+#~ msgid "Move Line"
+#~ msgstr "Linha de movimentação"
+
+#~ msgid "No partner allocated"
+#~ msgstr "Nenhum parceiro alocado"
+
+#~ msgid "Only Posted Moves"
+#~ msgstr "Apenas movimentações lançadas"
+
+#~ msgid "Parent"
+#~ msgstr "Pai"
+
+#~ msgid "Partner ID"
+#~ msgstr "ID Parceiro"
+
+#~ msgid "Percent Age 120 Days"
+#~ msgstr "Percentual 120 Dias"
+
+#~ msgid "Percent Age 30 Days"
+#~ msgstr "Percentual 30 Dias"
+
+#~ msgid "Percent Age 60 Days"
+#~ msgstr "Percentual 60 Dias"
+
+#~ msgid "Percent Age 90 Days"
+#~ msgstr "Percentual 90 Dias"
+
+#~ msgid "Percent Current"
+#~ msgstr "Percentual Atual"
+
+#~ msgid "Percent Older"
+#~ msgstr "Percentual Anterior"
+
+#~ msgid "Period Balance"
+#~ msgstr "Saldo do Período"
+
+#~ msgid "Report"
+#~ msgstr "Relatório"
+
+#~ msgid "Report Account"
+#~ msgstr "Relatório de Conta"
+
+#~ msgid "Report Journal Ledger"
+#~ msgstr "Relatório Razão por Diário"
+
+#~ msgid "Report Journal Ledger Tax Line"
+#~ msgstr "Relatório Linha de Impostos do Razão por Diário"
+
+#~ msgid "Report Move"
+#~ msgstr "Relatório de Movimentações"
+
+#~ msgid "Report Move Line"
+#~ msgstr "Relatório de Linhas de Movimentação"
+
+#~ msgid "Report Partner"
+#~ msgstr "Relatório de Parceiros"
+
+#~ msgid "Report Tax"
+#~ msgstr "Relatório de Impostos"
+
+#~ msgid "Report Tax Line"
+#~ msgstr "Relatório de Linhas de Impostos"
+
+#~ msgid "Sequence"
+#~ msgstr "Sequência"
+
+#~ msgid "Show Cost Center"
+#~ msgstr "Exibir Centros de Custo"
+
+#~ msgid "Sort Option"
+#~ msgstr "Opção de Ordenamento"
+
+#~ msgid "Tax Code"
+#~ msgstr "Código do Imposto"
+
+#~ msgid "Tax Detail"
+#~ msgstr "Detalhes do Imposto"
+
+#~ msgid "Tax ID"
+#~ msgstr "ID do Imposto"
+
+#~ msgid "Tax Name"
+#~ msgstr "Nome do Imposto"
+
+#~ msgid "Taxes Description"
+#~ msgstr "Descrições dos Impostos"
+
+#~ msgid "Taxgroup"
+#~ msgstr "Grupo de Impostos"
+
+#~ msgid "Taxtag"
+#~ msgstr "Marcador de impostos"
+
+#~ msgid "Taxtags"
+#~ msgstr "Marcadores de Impostos"
+
+#~ msgid "report.a_f_r.report_aged_partner_balance_xlsx"
+#~ msgstr "report.a_f_r.report_aged_partner_balance_xlsx"
+
+#~ msgid "report.a_f_r.report_general_ledger_xlsx"
+#~ msgstr "report.a_f_r.report_general_ledger_xlsx"
+
+#~ msgid "report.a_f_r.report_journal_ledger_xlsx"
+#~ msgstr "report.a_f_r.report_journal_ledger_xlsx"
+
+#~ msgid "report.a_f_r.report_open_items_xlsx"
+#~ msgstr "report.a_f_r.report_open_items_xlsx"
+
+#~ msgid "report.a_f_r.report_trial_balance_xlsx"
+#~ msgstr "report.a_f_r.report_trial_balance_xlsx"
+
+#~ msgid "report.a_f_r.report_vat_report_xlsx"
+#~ msgstr "report.a_f_r.report_vat_report_xlsx"
+
+#~ msgid "report.account_financial_report.abstract_report_xlsx"
+#~ msgstr "report.account_financial_report.abstract_report_xlsx"
+
+#~ msgid "report_aged_partner_balance"
+#~ msgstr "report_aged_partner_balance"
+
+#~ msgid "report_aged_partner_balance_account"
+#~ msgstr "report_aged_partner_balance_account"
+
+#~ msgid "report_aged_partner_balance_line"
+#~ msgstr "report_aged_partner_balance_line"
+
+#~ msgid "report_aged_partner_balance_move_line"
+#~ msgstr "report_aged_partner_balance_move_line"
+
+#~ msgid "report_aged_partner_balance_partner"
+#~ msgstr "report_aged_partner_balance_partner"
+
+#~ msgid "report_general_ledger"
+#~ msgstr "report_general_ledger"
+
+#~ msgid "report_general_ledger_account"
+#~ msgstr "report_general_ledger_account"
+
+#~ msgid "report_general_ledger_move_line"
+#~ msgstr "report_general_ledger_move_line"
+
+#~ msgid "report_general_ledger_partner"
+#~ msgstr "report_general_ledger_partner"
+
+#~ msgid "report_journal_ledger"
+#~ msgstr "report_journal_ledger"
+
+#~ msgid "report_journal_ledger_journal"
+#~ msgstr "report_journal_ledger_journal"
+
+#~ msgid "report_journal_ledger_journal_tax_line"
+#~ msgstr "report_journal_ledger_journal_tax_line"
+
+#~ msgid "report_journal_ledger_move"
+#~ msgstr "report_journal_ledger_move"
+
+#~ msgid "report_journal_ledger_move_line"
+#~ msgstr "report_journal_ledger_move_line"
+
+#~ msgid "report_journal_ledger_report_tax_line"
+#~ msgstr "report_journal_ledger_report_tax_line"
+
+#~ msgid "report_open_items"
+#~ msgstr "report_open_items"
+
+#~ msgid "report_open_items_account"
+#~ msgstr "report_open_items_account"
+
+#~ msgid "report_open_items_move_line"
+#~ msgstr "report_open_items_move_line"
+
+#~ msgid "report_open_items_partner"
+#~ msgstr "report_open_items_partner"
+
+#~ msgid "report_trial_balance"
+#~ msgstr "report_trial_balance"
+
+#~ msgid "report_trial_balance_account"
+#~ msgstr "report_trial_balance_account"
+
+#~ msgid "report_trial_balance_partner"
+#~ msgstr "report_trial_balance_partner"
+
+#~ msgid "report_vat_report"
+#~ msgstr "report_vat_report"
+
+#~ msgid "report_vat_report_tax"
+#~ msgstr "report_vat_report_tax"
+
+#~ msgid "report_vat_report_taxtag"
+#~ msgstr "report_vat_report_taxtag"
