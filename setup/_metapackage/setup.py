@@ -8,6 +8,7 @@ setuptools.setup(
     description="Meta package for oca-account-financial-reporting Odoo addons",
     version=version,
     install_requires=[
+        'odoo14-addon-account_financial_report',
         'odoo14-addon-account_tax_balance',
     ],
     classifiers=[
