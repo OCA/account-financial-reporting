@@ -720,6 +720,7 @@ class ReportJournalLedgerMoveLine(models.TransientModel):
     )
     report_move_id = fields.Many2one(
         comodel_name='report_journal_ledger_move',
+        index=True,
         required=True,
         ondelete='cascade',
     )
