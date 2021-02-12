@@ -2,15 +2,14 @@
 # Copyright 2017 ACSONE SA/NV
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import base64
+import codecs
+import csv
 import itertools
 import tempfile
-from io import StringIO, BytesIO
-import base64
+from io import BytesIO, StringIO
 
-import csv
-import codecs
-
-from odoo import api, fields, models, _
+from odoo import _, api, fields, models
 
 
 class AccountingWriter(object):
@@ -30,7 +29,7 @@ class AccountingWriter(object):
 
     def writerow(self, row):
         # we ensure that we do not try to encode none or bool
-        row = (x or '' for x in row)
+        row = (x or "" for x in row)
         self.writer.writerow(row)
         # Fetch UTF-8 output from the queue ...
         data = self.queue.getvalue()
@@ -52,23 +51,28 @@ class AccountingWriter(object):
 
 
 class AccountCSVExport(models.TransientModel):
-    _name = 'account.csv.export'
-    _description = 'Export Accounting'
+    _name = "account.csv.export"
+    _description = "Export Accounting"
 
-    data = fields.Binary('CSV', readonly=True)
+    data = fields.Binary("CSV", readonly=True)
     company_id = fields.Many2one(
-        comodel_name='res.company', string='Company', invisible=True,
-        default=lambda self: self._get_company_default())
+        comodel_name="res.company",
+        string="Company",
+        invisible=True,
+        default=lambda self: self._get_company_default(),
+    )
     date_start = fields.Date(required=True)
     date_end = fields.Date(required=True)
-    date_range_id = fields.Many2one(
-        comodel_name='date.range', string='Date range')
+    date_range_id = fields.Many2one(comodel_name="date.range", string="Date range")
     journal_ids = fields.Many2many(
-        comodel_name='account.journal', string='Journals',
+        comodel_name="account.journal",
+        string="Journals",
         default=lambda s: s._get_journal_default(),
-        help='If empty, use all journals, only used for journal entries')
+        help="If empty, use all journals, only used for journal entries",
+    )
     export_filename = fields.Char(
-        string='Export CSV Filename', size=128, default='account_export.csv')
+        string="Export CSV Filename", size=128, default="account_export.csv"
+    )
 
     @api.model
     def _get_journal_default(self):
@@ -79,17 +83,19 @@ class AccountCSVExport(models.TransientModel):
     def _get_company_default(self):
         return self.env.user.company_id
 
-    @api.onchange('date_range_id')
+    @api.onchange("date_range_id")
     def _onchange_date_range(self):
         if self.date_range_id:
             self.date_start = self.date_range_id.date_start
             self.date_end = self.date_range_id.date_end
 
-    @api.onchange('date_start', 'date_end')
+    @api.onchange("date_start", "date_end")
     def _onchange_dates(self):
         if self.date_range_id:
-            if self.date_start != self.date_range_id.date_start or \
-                    self.date_end != self.date_range_id.date_end:
+            if (
+                self.date_start != self.date_range_id.date_start
+                or self.date_end != self.date_range_id.date_end
+            ):
                 self.date_range_id = False
 
     def action_manual_export_account(self):
@@ -100,25 +106,25 @@ class AccountCSVExport(models.TransientModel):
             writer = AccountingWriter(file_data)
             writer.writerows(rows)
             file_value = file_data.getvalue()
-            self.write({'data': base64.encodestring(file_value)})
+            self.write({"data": base64.encodestring(file_value)})
         finally:
             file_data.close()
         return {
-            'type': 'ir.actions.act_window',
-            'res_model': 'account.csv.export',
-            'view_mode': 'form',
-            'res_id': self.id,
-            'views': [(False, 'form')],
-            'target': 'new',
+            "type": "ir.actions.act_window",
+            "res_model": "account.csv.export",
+            "view_mode": "form",
+            "res_id": self.id,
+            "views": [(False, "form")],
+            "target": "new",
         }
 
     def _get_header_account(self):
         return [
-            _('CODE'),
-            _('NAME'),
-            _('DEBIT'),
-            _('CREDIT'),
-            _('BALANCE'),
+            _("CODE"),
+            _("NAME"),
+            _("DEBIT"),
+            _("CREDIT"),
+            _("BALANCE"),
         ]
 
     def _get_rows_account(self, journal_ids):
@@ -126,7 +132,8 @@ class AccountCSVExport(models.TransientModel):
         Return list to generate rows of the CSV file
         """
         self.ensure_one()
-        self.env.cr.execute("""
+        self.env.cr.execute(
+            """
                 select ac.code,ac.name,
                 sum(debit) as sum_debit,
                 sum(credit) as sum_credit,
@@ -137,8 +144,9 @@ class AccountCSVExport(models.TransientModel):
                 AND aml.date <= %(date_end)s
                 group by ac.id,ac.code,ac.name
                 order by ac.code
-                   """, {'date_start': self.date_start,
-                         'date_end': self.date_end})
+                   """,
+            {"date_start": self.date_start, "date_end": self.date_end},
+        )
         res = self.env.cr.fetchall()
 
         rows = []
@@ -154,28 +162,28 @@ class AccountCSVExport(models.TransientModel):
             writer = AccountingWriter(file_data)
             writer.writerows(rows)
             file_value = file_data.getvalue()
-            self.write({'data': base64.encodestring(file_value)})
+            self.write({"data": base64.encodestring(file_value)})
         finally:
             file_data.close()
         return {
-            'type': 'ir.actions.act_window',
-            'res_model': 'account.csv.export',
-            'view_mode': 'form',
-            'view_type': 'form',
-            'res_id': self.id,
-            'views': [(False, 'form')],
-            'target': 'new',
+            "type": "ir.actions.act_window",
+            "res_model": "account.csv.export",
+            "view_mode": "form",
+            "view_type": "form",
+            "res_id": self.id,
+            "views": [(False, "form")],
+            "target": "new",
         }
 
     def _get_header_analytic(self):
         return [
-            _('ANALYTIC CODE'),
-            _('ANALYTIC NAME'),
-            _('CODE'),
-            _('ACCOUNT NAME'),
-            _('DEBIT'),
-            _('CREDIT'),
-            _('BALANCE'),
+            _("ANALYTIC CODE"),
+            _("ANALYTIC NAME"),
+            _("CODE"),
+            _("ACCOUNT NAME"),
+            _("DEBIT"),
+            _("CREDIT"),
+            _("BALANCE"),
         ]
 
     def _get_rows_analytic(self, journal_ids):
@@ -183,7 +191,8 @@ class AccountCSVExport(models.TransientModel):
         Return list to generate rows of the CSV file
         """
         self.ensure_one()
-        self.env.cr.execute("""  select aac.code as analytic_code,
+        self.env.cr.execute(
+            """  select aac.code as analytic_code,
                         aac.name as analytic_name,
                         ac.code,ac.name,
                         sum(debit) as sum_debit,
@@ -198,8 +207,9 @@ class AccountCSVExport(models.TransientModel):
                         AND account_move_line.date <= %(date_end)s
                         group by aac.id,aac.code,aac.name,ac.id,ac.code,ac.name
                         order by aac.code
-                   """, {'date_start': self.date_start,
-                         'date_end': self.date_end})
+                   """,
+            {"date_start": self.date_start, "date_end": self.date_end},
+        )
         res = self.env.cr.fetchall()
 
         rows = []
@@ -235,44 +245,46 @@ class AccountCSVExport(models.TransientModel):
                 file_data.seek(0)
                 base64.encode(file_data, base64_data)
                 base64_data.seek(0)
-                self.env.cr.execute("""
+                self.env.cr.execute(
+                    """
                 UPDATE account_csv_export
                 SET data = %s
-                WHERE id = %s""", (base64_data.read(), self.id))
+                WHERE id = %s""",
+                    (base64_data.read(), self.id),
+                )
         return {
-            'type': 'ir.actions.act_window',
-            'res_model': 'account.csv.export',
-            'view_mode': 'form',
-            'res_id': self.id,
-            'views': [(False, 'form')],
-            'target': 'new',
+            "type": "ir.actions.act_window",
+            "res_model": "account.csv.export",
+            "view_mode": "form",
+            "res_id": self.id,
+            "views": [(False, "form")],
+            "target": "new",
         }
 
     def _get_header_journal_entries(self):
         return [
             # Standard Sage export fields
-            _('DATE'),
-            _('JOURNAL CODE'),
-            _('ACCOUNT CODE'),
-            _('PARTNER NAME'),
-            _('REF'),
-            _('DESCRIPTION'),
-            _('DEBIT'),
-            _('CREDIT'),
-            _('FULL RECONCILE'),
-            _('ANALYTIC ACCOUNT CODE'),
-
+            _("DATE"),
+            _("JOURNAL CODE"),
+            _("ACCOUNT CODE"),
+            _("PARTNER NAME"),
+            _("REF"),
+            _("DESCRIPTION"),
+            _("DEBIT"),
+            _("CREDIT"),
+            _("FULL RECONCILE"),
+            _("ANALYTIC ACCOUNT CODE"),
             # Other fields
-            _('ENTRY NUMBER'),
-            _('ACCOUNT NAME'),
-            _('BALANCE'),
-            _('AMOUNT CURRENCY'),
-            _('CURRENCY'),
-            _('ANALYTIC ACCOUNT NAME'),
-            _('JOURNAL'),
-            _('TAX CODE'),
-            _('TAX NAME'),
-            _('BANK STATEMENT'),
+            _("ENTRY NUMBER"),
+            _("ACCOUNT NAME"),
+            _("BALANCE"),
+            _("AMOUNT CURRENCY"),
+            _("CURRENCY"),
+            _("ANALYTIC ACCOUNT NAME"),
+            _("JOURNAL"),
+            _("TAX CODE"),
+            _("TAX NAME"),
+            _("BANK STATEMENT"),
         ]
 
     def _get_rows_journal_entries(self, journal_ids):
@@ -280,7 +292,8 @@ class AccountCSVExport(models.TransientModel):
         Create a generator of rows of the CSV file
         """
         self.ensure_one()
-        self.env.cr.execute("""
+        self.env.cr.execute(
+            """
         SELECT
           account_move_line.date AS date,
           account_journal.name as journal,
@@ -326,9 +339,13 @@ class AccountCSVExport(models.TransientModel):
         AND account_move_line.date <= %(date_end)s
         AND account_journal.id IN %(journal_ids)s
         ORDER BY account_move_line.date
-        """, {'journal_ids': tuple(journal_ids),
-              'date_start': self.date_start,
-              'date_end': self.date_end})
+        """,
+            {
+                "journal_ids": tuple(journal_ids),
+                "date_start": self.date_start,
+                "date_end": self.date_end,
+            },
+        )
         while 1:
             # http://initd.org/psycopg/docs/cursor.html#cursor.fetchmany
             # Set cursor.arraysize to minimize network round trips
@@ -341,14 +358,12 @@ class AccountCSVExport(models.TransientModel):
 
     def _get_data(self, result_type):
         self.ensure_one()
-        get_header_func = getattr(
-            self, ("_get_header_%s" % (result_type)), None)
+        get_header_func = getattr(self, ("_get_header_%s" % (result_type)), None)
         get_rows_func = getattr(self, ("_get_rows_%s" % (result_type)), None)
         if self.journal_ids:
             journal_ids = [x.id for x in self.journal_ids]
         else:
             j_obj = self.env["account.journal"]
             journal_ids = j_obj.search([]).ids
-        rows = itertools.chain((get_header_func(),),
-                               get_rows_func(journal_ids))
+        rows = itertools.chain((get_header_func(),), get_rows_func(journal_ids))
         return rows
