@@ -45,7 +45,7 @@ class TestAccountExportCsv(TransactionCase):
             }
         )
         report_wizard.action_manual_export_journal_entries()
-        res = base64.decodestring(report_wizard.data)
+        res = base64.decodebytes(report_wizard.data)
         line_number = self.env["account.move.line"].search_count([])
         # check the number of lines in file: include header + EOF line
         self.assertEqual(len(res.decode().split("\r\n")), line_number + 2)

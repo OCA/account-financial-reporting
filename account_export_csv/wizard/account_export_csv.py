@@ -106,7 +106,7 @@ class AccountCSVExport(models.TransientModel):
             writer = AccountingWriter(file_data)
             writer.writerows(rows)
             file_value = file_data.getvalue()
-            self.write({"data": base64.encodestring(file_value)})
+            self.write({"data": base64.encodebytes(file_value)})
         finally:
             file_data.close()
         return {
@@ -162,7 +162,7 @@ class AccountCSVExport(models.TransientModel):
             writer = AccountingWriter(file_data)
             writer.writerows(rows)
             file_value = file_data.getvalue()
-            self.write({"data": base64.encodestring(file_value)})
+            self.write({"data": base64.encodebytes(file_value)})
         finally:
             file_data.close()
         return {
@@ -223,17 +223,14 @@ class AccountCSVExport(models.TransientModel):
         Memory
         We also write the data to the wizard with SQL query as write seems
         to use too much memory as well.
-
         Those improvements permitted to improve the export from a 100k line to
         200k lines
         with default `limit_memory_hard = 805306368` (768MB) with more lines,
         you might encounter a MemoryError when trying to download the file even
         if it has been generated.
-
         To be able to export bigger volume of data, it is advised to set
         limit_memory_hard to 2097152000 (2 GB) to generate the file and let
         Odoo load it in the wizard when trying to download it.
-
         Tested with up to a generation of 700k entry lines
         """
         self.ensure_one()
@@ -245,13 +242,14 @@ class AccountCSVExport(models.TransientModel):
                 file_data.seek(0)
                 base64.encode(file_data, base64_data)
                 base64_data.seek(0)
-                self.env.cr.execute(
-                    """
-                UPDATE account_csv_export
-                SET data = %s
-                WHERE id = %s""",
-                    (base64_data.read(), self.id),
-                )
+                self.write({"data": base64_data.read()})
+                # self.env.cr.execute(
+                #     """
+                # UPDATE account_csv_export
+                # SET data = %s
+                # WHERE id = %s""",
+                #     (base64_data.read(), self.id),
+                # )
         return {
             "type": "ir.actions.act_window",
             "res_model": "account.csv.export",
