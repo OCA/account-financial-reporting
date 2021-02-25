@@ -13,6 +13,7 @@ from odoo.tests import common
 class TestGeneralLedgerReport(common.TransactionCase):
     def setUp(self):
         super(TestGeneralLedgerReport, self).setUp()
+        self.env.user.company_id = self.env.ref("base.main_company").id
         self.before_previous_fy_year = fields.Date.from_string("2014-05-05")
         self.previous_fy_date_start = fields.Date.from_string("2015-01-01")
         self.previous_fy_date_end = fields.Date.from_string("2015-12-31")
@@ -20,10 +21,18 @@ class TestGeneralLedgerReport(common.TransactionCase):
         self.fy_date_end = fields.Date.from_string("2016-12-31")
 
         self.receivable_account = self.env["account.account"].search(
-            [("user_type_id.name", "=", "Receivable")], limit=1
+            [
+                ("user_type_id.name", "=", "Receivable"),
+                ("company_id", "=", self.env.user.company_id.id),
+            ],
+            limit=1,
         )
         self.income_account = self.env["account.account"].search(
-            [("user_type_id.name", "=", "Income")], limit=1
+            [
+                ("user_type_id.name", "=", "Income"),
+                ("company_id", "=", self.env.user.company_id.id),
+            ],
+            limit=1,
         )
         self.unaffected_account = self.env["account.account"].search(
             [
@@ -31,7 +40,8 @@ class TestGeneralLedgerReport(common.TransactionCase):
                     "user_type_id",
                     "=",
                     self.env.ref("account.data_unaffected_earnings").id,
-                )
+                ),
+                ("company_id", "=", self.env.user.company_id.id),
             ],
             limit=1,
         )
@@ -47,7 +57,9 @@ class TestGeneralLedgerReport(common.TransactionCase):
         unaffected_debit=0,
         unaffected_credit=0,
     ):
-        journal = self.env["account.journal"].search([], limit=1)
+        journal = self.env["account.journal"].search(
+            [("company_id", "=", self.env.user.company_id.id)], limit=1
+        )
         partner = self.env.ref("base.res_partner_12")
         move_vals = {
             "journal_id": journal.id,

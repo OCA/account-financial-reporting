@@ -9,7 +9,10 @@ from odoo.tests import common
 class TestTrialBalanceReport(common.TransactionCase):
     def setUp(self):
         super(TestTrialBalanceReport, self).setUp()
+        self.env.user.company_id = self.env.ref("base.main_company").id
         group_obj = self.env["account.group"]
+        # Remove previous account groups and related invoices to avoid conflicts
+        group_obj.search([("code_prefix_start", "in", ["1", "2", "11"])]).unlink()
         self.group1 = group_obj.create({"code_prefix_start": "1", "name": "Group 1"})
         self.group11 = group_obj.create(
             {"code_prefix_start": "11", "name": "Group 11", "parent_id": self.group1.id}
@@ -30,7 +33,8 @@ class TestTrialBalanceReport(common.TransactionCase):
                     "user_type_id",
                     "=",
                     self.env.ref("account.data_unaffected_earnings").id,
-                )
+                ),
+                ("company_id", "=", self.env.user.company_id.id),
             ],
             limit=1,
         )
@@ -76,7 +80,8 @@ class TestTrialBalanceReport(common.TransactionCase):
                     "user_type_id",
                     "=",
                     self.env.ref("account.data_unaffected_earnings").id,
-                )
+                ),
+                ("company_id", "=", self.env.user.company_id.id),
             ],
             limit=1,
         )
@@ -97,7 +102,9 @@ class TestTrialBalanceReport(common.TransactionCase):
         unaffected_debit=0,
         unaffected_credit=0,
     ):
-        journal = self.env["account.journal"].search([], limit=1)
+        journal = self.env["account.journal"].search(
+            [("company_id", "=", self.env.user.company_id.id)], limit=1
+        )
         partner = self.env.ref("base.res_partner_12")
         move_vals = {
             "journal_id": journal.id,
@@ -245,7 +252,14 @@ class TestTrialBalanceReport(common.TransactionCase):
         # Make sure there's no account of type "Current Year Earnings" in the
         # groups - We change the code
         earning_accs = self.env["account.account"].search(
-            [("user_type_id", "=", self.env.ref("account.data_unaffected_earnings").id)]
+            [
+                (
+                    "user_type_id",
+                    "=",
+                    self.env.ref("account.data_unaffected_earnings").id,
+                ),
+                ("company_id", "=", self.env.user.company_id.id),
+            ]
         )
         for acc in earning_accs:
             if acc.code.startswith("1") or acc.code.startswith("2"):
@@ -658,7 +672,9 @@ class TestTrialBalanceReport(common.TransactionCase):
 
     def test_04_undistributed_pl(self):
         # Add a P&L Move in the previous FY
-        journal = self.env["account.journal"].search([], limit=1)
+        journal = self.env["account.journal"].search(
+            [("company_id", "=", self.env.user.company_id.id)], limit=1
+        )
         move_vals = {
             "journal_id": journal.id,
             "date": self.previous_fy_date_end,
@@ -710,7 +726,9 @@ class TestTrialBalanceReport(common.TransactionCase):
         self.assertEqual(unaffected_lines["credit"], 0)
         self.assertEqual(unaffected_lines["final_balance"], -1000)
         # Add a P&L Move to the current FY
-        journal = self.env["account.journal"].search([], limit=1)
+        journal = self.env["account.journal"].search(
+            [("company_id", "=", self.env.user.company_id.id)], limit=1
+        )
         move_vals = {
             "journal_id": journal.id,
             "date": self.date_start,
@@ -762,7 +780,9 @@ class TestTrialBalanceReport(common.TransactionCase):
         self.assertEqual(unaffected_lines["credit"], 0)
         self.assertEqual(unaffected_lines["final_balance"], -1000)
         # Add a Move including Unaffected Earnings to the current FY
-        journal = self.env["account.journal"].search([], limit=1)
+        journal = self.env["account.journal"].search(
+            [("company_id", "=", self.env.user.company_id.id)], limit=1
+        )
         move_vals = {
             "journal_id": journal.id,
             "date": self.date_start,
