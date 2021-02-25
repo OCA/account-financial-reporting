@@ -13,6 +13,7 @@ from odoo.tests.common import Form, TransactionCase
 class TestJournalReport(TransactionCase):
     def setUp(self):
         super(TestJournalReport, self).setUp()
+        self.env.user.company_id = self.env.ref("base.main_company").id
         self.AccountObj = self.env["account.account"]
         self.InvoiceObj = self.env["account.move"]
         self.JournalObj = self.env["account.journal"]
@@ -36,16 +37,32 @@ class TestJournalReport(TransactionCase):
         self.fy_date_end = Date.to_string(today.replace(month=12, day=31))
 
         self.receivable_account = self.AccountObj.search(
-            [("user_type_id.name", "=", "Receivable")], limit=1
+            [
+                ("user_type_id.name", "=", "Receivable"),
+                ("company_id", "=", self.env.user.company_id.id),
+            ],
+            limit=1,
         )
         self.income_account = self.AccountObj.search(
-            [("user_type_id.name", "=", "Income")], limit=1
+            [
+                ("user_type_id.name", "=", "Income"),
+                ("company_id", "=", self.env.user.company_id.id),
+            ],
+            limit=1,
         )
         self.expense_account = self.AccountObj.search(
-            [("user_type_id.name", "=", "Expenses")], limit=1
+            [
+                ("user_type_id.name", "=", "Expenses"),
+                ("company_id", "=", self.env.user.company_id.id),
+            ],
+            limit=1,
         )
         self.payable_account = self.AccountObj.search(
-            [("user_type_id.name", "=", "Payable")], limit=1
+            [
+                ("user_type_id.name", "=", "Payable"),
+                ("company_id", "=", self.env.user.company_id.id),
+            ],
+            limit=1,
         )
 
         self.journal_sale = self.JournalObj.create(

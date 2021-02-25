@@ -11,6 +11,7 @@ from odoo.tests import common
 class TestVATReport(common.TransactionCase):
     def setUp(self):
         super(TestVATReport, self).setUp()
+        self.env.user.company_id = self.env.ref("base.main_company").id
         self.date_from = time.strftime("%Y-%m-01")
         self.date_to = time.strftime("%Y-%m-28")
         self.company = self.env.ref("base.main_company")
