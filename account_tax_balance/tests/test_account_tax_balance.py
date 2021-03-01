@@ -38,6 +38,9 @@ class TestAccountTaxBalance(HttpCase):
         self.range = self.env["date.range"]
 
     def test_tax_balance(self):
+        previous_taxes_ids = (
+            self.env["account.tax"].search([("has_moves", "=", True)]).ids
+        )
         tax_account_id = (
             self.env["account.account"]
             .create(
@@ -126,7 +129,9 @@ class TestAccountTaxBalance(HttpCase):
         self.assertEqual(action["context"]["to_date"], current_range[0].date_end)
 
         # exercise search has_moves = True
-        taxes = self.env["account.tax"].search([("has_moves", "=", True)])
+        taxes = self.env["account.tax"].search(
+            [("has_moves", "=", True), ("id", "not in", previous_taxes_ids)]
+        )
         self.assertEqual(len(taxes), 1)
         self.assertEqual(taxes[0].name, "Tax 10.0%")
 
