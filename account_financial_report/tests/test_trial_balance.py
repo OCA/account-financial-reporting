@@ -3,85 +3,79 @@
 # Copyright 2020 ForgeFlow S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo.tests import common
+from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
-class TestTrialBalanceReport(common.TransactionCase):
-    def setUp(self):
-        super(TestTrialBalanceReport, self).setUp()
-        self.env.user.company_id = self.env.ref("base.main_company").id
-        group_obj = self.env["account.group"]
+class TestTrialBalanceReport(AccountTestInvoicingCommon):
+    @classmethod
+    def setUpClass(cls, chart_template_ref=None):
+        super().setUpClass(chart_template_ref=chart_template_ref)
         # Remove previous account groups and related invoices to avoid conflicts
-        group_obj.search([("code_prefix_start", "in", ["1", "2", "11"])]).unlink()
-        self.group1 = group_obj.create({"code_prefix_start": "1", "name": "Group 1"})
-        self.group11 = group_obj.create(
-            {"code_prefix_start": "11", "name": "Group 11", "parent_id": self.group1.id}
+        group_obj = cls.env["account.group"]
+        cls.group1 = group_obj.create({"code_prefix_start": "1", "name": "Group 1"})
+        cls.group11 = group_obj.create(
+            {"code_prefix_start": "11", "name": "Group 11", "parent_id": cls.group1.id}
         )
-        self.group2 = group_obj.create({"code_prefix_start": "2", "name": "Group 2"})
-        self.account100 = self._create_account_account(
-            {
-                "code": "100",
-                "name": "Account 100",
-                "group_id": self.group1.id,
-                "user_type_id": self.env.ref("account.data_account_type_receivable").id,
-                "reconcile": True,
-            }
-        )
-        self.account110 = self.env["account.account"].search(
+        cls.group2 = group_obj.create({"code_prefix_start": "2", "name": "Group 2"})
+        # Set accounts
+        cls.account100 = cls.company_data["default_account_receivable"]
+        cls.account100.group_id = cls.group1.id
+        cls.account110 = cls.env["account.account"].search(
             [
                 (
                     "user_type_id",
                     "=",
-                    self.env.ref("account.data_unaffected_earnings").id,
+                    cls.env.ref("account.data_unaffected_earnings").id,
                 ),
-                ("company_id", "=", self.env.user.company_id.id),
             ],
             limit=1,
         )
-        self.account200 = self._create_account_account(
+        cls.account200 = cls._create_account_account(
+            cls,
             {
                 "code": "200",
                 "name": "Account 200",
-                "group_id": self.group2.id,
-                "user_type_id": self.env.ref(
+                "group_id": cls.group2.id,
+                "user_type_id": cls.env.ref(
                     "account.data_account_type_other_income"
                 ).id,
-            }
+            },
         )
-        self.account300 = self._create_account_account(
+        cls.account300 = cls._create_account_account(
+            cls,
             {
                 "code": "300",
                 "name": "Account 300",
-                "user_type_id": self.env.ref(
+                "user_type_id": cls.env.ref(
                     "account.data_account_type_other_income"
                 ).id,
-            }
+            },
         )
-        self.account301 = self._create_account_account(
+        cls.account301 = cls._create_account_account(
+            cls,
             {
                 "code": "301",
                 "name": "Account 301",
-                "group_id": self.group2.id,
-                "user_type_id": self.env.ref(
+                "group_id": cls.group2.id,
+                "user_type_id": cls.env.ref(
                     "account.data_account_type_other_income"
                 ).id,
-            }
+            },
         )
-        self.previous_fy_date_start = "2015-01-01"
-        self.previous_fy_date_end = "2015-12-31"
-        self.fy_date_start = "2016-01-01"
-        self.fy_date_end = "2016-12-31"
-        self.date_start = "2016-01-01"
-        self.date_end = "2016-12-31"
-        self.partner = self.env.ref("base.res_partner_12")
-        self.unaffected_account = self.env["account.account"].search(
+        cls.previous_fy_date_start = "2015-01-01"
+        cls.previous_fy_date_end = "2015-12-31"
+        cls.fy_date_start = "2016-01-01"
+        cls.fy_date_end = "2016-12-31"
+        cls.date_start = "2016-01-01"
+        cls.date_end = "2016-12-31"
+        cls.partner = cls.env.ref("base.res_partner_12")
+        cls.unaffected_account = cls.env["account.account"].search(
             [
                 (
                     "user_type_id",
                     "=",
-                    self.env.ref("account.data_unaffected_earnings").id,
+                    cls.env.ref("account.data_unaffected_earnings").id,
                 ),
-                ("company_id", "=", self.env.user.company_id.id),
             ],
             limit=1,
         )
@@ -166,7 +160,7 @@ class TestTrialBalanceReport(common.TransactionCase):
         move.action_post()
 
     def _get_report_lines(self, with_partners=False, hierarchy_on="computed"):
-        company = self.env.ref("base.main_company")
+        company = self.env.user.company_id
         trial_balance = self.env["trial.balance.report.wizard"].create(
             {
                 "date_from": self.date_start,
@@ -694,7 +688,7 @@ class TestTrialBalanceReport(common.TransactionCase):
         move = self.env["account.move"].create(move_vals)
         move.action_post()
         # Generate the trial balance line
-        company = self.env.ref("base.main_company")
+        company = self.env.user.company_id
         trial_balance = self.env["trial.balance.report.wizard"].create(
             {
                 "date_from": self.date_start,

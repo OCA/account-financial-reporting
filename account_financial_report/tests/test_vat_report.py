@@ -5,81 +5,103 @@
 import time
 from datetime import date
 
-from odoo.tests import common
+from odoo import fields
+from odoo.tests.common import Form
+
+from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
-class TestVATReport(common.TransactionCase):
-    def setUp(self):
-        super(TestVATReport, self).setUp()
-        self.env.user.company_id = self.env.ref("base.main_company").id
-        self.date_from = time.strftime("%Y-%m-01")
-        self.date_to = time.strftime("%Y-%m-28")
-        self.company = self.env.ref("base.main_company")
-        self.receivable_account = self.env["account.account"].search(
-            [
-                ("company_id", "=", self.company.id),
-                ("user_type_id.name", "=", "Receivable"),
-            ],
-            limit=1,
+class TestVATReport(AccountTestInvoicingCommon):
+    @classmethod
+    def init_invoice(
+        cls,
+        move_type,
+        name=None,
+        partner=None,
+        invoice_date=None,
+        post=False,
+        lines=None,
+        taxes=None,
+    ):
+        move_form = Form(
+            cls.env["account.move"].with_context(default_move_type=move_type)
         )
-        self.income_account = self.env["account.account"].search(
+        move_form.invoice_date = invoice_date or fields.Date.from_string("2019-01-01")
+        move_form.partner_id = partner or cls.partner_a
+        move_form.name = name or "Test"
+        lines = lines or []
+        for line in lines:
+            with move_form.invoice_line_ids.new() as line_form:
+                line_form.product_id = line[0]
+                line_form.name = "Test"
+                line_form.account_id = line[1]
+                line_form.quantity = line[2]
+                line_form.price_unit = line[3]
+                if taxes:
+                    line_form.tax_ids.clear()
+                    line_form.tax_ids.add(taxes)
+        rslt = move_form.save()
+        if post:
+            rslt.action_post()
+        return rslt
+
+    @classmethod
+    def setUpClass(cls, chart_template_ref=None):
+        super().setUpClass(chart_template_ref=chart_template_ref)
+        cls.date_from = time.strftime("%Y-%m-01")
+        cls.date_to = time.strftime("%Y-%m-28")
+        cls.company = cls.env.user.company_id
+        cls.company.country_id = cls.env.ref("base.us").id
+        cls.receivable_account = cls.company_data["default_account_receivable"]
+        cls.income_account = cls.company_data["default_account_revenue"]
+        cls.expense_account = cls.company_data["default_account_expense"]
+        cls.tax_account = cls.env["account.account"].search(
             [
-                ("company_id", "=", self.company.id),
-                ("user_type_id.name", "=", "Income"),
-            ],
-            limit=1,
-        )
-        self.tax_account = self.env["account.account"].search(
-            [
-                ("company_id", "=", self.company.id),
+                ("company_id", "=", cls.company.id),
                 (
                     "user_type_id",
                     "=",
-                    self.env.ref(
-                        "account.data_account_type_non_current_liabilities"
-                    ).id,
+                    cls.env.ref("account.data_account_type_non_current_liabilities").id,
                 ),
             ],
             limit=1,
         )
-        self.bank_journal = self.env["account.journal"].search(
-            [("type", "=", "bank"), ("company_id", "=", self.company.id)], limit=1
-        )
-        self.tax_tag_01 = self.env["account.account.tag"].create(
+        cls.bank_journal = cls.company_data["default_journal_bank"]
+        cls.tax_tag_01 = cls.env["account.account.tag"].create(
             {
                 "name": "Tag 01",
                 "applicability": "taxes",
-                "country_id": self.company.country_id.id,
+                "country_id": cls.company.country_id.id,
             }
         )
-        self.tax_tag_02 = self.env["account.account.tag"].create(
+        cls.tax_tag_02 = cls.env["account.account.tag"].create(
             {
                 "name": "Tag 02",
                 "applicability": "taxes",
-                "country_id": self.company.country_id.id,
+                "country_id": cls.company.country_id.id,
             }
         )
-        self.tax_tag_03 = self.env["account.account.tag"].create(
+        cls.tax_tag_03 = cls.env["account.account.tag"].create(
             {
                 "name": "Tag 03",
                 "applicability": "taxes",
-                "country_id": self.company.country_id.id,
+                "country_id": cls.company.country_id.id,
             }
         )
-        self.tax_group_10 = self.env["account.tax.group"].create(
+        cls.tax_group_10 = cls.env["account.tax.group"].create(
             {"name": "Tax 10%", "sequence": 1}
         )
-        self.tax_group_20 = self.env["account.tax.group"].create(
+        cls.tax_group_20 = cls.env["account.tax.group"].create(
             {"name": "Tax 20%", "sequence": 2}
         )
-        self.tax_10 = self.env["account.tax"].create(
+        cls.tax_10 = cls.env["account.tax"].create(
             {
                 "name": "Tax 10.0%",
                 "amount": 10.0,
                 "amount_type": "percent",
                 "type_tax_use": "sale",
-                "company_id": self.company.id,
-                "tax_group_id": self.tax_group_10.id,
+                "company_id": cls.company.id,
+                "tax_group_id": cls.tax_group_10.id,
                 "invoice_repartition_line_ids": [
                     (0, 0, {"factor_percent": 100, "repartition_type": "base"}),
                     (
@@ -88,10 +110,8 @@ class TestVATReport(common.TransactionCase):
                         {
                             "factor_percent": 100,
                             "repartition_type": "tax",
-                            "account_id": self.tax_account.id,
-                            "tag_ids": [
-                                (6, 0, [self.tax_tag_01.id, self.tax_tag_02.id])
-                            ],
+                            "account_id": cls.tax_account.id,
+                            "tag_ids": [(6, 0, [cls.tax_tag_01.id, cls.tax_tag_02.id])],
                         },
                     ),
                 ],
@@ -103,22 +123,22 @@ class TestVATReport(common.TransactionCase):
                         {
                             "factor_percent": 100,
                             "repartition_type": "tax",
-                            "account_id": self.tax_account.id,
+                            "account_id": cls.tax_account.id,
                         },
                     ),
                 ],
             }
         )
-        self.tax_20 = self.env["account.tax"].create(
+        cls.tax_20 = cls.env["account.tax"].create(
             {
                 "sequence": 30,
                 "name": "Tax 20.0%",
                 "amount": 20.0,
                 "amount_type": "percent",
                 "type_tax_use": "sale",
-                "company_id": self.company.id,
-                "cash_basis_transition_account_id": self.tax_account.id,
-                "tax_group_id": self.tax_group_20.id,
+                "company_id": cls.company.id,
+                "cash_basis_transition_account_id": cls.tax_account.id,
+                "tax_group_id": cls.tax_group_20.id,
                 "invoice_repartition_line_ids": [
                     (0, 0, {"factor_percent": 100, "repartition_type": "base"}),
                     (
@@ -127,10 +147,8 @@ class TestVATReport(common.TransactionCase):
                         {
                             "factor_percent": 100,
                             "repartition_type": "tax",
-                            "account_id": self.tax_account.id,
-                            "tag_ids": [
-                                (6, 0, [self.tax_tag_02.id, self.tax_tag_03.id])
-                            ],
+                            "account_id": cls.tax_account.id,
+                            "tag_ids": [(6, 0, [cls.tax_tag_02.id, cls.tax_tag_03.id])],
                         },
                     ),
                 ],
@@ -142,40 +160,39 @@ class TestVATReport(common.TransactionCase):
                         {
                             "factor_percent": 100,
                             "repartition_type": "tax",
-                            "account_id": self.tax_account.id,
+                            "account_id": cls.tax_account.id,
                         },
                     ),
                 ],
             }
         )
-
-        move_form = common.Form(
-            self.env["account.move"].with_context(default_move_type="out_invoice")
+        cls.init_invoice(
+            "out_invoice",
+            name="Test invoice 1",
+            partner=cls.env.ref("base.res_partner_2"),
+            invoice_date=time.strftime("%Y-%m-03"),
+            post=True,
+            lines=[
+                (cls.env.ref("product.product_product_4"), cls.income_account, 1, 100.0)
+            ],
+            taxes=cls.tax_10,
         )
-        move_form.partner_id = self.env.ref("base.res_partner_2")
-        move_form.invoice_date = time.strftime("%Y-%m-03")
-        with move_form.invoice_line_ids.new() as line_form:
-            line_form.product_id = self.env.ref("product.product_product_4")
-            line_form.quantity = 1.0
-            line_form.price_unit = 100.0
-            line_form.account_id = self.income_account
-            line_form.tax_ids.add(self.tax_10)
-        invoice = move_form.save()
-        invoice.action_post()
-
-        move_form = common.Form(
-            self.env["account.move"].with_context(default_move_type="out_invoice")
+        cls.init_invoice(
+            "out_invoice",
+            name="Test invoice 2",
+            partner=cls.env.ref("base.res_partner_2"),
+            invoice_date=time.strftime("%Y-%m-04"),
+            post=True,
+            lines=[
+                (
+                    cls.env.ref("product.product_product_4"),
+                    cls.income_account,
+                    1,
+                    250.0,
+                ),
+            ],
+            taxes=cls.tax_20,
         )
-        move_form.partner_id = self.env.ref("base.res_partner_2")
-        move_form.invoice_date = time.strftime("%Y-%m-04")
-        with move_form.invoice_line_ids.new() as line_form:
-            line_form.product_id = self.env.ref("product.product_product_4")
-            line_form.quantity = 1.0
-            line_form.price_unit = 250.0
-            line_form.account_id = self.income_account
-            line_form.tax_ids.add(self.tax_20)
-        invoice = move_form.save()
-        invoice.action_post()
 
     def _get_report_lines(self, taxgroups=False):
         based_on = "taxtags"
