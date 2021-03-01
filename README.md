@@ -19,8 +19,8 @@ Available addons
 ----------------
 addon | version | summary
 --- | --- | ---
-[account_financial_report](account_financial_report/) | 14.0.1.0.0 | OCA Financial Reports
-[account_tax_balance](account_tax_balance/) | 14.0.1.0.0 | Compute tax balances based on date range
+[account_financial_report](account_financial_report/) | 14.0.1.0.1 | OCA Financial Reports
+[account_tax_balance](account_tax_balance/) | 14.0.1.0.1 | Compute tax balances based on date range
 
 [//]: # (end addons)
 
