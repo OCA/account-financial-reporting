@@ -2,10 +2,14 @@
 # Copyright 2016 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo.tests.common import TransactionCase
+from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
-class TestOpenItems(TransactionCase):
+class TestOpenItems(AccountTestInvoicingCommon):
+    @classmethod
+    def setUpClass(cls, chart_template_ref=None):
+        super().setUpClass(chart_template_ref=chart_template_ref)
+
     def test_partner_filter(self):
         partner_1 = self.env.ref("base.res_partner_1")
         partner_2 = self.env.ref("base.res_partner_2")
