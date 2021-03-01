@@ -7,45 +7,34 @@ import time
 from datetime import date
 
 from odoo import api, fields
-from odoo.tests import common
+
+from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
-class TestGeneralLedgerReport(common.TransactionCase):
-    def setUp(self):
-        super(TestGeneralLedgerReport, self).setUp()
-        self.env.user.company_id = self.env.ref("base.main_company").id
-        self.before_previous_fy_year = fields.Date.from_string("2014-05-05")
-        self.previous_fy_date_start = fields.Date.from_string("2015-01-01")
-        self.previous_fy_date_end = fields.Date.from_string("2015-12-31")
-        self.fy_date_start = fields.Date.from_string("2016-01-01")
-        self.fy_date_end = fields.Date.from_string("2016-12-31")
-
-        self.receivable_account = self.env["account.account"].search(
-            [
-                ("user_type_id.name", "=", "Receivable"),
-                ("company_id", "=", self.env.user.company_id.id),
-            ],
-            limit=1,
-        )
-        self.income_account = self.env["account.account"].search(
-            [
-                ("user_type_id.name", "=", "Income"),
-                ("company_id", "=", self.env.user.company_id.id),
-            ],
-            limit=1,
-        )
-        self.unaffected_account = self.env["account.account"].search(
+class TestGeneralLedgerReport(AccountTestInvoicingCommon):
+    @classmethod
+    def setUpClass(cls, chart_template_ref=None):
+        super().setUpClass(chart_template_ref=chart_template_ref)
+        cls.before_previous_fy_year = fields.Date.from_string("2014-05-05")
+        cls.previous_fy_date_start = fields.Date.from_string("2015-01-01")
+        cls.previous_fy_date_end = fields.Date.from_string("2015-12-31")
+        cls.fy_date_start = fields.Date.from_string("2016-01-01")
+        cls.fy_date_end = fields.Date.from_string("2016-12-31")
+        # Get accounts
+        cls.receivable_account = cls.company_data["default_account_receivable"]
+        cls.income_account = cls.company_data["default_account_revenue"]
+        cls.unaffected_account = cls.env["account.account"].search(
             [
                 (
                     "user_type_id",
                     "=",
-                    self.env.ref("account.data_unaffected_earnings").id,
+                    cls.env.ref("account.data_unaffected_earnings").id,
                 ),
-                ("company_id", "=", self.env.user.company_id.id),
+                ("company_id", "=", cls.env.user.company_id.id),
             ],
             limit=1,
         )
-        self.partner = self.env.ref("base.res_partner_12")
+        cls.partner = cls.env.ref("base.res_partner_12")
 
     def _add_move(
         self,
@@ -104,7 +93,7 @@ class TestGeneralLedgerReport(common.TransactionCase):
         centralize = True
         if with_partners:
             centralize = False
-        company = self.env.ref("base.main_company")
+        company = self.env.user.company_id
         general_ledger = self.env["general.ledger.report.wizard"].create(
             {
                 "date_from": self.fy_date_start,
@@ -685,7 +674,7 @@ class TestGeneralLedgerReport(common.TransactionCase):
         self.assertEqual(wizard._default_partners(), expected_list)
 
     def test_validate_date(self):
-        company_id = self.env.ref("base.main_company")
+        company_id = self.env.user.company_id
         company_id.write({"fiscalyear_last_day": 31, "fiscalyear_last_month": "12"})
         user = self.env.ref("base.user_root").with_context(company_id=company_id.id)
         wizard = self.env["general.ledger.report.wizard"].with_context(user=user.id)
