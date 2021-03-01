@@ -7,93 +7,46 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 from odoo.fields import Date
-from odoo.tests.common import Form, TransactionCase
+from odoo.tests.common import Form
+
+from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
-class TestJournalReport(TransactionCase):
-    def setUp(self):
-        super(TestJournalReport, self).setUp()
-        self.env.user.company_id = self.env.ref("base.main_company").id
-        self.AccountObj = self.env["account.account"]
-        self.InvoiceObj = self.env["account.move"]
-        self.JournalObj = self.env["account.journal"]
-        self.MoveObj = self.env["account.move"]
-        self.TaxObj = self.env["account.tax"]
-
-        self.JournalLedgerReportWizard = self.env["journal.ledger.report.wizard"]
-        self.JournalLedgerReport = self.env[
+class TestJournalReport(AccountTestInvoicingCommon):
+    @classmethod
+    def setUpClass(cls, chart_template_ref=None):
+        super().setUpClass(chart_template_ref=chart_template_ref)
+        cls.AccountObj = cls.env["account.account"]
+        cls.InvoiceObj = cls.env["account.move"]
+        cls.JournalObj = cls.env["account.journal"]
+        cls.MoveObj = cls.env["account.move"]
+        cls.TaxObj = cls.env["account.tax"]
+        cls.JournalLedgerReportWizard = cls.env["journal.ledger.report.wizard"]
+        cls.JournalLedgerReport = cls.env[
             "report.account_financial_report.journal_ledger"
         ]
-        self.company = self.env.ref("base.main_company")
-        self.company.account_sale_tax_id = False
-        self.company.account_purchase_tax_id = False
-
+        cls.company = cls.company_data["company"]
+        cls.company.account_sale_tax_id = False
+        cls.company.account_purchase_tax_id = False
         today = datetime.today()
         last_year = today - relativedelta(years=1)
-
-        self.previous_fy_date_start = Date.to_string(last_year.replace(month=1, day=1))
-        self.previous_fy_date_end = Date.to_string(last_year.replace(month=12, day=31))
-        self.fy_date_start = Date.to_string(today.replace(month=1, day=1))
-        self.fy_date_end = Date.to_string(today.replace(month=12, day=31))
-
-        self.receivable_account = self.AccountObj.search(
-            [
-                ("user_type_id.name", "=", "Receivable"),
-                ("company_id", "=", self.env.user.company_id.id),
-            ],
-            limit=1,
-        )
-        self.income_account = self.AccountObj.search(
-            [
-                ("user_type_id.name", "=", "Income"),
-                ("company_id", "=", self.env.user.company_id.id),
-            ],
-            limit=1,
-        )
-        self.expense_account = self.AccountObj.search(
-            [
-                ("user_type_id.name", "=", "Expenses"),
-                ("company_id", "=", self.env.user.company_id.id),
-            ],
-            limit=1,
-        )
-        self.payable_account = self.AccountObj.search(
-            [
-                ("user_type_id.name", "=", "Payable"),
-                ("company_id", "=", self.env.user.company_id.id),
-            ],
-            limit=1,
-        )
-
-        self.journal_sale = self.JournalObj.create(
-            {
-                "name": "Test journal sale",
-                "code": "TST-JRNL-S",
-                "type": "sale",
-                "company_id": self.company.id,
-            }
-        )
-        self.journal_purchase = self.JournalObj.create(
-            {
-                "name": "Test journal purchase",
-                "code": "TST-JRNL-P",
-                "type": "purchase",
-                "company_id": self.company.id,
-            }
-        )
-
-        self.tax_15_s = self.TaxObj.create(
-            {
-                "sequence": 30,
-                "name": "Tax 15.0% (Percentage of Price)",
-                "amount": 15.0,
-                "amount_type": "percent",
-                "include_base_amount": False,
-                "type_tax_use": "sale",
-            }
-        )
-
-        self.tax_20_s = self.TaxObj.create(
+        cls.previous_fy_date_start = Date.to_string(last_year.replace(month=1, day=1))
+        cls.previous_fy_date_end = Date.to_string(last_year.replace(month=12, day=31))
+        cls.fy_date_start = Date.to_string(today.replace(month=1, day=1))
+        cls.fy_date_end = Date.to_string(today.replace(month=12, day=31))
+        cls.receivable_account = cls.company_data["default_account_receivable"]
+        cls.income_account = cls.company_data["default_account_revenue"]
+        cls.expense_account = cls.company_data["default_account_expense"]
+        cls.payable_account = cls.company_data["default_account_payable"]
+        cls.journal_sale = cls.company_data["default_journal_sale"]
+        cls.journal_purchase = cls.company_data["default_journal_purchase"]
+        cls.tax_15_s = cls.company_data["default_tax_sale"]
+        cls.tax_15_s.sequence = 30
+        cls.tax_15_s.amount = 15.0
+        cls.tax_15_s.amount_type = "percent"
+        cls.tax_15_s.include_base_amount = False
+        cls.tax_15_s.type_tax_use = "sale"
+        cls.tax_20_s = cls.tax_15_s.copy(
             {
                 "sequence": 30,
                 "name": "Tax 20.0% (Percentage of Price)",
@@ -103,19 +56,13 @@ class TestJournalReport(TransactionCase):
                 "type_tax_use": "sale",
             }
         )
-
-        self.tax_15_p = self.TaxObj.create(
-            {
-                "sequence": 30,
-                "name": "Tax 15.0% (Percentage of Price)",
-                "amount": 15.0,
-                "amount_type": "percent",
-                "include_base_amount": False,
-                "type_tax_use": "purchase",
-            }
-        )
-
-        self.tax_20_p = self.TaxObj.create(
+        cls.tax_15_p = cls.company_data["default_tax_purchase"]
+        cls.tax_15_p.sequence = 30
+        cls.tax_15_p.amount = 15.0
+        cls.tax_15_p.amount_type = "percent"
+        cls.tax_15_p.include_base_amount = False
+        cls.tax_15_p.type_tax_use = "purchase"
+        cls.tax_20_p = cls.tax_15_p.copy(
             {
                 "sequence": 30,
                 "name": "Tax 20.0% (Percentage of Price)",
@@ -125,8 +72,7 @@ class TestJournalReport(TransactionCase):
                 "type_tax_use": "purchase",
             }
         )
-
-        self.partner_2 = self.env.ref("base.res_partner_2")
+        cls.partner_2 = cls.env.ref("base.res_partner_2")
 
     def _add_move(
         self,
