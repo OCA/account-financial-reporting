@@ -7,15 +7,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-21 13:00+0000\n"
-"PO-Revision-Date: 2020-05-21 15:06+0200\n"
-"Last-Translator: <>\n"
+"PO-Revision-Date: 2021-03-16 13:45+0000\n"
+"Last-Translator: Ana Suárez <ana.suarez@qubiq.es>\n"
 "Language-Team: \n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: Poedit 2.3.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.3.2\n"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
@@ -70,6 +70,9 @@ msgid ""
 "                                            To\n"
 "                                        </span>"
 msgstr ""
+"<span class=\"oe_inline\">\n"
+"                                            A\n"
+"                                        </span>"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
@@ -79,11 +82,14 @@ msgid ""
 "                                To\n"
 "                            </span>"
 msgstr ""
+"<span class=\"oe_inline\">\n"
+"                                A\n"
+"                            </span>"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
 msgid "<span class=\"oe_inline\">To</span>"
-msgstr ""
+msgstr "<span class=\"oe_inline\">A</span>"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_abstract_report
@@ -97,8 +103,9 @@ msgstr "Asistente de Extracto"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_abstract_report_xlsx
+#, fuzzy
 msgid "Abstract XLSX Account Financial Report"
-msgstr ""
+msgstr "Resumen XLSX Account Financial Report"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -172,14 +179,16 @@ msgstr "Activar centralización"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
 msgid "Additional Filtering"
-msgstr ""
+msgstr "Filtrado adicional"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid ""
 "Age ≤ 120\n"
 "                        d."
-msgstr "≤ 120 d."
+msgstr ""
+"Tiempo ≤ 120 \n"
+"                             d."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -192,7 +201,9 @@ msgstr "Tiempo ≤ 120 d."
 msgid ""
 "Age ≤ 30\n"
 "                        d."
-msgstr "≤ 30 d."
+msgstr ""
+"Tiempo ≤ 30\n"
+"                        d."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -205,7 +216,9 @@ msgstr "Tiempo ≤ 30 d."
 msgid ""
 "Age ≤ 60\n"
 "                        d."
-msgstr "≤ 60 d."
+msgstr ""
+"Tiempo ≤ 60\n"
+"                        d."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -218,7 +231,9 @@ msgstr "Tiempo ≤ 60 d."
 msgid ""
 "Age ≤ 90\n"
 "                        d."
-msgstr "≤ 90 d."
+msgstr ""
+"Tiempo ≤ 90\n"
+"                        d."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -334,9 +349,9 @@ msgstr "Total Act."
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
-#, fuzzy, python-format
+#, python-format
 msgid "Analytic Account"
-msgstr "Filtro Cuenta"
+msgstr "Cuenta analítica"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
@@ -815,9 +830,8 @@ msgstr "Filtro Cuentas"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
-#, fuzzy
 msgid "Filter analytic accounts"
-msgstr "Filtrar por etiquetas analíticas"
+msgstr "Filtrar cuentas analíticas"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__analytic_tag_ids
@@ -916,7 +930,6 @@ msgstr "Asistente de informe de Libro Mayor"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_general_ledger_xlsx
-#, fuzzy
 msgid "General Ledger XLSL Report"
 msgstr "Libro mayor XLSX"
 
@@ -1016,13 +1029,12 @@ msgstr ""
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
-#, fuzzy
 msgid ""
 "Initial\n"
 "                    balance"
 msgstr ""
 "Balance\n"
-"                        inicial moneda"
+"                        inicial"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
@@ -1054,7 +1066,7 @@ msgstr "Apunte contable"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__domain
 msgid "Journal Items Domain"
-msgstr ""
+msgstr "Dominio Apuntes Contables"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
@@ -1421,8 +1433,9 @@ msgstr "Ref - Etiqueta"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_ir_actions_report
+#, fuzzy
 msgid "Report Action"
-msgstr ""
+msgstr "Acción Informe"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -1447,9 +1460,8 @@ msgstr "Mostrar"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__show_cost_center
-#, fuzzy
 msgid "Show Analytic Account"
-msgstr "Mostrar etiquetas analíticas"
+msgstr "Mostrar cuenta analítica"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__show_move_line_details
@@ -1628,6 +1640,8 @@ msgstr "El nivel de jerarquía a filtrar debe ser mayor que 0."
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__domain
 msgid "This domain will be used to select specific domain for Journal Items"
 msgstr ""
+"Este dominio se usará para seleccionar dominios específicos para Apuntes "
+"Contables"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
@@ -1677,7 +1691,6 @@ msgstr "Balance de Sumas y Saldos XLSX"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_trial_balance_xlsx
-#, fuzzy
 msgid "Trial Balance XLSX Report"
 msgstr "Balance de Sumas y Saldos XLSX"
 
@@ -1745,15 +1758,13 @@ msgstr "Informe de Impuestos"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_vat_report
-#, fuzzy
 msgid "Vat Report Report"
-msgstr "Informe de Impuestos"
+msgstr "Informe de IVA"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_vat_report_xlsx
-#, fuzzy
 msgid "Vat Report XLSX Report"
-msgstr "Informe de impuestos XLSX"
+msgstr "Informe de IVA XLSX"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
@@ -1792,7 +1803,7 @@ msgstr "Si"
 #: code:addons/account_financial_report/report/general_ledger.py:0
 #, python-format
 msgid "future"
-msgstr ""
+msgstr "futuro"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
