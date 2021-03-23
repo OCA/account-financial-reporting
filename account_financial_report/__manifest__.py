@@ -42,6 +42,7 @@
         "view/report_aged_partner_balance.xml",
         "view/report_vat_report.xml",
     ],
+    "qweb": ["static/src/xml/report.xml"],
     "installable": True,
     "application": True,
     "auto_install": False,
