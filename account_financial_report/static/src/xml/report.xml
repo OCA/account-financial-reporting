@@ -1,0 +1,17 @@
+<template>
+    <!-- Buttons of the Control Panel -->
+    <t t-name="account_financial_report.client_action.ControlButtons">
+        <div class="o_report_buttons">
+            <button
+                type="button"
+                class="btn btn-primary o_report_print"
+                title="Print"
+            >Print</button>
+            <button
+                type="button"
+                class="btn btn-secondary o_report_export"
+                title="Export"
+            >Export</button>
+        </div>
+    </t>
+</template>

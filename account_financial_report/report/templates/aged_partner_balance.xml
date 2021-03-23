@@ -248,210 +248,210 @@
                 <div class="act_as_row lines">
                     <!--## date-->
                     <div class="act_as_cell left">
-                        <!--                        <span>-->
-                        <!--                            <a t-att-data-active-id="line.move_line_id.id"-->
-                        <!--                               t-att-data-res-model="'account.move.line'"-->
-                        <!--                               class="o_account_financial_reports_web_action"-->
-                        <!--                               style="color: black;">-->
-                        <!--## We don't use t-field because it throws an error on click -->
-                        <t t-esc="line['date']" t-options="{'widget': 'date'}" />
-                        <!--                            </a>-->
-                        <!--                        </span>-->
+                        <span
+                            t-att-res-id="line.move_line_id.id"
+                            res-model="account.move.line"
+                            view-type="form"
+                        >
+                            <!--## We don't use t-field because it throws an error on click -->
+                            <t t-esc="line['date']" t-options="{'widget': 'date'}" />
+                        </span>
                     </div>
                     <!--## move-->
                     <div class="act_as_cell left">
-                        <!--                        <span>-->
-                        <!--                            <a t-att-data-active-id="line.move_line_id.move_id.id"-->
-                        <!--                               t-att-data-res-model="'account.move'"-->
-                        <!--                               class="o_account_financial_reports_web_action"-->
-                        <!--                               style="color: black;">-->
-                        <t t-raw="line['entry']" />
-                        <!--                            </a>-->
-                        <!--                        </span>-->
+                        <span
+                            t-att-res-id="line.move_line_id.move_id.id"
+                            res-model="account.move"
+                            view-type="form"
+                        >
+                            <t t-raw="line['entry']" />
+                        </span>
                     </div>
                     <!--## journal-->
                     <div class="act_as_cell left">
-                        <!--                        <span>-->
-                        <!--                            <a t-att-data-active-id="line.move_line_id.move_id.journal_id.id"-->
-                        <!--                               t-att-data-res-model="'account.journal'"-->
-                        <!--                               class="o_account_financial_reports_web_action"-->
-                        <!--                               style="color: black;">-->
-                        <t t-raw="line['journal']" />
-                        <!--                            </a>-->
-                        <!--                        </span>-->
+                        <span
+                            t-att-res-id="line.move_line_id.move_id.journal_id.id"
+                            res-model="account.journal"
+                            view-type="form"
+                        >
+                            <t t-raw="line['journal']" />
+                        </span>
                     </div>
                     <!--## account code-->
                     <div class="act_as_cell left">
-                        <!--                        <span>-->
-                        <!--                            <a t-att-data-active-id="line.move_line_id.account_id.id"-->
-                        <!--                               t-att-data-res-model="'account.account'"-->
-                        <!--                               class="o_account_financial_reports_web_action"-->
-                        <!--                               style="color: black;">-->
-                        <t t-raw="line['account']" />
-                        <!--                            </a>-->
-                        <!--                        </span>-->
+                        <span
+                            t-att-res-id="line.move_line_id.account_id.id"
+                            res-model="account.account"
+                            view-type="form"
+                        >
+                            <t t-raw="line['account']" />
+                        </span>
                     </div>
                     <!--## partner-->
                     <div class="act_as_cell left">
-                        <!--                        <span>-->
-                        <!--                            <a t-att-data-active-id="line.move_line_id.partner_id.id"-->
-                        <!--                               t-att-data-res-model="'res.partner'"-->
-                        <!--                               class="o_account_financial_reports_web_action"-->
-                        <!--                               style="color: black;">-->
-                        <t t-raw="line['partner']" />
-                        <!--                            </a>-->
-                        <!--                        </span>-->
+                        <span
+                            t-att-res-id="line.move_line_id.partner_id.id"
+                            res-model="res.partner"
+                            view-type="form"
+                        >
+                            <t t-raw="line['partner']" />
+                        </span>
                     </div>
                     <!--## ref - label-->
                     <div class="act_as_cell left">
-                        <!--                        <span>-->
-                        <!--                            <a t-att-data-active-id="line.move_line_id.id"-->
-                        <!--                               t-att-data-res-model="'account.move.line'"-->
-                        <!--                               class="o_account_financial_reports_web_action"-->
-                        <!--                               style="color: black;">-->
-                        <t t-raw="line['ref_label']" />
-                        <!--                            </a>-->
-                        <!--                        </span>-->
+                        <span
+                            t-att-res-id="line.move_line_id.id"
+                            res-model="account.move.line"
+                            view-type="form"
+                        >
+                            <t t-raw="line['ref_label']" />
+                        </span>
                     </div>
                     <!--## date_due-->
                     <div class="act_as_cell left">
-                        <!--                        <span>-->
-                        <!--                            <a t-att-data-active-id="line.move_line_id.id"-->
-                        <!--                               t-att-data-res-model="'account.move.line'"-->
-                        <!--                               class="o_account_financial_reports_web_action"-->
-                        <!--                               style="color: black;">-->
-                        <!--## We don't use t-field because it throws an error on click -->
-                        <t t-esc="line['due_date']" t-options="{'widget': 'date'}" />
-                        <!--                            </a>-->
-                        <!--                        </span>-->
+                        <span
+                            t-att-res-id="line.move_line_id.id"
+                            res-model="account.move.line"
+                            view-type="form"
+                        >
+                            <!--## We don't use t-field because it throws an error on click -->
+                            <t
+                                t-esc="line['due_date']"
+                                t-options="{'widget': 'date'}"
+                            />
+                        </span>
                     </div>
                     <!--## amount_residual-->
                     <div class="act_as_cell amount">
-                        <!--                        <span>-->
-                        <!--                            <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"-->
-                        <!--                               t-att-data-res-model="'account.move.line'"-->
-                        <!--                               class="o_account_financial_reports_web_action_multi"-->
-                        <!--                               style="color: black;">-->
-                        <t
-                            t-raw="line['residual']"
-                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                        />
-                        <!--                            </a>-->
-                        <!--                        </span>-->
+                        <span
+                            domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
+                            res-model="account.move.line"
+                        >
+                            <t
+                                t-raw="line['residual']"
+                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            />
+                        </span>
                     </div>
                     <!--## current-->
                     <div class="act_as_cell amount">
-                        <!--                        <t t-if="line.current != 0">-->
-                        <!--                            <span>-->
-                        <!--                                <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"-->
-                        <!--                                   t-att-data-res-model="'account.move.line'"-->
-                        <!--                                   class="o_account_financial_reports_web_action_multi"-->
-                        <!--                                   style="color: black;">-->
-                        <t
-                            t-raw="line['current']"
-                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                        />
-                        <!--                                </a>-->
-                        <!--                            </span>-->
-                        <!--                        </t>-->
-                        <!--                        <t t-if="line.current == 0">-->
-                        <!--                            <span t-field="line.current" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>-->
-                        <!--                        </t>-->
+                        <t t-if="line.current == 0">
+                            <span
+                                t-field="line.current"
+                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            />
+                        </t>
+                        <t t-else="">
+                            <span
+                                domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
+                                res-model="account.move.line"
+                            >
+                                <t
+                                    t-raw="line['current']"
+                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                />
+                            </span>
+                        </t>
                     </div>
                     <!--## age_30_days-->
                     <div class="act_as_cell amount">
-                        <!--                        <t t-if="line.age_30_days != 0">-->
-                        <!--                            <span>-->
-                        <!--                                <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"-->
-                        <!--                                   t-att-data-res-model="'account.move.line'"-->
-                        <!--                                   class="o_account_financial_reports_web_action_multi"-->
-                        <!--                                   style="color: black;">-->
-                        <t
-                            t-raw="line['30_days']"
-                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                        />
-                        <!--                                </a>-->
-                        <!--                            </span>-->
-                        <!--                        </t>-->
-                        <!--                        <t t-if="line.age_30_days == 0">-->
-                        <!--                            <span t-field="line.age_30_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>-->
-                        <!--                        </t>-->
+                        <t t-if="line.age_30_days == 0">
+                            <span
+                                t-field="line.age_30_days"
+                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            />
+                        </t>
+                        <t t-else="">
+                            <span
+                                domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
+                                res-model="account.move.line"
+                            >
+                                <t
+                                    t-raw="line['30_days']"
+                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                />
+                            </span>
+                        </t>
                     </div>
                     <!--## age_60_days-->
                     <div class="act_as_cell amount">
-                        <!--                        <t t-if="line.age_60_days != 0">-->
-                        <!--                            <span>-->
-                        <!--                                <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"-->
-                        <!--                                   t-att-data-res-model="'account.move.line'"-->
-                        <!--                                   class="o_account_financial_reports_web_action_multi"-->
-                        <!--                                   style="color: black;">-->
-                        <t
-                            t-raw="line['60_days']"
-                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                        />
-                        <!--                                </a>-->
-                        <!--                            </span>-->
-                        <!--                        </t>-->
-                        <!--                        <t t-if="line.age_60_days == 0">-->
-                        <!--                            <span t-field="line.age_60_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>-->
-                        <!--                        </t>-->
+                        <t t-if="line.age_60_days == 0">
+                            <span
+                                t-field="line.age_60_days"
+                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            />
+                        </t>
+                        <t t-else="">
+                            <span
+                                domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
+                                res-model="account.move.line"
+                            >
+                                <t
+                                    t-raw="line['60_days']"
+                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                />
+                            </span>
+                        </t>
                     </div>
                     <!--## age_90_days-->
                     <div class="act_as_cell amount">
-                        <!--                        <t t-if="line.age_90_days != 0">-->
-                        <!--                            <span>-->
-                        <!--                                <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"-->
-                        <!--                                   t-att-data-res-model="'account.move.line'"-->
-                        <!--                                   class="o_account_financial_reports_web_action_multi"-->
-                        <!--                                   style="color: black;">-->
-                        <t
-                            t-raw="line['90_days']"
-                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                        />
-                        <!--                                </a>-->
-                        <!--                            </span>-->
-                        <!--                        </t>-->
-                        <!--                        <t t-if="line.age_90_days == 0">-->
-                        <!--                            <span t-field="line.age_90_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>-->
-                        <!--                        </t>-->
+                        <t t-if="line.age_90_days == 0">
+                            <span
+                                t-field="line.age_90_days"
+                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            />
+                        </t>
+                        <t t-else="">
+                            <span
+                                domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
+                                res-model="account.move.line"
+                            >
+                                <t
+                                    t-raw="line['90_days']"
+                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                />
+                            </span>
+                        </t>
                     </div>
                     <!--## age_120_days-->
                     <div class="act_as_cell amount">
-                        <!--                        <t t-if="line.age_120_days != 0">-->
-                        <!--                            <span>-->
-                        <!--                                <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"-->
-                        <!--                                   t-att-data-res-model="'account.move.line'"-->
-                        <!--                                   class="o_account_financial_reports_web_action_multi"-->
-                        <!--                                   style="color: black;">-->
-                        <t
-                            t-raw="line['120_days']"
-                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                        />
-                        <!--                                </a>-->
-                        <!--                            </span>-->
-                        <!--                        </t>-->
-                        <!--                        <t t-if="line.age_120_days == 0">-->
-                        <!--                            <span t-field="line.age_120_days" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>-->
-                        <!--                        </t>-->
+                        <t t-if="line.age_120_days == 0">
+                            <span
+                                t-field="line.age_120_days"
+                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            />
+                        </t>
+                        <t t-else="">
+                            <span
+                                domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
+                                res-model="account.move.line"
+                            >
+                                <t
+                                    t-raw="line['120_days']"
+                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                />
+                            </span>
+                        </t>
                     </div>
                     <!--## older-->
                     <div class="act_as_cell amount">
-                        <!--                        <t t-if="line.older != 0">-->
-                        <!--                            <span>-->
-                        <!--                                <a t-att-data-domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"-->
-                        <!--                                   t-att-data-res-model="'account.move.line'"-->
-                        <!--                                   class="o_account_financial_reports_web_action_multi"-->
-                        <!--                                   style="color: black;">-->
-                        <t
-                            t-raw="line['older']"
-                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                        />
-                        <!--                                </a>-->
-                        <!--                            </span>-->
-                        <!--                        </t>-->
-                        <!--                        <t t-if="line.older == 0">-->
-                        <!--                            <span t-field="line.older" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>-->
-                        <!--                        </t>-->
+                        <t t-if="line.older == 0">
+                            <span
+                                t-field="line.older"
+                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            />
+                        </t>
+                        <t t-else="">
+                            <span
+                                domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
+                                res-model="account.move.line"
+                            >
+                                <t
+                                    t-raw="line['older']"
+                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                />
+                            </span>
+                        </t>
                     </div>
                 </div>
             </t>
