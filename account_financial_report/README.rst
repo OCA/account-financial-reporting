@@ -128,6 +128,7 @@ Contributors
   * Pedro M. Baeza
   * Sergio Teruel
   * Ernesto Tejeda
+  * Alexandre D. Díaz
 
 * Lois Rilo <lois.rilo@forgeflow.com>
 

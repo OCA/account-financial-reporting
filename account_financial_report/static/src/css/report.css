@@ -81,9 +81,9 @@
 .act_as_cell.right {
     text-align: right;
 }
-.list_table .act_as_cell {
-    /*    border-right:1px solid lightGrey;  uncomment to active column lines */
-}
+/*.list_table .act_as_cell {*/
+/*    border-right:1px solid lightGrey;  uncomment to active column lines */
+/*}*/
 .list_table .act_as_cell.first_column {
     padding-left: 0px;
     /*    border-left:1px solid lightGrey; uncomment to active column lines */
