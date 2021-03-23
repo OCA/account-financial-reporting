@@ -111,18 +111,14 @@
                             style="margin-top: 10px;"
                         />
                         <div class="act_as_caption account_title" style="width: 100%;">
-                            <t t-set="res_model" t-value="'account.account'" />
-                            <span>
-                                <a
-                                    t-att-data-active-id="account_id"
-                                    t-att-data-res-model="res_model"
-                                    class="o_account_financial_reports_web_action"
-                                    t-att-style="style"
-                                >
-                                    <t t-raw="accounts_data[account_id]['code']" />
-                                    -
-                                    <t t-raw="accounts_data[account_id]['name']" />
-                                </a>
+                            <span
+                                t-att-res-id="account_id"
+                                res-model="account.account"
+                                view-type="form"
+                            >
+                                        <t
+                                    t-raw="accounts_data[account_id]['code']"
+                                /> - <t t-raw="accounts_data[account_id]['name']" />
                             </span>
                         </div>
                         <div class="act_as_table data_table" style="width: 100%;">
@@ -240,59 +236,44 @@
                 <!--## Code-->
                 <t t-if="balance['type'] == 'account_type'">
                     <div class="act_as_cell left">
-                        <!--                    <t t-if="accounts_data[account_id]['code']">-->
-                        <t t-set="res_model" t-value="'account.account'" />
-                        <span>
-                            <a
-                                t-att-data-active-id="balance['id']"
-                                t-att-data-res-model="res_model"
-                                class="o_account_financial_reports_web_action"
-                                t-att-style="style"
-                            >
-                                <t t-att-style="style" t-esc="balance['code']" />
-                            </a>
+                        <span
+                            t-att-res-id="balance['id']"
+                            res-model="account.account"
+                            view-type="form"
+                        >
+                            <t t-att-style="style" t-esc="balance['code']" />
                         </span>
                     </div>
                     <!--            ## Account/Partner-->
                     <div class="act_as_cell left">
-                        <t t-set="res_model" t-value="'account.account'" />
-                        <span>
-                            <a
-                                t-att-data-active-id="balance['id']"
-                                t-att-data-res-model="res_model"
-                                class="o_account_financial_reports_web_action"
-                                t-att-style="style"
-                            >
-                                <t t-att-style="style" t-esc="balance['name']" />
-                            </a>
+                        <span
+                            t-att-res-id="balance['id']"
+                            res-model="account.account"
+                            view-type="form"
+                        >
+                            <t t-att-style="style" t-esc="balance['name']" />
                         </span>
                     </div>
                 </t>
                 <t t-if="balance['type'] == 'group_type'">
                     <div class="act_as_cell left">
                         <t t-set="res_model" t-value="'account.group'" />
-                        <span>
-                            <a
-                                t-att-data-active-id="balance['id']"
-                                t-att-data-res-model="res_model"
-                                class="o_account_financial_reports_web_action"
-                                t-att-style="style"
-                            >
-                                <t t-att-style="style" t-raw="balance['code']" />
-                            </a>
+                        <span
+                            t-att-res-id="balance['id']"
+                            res-model="account.group"
+                            view-type="form"
+                        >
+                            <t t-att-style="style" t-raw="balance['code']" />
                         </span>
                     </div>
                     <div class="act_as_cell left">
                         <t t-set="res_model" t-value="'account.group'" />
-                        <span>
-                            <a
-                                t-att-data-active-id="balance['id']"
-                                t-att-data-res-model="res_model"
-                                class="o_account_financial_reports_web_action"
-                                t-att-style="style"
-                            >
-                                <t t-att-style="style" t-esc="balance['name']" />
-                            </a>
+                        <span
+                            t-att-res-id="balance['id']"
+                            res-model="account.group"
+                            view-type="form"
+                        >
+                            <t t-att-style="style" t-esc="balance['name']" />
                         </span>
                     </div>
                 </t>
@@ -300,18 +281,15 @@
             <t t-if="show_partner_details">
                 <div class="act_as_cell left">
                     <t t-set="res_model" t-value="'res.partner'" />
-                    <span>
-                        <a
-                            t-att-data-active-id="partner_id"
-                            t-att-data-res-model="res_model"
-                            class="o_account_financial_reports_web_action"
+                    <span
+                        t-att-res-id="partner_id"
+                        res-model="res.partner"
+                        view-type="form"
+                    >
+                        <t
                             t-att-style="style"
-                        >
-                            <t
-                                t-att-style="style"
-                                t-esc="partners_data[partner_id]['name']"
-                            />
-                        </a>
+                            t-esc="partners_data[partner_id]['name']"
+                        />
                     </span>
                 </div>
             </t>
@@ -324,38 +302,26 @@
                             t-value="[('account_id', '=', balance['id']),
                                ('date', '&lt;', date_from)]"
                         />
-                        <span>
-                            <a
-                                t-att-data-domain="domain"
-                                t-att-data-res-model="'account.move.line'"
-                                class="o_account_financial_reports_web_action_monetary_multi"
+                        <span t-att-domain="domain" res-model="account.move.line">
+                            <t
                                 t-att-style="style"
-                            >
-                                <t
-                                    t-att-style="style"
-                                    t-esc="balance['initial_balance']"
-                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                                />
-                            </a>
+                                t-esc="balance['initial_balance']"
+                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            />
                         </span>
                     </t>
                     <t t-if="balance['type'] == 'group_type'">
-                        <!--                            <t t-set="domain"-->
-                        <!--                               t-value="[('account_id', 'in', line.compute_account_ids.ids),-->
-                        <!--                                         ('date', '&lt;', date_from.strftime('%Y-%m-%d'))]"/>-->
-                        <span>
-                            <a
-                                t-att-data-domain="domain"
-                                t-att-data-res-model="'account.move.line'"
-                                class="o_account_financial_reports_web_action_monetary_multi"
+                        <t
+                            t-set="domain"
+                            t-value="[('account_id', 'in', line.compute_account_ids.ids),
+                                    ('date', '&lt;', date_from.strftime('%Y-%m-%d'))]"
+                        />
+                        <span t-att-domain="domain" res-model="account.move.line">
+                            <t
                                 t-att-style="style"
-                            >
-                                <t
-                                    t-att-style="style"
-                                    t-raw="balance['initial_balance']"
-                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                                />
-                            </a>
+                                t-raw="balance['initial_balance']"
+                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            />
                         </span>
                     </t>
                 </t>
@@ -366,19 +332,12 @@
                                  ('partner_id', '=', int(partner_id)),
                                  ('date', '&lt;', date_from)]"
                     />
-                    <span>
-                        <a
-                            t-att-data-domain="domain"
-                            t-att-data-res-model="'account.move.line'"
-                            class="o_account_financial_reports_web_action_monetary_multi"
+                    <span t-att-domain="domain" res-model="account.move.line">
+                        <t
                             t-att-style="style"
-                        >
-                            <t
-                                t-att-style="style"
-                                t-raw="total_amount[account_id][partner_id]['initial_balance']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                            />
-                        </a>
+                            t-raw="total_amount[account_id][partner_id]['initial_balance']"
+                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        />
                     </span>
                 </t>
             </div>
@@ -393,40 +352,28 @@
                                          ('date', '&lt;=', date_to),
                                          ('debit', '&lt;&gt;', 0)]"
                         />
-                        <span>
-                            <a
-                                t-att-data-domain="domain"
-                                t-att-data-res-model="'account.move.line'"
-                                class="o_account_financial_reports_web_action_monetary_multi"
+                        <span t-att-domain="domain" res-model="account.move.line">
+                            <t
                                 t-att-style="style"
-                            >
-                                <t
-                                    t-att-style="style"
-                                    t-esc="balance['debit']"
-                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                                />
-                            </a>
+                                t-esc="balance['debit']"
+                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            />
                         </span>
                     </t>
                     <t t-if="balance['type'] == 'group_type'">
-                        <!--                            <t t-set="domain"-->
-                        <!--                               t-value="[('account_id', 'in', line.compute_account_ids.ids),-->
-                        <!--                                         ('date', '&gt;=', line.report_id.date_from.strftime('%Y-%m-%d')),-->
-                        <!--                                         ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d')),-->
-                        <!--                                         ('debit', '&lt;&gt;', 0)]"/>-->
-                        <span>
-                            <a
-                                t-att-data-domain="domain"
-                                t-att-data-res-model="'account.move.line'"
-                                class="o_account_financial_reports_web_action_monetary_multi"
+                        <t
+                            t-set="domain"
+                            t-value="[('account_id', 'in', line.compute_account_ids.ids),
+                                    ('date', '&gt;=', line.report_id.date_from.strftime('%Y-%m-%d')),
+                                    ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d')),
+                                    ('debit', '&lt;&gt;', 0)]"
+                        />
+                        <span t-att-domain="domain" res-model="account.move.line">
+                            <t
                                 t-att-style="style"
-                            >
-                                <t
-                                    t-att-style="style"
-                                    t-raw="balance['debit']"
-                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                                />
-                            </a>
+                                t-raw="balance['debit']"
+                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            />
                         </span>
                     </t>
                 </t>
@@ -439,19 +386,12 @@
                                  ('date', '&lt;=', date_to),
                                  ('debit', '&lt;&gt;', 0)]"
                     />
-                    <span>
-                        <a
-                            t-att-data-domain="domain"
-                            t-att-data-res-model="'account.move.line'"
-                            class="o_account_financial_reports_web_action_monetary_multi"
+                    <span t-att-domain="domain" res-model="account.move.line">
+                        <t
                             t-att-style="style"
-                        >
-                            <t
-                                t-att-style="style"
-                                t-raw="total_amount[account_id][partner_id]['debit']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                            />
-                        </a>
+                            t-raw="total_amount[account_id][partner_id]['debit']"
+                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        />
                     </span>
                 </t>
             </div>
@@ -466,40 +406,28 @@
                                          ('date', '&lt;=', date_to),
                                          ('credit', '&lt;&gt;', 0)]"
                         />
-                        <span>
-                            <a
-                                t-att-data-domain="domain"
-                                t-att-data-res-model="'account.move.line'"
-                                class="o_account_financial_reports_web_action_monetary_multi"
+                        <span t-att-domain="domain" res-model="account.move.line">
+                            <t
                                 t-att-style="style"
-                            >
-                                <t
-                                    t-att-style="style"
-                                    t-esc="balance['credit']"
-                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                                />
-                            </a>
+                                t-esc="balance['credit']"
+                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            />
                         </span>
                     </t>
                     <t t-if="balance['type'] == 'group_type'">
-                        <!--                            <t t-set="domain"-->
-                        <!--                               t-value="[('account_id', 'in', line.compute_account_ids.ids),-->
-                        <!--                                         ('date', '&gt;=', line.report_id.date_from.strftime('%Y-%m-%d')),-->
-                        <!--                                         ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d')),-->
-                        <!--                                         ('credit', '&lt;&gt;', 0)]"/>-->
-                        <span>
-                            <a
-                                t-att-data-domain="domain"
-                                t-att-data-res-model="'account.move.line'"
-                                class="o_account_financial_reports_web_action_monetary_multi"
+                        <t
+                            t-set="domain"
+                            t-value="[('account_id', 'in', line.compute_account_ids.ids),
+                                    ('date', '&gt;=', line.report_id.date_from.strftime('%Y-%m-%d')),
+                                    ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d')),
+                                    ('credit', '&lt;&gt;', 0)]"
+                        />
+                        <span t-att-domain="domain" res-model="account.move.line">
+                            <t
                                 t-att-style="style"
-                            >
-                                <t
-                                    t-att-style="style"
-                                    t-raw="balance['credit']"
-                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                                />
-                            </a>
+                                t-raw="balance['credit']"
+                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            />
                         </span>
                     </t>
                 </t>
@@ -512,19 +440,12 @@
                                  ('date', '&lt;=', date_to),
                                  ('credit', '&lt;&gt;', 0)]"
                     />
-                    <span>
-                        <a
-                            t-att-data-domain="domain"
-                            t-att-data-res-model="'account.move.line'"
-                            class="o_account_financial_reports_web_action_monetary_multi"
+                    <span t-att-domain="domain" res-model="account.move.line">
+                        <t
                             t-att-style="style"
-                        >
-                            <t
-                                t-att-style="style"
-                                t-raw="total_amount[account_id][partner_id]['credit']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                            />
-                        </a>
+                            t-raw="total_amount[account_id][partner_id]['credit']"
+                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        />
                     </span>
                 </t>
             </div>
@@ -532,44 +453,34 @@
             <div class="act_as_cell amount">
                 <t t-if="not show_partner_details">
                     <t t-if="balance['type'] == 'account_type'">
-                        <!--                            <t t-set="domain"-->
-                        <!--                               t-value="[('account_id', '=', balance['id']),-->
-                        <!--                                         ('date', '&gt;=', date_from),-->
-                        <!--                                         ('date', '&lt;=', date_to),-->
-                        <!--                                         ('balance', '&lt;&gt;', 0)]"/>-->
-                        <span>
-                            <a
-                                t-att-data-domain="domain"
-                                t-att-data-res-model="'account.move.line'"
-                                class="o_account_financial_reports_web_action_monetary_multi"
+                        <t
+                            t-set="domain"
+                            t-value="[('account_id', '=', balance['id']),
+                                    ('date', '&gt;=', date_from),
+                                    ('date', '&lt;=', date_to),
+                                    ('balance', '&lt;&gt;', 0)]"
+                        />
+                        <span t-att-domain="domain" res-model="account.move.line">
+                            <t
                                 t-att-style="style"
-                            >
-                                <t
-                                    t-att-style="style"
-                                    t-esc="balance['balance']"
-                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                                />
-                            </a>
+                                t-esc="balance['balance']"
+                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            />
                         </span>
                     </t>
                     <t t-if="balance['type'] == 'group_type'">
-                        <!--                        <t t-set="domain"-->
-                        <!--                           t-value="[('account_id', 'in', line.compute_account_ids.ids),-->
-                        <!--                                     ('date', '&gt;=', line.report_id.date_from.strftime('%Y-%m-%d')),-->
-                        <!--                                     ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d'))]"/>-->
-                        <span>
-                            <a
-                                t-att-data-domain="domain"
-                                t-att-data-res-model="'account.move.line'"
-                                class="o_account_financial_reports_web_action_multi"
+                        <t
+                            t-set="domain"
+                            t-value="[('account_id', 'in', line.compute_account_ids.ids),
+                                    ('date', '&gt;=', line.report_id.date_from.strftime('%Y-%m-%d')),
+                                    ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d'))]"
+                        />
+                        <span t-att-domain="domain" res-model="account.move.line">
+                            <t
                                 t-att-style="style"
-                            >
-                                <t
-                                    t-att-style="style"
-                                    t-raw="balance['balance']"
-                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                                />
-                            </a>
+                                t-raw="balance['balance']"
+                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            />
                         </span>
                     </t>
                 </t>
@@ -582,19 +493,12 @@
                                  ('date', '&lt;=', date_to),
                                  ('balance', '&lt;&gt;', 0)]"
                     />
-                    <span>
-                        <a
-                            t-att-data-domain="domain"
-                            t-att-data-res-model="'account.move.line'"
-                            class="o_account_financial_reports_web_action_monetary_multi"
+                    <span t-att-domain="domain" res-model="account.move.line">
+                        <t
                             t-att-style="style"
-                        >
-                            <t
-                                t-att-style="style"
-                                t-raw="total_amount[account_id][partner_id]['balance']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                            />
-                        </a>
+                            t-raw="total_amount[account_id][partner_id]['balance']"
+                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        />
                     </span>
                 </t>
             </div>
@@ -607,19 +511,12 @@
                             t-value="[('account_id', '=', balance['id']),
                                          ('date', '&lt;=', date_to)]"
                         />
-                        <span>
-                            <a
-                                t-att-data-domain="domain"
-                                t-att-data-res-model="'account.move.line'"
-                                class="o_account_financial_reports_web_action_monetary_multi"
+                        <span t-att-domain="domain" res-model="account.move.line">
+                            <t
                                 t-att-style="style"
-                            >
-                                <t
-                                    t-att-style="style"
-                                    t-esc="balance['ending_balance']"
-                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                                />
-                            </a>
+                                t-esc="balance['ending_balance']"
+                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            />
                         </span>
                     </t>
                     <t t-if="balance['type'] == 'group_type'">
@@ -627,19 +524,12 @@
                             t-set="domain"
                             t-value="[('account_id', 'in', balance['account_ids'])]"
                         />
-                        <span>
-                            <a
-                                t-att-data-domain="domain"
-                                t-att-data-res-model="'account.move.line'"
-                                class="o_account_financial_reports_web_action_monetary_multi"
+                        <span t-att-domain="domain" res-model="account.move.line">
+                            <t
                                 t-att-style="style"
-                            >
-                                <t
-                                    t-att-style="style"
-                                    t-raw="balance['ending_balance']"
-                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                                />
-                            </a>
+                                t-raw="balance['ending_balance']"
+                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            />
                         </span>
                     </t>
                 </t>
@@ -650,19 +540,12 @@
                                  ('partner_id', '=', int(partner_id)),
                                  ('date', '&lt;=', date_to)]"
                     />
-                    <span>
-                        <a
-                            t-att-data-domain="domain"
-                            t-att-data-res-model="'account.move.line'"
-                            class="o_account_financial_reports_web_action_monetary_multi"
+                    <span t-att-domain="domain" res-model="account.move.line">
+                        <t
                             t-att-style="style"
-                        >
-                            <t
-                                t-att-style="style"
-                                t-esc="total_amount[account_id][partner_id]['ending_balance']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                            />
-                        </a>
+                            t-esc="total_amount[account_id][partner_id]['ending_balance']"
+                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        />
                     </span>
                 </t>
             </div>
@@ -676,26 +559,24 @@
                             </div>
                             <!--## Initial balance cur.-->
                             <div class="act_as_cell amount">
-                                <!--                                <t t-set="domain"-->
-                                <!--                                   t-value="[('account_id', '=', line.account_id.id)]"/>-->
-                                <span>
-                                    <a
-                                        t-att-data-domain="domain"
-                                        t-att-data-res-model="'account.move.line'"
-                                        class="o_account_financial_reports_web_action_monetary_multi"
+                                <t
+                                    t-set="domain"
+                                    t-value="[('account_id', '=', line.account_id.id)]"
+                                />
+                                <span
+                                    t-att-domain="domain"
+                                    res-model="account.move.line"
+                                >
+                                    <t
                                         t-att-style="style"
-                                    >
-                                        <t
-                                            t-att-style="style"
-                                            t-esc="balance['initial_currency_balance']"
-                                        />
-                                    </a>
+                                        t-esc="balance['initial_currency_balance']"
+                                    />
                                 </span>
                                 <!--                            <t t-if="line.account_group_id">-->
                                 <!--                                <t t-set="domain"-->
                                 <!--                                   t-value="[('account_id', 'in', line.compute_account_ids.ids)]"/>-->
                                 <!--                                <span>-->
-                                <!--                                    <a t-att-data-domain="domain"-->
+                                <!--                                    <a t-att-data-t-att-domain="domain"-->
                                 <!--                                       t-att-data-res-model="'account.move.line'"-->
                                 <!--                                       class="o_account_financial_reports_web_action_monetary_multi"-->
                                 <!--                                       t-att-style="style">-->
@@ -716,21 +597,19 @@
                                 />
                             </div>
                             <div class="act_as_cell amount">
-                                <!--                            <t t-set="domain"-->
-                                <!--                               t-value="[('account_id', '=', line.report_account_id.account_id.id),-->
-                                <!--                                         ('partner_id', '=', line.partner_id.id)]"/>-->
-                                <span>
-                                    <a
-                                        t-att-data-domain="domain"
-                                        t-att-data-res-model="'account.move.line'"
-                                        class="o_account_financial_reports_web_action_monetary_multi"
+                                <t
+                                    t-set="domain"
+                                    t-value="[('account_id', '=', line.report_account_id.account_id.id),
+                                            ('partner_id', '=', line.partner_id.id)]"
+                                />
+                                <span
+                                    t-att-domain="domain"
+                                    res-model="account.move.line"
+                                >
+                                    <t
                                         t-att-style="style"
-                                    >
-                                        <t
-                                            t-att-style="style"
-                                            t-raw="total_amount[account_id][partner_id]['initial_currency_balance']"
-                                        />
-                                    </a>
+                                        t-raw="total_amount[account_id][partner_id]['initial_currency_balance']"
+                                    />
                                 </span>
                             </div>
                         </t>
@@ -741,26 +620,24 @@
                     <t t-if="balance['type'] == 'account_type'">
                         <t t-if="balance['currency_id']">
                             <div class="act_as_cell amount">
-                                <!--                                <t t-set="domain"-->
-                                <!--                                   t-value="[('account_id', '=', line.account_id.id)]"/>-->
-                                <span>
-                                    <a
-                                        t-att-data-domain="domain"
-                                        t-att-data-res-model="'account.move.line'"
-                                        class="o_account_financial_reports_web_action_monetary_multi"
+                                <t
+                                    t-set="domain"
+                                    t-value="[('account_id', '=', line.account_id.id)]"
+                                />
+                                <span
+                                    t-att-domain="domain"
+                                    res-model="account.move.line"
+                                >
+                                    <t
                                         t-att-style="style"
-                                    >
-                                        <t
-                                            t-att-style="style"
-                                            t-raw="balance['ending_currency_balance']"
-                                        />
-                                    </a>
+                                        t-raw="balance['ending_currency_balance']"
+                                    />
                                 </span>
                                 <!--                            <t t-if="line.account_group_id">-->
                                 <!--                                <t t-set="domain"-->
                                 <!--                                   t-value="[('account_id', 'in', line.compute_account_ids.ids)]"/>-->
                                 <!--                                <span>-->
-                                <!--                                    <a t-att-data-domain="domain"-->
+                                <!--                                    <a t-att-data-t-att-domain="domain"-->
                                 <!--                                       t-att-data-res-model="'account.move.line'"-->
                                 <!--                                       class="o_account_financial_reports_web_action_monetary_multi"-->
                                 <!--                                       t-att-style="style">-->
@@ -775,21 +652,19 @@
                     <t t-if="total_amount[account_id]['currency_id']">
                         <div class="act_as_cell amount">
                             <t t-if="type == 'partner_type'">
-                                <!--                            <t t-set="domain"-->
-                                <!--                               t-value="[('account_id', '=', line.report_account_id.account_id.id),-->
-                                <!--                                         ('partner_id', '=', line.partner_id.id)]"/>-->
-                                <span>
-                                    <a
-                                        t-att-data-domain="domain"
-                                        t-att-data-res-model="'account.move.line'"
-                                        class="o_account_financial_reports_web_action_monetary_multi"
+                                <t
+                                    t-set="domain"
+                                    t-value="[('account_id', '=', line.report_account_id.account_id.id),
+                                            ('partner_id', '=', line.partner_id.id)]"
+                                />
+                                <span
+                                    t-att-domain="domain"
+                                    res-model="account.move.line"
+                                >
+                                    <t
                                         t-att-style="style"
-                                    >
-                                        <t
-                                            t-att-style="style"
-                                            t-raw="total_amount[account_id][partner_id]['ending_currency_balance']"
-                                        />
-                                    </a>
+                                        t-raw="total_amount[account_id][partner_id]['ending_currency_balance']"
+                                    />
                                 </span>
                             </t>
                         </div>
@@ -843,7 +718,7 @@
     <!--                        t-value="[('account_id', '=', account.account_id.id),-->
     <!--                                  ('date', '&lt;', o.date_from.strftime('%Y-%m-%d'))]"/>-->
     <!--                    <span>-->
-    <!--                        <a t-att-data-domain="domain"-->
+    <!--                        <a t-att-data-t-att-domain="domain"-->
     <!--                           t-att-data-res-model="'account.move.line'"-->
     <!--                           class="o_account_financial_reports_web_action_monetary_multi"-->
     <!--                           t-att-style="style">-->
@@ -858,7 +733,7 @@
     <!--                                  ('date', '&lt;=', account.report_id.date_to.strftime('%Y-%m-%d')),-->
     <!--                                  ('debit', '&lt;&gt;', 0)]"/>-->
     <!--                    <span>-->
-    <!--                        <a t-att-data-domain="domain"-->
+    <!--                        <a t-att-data-t-att-domain="domain"-->
     <!--                           t-att-data-res-model="'account.move.line'"-->
     <!--                           class="o_account_financial_reports_web_action_monetary_multi"-->
     <!--                           t-att-style="style">-->
@@ -873,7 +748,7 @@
     <!--                                  ('date', '&lt;=', account.report_id.date_to.strftime('%Y-%m-%d')),-->
     <!--                                  ('credit', '&lt;&gt;', 0)]"/>-->
     <!--                    <span>-->
-    <!--                        <a t-att-data-domain="domain"-->
+    <!--                        <a t-att-data-t-att-domain="domain"-->
     <!--                           t-att-data-res-model="'account.move.line'"-->
     <!--                           class="o_account_financial_reports_web_action_monetary_multi"-->
     <!--                           t-att-style="style">-->
@@ -888,7 +763,7 @@
     <!--                                  ('date', '&lt;=', account.report_id.date_to.strftime('%Y-%m-%d')),-->
     <!--                                  ('period_balance', '&lt;&gt;', 0)]"/>-->
     <!--                    <span>-->
-    <!--                        <a t-att-data-domain="domain"-->
+    <!--                        <a t-att-data-t-att-domain="domain"-->
     <!--                           t-att-data-res-model="'account.move.line'"-->
     <!--                           class="o_account_financial_reports_web_action_monetary_multi"-->
     <!--                           t-att-style="style">-->
@@ -900,7 +775,7 @@
     <!--                    <t t-set="domain"-->
     <!--                           t-value="[('account_id', '=', account.account_id.id)]"/>-->
     <!--                    <span>-->
-    <!--                        <a t-att-data-domain="domain"-->
+    <!--                        <a t-att-data-t-att-domain="domain"-->
     <!--                           t-att-data-res-model="'account.move.line'"-->
     <!--                           class="o_account_financial_reports_web_action_monetary_multi"-->
     <!--                           t-att-style="style" >-->
@@ -921,7 +796,7 @@
     <!--                            t-value="[('account_id', '=', account.account_id.id),-->
     <!--                                      ('date', '&lt;', date_from.strftime('%Y-%m-%d'))]"/>-->
     <!--                            <span>-->
-    <!--                                <a t-att-data-domain="domain"-->
+    <!--                                <a t-att-data-t-att-domain="domain"-->
     <!--                                   t-att-data-res-model="'account.move.line'"-->
     <!--                                   class="o_account_financial_reports_web_action_monetary_multi"-->
     <!--                                   t-att-style="style">-->
@@ -932,7 +807,7 @@
     <!--                            <t t-set="domain"-->
     <!--                               t-value="[('account_id', '=', account.account_id.id)]"/>-->
     <!--                            <span>-->
-    <!--                                <a t-att-data-domain="domain"-->
+    <!--                                <a t-att-data-t-att-domain="domain"-->
     <!--                                   t-att-data-res-model="'account.move.line'"-->
     <!--                                   class="o_account_financial_reports_web_action_monetary_multi"-->
     <!--                                   t-att-style="style" >-->
