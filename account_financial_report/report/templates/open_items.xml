@@ -178,16 +178,12 @@
             </div>
             <!--## move-->
             <div class="act_as_cell left">
-                <t t-set="res_model" t-value="'account.move'" />
-                <span>
-                    <a
-                        t-att-data-active-id="line['move_id']"
-                        t-att-data-res-model="res_model"
-                        class="o_account_financial_reports_web_action"
-                        style="color: black;"
-                    >
-                        <t t-esc="line['move_name']" />
-                    </a>
+                <span
+                    t-att-res-id="line['move_id']"
+                    res-model="account.move"
+                    view-type="form"
+                >
+                    <t t-esc="line['move_name']" />
                 </span>
             </div>
             <!--## journal-->

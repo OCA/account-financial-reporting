@@ -22,6 +22,7 @@
   * Sergio Teruel
   * Ernesto Tejeda
   * Jo??o Marques
+  * Alexandre D. D??az
 
 Much of the work in this module was done at a sprint in Sorrento, Italy in
 April 2016.

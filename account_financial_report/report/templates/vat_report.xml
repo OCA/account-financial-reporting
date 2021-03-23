@@ -50,64 +50,56 @@
                             class="act_as_cell left oe_tooltip_string"
                             style="width: 5%;"
                         >
-                            <!--                            <span>-->
-                            <!--                                <a t-att-data-active-id="res_id"-->
-                            <!--                                   t-att-data-res-model="res_model"-->
-                            <!--                                   class="o_account_financial_reports_web_action"-->
-                            <!--                                   t-att-style="style">-->
-                            <t t-att-style="style" t-raw="tag_or_group['code']" />
-                            <!--                                </a>-->
-                            <!--                            </span>-->
+                            <span
+                                t-att-res-id="res_id"
+                                t-att-res-model="res_model"
+                                view-type="form"
+                            >
+                                <t t-att-style="style" t-raw="tag_or_group['code']" />
+                            </span>
                         </div>
                         <div
                             class="act_as_cell left oe_tooltip_string"
                             style="width: 65%;"
                         >
-                            <!--                            <span>-->
-                            <!--                                <a t-att-data-active-id="res_id"-->
-                            <!--                                    t-att-data-res-model="res_model"-->
-                            <!--                                    class="o_account_financial_reports_web_action"-->
-                            <!--                                    t-att-style="style">-->
-                            <t t-att-style="style" t-raw="tag_or_group['name']" />
-                            <!--                                </a>-->
-                            <!--                            </span>-->
+                            <span
+                                t-att-res-id="res_id"
+                                t-att-res-model="res_model"
+                                view-type="form"
+                            >
+                                <t t-att-style="style" t-raw="tag_or_group['name']" />
+                            </span>
                         </div>
                         <div class="act_as_cell amount" style="width: 15%;">
-                            <!--                            <t t-set="domain"-->
-                            <!--                               t-value="[('tax_ids', 'in', [tax.tax_id.id for tax in tag.tax_ids]),-->
-                            <!--                                         ('date', '&gt;=', o.date_from),-->
-                            <!--                                         ('date', '&lt;=', o.date_to)]"/>-->
-                            <!--                            <span>-->
-                            <!--                                <a t-att-data-domain="domain"-->
-                            <!--                                    t-att-data-res-model="'account.move.line'"-->
-                            <!--                                    class="o_account_financial_reports_web_action_multi"-->
-                            <!--                                    t-att-style="style">-->
                             <t
-                                t-att-style="style"
-                                t-raw="tag_or_group['net']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-set="domain"
+                                t-value="[('tax_ids', 'in', [tax.tax_id.id for tax in tag.tax_ids]),
+                                        ('date', '&gt;=', o.date_from),
+                                        ('date', '&lt;=', o.date_to)]"
                             />
-                            <!--                                </a>-->
-                            <!--                            </span>-->
+                            <span t-att-domain="domain" res-model="account.move.line">
+                                <t
+                                    t-att-style="style"
+                                    t-raw="tag_or_group['net']"
+                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                />
+                            </span>
                         </div>
                         <div class="act_as_cell amount" style="width: 15%;">
-                            <!--                            <t t-set="domain"-->
-                            <!--                               t-value="[('tax_line_id', 'in', [tax.tax_id.id for tax in tag.tax_ids]),-->
-                            <!--                                         ('date', '&gt;=', o.date_from),-->
-                            <!--                                         ('date', '&lt;=', o.date_to),-->
-                            <!--                                         ('tax_exigible', '=', True)]"/>-->
-                            <!--                            <span>-->
-                            <!--                                <a t-att-data-domain="domain"-->
-                            <!--                                    t-att-data-res-model="'account.move.line'"-->
-                            <!--                                    class="o_account_financial_reports_web_action_multi"-->
-                            <!--                                    t-att-style="style">-->
                             <t
-                                t-att-style="style"
-                                t-raw="tag_or_group['tax']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-set="domain"
+                                t-value="[('tax_line_id', 'in', [tax.tax_id.id for tax in tag.tax_ids]),
+                                        ('date', '&gt;=', o.date_from),
+                                        ('date', '&lt;=', o.date_to),
+                                        ('tax_exigible', '=', True)]"
                             />
-                            <!--                                </a>-->
-                            <!--                            </span>-->
+                            <span t-att-domain="domain" res-model="account.move.line">
+                                <t
+                                    t-att-style="style"
+                                    t-raw="tag_or_group['tax']"
+                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                />
+                            </span>
                         </div>
                     </div>
                     <t t-if="tax_detail">
@@ -118,52 +110,51 @@
                                     class="act_as_cell left oe_tooltip_string"
                                     style="padding-left: 20px; width: 65%;"
                                 >
-                                    <!--                                    <span>-->
-                                    <!--                                        <a t-att-data-active-id="tax.tax_id.id"-->
-                                    <!--                                            t-att-data-res-model="res_model"-->
-                                    <!--                                            class="o_account_financial_reports_web_action"-->
-                                    <!--                                            t-att-style="style">-->
-                                    <t t-att-style="style" t-raw="tax['name']" />
-                                    <!--                                        </a>-->
-                                    <!--                                    </span>-->
+                                    <span
+                                        t-att-res-id="tax.tax_id.id"
+                                        t-att-res-model="res_model"
+                                        view-type="form"
+                                    >
+                                        <t t-att-style="style" t-raw="tax['name']" />
+                                    </span>
                                 </div>
                                 <div class="act_as_cell amount" style="width: 15%;">
-                                    <!--                                    <t t-set="domain"-->
-                                    <!--                                       t-value="[('tax_ids', 'in', tax.tax_id.ids),-->
-                                    <!--                                                 ('date', '&gt;=', o.date_from),-->
-                                    <!--                                                 ('date', '&lt;=', o.date_to),-->
-                                    <!--                                                 ('tax_exigible', '=', True)]"/>-->
-                                    <!--                                    <span>-->
-                                    <!--                                        <a t-att-data-domain="domain"-->
-                                    <!--                                            t-att-data-res-model="'account.move.line'"-->
-                                    <!--                                            class="o_account_financial_reports_web_action_multi"-->
-                                    <!--                                            t-att-style="style">-->
                                     <t
-                                        t-att-style="style"
-                                        t-raw="tax['net']"
-                                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                        t-set="domain"
+                                        t-value="[('tax_ids', 'in', tax.tax_id.ids),
+                                                ('date', '&gt;=', o.date_from),
+                                                ('date', '&lt;=', o.date_to),
+                                                ('tax_exigible', '=', True)]"
                                     />
-                                    <!--                                        </a>-->
-                                    <!--                                    </span>-->
+                                    <span
+                                        t-att-domain="domain"
+                                        res-model="account.move.line"
+                                    >
+                                        <t
+                                            t-att-style="style"
+                                            t-raw="tax['net']"
+                                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                        />
+                                    </span>
                                 </div>
                                 <div class="act_as_cell amount" style="width: 15%;">
-                                    <!--                                    <t t-set="domain"-->
-                                    <!--                                       t-value="[('tax_line_id', '=', tax.tax_id.id),-->
-                                    <!--                                                 ('date', '&gt;=', o.date_from),-->
-                                    <!--                                                 ('date', '&lt;=', o.date_to),-->
-                                    <!--                                                 ('tax_exigible', '=', True)]"/>-->
-                                    <!--                                    <span>-->
-                                    <!--                                        <a t-att-data-domain="domain"-->
-                                    <!--                                            t-att-data-res-model="'account.move.line'"-->
-                                    <!--                                            class="o_account_financial_reports_web_action_multi"-->
-                                    <!--                                            t-att-style="style">-->
                                     <t
-                                        t-att-style="style"
-                                        t-raw="tax['tax']"
-                                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                        t-set="domain"
+                                        t-value="[('tax_line_id', '=', tax.tax_id.id),
+                                                ('date', '&gt;=', o.date_from),
+                                                ('date', '&lt;=', o.date_to),
+                                                ('tax_exigible', '=', True)]"
                                     />
-                                    <!--                                        </a>-->
-                                    <!--                                    </span>-->
+                                    <span
+                                        t-att-domain="domain"
+                                        res-model="account.move.line"
+                                    >
+                                        <t
+                                            t-att-style="style"
+                                            t-raw="tax['tax']"
+                                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                        />
+                                    </span>
                                 </div>
                             </div>
                         </t>

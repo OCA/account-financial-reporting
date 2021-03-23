@@ -6,7 +6,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Account Financial Reports",
-    "version": "14.0.1.0.1",
+    "version": "14.0.1.1.0",
     "category": "Reporting",
     "summary": "OCA Financial Reports",
     "author": "Camptocamp SA,"
@@ -42,6 +42,7 @@
         "view/report_aged_partner_balance.xml",
         "view/report_vat_report.xml",
     ],
+    "qweb": ["static/src/xml/report.xml"],
     "installable": True,
     "application": True,
     "auto_install": False,

@@ -195,19 +195,17 @@
     </template>
     <template id="account_financial_report.report_journal_move_line">
         <div class="act_as_cell left" name="entry">
-            <t t-set="res_model" t-value="'account.move'" />
-            <span t-if="display_move_info">
-                <a
-                    t-att-data-active-id="move_line['move_id']"
-                    t-att-data-res-model="res_model"
-                    class="o_account_financial_reports_web_action"
-                    style="color: black;"
+            <t t-if="display_move_info">
+                <span
+                    t-att-res-id="move_line['move_id']"
+                    res-model="account.move"
+                    view-type="form"
                 >
                     <t
                         t-esc="o._get_atr_from_dict(move_line['move_id'], move_ids_data, 'entry')"
                     />
-                </a>
-            </span>
+                </span>
+            </t>
         </div>
         <div class="act_as_cell left" name="date">
             <span
