@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
     <template id="account_financial_report.internal_layout">
-        <div class="article">
+        <div class="article o_account_financial_reports_page">
             <link
                 href="/account_financial_report/static/src/css/report.css"
                 rel="stylesheet"
