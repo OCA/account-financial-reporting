@@ -58,16 +58,6 @@ msgid "<b>Taxes summary</b>"
 msgstr "<b>Steuerbuchungen Zusammenfassung</b>"
 
 #. module: account_financial_report
-#: model_terms:ir.ui.view,arch_db:account_financial_report.report_buttons
-msgid "<span class=\"fa fa-download\"/> Export"
-msgstr "<span class=\"fa fa-download\"/> Export"
-
-#. module: account_financial_report
-#: model_terms:ir.ui.view,arch_db:account_financial_report.report_buttons
-msgid "<span class=\"fa fa-print\"/> Print"
-msgstr "<span class=\"fa fa-print\"/> Druck"
-
-#. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
 msgid ""
 "<span class=\"oe_inline\">\n"
@@ -244,7 +234,6 @@ msgstr "Alter bis 90 T."
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 #: model:ir.actions.act_window,name:account_financial_report.action_aged_partner_balance_wizard
-#: model:ir.actions.client,name:account_financial_report.action_report_aged_partner_balance
 #: model:ir.actions.report,name:account_financial_report.action_print_report_aged_partner_balance_html
 #: model:ir.actions.report,name:account_financial_report.action_print_report_aged_partner_balance_qweb
 #: model:ir.ui.menu,name:account_financial_report.menu_aged_partner_balance_wizard
@@ -794,6 +783,13 @@ msgid "Entry number"
 msgstr "Buchungssatz Nummer"
 
 #. module: account_financial_report
+#. openerp-web
+#: code:addons/account_financial_report/static/src/xml/report.xml:0
+#, python-format
+msgid "Export"
+msgstr ""
+
+#. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.journal_ledger_wizard
@@ -904,7 +900,6 @@ msgstr "GJ Beginn"
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: model:ir.actions.act_window,name:account_financial_report.act_action_general_ledger_wizard_partner_relation
 #: model:ir.actions.act_window,name:account_financial_report.action_general_ledger_wizard
-#: model:ir.actions.client,name:account_financial_report.action_report_general_ledger
 #: model:ir.actions.report,name:account_financial_report.action_print_report_general_ledger_html
 #: model:ir.actions.report,name:account_financial_report.action_print_report_general_ledger_qweb
 #: model:ir.ui.menu,name:account_financial_report.menu_general_ledger_wizard
@@ -1047,7 +1042,6 @@ msgstr "Anfangssaldo"
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: code:addons/account_financial_report/report/open_items_xlsx.py:0
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
-#: model:ir.actions.client,name:account_financial_report.action_report_journal_ledger
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__journal_ids
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
@@ -1262,7 +1256,6 @@ msgstr "Älter"
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/open_items_xlsx.py:0
 #: model:ir.actions.act_window,name:account_financial_report.action_open_items_wizard
-#: model:ir.actions.client,name:account_financial_report.action_report_open_items
 #: model:ir.actions.report,name:account_financial_report.action_print_report_open_items_html
 #: model:ir.actions.report,name:account_financial_report.action_print_report_open_items_qweb
 #: model:ir.ui.menu,name:account_financial_report.menu_open_items_wizard
@@ -1391,6 +1384,13 @@ msgstr "Zeiträume"
 #, python-format
 msgid "Posted"
 msgstr "Gebucht"
+
+#. module: account_financial_report
+#. openerp-web
+#: code:addons/account_financial_report/static/src/xml/report.xml:0
+#, python-format
+msgid "Print"
+msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
@@ -1668,7 +1668,6 @@ msgstr "Gesamt"
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
 #: model:ir.actions.act_window,name:account_financial_report.action_trial_balance_wizard
-#: model:ir.actions.client,name:account_financial_report.action_report_trial_balance
 #: model:ir.actions.report,name:account_financial_report.action_report_trial_balance_html
 #: model:ir.actions.report,name:account_financial_report.action_report_trial_balance_qweb
 #: model:ir.ui.menu,name:account_financial_report.menu_trial_balance_wizard
@@ -1732,7 +1731,6 @@ msgstr ""
 
 #. module: account_financial_report
 #: model:ir.actions.act_window,name:account_financial_report.action_vat_report_wizard
-#: model:ir.actions.client,name:account_financial_report.action_report_vat_report
 #: model:ir.actions.report,name:account_financial_report.action_print_report_vat_report_html
 #: model:ir.actions.report,name:account_financial_report.action_print_report_vat_report_qweb
 #: model:ir.ui.menu,name:account_financial_report.menu_vat_report_wizard
@@ -1852,6 +1850,12 @@ msgstr "Breite: 38.92%;"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 8.11%;"
 msgstr "Breite: 8,11%;"
+
+#~ msgid "<span class=\"fa fa-download\"/> Export"
+#~ msgstr "<span class=\"fa fa-download\"/> Export"
+
+#~ msgid "<span class=\"fa fa-print\"/> Print"
+#~ msgstr "<span class=\"fa fa-print\"/> Druck"
 
 #~ msgid ""
 #~ "Cost\n"
