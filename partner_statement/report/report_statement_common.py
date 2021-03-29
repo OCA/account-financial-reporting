@@ -1,6 +1,7 @@
 # Copyright 2018 ForgeFlow, S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
+# flake8: noqa: C901: cannot find a simple way to do with the complex of "_get_report_values"
 from datetime import datetime, timedelta
 
 from odoo import _, api, fields, models
