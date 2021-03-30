@@ -19,8 +19,8 @@ def pre_init_hook(cr):
         ("liquidity", "liquidity", False),
         ("payable", "payable", "AND aml.balance < 0"),
         ("payable_refund", "payable", "AND aml.balance >= 0"),
-        ("receivable", "receivable", "AND aml.balance < 0"),
-        ("receivable_refund", "receivable", "AND aml.balance >= 0"),
+        ("receivable", "receivable", "AND aml.balance > 0"),
+        ("receivable_refund", "receivable", "AND aml.balance <= 0"),
         ("other", False, False),
     ]
     for move_type, internal_type, extra_where in MAPPING:
