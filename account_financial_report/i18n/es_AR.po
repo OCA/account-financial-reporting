@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2020-10-05 20:16+0000\n"
+"PO-Revision-Date: 2021-03-31 04:46+0000\n"
 "Last-Translator: Ignacio Buioli <ibuioli@gmail.com>\n"
 "Language-Team: none\n"
 "Language: es_AR\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10\n"
+"X-Generator: Weblate 4.3.2\n"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
@@ -179,7 +179,9 @@ msgstr "Filtros Adicionales"
 msgid ""
 "Age ??? 120\n"
 "                        d."
-msgstr "??? 120 d."
+msgstr ""
+"Antig??edad ??? 120\n"
+"                        d."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -192,7 +194,9 @@ msgstr "Tiempo ??? 120 d."
 msgid ""
 "Age ??? 30\n"
 "                        d."
-msgstr "??? 30 d."
+msgstr ""
+"Antig??edad ??? 30\n"
+"                        d."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -205,7 +209,9 @@ msgstr "Tiempo ??? 30 d."
 msgid ""
 "Age ??? 60\n"
 "                        d."
-msgstr "??? 60 d."
+msgstr ""
+"Antig??edad ??? 60\n"
+"                        d."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -218,7 +224,9 @@ msgstr "Tiempo ??? 60 d."
 msgid ""
 "Age ??? 90\n"
 "                        d."
-msgstr "??? 90 d."
+msgstr ""
+"Antig??edad ??? 90\n"
+"                        d."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -1313,7 +1321,9 @@ msgstr "Socio"
 msgid ""
 "Partner\n"
 "                    cumul aged balance"
-msgstr "Saldo Acumulado de Empresa"
+msgstr ""
+"Saldo\n"
+"                    acumulado de Empresa"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
@@ -1388,7 +1398,9 @@ msgstr "S??lo cuentas a cobrar"
 msgid ""
 "Ref -\n"
 "                        Label"
-msgstr "Referencia"
+msgstr ""
+"Ref -\n"
+"                        Etiqueta"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
