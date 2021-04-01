@@ -129,6 +129,7 @@ Contributors
   * Sergio Teruel
   * Ernesto Tejeda
   * João Marques
+  * Alexandre D. Díaz
 
 Much of the work in this module was done at a sprint in Sorrento, Italy in
 April 2016.
