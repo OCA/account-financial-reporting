@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2021-03-31 04:46+0000\n"
+"PO-Revision-Date: 2021-04-02 21:46+0000\n"
 "Last-Translator: Ignacio Buioli <ibuioli@gmail.com>\n"
 "Language-Team: none\n"
 "Language: es_AR\n"
@@ -767,7 +767,7 @@ msgstr "N??mero de asiento"
 #: code:addons/account_financial_report/static/src/xml/report.xml:0
 #, python-format
 msgid "Export"
-msgstr ""
+msgstr "Exportar"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
@@ -913,6 +913,8 @@ msgid ""
 "General Ledger can be computed only if selected company have\n"
 "                        only one unaffected earnings account."
 msgstr ""
+"El Libro Mayor solo se puede calcular si la empresa seleccionada tiene\n"
+"                         solo una cuenta de ganancias no afectada."
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__group_option
@@ -1272,7 +1274,7 @@ msgstr "Abrir Elementos del Informe XLSX"
 #: model:ir.actions.act_window,name:account_financial_report.action_open_items_wizard
 #: model:ir.ui.menu,name:account_financial_report.menu_open_items_wizard
 msgid "Open Itemsr"
-msgstr ""
+msgstr "Abrir Itemsr"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.journal_ledger_wizard
@@ -1368,7 +1370,7 @@ msgstr "Posteado"
 #: code:addons/account_financial_report/static/src/xml/report.xml:0
 #, python-format
 msgid "Print"
-msgstr ""
+msgstr "Imprimir"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
@@ -1681,6 +1683,9 @@ msgid ""
 "Trial Balance can be computed only if selected company have only\n"
 "                        one unaffected earnings account."
 msgstr ""
+"El saldo de prueba se puede calcular solo si la empresa seleccionada tiene "
+"solo\n"
+"                         una cuenta de ganancias no afectada."
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__unaffected_earnings_account
@@ -1796,7 +1801,7 @@ msgstr "o"
 #. module: account_financial_report
 #: model:ir.actions.report,name:account_financial_report.action_print_journal_ledger_wizard_qweb
 msgid "ournal Ledger"
-msgstr ""
+msgstr "Libro Mayor del Diario"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal
