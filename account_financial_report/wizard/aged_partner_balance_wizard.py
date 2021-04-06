@@ -15,7 +15,7 @@ class AgedPartnerBalanceWizard(models.TransientModel):
 
     company_id = fields.Many2one(
         comodel_name="res.company",
-        default=lambda self: self.env.user.company_id,
+        default=lambda self: self.env.company,
         required=False,
         string="Company",
     )
