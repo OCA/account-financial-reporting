@@ -121,58 +121,103 @@ class AccountTax(models.Model):
             state = []
         return state
 
-    def get_move_line_partial_domain(self, from_date, to_date, company_id):
-        return [
-            ('date', '<=', to_date),
-            ('date', '>=', from_date),
-            ('company_id', '=', company_id),
-        ]
+    def get_move_line_partial_where(self, from_date, to_date, company_ids):
+        query = "aml.date <= %s AND aml.date >= %s AND aml.company_id IN %s"
+        params = [to_date, from_date, tuple(company_ids)]
+        return query, params
 
-    def compute_balance(self, tax_or_base='tax', move_type=None):
+    def compute_balance(self, tax_or_base="tax", move_type=None):
+        # There's really bad performace in m2m fields.
+        # So we better do a direct query.
+        # See https://github.com/odoo/odoo/issues/30350
         self.ensure_one()
-        domain = self.get_move_lines_domain(
-            tax_or_base=tax_or_base, move_type=move_type)
-        # balance is debit - credit whereas on tax return you want to see what
-        # vat has to be paid so:
-        # VAT on sales (credit) - VAT on purchases (debit).
+        query, params = self.get_move_lines_query(
+            tax_or_base=tax_or_base, move_type=move_type
+        )
+        _select = "sum(aml.balance)"
+        query = query.format(select_clause=_select)
+        self.env.cr.execute(query, params)  # pylint: disable=E8103
+        res = self.env.cr.fetchone()
+        balance = 0.0
+        if res:
+            balance = res[0]
+        return balance and -balance or 0.0
 
-        balance = self.env['account.move.line'].\
-            read_group(domain, ['balance'], [])[0]['balance']
-        return balance and -balance or 0
-
-    def get_balance_domain(self, state_list, type_list):
-        domain = [
-            ('move_id.state', 'in', state_list),
-            ('tax_line_id', '=', self.id),
-            ('tax_exigible', '=', True)
-        ]
-        if type_list:
-            domain.append(('move_id.move_type', 'in', type_list))
-        return domain
-
-    def get_base_balance_domain(self, state_list, type_list):
-        domain = [
-            ('move_id.state', 'in', state_list),
-            ('tax_ids', 'in', self.id),
-            ('tax_exigible', '=', True)
-        ]
-        if type_list:
-            domain.append(('move_id.move_type', 'in', type_list))
-        return domain
-
-    def get_move_lines_domain(self, tax_or_base='tax', move_type=None):
-        from_date, to_date, company_id, target_move = self.get_context_values()
+    def get_move_lines_query(self, tax_or_base="tax", move_type=None):
+        from_date, to_date, company_ids, target_move = self.get_context_values()
         state_list = self.get_target_state_list(target_move)
         type_list = self.get_target_type_list(move_type)
-        domain = self.get_move_line_partial_domain(
-            from_date, to_date, company_id)
-        balance_domain = []
-        if tax_or_base == 'tax':
-            balance_domain = self.get_balance_domain(state_list, type_list)
-        elif tax_or_base == 'base':
-            balance_domain = self.get_base_balance_domain(
-                state_list, type_list)
-        domain.extend(balance_domain)
+        base_query = self.get_move_lines_base_query()
+        _where = ""
+        _joins = ""
+        _params = []
+        where, params = self.get_move_line_partial_where(
+            from_date, to_date, company_ids
+        )
+        _where += where
+        _params += params
+        if tax_or_base == "tax":
+            where, params = self.get_balance_where(state_list, type_list)
+            _where += where
+            _params += params
+        elif tax_or_base == "base":
+            joins, where, params = self.get_base_balance_where(state_list, type_list)
+            _where += where
+            _joins += joins
+            _params += params
+        query = base_query.format(
+            select_clause="{select_clause}",
+            where_clause=_where,
+            additional_joins=_joins,
+        )
+        return query, _params
+
+    def get_move_lines_base_query(self):
+        return (
+            "SELECT {select_clause} FROM account_move_line AS aml "
+            "INNER JOIN account_move AS am ON aml.move_id = am.id "
+            "{additional_joins}"
+            " WHERE {where_clause}"
+        )
+
+    def get_balance_where(self, state_list, type_list):
+        where = (
+            " AND am.state IN %s AND "
+            "aml.tax_line_id = %s AND "
+            "aml.tax_exigible = True"
+        )
+        params = [tuple(state_list), self.id]
+        if type_list:
+            where += " AND am.move_type IN %s"
+            params += [tuple(type_list)]
+        return where, params
+
+    def get_base_balance_where(self, state_list, type_list):
+        joins = (
+            " INNER JOIN account_move_line_account_tax_rel AS rel "
+            "ON aml.id = rel.account_move_line_id"
+            " INNER JOIN account_tax as tax "
+            "ON tax.id = rel.account_tax_id"
+        )
+
+        where = " AND am.state IN %s" " AND tax.id = %s" " AND aml.tax_exigible = True "
+        params = [tuple(state_list), self.id]
+        if type_list:
+            where += " AND am.move_type IN %s"
+            params += [tuple(type_list)]
+        return joins, where, params
+
+    def get_move_lines_domain(self, tax_or_base="tax", move_type=None):
+        query, params = self.get_move_lines_query(
+            tax_or_base=tax_or_base, move_type=move_type
+        )
+        _select = "aml.id"
+        query = query.format(select_clause=_select)
+        self.env.cr.execute(query, params)  # pylint: disable=E8103
+        amls = []
+        for (aml_id,) in self.env.cr.fetchall():
+            amls.append(aml_id)
+        domain = [("id", "in", amls)]
         return domain
 
     def get_lines_action(self, tax_or_base='tax', move_type=None):
