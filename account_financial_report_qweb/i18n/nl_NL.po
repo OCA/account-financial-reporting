@@ -427,7 +427,7 @@ msgid "Centralized"
 msgstr "Gecentraliseerd"
 
 #. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:1434
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:1439
 #, python-format
 msgid "Centralized Entries"
 msgstr "Centralisatieboekingen"
@@ -1577,8 +1577,8 @@ msgid "No limit"
 msgstr ""
 
 #. module: account_financial_report_qweb
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:756
-#: code:addons/account_financial_report_qweb/report/general_ledger.py:1138
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:761
+#: code:addons/account_financial_report_qweb/report/general_ledger.py:1143
 #: code:addons/account_financial_report_qweb/report/open_items.py:307
 #: code:addons/account_financial_report_qweb/report/open_items.py:545
 #, python-format
