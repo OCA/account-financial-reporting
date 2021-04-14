@@ -131,17 +131,16 @@ class AccountTax(models.Model):
         # So we better do a direct query.
         # See https://github.com/odoo/odoo/issues/30350
         self.ensure_one()
-        query, params = self.get_move_lines_query(
+        _select, _group_by, query, params = self.get_move_lines_query(
             tax_or_base=tax_or_base, move_type=move_type
         )
-        _select = "sum(aml.balance)"
-        query = query.format(select_clause=_select)
+        _select = "SUM(aml.balance)"
+        query = query.format(select_clause=_select, group_by_clause=_group_by)
         self.env.cr.execute(query, params)  # pylint: disable=E8103
-        res = self.env.cr.fetchone()
-        balance = 0.0
-        if res:
-            balance = res[0]
-        return balance and -balance or 0.0
+        total_balance = {}
+        for balance, tax_id in self.env.cr.fetchall():
+            total_balance[tax_id] = balance
+        return False  # TODO
 
     def get_move_lines_query(self, tax_or_base="tax", move_type=None):
         from_date, to_date, company_ids, target_move = self.get_context_values()
@@ -150,27 +149,39 @@ class AccountTax(models.Model):
         base_query = self.get_move_lines_base_query()
         _where = ""
         _joins = ""
+        _group_by = ""
         _params = []
+        _select = "SELECT SUM(balance)"
+        _group_by = "GROUP BY "
         where, params = self.get_move_line_partial_where(
             from_date, to_date, company_ids
         )
         _where += where
         _params += params
         if tax_or_base == "tax":
-            where, params = self.get_balance_where(state_list, type_list)
+            select, where, group_by, params = self.get_balance_where(
+                state_list, type_list
+            )
             _where += where
             _params += params
+            _select += select
+            _group_by += group_by
         elif tax_or_base == "base":
-            joins, where, params = self.get_base_balance_where(state_list, type_list)
+            select, joins, where, group_by, params = self.get_base_balance_where(
+                state_list, type_list
+            )
             _where += where
             _joins += joins
             _params += params
+            _select += select
+            _group_by += group_by
         query = base_query.format(
             select_clause="{select_clause}",
             where_clause=_where,
             additional_joins=_joins,
+            group_by="{group_by_clause}",
         )
-        return query, _params
+        return _select, _group_by, query, _params
 
     def get_move_lines_base_query(self):
         return (
@@ -178,41 +189,44 @@ class AccountTax(models.Model):
             "INNER JOIN account_move AS am ON aml.move_id = am.id "
             "{additional_joins}"
             " WHERE {where_clause}"
+            "{group_by_clause}"
         )
 
     def get_balance_where(self, state_list, type_list):
+        select = ", tax_line_id  as tax_id"
         where = (
             " AND am.state IN %s AND "
             "aml.tax_line_id = %s AND "
             "aml.tax_exigible = True"
         )
+        group_by = "aml.tax_line_id"
         params = [tuple(state_list), self.id]
         if type_list:
             where += " AND am.move_type IN %s"
             params += [tuple(type_list)]
-        return where, params
+        return select, where, group_by, params
 
     def get_base_balance_where(self, state_list, type_list):
+        select = ", rel.account_tax_id as tax_id"
         joins = (
             " INNER JOIN account_move_line_account_tax_rel AS rel "
             "ON aml.id = rel.account_move_line_id"
-            " INNER JOIN account_tax as tax "
-            "ON tax.id = rel.account_tax_id"
         )
-
+        group_by = "rel.account_tax_id"
         where = " AND am.state IN %s" " AND tax.id = %s" " AND aml.tax_exigible = True "
         params = [tuple(state_list), self.id]
         if type_list:
             where += " AND am.move_type IN %s"
             params += [tuple(type_list)]
-        return joins, where, params
+        return select, joins, where, group_by, params
 
     def get_move_lines_domain(self, tax_or_base="tax", move_type=None):
-        query, params = self.get_move_lines_query(
+        _select, _group_by, query, params = self.get_move_lines_query(
             tax_or_base=tax_or_base, move_type=move_type
         )
         _select = "aml.id"
-        query = query.format(select_clause=_select)
+        _group_by = ""
+        query = query.format(select_clause=_select, group_by_clause=_group_by)
         self.env.cr.execute(query, params)  # pylint: disable=E8103
         amls = []
         for (aml_id,) in self.env.cr.fetchall():
