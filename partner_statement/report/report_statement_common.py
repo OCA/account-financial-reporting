@@ -1,7 +1,6 @@
 # Copyright 2018 ForgeFlow, S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-# flake8: noqa: C901: cannot find a simple way to do with the complex of "_get_report_values"
 from datetime import datetime, timedelta
 
 from odoo import _, api, fields, models
@@ -290,8 +289,9 @@ class ReportStatementCommon(models.AbstractModel):
             currencies,
         )
 
-    @api.model  # noqa: C901
+    @api.model
     def _get_report_values(self, docids, data=None):
+        # flake8: noqa: C901
         """
         @return: returns a dict of parameters to pass to qweb report.
           the most important pair is {'data': res} which contains all
