@@ -2,7 +2,7 @@
 # © 2016 Antonio Espinosa <antonio.espinosa@tecnativa.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 
 
 class AccountTax(models.Model):
@@ -26,11 +26,6 @@ class AccountTax(models.Model):
     base_balance_refund = fields.Float(
         string="Base Balance Refund", compute="_compute_balance",
     )
-    has_moves = fields.Boolean(
-        string="Has balance in period",
-        compute="_compute_has_moves",
-        search="_search_has_moves",
-    )
 
     def get_context_values(self):
         context = self.env.context
@@ -41,55 +36,9 @@ class AccountTax(models.Model):
             context.get('target_move', 'posted'),
         )
 
-    def _account_tax_ids_with_moves(self):
-        """ Return all account.tax ids for which there is at least
-        one account.move.line in the context period
-        for the user company.
-
-        Caveat: this ignores record rules and ACL but it is good
-        enough for filtering taxes with activity during the period.
-        """
-        req = """
-            SELECT id
-            FROM account_tax at
-            WHERE
-            company_id = %s AND
-            EXISTS (
-              SELECT 1 FROM account_move_Line aml
-              WHERE
-                date >= %s AND
-                date <= %s AND
-                company_id = %s AND (
-                  tax_line_id = at.id OR
-                  EXISTS (
-                    SELECT 1 FROM account_move_line_account_tax_rel
-                    WHERE account_move_line_id = aml.id AND
-                      account_tax_id = at.id
-                  )
-                )
-            )
-        """
-        from_date, to_date, company_id, target_move = self.get_context_values()
-        self.env.cr.execute(
-            req, (company_id, from_date, to_date, company_id))
-        return [r[0] for r in self.env.cr.fetchall()]
-
-    @api.multi
-    def _compute_has_moves(self):
-        ids_with_moves = set(self._account_tax_ids_with_moves())
-        for tax in self:
-            tax.has_moves = tax.id in ids_with_moves
-
     @api.model
     def _is_unsupported_search_operator(self, operator):
         return operator != '='
-
-    @api.model
-    def _search_has_moves(self, operator, value):
-        if self._is_unsupported_search_operator(operator) or not value:
-            raise ValueError(_("Unsupported search operator"))
-        ids_with_moves = self._account_tax_ids_with_moves()
-        return [('id', 'in', ids_with_moves)]
 
     def _compute_balance(self):
         total_balance_regular = self.compute_balance(
