@@ -229,7 +229,7 @@
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
                                 t-raw="account_or_partner_object['init_bal']['debit']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                             />
                         </span>
                     </t>
@@ -244,7 +244,7 @@
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
                                 t-raw="account_or_partner_object['init_bal']['debit']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                             />
                         </span>
                     </t>
@@ -261,7 +261,7 @@
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
                                 t-raw="account_or_partner_object['init_bal']['credit']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                             />
                         </span>
                     </t>
@@ -276,7 +276,7 @@
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
                                 t-raw="account_or_partner_object['init_bal']['credit']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                             />
                         </span>
                     </t>
@@ -292,7 +292,7 @@
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
                                 t-raw="account_or_partner_object['init_bal']['balance']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                             />
                         </span>
                     </t>
@@ -306,7 +306,7 @@
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
                                 t-raw="account_or_partner_object['init_bal']['balance']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                             />
                         </span>
                     </t>
@@ -516,7 +516,7 @@
                             >
                                 <t
                                     t-raw="line['debit']"
-                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                    t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                                 />
                             </span>
                         </t>
@@ -524,7 +524,7 @@
                             <span>
                                 <t
                                     t-raw="line['debit']"
-                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                    t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                                 />
                             </span>
                         </t>
@@ -539,7 +539,7 @@
                             >
                                 <t
                                     t-raw="line['credit']"
-                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                    t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                                 />
                             </span>
                         </t>
@@ -547,7 +547,7 @@
                             <span>
                                 <t
                                     t-raw="line['credit']"
-                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                    t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                                 />
                             </span>
                         </t>
@@ -562,7 +562,7 @@
                             >
                                 <t
                                     t-raw="line['balance']"
-                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                    t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                                 />
                             </span>
                         </t>
@@ -570,7 +570,7 @@
                             <span>
                                 <t
                                     t-raw="line['balance']"
-                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                    t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                                 />
                             </span>
                         </t>
@@ -640,21 +640,21 @@
                 <div class="act_as_cell amount" style="width: 8.02%;">
                     <span
                         t-esc="account_or_partner_object['fin_bal']['debit']"
-                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                     />
                 </div>
                 <!--## credit-->
                 <div class="act_as_cell amount" style="width: 8.02%;">
                     <span
                         t-esc="account_or_partner_object['fin_bal']['credit']"
-                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                     />
                 </div>
                 <!--## balance cumulated-->
                 <div class="act_as_cell amount" style="width: 8.02%;">
                     <span
                         t-esc="account_or_partner_object['fin_bal']['balance']"
-                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                     />
                 </div>
                 <!--## currency_name + amount_currency-->

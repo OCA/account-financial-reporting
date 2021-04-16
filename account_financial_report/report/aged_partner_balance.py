@@ -369,6 +369,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             "doc_model": "open.items.report.wizard",
             "docs": self.env["open.items.report.wizard"].browse(wizard_id),
             "company_name": company.display_name,
+            "company_currency": company.currency_id,
             "currency_name": company.currency_id.name,
             "date_at": date_at,
             "only_posted_moves": only_posted_moves,

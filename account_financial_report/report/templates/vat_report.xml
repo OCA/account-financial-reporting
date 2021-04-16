@@ -72,14 +72,14 @@
                             <t
                                 t-att-style="style"
                                 t-raw="tag_or_group['net']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                             />
                         </div>
                         <div class="act_as_cell amount" style="width: 15%;">
                             <t
                                 t-att-style="style"
                                 t-raw="tag_or_group['tax']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                             />
                         </div>
                     </div>
@@ -114,7 +114,7 @@
                                         <t
                                             t-att-style="style"
                                             t-raw="tax['net']"
-                                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                            t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                                         />
                                     </span>
                                 </div>
@@ -133,7 +133,7 @@
                                         <t
                                             t-att-style="style"
                                             t-raw="tax['tax']"
-                                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                            t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                                         />
                                     </span>
                                 </div>

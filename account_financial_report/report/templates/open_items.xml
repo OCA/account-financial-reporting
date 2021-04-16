@@ -210,14 +210,14 @@
                 <span
                     t-if="line.get('original', False)"
                     t-esc="line['original']"
-                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                    t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                 />
             </div>
             <!--## amount_residual-->
             <div class="act_as_cell amount">
                 <span
                     t-esc="line['amount_residual']"
-                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                    t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                 />
             </div>
             <t t-if="foreign_currency">
@@ -276,13 +276,13 @@
                     <t t-if='type == "account_type"'>
                         <span
                             t-esc="total_amount[account_id]['residual']"
-                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                         />
                     </t>
                     <t t-if='type == "partner_type"'>
                         <span
                             t-esc="total_amount[account_id][partner_id]['residual']"
-                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                         />
                     </t>
                 </div>
