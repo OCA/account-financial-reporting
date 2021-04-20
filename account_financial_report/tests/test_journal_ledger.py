@@ -250,6 +250,7 @@ class TestJournalReport(AccountTestInvoicingCommon):
             line_form.account_id = self.expense_account
             line_form.tax_ids.add(self.tax_15_p)
             line_form.tax_ids.add(self.tax_20_p)
+        move_form.invoice_date = move_form.date
         invoice = move_form.save()
         invoice.action_post()
 
