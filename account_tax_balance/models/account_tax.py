@@ -40,20 +40,36 @@ class AccountTax(models.Model):
     def _is_unsupported_search_operator(self, operator):
         return operator != '='
 
+    def _compute_regular_and_refund(self, total):
+        tax_ids = total.keys()
+        total_refund = {}
+        total_regular = {}
+        for tax_id in tax_ids:
+            total_refund[tax_id] = 0.0
+            total_regular[tax_id] = 0.0
+            move_types = total[tax_id].keys()
+            for move_type in move_types:
+                if move_type in ["receivable_refund", "payable_refund"]:
+                    total_refund[tax_id] += total[tax_id][move_type]
+                else:
+                    total_regular[tax_id] += total[tax_id][move_type]
+        return total_regular, total_refund
+
     def _compute_balance(self):
-        total_balance_regular = self.compute_balance(
-            tax_or_base="tax", move_type="regular"
+        total_balance_tax = self.compute_balance(tax_or_base="tax")
+        total_balance_base = self.compute_balance(tax_or_base="base")
+        total_balance_regular, total_balance_refund = self._compute_regular_and_refund(
+            total_balance_tax
         )
-        total_base_balance_regular = self.compute_balance(
-            tax_or_base="base", move_type="regular"
+        (
+            total_base_balance_regular,
+            total_base_balance_refund,
+        ) = self._compute_regular_and_refund(total_balance_base)
+        founded_taxes_ids = set(list(total_balance_tax.keys())).union(
+            set(list(total_balance_base.keys()))
         )
-        total_balance_refund = self.compute_balance(
-            tax_or_base="tax", move_type="refund"
-        )
-        total_base_balance_refund = self.compute_balance(
-            tax_or_base="base", move_type="refund"
-        )
-        for tax in self:
+        for tax_id in list(founded_taxes_ids):
+            tax = self.browse(tax_id)
             tax.balance_regular = (
                 total_balance_regular[tax.id]
                 if tax.id in total_balance_regular.keys()
@@ -94,53 +110,52 @@ class AccountTax(models.Model):
             state = []
         return state
 
-    def get_move_line_partial_where(self, from_date, to_date, company_ids):
-        query = "aml.date <= %s AND aml.date >= %s AND aml.company_id IN %s"
-        params = [to_date, from_date, tuple(company_ids)]
+    def get_move_line_partial_where(self, from_date, to_date, company_id):
+        query = "aml.date <= %s AND aml.date >= %s AND aml.company_id = %s"
+        params = [to_date, from_date, company_id]
         return query, params
 
-    def compute_balance(self, tax_or_base="tax", move_type=None):
+    def compute_balance(self, tax_or_base="tax"):
         # There's really bad performace in m2m fields.
         # So we better do a direct query.
         # See https://github.com/odoo/odoo/issues/30350
         _select, _group_by, query, params = self.get_move_lines_query(
-            tax_or_base=tax_or_base, move_type=move_type
+            tax_or_base=tax_or_base
         )
         query = query.format(select_clause=_select, group_by_clause=_group_by)
         self.env.cr.execute(query, params)  # pylint: disable=E8103
         results = self.env.cr.fetchall()
         total_balance = {}
-        for balance, tax_id in results:
-            total_balance[tax_id] = balance
+        for balance, tax_id, move_type in results:
+            if tax_id not in total_balance.keys():
+                total_balance[tax_id] = {}
+            total_balance[tax_id][move_type] = balance
         return total_balance
 
-    def get_move_lines_query(self, tax_or_base="tax", move_type=None):
-        from_date, to_date, company_ids, target_move = self.get_context_values()
+    def get_move_lines_query(self, tax_or_base="tax"):
+        from_date, to_date, company_id, target_move = self.get_context_values()
         state_list = self.get_target_state_list(target_move)
-        type_list = self.get_target_type_list(move_type)
         base_query = self.get_move_lines_base_query()
         _where = ""
         _joins = ""
         _group_by = ""
         _params = []
         _select = "SELECT SUM(balance)"
-        _group_by = " GROUP BY "
+        _group_by = " GROUP BY am.move_type, "
         where, params = self.get_move_line_partial_where(
-            from_date, to_date, company_ids
+            from_date, to_date, company_id
         )
         _where += where
         _params += params
         if tax_or_base == "tax":
-            select, where, group_by, params = self.get_balance_where(
-                state_list, type_list
-            )
+            select, where, group_by, params = self.get_balance_where(state_list)
             _where += where
             _params += params
             _select += select
             _group_by += group_by
         elif tax_or_base == "base":
             select, joins, where, group_by, params = self.get_base_balance_where(
-                state_list, type_list
+                state_list
             )
             _where += where
             _joins += joins
@@ -164,8 +179,8 @@ class AccountTax(models.Model):
             "{group_by_clause}"
         )
 
-    def get_balance_where(self, state_list, type_list):
-        select = ", aml.tax_line_id  as tax_id"
+    def get_balance_where(self, state_list):
+        select = ", aml.tax_line_id  as tax_id, am.move_type"
         where = (
             " AND am.state IN %s"
             " AND  aml.tax_line_id IS NOT NULL"
@@ -173,13 +188,10 @@ class AccountTax(models.Model):
         )
         group_by = "aml.tax_line_id"
         params = [tuple(state_list)]
-        if type_list:
-            where += " AND am.move_type IN %s"
-            params += [tuple(type_list)]
         return select, where, group_by, params
 
-    def get_base_balance_where(self, state_list, type_list):
-        select = ", rel.account_tax_id as tax_id"
+    def get_base_balance_where(self, state_list):
+        select = ", rel.account_tax_id as tax_id, am.move_type"
         joins = (
             " INNER JOIN account_move_line_account_tax_rel AS rel "
             "ON aml.id = rel.account_move_line_id"
@@ -187,14 +199,11 @@ class AccountTax(models.Model):
         group_by = "rel.account_tax_id"
         where = " AND am.state IN %s" " AND aml.tax_exigible = True "
         params = [tuple(state_list)]
-        if type_list:
-            where += " AND am.move_type IN %s"
-            params += [tuple(type_list)]
         return select, joins, where, group_by, params
 
     def get_move_lines_domain(self, tax_or_base="tax", move_type=None):
         _select, _group_by, query, params = self.get_move_lines_query(
-            tax_or_base=tax_or_base, move_type=move_type
+            tax_or_base=tax_or_base
         )
         _select = "SELECT aml.id"
         _group_by = ""
@@ -202,6 +211,10 @@ class AccountTax(models.Model):
             query += " AND aml.tax_line_id = " + str(self.id)
         elif tax_or_base == "base":
             query += " AND rel.account_tax_id = " + str(self.id)
+        type_list = self.get_target_type_list(move_type)
+        if type_list:
+            query += " AND am.move_type IN %s"
+            params += [tuple(type_list)]
         query = query.format(select_clause=_select, group_by_clause=_group_by)
         self.env.cr.execute(query, params)  # pylint: disable=E8103
         amls = []
