@@ -46,6 +46,7 @@
             <field name="description" string="Short Name"/>
             <field name="type_tax_use"/>
             <field name="account_id"/>
+            <filter name="filter_has_moves" string="Has Moves" domain="[('has_moves', '=', True)]"/>
             <group expand="0" string="Group By">
                 <filter name="tax_group" string="Tax Group" domain="[]" context="{'group_by':'tax_group_id'}"/>
                 <filter name="tax_scope" string="Tax Scope" domain="[]" context="{'group_by':'type_tax_use'}"/>
@@ -60,6 +61,7 @@
     <field name="res_model">account.tax</field>
     <field name="view_type">form</field>
     <field name="view_mode">tree</field>
+    <field name="context">{"search_default_filter_has_moves":1}</field>
     <field name="view_id" ref="view_tax_tree_balance"/>
     <field name="search_view_id" ref="view_tax_search_balance"/>
 </record>

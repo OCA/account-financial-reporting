@@ -26,6 +26,11 @@ class AccountTax(models.Model):
     base_balance_refund = fields.Float(
         string="Base Balance Refund", compute="_compute_balance",
     )
+    has_moves = fields.Boolean(
+        compute="_compute_balance",
+        search="_search_has_moves",
+        string="Has balance in period",
+    )
 
     def get_context_values(self):
         context = self.env.context
@@ -37,8 +42,11 @@ class AccountTax(models.Model):
         )
 
     @api.model
-    def _is_unsupported_search_operator(self, operator):
-        return operator != '='
+    def _search_has_moves(self, operator, value):
+        assert isinstance(value, bool), "Not implemented"
+        assert operator == "=", "Not implemented"
+        ids_with_moves = self.search([]).filtered(lambda t: t.has_moves == value)
+        return [('id', 'in', ids_with_moves.ids)]
 
     def _compute_regular_and_refund(self, total):
         tax_ids = total.keys()
@@ -50,9 +58,9 @@ class AccountTax(models.Model):
             move_types = total[tax_id].keys()
             for move_type in move_types:
                 if move_type in ["receivable_refund", "payable_refund"]:
-                    total_refund[tax_id] += total[tax_id][move_type]
+                    total_refund[tax_id] += (-1) * total[tax_id][move_type]
                 else:
-                    total_regular[tax_id] += total[tax_id][move_type]
+                    total_regular[tax_id] += (-1) * total[tax_id][move_type]
         return total_regular, total_refund
 
     def _compute_balance(self):
@@ -68,8 +76,8 @@ class AccountTax(models.Model):
         founded_taxes_ids = set(list(total_balance_tax.keys())).union(
             set(list(total_balance_base.keys()))
         )
-        for tax_id in list(founded_taxes_ids):
-            tax = self.browse(tax_id)
+        for tax in self:
+            tax.has_moves = tax.id in list(founded_taxes_ids)
             tax.balance_regular = (
                 total_balance_regular[tax.id]
                 if tax.id in total_balance_regular.keys()
