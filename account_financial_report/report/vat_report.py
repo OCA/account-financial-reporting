@@ -229,6 +229,7 @@ class VATReport(models.AbstractModel):
             "doc_model": "open.items.report.wizard",
             "docs": self.env["open.items.report.wizard"].browse(wizard_id),
             "company_name": company.display_name,
+            "company_currency": company.currency_id,
             "currency_name": company.currency_id.name,
             "date_to": data["date_to"],
             "date_from": data["date_from"],

@@ -258,6 +258,7 @@ class OpenItemsReport(models.AbstractModel):
             "foreign_currency": data["foreign_currency"],
             "show_partner_details": data["show_partner_details"],
             "company_name": company.display_name,
+            "company_currency": company.currency_id,
             "currency_name": company.currency_id.name,
             "date_at": date_at_object.strftime("%d/%m/%Y"),
             "hide_account_at_0": data["hide_account_at_0"],
