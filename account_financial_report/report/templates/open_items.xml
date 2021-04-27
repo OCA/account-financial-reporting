@@ -179,7 +179,7 @@
             <!--## move-->
             <div class="act_as_cell left">
                 <span
-                    t-att-res-id="line['move_id']"
+                    t-att-res-id="line['entry_id']"
                     res-model="account.move"
                     view-type="form"
                 >
@@ -188,16 +188,34 @@
             </div>
             <!--## journal-->
             <div class="act_as_cell left">
-                <span t-esc="journals_data[line['journal_id']]['code']" />
+                <span
+                    t-att-res-id="journals_data[line['journal_id']]['id']"
+                    res-model="account.journal"
+                    view-type="form"
+                >
+                    <t t-esc="journals_data[line['journal_id']]['code']" />
+                </span>
             </div>
             <!--## account code-->
             <div class="act_as_cell left">
-                <span t-esc="accounts_data[account_id]['code']" />
+                <span
+                    t-att-res-id="accounts_data[account_id]['id']"
+                    res-model="account.account"
+                    view-type="form"
+                >
+                    <t t-esc="accounts_data[account_id]['code']" />
+                </span>
             </div>
             <!--## partner-->
             <div class="act_as_cell left">
-                <!--                        <span t-if="line.get('partner_id', False)" t-esc="line['partner_id']"/>-->
-                <span t-esc="line['partner_name']" />
+                <span
+                    t-if="line.get('partner_id', False)"
+                    t-att-res-id="line['partner_id']"
+                    res-model="res.partner"
+                    view-type="form"
+                >
+                    <t t-esc="line['partner_name']" />
+                </span>
             </div>
             <!--## ref - label-->
             <div class="act_as_cell left">
