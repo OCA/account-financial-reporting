@@ -278,6 +278,7 @@ class OpenItemsReport(models.AbstractModel):
                     "ref_label": ref_label,
                     "journal_id": move_line["journal_id"][0],
                     "move_name": move_line["move_id"][1],
+                    "entry_id": move_line["move_id"][0],
                     "currency_id": move_line["currency_id"][0]
                     if move_line["currency_id"]
                     else False,
