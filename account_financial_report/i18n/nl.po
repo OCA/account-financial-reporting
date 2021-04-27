@@ -9,45 +9,45 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-16 08:14+0000\n"
-"PO-Revision-Date: 2018-10-03 14:13+0000\n"
-"Last-Translator: Yung-Wa <yw.ng@onestein.nl>\n"
+"PO-Revision-Date: 2021-04-27 13:47+0000\n"
+"Last-Translator: Bosd <c5e2fd43-d292-4c90-9d1f-74ff3436329a@anonaddy.me>\n"
 "Language-Team: Dutch (https://www.transifex.com/oca/teams/23907/nl/)\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.1.1\n"
+"X-Generator: Weblate 4.3.2\n"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "&gt; 120 d."
-msgstr ""
+msgstr "&gt; 120 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "1 - 30 d."
-msgstr ""
+msgstr "1 - 30 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
 msgid "10"
-msgstr ""
+msgstr "10"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "31 - 60 d."
-msgstr ""
+msgstr "31 - 60 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "61 - 90 d."
-msgstr ""
+msgstr "61 - 90 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "91 - 120 d."
-msgstr ""
+msgstr "91 - 120 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
@@ -61,7 +61,7 @@ msgstr "<b>Belasting samenvatting</b>"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.open_items_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
 msgid "<span class=\"oe_inline\">To</span>"
-msgstr ""
+msgstr "<span class=\"oe_inline\">tot</span>"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_financial_report_abstract_wizard
@@ -147,7 +147,7 @@ msgstr "Activeer centralisatie"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
 msgid "Additional Filtering"
-msgstr ""
+msgstr "Aanvullende filters"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -160,9 +160,9 @@ msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
-#, fuzzy, python-format
+#, python-format
 msgid "Age ??? 120 d."
-msgstr "Leeftijd van???? 120 d."
+msgstr "Vv. ??? 120 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -175,9 +175,9 @@ msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
-#, fuzzy, python-format
+#, python-format
 msgid "Age ??? 30 d."
-msgstr "Leeftijd van???? 30 d."
+msgstr "Vv. ??? 30 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -190,9 +190,9 @@ msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
-#, fuzzy, python-format
+#, python-format
 msgid "Age ??? 60 d."
-msgstr "Leeftijd van???? 60 d."
+msgstr "Vv. ??? 60 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -205,9 +205,9 @@ msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
-#, fuzzy, python-format
+#, python-format
 msgid "Age ??? 90 d."
-msgstr "Leeftijd van???? 90 d."
+msgstr "Vv. ??? 90 d."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -325,9 +325,8 @@ msgstr "Filter Rekening"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_taxes
-#, fuzzy
 msgid "Balance"
-msgstr "Proefbalans"
+msgstr "Saldo"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
@@ -666,7 +665,7 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__hide_parent_hierarchy_level
 msgid "Do not display parent levels"
-msgstr ""
+msgstr "Geef bovenliggende niveaus niet weer"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -771,7 +770,7 @@ msgstr "Boekingsnummer"
 #: code:addons/account_financial_report/static/src/xml/report.xml:0
 #, python-format
 msgid "Export"
-msgstr ""
+msgstr "Export"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
@@ -804,9 +803,8 @@ msgstr "Filter rekeningen"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
-#, fuzzy
 msgid "Filter analytic accounts"
-msgstr "Filter rekeningen"
+msgstr "Filter kostenplaatsen"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__analytic_tag_ids
@@ -822,9 +820,8 @@ msgstr "Filter kostenplaatsen"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__account_journal_ids
-#, fuzzy
 msgid "Filter journals"
-msgstr "Filter rekeningen"
+msgstr "Dagboekselectie"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__partner_ids
@@ -832,9 +829,8 @@ msgstr "Filter rekeningen"
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__partner_ids
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__partner_ids
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
-#, fuzzy
 msgid "Filter partners"
-msgstr "Filter partners"
+msgstr "Relatieselectie"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__foreign_currency
@@ -959,7 +955,7 @@ msgstr "Verberg rekeningen met balans 0"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__show_hierarchy_level
 msgid "Hierarchy Levels to display"
-msgstr ""
+msgstr "Hierarchie niveaus om weer te geven"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__hierarchy_on
@@ -1155,9 +1151,9 @@ msgstr "Niveau"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
-#, fuzzy, python-format
+#, python-format
 msgid "Level %s"
-msgstr "Niveau"
+msgstr "Niveau %s"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
@@ -1165,7 +1161,7 @@ msgstr "Niveau"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 #, python-format
 msgid "Limit hierarchy levels"
-msgstr ""
+msgstr "beperk hirarchie niveaus"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__move_target
@@ -1211,16 +1207,15 @@ msgstr "Geen groep"
 
 #. module: account_financial_report
 #: model:ir.model.fields.selection,name:account_financial_report.selection__trial_balance_report_wizard__hierarchy_on__none
-#, fuzzy
 msgid "No hierarchy"
-msgstr "Hi??rarchie aan"
+msgstr "Geen Hi??rarchie"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 #, python-format
 msgid "No limit"
-msgstr ""
+msgstr "geen limiet"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
@@ -1338,9 +1333,9 @@ msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
-#, fuzzy, python-format
+#, python-format
 msgid "Partner Initial balance"
-msgstr "Proefbalans"
+msgstr "Relatiebeginsaldo"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -1393,7 +1388,7 @@ msgstr "Geboekt"
 #: code:addons/account_financial_report/static/src/xml/report.xml:0
 #, python-format
 msgid "Print"
-msgstr ""
+msgstr "Print"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
@@ -1469,7 +1464,7 @@ msgstr "Toon"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__show_cost_center
 msgid "Show Analytic Account"
-msgstr ""
+msgstr "Toon kostenplaats"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__show_move_line_details
@@ -1570,9 +1565,9 @@ msgstr "Belastingbedrag"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
-#, fuzzy, python-format
+#, python-format
 msgid "Tax Balance"
-msgstr "Proefbalans"
+msgstr "BTW-saldo"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
@@ -1805,7 +1800,7 @@ msgstr "Ja"
 #: code:addons/account_financial_report/report/general_ledger.py:0
 #, python-format
 msgid "future"
-msgstr ""
+msgstr "toekomstig"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
@@ -1830,22 +1825,25 @@ msgstr "tot"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 23.24%;"
-msgstr ""
+msgstr "breedte: 23.24%;"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
+#, fuzzy
 msgid "width: 23.78%;"
-msgstr ""
+msgstr "breedte: 23.78%;"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
+#, fuzzy
 msgid "width: 38.92%;"
-msgstr ""
+msgstr "breedte: 38.92%;"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
+#, fuzzy
 msgid "width: 8.11%;"
-msgstr ""
+msgstr "breedte: 8.11%;"
 
 #~ msgid "<span class=\"fa fa-download\"/> Export"
 #~ msgstr "Exporteren"
