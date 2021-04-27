@@ -177,7 +177,7 @@
             <!--## move-->
             <div class="act_as_cell left">
                 <span
-                    t-att-res-id="line['move_id']"
+                    t-att-res-id="line['entry_id']"
                     res-model="account.move"
                     view-type="form"
                 >
