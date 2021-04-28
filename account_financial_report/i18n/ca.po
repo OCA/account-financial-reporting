@@ -1223,8 +1223,10 @@ msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: model:ir.actions.act_window,name:account_financial_report.action_open_items_wizard
 #: model:ir.actions.report,name:account_financial_report.action_print_report_open_items_html
 #: model:ir.actions.report,name:account_financial_report.action_print_report_open_items_qweb
+#: model:ir.ui.menu,name:account_financial_report.menu_open_items_wizard
 #, python-format
 msgid "Open Items"
 msgstr ""
@@ -1257,12 +1259,6 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_open_items_xlsx
 msgid "Open Items XLSX Report"
-msgstr ""
-
-#. module: account_financial_report
-#: model:ir.actions.act_window,name:account_financial_report.action_open_items_wizard
-#: model:ir.ui.menu,name:account_financial_report.menu_open_items_wizard
-msgid "Open Itemsr"
 msgstr ""
 
 #. module: account_financial_report
