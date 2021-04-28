@@ -1234,8 +1234,10 @@ msgstr "Mayor"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: model:ir.actions.act_window,name:account_financial_report.action_open_items_wizard
 #: model:ir.actions.report,name:account_financial_report.action_print_report_open_items_html
 #: model:ir.actions.report,name:account_financial_report.action_print_report_open_items_qweb
+#: model:ir.ui.menu,name:account_financial_report.menu_open_items_wizard
 #, python-format
 msgid "Open Items"
 msgstr "Partidas abiertas"
@@ -1269,12 +1271,6 @@ msgstr "Partidas abiertas XLSX"
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_open_items_xlsx
 msgid "Open Items XLSX Report"
 msgstr "Abrir Elementos del Informe XLSX"
-
-#. module: account_financial_report
-#: model:ir.actions.act_window,name:account_financial_report.action_open_items_wizard
-#: model:ir.ui.menu,name:account_financial_report.menu_open_items_wizard
-msgid "Open Itemsr"
-msgstr "Abrir Itemsr"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.journal_ledger_wizard
@@ -1827,6 +1823,9 @@ msgstr "ancho: 38.92%;"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 8.11%;"
 msgstr "ancho: 8.11%;"
+
+#~ msgid "Open Itemsr"
+#~ msgstr "Abrir Itemsr"
 
 #~ msgid "<span class=\"fa fa-download\"/> Export"
 #~ msgstr "<span class=\"fa fa-download\"/>Exportar"
