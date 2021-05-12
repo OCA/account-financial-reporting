@@ -89,7 +89,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         move = self.env["account.move"].create(move_vals)
         move.action_post()
 
-    def _get_report_lines(self, with_partners=False):
+    def _get_report_lines(self, with_partners=False, account_ids=False):
         centralize = True
         if with_partners:
             centralize = False
@@ -101,6 +101,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
                 "target_move": "posted",
                 "hide_account_at_0": False,
                 "company_id": company.id,
+                "account_ids": account_ids,
                 "fy_start_date": self.fy_date_start,
                 "centralize": centralize,
             }
@@ -178,6 +179,9 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
             self.income_account.id, general_ledger
         )
         self.assertFalse(check_income_account)
+        self.assertTrue(
+            self.check_account_in_report(self.unaffected_account.id, general_ledger)
+        )
 
         # Add a move at the previous day of the first day of fiscal year
         # to check the initial balance
@@ -266,6 +270,21 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         self.assertEqual(income_fin_balance["debit"], 1000)
         self.assertEqual(income_fin_balance["credit"], 0)
         self.assertEqual(income_fin_balance["balance"], 1000)
+
+        # Re Generate the general ledger line
+        res_data = self._get_report_lines(
+            account_ids=(self.receivable_account + self.income_account).ids
+        )
+        general_ledger = res_data["general_ledger"]
+        self.assertTrue(
+            self.check_account_in_report(self.receivable_account.id, general_ledger)
+        )
+        self.assertTrue(
+            self.check_account_in_report(self.income_account.id, general_ledger)
+        )
+        self.assertFalse(
+            self.check_account_in_report(self.unaffected_account.id, general_ledger)
+        )
 
         # Add another move at the end day of fiscal year
         # to check that it correctly used on report

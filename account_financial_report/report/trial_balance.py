@@ -347,6 +347,9 @@ class TrialBalanceReport(models.AbstractModel):
         accounts_domain = [("company_id", "=", company_id)]
         if account_ids:
             accounts_domain += [("id", "in", account_ids)]
+            # If explicit list of accounts is provided,
+            # don't include unaffected earnings account
+            unaffected_earnings_account = False
         accounts = self.env["account.account"].search(accounts_domain)
         tb_initial_acc = []
         for account in accounts:
@@ -452,19 +455,23 @@ class TrialBalanceReport(models.AbstractModel):
             )
         accounts_ids = list(total_amount.keys())
         unaffected_id = unaffected_earnings_account
-        if unaffected_id not in accounts_ids:
-            accounts_ids.append(unaffected_id)
-            total_amount[unaffected_id] = {}
-            total_amount[unaffected_id]["initial_balance"] = 0.0
-            total_amount[unaffected_id]["balance"] = 0.0
-            total_amount[unaffected_id]["credit"] = 0.0
-            total_amount[unaffected_id]["debit"] = 0.0
-            total_amount[unaffected_id]["ending_balance"] = 0.0
-            if foreign_currency:
-                total_amount[unaffected_id]["initial_currency_balance"] = 0.0
-                total_amount[unaffected_id]["ending_currency_balance"] = 0.0
+        if unaffected_id:
+            if unaffected_id not in accounts_ids:
+                accounts_ids.append(unaffected_id)
+                total_amount[unaffected_id] = {}
+                total_amount[unaffected_id]["initial_balance"] = 0.0
+                total_amount[unaffected_id]["balance"] = 0.0
+                total_amount[unaffected_id]["credit"] = 0.0
+                total_amount[unaffected_id]["debit"] = 0.0
+                total_amount[unaffected_id]["ending_balance"] = 0.0
+                if foreign_currency:
+                    total_amount[unaffected_id]["initial_currency_balance"] = 0.0
+                    total_amount[unaffected_id]["ending_currency_balance"] = 0.0
         accounts_data = self._get_accounts_data(accounts_ids)
-        pl_initial_balance, pl_initial_currency_balance = self._get_pl_initial_balance(
+        (
+            pl_initial_balance,
+            pl_initial_currency_balance,
+        ) = self._get_pl_initial_balance(
             account_ids,
             journal_ids,
             partner_ids,
@@ -474,15 +481,16 @@ class TrialBalanceReport(models.AbstractModel):
             show_partner_details,
             foreign_currency,
         )
-        total_amount[unaffected_id]["ending_balance"] += pl_initial_balance
-        total_amount[unaffected_id]["initial_balance"] += pl_initial_balance
-        if foreign_currency:
-            total_amount[unaffected_id][
-                "ending_currency_balance"
-            ] += pl_initial_currency_balance
-            total_amount[unaffected_id][
-                "initial_currency_balance"
-            ] += pl_initial_currency_balance
+        if unaffected_id:
+            total_amount[unaffected_id]["ending_balance"] += pl_initial_balance
+            total_amount[unaffected_id]["initial_balance"] += pl_initial_balance
+            if foreign_currency:
+                total_amount[unaffected_id][
+                    "ending_currency_balance"
+                ] += pl_initial_currency_balance
+                total_amount[unaffected_id][
+                    "initial_currency_balance"
+                ] += pl_initial_currency_balance
         return total_amount, accounts_data, partners_data
 
     def _get_hierarchy_groups(

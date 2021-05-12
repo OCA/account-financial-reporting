@@ -184,6 +184,10 @@ class GeneralLedgerReport(models.AbstractModel):
         cost_center_ids,
         extra_domain,
     ):
+        # If explicit list of accounts is provided,
+        # don't include unaffected earnings account
+        if account_ids:
+            unaffected_earnings_account = False
         base_domain = []
         if company_id:
             base_domain += [("company_id", "=", company_id)]
@@ -272,29 +276,38 @@ class GeneralLedgerReport(models.AbstractModel):
                 ]
         accounts_ids = list(gen_ld_data.keys())
         unaffected_id = unaffected_earnings_account
-        if unaffected_id not in accounts_ids:
-            accounts_ids.append(unaffected_id)
-            self._initialize_account(gen_ld_data, unaffected_id, foreign_currency)
-        pl_initial_balance = self._get_pl_initial_balance(
-            account_ids, company_id, fy_start_date, foreign_currency, base_domain
-        )
-        gen_ld_data[unaffected_id]["init_bal"]["debit"] += pl_initial_balance["debit"]
-        gen_ld_data[unaffected_id]["init_bal"]["credit"] += pl_initial_balance["credit"]
-        gen_ld_data[unaffected_id]["init_bal"]["balance"] += pl_initial_balance[
-            "balance"
-        ]
-        gen_ld_data[unaffected_id]["fin_bal"]["debit"] += pl_initial_balance["debit"]
-        gen_ld_data[unaffected_id]["fin_bal"]["credit"] += pl_initial_balance["credit"]
-        gen_ld_data[unaffected_id]["fin_bal"]["balance"] += pl_initial_balance[
-            "balance"
-        ]
-        if foreign_currency:
-            gen_ld_data[unaffected_id]["init_bal"]["bal_curr"] += pl_initial_balance[
-                "bal_curr"
+        if unaffected_id:
+            if unaffected_id not in accounts_ids:
+                accounts_ids.append(unaffected_id)
+                self._initialize_account(gen_ld_data, unaffected_id, foreign_currency)
+            pl_initial_balance = self._get_pl_initial_balance(
+                account_ids, company_id, fy_start_date, foreign_currency, base_domain
+            )
+            gen_ld_data[unaffected_id]["init_bal"]["debit"] += pl_initial_balance[
+                "debit"
             ]
-            gen_ld_data[unaffected_id]["fin_bal"]["bal_curr"] += pl_initial_balance[
-                "bal_curr"
+            gen_ld_data[unaffected_id]["init_bal"]["credit"] += pl_initial_balance[
+                "credit"
             ]
+            gen_ld_data[unaffected_id]["init_bal"]["balance"] += pl_initial_balance[
+                "balance"
+            ]
+            gen_ld_data[unaffected_id]["fin_bal"]["debit"] += pl_initial_balance[
+                "debit"
+            ]
+            gen_ld_data[unaffected_id]["fin_bal"]["credit"] += pl_initial_balance[
+                "credit"
+            ]
+            gen_ld_data[unaffected_id]["fin_bal"]["balance"] += pl_initial_balance[
+                "balance"
+            ]
+            if foreign_currency:
+                gen_ld_data[unaffected_id]["init_bal"][
+                    "bal_curr"
+                ] += pl_initial_balance["bal_curr"]
+                gen_ld_data[unaffected_id]["fin_bal"]["bal_curr"] += pl_initial_balance[
+                    "bal_curr"
+                ]
         return gen_ld_data, partners_data, partner_ids
 
     @api.model
