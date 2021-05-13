@@ -313,8 +313,8 @@
                     <t t-if="balance['type'] == 'group_type'">
                         <t
                             t-set="domain"
-                            t-value="[('account_id', 'in', line.compute_account_ids.ids),
-                                    ('date', '&lt;', date_from.strftime('%Y-%m-%d'))]"
+                            t-value="[('account_id', 'in', balance['account_ids']),
+                                    ('date', '&lt;', date_from)]"
                         />
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
@@ -363,9 +363,9 @@
                     <t t-if="balance['type'] == 'group_type'">
                         <t
                             t-set="domain"
-                            t-value="[('account_id', 'in', line.compute_account_ids.ids),
-                                    ('date', '&gt;=', line.report_id.date_from.strftime('%Y-%m-%d')),
-                                    ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d')),
+                            t-value="[('account_id', 'in', balance['account_ids']),
+                                    ('date', '&gt;=', date_from),
+                                    ('date', '&lt;=', date_to),
                                     ('debit', '&lt;&gt;', 0)]"
                         />
                         <span t-att-domain="domain" res-model="account.move.line">
@@ -417,9 +417,9 @@
                     <t t-if="balance['type'] == 'group_type'">
                         <t
                             t-set="domain"
-                            t-value="[('account_id', 'in', line.compute_account_ids.ids),
-                                    ('date', '&gt;=', line.report_id.date_from.strftime('%Y-%m-%d')),
-                                    ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d')),
+                            t-value="[('account_id', 'in', balance['account_ids']),
+                                    ('date', '&gt;=', date_from),
+                                    ('date', '&lt;=', date_to),
                                     ('credit', '&lt;&gt;', 0)]"
                         />
                         <span t-att-domain="domain" res-model="account.move.line">
@@ -471,9 +471,9 @@
                     <t t-if="balance['type'] == 'group_type'">
                         <t
                             t-set="domain"
-                            t-value="[('account_id', 'in', line.compute_account_ids.ids),
-                                    ('date', '&gt;=', line.report_id.date_from.strftime('%Y-%m-%d')),
-                                    ('date', '&lt;=', line.report_id.date_to.strftime('%Y-%m-%d'))]"
+                            t-value="[('account_id', 'in', balance['account_ids']),
+                                    ('date', '&gt;=', date_from),
+                                    ('date', '&lt;=', date_to)]"
                         />
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
@@ -561,7 +561,7 @@
                             <div class="act_as_cell amount">
                                 <t
                                     t-set="domain"
-                                    t-value="[('account_id', '=', line.account_id.id)]"
+                                    t-value="[('account_id', '=', balance['id'])]"
                                 />
                                 <span
                                     t-att-domain="domain"
@@ -599,8 +599,8 @@
                             <div class="act_as_cell amount">
                                 <t
                                     t-set="domain"
-                                    t-value="[('account_id', '=', line.report_account_id.account_id.id),
-                                            ('partner_id', '=', line.partner_id.id)]"
+                                    t-value="[('account_id', '=', account_id),
+                                            ('partner_id', '=', partner_id)]"
                                 />
                                 <span
                                     t-att-domain="domain"
@@ -622,7 +622,7 @@
                             <div class="act_as_cell amount">
                                 <t
                                     t-set="domain"
-                                    t-value="[('account_id', '=', line.account_id.id)]"
+                                    t-value="[('account_id', '=', balance['id'])]"
                                 />
                                 <span
                                     t-att-domain="domain"
@@ -654,8 +654,8 @@
                             <t t-if="type == 'partner_type'">
                                 <t
                                     t-set="domain"
-                                    t-value="[('account_id', '=', line.report_account_id.account_id.id),
-                                            ('partner_id', '=', line.partner_id.id)]"
+                                    t-value="[('account_id', '=', account_id),
+                                            ('partner_id', '=', partner_id)]"
                                 />
                                 <span
                                     t-att-domain="domain"
