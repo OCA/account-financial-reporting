@@ -159,7 +159,9 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
         move = self.env["account.move"].create(move_vals)
         move.action_post()
 
-    def _get_report_lines(self, with_partners=False, hierarchy_on="computed"):
+    def _get_report_lines(
+        self, with_partners=False, account_ids=False, hierarchy_on="computed"
+    ):
         company = self.env.user.company_id
         trial_balance = self.env["trial.balance.report.wizard"].create(
             {
@@ -169,6 +171,7 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
                 "hide_account_at_0": True,
                 "hierarchy_on": hierarchy_on,
                 "company_id": company.id,
+                "account_ids": account_ids,
                 "fy_start_date": self.fy_date_start,
                 "show_partner_details": with_partners,
             }
@@ -243,8 +246,8 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
         self.assertTrue(self.account200 in self.group2.compute_account_ids)
 
     def test_01_account_balance_computed(self):
-        # Make sure there's no account of type "Current Year Earnings" in the
-        # groups - We change the code
+        # Change code of the P&L for not being automatically included
+        # in group 1 balances
         earning_accs = self.env["account.account"].search(
             [
                 (
@@ -256,8 +259,7 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
             ]
         )
         for acc in earning_accs:
-            if acc.code.startswith("1") or acc.code.startswith("2"):
-                acc.code = "999" + acc.code
+            acc.code = "999" + acc.code
         # Generate the general ledger line
         res_data = self._get_report_lines()
         trial_balance = res_data["trial_balance"]
@@ -270,6 +272,9 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
             self.account200.id, trial_balance
         )
         self.assertFalse(check_income_account)
+        self.assertTrue(
+            self.check_account_in_report(self.unaffected_account.id, trial_balance)
+        )
 
         # Add a move at the previous day of the first day of fiscal year
         # to check the initial balance
@@ -331,6 +336,18 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
             self.account200.id, trial_balance
         )
         self.assertTrue(check_income_account)
+
+        # Re Generate the trial balance line with an account filter
+        res_data = self._get_report_lines(
+            account_ids=(self.account100 + self.account200).ids
+        )
+        trial_balance = res_data["trial_balance"]
+        self.assertTrue(self.check_account_in_report(self.account100.id, trial_balance))
+        self.assertTrue(self.check_account_in_report(self.account200.id, trial_balance))
+        # Unaffected account should not be present
+        self.assertFalse(
+            self.check_account_in_report(self.unaffected_account.id, trial_balance)
+        )
 
         # Check the initial and final balance
         account_receivable_lines = self._get_account_lines(
