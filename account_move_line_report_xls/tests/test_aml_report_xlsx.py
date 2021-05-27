@@ -28,5 +28,5 @@ class TestAmlReportXlsx(TransactionCase):
         self.amls = am.line_ids
 
     def test_aml_report_xlsx(self):
-        report_xls = self.report.render_xlsx(self.amls.ids, None)
+        report_xls = self.report._render_xlsx(self.amls.ids, None)
         self.assertEqual(report_xls[1], "xlsx")

@@ -3,7 +3,7 @@
 
 {
     "name": "Account Move Line XLSX export",
-    "version": "13.0.1.0.0",
+    "version": "14.0.1.0.0",
     "license": "AGPL-3",
     "author": "Noviat, Odoo Community Association (OCA)",
     "category": "Accounting & Finance",
