@@ -6,6 +6,11 @@ import logging
 from odoo import models
 from odoo.tools.translate import translate
 
+from odoo.addons.report_xlsx_helper.report.report_xlsx_format import (
+    FORMATS,
+    XLS_HEADERS,
+)
+
 _logger = logging.getLogger(__name__)
 
 IR_TRANSLATION_NAME = "move.line.list.xls"
@@ -43,7 +48,7 @@ class AccountMoveLineXlsx(models.AbstractModel):
                 "header": {"value": self._("Effective Date")},
                 "lines": {
                     "value": self._render("line.date"),
-                    "format": self.format_tcell_date_left,
+                    "format": FORMATS["format_tcell_date_left"],
                 },
                 "width": 13,
             },
@@ -70,68 +75,68 @@ class AccountMoveLineXlsx(models.AbstractModel):
                 "header": {"value": self._("Maturity Date")},
                 "lines": {
                     "value": self._render("line.date_maturity"),
-                    "format": self.format_tcell_date_left,
+                    "format": FORMATS["format_tcell_date_left"],
                 },
                 "width": 13,
             },
             "debit": {
                 "header": {
                     "value": self._("Debit"),
-                    "format": self.format_theader_yellow_right,
+                    "format": FORMATS["format_theader_yellow_right"],
                 },
                 "lines": {
                     "value": self._render("line.debit"),
-                    "format": self.format_tcell_amount_right,
+                    "format": FORMATS["format_tcell_amount_right"],
                 },
                 "totals": {
                     "type": "formula",
                     "value": self._render("debit_formula"),
-                    "format": self.format_theader_yellow_amount_right,
+                    "format": FORMATS["format_theader_yellow_amount_right"],
                 },
                 "width": 18,
             },
             "credit": {
                 "header": {
                     "value": self._("Credit"),
-                    "format": self.format_theader_yellow_right,
+                    "format": FORMATS["format_theader_yellow_right"],
                 },
                 "lines": {
                     "value": self._render("line.credit"),
-                    "format": self.format_tcell_amount_right,
+                    "format": FORMATS["format_tcell_amount_right"],
                 },
                 "totals": {
                     "type": "formula",
                     "value": self._render("credit_formula"),
-                    "format": self.format_theader_yellow_amount_right,
+                    "format": FORMATS["format_theader_yellow_amount_right"],
                 },
                 "width": 18,
             },
             "balance": {
                 "header": {
                     "value": self._("Balance"),
-                    "format": self.format_theader_yellow_right,
+                    "format": FORMATS["format_theader_yellow_right"],
                 },
                 "lines": {
                     "value": self._render("line.balance"),
-                    "format": self.format_tcell_amount_right,
+                    "format": FORMATS["format_tcell_amount_right"],
                 },
                 "totals": {
                     "type": "formula",
                     "value": self._render("bal_formula"),
-                    "format": self.format_theader_yellow_amount_right,
+                    "format": FORMATS["format_theader_yellow_amount_right"],
                 },
                 "width": 18,
             },
             "full_reconcile": {
                 "header": {
                     "value": self._("Rec."),
-                    "format": self.format_theader_yellow_center,
+                    "format": FORMATS["format_theader_yellow_center"],
                 },
                 "lines": {
                     "value": self._render(
                         "line.full_reconcile_id " "and line.full_reconcile_id.name"
                     ),
-                    "format": self.format_tcell_center,
+                    "format": FORMATS["format_tcell_center"],
                 },
                 "width": 12,
             },
@@ -143,7 +148,7 @@ class AccountMoveLineXlsx(models.AbstractModel):
                         "(sum(line.matched_credit_ids.mapped('amount')) - "
                         "sum(line.matched_debit_ids.mapped('amount')))"
                     ),
-                    "format": self.format_tcell_amount_right,
+                    "format": FORMATS["format_tcell_amount_right"],
                 },
                 "width": 12,
             },
@@ -172,22 +177,22 @@ class AccountMoveLineXlsx(models.AbstractModel):
             "amount_currency": {
                 "header": {
                     "value": self._("Am. Currency"),
-                    "format": self.format_theader_yellow_right,
+                    "format": FORMATS["format_theader_yellow_right"],
                 },
                 "lines": {
                     "value": self._render("line.amount_currency"),
-                    "format": self.format_tcell_amount_right,
+                    "format": FORMATS["format_tcell_amount_right"],
                 },
                 "width": 18,
             },
             "currency_name": {
                 "header": {
                     "value": self._("Curr."),
-                    "format": self.format_theader_yellow_center,
+                    "format": FORMATS["format_theader_yellow_center"],
                 },
                 "lines": {
                     "value": self._render("line.currency_id and line.currency_id.name"),
-                    "format": self.format_tcell_center,
+                    "format": FORMATS["format_tcell_center"],
                 },
                 "width": 6,
             },
@@ -199,11 +204,11 @@ class AccountMoveLineXlsx(models.AbstractModel):
             "company_currency": {
                 "header": {
                     "value": self._("Comp. Curr."),
-                    "format": self.format_theader_yellow_center,
+                    "format": FORMATS["format_theader_yellow_center"],
                 },
                 "lines": {
                     "value": self._render("line.company_id.currency_id.name"),
-                    "format": self.format_tcell_center,
+                    "format": FORMATS["format_tcell_center"],
                 },
                 "width": 10,
             },
@@ -253,11 +258,11 @@ class AccountMoveLineXlsx(models.AbstractModel):
             "quantity": {
                 "header": {
                     "value": self._("Qty"),
-                    "format": self.format_theader_yellow_right,
+                    "format": FORMATS["format_theader_yellow_right"],
                 },
                 "lines": {
                     "value": self._render("line.quantity"),
-                    "format": self.format_tcell_amount_right,
+                    "format": FORMATS["format_tcell_amount_right"],
                 },
                 "width": 8,
             },
@@ -280,22 +285,22 @@ class AccountMoveLineXlsx(models.AbstractModel):
             "amount_residual": {
                 "header": {
                     "value": self._("Residual Amount"),
-                    "format": self.format_theader_yellow_right,
+                    "format": FORMATS["format_theader_yellow_right"],
                 },
                 "lines": {
                     "value": self._render("line.amount_residual"),
-                    "format": self.format_tcell_amount_right,
+                    "format": FORMATS["format_tcell_amount_right"],
                 },
                 "width": 18,
             },
             "amount_residual_currency": {
                 "header": {
                     "value": self._("Res. Am. in Curr."),
-                    "format": self.format_theader_yellow_right,
+                    "format": FORMATS["format_theader_yellow_right"],
                 },
                 "lines": {
                     "value": self._render("line.amount_residual_currency"),
-                    "format": self.format_tcell_amount_right,
+                    "format": FORMATS["format_tcell_amount_right"],
                 },
                 "width": 18,
             },
@@ -307,22 +312,22 @@ class AccountMoveLineXlsx(models.AbstractModel):
             "blocked": {
                 "header": {
                     "value": self._("Lit."),
-                    "format": self.format_theader_yellow_center,
+                    "format": FORMATS["format_theader_yellow_center"],
                 },
                 "lines": {
                     "value": self._render("line.blocked and 'x' or ''"),
-                    "format": self.format_tcell_center,
+                    "format": FORMATS["format_tcell_center"],
                 },
                 "width": 4,
             },
             "id": {
                 "header": {
                     "value": self._("Id"),
-                    "format": self.format_theader_yellow_right,
+                    "format": FORMATS["format_theader_yellow_right"],
                 },
                 "lines": {
                     "value": self._render("line.id"),
-                    "format": self.format_tcell_integer_right,
+                    "format": FORMATS["format_tcell_integer_right"],
                 },
                 "width": 12,
             },
@@ -345,8 +350,8 @@ class AccountMoveLineXlsx(models.AbstractModel):
 
         ws.set_landscape()
         ws.fit_to_pages(1, 0)
-        ws.set_header(self.xls_headers["standard"])
-        ws.set_footer(self.xls_footers["standard"])
+        ws.set_header(XLS_HEADERS["xls_headers"]["standard"])
+        ws.set_footer(XLS_HEADERS["xls_footers"]["standard"])
 
         self._set_column_width(ws, ws_params)
 
@@ -358,7 +363,7 @@ class AccountMoveLineXlsx(models.AbstractModel):
             row_pos,
             ws_params,
             col_specs_section="header",
-            default_format=self.format_theader_yellow_left,
+            default_format=FORMATS["format_theader_yellow_left"],
         )
 
         ws.freeze_panes(row_pos, 0)
@@ -374,7 +379,7 @@ class AccountMoveLineXlsx(models.AbstractModel):
                 ws_params,
                 col_specs_section="lines",
                 render_space={"line": line},
-                default_format=self.format_tcell_left,
+                default_format=FORMATS["format_tcell_left"],
             )
 
         aml_cnt = len(amls)
@@ -397,5 +402,5 @@ class AccountMoveLineXlsx(models.AbstractModel):
                 "credit_formula": credit_formula,
                 "bal_formula": bal_formula,
             },
-            default_format=self.format_theader_yellow_left,
+            default_format=FORMATS["format_theader_yellow_left"],
         )
