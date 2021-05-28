@@ -39,7 +39,7 @@ class AbstractReportXslx(models.AbstractModel):
 
         self.row_pos = 0
 
-        self._define_formats(workbook)
+        self._define_formats(workbook, data)
 
         report_name = self._get_report_name(report, data=data)
         report_footer = self._get_report_footer()
@@ -58,7 +58,7 @@ class AbstractReportXslx(models.AbstractModel):
 
         self._write_report_footer(report_footer)
 
-    def _define_formats(self, workbook):
+    def _define_formats(self, workbook, data):
         """ Add cell formats to current workbook.
         Those formats can be used on all cell.
         Available formats are :
@@ -90,16 +90,19 @@ class AbstractReportXslx(models.AbstractModel):
         self.format_header_amount = workbook.add_format(
             {"bold": True, "border": True, "bg_color": "#FFFFCC"}
         )
-        currency_id = self.env["res.company"]._get_user_currency()
+        company_id = data.get("company_id", False)
+        if company_id:
+            company = self.env["res.company"].browse(company_id)
+            currency = company.currency_id
+        else:
+            currency = self.env["res.company"]._get_user_currency()
         self.format_header_amount.set_num_format(
-            "#,##0." + "0" * currency_id.decimal_places
+            "#,##0." + "0" * currency.decimal_places
         )
         self.format_amount = workbook.add_format()
-        self.format_amount.set_num_format("#,##0." + "0" * currency_id.decimal_places)
+        self.format_amount.set_num_format("#,##0." + "0" * currency.decimal_places)
         self.format_amount_bold = workbook.add_format({"bold": True})
-        self.format_amount_bold.set_num_format(
-            "#,##0." + "0" * currency_id.decimal_places
-        )
+        self.format_amount_bold.set_num_format("#,##0." + "0" * currency.decimal_places)
         self.format_percent_bold_italic = workbook.add_format(
             {"bold": True, "italic": True}
         )
