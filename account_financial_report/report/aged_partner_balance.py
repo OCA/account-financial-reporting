@@ -140,6 +140,9 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             move_line
             for move_line in move_lines
             if move_line["date"] <= date_at_object
+            and not float_is_zero(
+                move_line["debit"] - move_line["credit"], precision_digits=2
+            )
             and not float_is_zero(move_line["amount_residual"], precision_digits=2)
         ]
         for move_line in move_lines:
