@@ -496,12 +496,3 @@ msgstr "in"
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
 msgid "or"
 msgstr "o"
-
-#~ msgid "Payment"
-#~ msgstr "Pagamento"
-
-#~ msgid "report.partner_statement.activity_statement"
-#~ msgstr "report.partner_statement.activity_statement"
-
-#~ msgid "report.partner_statement.outstanding_statement"
-#~ msgstr "report.partner_statement.outstanding_statement"

@@ -5,11 +5,10 @@ class ResConfigSettings(models.TransientModel):
     _inherit = "res.config.settings"
 
     group_activity_statement = fields.Boolean(
-        "Enable OCA Activity Statements",
+        string="Enable OCA Activity Statements",
         group="account.group_account_invoice",
         implied_group="partner_statement.group_activity_statement",
     )
-
     default_aging_type = fields.Selection(
         [("days", "Age by Days"), ("months", "Age by Months")],
         string="Aging Method",
@@ -17,22 +16,18 @@ class ResConfigSettings(models.TransientModel):
         default="days",
         default_model="statement.common.wizard",
     )
-
     default_show_aging_buckets = fields.Boolean(
         string="Show Aging Buckets", default_model="statement.common.wizard"
     )
-
     default_filter_partners_non_due = fields.Boolean(
         string="Exclude partners with no due entries",
         default_model="statement.common.wizard",
     )
-
     default_filter_negative_balances = fields.Boolean(
-        "Exclude Negative Balances", default_model="statement.common.wizard"
+        string="Exclude Negative Balances", default_model="statement.common.wizard"
     )
-
     group_outstanding_statement = fields.Boolean(
-        "Enable OCA Outstanding Statements",
+        string="Enable OCA Outstanding Statements",
         group="account.group_account_invoice",
         implied_group="partner_statement.group_outstanding_statement",
     )

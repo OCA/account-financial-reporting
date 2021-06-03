@@ -507,6 +507,3 @@ msgstr "en"
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
 msgid "or"
 msgstr "o"
-
-#~ msgid "Payment"
-#~ msgstr "Pago"

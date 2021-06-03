@@ -507,9 +507,3 @@ msgstr "în"
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
 msgid "or"
 msgstr "sau"
-
-#~ msgid "Payment"
-#~ msgstr "Plată"
-
-#~ msgid "Date:"
-#~ msgstr "Data:"

@@ -13,6 +13,7 @@ class OutstandingStatement(models.AbstractModel):
 
     def _display_lines_sql_q1(self, partners, date_end, account_type):
         partners = tuple(partners)
+        # flake8: noqa
         return str(
             self._cr.mogrify(
                 """
@@ -35,8 +36,8 @@ class OutstandingStatement(models.AbstractModel):
                 ELSE l.balance + sum(coalesce(pc.amount, 0.0))
             END AS open_amount,
             CASE WHEN l.balance > 0.0
-                THEN l.amount_currency - sum(coalesce(pd.amount_currency, 0.0))
-                ELSE l.amount_currency + sum(coalesce(pc.amount_currency, 0.0))
+                THEN l.amount_currency - sum(coalesce(pd.debit_amount_currency, 0.0))
+                ELSE l.amount_currency + sum(coalesce(pc.debit_amount_currency, 0.0))
             END AS open_amount_currency,
             CASE WHEN l.date_maturity is null
                 THEN l.date
@@ -44,6 +45,8 @@ class OutstandingStatement(models.AbstractModel):
             END as date_maturity
             FROM account_move_line l
             JOIN account_move m ON (l.move_id = m.id)
+            JOIN account_account l_account ON l.account_id = l_account.id
+            JOIN account_account_type l_account_type ON l_account.user_type_id = l_account_type.id
             LEFT JOIN (SELECT pr.*
                 FROM account_partial_reconcile pr
                 INNER JOIN account_move_line l2
@@ -57,7 +60,7 @@ class OutstandingStatement(models.AbstractModel):
                 WHERE l2.date <= %(date_end)s
             ) as pc ON pc.credit_move_id = l.id
             WHERE l.partner_id IN %(partners)s
-                                AND l.account_internal_type = %(account_type)s
+                                AND l_account_type.type = %(account_type)s
                                 AND (
                                   (pd.id IS NOT NULL AND
                                       pd.max_date <= %(date_end)s) OR

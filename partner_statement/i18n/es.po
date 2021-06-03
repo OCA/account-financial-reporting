@@ -512,21 +512,3 @@ msgstr "en"
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
 msgid "or"
 msgstr "o"
-
-#~ msgid "Payment"
-#~ msgstr "Pago"
-
-#~ msgid "report.partner_statement.activity_statement"
-#~ msgstr "report.partner_statement.activity_statement"
-
-#~ msgid "report.partner_statement.outstanding_statement"
-#~ msgstr "report.partner_statement.outstanding_statement"
-
-#~ msgid "Balance Due"
-#~ msgstr "Saldo"
-
-#~ msgid "Date:"
-#~ msgstr "Fecha:"
-
-#~ msgid "Partner ref:"
-#~ msgstr "Ref. de Cliente:"

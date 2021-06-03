@@ -7,20 +7,13 @@ from odoo import api, fields, models
 
 
 class StatementCommon(models.AbstractModel):
-
     _name = "statement.common.wizard"
     _description = "Statement Reports Common Wizard"
-
-    def _get_company(self):
-        return (
-            self.env["res.company"].browse(self.env.context.get("force_company"))
-            or self.env.company
-        )
 
     name = fields.Char()
     company_id = fields.Many2one(
         comodel_name="res.company",
-        default=_get_company,
+        default=lambda self: self.env.company,
         string="Company",
         required=True,
     )
@@ -32,8 +25,9 @@ class StatementCommon(models.AbstractModel):
     filter_partners_non_due = fields.Boolean(
         string="Don't show partners with no due entries", default=True
     )
-    filter_negative_balances = fields.Boolean("Exclude Negative Balances", default=True)
-
+    filter_negative_balances = fields.Boolean(
+        string="Exclude Negative Balances", default=True
+    )
     aging_type = fields.Selection(
         [("days", "Age by Days"), ("months", "Age by Months")],
         string="Aging Method",

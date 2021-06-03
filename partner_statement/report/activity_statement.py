@@ -14,6 +14,7 @@ class ActivityStatement(models.AbstractModel):
     _description = "Partner Activity Statement"
 
     def _initial_balance_sql_q1(self, partners, date_start, account_type):
+        # flake8: noqa
         return str(
             self._cr.mogrify(
                 """
@@ -28,8 +29,10 @@ class ActivityStatement(models.AbstractModel):
             END as credit
             FROM account_move_line l
             JOIN account_move m ON (l.move_id = m.id)
+            JOIN account_account l_account ON l.account_id = l_account.id
+            JOIN account_account_type l_account_type ON l_account.user_type_id = l_account_type.id
             WHERE l.partner_id IN %(partners)s
-                                AND l.account_internal_type = %(account_type)s
+                                AND l_account_type.type = %(account_type)s
                                 AND l.date < %(date_start)s AND not l.blocked
                                 AND m.state IN ('posted')
             GROUP BY l.partner_id, l.currency_id, l.amount_currency,
@@ -107,9 +110,11 @@ class ActivityStatement(models.AbstractModel):
                 END as date_maturity
             FROM account_move_line l
             JOIN account_move m ON (l.move_id = m.id)
+            JOIN account_account l_account ON l.account_id = l_account.id
+            JOIN account_account_type l_account_type ON l_account.user_type_id = l_account_type.id
             JOIN account_journal aj ON (l.journal_id = aj.id)
             WHERE l.partner_id IN %(partners)s
-                AND l.account_internal_type = %(account_type)s
+                AND l_account_type.type = %(account_type)s
                 AND %(date_start)s <= l.date
                 AND l.date <= %(date_end)s
                 AND m.state IN ('posted')

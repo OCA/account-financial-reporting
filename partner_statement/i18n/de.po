@@ -528,22 +528,3 @@ msgstr "in"
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
 msgid "or"
 msgstr "oder"
-
-#, fuzzy
-#~| msgid "report.customer_activity_statement.statement"
-#~ msgid "report.partner_statement.activity_statement"
-#~ msgstr "report.customer_activity_statement.statement"
-
-#, fuzzy
-#~| msgid "report.customer_activity_statement.statement"
-#~ msgid "report.partner_statement.outstanding_statement"
-#~ msgstr "report.customer_activity_statement.statement"
-
-#~ msgid "Balance Due"
-#~ msgstr "Fälliger Saldo"
-
-#~ msgid "Date:"
-#~ msgstr "Datum:"
-
-#~ msgid "Partner ref:"
-#~ msgstr "Partner-Ref.:"
