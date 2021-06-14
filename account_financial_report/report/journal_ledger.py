@@ -84,7 +84,7 @@ class JournalLedgerReport(models.AbstractModel):
     def _get_move_lines_order(self, move_ids, wizard, journal_ids):
         return ""
 
-    def _get_move_lines_data(self, ml, wizard, ml_taxes):
+    def _get_move_lines_data(self, ml, wizard, ml_taxes, auto_sequence):
         base_debit = (
             base_credit
         ) = tax_debit = tax_credit = base_balance = tax_balance = 0.0
@@ -116,6 +116,7 @@ class JournalLedgerReport(models.AbstractModel):
             "tax_credit": tax_credit,
             "base_balance": base_balance,
             "tax_balance": tax_balance,
+            "auto_sequence": str(auto_sequence).zfill(6),
         }
 
     def _get_account_data(self, accounts):
@@ -200,6 +201,7 @@ class JournalLedgerReport(models.AbstractModel):
         partners = self.env["res.partner"]
         currencies = self.env["res.currency"]
         tax_lines = self.env["account.tax"]
+        auto_sequence = len(move_ids)
         for ml in move_lines:
             if ml.account_id not in accounts:
                 accounts |= ml.account_id
@@ -211,13 +213,14 @@ class JournalLedgerReport(models.AbstractModel):
                 tax_lines |= ml.tax_line_id
             if ml.move_id.id not in Move_Lines.keys():
                 Move_Lines[ml.move_id.id] = []
+                auto_sequence -= 1
             taxes = (
                 ml.id in move_line_ids_taxes_data.keys()
                 and move_line_ids_taxes_data[ml.id]
                 or {}
             )
             Move_Lines[ml.move_id.id].append(
-                self._get_move_lines_data(ml, wizard, taxes)
+                self._get_move_lines_data(ml, wizard, taxes, auto_sequence)
             )
         account_ids_data = self._get_account_data(accounts)
         partner_ids_data = self._get_partner_data(partners)
@@ -348,6 +351,7 @@ class JournalLedgerReport(models.AbstractModel):
             "date_from": data["date_from"],
             "date_to": data["date_to"],
             "move_target": data["move_target"],
+            "with_auto_sequence": data["with_auto_sequence"],
             "account_ids_data": account_ids_data,
             "partner_ids_data": partner_ids_data,
             "currency_ids_data": currency_ids_data,
