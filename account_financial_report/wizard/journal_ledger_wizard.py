@@ -40,6 +40,7 @@ class JournalLedgerReportWizard(models.TransientModel):
         required=True,
     )
     with_account_name = fields.Boolean(default=False)
+    with_auto_sequence = fields.Boolean(string="Show Auto Sequence", default=False)
 
     @api.model
     def _get_move_targets(self):
@@ -128,6 +129,7 @@ class JournalLedgerReportWizard(models.TransientModel):
             "group_option": self.group_option,
             "with_account_name": self.with_account_name,
             "account_financial_report_lang": self.env.lang,
+            "with_auto_sequence": self.with_auto_sequence,
         }
 
     def _export(self, report_type):

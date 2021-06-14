@@ -131,6 +131,11 @@ Contributors
   * Jo??o Marques
   * Alexandre D. D??az
 
+* `Sygel <https://www.sygel.es>`__:
+
+  * Harald Panten
+  * Valentin Vinagre
+
 Much of the work in this module was done at a sprint in Sorrento, Italy in
 April 2016.
 
