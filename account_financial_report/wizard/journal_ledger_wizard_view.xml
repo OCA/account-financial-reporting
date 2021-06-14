@@ -31,6 +31,7 @@
                         <field name="group_option" />
                         <field name="foreign_currency" />
                         <field name="with_account_name" />
+                        <field name="with_auto_sequence" />
                     </group>
                     <group />
                 </group>

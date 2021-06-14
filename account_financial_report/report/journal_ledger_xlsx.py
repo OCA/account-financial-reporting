@@ -28,6 +28,11 @@ class JournalLedgerXslx(models.AbstractModel):
             {"header": _("Account"), "field": "account_code", "width": 9},
         ]
 
+        if report.with_auto_sequence:
+            columns.insert(
+                0, {"header": _("Sequence"), "field": "auto_sequence", "width": 10}
+            )
+
         if report.with_account_name:
             columns.append(
                 {"header": _("Account Name"), "field": "account_name", "width": 15}
@@ -232,6 +237,7 @@ class JournalLedgerXslx(models.AbstractModel):
                 line["partner"] = self._get_partner_name(
                     line["partner_id"], partner_ids_data
                 )
+                line["auto_sequence"] = line["auto_sequence"]
                 line["account_code"] = account_code
                 line["account_name"] = account_name
                 line["currency_name"] = currency_name
