@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2020-06-18 08:09+0000\n"
+"PO-Revision-Date: 2021-07-05 09:42+0000\n"
 "Last-Translator: Hans Henrik Gabelgaard <hhg@gabelgaard.org>\n"
 "Language-Team: none\n"
 "Language: da\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10\n"
+"X-Generator: Weblate 4.3.2\n"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:243
@@ -143,6 +143,8 @@ msgstr "Forfaldsrapport pr"
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
 msgid "Aging details can be shown in the report, expressed in aging         buckets, so the partner can review how much is open, due or overdue."
 msgstr ""
+"Aldringsoplysninger kan vises i rapporten, udtrykt i aldrende spande, så "
+"partneren kan gennemgå, hvor meget der er åbent, forfaldent eller for sent."
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
@@ -245,12 +247,12 @@ msgstr "Forfaldsdato"
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__group_activity_statement
 msgid "Enable OCA Activity Statements"
-msgstr ""
+msgstr "Aktivér OCA aktivitets kontoudtog"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__group_outstanding_statement
 msgid "Enable OCA Outstanding Statements"
-msgstr ""
+msgstr "Aktivér OCA udestående kontoudtog"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
@@ -284,7 +286,7 @@ msgstr "Eksport PDF"
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common__id
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard____last_update
@@ -320,7 +322,7 @@ msgstr "Navn"
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__number_partner_ids
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__number_partner_ids
 msgid "Number Partner"
-msgstr ""
+msgstr "Antal partner"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:258
@@ -368,7 +370,7 @@ msgstr "Partner kontoudtog udestående"
 #: selection:outstanding.statement.wizard,account_type:0
 #: selection:statement.common.wizard,account_type:0
 msgid "Payable"
-msgstr ""
+msgstr "Kreditor"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
@@ -385,7 +387,7 @@ msgstr "Angiv venligst opsætning under Kontoudtog."
 #: selection:outstanding.statement.wizard,account_type:0
 #: selection:statement.common.wizard,account_type:0
 msgid "Receivable"
-msgstr ""
+msgstr "Debitor"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
@@ -436,11 +438,20 @@ msgstr "Leverandør"
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_wizard_view
 msgid "The activity statement provides details of all activity on                     a partner's receivables and payables between two selected dates. This includes all invoices,                     refunds and payments. Any outstanding balance dated prior to the chosen statement                     period will appear as a forward balance at the top of the statement. The list is                     displayed in chronological order and is split by currencies."
 msgstr ""
+"Aktivitetsoversigten indeholder oplysninger om al aktivitet på en partners "
+"tilgodehavender og gæld mellem to valgte datoer. Dette inkluderer alle "
+"fakturaer, refusioner og betalinger. Enhver udestående saldo dateret før den "
+"valgte periodeperiode vises som en terminsaldo øverst i opgørelsen. Listen "
+"vises i kronologisk rækkefølge og er opdelt efter valutaer."
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_wizard_view
 msgid "The outstanding statement provides details of all partner's outstanding         receivables and payables up to a particular date. This includes all unpaid invoices, unclaimed         refunds and outstanding payments. The list is displayed in chronological order and is         split by currencies."
 msgstr ""
+"Den udestående opgørelse indeholder detaljer om alle partners udestående "
+"tilgodehavender og gæld til en bestemt dato. Dette inkluderer alle ubetalte "
+"fakturaer, uanmodede refusioner og udestående betalinger. Listen vises i "
+"kronologisk rækkefølge og er opdelt efter valutaer."
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:248
