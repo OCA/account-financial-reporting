@@ -57,7 +57,7 @@ class MisCashFlow(models.Model):
                 -- we use negative id to avoid duplicates and we don't use
                 -- ROW_NUMBER() because the performance was very poor
                 -aml.id as id,
-                CAST('move_line' AS varchar) as line_type,
+                'move_line' as line_type,
                 aml.id as move_line_id,
                 aml.account_id as account_id,
                 CASE
@@ -77,10 +77,11 @@ class MisCashFlow(models.Model):
                 aml.name as name,
                 COALESCE(aml.date_maturity, aml.date) as date
             FROM account_move_line as aml
+            WHERE aml.parent_state != 'cancel'
             UNION ALL
             SELECT
                 fl.id as id,
-                CAST('forecast_line' AS varchar) as line_type,
+                'forecast_line' as line_type,
                 NULL as move_line_id,
                 fl.account_id as account_id,
                 CASE
