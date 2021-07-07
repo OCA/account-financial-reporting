@@ -50,6 +50,12 @@ class MisCashFlow(models.Model):
     account_internal_type = fields.Selection(
         related="account_id.user_type_id.type", readonly=True
     )
+    state = fields.Selection(selection="_selection_parent_state",)
+
+    def _selection_parent_state(self):
+        return self.env["account.move"].fields_get(allfields=["state"])["state"][
+            "selection"
+        ]
 
     def init(self):
         query = """
@@ -75,6 +81,7 @@ class MisCashFlow(models.Model):
                 aml.partner_id as partner_id,
                 aml.company_id as company_id,
                 aml.name as name,
+                aml.parent_state as state,
                 COALESCE(aml.date_maturity, aml.date) as date
             FROM account_move_line as aml
             WHERE aml.parent_state != 'cancel'
@@ -99,6 +106,7 @@ class MisCashFlow(models.Model):
                 fl.partner_id as partner_id,
                 fl.company_id as company_id,
                 fl.name as name,
+                'posted' as state,
                 fl.date as date
             FROM mis_cash_flow_forecast_line as fl
         """
