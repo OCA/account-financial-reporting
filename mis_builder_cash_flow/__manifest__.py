@@ -1,9 +1,10 @@
 # Copyright 2019 ADHOC SA
+# Copyright 2021 Tecnativa - Pedro M. Baeza
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
     "name": "MIS Builder Cash Flow",
-    "version": "13.0.1.0.0",
+    "version": "13.0.1.1.0",
     "license": "LGPL-3",
     "author": "ADHOC SA, " "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/mis-builder",

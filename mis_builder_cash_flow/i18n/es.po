@@ -227,6 +227,11 @@ msgid "MIS Cash Flow Forecast Line"
 msgstr "Línea de previsión de flujo de caja MIS"
 
 #. module: mis_builder_cash_flow
+#: model:ir.model,name:mis_builder_cash_flow.model_mis_report_instance_period
+msgid "MIS Report Instance Period"
+msgstr ""
+
+#. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__full_reconcile_id
 msgid "Matching Number"
 msgstr "Asiento de conciliación"
@@ -274,6 +279,11 @@ msgstr "Empresa"
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__reconciled
 msgid "Reconciled"
 msgstr "Conciliado"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__state
+msgid "State"
+msgstr ""
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,help:mis_builder_cash_flow.field_mis_cash_flow__account_internal_type
