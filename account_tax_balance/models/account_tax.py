@@ -39,6 +39,7 @@ class AccountTax(models.Model):
             context.get('to_date', fields.Date.context_today(self)),
             context.get('company_id', self.env.user.company_id.id),
             context.get('target_move', 'posted'),
+            context.get('display_all', False),
         )
 
     def _account_tax_ids_with_moves(self):
@@ -69,7 +70,8 @@ class AccountTax(models.Model):
                 )
             )
         """
-        from_date, to_date, company_id, target_move = self.get_context_values()
+        from_date, to_date, company_id, target_move, display_all \
+            = self.get_context_values()
         self.env.cr.execute(
             req, (company_id, from_date, to_date, company_id))
         return [r[0] for r in self.env.cr.fetchall()]
@@ -86,9 +88,14 @@ class AccountTax(models.Model):
 
     @api.model
     def _search_has_moves(self, operator, value):
+        from_date, to_date, company_id, target_move, display_all \
+            = self.get_context_values()
         if self._is_unsupported_search_operator(operator) or not value:
             raise ValueError(_("Unsupported search operator"))
-        ids_with_moves = self._account_tax_ids_with_moves()
+        if display_all:
+            ids_with_moves = self.env['account.tax'].search([]).ids
+        else:
+            ids_with_moves = self._account_tax_ids_with_moves()
         return [('id', 'in', ids_with_moves)]
 
     def _compute_balance(self):
@@ -161,7 +168,8 @@ class AccountTax(models.Model):
         return domain
 
     def get_move_lines_domain(self, tax_or_base='tax', move_type=None):
-        from_date, to_date, company_id, target_move = self.get_context_values()
+        from_date, to_date, company_id, target_move, display_all \
+            = self.get_context_values()
         state_list = self.get_target_state_list(target_move)
         type_list = self.get_target_type_list(move_type)
         domain = self.get_move_line_partial_domain(

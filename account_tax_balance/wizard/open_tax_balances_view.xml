@@ -13,6 +13,7 @@
                 <field name="from_date"></field>
                 <field name="to_date"></field>
                 <field name="target_move"></field>
+                <field name="display_all"></field>
             </group>
             <footer>
                 <button string="Open Taxes" name="open_taxes" type="object" class="oe_highlight"/>
