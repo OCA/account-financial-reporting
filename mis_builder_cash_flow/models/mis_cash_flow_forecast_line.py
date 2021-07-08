@@ -23,7 +23,7 @@ class MisCashFlowForecastLine(models.Model):
         "res.company",
         string="Company",
         required=True,
-        default=lambda self: self.env.user.company_id.id,
+        default=lambda self: self.env.company,
         index=True,
     )
 
