@@ -18,6 +18,10 @@ class WizardOpenTaxBalances(models.TransientModel):
         ('posted', 'All Posted Entries'),
         ('all', 'All Entries'),
     ], 'Target Moves', required=True, default='posted')
+    display_all = fields.Boolean(
+        string="Display all tax accounts",
+        default=False
+    )
 
     @api.onchange('date_range_id')
     def onchange_date_range_id(self):
@@ -56,5 +60,6 @@ class WizardOpenTaxBalances(models.TransientModel):
             'target_move': self.target_move,
             'company_id': self.company_id.id,
             'search_default_filter_has_moves': True,
+            'display_all': self.display_all,
         }
         return vals

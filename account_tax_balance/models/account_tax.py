@@ -39,13 +39,19 @@ class AccountTax(models.Model):
             context.get('to_date', fields.Date.context_today(self)),
             context.get('company_id', self.env.user.company_id.id),
             context.get('target_move', 'posted'),
+            context.get('display_all', False),
         )
 
     @api.model
     def _search_has_moves(self, operator, value):
         assert isinstance(value, bool), "Not implemented"
         assert operator == "=", "Not implemented"
-        ids_with_moves = self.search([]).filtered(lambda t: t.has_moves == value)
+        from_date, to_date, company_id, target_move, display_all \
+            = self.get_context_values()
+        if display_all:
+            ids_with_moves = self.env['account.tax'].search([])
+        else:
+            ids_with_moves = self.search([]).filtered(lambda t: t.has_moves == value)
         return [('id', 'in', ids_with_moves.ids)]
 
     def _compute_regular_and_refund(self, total):
@@ -141,7 +147,8 @@ class AccountTax(models.Model):
         return total_balance
 
     def get_move_lines_query(self, tax_or_base="tax"):
-        from_date, to_date, company_id, target_move = self.get_context_values()
+        from_date, to_date, company_id, target_move, display_all \
+            = self.get_context_values()
         state_list = self.get_target_state_list(target_move)
         base_query = self.get_move_lines_base_query()
         _where = ""
