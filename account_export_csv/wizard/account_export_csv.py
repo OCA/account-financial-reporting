@@ -242,14 +242,13 @@ class AccountCSVExport(models.TransientModel):
                 file_data.seek(0)
                 base64.encode(file_data, base64_data)
                 base64_data.seek(0)
-                self.write({"data": base64_data.read()})
-                # self.env.cr.execute(
-                #     """
-                # UPDATE account_csv_export
-                # SET data = %s
-                # WHERE id = %s""",
-                #     (base64_data.read(), self.id),
-                # )
+                self.env.cr.execute(
+                    """
+                UPDATE account_csv_export
+                SET data = %s
+                WHERE id = %s""",
+                    (base64_data.read(), self.id),
+                )
         return {
             "type": "ir.actions.act_window",
             "res_model": "account.csv.export",
