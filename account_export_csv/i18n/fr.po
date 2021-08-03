@@ -7,26 +7,26 @@ msgstr ""
 "Project-Id-Version: OpenERP Server 7.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-04-10 15:11+0000\n"
-"PO-Revision-Date: 2020-10-16 10:09+0000\n"
-"Last-Translator: vdewulf <virginie@coopiteasy.be>\n"
+"PO-Revision-Date: 2021-08-03 17:49+0000\n"
+"Last-Translator: Pascal GOUHIER <pascal.gouhier@copagex.fr>\n"
 "Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.10\n"
+"X-Generator: Weblate 4.3.2\n"
 
 #. module: account_export_csv
 #: model_terms:ir.ui.view,arch_db:account_export_csv.account_csv_export_view
 msgid "<span string=\"-\" class=\"oe_inline\"/>"
-msgstr ""
+msgstr "<span string=\"-\" class=\"oe_inline\"/>"
 
 #. module: account_export_csv
 #: code:addons/account_export_csv/wizard/account_export_csv.py:256
 #, python-format
 msgid "ACCOUNT CODE"
-msgstr "CODE DU COMPTE"
+msgstr "Numéro de compte"
 
 #. module: account_export_csv
 #: code:addons/account_export_csv/wizard/account_export_csv.py:175
@@ -39,7 +39,7 @@ msgstr "NOM DU COMPTE"
 #: code:addons/account_export_csv/wizard/account_export_csv.py:269
 #, python-format
 msgid "AMOUNT CURRENCY"
-msgstr "MONTANT"
+msgstr "MONTANT EN DEVISE"
 
 #. module: account_export_csv
 #: code:addons/account_export_csv/wizard/account_export_csv.py:263
@@ -51,7 +51,7 @@ msgstr "CODE DU COMPTE ANALYTIQUE"
 #: code:addons/account_export_csv/wizard/account_export_csv.py:271
 #, python-format
 msgid "ANALYTIC ACCOUNT NAME"
-msgstr "NOM DU CODE ANALYTIQUE"
+msgstr "NOM DU COMPTE ANALYTIQUE"
 
 #. module: account_export_csv
 #: code:addons/account_export_csv/wizard/account_export_csv.py:172
@@ -94,7 +94,7 @@ msgstr "RELEVE BANCAIRE"
 #. module: account_export_csv
 #: code:addons/account_export_csv/wizard/account_export_csv.py:117
 #: code:addons/account_export_csv/wizard/account_export_csv.py:174
-#, fuzzy, python-format
+#, python-format
 msgid "CODE"
 msgstr "CODE"
 
@@ -170,7 +170,7 @@ msgstr "Date de fin"
 #. module: account_export_csv
 #: model:ir.model.fields,field_description:account_export_csv.field_account_csv_export__date_start
 msgid "Date Start"
-msgstr "Date de début"
+msgstr "Date de début de période"
 
 #. module: account_export_csv
 #: model:ir.model.fields,field_description:account_export_csv.field_account_csv_export__date_range_id
@@ -186,7 +186,7 @@ msgstr "Nom affiché"
 #: code:addons/account_export_csv/wizard/account_export_csv.py:266
 #, python-format
 msgid "ENTRY NUMBER"
-msgstr ""
+msgstr "Numéro d'écriture"
 
 #. module: account_export_csv
 #: model:ir.model,name:account_export_csv.model_account_csv_export
@@ -213,6 +213,7 @@ msgstr "ID"
 #: model:ir.model.fields,help:account_export_csv.field_account_csv_export__journal_ids
 msgid "If empty, use all journals, only used for journal entries"
 msgstr ""
+"Si vide, utilise tous les journaux, utilisé uniquement pour les écritures"
 
 #. module: account_export_csv
 #: code:addons/account_export_csv/wizard/account_export_csv.py:272
@@ -229,7 +230,7 @@ msgstr "CODE DU JOURNAL"
 #. module: account_export_csv
 #: model_terms:ir.ui.view,arch_db:account_export_csv.account_csv_export_view
 msgid "Journal Entries"
-msgstr "Mouvements du journal"
+msgstr "Ecritures comptables"
 
 #. module: account_export_csv
 #: model:ir.model.fields,field_description:account_export_csv.field_account_csv_export__journal_ids
@@ -261,30 +262,30 @@ msgstr "NOM"
 #: code:addons/account_export_csv/wizard/account_export_csv.py:257
 #, python-format
 msgid "PARTNER NAME"
-msgstr "NOM DU PARTENAIRE"
+msgstr "Nom du partenaire"
 
 #. module: account_export_csv
 #: code:addons/account_export_csv/wizard/account_export_csv.py:258
 #, python-format
 msgid "REF"
-msgstr ""
+msgstr "REF"
 
 #. module: account_export_csv
 #: model_terms:ir.ui.view,arch_db:account_export_csv.account_csv_export_view
 msgid "Report"
-msgstr ""
+msgstr "Rapport"
 
 #. module: account_export_csv
 #: code:addons/account_export_csv/wizard/account_export_csv.py:273
 #, python-format
 msgid "TAX CODE"
-msgstr ""
+msgstr "CODE DE TAXE"
 
 #. module: account_export_csv
 #: code:addons/account_export_csv/wizard/account_export_csv.py:274
 #, python-format
 msgid "TAX NAME"
-msgstr ""
+msgstr "NOM DE TAXE"
 
 #. module: account_export_csv
 #: model_terms:ir.ui.view,arch_db:account_export_csv.account_csv_export_view
@@ -294,7 +295,7 @@ msgstr "Balance générale"
 #. module: account_export_csv
 #: model_terms:ir.ui.view,arch_db:account_export_csv.account_csv_export_view
 msgid "or"
-msgstr ""
+msgstr "ou"
 
 #~ msgid "All periods in the fiscal year if empty"
 #~ msgstr "Toutes les périodes de l'année fiscale si vide"
