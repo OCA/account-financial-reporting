@@ -9,21 +9,21 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-19 01:37+0000\n"
-"PO-Revision-Date: 2019-05-01 20:02+0000\n"
-"Last-Translator: Katerina Katapodi <katerinakatapodi@gmail.com>\n"
+"PO-Revision-Date: 2021-08-03 17:49+0000\n"
+"Last-Translator: Pascal GOUHIER <pascal.gouhier@copagex.fr>\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.5.1\n"
+"X-Generator: Weblate 4.3.2\n"
 
 #. module: account_tax_balance
 #: code:addons/account_tax_balance/wizard/open_tax_balances.py:48
 #, python-format
 msgid "%(name)s: %(target)s from %(from)s to %(to)s"
-msgstr ""
+msgstr "%(name)s : %(target)s du %(from)s au %(to)s"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
@@ -34,7 +34,7 @@ msgstr "Compte"
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "Account Tax"
-msgstr "Impot de Compte"
+msgstr "Compte de Taxe"
 
 #. module: account_tax_balance
 #: selection:wizard.open.tax.balances,target_move:0
@@ -54,7 +54,7 @@ msgstr "Solde"
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__balance_refund
 msgid "Balance Refund"
-msgstr "Solde Rembourse"
+msgstr "Solde du Remboursement"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__base_balance_regular
@@ -109,12 +109,12 @@ msgstr "A partir de la date"
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
 msgid "Group By"
-msgstr "Groupe de"
+msgstr "Grouper Par"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__has_moves
 msgid "Has balance in period"
-msgstr "Le Solde de la Periode"
+msgstr "Solde de la Periode"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__id
@@ -123,14 +123,13 @@ msgstr "ID"
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_account_move
-#, fuzzy
 msgid "Journal Entries"
-msgstr "Écritures comptabilisées + non-comptabilisées"
+msgstr "Écritures comptabilisées + provisoires"
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_account_move_line
 msgid "Journal Item"
-msgstr ""
+msgstr "Écritures"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances____last_update
@@ -150,17 +149,17 @@ msgstr "Dernière mise à jour le"
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_move__move_type
 msgid "Move Type"
-msgstr "Type Change"
+msgstr "Type de mouvement comptable"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_account_move_filter
 msgid "Move type"
-msgstr "Type change"
+msgstr "Type de mouvement comptable"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "Open Taxes"
-msgstr "Taxes Ouverts"
+msgstr "Encours de Taxes"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
@@ -176,7 +175,7 @@ msgstr "Écritures ciblées"
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_account_tax
 msgid "Tax"
-msgstr "Impot"
+msgstr "Taxe"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
@@ -186,7 +185,7 @@ msgstr "Groupe de Taxes"
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
 msgid "Tax Scope"
-msgstr "But du Taxe"
+msgstr "Domaine de la taxe"
 
 #. module: account_tax_balance
 #: model:ir.actions.act_window,name:account_tax_balance.action_open_tax_balances
@@ -195,12 +194,12 @@ msgstr "But du Taxe"
 #: model:ir.ui.menu,name:account_tax_balance.menu_tax_balances
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "Taxes Balance"
-msgstr "Taxes Totaux"
+msgstr "Solde des Taxes"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__to_date
 msgid "To date"
-msgstr "jusqu'au jour"
+msgstr "Jusqu'au"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
@@ -215,48 +214,48 @@ msgstr "Solde Total"
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__base_balance
 msgid "Total Base Balance"
-msgstr "Solde de Base Total"
+msgstr "Solde Total des bases de taxe"
 
 #. module: account_tax_balance
 #: code:addons/account_tax_balance/models/account_tax.py:90
 #, python-format
 msgid "Unsupported search operator"
-msgstr "Gestionnaire de Recherche Non-appuye"
+msgstr "Critère de recherche non valable"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "View base lines"
-msgstr "Voir  lignes de base"
+msgstr "Vue des lignes des bases de taxe"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "View base refund lines"
-msgstr "Voir les lignes de base de la somme remboursee"
+msgstr "Vue des lignes des bases remboursées"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "View base regular lines"
-msgstr "Voir lignes de bases regulieres"
+msgstr "Vue des lignes régulières des bases de taxe"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "View tax lines"
-msgstr "Visualiser les lignes d'impots"
+msgstr "Vue des lignes de taxes"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "View tax refund lines"
-msgstr "Visualiser les lignes des taxes remboursees"
+msgstr "Vue des lignes des taxes remboursées"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "View tax regular lines"
-msgstr "Voir lignes des taxes de la somme remboursee"
+msgstr "Vue des lignes de taxes régulières"
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_wizard_open_tax_balances
 msgid "Wizard Open Tax Balances"
-msgstr "Mage Soldes de Taxes Ouverts"
+msgstr "Utilitaire des Soldes de Taxes"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
