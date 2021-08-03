@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-28 10:11+0000\n"
 "PO-Revision-Date: 2021-08-03 17:49+0000\n"
-"Last-Translator: Pascal GOUHIER <pascal.gouhier@copagex.fr>\n"
+"Last-Translator: jcleonard2018 <jcl@solutionsmakers.fr>\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -121,7 +121,7 @@ msgstr "afficher toutes les transactions entre deux dates."
 #: selection:res.config.settings,default_aging_type:0
 #: selection:statement.common.wizard,aging_type:0
 msgid "Age by Days"
-msgstr "Age par jours"
+msgstr "Age en jours"
 
 #. module: partner_statement
 #: selection:activity.statement.wizard,aging_type:0
