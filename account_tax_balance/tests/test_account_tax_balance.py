@@ -168,7 +168,8 @@ class TestAccountTaxBalance(HttpCase):
         self.env['account.move'].create({
             'date': Date.context_today(self.env.user),
             'journal_id': self.env['account.journal'].search(
-                [('type', '=', 'bank')], limit=1).id,
+                [('type', '=', 'bank'),
+                 ('company_id', '=', self.env.user.company_id.id)], limit=1).id,
             'name': 'Test move',
             'line_ids': [(0, 0, {
                 'account_id': liquidity_account_id,
