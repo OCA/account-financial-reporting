@@ -160,8 +160,8 @@ class OpenItemsXslx(models.AbstractModel):
                             type_object,
                             total_amount,
                             report_data,
-                            account_id,
-                            partner_id,
+                            account_id=account_id,
+                            partner_id=partner_id,
                         )
 
                         # Line break
@@ -187,7 +187,7 @@ class OpenItemsXslx(models.AbstractModel):
                     type_object,
                     total_amount,
                     report_data,
-                    account_id,
+                    account_id=account_id,
                 )
 
                 # 2 lines break
