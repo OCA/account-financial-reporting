@@ -185,8 +185,8 @@ class OpenItemsXslx(models.AbstractModel):
                 self.write_ending_balance_from_dict(
                     accounts_data[account_id],
                     type_object,
-                    report_data,
                     total_amount,
+                    report_data,
                     account_id,
                 )
 
