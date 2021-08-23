@@ -218,9 +218,8 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             "ref",
             "reconciled",
         ]
-        move_lines = self.env["account.move.line"].search_read(
-            domain=domain, fields=ml_fields
-        )
+        line_model = self.env["account.move.line"]
+        move_lines = line_model.search_read(domain=domain, fields=ml_fields)
         journals_ids = set()
         partners_ids = set()
         partners_data = {}
@@ -288,6 +287,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                     ref_label = move_line["ref"] + str(" - ") + move_line["name"]
                 move_line_data.update(
                     {
+                        "line_rec": line_model.browse(move_line["id"]),
                         "date": move_line["date"],
                         "entry": move_line["move_id"][1],
                         "jnl_id": move_line["journal_id"][0],

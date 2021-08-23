@@ -249,7 +249,7 @@
                     <!--## date-->
                     <div class="act_as_cell left">
                         <span
-                            t-att-res-id="line.move_line_id.id"
+                            t-att-res-id="line['line_rec'].id"
                             res-model="account.move.line"
                             view-type="form"
                         >
@@ -260,7 +260,7 @@
                     <!--## move-->
                     <div class="act_as_cell left">
                         <span
-                            t-att-res-id="line.move_line_id.move_id.id"
+                            t-att-res-id="line['line_rec'].move_id.id"
                             res-model="account.move"
                             view-type="form"
                         >
@@ -270,7 +270,7 @@
                     <!--## journal-->
                     <div class="act_as_cell left">
                         <span
-                            t-att-res-id="line.move_line_id.move_id.journal_id.id"
+                            t-att-res-id="line['line_rec'].move_id.journal_id.id"
                             res-model="account.journal"
                             view-type="form"
                         >
@@ -280,7 +280,7 @@
                     <!--## account code-->
                     <div class="act_as_cell left">
                         <span
-                            t-att-res-id="line.move_line_id.account_id.id"
+                            t-att-res-id="line['line_rec'].account_id.id"
                             res-model="account.account"
                             view-type="form"
                         >
@@ -290,7 +290,7 @@
                     <!--## partner-->
                     <div class="act_as_cell left">
                         <span
-                            t-att-res-id="line.move_line_id.partner_id.id"
+                            t-att-res-id="line['line_rec'].partner_id.id"
                             res-model="res.partner"
                             view-type="form"
                         >
@@ -300,7 +300,7 @@
                     <!--## ref - label-->
                     <div class="act_as_cell left">
                         <span
-                            t-att-res-id="line.move_line_id.id"
+                            t-att-res-id="line['line_rec'].id"
                             res-model="account.move.line"
                             view-type="form"
                         >
@@ -310,7 +310,7 @@
                     <!--## date_due-->
                     <div class="act_as_cell left">
                         <span
-                            t-att-res-id="line.move_line_id.id"
+                            t-att-res-id="line['line_rec'].id"
                             res-model="account.move.line"
                             view-type="form"
                         >
@@ -324,7 +324,7 @@
                     <!--## amount_residual-->
                     <div class="act_as_cell amount">
                         <span
-                            domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
+                            domain="[('id', 'in', (line['line_rec'] | line['line_rec'].matched_debit_ids.mapped('debit_move_id') | line['line_rec'].matched_credit_ids.mapped('credit_move_id')).ids)]"
                             res-model="account.move.line"
                         >
                             <t
@@ -335,15 +335,15 @@
                     </div>
                     <!--## current-->
                     <div class="act_as_cell amount">
-                        <t t-if="line.current == 0">
+                        <t t-if="line['current'] == 0">
                             <span
-                                t-field="line.current"
+                                t-esc="line['current']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
                         </t>
                         <t t-else="">
                             <span
-                                domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
+                                domain="[('id', 'in', (line['line_rec'] | line['line_rec'].matched_debit_ids.mapped('debit_move_id') | line['line_rec'].matched_credit_ids.mapped('credit_move_id')).ids)]"
                                 res-model="account.move.line"
                             >
                                 <t
@@ -355,15 +355,15 @@
                     </div>
                     <!--## age_30_days-->
                     <div class="act_as_cell amount">
-                        <t t-if="line.age_30_days == 0">
+                        <t t-if="line['30_days'] == 0">
                             <span
-                                t-field="line.age_30_days"
+                                t-esc="line['30_days']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
                         </t>
                         <t t-else="">
                             <span
-                                domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
+                                domain="[('id', 'in', (line['line_rec'] | line['line_rec'].matched_debit_ids.mapped('debit_move_id') | line['line_rec'].matched_credit_ids.mapped('credit_move_id')).ids)]"
                                 res-model="account.move.line"
                             >
                                 <t
@@ -375,15 +375,15 @@
                     </div>
                     <!--## age_60_days-->
                     <div class="act_as_cell amount">
-                        <t t-if="line.age_60_days == 0">
+                        <t t-if="line['60_days'] == 0">
                             <span
-                                t-field="line.age_60_days"
+                                t-esc="line['60_days']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
                         </t>
                         <t t-else="">
                             <span
-                                domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
+                                domain="[('id', 'in', (line['line_rec'] | line['line_rec'].matched_debit_ids.mapped('debit_move_id') | line['line_rec'].matched_credit_ids.mapped('credit_move_id')).ids)]"
                                 res-model="account.move.line"
                             >
                                 <t
@@ -395,15 +395,15 @@
                     </div>
                     <!--## age_90_days-->
                     <div class="act_as_cell amount">
-                        <t t-if="line.age_90_days == 0">
+                        <t t-if="line['90_days'] == 0">
                             <span
-                                t-field="line.age_90_days"
+                                t-esc="line['90_days']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
                         </t>
                         <t t-else="">
                             <span
-                                domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
+                                domain="[('id', 'in', (line['line_rec'] | line['line_rec'].matched_debit_ids.mapped('debit_move_id') | line['line_rec'].matched_credit_ids.mapped('credit_move_id')).ids)]"
                                 res-model="account.move.line"
                             >
                                 <t
@@ -415,15 +415,15 @@
                     </div>
                     <!--## age_120_days-->
                     <div class="act_as_cell amount">
-                        <t t-if="line.age_120_days == 0">
+                        <t t-if="line['120_days'] == 0">
                             <span
-                                t-field="line.age_120_days"
+                                t-esc="line['120_days']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
                         </t>
                         <t t-else="">
                             <span
-                                domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
+                                domain="[('id', 'in', (line['line_rec'] | line['line_rec'].matched_debit_ids.mapped('debit_move_id') | line['line_rec'].matched_credit_ids.mapped('credit_move_id')).ids)]"
                                 res-model="account.move.line"
                             >
                                 <t
@@ -435,15 +435,15 @@
                     </div>
                     <!--## older-->
                     <div class="act_as_cell amount">
-                        <t t-if="line.older == 0">
+                        <t t-if="line['older'] == 0">
                             <span
-                                t-field="line.older"
+                                t-esc="line['older']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
                         </t>
                         <t t-else="">
                             <span
-                                domain="[('id', 'in', (line.move_line_id | line.move_line_id.matched_debit_ids.mapped('debit_move_id') | line.move_line_id.matched_credit_ids.mapped('credit_move_id')).ids)]"
+                                domain="[('id', 'in', (line['line_rec'] | line['line_rec'].matched_debit_ids.mapped('debit_move_id') | line['line_rec'].matched_credit_ids.mapped('credit_move_id')).ids)]"
                                 res-model="account.move.line"
                             >
                                 <t
