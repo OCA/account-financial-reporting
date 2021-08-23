@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-21 13:00+0000\n"
-"PO-Revision-Date: 2021-03-10 18:45+0000\n"
-"Last-Translator: Ana Su??rez <ana.suarez@qubiq.es>\n"
+"PO-Revision-Date: 2021-08-23 19:50+0000\n"
+"Last-Translator: Ernesto Tejeda <ernesto.tejeda87@gmail.com>\n"
 "Language-Team: \n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -213,33 +213,32 @@ msgstr "Tiempo ??? 90 d."
 #: model:ir.ui.menu,name:account_financial_report.menu_aged_partner_balance_wizard
 #, python-format
 msgid "Aged Partner Balance"
-msgstr "Saldo vencidos de empresa"
+msgstr "Calidad de la deuda"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_base
 msgid "Aged Partner Balance -"
-msgstr "Balance Empresa Vencido"
+msgstr "Calidad de la deuda -"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_aged_partner_balance
 msgid "Aged Partner Balance Report"
-msgstr "Estado de antig??edad de saldos"
+msgstr "Informe de Calidad de la deuda"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_aged_partner_balance_report_wizard
 msgid "Aged Partner Balance Wizard"
-msgstr "Asistente de Estado de Antig??edad de Saldos"
+msgstr "Asistente de Calidad de la deuda"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_aged_partner_balance_xlsx
-#, fuzzy
 msgid "Aged Partner Balance XLSL Report"
-msgstr "Saldo vencidos de empresa XLSX"
+msgstr "Calidad de la deuda XLSX"
 
 #. module: account_financial_report
 #: model:ir.actions.report,name:account_financial_report.action_report_aged_partner_balance_xlsx
 msgid "Aged Partner Balance XLSX"
-msgstr "Saldo vencidos de empresa XLSX"
+msgstr "Calidad de la deuda XLSX"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
@@ -802,9 +801,8 @@ msgstr "Filtro Cuentas"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
-#, fuzzy
 msgid "Filter analytic accounts"
-msgstr "Filtrar por etiquetas anal??ticas"
+msgstr "Filtrar por cuentas anal??ticas"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__analytic_tag_ids
