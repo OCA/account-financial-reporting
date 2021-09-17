@@ -103,7 +103,7 @@
         <field name="res_model">open.items.report.wizard</field>
         <field name="binding_model_id" ref="base.model_res_partner" />
         <field name="view_mode">form</field>
-        <field name="view_id" ref="general_ledger_wizard" />
+        <field name="view_id" ref="open_items_wizard" />
         <field
             name="context"
             eval="{
