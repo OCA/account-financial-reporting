@@ -172,7 +172,9 @@
     </template>
     <template id="account_financial_report.report_journal_ledger_journal_first_line">
         <div class="act_as_row lines">
-            <div class="act_as_cell" name="Sequence" />
+            <t t-if="with_auto_sequence">
+                <div class="act_as_cell" name="Sequence" />
+            </t>
             <div class="act_as_cell" name="entry" />
             <div class="act_as_cell" name="date" />
             <div class="act_as_cell" name="account" />
