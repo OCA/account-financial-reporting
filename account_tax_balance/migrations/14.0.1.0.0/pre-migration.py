@@ -16,16 +16,22 @@ def migrate(env, version):
     """
     old_move_type_column = "move_type"
     new_move_type_column = "financial_type"
+    move_model_name = "account.move"
     move_table_name = "account_move"
     enterprise_move_type_rename = "move_type_custom"
     ou_move_type_rename = openupgrade.get_legacy_name(old_move_type_column)
 
     for move_type_rename in (enterprise_move_type_rename, ou_move_type_rename):
         if openupgrade.column_exists(env.cr, move_table_name, move_type_rename):
-            openupgrade.rename_columns(
-                env.cr,
-                {
-                    move_table_name: [(move_type_rename, new_move_type_column)],
-                },
+            openupgrade.rename_fields(
+                env,
+                [
+                    (
+                        move_model_name,
+                        move_table_name,
+                        move_type_rename,
+                        new_move_type_column,
+                    ),
+                ],
             )
             break
