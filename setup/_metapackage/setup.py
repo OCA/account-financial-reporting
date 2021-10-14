@@ -9,6 +9,7 @@ setuptools.setup(
     version=version,
     install_requires=[
         'odoo14-addon-account_financial_report',
+        'odoo14-addon-account_move_line_report_xls',
         'odoo14-addon-account_tax_balance',
     ],
     classifiers=[
