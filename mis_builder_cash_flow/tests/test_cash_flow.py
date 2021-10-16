@@ -70,7 +70,7 @@ class TestCashFlow(TransactionCase):
                 "name": "Move",
                 "journal_id": self.journal.id,
                 "company_id": self.company.id,
-                "type": "entry",
+                "move_type": "entry",
                 "line_ids": [
                     (
                         0,
