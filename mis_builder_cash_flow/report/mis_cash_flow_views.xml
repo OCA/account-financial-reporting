@@ -61,7 +61,7 @@
                 <separator />
                 <filter
                     string="Unreconciled"
-                    domain="[('full_reconcile_id', '=', False), ('balance','!=', 0), ('account_id.reconcile','=',True)]"
+                    domain="[('full_reconcile_id', '=', False), ('account_id.reconcile','=',True)]"
                     help="Journal items where matching number isn't set"
                     name="unreconciled"
                 />
