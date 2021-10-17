@@ -30,8 +30,8 @@ class MisReportInstance(models.Model):
         """Determine if the report template is a horizontal one"""
         self.ensure_one()
         return set(self.report_id.get_external_id().values()) & {
-            "l10n_nl_mis_reports.report_bs",
-            "l10n_nl_mis_reports.report_pl",
+            "mis_template_financial_report.report_bs",
+            "mis_template_financial_report.report_pl",
         }
 
     @api.multi
@@ -41,9 +41,9 @@ class MisReportInstance(models.Model):
             matrix or self._compute_matrix(),
             [
                 (
-                    self.env.ref("l10n_nl_mis_reports.kpi_profit"),
-                    self.env.ref("l10n_nl_mis_reports.kpi_pl_to_report"),
-                    self.env.ref("l10n_nl_mis_reports.kpi_assets"),
+                    self.env.ref("mis_template_financial_report.kpi_profit"),
+                    self.env.ref("mis_template_financial_report.kpi_pl_to_report"),
+                    self.env.ref("mis_template_financial_report.kpi_assets"),
                 )
             ],
         )

@@ -3,12 +3,12 @@
 from odoo.addons.mis_builder.tests.test_mis_report_instance import TestMisReportInstance
 
 
-class TestL10nNlMisReports(TestMisReportInstance):
-    def test_l10n_nl_mis_reports(self):
+class TestMisTemplateFinancialReport(TestMisReportInstance):
+    def test_mis_template_financial_report(self):
         instance = self.env["mis.report.instance"].create(
             {
                 "name": "Balance Sheet",
-                "report_id": self.env.ref("l10n_nl_mis_reports.report_bs").id,
+                "report_id": self.env.ref("mis_template_financial_report.report_bs").id,
             }
         )
         result_dict = instance.compute()

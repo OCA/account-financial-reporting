@@ -3,7 +3,7 @@
         <xpath expr="." position="inside">
             <link
                 rel="stylesheet"
-                href="/l10n_nl_mis_reports/static/src/css/l10n_nl_mis_reports.css"
+                href="/mis_template_financial_report/static/src/css/mis_template_financial_report.css"
             />
         </xpath>
     </template>
@@ -11,7 +11,7 @@
         <xpath expr="." position="inside">
             <link
                 rel="stylesheet"
-                href="/l10n_nl_mis_reports/static/src/css/report.css"
+                href="/mis_template_financial_report/static/src/css/report.css"
             />
         </xpath>
     </template>
