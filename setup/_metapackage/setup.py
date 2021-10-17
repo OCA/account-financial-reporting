@@ -11,6 +11,7 @@ setuptools.setup(
         'odoo14-addon-account_financial_report',
         'odoo14-addon-account_move_line_report_xls',
         'odoo14-addon-account_tax_balance',
+        'odoo14-addon-mis_builder_cash_flow',
     ],
     classifiers=[
         'Programming Language :: Python',
