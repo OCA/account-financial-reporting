@@ -14,6 +14,7 @@
         "data/mis_report.xml",
         "data/mis_report_kpi.xml",
         "data/mis_report_subreport.xml",
+        "views/mis_report_instance_views.xml",
         "views/templates.xml",
     ],
     "qweb": ["static/src/xml/mis_template_financial_report.xml"],
