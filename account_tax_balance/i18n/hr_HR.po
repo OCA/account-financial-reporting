@@ -95,9 +95,19 @@ msgid "Date Range"
 msgstr "Raspon datuma"
 
 #. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_move__display_name
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_move_line__display_name
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__display_name
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__display_name
 msgid "Display Name"
 msgstr "Naziv "
+
+#. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_bank_statement_line__financial_type
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_move__financial_type
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_payment__financial_type
+msgid "Financial Type"
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__from_date
@@ -116,15 +126,17 @@ msgid "Has balance in period"
 msgstr "Ima saldo u periodu"
 
 #. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_move__id
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_move_line__id
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__id
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__id
 msgid "ID"
 msgstr "ID"
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_account_move
-#, fuzzy
-msgid "Journal Entries"
-msgstr "Sve stavke"
+msgid "Journal Entry"
+msgstr ""
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_account_move_line
@@ -132,6 +144,9 @@ msgid "Journal Item"
 msgstr ""
 
 #. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_move____last_update
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_move_line____last_update
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax____last_update
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances____last_update
 msgid "Last Modified on"
 msgstr ""
@@ -147,8 +162,9 @@ msgid "Last Updated on"
 msgstr ""
 
 #. module: account_tax_balance
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_move__move_type
-msgid "Move Type"
+#: code:addons/account_tax_balance/models/account_move.py:0
+#, python-format
+msgid "Liquidity"
 msgstr ""
 
 #. module: account_tax_balance
@@ -160,6 +176,36 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "Open Taxes"
 msgstr ""
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:0
+#, python-format
+msgid "Other"
+msgstr ""
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:0
+#, python-format
+msgid "Payable"
+msgstr "Dugovno"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:0
+#, python-format
+msgid "Payable refund"
+msgstr "Dugovni povrat"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:0
+#, python-format
+msgid "Receivable"
+msgstr "Potražno"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:0
+#, python-format
+msgid "Receivable refund"
+msgstr "Potražni povrat"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
@@ -263,6 +309,10 @@ msgstr "wizard.open.tax.balances"
 msgid "or"
 msgstr "ili"
 
+#, fuzzy
+#~ msgid "Journal Entries"
+#~ msgstr "Sve stavke"
+
 #~ msgid "Account"
 #~ msgstr "Konto"
 
@@ -271,15 +321,3 @@ msgstr "ili"
 
 #~ msgid "Account Entry"
 #~ msgstr "Stavka konta"
-
-#~ msgid "Payable"
-#~ msgstr "Dugovno"
-
-#~ msgid "Payable refund"
-#~ msgstr "Dugovni povrat"
-
-#~ msgid "Receivable"
-#~ msgstr "Potražno"
-
-#~ msgid "Receivable refund"
-#~ msgstr "Potražni povrat"

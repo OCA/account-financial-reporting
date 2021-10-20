@@ -152,6 +152,12 @@ msgid "Last Updated on"
 msgstr ""
 
 #. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:0
+#, python-format
+msgid "Liquidity"
+msgstr ""
+
+#. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_account_move_filter
 msgid "Move type"
 msgstr ""
@@ -159,6 +165,36 @@ msgstr ""
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "Open Taxes"
+msgstr ""
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:0
+#, python-format
+msgid "Other"
+msgstr ""
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:0
+#, python-format
+msgid "Payable"
+msgstr ""
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:0
+#, python-format
+msgid "Payable refund"
+msgstr ""
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:0
+#, python-format
+msgid "Receivable"
+msgstr ""
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:0
+#, python-format
+msgid "Receivable refund"
 msgstr ""
 
 #. module: account_tax_balance
