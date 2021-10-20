@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2020-08-12 00:59+0000\n"
+"PO-Revision-Date: 2021-11-08 06:35+0000\n"
 "Last-Translator: Ignacio Buioli <ibuioli@gmail.com>\n"
 "Language-Team: none\n"
 "Language: es_AR\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10\n"
+"X-Generator: Weblate 4.3.2\n"
 
 #. module: account_tax_balance
 #: code:addons/account_tax_balance/wizard/open_tax_balances.py:0
@@ -89,9 +89,19 @@ msgid "Date Range"
 msgstr "Rango de Fecha"
 
 #. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_move__display_name
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_move_line__display_name
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__display_name
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__display_name
 msgid "Display Name"
 msgstr "Mostrar Nombre"
+
+#. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_bank_statement_line__financial_type
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_move__financial_type
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_payment__financial_type
+msgid "Financial Type"
+msgstr "Tipo Financiero"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__from_date
@@ -109,21 +119,27 @@ msgid "Has balance in period"
 msgstr "Tiene saldo en periodo"
 
 #. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_move__id
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_move_line__id
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__id
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__id
 msgid "ID"
 msgstr "ID"
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_account_move
-msgid "Journal Entries"
-msgstr "Asientos Contables"
+msgid "Journal Entry"
+msgstr "Apunte Contable"
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_account_move_line
 msgid "Journal Item"
-msgstr "Elemento del Diario"
+msgstr "Asiento Contable"
 
 #. module: account_tax_balance
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_move____last_update
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_move_line____last_update
+#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax____last_update
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances____last_update
 msgid "Last Modified on"
 msgstr "Última modificación en"
@@ -139,9 +155,10 @@ msgid "Last Updated on"
 msgstr "Última actualización en"
 
 #. module: account_tax_balance
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_move__move_type
-msgid "Move Type"
-msgstr "Tipo de Movimiento"
+#: code:addons/account_tax_balance/models/account_move.py:0
+#, python-format
+msgid "Liquidity"
+msgstr "Liquidez"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_account_move_filter
@@ -152,6 +169,36 @@ msgstr "Tipo de Operación"
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "Open Taxes"
 msgstr "Ver Impuestos"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:0
+#, python-format
+msgid "Other"
+msgstr "Otro"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:0
+#, python-format
+msgid "Payable"
+msgstr "Pagadero"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:0
+#, python-format
+msgid "Payable refund"
+msgstr "Reembolso a Pagar"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:0
+#, python-format
+msgid "Receivable"
+msgstr "A Cobrar"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:0
+#, python-format
+msgid "Receivable refund"
+msgstr "Reembolso a Cobrar"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
@@ -253,3 +300,9 @@ msgstr "Asistente apertura balance de impuestos"
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "or"
 msgstr "o"
+
+#~ msgid "Journal Entries"
+#~ msgstr "Asientos Contables"
+
+#~ msgid "Move Type"
+#~ msgstr "Tipo de Movimiento"
