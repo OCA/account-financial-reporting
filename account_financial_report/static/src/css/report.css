@@ -111,3 +111,22 @@
     margin-left: auto;
     font-family: Helvetica, Arial;
 }
+/*table_layout_fixed*/
+.table_layout_fixed {
+    table-layout: fixed;
+    width: 100%;
+}
+.table_layout_fixed thead,
+.table_layout_fixed tfoot {
+    background-color: #f0f0f0 !important;
+}
+.table_layout_fixed th,
+.table_layout_fixed td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.table_layout_fixed thead th,
+.table_layout_fixed tbody td {
+    border: 1px solid lightGrey;
+}
