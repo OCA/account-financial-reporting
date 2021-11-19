@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 # © 2016 Julien Coux (Camptocamp)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
-from datetime import timedelta
+from datetime import timedelta, date, datetime as dtm
+from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DT
+from odoo.tools import float_is_zero
 
 from odoo import models, fields, api, _
 
@@ -179,14 +181,434 @@ class OpenItemsReportCompute(models.TransientModel):
     def get_html(self, given_context=None):
         return self._get_html()
 
+    @api.model
+    def _get_move_lines_domain(self, company_id, account_ids, partner_ids,
+                               target_move, date_from):
+        domain = [('account_id', 'in', account_ids),
+                  ('company_id', '=', company_id),
+                  ('reconciled', '=', False)]
+        if partner_ids:
+            domain += [('partner_id', 'in', partner_ids)]
+        if target_move == 'posted':
+            domain += [('move_id.state', '=', 'posted')]
+        if date_from:
+            domain += [('date', '>', date_from)]
+        return domain
+
+    def _recalculate_move_lines(self, move_lines, debit_ids, credit_ids,
+                                debit_amount, credit_amount, ml_ids,
+                                account_ids, company_id, partner_ids,
+                                target_moves):
+        debit_ids = set(debit_ids)
+        credit_ids = set(credit_ids)
+        in_credit_but_not_in_debit = credit_ids - debit_ids
+        reconciled_ids = list(debit_ids) + list(in_credit_but_not_in_debit)
+        reconciled_ids = set(reconciled_ids)
+        ml_ids = set(ml_ids)
+        new_ml_ids = reconciled_ids - ml_ids
+        new_ml_ids = list(new_ml_ids)
+        new_domain = self._get_new_move_lines_domain(new_ml_ids, account_ids,
+                                                     company_id, partner_ids,
+                                                     target_moves)
+        ml_fields = [
+            'id', 'name', 'date', 'move_id', 'journal_id', 'account_id',
+            'partner_id', 'amount_residual', 'date_maturity', 'ref',
+            'debit', 'credit', 'balance', 'reconciled', 'currency_id', 'amount_currency',
+            'amount_residual_currency']
+        new_move_lines = self.env['account.move.line'].search_read(
+            domain=new_domain, fields=ml_fields
+        )
+        move_lines = move_lines + new_move_lines
+        for move_line in move_lines:
+            ml_id = move_line['id']
+            if ml_id in debit_ids:
+                move_line['amount_residual'] += debit_amount[ml_id]
+            if ml_id in credit_ids:
+                move_line['amount_residual'] -= credit_amount[ml_id]
+        return move_lines
+        
+    def _get_data(
+            self, account_ids, partner_ids, date_at_object,
+            target_move, company_id, date_from):
+        domain = self._get_move_lines_domain(company_id, account_ids,
+                                             partner_ids, target_move,
+                                             date_from)
+        ml_fields = [
+            'id', 'name', 'date', 'move_id', 'journal_id', 'account_id',
+            'partner_id', 'amount_residual', 'date_maturity', 'ref',
+            'debit', 'credit', 'balance', 'reconciled', 'currency_id', 'amount_currency',
+            'amount_residual_currency']
+        move_lines = self.env['account.move.line'].search_read(
+            domain=domain, fields=ml_fields
+        )
+        journals_ids = set()
+        partners_ids = set()
+        partners_data = {}
+        date_at_object = dtm.strptime(date_at_object, DT).date()
+        if date_at_object < date.today():
+            acc_partial_rec, debit_amount, credit_amount = \
+                self._get_account_partial_reconciled(company_id,
+                                                     date_at_object)
+            if acc_partial_rec:
+                ml_ids = list(map(operator.itemgetter('id'), move_lines))
+                debit_ids = list(map(operator.itemgetter('debit_move_id'),
+                                     acc_partial_rec))
+                credit_ids = list(map(operator.itemgetter('credit_move_id'),
+                                      acc_partial_rec))
+                move_lines = self._recalculate_move_lines(
+                    move_lines, debit_ids, credit_ids,
+                    debit_amount, credit_amount, ml_ids, account_ids,
+                    company_id, partner_ids, target_move
+                )
+        move_lines = [move_line for move_line in move_lines if
+                      dtm.strptime(move_line['date'], DT).date() <= date_at_object and not
+                      float_is_zero(move_line['amount_residual'],
+                                    precision_digits=2)]
+
+        open_items_move_lines_data = {}
+        for move_line in move_lines:
+            journals_ids.add(move_line['journal_id'][0])
+            acc_id = move_line['account_id'][0]
+            # Partners data
+            if move_line['partner_id']:
+                prt_id = move_line['partner_id'][0]
+                prt_name = move_line['partner_id'][1]
+            else:
+                prt_id = 0
+                prt_name = "Missing Partner"
+            if prt_id not in partners_ids:
+                partners_data.update({
+                    prt_id: {'id': prt_id, 'name': prt_name}
+                })
+                partners_ids.add(prt_id)
+
+            # Move line update
+            original = 0
+
+            if not float_is_zero(move_line['credit'], precision_digits=2):
+                original = move_line['credit']*(-1)
+            if not float_is_zero(move_line['debit'], precision_digits=2):
+                original = move_line['debit']
+
+            if move_line['ref'] == move_line['name']:
+                if move_line['ref']:
+                    ref_label = move_line['ref']
+                else:
+                    ref_label = ''
+            elif not move_line['ref']:
+                ref_label = move_line['name']
+            elif not move_line['name']:
+                ref_label = move_line['ref']
+            else:
+                ref_label = move_line['ref'] + str(' - ') + move_line['name']
+
+            move_line.update({
+                'date': move_line['date'],
+                'date_maturity': move_line["date_maturity"],
+                'original': original,
+                'partner_id': prt_id,
+                'partner_name': prt_name,
+                'ref_label': ref_label,
+                'journal_id': move_line['journal_id'][0],
+                'move_name': move_line['move_id'][1],
+                'currency_id': move_line['currency_id'][0]
+                if move_line['currency_id'] else False,
+                'currency_name': move_line['currency_id'][1]
+                if move_line['currency_id'] else False,
+            })
+
+            # Open Items Move Lines Data
+            if acc_id not in open_items_move_lines_data.keys():
+                open_items_move_lines_data[acc_id] = {prt_id: [move_line]}
+            else:
+                if prt_id not in open_items_move_lines_data[acc_id].keys():
+                    open_items_move_lines_data[acc_id][prt_id] = [move_line]
+                else:
+                    open_items_move_lines_data[acc_id][prt_id].append(move_line)
+        journals_data = self._get_journals_data(list(journals_ids))
+        accounts_data = self._get_accounts_data(
+            open_items_move_lines_data.keys())
+        return move_lines, partners_data, journals_data, accounts_data, \
+            open_items_move_lines_data
+
+    def _get_journals_data(self, journals_ids):
+        journals = self.env['account.journal'].browse(journals_ids)
+        journals_data = {}
+        for journal in journals:
+            journals_data.update({journal.id: {'id': journal.id,
+                                               'code': journal.code}})
+        return journals_data
+
+    def _get_accounts_data(self, accounts_ids):
+        accounts = self.env['account.account'].browse(accounts_ids)
+        accounts_data = {}
+        for account in accounts:
+            accounts_data.update({account.id: {
+                'id': account.id,
+                'code': account.code,
+                'name': account.name,
+                'hide_account': False,
+                'currency_id': account.currency_id or False,
+                'currency_name': account.currency_id.name}
+            })
+        return accounts_data
+
+    @api.model
+    def _calculate_amounts(self, open_items_move_lines_data):
+        total_amount = {}
+        for account_id in open_items_move_lines_data.keys():
+            total_amount[account_id] = {}
+            total_amount[account_id]['residual'] = 0.0
+            for partner_id in open_items_move_lines_data[account_id].keys():
+                total_amount[account_id][partner_id] = {}
+                total_amount[account_id][partner_id]['residual'] = 0.0
+                for move_line in open_items_move_lines_data[account_id][
+                        partner_id]:
+                    total_amount[account_id][partner_id]['residual'] += \
+                        move_line['amount_residual']
+                    total_amount[account_id]['residual'] += move_line[
+                        'amount_residual']
+        return total_amount
+
+    @api.model
+    def _order_open_items_by_date(
+            self, open_items_move_lines_data):
+        new_open_items = {}
+        for acc_id in open_items_move_lines_data.keys():
+            new_open_items[acc_id] = {}
+            move_lines = []
+            for prt_id in open_items_move_lines_data[acc_id]:
+                for move_line in open_items_move_lines_data[acc_id][prt_id]:
+                    move_lines += [move_line]
+            move_lines = sorted(move_lines, key=lambda k: (k['date']))
+            new_open_items[acc_id] = move_lines
+        else:
+            for acc_id in open_items_move_lines_data.keys():
+                new_open_items[acc_id] = {}
+                for prt_id in open_items_move_lines_data[acc_id]:
+                    new_open_items[acc_id][prt_id] = {}
+                    move_lines = []
+                    for move_line in open_items_move_lines_data[acc_id][prt_id]:
+                        move_lines += [move_line]
+                    move_lines = sorted(move_lines, key=lambda k: (k['date']))
+                    new_open_items[acc_id][prt_id] = move_lines
+        return new_open_items
+
+    def _insert_line_info(self, line_data):
+        # partner may be undefined but there is a record in the table report_xxx_partner
+        partner_id = line_data.get('partner_id', 0)
+        if partner_id and isinstance(partner_id, list):
+            partner_id = partner_id[0]
+        elif partner_id:
+            pass
+        else:
+            partner_id = False
+        report_partner_id = self.env['report_open_items_qweb_partner'].search([('partner_id', '=', partner_id)])[-1].id
+        create_uid = 1
+        create_date = line_data.get('date', dtm.strftime(dtm.now(), DT))
+        move_line_id = line_data.get('id', 0)
+        date = line_data.get('create_date', dtm.strftime(dtm.now(), DT))
+        date_due = line_data.get('date_maturity', date)
+        entry = line_data.get('move_name', "Undefined")
+        journal_id = line_data.get('journal_id', 0)
+        if journal_id == 0:
+            journal = "Undefined"
+        else:
+            journal = self.env['account.journal'].browse(journal_id).name
+        account_id = line_data.get('account_id', 0)
+        if account_id:
+            account = self.env['account.account'].browse(account_id[0]).code
+        else:
+            account_id = 0
+        if not partner_id:
+            partner = "Undefined"
+        else:
+            # partners with apostrophe
+            partner = self.env['res.partner'].browse(partner_id).display_name.replace("'", " ")
+        label = line_data.get('ref_label', "Undefined")
+        amount_total_due = line_data.get('balance', 0)
+        amount_residual = line_data.get('amount_residual', 0)
+        currency_id = line_data.get('currency_id', 0)
+        amount_total_due_currency = line_data.get('amount_currency', 0)
+        amount_residual_currency = line_data.get('amount_residual_currency', 0)
+        insert_query = """
+            INSERT INTO report_open_items_qweb_move_line
+                (
+                report_partner_id,
+                create_uid,
+                create_date,
+                move_line_id,
+                date,
+                date_due,
+                entry,
+                journal,
+                account,
+                partner,
+                label,
+                amount_total_due,
+                amount_residual,
+                currency_id,
+                amount_total_due_currency,
+                amount_residual_currency
+            )
+            VALUES
+            (%s,
+            %s,
+            '%s',
+            %s,
+            '%s',
+            '%s',
+            '%s',
+            '%s',
+            %s,
+            '%s',
+            '%s',
+            %s,
+            %s,
+            %s,
+            %s,
+            '%s'
+            )
+        """ % (
+            report_partner_id or "null",
+            create_uid,
+            create_date,
+            move_line_id,
+            date,
+            date_due,
+            entry,
+            journal,
+            account,
+            partner,
+            label,
+            amount_total_due,
+            amount_residual,
+            currency_id or "null",
+            amount_total_due_currency,
+            amount_residual_currency
+        )
+        self.env.cr.execute(insert_query)
+
+
+    def _insert_partner_info(self, line_data):
+        account_id = line_data.get('account_id', 0)
+        if account_id:
+            account_id = account_id[0]
+            report_account_id = self.env['report_open_items_qweb_account'].search([('account_id', '=', account_id)])[-1].id
+        else:
+            report_account_id = 0
+
+        partner_id = line_data.get('partner_id', 0)
+        create_uid = 1
+        create_date = line_data.get('date', dtm.strftime(dtm.now(), DT))
+        if partner_id == 0:
+            name = "Undefined"
+        else:
+            name = self.env['res.partner'].browse(partner_id).display_name.replace("'", " ")
+
+        insert_query = """
+            INSERT INTO
+                report_open_items_qweb_partner
+                (
+                report_account_id,
+                create_uid,
+                create_date,
+                partner_id,
+                name
+                )
+            VALUES
+            (%s,
+            %s,
+            '%s',
+            %s,
+            '%s'
+            )
+        """ % (
+            report_account_id or "null",
+            create_uid,
+            create_date,
+            partner_id or "null",
+            name
+        )
+        self.env.cr.execute(insert_query)
+
+    def _insert_account_info(self, line_data):
+        # taking the last report
+        report_id = self.env['report_open_items_qweb'].search([], order="id desc", limit=1).id
+        create_uid = 1
+        create_date = line_data.get('date', dtm.strftime(dtm.now(), DT))
+        account_id = line_data.get('account_id', 0)
+        if account_id:
+            code = account_id[0]
+        else:
+            code = "Undefined"
+        currency_id = line_data.get('currency_id', 0)
+        if currency_id:
+            currency_id = currency_id[0]            
+        if account_id == 0:
+            name = "Undefined"
+            account = 0
+        else:
+            name = self.env['account.account'].browse(account_id[0]).display_name
+            account = account_id[0]
+
+        insert_query = """
+            INSERT INTO
+                report_open_items_qweb_account
+                (
+                report_id,
+                create_uid,
+                create_date,
+                account_id,
+                currency_id,
+                code,
+                name
+                )
+            VALUES
+            (%s,
+            %s,
+            '%s',
+            %s,
+            %s,
+            '%s',
+            '%s'
+            )
+        """ % (
+            report_id or "null",
+            create_uid,
+            create_date,
+            account or "null",
+            currency_id or "null",
+            code,
+            name
+        )
+        self.env.cr.execute(insert_query)
+
+    def _inject_line_values_from_open_items_move_lines_data(self, open_items_move_lines_data):
+        for account_id in open_items_move_lines_data.keys():
+            # For each account
+            if open_items_move_lines_data[account_id]:
+                for partner_id in open_items_move_lines_data[account_id]:
+                    # Display account move lines
+                    for line in open_items_move_lines_data[account_id][partner_id]:
+                        self._insert_line_info(line)
+
     @api.multi
     def compute_data_for_report(self):
         self.ensure_one()
         # Compute report data
         self._inject_account_values()
         self._inject_partner_values()
-        self._inject_line_values()
-        self._inject_line_values(only_empty_partner_line=True)
+        # backport for open items refactor v12
+        move_lines_data, partners_data, journals_data, accounts_data, \
+            open_items_move_lines_data = self._get_data(
+                self.filter_account_ids.ids, self.filter_partner_ids.ids, self.date_at,
+                self.only_posted_moves, self.company_id.id, False)
+        total_amount = self._calculate_amounts(open_items_move_lines_data)
+        open_items_move_lines_data = self._order_open_items_by_date(
+            open_items_move_lines_data
+        )
+        self._inject_line_values_from_open_items_move_lines_data(open_items_move_lines_data)        
         self._clean_partners_and_accounts()
         self._compute_partners_and_accounts_cumul()
         if self.hide_account_at_0:
@@ -368,260 +790,6 @@ FROM
             self.env.uid,
         )
         self.env.cr.execute(query_inject_partner, query_inject_partner_params)
-
-    def _get_line_sub_query_move_lines(self,
-                                       only_empty_partner_line=False,
-                                       positive_balance=True):
-        """ Return subquery used to compute sum amounts on lines """
-        sub_query = """
-            SELECT
-                ml.id,
-                ml.balance,
-                SUM(
-                    CASE
-                        WHEN ml_past.id IS NOT NULL
-                        THEN pr.amount
-                        ELSE NULL
-                    END
-                ) AS partial_amount,
-                ml.amount_currency,
-                SUM(
-                    CASE
-                        WHEN ml_past.id IS NOT NULL
-                        THEN pr.amount_currency
-                        ELSE NULL
-                    END
-                ) AS partial_amount_currency,
-                ml.currency_id
-            FROM
-                report_open_items_qweb_partner rp
-            INNER JOIN
-                report_open_items_qweb_account ra
-                    ON rp.report_account_id = ra.id
-            INNER JOIN
-                account_move_line ml
-                    ON ra.account_id = ml.account_id
-        """
-        if not only_empty_partner_line:
-            sub_query += """
-                    AND rp.partner_id = ml.partner_id
-            """
-        elif only_empty_partner_line:
-            sub_query += """
-                    AND ml.partner_id IS NULL
-            """
-        if not positive_balance:
-            sub_query += """
-            LEFT JOIN
-                account_partial_reconcile pr
-                    ON ml.balance < 0 AND pr.credit_move_id = ml.id
-            LEFT JOIN
-                account_move_line ml_past
-                    ON ml.balance < 0 AND pr.debit_move_id = ml_past.id
-                    AND ml_past.date <= %s
-            """
-        else:
-            sub_query += """
-            LEFT JOIN
-                account_partial_reconcile pr
-                    ON ml.balance > 0 AND pr.debit_move_id = ml.id
-            LEFT JOIN
-                account_move_line ml_past
-                    ON ml.balance > 0 AND pr.credit_move_id = ml_past.id
-                    AND ml_past.date <= %s
-        """
-        sub_query += """
-            LEFT JOIN account_full_reconcile afr ON afr.id = ml.full_reconcile_id
-            WHERE
-                ra.report_id = %s
-            AND ml.full_reconcile_id IS NULL OR afr.create_date >= %s
-            GROUP BY
-                ml.id,
-                ml.balance,
-                ml.amount_currency
-        """
-        return sub_query
-
-    def _inject_line_values(self, only_empty_partner_line=False):
-        """ Inject report values for report_open_items_qweb_move_line.
-
-        The "only_empty_partner_line" value is used
-        to compute data without partner.
-        """
-        query_inject_move_line = """
-WITH
-    move_lines_amount AS
-        (
-        """
-        query_inject_move_line += self._get_line_sub_query_move_lines(
-            only_empty_partner_line=only_empty_partner_line,
-            positive_balance=True
-        )
-        query_inject_move_line += """
-            UNION
-        """
-        query_inject_move_line += self._get_line_sub_query_move_lines(
-            only_empty_partner_line=only_empty_partner_line,
-            positive_balance=False
-        )
-        query_inject_move_line += """
-        ),
-    move_lines AS
-        (
-            SELECT
-                id,
-                CASE
-                    WHEN SUM(partial_amount) > 0
-                    THEN
-                        CASE
-                            WHEN balance > 0
-                            THEN balance - SUM(partial_amount)
-                            ELSE balance + SUM(partial_amount)
-                        END
-                    ELSE balance
-                END AS amount_residual,
-                CASE
-                    WHEN SUM(partial_amount_currency) > 0
-                    THEN
-                        CASE
-                            WHEN amount_currency > 0
-                            THEN amount_currency - SUM(partial_amount_currency)
-                            ELSE amount_currency + SUM(partial_amount_currency)
-                        END
-                    ELSE amount_currency
-                END AS amount_residual_currency,
-                currency_id
-            FROM
-                move_lines_amount
-            GROUP BY
-                id,
-                balance,
-                amount_currency,
-                currency_id
-        )
-INSERT INTO
-    report_open_items_qweb_move_line
-    (
-    report_partner_id,
-    create_uid,
-    create_date,
-    move_line_id,
-    date,
-    date_due,
-    entry,
-    journal,
-    account,
-    partner,
-    label,
-    amount_total_due,
-    amount_residual,
-    currency_id,
-    amount_total_due_currency,
-    amount_residual_currency
-    )
-SELECT
-    rp.id AS report_partner_id,
-    %s AS create_uid,
-    NOW() AS create_date,
-    ml.id AS move_line_id,
-    ml.date,
-    ml.date_maturity,
-    m.name AS entry,
-    j.code AS journal,
-    a.code AS account,
-        """
-        if not only_empty_partner_line:
-            query_inject_move_line += """
-    CASE
-        WHEN
-            NULLIF(p.name, '') IS NOT NULL
-            AND NULLIF(p.ref, '') IS NOT NULL
-        THEN p.name || ' (' || p.ref || ')'
-        ELSE p.name
-    END AS partner,
-            """
-        elif only_empty_partner_line:
-            query_inject_move_line += """
-    '""" + _('No partner allocated') + """' AS partner,
-            """
-        query_inject_move_line += """
-    CONCAT_WS(' - ', NULLIF(ml.ref, ''), NULLIF(ml.name, '')) AS label,
-    ml.balance,
-    ml2.amount_residual,
-    c.id AS currency_id,
-    ml.amount_currency,
-    ml2.amount_residual_currency
-FROM
-    report_open_items_qweb_partner rp
-INNER JOIN
-    report_open_items_qweb_account ra ON rp.report_account_id = ra.id
-INNER JOIN
-    account_move_line ml ON ra.account_id = ml.account_id
-INNER JOIN
-    move_lines ml2
-        ON ml.id = ml2.id
-        AND ml2.amount_residual IS NOT NULL
-        AND ml2.amount_residual != 0
-INNER JOIN
-    account_move m ON ml.move_id = m.id
-INNER JOIN
-    account_journal j ON ml.journal_id = j.id
-INNER JOIN
-    account_account a ON ml.account_id = a.id
-        """
-        if not only_empty_partner_line:
-            query_inject_move_line += """
-INNER JOIN
-    res_partner p
-        ON ml.partner_id = p.id AND rp.partner_id = p.id
-            """
-        query_inject_move_line += """
-LEFT JOIN
-    account_full_reconcile fr ON ml.full_reconcile_id = fr.id
-LEFT JOIN
-    res_currency c ON ml2.currency_id = c.id
-WHERE
-    ra.report_id = %s
-AND
-    ml.date <= %s
-        """
-        if self.only_posted_moves:
-            query_inject_move_line += """
-AND
-    m.state = 'posted'
-        """
-        if only_empty_partner_line:
-            query_inject_move_line += """
-AND
-    ml.partner_id IS NULL
-AND
-    rp.partner_id IS NULL
-        """
-        if not only_empty_partner_line:
-            query_inject_move_line += """
-ORDER BY
-    a.code, p.name, ml.date, ml.id
-            """
-        elif only_empty_partner_line:
-            query_inject_move_line += """
-ORDER BY
-    a.code, ml.date, ml.id
-            """
-        full_reconcile_date = fields.Datetime.to_string(
-            fields.Datetime.from_string(self.date_at) + timedelta(days=1))
-        self.env.cr.execute(
-            query_inject_move_line,
-            (self.date_at,
-             self.id,
-             full_reconcile_date,
-             self.date_at,
-             self.id,
-             full_reconcile_date,
-             self.env.uid,
-             self.id,
-             self.date_at,
-             )
-        )
 
     def _compute_partners_and_accounts_cumul(self):
         """ Compute cumulative amount for
