@@ -3,6 +3,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import models, fields, api, _
+from odoo.tools.safe_eval import safe_eval
+from odoo.tools import pycompat
 
 
 class OpenItemsReport(models.TransientModel):
@@ -162,6 +164,22 @@ class OpenItemsReportCompute(models.TransientModel):
             [('report_name', '=', report_name),
              ('report_type', '=', report_type)],
             limit=1).report_action(self, config=False)
+
+    @api.multi
+    def recompute_report(self):
+        self.ensure_one()
+        self.account_ids.unlink()
+        self.compute_data_for_report()
+        action = self.env.ref(
+            'account_financial_report.action_report_open_items')
+        vals = action.read()[0]
+        ctx = vals.get('context', {})
+        if isinstance(ctx, pycompat.string_types):
+            ctx = safe_eval(ctx)
+        ctx['active_id'] = self.id
+        ctx['active_ids'] = self.ids
+        vals['context'] = ctx
+        return vals
 
     def _get_html(self):
         result = {}

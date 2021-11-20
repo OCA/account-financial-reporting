@@ -14,6 +14,7 @@ odoo.define('account_financial_report.account_financial_report_backend', functio
         events: {
             'click .o_account_financial_reports_print': 'print',
             'click .o_account_financial_reports_export': 'export',
+            'click .o_account_financial_reports_recompute': 'recompute',
         },
         init: function (parent, action) {
             this.actionManager = parent;
@@ -99,6 +100,17 @@ odoo.define('account_financial_report.account_financial_report_backend', functio
                 context: self.odoo_context,
             }).then(function (result) {
                 self.do_action(result);
+            });
+        },
+        recompute: function () {
+            var self = this;
+            this._rpc({
+                model: this.given_context.model,
+                method: 'recompute_report',
+                args: [this.given_context.active_id],
+                context: self.odoo_context,
+            }).then(function () {
+                location.reload();
             });
         },
         canBeRemoved: function () {
