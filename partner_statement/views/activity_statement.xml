@@ -170,4 +170,21 @@
         name="partner_statement.activity_statement"
         file="partner_statement.activity_statement"
     />
+    <report
+        id="action_print_activity_statement_html"
+        model="res.partner"
+        report_type="qweb-html"
+        menu="False"
+        string="Activity Statement"
+        name="partner_statement.activity_statement"
+        file="partner_statement.activity_statement"
+    />
+    <record id="action_print_activity_statement_xlsx" model="ir.actions.report">
+        <field name="name">Activity Statement XLSX</field>
+        <field name="model">res.partner</field>
+        <field name="type">ir.actions.report</field>
+        <field name="report_name">p_s.report_activity_statement_xlsx</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_file">report_activity_statement</field>
+    </record>
 </odoo>
