@@ -217,7 +217,7 @@ msgid "Total Base Balance"
 msgstr "Solde Total des bases de taxe"
 
 #. module: account_tax_balance
-#: code:addons/account_tax_balance/models/account_tax.py:90
+#: code:addons/account_tax_balance/models/account_tax.py:92
 #, python-format
 msgid "Unsupported search operator"
 msgstr "Critère de recherche non valable"
