@@ -10,7 +10,7 @@ class AccountGroup(models.Model):
     group_child_ids = fields.One2many(
         comodel_name="account.group", inverse_name="parent_id", string="Child Groups"
     )
-    level = fields.Integer(string="Level", compute="_compute_level")
+    level = fields.Integer(compute="_compute_level")
     account_ids = fields.One2many(
         comodel_name="account.account", inverse_name="group_id", string="Accounts"
     )

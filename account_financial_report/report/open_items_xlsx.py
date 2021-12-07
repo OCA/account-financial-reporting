@@ -214,3 +214,4 @@ class OpenItemsXslx(models.AbstractModel):
         super(OpenItemsXslx, self).write_ending_balance_from_dict(
             my_object, name, label, report_data
         )
+        return

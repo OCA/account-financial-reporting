@@ -144,7 +144,8 @@ class TrialBalanceXslx(models.AbstractModel):
         return [
             [
                 _("Date range filter"),
-                _("From: %s To: %s") % (report.date_from, report.date_to),
+                _("From: %(from)s To: %(to)s")
+                % {"from": report.date_from, "to": report.date_to},
             ],
             [
                 _("Target moves filter"),
@@ -162,7 +163,7 @@ class TrialBalanceXslx(models.AbstractModel):
             ],
             [
                 _("Limit hierarchy levels"),
-                _("Level %s" % report.show_hierarchy_level)
+                _("Level %s") % report.show_hierarchy_level
                 if report.limit_hierarchy_level
                 else _("No limit"),
             ],
@@ -278,6 +279,7 @@ class TrialBalanceXslx(models.AbstractModel):
         elif type_object == "account":
             line_object.currency_id = line_object.currency_id
         super(TrialBalanceXslx, self).write_line(line_object, report_data)
+        return
 
     def write_account_footer(self, account, name_value, report_data):
         """Specific function to write account footer for Trial Balance"""

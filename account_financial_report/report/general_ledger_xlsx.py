@@ -97,7 +97,8 @@ class GeneralLedgerXslx(models.AbstractModel):
         return [
             [
                 _("Date range filter"),
-                _("From: %s To: %s") % (report.date_from, report.date_to),
+                _("From: %(from)s To: %(to)s")
+                % {"from": report.date_from, "to": report.date_to},
             ],
             [
                 _("Target moves filter"),
@@ -332,6 +333,7 @@ class GeneralLedgerXslx(models.AbstractModel):
         super(GeneralLedgerXslx, self).write_initial_balance_from_dict(
             my_object, label, report_data
         )
+        return
 
     def write_ending_balance_from_dict(self, my_object, report_data):
         """Specific function to write ending balance for General Ledger"""
@@ -344,3 +346,4 @@ class GeneralLedgerXslx(models.AbstractModel):
         super(GeneralLedgerXslx, self).write_ending_balance_from_dict(
             my_object, name, label, report_data
         )
+        return
