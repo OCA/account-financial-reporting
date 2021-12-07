@@ -18,9 +18,9 @@
         <!-- Defines global variables used by internal layout -->
         <t t-set="title">
             Trial Balance -
-            <t t-raw="company_name" />
+            <t t-esc="company_name" />
             -
-            <t t-raw="currency_name" />
+            <t t-esc="currency_name" />
         </t>
         <t t-set="company_name" t-value="Company_Name" />
         <!--       <t t-set="res_company" t-value="company_id"/>-->
@@ -117,8 +117,8 @@
                                 view-type="form"
                             >
                                         <t
-                                    t-raw="accounts_data[account_id]['code']"
-                                /> - <t t-raw="accounts_data[account_id]['name']" />
+                                    t-esc="accounts_data[account_id]['code']"
+                                /> - <t t-esc="accounts_data[account_id]['name']" />
                             </span>
                         </div>
                         <div class="act_as_table data_table" style="width: 100%;">
@@ -263,7 +263,7 @@
                             res-model="account.group"
                             view-type="form"
                         >
-                            <t t-att-style="style" t-raw="balance['code']" />
+                            <t t-att-style="style" t-esc="balance['code']" />
                         </span>
                     </div>
                     <div class="act_as_cell left">
@@ -319,7 +319,7 @@
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
                                 t-att-style="style"
-                                t-raw="balance['initial_balance']"
+                                t-esc="balance['initial_balance']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
                         </span>
@@ -335,7 +335,7 @@
                     <span t-att-domain="domain" res-model="account.move.line">
                         <t
                             t-att-style="style"
-                            t-raw="total_amount[account_id][partner_id]['initial_balance']"
+                            t-esc="total_amount[account_id][partner_id]['initial_balance']"
                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                         />
                     </span>
@@ -371,7 +371,7 @@
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
                                 t-att-style="style"
-                                t-raw="balance['debit']"
+                                t-esc="balance['debit']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
                         </span>
@@ -389,7 +389,7 @@
                     <span t-att-domain="domain" res-model="account.move.line">
                         <t
                             t-att-style="style"
-                            t-raw="total_amount[account_id][partner_id]['debit']"
+                            t-esc="total_amount[account_id][partner_id]['debit']"
                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                         />
                     </span>
@@ -425,7 +425,7 @@
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
                                 t-att-style="style"
-                                t-raw="balance['credit']"
+                                t-esc="balance['credit']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
                         </span>
@@ -443,7 +443,7 @@
                     <span t-att-domain="domain" res-model="account.move.line">
                         <t
                             t-att-style="style"
-                            t-raw="total_amount[account_id][partner_id]['credit']"
+                            t-esc="total_amount[account_id][partner_id]['credit']"
                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                         />
                     </span>
@@ -478,7 +478,7 @@
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
                                 t-att-style="style"
-                                t-raw="balance['balance']"
+                                t-esc="balance['balance']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
                         </span>
@@ -496,7 +496,7 @@
                     <span t-att-domain="domain" res-model="account.move.line">
                         <t
                             t-att-style="style"
-                            t-raw="total_amount[account_id][partner_id]['balance']"
+                            t-esc="total_amount[account_id][partner_id]['balance']"
                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                         />
                     </span>
@@ -527,7 +527,7 @@
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
                                 t-att-style="style"
-                                t-raw="balance['ending_balance']"
+                                t-esc="balance['ending_balance']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
                         </span>
@@ -580,7 +580,7 @@
                                 <!--                                       t-att-data-res-model="'account.move.line'"-->
                                 <!--                                       class="o_account_financial_reports_web_action_monetary_multi"-->
                                 <!--                                       t-att-style="style">-->
-                                <!--                                    <t t-att-style="style" t-raw="line.initial_balance_foreign_currency" t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/></a>-->
+                                <!--                                    <t t-att-style="style" t-esc="line.initial_balance_foreign_currency" t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/></a>-->
                                 <!--                                </span>-->
                                 <!--                            </t>-->
                             </div>
@@ -608,7 +608,7 @@
                                 >
                                     <t
                                         t-att-style="style"
-                                        t-raw="total_amount[account_id][partner_id]['initial_currency_balance']"
+                                        t-esc="total_amount[account_id][partner_id]['initial_currency_balance']"
                                     />
                                 </span>
                             </div>
@@ -630,7 +630,7 @@
                                 >
                                     <t
                                         t-att-style="style"
-                                        t-raw="balance['ending_currency_balance']"
+                                        t-esc="balance['ending_currency_balance']"
                                     />
                                 </span>
                                 <!--                            <t t-if="line.account_group_id">-->
@@ -641,7 +641,7 @@
                                 <!--                                       t-att-data-res-model="'account.move.line'"-->
                                 <!--                                       class="o_account_financial_reports_web_action_monetary_multi"-->
                                 <!--                                       t-att-style="style">-->
-                                <!--                                    <t t-att-style="style" t-raw="line.final_balance_foreign_currency" t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/></a>-->
+                                <!--                                    <t t-att-style="style" t-esc="line.final_balance_foreign_currency" t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/></a>-->
                                 <!--                                </span>-->
                                 <!--                            </t>-->
                             </div>
@@ -663,7 +663,7 @@
                                 >
                                     <t
                                         t-att-style="style"
-                                        t-raw="total_amount[account_id][partner_id]['ending_currency_balance']"
+                                        t-esc="total_amount[account_id][partner_id]['ending_currency_balance']"
                                     />
                                 </span>
                             </t>
