@@ -107,7 +107,7 @@
                                         t-value="[('tax_ids', 'in', tax['id']),
                                                 ('date', '&gt;=', date_from),
                                                 ('date', '&lt;=', date_to),
-                                                ('tax_exigible', '=', True)]"
+                                                ('move_id.always_tax_exigible', '=', True)]"
                                     />
                                     <span
                                         t-att-domain="domain"
@@ -126,7 +126,7 @@
                                         t-value="[('tax_line_id', '=', tax['id']),
                                                 ('date', '&gt;=', date_from),
                                                 ('date', '&lt;=', date_to),
-                                                ('tax_exigible', '=', True)]"
+                                                ('move_id.always_tax_exigible', '=', True)]"
                                     />
                                     <span
                                         t-att-domain="domain"

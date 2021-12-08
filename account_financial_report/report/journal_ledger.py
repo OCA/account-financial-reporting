@@ -88,7 +88,7 @@ class JournalLedgerReport(models.AbstractModel):
         base_debit = (
             base_credit
         ) = tax_debit = tax_credit = base_balance = tax_balance = 0.0
-        if ml.tax_exigible:
+        if ml.move_id.always_tax_exigible:
             base_debit = ml_taxes and ml.debit or 0.0
             base_credit = ml_taxes and ml.credit or 0.0
             base_balance = ml_taxes and ml.balance or 0.0
