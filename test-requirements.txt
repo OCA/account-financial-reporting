@@ -1,0 +1,2 @@
+git+https://github.com/OCA/server-ux@refs/pull/414/head#subdirectory=setup/date_range
+git+https://github.com/OCA/reporting-engine@refs/pull/554/head#subdirectory=setup/report_xlsx
