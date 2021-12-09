@@ -3,13 +3,16 @@
 # Copyright 2019 Andrea Stirpe <a.stirpe@onestein.nl>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from dateutil.rrule import MONTHLY
 
 import odoo
+from odoo import fields
 from odoo.fields import Date
 from odoo.tests.common import HttpCase
+
+from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
 @odoo.tests.tagged("post_install", "-at_install")
@@ -260,3 +263,42 @@ class TestAccountTaxBalance(HttpCase):
         tax.refresh()
         self.assertEqual(tax.base_balance, 175.0)
         self.assertEqual(tax.balance, 17.5)
+
+
+class TestInvoicingBalance(AccountTestInvoicingCommon):
+    def test_balance_recomputation(self):
+        """Check that balances are computed correctly for different dates."""
+        partner = self.partner_a
+        tax = self.tax_sale_a
+        today = fields.Date.today()
+        self.init_invoice(
+            "in_invoice",
+            partner=partner,
+            invoice_date=today,
+            post=True,
+            amounts=[100],
+            taxes=tax,
+        )
+        tomorrow = today + timedelta(days=1)
+        self.init_invoice(
+            "in_invoice",
+            partner=partner,
+            invoice_date=tomorrow,
+            post=True,
+            amounts=[200],
+            taxes=tax,
+        )
+
+        # Check today's balance
+        self.check_date_balance(tax, today, -15)
+
+        # Check tomorrow's balance
+        self.check_date_balance(tax, tomorrow, -30)
+
+    def check_date_balance(self, tax, date, balance):
+        """Compare expected balance with tax's balance in specified date."""
+        tax = tax.with_context(
+            from_date=date,
+            to_date=date,
+        )
+        self.assertEqual(tax.balance, balance)
