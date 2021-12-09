@@ -81,6 +81,12 @@ class AccountTax(models.Model):
         ids_with_moves = self._account_tax_ids_with_moves()
         return [("id", "in", ids_with_moves)]
 
+    @api.depends_context(
+        "from_date",
+        "to_date",
+        "company_ids",
+        "target_move",
+    )
     def _compute_balance(self):
         for tax in self:
             tax.balance_regular = tax.compute_balance(
