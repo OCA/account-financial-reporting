@@ -139,8 +139,8 @@ class AccountTax(models.Model):
         domain = [
             ("move_id.state", "in", state_list),
             ("tax_line_id", "=", self.id),
-            ("tax_exigible", "=", True),
         ]
+        domain.extend(self.env["account.move.line"]._get_tax_exigible_domain())
         if type_list:
             domain.append(("move_id.financial_type", "in", type_list))
         return domain
@@ -149,8 +149,8 @@ class AccountTax(models.Model):
         domain = [
             ("move_id.state", "in", state_list),
             ("tax_ids", "in", self.id),
-            ("tax_exigible", "=", True),
         ]
+        domain.extend(self.env["account.move.line"]._get_tax_exigible_domain())
         if type_list:
             domain.append(("move_id.financial_type", "in", type_list))
         return domain
