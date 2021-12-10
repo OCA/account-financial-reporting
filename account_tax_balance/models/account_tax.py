@@ -14,10 +14,8 @@ class AccountTax(models.Model):
     base_balance_regular = fields.Float(
         string="Base Balance", compute="_compute_balance"
     )
-    balance_refund = fields.Float(string="Balance Refund", compute="_compute_balance")
-    base_balance_refund = fields.Float(
-        string="Base Balance Refund", compute="_compute_balance"
-    )
+    balance_refund = fields.Float(compute="_compute_balance")
+    base_balance_refund = fields.Float(compute="_compute_balance")
     has_moves = fields.Boolean(
         string="Has balance in period",
         compute="_compute_has_moves",
