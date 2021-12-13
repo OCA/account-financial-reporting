@@ -151,7 +151,10 @@ WITH
         (SELECT coalesce(regexp_replace(tag.name,
                 '[^0-9\\.]+', '', 'g'), ' ') AS code,
                 tag.name, tag.id,
-                coalesce(sum(movetax.tax_base_amount), 0.00) AS net,
+                coalesce(sum(case
+                	WHEN (coalesce(movetax.credit, 0.00) != 0 and tax.type_tax_use = 'sale') OR (coalesce(movetax.debit, 0.00) != 0 and tax.type_tax_use = 'purchase')
+                	THEN coalesce(movetax.tax_base_amount, 0.00) * -1
+                	ELSE coalesce(movetax.tax_base_amount, 0.00) end)) AS net,
                 coalesce(sum(movetax.balance), 0.00) AS tax
             FROM
                 account_account_tag AS tag
@@ -203,7 +206,10 @@ WITH
     taxgroups AS
         (SELECT coalesce(taxgroup.sequence, 0) AS code,
                 taxgroup.name, taxgroup.id,
-                coalesce(sum(movetax.tax_base_amount), 0.00) AS net,
+                coalesce(sum(case
+                	WHEN (coalesce(movetax.credit, 0.00) != 0 and tax.type_tax_use = 'sale') OR (coalesce(movetax.debit, 0.00) != 0 and tax.type_tax_use = 'purchase')
+                	THEN coalesce(movetax.tax_base_amount, 0.00) * -1
+                	ELSE coalesce(movetax.tax_base_amount, 0.00) end)) AS net,
                 coalesce(sum(movetax.balance), 0.00) AS tax
             FROM
                 account_tax_group AS taxgroup
@@ -257,7 +263,10 @@ WITH
             SELECT
                 tag.id AS report_tax_id, ' ' AS code,
                 tax.name, tax.id,
-                coalesce(sum(movetax.tax_base_amount), 0.00) AS net,
+                coalesce(sum(case
+                	WHEN (coalesce(movetax.credit, 0.00) != 0 and tax.type_tax_use = 'sale') OR (coalesce(movetax.debit, 0.00) != 0 and tax.type_tax_use = 'purchase')
+                	THEN coalesce(movetax.tax_base_amount, 0.00) * -1
+                	ELSE coalesce(movetax.tax_base_amount, 0.00) end)) AS net,
                 coalesce(sum(movetax.balance), 0.00) AS tax
             FROM
                 report_vat_report_taxtag AS tag
@@ -312,7 +321,10 @@ WITH
             SELECT
                 taxtag.id AS report_tax_id, ' ' AS code,
                 tax.name, tax.id,
-                coalesce(sum(movetax.tax_base_amount), 0.00) AS net,
+                coalesce(sum(case
+                WHEN (coalesce(movetax.credit, 0.00) != 0 and tax.type_tax_use = 'sale') OR (coalesce(movetax.debit, 0.00) != 0 and tax.type_tax_use = 'purchase')
+                THEN coalesce(movetax.tax_base_amount, 0.00) * -1
+                ELSE coalesce(movetax.tax_base_amount, 0.00) end)) AS net,
                 coalesce(sum(movetax.balance), 0.00) AS tax
             FROM
                 report_vat_report_taxtag AS taxtag
