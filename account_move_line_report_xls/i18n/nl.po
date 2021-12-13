@@ -244,7 +244,7 @@ msgstr "Maateenheid"
 
 #. module: account_move_line_report_xls
 #: model:ir.model,name:account_move_line_report_xls.model_report_account_move_line_report_xls_account_move_line_xlsx
-msgid "report.account_move_line_report_xls.account_move_line_xlsx"
+msgid "XLSX report for account move lines."
 msgstr ""
 
 #~ msgid "Period"
