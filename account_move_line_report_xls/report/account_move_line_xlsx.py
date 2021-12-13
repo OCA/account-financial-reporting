@@ -19,6 +19,7 @@ IR_TRANSLATION_NAME = "move.line.list.xls"
 class AccountMoveLineXlsx(models.AbstractModel):
     _name = "report.account_move_line_report_xls.account_move_line_xlsx"
     _inherit = "report.report_xlsx.abstract"
+    _description = "XLSX report for account move lines."
 
     def _(self, src):
         lang = self.env.context.get("lang", "en_US")
