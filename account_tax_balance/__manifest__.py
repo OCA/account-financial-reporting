@@ -7,7 +7,7 @@
     "name": "Tax Balance",
     "summary": "Compute tax balances based on date range",
     "version": "15.0.1.0.0",
-    "development_status": "Production/Stable",
+    "development_status": "Mature",
     "category": "Invoices & Payments",
     "website": "https://github.com/OCA/account-financial-reporting",
     "author": "Agile Business Group, Therp BV, Tecnativa, ACSONE SA/NV, "
