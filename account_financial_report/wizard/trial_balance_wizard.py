@@ -16,12 +16,6 @@ class TrialBalanceReportWizard(models.TransientModel):
     _description = "Trial Balance Report Wizard"
     _inherit = "account_financial_report_abstract_wizard"
 
-    company_id = fields.Many2one(
-        comodel_name="res.company",
-        default=lambda self: self.env.company,
-        required=False,
-        string="Company",
-    )
     date_range_id = fields.Many2one(comodel_name="date.range", string="Date range")
     date_from = fields.Date(required=True)
     date_to = fields.Date(required=True)
@@ -257,21 +251,6 @@ class TrialBalanceReportWizard(models.TransientModel):
             )
             .report_action(self, data=data)
         )
-
-    def button_export_html(self):
-        self.ensure_one()
-        report_type = "qweb-html"
-        return self._export(report_type)
-
-    def button_export_pdf(self):
-        self.ensure_one()
-        report_type = "qweb-pdf"
-        return self._export(report_type)
-
-    def button_export_xlsx(self):
-        self.ensure_one()
-        report_type = "xlsx"
-        return self._export(report_type)
 
     def _prepare_report_trial_balance(self):
         self.ensure_one()

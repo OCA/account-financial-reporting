@@ -10,42 +10,7 @@ from odoo import api, models
 class TrialBalanceReport(models.AbstractModel):
     _name = "report.account_financial_report.trial_balance"
     _description = "Trial Balance Report"
-
-    @api.model
-    def get_html(self, given_context=None):
-        return self._get_html()
-
-    def _get_html(self):
-        result = {}
-        rcontext = {}
-        context = dict(self.env.context)
-        rcontext.update(context.get("data"))
-        active_id = context.get("active_id")
-        wiz = self.env["open.items.report.wizard"].browse(active_id)
-        rcontext["o"] = wiz
-        result["html"] = self.env.ref(
-            "account_financial_report.report_trial_balance"
-        ).render(rcontext)
-        return result
-
-    def _get_accounts_data(self, account_ids):
-        accounts = self.env["account.account"].browse(account_ids)
-        accounts_data = {}
-        for account in accounts:
-            accounts_data.update(
-                {
-                    account.id: {
-                        "id": account.id,
-                        "code": account.code,
-                        "name": account.name,
-                        "group_id": account.group_id.id,
-                        "hide_account": False,
-                        "currency_id": account.currency_id or False,
-                        "currency_name": account.currency_id.name,
-                    }
-                }
-            )
-        return accounts_data
+    _inherit = "report.account_financial_report.abstract_report"
 
     def _get_initial_balances_bs_ml_domain(
         self,
@@ -74,6 +39,8 @@ class TrialBalanceReport(models.AbstractModel):
             domain += [("partner_id", "in", partner_ids)]
         if only_posted_moves:
             domain += [("move_id.state", "=", "posted")]
+        else:
+            domain += [("move_id.state", "in", ["posted", "draft"])]
         if show_partner_details:
             domain += [("account_id.internal_type", "in", ["receivable", "payable"])]
         return domain
@@ -106,6 +73,8 @@ class TrialBalanceReport(models.AbstractModel):
             domain += [("partner_id", "in", partner_ids)]
         if only_posted_moves:
             domain += [("move_id.state", "=", "posted")]
+        else:
+            domain += [("move_id.state", "in", ["posted", "draft"])]
         if show_partner_details:
             domain += [("account_id.internal_type", "in", ["receivable", "payable"])]
         return domain
@@ -137,6 +106,8 @@ class TrialBalanceReport(models.AbstractModel):
             domain += [("partner_id", "in", partner_ids)]
         if only_posted_moves:
             domain += [("move_id.state", "=", "posted")]
+        else:
+            domain += [("move_id.state", "in", ["posted", "draft"])]
         if show_partner_details:
             domain += [("account_id.internal_type", "in", ["receivable", "payable"])]
         return domain
@@ -168,6 +139,8 @@ class TrialBalanceReport(models.AbstractModel):
             domain += [("partner_id", "in", partner_ids)]
         if only_posted_moves:
             domain += [("move_id.state", "=", "posted")]
+        else:
+            domain += [("move_id.state", "in", ["posted", "draft"])]
         if show_partner_details:
             domain += [("account_id.internal_type", "in", ["receivable", "payable"])]
         return domain
@@ -253,6 +226,25 @@ class TrialBalanceReport(models.AbstractModel):
         return total_amount
 
     @api.model
+    def _compute_acc_prt_amount(
+        self, total_amount, tb, acc_id, prt_id, foreign_currency
+    ):
+        total_amount[acc_id][prt_id] = {}
+        total_amount[acc_id][prt_id]["credit"] = 0.0
+        total_amount[acc_id][prt_id]["debit"] = 0.0
+        total_amount[acc_id][prt_id]["balance"] = 0.0
+        total_amount[acc_id][prt_id]["initial_balance"] = tb["balance"]
+        total_amount[acc_id][prt_id]["ending_balance"] = tb["balance"]
+        if foreign_currency:
+            total_amount[acc_id][prt_id]["initial_currency_balance"] = round(
+                tb["amount_currency"], 2
+            )
+            total_amount[acc_id][prt_id]["ending_currency_balance"] = round(
+                tb["amount_currency"], 2
+            )
+        return total_amount
+
+    @api.model
     def _compute_partner_amount(
         self, total_amount, tb_initial_prt, tb_period_prt, foreign_currency
     ):
@@ -287,34 +279,14 @@ class TrialBalanceReport(models.AbstractModel):
                         {prt_id: {"id": prt_id, "name": tb["partner_id"][1]}}
                     )
                 if acc_id not in total_amount.keys():
-                    total_amount[acc_id][prt_id] = {}
-                    total_amount[acc_id][prt_id]["credit"] = 0.0
-                    total_amount[acc_id][prt_id]["debit"] = 0.0
-                    total_amount[acc_id][prt_id]["balance"] = 0.0
-                    total_amount[acc_id][prt_id]["initial_balance"] = tb["balance"]
-                    total_amount[acc_id][prt_id]["ending_balance"] = tb["balance"]
-                    if foreign_currency:
-                        total_amount[acc_id][prt_id][
-                            "initial_currency_balance"
-                        ] = round(tb["amount_currency"], 2)
-                        total_amount[acc_id][prt_id]["ending_currency_balance"] = round(
-                            tb["amount_currency"], 2
-                        )
+                    total_amount = self._compute_acc_prt_amount(
+                        total_amount, tb, acc_id, prt_id, foreign_currency
+                    )
                     partners_ids.add(tb["partner_id"])
                 elif prt_id not in total_amount[acc_id].keys():
-                    total_amount[acc_id][prt_id] = {}
-                    total_amount[acc_id][prt_id]["credit"] = 0.0
-                    total_amount[acc_id][prt_id]["debit"] = 0.0
-                    total_amount[acc_id][prt_id]["balance"] = 0.0
-                    total_amount[acc_id][prt_id]["initial_balance"] = tb["balance"]
-                    total_amount[acc_id][prt_id]["ending_balance"] = tb["balance"]
-                    if foreign_currency:
-                        total_amount[acc_id][prt_id][
-                            "initial_currency_balance"
-                        ] = round(tb["amount_currency"], 2)
-                        total_amount[acc_id][prt_id]["ending_currency_balance"] = round(
-                            tb["amount_currency"], 2
-                        )
+                    total_amount = self._compute_acc_prt_amount(
+                        total_amount, tb, acc_id, prt_id, foreign_currency
+                    )
                     partners_ids.add(tb["partner_id"])
                 else:
                     total_amount[acc_id][prt_id]["initial_balance"] += tb["balance"]

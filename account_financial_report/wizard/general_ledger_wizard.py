@@ -22,12 +22,6 @@ class GeneralLedgerReportWizard(models.TransientModel):
     _description = "General Ledger Report Wizard"
     _inherit = "account_financial_report_abstract_wizard"
 
-    company_id = fields.Many2one(
-        comodel_name="res.company",
-        default=lambda self: self.env.company,
-        required=False,
-        string="Company",
-    )
     date_range_id = fields.Many2one(comodel_name="date.range", string="Date range")
     date_from = fields.Date(required=True, default=lambda self: self._init_date_from())
     date_to = fields.Date(required=True, default=fields.Date.context_today)
@@ -128,8 +122,9 @@ class GeneralLedgerReportWizard(models.TransientModel):
     def _init_date_from(self):
         """set start date to begin of current year if fiscal year running"""
         today = fields.Date.context_today(self)
-        last_fsc_month = self.env.user.company_id.fiscalyear_last_month
-        last_fsc_day = self.env.user.company_id.fiscalyear_last_day
+        company = self.company_id or self.env.company
+        last_fsc_month = company.fiscalyear_last_month
+        last_fsc_day = company.fiscalyear_last_day
 
         if (
             today.month < int(last_fsc_month)
@@ -296,21 +291,6 @@ class GeneralLedgerReportWizard(models.TransientModel):
             )
             .report_action(self, data=data)
         )
-
-    def button_export_html(self):
-        self.ensure_one()
-        report_type = "qweb-html"
-        return self._export(report_type)
-
-    def button_export_pdf(self):
-        self.ensure_one()
-        report_type = "qweb-pdf"
-        return self._export(report_type)
-
-    def button_export_xlsx(self):
-        self.ensure_one()
-        report_type = "xlsx"
-        return self._export(report_type)
 
     def _prepare_report_general_ledger(self):
         self.ensure_one()

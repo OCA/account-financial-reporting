@@ -13,12 +13,6 @@ class AgedPartnerBalanceWizard(models.TransientModel):
     _description = "Aged Partner Balance Wizard"
     _inherit = "account_financial_report_abstract_wizard"
 
-    company_id = fields.Many2one(
-        comodel_name="res.company",
-        default=lambda self: self.env.company,
-        required=False,
-        string="Company",
-    )
     date_at = fields.Date(required=True, default=fields.Date.context_today)
     date_from = fields.Date(string="Date From")
     target_move = fields.Selection(
@@ -132,21 +126,6 @@ class AgedPartnerBalanceWizard(models.TransientModel):
             )
             .report_action(self, data=data)
         )
-
-    def button_export_html(self):
-        self.ensure_one()
-        report_type = "qweb-html"
-        return self._export(report_type)
-
-    def button_export_pdf(self):
-        self.ensure_one()
-        report_type = "qweb-pdf"
-        return self._export(report_type)
-
-    def button_export_xlsx(self):
-        self.ensure_one()
-        report_type = "xlsx"
-        return self._export(report_type)
 
     def _prepare_report_aged_partner_balance(self):
         self.ensure_one()

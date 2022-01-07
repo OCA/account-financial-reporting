@@ -12,23 +12,7 @@ from odoo.tools import float_is_zero
 class OpenItemsReport(models.AbstractModel):
     _name = "report.account_financial_report.open_items"
     _description = "Open Items Report"
-
-    @api.model
-    def get_html(self, given_context=None):
-        return self._get_html()
-
-    def _get_html(self):
-        result = {}
-        rcontext = {}
-        context = dict(self.env.context)
-        rcontext.update(context.get("data"))
-        active_id = context.get("active_id")
-        wiz = self.env["open.items.report.wizard"].browse(active_id)
-        rcontext["o"] = wiz
-        result["html"] = self.env.ref(
-            "account_financial_report.report_open_items"
-        ).render(rcontext)
-        return result
+    _inherit = "report.account_financial_report.abstract_report"
 
     def _get_account_partial_reconciled(self, company_id, date_at_object):
         domain = [("max_date", ">", date_at_object), ("company_id", "=", company_id)]
@@ -52,128 +36,17 @@ class OpenItemsReport(models.AbstractModel):
             )
         return accounts_partial_reconcile, debit_amount, credit_amount
 
-    @api.model
-    def _get_new_move_lines_domain(
-        self, new_ml_ids, account_ids, company_id, partner_ids, target_moves
-    ):
-        domain = [
-            ("account_id", "in", account_ids),
-            ("company_id", "=", company_id),
-            ("id", "in", new_ml_ids),
-        ]
-        if partner_ids:
-            domain += [("partner_id", "in", partner_ids)]
-        if target_moves == "posted":
-            domain += [("move_id.state", "=", "posted")]
-        return domain
-
-    def _recalculate_move_lines(
-        self,
-        move_lines,
-        debit_ids,
-        credit_ids,
-        debit_amount,
-        credit_amount,
-        ml_ids,
-        account_ids,
-        company_id,
-        partner_ids,
-        target_moves,
-    ):
-        debit_ids = set(debit_ids)
-        credit_ids = set(credit_ids)
-        in_credit_but_not_in_debit = credit_ids - debit_ids
-        reconciled_ids = list(debit_ids) + list(in_credit_but_not_in_debit)
-        reconciled_ids = set(reconciled_ids)
-        ml_ids = set(ml_ids)
-        new_ml_ids = reconciled_ids - ml_ids
-        new_ml_ids = list(new_ml_ids)
-        new_domain = self._get_new_move_lines_domain(
-            new_ml_ids, account_ids, company_id, partner_ids, target_moves
-        )
-        ml_fields = [
-            "id",
-            "name",
-            "date",
-            "move_id",
-            "journal_id",
-            "account_id",
-            "partner_id",
-            "amount_residual",
-            "date_maturity",
-            "ref",
-            "debit",
-            "credit",
-            "reconciled",
-            "currency_id",
-            "amount_currency",
-            "amount_residual_currency",
-        ]
-        new_move_lines = self.env["account.move.line"].search_read(
-            domain=new_domain, fields=ml_fields
-        )
-        move_lines = move_lines + new_move_lines
-        for move_line in move_lines:
-            ml_id = move_line["id"]
-            if ml_id in debit_ids:
-                move_line["amount_residual"] += debit_amount[ml_id]
-            if ml_id in credit_ids:
-                move_line["amount_residual"] -= credit_amount[ml_id]
-        return move_lines
-
-    @api.model
-    def _get_move_lines_domain(
-        self, company_id, account_ids, partner_ids, target_move, date_from
-    ):
-        domain = [
-            ("account_id", "in", account_ids),
-            ("company_id", "=", company_id),
-            ("reconciled", "=", False),
-        ]
-        if partner_ids:
-            domain += [("partner_id", "in", partner_ids)]
-        if target_move == "posted":
-            domain += [("move_id.state", "=", "posted")]
-        if date_from:
-            domain += [("date", ">", date_from)]
-        return domain
-
-    def _get_accounts_data(self, accounts_ids):
-        accounts = self.env["account.account"].browse(accounts_ids)
-        accounts_data = {}
-        for account in accounts:
-            accounts_data.update(
-                {
-                    account.id: {
-                        "id": account.id,
-                        "code": account.code,
-                        "name": account.name,
-                        "hide_account": False,
-                        "currency_id": account.currency_id or False,
-                        "currency_name": account.currency_id.name,
-                    }
-                }
-            )
-        return accounts_data
-
-    def _get_journals_data(self, journals_ids):
-        journals = self.env["account.journal"].browse(journals_ids)
-        journals_data = {}
-        for journal in journals:
-            journals_data.update({journal.id: {"id": journal.id, "code": journal.code}})
-        return journals_data
-
     def _get_data(
         self,
         account_ids,
         partner_ids,
         date_at_object,
-        target_move,
+        only_posted_moves,
         company_id,
         date_from,
     ):
-        domain = self._get_move_lines_domain(
-            company_id, account_ids, partner_ids, target_move, date_from
+        domain = self._get_move_lines_domain_not_reconciled(
+            company_id, account_ids, partner_ids, only_posted_moves, date_from
         )
         ml_fields = [
             "id",
@@ -223,7 +96,7 @@ class OpenItemsReport(models.AbstractModel):
                     account_ids,
                     company_id,
                     partner_ids,
-                    target_move,
+                    only_posted_moves,
                 )
         move_lines = [
             move_line
@@ -357,7 +230,7 @@ class OpenItemsReport(models.AbstractModel):
         date_at = data["date_at"]
         date_at_object = datetime.strptime(date_at, "%Y-%m-%d").date()
         date_from = data["date_from"]
-        target_move = data["target_move"]
+        only_posted_moves = data["only_posted_moves"]
         show_partner_details = data["show_partner_details"]
 
         (
@@ -367,7 +240,12 @@ class OpenItemsReport(models.AbstractModel):
             accounts_data,
             open_items_move_lines_data,
         ) = self._get_data(
-            account_ids, partner_ids, date_at_object, target_move, company_id, date_from
+            account_ids,
+            partner_ids,
+            date_at_object,
+            only_posted_moves,
+            company_id,
+            date_from,
         )
 
         total_amount = self._calculate_amounts(open_items_move_lines_data)
