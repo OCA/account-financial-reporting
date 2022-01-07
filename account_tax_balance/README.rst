@@ -7,9 +7,9 @@ Tax Balance
    !! changes will be overwritten.                   !!
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-.. |badge1| image:: https://img.shields.io/badge/maturity-Production%2FStable-green.png
+.. |badge1| image:: https://img.shields.io/badge/maturity-Mature-brightgreen.png
     :target: https://odoo-community.org/page/development-status
-    :alt: Production/Stable
+    :alt: Mature
 .. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
@@ -87,6 +87,14 @@ This module is maintained by the OCA.
 OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
+
+.. |maintainer-pedrobaeza| image:: https://github.com/pedrobaeza.png?size=40px
+    :target: https://github.com/pedrobaeza
+    :alt: pedrobaeza
+
+Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
+
+|maintainer-pedrobaeza| 
 
 This module is part of the `OCA/account-financial-reporting <https://github.com/OCA/account-financial-reporting/tree/14.0/account_tax_balance>`_ project on GitHub.
 
