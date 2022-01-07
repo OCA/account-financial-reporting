@@ -65,6 +65,12 @@ msgid "<span class=\"oe_inline\">To</span>"
 msgstr "<span class=\"oe_inline\">Către</span>"
 
 #. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_report_account_financial_report_abstract_report
+#, fuzzy
+msgid "Abstract Report"
+msgstr "Raport TVA"
+
+#. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_financial_report_abstract_wizard
 msgid "Abstract Wizard"
 msgstr ""
@@ -403,6 +409,7 @@ msgstr "Cod"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract_wizard__company_id
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__company_id
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__company_id
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__company_id
@@ -632,6 +639,7 @@ msgstr "Detalii impozite"
 #: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_open_items_xlsx__display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_trial_balance_xlsx__display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_vat_report_xlsx__display_name
+#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_abstract_report__display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_abstract_report_xlsx__display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_aged_partner_balance__display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_general_ledger__display_name
@@ -960,6 +968,7 @@ msgstr "Activare ierarhie"
 #: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_open_items_xlsx__id
 #: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_trial_balance_xlsx__id
 #: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_vat_report_xlsx__id
+#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_abstract_report__id
 #: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_abstract_report_xlsx__id
 #: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_aged_partner_balance__id
 #: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_general_ledger__id
@@ -1088,6 +1097,7 @@ msgstr "Jurnale"
 #: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_open_items_xlsx____last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_trial_balance_xlsx____last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_vat_report_xlsx____last_update
+#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_abstract_report____last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_abstract_report_xlsx____last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_aged_partner_balance____last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_general_ledger____last_update
@@ -1852,11 +1862,6 @@ msgstr "lățime: 8,11%;"
 
 #~ msgid "Cost center"
 #~ msgstr "Centrul de cost"
-
-#, fuzzy
-#~| msgid "VAT Report"
-#~ msgid "Abstract Report"
-#~ msgstr "Raport TVA"
 
 #, fuzzy
 #~| msgid "Account"
