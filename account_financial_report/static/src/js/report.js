@@ -15,7 +15,7 @@ odoo.define("account_financial_report.report", function (require) {
 
     /**
      * Convert a model name to a capitalized title style
-     * Example: account.mode.line --> Account Move Line
+     * Example: account.move.line --> Account Move Line
      *
      * @param {String} str
      * @returns {String}
