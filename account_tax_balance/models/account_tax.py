@@ -180,11 +180,11 @@ class AccountTax(models.Model):
         domain = self.get_move_lines_domain(
             tax_or_base=tax_or_base, financial_type=financial_type
         )
-        action = self.env.ref("account.action_account_moves_all_tree")
-        vals = action.sudo().read()[0]
-        vals["context"] = {}
-        vals["domain"] = domain
-        return vals
+        xmlid = "account.action_account_moves_all_tree"
+        action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
+        action["context"] = {}
+        action["domain"] = domain
+        return action
 
     def view_tax_lines(self):
         self.ensure_one()
