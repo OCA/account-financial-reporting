@@ -390,11 +390,14 @@ class ReportStatementCommon(models.AbstractModel):
             currency_dict = res[partner_id]["currencies"]
 
             for line in balances_forward.get(partner_id, []):
+                bal_fwd = currency_dict.get(line["currency_id"], 0.0)
+                if bal_fwd:
+                    bal_fwd = bal_fwd.get("balance_forward", 0.0)
                 (
                     currency_dict[line["currency_id"]],
                     currencies,
                 ) = self._get_line_currency_defaults(
-                    line["currency_id"], currencies, line["balance"]
+                    line["currency_id"], currencies, bal_fwd + line["balance"]
                 )
 
             for line in lines[partner_id]:
