@@ -147,6 +147,12 @@ msgid "Last Updated on"
 msgstr "Zuletzt aktualisiert am"
 
 #. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:14
+#, python-format
+msgid "Liquidity"
+msgstr "Liquidität"
+
+#. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_move__move_type
 msgid "Move Type"
 msgstr "Buchungstyp"
@@ -160,6 +166,36 @@ msgstr "Buchungsart"
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "Open Taxes"
 msgstr "Offene Steuern"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:13
+#, python-format
+msgid "Other"
+msgstr "Andere"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:17
+#, python-format
+msgid "Payable"
+msgstr "Verbindlichkeit"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:18
+#, python-format
+msgid "Payable refund"
+msgstr "Verbindlichkeitserstattung"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:15
+#, python-format
+msgid "Receivable"
+msgstr "Forderung"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:16
+#, python-format
+msgid "Receivable refund"
+msgstr "Forderungserstattung"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
@@ -264,21 +300,3 @@ msgstr "oder"
 
 #~ msgid "Account Entry"
 #~ msgstr "Kontoposten"
-
-#~ msgid "Liquidity"
-#~ msgstr "Liquidität"
-
-#~ msgid "Other"
-#~ msgstr "Andere"
-
-#~ msgid "Payable"
-#~ msgstr "Verbindlichkeit"
-
-#~ msgid "Payable refund"
-#~ msgstr "Verbindlichkeitserstattung"
-
-#~ msgid "Receivable"
-#~ msgstr "Forderung"
-
-#~ msgid "Receivable refund"
-#~ msgstr "Forderungserstattung"

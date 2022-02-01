@@ -147,6 +147,12 @@ msgid "Last Updated on"
 msgstr "Última Atualização em"
 
 #. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:14
+#, python-format
+msgid "Liquidity"
+msgstr "Liquidez"
+
+#. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_move__move_type
 msgid "Move Type"
 msgstr "Tipo de movimento"
@@ -160,6 +166,36 @@ msgstr "Tipo de movimento"
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "Open Taxes"
 msgstr "Abrir impostos"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:13
+#, python-format
+msgid "Other"
+msgstr "Outro"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:17
+#, python-format
+msgid "Payable"
+msgstr "A pagar"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:18
+#, python-format
+msgid "Payable refund"
+msgstr "Crédito a pagar"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:15
+#, python-format
+msgid "Receivable"
+msgstr "A receber"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:16
+#, python-format
+msgid "Receivable refund"
+msgstr "Crédito a receber"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
@@ -264,21 +300,3 @@ msgstr "ou"
 
 #~ msgid "Account Entry"
 #~ msgstr "Conta de lançamento"
-
-#~ msgid "Liquidity"
-#~ msgstr "Liquidez"
-
-#~ msgid "Other"
-#~ msgstr "Outro"
-
-#~ msgid "Payable"
-#~ msgstr "A pagar"
-
-#~ msgid "Payable refund"
-#~ msgstr "Crédito a pagar"
-
-#~ msgid "Receivable"
-#~ msgstr "A receber"
-
-#~ msgid "Receivable refund"
-#~ msgstr "Crédito a receber"

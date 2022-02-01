@@ -149,6 +149,12 @@ msgid "Last Updated on"
 msgstr ""
 
 #. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:14
+#, python-format
+msgid "Liquidity"
+msgstr ""
+
+#. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_move__move_type
 msgid "Move Type"
 msgstr ""
@@ -162,6 +168,36 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "Open Taxes"
 msgstr ""
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:13
+#, python-format
+msgid "Other"
+msgstr ""
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:17
+#, python-format
+msgid "Payable"
+msgstr "Dugovno"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:18
+#, python-format
+msgid "Payable refund"
+msgstr "Dugovni povrat"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:15
+#, python-format
+msgid "Receivable"
+msgstr "Potražno"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:16
+#, python-format
+msgid "Receivable refund"
+msgstr "Potražni povrat"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
@@ -267,15 +303,3 @@ msgstr "ili"
 
 #~ msgid "Account Entry"
 #~ msgstr "Stavka konta"
-
-#~ msgid "Payable"
-#~ msgstr "Dugovno"
-
-#~ msgid "Payable refund"
-#~ msgstr "Dugovni povrat"
-
-#~ msgid "Receivable"
-#~ msgstr "Potražno"
-
-#~ msgid "Receivable refund"
-#~ msgstr "Potražni povrat"

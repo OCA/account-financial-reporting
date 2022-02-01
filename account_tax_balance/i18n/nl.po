@@ -147,6 +147,12 @@ msgid "Last Updated on"
 msgstr "Laatst Geüpdatet op"
 
 #. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:14
+#, python-format
+msgid "Liquidity"
+msgstr "Liquiditeit"
+
+#. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_move__move_type
 #, fuzzy
 msgid "Move Type"
@@ -161,6 +167,36 @@ msgstr "Beweeg type"
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "Open Taxes"
 msgstr "Open Belastingen"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:13
+#, python-format
+msgid "Other"
+msgstr "Overige"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:17
+#, python-format
+msgid "Payable"
+msgstr "Te betalen"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:18
+#, python-format
+msgid "Payable refund"
+msgstr "Te betalen restitutie"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:15
+#, python-format
+msgid "Receivable"
+msgstr "Ontvangbaar"
+
+#. module: account_tax_balance
+#: code:addons/account_tax_balance/models/account_move.py:16
+#, python-format
+msgid "Receivable refund"
+msgstr "Vorderbare restitutie"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
@@ -265,21 +301,3 @@ msgstr "of"
 
 #~ msgid "Account Entry"
 #~ msgstr "Account Post"
-
-#~ msgid "Liquidity"
-#~ msgstr "Liquiditeit"
-
-#~ msgid "Other"
-#~ msgstr "Overige"
-
-#~ msgid "Payable"
-#~ msgstr "Te betalen"
-
-#~ msgid "Payable refund"
-#~ msgstr "Te betalen restitutie"
-
-#~ msgid "Receivable"
-#~ msgstr "Ontvangbaar"
-
-#~ msgid "Receivable refund"
-#~ msgstr "Vorderbare restitutie"
