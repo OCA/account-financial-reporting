@@ -90,11 +90,29 @@ class AbstractReport(models.AbstractModel):
         for move_line in move_lines:
             ml_id = move_line["id"]
             if ml_id in debit_ids:
-                move_line["amount_residual"] += debit_amount[ml_id]
-                move_line["amount_residual_currency"] += debit_amount_currency[ml_id]
+                if move_line.get("amount_residual", False):
+                    move_line["amount_residual"] += debit_amount[ml_id]
+                else:
+                    move_line["amount_residual"] = debit_amount[ml_id]
+                if move_line.get("amount_residual_currency", False):
+                    move_line["amount_residual_currency"] += debit_amount_currency[
+                        ml_id
+                    ]
+                else:
+                    move_line["amount_residual_currency"] = debit_amount_currency[ml_id]
             if ml_id in credit_ids:
-                move_line["amount_residual_currency"] += credit_amount_currency[ml_id]
-                move_line["amount_residual"] -= credit_amount[ml_id]
+                if move_line.get("amount_residual", False):
+                    move_line["amount_residual"] -= credit_amount[ml_id]
+                else:
+                    move_line["amount_residual"] = -credit_amount[ml_id]
+                if move_line.get("amount_residual_currency", False):
+                    move_line["amount_residual_currency"] -= credit_amount_currency[
+                        ml_id
+                    ]
+                else:
+                    move_line["amount_residual_currency"] = -credit_amount_currency[
+                        ml_id
+                    ]
         return move_lines
 
     def _get_accounts_data(self, accounts_ids):
