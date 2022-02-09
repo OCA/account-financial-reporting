@@ -19,7 +19,7 @@ Available addons
 ----------------
 addon | version | maintainers | summary
 --- | --- | --- | ---
-[account_tax_balance](account_tax_balance/) | 15.0.1.0.0 |  | Compute tax balances based on date range
+[account_tax_balance](account_tax_balance/) | 15.0.1.0.1 |  | Compute tax balances based on date range
 
 [//]: # (end addons)
 
