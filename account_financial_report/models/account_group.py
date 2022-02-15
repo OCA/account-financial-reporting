@@ -20,26 +20,34 @@ class AccountGroup(models.Model):
         string="Compute accounts",
         store=True,
     )
-    complete_name = fields.Char("Full Name", compute="_compute_complete_name")
-    complete_code = fields.Char("Full Code", compute="_compute_complete_code")
+    complete_name = fields.Char(
+        "Full Name", compute="_compute_complete_name", recursive=True
+    )
+    complete_code = fields.Char(
+        "Full Code", compute="_compute_complete_code", recursive=True
+    )
 
     @api.depends("name", "parent_id.complete_name")
     def _compute_complete_name(self):
         """ Forms complete name of location from parent location to child location. """
-        if self.parent_id.complete_name:
-            self.complete_name = "{}/{}".format(self.parent_id.complete_name, self.name)
-        else:
-            self.complete_name = self.name
+        for group in self:
+            if group.parent_id.complete_name:
+                group.complete_name = "{}/{}".format(
+                    group.parent_id.complete_name, group.name
+                )
+            else:
+                group.complete_name = group.name
 
     @api.depends("code_prefix_start", "parent_id.complete_code")
     def _compute_complete_code(self):
         """ Forms complete code of location from parent location to child location. """
-        if self.parent_id.complete_code:
-            self.complete_code = "{}/{}".format(
-                self.parent_id.complete_code, self.code_prefix_start
-            )
-        else:
-            self.complete_code = self.code_prefix_start
+        for group in self:
+            if group.parent_id.complete_code:
+                group.complete_code = "{}/{}".format(
+                    group.parent_id.complete_code, group.code_prefix_start
+                )
+            else:
+                group.complete_code = group.code_prefix_start
 
     @api.depends("parent_id", "parent_id.level")
     def _compute_level(self):
