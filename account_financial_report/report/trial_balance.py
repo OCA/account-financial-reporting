@@ -1,10 +1,11 @@
 # © 2016 Julien Coux (Camptocamp)
 # © 2018 Forest and Biomass Romania SA
 # Copyright 2020 ForgeFlow S.L. (https://www.forgeflow.com)
+# Copyright 2021 Tecnativa - Carlos Dauden
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-
-from odoo import api, models
+from odoo import _, api, models
+from odoo.exceptions import ValidationError
 
 
 class TrialBalanceReport(models.AbstractModel):
@@ -596,53 +597,119 @@ class TrialBalanceReport(models.AbstractModel):
         )
         return groups_data
 
-    def _get_computed_groups_data(self, accounts_data, total_amount, foreign_currency):
-        groups = self.env["account.group"].search([("id", "!=", False)])
-        groups_data = {}
-        for group in groups:
-            len_group_code = len(group.code_prefix)
-            groups_data.update(
-                {
-                    group.id: {
-                        "id": group.id,
-                        "code": group.code_prefix,
-                        "name": group.name,
-                        "parent_id": group.parent_id.id,
-                        "parent_path": group.parent_path,
-                        "type": "group_type",
-                        "complete_code": group.complete_code,
-                        "account_ids": group.compute_account_ids.ids,
-                        "initial_balance": 0.0,
-                        "credit": 0.0,
-                        "debit": 0.0,
-                        "balance": 0.0,
-                        "ending_balance": 0.0,
-                    }
-                }
+    @api.model
+    def _get_computed_account_groups(self, account_code, data, groups):
+        show_hierarchy_level = data["show_hierarchy_level"]
+        limit_hierarchy_level = data["limit_hierarchy_level"]
+        account_groups = []
+        if limit_hierarchy_level:
+            limit_level = show_hierarchy_level
+        else:
+            limit_level = len(account_code)
+        for i in range(limit_level + 1):
+            group_code = account_code[:i]
+            group = groups.filtered(lambda g: g.code_prefix == group_code)[:1]
+            # Only append existing groups if not limit_hierarchy_level
+            if limit_hierarchy_level or group:
+                account_groups.append((group_code, group))
+        return account_groups
+
+    def _get_computed_groups_data(
+        self, accounts_data, total_amount, foreign_currency, data
+    ):
+        show_hierarchy_level = data["show_hierarchy_level"]
+        hide_parent_hierarchy_level = data["hide_parent_hierarchy_level"]
+        groups = self.env["account.group"].search([])
+        groups_data = {
+            "": {
+                "id": False,
+                "code": "",
+                "name": "Total",
+                "parent_id": False,
+                "parent_path": "",
+                "level": show_hierarchy_level if hide_parent_hierarchy_level else 0,
+                "type": "group_type",
+                "complete_code": "",
+                "account_ids": [],
+                "initial_balance": 0.0,
+                "debit": 0.0,
+                "credit": 0.0,
+                "balance": 0.0,
+                "ending_balance": 0.0,
+            }
+        }
+        if foreign_currency:
+            groups_data[""].update(
+                {"initial_currency_balance": 0.0, "ending_currency_balance": 0.0}
             )
-            if foreign_currency:
-                groups_data[group.id]["initial_currency_balance"] = 0.0
-                groups_data[group.id]["ending_currency_balance"] = 0.0
-            for account in accounts_data.values():
-                if group.code_prefix == account["code"][:len_group_code]:
-                    acc_id = account["id"]
-                    group_id = group.id
-                    groups_data[group_id]["initial_balance"] += total_amount[acc_id][
+        for account in accounts_data.values():
+            previous_group = False
+            for group_code, group in self._get_computed_account_groups(
+                account["code"], data, groups
+            ):
+                if group_code and not group and not previous_group:
+                    raise ValidationError(
+                        _("Code %s can not be related with any account group")
+                        % group_code
+                    )
+                acc_id = account["id"]
+                if group_code not in groups_data:
+                    len_group = len(group_code)
+                    groups_data[group_code] = {
+                        "id": group.id if group else previous_group.id,
+                        "code": group_code,
+                        "name": group.name
+                        if group
+                        else "{} ({})".format(previous_group.name, group_code),
+                        "parent_id": group.parent_id.id if group else previous_group.id,
+                        "parent_path": group.parent_path
+                        if group
+                        else previous_group.parent_path,
+                        "level": len_group,
+                        "type": "group_type",
+                        "complete_code": "/".join(
+                            [group_code[:i] for i in range(1, len_group)]
+                        ),
+                        "account_ids": [account["id"]],
+                        "initial_balance": total_amount[acc_id]["initial_balance"],
+                        "debit": total_amount[acc_id]["debit"],
+                        "credit": total_amount[acc_id]["credit"],
+                        "balance": total_amount[acc_id]["balance"],
+                        "ending_balance": total_amount[acc_id]["ending_balance"],
+                    }
+                    if foreign_currency:
+                        groups_data[group_code].update(
+                            {
+                                "initial_currency_balance": total_amount[acc_id][
+                                    "initial_currency_balance"
+                                ],
+                                "ending_currency_balance": total_amount[acc_id][
+                                    "ending_currency_balance"
+                                ],
+                            }
+                        )
+                else:
+                    groups_data[group_code]["account_ids"].append(acc_id)
+                    groups_data[group_code]["initial_balance"] += total_amount[acc_id][
                         "initial_balance"
                     ]
-                    groups_data[group_id]["debit"] += total_amount[acc_id]["debit"]
-                    groups_data[group_id]["credit"] += total_amount[acc_id]["credit"]
-                    groups_data[group_id]["balance"] += total_amount[acc_id]["balance"]
-                    groups_data[group_id]["ending_balance"] += total_amount[acc_id][
+                    groups_data[group_code]["debit"] += total_amount[acc_id]["debit"]
+                    groups_data[group_code]["credit"] += total_amount[acc_id]["credit"]
+                    groups_data[group_code]["balance"] += total_amount[acc_id][
+                        "balance"
+                    ]
+                    groups_data[group_code]["ending_balance"] += total_amount[acc_id][
                         "ending_balance"
                     ]
                     if foreign_currency:
-                        groups_data[group_id][
+                        groups_data[group_code][
                             "initial_currency_balance"
                         ] += total_amount[acc_id]["initial_currency_balance"]
-                        groups_data[group_id][
+                        groups_data[group_code][
                             "ending_currency_balance"
                         ] += total_amount[acc_id]["ending_currency_balance"]
+                if group:
+                    previous_group = group
         return groups_data
 
     def _get_report_values(self, docids, data):
@@ -657,6 +724,7 @@ class TrialBalanceReport(models.AbstractModel):
         date_from = data["date_from"]
         hide_account_at_0 = data["hide_account_at_0"]
         hierarchy_on = data["hierarchy_on"]
+        limit_hierarchy_level = data["limit_hierarchy_level"]
         show_hierarchy_level = data["show_hierarchy_level"]
         foreign_currency = data["foreign_currency"]
         only_posted_moves = data["only_posted_moves"]
@@ -712,10 +780,11 @@ class TrialBalanceReport(models.AbstractModel):
                     trial["level"] = counter
             if hierarchy_on == "computed":
                 groups_data = self._get_computed_groups_data(
-                    accounts_data, total_amount, foreign_currency
+                    accounts_data, total_amount, foreign_currency, data
                 )
                 trial_balance = list(groups_data.values())
-                trial_balance += list(accounts_data.values())
+                if not limit_hierarchy_level:
+                    trial_balance += list(accounts_data.values())
                 trial_balance = sorted(trial_balance, key=lambda k: k["code"])
             if hierarchy_on == "none":
                 trial_balance = list(accounts_data.values())
