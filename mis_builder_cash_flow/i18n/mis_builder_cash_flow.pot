@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 14.0\n"
+"Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -126,10 +126,8 @@ msgid "Debit"
 msgstr ""
 
 #. module: mis_builder_cash_flow
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_account_account__display_name
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__display_name
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__display_name
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_report_instance_period__display_name
 msgid "Display Name"
 msgstr ""
 
@@ -145,10 +143,8 @@ msgid "Hide in Cash Flow?"
 msgstr ""
 
 #. module: mis_builder_cash_flow
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_account_account__id
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__id
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__id
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_report_instance_period__id
 msgid "ID"
 msgstr ""
 
@@ -185,10 +181,8 @@ msgid "LIQUIDITY"
 msgstr ""
 
 #. module: mis_builder_cash_flow
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_account_account____last_update
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow____last_update
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line____last_update
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_report_instance_period____last_update
 msgid "Last Modified on"
 msgstr ""
 
@@ -216,7 +210,6 @@ msgstr ""
 #. module: mis_builder_cash_flow
 #: model:ir.model,name:mis_builder_cash_flow.model_mis_cash_flow_forecast_line
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_forecast_line_view_form
-#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_forecast_line_view_tree
 msgid "MIS Cash Flow Forecast Line"
 msgstr ""
 
