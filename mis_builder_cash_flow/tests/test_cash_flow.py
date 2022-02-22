@@ -105,7 +105,7 @@ class TestCashFlow(TransactionCase):
                 ],
             }
         )
-        move.post()
+        move._post()
         self.check_matrix(
             args=[
                 ("liquidity", "Current", 1500),
