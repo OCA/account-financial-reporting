@@ -64,7 +64,7 @@
         <field name="name">mis.cash_flow.forecast_line.tree</field>
         <field name="model">mis.cash_flow.forecast_line</field>
         <field name="arch" type="xml">
-            <tree string="MIS Cash Flow Forecast Line" editable="top">
+            <tree editable="top">
                 <field name="company_id" groups="base.group_multi_company" />
                 <field name="date" />
                 <field name="name" />
