@@ -5,6 +5,7 @@
 
 
 from odoo import api, models
+from odoo.tools.float_utils import float_is_zero
 
 
 class TrialBalanceReport(models.AbstractModel):
@@ -300,6 +301,33 @@ class TrialBalanceReport(models.AbstractModel):
                         ] += round(tb["amount_currency"], 2)
         return total_amount, partners_data
 
+    def _remove_accounts_at_cero(self, total_amount, show_partner_details, company):
+        def is_removable(d):
+            rounding = company.currency_id.rounding
+            return (
+                float_is_zero(d["initial_balance"], precision_rounding=rounding)
+                and float_is_zero(d["credit"], precision_rounding=rounding)
+                and float_is_zero(d["debit"], precision_rounding=rounding)
+                and float_is_zero(d["ending_balance"], precision_rounding=rounding)
+            )
+
+        accounts_to_remove = []
+        for acc_id, ta_data in total_amount.items():
+            if is_removable(ta_data):
+                accounts_to_remove.append(acc_id)
+            elif show_partner_details:
+                partner_to_remove = []
+                for key, value in ta_data.items():
+                    # If the show_partner_details option is checked,
+                    # the partner data is in the same account data dict
+                    # but with the partner id as the key
+                    if isinstance(key, int) and is_removable(value):
+                        partner_to_remove.append(key)
+                for partner_id in partner_to_remove:
+                    del ta_data[partner_id]
+        for account_id in accounts_to_remove:
+            del total_amount[account_id]
+
     @api.model
     def _get_data(
         self,
@@ -425,6 +453,11 @@ class TrialBalanceReport(models.AbstractModel):
             total_amount, partners_data = self._compute_partner_amount(
                 total_amount, tb_initial_prt, tb_period_prt, foreign_currency
             )
+        # Remove accounts a 0 from collections
+        if hide_account_at_0:
+            company = self.env["res.company"].browse(company_id)
+            self._remove_accounts_at_cero(total_amount, show_partner_details, company)
+
         accounts_ids = list(total_amount.keys())
         unaffected_id = unaffected_earnings_account
         if unaffected_id:
