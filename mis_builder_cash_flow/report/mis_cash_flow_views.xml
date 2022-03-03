@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2019 ADHOC SA
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record model="ir.ui.view" id="mis_cash_flow_tree_view">
+        <field name="name">mis.cash_flow.tree</field>
+        <field name="model">mis.cash_flow</field>
+        <field name="arch" type="xml">
+            <tree create="false" edit="false" delete="false">
+                <field name="company_id" groups="base.group_multi_company" />
+                <field name="line_type" />
+                <field name="date" />
+                <field name="name" />
+                <field name="partner_id" />
+                <field name="account_id" />
+                <field name="debit" sum="Total" />
+                <field name="credit" sum="Total" />
+                <button
+                    type="object"
+                    string="Open Journal Item / Forecast Line"
+                    icon="fa-external-link"
+                    name="action_open_related_line"
+                />
+            </tree>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="mis_cash_flow_form_view">
+        <field name="name">mis.cash_flow.form</field>
+        <field name="model">mis.cash_flow</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false" delete="false">
+                <group>
+                    <group>
+                        <field name="date" />
+                        <field name="name" />
+                        <field name="partner_id" />
+                        <field name="account_id" />
+                        <field name="move_line_id" />
+                    </group>
+                    <group>
+                        <field name="debit" sum="Total" />
+                        <field name="credit" sum="Total" />
+                        <field name="company_id" groups="base.group_multi_company" />
+                        <field name="line_type" />
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="mis_cash_flow_search_view">
+        <field name="name">mis.cash_flow.search</field>
+        <field name="model">mis.cash_flow</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="date" />
+                <separator />
+                <field name="partner_id" />
+                <field name="account_id" />
+                <field name="company_id" groups="base.group_multi_company" />
+                <separator />
+                <filter
+                    string="Unreconciled"
+                    domain="[('full_reconcile_id', '=', False), ('account_id.reconcile','=',True)]"
+                    help="Journal items where matching number isn't set"
+                    name="unreconciled"
+                />
+                <separator />
+                <filter
+                    string="Journal Item"
+                    name="move_line"
+                    domain="[('line_type','=', 'move_line')]"
+                />
+                <filter
+                    string="Forecast Line"
+                    name="forecast_line"
+                    domain="[('line_type','=', 'forecast_line')]"
+                />
+                <group>
+                    <filter
+                        string="Line Type"
+                        name="group_by_line_type"
+                        context="{'group_by':'line_type'}"
+                    />
+                    <filter
+                        string="Account"
+                        name="group_by_account_id"
+                        context="{'group_by':'account_id'}"
+                    />
+                    <filter
+                        string="Date"
+                        name="group_by_date"
+                        context="{'group_by':'date'}"
+                    />
+                    <filter
+                        string="Company"
+                        name="group_by_company_id"
+                        context="{'group_by':'company_id'}"
+                        groups="base.group_multi_company"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>
