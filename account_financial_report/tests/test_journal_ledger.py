@@ -116,11 +116,11 @@ class TestJournalReport(AccountTestInvoicingCommon):
         self, res_data, expected_debit, expected_credit
     ):
         self.assertEqual(
-            expected_debit, sum([rec["debit"] for rec in res_data["Journal_Ledgers"]])
+            expected_debit, sum(rec["debit"] for rec in res_data["Journal_Ledgers"])
         )
 
         self.assertEqual(
-            expected_credit, sum([rec["credit"] for rec in res_data["Journal_Ledgers"]])
+            expected_credit, sum(rec["credit"] for rec in res_data["Journal_Ledgers"])
         )
 
     def check_report_journal_debit_credit_taxes(
@@ -134,19 +134,19 @@ class TestJournalReport(AccountTestInvoicingCommon):
         for rec in res_data["Journal_Ledgers"]:
             self.assertEqual(
                 expected_base_debit,
-                sum([tax_line["base_debit"] for tax_line in rec["tax_lines"]]),
+                sum(tax_line["base_debit"] for tax_line in rec["tax_lines"]),
             )
             self.assertEqual(
                 expected_base_credit,
-                sum([tax_line["base_credit"] for tax_line in rec["tax_lines"]]),
+                sum(tax_line["base_credit"] for tax_line in rec["tax_lines"]),
             )
             self.assertEqual(
                 expected_tax_debit,
-                sum([tax_line["tax_debit"] for tax_line in rec["tax_lines"]]),
+                sum(tax_line["tax_debit"] for tax_line in rec["tax_lines"]),
             )
             self.assertEqual(
                 expected_tax_credit,
-                sum([tax_line["tax_credit"] for tax_line in rec["tax_lines"]]),
+                sum(tax_line["tax_credit"] for tax_line in rec["tax_lines"]),
             )
 
     def test_01_test_total(self):

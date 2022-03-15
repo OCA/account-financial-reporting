@@ -524,7 +524,7 @@ class AbstractReportXslx(models.AbstractModel):
         report_data["row_pos"] += 1
 
     def _get_currency_amt_format(self, line_object, report_data):
-        """ Return amount format specific for each currency. """
+        """Return amount format specific for each currency."""
         if "account_group_id" in line_object and line_object["account_group_id"]:
             format_amt = report_data["formats"]["format_amount_bold"]
             field_prefix = "format_amount_bold"
@@ -545,7 +545,7 @@ class AbstractReportXslx(models.AbstractModel):
         return format_amt
 
     def _get_currency_amt_format_dict(self, line_dict, report_data):
-        """ Return amount format specific for each currency. """
+        """Return amount format specific for each currency."""
         if line_dict.get("account_group_id", False) and line_dict["account_group_id"]:
             format_amt = report_data["formats"]["format_amount_bold"]
             field_prefix = "format_amount_bold"
@@ -568,7 +568,7 @@ class AbstractReportXslx(models.AbstractModel):
         return format_amt
 
     def _get_currency_amt_header_format(self, line_object, report_data):
-        """ Return amount header format for each currency. """
+        """Return amount header format for each currency."""
         format_amt = report_data["formats"]["format_header_amount"]
         if line_object.currency_id:
             field_name = "format_header_amount_%s" % line_object.currency_id.name
@@ -586,7 +586,7 @@ class AbstractReportXslx(models.AbstractModel):
         return format_amt
 
     def _get_currency_amt_header_format_dict(self, line_object, report_data):
-        """ Return amount header format for each currency. """
+        """Return amount header format for each currency."""
         format_amt = report_data["formats"]["format_header_amount"]
         if line_object["currency_id"]:
             field_name = "format_header_amount_%s" % line_object["currency_name"]
