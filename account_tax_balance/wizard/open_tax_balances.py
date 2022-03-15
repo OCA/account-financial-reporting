@@ -54,6 +54,6 @@ class WizardOpenTaxBalances(models.TransientModel):
             'from_date': self.from_date,
             'to_date': self.to_date,
             'target_move': self.target_move,
-            'company_id': self.company_id.id,
+            'company_ids': [self.company_id.id],
         }
         return vals
