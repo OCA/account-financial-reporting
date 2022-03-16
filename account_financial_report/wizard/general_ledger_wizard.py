@@ -43,9 +43,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
         "If partners are filtered, "
         "debits and credits totals will not match the trial balance.",
     )
-    show_analytic_tags = fields.Boolean(
-        string="Show analytic tags",
-    )
+    show_analytic_tags = fields.Boolean()
     receivable_accounts_only = fields.Boolean()
     payable_accounts_only = fields.Boolean()
     partner_ids = fields.Many2many(
@@ -63,9 +61,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
         comodel_name="account.analytic.account", string="Filter cost centers"
     )
 
-    not_only_one_unaffected_earnings_account = fields.Boolean(
-        readonly=True, string="Not only one unaffected earnings account"
-    )
+    not_only_one_unaffected_earnings_account = fields.Boolean(readonly=True)
     foreign_currency = fields.Boolean(
         string="Show foreign currency",
         help="Display foreign currency for move lines, unless "
@@ -75,16 +71,13 @@ class GeneralLedgerReportWizard(models.TransientModel):
     )
     account_code_from = fields.Many2one(
         comodel_name="account.account",
-        string="Account Code From",
         help="Starting account in a range",
     )
     account_code_to = fields.Many2one(
         comodel_name="account.account",
-        string="Account Code To",
         help="Ending account in a range",
     )
     show_partner_details = fields.Boolean(
-        string="Show Partner Details",
         default=True,
     )
     show_cost_center = fields.Boolean(
