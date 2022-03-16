@@ -689,7 +689,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
             "active_model": "res.partner",
         }
 
-        wizard = self.env["general.ledger.report.wizard"].with_context(context)
+        wizard = self.env["general.ledger.report.wizard"].with_context(**context)
         self.assertEqual(wizard._default_partners(), expected_list)
 
     def test_validate_date(self):
