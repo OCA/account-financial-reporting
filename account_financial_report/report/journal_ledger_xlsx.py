@@ -134,7 +134,8 @@ class JournalLedgerXslx(models.AbstractModel):
             [_("Company"), report.company_id.name],
             [
                 _("Date range filter"),
-                _("From: %s To: %s") % (report.date_from, report.date_to),
+                _("From: %(date_from)s To: %(date_to)s")
+                % ({"date_from": report.date_from, "date_to": report.date_to}),
             ],
             [
                 _("Target moves filter"),

@@ -17,9 +17,9 @@
         <!-- Defines global variables used by internal layout -->
         <t t-set="title">
             Aged Partner Balance -
-            <t t-raw="company_name" />
+            <t t-out="company_name" />
             -
-            <t t-raw="currency_name" />
+            <t t-out="currency_name" />
         </t>
         <div class="page">
             <div class="row">
@@ -264,7 +264,7 @@
                             res-model="account.move"
                             view-type="form"
                         >
-                            <t t-raw="line['entry']" />
+                            <t t-out="line['entry']" />
                         </span>
                     </div>
                     <!--## journal-->
@@ -274,7 +274,7 @@
                             res-model="account.journal"
                             view-type="form"
                         >
-                            <t t-raw="line['journal']" />
+                            <t t-out="line['journal']" />
                         </span>
                     </div>
                     <!--## account code-->
@@ -284,7 +284,7 @@
                             res-model="account.account"
                             view-type="form"
                         >
-                            <t t-raw="line['account']" />
+                            <t t-out="line['account']" />
                         </span>
                     </div>
                     <!--## partner-->
@@ -294,7 +294,7 @@
                             res-model="res.partner"
                             view-type="form"
                         >
-                            <t t-raw="line['partner']" />
+                            <t t-out="line['partner']" />
                         </span>
                     </div>
                     <!--## ref - label-->
@@ -304,7 +304,7 @@
                             res-model="account.move.line"
                             view-type="form"
                         >
-                            <t t-raw="line['ref_label']" />
+                            <t t-out="line['ref_label']" />
                         </span>
                     </div>
                     <!--## date_due-->
@@ -328,7 +328,7 @@
                             res-model="account.move.line"
                         >
                             <t
-                                t-raw="line['residual']"
+                                t-out="line['residual']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
                         </span>
@@ -347,7 +347,7 @@
                                 res-model="account.move.line"
                             >
                                 <t
-                                    t-raw="line['current']"
+                                    t-out="line['current']"
                                     t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                                 />
                             </span>
@@ -367,7 +367,7 @@
                                 res-model="account.move.line"
                             >
                                 <t
-                                    t-raw="line['30_days']"
+                                    t-out="line['30_days']"
                                     t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                                 />
                             </span>
@@ -387,7 +387,7 @@
                                 res-model="account.move.line"
                             >
                                 <t
-                                    t-raw="line['60_days']"
+                                    t-out="line['60_days']"
                                     t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                                 />
                             </span>
@@ -407,7 +407,7 @@
                                 res-model="account.move.line"
                             >
                                 <t
-                                    t-raw="line['90_days']"
+                                    t-out="line['90_days']"
                                     t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                                 />
                             </span>
@@ -427,7 +427,7 @@
                                 res-model="account.move.line"
                             >
                                 <t
-                                    t-raw="line['120_days']"
+                                    t-out="line['120_days']"
                                     t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                                 />
                             </span>
@@ -447,7 +447,7 @@
                                 res-model="account.move.line"
                             >
                                 <t
-                                    t-raw="line['older']"
+                                    t-out="line['older']"
                                     t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                                 />
                             </span>

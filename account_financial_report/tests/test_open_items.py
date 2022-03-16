@@ -24,5 +24,5 @@ class TestOpenItems(AccountTestInvoicingCommon):
             "active_model": "res.partner",
         }
 
-        wizard = self.env["open.items.report.wizard"].with_context(context)
+        wizard = self.env["open.items.report.wizard"].with_context(**context)
         self.assertEqual(wizard._default_partners(), expected_list)

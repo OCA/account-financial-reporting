@@ -97,7 +97,8 @@ class GeneralLedgerXslx(models.AbstractModel):
         return [
             [
                 _("Date range filter"),
-                _("From: %s To: %s") % (report.date_from, report.date_to),
+                _("From: %(date_from)s To: %(date_to)s")
+                % ({"date_from": report.date_from, "date_to": report.date_to}),
             ],
             [
                 _("Target moves filter"),
@@ -329,7 +330,7 @@ class GeneralLedgerXslx(models.AbstractModel):
             label = _("Partner Initial balance")
         elif "account" in my_object["type"]:
             label = _("Initial balance")
-        super(GeneralLedgerXslx, self).write_initial_balance_from_dict(
+        return super(GeneralLedgerXslx, self).write_initial_balance_from_dict(
             my_object, label, report_data
         )
 
@@ -341,6 +342,6 @@ class GeneralLedgerXslx(models.AbstractModel):
         elif "account" in my_object["type"]:
             name = my_object["code"] + " - " + my_object["name"]
             label = _("Ending balance")
-        super(GeneralLedgerXslx, self).write_ending_balance_from_dict(
+        return super(GeneralLedgerXslx, self).write_ending_balance_from_dict(
             my_object, name, label, report_data
         )

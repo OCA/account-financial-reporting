@@ -10,7 +10,7 @@ class AccountGroup(models.Model):
     group_child_ids = fields.One2many(
         comodel_name="account.group", inverse_name="parent_id", string="Child Groups"
     )
-    level = fields.Integer(string="Level", compute="_compute_level")
+    level = fields.Integer(compute="_compute_level", recursive=True)
     account_ids = fields.One2many(
         comodel_name="account.account", inverse_name="group_id", string="Accounts"
     )
@@ -20,8 +20,12 @@ class AccountGroup(models.Model):
         string="Compute accounts",
         store=True,
     )
-    complete_name = fields.Char("Full Name", compute="_compute_complete_name")
-    complete_code = fields.Char("Full Code", compute="_compute_complete_code")
+    complete_name = fields.Char(
+        "Full Name", compute="_compute_complete_name", recursive=True
+    )
+    complete_code = fields.Char(
+        "Full Code", compute="_compute_complete_code", recursive=True
+    )
 
     @api.depends("name", "parent_id.complete_name")
     def _compute_complete_name(self):
