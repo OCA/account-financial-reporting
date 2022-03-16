@@ -14,7 +14,7 @@ class OpenItemsReportWizard(models.TransientModel):
     _inherit = "account_financial_report_abstract_wizard"
 
     date_at = fields.Date(required=True, default=fields.Date.context_today)
-    date_from = fields.Date(string="Date From")
+    date_from = fields.Date()
     target_move = fields.Selection(
         [("posted", "All Posted Entries"), ("all", "All Entries")],
         string="Target Moves",
@@ -50,17 +50,13 @@ class OpenItemsReportWizard(models.TransientModel):
         default=lambda self: self._default_foreign_currency(),
     )
     show_partner_details = fields.Boolean(
-        string="Show Partner Details",
         default=True,
     )
     account_code_from = fields.Many2one(
         comodel_name="account.account",
-        string="Account Code From",
-        help="Starting account in a range",
     )
     account_code_to = fields.Many2one(
         comodel_name="account.account",
-        string="Account Code To",
         help="Ending account in a range",
     )
 

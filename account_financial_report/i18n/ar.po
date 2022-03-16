@@ -1136,7 +1136,7 @@ msgstr "المستوى"
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
 #, fuzzy, python-format
 msgid "Level %s"
-msgstr "المستوى"
+msgstr "المستوى %s"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0

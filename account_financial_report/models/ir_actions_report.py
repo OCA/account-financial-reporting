@@ -15,11 +15,11 @@ class IrActionsReport(models.Model):
     @api.model
     def _render_qweb_html(self, docids, data=None):
         context = self._prepare_account_financial_report_context(data)
-        obj = self.with_context(context) if context else self
+        obj = self.with_context(**context) if context else self
         return super(IrActionsReport, obj)._render_qweb_html(docids, data)
 
     @api.model
     def _render_xlsx(self, docids, data):
         context = self._prepare_account_financial_report_context(data)
-        obj = self.with_context(context) if context else self
+        obj = self.with_context(**context) if context else self
         return super(IrActionsReport, obj)._render_xlsx(docids, data)
