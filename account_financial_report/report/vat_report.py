@@ -36,8 +36,7 @@ class VATReport(models.AbstractModel):
             ("date", ">=", date_from),
             ("date", "<=", date_to),
             ("tax_line_id", "!=", False),
-            ("tax_exigible", "=", True),
-        ]
+        ] + self.env["account.move.line"]._get_tax_exigible_domain()
         if only_posted_moves:
             domain += [("move_id.state", "=", "posted")]
         else:
@@ -50,8 +49,7 @@ class VATReport(models.AbstractModel):
             ("company_id", "=", company_id),
             ("date", ">=", date_from),
             ("date", "<=", date_to),
-            ("tax_exigible", "=", True),
-        ]
+        ] + self.env["account.move.line"]._get_tax_exigible_domain()
         if only_posted_moves:
             domain += [("move_id.state", "=", "posted")]
         else:

@@ -211,6 +211,6 @@ class OpenItemsXslx(models.AbstractModel):
             name = my_object["code"] + " - " + my_object["name"]
             my_object["residual"] = total_amount[account_id]["residual"]
             label = _("Ending balance")
-        super(OpenItemsXslx, self).write_ending_balance_from_dict(
+        return super(OpenItemsXslx, self).write_ending_balance_from_dict(
             my_object, name, label, report_data
         )

@@ -15,7 +15,6 @@ class VATReportWizard(models.TransientModel):
     date_to = fields.Date("End Date", required=True)
     based_on = fields.Selection(
         [("taxtags", "Tax Tags"), ("taxgroups", "Tax Groups")],
-        string="Based On",
         required=True,
         default="taxtags",
     )

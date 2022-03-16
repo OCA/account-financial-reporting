@@ -32,7 +32,6 @@ class TrialBalanceReportWizard(models.TransientModel):
             ("relation", "Child Accounts"),
             ("none", "No hierarchy"),
         ],
-        string="Hierarchy On",
         required=True,
         default="none",
         help="""Computed Accounts: Use when the account group have codes
@@ -62,9 +61,7 @@ class TrialBalanceReportWizard(models.TransientModel):
     partner_ids = fields.Many2many(comodel_name="res.partner", string="Filter partners")
     journal_ids = fields.Many2many(comodel_name="account.journal")
 
-    not_only_one_unaffected_earnings_account = fields.Boolean(
-        readonly=True, string="Not only one unaffected earnings account"
-    )
+    not_only_one_unaffected_earnings_account = fields.Boolean(readonly=True)
 
     foreign_currency = fields.Boolean(
         string="Show foreign currency",
@@ -74,12 +71,10 @@ class TrialBalanceReportWizard(models.TransientModel):
     )
     account_code_from = fields.Many2one(
         comodel_name="account.account",
-        string="Account Code From",
         help="Starting account in a range",
     )
     account_code_to = fields.Many2one(
         comodel_name="account.account",
-        string="Account Code To",
         help="Ending account in a range",
     )
 
