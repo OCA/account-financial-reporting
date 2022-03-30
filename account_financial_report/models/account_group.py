@@ -29,7 +29,7 @@ class AccountGroup(models.Model):
 
     @api.depends("name", "parent_id.complete_name")
     def _compute_complete_name(self):
-        """ Forms complete name of location from parent location to child location. """
+        """Forms complete name of location from parent location to child location."""
         for group in self:
             if group.parent_id.complete_name:
                 group.complete_name = "{}/{}".format(
@@ -40,7 +40,7 @@ class AccountGroup(models.Model):
 
     @api.depends("code_prefix_start", "parent_id.complete_code")
     def _compute_complete_code(self):
-        """ Forms complete code of location from parent location to child location. """
+        """Forms complete code of location from parent location to child location."""
         for group in self:
             if group.parent_id.complete_code:
                 group.complete_code = "{}/{}".format(

@@ -40,7 +40,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                     "width": 14,
                 },
                 3: {
-                    "header": _(u"Age ≤ 30 d."),
+                    "header": _("Age ≤ 30 d."),
                     "field": "30_days",
                     "field_footer_total": "30_days",
                     "field_footer_percent": "percent_30_days",
@@ -48,7 +48,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                     "width": 14,
                 },
                 4: {
-                    "header": _(u"Age ≤ 60 d."),
+                    "header": _("Age ≤ 60 d."),
                     "field": "60_days",
                     "field_footer_total": "60_days",
                     "field_footer_percent": "percent_60_days",
@@ -56,7 +56,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                     "width": 14,
                 },
                 5: {
-                    "header": _(u"Age ≤ 90 d."),
+                    "header": _("Age ≤ 90 d."),
                     "field": "90_days",
                     "field_footer_total": "90_days",
                     "field_footer_percent": "percent_90_days",
@@ -64,7 +64,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                     "width": 14,
                 },
                 6: {
-                    "header": _(u"Age ≤ 120 d."),
+                    "header": _("Age ≤ 120 d."),
                     "field": "120_days",
                     "field_footer_total": "120_days",
                     "field_footer_percent": "percent_120_days",
@@ -106,7 +106,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                 "width": 14,
             },
             9: {
-                "header": _(u"Age ≤ 30 d."),
+                "header": _("Age ≤ 30 d."),
                 "field": "30_days",
                 "field_footer_total": "30_days",
                 "field_footer_percent": "percent_30_days",
@@ -115,7 +115,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                 "width": 14,
             },
             10: {
-                "header": _(u"Age ≤ 60 d."),
+                "header": _("Age ≤ 60 d."),
                 "field": "60_days",
                 "field_footer_total": "60_days",
                 "field_footer_percent": "percent_60_days",
@@ -124,7 +124,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                 "width": 14,
             },
             11: {
-                "header": _(u"Age ≤ 90 d."),
+                "header": _("Age ≤ 90 d."),
                 "field": "90_days",
                 "field_footer_total": "90_days",
                 "field_footer_percent": "percent_90_days",
@@ -133,7 +133,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                 "width": 14,
             },
             12: {
-                "header": _(u"Age ≤ 120 d."),
+                "header": _("Age ≤ 120 d."),
                 "field": "120_days",
                 "field_footer_total": "120_days",
                 "field_footer_percent": "percent_120_days",
