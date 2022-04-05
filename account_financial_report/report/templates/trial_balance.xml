@@ -297,11 +297,21 @@
             <div class="act_as_cell amount">
                 <t t-if="not show_partner_details">
                     <t t-if="balance['type'] == 'account_type'">
-                        <t
-                            t-set="domain"
-                            t-value="[('account_id', '=', balance['id']),
-                               ('date', '&lt;', date_from)]"
-                        />
+                        <t t-if="only_posted_moves">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', '=', balance['id']),
+                                    ('parent_state', '=', 'posted'),
+                                    ('date', '&lt;', date_from)]"
+                            />
+                        </t>
+                        <t t-else="">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', '=', balance['id']),
+                                ('date', '&lt;', date_from)]"
+                            />
+                        </t>
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
                                 t-att-style="style"
@@ -311,11 +321,21 @@
                         </span>
                     </t>
                     <t t-if="balance['type'] == 'group_type'">
-                        <t
-                            t-set="domain"
-                            t-value="[('account_id', 'in', balance['account_ids']),
+                        <t t-if="only_posted_moves">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', '=', balance['account_ids']),
+                                    ('parent_state', '=', 'posted'),
                                     ('date', '&lt;', date_from)]"
-                        />
+                            />
+                        </t>
+                        <t t-else="">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', '=', balance['account_ids']),
+                                ('date', '&lt;', date_from)]"
+                            />
+                        </t>
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
                                 t-att-style="style"
@@ -326,12 +346,23 @@
                     </t>
                 </t>
                 <t t-if="type == 'partner_type'">
-                    <t
-                        t-set="domain"
-                        t-value="[('account_id', '=', int(account_id)),
-                                 ('partner_id', '=', int(partner_id)),
-                                 ('date', '&lt;', date_from)]"
-                    />
+                    <t t-if="only_posted_moves">
+                        <t
+                            t-set="domain"
+                            t-value="[('account_id', '=', int(account_id)),
+                                ('parent_state', '=', 'posted'),
+                                ('partner_id', '=', int(partner_id)),
+                                ('date', '&lt;', date_from)]"
+                        />
+                    </t>
+                    <t t-else="">
+                        <t
+                            t-set="domain"
+                            t-value="[('account_id', '=', int(account_id)),
+                                ('partner_id', '=', int(partner_id)),
+                                ('date', '&lt;', date_from)]"
+                        />
+                    </t>
                     <span t-att-domain="domain" res-model="account.move.line">
                         <t
                             t-att-style="style"
@@ -345,13 +376,25 @@
             <div class="act_as_cell amount">
                 <t t-if="not show_partner_details">
                     <t t-if="balance['type'] == 'account_type'">
-                        <t
-                            t-set="domain"
-                            t-value="[('account_id', '=', balance['id']),
-                                         ('date', '&gt;=', date_from),
-                                         ('date', '&lt;=', date_to),
-                                         ('debit', '&lt;&gt;', 0)]"
-                        />
+                        <t t-if="only_posted_moves">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', '=', balance['id']),
+                                    ('parent_state', '=', 'posted'),
+                                    ('date', '&gt;=', date_from),
+                                    ('date', '&lt;=', date_to),
+                                    ('debit', '&lt;&gt;', 0)]"
+                            />
+                        </t>
+                        <t t-else="">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', '=', balance['id']),
+                                    ('date', '&gt;=', date_from),
+                                    ('date', '&lt;=', date_to),
+                                    ('debit', '&lt;&gt;', 0)]"
+                            />
+                        </t>
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
                                 t-att-style="style"
@@ -361,13 +404,25 @@
                         </span>
                     </t>
                     <t t-if="balance['type'] == 'group_type'">
-                        <t
-                            t-set="domain"
-                            t-value="[('account_id', 'in', balance['account_ids']),
+                        <t t-if="only_posted_moves">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', 'in', balance['account_ids']),
+                                    ('parent_state', '=', 'posted'),
                                     ('date', '&gt;=', date_from),
                                     ('date', '&lt;=', date_to),
                                     ('debit', '&lt;&gt;', 0)]"
-                        />
+                            />
+                        </t>
+                        <t t-else="">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', 'in', balance['account_ids']),
+                                    ('date', '&gt;=', date_from),
+                                    ('date', '&lt;=', date_to),
+                                    ('debit', '&lt;&gt;', 0)]"
+                            />
+                        </t>
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
                                 t-att-style="style"
@@ -378,14 +433,27 @@
                     </t>
                 </t>
                 <t t-if="type == 'partner_type'">
-                    <t
-                        t-set="domain"
-                        t-value="[('account_id', '=', int(account_id)),
-                                 ('partner_id', '=', int(partner_id)),
-                                 ('date', '&gt;=', date_from),
-                                 ('date', '&lt;=', date_to),
-                                 ('debit', '&lt;&gt;', 0)]"
-                    />
+                    <t t-if="only_posted_moves">
+                        <t
+                            t-set="domain"
+                            t-value="[('account_id', '=', int(account_id)),
+                                ('partner_id', '=', int(partner_id)),
+                                ('parent_state', '=', 'posted'),
+                                ('date', '&gt;=', date_from),
+                                ('date', '&lt;=', date_to),
+                                ('debit', '&lt;&gt;', 0)]"
+                        />
+                    </t>
+                    <t t-else="">
+                        <t
+                            t-set="domain"
+                            t-value="[('account_id', '=', int(account_id)),
+                                ('partner_id', '=', int(partner_id)),
+                                ('date', '&gt;=', date_from),
+                                ('date', '&lt;=', date_to),
+                                ('debit', '&lt;&gt;', 0)]"
+                        />
+                    </t>
                     <span t-att-domain="domain" res-model="account.move.line">
                         <t
                             t-att-style="style"
@@ -399,13 +467,25 @@
             <div class="act_as_cell amount">
                 <t t-if="not show_partner_details">
                     <t t-if="balance['type'] == 'account_type'">
-                        <t
-                            t-set="domain"
-                            t-value="[('account_id', '=', balance['id']),
-                                         ('date', '&gt;=', date_from),
-                                         ('date', '&lt;=', date_to),
-                                         ('credit', '&lt;&gt;', 0)]"
-                        />
+                        <t t-if="only_posted_moves">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', '=', balance['id']),
+                                    ('parent_state', '=', 'posted'),
+                                    ('date', '&gt;=', date_from),
+                                    ('date', '&lt;=', date_to),
+                                    ('credit', '&lt;&gt;', 0)]"
+                            />
+                        </t>
+                        <t t-else="">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', '=', balance['id']),
+                                    ('date', '&gt;=', date_from),
+                                    ('date', '&lt;=', date_to),
+                                    ('credit', '&lt;&gt;', 0)]"
+                            />
+                        </t>
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
                                 t-att-style="style"
@@ -415,13 +495,25 @@
                         </span>
                     </t>
                     <t t-if="balance['type'] == 'group_type'">
-                        <t
-                            t-set="domain"
-                            t-value="[('account_id', 'in', balance['account_ids']),
+                        <t t-if="only_posted_moves">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', 'in', balance['account_ids']),
+                                    ('parent_state', '=', 'posted'),
                                     ('date', '&gt;=', date_from),
                                     ('date', '&lt;=', date_to),
                                     ('credit', '&lt;&gt;', 0)]"
-                        />
+                            />
+                        </t>
+                        <t t-else="">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', 'in', balance['account_ids']),
+                                    ('date', '&gt;=', date_from),
+                                    ('date', '&lt;=', date_to),
+                                    ('credit', '&lt;&gt;', 0)]"
+                            />
+                        </t>
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
                                 t-att-style="style"
@@ -432,14 +524,27 @@
                     </t>
                 </t>
                 <t t-if="type == 'partner_type'">
-                    <t
-                        t-set="domain"
-                        t-value="[('account_id', '=', int(account_id)),
-                                 ('partner_id', '=', int(partner_id)),
-                                 ('date', '&gt;=', date_from),
-                                 ('date', '&lt;=', date_to),
-                                 ('credit', '&lt;&gt;', 0)]"
-                    />
+                    <t t-if="only_posted_moves">
+                        <t
+                            t-set="domain"
+                            t-value="[('account_id', '=', int(account_id)),
+                                ('partner_id', '=', int(partner_id)),
+                                ('parent_state', '=', 'posted'),
+                                ('date', '&gt;=', date_from),
+                                ('date', '&lt;=', date_to),
+                                ('credit', '&lt;&gt;', 0)]"
+                        />
+                    </t>
+                    <t t-else="">
+                        <t
+                            t-set="domain"
+                            t-value="[('account_id', '=', int(account_id)),
+                                ('partner_id', '=', int(partner_id)),
+                                ('date', '&gt;=', date_from),
+                                ('date', '&lt;=', date_to),
+                                ('credit', '&lt;&gt;', 0)]"
+                        />
+                    </t>
                     <span t-att-domain="domain" res-model="account.move.line">
                         <t
                             t-att-style="style"
@@ -453,13 +558,25 @@
             <div class="act_as_cell amount">
                 <t t-if="not show_partner_details">
                     <t t-if="balance['type'] == 'account_type'">
-                        <t
-                            t-set="domain"
-                            t-value="[('account_id', '=', balance['id']),
+                        <t t-if="only_posted_moves">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', '=', balance['id']),
+                                    ('parent_state', '=', 'posted'),
                                     ('date', '&gt;=', date_from),
                                     ('date', '&lt;=', date_to),
                                     ('balance', '&lt;&gt;', 0)]"
-                        />
+                            />
+                        </t>
+                        <t t-else="">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', '=', balance['id']),
+                                    ('date', '&gt;=', date_from),
+                                    ('date', '&lt;=', date_to),
+                                    ('balance', '&lt;&gt;', 0)]"
+                            />
+                        </t>
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
                                 t-att-style="style"
@@ -469,12 +586,23 @@
                         </span>
                     </t>
                     <t t-if="balance['type'] == 'group_type'">
-                        <t
-                            t-set="domain"
-                            t-value="[('account_id', 'in', balance['account_ids']),
+                        <t t-if="only_posted_moves">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', 'in', balance['account_ids']),
+                                    ('parent_state', '=', 'posted'),
                                     ('date', '&gt;=', date_from),
                                     ('date', '&lt;=', date_to)]"
-                        />
+                            />
+                        </t>
+                        <t t-else="">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', 'in', balance['account_ids']),
+                                    ('date', '&gt;=', date_from),
+                                    ('date', '&lt;=', date_to)]"
+                            />
+                        </t>
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
                                 t-att-style="style"
@@ -485,14 +613,27 @@
                     </t>
                 </t>
                 <t t-if="type == 'partner_type'">
-                    <t
-                        t-set="domain"
-                        t-value="[('account_id', '=', int(account_id)),
-                                 ('partner_id', '=', int(partner_id)),
-                                 ('date', '&gt;=', date_from),
-                                 ('date', '&lt;=', date_to),
-                                 ('balance', '&lt;&gt;', 0)]"
-                    />
+                    <t t-if="only_posted_moves">
+                        <t
+                            t-set="domain"
+                            t-value="[('account_id', '=', int(account_id)),
+                                ('parent_state', '=', 'posted'),
+                                ('partner_id', '=', int(partner_id)),
+                                ('date', '&gt;=', date_from),
+                                ('date', '&lt;=', date_to),
+                                ('balance', '&lt;&gt;', 0)]"
+                        />
+                    </t>
+                    <t t-else="">
+                        <t
+                            t-set="domain"
+                            t-value="[('account_id', '=', int(account_id)),
+                                ('partner_id', '=', int(partner_id)),
+                                ('date', '&gt;=', date_from),
+                                ('date', '&lt;=', date_to),
+                                ('balance', '&lt;&gt;', 0)]"
+                        />
+                    </t>
                     <span t-att-domain="domain" res-model="account.move.line">
                         <t
                             t-att-style="style"
@@ -506,11 +647,21 @@
             <div class="act_as_cell amount">
                 <t t-if="not show_partner_details">
                     <t t-if="balance['type'] == 'account_type'">
-                        <t
-                            t-set="domain"
-                            t-value="[('account_id', '=', balance['id']),
-                                         ('date', '&lt;=', date_to)]"
-                        />
+                        <t t-if="only_posted_moves">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', '=', balance['id']),
+                                    ('parent_state', '=', 'posted'),
+                                    ('date', '&lt;=', date_to)]"
+                            />
+                        </t>
+                        <t t-else="">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', '=', balance['id']),
+                                    ('date', '&lt;=', date_to)]"
+                            />
+                        </t>
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
                                 t-att-style="style"
@@ -520,10 +671,18 @@
                         </span>
                     </t>
                     <t t-if="balance['type'] == 'group_type'">
-                        <t
-                            t-set="domain"
-                            t-value="[('account_id', 'in', balance['account_ids'])]"
-                        />
+                        <t t-if="only_posted_moves">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', 'in', balance['account_ids']), ('parent_state', '=', 'posted')]"
+                            />
+                        </t>
+                        <t t-else="">
+                            <t
+                                t-set="domain"
+                                t-value="[('account_id', 'in', balance['account_ids'])]"
+                            />
+                        </t>
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
                                 t-att-style="style"
@@ -534,12 +693,23 @@
                     </t>
                 </t>
                 <t t-if="type == 'partner_type'">
-                    <t
-                        t-set="domain"
-                        t-value="[('account_id', '=', int(account_id)),
-                                 ('partner_id', '=', int(partner_id)),
-                                 ('date', '&lt;=', date_to)]"
-                    />
+                    <t t-if="only_posted_moves">
+                        <t
+                            t-set="domain"
+                            t-value="[('account_id', '=', int(account_id)),
+                                ('parent_state', '=', 'posted'),
+                                ('partner_id', '=', int(partner_id)),
+                                ('date', '&lt;=', date_to)]"
+                        />
+                    </t>
+                    <t t-else="">
+                        <t
+                            t-set="domain"
+                            t-value="[('account_id', '=', int(account_id)),
+                                ('partner_id', '=', int(partner_id)),
+                                ('date', '&lt;=', date_to)]"
+                        />
+                    </t>
                     <span t-att-domain="domain" res-model="account.move.line">
                         <t
                             t-att-style="style"
@@ -559,10 +729,18 @@
                             </div>
                             <!--## Initial balance cur.-->
                             <div class="act_as_cell amount">
-                                <t
-                                    t-set="domain"
-                                    t-value="[('account_id', '=', balance['id'])]"
-                                />
+                                <t t-if="only_posted_moves">
+                                    <t
+                                        t-set="domain"
+                                        t-value="[('account_id', '=', balance['id']), ('parent_state', '=', 'posted')]"
+                                    />
+                                </t>
+                                <t t-else="">
+                                    <t
+                                        t-set="domain"
+                                        t-value="[('account_id', '=', balance['id'])]"
+                                    />
+                                </t>
                                 <span
                                     t-att-domain="domain"
                                     res-model="account.move.line"
@@ -597,11 +775,21 @@
                                 />
                             </div>
                             <div class="act_as_cell amount">
-                                <t
-                                    t-set="domain"
-                                    t-value="[('account_id', '=', account_id),
+                                <t t-if="only_posted_moves">
+                                    <t
+                                        t-set="domain"
+                                        t-value="[('account_id', '=', account_id),
+                                            ('parent_state', '=', 'posted'),
                                             ('partner_id', '=', partner_id)]"
-                                />
+                                    />
+                                </t>
+                                <t t-else="">
+                                    <t
+                                        t-set="domain"
+                                        t-value="[('account_id', '=', account_id),
+                                            ('partner_id', '=', partner_id)]"
+                                    />
+                                </t>
                                 <span
                                     t-att-domain="domain"
                                     res-model="account.move.line"
@@ -620,10 +808,18 @@
                     <t t-if="balance['type'] == 'account_type'">
                         <t t-if="balance['currency_id']">
                             <div class="act_as_cell amount">
-                                <t
-                                    t-set="domain"
-                                    t-value="[('account_id', '=', balance['id'])]"
-                                />
+                                <t t-if="only_posted_moves">
+                                    <t
+                                        t-set="domain"
+                                        t-value="[('account_id', '=', balance['id']), ('parent_state', '=', 'posted')]"
+                                    />
+                                </t>
+                                <t t-else="">
+                                    <t
+                                        t-set="domain"
+                                        t-value="[('account_id', '=', balance['id'])]"
+                                    />
+                                </t>
                                 <span
                                     t-att-domain="domain"
                                     res-model="account.move.line"
@@ -652,11 +848,21 @@
                     <t t-if="total_amount[account_id]['currency_id']">
                         <div class="act_as_cell amount">
                             <t t-if="type == 'partner_type'">
-                                <t
-                                    t-set="domain"
-                                    t-value="[('account_id', '=', account_id),
+                                <t t-if="only_posted_moves">
+                                    <t
+                                        t-set="domain"
+                                        t-value="[('account_id', '=', account_id),
+                                            ('parent_state', '=', 'posted'),
                                             ('partner_id', '=', partner_id)]"
-                                />
+                                    />
+                                </t>
+                                <t t-else="">
+                                    <t
+                                        t-set="domain"
+                                        t-value="[('account_id', '=', account_id),
+                                            ('partner_id', '=', partner_id)]"
+                                    />
+                                </t>
                                 <span
                                     t-att-domain="domain"
                                     res-model="account.move.line"
