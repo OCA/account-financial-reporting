@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Copyright 2017-2020 Akretion France (http://www.akretion.com/)
+  @author: Alexis de Lattre <alexis.delattre@akretion.com>
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="view_bank_statement_form" model="ir.ui.view">
+        <field name="name">bank_rec_summary.account.bank.statement.form</field>
+        <field name="model">account.bank.statement</field>
+        <field name="inherit_id" ref="account.view_bank_statement_form" />
+        <field name="arch" type="xml">
+            <button name="check_confirm_bank" position="after">
+                <button
+                    name="%(bank_reconciliation_report_wizard_action)d"
+                    type="action"
+                    string="Bank Reconciliation Report"
+                    context="{'default_journal_ids': [journal_id]}"
+                />
+            </button>
+        </field>
+    </record>
+</odoo>

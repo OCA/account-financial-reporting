@@ -1,0 +1,216 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* account_bank_reconciliation_summary_xlsx
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-12-04 10:29+0000\n"
+"PO-Revision-Date: 2018-12-04 10:29+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:70
+#, python-format
+msgid "%s - Bank Reconciliation"
+msgstr "%s - Rapprochement bancaire"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: model:ir.ui.view,arch_db:account_bank_reconciliation_summary_xlsx.account_journal_dashboard_kanban_view
+msgid "<span>Report</span>"
+msgstr "<span>Rapport</span>"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:129
+#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:182
+#, python-format
+msgid "Amount"
+msgstr "Montant"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:92
+#, python-format
+msgid "Balance %s:"
+msgstr "Balance %s:"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: model:ir.model.fields,field_description:account_bank_reconciliation_summary_xlsx.field_bank_reconciliation_report_wizard_journal_ids
+msgid "Bank Journals"
+msgstr "Journaux de banque"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: model:ir.actions.act_window,name:account_bank_reconciliation_summary_xlsx.bank_reconciliation_report_wizard_action
+#: model:ir.ui.menu,name:account_bank_reconciliation_summary_xlsx.bank_reconciliation_report_wizard_menu
+#: model:ir.ui.view,arch_db:account_bank_reconciliation_summary_xlsx.account_journal_dashboard_kanban_view
+msgid "Bank Reconciliation"
+msgstr "Rapprochement bancaire"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: model:ir.ui.view,arch_db:account_bank_reconciliation_summary_xlsx.bank_reconciliation_report_wizard_form
+#: model:ir.ui.view,arch_db:account_bank_reconciliation_summary_xlsx.view_bank_statement_form
+msgid "Bank Reconciliation Report"
+msgstr "Rapport rapprochement bancaire"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: model:ir.model,name:account_bank_reconciliation_summary_xlsx.model_bank_reconciliation_report_wizard
+msgid "Bank Reconciliation Report Wizard"
+msgstr "Wizard raport rapprochement bancaire"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: model:ir.actions.report.xml,name:account_bank_reconciliation_summary_xlsx.bank_reconciliation_xlsx
+msgid "Bank Reconciliation XLSX"
+msgstr "Rapprochement bancaire XLSX"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: model:ir.ui.view,arch_db:account_bank_reconciliation_summary_xlsx.bank_reconciliation_report_wizard_form
+msgid "Cancel"
+msgstr "Annuler"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:210
+#, python-format
+msgid "Computed Bank Account Balance at the Bank:"
+msgstr "Solde théorique du compte bancaire :"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:130
+#, python-format
+msgid "Counter-part"
+msgstr "Contre partie"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: model:ir.model.fields,field_description:account_bank_reconciliation_summary_xlsx.field_bank_reconciliation_report_wizard_create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: model:ir.model.fields,field_description:account_bank_reconciliation_summary_xlsx.field_bank_reconciliation_report_wizard_create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:128
+#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:181
+#: model:ir.model.fields,field_description:account_bank_reconciliation_summary_xlsx.field_bank_reconciliation_report_wizard_date
+#, python-format
+msgid "Date"
+msgstr "Date "
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:83
+#, python-format
+msgid "Date:"
+msgstr "Date :"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: model:ir.model.fields,field_description:account_bank_reconciliation_summary_xlsx.field_bank_reconciliation_report_wizard_display_name
+msgid "Display Name"
+msgstr "Nom affiché"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:169
+#, python-format
+msgid "Draft bank statement lines:"
+msgstr "Lignes non validées du relevé bancaire :"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: model:ir.ui.view,arch_db:account_bank_reconciliation_summary_xlsx.bank_reconciliation_report_wizard_form
+msgid "Export XLSX"
+msgstr "Export XLSX"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: model:ir.model.fields,field_description:account_bank_reconciliation_summary_xlsx.field_bank_reconciliation_report_wizard_id
+msgid "ID"
+msgstr "ID"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: model:ir.model,name:account_bank_reconciliation_summary_xlsx.model_account_move_line
+msgid "Journal Item"
+msgstr "Écriture comptable"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:113
+#, python-format
+msgid "Journal items of account %s not linked to a bank statement line:"
+msgstr "Ecritures comptables du compte %s non liées à une ligne de relevé bancaire :"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:128
+#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:181
+#, python-format
+msgid "Label"
+msgstr "Libellé"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: model:ir.model.fields,field_description:account_bank_reconciliation_summary_xlsx.field_bank_reconciliation_report_wizard___last_update
+msgid "Last Modified on"
+msgstr "Dernière modification le"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: model:ir.model.fields,field_description:account_bank_reconciliation_summary_xlsx.field_bank_reconciliation_report_wizard_write_uid
+msgid "Last Updated by"
+msgstr "Mis à jour par"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: model:ir.model.fields,field_description:account_bank_reconciliation_summary_xlsx.field_bank_reconciliation_report_wizard_write_date
+msgid "Last Updated on"
+msgstr "Mis à jour le"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:129
+#, python-format
+msgid "Move Number"
+msgstr "Numéro de pièce"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:124
+#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:177
+#, python-format
+msgid "NONE"
+msgstr "Rien"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:215
+#, python-format
+msgid "No Bank Journal"
+msgstr "Pas de journal de banque"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:220
+#, python-format
+msgid "No bank journal selected. This report is only for bank journals."
+msgstr "Pas de journal de banque sélectionné. Ce rapport est uniquement pour les journaux de banque."
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:128
+#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:182
+#, python-format
+msgid "Partner"
+msgstr "Partenaire"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:128
+#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:181
+#, python-format
+msgid "Ref."
+msgstr "Ref."
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:129
+#: model:ir.model.fields,field_description:account_bank_reconciliation_summary_xlsx.field_account_move_line_statement_line_date
+#, python-format
+msgid "Statement Line Date"
+msgstr "Date ligne relevé"
+
+#. module: account_bank_reconciliation_summary_xlsx
+#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:182
+#, python-format
+msgid "Statement Ref."
+msgstr "Ref. relevé"
+
