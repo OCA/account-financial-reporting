@@ -244,6 +244,7 @@ class OpenItemsReport(models.AbstractModel):
         date_from = data["date_from"]
         only_posted_moves = data["only_posted_moves"]
         show_partner_details = data["show_partner_details"]
+        use_landscape = data["use_landscape"]
 
         (
             move_lines_data,
@@ -280,6 +281,7 @@ class OpenItemsReport(models.AbstractModel):
             "accounts_data": accounts_data,
             "total_amount": total_amount,
             "Open_Items": open_items_move_lines_data,
+            "use_landscape": use_landscape,
         }
 
     def _get_ml_fields(self):

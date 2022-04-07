@@ -53,6 +53,12 @@ class OpenItemsReportWizard(models.TransientModel):
         string="Show Partner Details",
         default=True,
     )
+    use_landscape = fields.Boolean(
+        string="Use landscape format",
+        help="Generate a report in landscape format. This is "
+        "sometimes better for legibility of the report.",
+        default=False,
+    )
     account_code_from = fields.Many2one(
         comodel_name="account.account",
         string="Account Code From",
@@ -149,6 +155,7 @@ class OpenItemsReportWizard(models.TransientModel):
                 [("report_name", "=", report_name), ("report_type", "=", report_type)],
                 limit=1,
             )
+            .with_context(landscape=self.use_landscape)
             .report_action(self, data=data)
         )
 
@@ -162,6 +169,7 @@ class OpenItemsReportWizard(models.TransientModel):
             "hide_account_at_0": self.hide_account_at_0,
             "foreign_currency": self.foreign_currency,
             "show_partner_details": self.show_partner_details,
+            "use_landscape": self.use_landscape,
             "company_id": self.company_id.id,
             "target_move": self.target_move,
             "account_ids": self.account_ids.ids,

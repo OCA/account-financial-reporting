@@ -23,6 +23,7 @@
                         <field name="show_partner_details" />
                         <field name="hide_account_at_0" />
                         <field name="foreign_currency" />
+                        <field name="use_landscape" />
                     </group>
                 </group>
                 <group name="partner_filter" col="1">
