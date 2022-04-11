@@ -46,15 +46,13 @@
                     <t t-foreach="trial_balance" t-as="balance">
                         <!-- Adapt -->
                         <t t-set="style" t-value="'font-size:12px;'" />
-                        <t t-if="show_hierarchy">
-                            <t t-if="limit_hierarchy_level">
+                        <t t-if="show_hierarchy and limit_hierarchy_level">
+                            <t
+                                t-if="show_hierarchy_level > balance['level'] and (not hide_parent_hierarchy_level or (show_hierarchy_level - 1) == balance['level'])"
+                            >
                                 <t
-                                    t-if="show_hierarchy_level > balance['level'] and (not hide_parent_hierarchy_level or (show_hierarchy_level - 1) == balance['level'])"
-                                >
-                                    <t
-                                        t-call="account_financial_report.report_trial_balance_line"
-                                    />
-                                </t>
+                                    t-call="account_financial_report.report_trial_balance_line"
+                                />
                             </t>
                         </t>
                         <t t-else="">

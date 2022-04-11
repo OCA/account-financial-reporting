@@ -544,7 +544,9 @@ class TrialBalanceReport(models.AbstractModel):
         account_group_relation = {}
         for account in accounts:
             accounts_data[account.id]["complete_code"] = (
-                account.group_id.complete_code if account.group_id.id else ""
+                account.group_id.complete_code + " / " + account.code
+                if account.group_id.id
+                else ""
             )
             if account.group_id.id:
                 if account.group_id.id not in account_group_relation.keys():
