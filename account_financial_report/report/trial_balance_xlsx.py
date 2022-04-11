@@ -188,6 +188,7 @@ class TrialBalanceXslx(models.AbstractModel):
         show_hierarchy_level = res_data["show_hierarchy_level"]
         foreign_currency = res_data["foreign_currency"]
         limit_hierarchy_level = res_data["limit_hierarchy_level"]
+        hide_parent_hierarchy_level = res_data["hide_parent_hierarchy_level"]
         if not show_partner_details:
             # Display array header for account lines
             self.write_array_header(report_data)
@@ -195,12 +196,12 @@ class TrialBalanceXslx(models.AbstractModel):
         # For each account
         if not show_partner_details:
             for balance in trial_balance:
-                if show_hierarchy:
-                    if limit_hierarchy_level:
-                        if show_hierarchy_level > balance["level"]:
-                            # Display account lines
-                            self.write_line_from_dict(balance, report_data)
-                    else:
+                if show_hierarchy and limit_hierarchy_level:
+                    if show_hierarchy_level > balance["level"] and (
+                        not hide_parent_hierarchy_level
+                        or (show_hierarchy_level - 1) == balance["level"]
+                    ):
+                        # Display account lines
                         self.write_line_from_dict(balance, report_data)
                 else:
                     self.write_line_from_dict(balance, report_data)
