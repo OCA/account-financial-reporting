@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-06-03 12:07+0000\n"
-"PO-Revision-Date: 2021-12-03 12:36+0000\n"
+"PO-Revision-Date: 2022-04-12 18:05+0000\n"
 "Last-Translator: Francesco Foresti <francesco.foresti@ooops404.com>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -321,9 +321,9 @@ msgstr "Importo val."
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
-#, fuzzy, python-format
+#, python-format
 msgid "Analytic Account"
-msgstr "Filtro conto"
+msgstr "Conto analitico"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
