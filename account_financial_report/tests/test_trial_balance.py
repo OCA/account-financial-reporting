@@ -3,9 +3,12 @@
 # Copyright 2020 ForgeFlow S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+from odoo.tests import tagged
+
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
+@tagged("post_install", "-at_install")
 class TestTrialBalanceReport(AccountTestInvoicingCommon):
     @classmethod
     def setUpClass(cls, chart_template_ref=None):
