@@ -612,16 +612,6 @@ AND
 AND
     rp.partner_id IS NULL
         """
-        if not only_empty_partner_line:
-            query_inject_move_line += """
-ORDER BY
-    a.code, p.name, ml.date, ml.id
-            """
-        elif only_empty_partner_line:
-            query_inject_move_line += """
-ORDER BY
-    a.code, ml.date, ml.id
-            """
         self.env.cr.execute(
             query_inject_move_line,
             (self.date_at,
