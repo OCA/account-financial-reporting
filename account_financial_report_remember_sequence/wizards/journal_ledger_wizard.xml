@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 Moduon
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<data>
+
+    <record id="wizard_model_view_form" model="ir.ui.view">
+        <field name="name">Add store_auto_sequence option</field>
+        <field name="model">journal.ledger.report.wizard</field>
+        <field name="inherit_id" ref="account_financial_report.journal_ledger_wizard" />
+        <field name="arch" type="xml">
+            <field name="with_auto_sequence" position="after">
+                <field
+                    name="store_auto_sequence"
+                    attrs="{'invisible': [('with_auto_sequence', '=', False)]}"
+                />
+            </field>
+        </field>
+    </record>
+
+</data>
