@@ -16,7 +16,8 @@
         "data/mis_report_subreport.xml",
         "views/mis_report_instance_views.xml",
         "views/templates.xml",
+        "views/generate_reports.xml",
     ],
     "qweb": ["static/src/xml/mis_template_financial_report.xml"],
-    "maintainers": ["hbrunn"],
+    "maintainers": ["hbrunn", "appstogrow"],
 }

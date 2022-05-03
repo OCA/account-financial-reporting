@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.actions.server" id="action_generate_reports">
+        <field name="name">Create detailed PL/BS</field>
+        <field name="model_id" ref="mis_builder.model_mis_report"/>
+        <field name="state">code</field>
+        <field name="code">model.generate_reports()</field>
+    </record>
+    <menuitem id="menu_generate_reports"
+                name="Create detailed PL/BS"
+                sequence="30"
+                parent="mis_builder.mis_report_conf_menu"
+                action="action_generate_reports"
+                />
+</odoo>
