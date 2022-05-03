@@ -1,0 +1,7 @@
+<odoo>
+    <record id="subreport_pl" model="mis.report.subreport">
+        <field name="report_id" ref="report_bs" />
+        <field name="subreport_id" ref="report_pl" />
+        <field name="name">subreport_pl</field>
+    </record>
+</odoo>
