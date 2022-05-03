@@ -12,6 +12,7 @@ setuptools.setup(
         'odoo13-addon-account_financial_report',
         'odoo13-addon-account_tax_balance',
         'odoo13-addon-mis_builder_cash_flow',
+        'odoo13-addon-mis_template_financial_report',
         'odoo13-addon-partner_statement',
     ],
     classifiers=[
