@@ -13,7 +13,7 @@
     "redCOR AG,"
     "ForgeFlow,"
     "Odoo Community Association (OCA)",
-    "website": "https://odoo-community.org/",
+    "website": "https://github.com/OCA/account-financial-reporting",
     "depends": ["account", "date_range", "report_xlsx"],
     "data": [
         "wizard/aged_partner_balance_wizard_view.xml",
