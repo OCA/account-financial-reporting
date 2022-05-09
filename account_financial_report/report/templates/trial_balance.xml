@@ -51,12 +51,22 @@
                         <t t-if="hierarchy_on == 'computed'">
                             <t t-if="balance['type'] == 'group_type'">
                                 <t
-                                    t-set="style"
-                                    t-value="style + 'font-weight: bold; color: blue;'"
-                                />
-                                <t
-                                    t-call="account_financial_report.report_trial_balance_line"
-                                />
+                                    t-if="not limit_hierarchy_level or (
+                                    show_hierarchy_level &gt;= balance['level'] and (
+                                    not hide_parent_hierarchy_level or show_hierarchy_level == balance['level']))"
+                                >
+                                    <t
+                                        t-if="not limit_hierarchy_level or show_hierarchy_level &gt; balance['level']"
+                                    >
+                                        <t
+                                            t-set="style"
+                                            t-value="style + 'font-weight: bold; color: blue;'"
+                                        />
+                                    </t>
+                                    <t
+                                        t-call="account_financial_report.report_trial_balance_line"
+                                    />
+                                </t>
                             </t>
                             <t t-if="balance['type'] == 'account_type'">
                                 <t
