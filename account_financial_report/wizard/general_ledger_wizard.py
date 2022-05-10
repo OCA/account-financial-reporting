@@ -112,7 +112,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
             start_range = int(self.account_code_from.code)
             end_range = int(self.account_code_to.code)
             self.account_ids = self.env["account.account"].search(
-                [("code", "in", [x for x in range(start_range, end_range + 1)])]
+                [("code", ">=", start_range), ("code", "<=", end_range)]
             )
             if self.company_id:
                 self.account_ids = self.account_ids.filtered(
