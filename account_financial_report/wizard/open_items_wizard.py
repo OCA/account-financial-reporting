@@ -76,7 +76,8 @@ class OpenItemsReportWizard(models.TransientModel):
             end_range = int(self.account_code_to.code)
             self.account_ids = self.env["account.account"].search(
                 [
-                    ("code", "in", [x for x in range(start_range, end_range + 1)]),
+                    ("code", ">=", start_range),
+                    ("code", "<=", end_range),
                     ("reconcile", "=", True),
                 ]
             )
