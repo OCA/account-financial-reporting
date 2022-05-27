@@ -498,59 +498,13 @@ class TrialBalanceReport(models.AbstractModel):
                 ] += pl_initial_currency_balance
         return total_amount, accounts_data, partners_data
 
-    def _get_hierarchy_groups(
-        self, group_ids, groups_data, old_groups_ids, foreign_currency
-    ):
-        new_parents = False
+    def _get_hierarchy_groups(self, group_ids, groups_data, foreign_currency):
         for group_id in group_ids:
-            if groups_data[group_id]["parent_id"]:
-                new_parents = True
-                nw_id = groups_data[group_id]["parent_id"]
-                if nw_id in groups_data.keys():
-                    groups_data[nw_id]["initial_balance"] += groups_data[group_id][
-                        "initial_balance"
-                    ]
-                    groups_data[nw_id]["debit"] += groups_data[group_id]["debit"]
-                    groups_data[nw_id]["credit"] += groups_data[group_id]["credit"]
-                    groups_data[nw_id]["balance"] += groups_data[group_id]["balance"]
-                    groups_data[nw_id]["ending_balance"] += groups_data[group_id][
-                        "ending_balance"
-                    ]
-                    if foreign_currency:
-                        groups_data[nw_id]["initial_currency_balance"] += groups_data[
-                            group_id
-                        ]["initial_currency_balance"]
-                        groups_data[nw_id]["ending_currency_balance"] += groups_data[
-                            group_id
-                        ]["ending_currency_balance"]
-                else:
-                    groups_data[nw_id] = {}
-                    groups_data[nw_id]["initial_balance"] = groups_data[group_id][
-                        "initial_balance"
-                    ]
-                    groups_data[nw_id]["debit"] = groups_data[group_id]["debit"]
-                    groups_data[nw_id]["credit"] = groups_data[group_id]["credit"]
-                    groups_data[nw_id]["balance"] = groups_data[group_id]["balance"]
-                    groups_data[nw_id]["ending_balance"] = groups_data[group_id][
-                        "ending_balance"
-                    ]
-                    if foreign_currency:
-                        groups_data[nw_id]["initial_currency_balance"] = groups_data[
-                            group_id
-                        ]["initial_currency_balance"]
-                        groups_data[nw_id]["ending_currency_balance"] = groups_data[
-                            group_id
-                        ]["ending_currency_balance"]
-        if new_parents:
-            nw_groups_ids = []
-            for group_id in list(groups_data.keys()):
-                if group_id not in old_groups_ids:
-                    nw_groups_ids.append(group_id)
-                    old_groups_ids.append(group_id)
-            groups = self.env["account.group"].browse(nw_groups_ids)
-            for group in groups:
-                groups_data[group.id].update(
-                    {
+            parent_id = groups_data[group_id]["parent_id"]
+            while parent_id:
+                if parent_id not in groups_data.keys():
+                    group = self.env["account.group"].browse(parent_id)
+                    groups_data[group.id] = {
                         "id": group.id,
                         "code": group.code_prefix_start,
                         "name": group.name,
@@ -559,11 +513,29 @@ class TrialBalanceReport(models.AbstractModel):
                         "complete_code": group.complete_code,
                         "account_ids": group.compute_account_ids.ids,
                         "type": "group_type",
+                        "initial_balance": 0,
+                        "debit": 0,
+                        "credit": 0,
+                        "balance": 0,
+                        "ending_balance": 0,
                     }
-                )
-            groups_data = self._get_hierarchy_groups(
-                nw_groups_ids, groups_data, old_groups_ids, foreign_currency
-            )
+                    if foreign_currency:
+                        groups_data[group.id].update(
+                            initial_currency_balance=0,
+                            ending_currency_balance=0,
+                        )
+                acc_keys = ["debit", "credit", "balance"]
+                acc_keys += ["initial_balance", "ending_balance"]
+                for acc_key in acc_keys:
+                    groups_data[parent_id][acc_key] += groups_data[group_id][acc_key]
+                if foreign_currency:
+                    groups_data[group_id]["initial_currency_balance"] += groups_data[
+                        group_id
+                    ]["initial_currency_balance"]
+                    groups_data[group_id]["ending_currency_balance"] += groups_data[
+                        group_id
+                    ]["ending_currency_balance"]
+                parent_id = groups_data[parent_id]["parent_id"]
         return groups_data
 
     def _get_groups_data(self, accounts_data, total_amount, foreign_currency):
@@ -623,9 +595,10 @@ class TrialBalanceReport(models.AbstractModel):
                         account_id
                     ]["ending_currency_balance"]
         group_ids = list(groups_data.keys())
-        old_group_ids = list(groups_data.keys())
         groups_data = self._get_hierarchy_groups(
-            group_ids, groups_data, old_group_ids, foreign_currency
+            group_ids,
+            groups_data,
+            foreign_currency,
         )
         return groups_data
 
