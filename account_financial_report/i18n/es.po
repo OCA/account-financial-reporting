@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-21 13:00+0000\n"
-"PO-Revision-Date: 2022-05-26 20:05+0000\n"
+"PO-Revision-Date: 2022-05-30 21:05+0000\n"
 "Last-Translator: Luis D. Lafaurie <luislafaurie@hotmail.com>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -51,7 +51,7 @@ msgstr "91 - 120 d."
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_taxes
 msgid "<b>Taxes summary</b>"
-msgstr "<b>Resumen de Impuestos</b>"
+msgstr "<b>Resumen de impuestos</b>"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
@@ -118,7 +118,7 @@ msgstr "Cuenta"
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__account_code_from
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__account_code_from
 msgid "Account Code From"
-msgstr "Código Cuenta Desde"
+msgstr "Código cuenta desde"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__account_code_to
@@ -126,7 +126,7 @@ msgstr "Código Cuenta Desde"
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__account_code_to
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__account_code_to
 msgid "Account Code To"
-msgstr "Código Cuenta Hasta"
+msgstr "Código cuenta hasta"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_group
@@ -144,7 +144,7 @@ msgstr "Cuenta"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 #, python-format
 msgid "Account at 0 filter"
-msgstr "Filtrar por Cuenta a 0"
+msgstr "Filtrar por cuenta a 0"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
@@ -153,7 +153,7 @@ msgstr "Filtrar por Cuenta a 0"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_filters
 #, python-format
 msgid "Account balance at 0 filter"
-msgstr "Balance de Cuenta en filtro 0"
+msgstr "Balance de cuenta en filtro 0"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__account_ids
@@ -238,12 +238,12 @@ msgstr "Tiempo ≤ 90 d."
 #: model:ir.ui.menu,name:account_financial_report.menu_aged_partner_balance_wizard
 #, python-format
 msgid "Aged Partner Balance"
-msgstr "Saldo vencidos de empresa"
+msgstr "Saldo vencido de empresa"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_base
 msgid "Aged Partner Balance -"
-msgstr "Balance Empresa Vencido"
+msgstr "Balance empresa vencido"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_aged_partner_balance
@@ -329,7 +329,7 @@ msgstr "Moneda de Total"
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
-#, python-format
+#, fuzzy, python-format
 msgid "Amount cur."
 msgstr "Total Act."
 
@@ -427,7 +427,7 @@ msgstr "Código"
 #: code:addons/account_financial_report/report/trial_balance.py:0
 #, python-format
 msgid "Code %s can not be related with any account group"
-msgstr "Código %s no pueden estar relacionados con algún grupo de cuentas"
+msgstr "Código %s no puede estar relacionado con algún grupo de cuentas"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
