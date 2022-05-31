@@ -662,7 +662,7 @@ class TrialBalanceReport(models.AbstractModel):
         date_to = data["date_to"]
         date_from = data["date_from"]
         hide_account_at_0 = data["hide_account_at_0"]
-        hierarchy_on = data["hierarchy_on"]
+        show_hierarchy = data["show_hierarchy"]
         show_hierarchy_level = data["show_hierarchy_level"]
         foreign_currency = data["foreign_currency"]
         only_posted_moves = data["only_posted_moves"]
@@ -706,7 +706,7 @@ class TrialBalanceReport(models.AbstractModel):
                             ],
                         }
                     )
-            if hierarchy_on == "relation":
+            if show_hierarchy:
                 groups_data = self._get_groups_data(
                     accounts_data, total_amount, foreign_currency
                 )
@@ -716,14 +716,7 @@ class TrialBalanceReport(models.AbstractModel):
                 for trial in trial_balance:
                     counter = trial["complete_code"].count("/")
                     trial["level"] = counter
-            if hierarchy_on == "computed":
-                groups_data = self._get_computed_groups_data(
-                    accounts_data, total_amount, foreign_currency
-                )
-                trial_balance = list(groups_data.values())
-                trial_balance += list(accounts_data.values())
-                trial_balance = sorted(trial_balance, key=lambda k: k["code"])
-            if hierarchy_on == "none":
+            else:
                 trial_balance = list(accounts_data.values())
                 trial_balance = sorted(trial_balance, key=lambda k: k["code"])
         else:
@@ -749,7 +742,8 @@ class TrialBalanceReport(models.AbstractModel):
             "hide_account_at_0": data["hide_account_at_0"],
             "show_partner_details": data["show_partner_details"],
             "limit_hierarchy_level": data["limit_hierarchy_level"],
-            "hierarchy_on": hierarchy_on,
+            "show_hierarchy": show_hierarchy,
+            "hide_parent_hierarchy_level": data["hide_parent_hierarchy_level"],
             "trial_balance": trial_balance,
             "total_amount": total_amount,
             "accounts_data": accounts_data,
