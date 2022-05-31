@@ -46,55 +46,21 @@
                     <t t-foreach="trial_balance" t-as="balance">
                         <!-- Adapt -->
                         <t t-set="style" t-value="'font-size:12px;'" />
-                        <t t-if="hierarchy_on == 'none'">
-                            <t
-                                t-call="account_financial_report.report_trial_balance_line"
-                            />
-                        </t>
-                        <t t-if="hierarchy_on == 'computed'">
-                            <t t-if="balance['type'] == 'group_type'">
+                        <t t-if="show_hierarchy">
+                            <t t-if="limit_hierarchy_level">
                                 <t
-                                    t-set="style"
-                                    t-value="style + 'font-weight: bold; color: blue;'"
-                                />
-                                <t
-                                    t-call="account_financial_report.report_trial_balance_line"
-                                />
-                            </t>
-                            <t t-if="balance['type'] == 'account_type'">
-                                <t
-                                    t-call="account_financial_report.report_trial_balance_line"
-                                />
-                            </t>
-                        </t>
-                        <!--                        <t t-set="padding" t-value="line.level * 4"/>-->
-                        <!--                        <t t-if="hierarchy_on != 'none'">-->
-                        <!--                            <t t-set="style" t-value="'font-size: ' + str(14 - line.level) + 'px; margin-left: ' + str(line.level * 4) + 'px;'"/>-->
-                        <!--                        </t>-->
-                        <t t-if="hierarchy_on == 'relation'">
-                            <t t-if="balance['type'] == 'group_type'">
-                                <t
-                                    t-set="style"
-                                    t-value="style + 'font-weight: bold; color: blue;'"
-                                />
-                                <t
-                                    t-call="account_financial_report.report_trial_balance_line"
-                                />
-                            </t>
-                            <t t-if="balance['type'] == 'account_type'">
-                                <t t-if="limit_hierarchy_level">
-                                    <t t-if="show_hierarchy_level > balance['level']">
-                                        <t
-                                            t-call="account_financial_report.report_trial_balance_line"
-                                        />
-                                    </t>
-                                </t>
-                                <t t-if="not limit_hierarchy_level">
+                                    t-if="show_hierarchy_level > balance['level'] and (not hide_parent_hierarchy_level or (show_hierarchy_level - 1) == balance['level'])"
+                                >
                                     <t
                                         t-call="account_financial_report.report_trial_balance_line"
                                     />
                                 </t>
                             </t>
+                        </t>
+                        <t t-else="">
+                            <t
+                                t-call="account_financial_report.report_trial_balance_line"
+                            />
                         </t>
                     </t>
                 </div>
