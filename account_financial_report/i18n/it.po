@@ -390,11 +390,6 @@ msgid "Centralized"
 msgstr "Centralizzato"
 
 #. module: account_financial_report
-#: model:ir.model.fields.selection,name:account_financial_report.selection__trial_balance_report_wizard__hierarchy_on__relation
-msgid "Child Accounts"
-msgstr "Conti figli"
-
-#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__group_child_ids
 msgid "Child Groups"
 msgstr "Gruppi figli"
@@ -425,32 +420,6 @@ msgstr "Azienda"
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__compute_account_ids
 msgid "Compute accounts"
 msgstr "Calcolare conti"
-
-#. module: account_financial_report
-#: model:ir.model.fields.selection,name:account_financial_report.selection__trial_balance_report_wizard__hierarchy_on__computed
-msgid "Computed Accounts"
-msgstr "Conti calcolati"
-
-#. module: account_financial_report
-#: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__hierarchy_on
-msgid ""
-"Computed Accounts: Use when the account group have codes\n"
-"        that represent prefixes of the actual accounts.\n"
-"\n"
-"        Child Accounts: Use when your account groups are hierarchical.\n"
-"\n"
-"        No hierarchy: Use to display just the accounts, without any "
-"grouping.\n"
-"        "
-msgstr ""
-"Conti calcolati: utilizzato quando i gruppi di conti hanno codici\n"
-"        che rappresentano il prefisso dei conti effettivi.\n"
-"\n"
-"        Conti figli: utilizzato quando i gruppi di conti sono gerarchici.\n"
-"\n"
-"        Nessuna gerarchia: utilizzato per visualizzare solo i conti, senza "
-"alcun raggruppo.\n"
-"        "
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__create_uid
@@ -956,11 +925,6 @@ msgid "Hierarchy Levels to display"
 msgstr "Livelli da mostrare"
 
 #. module: account_financial_report
-#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__hierarchy_on
-msgid "Hierarchy On"
-msgstr "Gerarchia su"
-
-#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__id
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__id
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__id
@@ -1160,11 +1124,6 @@ msgstr ""
 #, python-format
 msgid "No group"
 msgstr ""
-
-#. module: account_financial_report
-#: model:ir.model.fields.selection,name:account_financial_report.selection__trial_balance_report_wizard__hierarchy_on__none
-msgid "No hierarchy"
-msgstr "Nessuna gerarchia"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
@@ -1480,6 +1439,11 @@ msgid "Show foreign currency"
 msgstr "Mostrare valuta estera"
 
 #. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__show_hierarchy
+msgid "Show hierarchy"
+msgstr ""
+
+#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__sort_option
 msgid "Sort entries by"
 msgstr "Ordina registrazioni per"
@@ -1713,6 +1677,11 @@ msgid ""
 msgstr ""
 
 #. module: account_financial_report
+#: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__show_hierarchy
+msgid "Use when your account groups are hierarchical"
+msgstr ""
+
+#. module: account_financial_report
 #: model:ir.actions.act_window,name:account_financial_report.action_vat_report_wizard
 #: model:ir.actions.report,name:account_financial_report.action_print_report_vat_report_html
 #: model:ir.actions.report,name:account_financial_report.action_print_report_vat_report_qweb
@@ -1844,6 +1813,38 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 8.11%;"
 msgstr ""
+
+#~ msgid "Child Accounts"
+#~ msgstr "Conti figli"
+
+#~ msgid "Computed Accounts"
+#~ msgstr "Conti calcolati"
+
+#~ msgid ""
+#~ "Computed Accounts: Use when the account group have codes\n"
+#~ "        that represent prefixes of the actual accounts.\n"
+#~ "\n"
+#~ "        Child Accounts: Use when your account groups are hierarchical.\n"
+#~ "\n"
+#~ "        No hierarchy: Use to display just the accounts, without any "
+#~ "grouping.\n"
+#~ "        "
+#~ msgstr ""
+#~ "Conti calcolati: utilizzato quando i gruppi di conti hanno codici\n"
+#~ "        che rappresentano il prefisso dei conti effettivi.\n"
+#~ "\n"
+#~ "        Conti figli: utilizzato quando i gruppi di conti sono "
+#~ "gerarchici.\n"
+#~ "\n"
+#~ "        Nessuna gerarchia: utilizzato per visualizzare solo i conti, "
+#~ "senza alcun raggruppo.\n"
+#~ "        "
+
+#~ msgid "Hierarchy On"
+#~ msgstr "Gerarchia su"
+
+#~ msgid "No hierarchy"
+#~ msgstr "Nessuna gerarchia"
 
 #~ msgid "From: %s To: %s"
 #~ msgstr "Da: %s A: %s"
