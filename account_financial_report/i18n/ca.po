@@ -1709,7 +1709,7 @@ msgstr "Sense límit"
 #: code:addons/account_financial_report/report/general_ledger.py:776
 #: code:addons/account_financial_report/report/general_ledger.py:1155
 #: code:addons/account_financial_report/report/open_items.py:307
-#: code:addons/account_financial_report/report/open_items.py:556
+#: code:addons/account_financial_report/report/open_items.py:560
 #, python-format
 msgid "No partner allocated"
 msgstr "Empresa sense assignar"
