@@ -394,6 +394,9 @@ FROM
                 ) AS partial_amount_currency,
                 ml.currency_id
             FROM
+        """
+        if not only_empty_partner_line:
+            sub_query += """
                 report_open_items_partner rp
             INNER JOIN
                 report_open_items_account ra
@@ -401,13 +404,14 @@ FROM
             INNER JOIN
                 account_move_line ml
                     ON ra.account_id = ml.account_id
-        """
-        if not only_empty_partner_line:
-            sub_query += """
                     AND rp.partner_id = ml.partner_id
             """
         elif only_empty_partner_line:
             sub_query += """
+                report_open_items_account ra
+            INNER JOIN
+                account_move_line ml
+                    ON ra.account_id = ml.account_id
                     AND ml.partner_id IS NULL
             """
         if not positive_balance:
@@ -608,16 +612,6 @@ AND
 AND
     rp.partner_id IS NULL
         """
-        if not only_empty_partner_line:
-            query_inject_move_line += """
-ORDER BY
-    a.code, p.name, ml.date, ml.id
-            """
-        elif only_empty_partner_line:
-            query_inject_move_line += """
-ORDER BY
-    a.code, ml.date, ml.id
-            """
         self.env.cr.execute(
             query_inject_move_line,
             (self.date_at,
