@@ -1,6 +1,7 @@
 # © 2016 Julien Coux (Camptocamp)
 # © 2018 Forest and Biomass Romania SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+# pylint: disable=no-member
 
 from odoo import models, fields, api
 from odoo.tools import float_is_zero
@@ -482,12 +483,8 @@ WHERE report_trial_balance_account.account_group_id = computed.account_group_id
 
     def _add_account_group_account_values(self):
         """Compute values for report_trial_balance_account group in child."""
+        self._make_array_concat_agg()
         query_update_account_group = """
-DROP AGGREGATE IF EXISTS array_concat_agg(anycompatiblearray);
-CREATE AGGREGATE array_concat_agg(anycompatiblearray) (
-  SFUNC = array_cat,
-  STYPE = anycompatiblearray
-);
 WITH aggr AS(WITH computed AS (WITH RECURSIVE cte AS (
    SELECT account_group_id, account_group_id AS parent_id,
     ARRAY[account_id]::int[] as child_account_ids
@@ -520,6 +517,36 @@ WHERE report_trial_balance_account.account_group_id = aggr.account_group_id
         query_update_account_params = (self.id, self.id, self.id,)
         self.env.cr.execute(query_update_account_group,
                             query_update_account_params)
+
+    def _make_array_concat_agg(self):
+        """Make array aggregate depending on postgres version."""
+        postgres_version = self._get_major_postgres_version()
+        if postgres_version >= 14:
+            make_statement = """
+DROP AGGREGATE IF EXISTS array_concat_agg(anycompatiblearray);
+CREATE AGGREGATE array_concat_agg(anycompatiblearray) (
+  SFUNC = array_cat,
+  STYPE = anycompatiblearray
+);
+"""
+        else:
+            make_statement = """
+DROP AGGREGATE IF EXISTS array_concat_agg(anyarray);
+CREATE AGGREGATE array_concat_agg(anyarray) (
+  SFUNC = array_cat,
+  STYPE = anyarray
+);
+"""
+        self.env.cr.execute(make_statement)
+
+    def _get_major_postgres_version(self):
+        """Get major postgres version, for version dependent functions."""
+        try:
+            self.env.cr.execute("SELECT current_setting('server_version_num')")
+            resultset = self.env.cr.fetchone()
+            return int(resultset[0]) // 10000  # Resultset looks like: ("140003", )
+        except Exception:  # pylint: disable=broad-except
+            return 10
 
     def _update_account_group_computed_values(self):
         """Compute values for report_trial_balance_account group in compute."""
