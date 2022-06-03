@@ -26,20 +26,9 @@ class TrialBalanceReportWizard(models.TransientModel):
         required=True,
         default="posted",
     )
-    hierarchy_on = fields.Selection(
-        [
-            ("computed", "Computed Accounts"),
-            ("relation", "Child Accounts"),
-            ("none", "No hierarchy"),
-        ],
-        string="Hierarchy On",
-        required=True,
-        default="none",
-        help="""Computed Accounts: Use when the account group have codes
-        that represent prefixes of the actual accounts.\n
-        Child Accounts: Use when your account groups are hierarchical.\n
-        No hierarchy: Use to display just the accounts, without any grouping.
-        """,
+    show_hierarchy = fields.Boolean(
+        string="Show hierarchy",
+        help="Use when your account groups are hierarchical",
     )
     limit_hierarchy_level = fields.Boolean("Limit hierarchy levels")
     show_hierarchy_level = fields.Integer("Hierarchy Levels to display", default=1)
@@ -101,12 +90,12 @@ class TrialBalanceReportWizard(models.TransientModel):
                     lambda a: a.company_id == self.company_id
                 )
 
-    @api.constrains("hierarchy_on", "show_hierarchy_level")
+    @api.constrains("show_hierarchy", "show_hierarchy_level")
     def _check_show_hierarchy_level(self):
         for rec in self:
-            if rec.hierarchy_on != "none" and rec.show_hierarchy_level <= 0:
+            if rec.show_hierarchy and rec.show_hierarchy_level <= 0:
                 raise UserError(
-                    _("The hierarchy level to filter on must be " "greater than 0.")
+                    _("The hierarchy level to filter on must be greater than 0.")
                 )
 
     @api.depends("date_from")
@@ -266,7 +255,7 @@ class TrialBalanceReportWizard(models.TransientModel):
             "partner_ids": self.partner_ids.ids or [],
             "journal_ids": self.journal_ids.ids or [],
             "fy_start_date": self.fy_start_date,
-            "hierarchy_on": self.hierarchy_on,
+            "show_hierarchy": self.show_hierarchy,
             "limit_hierarchy_level": self.limit_hierarchy_level,
             "show_hierarchy_level": self.show_hierarchy_level,
             "hide_parent_hierarchy_level": self.hide_parent_hierarchy_level,
