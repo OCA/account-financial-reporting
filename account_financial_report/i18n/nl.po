@@ -393,11 +393,6 @@ msgid "Centralized"
 msgstr "Gecentraliseerd"
 
 #. module: account_financial_report
-#: model:ir.model.fields.selection,name:account_financial_report.selection__trial_balance_report_wizard__hierarchy_on__relation
-msgid "Child Accounts"
-msgstr "Onderliggende rekeningen"
-
-#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__group_child_ids
 msgid "Child Groups"
 msgstr "Onderliggende groepen"
@@ -429,24 +424,6 @@ msgstr "Bedrijf"
 #, fuzzy
 msgid "Compute accounts"
 msgstr "Berekende rekeningen"
-
-#. module: account_financial_report
-#: model:ir.model.fields.selection,name:account_financial_report.selection__trial_balance_report_wizard__hierarchy_on__computed
-msgid "Computed Accounts"
-msgstr "Berekende rekeningen"
-
-#. module: account_financial_report
-#: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__hierarchy_on
-msgid ""
-"Computed Accounts: Use when the account group have codes\n"
-"        that represent prefixes of the actual accounts.\n"
-"\n"
-"        Child Accounts: Use when your account groups are hierarchical.\n"
-"\n"
-"        No hierarchy: Use to display just the accounts, without any "
-"grouping.\n"
-"        "
-msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__create_uid
@@ -966,11 +943,6 @@ msgid "Hierarchy Levels to display"
 msgstr "Hierarchie niveaus om weer te geven"
 
 #. module: account_financial_report
-#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__hierarchy_on
-msgid "Hierarchy On"
-msgstr "Hiërarchie aan"
-
-#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_account__id
 #: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract_wizard__id
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__id
@@ -1214,11 +1186,6 @@ msgstr "Nee"
 #, python-format
 msgid "No group"
 msgstr "Geen groep"
-
-#. module: account_financial_report
-#: model:ir.model.fields.selection,name:account_financial_report.selection__trial_balance_report_wizard__hierarchy_on__none
-msgid "No hierarchy"
-msgstr "Geen Hiërarchie"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
@@ -1516,6 +1483,11 @@ msgid "Show foreign currency"
 msgstr "Toon buitenlandse valuta"
 
 #. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__show_hierarchy
+msgid "Show hierarchy"
+msgstr ""
+
+#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__sort_option
 msgid "Sort entries by"
 msgstr "Sorteer boekingen op"
@@ -1736,6 +1708,11 @@ msgstr ""
 "niet overeen met de proefbalans."
 
 #. module: account_financial_report
+#: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__show_hierarchy
+msgid "Use when your account groups are hierarchical"
+msgstr ""
+
+#. module: account_financial_report
 #: model:ir.actions.act_window,name:account_financial_report.action_vat_report_wizard
 #: model:ir.actions.report,name:account_financial_report.action_print_report_vat_report_html
 #: model:ir.actions.report,name:account_financial_report.action_print_report_vat_report_qweb
@@ -1872,6 +1849,18 @@ msgstr "breedte: 38.92%;"
 #, fuzzy
 msgid "width: 8.11%;"
 msgstr "breedte: 8.11%;"
+
+#~ msgid "Child Accounts"
+#~ msgstr "Onderliggende rekeningen"
+
+#~ msgid "Computed Accounts"
+#~ msgstr "Berekende rekeningen"
+
+#~ msgid "Hierarchy On"
+#~ msgstr "Hiërarchie aan"
+
+#~ msgid "No hierarchy"
+#~ msgstr "Geen Hiërarchie"
 
 #~ msgid "<span class=\"fa fa-download\"/> Export"
 #~ msgstr "Exporteren"
