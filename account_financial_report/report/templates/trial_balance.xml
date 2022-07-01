@@ -75,7 +75,7 @@
                             <t t-if="balance['type'] == 'group_type'">
                                 <t
                                     t-set="style"
-                                    t-value="style + 'font-weight: bold; color: blue;'"
+                                    t-value="style + ' font-weight: bold;'"
                                 />
                                 <t
                                     t-call="account_financial_report.report_trial_balance_line"
@@ -256,30 +256,31 @@
                     </div>
                 </t>
                 <t t-if="balance['type'] == 'group_type'">
-                    <div class="act_as_cell left">
+
+                    <div class="act_as_cell left" t-att-style="style">
                         <t t-set="res_model" t-value="'account.group'" />
                         <span
                             t-att-res-id="balance['id']"
                             res-model="account.group"
                             view-type="form"
                         >
-                            <t t-att-style="style" t-raw="balance['code']" />
+                            <t t-raw="balance['code']" />
                         </span>
                     </div>
-                    <div class="act_as_cell left">
+                    <div class="act_as_cell left" t-att-style="style">
                         <t t-set="res_model" t-value="'account.group'" />
                         <span
                             t-att-res-id="balance['id']"
                             res-model="account.group"
                             view-type="form"
                         >
-                            <t t-att-style="style" t-esc="balance['name']" />
+                            <t t-esc="balance['name']" />
                         </span>
                     </div>
                 </t>
             </t>
             <t t-if="show_partner_details">
-                <div class="act_as_cell left">
+                <div class="act_as_cell left" t-att-style="style">
                     <t t-set="res_model" t-value="'res.partner'" />
                     <span
                         t-att-res-id="partner_id"
@@ -294,7 +295,7 @@
                 </div>
             </t>
             <!--## Initial balance-->
-            <div class="act_as_cell amount">
+            <div class="act_as_cell amount" t-att-style="style">>
                 <t t-if="not show_partner_details">
                     <t t-if="balance['type'] == 'account_type'">
                         <t
@@ -304,7 +305,6 @@
                         />
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
-                                t-att-style="style"
                                 t-esc="balance['initial_balance']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
@@ -318,7 +318,6 @@
                         />
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
-                                t-att-style="style"
                                 t-raw="balance['initial_balance']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
@@ -342,7 +341,7 @@
                 </t>
             </div>
             <!--## Debit-->
-            <div class="act_as_cell amount">
+            <div class="act_as_cell amount" t-att-style="style">>
                 <t t-if="not show_partner_details">
                     <t t-if="balance['type'] == 'account_type'">
                         <t
@@ -354,7 +353,6 @@
                         />
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
-                                t-att-style="style"
                                 t-esc="balance['debit']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
@@ -396,7 +394,7 @@
                 </t>
             </div>
             <!--            &lt;!&ndash;## Credit&ndash;&gt;-->
-            <div class="act_as_cell amount">
+            <div class="act_as_cell amount" t-att-style="style">>
                 <t t-if="not show_partner_details">
                     <t t-if="balance['type'] == 'account_type'">
                         <t
@@ -408,7 +406,6 @@
                         />
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
-                                t-att-style="style"
                                 t-esc="balance['credit']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
@@ -450,7 +447,7 @@
                 </t>
             </div>
             <!--            &lt;!&ndash;## Period balance&ndash;&gt;-->
-            <div class="act_as_cell amount">
+            <div class="act_as_cell amount" t-att-style="style">>
                 <t t-if="not show_partner_details">
                     <t t-if="balance['type'] == 'account_type'">
                         <t
@@ -462,7 +459,6 @@
                         />
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
-                                t-att-style="style"
                                 t-esc="balance['balance']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
@@ -503,7 +499,7 @@
                 </t>
             </div>
             <!--            &lt;!&ndash;## Ending balance&ndash;&gt;-->
-            <div class="act_as_cell amount">
+            <div class="act_as_cell amount" t-att-style="style">>
                 <t t-if="not show_partner_details">
                     <t t-if="balance['type'] == 'account_type'">
                         <t
@@ -513,7 +509,6 @@
                         />
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
-                                t-att-style="style"
                                 t-esc="balance['ending_balance']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
