@@ -295,7 +295,7 @@
                 </div>
             </t>
             <!--## Initial balance-->
-            <div class="act_as_cell amount" t-att-style="style">>
+            <div class="act_as_cell amount" t-att-style="style">
                 <t t-if="not show_partner_details">
                     <t t-if="balance['type'] == 'account_type'">
                         <t
