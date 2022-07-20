@@ -2,9 +2,12 @@
 # Copyright 2016 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+from odoo.tests import tagged
+
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
+@tagged("post_install", "-at_install")
 class TestOpenItems(AccountTestInvoicingCommon):
     @classmethod
     def setUpClass(cls, chart_template_ref=None):
