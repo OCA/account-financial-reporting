@@ -7,10 +7,12 @@ import time
 from datetime import date
 
 from odoo import api, fields
+from odoo.tests import tagged
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
+@tagged("post_install", "-at_install")
 class TestGeneralLedgerReport(AccountTestInvoicingCommon):
     @classmethod
     def setUpClass(cls, chart_template_ref=None):
