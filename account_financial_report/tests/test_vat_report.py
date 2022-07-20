@@ -6,11 +6,13 @@ import time
 from datetime import date
 
 from odoo import fields
+from odoo.tests import tagged
 from odoo.tests.common import Form
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
+@tagged("post_install", "-at_install")
 class TestVATReport(AccountTestInvoicingCommon):
     @classmethod
     def init_invoice(

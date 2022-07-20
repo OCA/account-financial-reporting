@@ -7,11 +7,13 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 from odoo.fields import Date
+from odoo.tests import tagged
 from odoo.tests.common import Form
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
+@tagged("post_install", "-at_install")
 class TestJournalReport(AccountTestInvoicingCommon):
     @classmethod
     def setUpClass(cls, chart_template_ref=None):
