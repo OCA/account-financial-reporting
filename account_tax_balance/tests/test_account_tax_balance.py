@@ -265,6 +265,7 @@ class TestAccountTaxBalance(HttpCase):
         self.assertEqual(tax.balance, 17.5)
 
 
+@odoo.tests.tagged("post_install", "-at_install")
 class TestInvoicingBalance(AccountTestInvoicingCommon):
     def test_balance_recomputation(self):
         """Check that balances are computed correctly for different dates."""
