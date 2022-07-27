@@ -34,7 +34,7 @@
                             />
                             <field
                                 name="limit_hierarchy_level"
-                                attrs="{'invisible':['|', ('hierarchy_on','in',['none', 'computed']),('show_partner_details','=',True)]}"
+                                attrs="{'invisible':['|', ('hierarchy_on','=','none'),('show_partner_details','=',True)]}"
                             />
                             <field
                                 name="show_hierarchy_level"

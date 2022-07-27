@@ -8,9 +8,11 @@ setuptools.setup(
     description="Meta package for oca-account-financial-reporting Odoo addons",
     version=version,
     install_requires=[
+        'odoo13-addon-account_bank_reconciliation_summary_xlsx',
         'odoo13-addon-account_financial_report',
         'odoo13-addon-account_tax_balance',
         'odoo13-addon-mis_builder_cash_flow',
+        'odoo13-addon-mis_template_financial_report',
         'odoo13-addon-partner_statement',
     ],
     classifiers=[

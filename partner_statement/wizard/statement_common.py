@@ -56,10 +56,6 @@ class StatementCommon(models.AbstractModel):
         else:
             self.date_end = fields.Date.context_today(self)
 
-    def button_export_pdf(self):
-        self.ensure_one()
-        return self._export()
-
     def _prepare_statement(self):
         self.ensure_one()
         return {
@@ -73,5 +69,17 @@ class StatementCommon(models.AbstractModel):
             "filter_negative_balances": self.filter_negative_balances,
         }
 
-    def _export(self):
-        raise NotImplementedError
+    def button_export_html(self):
+        self.ensure_one()
+        report_type = "qweb-html"
+        return self._export(report_type)
+
+    def button_export_pdf(self):
+        self.ensure_one()
+        report_type = "qweb-pdf"
+        return self._export(report_type)
+
+    def button_export_xlsx(self):
+        self.ensure_one()
+        report_type = "xlsx"
+        return self._export(report_type)

@@ -1,0 +1,58 @@
+<odoo>
+    <template id="assets_backend" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link
+                rel="stylesheet"
+                href="/mis_template_financial_report/static/src/css/mis_template_financial_report.css"
+            />
+        </xpath>
+    </template>
+    <template id="report_assets_common" inherit_id="web.report_assets_common">
+        <xpath expr="." position="inside">
+            <link
+                rel="stylesheet"
+                href="/mis_template_financial_report/static/src/css/report.css"
+            />
+        </xpath>
+    </template>
+    <template
+        id="report_mis_report_instance"
+        inherit_id="mis_builder.report_mis_report_instance"
+    >
+        <xpath expr="//div[hasclass('mis_table')]" position="attributes">
+            <attribute name="t-if">not o.horizontal</attribute>
+        </xpath>
+        <!-- the following is a somewhat convoluted way to duplicate the table /-->
+        <xpath expr="//div[hasclass('mis_table')]" position="replace">
+            <t t-marker="unwrap">$0</t>
+            <t t-marker="wrap_in_table">$0</t>
+        </xpath>
+        <xpath expr="//t[@t-marker='unwrap']" position="before">
+            <xpath
+                expr="//t[@t-marker='unwrap']/div[hasclass('mis_table')]"
+                position="move"
+            />
+        </xpath>
+        <xpath expr="//t[@t-marker='unwrap']" position="replace" />
+        <xpath expr="//t[@t-marker='wrap_in_table']" position="after">
+            <div t-if="o.horizontal" class="mis_builder_horizontal">
+                <div>
+                    <div t-foreach="o._compute_horizontal_matrices()" t-as="matrix" />
+                </div>
+            </div>
+        </xpath>
+        <xpath
+            expr="//div[hasclass('mis_builder_horizontal')]/div/div"
+            position="inside"
+        >
+            <xpath expr="//t[@t-marker='wrap_in_table']/div" position="move" />
+        </xpath>
+        <xpath expr="//t[@t-marker='wrap_in_table']" position="replace" />
+        <xpath
+            expr="//div[hasclass('mis_builder_horizontal')]//div[hasclass('mis_table')]"
+            position="attributes"
+        >
+            <attribute name="t-if" />
+        </xpath>
+    </template>
+</odoo>

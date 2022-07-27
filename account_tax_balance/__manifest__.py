@@ -6,9 +6,10 @@
 {
     "name": "Tax Balance",
     "summary": "Compute tax balances based on date range",
-    "version": "13.0.1.0.1",
+    "version": "13.0.1.0.3",
     "category": "Invoices & Payments",
     "website": "https://github.com/OCA/account-financial-reporting",
+    "development_status": "Mature",
     "author": "Agile Business Group, Therp BV, Tecnativa, ACSONE SA/NV, "
     "Odoo Community Association (OCA)",
     "license": "AGPL-3",

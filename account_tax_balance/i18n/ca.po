@@ -9,27 +9,27 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-28 10:11+0000\n"
-"PO-Revision-Date: 2019-05-27 13:19+0000\n"
-"Last-Translator: Jaume Planas <jplanas@itberga.com>\n"
+"PO-Revision-Date: 2021-11-16 22:36+0000\n"
+"Last-Translator: pere-aquarian <pere@aquarian.tech>\n"
 "Language-Team: Catalan (https://www.transifex.com/oca/teams/23907/ca/)\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.6.1\n"
+"X-Generator: Weblate 4.3.2\n"
 
 #. module: account_tax_balance
 #: code:addons/account_tax_balance/wizard/open_tax_balances.py:0
 #, python-format
 msgid "%(name)s: %(target)s from %(from)s to %(to)s"
-msgstr ""
+msgstr "%(name)s: %(target)s des de %(from)s a %(to)s"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "Account Tax"
-msgstr ""
+msgstr "Compte d'impost"
 
 #. module: account_tax_balance
 #: model:ir.model.fields.selection,name:account_tax_balance.selection__wizard_open_tax_balances__target_move__all
@@ -44,22 +44,22 @@ msgstr "Tots els apunts tancats"
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__balance_regular
 msgid "Balance"
-msgstr "Balanç "
+msgstr "Saldo"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__balance_refund
 msgid "Balance Refund"
-msgstr ""
+msgstr "Quota de devolucions"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__base_balance_regular
 msgid "Base Balance"
-msgstr ""
+msgstr "Base"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__base_balance_refund
 msgid "Base Balance Refund"
-msgstr ""
+msgstr "Base de devolucions"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
@@ -69,38 +69,35 @@ msgstr "Total base"
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "Cancel"
-msgstr "Cancel·lar "
+msgstr "Cancel·lar"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__company_ids
-#, fuzzy
 msgid "Companies"
-msgstr "Empresa "
+msgstr "Companyies"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__create_uid
 msgid "Created by"
-msgstr "Creat per "
+msgstr "Creat per"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__create_date
 msgid "Created on"
-msgstr "Creat a "
+msgstr "Creat el"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__date_range_id
-#, fuzzy
 msgid "Date Range"
-msgstr "Interval de dates"
+msgstr "Període"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__display_name
 msgid "Display Name"
-msgstr "Nom a mostrar "
+msgstr "Nom a mostrar"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__from_date
-#, fuzzy
 msgid "From Date"
 msgstr "Des de la data"
 
@@ -112,7 +109,7 @@ msgstr "Agrupat per"
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__has_moves
 msgid "Has balance in period"
-msgstr ""
+msgstr "Té saldo en període"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__id
@@ -132,17 +129,17 @@ msgstr "Apunt comptable"
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances____last_update
 msgid "Last Modified on"
-msgstr "Última modificació a "
+msgstr "Última modificació el"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__write_uid
 msgid "Last Updated by"
-msgstr "Última actualització per "
+msgstr "Última actualització per"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__write_date
 msgid "Last Updated on"
-msgstr "Última actualització a "
+msgstr "Última actualització el"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_move__move_type
@@ -192,12 +189,12 @@ msgstr "Abast impostos"
 #: model:ir.ui.menu,name:account_tax_balance.menu_tax_balances
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "Taxes Balance"
-msgstr ""
+msgstr "Taula dimpostos"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__to_date
 msgid "To Date"
-msgstr ""
+msgstr "A data"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
@@ -207,12 +204,12 @@ msgstr "Total"
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__balance
 msgid "Total Balance"
-msgstr ""
+msgstr "Total quota"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__base_balance
 msgid "Total Base Balance"
-msgstr ""
+msgstr "Total base imposable"
 
 #. module: account_tax_balance
 #: code:addons/account_tax_balance/models/account_tax.py:0
@@ -223,37 +220,37 @@ msgstr "Operador de cerca no admès"
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "View base lines"
-msgstr ""
+msgstr "Veure línies de base imposable"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "View base refund lines"
-msgstr ""
+msgstr "Veure les línies de la base imposable de la devolució"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "View base regular lines"
-msgstr ""
+msgstr "Veure les línies de la base imposable de les operacions corrents"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "View tax lines"
-msgstr ""
+msgstr "Veure línies de quota"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "View tax refund lines"
-msgstr ""
+msgstr "Veure línies de quota de devolucions"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "View tax regular lines"
-msgstr ""
+msgstr "Veure línies de quota d'operacions corrents"
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_wizard_open_tax_balances
 msgid "Wizard Open Tax Balances"
-msgstr ""
+msgstr "Assistent Apertura de balanç d'impostos"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
