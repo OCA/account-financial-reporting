@@ -18,9 +18,8 @@ msgstr ""
 
 #. module: account_bank_reconciliation_summary_xlsx
 #: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:0
-#, fuzzy, python-format
 msgid "%s - %s - Bank Reconciliation"
-msgstr "%s - Rapprochement bancaire"
+msgstr "%s - %s - Rapprochement bancaire"
 
 #. module: account_bank_reconciliation_summary_xlsx
 #: model:ir.actions.report,print_report_name:account_bank_reconciliation_summary_xlsx.bank_reconciliation_xlsx

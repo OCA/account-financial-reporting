@@ -4,7 +4,7 @@
 
 {
     "name": "Bank Reconciliation Report",
-    "version": "13.0.1.0.0",
+    "version": "13.0.1.0.1",
     "license": "AGPL-3",
     "author": "Akretion,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/account-financial-reporting",
