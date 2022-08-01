@@ -27,7 +27,7 @@ Available addons
 ----------------
 addon | version | maintainers | summary
 --- | --- | --- | ---
-[account_bank_reconciliation_summary_xlsx](account_bank_reconciliation_summary_xlsx/) | 13.0.1.0.0 |  | XLSX report to help on bank reconciliation
+[account_bank_reconciliation_summary_xlsx](account_bank_reconciliation_summary_xlsx/) | 13.0.1.0.1 |  | XLSX report to help on bank reconciliation
 [account_financial_report](account_financial_report/) | 13.0.1.9.2 |  | OCA Financial Reports
 [account_tax_balance](account_tax_balance/) | 13.0.1.0.3 |  | Compute tax balances based on date range
 [mis_builder_cash_flow](mis_builder_cash_flow/) | 13.0.1.1.1 | [![jjscarafia](https://github.com/jjscarafia.png?size=30px)](https://github.com/jjscarafia) | MIS Builder Cash Flow
