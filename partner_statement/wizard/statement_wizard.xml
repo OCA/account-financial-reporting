@@ -44,6 +44,7 @@
                         />
                         <label for="account_type" />
                         <field name="account_type" nolabel="1" widget="radio" />
+                        <field name="email_customer"/>
                     </group>
                     <group name="aging_report">
                         <field name="show_aging_buckets" />

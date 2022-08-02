@@ -171,6 +171,16 @@
         file="partner_statement.activity_statement"
     />
     <report
+        id="action_print_activity_statement_a"
+        model="res.partner"
+        report_type="qweb-pdf"
+        attachment_use="True"
+        menu="False"
+        string="Activity Statement"
+        name="partner_statement.activity_statement_a"
+        file="partner_statement.activity_statement_a"
+    />
+    <report
         id="action_print_activity_statement_html"
         model="res.partner"
         report_type="qweb-html"

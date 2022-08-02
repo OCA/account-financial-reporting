@@ -26,6 +26,7 @@ class StatementCommon(models.AbstractModel):
     )
     date_end = fields.Date(required=True, default=fields.Date.context_today)
     show_aging_buckets = fields.Boolean(default=True)
+    email_customer = fields.Boolean(default=True)
     number_partner_ids = fields.Integer(
         default=lambda self: len(self._context["active_ids"])
     )

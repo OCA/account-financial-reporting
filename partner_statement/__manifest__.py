@@ -19,6 +19,7 @@
         "views/aging_buckets.xml",
         "views/res_config_settings.xml",
         "wizard/statement_wizard.xml",
+        "template/email_template.xml",
     ],
     "installable": True,
     "application": False,
