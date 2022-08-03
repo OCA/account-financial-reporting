@@ -122,12 +122,8 @@ class StatementCommon(models.AbstractModel):
 
             full_customer_name = customer_to_email.name_get()[0][1].split(", ")
             if full_customer_name[1]:
-                customer_name = (
-                    f"{full_customer_name[1]}</strong> from <strong>{full_customer_name[0]}"
-                )
-                notification_body = (
-                    f"{notification_body} file attached) sent to {full_customer_name[1]}"
-                )
+                customer_name = f"{full_customer_name[1]}</strong> from <strong>{full_customer_name[0]}"
+                notification_body = f"{notification_body} file attached) sent to {full_customer_name[1]}"
             else:
                 customer_name = customer_to_email.name_get()[0][1]
                 notification_body = (
@@ -150,7 +146,7 @@ class StatementCommon(models.AbstractModel):
         body = body.replace("--STATEMENT--", f"outstanding")
         body = body.replace(
             "--DATE--",
-            f"<strong>{self.date_end.strftime('%A the %d-%B-%Y')}</strong><br/> \n <br/>"
+            f"<strong>{self.date_end.strftime('%A the %d-%B-%Y')}</strong><br/> \n <br/>",
         )
 
         attachment_ids.append(
@@ -220,7 +216,7 @@ class StatementCommon(models.AbstractModel):
             b64_attach = base64.b64encode(attach)
         # save pdf as attachment
         name = "My Attachment"
-        return self.env['ir.attachment'].create({
+        return self.env["ir.attachment"].create({
             "name": name,
             "type": "binary",
             "datas": b64_attach,
