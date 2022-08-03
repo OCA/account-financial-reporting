@@ -98,7 +98,9 @@ class StatementCommon(models.AbstractModel):
 
         if not template:
             _logger.debug("template not set, creating from template")
-            template = self.env.ref("partner_statement.customer_statement_email_template")
+            template = self.env.ref(
+                "partner_statement.customer_statement_email_template"
+            )
         if not body:
             _logger.debug("body not set, creating from template")
             body = template.body_html
@@ -109,7 +111,7 @@ class StatementCommon(models.AbstractModel):
         customer_name = ""
 
         for partner in self._context["active_ids"]:
-            customer_to_email = self.env['res.partner'].search([("id", "=", partner)])
+            customer_to_email = self.env["res.partner"].search([("id", "=", partner)])
             # add to receipt list
             receipt_list.append(customer_to_email.email)
             notification_body = f"{statement_type} statement email(with "
@@ -120,13 +122,21 @@ class StatementCommon(models.AbstractModel):
 
             full_customer_name = customer_to_email.name_get()[0][1].split(", ")
             if full_customer_name[1]:
-                customer_name = f"{full_customer_name[1]}</strong> from <strong>{full_customer_name[0]}"
-                notification_body = f"{notification_body} file attached) sent to {full_customer_name[1]}"
+                customer_name = (
+                    f"{full_customer_name[1]}</strong> from <strong>{full_customer_name[0]}"
+                )
+                notification_body = (
+                    f"{notification_body} file attached) sent to {full_customer_name[1]}"
+                )
             else:
                 customer_name = customer_to_email.name_get()[0][1]
-                notification_body = f"{notification_body} file attached) sent to {customer_name}"
+                notification_body = (
+                    f"{notification_body} file attached) sent to {customer_name}"
+                )
             _logger.debug("Status: %s", str(notification_body))
-            notification_body = f"{notification_body} &lt;{customer_to_email.email}&gt;."
+            notification_body = (
+                f"{notification_body} &lt;{customer_to_email.email}&gt;."
+            )
 
             customer_to_email.message_post(body=notification_body, subtype="mt_comment")
 
@@ -134,9 +144,14 @@ class StatementCommon(models.AbstractModel):
 
         body = body.replace("--CUSTOMER--", f"<strong>{customer_name}</strong>")
         body = body.replace("--SENDER--", f"<strong>{company_name}</strong>")
-        body = body.replace("--SENDER_REGARDS--", f"<strong>{user_name}<br/>{company_name}</strong>")
+        body = body.replace(
+            "--SENDER_REGARDS--", f"<strong>{user_name}<br/>{company_name}</strong>"
+        )
         body = body.replace("--STATEMENT--", f"outstanding")
-        body = body.replace("--DATE--", f"<strong>{self.date_end.strftime('%A the %d-%B-%Y')}</strong><br/> \n <br/>")
+        body = body.replace(
+            "--DATE--",
+            f"<strong>{self.date_end.strftime('%A the %d-%B-%Y')}</strong><br/> \n <br/>"
+        )
 
         attachment_ids.append(
             self._action_get_attachment(report_type, report_name, data).id
@@ -163,20 +178,22 @@ class StatementCommon(models.AbstractModel):
                 .search(
                     [
                         ("report_name", "=", report_name),
-                        ("report_type", "=", report_type)
+                        ("report_type", "=", report_type),
                     ],
                     limit=1,
                 )
                 .render_xlsx(self._context["active_ids"], data=data)
             )
-            mimetype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            mimetype = (
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
         elif report_type == "qweb-html":
             (attach, header) = (
                 self.env["ir.actions.report"]
                 .search(
                     [
                         ("report_name", "=", report_name),
-                        ("report_type", "=", report_type)
+                        ("report_type", "=", report_type),
                     ],
                     limit=1,
                 )
@@ -184,17 +201,17 @@ class StatementCommon(models.AbstractModel):
             )
             mimetype = "text/html"
         else:
-            _logger.debug("report name: %s, report_type: %s", str(report_name), str(report_type))
             (attach, header) = (
                 self.env["ir.actions.report"]
                 .search(
                     [
                         ("report_name", "=", report_name),
-                        ("report_type", "=", report_type)
+                        ("report_type", "=", report_type),
                     ],
                     limit=1,
                 )
-                .render_qweb_pdf(self._context["active_ids"]))
+                .render_qweb_pdf(self._context["active_ids"])
+            )
             mimetype = "application/x-pdf"
 
         if not attach:
@@ -204,11 +221,11 @@ class StatementCommon(models.AbstractModel):
         # save pdf as attachment
         name = "My Attachment"
         return self.env['ir.attachment'].create({
-            'name': name,
-            'type': 'binary',
-            'datas': b64_attach,
-            'store_fname': name,
-            'res_model': self._name,
-            'res_id': self.id,
-            'mimetype': mimetype
+            "name": name,
+            "type": "binary",
+            "datas": b64_attach,
+            "store_fname": name,
+            "res_model": self._name,
+            "res_id": self.id,
+            "mimetype": mimetype
         })
