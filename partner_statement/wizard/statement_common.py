@@ -4,7 +4,10 @@
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models
+import base64
 
+import logging
+_logger = logging.getLogger(__name__)
 
 class StatementCommon(models.AbstractModel):
 
@@ -26,7 +29,7 @@ class StatementCommon(models.AbstractModel):
     )
     date_end = fields.Date(required=True, default=fields.Date.context_today)
     show_aging_buckets = fields.Boolean(default=True)
-    email_customer = fields.Boolean(default=True)
+    email_customer = fields.Boolean(default=False)
     number_partner_ids = fields.Integer(
         default=lambda self: len(self._context["active_ids"])
     )
@@ -84,3 +87,101 @@ class StatementCommon(models.AbstractModel):
         self.ensure_one()
         report_type = "xlsx"
         return self._export(report_type)
+
+    def _send_email(self, report_type, report_name, data, statement_type):
+        template = self.env.ref('partner_statement.customer_statement_email_template')
+        body = dict({})
+        attachment_ids = []
+        receipt_list = []
+
+        if not template:
+            _logger.debug("template not set, creating from template")
+            template = self.env.ref('partner_statement.customer_statement_email_template')
+        if not body:
+            _logger.debug("body not set, creating from template")
+            body = template.body_html
+
+        current_user = self.env['res.users'].browse(self.env.uid)
+        user_name = current_user.name_get()[0][1]
+        company_name = self.company_id.name_get()[0][1]
+        customer_name = ""
+
+        for partner in self._context["active_ids"]:
+            customer_to_email = self.env['res.partner'].search([('id', '=', partner)])
+            # add to receipt list
+            receipt_list.append(customer_to_email.email)
+            notification_body = f"{statement_type} statement email(with "
+            if report_type == "xlsx":
+                notification_body = f"{notification_body} Excel"
+            else:
+                notification_body = f"{notification_body} PDF"
+
+            full_customer_name = customer_to_email.name_get()[0][1].split(", ")
+            if full_customer_name[1]:
+                customer_name = f"{full_customer_name[1]}</strong> from <strong>{full_customer_name[0]}"
+                notification_body = f"{notification_body} file attached) sent to {full_customer_name[1]}"
+            else:
+                customer_name = customer_to_email.name_get()[0][1]
+                notification_body = f"{notification_body} file attached) sent to {customer_name}"
+            _logger.debug("Status: %s", str(notification_body))
+            notification_body = f"{notification_body} &lt;{customer_to_email.email}&gt;."
+
+            customer_to_email.message_post(body=notification_body, subtype='mt_comment')
+
+        receipt_list = sorted(set(receipt_list))
+
+        body = body.replace('--CUSTOMER--', f"<strong>{customer_name}</strong>")
+        body = body.replace('--SENDER--', f"<strong>{company_name}</strong>")
+        body = body.replace('--SENDER_REGARDS--', f"<strong>{user_name}<br/>{company_name}</strong>")
+        body = body.replace('--STATEMENT--', f"outstanding")
+        body = body.replace('--DATE--', f"<strong>{self.date_end.strftime('%A the %d-%B-%Y')}</strong><br/> \n <br/>")
+
+        attachment_ids.append(self._action_get_attachment(report_type, report_name, data).id)
+
+        # template.email_from = receipt_list[0]
+        if template:
+            for recipient in receipt_list:
+                email_values = {
+                    'subject': template.subject,
+                    'body_html': body,
+                    'email_to': recipient,
+                    'email_from': template.email_from,
+                    'attachment_ids': attachment_ids,
+                    'auto_delete': True,
+                }
+                self.env['mail.mail'].create(email_values)
+
+    def _action_get_attachment(self, report_type, report_name, data):
+        """ this method called from button action in view xml """
+        if report_type == "xlsx":
+            (attach, header) = self.env["ir.actions.report"].search(
+                [("report_name", "=", report_name), ("report_type", "=", report_type)], limit=1).render_xlsx(
+                self._context["active_ids"], data=data)
+            mimetype = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        elif report_type == "qweb-html":
+            (attach, header) = self.env["ir.actions.report"].search(
+                [("report_name", "=", report_name), ("report_type", "=", report_type)], limit=1).render_qweb_html(
+                self._context["active_ids"])
+            mimetype = 'text/html'
+        else:
+            _logger.debug("report name: %s, report_type: %s", str(report_name), str(report_type))
+            (attach, header) = self.env["ir.actions.report"].search(
+                [("report_name", "=", report_name), ("report_type", "=", report_type)], limit=1).render_qweb_pdf(
+                self._context["active_ids"])
+            mimetype = 'application/x-pdf'
+
+        if not attach:
+            _logger.debug("attachment empty")
+        else:
+            b64_attach = base64.b64encode(attach)
+        # save pdf as attachment
+        name = "My Attachment"
+        return self.env['ir.attachment'].create({
+            'name': name,
+            'type': 'binary',
+            'datas': b64_attach,
+            'store_fname': name,
+            'res_model': self._name,
+            'res_id': self.id,
+            'mimetype': mimetype
+        })

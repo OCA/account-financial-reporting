@@ -3,7 +3,6 @@
 
 from odoo import models
 
-
 class OutstandingStatementWizard(models.TransientModel):
     """Outstanding Statement wizard."""
 
@@ -18,6 +17,9 @@ class OutstandingStatementWizard(models.TransientModel):
             report_name = "p_s.report_outstanding_statement_xlsx"
         else:
             report_name = "partner_statement.outstanding_statement"
+        if self.email_customer and report_type != "qweb-html":
+            self._send_email(report_type, report_name, data, "Outstanding")
+
         return (
             self.env["ir.actions.report"]
             .search(

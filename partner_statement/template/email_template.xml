@@ -12,13 +12,13 @@
             <field name="body_html">
                 <![CDATA[
 		    <p>Hi --CUSTOMER--<br/><br/></p>
-            <p>Please find attached your customer statement of account from --SENDER-- as at the --DATE--.<br/></p>
+            <p>Please find attached your --STATEMENT-- statement of account from --SENDER-- as at the --DATE--.<br/></p>
             <p>Please remit payment at your earliest convenience<br/></p>
             <p>Please don't hesitate to contact us if you require copies of any invoices.<br/></p>
             <br/>
             <br/>
             <p>Regards,<br/></p>
-            --SENDER--
+            --SENDER_REGARDS--
                             ]]>
             </field>
         </record>
