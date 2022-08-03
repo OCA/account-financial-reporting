@@ -3,6 +3,7 @@
 
 from odoo import models
 
+
 class OutstandingStatementWizard(models.TransientModel):
     """Outstanding Statement wizard."""
 
