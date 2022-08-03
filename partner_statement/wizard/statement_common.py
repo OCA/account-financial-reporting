@@ -216,12 +216,14 @@ class StatementCommon(models.AbstractModel):
             b64_attach = base64.b64encode(attach)
         # save pdf as attachment
         name = "My Attachment"
-        return self.env["ir.attachment"].create({
-            "name": name,
-            "type": "binary",
-            "datas": b64_attach,
-            "store_fname": name,
-            "res_model": self._name,
-            "res_id": self.id,
-            "mimetype": mimetype
-        })
+        return self.env["ir.attachment"].create(
+            {
+                "name": name,
+                "type": "binary",
+                "datas": b64_attach,
+                "store_fname": name,
+                "res_model": self._name,
+                "res_id": self.id,
+                "mimetype": mimetype
+            }
+        )
