@@ -224,6 +224,6 @@ class StatementCommon(models.AbstractModel):
                 "store_fname": name,
                 "res_model": self._name,
                 "res_id": self.id,
-                "mimetype": mimetype
+                "mimetype": mimetype,
             }
         )
