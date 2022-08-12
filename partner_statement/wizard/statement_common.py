@@ -121,7 +121,7 @@ class StatementCommon(models.AbstractModel):
                 notification_body = f"{notification_body} PDF"
 
             full_customer_name = customer_to_email.name_get()[0][1].split(", ")
-            if full_customer_name[1]:
+            if len(full_customer_name) > 1:
                 customer_name = f"{full_customer_name[1]}</strong> from <strong>"
                 customer_name = f"{customer_name}{full_customer_name[0]}"
                 notification_body = f"{notification_body} file attached) sent to "
