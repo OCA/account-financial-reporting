@@ -84,6 +84,47 @@ class TestOutstandingStatement(TransactionCase):
             "bucket_labels", report, "There was an error while compiling the report."
         )
 
+    def test_customer_outstanding_statement_email(self):
+        self.email_customer = True
+        wiz_id = self.wiz.with_context(
+            active_ids=[self.partner1.id, self.partner2.id]
+        ).create({})
+        wiz_id.aging_type = "months"
+
+        statement = wiz_id.button_export_pdf()
+
+        self.assertDictContainsSubset(
+            {
+                "type": "ir.actions.report",
+                "report_name": self.report_name,
+                "report_type": "qweb-pdf",
+            },
+            statement,
+            "There was an error and the PDF report was not generated.",
+        )
+
+        statement_xlsx = wiz_id.button_export_xlsx()
+
+        self.assertDictContainsSubset(
+            {
+                "type": "ir.actions.report",
+                "report_name": self.report_name_xlsx,
+                "report_type": "xlsx",
+            },
+            statement_xlsx,
+            "There was an error and the PDF report was not generated.",
+        )
+
+        data = wiz_id._prepare_statement()
+        docids = data["partner_ids"]
+        report = self.statement_model._get_report_values(docids, data)
+        self.assertIsInstance(
+            report, dict, "There was an error while compiling the report."
+        )
+        self.assertIn(
+            "bucket_labels", report, "There was an error while compiling the report."
+        )
+
     def test_customer_outstanding_report_no_wizard(self):
         docids = [self.partner1.id]
         report = self.statement_model._get_report_values(docids, False)
