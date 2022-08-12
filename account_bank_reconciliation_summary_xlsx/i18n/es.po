@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2022-08-11 19:07+0000\n"
+"PO-Revision-Date: 2022-08-12 18:07+0000\n"
 "Last-Translator: Luis D. Lafaurie <luislafaurie@hotmail.com>\n"
 "Language-Team: none\n"
 "Language: es\n"
@@ -129,7 +129,7 @@ msgstr "Nombre mostrado"
 #: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:0
 #, python-format
 msgid "Draft bank statement lines:"
-msgstr ""
+msgstr "Borrador de líneas del extracto bancario:"
 
 #. module: account_bank_reconciliation_summary_xlsx
 #: model_terms:ir.ui.view,arch_db:account_bank_reconciliation_summary_xlsx.bank_reconciliation_report_wizard_form
@@ -182,7 +182,7 @@ msgstr "Actualizado el"
 #: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:0
 #, python-format
 msgid "Move Number"
-msgstr ""
+msgstr "Número del movimiento"
 
 #. module: account_bank_reconciliation_summary_xlsx
 #: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:0
