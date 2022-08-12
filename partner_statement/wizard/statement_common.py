@@ -97,10 +97,7 @@ class StatementCommon(models.AbstractModel):
         receipt_list = []
 
         if not template:
-            _logger.debug("template not set, creating from template")
-            template = self.env.ref(
-                "partner_statement.customer_statement_email_template"
-            )
+            _logger.debug("template not set.")
         if not body:
             _logger.debug("body not set, creating from template")
             body = template.body_html
@@ -185,19 +182,6 @@ class StatementCommon(models.AbstractModel):
             mimetype = (
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             )
-        elif report_type == "qweb-html":
-            (attach, header) = (
-                self.env["ir.actions.report"]
-                .search(
-                    [
-                        ("report_name", "=", report_name),
-                        ("report_type", "=", report_type),
-                    ],
-                    limit=1,
-                )
-                .render_qweb_html(self._context["active_ids"])
-            )
-            mimetype = "text/html"
         else:
             (attach, header) = (
                 self.env["ir.actions.report"]
