@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2021-06-25 02:48+0000\n"
+"PO-Revision-Date: 2022-08-14 00:07+0000\n"
 "Last-Translator: Ignacio Buioli <ibuioli@gmail.com>\n"
 "Language-Team: none\n"
 "Language: es_AR\n"
@@ -426,7 +426,7 @@ msgstr "Código"
 #: code:addons/account_financial_report/report/trial_balance.py:0
 #, python-format
 msgid "Code %s can not be related with any account group"
-msgstr ""
+msgstr "El Código %s no puede ser relacionado con ningún grupo de cuentas"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
