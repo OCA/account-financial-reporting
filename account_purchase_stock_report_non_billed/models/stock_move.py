@@ -1,0 +1,74 @@
+# Copyright 2022 Tecnativa - Carlos Roca
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html).
+
+from odoo import api, models
+
+
+class StockMove(models.Model):
+    _inherit = "stock.move"
+
+    @api.depends("purchase_line_id")
+    def _compute_currency_id(self):
+        for move in self:
+            if move.purchase_line_id:
+                move.currency_id = move.purchase_line_id.currency_id
+            else:
+                super(StockMove, move)._compute_currency_id()
+
+    def get_quantity_invoiced(self, invoice_lines):
+        if self.purchase_line_id:
+            if not invoice_lines:
+                return 0
+            qty_invoiced = abs(
+                sum(
+                    invoice_lines.mapped(
+                        lambda l: l.quantity
+                        if (l.move_id.type == "in_invoice" and not self.to_refund)
+                        or (l.move_id.type == "in_refund" and self.to_refund)
+                        else -l.quantity
+                    )
+                )
+            )
+            # Check when grouping different moves in an invoice line
+            moves = invoice_lines.mapped("move_line_ids")
+            total_qty = moves.get_total_devolution_moves()
+            if qty_invoiced != total_qty:
+                invoiced = 0.0
+                for move in moves:
+                    qty = (
+                        move.quantity_done
+                        if move.quantity_done <= (qty_invoiced - invoiced)
+                        else qty_invoiced - invoiced
+                    )
+                    if move.check_is_return():
+                        qty = -qty
+                    if move == self:
+                        return qty
+                    invoiced += qty
+                return 0
+            return (
+                self.quantity_done
+                if not self.check_is_return()
+                else -self.quantity_done
+            )
+        return super().get_quantity_invoiced(invoice_lines)
+
+    def _set_not_invoiced_values(self, qty_to_invoice, invoiced_qty):
+        self.ensure_one()
+        if self.purchase_line_id:
+            self.quantity_not_invoiced = qty_to_invoice - invoiced_qty
+            self.price_not_invoiced = (
+                qty_to_invoice - invoiced_qty
+            ) * self.purchase_line_id.price_unit
+        else:
+            super()._set_not_invoiced_values(qty_to_invoice, invoiced_qty)
+
+    @api.depends("purchase_line_id")
+    @api.depends_context("date_check_invoiced_moves")
+    def _compute_not_invoiced_values(self):
+        super()._compute_not_invoiced_values()
+
+    def _get_model_id_origin_document(self):
+        if not self.purchase_line_id:
+            return super()._get_model_id_origin_document()
+        return self.purchase_line_id.order_id._name, self.purchase_line_id.order_id.id
