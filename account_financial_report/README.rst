@@ -129,6 +129,7 @@ Contributors
   * Sergio Teruel
   * Ernesto Tejeda
   * Alexandre D. Díaz
+  * Víctor Martínez
 
 * Lois Rilo <lois.rilo@forgeflow.com>
 * `Sygel <https://www.sygel.es>`__:
