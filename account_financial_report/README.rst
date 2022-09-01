@@ -130,6 +130,7 @@ Contributors
   * Ernesto Tejeda
   * Jo??o Marques
   * Alexandre D. D??az
+  * V??ctor Mart??nez
 
 * `Sygel <https://www.sygel.es>`__:
 

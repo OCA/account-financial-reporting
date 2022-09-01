@@ -191,8 +191,13 @@
                         <!--## amount_currency-->
                         <div
                             class="act_as_cell amount"
-                            style="width: 7.27%;"
+                            style="width: 3.63%;"
                         >Amount cur.</div>
+                        <!--## amount_currency cumulated-->
+                        <div
+                            class="act_as_cell amount"
+                            style="width: 3.63%;"
+                        >Cumul cur.</div>
                     </t>
                 </div>
             </div>
@@ -320,7 +325,7 @@
                     <t
                         t-if="o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')"
                     >
-                        <div class="act_as_cell amount" style="width: 7.27%;">
+                        <div class="act_as_cell amount" style="width: 3.63%;">
                             <t t-if="type == 'account_type'">
                                 <t
                                     t-set="domain"
@@ -355,15 +360,18 @@
                                 </span>
                             </t>
                         </div>
+                        <div class="act_as_cell amount" style="width: 3.63%;" />
                     </t>
                     <t
                         t-if="not o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')"
                     >
-                        <div class="act_as_cell" style="width: 7.27%;" />
+                        <div class="act_as_cell" style="width: 3.63%;" />
+                        <div class="act_as_cell" style="width: 3.63%;" />
                     </t>
                 </t>
             </div>
             <!-- Display each lines -->
+            <t t-set="total_bal_curr" t-value="0" />
             <t t-foreach="account_or_partner_object['move_lines']" t-as="line">
                 <!-- # lines or centralized lines -->
                 <div class="act_as_row lines">
@@ -576,12 +584,16 @@
                     </div>
                     <t t-if="foreign_currency">
                         <t t-if="line['currency_id']">
+                            <t
+                                t-set="line_currency"
+                                t-value="currency_model.browse(line['currency_id'][0])"
+                            />
+                            <t
+                                t-set="total_bal_curr"
+                                t-value="total_bal_curr + line['bal_curr']"
+                            />
                             <!--## amount_currency-->
-                            <div class="act_as_cell amount" style="width: 7.27%;">
-                                <t
-                                    t-set="line_currency"
-                                    t-value="currency_model.browse(line['currency_id'][0])"
-                                />
+                            <div class="act_as_cell amount" style="width: 3.63%;">
                                 <span
                                     t-att-res-id="line['id']"
                                     res-model="account.move.line"
@@ -590,10 +602,22 @@
                                     t-options="{'widget': 'monetary', 'display_currency': line_currency}"
                                 />
                             </div>
+                            <!--## amount_currency cumulated-->
+                            <div class="act_as_cell amount" style="width: 3.63%;">
+                                <span
+                                    t-att-res-id="line['id']"
+                                    res-model="account.move.line"
+                                    view-type="form"
+                                    t-raw="total_bal_curr"
+                                    t-options="{'widget': 'monetary', 'display_currency': line_currency}"
+                                />
+                            </div>
                         </t>
                         <t t-if="not line['currency_id']">
                             <!--## amount_currency-->
-                            <div class="act_as_cell amount" style="width: 7.27%;" />
+                            <div class="act_as_cell amount" style="width: 3.63%;" />
+                            <!--## amount_currency cumulated-->
+                            <div class="act_as_cell amount" style="width: 3.63%;" />
                         </t>
                     </t>
                 </div>
@@ -661,7 +685,7 @@
                     <t
                         t-if="o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')"
                     >
-                        <div class="act_as_cell amount" style="width: 7.27%;">
+                        <div class="act_as_cell amount" style="width: 3.63%;">
                             <t t-if="type == 'account_type'">
                                 <t
                                     t-set="domain"
@@ -704,11 +728,13 @@
                                 </span>
                             </t>
                         </div>
+                        <div class="act_as_cell amount" style="width: 3.63%;" />
                     </t>
                     <t
                         t-if="not o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')"
                     >
-                        <div class="act_as_cell amount" style="width: 7.27%;" />
+                        <div class="act_as_cell amount" style="width: 3.63%;" />
+                        <div class="act_as_cell amount" style="width: 3.63%;" />
                     </t>
                 </t>
             </div>
