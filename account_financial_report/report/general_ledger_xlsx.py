@@ -2,6 +2,7 @@
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA
 # Copyright 2021 Tecnativa - Jo??o Marques
+# Copyright 2022 Tecnativa - V??ctor Mart??nez
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import _, models
@@ -73,19 +74,18 @@ class GeneralLedgerXslx(models.AbstractModel):
         if report.foreign_currency:
             res += [
                 {
-                    "header": _("Cur."),
-                    "field": "currency_name",
-                    "field_currency_balance": "currency_name",
-                    "type": "currency_name",
-                    "width": 7,
-                },
-                {
                     "header": _("Amount cur."),
                     "field": "bal_curr",
                     "field_initial_balance": "initial_bal_curr",
                     "field_final_balance": "final_bal_curr",
                     "type": "amount_currency",
-                    "width": 14,
+                    "width": 10,
+                },
+                {
+                    "header": _("Cumul cur."),
+                    "field": "total_bal_curr",
+                    "type": "amount_currency",
+                    "width": 10,
                 },
             ]
         res_as_dict = {}
@@ -149,6 +149,7 @@ class GeneralLedgerXslx(models.AbstractModel):
         tags_data = res_data["tags_data"]
         filter_partner_ids = res_data["filter_partner_ids"]
         foreign_currency = res_data["foreign_currency"]
+        company_currency = report.company_id.currency_id
         # For each account
         for account in general_ledger:
             # Write account title
@@ -176,6 +177,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                 self.write_initial_balance_from_dict(account, report_data)
 
                 # Display account move lines
+                total_bal_curr = 0
                 for line in account["move_lines"]:
                     line.update(
                         {
@@ -203,6 +205,13 @@ class GeneralLedgerXslx(models.AbstractModel):
                                 "tags": tags,
                             }
                         )
+                    if (
+                        foreign_currency
+                        and line["currency_id"]
+                        and line["currency_id"] != company_currency.id
+                    ):
+                        total_bal_curr += line["bal_curr"]
+                        line.update({"total_bal_curr": total_bal_curr})
                     self.write_line_from_dict(line, report_data)
                 # Display ending balance line for account
                 account.update(
@@ -251,6 +260,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                     self.write_initial_balance_from_dict(partner, report_data)
 
                     # Display account move lines
+                    total_bal_curr = 0
                     for line in partner["move_lines"]:
                         line.update(
                             {
@@ -280,6 +290,13 @@ class GeneralLedgerXslx(models.AbstractModel):
                                     "tags": tags,
                                 }
                             )
+                        if (
+                            foreign_currency
+                            and line["currency_id"]
+                            and line["currency_id"] != company_currency.id
+                        ):
+                            total_bal_curr += line["bal_curr"]
+                            line.update({"total_bal_curr": total_bal_curr})
                         self.write_line_from_dict(line, report_data)
 
                     # Display ending balance line for partner

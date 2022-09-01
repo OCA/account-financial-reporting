@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-21 13:00+0000\n"
-"PO-Revision-Date: 2022-08-26 19:07+0000\n"
+"POT-Creation-Date: 2022-09-01 13:35+0000\n"
+"PO-Revision-Date: 2022-09-01 15:36+0200\n"
 "Last-Translator: Pedro M. Baeza <pedro.baeza@gmail.com>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.2\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
@@ -481,6 +481,11 @@ msgid "Credit"
 msgstr "Haber"
 
 #. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+msgid "Cumul cur."
+msgstr "Acumulado moneda"
+
+#. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #, python-format
@@ -491,7 +496,6 @@ msgstr "Saldo Acumu."
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: code:addons/account_financial_report/report/open_items_xlsx.py:0
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
-#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
@@ -1852,136 +1856,3 @@ msgstr "ancho: 38.92%;"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 8.11%;"
 msgstr "ancho: 8.11%;"
-
-#~ msgid "<span class=\"fa fa-download\"/> Export"
-#~ msgstr "<span class=\"fa fa-download\"/>Exportar"
-
-#~ msgid "<span class=\"fa fa-print\"/> Print"
-#~ msgstr "<span class=\"fa fa-print\"/>Imprimir"
-
-#~ msgid ""
-#~ "<span class=\"oe_inline\">\n"
-#~ "                                            To\n"
-#~ "                                        </span>"
-#~ msgstr ""
-#~ "<span class=\"oe_inline\">\n"
-#~ "                                            A\n"
-#~ "                                        </span>"
-
-#~ msgid ""
-#~ "<span class=\"oe_inline\">\n"
-#~ "                                To\n"
-#~ "                            </span>"
-#~ msgstr ""
-#~ "<span class=\"oe_inline\">\n"
-#~ "                                A\n"
-#~ "                            </span>"
-
-#~ msgid ""
-#~ "General Ledger can be computed only if selected company have only one "
-#~ "unaffected earnings account."
-#~ msgstr ""
-#~ "El Libro mayor solo se puede calcular si la empresa seleccionada tiene "
-#~ "solo una cuenta de resultados no afectados."
-
-#~ msgid ""
-#~ "Trial Balance can be computed only if selected company have only one "
-#~ "unaffected earnings account."
-#~ msgstr ""
-#~ "El balance de sumas y saldos solo puede calcularse si la compa????a "
-#~ "seleccionada tiene una y solo una cuenta de ganancias."
-
-#~ msgid ""
-#~ "Cost\n"
-#~ "                            center"
-#~ msgstr "Centro de Costos"
-
-#~ msgid "Cost center"
-#~ msgstr "Centro de Costos"
-
-#~ msgid "Account Code"
-#~ msgstr "Cuenta"
-
-#~ msgid "Account ID"
-#~ msgstr "N?? Cuenta"
-
-#~ msgid "Account Type"
-#~ msgstr "Tipo de Cuenta"
-
-#~ msgid "Age 120 Days"
-#~ msgstr "120 d??as"
-
-#~ msgid "Age 30 Days"
-#~ msgstr "30 d??as"
-
-#~ msgid "Age 60 Days"
-#~ msgstr "60 d??as"
-
-#~ msgid "Age 90 Days"
-#~ msgstr "90 d??as"
-
-#~ msgid "Amount Residual"
-#~ msgstr "Importe Inicial"
-
-#~ msgid "Amount Residual Currency"
-#~ msgstr "Moneda de Saldo Pendiente"
-
-#~ msgid "Amount Total Due"
-#~ msgstr "Total"
-
-#~ msgid "Amount Total Due Currency"
-#~ msgstr "Moneda de Total"
-
-#~ msgid "Centralize"
-#~ msgstr "Centralizar"
-
-#~ msgid "Centralized Entries"
-#~ msgstr "Centralizar las entradas"
-
-#~ msgid "Child accounts"
-#~ msgstr "Cuentas Hijas"
-
-#~ msgid "Company Currency"
-#~ msgstr "Moneda de Empresa"
-
-#~ msgid "Cost Center"
-#~ msgstr "Centro de Costos"
-
-#~ msgid "Cumul Age 120 Days"
-#~ msgstr "Acumulado a 120 d??as"
-
-#~ msgid "Cumul Age 30 Days"
-#~ msgstr "Acumulado a 30 d??as"
-
-#~ msgid "Cumul Age 60 Days"
-#~ msgstr "Acumulado a 60 d??as"
-
-#~ msgid "Cumul Age 90 Days"
-#~ msgstr "Acumulado a 90 d??as"
-
-#~ msgid "Cumul Amount Residual"
-#~ msgstr "Cantidad Residual Acumulada"
-
-#~ msgid "Cumul Balance"
-#~ msgstr "Saldo Acumulado"
-
-#~ msgid "Cumul Current"
-#~ msgstr "Acum. Actual"
-
-#~ msgid "Cumul Older"
-#~ msgstr "Acum. Anterior"
-
-#~ msgid "Currency Name"
-#~ msgstr "Moneda"
-
-#~ msgid "Date Due"
-#~ msgstr "Fecha vencimiento"
-
-#~ msgid "Ending blance cur."
-#~ msgstr "Saldo final."
-
-#~ msgid "Filter Analytic Tag"
-#~ msgstr "Filtrar por Etiqueta Anal??tica"
-
-#~ msgid "Filter Cost Center"
-#~ msgstr "Filtro Centro de Costos"
