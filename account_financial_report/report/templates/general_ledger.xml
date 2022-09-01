@@ -188,12 +188,11 @@
                         Cumul. Bal.
                     </div>
                     <t t-if="foreign_currency">
-                        <!--## currency_name-->
-                        <div class="act_as_cell" style="width: 2.08%;">Cur.</div>
                         <!--## amount_currency-->
-                        <div class="act_as_cell amount" style="width: 5.19%;">
-                            Amount cur.
-                        </div>
+                        <div
+                            class="act_as_cell amount"
+                            style="width: 7.27%;"
+                        >Amount cur.</div>
                     </t>
                 </div>
             </div>
@@ -321,12 +320,7 @@
                     <t
                         t-if="o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')"
                     >
-                        <div class="act_as_cell amount" style="width: 2.08%;">
-                            <span
-                                t-esc="o._get_atr_from_dict(account['id'], accounts_data, 'currency_name')"
-                            />
-                        </div>
-                        <div class="act_as_cell amount" style="width: 5.19%;">
+                        <div class="act_as_cell amount" style="width: 7.27%;">
                             <t t-if="type == 'account_type'">
                                 <t
                                     t-set="domain"
@@ -365,8 +359,7 @@
                     <t
                         t-if="not o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')"
                     >
-                        <div class="act_as_cell" style="width: 2.08%;" />
-                        <div class="act_as_cell" style="width: 5.19%;" />
+                        <div class="act_as_cell" style="width: 7.27%;" />
                     </t>
                 </t>
             </div>
@@ -583,26 +576,24 @@
                     </div>
                     <t t-if="foreign_currency">
                         <t t-if="line['currency_id']">
-                            <!--## currency_name-->
-                            <div class="act_as_cell amount" style="width: 2.08%;">
-                                <span t-esc="line['currency_id'][1]" />
-                            </div>
                             <!--## amount_currency-->
-                            <div class="act_as_cell amount" style="width: 5.19%;">
+                            <div class="act_as_cell amount" style="width: 7.27%;">
+                                <t
+                                    t-set="line_currency"
+                                    t-value="currency_model.browse(line['currency_id'][0])"
+                                />
                                 <span
                                     t-att-res-id="line['id']"
                                     res-model="account.move.line"
                                     view-type="form"
-                                >
-                                    <t t-raw="line['bal_curr']" />
-                                </span>
+                                    t-raw="line['bal_curr']"
+                                    t-options="{'widget': 'monetary', 'display_currency': line_currency}"
+                                />
                             </div>
                         </t>
                         <t t-if="not line['currency_id']">
-                            <!--## currency_name-->
-                            <div class="act_as_cell amount" style="width: 2.08%;" />
                             <!--## amount_currency-->
-                            <div class="act_as_cell amount" style="width: 5.19%;" />
+                            <div class="act_as_cell amount" style="width: 7.27%;" />
                         </t>
                     </t>
                 </div>
@@ -670,12 +661,7 @@
                     <t
                         t-if="o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')"
                     >
-                        <div class="act_as_cell amount" style="width: 2.08%;">
-                            <span
-                                t-esc="o._get_atr_from_dict(account['id'], accounts_data, 'currency_name')"
-                            />
-                        </div>
-                        <div class="act_as_cell amount" style="width: 5.19%;">
+                        <div class="act_as_cell amount" style="width: 7.27%;">
                             <t t-if="type == 'account_type'">
                                 <t
                                     t-set="domain"
@@ -722,8 +708,7 @@
                     <t
                         t-if="not o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')"
                     >
-                        <div class="act_as_cell amount" style="width: 2.08%;" />
-                        <div class="act_as_cell amount" style="width: 5.19%;" />
+                        <div class="act_as_cell amount" style="width: 7.27%;" />
                     </t>
                 </t>
             </div>
