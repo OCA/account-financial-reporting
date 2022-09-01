@@ -859,4 +859,5 @@ class GeneralLedgerReport(models.AbstractModel):
             "centralize": centralize,
             "tags_data": tags_data,
             "filter_partner_ids": filter_partner_ids,
+            "currency_model": self.env["res.currency"],
         }
