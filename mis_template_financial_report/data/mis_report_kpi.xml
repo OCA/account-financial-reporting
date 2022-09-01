@@ -19,7 +19,7 @@
         <field name="description">Profit</field>
         <field
             name="expression"
-        >-balp[('user_type_id', 'in', (ref('account.data_account_type_other_income').id, ref('account.data_account_type_revenue').id, ref('account.data_unaffected_earnings').id,))][]</field>
+        >-balp[('user_type_id', 'in', (ref('account.data_account_type_other_income').id, ref('account.data_account_type_revenue').id,))][]</field>
         <field name="auto_expand_accounts">true</field>
         <field name="auto_expand_accounts_style_id" ref="style_details" />
         <field name="style_id" ref="style_header" />
