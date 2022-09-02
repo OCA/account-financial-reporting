@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-16 08:14+0000\n"
-"PO-Revision-Date: 2022-09-02 11:51+0000\n"
+"PO-Revision-Date: 2022-09-02 12:04+0000\n"
 "Last-Translator: Vincent Hatakeyama <vincent+github@hatakeyama.fr>\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "Language: fr\n"
@@ -27,7 +27,7 @@ msgstr "&gt; 120 j."
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "1 - 30 d."
-msgstr "1 - 30 j."
+msgstr "1 – 30 j."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
@@ -37,17 +37,17 @@ msgstr "10"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "31 - 60 d."
-msgstr "31 - 60 j."
+msgstr "31 – 60 j."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "61 - 90 d."
-msgstr "61 - 90 j."
+msgstr "61 – 90 j."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "91 - 120 d."
-msgstr "91 - 120 j."
+msgstr "91 – 120 j."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
