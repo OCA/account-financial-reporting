@@ -84,6 +84,10 @@
                                     t-set="currency_id"
                                     t-value="accounts_data[account_id]['currency_name']"
                                 />
+                                <t
+                                    t-set="foreign_currency_id"
+                                    t-value="total_amount[account_id][partner_id]['foreign_currency_id']"
+                                />
                                 <t t-set="type" t-value='"partner_type"' />
                             </t>
                         </t>
@@ -320,7 +324,17 @@
                     <!--## amount_total_due_currency-->
                     <div class="act_as_cell" />
                     <!--## amount_residual_currency-->
-                    <div class="act_as_cell" />
+                    <div class="act_as_cell amount" style="width: 6.57%;">
+                        <t t-if='type == "partner_type" and foreign_currency_id'>
+                            <span
+                                t-esc="total_amount[account_id][partner_id]['residual_currency']"
+                                t-options="{'widget': 'monetary', 'display_currency': env['res.currency'].browse(foreign_currency_id)}"
+                            />
+                        </t>
+                        <t t-else="">
+                            <div class="act_as_cell" />
+                        </t>
+                    </div>
                 </t>
             </div>
         </div>
