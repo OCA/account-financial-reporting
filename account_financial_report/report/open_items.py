@@ -298,7 +298,7 @@ class OpenItemsReport(models.AbstractModel):
             date_from,
         )
 
-        total_amount = self._calculate_amounts(open_items_move_lines_data)
+        total_amount = self._calculate_amounts(open_items_move_lines_data, company_id)
         open_items_move_lines_data = self._order_open_items_by_date(
             open_items_move_lines_data,
             show_partner_details,
