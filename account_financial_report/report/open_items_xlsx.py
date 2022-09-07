@@ -62,7 +62,7 @@ class OpenItemsXslx(models.AbstractModel):
                 11: {
                     "header": _("Cur. Residual"),
                     "field": "amount_residual_currency",
-                    "field_final_balance": "amount_currency",
+                    "field_final_balance": "residual_currency",
                     "type": "amount_currency",
                     "width": 14,
                 },
@@ -155,6 +155,9 @@ class OpenItemsXslx(models.AbstractModel):
                                 ],
                             }
                         )
+                        foreign_currency_id = total_amount[account_id][partner_id][
+                            "foreign_currency_id"
+                        ]
                         self.write_ending_balance_from_dict(
                             partners_data[partner_id],
                             type_object,
@@ -162,6 +165,7 @@ class OpenItemsXslx(models.AbstractModel):
                             report_data,
                             account_id=account_id,
                             partner_id=partner_id,
+                            foreign_currency_id=foreign_currency_id,
                         )
 
                         # Line break
@@ -201,15 +205,24 @@ class OpenItemsXslx(models.AbstractModel):
         report_data,
         account_id=False,
         partner_id=False,
+        foreign_currency_id=False,
     ):
         """Specific function to write ending balance for Open Items"""
         if type_object == "partner":
             name = my_object["name"]
             my_object["residual"] = total_amount[account_id][partner_id]["residual"]
+            if foreign_currency_id:
+                my_object["residual_currency"] = total_amount[account_id][partner_id][
+                    "residual_currency"
+                ]
             label = _("Partner ending balance")
         elif type_object == "account":
             name = my_object["code"] + " - " + my_object["name"]
             my_object["residual"] = total_amount[account_id]["residual"]
+            if foreign_currency_id:
+                my_object["residual_currency"] = total_amount[account_id][
+                    "residual_currency"
+                ]
             label = _("Ending balance")
         super(OpenItemsXslx, self).write_ending_balance_from_dict(
             my_object, name, label, report_data
