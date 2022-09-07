@@ -112,6 +112,7 @@ class OpenItemsXslx(models.AbstractModel):
         journals_data = res_data["journals_data"]
         total_amount = res_data["total_amount"]
         show_partner_details = res_data["show_partner_details"]
+        company = self.env["res.company"].browse(data["company_id"])
         for account_id in Open_items.keys():
             # Write account title
             self.write_array_title(
@@ -149,10 +150,8 @@ class OpenItemsXslx(models.AbstractModel):
                         # Display ending balance line for partner
                         partners_data[partner_id].update(
                             {
-                                "currency_id": accounts_data[account_id]["currency_id"],
-                                "currency_name": accounts_data[account_id][
-                                    "currency_name"
-                                ],
+                                "currency_id": company.currency_id,
+                                "currency_name": company.currency_id.name,
                             }
                         )
                         self.write_ending_balance_from_dict(
@@ -182,6 +181,12 @@ class OpenItemsXslx(models.AbstractModel):
 
                 # Display ending balance line for account
                 type_object = "account"
+                accounts_data[account_id].update(
+                    {
+                        "currency_id": company.currency_id,
+                        "currency_name": company.currency_id.name,
+                    }
+                )
                 self.write_ending_balance_from_dict(
                     accounts_data[account_id],
                     type_object,
