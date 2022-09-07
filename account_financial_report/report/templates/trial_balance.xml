@@ -89,18 +89,9 @@
                                 />
                             </t>
                             <t t-if="balance['type'] == 'account_type'">
-                                <t t-if="limit_hierarchy_level">
-                                    <t t-if="show_hierarchy_level > balance['level']">
-                                        <t
-                                            t-call="account_financial_report.report_trial_balance_line"
-                                        />
-                                    </t>
-                                </t>
-                                <t t-if="not limit_hierarchy_level">
-                                    <t
-                                        t-call="account_financial_report.report_trial_balance_line"
-                                    />
-                                </t>
+                                <t
+                                    t-call="account_financial_report.report_trial_balance_line"
+                                />
                             </t>
                         </t>
                     </t>

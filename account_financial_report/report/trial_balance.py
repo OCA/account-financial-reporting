@@ -540,8 +540,8 @@ class TrialBalanceReport(models.AbstractModel):
         account_group_relation = {}
         for account in accounts:
             accounts_data[account.id]["complete_code"] = (
-                account.group_id.complete_code if account.group_id.id else ""
-            )
+                account.group_id.complete_code + "/" if account.group_id.id else ""
+            ) + account.code
             if account.group_id.id:
                 if account.group_id.id not in account_group_relation.keys():
                     account_group_relation.update({account.group_id.id: [account.id]})
@@ -554,7 +554,7 @@ class TrialBalanceReport(models.AbstractModel):
                 {
                     group.id: {
                         "id": group.id,
-                        "code": group.code_prefix,
+                        "code": group.code_prefix or "",
                         "name": group.name,
                         "parent_id": group.parent_id.id,
                         "parent_path": group.parent_path,
@@ -726,6 +726,7 @@ class TrialBalanceReport(models.AbstractModel):
         hierarchy_on = data["hierarchy_on"]
         limit_hierarchy_level = data["limit_hierarchy_level"]
         show_hierarchy_level = data["show_hierarchy_level"]
+        hide_parent_hierarchy_level = data["hide_parent_hierarchy_level"]
         foreign_currency = data["foreign_currency"]
         only_posted_moves = data["only_posted_moves"]
         unaffected_earnings_account = data["unaffected_earnings_account"]
@@ -772,12 +773,36 @@ class TrialBalanceReport(models.AbstractModel):
                 groups_data = self._get_groups_data(
                     accounts_data, total_amount, foreign_currency
                 )
-                trial_balance = list(groups_data.values())
-                trial_balance += list(accounts_data.values())
+                # filter out by level now rather than when generating the reports
+                trial_balance = list(
+                    group_data
+                    for group_data in groups_data.values()
+                    if not limit_hierarchy_level
+                    or show_hierarchy_level
+                    == (1 + group_data["complete_code"].count("/"))
+                    or (
+                        not hide_parent_hierarchy_level
+                        and show_hierarchy_level
+                        > (1 + group_data["complete_code"].count("/"))
+                    )
+                )
+                # Limit display to the hierarchy level but also include
+                # every line without an account group
+                trial_balance += list(
+                    account_data
+                    for account_data in accounts_data.values()
+                    if not limit_hierarchy_level
+                    or account_data["complete_code"].count("/") == 0
+                    or show_hierarchy_level
+                    == (1 + account_data["complete_code"].count("/"))
+                    or (
+                        not hide_parent_hierarchy_level
+                        and show_hierarchy_level
+                        > (1 + account_data["complete_code"].count("/"))
+                    )
+                )
+                # sort what is left over
                 trial_balance = sorted(trial_balance, key=lambda k: k["complete_code"])
-                for trial in trial_balance:
-                    counter = trial["complete_code"].count("/")
-                    trial["level"] = counter
             if hierarchy_on == "computed":
                 groups_data = self._get_computed_groups_data(
                     accounts_data, total_amount, foreign_currency, data

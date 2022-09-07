@@ -39,7 +39,7 @@ class AccountGroup(models.Model):
                 self.parent_id.complete_code, self.code_prefix
             )
         else:
-            self.complete_code = self.code_prefix
+            self.complete_code = self.code_prefix or ""
 
     @api.depends("parent_id", "parent_id.level")
     def _compute_level(self):

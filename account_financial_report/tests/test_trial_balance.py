@@ -9,7 +9,7 @@ from odoo.tests import common, tagged
 @tagged("post_install", "-at_install")
 class TestTrialBalanceReport(common.TransactionCase):
     def setUp(self):
-        super(TestTrialBalanceReport, self).setUp()
+        super().setUp()
         group_obj = self.env["account.group"]
         acc_obj = self.env["account.account"]
         self.group1 = group_obj.create({"code_prefix": "1", "name": "Group 1"})
@@ -155,7 +155,13 @@ class TestTrialBalanceReport(common.TransactionCase):
         move.post()
 
     def _get_report_lines(
-        self, with_partners=False, account_ids=False, hierarchy_on="computed"
+        self,
+        with_partners=False,
+        account_ids=False,
+        hierarchy_on="computed",
+        limit_hierarchy_level: bool = False,
+        show_hierarchy_level: int = 1,
+        hide_parent_hierarchy_level: bool = False,
     ):
         company = self.env.ref("base.main_company")
         trial_balance = self.env["trial.balance.report.wizard"].create(
@@ -169,6 +175,9 @@ class TestTrialBalanceReport(common.TransactionCase):
                 "account_ids": account_ids,
                 "fy_start_date": self.fy_date_start,
                 "show_partner_details": with_partners,
+                "limit_hierarchy_level": limit_hierarchy_level,
+                "show_hierarchy_level": show_hierarchy_level,
+                "hide_parent_hierarchy_level": hide_parent_hierarchy_level,
             }
         )
         data = trial_balance._prepare_report_trial_balance()
@@ -574,6 +583,54 @@ class TestTrialBalanceReport(common.TransactionCase):
         self.assertEqual(group2_lines["debit"], 4000)
         self.assertEqual(group2_lines["credit"], 0)
         self.assertEqual(group2_lines["final_balance"], 4000)
+
+        # change accounts groups. No accounts have groups except 300 and 301
+        # that have the same.
+        self.account100.group_id = False
+        self.account200.group_id = False
+        group_obj = self.env["account.group"]
+        group = group_obj.create({"name": "Group"})
+        self.account300.group_id = group
+        self.account301.group_id = group
+
+        res_data = self._get_report_lines(
+            hierarchy_on="relation", limit_hierarchy_level=True
+        )
+        trial_balance = res_data["trial_balance"]
+        # 1 line for group, 1 for account 100, 1 for account 200, and 1 for account 999999
+        self.assertEqual(len(trial_balance), 4)
+        self.assertEqual(
+            [line["code"] for line in trial_balance], ["", "100", "200", "999999"]
+        )
+
+        group_line = self._get_group_lines(group.id, trial_balance)
+        self.assertEqual(group_line["initial_balance"], 0)
+        self.assertEqual(group_line["debit"], 2000)
+        self.assertEqual(group_line["credit"], 2000)
+        self.assertEqual(group_line["final_balance"], 0)
+
+        res_data = self._get_report_lines(
+            hierarchy_on="relation", limit_hierarchy_level=True, show_hierarchy_level=2
+        )
+        trial_balance = res_data["trial_balance"]
+        self.assertEqual(len(trial_balance), 6)
+        self.assertEqual(
+            [line["code"] for line in trial_balance],
+            ["", "300", "301", "100", "200", "999999"],
+        )
+
+        res_data = self._get_report_lines(
+            hierarchy_on="relation",
+            limit_hierarchy_level=True,
+            show_hierarchy_level=2,
+            hide_parent_hierarchy_level=True,
+        )
+        trial_balance = res_data["trial_balance"]
+        self.assertEqual(len(trial_balance), 5)
+        self.assertEqual(
+            [line["code"] for line in trial_balance],
+            ["300", "301", "100", "200", "999999"],
+        )
 
     def test_03_partner_balance(self):
         # Generate the trial balance line

@@ -143,7 +143,8 @@ class TrialBalanceXslx(models.AbstractModel):
         return [
             [
                 _("Date range filter"),
-                _("From: %s To: %s") % (report.date_from, report.date_to),
+                _("From: %(date_from)s To: %(date_to)s")
+                % {"date_from": report.date_from, "date_to": report.date_to},
             ],
             [
                 _("Target moves filter"),
@@ -161,7 +162,7 @@ class TrialBalanceXslx(models.AbstractModel):
             ],
             [
                 _("Limit hierarchy levels"),
-                _("Level %s" % report.show_hierarchy_level)
+                _("Level %s") % report.show_hierarchy_level
                 if report.limit_hierarchy_level
                 else _("No limit"),
             ],
@@ -195,12 +196,8 @@ class TrialBalanceXslx(models.AbstractModel):
         if not show_partner_details:
             for balance in trial_balance:
                 if hierarchy_on == "relation":
-                    if limit_hierarchy_level:
-                        if show_hierarchy_level > balance["level"]:
-                            # Display account lines
-                            self.write_line_from_dict(balance)
-                    else:
-                        self.write_line_from_dict(balance)
+                    # filtering by level is done at the data level
+                    self.write_line_from_dict(balance)
                 elif hierarchy_on == "computed":
                     if limit_hierarchy_level:
                         if show_hierarchy_level == balance["level"] or (
@@ -276,7 +273,7 @@ class TrialBalanceXslx(models.AbstractModel):
             line_object.currency_id = line_object.report_account_id.currency_id
         elif type_object == "account":
             line_object.currency_id = line_object.currency_id
-        super(TrialBalanceXslx, self).write_line(line_object)
+        super().write_line(line_object)
 
     def write_account_footer(self, account, name_value):
         """Specific function to write account footer for Trial Balance"""
