@@ -78,13 +78,13 @@ class GeneralLedgerXslx(models.AbstractModel):
                     "field": "bal_curr",
                     "field_initial_balance": "initial_bal_curr",
                     "field_final_balance": "final_bal_curr",
-                    "type": "amount_currency",
+                    "type": "amount_different_company_currency",
                     "width": 10,
                 },
                 {
                     "header": _("Cumul cur."),
                     "field": "total_bal_curr",
-                    "type": "amount_currency",
+                    "type": "amount_different_company_currency",
                     "width": 10,
                 },
             ]
@@ -183,6 +183,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                         {
                             "account": account["code"],
                             "journal": journals_data[line["journal_id"]]["code"],
+                            "company_currency_id": company_currency.id,
                         }
                     )
                     if line["currency_id"]:
@@ -266,6 +267,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                             {
                                 "account": account["code"],
                                 "journal": journals_data[line["journal_id"]]["code"],
+                                "company_currency_id": company_currency.id,
                             }
                         )
                         if line["currency_id"]:
