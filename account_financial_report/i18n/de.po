@@ -488,14 +488,19 @@ msgstr "Haben"
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #, python-format
+msgid "Cumul cur."
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+#, python-format
 msgid "Cumul. Bal."
 msgstr "Kumul. Saldo"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: code:addons/account_financial_report/report/open_items_xlsx.py:0
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
-#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
@@ -632,29 +637,10 @@ msgid "Detail Taxes"
 msgstr "Details zu Steuern"
 
 #. module: account_financial_report
-#: model:ir.model.fields,field_description:account_financial_report.field_account_account__display_name
-#: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract_wizard__display_name
-#: model:ir.model.fields,field_description:account_financial_report.field_account_group__display_name
-#: model:ir.model.fields,field_description:account_financial_report.field_account_move_line__display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__display_name
-#: model:ir.model.fields,field_description:account_financial_report.field_ir_actions_report__display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__display_name
-#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_aged_partner_balance_xlsx__display_name
-#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_general_ledger_xlsx__display_name
-#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_journal_ledger_xlsx__display_name
-#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_open_items_xlsx__display_name
-#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_trial_balance_xlsx__display_name
-#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_vat_report_xlsx__display_name
-#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_abstract_report__display_name
-#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_abstract_report_xlsx__display_name
-#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_aged_partner_balance__display_name
-#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_general_ledger__display_name
-#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_journal_ledger__display_name
-#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_open_items__display_name
-#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_trial_balance__display_name
-#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_vat_report__display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__display_name
 msgid "Display Name"
@@ -865,8 +851,8 @@ msgstr "Von:"
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
 #, python-format
-msgid "From: %s To: %s"
-msgstr "Von: %s Bis: %s"
+msgid "From: %(date_from)s To: %(date_to)s"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__complete_code
@@ -969,29 +955,10 @@ msgid "Hierarchy On"
 msgstr "Gruppieren ??ber"
 
 #. module: account_financial_report
-#: model:ir.model.fields,field_description:account_financial_report.field_account_account__id
-#: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract_wizard__id
-#: model:ir.model.fields,field_description:account_financial_report.field_account_group__id
-#: model:ir.model.fields,field_description:account_financial_report.field_account_move_line__id
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__id
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__id
-#: model:ir.model.fields,field_description:account_financial_report.field_ir_actions_report__id
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__id
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__id
-#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_aged_partner_balance_xlsx__id
-#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_general_ledger_xlsx__id
-#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_journal_ledger_xlsx__id
-#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_open_items_xlsx__id
-#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_trial_balance_xlsx__id
-#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_vat_report_xlsx__id
-#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_abstract_report__id
-#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_abstract_report_xlsx__id
-#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_aged_partner_balance__id
-#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_general_ledger__id
-#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_journal_ledger__id
-#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_open_items__id
-#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_trial_balance__id
-#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_vat_report__id
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__id
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__id
 msgid "ID"
@@ -1097,29 +1064,10 @@ msgid "Journals"
 msgstr "Journale"
 
 #. module: account_financial_report
-#: model:ir.model.fields,field_description:account_financial_report.field_account_account____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_account_group____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_account_move_line____last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard____last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_ir_actions_report____last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard____last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_aged_partner_balance_xlsx____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_general_ledger_xlsx____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_journal_ledger_xlsx____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_open_items_xlsx____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_trial_balance_xlsx____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_report_a_f_r_report_vat_report_xlsx____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_abstract_report____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_abstract_report_xlsx____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_aged_partner_balance____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_general_ledger____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_journal_ledger____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_open_items____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_trial_balance____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_report_account_financial_report_vat_report____last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard____last_update
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard____last_update
 msgid "Last Modified on"
@@ -1220,6 +1168,12 @@ msgid "No limit"
 msgstr "Keine Einschr??nkung"
 
 #. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__not_only_one_unaffected_earnings_account
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__not_only_one_unaffected_earnings_account
+msgid "Not Only One Unaffected Earnings Account"
+msgstr ""
+
+#. module: account_financial_report
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
 #, python-format
 msgid "Not Posted"
@@ -1229,12 +1183,6 @@ msgstr "Nicht gebucht"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "Not due"
 msgstr "Nicht f??llig"
-
-#. module: account_financial_report
-#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__not_only_one_unaffected_earnings_account
-#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__not_only_one_unaffected_earnings_account
-msgid "Not only one unaffected earnings account"
-msgstr "Mehr als ein unber??hrtes ??berschu??konto"
 
 #. module: account_financial_report
 #: model:ir.ui.menu,name:account_financial_report.menu_oca_reports
@@ -1472,6 +1420,11 @@ msgid "Show Analytic Account"
 msgstr "Kosten-Stichw??rter anzeigen"
 
 #. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__show_analytic_tags
+msgid "Show Analytic Tags"
+msgstr ""
+
+#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__with_auto_sequence
 msgid "Show Auto Sequence"
 msgstr ""
@@ -1490,7 +1443,6 @@ msgstr "Partnerdetails anzeigen"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
-#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__show_analytic_tags
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 #, python-format
 msgid "Show analytic tags"
@@ -1527,7 +1479,6 @@ msgstr "Anfangsdatum"
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_aged_partner_balance_report_wizard__account_code_from
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__account_code_from
-#: model:ir.model.fields,help:account_financial_report.field_open_items_report_wizard__account_code_from
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__account_code_from
 msgid "Starting account in a range"
 msgstr ""
@@ -1870,6 +1821,12 @@ msgstr "Breite: 38.92%;"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 8.11%;"
 msgstr "Breite: 8,11%;"
+
+#~ msgid "From: %s To: %s"
+#~ msgstr "Von: %s Bis: %s"
+
+#~ msgid "Not only one unaffected earnings account"
+#~ msgstr "Mehr als ein unber??hrtes ??berschu??konto"
 
 #~ msgid "<span class=\"fa fa-download\"/> Export"
 #~ msgstr "<span class=\"fa fa-download\"/> Export"
