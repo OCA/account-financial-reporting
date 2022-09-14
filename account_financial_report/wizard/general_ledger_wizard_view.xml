@@ -22,11 +22,11 @@
                             <field name="date_from" />
                             <field name="date_to" />
                             <field name="fy_start_date" invisible="1" />
+                            <field name="target_move" widget="radio" />
                         </group>
                         <group name="other_filters">
-                            <field name="target_move" widget="radio" />
+                            <field name="grouped_by" />
                             <field name="centralize" />
-                            <field name="show_partner_details" />
                             <field name="hide_account_at_0" />
                             <field name="foreign_currency" />
                             <field name="show_analytic_tags" />
