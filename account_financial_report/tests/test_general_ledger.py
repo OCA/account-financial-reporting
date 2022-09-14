@@ -128,7 +128,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         partner_in_report = False
         for account in general_ledger:
             if account["id"] == account_id and account["partners"]:
-                for partner in account["list_partner"]:
+                for partner in account["list_grouped"]:
                     if partner["id"] == partner_id:
                         partner_in_report = True
         return partner_in_report
@@ -146,7 +146,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         initial_balance = False
         for account in general_ledger:
             if account["id"] == account_id and account["partners"]:
-                for partner in account["list_partner"]:
+                for partner in account["list_grouped"]:
                     if partner["id"] == partner_id:
                         initial_balance = partner["init_bal"]
         return initial_balance
@@ -164,7 +164,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         final_balance = False
         for account in general_ledger:
             if account["id"] == account_id and account["partners"]:
-                for partner in account["list_partner"]:
+                for partner in account["list_grouped"]:
                     if partner["id"] == partner_id:
                         final_balance = partner["fin_bal"]
         return final_balance
