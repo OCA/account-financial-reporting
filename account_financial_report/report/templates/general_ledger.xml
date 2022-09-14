@@ -35,48 +35,42 @@
                     <!-- Display account header -->
                     <div class="act_as_table list_table" style="margin-top: 10px;" />
                     <div class="act_as_caption account_title" style="width: 100%">
-                        <span
-                            t-esc="o._get_atr_from_dict(account['id'], accounts_data, 'code')"
-                        />
-                        -
-                        <span
-                            t-esc="o._get_atr_from_dict(account['id'], accounts_data, 'name')"
+                        <span t-esc="account['code']" /> - <span
+                            t-esc="account['name']"
                         />
                     </div>
-                    <t t-if="not account['partners']">
+                    <t t-if="'list_grouped' not in account">
                         <!-- Display account move lines without partner regroup -->
                         <t t-set="type" t-value='"account_type"' />
                         <t
                             t-call="account_financial_report.report_general_ledger_lines"
                         >
-                            <t t-set="account_or_partner_object" t-value="account" />
+                            <t t-set="account_or_group_item_object" t-value="account" />
                         </t>
                         <!-- Display account footer -->
                         <t
                             t-call="account_financial_report.report_general_ledger_ending_cumul"
                         >
-                            <t t-set="account_or_partner_object" t-value="account" />
+                            <t t-set="account_or_group_item_object" t-value="account" />
                             <t t-set="type" t-value='"account_type"' />
                         </t>
                     </t>
-                    <t t-if="account['partners']">
+                    <t t-if="'list_grouped' in account">
                         <!-- Display account partners -->
-                        <t t-foreach="account['list_partner']" t-as="partner">
-                            <t t-set="type" t-value='"partner_type"' />
+                        <t t-foreach="account['list_grouped']" t-as="group_item">
+                            <t t-set="type" t-value='"grouped_type"' />
                             <div class="page_break">
                                 <!-- Display partner header -->
                                 <div class="act_as_caption account_title">
-                                    <span
-                                        t-esc="o._get_atr_from_dict(partner['id'], partners_data, 'name')"
-                                    />
+                                    <span t-esc="group_item['name']" />
                                 </div>
                                 <!-- Display partner move lines -->
                                 <t
                                     t-call="account_financial_report.report_general_ledger_lines"
                                 >
                                     <t
-                                        t-set="account_or_partner_object"
-                                        t-value="partner"
+                                        t-set="account_or_group_item_object"
+                                        t-value="group_item"
                                     />
                                 </t>
                                 <!-- Display partner footer -->
@@ -84,10 +78,10 @@
                                     t-call="account_financial_report.report_general_ledger_ending_cumul"
                                 >
                                     <t
-                                        t-set="account_or_partner_object"
-                                        t-value="partner"
+                                        t-set="account_or_group_item_object"
+                                        t-value="group_item"
                                     />
-                                    <t t-set="type" t-value='"partner_type"' />
+                                    <t t-set="type" t-value='"grouped_type"' />
                                 </t>
                             </div>
                         </t>
@@ -97,7 +91,7 @@
                                 t-call="account_financial_report.report_general_ledger_ending_cumul"
                             >
                                 <t
-                                    t-set="account_or_partner_object"
+                                    t-set="account_or_group_item_object"
                                     t-value="account"
                                 />
                                 <t t-set="type" t-value='"account_type"' />
@@ -216,7 +210,12 @@
                 <!--## partner-->
                 <div class="act_as_cell" />
                 <!--## ref - label-->
-                <div class="act_as_cell amount">Initial balance</div>
+                <div class="act_as_cell amount">
+                    <t t-if='type == "account_type"'>Initial balance</t>
+                    <t t-if='type == "grouped_type"'>
+                        <t t-if="'partners' in account">Partner initial balance</t>
+                    </t>
+                </div>
                 <t t-if="show_cost_center">
                     <!--## cost_center-->
                     <div class="act_as_cell" />
@@ -238,23 +237,23 @@
                         />
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
-                                t-raw="account_or_partner_object['init_bal']['debit']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-raw="account_or_group_item_object['init_bal']['debit']"
+                                t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                             />
                         </span>
                     </t>
-                    <t t-if="type == 'partner_type'">
+                    <t t-if="type == 'grouped_type'">
                         <t
                             t-set="domain"
                             t-value="[('account_id', '=', account['id']),
-                                     ('partner_id', '=', partner['id']),
+                                     ('partner_id', '=', group_item['id']),
                                      ('date', '&lt;', date_from),
                                      ('debit', '&lt;&gt;', 0)]"
                         />
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
-                                t-raw="account_or_partner_object['init_bal']['debit']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-raw="account_or_group_item_object['init_bal']['debit']"
+                                t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                             />
                         </span>
                     </t>
@@ -270,23 +269,23 @@
                         />
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
-                                t-raw="account_or_partner_object['init_bal']['credit']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-raw="account_or_group_item_object['init_bal']['credit']"
+                                t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                             />
                         </span>
                     </t>
-                    <t t-if="type == 'partner_type'">
+                    <t t-if="type == 'grouped_type'">
                         <t
                             t-set="domain"
                             t-value="[('account_id', '=', account['id']),
-                                     ('partner_id', '=', partner['id']),
+                                     ('partner_id', '=', group_item['id']),
                                      ('date', '&lt;', date_from),
                                      ('credit', '&lt;&gt;', 0)]"
                         />
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
-                                t-raw="account_or_partner_object['init_bal']['credit']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-raw="account_or_group_item_object['init_bal']['credit']"
+                                t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                             />
                         </span>
                     </t>
@@ -301,30 +300,28 @@
                         />
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
-                                t-raw="account_or_partner_object['init_bal']['balance']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-raw="account_or_group_item_object['init_bal']['balance']"
+                                t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                             />
                         </span>
                     </t>
-                    <t t-if="type == 'partner_type'">
+                    <t t-if="type == 'grouped_type'">
                         <t
                             t-set="domain"
                             t-value="[('account_id', '=', account['id']),
-                                     ('partner_id', '=', partner['id']),
+                                     ('partner_id', '=', group_item['id']),
                                      ('date', '&lt;', date_from)]"
                         />
                         <span t-att-domain="domain" res-model="account.move.line">
                             <t
-                                t-raw="account_or_partner_object['init_bal']['balance']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-raw="account_or_group_item_object['init_bal']['balance']"
+                                t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                             />
                         </span>
                     </t>
                 </div>
                 <t t-if="foreign_currency">
-                    <t
-                        t-if="o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')"
-                    >
+                    <t t-if="account['currency_id']">
                         <div class="act_as_cell amount" style="width: 3.63%;">
                             <t t-if="type == 'account_type'">
                                 <t
@@ -337,16 +334,16 @@
                                     res-model="account.move.line"
                                 >
                                     <t
-                                        t-raw="account_or_partner_object['init_bal']['bal_curr']"
-                                        t-options="{'widget': 'monetary', 'display_currency': o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')}"
+                                        t-raw="account_or_group_item_object['init_bal']['bal_curr']"
+                                        t-options="{'widget': 'monetary', 'display_currency': account['currency_id']}"
                                     />
                                 </span>
                             </t>
-                            <t t-if="type == 'partner_type'">
+                            <t t-if="type == 'grouped_type'">
                                 <t
                                     t-set="domain"
                                     t-value="[('account_id', '=', account['id']),
-                                             ('partner_id', '=', partner['id']),
+                                             ('partner_id', '=', group_item['id']),
                                              ('date', '&lt;', o.date_from)]"
                                 />
                                 <span
@@ -354,17 +351,15 @@
                                     res-model="account.move.line"
                                 >
                                     <t
-                                        t-raw="account_or_partner_object['init_bal']['bal_curr']"
-                                        t-options="{'widget': 'monetary', 'display_currency': o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')}"
+                                        t-raw="account_or_group_item_object['init_bal']['bal_curr']"
+                                        t-options="{'widget': 'monetary', 'display_currency': account['currency_id']}"
                                     />
                                 </span>
                             </t>
                         </div>
                         <div class="act_as_cell amount" style="width: 3.63%;" />
                     </t>
-                    <t
-                        t-if="not o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')"
-                    >
+                    <t t-if="not account['currency_id']">
                         <div class="act_as_cell" style="width: 3.63%;" />
                         <div class="act_as_cell" style="width: 3.63%;" />
                     </t>
@@ -372,7 +367,7 @@
             </div>
             <!-- Display each lines -->
             <t t-set="total_bal_curr" t-value="0" />
-            <t t-foreach="account_or_partner_object['move_lines']" t-as="line">
+            <t t-foreach="account_or_group_item_object['move_lines']" t-as="line">
                 <!-- # lines or centralized lines -->
                 <div class="act_as_row lines">
                     <!--## date-->
@@ -431,9 +426,7 @@
                             res-model="account.account"
                             view-type="form"
                         >
-                            <t
-                                t-raw="o._get_atr_from_dict(account['id'], accounts_data, 'code')"
-                            />
+                            <t t-raw="account['code']" />
                         </span>
                     </div>
                     <!--## taxes-->
@@ -637,22 +630,19 @@
                 <!--## date-->
                 <t t-if='type == "account_type"'>
                     <div class="act_as_cell first_column" style="width: 41.32%;">
-                        <span
-                            t-esc="o._get_atr_from_dict(account['id'], accounts_data, 'code')"
-                        />
-                        -
-                        <span
-                            t-esc="o._get_atr_from_dict(account['id'], accounts_data, 'name')"
+                        <span t-esc="account['code']" /> - <span
+                            t-esc="account['name']"
                         />
                     </div>
-                    <div class="act_as_cell right" style="width: 16.9%;">
-                        Ending balance
-                    </div>
+                    <div
+                        class="act_as_cell right"
+                        style="width: 16.9%;"
+                    >Ending balance</div>
                 </t>
-                <t t-if='type == "partner_type"'>
+                <t t-if='type == "grouped_type"'>
                     <div class="act_as_cell first_column" style="width: 41.32%;" />
                     <div class="act_as_cell right" style="width: 16.9%;">
-                        Partner ending balance
+                        <t t-if="'partners' in account">Partner ending balance</t>
                     </div>
                 </t>
                 <t t-if="show_cost_center">
@@ -668,29 +658,27 @@
                 <!--## debit-->
                 <div class="act_as_cell amount" style="width: 8.02%;">
                     <span
-                        t-esc="account_or_partner_object['fin_bal']['debit']"
-                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        t-esc="account_or_group_item_object['fin_bal']['debit']"
+                        t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                     />
                 </div>
                 <!--## credit-->
                 <div class="act_as_cell amount" style="width: 8.02%;">
                     <span
-                        t-esc="account_or_partner_object['fin_bal']['credit']"
-                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        t-esc="account_or_group_item_object['fin_bal']['credit']"
+                        t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                     />
                 </div>
                 <!--## balance cumulated-->
                 <div class="act_as_cell amount" style="width: 8.02%;">
                     <span
-                        t-esc="account_or_partner_object['fin_bal']['balance']"
-                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        t-esc="account_or_group_item_object['fin_bal']['balance']"
+                        t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                     />
                 </div>
                 <!--## currency_name + amount_currency-->
                 <t t-if="foreign_currency">
-                    <t
-                        t-if="o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')"
-                    >
+                    <t t-if="account['currency_id']">
                         <div class="act_as_cell amount" style="width: 3.63%;">
                             <t t-if="type == 'account_type'">
                                 <t
@@ -706,17 +694,17 @@
                                         style="color: black;"
                                     >
                                         <t
-                                            t-raw="account_or_partner_object['fin_bal']['bal_curr']"
-                                            t-options="{'widget': 'monetary', 'display_currency': o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')}"
+                                            t-raw="account_or_group_item_object['fin_bal']['bal_curr']"
+                                            t-options="{'widget': 'monetary', 'display_currency': account['currency_id']}"
                                         />
                                     </a>
                                 </span>
                             </t>
-                            <t t-if="type == 'partner_type'">
+                            <t t-if="type == 'grouped_type'">
                                 <t
                                     t-set="domain"
                                     t-value="[('account_id', '=', account['id']),
-                                             ('partner_id', '=', partner['id']),
+                                             ('partner_id', '=', group_item['id']),
                                              ('date', '&lt;', date_from)]"
                                 />
                                 <span>
@@ -727,8 +715,8 @@
                                         style="color: black;"
                                     >
                                         <t
-                                            t-raw="account_or_partner_object['fin_bal']['bal_curr']"
-                                            t-options="{'widget': 'monetary', 'display_currency': o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')}"
+                                            t-raw="account_or_group_item_object['fin_bal']['bal_curr']"
+                                            t-options="{'widget': 'monetary', 'display_currency': account['currency_id']}"
                                         />
                                     </a>
                                 </span>
@@ -736,9 +724,7 @@
                         </div>
                         <div class="act_as_cell amount" style="width: 3.63%;" />
                     </t>
-                    <t
-                        t-if="not o._get_atr_from_dict(account['id'], accounts_data, 'currency_id')"
-                    >
+                    <t t-if="not account['currency_id']">
                         <div class="act_as_cell amount" style="width: 3.63%;" />
                         <div class="act_as_cell amount" style="width: 3.63%;" />
                     </t>
