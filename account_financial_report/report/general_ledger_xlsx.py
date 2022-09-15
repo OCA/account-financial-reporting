@@ -198,6 +198,8 @@ class GeneralLedgerXslx(models.AbstractModel):
                         tags = ""
                         for tax_id in line["tax_ids"]:
                             taxes_description += taxes_data[tax_id]["tax_name"] + " "
+                        if line["tax_line_id"]:
+                            taxes_description += line["tax_line_id"][1]
                         for tag_id in line["tag_ids"]:
                             tags += tags_data[tag_id]["name"] + " "
                         line.update(
