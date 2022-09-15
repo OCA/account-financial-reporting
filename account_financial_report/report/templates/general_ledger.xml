@@ -445,6 +445,9 @@
                                 />
                             </t>
                         </t>
+                        <t t-if="line['tax_line_id']">
+                            <span t-esc="line['tax_line_id'][1]" />
+                        </t>
                     </div>
                     <!--## partner-->
                     <div class="act_as_cell left">
