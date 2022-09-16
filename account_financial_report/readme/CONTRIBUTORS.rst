@@ -23,6 +23,7 @@
   * Ernesto Tejeda
   * João Marques
   * Alexandre D. Díaz
+  * Víctor Martínez
 
 * `Sygel <https://www.sygel.es>`__:
 
