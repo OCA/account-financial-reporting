@@ -214,6 +214,7 @@
                     <t t-if='type == "account_type"'>Initial balance</t>
                     <t t-if='type == "grouped_type"'>
                         <t t-if="'partners' in account">Partner initial balance</t>
+                        <t t-if="'taxes' in account">Tax initial balance</t>
                     </t>
                 </div>
                 <t t-if="show_cost_center">
@@ -643,6 +644,7 @@
                     <div class="act_as_cell first_column" style="width: 41.32%;" />
                     <div class="act_as_cell right" style="width: 16.9%;">
                         <t t-if="'partners' in account">Partner ending balance</t>
+                        <t t-if="'taxes' in account">Tax ending balance</t>
                     </div>
                 </t>
                 <t t-if="show_cost_center">

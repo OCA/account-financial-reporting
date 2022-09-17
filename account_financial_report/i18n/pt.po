@@ -903,6 +903,11 @@ msgid "Group entries by"
 msgstr "Agrupar movimentos por"
 
 #. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__grouped_by
+msgid "Grouped By"
+msgstr ""
+
+#. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: code:addons/account_financial_report/report/open_items_xlsx.py:0
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
@@ -1147,6 +1152,11 @@ msgid "No limit"
 msgstr "Sem limite"
 
 #. module: account_financial_report
+#: model:ir.model.fields.selection,name:account_financial_report.selection__general_ledger_report_wizard__grouped_by__none
+msgid "None"
+msgstr ""
+
+#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__not_only_one_unaffected_earnings_account
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__not_only_one_unaffected_earnings_account
 msgid "Not Only One Unaffected Earnings Account"
@@ -1272,6 +1282,16 @@ msgstr "Antiguidade de saldo de parceiro acumulado"
 #, python-format
 msgid "Partner ending balance"
 msgstr "Saldo final de parceiro"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+msgid "Partner initial balance"
+msgstr ""
+
+#. module: account_financial_report
+#: model:ir.model.fields.selection,name:account_financial_report.selection__general_ledger_report_wizard__grouped_by__partners
+msgid "Partners"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__payable_accounts_only
@@ -1407,7 +1427,6 @@ msgid "Show Move Line Details"
 msgstr "Exibir Detalhes de Linhas de Movimento"
 
 #. module: account_financial_report
-#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__show_partner_details
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__show_partner_details
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__show_partner_details
 msgid "Show Partner Details"
@@ -1522,6 +1541,12 @@ msgid "Tax Groups"
 msgstr "Grupos de Impostos"
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#, python-format
+msgid "Tax Initial balance"
+msgstr ""
+
+#. module: account_financial_report
 #: code:addons/account_financial_report/report/vat_report_xlsx.py:0
 #: model:ir.model.fields.selection,name:account_financial_report.selection__vat_report_wizard__based_on__taxtags
 #, python-format
@@ -1530,7 +1555,20 @@ msgstr "Etiquetas de Imposto"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_ending_cumul
+#, python-format
+msgid "Tax ending balance"
+msgstr ""
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+msgid "Tax initial balance"
+msgstr ""
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#: model:ir.model.fields.selection,name:account_financial_report.selection__general_ledger_report_wizard__grouped_by__taxes
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 #, python-format

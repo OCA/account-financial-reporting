@@ -50,16 +50,19 @@ class GeneralLedgerReport(models.AbstractModel):
             )
         return taxes_data
 
-    def _get_acc_prt_accounts_ids(self, company_id):
+    def _get_account_internal_types(self, grouped_by):
+        return ["receivable", "payable"] if grouped_by != "taxes" else ["other"]
+
+    def _get_acc_prt_accounts_ids(self, company_id, grouped_by):
         accounts_domain = [
             ("company_id", "=", company_id),
-            ("internal_type", "in", ["receivable", "payable"]),
+            ("internal_type", "in", self._get_account_internal_types(grouped_by)),
         ]
         acc_prt_accounts = self.env["account.account"].search(accounts_domain)
         return acc_prt_accounts.ids
 
     def _get_initial_balances_bs_ml_domain(
-        self, account_ids, company_id, date_from, base_domain, acc_prt=False
+        self, account_ids, company_id, date_from, base_domain, grouped_by, acc_prt=False
     ):
         accounts_domain = [
             ("company_id", "=", company_id),
@@ -73,7 +76,8 @@ class GeneralLedgerReport(models.AbstractModel):
         accounts = self.env["account.account"].search(accounts_domain)
         domain += [("account_id", "in", accounts.ids)]
         if acc_prt:
-            domain += [("account_id.internal_type", "in", ["receivable", "payable"])]
+            internal_types = self._get_account_internal_types(grouped_by)
+            domain += [("account_id.internal_type", "in", internal_types)]
         return domain
 
     def _get_initial_balances_pl_ml_domain(
@@ -147,10 +151,10 @@ class GeneralLedgerReport(models.AbstractModel):
         return pl_initial_balance
 
     def _get_gl_initial_acc(
-        self, account_ids, company_id, date_from, fy_start_date, base_domain
+        self, account_ids, company_id, date_from, fy_start_date, base_domain, grouped_by
     ):
         initial_domain_bs = self._get_initial_balances_bs_ml_domain(
-            account_ids, company_id, date_from, base_domain
+            account_ids, company_id, date_from, base_domain, grouped_by
         )
         initial_domain_pl = self._get_initial_balances_pl_ml_domain(
             account_ids, company_id, date_from, fy_start_date, base_domain
@@ -209,6 +213,36 @@ class GeneralLedgerReport(models.AbstractModel):
                 data[acc_id][grouped_by] = True
         return data
 
+    def _prepare_gen_ld_data_group_taxes(self, data, domain, grouped_by):
+        gl_initial_acc_prt = self.env["account.move.line"].read_group(
+            domain=domain,
+            fields=[
+                "account_id",
+                "debit",
+                "credit",
+                "balance",
+                "amount_currency",
+                "tax_line_id",
+            ],
+            groupby=["account_id"],
+            lazy=False,
+        )
+        if gl_initial_acc_prt:
+            for gl in gl_initial_acc_prt:
+                if "tax_line_id" in gl and gl["tax_line_id"]:
+                    tax_id = gl["tax_line_id"][0]
+                    tax_name = gl["tax_line_id"][1]
+                    tax_name = tax_name._value
+                else:
+                    tax_id = 0
+                    tax_name = "Missing Tax"
+                acc_id = gl["account_id"][0]
+                data[acc_id][tax_id] = self._prepare_gen_ld_data_item(gl)
+                data[acc_id][tax_id]["id"] = tax_id
+                data[acc_id][tax_id]["name"] = tax_name
+                data[acc_id][grouped_by] = True
+        return data
+
     def _get_initial_balance_data(
         self,
         account_ids,
@@ -244,10 +278,10 @@ class GeneralLedgerReport(models.AbstractModel):
         if extra_domain:
             base_domain += extra_domain
         gl_initial_acc = self._get_gl_initial_acc(
-            account_ids, company_id, date_from, fy_start_date, base_domain
+            account_ids, company_id, date_from, fy_start_date, base_domain, grouped_by
         )
         domain = self._get_initial_balances_bs_ml_domain(
-            account_ids, company_id, date_from, base_domain, acc_prt=True
+            account_ids, company_id, date_from, base_domain, grouped_by, acc_prt=True
         )
         data = self._prepare_gen_ld_data(gl_initial_acc, domain, grouped_by)
         accounts_ids = list(data.keys())
@@ -391,6 +425,17 @@ class GeneralLedgerReport(models.AbstractModel):
                 else "Missing Partner"
             )
             res.append({"id": item_id, "name": item_name})
+        elif grouped_by == "taxes":
+            if move_line["tax_line_id"]:
+                item_id = move_line["tax_line_id"][0]
+                item_name = move_line["tax_line_id"][1]
+                res.append({"id": item_id, "name": item_name})
+            elif move_line["tax_ids"]:
+                for tax_id in move_line["tax_ids"]:
+                    tax_item = self.env["account.tax"].browse(tax_id)
+                    res.append({"id": tax_item.id, "name": tax_item.name})
+            else:
+                res.append({"id": 0, "name": "Missing Tax"})
         return res
 
     def _get_period_ml_data(
@@ -449,7 +494,7 @@ class GeneralLedgerReport(models.AbstractModel):
         taxes_ids = set()
         tags_ids = set()
         full_reconcile_data = {}
-        acc_prt_account_ids = self._get_acc_prt_accounts_ids(company_id)
+        acc_prt_account_ids = self._get_acc_prt_accounts_ids(company_id, grouped_by)
         for move_line in move_lines:
             journal_ids.add(move_line["journal_id"][0])
             for tax_id in move_line["tax_ids"]:
