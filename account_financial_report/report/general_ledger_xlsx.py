@@ -350,6 +350,8 @@ class GeneralLedgerXslx(models.AbstractModel):
         if "account" not in my_object["type"] and "grouped_by" in my_object:
             if my_object["grouped_by"] == "partners":
                 label = _("Partner Initial balance")
+            elif my_object["grouped_by"] == "taxes":
+                label = _("Tax Initial balance")
         label = label if label else _("Initial balance")
         return super().write_initial_balance_from_dict(my_object, label, report_data)
 
@@ -362,6 +364,8 @@ class GeneralLedgerXslx(models.AbstractModel):
             name = my_object["name"]
             if my_object["grouped_by"] == "partners":
                 label = _("Partner ending balance")
+            elif my_object["grouped_by"] == "taxes":
+                label = _("Tax ending balance")
         label = label if label else _("Ending balance")
         return super().write_ending_balance_from_dict(
             my_object, name, label, report_data
