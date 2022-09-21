@@ -55,7 +55,7 @@
                     <t t-if="'list_grouped' in account">
                         <!-- Display account partners -->
                         <t t-foreach="account['list_grouped']" t-as="group_item">
-                            <t t-set="type" t-value='"partner_type"' />
+                            <t t-set="type" t-value='"grouped_type"' />
                             <div class="page_break">
                                 <!-- Display partner header -->
                                 <div class="act_as_caption account_title">
@@ -78,7 +78,7 @@
                                         t-set="account_or_group_item_object"
                                         t-value="group_item"
                                     />
-                                    <t t-set="type" t-value='"partner_type"' />
+                                    <t t-set="type" t-value='"grouped_type"' />
                                 </t>
                             </div>
                         </t>
@@ -204,7 +204,13 @@
                 <!--## partner-->
                 <div class="act_as_cell" />
                 <!--## ref - label-->
-                <div class="act_as_cell amount">Initial balance</div>
+                <div class="act_as_cell amount">
+                    <t t-if='type == "account_type"'>Initial balance</t>
+                    <t t-if='type == "grouped_type"'>
+                        <t t-if="'partners' in account">Partner initial balance</t>
+                        <t t-if="'taxes' in account">Tax initial balance</t>
+                    </t>
+                </div>
                 <t t-if="show_cost_center">
                     <!--## cost_center-->
                     <div class="act_as_cell" />
@@ -231,7 +237,7 @@
                             />
                         </span>
                     </t>
-                    <t t-if="type == 'partner_type'">
+                    <t t-if="type == 'grouped_type'">
                         <t
                             t-set="domain"
                             t-value="[('account_id', '=', account['id']),
@@ -263,7 +269,7 @@
                             />
                         </span>
                     </t>
-                    <t t-if="type == 'partner_type'">
+                    <t t-if="type == 'grouped_type'">
                         <t
                             t-set="domain"
                             t-value="[('account_id', '=', account['id']),
@@ -294,7 +300,7 @@
                             />
                         </span>
                     </t>
-                    <t t-if="type == 'partner_type'">
+                    <t t-if="type == 'grouped_type'">
                         <t
                             t-set="domain"
                             t-value="[('account_id', '=', account['id']),
@@ -328,7 +334,7 @@
                                     />
                                 </span>
                             </t>
-                            <t t-if="type == 'partner_type'">
+                            <t t-if="type == 'grouped_type'">
                                 <t
                                     t-set="domain"
                                     t-value="[('account_id', '=', account['id']),
@@ -625,12 +631,12 @@
                         style="width: 16.9%;"
                     >Ending balance</div>
                 </t>
-                <t t-if='type == "partner_type"'>
+                <t t-if='type == "grouped_type"'>
                     <div class="act_as_cell first_column" style="width: 41.32%;" />
-                    <div
-                        class="act_as_cell right"
-                        style="width: 16.9%;"
-                    >Partner ending balance</div>
+                    <div class="act_as_cell right" style="width: 16.9%;">
+                        <t t-if="'partners' in account">Partner ending balance</t>
+                        <t t-if="'taxes' in account">Tax ending balance</t>
+                    </div>
                 </t>
                 <t t-if="show_cost_center">
                     <!--## cost_center-->
@@ -687,7 +693,7 @@
                                     </a>
                                 </span>
                             </t>
-                            <t t-if="type == 'partner_type'">
+                            <t t-if="type == 'grouped_type'">
                                 <t
                                     t-set="domain"
                                     t-value="[('account_id', '=', account['id']),
