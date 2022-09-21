@@ -84,7 +84,10 @@ class JournalLedgerReport(models.AbstractModel):
         return [("display_type", "=", False), ("move_id", "in", move_ids)]
 
     def _get_move_lines_order(self, move_ids, wizard, journal_ids):
-        return ""
+        """Add `move_id` to make sure the order of the records is correct
+        (especially if we use auto-sequence).
+        """
+        return "move_id"
 
     def _get_move_lines_data(self, ml, wizard, ml_taxes, auto_sequence):
         base_debit = (
