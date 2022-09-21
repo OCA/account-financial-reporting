@@ -83,9 +83,10 @@ class GeneralLedgerReportWizard(models.TransientModel):
         string="Account Code To",
         help="Ending account in a range",
     )
-    show_partner_details = fields.Boolean(
-        string="Show Partner Details",
-        default=True,
+    grouped_by = fields.Selection(
+        selection=[("none", "None"), ("partners", "Partners"), ("taxes", "Taxes")],
+        default="partners",
+        string="Grouped by",
     )
     show_cost_center = fields.Boolean(
         string="Show Analytic Account",
@@ -305,7 +306,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
             "company_id": self.company_id.id,
             "account_ids": self.account_ids.ids,
             "partner_ids": self.partner_ids.ids,
-            "show_partner_details": self.show_partner_details,
+            "grouped_by": self.grouped_by,
             "cost_center_ids": self.cost_center_ids.ids,
             "show_cost_center": self.show_cost_center,
             "analytic_tag_ids": self.analytic_tag_ids.ids,
