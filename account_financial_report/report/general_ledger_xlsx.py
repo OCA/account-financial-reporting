@@ -141,7 +141,6 @@ class GeneralLedgerXslx(models.AbstractModel):
         ]._get_report_values(report, data)
         general_ledger = res_data["general_ledger"]
         accounts_data = res_data["accounts_data"]
-        partners_data = res_data["partners_data"]
         journals_data = res_data["journals_data"]
         taxes_data = res_data["taxes_data"]
         tags_data = res_data["tags_data"]
@@ -154,7 +153,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                 account["code"] + " - " + accounts_data[account["id"]]["name"]
             )
 
-            if not account["partners"]:
+            if "list_grouped" not in account:
                 # Display array header for move lines
                 self.write_array_header()
 
@@ -193,6 +192,8 @@ class GeneralLedgerXslx(models.AbstractModel):
                         tags = ""
                         for tax_id in line["tax_ids"]:
                             taxes_description += taxes_data[tax_id]["tax_name"] + " "
+                        if line["tax_line_id"]:
+                            taxes_description += line["tax_line_id"][1]
                         for tag_id in line["tag_ids"]:
                             tags += tags_data[tag_id]["name"] + " "
                         line.update(
@@ -218,21 +219,23 @@ class GeneralLedgerXslx(models.AbstractModel):
 
             else:
                 # For each partner
-                for partner in account["list_partner"]:
+                for group_item in account["list_grouped"]:
                     # Write partner title
-                    self.write_array_title(partners_data[partner["id"]]["name"])
+                    self.write_array_title(group_item["name"])
 
                     # Display array header for move lines
                     self.write_array_header()
 
                     # Display initial balance line for partner
-                    partner.update(
+                    group_item.update(
                         {
-                            "initial_debit": partner["init_bal"]["debit"],
-                            "initial_credit": partner["init_bal"]["credit"],
-                            "initial_balance": partner["init_bal"]["balance"],
-                            "name": partners_data[partner["id"]]["name"],
+                            "initial_debit": group_item["init_bal"]["debit"],
+                            "initial_credit": group_item["init_bal"]["credit"],
+                            "initial_balance": group_item["init_bal"]["balance"],
                             "type": "partner",
+                            "grouped_by": account["grouped_by"]
+                            if "grouped_by" in account
+                            else "",
                             "currency_id": accounts_data[account["id"]]["currency_id"],
                         }
                     )
@@ -240,11 +243,11 @@ class GeneralLedgerXslx(models.AbstractModel):
                         account.update(
                             {"initial_bal_curr": account["init_bal"]["bal_curr"]}
                         )
-                    self.write_initial_balance_from_dict(partner)
+                    self.write_initial_balance_from_dict(group_item)
 
                     # Display account move lines
                     total_bal_curr = 0
-                    for line in partner["move_lines"]:
+                    for line in group_item["move_lines"]:
                         line.update(
                             {
                                 "account": account["code"],
@@ -276,22 +279,22 @@ class GeneralLedgerXslx(models.AbstractModel):
                         self.write_line_from_dict(line)
 
                     # Display ending balance line for partner
-                    partner.update(
+                    group_item.update(
                         {
-                            "final_debit": partner["fin_bal"]["debit"],
-                            "final_credit": partner["fin_bal"]["credit"],
-                            "final_balance": partner["fin_bal"]["balance"],
+                            "final_debit": group_item["fin_bal"]["debit"],
+                            "final_credit": group_item["fin_bal"]["credit"],
+                            "final_balance": group_item["fin_bal"]["balance"],
                         }
                     )
-                    if foreign_currency and partner["currency_id"]:
-                        partner.update(
+                    if foreign_currency and group_item["currency_id"]:
+                        group_item.update(
                             {
-                                "final_bal_curr": partner["fin_bal"]["bal_curr"],
-                                "currency_name": partner["currency_id"].name,
-                                "currency_id": partner["currency_id"].id,
+                                "final_bal_curr": group_item["fin_bal"]["bal_curr"],
+                                "currency_name": group_item["currency_id"].name,
+                                "currency_id": group_item["currency_id"].id,
                             }
                         )
-                    self.write_ending_balance_from_dict(partner)
+                    self.write_ending_balance_from_dict(group_item)
 
                     # Line break
                     self.row_pos += 1
@@ -319,20 +322,25 @@ class GeneralLedgerXslx(models.AbstractModel):
 
     def write_initial_balance_from_dict(self, my_object):
         """Specific function to write initial balance for General Ledger"""
-        if "partner" in my_object["type"]:
-            label = _("Partner Initial balance")
-        elif "account" in my_object["type"]:
-            label = _("Initial balance")
-        super(GeneralLedgerXslx, self).write_initial_balance_from_dict(my_object, label)
+        label = False
+        if "account" not in my_object["type"] and "grouped_by" in my_object:
+            if my_object["grouped_by"] == "partners":
+                label = _("Partner Initial balance")
+            elif my_object["grouped_by"] == "taxes":
+                label = _("Tax Initial balance")
+        label = label if label else _("Initial balance")
+        super().write_initial_balance_from_dict(my_object, label)
 
     def write_ending_balance_from_dict(self, my_object):
         """Specific function to write ending balance for General Ledger"""
-        if "partner" in my_object["type"]:
-            name = my_object["name"]
-            label = _("Partner ending balance")
-        elif "account" in my_object["type"]:
+        label = name = False
+        if "account" in my_object["type"]:
             name = my_object["code"] + " - " + my_object["name"]
-            label = _("Ending balance")
-        super(GeneralLedgerXslx, self).write_ending_balance_from_dict(
-            my_object, name, label
-        )
+        elif "grouped_by" in my_object:
+            name = my_object["name"]
+            if my_object["grouped_by"] == "partners":
+                label = _("Partner ending balance")
+            elif my_object["grouped_by"] == "taxes":
+                label = _("Tax ending balance")
+        label = label if label else _("Ending balance")
+        super().write_ending_balance_from_dict(my_object, name, label)
