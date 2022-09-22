@@ -240,8 +240,8 @@ class GeneralLedgerXslx(models.AbstractModel):
                         }
                     )
                     if foreign_currency:
-                        account.update(
-                            {"initial_bal_curr": account["init_bal"]["bal_curr"]}
+                        group_item.update(
+                            {"initial_bal_curr": group_item["init_bal"]["bal_curr"]}
                         )
                     self.write_initial_balance_from_dict(group_item)
 
