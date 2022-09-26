@@ -11,14 +11,16 @@ class StockMove(models.Model):
         string="Qty. to invoice",
         compute="_compute_not_invoiced_values",
         digits="Product Unit of Measure",
+        compute_sudo=True,
     )
     price_not_invoiced = fields.Float(
         string="Amount to invoice",
         compute="_compute_not_invoiced_values",
         digits="Product Price",
+        compute_sudo=True,
     )
     currency_id = fields.Many2one(
-        comodel_name="res.currency", compute="_compute_currency_id"
+        comodel_name="res.currency", compute="_compute_currency_id", compute_sudo=True
     )
     date_done = fields.Date(
         string="Effective Date", compute="_compute_date_done", store=True
