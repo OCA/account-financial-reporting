@@ -9,6 +9,12 @@ class AccountSaleStockReportNonBilledWiz(models.TransientModel):
     _name = "account.sale.stock.report.non.billed.wiz"
     _description = "Wizard to open stock moves that have not been invoiced at that time"
 
+    def _default_stock_move_non_billed_threshold(self):
+        return self.env.company.stock_move_non_billed_threshold
+
+    stock_move_non_billed_threshold = fields.Date(
+        default=lambda self: self._default_stock_move_non_billed_threshold()
+    )
     date_check = fields.Date(string="Date", default=fields.Date.today)
 
     def _get_search_domain(self):
@@ -54,7 +60,7 @@ class AccountSaleStockReportNonBilledWiz(models.TransientModel):
         dp = self.env["decimal.precision"].precision_get("Product Unit of Measure")
         # Get the moves after the threshold
         stock_moves = self.env["stock.move"].search(
-            [("date_done", ">=", self.env.company.stock_move_non_billed_threshold)]
+            [("date_done", ">=", self.stock_move_non_billed_threshold)]
         )
         # Filter the moves with the domain
         stock_moves = stock_moves.filtered_domain(self._get_search_domain())
@@ -90,10 +96,7 @@ class AccountSaleStockReportNonBilledWiz(models.TransientModel):
             "view_mode": "tree,pivot",
             "search_view_id": search_view_id,
             "name": _("Non billed moves (%(from)s -> %(to)s)")
-            % {
-                "from": self.env.company.stock_move_non_billed_threshold,
-                "to": self.date_check,
-            },
+            % {"from": self.stock_move_non_billed_threshold, "to": self.date_check},
             "res_model": "stock.move",
             "domain": [("id", "in", final_stock_move_ids)],
             "context": dict(
