@@ -8,6 +8,7 @@
             <form string="Non Billed Stock Moves">
                 <sheet>
                     <group>
+                        <field name="stock_move_non_billed_threshold" />
                         <field name="date_check" />
                     </group>
                     <footer>
