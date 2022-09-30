@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2022-05-02 11:05+0000\n"
-"Last-Translator: jabelchi <jabelchi@gmail.com>\n"
+"PO-Revision-Date: 2022-10-01 01:07+0000\n"
+"Last-Translator: pere-aquarian <pere@aquarian.tech>\n"
 "Language-Team: none\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -25,7 +25,7 @@ msgstr "%s - %s - Conciliació bancària"
 #. module: account_bank_reconciliation_summary_xlsx
 #: model:ir.actions.report,print_report_name:account_bank_reconciliation_summary_xlsx.bank_reconciliation_xlsx
 msgid "'bank_reconciliation-%s' % (object.date)"
-msgstr ""
+msgstr "'bank_reconciliation-%s' % (object.date)"
 
 #. module: account_bank_reconciliation_summary_xlsx
 #: model_terms:ir.ui.view,arch_db:account_bank_reconciliation_summary_xlsx.account_journal_dashboard_kanban_view
@@ -188,7 +188,7 @@ msgstr "Número de moviment"
 #: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:0
 #, python-format
 msgid "NONE"
-msgstr ""
+msgstr "Cap"
 
 #. module: account_bank_reconciliation_summary_xlsx
 #: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:0
