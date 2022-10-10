@@ -44,11 +44,11 @@ class AccountMove(models.Model):
                 move.financial_type = "liquidity"
             elif "payable" in internal_types:
                 balance = _balance_get(move.line_ids, "payable")
-                move.financial_type = "payable" if balance < 0 else "payable_refund"
+                move.financial_type = "payable" if balance <= 0 else "payable_refund"
             elif "receivable" in internal_types:
                 balance = _balance_get(move.line_ids, "receivable")
                 move.financial_type = (
-                    "receivable" if balance > 0 else "receivable_refund"
+                    "receivable" if balance >= 0 else "receivable_refund"
                 )
             else:
                 move.financial_type = "other"
