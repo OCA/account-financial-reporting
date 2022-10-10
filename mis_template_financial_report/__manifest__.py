@@ -3,10 +3,10 @@
 
 {
     "name": "Profit & Loss / Balance sheet MIS templates",
-    "version": "14.0.1.1.0",
+    "version": "15.0.1.0.0",
     "license": "AGPL-3",
     "author": "Hunki Enterprises BV,Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/account-financial-reporting",
+    "website": "https://github.com/OCA/mis-builder",
     "category": "Localization",
     "depends": ["mis_builder"],
     "data": [
@@ -18,5 +18,11 @@
         "views/templates.xml",
     ],
     "qweb": ["static/src/xml/mis_template_financial_report.xml"],
+    "web.report_assets_common": [
+        "mis_template_financial_report/static/src/css/mis_template_financial_report.css",
+    ],
+    "web.assets_backend": [
+        "mis_template_financial_report/static/src/css/mis_template_financial_report.css",
+    ],
     "maintainers": ["hbrunn"],
 }
