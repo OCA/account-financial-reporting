@@ -8,4 +8,8 @@
         <field name="name">Use outstanding statements</field>
         <field name="category_id" ref="base.module_category_hidden" />
     </record>
+    <record id="group_current_statement" model="res.groups">
+        <field name="name">Use current statements</field>
+        <field name="category_id" ref="base.module_category_hidden" />
+    </record>
 </odoo>

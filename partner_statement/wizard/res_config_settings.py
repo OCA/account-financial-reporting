@@ -37,6 +37,12 @@ class ResConfigSettings(models.TransientModel):
         implied_group="partner_statement.group_outstanding_statement",
     )
 
+    group_current_statement = fields.Boolean(
+        "Enable Current Statements",
+        group="account.group_account_invoice",
+        implied_group="partner_statement.group_current_statement",
+    )
+
     def set_values(self):
         self = self.with_context(active_test=False)
         # default values fields
@@ -56,4 +62,5 @@ class ResConfigSettings(models.TransientModel):
                 IrDefault.set("activity.statement.wizard", name[8:], value)
                 IrDefault.set("outstanding.statement.wizard", name[8:], value)
                 IrDefault.set("detailed.activity.statement.wizard", name[8:], value)
+                IrDefault.set("current.statement.wizard", name[8:], value)
         return super().set_values()

@@ -39,6 +39,17 @@
         />
         <field name="target">new</field>
     </record>
+    <record id="currnet_statement_wizard_action" model="ir.actions.act_window">
+        <field name="name">Partner Current Statement</field>
+        <field name="binding_model_id" ref="base.model_res_partner" />
+        <field name="res_model">current.statement.wizard</field>
+        <field name="view_mode">form</field>
+        <field
+            name="groups_id"
+            eval="[(4, ref('partner_statement.group_current_statement'))]"
+        />
+        <field name="target">new</field>
+    </record>
     <!-- wizard view -->
     <record id="statement_common_view" model="ir.ui.view">
         <field name="name">Statement Common Wizard View</field>
@@ -164,6 +175,24 @@
             <group name="aging_report" position="inside">
                 <field name="show_balance" />
             </group>
+        </field>
+    </record>
+    <record id="current_statement_wizard_view" model="ir.ui.view">
+        <field name="name">Current Statement Wizard</field>
+        <field name="model">current.statement.wizard</field>
+        <field name="inherit_id" ref="partner_statement.statement_common_view" />
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='info']/span" position="before">
+                <span class="o_form_label">
+            The current statement provides details of all partner's outstanding and current
+        receivables and payables up to a particular date. This includes all unpaid invoices, unclaimed
+        refunds and outstanding payments. The list is displayed in chronological order and is
+        split by currencies.
+                </span>
+                <br />
+                <br />
+            </xpath>
         </field>
     </record>
 </odoo>

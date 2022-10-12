@@ -17,6 +17,7 @@
         "views/activity_statement.xml",
         "views/outstanding_statement.xml",
         "views/detailed_activity_statement.xml",
+        "views/current_statement.xml",
         "views/assets.xml",
         "views/aging_buckets.xml",
         "views/res_config_settings.xml",
