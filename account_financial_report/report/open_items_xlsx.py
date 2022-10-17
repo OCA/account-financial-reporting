@@ -28,14 +28,15 @@ class OpenItemsXslx(models.AbstractModel):
             3: {"header": _("Account"), "field": "account", "width": 9},
             4: {"header": _("Partner"), "field": "partner_name", "width": 25},
             5: {"header": _("Ref - Label"), "field": "ref_label", "width": 40},
-            6: {"header": _("Due date"), "field": "date_maturity", "width": 11},
-            7: {
+            6: {"header": _("Under Litigation"), "field": "blocked", "width": 20},
+            7: {"header": _("Due date"), "field": "date_maturity", "width": 11},
+            8: {
                 "header": _("Original"),
                 "field": "original",
                 "type": "amount",
                 "width": 14,
             },
-            8: {
+            9: {
                 "header": _("Residual"),
                 "field": "amount_residual",
                 "field_final_balance": "residual",
@@ -45,21 +46,21 @@ class OpenItemsXslx(models.AbstractModel):
         }
         if report.foreign_currency:
             foreign_currency = {
-                9: {
+                10: {
                     "header": _("Cur."),
                     "field": "currency_name",
                     "field_currency_balance": "currency_name",
                     "type": "currency_name",
                     "width": 7,
                 },
-                10: {
+                11: {
                     "header": _("Cur. Original"),
                     "field": "amount_currency",
                     "field_final_balance": "amount_currency",
                     "type": "amount_currency",
                     "width": 14,
                 },
-                11: {
+                12: {
                     "header": _("Cur. Residual"),
                     "field": "amount_residual_currency",
                     "field_final_balance": "amount_currency",
@@ -136,6 +137,7 @@ class OpenItemsXslx(models.AbstractModel):
 
                         # Display account move lines
                         for line in Open_items[account_id][partner_id]:
+                            line['blocked'] = line.get('blocked', False) and 'X' or ''
                             line.update(
                                 {
                                     "account": accounts_data[account_id]["code"],
@@ -176,6 +178,7 @@ class OpenItemsXslx(models.AbstractModel):
                             {
                                 "account": accounts_data[account_id]["code"],
                                 "journal": journals_data[line["journal_id"]]["code"],
+                                "blocked": line.get('blocked', False) and 'X' or '',
                             }
                         )
                         self.write_line_from_dict(line, report_data)

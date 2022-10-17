@@ -65,6 +65,7 @@ class OpenItemsReport(models.AbstractModel):
             "currency_id",
             "amount_currency",
             "amount_residual_currency",
+            "blocked"
         ]
         move_lines = self.env["account.move.line"].search_read(
             domain=domain, fields=ml_fields

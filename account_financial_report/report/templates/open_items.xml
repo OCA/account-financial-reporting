@@ -145,6 +145,10 @@
                     Ref -
                     Label
                 </div>
+                <div class="act_as_cell" style="width: 6.47%;">
+                    Under
+                    Litigation
+                </div>
                 <!--## date_due-->
                 <div class="act_as_cell" style="width: 6.47%;">
                     Due
@@ -220,6 +224,12 @@
             <!--## ref - label-->
             <div class="act_as_cell left">
                 <span t-esc="line['ref_label']" />
+            </div>
+            <!--## blocked-->
+            <div class="act_as_cell left">
+                <span t-if="line.get('blocked', False)">
+                    <t>X</t>
+                </span>
             </div>
             <!--## date_due-->
             <div class="act_as_cell left">
