@@ -25,6 +25,8 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         # Get accounts
         cls.receivable_account = cls.company_data["default_account_receivable"]
         cls.income_account = cls.company_data["default_account_revenue"]
+        cls.journal_sale = cls.company_data["default_journal_sale"]
+        cls.journal_misc = cls.company_data["default_journal_misc"]
         cls.unaffected_account = cls.env["account.account"].search(
             [
                 (
@@ -41,6 +43,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
     def _add_move(
         self,
         date,
+        journal,
         receivable_debit,
         receivable_credit,
         income_debit,
@@ -48,9 +51,6 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         unaffected_debit=0,
         unaffected_credit=0,
     ):
-        journal = self.env["account.journal"].search(
-            [("company_id", "=", self.env.user.company_id.id)], limit=1
-        )
         partner = self.env.ref("base.res_partner_12")
         move_vals = {
             "journal_id": journal.id,
@@ -91,7 +91,9 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         move = self.env["account.move"].create(move_vals)
         move.action_post()
 
-    def _get_report_lines(self, with_partners=False, account_ids=False):
+    def _get_report_lines(
+        self, with_partners=False, account_ids=False, journal_ids=False
+    ):
         centralize = True
         if with_partners:
             centralize = False
@@ -104,6 +106,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
                 "hide_account_at_0": False,
                 "company_id": company.id,
                 "account_ids": account_ids,
+                "journal_ids": journal_ids,
                 "fy_start_date": self.fy_date_start,
                 "centralize": centralize,
             }
@@ -132,6 +135,15 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
                     if partner["id"] == partner_id:
                         partner_in_report = True
         return partner_in_report
+
+    @api.model
+    def check_journal_in_report(self, journal_id, journal_datas):
+        journal_in_report = False
+        for journal in journal_datas:
+            if journal["id"] == journal_id:
+                journal_in_report = True
+                break
+        return journal_in_report
 
     @api.model
     def _get_initial_balance(self, account_id, general_ledger):
@@ -189,6 +201,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         # to check the initial balance
         self._add_move(
             date=self.previous_fy_date_end,
+            journal=self.journal_sale,
             receivable_debit=1000,
             receivable_credit=0,
             income_debit=0,
@@ -227,6 +240,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         # to compute the initial balance
         self._add_move(
             date=self.fy_date_start,
+            journal=self.journal_sale,
             receivable_debit=0,
             receivable_credit=1000,
             income_debit=1000,
@@ -292,6 +306,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         # to check that it correctly used on report
         self._add_move(
             date=self.fy_date_end,
+            journal=self.journal_sale,
             receivable_debit=0,
             receivable_credit=1000,
             income_debit=1000,
@@ -351,6 +366,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         # to check the initial balance
         self._add_move(
             date=self.previous_fy_date_end,
+            journal=self.journal_sale,
             receivable_debit=1000,
             receivable_credit=0,
             income_debit=0,
@@ -385,6 +401,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         # to compute the initial balance
         self._add_move(
             date=self.fy_date_start,
+            journal=self.journal_sale,
             receivable_debit=0,
             receivable_credit=1000,
             income_debit=1000,
@@ -418,6 +435,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         # to check that it correctly used on report
         self._add_move(
             date=self.fy_date_end,
+            journal=self.journal_sale,
             receivable_debit=0,
             receivable_credit=1000,
             income_debit=1000,
@@ -475,6 +493,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         # to check the initial balance
         self._add_move(
             date=self.previous_fy_date_end,
+            journal=self.journal_sale,
             receivable_debit=1000,
             receivable_credit=0,
             income_debit=0,
@@ -509,6 +528,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         # to compute the initial balance
         self._add_move(
             date=self.fy_date_start,
+            journal=self.journal_sale,
             receivable_debit=0,
             receivable_credit=0,
             income_debit=0,
@@ -544,6 +564,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         # to check that it correctly used on report
         self._add_move(
             date=self.fy_date_end,
+            journal=self.journal_sale,
             receivable_debit=3000,
             receivable_credit=0,
             income_debit=0,
@@ -603,6 +624,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         # (to create an historic)
         self._add_move(
             date=self.before_previous_fy_year,
+            journal=self.journal_sale,
             receivable_debit=0,
             receivable_credit=1000,
             income_debit=1000,
@@ -635,6 +657,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         # Affect the company's result last year
         self._add_move(
             date=self.previous_fy_date_start,
+            journal=self.journal_sale,
             receivable_debit=1000,
             receivable_credit=0,
             income_debit=0,
@@ -646,6 +669,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         # Add another move last year to test the initial balance this year
         self._add_move(
             date=self.previous_fy_date_start,
+            journal=self.journal_sale,
             receivable_debit=0,
             receivable_credit=500,
             income_debit=500,
@@ -676,6 +700,108 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         self.assertEqual(unaffected_fin_balance["debit"], 1500)
         self.assertEqual(unaffected_fin_balance["credit"], 1000)
         self.assertEqual(unaffected_fin_balance["balance"], 500)
+
+    def test_05_journal_filtering(self):
+        # Generate the general ledger line
+        res_data = self._get_report_lines()
+        journal_datas = res_data["journal_datas"]
+        # Check journals
+        check_sale_journal = self.check_journal_in_report(
+            self.journal_sale.id, journal_datas
+        )
+        self.assertFalse(check_sale_journal)
+        check_misc_journal = self.check_journal_in_report(
+            self.journal_misc.id, journal_datas
+        )
+        self.assertFalse(check_misc_journal)
+
+        # Add a move on the sale journal and check balance
+        self._add_move(
+            date=self.fy_date_start,
+            journal=self.journal_sale,
+            receivable_debit=1000,
+            receivable_credit=0,
+            income_debit=0,
+            income_credit=1000,
+        )
+
+        # Re Generate the general ledger line
+        res_data = self._get_report_lines()
+        general_ledger = res_data["general_ledger"]
+        journal_datas = res_data["journal_datas"]
+        # Check journals
+        check_sale_journal = self.check_journal_in_report(
+            self.journal_sale.id, journal_datas
+        )
+        self.assertTrue(check_sale_journal)
+        check_misc_journal = self.check_journal_in_report(
+            self.journal_misc.id, journal_datas
+        )
+        self.assertFalse(check_misc_journal)
+
+        # Check the final balance
+        receivable_fin_balance = self._get_final_balance(
+            self.receivable_account.id, general_ledger
+        )
+
+        self.assertEqual(receivable_fin_balance["debit"], 1000)
+        self.assertEqual(receivable_fin_balance["credit"], 0)
+        self.assertEqual(receivable_fin_balance["balance"], 1000)
+
+        # Add a move on the misc journal and check balance
+        self._add_move(
+            date=self.fy_date_start,
+            journal=self.journal_misc,
+            receivable_debit=1000,
+            receivable_credit=0,
+            income_debit=0,
+            income_credit=1000,
+        )
+
+        # Re Generate the general ledger line
+        res_data = self._get_report_lines()
+        general_ledger = res_data["general_ledger"]
+        journal_datas = res_data["journal_datas"]
+        # Check journals
+        check_sale_journal = self.check_journal_in_report(
+            self.journal_sale.id, journal_datas
+        )
+        self.assertTrue(check_sale_journal)
+        check_misc_journal = self.check_journal_in_report(
+            self.journal_misc.id, journal_datas
+        )
+        self.assertTrue(check_misc_journal)
+
+        # Check final balance
+        receivable_fin_balance = self._get_final_balance(
+            self.receivable_account.id, general_ledger
+        )
+        self.assertEqual(receivable_fin_balance["debit"], 2000)
+        self.assertEqual(receivable_fin_balance["credit"], 0)
+        self.assertEqual(receivable_fin_balance["balance"], 2000)
+
+        # Re Generate the general ledger line
+        # with filter on sale journal
+        res_data = self._get_report_lines(journal_ids=self.journal_sale.ids)
+        general_ledger = res_data["general_ledger"]
+        journal_datas = res_data["journal_datas"]
+        # Check journals
+        check_sale_journal = self.check_journal_in_report(
+            self.journal_sale.id, journal_datas
+        )
+        self.assertTrue(check_sale_journal)
+        check_misc_journal = self.check_journal_in_report(
+            self.journal_misc.id, journal_datas
+        )
+        self.assertFalse(check_misc_journal)
+
+        # Check final balance
+        receivable_fin_balance = self._get_final_balance(
+            self.receivable_account.id, general_ledger
+        )
+        self.assertEqual(receivable_fin_balance["debit"], 1000)
+        self.assertEqual(receivable_fin_balance["credit"], 0)
+        self.assertEqual(receivable_fin_balance["balance"], 1000)
 
     def test_partner_filter(self):
         partner_1 = self.env.ref("base.res_partner_1")
