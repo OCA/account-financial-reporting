@@ -62,7 +62,14 @@ class GeneralLedgerReport(models.AbstractModel):
         return acc_prt_accounts.ids
 
     def _get_initial_balances_bs_ml_domain(
-        self, account_ids, company_id, date_from, base_domain, grouped_by, acc_prt=False
+        self,
+        account_ids,
+        journal_ids,
+        company_id,
+        date_from,
+        base_domain,
+        grouped_by,
+        acc_prt=False,
     ):
         accounts_domain = [
             ("company_id", "=", company_id),
@@ -81,7 +88,13 @@ class GeneralLedgerReport(models.AbstractModel):
         return domain
 
     def _get_initial_balances_pl_ml_domain(
-        self, account_ids, company_id, date_from, fy_start_date, base_domain
+        self,
+        account_ids,
+        journal_ids,
+        company_id,
+        date_from,
+        fy_start_date,
+        base_domain,
     ):
         accounts_domain = [
             ("company_id", "=", company_id),
@@ -111,7 +124,7 @@ class GeneralLedgerReport(models.AbstractModel):
         return gl_initial_acc
 
     def _get_initial_balance_fy_pl_ml_domain(
-        self, account_ids, company_id, fy_start_date, base_domain
+        self, account_ids, journal_ids, company_id, fy_start_date, base_domain
     ):
         accounts_domain = [
             ("company_id", "=", company_id),
@@ -127,10 +140,16 @@ class GeneralLedgerReport(models.AbstractModel):
         return domain
 
     def _get_pl_initial_balance(
-        self, account_ids, company_id, fy_start_date, foreign_currency, base_domain
+        self,
+        account_ids,
+        journal_ids,
+        company_id,
+        fy_start_date,
+        foreign_currency,
+        base_domain,
     ):
         domain = self._get_initial_balance_fy_pl_ml_domain(
-            account_ids, company_id, fy_start_date, base_domain
+            account_ids, journal_ids, company_id, fy_start_date, base_domain
         )
         initial_balances = self.env["account.move.line"].read_group(
             domain=domain,
@@ -151,13 +170,20 @@ class GeneralLedgerReport(models.AbstractModel):
         return pl_initial_balance
 
     def _get_gl_initial_acc(
-        self, account_ids, company_id, date_from, fy_start_date, base_domain, grouped_by
+        self,
+        account_ids,
+        journal_ids,
+        company_id,
+        date_from,
+        fy_start_date,
+        base_domain,
+        grouped_by,
     ):
         initial_domain_bs = self._get_initial_balances_bs_ml_domain(
-            account_ids, company_id, date_from, base_domain, grouped_by
+            account_ids, journal_ids, company_id, date_from, base_domain, grouped_by
         )
         initial_domain_pl = self._get_initial_balances_pl_ml_domain(
-            account_ids, company_id, date_from, fy_start_date, base_domain
+            account_ids, journal_ids, company_id, date_from, fy_start_date, base_domain
         )
         return self._get_accounts_initial_balance(initial_domain_bs, initial_domain_pl)
 
@@ -246,6 +272,7 @@ class GeneralLedgerReport(models.AbstractModel):
     def _get_initial_balance_data(
         self,
         account_ids,
+        journal_ids,
         partner_ids,
         company_id,
         date_from,
@@ -267,6 +294,8 @@ class GeneralLedgerReport(models.AbstractModel):
             base_domain += [("company_id", "=", company_id)]
         if partner_ids:
             base_domain += [("partner_id", "in", partner_ids)]
+        if journal_ids:
+            base_domain += [("journal_id", "in", journal_ids)]
         if only_posted_moves:
             base_domain += [("move_id.state", "=", "posted")]
         else:
@@ -278,10 +307,22 @@ class GeneralLedgerReport(models.AbstractModel):
         if extra_domain:
             base_domain += extra_domain
         gl_initial_acc = self._get_gl_initial_acc(
-            account_ids, company_id, date_from, fy_start_date, base_domain, grouped_by
+            account_ids,
+            journal_ids,
+            company_id,
+            date_from,
+            fy_start_date,
+            base_domain,
+            grouped_by,
         )
         domain = self._get_initial_balances_bs_ml_domain(
-            account_ids, company_id, date_from, base_domain, grouped_by, acc_prt=True
+            account_ids,
+            journal_ids,
+            company_id,
+            date_from,
+            base_domain,
+            grouped_by,
+            acc_prt=True,
         )
         data = self._prepare_gen_ld_data(gl_initial_acc, domain, grouped_by)
         accounts_ids = list(data.keys())
@@ -294,7 +335,12 @@ class GeneralLedgerReport(models.AbstractModel):
                 data[unaffected_id]["mame"] = ""
                 data[unaffected_id][grouped_by] = False
             pl_initial_balance = self._get_pl_initial_balance(
-                account_ids, company_id, fy_start_date, foreign_currency, base_domain
+                account_ids,
+                journal_ids,
+                company_id,
+                fy_start_date,
+                foreign_currency,
+                base_domain,
             )
             for key_bal in ["init_bal", "fin_bal"]:
                 fields_balance = ["credit", "debit", "balance"]
@@ -360,6 +406,7 @@ class GeneralLedgerReport(models.AbstractModel):
     def _get_period_domain(
         self,
         account_ids,
+        journal_ids,
         partner_ids,
         company_id,
         only_posted_moves,
@@ -375,6 +422,8 @@ class GeneralLedgerReport(models.AbstractModel):
         ]
         if account_ids:
             domain += [("account_id", "in", account_ids)]
+        if journal_ids:
+            domain += [("journal_id", "in", journal_ids)]
         if company_id:
             domain += [("company_id", "=", company_id)]
         if partner_ids:
@@ -441,6 +490,7 @@ class GeneralLedgerReport(models.AbstractModel):
     def _get_period_ml_data(
         self,
         account_ids,
+        journal_ids,
         partner_ids,
         company_id,
         foreign_currency,
@@ -455,6 +505,7 @@ class GeneralLedgerReport(models.AbstractModel):
     ):
         domain = self._get_period_domain(
             account_ids,
+            journal_ids,
             partner_ids,
             company_id,
             only_posted_moves,
@@ -798,6 +849,7 @@ class GeneralLedgerReport(models.AbstractModel):
         date_from = data["date_from"]
         partner_ids = data["partner_ids"]
         account_ids = data["account_ids"]
+        journal_ids = data["journal_ids"]
         analytic_tag_ids = data["analytic_tag_ids"]
         cost_center_ids = data["cost_center_ids"]
         grouped_by = data["grouped_by"]
@@ -809,6 +861,7 @@ class GeneralLedgerReport(models.AbstractModel):
         extra_domain = data["domain"]
         gen_ld_data = self._get_initial_balance_data(
             account_ids,
+            journal_ids,
             partner_ids,
             company_id,
             date_from,
@@ -832,6 +885,7 @@ class GeneralLedgerReport(models.AbstractModel):
             rec_after_date_to_ids,
         ) = self._get_period_ml_data(
             account_ids,
+            journal_ids,
             partner_ids,
             company_id,
             foreign_currency,
