@@ -106,7 +106,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
                 "hide_account_at_0": False,
                 "company_id": company.id,
                 "account_ids": account_ids,
-                "journal_ids": journal_ids,
+                "account_journal_ids": journal_ids,
                 "fy_start_date": self.fy_date_start,
                 "centralize": centralize,
             }
