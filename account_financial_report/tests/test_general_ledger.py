@@ -138,12 +138,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
 
     @api.model
     def check_journal_in_report(self, journal_id, journals_data):
-        journal_in_report = False
-        for journal in journals_data:
-            if journal["id"] == journal_id:
-                journal_in_report = True
-                break
-        return journal_in_report
+        return journal_id in journals_data
 
     @api.model
     def _get_initial_balance(self, account_id, general_ledger):
