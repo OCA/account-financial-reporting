@@ -137,9 +137,9 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         return partner_in_report
 
     @api.model
-    def check_journal_in_report(self, journal_id, journal_datas):
+    def check_journal_in_report(self, journal_id, journals_data):
         journal_in_report = False
-        for journal in journal_datas:
+        for journal in journals_data:
             if journal["id"] == journal_id:
                 journal_in_report = True
                 break
@@ -704,14 +704,14 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
     def test_05_journal_filtering(self):
         # Generate the general ledger line
         res_data = self._get_report_lines()
-        journal_datas = res_data["journal_datas"]
+        journals_data = res_data["journals_data"]
         # Check journals
         check_sale_journal = self.check_journal_in_report(
-            self.journal_sale.id, journal_datas
+            self.journal_sale.id, journals_data
         )
         self.assertFalse(check_sale_journal)
         check_misc_journal = self.check_journal_in_report(
-            self.journal_misc.id, journal_datas
+            self.journal_misc.id, journals_data
         )
         self.assertFalse(check_misc_journal)
 
@@ -728,14 +728,14 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         # Re Generate the general ledger line
         res_data = self._get_report_lines()
         general_ledger = res_data["general_ledger"]
-        journal_datas = res_data["journal_datas"]
+        journals_data = res_data["journals_data"]
         # Check journals
         check_sale_journal = self.check_journal_in_report(
-            self.journal_sale.id, journal_datas
+            self.journal_sale.id, journals_data
         )
         self.assertTrue(check_sale_journal)
         check_misc_journal = self.check_journal_in_report(
-            self.journal_misc.id, journal_datas
+            self.journal_misc.id, journals_data
         )
         self.assertFalse(check_misc_journal)
 
@@ -761,14 +761,14 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         # Re Generate the general ledger line
         res_data = self._get_report_lines()
         general_ledger = res_data["general_ledger"]
-        journal_datas = res_data["journal_datas"]
+        journals_data = res_data["journals_data"]
         # Check journals
         check_sale_journal = self.check_journal_in_report(
-            self.journal_sale.id, journal_datas
+            self.journal_sale.id, journals_data
         )
         self.assertTrue(check_sale_journal)
         check_misc_journal = self.check_journal_in_report(
-            self.journal_misc.id, journal_datas
+            self.journal_misc.id, journals_data
         )
         self.assertTrue(check_misc_journal)
 
@@ -784,14 +784,14 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         # with filter on sale journal
         res_data = self._get_report_lines(journal_ids=self.journal_sale.ids)
         general_ledger = res_data["general_ledger"]
-        journal_datas = res_data["journal_datas"]
+        journals_data = res_data["journals_data"]
         # Check journals
         check_sale_journal = self.check_journal_in_report(
-            self.journal_sale.id, journal_datas
+            self.journal_sale.id, journals_data
         )
         self.assertTrue(check_sale_journal)
         check_misc_journal = self.check_journal_in_report(
-            self.journal_misc.id, journal_datas
+            self.journal_misc.id, journals_data
         )
         self.assertFalse(check_misc_journal)
 
