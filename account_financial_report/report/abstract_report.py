@@ -4,7 +4,7 @@
 from odoo import api, models
 
 
-class AgedPartnerBalanceReport(models.AbstractModel):
+class AccountFinancialAbstractReport(models.AbstractModel):
     _name = "report.account_financial_report.abstract_report"
     _description = "Abstract Report"
 
