@@ -10,6 +10,7 @@ setuptools.setup(
     install_requires=[
         'odoo13-addon-account_bank_reconciliation_summary_xlsx',
         'odoo13-addon-account_financial_report',
+        'odoo13-addon-account_sale_stock_report_non_billed',
         'odoo13-addon-account_tax_balance',
         'odoo13-addon-mis_builder_cash_flow',
         'odoo13-addon-mis_template_financial_report',
