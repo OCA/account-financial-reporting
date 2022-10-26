@@ -207,6 +207,16 @@
         </div>
     </template>
     <template id="account_financial_report.report_trial_balance_line">
+        <t
+            t-set="aml_domain_common"
+            t-if="only_posted_moves"
+            t-value="[('parent_state', '=', 'posted')]"
+        />
+        <t
+            t-set="aml_domain_common"
+            t-else=""
+            t-value="[('parent_state', 'in', ('posted', 'draft'))]"
+        />
         <!-- # line -->
         <div class="act_as_row lines">
             <t t-if="not show_partner_details">
@@ -286,7 +296,10 @@
                                 ('date', '&lt;', date_from)]"
                             />
                         </t>
-                        <span t-att-domain="domain" res-model="account.move.line">
+                        <span
+                            t-att-domain="domain+aml_domain_common"
+                            res-model="account.move.line"
+                        >
                             <t
                                 t-esc="balance['initial_balance']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
@@ -309,7 +322,10 @@
                                 ('date', '&lt;', date_from)]"
                             />
                         </t>
-                        <span t-att-domain="domain" res-model="account.move.line">
+                        <span
+                            t-att-domain="domain+aml_domain_common"
+                            res-model="account.move.line"
+                        >
                             <t
                                 t-raw="balance['initial_balance']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
@@ -335,7 +351,10 @@
                                 ('date', '&lt;', date_from)]"
                         />
                     </t>
-                    <span t-att-domain="domain" res-model="account.move.line">
+                    <span
+                        t-att-domain="domain+aml_domain_common"
+                        res-model="account.move.line"
+                    >
                         <t
                             t-raw="total_amount[account_id][partner_id]['initial_balance']"
                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
@@ -366,7 +385,10 @@
                                     ('debit', '&lt;&gt;', 0)]"
                             />
                         </t>
-                        <span t-att-domain="domain" res-model="account.move.line">
+                        <span
+                            t-att-domain="domain+aml_domain_common"
+                            res-model="account.move.line"
+                        >
                             <t
                                 t-esc="balance['debit']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
@@ -393,7 +415,10 @@
                                     ('debit', '&lt;&gt;', 0)]"
                             />
                         </t>
-                        <span t-att-domain="domain" res-model="account.move.line">
+                        <span
+                            t-att-domain="domain+aml_domain_common"
+                            res-model="account.move.line"
+                        >
                             <t
                                 t-raw="balance['debit']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
@@ -423,7 +448,10 @@
                                 ('debit', '&lt;&gt;', 0)]"
                         />
                     </t>
-                    <span t-att-domain="domain" res-model="account.move.line">
+                    <span
+                        t-att-domain="domain+aml_domain_common"
+                        res-model="account.move.line"
+                    >
                         <t
                             t-raw="total_amount[account_id][partner_id]['debit']"
                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
@@ -454,7 +482,10 @@
                                     ('credit', '&lt;&gt;', 0)]"
                             />
                         </t>
-                        <span t-att-domain="domain" res-model="account.move.line">
+                        <span
+                            t-att-domain="domain+aml_domain_common"
+                            res-model="account.move.line"
+                        >
                             <t
                                 t-esc="balance['credit']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
@@ -481,7 +512,10 @@
                                     ('credit', '&lt;&gt;', 0)]"
                             />
                         </t>
-                        <span t-att-domain="domain" res-model="account.move.line">
+                        <span
+                            t-att-domain="domain+aml_domain_common"
+                            res-model="account.move.line"
+                        >
                             <t
                                 t-raw="balance['credit']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
@@ -511,7 +545,10 @@
                                 ('credit', '&lt;&gt;', 0)]"
                         />
                     </t>
-                    <span t-att-domain="domain" res-model="account.move.line">
+                    <span
+                        t-att-domain="domain+aml_domain_common"
+                        res-model="account.move.line"
+                    >
                         <t
                             t-raw="total_amount[account_id][partner_id]['credit']"
                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
@@ -542,7 +579,10 @@
                                     ('balance', '&lt;&gt;', 0)]"
                             />
                         </t>
-                        <span t-att-domain="domain" res-model="account.move.line">
+                        <span
+                            t-att-domain="domain+aml_domain_common"
+                            res-model="account.move.line"
+                        >
                             <t
                                 t-esc="balance['balance']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
@@ -567,7 +607,10 @@
                                     ('date', '&lt;=', date_to)]"
                             />
                         </t>
-                        <span t-att-domain="domain" res-model="account.move.line">
+                        <span
+                            t-att-domain="domain+aml_domain_common"
+                            res-model="account.move.line"
+                        >
                             <t
                                 t-raw="balance['balance']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
@@ -597,7 +640,10 @@
                                 ('balance', '&lt;&gt;', 0)]"
                         />
                     </t>
-                    <span t-att-domain="domain" res-model="account.move.line">
+                    <span
+                        t-att-domain="domain+aml_domain_common"
+                        res-model="account.move.line"
+                    >
                         <t
                             t-raw="total_amount[account_id][partner_id]['balance']"
                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
@@ -624,7 +670,10 @@
                                     ('date', '&lt;=', date_to)]"
                             />
                         </t>
-                        <span t-att-domain="domain" res-model="account.move.line">
+                        <span
+                            t-att-domain="domain+aml_domain_common"
+                            res-model="account.move.line"
+                        >
                             <t
                                 t-esc="balance['ending_balance']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
@@ -644,7 +693,10 @@
                                 t-value="[('account_id', 'in', balance['account_ids'])]"
                             />
                         </t>
-                        <span t-att-domain="domain" res-model="account.move.line">
+                        <span
+                            t-att-domain="domain+aml_domain_common"
+                            res-model="account.move.line"
+                        >
                             <t
                                 t-raw="balance['ending_balance']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
@@ -670,7 +722,10 @@
                                 ('date', '&lt;=', date_to)]"
                         />
                     </t>
-                    <span t-att-domain="domain" res-model="account.move.line">
+                    <span
+                        t-att-domain="domain+aml_domain_common"
+                        res-model="account.move.line"
+                    >
                         <t
                             t-esc="total_amount[account_id][partner_id]['ending_balance']"
                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
@@ -701,7 +756,7 @@
                                     />
                                 </t>
                                 <span
-                                    t-att-domain="domain"
+                                    t-att-domain="domain+aml_domain_common"
                                     res-model="account.move.line"
                                 >
                                     <t t-esc="balance['initial_currency_balance']" />
@@ -747,7 +802,7 @@
                                     />
                                 </t>
                                 <span
-                                    t-att-domain="domain"
+                                    t-att-domain="domain+aml_domain_common"
                                     res-model="account.move.line"
                                 >
                                     <t
@@ -776,7 +831,7 @@
                                     />
                                 </t>
                                 <span
-                                    t-att-domain="domain"
+                                    t-att-domain="domain+aml_domain_common"
                                     res-model="account.move.line"
                                 >
                                     <t t-raw="balance['ending_currency_balance']" />
@@ -816,7 +871,7 @@
                                     />
                                 </t>
                                 <span
-                                    t-att-domain="domain"
+                                    t-att-domain="domain+aml_domain_common"
                                     res-model="account.move.line"
                                 >
                                     <t
