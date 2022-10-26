@@ -97,6 +97,7 @@
                                 nolabel="1"
                                 widget="many2many_tags"
                                 options="{'no_create': True}"
+                                colspan="4"
                             />
                         </page>
                         <page string="Additional Filtering">
