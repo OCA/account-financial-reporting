@@ -53,6 +53,9 @@ class StockMove(models.Model):
     def get_total_devolution_moves(self):
         total_qty = 0
         for move in self:
+            # Avoid moves related to returns that not update qty on stock
+            if move.origin_returned_move_id and not move.to_refund:
+                continue
             if not move.check_is_return():
                 total_qty += move.quantity_done
             else:
