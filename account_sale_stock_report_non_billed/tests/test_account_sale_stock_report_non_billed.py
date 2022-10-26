@@ -207,3 +207,42 @@ class TestAccountSaleStrockReportNonBilled(TestStockPickingInvoiceLink):
             self.assertNotIn(move.id, domain_ids)
         for move in picking_return_return.move_lines:
             self.assertIn(move.id, domain_ids)
+
+    def test_09_move_invoice_return_without_update_qty(self):
+        picking = self.get_picking_done_so()
+        self.so._create_invoices(final=True)
+        wiz_return_form = Form(
+            self.env["stock.return.picking"].with_context(
+                active_model="stock.picking",
+                active_id=picking.id,
+                default_to_refund=False,
+            )
+        )
+        wiz_return = wiz_return_form.save()
+        return_id = wiz_return.create_returns()["res_id"]
+        picking_return = self.env["stock.picking"].browse(return_id)
+        picking_return.move_line_ids.write({"qty_done": 2})
+        picking_return.action_done()
+        wiz_return_return_form = Form(
+            self.env["stock.return.picking"].with_context(
+                active_model="stock.picking",
+                active_id=picking_return.id,
+                default_to_refund=False,
+            )
+        )
+        wiz_return_return = wiz_return_return_form.save()
+        return_return_id = wiz_return_return.create_returns()["res_id"]
+        picking_return_return = self.env["stock.picking"].browse(return_return_id)
+        picking_return_return.move_line_ids.write({"qty_done": 2})
+        picking_return_return.action_done()
+        wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
+            {"date_check": fields.Date.today()}
+        )
+        action = wiz.open_at_date()
+        domain_ids = action["domain"][0][2]
+        for move in picking.move_lines:
+            self.assertNotIn(move.id, domain_ids)
+        for move in picking_return.move_lines:
+            self.assertNotIn(move.id, domain_ids)
+        for move in picking_return_return.move_lines:
+            self.assertNotIn(move.id, domain_ids)
