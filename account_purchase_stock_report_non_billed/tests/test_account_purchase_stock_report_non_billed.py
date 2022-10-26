@@ -306,3 +306,48 @@ class TestAccountPurchaseStockReportNonBilled(common.SavepointCase):
             self.assertNotIn(move.id, domain_ids)
         for move in picking_return_return.move_lines:
             self.assertIn(move.id, domain_ids)
+
+    def test_10_move_invoice_return_without_update_qty(self):
+        self.po.button_confirm()
+        # Validate shipment
+        picking = self.po.picking_ids[0]
+        # Process pickings
+        picking.action_confirm()
+        picking.move_lines.quantity_done = 1.0
+        picking.button_validate()
+        inv_action = self.po.action_view_invoice()
+        inv_form = Form(self.env["account.move"].with_context(**inv_action["context"]))
+        inv_form.save()
+        wiz_return_form = Form(
+            self.env["stock.return.picking"].with_context(
+                active_model="stock.picking", active_id=picking.id, to_refund=False
+            )
+        )
+        wiz_return = wiz_return_form.save()
+        return_id = wiz_return.create_returns()["res_id"]
+        picking_return = self.env["stock.picking"].browse(return_id)
+        picking_return.move_line_ids.write({"qty_done": 1})
+        picking_return.action_done()
+        wiz_return_return_form = Form(
+            self.env["stock.return.picking"].with_context(
+                active_model="stock.picking",
+                active_id=picking_return.id,
+                to_refund=False,
+            )
+        )
+        wiz_return_return = wiz_return_return_form.save()
+        return_return_id = wiz_return_return.create_returns()["res_id"]
+        picking_return_return = self.env["stock.picking"].browse(return_return_id)
+        picking_return_return.move_line_ids.write({"qty_done": 1})
+        picking_return_return.action_done()
+        wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
+            {"date_check": fields.Date.today()}
+        )
+        action = wiz.open_at_date()
+        domain_ids = action["domain"][0][2]
+        for move in picking.move_lines:
+            self.assertNotIn(move.id, domain_ids)
+        for move in picking_return.move_lines:
+            self.assertNotIn(move.id, domain_ids)
+        for move in picking_return_return.move_lines:
+            self.assertNotIn(move.id, domain_ids)
