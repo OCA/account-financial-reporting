@@ -40,6 +40,9 @@ class AccountSaleStockReportNonBilledWiz(models.TransientModel):
     def _get_neutralized_moves(self, stock_moves):
         neutralized_moves = self.env["stock.move"]
         for move in stock_moves.sorted("origin_returned_move_id"):
+            # Not show returns that not update qty on stock
+            if move.origin_returned_move_id and not move.to_refund:
+                neutralized_moves |= move
             if move in neutralized_moves:
                 continue
             dp = self.env["decimal.precision"].precision_get("Product Unit of Measure")
