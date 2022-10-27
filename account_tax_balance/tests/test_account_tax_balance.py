@@ -10,7 +10,7 @@ from dateutil.rrule import MONTHLY
 import odoo
 from odoo import fields
 from odoo.fields import Date
-from odoo.tests.common import HttpCase
+from odoo.tests.common import Form, HttpCase
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
@@ -19,7 +19,7 @@ from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 class TestAccountTaxBalance(HttpCase):
     def setUp(self):
         super().setUp()
-
+        self.env.user.groups_id = [(4, self.env.ref("account.group_account_user").id)]
         self.company = self.env.user.company_id
         self.range_type = self.env["date.range.type"].create(
             {"name": "Fiscal year", "allow_overlap": False}
@@ -44,59 +44,40 @@ class TestAccountTaxBalance(HttpCase):
         previous_taxes_ids = (
             self.env["account.tax"].search([("has_moves", "=", True)]).ids
         )
-        tax_account_id = (
-            self.env["account.account"]
-            .create(
-                {
-                    "name": "Tax Paid",
-                    "code": "TAXTEST",
-                    "user_type_id": self.env.ref(
-                        "account.data_account_type_current_liabilities"
-                    ).id,
-                }
-            )
-            .id
+        tax_account_id = self.env["account.account"].create(
+            {
+                "name": "Tax Paid",
+                "code": "TAXTEST",
+                "account_type": "liability_current",
+            }
         )
         tax = self.env["account.tax"].create(
             {"name": "Tax 10.0%", "amount": 10.0, "amount_type": "percent"}
         )
-        invoice_line_account_id = (
-            self.env["account.account"]
-            .create(
-                {
-                    "user_type_id": self.env.ref(
-                        "account.data_account_type_expenses"
-                    ).id,
-                    "code": "EXPTEST",
-                    "name": "Test expense account",
-                }
-            )
-            .id
-        )
-        product = self.env.ref("product.product_product_4")
-        invoice = self.env["account.move"].create(
+        invoice_line_account_id = self.env["account.account"].create(
             {
-                "partner_id": self.env.ref("base.res_partner_2").id,
-                "move_type": "out_invoice",
-                "invoice_line_ids": [
-                    (
-                        0,
-                        None,
-                        {
-                            "product_id": product.id,
-                            "quantity": 1.0,
-                            "price_unit": 100.0,
-                            "name": "product that cost 100",
-                            "account_id": invoice_line_account_id,
-                            "tax_ids": [(6, 0, [tax.id])],
-                        },
-                    )
-                ],
+                "account_type": "expense",
+                "code": "EXPTEST",
+                "name": "Test expense account",
             }
         )
+        product = self.env.ref("product.product_product_4")
+        invoice_form = Form(
+            self.env["account.move"].with_context(
+                default_move_type="out_invoice",
+            )
+        )
+        invoice_form.partner_id = self.env.ref("base.res_partner_2")
+        with invoice_form.invoice_line_ids.new() as line:
+            line.product_id = product
+            line.quantity = 1.0
+            line.price_unit = 100.0
+            line.name = "product that cost 100"
+            line.account_id = invoice_line_account_id
+            line.tax_ids.clear()
+            line.tax_ids.add(tax)
+        invoice = invoice_form.save()
 
-        invoice._onchange_invoice_line_ids()
-        invoice._convert_to_write(invoice._cache)
         self.assertEqual(invoice.state, "draft")
 
         # change the state of invoice to open by clicking Validate button
@@ -159,29 +140,21 @@ class TestAccountTaxBalance(HttpCase):
         self.assertEqual(state_list, [])
 
         product = self.env.ref("product.product_product_2")
-        refund = self.env["account.move"].create(
-            {
-                "partner_id": self.env.ref("base.res_partner_2").id,
-                "move_type": "out_refund",
-                "invoice_line_ids": [
-                    (
-                        0,
-                        None,
-                        {
-                            "product_id": product.id,
-                            "quantity": 1.0,
-                            "price_unit": 25.0,
-                            "name": "returned product that cost 25",
-                            "account_id": invoice_line_account_id,
-                            "tax_ids": [(6, 0, [tax.id])],
-                        },
-                    )
-                ],
-            }
-        )
+        with Form(
+            self.env["account.move"].with_context(default_move_type="out_refund")
+        ) as refund_form:
+            refund_form.partner_id = self.env.ref("base.res_partner_2")
+            with refund_form.invoice_line_ids.new() as line:
+                line.product_id = product
+                line.quantity = 1.0
+                line.price_unit = 25.0
+                line.name = "returned product that cost 25"
+                line.account_id = invoice_line_account_id
+                line.tax_ids.clear()
+                line.tax_ids.add(tax)
 
-        refund._onchange_invoice_line_ids()
-        refund._convert_to_write(invoice._cache)
+            refund = refund_form.save()
+
         self.assertEqual(refund.state, "draft")
 
         # change the state of refund to open by clicking Validate button
@@ -201,16 +174,12 @@ class TestAccountTaxBalance(HttpCase):
         tax_repartition_line = tax.invoice_repartition_line_ids.filtered(
             lambda line: line.repartition_type == "tax"
         )
-        liquidity_account_id = (
-            self.env["account.account"]
-            .search(
-                [
-                    ("internal_type", "=", "liquidity"),
-                    ("company_id", "=", self.company.id),
-                ],
-                limit=1,
-            )
-            .id
+        liquidity_account_id = self.env["account.account"].search(
+            [
+                ("account_type", "in", ["asset_cash", "liability_credit_card"]),
+                ("company_id", "=", self.company.id),
+            ],
+            limit=1,
         )
         move = self.env["account.move"].create(
             {
@@ -228,7 +197,7 @@ class TestAccountTaxBalance(HttpCase):
                         0,
                         0,
                         {
-                            "account_id": liquidity_account_id,
+                            "account_id": liquidity_account_id.id,
                             "debit": 110,
                             "credit": 0,
                             "name": "Bank Fees",
@@ -238,7 +207,7 @@ class TestAccountTaxBalance(HttpCase):
                         0,
                         0,
                         {
-                            "account_id": invoice_line_account_id,
+                            "account_id": invoice_line_account_id.id,
                             "debit": 0,
                             "credit": 100,
                             "name": "Bank Fees",
@@ -249,7 +218,7 @@ class TestAccountTaxBalance(HttpCase):
                         0,
                         0,
                         {
-                            "account_id": tax_account_id,
+                            "account_id": tax_account_id.id,
                             "debit": 0,
                             "credit": 10,
                             "name": "Bank Fees",
@@ -260,7 +229,7 @@ class TestAccountTaxBalance(HttpCase):
             }
         )
         move.action_post()
-        tax.refresh()
+        tax.invalidate_recordset()
         self.assertEqual(tax.base_balance, 175.0)
         self.assertEqual(tax.balance, 17.5)
 
