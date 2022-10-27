@@ -21,6 +21,7 @@ msgstr ""
 "X-Generator: Weblate 3.10\n"
 
 #. module: account_tax_balance
+#. odoo-python
 #: code:addons/account_tax_balance/wizard/open_tax_balances.py:0
 #, python-format
 msgid "%(name)s: %(target)s from %(from)s to %(to)s"
@@ -28,7 +29,6 @@ msgstr "%(name)s:%(target)s de la %(from)s la %(to)s"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
-#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "Account Tax"
 msgstr "Cont TVA"
 
@@ -95,9 +95,6 @@ msgid "Date Range"
 msgstr "Interval"
 
 #. module: account_tax_balance
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_move__display_name
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_move_line__display_name
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__display_name
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__display_name
 msgid "Display Name"
 msgstr "Afișați nume"
@@ -125,9 +122,6 @@ msgid "Has balance in period"
 msgstr ""
 
 #. module: account_tax_balance
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_move__id
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_move_line__id
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__id
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__id
 msgid "ID"
 msgstr "ID"
@@ -143,9 +137,6 @@ msgid "Journal Item"
 msgstr "Articol de jurnal"
 
 #. module: account_tax_balance
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_move____last_update
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_move_line____last_update
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax____last_update
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances____last_update
 msgid "Last Modified on"
 msgstr "Ultima dată modificat"
@@ -161,6 +152,7 @@ msgid "Last Updated on"
 msgstr ""
 
 #. module: account_tax_balance
+#. odoo-python
 #: code:addons/account_tax_balance/models/account_move.py:0
 #, python-format
 msgid "Liquidity"
@@ -177,30 +169,35 @@ msgid "Open Taxes"
 msgstr "Impozite deschise"
 
 #. module: account_tax_balance
+#. odoo-python
 #: code:addons/account_tax_balance/models/account_move.py:0
 #, python-format
 msgid "Other"
 msgstr ""
 
 #. module: account_tax_balance
+#. odoo-python
 #: code:addons/account_tax_balance/models/account_move.py:0
 #, python-format
 msgid "Payable"
 msgstr ""
 
 #. module: account_tax_balance
+#. odoo-python
 #: code:addons/account_tax_balance/models/account_move.py:0
 #, python-format
 msgid "Payable refund"
 msgstr ""
 
 #. module: account_tax_balance
+#. odoo-python
 #: code:addons/account_tax_balance/models/account_move.py:0
 #, python-format
 msgid "Receivable"
 msgstr ""
 
 #. module: account_tax_balance
+#. odoo-python
 #: code:addons/account_tax_balance/models/account_move.py:0
 #, python-format
 msgid "Receivable refund"
@@ -262,6 +259,7 @@ msgid "Total Base Balance"
 msgstr "Solt total inițial"
 
 #. module: account_tax_balance
+#. odoo-python
 #: code:addons/account_tax_balance/models/account_tax.py:0
 #, python-format
 msgid "Unsupported search operator"
