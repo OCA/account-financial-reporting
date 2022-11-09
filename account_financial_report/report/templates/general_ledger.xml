@@ -335,7 +335,30 @@
                                 </span>
                             </t>
                         </div>
-                        <div class="act_as_cell amount" style="width: 3.63%;" />
+                        <div class="act_as_cell amount" style="width: 3.63%;">
+                            <t t-if="type == 'account_type'">
+                                <span
+                                    t-att-domain="misc_domain"
+                                    res-model="account.move.line"
+                                >
+                                    <t
+                                        t-raw="account_or_group_item_object['init_bal']['bal_curr']"
+                                        t-options="{'widget': 'monetary', 'display_currency': account['currency_id']}"
+                                    />
+                                </span>
+                            </t>
+                            <t t-if="type == 'grouped_type'">
+                                <span
+                                    t-att-domain="misc_domain+partner_domain"
+                                    res-model="account.move.line"
+                                >
+                                    <t
+                                        t-raw="account_or_group_item_object['init_bal']['bal_curr']"
+                                        t-options="{'widget': 'monetary', 'display_currency': account['currency_id']}"
+                                    />
+                                </span>
+                            </t>
+                        </div>
                     </t>
                     <t t-if="not account['currency_id']">
                         <div class="act_as_cell" style="width: 3.63%;" />
@@ -344,7 +367,10 @@
                 </t>
             </div>
             <!-- Display each lines -->
-            <t t-set="total_bal_curr" t-value="0" />
+            <t
+                t-set="total_bal_curr"
+                t-value="account_or_group_item_object['init_bal']['bal_curr'] or 0"
+            />
             <t t-foreach="account_or_group_item_object['move_lines']" t-as="line">
                 <!-- # lines or centralized lines -->
                 <div class="act_as_row lines">
@@ -698,7 +724,38 @@
                                 </span>
                             </t>
                         </div>
-                        <div class="act_as_cell amount" style="width: 3.63%;" />
+                        <div class="act_as_cell amount" style="width: 3.63%;">
+                            <t t-if="type == 'account_type'">
+                                <span>
+                                    <a
+                                        t-att-data-t-att-domain="misc_domain"
+                                        t-att-data-res-model="'account.move.line'"
+                                        class="o_account_financial_reports_web_action_monetary_multi"
+                                        style="color: black;"
+                                    >
+                                        <t
+                                            t-raw="account_or_group_item_object['fin_bal']['bal_curr']"
+                                            t-options="{'widget': 'monetary', 'display_currency': account['currency_id']}"
+                                        />
+                                    </a>
+                                </span>
+                            </t>
+                            <t t-if="type == 'grouped_type'">
+                                <span>
+                                    <a
+                                        t-att-data-t-att-domain="misc_domain+partner_domain"
+                                        t-att-data-res-model="'account.move.line'"
+                                        class="o_account_financial_reports_web_action_monetary_multi"
+                                        style="color: black;"
+                                    >
+                                        <t
+                                            t-raw="account_or_group_item_object['fin_bal']['bal_curr']"
+                                            t-options="{'widget': 'monetary', 'display_currency': account['currency_id']}"
+                                        />
+                                    </a>
+                                </span>
+                            </t>
+                        </div>
                     </t>
                     <t t-if="not account['currency_id']">
                         <div class="act_as_cell amount" style="width: 3.63%;" />
