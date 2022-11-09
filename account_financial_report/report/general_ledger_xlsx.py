@@ -83,6 +83,8 @@ class GeneralLedgerXslx(models.AbstractModel):
                 {
                     "header": _("Cumul cur."),
                     "field": "total_bal_curr",
+                    "field_initial_balance": "initial_bal_curr",
+                    "field_final_balance": "final_bal_curr",
                     "type": "amount_currency",
                     "width": 10,
                 },
@@ -149,6 +151,7 @@ class GeneralLedgerXslx(models.AbstractModel):
         # For each account
         for account in general_ledger:
             # Write account title
+            total_bal_curr = account["init_bal"]["bal_curr"]
             self.write_array_title(
                 account["code"] + " - " + accounts_data[account["id"]]["name"]
             )
@@ -172,7 +175,6 @@ class GeneralLedgerXslx(models.AbstractModel):
                 self.write_initial_balance_from_dict(account)
 
                 # Display account move lines
-                total_bal_curr = 0
                 for line in account["move_lines"]:
                     line.update(
                         {
@@ -219,6 +221,7 @@ class GeneralLedgerXslx(models.AbstractModel):
 
             else:
                 # For each partner
+                total_bal_curr = account["init_bal"]["bal_curr"]
                 for group_item in account["list_grouped"]:
                     # Write partner title
                     self.write_array_title(group_item["name"])
@@ -246,7 +249,6 @@ class GeneralLedgerXslx(models.AbstractModel):
                     self.write_initial_balance_from_dict(group_item)
 
                     # Display account move lines
-                    total_bal_curr = 0
                     for line in group_item["move_lines"]:
                         line.update(
                             {
