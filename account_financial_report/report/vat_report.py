@@ -226,8 +226,8 @@ class VATReport(models.AbstractModel):
             )
         return {
             "doc_ids": [wizard_id],
-            "doc_model": "open.items.report.wizard",
-            "docs": self.env["open.items.report.wizard"].browse(wizard_id),
+            "doc_model": "vat.report.wizard",
+            "docs": self.env["vat.report.wizard"].browse(wizard_id),
             "company_name": company.display_name,
             "company_currency": company.currency_id,
             "currency_name": company.currency_id.name,
