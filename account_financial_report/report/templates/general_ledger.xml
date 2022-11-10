@@ -221,16 +221,22 @@
                 </t>
                 <!--## matching_number-->
                 <div class="act_as_cell" />
+                <t
+                    t-set="misc_domain"
+                    t-value="[('account_id', '=', account['id']),('date', '&lt;', date_from)]"
+                />
+                <t
+                    t-set="partner_domain"
+                    t-value="[('partner_id', '=', account_or_group_item_object['id'])]"
+                />
                 <!--## debit-->
                 <div class="act_as_cell amount">
+                    <t t-set="debit_domain" t-value="[('debit', '&lt;&gt;', 0)]" />
                     <t t-if="type == 'account_type'">
-                        <t
-                            t-set="domain"
-                            t-value="[('account_id', '=', account['id']),
-                                     ('date', '&lt;', date_from),
-                                     ('debit', '&lt;&gt;', 0)]"
-                        />
-                        <span t-att-domain="domain" res-model="account.move.line">
+                        <span
+                            t-att-domain="misc_domain+debit_domain"
+                            res-model="account.move.line"
+                        >
                             <t
                                 t-raw="account_or_group_item_object['init_bal']['debit']"
                                 t-options="{'widget': 'monetary', 'display_currency': company_currency}"
@@ -238,14 +244,10 @@
                         </span>
                     </t>
                     <t t-if="type == 'grouped_type'">
-                        <t
-                            t-set="domain"
-                            t-value="[('account_id', '=', account['id']),
-                                     ('partner_id', '=', group_item['id']),
-                                     ('date', '&lt;', date_from),
-                                     ('debit', '&lt;&gt;', 0)]"
-                        />
-                        <span t-att-domain="domain" res-model="account.move.line">
+                        <span
+                            t-att-domain="misc_domain+debit_domain+partner_domain"
+                            res-model="account.move.line"
+                        >
                             <t
                                 t-raw="account_or_group_item_object['init_bal']['debit']"
                                 t-options="{'widget': 'monetary', 'display_currency': company_currency}"
@@ -255,14 +257,12 @@
                 </div>
                 <!--## credit-->
                 <div class="act_as_cell amount">
+                    <t t-set="credit_domain" t-value="[('credit', '&lt;&gt;', 0)]" />
                     <t t-if="type == 'account_type'">
-                        <t
-                            t-set="domain"
-                            t-value="[('account_id', '=',  account['id']),
-                                     ('date', '&lt;', date_from),
-                                     ('credit', '&lt;&gt;', 0)]"
-                        />
-                        <span t-att-domain="domain" res-model="account.move.line">
+                        <span
+                            t-att-domain="misc_domain+credit_domain"
+                            res-model="account.move.line"
+                        >
                             <t
                                 t-raw="account_or_group_item_object['init_bal']['credit']"
                                 t-options="{'widget': 'monetary', 'display_currency': company_currency}"
@@ -270,14 +270,10 @@
                         </span>
                     </t>
                     <t t-if="type == 'grouped_type'">
-                        <t
-                            t-set="domain"
-                            t-value="[('account_id', '=', account['id']),
-                                     ('partner_id', '=', group_item['id']),
-                                     ('date', '&lt;', date_from),
-                                     ('credit', '&lt;&gt;', 0)]"
-                        />
-                        <span t-att-domain="domain" res-model="account.move.line">
+                        <span
+                            t-att-domain="misc_domain+credit_domain+partner_domain"
+                            res-model="account.move.line"
+                        >
                             <t
                                 t-raw="account_or_group_item_object['init_bal']['credit']"
                                 t-options="{'widget': 'monetary', 'display_currency': company_currency}"
@@ -288,12 +284,7 @@
                 <!--## balance cumulated-->
                 <div class="act_as_cell amount">
                     <t t-if="type == 'account_type'">
-                        <t
-                            t-set="domain"
-                            t-value="[('account_id', '=', account['id']),
-                                     ('date', '&lt;', date_from)]"
-                        />
-                        <span t-att-domain="domain" res-model="account.move.line">
+                        <span t-att-domain="misc_domain" res-model="account.move.line">
                             <t
                                 t-raw="account_or_group_item_object['init_bal']['balance']"
                                 t-options="{'widget': 'monetary', 'display_currency': company_currency}"
@@ -301,13 +292,10 @@
                         </span>
                     </t>
                     <t t-if="type == 'grouped_type'">
-                        <t
-                            t-set="domain"
-                            t-value="[('account_id', '=', account['id']),
-                                     ('partner_id', '=', group_item['id']),
-                                     ('date', '&lt;', date_from)]"
-                        />
-                        <span t-att-domain="domain" res-model="account.move.line">
+                        <span
+                            t-att-domain="misc_domain+partner_domain"
+                            res-model="account.move.line"
+                        >
                             <t
                                 t-raw="account_or_group_item_object['init_bal']['balance']"
                                 t-options="{'widget': 'monetary', 'display_currency': company_currency}"
@@ -319,13 +307,8 @@
                     <t t-if="account['currency_id']">
                         <div class="act_as_cell amount" style="width: 3.63%;">
                             <t t-if="type == 'account_type'">
-                                <t
-                                    t-set="domain"
-                                    t-value="[('account_id', '=', account['id']),
-                                             ('date', '&lt;', o.date_from)]"
-                                />
                                 <span
-                                    t-att-domain="domain"
+                                    t-att-domain="misc_domain"
                                     res-model="account.move.line"
                                 >
                                     <t
@@ -335,14 +318,8 @@
                                 </span>
                             </t>
                             <t t-if="type == 'grouped_type'">
-                                <t
-                                    t-set="domain"
-                                    t-value="[('account_id', '=', account['id']),
-                                             ('partner_id', '=', group_item['id']),
-                                             ('date', '&lt;', o.date_from)]"
-                                />
                                 <span
-                                    t-att-domain="domain"
+                                    t-att-domain="misc_domain+partner_domain"
                                     res-model="account.move.line"
                                 >
                                     <t
@@ -670,18 +647,21 @@
                     />
                 </div>
                 <!--## currency_name + amount_currency-->
+                <t
+                    t-set="misc_domain"
+                    t-value="[('account_id', '=', account['id']),('date', '&lt;', date_from)]"
+                />
+                <t
+                    t-set="partner_domain"
+                    t-value="[('partner_id', '=', account_or_group_item_object['id'])]"
+                />
                 <t t-if="foreign_currency">
                     <t t-if="account['currency_id']">
                         <div class="act_as_cell amount" style="width: 3.63%;">
                             <t t-if="type == 'account_type'">
-                                <t
-                                    t-set="domain"
-                                    t-value="[('account_id', '=', account['id']),
-                                             ('date', '&lt;', date_from)]"
-                                />
                                 <span>
                                     <a
-                                        t-att-data-t-att-domain="domain"
+                                        t-att-data-t-att-domain="misc_domain"
                                         t-att-data-res-model="'account.move.line'"
                                         class="o_account_financial_reports_web_action_monetary_multi"
                                         style="color: black;"
@@ -694,15 +674,9 @@
                                 </span>
                             </t>
                             <t t-if="type == 'grouped_type'">
-                                <t
-                                    t-set="domain"
-                                    t-value="[('account_id', '=', account['id']),
-                                             ('partner_id', '=', group_item['id']),
-                                             ('date', '&lt;', date_from)]"
-                                />
                                 <span>
                                     <a
-                                        t-att-data-t-att-domain="domain"
+                                        t-att-data-t-att-domain="misc_domain+partner_domain"
                                         t-att-data-res-model="'account.move.line'"
                                         class="o_account_financial_reports_web_action_monetary_multi"
                                         style="color: black;"
