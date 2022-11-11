@@ -232,9 +232,11 @@
                     t-value="[('account_id', '=', account['id']),('date', '&lt;', date_from)]"
                 />
                 <t
-                    t-set="partner_domain"
+                    t-set="misc_grouped_domain"
                     t-value="[('partner_id', '=', account_or_group_item_object['id'])]"
+                    t-if="'partners' in account"
                 />
+                <t t-set="misc_grouped_domain" t-value="[]" t-else="" />
                 <!--## debit-->
                 <div class="act_as_cell amount">
                     <t t-set="debit_domain" t-value="[('debit', '&lt;&gt;', 0)]" />
@@ -251,7 +253,7 @@
                     </t>
                     <t t-if="type == 'grouped_type'">
                         <span
-                            t-att-domain="misc_domain+debit_domain+partner_domain"
+                            t-att-domain="misc_domain+debit_domain+misc_grouped_domain"
                             res-model="account.move.line"
                         >
                             <t
@@ -277,7 +279,7 @@
                     </t>
                     <t t-if="type == 'grouped_type'">
                         <span
-                            t-att-domain="misc_domain+credit_domain+partner_domain"
+                            t-att-domain="misc_domain+credit_domain+misc_grouped_domain"
                             res-model="account.move.line"
                         >
                             <t
@@ -299,7 +301,7 @@
                     </t>
                     <t t-if="type == 'grouped_type'">
                         <span
-                            t-att-domain="misc_domain+partner_domain"
+                            t-att-domain="misc_domain+misc_grouped_domain"
                             res-model="account.move.line"
                         >
                             <t
@@ -325,7 +327,7 @@
                             </t>
                             <t t-if="type == 'grouped_type'">
                                 <span
-                                    t-att-domain="misc_domain+partner_domain"
+                                    t-att-domain="misc_domain+misc_grouped_domain"
                                     res-model="account.move.line"
                                 >
                                     <t
@@ -349,7 +351,7 @@
                             </t>
                             <t t-if="type == 'grouped_type'">
                                 <span
-                                    t-att-domain="misc_domain+partner_domain"
+                                    t-att-domain="misc_domain+misc_grouped_domain"
                                     res-model="account.move.line"
                                 >
                                     <t
@@ -687,9 +689,11 @@
                     t-value="[('account_id', '=', account['id']),('date', '&lt;', date_from)]"
                 />
                 <t
-                    t-set="partner_domain"
+                    t-set="misc_grouped_domain"
                     t-value="[('partner_id', '=', account_or_group_item_object['id'])]"
+                    t-if="'partners' in account"
                 />
+                <t t-set="misc_grouped_domain" t-value="[]" t-else="" />
                 <t t-if="foreign_currency">
                     <t t-if="account['currency_id']">
                         <div class="act_as_cell amount" style="width: 3.63%;">
@@ -711,7 +715,7 @@
                             <t t-if="type == 'grouped_type'">
                                 <span>
                                     <a
-                                        t-att-data-t-att-domain="misc_domain+partner_domain"
+                                        t-att-data-t-att-domain="misc_domain+misc_grouped_domain"
                                         t-att-data-res-model="'account.move.line'"
                                         class="o_account_financial_reports_web_action_monetary_multi"
                                         style="color: black;"
@@ -743,7 +747,7 @@
                             <t t-if="type == 'grouped_type'">
                                 <span>
                                     <a
-                                        t-att-data-t-att-domain="misc_domain+partner_domain"
+                                        t-att-data-t-att-domain="misc_domain+misc_grouped_domain"
                                         t-att-data-res-model="'account.move.line'"
                                         class="o_account_financial_reports_web_action_monetary_multi"
                                         style="color: black;"
