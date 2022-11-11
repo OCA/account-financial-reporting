@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2016 Lorenzo Battistini - Agile Business Group
+     Copyright 2016 Antonio Espinosa <antonio.espinosa@tecnativa.com>
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="view_tax_tree_balance" model="ir.ui.view">
+        <field name="name">account.tax.tree.balance</field>
+        <field name="model">account.tax</field>
+        <field eval="100" name="priority" />
+        <field name="arch" type="xml">
+            <tree create="false" delete="false">
+                <field name="name" />
+                <field name="description" string="Short Name" />
+                <field name="balance_regular" sum="Total" />
+                <button
+                    type="object"
+                    name="view_tax_regular_lines"
+                    title="View tax regular lines"
+                    icon="fa-search-plus"
+                />
+                <field name="base_balance_regular" sum="Base Total" />
+                <button
+                    type="object"
+                    name="view_base_regular_lines"
+                    title="View base regular lines"
+                    icon="fa-search-plus"
+                />
+                <field name="balance_refund" sum="Total" />
+                <button
+                    type="object"
+                    name="view_tax_refund_lines"
+                    title="View tax refund lines"
+                    icon="fa-search-plus"
+                />
+                <field name="base_balance_refund" sum="Base Total" />
+                <button
+                    type="object"
+                    name="view_base_refund_lines"
+                    title="View base refund lines"
+                    icon="fa-search-plus"
+                />
+                <field name="balance" sum="Total" />
+                <button
+                    type="object"
+                    name="view_tax_lines"
+                    title="View tax lines"
+                    icon="fa-search-plus"
+                />
+                <field name="base_balance" sum="Base Total" />
+                <button
+                    type="object"
+                    name="view_base_lines"
+                    title="View base lines"
+                    icon="fa-search-plus"
+                />
+            </tree>
+        </field>
+    </record>
+    <record id="view_tax_search_balance" model="ir.ui.view">
+        <field name="name">account.tax.search.balance</field>
+        <field name="model">account.tax</field>
+        <field eval="100" name="priority" />
+        <field name="arch" type="xml">
+            <search string="Account Tax">
+                <field name="name" />
+                <field name="description" string="Short Name" />
+                <field name="type_tax_use" />
+                <group expand="0" string="Group By">
+                    <filter
+                        name="tax_group"
+                        string="Tax Group"
+                        domain="[]"
+                        context="{'group_by':'tax_group_id'}"
+                    />
+                    <filter
+                        name="tax_scope"
+                        string="Tax Scope"
+                        domain="[]"
+                        context="{'group_by':'type_tax_use'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_tax_balances_tree" model="ir.actions.act_window">
+        <field name="name">Taxes Balance</field>
+        <field name="res_model">account.tax</field>
+        <field name="view_mode">tree</field>
+        <field name="domain">[('has_moves', '=', True)]</field>
+        <field name="view_id" ref="view_tax_tree_balance" />
+        <field name="search_view_id" ref="view_tax_search_balance" />
+    </record>
+</odoo>

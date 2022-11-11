@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2016 Antonio Espinosa <antonio.espinosa@tecnativa.com>
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="view_move_tree" model="ir.ui.view">
+        <field name="name">Add move type column</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_tree" />
+        <field name="arch" type="xml">
+            <field name="state" position="after">
+                <field name="financial_type" />
+            </field>
+        </field>
+    </record>
+    <record id="view_move_form" model="ir.ui.view">
+        <field name="name">Add move type field</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form" />
+        <field name="arch" type="xml">
+            <field name="ref" position="after">
+                <field name="financial_type" />
+            </field>
+        </field>
+    </record>
+    <record id="view_account_move_filter" model="ir.ui.view">
+        <field name="name">Add move type group by</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_move_filter" />
+        <field name="arch" type="xml">
+            <group expand="0" position="inside">
+                <filter
+                    name="financial_type"
+                    string="Move type"
+                    domain="[]"
+                    context="{'group_by':'financial_type'}"
+                />
+            </group>
+        </field>
+    </record>
+</odoo>

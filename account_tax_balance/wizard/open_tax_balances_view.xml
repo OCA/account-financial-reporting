@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2016 Lorenzo Battistini - Agile Business Group
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="wizard_open_tax_balances" model="ir.ui.view">
+        <field name="model">wizard.open.tax.balances</field>
+        <field name="arch" type="xml">
+            <form string="Taxes Balance">
+                <group>
+                    <field
+                        name="company_ids"
+                        widget="many2many_tags"
+                        groups="base.group_multi_company"
+                    />
+                    <field name="date_range_id" />
+                    <field name="from_date" />
+                    <field name="to_date" />
+                    <field name="target_move" />
+                </group>
+                <footer>
+                    <button
+                        string="Open Taxes"
+                        name="open_taxes"
+                        type="object"
+                        class="oe_highlight"
+                    />
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_open_tax_balances" model="ir.actions.act_window">
+        <field name="name">Taxes Balance</field>
+        <field name="res_model">wizard.open.tax.balances</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="wizard_open_tax_balances" />
+        <field name="target">new</field>
+    </record>
+    <menuitem
+        id="menu_tax_balances"
+        name="Taxes Balance"
+        parent="account.menu_finance_reports"
+        groups="account.group_account_user,account.group_account_manager"
+    />
+    <menuitem
+        action="action_open_tax_balances"
+        id="menu_action_open_tax_balances"
+        parent="menu_tax_balances"
+        groups="account.group_account_user,account.group_account_manager"
+    />
+</odoo>
