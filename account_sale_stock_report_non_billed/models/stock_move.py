@@ -105,7 +105,7 @@ class StockMove(models.Model):
         self.quantity_not_invoiced = qty_to_invoice - invoiced_qty
         self.price_not_invoiced = (
             qty_to_invoice - invoiced_qty
-        ) * self.sale_line_id.price_unit
+        ) * self.sale_line_id.price_reduce
 
     @api.depends("sale_line_id")
     @api.depends_context("date_check_invoiced_moves")
