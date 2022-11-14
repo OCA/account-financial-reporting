@@ -1,5 +1,6 @@
 # Copyright 2022 Tecnativa - Carlos Roca
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html).
+from dateutil.relativedelta import relativedelta
 
 from odoo import fields
 from odoo.tests import Form, common
@@ -351,3 +352,24 @@ class TestAccountPurchaseStockReportNonBilled(common.SavepointCase):
             self.assertNotIn(move.id, domain_ids)
         for move in picking_return_return.move_lines:
             self.assertNotIn(move.id, domain_ids)
+
+    def test_11_report_move_full_invoiced_out_of_date(self):
+        self.po.button_confirm()
+        # Validate shipment
+        picking = self.po.picking_ids[0]
+        # Process pickings
+        picking.action_confirm()
+        picking.move_lines.quantity_done = 1.0
+        picking.button_validate()
+        # Emulate prepaying invoice
+        inv_action = self.po.action_view_invoice()
+        inv_form = Form(self.env["account.move"].with_context(**inv_action["context"]))
+        inv_form.date = fields.Date.today() - relativedelta(days=5)
+        inv_form.save()
+        wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
+            {"date_check": fields.Date.today(), "interval_restrict_invoices": True}
+        )
+        action = wiz.open_at_date()
+        domain_ids = action["domain"][0][2]
+        for move in picking.move_lines:
+            self.assertIn(move.id, domain_ids)
