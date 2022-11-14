@@ -146,6 +146,12 @@ msgid "Qty. to invoice"
 msgstr "Ctd. a facturar"
 
 #. module: account_sale_stock_report_non_billed
+#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_account_sale_stock_report_non_billed_wiz__interval_restrict_invoices
+#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_res_config_settings__default_interval_restrict_invoices
+msgid "Restrict invoices using the date interval"
+msgstr "Aplicar intervalo de fechas también a las facturas vinculadas"
+
+#. module: account_sale_stock_report_non_billed
 #: model:ir.model,name:account_sale_stock_report_non_billed.model_stock_move
 msgid "Stock Move"
 msgstr "Movimiento de stock"
@@ -159,12 +165,6 @@ msgstr "Fecha umbral movimientos no facturados"
 #: model_terms:ir.ui.view,arch_db:account_sale_stock_report_non_billed.view_move_pivot_no_invoiced
 msgid "Stock Moves Analysis"
 msgstr "Análisis de movimientos de stock"
-
-#. module: account_sale_stock_report_non_billed
-#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_account_sale_stock_report_non_billed_wiz__interval_restrict_invoices
-#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_res_config_settings__default_interval_restrict_invoices
-msgid "Restrict invoices using the date interval"
-msgstr "Aplicar intervalo de fechas también a las facturas vinculadas"
 
 #. module: account_sale_stock_report_non_billed
 #: model:ir.model,name:account_sale_stock_report_non_billed.model_account_sale_stock_report_non_billed_wiz
