@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-26 19:03+0000\n"
-"PO-Revision-Date: 2022-09-26 21:04+0200\n"
+"POT-Creation-Date: 2022-11-14 10:03+0000\n"
+"PO-Revision-Date: 2022-11-14 11:04+0100\n"
 "Last-Translator: Sergio Teruel <sergio.teruel@tecnativa.com>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 2.3\n"
 
 #. module: account_sale_stock_report_non_billed
 #: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_stock_move__price_not_invoiced
@@ -159,6 +159,12 @@ msgstr "Fecha umbral movimientos no facturados"
 #: model_terms:ir.ui.view,arch_db:account_sale_stock_report_non_billed.view_move_pivot_no_invoiced
 msgid "Stock Moves Analysis"
 msgstr "Análisis de movimientos de stock"
+
+#. module: account_sale_stock_report_non_billed
+#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_account_sale_stock_report_non_billed_wiz__interval_restrict_invoices
+#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_res_config_settings__default_interval_restrict_invoices
+msgid "Restrict invoices using the date interval"
+msgstr "Aplicar intervalo de fechas también a las facturas vinculadas"
 
 #. module: account_sale_stock_report_non_billed
 #: model:ir.model,name:account_sale_stock_report_non_billed.model_account_sale_stock_report_non_billed_wiz
