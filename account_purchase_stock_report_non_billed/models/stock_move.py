@@ -31,6 +31,12 @@ class StockMove(models.Model):
             )
             # Check when grouping different moves in an invoice line
             moves = invoice_lines.mapped("move_line_ids")
+            date_start = self.env.context.get("moves_date_start")
+            date_end = self.env.context.get("moves_date_end")
+            if date_start and date_end:
+                moves = moves.filtered(
+                    lambda ml: ml.date_done >= date_start and ml.date_done <= date_end
+                )
             total_qty = moves.get_total_devolution_moves()
             if qty_invoiced != total_qty:
                 invoiced = 0.0
