@@ -63,9 +63,12 @@ class StockMove(models.Model):
         self.ensure_one()
         if self.purchase_line_id:
             self.quantity_not_invoiced = qty_to_invoice - invoiced_qty
-            self.price_not_invoiced = (
-                qty_to_invoice - invoiced_qty
-            ) * self.purchase_line_id.price_unit
+            price_unit = self.purchase_line_id.price_unit
+            if "discount" in self.purchase_line_id._fields:
+                price_unit = self.purchase_line_id.price_unit * (
+                    1 - self.purchase_line_id.discount / 100
+                )
+            self.price_not_invoiced = (qty_to_invoice - invoiced_qty) * price_unit
         else:
             super()._set_not_invoiced_values(qty_to_invoice, invoiced_qty)
 
