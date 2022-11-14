@@ -6,8 +6,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-14 10:03+0000\n"
-"PO-Revision-Date: 2022-11-14 10:03+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -142,6 +140,12 @@ msgid "Qty. to invoice"
 msgstr ""
 
 #. module: account_sale_stock_report_non_billed
+#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_account_sale_stock_report_non_billed_wiz__interval_restrict_invoices
+#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_res_config_settings__default_interval_restrict_invoices
+msgid "Restrict invoices using the date interval"
+msgstr ""
+
+#. module: account_sale_stock_report_non_billed
 #: model:ir.model,name:account_sale_stock_report_non_billed.model_stock_move
 msgid "Stock Move"
 msgstr ""
@@ -154,12 +158,6 @@ msgstr ""
 #. module: account_sale_stock_report_non_billed
 #: model_terms:ir.ui.view,arch_db:account_sale_stock_report_non_billed.view_move_pivot_no_invoiced
 msgid "Stock Moves Analysis"
-msgstr ""
-
-#. module: account_sale_stock_report_non_billed
-#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_account_sale_stock_report_non_billed_wiz__interval_restrict_invoices
-#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_res_config_settings__default_interval_restrict_invoices
-msgid "Restrict invoices using the date interval"
 msgstr ""
 
 #. module: account_sale_stock_report_non_billed
