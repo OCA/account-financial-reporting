@@ -14,6 +14,7 @@ class AccountSaleStockReportNonBilledWiz(models.TransientModel):
             [
                 domain,
                 [
+                    ("date_done", ">=", self.stock_move_non_billed_threshold),
                     ("date_done", "<=", self.date_check),
                     ("purchase_line_id", "!=", False),
                     ("state", "=", "done"),
