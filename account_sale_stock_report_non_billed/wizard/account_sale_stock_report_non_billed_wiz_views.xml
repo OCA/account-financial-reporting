@@ -10,6 +10,7 @@
                     <group>
                         <field name="stock_move_non_billed_threshold" />
                         <field name="date_check" />
+                        <field name="interval_restrict_invoices" />
                     </group>
                     <footer>
                         <button
