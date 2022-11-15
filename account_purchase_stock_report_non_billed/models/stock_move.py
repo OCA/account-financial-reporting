@@ -31,6 +31,12 @@ class StockMove(models.Model):
             )
             # Check when grouping different moves in an invoice line
             moves = invoice_lines.mapped("move_line_ids")
+            date_start = self.env.context.get("moves_date_start")
+            date_end = self.env.context.get("moves_date_end")
+            if date_start and date_end:
+                moves = moves.filtered(
+                    lambda ml: ml.date_done >= date_start and ml.date_done <= date_end
+                )
             total_qty = moves.get_total_devolution_moves()
             if qty_invoiced != total_qty:
                 invoiced = 0.0
@@ -57,9 +63,12 @@ class StockMove(models.Model):
         self.ensure_one()
         if self.purchase_line_id:
             self.quantity_not_invoiced = qty_to_invoice - invoiced_qty
-            self.price_not_invoiced = (
-                qty_to_invoice - invoiced_qty
-            ) * self.purchase_line_id.price_unit
+            price_unit = self.purchase_line_id.price_unit
+            if "discount" in self.purchase_line_id._fields:
+                price_unit = self.purchase_line_id.price_unit * (
+                    1 - self.purchase_line_id.discount / 100
+                )
+            self.price_not_invoiced = (qty_to_invoice - invoiced_qty) * price_unit
         else:
             super()._set_not_invoiced_values(qty_to_invoice, invoiced_qty)
 

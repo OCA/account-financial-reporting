@@ -7,8 +7,21 @@ from odoo import models
 class StockMove(models.Model):
     _inherit = "account.move.line"
 
-    def check_invoice_line_in_date(self, date_check):
+    def check_invoice_line_in_date(self, date_check, date_start=False):
         self.ensure_one()
+        start = True
+        if date_start:
+            start = (
+                self.move_id.date
+                or self.move_id.invoice_date
+                or self.create_date.date()
+            ) >= date_start
         return (
-            self.move_id.date or self.move_id.invoice_date or self.create_date.date()
-        ) <= date_check
+            start
+            and (
+                self.move_id.date
+                or self.move_id.invoice_date
+                or self.create_date.date()
+            )
+            <= date_check
+        )
