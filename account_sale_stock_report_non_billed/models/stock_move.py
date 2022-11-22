@@ -76,7 +76,7 @@ class StockMove(models.Model):
             )
         )
         # Check when grouping different moves in an invoice line
-        moves = invoice_lines.mapped("move_line_ids")
+        moves = invoice_lines.move_line_ids.filtered(lambda x: x.state == "done")
         date_start = self.env.context.get("moves_date_start")
         date_end = self.env.context.get("moves_date_end")
         if date_start and date_end:
