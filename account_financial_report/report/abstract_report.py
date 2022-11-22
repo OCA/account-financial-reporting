@@ -7,6 +7,16 @@ from odoo import api, models
 class AccountFinancialAbstractReport(models.AbstractModel):
     _name = "report.account_financial_report.abstract_report"
     _description = "Abstract Report"
+    COMMON_ML_FIELDS = [
+        "account_id",
+        "partner_id",
+        "journal_id",
+        "date",
+        "ref",
+        "id",
+        "move_id",
+        "name",
+    ]
 
     @api.model
     def _get_move_lines_domain_not_reconciled(
@@ -68,24 +78,7 @@ class AccountFinancialAbstractReport(models.AbstractModel):
         new_domain = self._get_new_move_lines_domain(
             new_ml_ids, account_ids, company_id, partner_ids, only_posted_moves
         )
-        ml_fields = [
-            "id",
-            "name",
-            "date",
-            "move_id",
-            "journal_id",
-            "account_id",
-            "partner_id",
-            "amount_residual",
-            "date_maturity",
-            "ref",
-            "debit",
-            "credit",
-            "reconciled",
-            "currency_id",
-            "amount_currency",
-            "amount_residual_currency",
-        ]
+        ml_fields = self._get_ml_fields()
         new_move_lines = self.env["account.move.line"].search_read(
             domain=new_domain, fields=ml_fields
         )
@@ -124,3 +117,15 @@ class AccountFinancialAbstractReport(models.AbstractModel):
         for journal in journals:
             journals_data.update({journal.id: {"id": journal.id, "code": journal.code}})
         return journals_data
+
+    def _get_ml_fields(self):
+        return self.COMMON_ML_FIELDS + [
+            "amount_residual",
+            "reconciled",
+            "currency_id",
+            "credit",
+            "date_maturity",
+            "amount_residual_currency",
+            "debit",
+            "amount_currency",
+        ]

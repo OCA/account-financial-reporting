@@ -62,14 +62,7 @@ class VATReport(models.AbstractModel):
         tax_domain = self._get_tax_report_domain(
             company_id, date_from, date_to, only_posted_moves
         )
-        ml_fields = [
-            "id",
-            "tax_base_amount",
-            "balance",
-            "tax_line_id",
-            "tax_ids",
-            "analytic_tag_ids",
-        ]
+        ml_fields = self._get_ml_fields_vat_report()
         tax_move_lines = self.env["account.move.line"].search_read(
             domain=tax_domain,
             fields=ml_fields,
@@ -237,3 +230,13 @@ class VATReport(models.AbstractModel):
             "tax_detail": data["tax_detail"],
             "vat_report": vat_report,
         }
+
+    def _get_ml_fields_vat_report(self):
+        return [
+            "id",
+            "tax_base_amount",
+            "balance",
+            "tax_line_id",
+            "tax_ids",
+            "analytic_tag_ids",
+        ]
