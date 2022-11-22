@@ -66,16 +66,8 @@ class MisCashFlow(models.Model):
                 'move_line' as line_type,
                 aml.id as move_line_id,
                 aml.account_id as account_id,
-                CASE
-                    WHEN aml.amount_residual > 0
-                    THEN aml.amount_residual
-                    ELSE 0.0
-                END AS debit,
-                CASE
-                    WHEN aml.amount_residual < 0
-                    THEN -aml.amount_residual
-                    ELSE 0.0
-                END AS credit,
+                aml.debit as debit,
+                aml.credit as credit,
                 aml.reconciled as reconciled,
                 aml.full_reconcile_id as full_reconcile_id,
                 aml.partner_id as partner_id,
