@@ -48,24 +48,7 @@ class OpenItemsReport(models.AbstractModel):
         domain = self._get_move_lines_domain_not_reconciled(
             company_id, account_ids, partner_ids, only_posted_moves, date_from
         )
-        ml_fields = [
-            "id",
-            "name",
-            "date",
-            "move_id",
-            "journal_id",
-            "account_id",
-            "partner_id",
-            "amount_residual",
-            "date_maturity",
-            "ref",
-            "debit",
-            "credit",
-            "reconciled",
-            "currency_id",
-            "amount_currency",
-            "amount_residual_currency",
-        ]
+        ml_fields = self._get_ml_fields()
         move_lines = self.env["account.move.line"].search_read(
             domain=domain, fields=ml_fields
         )
@@ -272,3 +255,15 @@ class OpenItemsReport(models.AbstractModel):
             "total_amount": total_amount,
             "Open_Items": open_items_move_lines_data,
         }
+
+    def _get_ml_fields(self):
+        return self.COMMON_ML_FIELDS + [
+            "amount_residual",
+            "reconciled",
+            "currency_id",
+            "credit",
+            "date_maturity",
+            "amount_residual_currency",
+            "debit",
+            "amount_currency",
+        ]

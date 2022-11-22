@@ -103,19 +103,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         domain = self._get_move_lines_domain_not_reconciled(
             company_id, account_ids, partner_ids, only_posted_moves, date_from
         )
-        ml_fields = [
-            "id",
-            "name",
-            "date",
-            "move_id",
-            "journal_id",
-            "account_id",
-            "partner_id",
-            "amount_residual",
-            "date_maturity",
-            "ref",
-            "reconciled",
-        ]
+        ml_fields = self._get_ml_fields()
         line_model = self.env["account.move.line"]
         move_lines = line_model.search_read(domain=domain, fields=ml_fields)
         journals_ids = set()
@@ -375,3 +363,10 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             "aged_partner_balance": aged_partner_data,
             "show_move_lines_details": show_move_line_details,
         }
+
+    def _get_ml_fields(self):
+        return self.COMMON_ML_FIELDS + [
+            "amount_residual",
+            "reconciled",
+            "date_maturity",
+        ]
