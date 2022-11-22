@@ -118,11 +118,15 @@ class AccountSaleStockReportNonBilledWiz(models.TransientModel):
         search_view_id = self.env.ref(
             "account_sale_stock_report_non_billed.view_move_search"
         ).id
-        context = dict(self.env.context, date_check_invoiced_moves=self.date_check)
+        context = dict(
+            self.env.context,
+            non_billed_date=self.date_check,
+            non_billed_date_start=self.stock_move_non_billed_threshold,
+        )
         if self.interval_restrict_invoices:
             context = dict(
                 context,
-                date_check_invoiced_moves_start=self.stock_move_non_billed_threshold,
+                non_billed_invoice_date_start=self.stock_move_non_billed_threshold,
             )
         action = {
             "type": "ir.actions.act_window",
