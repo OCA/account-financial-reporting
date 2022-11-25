@@ -151,7 +151,7 @@ class GeneralLedgerXslx(models.AbstractModel):
         # For each account
         for account in general_ledger:
             # Write account title
-            total_bal_curr = account["init_bal"]["bal_curr"]
+            total_bal_curr = account["init_bal"]["bal_curr"] if foreign_currency else 0
             self.write_array_title(
                 account["code"] + " - " + accounts_data[account["id"]]["name"]
             )
@@ -221,7 +221,9 @@ class GeneralLedgerXslx(models.AbstractModel):
 
             else:
                 # For each partner
-                total_bal_curr = account["init_bal"]["bal_curr"]
+                total_bal_curr = (
+                    account["init_bal"]["bal_curr"] if foreign_currency else 0
+                )
                 for group_item in account["list_grouped"]:
                     # Write partner title
                     self.write_array_title(group_item["name"])
