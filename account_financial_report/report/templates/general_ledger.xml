@@ -366,6 +366,7 @@
             <t
                 t-set="total_bal_curr"
                 t-value="account_or_group_item_object['init_bal']['bal_curr'] or 0"
+                t-if="foreign_currency"
             />
             <t t-foreach="account_or_group_item_object['move_lines']" t-as="line">
                 <!-- # lines or centralized lines -->
