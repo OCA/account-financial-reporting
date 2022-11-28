@@ -4,6 +4,10 @@
 # Copyright 2018 ForgeFlow, S.L.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+from ast import literal_eval
+
+from lxml import etree
+
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
@@ -58,7 +62,11 @@ class TrialBalanceReportWizard(models.TransientModel):
     receivable_accounts_only = fields.Boolean()
     payable_accounts_only = fields.Boolean()
     show_partner_details = fields.Boolean()
-    partner_ids = fields.Many2many(comodel_name="res.partner", string="Filter partners")
+    partner_ids = fields.Many2many(
+        comodel_name="res.partner",
+        string="Filter partners",
+        default=lambda self: self._default_partners(),
+    )
     journal_ids = fields.Many2many(comodel_name="account.journal")
 
     not_only_one_unaffected_earnings_account = fields.Boolean(
@@ -81,6 +89,15 @@ class TrialBalanceReportWizard(models.TransientModel):
         string="Account Code To",
         help="Ending account in a range",
     )
+    domain = fields.Char(
+        string="Journal Items Domain",
+        default=[],
+        help="This domain will be used to select specific domain for Journal Items",
+    )
+
+    def _get_account_move_lines_domain(self):
+        domain = literal_eval(self.domain) if self.domain else []
+        return domain
 
     @api.onchange("account_code_from", "account_code_to")
     def on_change_account_range(self):
@@ -268,8 +285,47 @@ class TrialBalanceReportWizard(models.TransientModel):
             "show_partner_details": self.show_partner_details,
             "unaffected_earnings_account": self.unaffected_earnings_account.id,
             "account_financial_report_lang": self.env.lang,
+            "domain": self._get_account_move_lines_domain(),
         }
 
     def _export(self, report_type):
         """Default export is PDF."""
         return self._print_report(report_type)
+
+    @api.model
+    def translate_page(self, page_name):
+
+        return self.env["ir.translation"]._get_source(
+            "ir.ui.view,arch_db", "model_terms", self.env.lang, source=page_name
+        )
+
+    @api.model
+    def fields_view_get(
+        self, view_id=None, view_type="form", toolbar=False, submenu=False
+    ):
+        """Override to:
+        - Force the translation of the page titles in the wizard form view.
+        """
+
+        res = super(TrialBalanceReportWizard, self).fields_view_get(
+            view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu
+        )
+
+        if view_type == "form":
+
+            label_dict = {
+                "filter_accounts_page": self.translate_page("Filter accounts"),
+                "filter_partners_page": self.translate_page("Filter partners"),
+                "filter_additional_page": self.translate_page("Additional Filtering"),
+            }
+
+            doc = etree.XML(res["arch"])
+
+            for page_name, translation in label_dict.items():
+
+                for f in doc.xpath("//notebook//page[@name='%s']" % (page_name)):
+                    f.set("string", translation)
+
+            res["arch"] = etree.tostring(doc)
+
+        return res
