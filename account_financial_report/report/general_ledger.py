@@ -436,6 +436,8 @@ class GeneralLedgerReport(models.AbstractModel):
                     res.append({"id": tax_item.id, "name": tax_item.name})
             else:
                 res.append({"id": 0, "name": "Missing Tax"})
+        else:
+            res.append({"id": 0, "name": ""})
         return res
 
     def _get_period_ml_data(
@@ -519,13 +521,15 @@ class GeneralLedgerReport(models.AbstractModel):
                 gen_ld_data[acc_id] = self._initialize_data(foreign_currency)
                 gen_ld_data[acc_id]["id"] = acc_id
                 gen_ld_data[acc_id]["mame"] = move_line["account_id"][1]
-                gen_ld_data[acc_id][grouped_by] = False
+                if grouped_by:
+                    gen_ld_data[acc_id][grouped_by] = False
             if acc_id in acc_prt_account_ids:
                 item_ids = self._prepare_ml_items(move_line, grouped_by)
                 for item in item_ids:
                     item_id = item["id"]
                     if item_id not in gen_ld_data[acc_id]:
-                        gen_ld_data[acc_id][grouped_by] = True
+                        if grouped_by:
+                            gen_ld_data[acc_id][grouped_by] = True
                         gen_ld_data[acc_id][item_id] = self._initialize_data(
                             foreign_currency
                         )
