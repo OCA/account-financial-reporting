@@ -81,7 +81,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
         help="Ending account in a range",
     )
     grouped_by = fields.Selection(
-        selection=[("none", "None"), ("partners", "Partners"), ("taxes", "Taxes")],
+        selection=[("", "None"), ("partners", "Partners"), ("taxes", "Taxes")],
         default="partners",
         string="Grouped by",
     )
