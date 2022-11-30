@@ -28,7 +28,7 @@ Available addons
 addon | version | maintainers | summary
 --- | --- | --- | ---
 [account_bank_reconciliation_summary_xlsx](account_bank_reconciliation_summary_xlsx/) | 13.0.1.0.1 |  | XLSX report to help on bank reconciliation
-[account_financial_report](account_financial_report/) | 13.0.2.2.1 |  | OCA Financial Reports
+[account_financial_report](account_financial_report/) | 13.0.2.3.0 |  | OCA Financial Reports
 [account_purchase_stock_report_non_billed](account_purchase_stock_report_non_billed/) | 13.0.1.1.0 | [![CarlosRoca13](https://github.com/CarlosRoca13.png?size=30px)](https://github.com/CarlosRoca13) | Account Purchase Stock Report Non Billed
 [account_sale_stock_report_non_billed](account_sale_stock_report_non_billed/) | 13.0.1.1.0 | [![CarlosRoca13](https://github.com/CarlosRoca13.png?size=30px)](https://github.com/CarlosRoca13) | Account Sale Stock Report Non Billed
 [account_tax_balance](account_tax_balance/) | 13.0.1.0.3 |  | Compute tax balances based on date range
