@@ -6,6 +6,7 @@
     "name": "Tax Balance",
     "summary": "Compute tax balances based on date range",
     "version": "10.0.1.1.2",
+    "development_status": "Production/Stable",
     "category": "Accounting & Finance",
     "website": "https://www.agilebg.com/",
     "author": "Agile Business Group, Therp BV, Tecnativa, ACSONE SA/NV, "
