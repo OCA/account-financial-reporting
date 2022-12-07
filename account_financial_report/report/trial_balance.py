@@ -5,6 +5,7 @@
 
 
 from odoo import api, models
+from odoo.tools.float_utils import float_is_zero
 
 
 class TrialBalanceReport(models.AbstractModel):
@@ -300,6 +301,33 @@ class TrialBalanceReport(models.AbstractModel):
                         ] += round(tb["amount_currency"], 2)
         return total_amount, partners_data
 
+    def _remove_accounts_at_cero(self, total_amount, show_partner_details, company):
+        def is_removable(d):
+            rounding = company.currency_id.rounding
+            return (
+                float_is_zero(d["initial_balance"], precision_rounding=rounding)
+                and float_is_zero(d["credit"], precision_rounding=rounding)
+                and float_is_zero(d["debit"], precision_rounding=rounding)
+                and float_is_zero(d["ending_balance"], precision_rounding=rounding)
+            )
+
+        accounts_to_remove = []
+        for acc_id, ta_data in total_amount.items():
+            if is_removable(ta_data):
+                accounts_to_remove.append(acc_id)
+            elif show_partner_details:
+                partner_to_remove = []
+                for key, value in ta_data.items():
+                    # If the show_partner_details option is checked,
+                    # the partner data is in the same account data dict
+                    # but with the partner id as the key
+                    if isinstance(key, int) and is_removable(value):
+                        partner_to_remove.append(key)
+                for partner_id in partner_to_remove:
+                    del ta_data[partner_id]
+        for account_id in accounts_to_remove:
+            del total_amount[account_id]
+
     @api.model
     def _get_data(
         self,
@@ -425,6 +453,11 @@ class TrialBalanceReport(models.AbstractModel):
             total_amount, partners_data = self._compute_partner_amount(
                 total_amount, tb_initial_prt, tb_period_prt, foreign_currency
             )
+        # Remove accounts a 0 from collections
+        if hide_account_at_0:
+            company = self.env["res.company"].browse(company_id)
+            self._remove_accounts_at_cero(total_amount, show_partner_details, company)
+
         accounts_ids = list(total_amount.keys())
         unaffected_id = unaffected_earnings_account
         if unaffected_id:
@@ -465,59 +498,13 @@ class TrialBalanceReport(models.AbstractModel):
                 ] += pl_initial_currency_balance
         return total_amount, accounts_data, partners_data
 
-    def _get_hierarchy_groups(
-        self, group_ids, groups_data, old_groups_ids, foreign_currency
-    ):
-        new_parents = False
+    def _get_hierarchy_groups(self, group_ids, groups_data, foreign_currency):
         for group_id in group_ids:
-            if groups_data[group_id]["parent_id"]:
-                new_parents = True
-                nw_id = groups_data[group_id]["parent_id"]
-                if nw_id in groups_data.keys():
-                    groups_data[nw_id]["initial_balance"] += groups_data[group_id][
-                        "initial_balance"
-                    ]
-                    groups_data[nw_id]["debit"] += groups_data[group_id]["debit"]
-                    groups_data[nw_id]["credit"] += groups_data[group_id]["credit"]
-                    groups_data[nw_id]["balance"] += groups_data[group_id]["balance"]
-                    groups_data[nw_id]["ending_balance"] += groups_data[group_id][
-                        "ending_balance"
-                    ]
-                    if foreign_currency:
-                        groups_data[nw_id]["initial_currency_balance"] += groups_data[
-                            group_id
-                        ]["initial_currency_balance"]
-                        groups_data[nw_id]["ending_currency_balance"] += groups_data[
-                            group_id
-                        ]["ending_currency_balance"]
-                else:
-                    groups_data[nw_id] = {}
-                    groups_data[nw_id]["initial_balance"] = groups_data[group_id][
-                        "initial_balance"
-                    ]
-                    groups_data[nw_id]["debit"] = groups_data[group_id]["debit"]
-                    groups_data[nw_id]["credit"] = groups_data[group_id]["credit"]
-                    groups_data[nw_id]["balance"] = groups_data[group_id]["balance"]
-                    groups_data[nw_id]["ending_balance"] = groups_data[group_id][
-                        "ending_balance"
-                    ]
-                    if foreign_currency:
-                        groups_data[nw_id]["initial_currency_balance"] = groups_data[
-                            group_id
-                        ]["initial_currency_balance"]
-                        groups_data[nw_id]["ending_currency_balance"] = groups_data[
-                            group_id
-                        ]["ending_currency_balance"]
-        if new_parents:
-            nw_groups_ids = []
-            for group_id in list(groups_data.keys()):
-                if group_id not in old_groups_ids:
-                    nw_groups_ids.append(group_id)
-                    old_groups_ids.append(group_id)
-            groups = self.env["account.group"].browse(nw_groups_ids)
-            for group in groups:
-                groups_data[group.id].update(
-                    {
+            parent_id = groups_data[group_id]["parent_id"]
+            while parent_id:
+                if parent_id not in groups_data.keys():
+                    group = self.env["account.group"].browse(parent_id)
+                    groups_data[group.id] = {
                         "id": group.id,
                         "code": group.code_prefix_start,
                         "name": group.name,
@@ -526,11 +513,29 @@ class TrialBalanceReport(models.AbstractModel):
                         "complete_code": group.complete_code,
                         "account_ids": group.compute_account_ids.ids,
                         "type": "group_type",
+                        "initial_balance": 0,
+                        "debit": 0,
+                        "credit": 0,
+                        "balance": 0,
+                        "ending_balance": 0,
                     }
-                )
-            groups_data = self._get_hierarchy_groups(
-                nw_groups_ids, groups_data, old_groups_ids, foreign_currency
-            )
+                    if foreign_currency:
+                        groups_data[group.id].update(
+                            initial_currency_balance=0,
+                            ending_currency_balance=0,
+                        )
+                acc_keys = ["debit", "credit", "balance"]
+                acc_keys += ["initial_balance", "ending_balance"]
+                for acc_key in acc_keys:
+                    groups_data[parent_id][acc_key] += groups_data[group_id][acc_key]
+                if foreign_currency:
+                    groups_data[group_id]["initial_currency_balance"] += groups_data[
+                        group_id
+                    ]["initial_currency_balance"]
+                    groups_data[group_id]["ending_currency_balance"] += groups_data[
+                        group_id
+                    ]["ending_currency_balance"]
+                parent_id = groups_data[parent_id]["parent_id"]
         return groups_data
 
     def _get_groups_data(self, accounts_data, total_amount, foreign_currency):
@@ -590,9 +595,10 @@ class TrialBalanceReport(models.AbstractModel):
                         account_id
                     ]["ending_currency_balance"]
         group_ids = list(groups_data.keys())
-        old_group_ids = list(groups_data.keys())
         groups_data = self._get_hierarchy_groups(
-            group_ids, groups_data, old_group_ids, foreign_currency
+            group_ids,
+            groups_data,
+            foreign_currency,
         )
         return groups_data
 
@@ -656,7 +662,7 @@ class TrialBalanceReport(models.AbstractModel):
         date_to = data["date_to"]
         date_from = data["date_from"]
         hide_account_at_0 = data["hide_account_at_0"]
-        hierarchy_on = data["hierarchy_on"]
+        show_hierarchy = data["show_hierarchy"]
         show_hierarchy_level = data["show_hierarchy_level"]
         foreign_currency = data["foreign_currency"]
         only_posted_moves = data["only_posted_moves"]
@@ -700,7 +706,7 @@ class TrialBalanceReport(models.AbstractModel):
                             ],
                         }
                     )
-            if hierarchy_on == "relation":
+            if show_hierarchy:
                 groups_data = self._get_groups_data(
                     accounts_data, total_amount, foreign_currency
                 )
@@ -710,14 +716,7 @@ class TrialBalanceReport(models.AbstractModel):
                 for trial in trial_balance:
                     counter = trial["complete_code"].count("/")
                     trial["level"] = counter
-            if hierarchy_on == "computed":
-                groups_data = self._get_computed_groups_data(
-                    accounts_data, total_amount, foreign_currency
-                )
-                trial_balance = list(groups_data.values())
-                trial_balance += list(accounts_data.values())
-                trial_balance = sorted(trial_balance, key=lambda k: k["code"])
-            if hierarchy_on == "none":
+            else:
                 trial_balance = list(accounts_data.values())
                 trial_balance = sorted(trial_balance, key=lambda k: k["code"])
         else:
@@ -743,7 +742,8 @@ class TrialBalanceReport(models.AbstractModel):
             "hide_account_at_0": data["hide_account_at_0"],
             "show_partner_details": data["show_partner_details"],
             "limit_hierarchy_level": data["limit_hierarchy_level"],
-            "hierarchy_on": hierarchy_on,
+            "show_hierarchy": show_hierarchy,
+            "hide_parent_hierarchy_level": data["hide_parent_hierarchy_level"],
             "trial_balance": trial_balance,
             "total_amount": total_amount,
             "accounts_data": accounts_data,
