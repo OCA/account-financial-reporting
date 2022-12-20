@@ -110,10 +110,9 @@ class TrialBalanceReportWizard(models.TransientModel):
     @api.onchange("company_id")
     def onchange_company_id(self):
         """Handle company change."""
-        account_type = self.env.ref("account.data_unaffected_earnings")
         count = self.env["account.account"].search_count(
             [
-                ("user_type_id", "=", account_type.id),
+                ("account_type", "=", "equity_unaffected"),
                 ("company_id", "=", self.company_id.id),
             ]
         )
@@ -187,11 +186,13 @@ class TrialBalanceReportWizard(models.TransientModel):
         if self.receivable_accounts_only or self.payable_accounts_only:
             domain = [("company_id", "=", self.company_id.id)]
             if self.receivable_accounts_only and self.payable_accounts_only:
-                domain += [("internal_type", "in", ("receivable", "payable"))]
+                domain += [
+                    ("account_type", "in", ("asset_receivable", "liability_payable"))
+                ]
             elif self.receivable_accounts_only:
-                domain += [("internal_type", "=", "receivable")]
+                domain += [("account_type", "=", "asset_receivable")]
             elif self.payable_accounts_only:
-                domain += [("internal_type", "=", "payable")]
+                domain += [("account_type", "=", "liability_payable")]
             self.account_ids = self.env["account.account"].search(domain)
         else:
             self.account_ids = None
@@ -206,11 +207,10 @@ class TrialBalanceReportWizard(models.TransientModel):
 
     @api.depends("company_id")
     def _compute_unaffected_earnings_account(self):
-        account_type = self.env.ref("account.data_unaffected_earnings")
         for record in self:
             record.unaffected_earnings_account = self.env["account.account"].search(
                 [
-                    ("user_type_id", "=", account_type.id),
+                    ("account_type", "=", "equity_unaffected"),
                     ("company_id", "=", record.company_id.id),
                 ]
             )

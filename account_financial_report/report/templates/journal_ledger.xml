@@ -306,10 +306,7 @@
                 </t>
             </div>
             <div class="act_as_cell amount" name="amount_currency">
-                <t
-                    t-if="move_line['amount_currency']"
-                    t-options="{'widget': 'float', 'precision': 2}"
-                >
+                <t t-if="move_line['amount_currency']">
                     <span
                         t-esc="move_line['amount_currency']"
                         t-options="{'widget': 'float', 'precision': 2}"
