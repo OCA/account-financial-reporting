@@ -28,9 +28,9 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         cls.unaffected_account = cls.env["account.account"].search(
             [
                 (
-                    "user_type_id",
+                    "account_type",
                     "=",
-                    cls.env.ref("account.data_unaffected_earnings").id,
+                    "equity_unaffected",
                 ),
                 ("company_id", "=", cls.env.user.company_id.id),
             ],
