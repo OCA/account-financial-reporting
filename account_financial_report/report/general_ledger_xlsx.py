@@ -35,14 +35,10 @@ class GeneralLedgerXslx(models.AbstractModel):
         if report.show_cost_center:
             res += [
                 {
-                    "header": _("Analytic Account"),
-                    "field": "analytic_account",
+                    "header": _("Analytic Distribution"),
+                    "field": "analytic_distribution",
                     "width": 20,
                 },
-            ]
-        if report.show_analytic_tags:
-            res += [
-                {"header": _("Tags"), "field": "tags", "width": 10},
             ]
         res += [
             {"header": _("Rec."), "field": "rec_name", "width": 15},
@@ -114,10 +110,6 @@ class GeneralLedgerXslx(models.AbstractModel):
             ],
             [_("Centralize filter"), _("Yes") if report.centralize else _("No")],
             [
-                _("Show analytic tags"),
-                _("Yes") if report.show_analytic_tags else _("No"),
-            ],
-            [
                 _("Show foreign currency"),
                 _("Yes") if report.foreign_currency else _("No"),
             ],
@@ -147,7 +139,7 @@ class GeneralLedgerXslx(models.AbstractModel):
         accounts_data = res_data["accounts_data"]
         journals_data = res_data["journals_data"]
         taxes_data = res_data["taxes_data"]
-        tags_data = res_data["tags_data"]
+        analytic_data = res_data["analytic_data"]
         filter_partner_ids = res_data["filter_partner_ids"]
         foreign_currency = res_data["foreign_currency"]
         company_currency = report.company_id.currency_id
@@ -196,17 +188,25 @@ class GeneralLedgerXslx(models.AbstractModel):
                         )
                     if line["ref_label"] != "Centralized entries":
                         taxes_description = ""
-                        tags = ""
+                        analytic_distribution = ""
                         for tax_id in line["tax_ids"]:
                             taxes_description += taxes_data[tax_id]["tax_name"] + " "
                         if line["tax_line_id"]:
                             taxes_description += line["tax_line_id"][1]
-                        for tag_id in line["tag_ids"]:
-                            tags += tags_data[tag_id]["name"] + " "
+                        for account_id, value in line["analytic_distribution"].items():
+                            if value < 100:
+                                analytic_distribution += "%s %d%% " % (
+                                    analytic_data[int(account_id)]["name"],
+                                    value,
+                                )
+                            else:
+                                analytic_distribution += (
+                                    "%s " % analytic_data[int(account_id)]["name"]
+                                )
                         line.update(
                             {
                                 "taxes_description": taxes_description,
-                                "tags": tags,
+                                "analytic_distribution": analytic_distribution,
                             }
                         )
                     if (
@@ -282,17 +282,27 @@ class GeneralLedgerXslx(models.AbstractModel):
                             )
                         if line["ref_label"] != "Centralized entries":
                             taxes_description = ""
-                            tags = ""
+                            analytic_distribution = ""
                             for tax_id in line["tax_ids"]:
                                 taxes_description += (
                                     taxes_data[tax_id]["tax_name"] + " "
                                 )
-                            for tag_id in line["tag_ids"]:
-                                tags += tags_data[tag_id]["name"] + " "
+                            for account_id, value in line[
+                                "analytic_distribution"
+                            ].items():
+                                if value < 100:
+                                    analytic_distribution += "%s %d%% " % (
+                                        analytic_data[int(account_id)]["name"],
+                                        value,
+                                    )
+                                else:
+                                    analytic_distribution += (
+                                        "%s " % analytic_data[int(account_id)]["name"]
+                                    )
                             line.update(
                                 {
                                     "taxes_description": taxes_description,
-                                    "tags": tags,
+                                    "analytic_distribution": analytic_distribution,
                                 }
                             )
                         if (

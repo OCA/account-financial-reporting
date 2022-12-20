@@ -6,7 +6,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Account Financial Reports",
-    "version": "15.0.2.3.0",
+    "version": "16.0.1.0.0",
     "category": "Reporting",
     "summary": "OCA Financial Reports",
     "author": "Camptocamp SA,"
@@ -43,14 +43,11 @@
     ],
     "assets": {
         "web.assets_backend": [
-            "account_financial_report/static/src/js/action_manager_report.js",
-            "account_financial_report/static/src/js/client_action.js",
+            "account_financial_report/static/src/js/report_action.esm.js",
+            "account_financial_report/static/src/xml/**/*",
         ],
         "web.report_assets_common": [
-            "account_financial_report/static/src/js/report.js"
-        ],
-        "web.assets_qweb": [
-            "account_financial_report/static/src/xml/**/*",
+            "account_financial_report/static/src/js/report.js",
         ],
     },
     "installable": True,

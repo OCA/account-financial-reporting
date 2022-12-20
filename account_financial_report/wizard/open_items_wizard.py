@@ -123,11 +123,13 @@ class OpenItemsReportWizard(models.TransientModel):
         domain = [("company_id", "=", self.company_id.id)]
         if self.receivable_accounts_only or self.payable_accounts_only:
             if self.receivable_accounts_only and self.payable_accounts_only:
-                domain += [("internal_type", "in", ("receivable", "payable"))]
+                domain += [
+                    ("account_type", "in", ("asset_receivable", "liability_payable"))
+                ]
             elif self.receivable_accounts_only:
-                domain += [("internal_type", "=", "receivable")]
+                domain += [("account_type", "=", "asset_receivable")]
             elif self.payable_accounts_only:
-                domain += [("internal_type", "=", "payable")]
+                domain += [("account_type", "=", "liability_payable")]
             self.account_ids = self.env["account.account"].search(domain)
         else:
             self.account_ids = None
