@@ -1,17 +1,19 @@
 <template>
     <!-- Buttons of the Control Panel -->
-    <t t-name="account_financial_report.client_action.ControlButtons">
-        <div class="o_report_buttons">
+    <t
+        t-name="info.ReportAction"
+        t-inherit="web.ReportAction"
+        t-inherit-mode="extension"
+        owl="1"
+    >
+        <xpath expr="//button" position="after">
             <button
+                t-if="isAccountFinancialReport"
+                t-on-click="export"
                 type="button"
-                class="btn btn-primary o_report_print"
-                title="Print"
-            >Print</button>
-            <button
-                type="button"
-                class="btn btn-secondary o_report_export"
+                class="btn btn-secondary"
                 title="Export"
             >Export</button>
-        </div>
+        </xpath>
     </t>
 </template>
