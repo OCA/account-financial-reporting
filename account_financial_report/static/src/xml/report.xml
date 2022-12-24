@@ -1,0 +1,19 @@
+<template>
+    <!-- Buttons of the Control Panel -->
+    <t
+        t-name="info.ReportAction"
+        t-inherit="web.ReportAction"
+        t-inherit-mode="extension"
+        owl="1"
+    >
+        <xpath expr="//button" position="after">
+            <button
+                t-if="isAccountFinancialReport"
+                t-on-click="export"
+                type="button"
+                class="btn btn-secondary"
+                title="Export"
+            >Export</button>
+        </xpath>
+    </t>
+</template>
