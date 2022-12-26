@@ -234,7 +234,8 @@ class GeneralLedgerXslx(models.AbstractModel):
 
             else:
                 # For each partner
-                total_bal_curr = account["init_bal"]["bal_curr"]
+                if foreign_currency:
+                    total_bal_curr = account["init_bal"]["bal_curr"]
                 for group_item in account["list_grouped"]:
                     # Write partner title
                     self.write_array_title(group_item["name"], report_data)
