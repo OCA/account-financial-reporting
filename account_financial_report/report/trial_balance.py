@@ -483,9 +483,9 @@ WHERE report_trial_balance_account.account_group_id = computed.account_group_id
     def _add_account_group_account_values(self):
         """Compute values for report_trial_balance_account group in child."""
         query_update_account_group = """
-DROP AGGREGATE IF EXISTS array_concat_agg(anyarray);
-CREATE AGGREGATE array_concat_agg(anyarray) (
-  SFUNC = array_cat,
+DROP AGGREGATE IF EXISTS array_larger_agg(anyarray);
+CREATE AGGREGATE array_larger_agg(anyarray) (
+  SFUNC = array_larger,
   STYPE = anyarray
 );
 WITH aggr AS(WITH computed AS (WITH RECURSIVE cte AS (
@@ -502,13 +502,13 @@ WITH aggr AS(WITH computed AS (WITH RECURSIVE cte AS (
     WHERE p.report_id = %s
 )
 SELECT account_group_id,
-    array_concat_agg(DISTINCT child_account_ids)::int[] as child_account_ids
+    array_larger_agg(DISTINCT child_account_ids)::int[] as child_account_ids
 FROM   cte
 GROUP BY cte.account_group_id, cte.child_account_ids
 ORDER BY account_group_id
 )
 SELECT account_group_id,
-    array_concat_agg(DISTINCT child_account_ids)::int[]
+    array_larger_agg(DISTINCT child_account_ids)::int[]
         AS child_account_ids from computed
 GROUP BY account_group_id)
 UPDATE report_trial_balance_account
