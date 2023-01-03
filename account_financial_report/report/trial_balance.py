@@ -280,6 +280,7 @@ class TrialBalanceReport(models.AbstractModel):
                         {prt_id: {"id": prt_id, "name": tb["partner_id"][1]}}
                     )
                 if acc_id not in total_amount.keys():
+                    total_amount[acc_id] = {}
                     total_amount = self._compute_acc_prt_amount(
                         total_amount, tb, acc_id, prt_id, foreign_currency
                     )
