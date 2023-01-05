@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2020-02-05 09:01+0000\n"
+"PO-Revision-Date: 2023-01-05 17:45+0000\n"
 "Last-Translator: Bole <bole@dajmi5.com>\n"
 "Language-Team: none\n"
 "Language: hr\n"
@@ -15,43 +15,43 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.10\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "&gt; 120 d."
-msgstr ""
+msgstr "&gt; 120 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "1 - 30 d."
-msgstr ""
+msgstr "1 - 30 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
 msgid "10"
-msgstr ""
+msgstr "10"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "31 - 60 d."
-msgstr ""
+msgstr "31 - 60 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "61 - 90 d."
-msgstr ""
+msgstr "61 - 90 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "91 - 120 d."
-msgstr ""
+msgstr "91 - 120 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_taxes
 msgid "<b>Taxes summary</b>"
-msgstr ""
+msgstr "<b>Sažetak poreza</b>"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
@@ -59,22 +59,22 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.open_items_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
 msgid "<span class=\"oe_inline\">To</span>"
-msgstr ""
+msgstr "<span class=\"oe_inline\">Do</span>"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_abstract_report
 msgid "Abstract Report"
-msgstr ""
+msgstr "Apstraktni izvještaj"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_financial_report_abstract_wizard
 msgid "Abstract Wizard"
-msgstr ""
+msgstr "Apstraktni čarobnjak"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_abstract_report_xlsx
 msgid "Abstract XLSX Account Financial Report"
-msgstr ""
+msgstr "Apstraktni XLSX Financijski izvještaj"
 
 #. module: account_financial_report
 #. odoo-python
@@ -99,7 +99,7 @@ msgstr "Konto"
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__account_code_from
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__account_code_from
 msgid "Account Code From"
-msgstr ""
+msgstr "Šifra konta od"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__account_code_to
@@ -113,14 +113,14 @@ msgstr "Konto"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_group
 msgid "Account Group"
-msgstr ""
+msgstr "Grupa konta"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 #, python-format
 msgid "Account Name"
-msgstr ""
+msgstr "Naziv konta"
 
 #. module: account_financial_report
 #. odoo-python
@@ -128,7 +128,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 #, python-format
 msgid "Account at 0 filter"
-msgstr ""
+msgstr "Konto na 0 filteru"
 
 #. module: account_financial_report
 #. odoo-python
@@ -138,22 +138,22 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_filters
 #, python-format
 msgid "Account balance at 0 filter"
-msgstr ""
+msgstr "Saldo konta na 0 filteru"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__account_ids
 msgid "Accounts"
-msgstr ""
+msgstr "Konta"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__centralize
 msgid "Activate centralization"
-msgstr ""
+msgstr "Aktiviraj centralizaciju"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
 msgid "Additional Filtering"
-msgstr ""
+msgstr "Dodatno filtriranje"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -161,13 +161,15 @@ msgid ""
 "Age ≤ 120\n"
 "                        d."
 msgstr ""
+"Dosp. ≤ 120\n"
+"                        d."
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 #, python-format
 msgid "Age ≤ 120 d."
-msgstr ""
+msgstr "Dosp. ≤ 120 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -175,13 +177,15 @@ msgid ""
 "Age ≤ 30\n"
 "                        d."
 msgstr ""
+"Dosp. ≤ 30\n"
+"                        d."
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 #, python-format
 msgid "Age ≤ 30 d."
-msgstr ""
+msgstr "Dosp. ≤ 30 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -189,13 +193,15 @@ msgid ""
 "Age ≤ 60\n"
 "                        d."
 msgstr ""
+"Dosp. ≤ 60\n"
+"                        d."
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 #, python-format
 msgid "Age ≤ 60 d."
-msgstr ""
+msgstr "Dosp. ≤ 60 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -203,13 +209,15 @@ msgid ""
 "Age ≤ 90\n"
 "                        d."
 msgstr ""
+"Dosp. ≤ 90\n"
+"                        d."
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 #, python-format
 msgid "Age ≤ 90 d."
-msgstr ""
+msgstr "Dosp. ≤ 90 d."
 
 #. module: account_financial_report
 #. odoo-python
@@ -220,17 +228,17 @@ msgstr ""
 #: model:ir.ui.menu,name:account_financial_report.menu_aged_partner_balance_wizard
 #, python-format
 msgid "Aged Partner Balance"
-msgstr ""
+msgstr "Dospjela dugovanja kupca"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_base
 msgid "Aged Partner Balance -"
-msgstr ""
+msgstr "Dospjela dugovanja kupca -"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_aged_partner_balance
 msgid "Aged Partner Balance Report"
-msgstr ""
+msgstr "Izvještaj dospjelih dugovanja kupaca"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_aged_partner_balance_report_wizard
@@ -252,7 +260,7 @@ msgstr ""
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
 #, python-format
 msgid "All"
-msgstr ""
+msgstr "Sve"
 
 #. module: account_financial_report
 #: model:ir.model.fields.selection,name:account_financial_report.selection__aged_partner_balance_report_wizard__target_move__all
@@ -284,7 +292,7 @@ msgstr "Sve proknjižene stavke"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 #, python-format
 msgid "All entries"
-msgstr ""
+msgstr "Sve stavke"
 
 #. module: account_financial_report
 #. odoo-python
@@ -298,19 +306,19 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 #, python-format
 msgid "All posted entries"
-msgstr ""
+msgstr "Sve proknjižene stavke"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "Amount Cur."
-msgstr ""
+msgstr "Iznos u val."
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 #, python-format
 msgid "Amount Currency"
-msgstr ""
+msgstr "Iznos u valuti"
 
 #. module: account_financial_report
 #. odoo-python
@@ -318,13 +326,12 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #, python-format
 msgid "Amount cur."
-msgstr ""
+msgstr "Iznos u val."
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_move_line__analytic_account_ids
-#, fuzzy
 msgid "Analytic Account"
-msgstr "Konto"
+msgstr "Analitički Konto"
 
 #. module: account_financial_report
 #. odoo-python
@@ -332,53 +339,53 @@ msgstr "Konto"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #, python-format
 msgid "Analytic Distribution"
-msgstr ""
+msgstr "Analitička distribucija"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_taxes
 msgid "Balance"
-msgstr ""
+msgstr "Saldo"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_taxes
 msgid "Base Amount"
-msgstr ""
+msgstr "Osnovica"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 #, python-format
 msgid "Base Balance"
-msgstr ""
+msgstr "Saldo osnovica"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 #, python-format
 msgid "Base Credit"
-msgstr ""
+msgstr "Osnovica Duguje"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 #, python-format
 msgid "Base Debit"
-msgstr ""
+msgstr "Osnovica potražuje"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__based_on
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_vat_report_filters
 msgid "Based On"
-msgstr ""
+msgstr "Bazirano na"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/vat_report_xlsx.py:0
 #, python-format
 msgid "Based on"
-msgstr ""
+msgstr "Bazirano na"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
@@ -396,17 +403,17 @@ msgstr "Otkaži"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 #, python-format
 msgid "Centralize filter"
-msgstr ""
+msgstr "Centraliziraj filter"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_account__centralized
 msgid "Centralized"
-msgstr ""
+msgstr "Centralizirano"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__group_child_ids
 msgid "Child Groups"
-msgstr ""
+msgstr "Podređene grupe"
 
 #. module: account_financial_report
 #. odoo-python
@@ -416,7 +423,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_vat_report_base
 #, python-format
 msgid "Code"
-msgstr ""
+msgstr "Šifra"
 
 #. module: account_financial_report
 #. odoo-python
@@ -435,7 +442,7 @@ msgstr "Tvrtka"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__compute_account_ids
 msgid "Compute accounts"
-msgstr ""
+msgstr "Izračunaj konta"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__create_uid
@@ -469,7 +476,7 @@ msgstr "Kreirano"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
 #, python-format
 msgid "Credit"
-msgstr ""
+msgstr "Duguje"
 
 #. module: account_financial_report
 #. odoo-python
@@ -477,7 +484,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #, python-format
 msgid "Cumul cur."
-msgstr ""
+msgstr "Ukupno val."
 
 #. module: account_financial_report
 #. odoo-python
@@ -485,7 +492,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #, python-format
 msgid "Cumul. Bal."
-msgstr ""
+msgstr "Ukupno Sal."
 
 #. module: account_financial_report
 #. odoo-python
@@ -496,7 +503,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
 #, python-format
 msgid "Cur."
-msgstr ""
+msgstr "Val."
 
 #. module: account_financial_report
 #. odoo-python
@@ -504,7 +511,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
 #, python-format
 msgid "Cur. Original"
-msgstr ""
+msgstr "Orig. Val."
 
 #. module: account_financial_report
 #. odoo-python
@@ -519,7 +526,7 @@ msgstr ""
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 #, python-format
 msgid "Currency"
-msgstr ""
+msgstr "Valuta"
 
 #. module: account_financial_report
 #. odoo-python
@@ -548,7 +555,7 @@ msgstr "Datum"
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__date_at
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__date_at
 msgid "Date At"
-msgstr ""
+msgstr "Datum na"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__date_from
@@ -557,14 +564,14 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__date_from
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_vat_report_filters
 msgid "Date From"
-msgstr ""
+msgstr "Datum od"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__date_to
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__date_to
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_vat_report_filters
 msgid "Date To"
-msgstr ""
+msgstr "Datum do"
 
 #. module: account_financial_report
 #. odoo-python
@@ -574,14 +581,14 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_filters
 #, python-format
 msgid "Date at filter"
-msgstr ""
+msgstr "Datum na filteru"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/vat_report_xlsx.py:0
 #, python-format
 msgid "Date from"
-msgstr ""
+msgstr "Datum od"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__date_range_id
@@ -600,14 +607,14 @@ msgstr "Raspon datuma"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 #, python-format
 msgid "Date range filter"
-msgstr ""
+msgstr "Filter raspona datuma"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/vat_report_xlsx.py:0
 #, python-format
 msgid "Date to"
-msgstr ""
+msgstr "Datum do"
 
 #. module: account_financial_report
 #. odoo-python
@@ -621,7 +628,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
 #, python-format
 msgid "Debit"
-msgstr ""
+msgstr "Duguje"
 
 #. module: account_financial_report
 #. odoo-python
@@ -630,12 +637,12 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_taxes
 #, python-format
 msgid "Description"
-msgstr ""
+msgstr "Opis"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__tax_detail
 msgid "Detail Taxes"
-msgstr ""
+msgstr "Pojedinosti poreza"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__display_name
@@ -645,7 +652,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__display_name
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__display_name
 msgid "Display Name"
-msgstr "Naziv "
+msgstr "Naziv"
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__foreign_currency
@@ -660,7 +667,7 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__hide_parent_hierarchy_level
 msgid "Do not display parent levels"
-msgstr ""
+msgstr "Ne prikazuj nadređene razine"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -668,6 +675,8 @@ msgid ""
 "Due\n"
 "                        date"
 msgstr ""
+"Datum\n"
+"                        dosp"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
@@ -675,6 +684,8 @@ msgid ""
 "Due\n"
 "                    date"
 msgstr ""
+"Datum\n"
+"                    dosp"
 
 #. module: account_financial_report
 #. odoo-python
@@ -682,17 +693,17 @@ msgstr ""
 #: code:addons/account_financial_report/report/open_items_xlsx.py:0
 #, python-format
 msgid "Due date"
-msgstr ""
+msgstr "Datum dospijeća"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__date_to
 msgid "End Date"
-msgstr ""
+msgstr "Završni datum"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__date_to
 msgid "End date"
-msgstr ""
+msgstr "Završni datum"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_ending_cumul
@@ -700,6 +711,8 @@ msgid ""
 "Ending\n"
 "                        balance"
 msgstr ""
+"Završni\n"
+"                        saldo"
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_aged_partner_balance_report_wizard__account_code_to
@@ -707,7 +720,7 @@ msgstr ""
 #: model:ir.model.fields,help:account_financial_report.field_open_items_report_wizard__account_code_to
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__account_code_to
 msgid "Ending account in a range"
-msgstr ""
+msgstr "Završni konto u rasponu"
 
 #. module: account_financial_report
 #. odoo-python
@@ -718,7 +731,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
 #, python-format
 msgid "Ending balance"
-msgstr ""
+msgstr "Završni saldo"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
@@ -726,13 +739,15 @@ msgid ""
 "Ending balance\n"
 "                        cur."
 msgstr ""
+"Završni saldo\n"
+"                        val."
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 #, python-format
 msgid "Entries sorted by"
-msgstr ""
+msgstr "Stavke sortirane po"
 
 #. module: account_financial_report
 #. odoo-python
@@ -746,21 +761,21 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
 #, python-format
 msgid "Entry"
-msgstr ""
+msgstr "Stavka"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
 #, python-format
 msgid "Entry number"
-msgstr ""
+msgstr "Broj stavke"
 
 #. module: account_financial_report
 #. odoo-javascript
 #: code:addons/account_financial_report/static/src/xml/report.xml:0
 #, python-format
 msgid "Export"
-msgstr ""
+msgstr "Izvoz"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
@@ -780,7 +795,7 @@ msgstr "Izvoz PDF"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.vat_report_wizard
 msgid "Export XLSX"
-msgstr ""
+msgstr "Izvoz XLSX"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__account_ids
@@ -789,22 +804,22 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__account_ids
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
 msgid "Filter accounts"
-msgstr ""
+msgstr "Filtriraj konta"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
 msgid "Filter analytic accounts"
-msgstr ""
+msgstr "Filtriraj analitička konta"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__cost_center_ids
 msgid "Filter cost centers"
-msgstr ""
+msgstr "Filtriraj mjesta troška"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__account_journal_ids
 msgid "Filter journals"
-msgstr ""
+msgstr "Filtriraj dnevnike"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__partner_ids
@@ -813,12 +828,12 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__partner_ids
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
 msgid "Filter partners"
-msgstr ""
+msgstr "Filtriraj partnere"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__foreign_currency
 msgid "Foreign Currency"
-msgstr ""
+msgstr "Strana valuta"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
@@ -826,13 +841,13 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.open_items_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
 msgid "From Code"
-msgstr ""
+msgstr "Od šifre"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 msgid "From:"
-msgstr ""
+msgstr "Od:"
 
 #. module: account_financial_report
 #. odoo-python
@@ -841,23 +856,23 @@ msgstr ""
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
 #, python-format
 msgid "From: %(date_from)s To: %(date_to)s"
-msgstr ""
+msgstr "Od: %(date_from)s do: %(date_to)s"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__complete_code
 msgid "Full Code"
-msgstr ""
+msgstr "Puna šifra"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__complete_name
 msgid "Full Name"
-msgstr ""
+msgstr "Puni naziv"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__fy_start_date
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__fy_start_date
 msgid "Fy Start Date"
-msgstr ""
+msgstr "Početni dan Fisk god"
 
 #. module: account_financial_report
 #. odoo-python
@@ -906,12 +921,12 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__group_option
 msgid "Group entries by"
-msgstr ""
+msgstr "Grupiraj stavke po"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__grouped_by
 msgid "Grouped By"
-msgstr ""
+msgstr "Grupirano po"
 
 #. module: account_financial_report
 #. odoo-python
@@ -923,23 +938,23 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 #, python-format
 msgid "Hide"
-msgstr ""
+msgstr "Sakrij"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__hide_account_at_0
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__hide_account_at_0
 msgid "Hide account ending balance at 0"
-msgstr ""
+msgstr "Sakrij konta sa saldom 0"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__hide_account_at_0
 msgid "Hide accounts at 0"
-msgstr ""
+msgstr "Sakrij konta sa 0"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__show_hierarchy_level
 msgid "Hierarchy Levels to display"
-msgstr ""
+msgstr "Prikaži razinu strukture"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__id
@@ -964,6 +979,8 @@ msgid ""
 "Initial\n"
 "                        balance cur."
 msgstr ""
+"Početni\n"
+"                        saldo val."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
@@ -971,6 +988,8 @@ msgid ""
 "Initial\n"
 "                    balance"
 msgstr ""
+"Početni\n"
+"                    saldo"
 
 #. module: account_financial_report
 #. odoo-python
@@ -979,7 +998,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #, python-format
 msgid "Initial balance"
-msgstr ""
+msgstr "Početni saldo"
 
 #. module: account_financial_report
 #. odoo-python
@@ -993,17 +1012,17 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
 #, python-format
 msgid "Journal"
-msgstr ""
+msgstr "Dnevnik"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_move_line
 msgid "Journal Item"
-msgstr ""
+msgstr "Stavka dnevnika"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__domain
 msgid "Journal Items Domain"
-msgstr ""
+msgstr "Domena stavaka dnevnika"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1120,7 +1139,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_vat_report_base
 #, python-format
 msgid "Name"
-msgstr ""
+msgstr "Naziv"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1128,7 +1147,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_vat_report_base
 #, python-format
 msgid "Net"
-msgstr ""
+msgstr "Neto"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1138,14 +1157,14 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 #, python-format
 msgid "No"
-msgstr ""
+msgstr "Ne"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
 #, python-format
 msgid "No group"
-msgstr ""
+msgstr "Nema grupu"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1171,17 +1190,17 @@ msgstr ""
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
 #, python-format
 msgid "Not Posted"
-msgstr ""
+msgstr "Nije proknjiženo"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "Not due"
-msgstr ""
+msgstr "Nije dospjelo"
 
 #. module: account_financial_report
 #: model:ir.ui.menu,name:account_financial_report.menu_oca_reports
 msgid "OCA accounting reports"
-msgstr ""
+msgstr "OCA računovodstveni izvještaji"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1189,7 +1208,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 #, python-format
 msgid "Older"
-msgstr ""
+msgstr "Starije"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1200,22 +1219,22 @@ msgstr ""
 #: model:ir.ui.menu,name:account_financial_report.menu_open_items_wizard
 #, python-format
 msgid "Open Items"
-msgstr ""
+msgstr "Otvorene stavke"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_base
 msgid "Open Items -"
-msgstr ""
+msgstr "Otvorene stavke -"
 
 #. module: account_financial_report
 #: model:ir.actions.act_window,name:account_financial_report.act_action_open_items_wizard_partner_relation
 msgid "Open Items Partner"
-msgstr ""
+msgstr "Otvorene stavke partnera"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_open_items
 msgid "Open Items Report"
-msgstr ""
+msgstr "Izvještaj otvorenih stavaka"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_open_items_report_wizard
@@ -1301,7 +1320,7 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model.fields.selection,name:account_financial_report.selection__general_ledger_report_wizard__grouped_by__partners
 msgid "Partners"
-msgstr ""
+msgstr "Partneri"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__payable_accounts_only
@@ -1322,19 +1341,19 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
 #, python-format
 msgid "Period balance"
-msgstr ""
+msgstr "Saldo perioda"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.journal_ledger_wizard
 msgid "Periods"
-msgstr ""
+msgstr "Periodi"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
 #, python-format
 msgid "Posted"
-msgstr ""
+msgstr "Proknjiženo"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1400,7 +1419,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 #, python-format
 msgid "Sequence"
-msgstr ""
+msgstr "Sekvenca"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1412,28 +1431,28 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 #, python-format
 msgid "Show"
-msgstr ""
+msgstr "Prikaži"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__show_cost_center
 msgid "Show Analytic Account"
-msgstr ""
+msgstr "Prikaži analitički konto"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__with_auto_sequence
 msgid "Show Auto Sequence"
-msgstr ""
+msgstr "Prikaži auto sekvencu"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__show_move_line_details
 msgid "Show Move Line Details"
-msgstr ""
+msgstr "Prikaži detalje stavke"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__show_partner_details
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__show_partner_details
 msgid "Show Partner Details"
-msgstr ""
+msgstr "Prikaži detalje partnera"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1445,39 +1464,39 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__foreign_currency
 #, python-format
 msgid "Show foreign currency"
-msgstr ""
+msgstr "Prikaži stranu valutu"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__show_hierarchy
 msgid "Show hierarchy"
-msgstr ""
+msgstr "Prikaži strukturu"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__sort_option
 msgid "Sort entries by"
-msgstr ""
+msgstr "Sortiraj stavke po"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__date_from
 msgid "Start Date"
-msgstr ""
+msgstr "Početni datum"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__date_from
 msgid "Start date"
-msgstr ""
+msgstr "Početni datum"
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_aged_partner_balance_report_wizard__account_code_from
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__account_code_from
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__account_code_from
 msgid "Starting account in a range"
-msgstr ""
+msgstr "Početni konto u rasponu"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 msgid "Tags"
-msgstr ""
+msgstr "Oznake"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__target_move
@@ -1501,7 +1520,7 @@ msgstr "Ciljane stavke"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 #, python-format
 msgid "Target moves filter"
-msgstr ""
+msgstr "Filter ciljanih stavaka"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1515,28 +1534,28 @@ msgstr "Porez"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_taxes
 msgid "Tax Amount"
-msgstr ""
+msgstr "Iznos poreza"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 #, python-format
 msgid "Tax Balance"
-msgstr ""
+msgstr "Saldo poreza"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 #, python-format
 msgid "Tax Credit"
-msgstr ""
+msgstr "Potražuje porez"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 #, python-format
 msgid "Tax Debit"
-msgstr ""
+msgstr "Duguje porez"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1544,14 +1563,14 @@ msgstr ""
 #: model:ir.model.fields.selection,name:account_financial_report.selection__vat_report_wizard__based_on__taxgroups
 #, python-format
 msgid "Tax Groups"
-msgstr ""
+msgstr "Porezne grupe"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #, python-format
 msgid "Tax Initial balance"
-msgstr ""
+msgstr "Početni saldo poreza"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1559,7 +1578,7 @@ msgstr ""
 #: model:ir.model.fields.selection,name:account_financial_report.selection__vat_report_wizard__based_on__taxtags
 #, python-format
 msgid "Tax Tags"
-msgstr ""
+msgstr "Oznake poreza"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1567,12 +1586,12 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_ending_cumul
 #, python-format
 msgid "Tax ending balance"
-msgstr ""
+msgstr "Završni saldo poreza"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 msgid "Tax initial balance"
-msgstr ""
+msgstr "Početni saldo poreza"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1583,7 +1602,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 #, python-format
 msgid "Taxes"
-msgstr ""
+msgstr "Porezi"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1616,7 +1635,7 @@ msgstr ""
 #: code:addons/account_financial_report/wizard/trial_balance_wizard.py:0
 #, python-format
 msgid "The hierarchy level to filter on must be greater than 0."
-msgstr ""
+msgstr "Razina strukture za filtriranje mora biti veća od 0."
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__domain
@@ -1626,12 +1645,12 @@ msgstr ""
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 msgid "To"
-msgstr ""
+msgstr "Do"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 msgid "To:"
-msgstr ""
+msgstr "Do:"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_account_ending_cumul
@@ -1707,12 +1726,12 @@ msgstr ""
 #: model:ir.actions.report,name:account_financial_report.action_print_report_vat_report_qweb
 #: model:ir.ui.menu,name:account_financial_report.menu_vat_report_wizard
 msgid "VAT Report"
-msgstr ""
+msgstr "Porezni izvještaj"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_vat_report_base
 msgid "VAT Report -"
-msgstr ""
+msgstr "Porezni izvještaj -"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.vat_report_wizard
@@ -1754,7 +1773,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.vat_report_wizard
 msgid "View"
-msgstr ""
+msgstr "Pogled"
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__hide_account_at_0
@@ -1766,7 +1785,7 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__with_account_name
 msgid "With Account Name"
-msgstr ""
+msgstr "Sa nazivom konta"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1776,14 +1795,14 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 #, python-format
 msgid "Yes"
-msgstr ""
+msgstr "Da"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/general_ledger.py:0
 #, python-format
 msgid "future"
-msgstr ""
+msgstr "buduće"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
@@ -1803,34 +1822,34 @@ msgstr ""
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal
 msgid "to"
-msgstr ""
+msgstr "do"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 16.21%;"
-msgstr ""
+msgstr "širina: 16.21%;"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 23.24%;"
-msgstr ""
+msgstr "širina: 23.24%;"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 23.78%;"
-msgstr ""
+msgstr "širina: 23.78%;"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 31.35%;"
-msgstr ""
+msgstr "širina: 31.35%;"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 38.92%;"
-msgstr ""
+msgstr "širina: 38.92%;"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 8.11%;"
-msgstr ""
+msgstr "širina: 8.11%;"
