@@ -467,27 +467,7 @@ class GeneralLedgerReport(models.AbstractModel):
         )
         if extra_domain:
             domain += extra_domain
-        ml_fields = [
-            "id",
-            "name",
-            "date",
-            "move_id",
-            "journal_id",
-            "account_id",
-            "partner_id",
-            "debit",
-            "credit",
-            "balance",
-            "currency_id",
-            "full_reconcile_id",
-            "tax_ids",
-            "tax_line_id",
-            "analytic_tag_ids",
-            "amount_currency",
-            "ref",
-            "name",
-            "analytic_account_id",
-        ]
+        ml_fields = self._get_ml_fields()
         move_lines = self.env["account.move.line"].search_read(
             domain=domain, fields=ml_fields
         )
@@ -895,3 +875,17 @@ class GeneralLedgerReport(models.AbstractModel):
             "filter_partner_ids": True if partner_ids else False,
             "currency_model": self.env["res.currency"],
         }
+
+    def _get_ml_fields(self):
+        return self.COMMON_ML_FIELDS + [
+            "analytic_account_id",
+            "full_reconcile_id",
+            "analytic_tag_ids",
+            "tax_line_id",
+            "currency_id",
+            "credit",
+            "debit",
+            "amount_currency",
+            "balance",
+            "tax_ids",
+        ]
