@@ -363,10 +363,7 @@
                 </t>
             </div>
             <!-- Display each lines -->
-            <t
-                t-set="total_bal_curr"
-                t-value="account_or_group_item_object['init_bal'].get('bal_curr', 0)"
-            />
+            <t t-set="total_bal_curr" t-value="0" />
             <t t-foreach="account_or_group_item_object['move_lines']" t-as="line">
                 <!-- # lines or centralized lines -->
                 <div class="act_as_row lines">
