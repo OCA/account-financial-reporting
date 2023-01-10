@@ -178,17 +178,11 @@
                 <!--## Ending balance-->
                 <div class="act_as_cell" style="width: 9%;">Ending balance</div>
                 <t t-if="foreign_currency">
-                    <!--## currency_name-->
-                    <div class="act_as_cell" style="width: 4%;">Cur.</div>
                     <!--## amount_currency-->
-                    <div class="act_as_cell" style="width: 9%;">
-                        Initial
-                        balance cur.
-                    </div>
-                    <div class="act_as_cell" style="width: 9%;">
-                        Ending balance
-                        cur.
-                    </div>
+                    <div class="act_as_cell" style="width: 11%;">Initial
+                        balance cur.</div>
+                    <div class="act_as_cell" style="width: 11%;">Ending balance
+                        cur.</div>
                 </t>
             </div>
         </div>
@@ -572,10 +566,6 @@
                 <t t-if="not show_partner_details">
                     <t t-if="balance['type'] == 'account_type'">
                         <t t-if="balance['currency_id']">
-                            <!--## currency_name-->
-                            <div class="act_as_cell" style="width: 4.43%;">
-                                <span t-esc="balance['currency_name']" />
-                            </div>
                             <!--## Initial balance cur.-->
                             <div class="act_as_cell amount">
                                 <t
@@ -589,6 +579,7 @@
                                     <t
                                         t-att-style="style"
                                         t-esc="balance['initial_currency_balance']"
+                                        t-options="{'widget': 'monetary', 'display_currency': balance['currency_id']}"
                                     />
                                 </span>
                                 <!--                            <t t-if="line.account_group_id">-->
@@ -609,12 +600,6 @@
                 <t t-if="show_partner_details">
                     <t t-if="total_amount[account_id]['currency_id']">
                         <t t-if="type == 'partner_type'">
-                            <!--## currency_name-->
-                            <div class="act_as_cell" style="width: 4.43%;">
-                                <span
-                                    t-esc="total_amount[account_id]['currency_name']"
-                                />
-                            </div>
                             <div class="act_as_cell amount">
                                 <t
                                     t-set="domain"
@@ -628,6 +613,7 @@
                                     <t
                                         t-att-style="style"
                                         t-raw="total_amount[account_id][partner_id]['initial_currency_balance']"
+                                        t-options="{'widget': 'monetary', 'display_currency': total_amount[account_id]['currency_id']}"
                                     />
                                 </span>
                             </div>
@@ -650,6 +636,7 @@
                                     <t
                                         t-att-style="style"
                                         t-raw="balance['ending_currency_balance']"
+                                        t-options="{'widget': 'monetary', 'display_currency': balance['currency_id']}"
                                     />
                                 </span>
                                 <!--                            <t t-if="line.account_group_id">-->
@@ -683,6 +670,7 @@
                                     <t
                                         t-att-style="style"
                                         t-raw="total_amount[account_id][partner_id]['ending_currency_balance']"
+                                        t-options="{'widget': 'monetary', 'display_currency': total_amount[account_id]['currency_id']}"
                                     />
                                 </span>
                             </t>
@@ -694,7 +682,6 @@
                         <!--## balance_currency-->
                         <div class="act_as_cell" />
                         <div class="act_as_cell" />
-                        <div class="act_as_cell" />
                     </t>
                 </t>
                 <t t-if="not show_partner_details">
@@ -703,12 +690,10 @@
                             <!--## balance_currency-->
                             <div class="act_as_cell" />
                             <div class="act_as_cell" />
-                            <div class="act_as_cell" />
                         </t>
                     </t>
                     <t t-if="balance['type'] == 'group_type'">
                         <!--## balance_currency-->
-                        <div class="act_as_cell" />
                         <div class="act_as_cell" />
                         <div class="act_as_cell" />
                     </t>
@@ -889,12 +874,10 @@
                     />
                 </div>
                 <t t-if="foreign_currency">
-                    <!--## currency_name-->
-                    <div class="act_as_cell" style="width: 4%;" />
                     <!--## amount_total_due_currency-->
-                    <div class="act_as_cell" style="width: 9%;" />
+                    <div class="act_as_cell" style="width: 11%;" />
                     <!--## amount_residual_currency-->
-                    <div class="act_as_cell" style="width: 9%;" />
+                    <div class="act_as_cell" style="width: 11%;" />
                 </t>
             </div>
         </div>
