@@ -60,19 +60,12 @@ class TrialBalanceXslx(models.AbstractModel):
             if report.foreign_currency:
                 foreign_currency = {
                     7: {
-                        "header": _("Cur."),
-                        "field": "currency_id",
-                        "field_currency_balance": "currency_id",
-                        "type": "many2one",
-                        "width": 7,
-                    },
-                    8: {
                         "header": _("Initial balance"),
                         "field": "initial_currency_balance",
                         "type": "amount_currency",
                         "width": 14,
                     },
-                    9: {
+                    8: {
                         "header": _("Ending balance"),
                         "field": "ending_currency_balance",
                         "type": "amount_currency",
@@ -118,19 +111,12 @@ class TrialBalanceXslx(models.AbstractModel):
             if report.foreign_currency:
                 foreign_currency = {
                     6: {
-                        "header": _("Cur."),
-                        "field": "currency_id",
-                        "field_currency_balance": "currency_id",
-                        "type": "many2one",
-                        "width": 7,
-                    },
-                    7: {
                         "header": _("Initial balance"),
                         "field": "initial_currency_balance",
                         "type": "amount_currency",
                         "width": 14,
                     },
-                    8: {
+                    7: {
                         "header": _("Ending balance"),
                         "field": "ending_currency_balance",
                         "type": "amount_currency",
