@@ -34,6 +34,21 @@ class ReportStatementCommon(models.AbstractModel):
     ):
         return {}
 
+    def _get_account_display_prior_lines(
+        self, company_id, partner_ids, date_start, date_end, account_type
+    ):
+        return {}
+
+    def _get_account_display_reconciled_lines(
+        self, company_id, partner_ids, date_start, date_end, account_type
+    ):
+        return {}
+
+    def _get_account_display_ending_lines(
+        self, company_id, partner_ids, date_start, date_end, account_type
+    ):
+        return {}
+
     def _show_buckets_sql_q1(self, partners, date_end, account_type):
         return str(
             self._cr.mogrify(
@@ -273,21 +288,34 @@ class ReportStatementCommon(models.AbstractModel):
             _("Total"),
         ]
 
-    def _get_line_currency_defaults(self, currency_id, currencies, balance_forward):
+    def _get_line_currency_defaults(
+        self, currency_id, currencies, balance_forward, amount_due
+    ):
         if currency_id not in currencies:
             # This will only happen if currency is inactive
             currencies[currency_id] = self.env["res.currency"].browse(currency_id)
         return (
             {
+                "prior_lines": [],
                 "lines": [],
+                "ending_lines": [],
                 "buckets": [],
                 "balance_forward": balance_forward,
-                "amount_due": balance_forward,
+                "amount_due": amount_due,
             },
             currencies,
         )
 
     def _add_currency_line(self, line, currency):
+        return [line]
+
+    def _add_currency_prior_line(self, line, currency):
+        return [line]
+
+    def _add_currency_reconciled_line(self, line, currency):
+        return [line]
+
+    def _add_currency_ending_line(self, line, currency):
         return [line]
 
     @api.model
@@ -325,6 +353,9 @@ class ReportStatementCommon(models.AbstractModel):
             date_end = datetime.strptime(date_end, DEFAULT_SERVER_DATE_FORMAT).date()
         account_type = data["account_type"]
         aging_type = data["aging_type"]
+        show_balance = data.get("show_balance", True)
+        is_detailed = data.get("is_detailed") and data.get("is_activity")
+        # because detailed outstanding doesn't exist (yet)
         today = fields.Date.today()
         amount_field = data.get("amount_field", "amount")
 
@@ -344,8 +375,30 @@ class ReportStatementCommon(models.AbstractModel):
 
         res = {}
         # get base data
+        prior_day = date_start - timedelta(days=1) if date_start else None
+        prior_lines = (
+            self._get_account_display_prior_lines(
+                company_id, partner_ids, prior_day, prior_day, account_type
+            )
+            if is_detailed
+            else {}
+        )
         lines = self._get_account_display_lines(
             company_id, partner_ids, date_start, date_end, account_type
+        )
+        ending_lines = (
+            self._get_account_display_ending_lines(
+                company_id, partner_ids, date_start, date_end, account_type
+            )
+            if is_detailed
+            else {}
+        )
+        reconciled_lines = (
+            self._get_account_display_reconciled_lines(
+                company_id, partner_ids, date_start, date_end, account_type
+            )
+            if is_detailed
+            else {}
         )
         balances_forward = self._get_account_initial_balance(
             company_id, partner_ids, date_start, account_type
@@ -369,6 +422,9 @@ class ReportStatementCommon(models.AbstractModel):
                     date_start, date_formats.get(partner_id, default_fmt)
                 ),
                 "end": format_date(date_end, date_formats.get(partner_id, default_fmt)),
+                "prior_day": format_date(
+                    prior_day, date_formats.get(partner_id, default_fmt)
+                ),
                 "currencies": {},
             }
             currency_dict = res[partner_id]["currencies"]
@@ -378,7 +434,32 @@ class ReportStatementCommon(models.AbstractModel):
                     currency_dict[line["currency_id"]],
                     currencies,
                 ) = self._get_line_currency_defaults(
-                    line["currency_id"], currencies, line["balance"]
+                    line["currency_id"],
+                    currencies,
+                    line["balance"],
+                    0.0 if is_detailed else line["balance"],
+                )
+
+            for line in prior_lines.get(partner_id, []):
+                if line["currency_id"] not in currency_dict:
+                    (
+                        currency_dict[line["currency_id"]],
+                        currencies,
+                    ) = self._get_line_currency_defaults(
+                        line["currency_id"], currencies, 0.0, 0.0
+                    )
+                line_currency = currency_dict[line["currency_id"]]
+                if not line["blocked"]:
+                    line_currency["amount_due"] += line["open_amount"]
+                line["balance"] = line_currency["amount_due"]
+                line["date"] = format_date(
+                    line["date"], date_formats.get(partner_id, default_fmt)
+                )
+                line["date_maturity"] = format_date(
+                    line["date_maturity"], date_formats.get(partner_id, default_fmt)
+                )
+                line_currency["prior_lines"].extend(
+                    self._add_currency_prior_line(line, currencies[line["currency_id"]])
                 )
 
             for line in lines[partner_id]:
@@ -387,7 +468,7 @@ class ReportStatementCommon(models.AbstractModel):
                         currency_dict[line["currency_id"]],
                         currencies,
                     ) = self._get_line_currency_defaults(
-                        line["currency_id"], currencies, 0.0
+                        line["currency_id"], currencies, 0.0, 0.0
                     )
                 line_currency = currency_dict[line["currency_id"]]
                 if not line["blocked"]:
@@ -399,9 +480,73 @@ class ReportStatementCommon(models.AbstractModel):
                 line["date_maturity"] = format_date(
                     line["date_maturity"], date_formats.get(partner_id, default_fmt)
                 )
+                line["reconciled_line"] = False
+                if is_detailed:
+                    line["open_amount"] = 0.0
                 line_currency["lines"].extend(
                     self._add_currency_line(line, currencies[line["currency_id"]])
                 )
+                for line2 in reconciled_lines.get(partner_id, []):
+                    if line2["id"] in line["ids"]:
+                        line2["date"] = format_date(
+                            line2["date"], date_formats.get(partner_id, default_fmt)
+                        )
+                        line2["date_maturity"] = format_date(
+                            line2["date_maturity"],
+                            date_formats.get(partner_id, default_fmt),
+                        )
+                        line2["reconciled_line"] = True
+                        line2["applied_amount"] = line2["open_amount"]
+                        line_currency["lines"].extend(
+                            self._add_currency_reconciled_line(
+                                line2, currencies[line["currency_id"]]
+                            )
+                        )
+
+            for line in ending_lines.get(partner_id, []):
+                line_currency = currency_dict[line["currency_id"]]
+                ending_balance = 0.0
+                for line2 in prior_lines.get(partner_id, []):
+                    if line["id"] == line2["id"]:
+                        if not line["blocked"]:
+                            ending_balance += line["open_amount"]
+                        line["balance"] = ending_balance
+                        line["date"] = format_date(
+                            line["date"], date_formats.get(partner_id, default_fmt)
+                        )
+                        line["date_maturity"] = format_date(
+                            line["date_maturity"],
+                            date_formats.get(partner_id, default_fmt),
+                        )
+                        line_currency["ending_lines"].extend(
+                            self._add_currency_ending_line(
+                                line, currencies[line["currency_id"]]
+                            )
+                        )
+            for line in ending_lines.get(partner_id, []):
+                line_currency = currency_dict[line["currency_id"]]
+                for line2 in lines.get(partner_id, []):
+                    if line2["reconciled_line"]:
+                        continue
+                    if line["id"] == line2["ids"][0]:
+                        same_lines = [
+                            ln
+                            for ln in ending_lines[partner_id]
+                            if ln["id"] in set(line2["ids"])
+                        ]
+                        line2["open_amount"] = sum(
+                            ln["open_amount"] for ln in same_lines
+                        )
+                        line_currency["ending_lines"].extend(
+                            self._add_currency_ending_line(
+                                line2, currencies[line["currency_id"]]
+                            )
+                        )
+            if is_detailed:
+                for line in lines[partner_id]:
+                    if line["reconciled_line"]:
+                        continue
+                    line["applied_amount"] = line["open_amount"] - line["amount"]
 
             if data["show_aging_buckets"]:
                 for line in buckets[partner_id]:
@@ -410,7 +555,7 @@ class ReportStatementCommon(models.AbstractModel):
                             currency_dict[line["currency_id"]],
                             currencies,
                         ) = self._get_line_currency_defaults(
-                            line["currency_id"], currencies, 0.0
+                            line["currency_id"], currencies, 0.0, 0.0
                         )
                     line_currency = currency_dict[line["currency_id"]]
                     line_currency["buckets"] = line
@@ -439,6 +584,8 @@ class ReportStatementCommon(models.AbstractModel):
             "company": self.env["res.company"].browse(company_id),
             "Currencies": currencies,
             "account_type": account_type,
+            "is_detailed": is_detailed,
+            "show_balance": show_balance,
             "bucket_labels": bucket_labels,
             "get_inv_addr": self._get_invoice_address,
         }

@@ -75,11 +75,14 @@ class ActivityStatement(models.AbstractModel):
             balance_start[row.pop("partner_id")].append(row)
         return balance_start
 
-    def _display_lines_sql_q1(self, partners, date_start, date_end, account_type):
+    def _display_activity_lines_sql_q1(
+        self, partners, date_start, date_end, account_type
+    ):
         return str(
             self._cr.mogrify(
                 """
             SELECT m.name AS move_id, l.partner_id, l.date,
+                array_agg(l.id ORDER BY l.id) as ids,
                 CASE WHEN (aj.type IN ('sale', 'purchase'))
                     THEN l.name
                     ELSE '/'
@@ -92,7 +95,7 @@ class ActivityStatement(models.AbstractModel):
                     WHEN (aj.type in ('bank', 'cash'))
                         THEN 'Payment'
                     ELSE ''
-                END as ref,
+                END as case_ref,
                 l.blocked, l.currency_id, l.company_id,
                 sum(CASE WHEN (l.currency_id is not null AND l.amount_currency > 0.0)
                     THEN l.amount_currency
@@ -116,37 +119,24 @@ class ActivityStatement(models.AbstractModel):
                 AND %(date_start)s <= l.date
                 AND l.date <= %(date_end)s
                 AND m.state IN ('posted')
-            GROUP BY l.partner_id, m.name, l.date, l.date_maturity,
-                CASE WHEN (aj.type IN ('sale', 'purchase'))
-                    THEN l.name
-                    ELSE '/'
-                END,
-                CASE
-                    WHEN (aj.type IN ('sale', 'purchase')) AND l.name IS NOT NULL
-                        THEN l.ref
-                    WHEN aj.type IN ('sale', 'purchase') AND l.name IS NULL
-                        THEN m.ref
-                    WHEN (aj.type in ('bank', 'cash'))
-                        THEN 'Payment'
-                    ELSE ''
-                END,
-                l.blocked, l.currency_id, l.company_id
+            GROUP BY l.partner_id, m.name, l.date, l.date_maturity, l.name,
+                aj.type, case_ref, l.blocked, l.currency_id, l.company_id
         """,
                 locals(),
             ),
             "utf-8",
         )
 
-    def _display_lines_sql_q2(self, company_id):
+    def _display_activity_lines_sql_q2(self, sub, company_id):
         return str(
             self._cr.mogrify(
-                """
-            SELECT Q1.partner_id, Q1.move_id, Q1.date, Q1.date_maturity,
-                Q1.name, Q1.ref, Q1.debit, Q1.credit,
-                Q1.debit-Q1.credit as amount, Q1.blocked,
-                COALESCE(Q1.currency_id, c.currency_id) AS currency_id
-            FROM Q1
-            JOIN res_company c ON (c.id = Q1.company_id)
+                f"""
+            SELECT {sub}.partner_id, {sub}.move_id, {sub}.date, {sub}.date_maturity,
+                {sub}.name, {sub}.case_ref as ref, {sub}.debit, {sub}.credit, {sub}.ids,
+                {sub}.debit-{sub}.credit as amount, {sub}.blocked,
+                COALESCE({sub}.currency_id, c.currency_id) AS currency_id
+            FROM {sub}
+            JOIN res_company c ON (c.id = {sub}.company_id)
             WHERE c.id = %(company_id)s
         """,
                 locals(),
@@ -166,14 +156,14 @@ class ActivityStatement(models.AbstractModel):
         WITH Q1 AS (%s),
              Q2 AS (%s)
         SELECT partner_id, move_id, date, date_maturity, name, ref, debit,
-                            credit, amount, blocked, currency_id
+            ids, credit, amount, blocked, currency_id
         FROM Q2
         ORDER BY date, date_maturity, move_id"""
             % (
-                self._display_lines_sql_q1(
+                self._display_activity_lines_sql_q1(
                     partners, date_start, date_end, account_type
                 ),
-                self._display_lines_sql_q2(company_id),
+                self._display_activity_lines_sql_q2("Q1", company_id),
             )
         )
         for row in self.env.cr.dictfetchall():
