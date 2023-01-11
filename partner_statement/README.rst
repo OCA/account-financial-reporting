@@ -26,14 +26,17 @@ Partner Statement
 |badge1| |badge2| |badge3| |badge4| |badge5| 
 
 This module extends the functionality of Invoicing to support the printing of customer and vendor statements.
-There are two types of statements, Activity and Outstanding.  Aging details can be shown in the reports, expressed in aging buckets,
-so the customer or vendor can review how much is open, due or overdue.
+There are three types of statements: Activity, Detailed Activity, and Outstanding. Aging details can be shown
+in the reports, expressed in aging buckets, so the customer or vendor can review how much is open, due or overdue.
 
 The activity statement provides details of all activity on the partner receivables or payables
 between two selected dates. This includes all invoices, refunds and payments.
 Any outstanding balance dated prior to the chosen statement period will appear
 as a forward balance at the top of the statement. The list is displayed in chronological
 order and is split by currencies.
+
+The detailed activity statement is an extension of the previous statement, and intends to explain the transactions
+that have happened during the period, also providing with a Prior Balance section and an Ending Balance section.
 
 The outstanding statement provides details of all outstanding partner receivables or payables
 up to a particular date. This includes all unpaid invoices, unclaimed refunds and
@@ -90,6 +93,11 @@ Changelog
   * Age by months or days
   * Filter negative balances
 
+14.0.2.0.0 (2022-12-16)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* [ADD] Detailed Activity Statement.
+
 Bug Tracker
 ===========
 
@@ -127,6 +135,14 @@ This module is maintained by the OCA.
 OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
+
+.. |maintainer-MiquelRForgeFlow| image:: https://github.com/MiquelRForgeFlow.png?size=40px
+    :target: https://github.com/MiquelRForgeFlow
+    :alt: MiquelRForgeFlow
+
+Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
+
+|maintainer-MiquelRForgeFlow| 
 
 This module is part of the `OCA/account-financial-reporting <https://github.com/OCA/account-financial-reporting/tree/14.0/partner_statement>`_ project on GitHub.
 
