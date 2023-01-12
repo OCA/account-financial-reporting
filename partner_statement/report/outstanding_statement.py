@@ -60,13 +60,13 @@ class OutstandingStatement(models.AbstractModel):
                 WHERE l2.date <= %(date_end)s
             ) as pc ON pc.credit_move_id = l.id
             WHERE l.partner_id IN %(partners)s AND at.type = %(account_type)s
-                                AND (
-                                  (pd.id IS NOT NULL AND
-                                      pd.max_date <= %(date_end)s) OR
-                                  (pc.id IS NOT NULL AND
-                                      pc.max_date <= %(date_end)s) OR
-                                  (pd.id IS NULL AND pc.id IS NULL)
-                                ) AND l.date <= %(date_end)s AND m.state IN ('posted')
+                AND (
+                    (pd.id IS NOT NULL AND
+                        pd.max_date <= %(date_end)s) OR
+                    (pc.id IS NOT NULL AND
+                        pc.max_date <= %(date_end)s) OR
+                    (pd.id IS NULL AND pc.id IS NULL)
+                ) AND l.date <= %(date_end)s AND m.state IN ('posted')
             GROUP BY l.id, l.partner_id, m.name, l.date, l.date_maturity, l.name,
                 CASE WHEN l.ref IS NOT NULL
                     THEN l.ref
@@ -86,10 +86,10 @@ class OutstandingStatement(models.AbstractModel):
                 SELECT {sub}.partner_id, {sub}.currency_id, {sub}.move_id,
                     {sub}.date, {sub}.date_maturity, {sub}.debit, {sub}.credit,
                     {sub}.name, {sub}.ref, {sub}.blocked, {sub}.company_id,
-                CASE WHEN {sub}.currency_id is not null
-                    THEN {sub}.open_amount_currency
-                    ELSE {sub}.open_amount
-                END as open_amount, {sub}.id
+                    CASE WHEN {sub}.currency_id is not null
+                        THEN {sub}.open_amount_currency
+                        ELSE {sub}.open_amount
+                    END as open_amount, {sub}.id
                 FROM {sub}
                 """,
                 locals(),
@@ -101,11 +101,11 @@ class OutstandingStatement(models.AbstractModel):
         return str(
             self._cr.mogrify(
                 f"""
-            SELECT {sub}.partner_id, {sub}.move_id, {sub}.date, {sub}.date_maturity,
-              {sub}.name, {sub}.ref, {sub}.debit, {sub}.credit,
-              {sub}.debit-{sub}.credit AS amount, blocked,
-              COALESCE({sub}.currency_id, c.currency_id) AS currency_id,
-              {sub}.open_amount, {sub}.id
+            SELECT {sub}.partner_id, {sub}.move_id, {sub}.date,
+                {sub}.date_maturity, {sub}.name, {sub}.ref, {sub}.debit,
+                {sub}.credit, {sub}.debit-{sub}.credit AS amount,
+                COALESCE({sub}.currency_id, c.currency_id) AS currency_id,
+                {sub}.open_amount, {sub}.blocked, {sub}.id
             FROM {sub}
             JOIN res_company c ON (c.id = {sub}.company_id)
             WHERE c.id = %(company_id)s AND {sub}.open_amount != 0.0
@@ -127,7 +127,8 @@ class OutstandingStatement(models.AbstractModel):
              Q2 AS (%s),
              Q3 AS (%s)
         SELECT partner_id, currency_id, move_id, date, date_maturity, debit,
-            credit, amount, open_amount, name, ref, blocked, id
+            credit, amount, open_amount, COALESCE(name, '') as name,
+            COALESCE(ref, '') as ref, blocked, id
         FROM Q3
         ORDER BY date, date_maturity, move_id"""
             % (

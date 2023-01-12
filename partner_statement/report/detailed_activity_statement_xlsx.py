@@ -37,7 +37,6 @@ class DetailedActivityStatementXslx(models.AbstractModel):
         partner_data = data.get("data", {}).get(partner.id, {})
         currency_data = partner_data.get("currencies", {}).get(currency.id)
         account_type = data.get("account_type", False)
-        show_balance = data.get("show_balance", True)
         row_pos += 2
         statement_header = _("Detailed %sStatement between %s and %s in %s") % (
             account_type == "payable" and _("Supplier ") or "",
@@ -49,7 +48,7 @@ class DetailedActivityStatementXslx(models.AbstractModel):
             row_pos,
             0,
             row_pos,
-            7 if show_balance else 6,
+            6,
             statement_header,
             FORMATS["format_left_bold"],
         )
@@ -66,17 +65,15 @@ class DetailedActivityStatementXslx(models.AbstractModel):
             _("Description"),
             FORMATS["format_theader_yellow_center"],
         )
-        sheet.write(row_pos, 4, _("Original"), FORMATS["format_theader_yellow_center"])
+        sheet.write(
+            row_pos, 4, _("Original Amount"), FORMATS["format_theader_yellow_center"]
+        )
         sheet.write(
             row_pos, 5, _("Applied Amount"), FORMATS["format_theader_yellow_center"]
         )
         sheet.write(
             row_pos, 6, _("Open Amount"), FORMATS["format_theader_yellow_center"]
         )
-        if show_balance:
-            sheet.write(
-                row_pos, 7, _("Balance"), FORMATS["format_theader_yellow_center"]
-            )
         row_pos += 1
         sheet.write(
             row_pos, 1, partner_data.get("prior_day"), FORMATS["format_tcell_date_left"]
@@ -85,13 +82,13 @@ class DetailedActivityStatementXslx(models.AbstractModel):
             row_pos,
             2,
             row_pos,
-            6 if show_balance else 5,
+            5,
             _("Initial Balance"),
             FORMATS["format_tcell_left"],
         )
         sheet.write(
             row_pos,
-            7 if show_balance else 6,
+            6,
             currency_data.get("balance_forward"),
             FORMATS["current_money_format"],
         )
@@ -124,7 +121,7 @@ class DetailedActivityStatementXslx(models.AbstractModel):
             name_to_show = (
                 line.get("name", "") == "/" or not line.get("name", "")
             ) and line.get("ref", "")
-            if line.get("name", "") != "/":
+            if line.get("name", "") and line.get("name", "") != "/":
                 if not line.get("ref", ""):
                     name_to_show = line.get("name", "")
                 else:
@@ -152,8 +149,6 @@ class DetailedActivityStatementXslx(models.AbstractModel):
                 line.get("open_amount", "") if not line.get("reconciled_line") else "",
                 current_money_format,
             )
-            if show_balance:
-                sheet.write(row_pos, 7, line.get("balance", ""), current_money_format)
         row_pos += 1
         sheet.write(
             row_pos, 1, partner_data.get("end"), FORMATS["format_tcell_date_left"]
@@ -162,13 +157,13 @@ class DetailedActivityStatementXslx(models.AbstractModel):
             row_pos,
             2,
             row_pos,
-            6 if show_balance else 5,
+            5,
             _("Ending Balance"),
             FORMATS["format_tcell_left"],
         )
         sheet.write(
             row_pos,
-            7 if show_balance else 6,
+            6,
             currency_data.get("amount_due"),
             FORMATS["current_money_format"],
         )
@@ -178,7 +173,6 @@ class DetailedActivityStatementXslx(models.AbstractModel):
         partner_data = data.get("data", {}).get(partner.id, {})
         currency_data = partner_data.get("currencies", {}).get(currency.id)
         account_type = data.get("account_type", False)
-        show_balance = data.get("show_balance", True)
         row_pos += 2
         statement_header = _("%sStatement up to %s in %s") % (
             account_type == "payable" and _("Supplier ") or "",
@@ -189,7 +183,7 @@ class DetailedActivityStatementXslx(models.AbstractModel):
             row_pos,
             0,
             row_pos,
-            7 if show_balance else 6,
+            6,
             statement_header,
             FORMATS["format_left_bold"],
         )
@@ -199,22 +193,17 @@ class DetailedActivityStatementXslx(models.AbstractModel):
         )
         sheet.write(row_pos, 1, _("Date"), FORMATS["format_theader_yellow_center"])
         sheet.write(row_pos, 2, _("Due Date"), FORMATS["format_theader_yellow_center"])
-        sheet.merge_range(
+        sheet.write(
             row_pos,
             3,
-            row_pos,
-            4,
             _("Description"),
             FORMATS["format_theader_yellow_center"],
         )
-        sheet.write(row_pos, 5, _("Original"), FORMATS["format_theader_yellow_center"])
+        sheet.write(row_pos, 4, _("Original"), FORMATS["format_theader_yellow_center"])
         sheet.write(
-            row_pos, 6, _("Open Amount"), FORMATS["format_theader_yellow_center"]
+            row_pos, 5, _("Open Amount"), FORMATS["format_theader_yellow_center"]
         )
-        if show_balance:
-            sheet.write(
-                row_pos, 7, _("Balance"), FORMATS["format_theader_yellow_center"]
-            )
+        sheet.write(row_pos, 6, _("Balance"), FORMATS["format_theader_yellow_center"])
         format_tcell_left = FORMATS["format_tcell_left"]
         format_tcell_date_left = FORMATS["format_tcell_date_left"]
         format_distributed = FORMATS["format_distributed"]
@@ -243,7 +232,7 @@ class DetailedActivityStatementXslx(models.AbstractModel):
             name_to_show = (
                 line.get("name", "") == "/" or not line.get("name", "")
             ) and line.get("ref", "")
-            if line.get("name", "") != "/":
+            if line.get("name", "") and line.get("name", "") != "/":
                 if not line.get("ref", ""):
                     name_to_show = line.get("name", "")
                 else:
@@ -261,11 +250,10 @@ class DetailedActivityStatementXslx(models.AbstractModel):
                 line.get("date_maturity", ""),
                 format_tcell_date_left,
             )
-            sheet.merge_range(row_pos, 3, row_pos, 4, name_to_show, format_distributed)
-            sheet.write(row_pos, 5, line.get("amount", ""), current_money_format)
-            sheet.write(row_pos, 6, line.get("open_amount", ""), current_money_format)
-            if show_balance:
-                sheet.write(row_pos, 7, line.get("balance", ""), current_money_format)
+            sheet.write(row_pos, 3, name_to_show, format_distributed)
+            sheet.write(row_pos, 4, line.get("amount", ""), current_money_format)
+            sheet.write(row_pos, 5, line.get("open_amount", ""), current_money_format)
+            sheet.write(row_pos, 6, line.get("balance", ""), current_money_format)
         row_pos += 1
         sheet.write(
             row_pos, 1, partner_data.get("prior_day"), FORMATS["format_tcell_date_left"]
@@ -274,14 +262,14 @@ class DetailedActivityStatementXslx(models.AbstractModel):
             row_pos,
             2,
             row_pos,
-            6 if show_balance else 5,
+            5,
             _("Ending Balance"),
             FORMATS["format_tcell_left"],
         )
         sheet.write(
             row_pos,
-            7 if show_balance else 6,
-            currency_data.get("amount_due"),
+            6,
+            currency_data.get("balance_forward"),
             FORMATS["current_money_format"],
         )
         return row_pos
@@ -290,7 +278,6 @@ class DetailedActivityStatementXslx(models.AbstractModel):
         partner_data = data.get("data", {}).get(partner.id, {})
         currency_data = partner_data.get("currencies", {}).get(currency.id)
         account_type = data.get("account_type", False)
-        show_balance = data.get("show_balance", True)
         row_pos += 2
         statement_header = _("%sStatement up to %s in %s") % (
             account_type == "payable" and _("Supplier ") or "",
@@ -301,7 +288,7 @@ class DetailedActivityStatementXslx(models.AbstractModel):
             row_pos,
             0,
             row_pos,
-            7 if show_balance else 6,
+            6,
             statement_header,
             FORMATS["format_left_bold"],
         )
@@ -311,22 +298,17 @@ class DetailedActivityStatementXslx(models.AbstractModel):
         )
         sheet.write(row_pos, 1, _("Date"), FORMATS["format_theader_yellow_center"])
         sheet.write(row_pos, 2, _("Due Date"), FORMATS["format_theader_yellow_center"])
-        sheet.merge_range(
+        sheet.write(
             row_pos,
             3,
-            row_pos,
-            4,
             _("Description"),
             FORMATS["format_theader_yellow_center"],
         )
-        sheet.write(row_pos, 5, _("Original"), FORMATS["format_theader_yellow_center"])
+        sheet.write(row_pos, 4, _("Original"), FORMATS["format_theader_yellow_center"])
         sheet.write(
-            row_pos, 6, _("Open Amount"), FORMATS["format_theader_yellow_center"]
+            row_pos, 5, _("Open Amount"), FORMATS["format_theader_yellow_center"]
         )
-        if show_balance:
-            sheet.write(
-                row_pos, 7, _("Balance"), FORMATS["format_theader_yellow_center"]
-            )
+        sheet.write(row_pos, 6, _("Balance"), FORMATS["format_theader_yellow_center"])
         format_tcell_left = FORMATS["format_tcell_left"]
         format_tcell_date_left = FORMATS["format_tcell_date_left"]
         format_distributed = FORMATS["format_distributed"]
@@ -355,7 +337,7 @@ class DetailedActivityStatementXslx(models.AbstractModel):
             name_to_show = (
                 line.get("name", "") == "/" or not line.get("name", "")
             ) and line.get("ref", "")
-            if line.get("name", "") != "/":
+            if line.get("name", "") and line.get("name", "") != "/":
                 if not line.get("ref", ""):
                     name_to_show = line.get("name", "")
                 else:
@@ -373,11 +355,10 @@ class DetailedActivityStatementXslx(models.AbstractModel):
                 line.get("date_maturity", ""),
                 format_tcell_date_left,
             )
-            sheet.merge_range(row_pos, 3, row_pos, 4, name_to_show, format_distributed)
-            sheet.write(row_pos, 5, line.get("amount", ""), current_money_format)
-            sheet.write(row_pos, 6, line.get("open_amount", ""), current_money_format)
-            if show_balance:
-                sheet.write(row_pos, 7, line.get("balance", ""), current_money_format)
+            sheet.write(row_pos, 3, name_to_show, format_distributed)
+            sheet.write(row_pos, 4, line.get("amount", ""), current_money_format)
+            sheet.write(row_pos, 5, line.get("open_amount", ""), current_money_format)
+            sheet.write(row_pos, 6, line.get("balance", ""), current_money_format)
         row_pos += 1
         sheet.write(
             row_pos, 1, partner_data.get("end"), FORMATS["format_tcell_date_left"]
@@ -386,21 +367,20 @@ class DetailedActivityStatementXslx(models.AbstractModel):
             row_pos,
             2,
             row_pos,
-            6 if show_balance else 5,
+            5,
             _("Ending Balance"),
             FORMATS["format_tcell_left"],
         )
         sheet.write(
             row_pos,
-            7 if show_balance else 6,
+            6,
             currency_data.get("amount_due"),
             FORMATS["current_money_format"],
         )
         return row_pos
 
     def _size_columns(self, sheet, data):
-        show_balance = data.get("show_balance", True)
-        for i in range(8 if show_balance else 7):
+        for i in range(7):
             sheet.set_column(0, i, 20)
 
     def generate_xlsx_report(self, workbook, data, objects):
@@ -413,7 +393,6 @@ class DetailedActivityStatementXslx(models.AbstractModel):
         else:
             company = self.env.user.company_id
         data.update(report_model._get_report_values(data.get("partner_ids"), data))
-        show_balance = data.get("show_balance", True)
         partners = self.env["res.partner"].browse(data.get("partner_ids"))
         sheet = workbook.add_worksheet(_("Detailed Activity Statement"))
         sheet.set_landscape()
@@ -422,7 +401,7 @@ class DetailedActivityStatementXslx(models.AbstractModel):
             row_pos,
             0,
             row_pos,
-            7 if show_balance else 6,
+            6,
             _("Statement of Account from %s") % (company.display_name,),
             FORMATS["format_ws_title"],
         )

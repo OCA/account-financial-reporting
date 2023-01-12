@@ -18,7 +18,6 @@ class DetailedActivityStatementWizard(models.TransientModel):
         res = super()._prepare_statement()
         res.update(
             {
-                "show_balance": self.show_balance,
                 "is_detailed": True,
             }
         )
