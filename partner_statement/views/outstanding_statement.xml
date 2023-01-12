@@ -6,7 +6,9 @@
         <p>
             <span t-esc="'' if  account_type == 'receivable' else 'Supplier '" /><span
                 t-esc="title_name"
-            /> up to <span t-esc="d['end']" /> in <span t-esc="display_currency.name" />
+            /> up to <span t-esc="ending_date" /> in <span
+                t-esc="display_currency.name"
+            />
         </p>
         <table class="table table-sm table-statement">
             <thead>
