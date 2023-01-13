@@ -278,9 +278,7 @@ class AccountMoveLineXlsx(models.AbstractModel):
             },
             "invoice": {
                 "header": {"value": self._("Invoice")},
-                "lines": {
-                    "value": self._render("line.invoice_id and line.invoice_id.number")
-                },
+                "lines": {"value": self._render("line.move_id and line.move_id.name")},
                 "width": 20,
             },
             "amount_residual": {
