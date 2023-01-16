@@ -102,7 +102,7 @@ class OutstandingStatement(models.AbstractModel):
                 CASE WHEN Q1.currency_id is not null
                     THEN Q1.open_amount_currency
                     ELSE Q1.open_amount
-                END as open_amount
+                END as open_amount, Q1.id
                 FROM Q1
                 """,
                 locals(),
@@ -118,7 +118,7 @@ class OutstandingStatement(models.AbstractModel):
               Q2.name, Q2.ref, Q2.debit, Q2.credit,
               Q2.debit-Q2.credit AS amount, blocked,
               COALESCE(Q2.currency_id, c.currency_id) AS currency_id,
-              Q2.open_amount
+              Q2.open_amount, Q2.id
             FROM Q2
             JOIN res_company c ON (c.id = Q2.company_id)
             JOIN res_currency cur ON cur.id = COALESCE(Q2.currency_id, c.currency_id)
@@ -142,7 +142,8 @@ class OutstandingStatement(models.AbstractModel):
              Q2 AS (%s),
              Q3 AS (%s)
         SELECT partner_id, currency_id, move_id, date, date_maturity, debit,
-                            credit, amount, open_amount, name, ref, blocked
+            credit, amount, open_amount, COALESCE(name, '') as name,
+            COALESCE(ref, '') as ref, blocked, id
         FROM Q3
         ORDER BY date, date_maturity, move_id"""
             % (
