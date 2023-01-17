@@ -56,18 +56,25 @@ class ActivityStatementXslx(models.AbstractModel):
             row_pos,
             2,
             row_pos,
-            4,
+            3,
             _("Description"),
             FORMATS["format_theader_yellow_center"],
         )
-        sheet.write(row_pos, 5, _("Amount"), FORMATS["format_theader_yellow_center"])
-        sheet.write(row_pos, 6, _("Balance"), FORMATS["format_theader_yellow_center"])
+        sheet.write(
+            row_pos, 4, _("Original Amount"), FORMATS["format_theader_yellow_center"]
+        )
+        sheet.write(
+            row_pos, 5, _("Applied Amount"), FORMATS["format_theader_yellow_center"]
+        )
+        sheet.write(
+            row_pos, 6, _("Open Amount"), FORMATS["format_theader_yellow_center"]
+        )
         row_pos += 1
         sheet.write(
             row_pos, 1, partner_data.get("prior_day"), FORMATS["format_tcell_date_left"]
         )
         sheet.merge_range(
-            row_pos, 2, row_pos, 4, _("Balance Forward"), FORMATS["format_tcell_left"]
+            row_pos, 2, row_pos, 5, _("Balance Forward"), FORMATS["format_tcell_left"]
         )
         sheet.write(
             row_pos,
@@ -89,7 +96,7 @@ class ActivityStatementXslx(models.AbstractModel):
             name_to_show = (
                 line.get("name", "") == "/" or not line.get("name", "")
             ) and line.get("ref", "")
-            if line.get("name", "") != "/":
+            if line.get("name", "") and line.get("name", "") != "/":
                 if not line.get("ref", ""):
                     name_to_show = line.get("name", "")
                 else:
@@ -101,18 +108,24 @@ class ActivityStatementXslx(models.AbstractModel):
                         name_to_show = line.get("ref", "")
             sheet.write(row_pos, 0, line.get("move_id", ""), format_tcell_left)
             sheet.write(row_pos, 1, line.get("date", ""), format_tcell_date_left)
-            sheet.merge_range(row_pos, 2, row_pos, 4, name_to_show, format_distributed)
-            sheet.write(row_pos, 5, line.get("amount", ""), current_money_format)
-            sheet.write(row_pos, 6, line.get("balance", ""), current_money_format)
+            sheet.merge_range(row_pos, 2, row_pos, 3, name_to_show, format_distributed)
+            sheet.write(row_pos, 4, line.get("amount", ""), current_money_format)
+            sheet.write(
+                row_pos, 5, line.get("applied_amount", ""), current_money_format
+            )
+            sheet.write(row_pos, 6, line.get("open_amount", ""), current_money_format)
         row_pos += 1
         sheet.write(
             row_pos, 1, partner_data.get("end"), FORMATS["format_tcell_date_left"]
         )
         sheet.merge_range(
-            row_pos, 2, row_pos, 4, _("Ending Balance"), FORMATS["format_tcell_left"]
+            row_pos, 2, row_pos, 5, _("Ending Balance"), FORMATS["format_tcell_left"]
         )
         sheet.write(
-            row_pos, 6, currency_data.get("amount_due"), FORMATS["current_money_format"]
+            row_pos,
+            6,
+            currency_data.get("amount_due"),
+            FORMATS["current_money_format"],
         )
         return row_pos
 

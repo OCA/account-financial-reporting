@@ -17,12 +17,9 @@
                     <th>Reference number</th>
                     <th>Date</th>
                     <th>Description</th>
-                    <th class="amount"><span t-if="is_detailed">Original</span><span
-                            t-if="not is_detailed"
-                        >Amount</span></th>
-                    <th t-if="is_detailed">Applied Amount</th>
-                    <th t-if="is_detailed">Open Amount</th>
-                    <th class="amount" t-if="show_balance">Balance</th>
+                    <th class="amount">Original Amount</th>
+                    <th class="amount">Applied Amount</th>
+                    <th class="amount">Open Amount</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,9 +30,8 @@
                     </td>
                     <td t-if="is_detailed">Initial Balance</td>
                     <td t-else="">Balance Forward</td>
-                    <td t-if="show_balance" />
-                    <td t-if="is_detailed" />
-                    <td t-if="is_detailed" />
+                    <td />
+                    <td />
                     <td class="amount">
                         <span
                             t-esc="currency['balance_forward']"
@@ -87,22 +83,15 @@
                             t-if="not line['reconciled_line']"
                         />
                     </td>
-                    <td class="amount" t-if="is_detailed">
+                    <td class="amount">
                         <span
                             t-esc="line['applied_amount']"
                             t-options="{'widget': 'monetary', 'display_currency': display_currency}"
                         />
                     </td>
-                    <td class="amount" t-if="is_detailed">
+                    <td class="amount">
                         <span
                             t-esc="line['open_amount']"
-                            t-options="{'widget': 'monetary', 'display_currency': display_currency}"
-                            t-if="not line['reconciled_line']"
-                        />
-                    </td>
-                    <td class="amount" t-if="show_balance">
-                        <span
-                            t-esc="line['balance']"
                             t-options="{'widget': 'monetary', 'display_currency': display_currency}"
                             t-if="not line['reconciled_line']"
                         />
@@ -114,9 +103,8 @@
                         <span t-esc="d['end']" />
                     </td>
                     <td>Ending Balance</td>
-                    <td t-if="show_balance" />
-                    <td t-if="is_detailed" />
-                    <td t-if="is_detailed" />
+                    <td />
+                    <td />
                     <td class="amount">
                         <span
                             t-esc="currency['amount_due']"
