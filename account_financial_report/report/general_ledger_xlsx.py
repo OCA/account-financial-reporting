@@ -74,7 +74,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                     "field": "bal_curr",
                     "field_initial_balance": "initial_bal_curr",
                     "field_final_balance": "final_bal_curr",
-                    "type": "amount_different_company_currency",
+                    "type": "amount_currency",
                     "width": 10,
                 },
                 {
@@ -142,7 +142,6 @@ class GeneralLedgerXslx(models.AbstractModel):
         analytic_data = res_data["analytic_data"]
         filter_partner_ids = res_data["filter_partner_ids"]
         foreign_currency = res_data["foreign_currency"]
-        company_currency = report.company_id.currency_id
         # For each account
         for account in general_ledger:
             # Write account title
@@ -176,7 +175,6 @@ class GeneralLedgerXslx(models.AbstractModel):
                         {
                             "account": account["code"],
                             "journal": journals_data[line["journal_id"]]["code"],
-                            "company_currency_id": company_currency.id,
                         }
                     )
                     if line["currency_id"]:
@@ -209,11 +207,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                                 "analytic_distribution": analytic_distribution,
                             }
                         )
-                    if (
-                        foreign_currency
-                        and line["currency_id"]
-                        and line["currency_id"] != company_currency.id
-                    ):
+                    if foreign_currency:
                         total_bal_curr += line["bal_curr"]
                         line.update({"total_bal_curr": total_bal_curr})
                     self.write_line_from_dict(line, report_data)
@@ -270,7 +264,6 @@ class GeneralLedgerXslx(models.AbstractModel):
                             {
                                 "account": account["code"],
                                 "journal": journals_data[line["journal_id"]]["code"],
-                                "company_currency_id": company_currency.id,
                             }
                         )
                         if line["currency_id"]:
@@ -305,11 +298,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                                     "analytic_distribution": analytic_distribution,
                                 }
                             )
-                        if (
-                            foreign_currency
-                            and line["currency_id"]
-                            and line["currency_id"] != company_currency.id
-                        ):
+                        if foreign_currency:
                             total_bal_curr += line["bal_curr"]
                             line.update({"total_bal_curr": total_bal_curr})
                         self.write_line_from_dict(line, report_data)
