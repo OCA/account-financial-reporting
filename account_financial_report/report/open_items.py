@@ -180,7 +180,7 @@ class OpenItemsReport(models.AbstractModel):
 
     @api.model
     def _order_open_items_by_date(
-        self, open_items_move_lines_data, show_partner_details
+        self, open_items_move_lines_data, show_partner_details, company_currency
     ):
         new_open_items = {}
         if not show_partner_details:
@@ -190,7 +190,12 @@ class OpenItemsReport(models.AbstractModel):
                 for prt_id in open_items_move_lines_data[acc_id]:
                     for move_line in open_items_move_lines_data[acc_id][prt_id]:
                         move_lines += [move_line]
-                move_lines = sorted(move_lines, key=lambda k: (k["date"]))
+                move_lines = sorted(
+                    move_lines,
+                    key=lambda k: (
+                        k["date"] and (k["currency_id"] or company_currency.id)
+                    ),
+                )
                 new_open_items[acc_id] = move_lines
         else:
             for acc_id in open_items_move_lines_data.keys():
@@ -200,7 +205,12 @@ class OpenItemsReport(models.AbstractModel):
                     move_lines = []
                     for move_line in open_items_move_lines_data[acc_id][prt_id]:
                         move_lines += [move_line]
-                    move_lines = sorted(move_lines, key=lambda k: (k["date"]))
+                    move_lines = sorted(
+                        move_lines,
+                        key=lambda k: (
+                            k["date"] and (k["currency_id"] or company_currency.id)
+                        ),
+                    )
                     new_open_items[acc_id][prt_id] = move_lines
         return new_open_items
 
@@ -208,6 +218,7 @@ class OpenItemsReport(models.AbstractModel):
         wizard_id = data["wizard_id"]
         company = self.env["res.company"].browse(data["company_id"])
         company_id = data["company_id"]
+        company_currency = company.currency_id
         account_ids = data["account_ids"]
         partner_ids = data["partner_ids"]
         date_at = data["date_at"]
@@ -233,7 +244,7 @@ class OpenItemsReport(models.AbstractModel):
 
         total_amount = self._calculate_amounts(open_items_move_lines_data)
         open_items_move_lines_data = self._order_open_items_by_date(
-            open_items_move_lines_data, show_partner_details
+            open_items_move_lines_data, show_partner_details, company_currency
         )
         return {
             "doc_ids": [wizard_id],

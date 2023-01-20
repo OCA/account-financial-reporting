@@ -111,6 +111,8 @@ class OpenItemsXslx(models.AbstractModel):
         journals_data = res_data["journals_data"]
         total_amount = res_data["total_amount"]
         show_partner_details = res_data["show_partner_details"]
+        foreign_currency = res_data["foreign_currency"]
+        company_currency = res_data["company_currency"]
         for account_id in Open_items.keys():
             # Write account title
             self.write_array_title(
@@ -130,6 +132,8 @@ class OpenItemsXslx(models.AbstractModel):
                         # Display array header for move lines
                         self.write_array_header()
 
+                        currencies_used = set()
+
                         # Display account move lines
                         for line in Open_items[account_id][partner_id]:
                             line.update(
@@ -140,6 +144,17 @@ class OpenItemsXslx(models.AbstractModel):
                                     ],
                                 }
                             )
+                            if foreign_currency:
+                                currency_id = line.get("currency_id", False)
+                                if currency_id and currency_id not in currencies_used:
+                                    self.write_array_title(line["currency_name"])
+                                    currencies_used.add(currency_id)
+                                elif (
+                                    not currency_id
+                                    and company_currency.id not in currencies_used
+                                ):
+                                    self.write_array_title(company_currency.name)
+                                    currencies_used.add(company_currency.id)
                             self.write_line_from_dict(line)
 
                         # Display ending balance line for partner
