@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2023-01-16 03:17+0000\n"
+"PO-Revision-Date: 2023-01-23 03:03+0000\n"
 "Last-Translator: Ignacio Buioli <ibuioli@gmail.com>\n"
 "Language-Team: none\n"
 "Language: es_AR\n"
@@ -140,6 +140,14 @@ msgid ""
 "                <br/>\n"
 "                <br/>"
 msgstr ""
+"<span class=\"o_form_label\">La declaración de actividad detallada es una "
+"extensión de la declaración de actividad y pretende explicar las "
+"transacciones\n"
+"que hayan ocurrido durante el período, disponiendo además de una sección de "
+"Saldo Anterior y una sección de Saldo Final.\n"
+"                 </span>\n"
+"                 <br/>\n"
+"                 <br/>"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_wizard_view
@@ -581,7 +589,7 @@ msgstr "Inicial"
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 #, python-format
 msgid "Original Amount"
-msgstr ""
+msgstr "Importe Original"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
