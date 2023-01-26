@@ -128,7 +128,10 @@ class StockMove(models.Model):
                 lambda m: m.date_done >= date_start and m.date_done <= date_end
             )
             inv_lines = moves_in_date.mapped("invoice_line_ids").filtered(
-                lambda l: l.check_invoice_line_in_date(date_end, date_start=date_start,)
+                lambda l: l.check_invoice_line_in_date(
+                    date_end,
+                    date_start=date_start,
+                )
             )
             qty_to_invoice = (
                 move.quantity_done
@@ -136,7 +139,8 @@ class StockMove(models.Model):
                 else -move.quantity_done
             )
             calculated_qty = move.with_context(
-                moves_date_start=date_start, moves_date_end=date_end,
+                moves_date_start=date_start,
+                moves_date_end=date_end,
             ).get_quantity_invoiced(inv_lines)
             move._set_not_invoiced_values(qty_to_invoice, calculated_qty)
 
