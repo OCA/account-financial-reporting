@@ -69,8 +69,8 @@ class StockMove(models.Model):
             sum(
                 invoice_lines.mapped(
                     lambda l: l.quantity
-                    if (l.move_id.type == "out_invoice" and not self.to_refund)
-                    or (l.move_id.type == "out_refund" and self.to_refund)
+                    if (l.move_id.move_type == "out_invoice" and not self.to_refund)
+                    or (l.move_id.move_type == "out_refund" and self.to_refund)
                     else -l.quantity
                 )
             )
