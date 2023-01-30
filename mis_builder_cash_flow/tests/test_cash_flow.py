@@ -108,11 +108,11 @@ class TestCashFlow(TransactionCase):
         move.post()
         self.check_matrix(
             args=[
-                ("liquidity", "Current", 1500),
+                ("in_liquidity", "Current", 1500),
                 ("balance", "Current", 1500),
-                ("in_receivable", "Current", -2000),
+                ("out_receivable", "Current", -2000),
             ],
-            ignore_rows=["balance", "period_balance", "in_total"],
+            ignore_rows=["balance", "period_balance", "in_total", "out_total"],
         )
         date = Date.today() + timedelta(weeks=8)
         self.env["mis.cash_flow.forecast_line"].create(
@@ -125,12 +125,12 @@ class TestCashFlow(TransactionCase):
         )
         self.check_matrix(
             [
-                ("liquidity", "Current", 1500),
+                ("in_liquidity", "Current", 1500),
                 ("balance", "Current", 1500),
-                ("in_receivable", "Current", -2000),
+                ("out_receivable", "Current", -2000),
                 ("in_forecast", "+8w", 1000),
             ],
-            ignore_rows=["balance", "period_balance", "in_total"],
+            ignore_rows=["balance", "period_balance", "in_total", "out_total"],
         )
 
     def check_matrix(self, args=None, ignore_rows=None):

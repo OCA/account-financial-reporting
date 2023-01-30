@@ -6,25 +6,27 @@
         <field name="name">Cash Flow</field>
         <field name="style_id" ref="mis_style_cash_flow" />
     </record>
-    <record id="mis_kpi_aliquidity" model="mis.report.kpi">
-        <field name="report_id" ref="mis_report_cash_flow" />
-        <field name="name">liquidity</field>
-        <field name="description">LIQUIDITY</field>
-        <field name="style_id" ref="mis_style_account_sub_total" />
-        <field name="auto_expand_accounts" eval="True" />
-        <field name="auto_expand_accounts_style_id" ref="mis_style_account_detail" />
-        <field name="sequence">20</field>
-        <field
-            name="expression"
-        >bal[][('account_internal_type', '=', 'liquidity'), ('line_type', '=', 'move_line'), ('account_id.hide_in_cash_flow', '=', False)]</field>
-    </record>
     <record id="mis_kpi_in_total" model="mis.report.kpi">
         <field name="report_id" ref="mis_report_cash_flow" />
         <field name="name">in_total</field>
         <field name="description">IN TOTAL</field>
         <field name="style_id" ref="mis_style_account_sub_total" />
         <field name="sequence">30</field>
-        <field name="expression">in_receivable + in_forecast</field>
+        <field
+            name="expression"
+        >in_liquidity + in_receivable + in_payable + in_forecast</field>
+    </record>
+    <record id="mis_kpi_in_liquidity" model="mis.report.kpi">
+        <field name="report_id" ref="mis_report_cash_flow" />
+        <field name="name">in_liquidity</field>
+        <field name="description">In Liquidity</field>
+        <field name="style_id" ref="mis_style_account_line" />
+        <field name="auto_expand_accounts" eval="True" />
+        <field name="auto_expand_accounts_style_id" ref="mis_style_account_detail" />
+        <field name="sequence">40</field>
+        <field
+            name="expression"
+        >bal[][('account_internal_type', '=', 'liquidity'), ('debit', '!=', 0.0), ('line_type', '=', 'move_line'), ('account_id.hide_in_cash_flow', '=', False)]</field>
     </record>
     <record id="mis_kpi_in_receivable" model="mis.report.kpi">
         <field name="report_id" ref="mis_report_cash_flow" />
@@ -36,7 +38,19 @@
         <field name="sequence">50</field>
         <field
             name="expression"
-        >bal[][('account_internal_type', '=', 'receivable'), ('full_reconcile_id', '=', False), ('line_type', '=', 'move_line'), ('account_id.hide_in_cash_flow', '=', False)]</field>
+        >bal[][('account_internal_type', '=', 'receivable'), ('debit', '!=', 0.0), ('full_reconcile_id', '=', False), ('line_type', '=', 'move_line'), ('account_id.hide_in_cash_flow', '=', False)]</field>
+    </record>
+    <record id="mis_kpi_in_payable" model="mis.report.kpi">
+        <field name="report_id" ref="mis_report_cash_flow" />
+        <field name="name">in_payable</field>
+        <field name="description">In payable</field>
+        <field name="style_id" ref="mis_style_account_line" />
+        <field name="auto_expand_accounts" eval="True" />
+        <field name="auto_expand_accounts_style_id" ref="mis_style_account_detail" />
+        <field name="sequence">60</field>
+        <field
+            name="expression"
+        >bal[][('account_internal_type', '=', 'payable'), ('debit', '!=', 0.0), ('full_reconcile_id', '=', False), ('line_type', '=', 'move_line'), ('account_id.hide_in_cash_flow', '=', False)]</field>
     </record>
     <record id="mis_kpi_in_forecast" model="mis.report.kpi">
         <field name="report_id" ref="mis_report_cash_flow" />
@@ -56,7 +70,21 @@
         <field name="description">OUT TOTAL</field>
         <field name="style_id" ref="mis_style_account_sub_total" />
         <field name="sequence">80</field>
-        <field name="expression">out_payable + out_forecast</field>
+        <field
+            name="expression"
+        >out_liquidity + out_payable + out_receivable + out_forecast</field>
+    </record>
+    <record id="mis_kpi_out_liquidity" model="mis.report.kpi">
+        <field name="report_id" ref="mis_report_cash_flow" />
+        <field name="name">out_liquidity</field>
+        <field name="description">Out Liquidity</field>
+        <field name="style_id" ref="mis_style_account_line" />
+        <field name="auto_expand_accounts" eval="True" />
+        <field name="auto_expand_accounts_style_id" ref="mis_style_account_detail" />
+        <field name="sequence">90</field>
+        <field
+            name="expression"
+        >bal[][('account_internal_type', '=', 'liquidity'), ('credit', '!=', 0.0), ('line_type', '=', 'move_line'), ('account_id.hide_in_cash_flow', '=', False)]</field>
     </record>
     <record id="mis_kpi_out_payable" model="mis.report.kpi">
         <field name="report_id" ref="mis_report_cash_flow" />
@@ -68,7 +96,19 @@
         <field name="sequence">100</field>
         <field
             name="expression"
-        >bal[][('account_internal_type', '=', 'payable'), ('full_reconcile_id', '=', False), ('line_type', '=', 'move_line'), ('account_id.hide_in_cash_flow', '=', False)]</field>
+        >bal[][('account_internal_type', '=', 'payable'), ('credit', '!=', 0.0), ('full_reconcile_id', '=', False), ('line_type', '=', 'move_line'), ('account_id.hide_in_cash_flow', '=', False)]</field>
+    </record>
+    <record id="mis_kpi_out_receivable" model="mis.report.kpi">
+        <field name="report_id" ref="mis_report_cash_flow" />
+        <field name="name">out_receivable</field>
+        <field name="description">Out receivable</field>
+        <field name="style_id" ref="mis_style_account_line" />
+        <field name="auto_expand_accounts" eval="True" />
+        <field name="auto_expand_accounts_style_id" ref="mis_style_account_detail" />
+        <field name="sequence">110</field>
+        <field
+            name="expression"
+        >bal[][('account_internal_type', '=', 'receivable'), ('credit', '!=', 0.0), ('full_reconcile_id', '=', False), ('line_type', '=', 'move_line'), ('account_id.hide_in_cash_flow', '=', False)]</field>
     </record>
     <record id="mis_kpi_out_forecast" model="mis.report.kpi">
         <field name="report_id" ref="mis_report_cash_flow" />
