@@ -127,6 +127,7 @@ class MisCashFlow(models.Model):
                 'posted' as state,
                 fl.date as date
             FROM mis_cash_flow_forecast_line as fl
+            WHERE fl.date >= now()
         """
         tools.drop_view_if_exists(self.env.cr, self._table)
         self._cr.execute(
