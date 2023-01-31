@@ -12,15 +12,15 @@ class StockMove(models.Model):
         start = True
         if date_start:
             start = (
-                self.move_id.date
-                or self.move_id.invoice_date
+                self.move_id.invoice_date
+                or self.move_id.date
                 or self.create_date.date()
             ) >= date_start
         return (
             start
             and (
-                self.move_id.date
-                or self.move_id.invoice_date
+                self.move_id.invoice_date
+                or self.move_id.date
                 or self.create_date.date()
             )
             <= date_check
