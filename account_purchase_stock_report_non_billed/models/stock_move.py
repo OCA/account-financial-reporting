@@ -13,7 +13,7 @@ class StockMove(models.Model):
             if move.purchase_line_id:
                 move.currency_id = move.purchase_line_id.currency_id
             else:
-                super(StockMove, move)._compute_currency_id()
+                return super(StockMove, move)._compute_currency_id()
 
     def get_quantity_invoiced(self, invoice_lines):
         if self.purchase_line_id:
@@ -23,8 +23,8 @@ class StockMove(models.Model):
                 sum(
                     invoice_lines.mapped(
                         lambda l: l.quantity
-                        if (l.move_id.type == "in_invoice" and not self.to_refund)
-                        or (l.move_id.type == "in_refund" and self.to_refund)
+                        if (l.move_id.move_type == "in_invoice" and not self.to_refund)
+                        or (l.move_id.move_type == "in_refund" and self.to_refund)
                         else -l.quantity
                     )
                 )
@@ -70,12 +70,12 @@ class StockMove(models.Model):
                 )
             self.price_not_invoiced = (qty_to_invoice - invoiced_qty) * price_unit
         else:
-            super()._set_not_invoiced_values(qty_to_invoice, invoiced_qty)
+            return super()._set_not_invoiced_values(qty_to_invoice, invoiced_qty)
 
     @api.depends("purchase_line_id")
     @api.depends_context("date_check_invoiced_moves")
     def _compute_not_invoiced_values(self):
-        super()._compute_not_invoiced_values()
+        return super()._compute_not_invoiced_values()
 
     def _get_model_id_origin_document(self):
         if not self.purchase_line_id:

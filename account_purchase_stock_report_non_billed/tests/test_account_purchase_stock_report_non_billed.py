@@ -3,10 +3,11 @@
 from dateutil.relativedelta import relativedelta
 
 from odoo import fields
-from odoo.tests import Form, common
+from odoo.tests import Form, common, tagged
 
 
-class TestAccountPurchaseStockReportNonBilled(common.SavepointCase):
+@tagged("-at_install", "post_install")
+class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -39,9 +40,9 @@ class TestAccountPurchaseStockReportNonBilled(common.SavepointCase):
 
     def test_02_report_move_full_invoiced(self):
         picking = self.get_picking_done_po()
-        inv_action = self.po.action_view_invoice()
-        inv_form = Form(self.env["account.move"].with_context(**inv_action["context"]))
-        invoice = inv_form.save()
+        inv_action = self.po.action_create_invoice()
+        invoice = self.env["account.move"].browse([(inv_action["res_id"])])
+        invoice.invoice_date = self.po.create_date
         invoice.action_post()
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
             {"date_check": fields.Date.today()}
@@ -58,16 +59,16 @@ class TestAccountPurchaseStockReportNonBilled(common.SavepointCase):
         picking.action_confirm()
         move_done = picking.move_lines[0]
         move_done.quantity_done = 1.0
-        picking.action_done()
-        inv_action = self.po.action_view_invoice()
-        inv_form = Form(self.env["account.move"].with_context(**inv_action["context"]))
-        inv = inv_form.save()
-        inv.action_post()
+        picking.button_validate()
+        inv_action = self.po.action_create_invoice()
+        invoice = self.env["account.move"].browse([(inv_action["res_id"])])
+        invoice.invoice_date = self.po.create_date
+        invoice.action_post()
         # Done other moves to appear at report
         picking_ret = self.po.picking_ids.filtered(lambda p: p.state == "assigned")
         picking_ret.action_confirm()
         picking_ret.move_lines.quantity_done = 1.0
-        picking_ret.action_done()
+        picking_ret.button_validate()
         moves_not_done = picking_ret.move_lines
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
             {"date_check": fields.Date.today()}
@@ -87,9 +88,9 @@ class TestAccountPurchaseStockReportNonBilled(common.SavepointCase):
         picking.move_lines.quantity_done = 1.0
         picking.button_validate()
         # Create invoice
-        inv_action = self.po.action_view_invoice()
-        inv_form = Form(self.env["account.move"].with_context(**inv_action["context"]))
-        invoice = inv_form.save()
+        inv_action = self.po.action_create_invoice()
+        invoice = self.env["account.move"].browse([(inv_action["res_id"])])
+        invoice.invoice_date = self.po.create_date
         invoice.action_post()
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
             {"date_check": fields.Date.today()}
@@ -102,7 +103,13 @@ class TestAccountPurchaseStockReportNonBilled(common.SavepointCase):
         wiz_invoice_refund = (
             self.env["account.move.reversal"]
             .with_context(active_model="account.move", active_ids=invoice.ids)
-            .create({"refund_method": "cancel", "reason": "test"})
+            .create(
+                {
+                    "refund_method": "cancel",
+                    "reason": "test",
+                    "journal_id": invoice.journal_id.id,
+                }
+            )
         )
         wiz_invoice_refund.reverse_moves()
         action = wiz.open_at_date()
@@ -110,10 +117,10 @@ class TestAccountPurchaseStockReportNonBilled(common.SavepointCase):
         for move in picking.move_lines:
             self.assertIn(move.id, domain_ids)
         # Create invoice again
-        inv_action = self.po.action_view_invoice()
-        inv_form = Form(self.env["account.move"].with_context(**inv_action["context"]))
-        new_inv = inv_form.save()
-        new_inv.action_post()
+        inv_action = self.po.action_create_invoice()
+        new_invoice = self.env["account.move"].browse([(inv_action["res_id"])])
+        new_invoice.invoice_date = self.po.create_date
+        new_invoice.action_post()
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
         for move in picking.move_lines:
@@ -125,12 +132,11 @@ class TestAccountPurchaseStockReportNonBilled(common.SavepointCase):
         picking = self.po.picking_ids[0]
         picking.action_confirm()
         picking.move_lines.quantity_done = 3.0
-        picking.button_validate()
+        res_dict = picking.button_validate()
         move_lines = picking.move_lines
-        wiz = self.env["stock.backorder.confirmation"].create(
-            {"pick_ids": [(4, picking.id)]}
-        )
-        wiz.process()
+        self.env["stock.backorder.confirmation"].with_context(
+            **res_dict["context"]
+        ).process()
         picking = self.po.picking_ids.filtered(lambda p: p.state != "done")
         picking.action_confirm()
         picking.move_lines.quantity_done = 2.0
@@ -143,9 +149,9 @@ class TestAccountPurchaseStockReportNonBilled(common.SavepointCase):
         domain_ids = action["domain"][0][2]
         for move in move_lines:
             self.assertIn(move.id, domain_ids)
-        inv_action = self.po.action_view_invoice()
-        inv_form = Form(self.env["account.move"].with_context(**inv_action["context"]))
-        invoice = inv_form.save()
+        inv_action = self.po.action_create_invoice()
+        invoice = self.env["account.move"].browse([(inv_action["res_id"])])
+        invoice.invoice_date = self.po.create_date
         invoice.action_post()
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
@@ -158,15 +164,14 @@ class TestAccountPurchaseStockReportNonBilled(common.SavepointCase):
         picking = self.po.picking_ids[0]
         picking.action_confirm()
         picking.move_lines.quantity_done = 3.0
-        picking.button_validate()
-        wiz = self.env["stock.backorder.confirmation"].create(
-            {"pick_ids": [(4, picking.id)]}
-        )
-        wiz.process()
+        res_dict = picking.button_validate()
         move_lines = picking.move_lines
-        inv_action = self.po.action_view_invoice()
-        inv_form = Form(self.env["account.move"].with_context(**inv_action["context"]))
-        invoice = inv_form.save()
+        self.env["stock.backorder.confirmation"].with_context(
+            **res_dict["context"]
+        ).process()
+        inv_action = self.po.action_create_invoice()
+        invoice = self.env["account.move"].browse([(inv_action["res_id"])])
+        invoice.invoice_date = self.po.create_date
         invoice.action_post()
         picking = self.po.picking_ids.filtered(lambda p: p.state != "done")
         picking.action_confirm()
@@ -181,9 +186,9 @@ class TestAccountPurchaseStockReportNonBilled(common.SavepointCase):
             self.assertNotIn(move.id, domain_ids)
         for move in picking.move_lines:
             self.assertIn(move.id, domain_ids)
-        inv_action = self.po.action_view_invoice()
-        inv_form = Form(self.env["account.move"].with_context(**inv_action["context"]))
-        invoice = inv_form.save()
+        inv_action = self.po.action_create_invoice()
+        invoice = self.env["account.move"].browse([(inv_action["res_id"])])
+        invoice.invoice_date = self.po.create_date
         invoice.action_post()
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
@@ -199,9 +204,9 @@ class TestAccountPurchaseStockReportNonBilled(common.SavepointCase):
         picking.move_lines.quantity_done = 1.0
         picking.button_validate()
         # Create invoice
-        inv_action = self.po.action_view_invoice()
-        inv_form = Form(self.env["account.move"].with_context(**inv_action["context"]))
-        invoice = inv_form.save()
+        inv_action = self.po.action_create_invoice()
+        invoice = self.env["account.move"].browse([(inv_action["res_id"])])
+        invoice.invoice_date = self.po.create_date
         invoice.action_post()
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
             {"date_check": fields.Date.today()}
@@ -221,7 +226,7 @@ class TestAccountPurchaseStockReportNonBilled(common.SavepointCase):
         return_id = wiz_return.create_returns()["res_id"]
         picking_return = self.env["stock.picking"].browse(return_id)
         picking_return.move_line_ids.write({"qty_done": 1})
-        picking_return.action_done()
+        picking_return.button_validate()
         for move in picking_return.move_lines:
             self.assertNotIn(move.id, domain_ids)
 
@@ -242,7 +247,7 @@ class TestAccountPurchaseStockReportNonBilled(common.SavepointCase):
         return_id = wiz_return.create_returns()["res_id"]
         picking_return = self.env["stock.picking"].browse(return_id)
         picking_return.move_line_ids.write({"qty_done": 1})
-        picking_return.action_done()
+        picking_return.button_validate()
         wiz_return_return_form = Form(
             self.env["stock.return.picking"].with_context(
                 active_model="stock.picking", active_id=picking_return.id
@@ -252,10 +257,11 @@ class TestAccountPurchaseStockReportNonBilled(common.SavepointCase):
         return_return_id = wiz_return_return.create_returns()["res_id"]
         picking_return_return = self.env["stock.picking"].browse(return_return_id)
         picking_return_return.move_line_ids.write({"qty_done": 1})
-        picking_return_return.action_done()
-        inv_action = self.po.action_view_invoice()
-        inv_form = Form(self.env["account.move"].with_context(**inv_action["context"]))
-        inv_form.save()
+        picking_return_return.button_validate()
+        inv_action = self.po.action_create_invoice()
+        invoice = self.env["account.move"].browse([(inv_action["res_id"])])
+        invoice.invoice_date = self.po.create_date
+        invoice.action_post()
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
             {"date_check": fields.Date.today()}
         )
@@ -285,7 +291,7 @@ class TestAccountPurchaseStockReportNonBilled(common.SavepointCase):
         return_id = wiz_return.create_returns()["res_id"]
         picking_return = self.env["stock.picking"].browse(return_id)
         picking_return.move_line_ids.write({"qty_done": 1})
-        picking_return.action_done()
+        picking_return.button_validate()
         wiz_return_return_form = Form(
             self.env["stock.return.picking"].with_context(
                 active_model="stock.picking", active_id=picking_return.id
@@ -295,7 +301,7 @@ class TestAccountPurchaseStockReportNonBilled(common.SavepointCase):
         return_return_id = wiz_return_return.create_returns()["res_id"]
         picking_return_return = self.env["stock.picking"].browse(return_return_id)
         picking_return_return.move_line_ids.write({"qty_done": 1})
-        picking_return_return.action_done()
+        picking_return_return.button_validate()
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
             {"date_check": fields.Date.today()}
         )
@@ -316,9 +322,10 @@ class TestAccountPurchaseStockReportNonBilled(common.SavepointCase):
         picking.action_confirm()
         picking.move_lines.quantity_done = 1.0
         picking.button_validate()
-        inv_action = self.po.action_view_invoice()
-        inv_form = Form(self.env["account.move"].with_context(**inv_action["context"]))
-        inv_form.save()
+        inv_action = self.po.action_create_invoice()
+        invoice = self.env["account.move"].browse([(inv_action["res_id"])])
+        invoice.invoice_date = self.po.create_date
+        invoice.action_post()
         wiz_return_form = Form(
             self.env["stock.return.picking"].with_context(
                 active_model="stock.picking", active_id=picking.id, to_refund=False
@@ -328,7 +335,7 @@ class TestAccountPurchaseStockReportNonBilled(common.SavepointCase):
         return_id = wiz_return.create_returns()["res_id"]
         picking_return = self.env["stock.picking"].browse(return_id)
         picking_return.move_line_ids.write({"qty_done": 1})
-        picking_return.action_done()
+        picking_return.button_validate()
         wiz_return_return_form = Form(
             self.env["stock.return.picking"].with_context(
                 active_model="stock.picking",
@@ -340,7 +347,7 @@ class TestAccountPurchaseStockReportNonBilled(common.SavepointCase):
         return_return_id = wiz_return_return.create_returns()["res_id"]
         picking_return_return = self.env["stock.picking"].browse(return_return_id)
         picking_return_return.move_line_ids.write({"qty_done": 1})
-        picking_return_return.action_done()
+        picking_return_return.button_validate()
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
             {"date_check": fields.Date.today()}
         )
@@ -362,10 +369,10 @@ class TestAccountPurchaseStockReportNonBilled(common.SavepointCase):
         picking.move_lines.quantity_done = 1.0
         picking.button_validate()
         # Emulate prepaying invoice
-        inv_action = self.po.action_view_invoice()
-        inv_form = Form(self.env["account.move"].with_context(**inv_action["context"]))
-        inv_form.date = fields.Date.today() - relativedelta(days=5)
-        inv_form.save()
+        inv_action = self.po.action_create_invoice()
+        invoice = self.env["account.move"].browse([(inv_action["res_id"])])
+        invoice.invoice_date = fields.Date.today() - relativedelta(days=5)
+        invoice.action_post()
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
             {"date_check": fields.Date.today(), "interval_restrict_invoices": True}
         )
