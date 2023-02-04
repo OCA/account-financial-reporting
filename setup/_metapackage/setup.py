@@ -9,6 +9,7 @@ setuptools.setup(
     version=version,
     install_requires=[
         'odoo-addon-account_financial_report>=15.0dev,<15.1dev',
+        'odoo-addon-account_purchase_stock_report_non_billed>=15.0dev,<15.1dev',
         'odoo-addon-account_sale_stock_report_non_billed>=15.0dev,<15.1dev',
         'odoo-addon-account_tax_balance>=15.0dev,<15.1dev',
         'odoo-addon-mis_builder_cash_flow>=15.0dev,<15.1dev',
