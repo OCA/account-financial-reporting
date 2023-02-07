@@ -11,7 +11,7 @@
         'date_range',
     ],
     'author': "Camptocamp,Odoo Community Association (OCA)",
-    'website': 'http://www.camptocamp.com',
+    'website': 'https://github.com/OCA/account-financial-reporting',
     'license': 'AGPL-3',
     'data': [
         'wizard/account_export_csv_view.xml',
