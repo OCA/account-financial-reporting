@@ -103,7 +103,7 @@ class ActivityStatement(models.AbstractModel):
                     Q2 AS (%s),
                     Q3 AS (%s)
         SELECT partner_id, currency_id, sum(balance) as balance
-        FROM Q2
+        FROM Q3
         GROUP BY partner_id, currency_id"""
             % (
                 self._initial_balance_sql_q1(partners, date_start, account_type),
