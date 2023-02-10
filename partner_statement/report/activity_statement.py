@@ -159,8 +159,11 @@ class ActivityStatement(models.AbstractModel):
                 AND %(date_start)s <= l.date
                 AND l.date <= %(date_end)s
                 AND m.state IN ('posted')
-            GROUP BY l.partner_id, m.name, l.date, l.date_maturity, l.name,
-                aj.type, case_ref, l.blocked, l.currency_id, l.company_id
+            GROUP BY l.partner_id, m.name, l.date, l.date_maturity,
+                CASE WHEN (aj.type IN ('sale', 'purchase'))
+                    THEN l.name
+                    ELSE '/'
+                END, case_ref, l.blocked, l.currency_id, l.company_id
         """,
                 locals(),
             ),
