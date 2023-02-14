@@ -580,7 +580,7 @@ class TrialBalanceReport(models.AbstractModel):
                     total_amount[unaffected_id], foreign_currency
                 )
                 total_amount[unaffected_id]["group_by_data"][0] = group_by_data_item
-        accounts_data = self._get_accounts_data(accounts_ids)
+        accounts_data = self._get_accounts_data(accounts_ids, company_id)
         (
             pl_initial_balance,
             pl_initial_currency_balance,
