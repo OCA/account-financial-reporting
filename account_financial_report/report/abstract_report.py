@@ -113,8 +113,9 @@ class AccountFinancialAbstractReport(models.AbstractModel):
                     ]
         return move_lines
 
-    def _get_accounts_data(self, accounts_ids):
+    def _get_accounts_data(self, accounts_ids, company_id):
         accounts = self.env["account.account"].browse(accounts_ids)
+        company = self.env["res.company"].browse(company_id)
         accounts_data = {}
         for account in accounts:
             accounts_data.update(
@@ -127,6 +128,12 @@ class AccountFinancialAbstractReport(models.AbstractModel):
                         "group_id": account.group_id.id,
                         "currency_id": account.currency_id or False,
                         "currency_name": account.currency_id.name,
+                        "foreign_currency_id": (
+                            account.currency_id.id
+                            if account.currency_id
+                            and account.currency_id != company.currency_id
+                            else False
+                        ),
                         "centralized": account.centralized,
                     }
                 }

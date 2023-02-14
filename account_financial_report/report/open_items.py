@@ -179,7 +179,9 @@ class OpenItemsReport(models.AbstractModel):
                 else:
                     open_items_move_lines_data[acc_id][prt_id].append(move_line)
         journals_data = self._get_journals_data(list(journals_ids))
-        accounts_data = self._get_accounts_data(open_items_move_lines_data.keys())
+        accounts_data = self._get_accounts_data(
+            open_items_move_lines_data.keys(), company_id
+        )
         return (
             move_lines,
             partners_data,
@@ -195,6 +197,7 @@ class OpenItemsReport(models.AbstractModel):
         for account_id in open_items_move_lines_data.keys():
             total_amount[account_id] = {}
             total_amount[account_id]["residual"] = 0.0
+            total_amount[account_id]["residual_currency"] = 0.0
             for partner_id in open_items_move_lines_data[account_id].keys():
                 total_amount[account_id][partner_id] = {}
                 total_amount[account_id][partner_id]["residual"] = 0.0
@@ -213,7 +216,8 @@ class OpenItemsReport(models.AbstractModel):
                 )
                 foreign_currency_id = (
                     move_currency_id
-                    if move_lines_have_same_currency
+                    if move_currency_id
+                    and move_lines_have_same_currency
                     and move_currency_id != company.currency_id.id
                     else False
                 )
@@ -225,6 +229,9 @@ class OpenItemsReport(models.AbstractModel):
                         "residual_currency"
                     ] += move_line["amount_residual_currency"]
                     total_amount[account_id]["residual"] += move_line["amount_residual"]
+                    total_amount[account_id]["residual_currency"] += move_line[
+                        "amount_residual_currency"
+                    ]
                 total_amount[account_id][partner_id][
                     "foreign_currency_id"
                 ] = foreign_currency_id

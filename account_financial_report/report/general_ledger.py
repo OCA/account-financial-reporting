@@ -541,7 +541,7 @@ class GeneralLedgerReport(models.AbstractModel):
                     "amount_currency"
                 ]
         journals_data = self._get_journals_data(list(journal_ids))
-        accounts_data = self._get_accounts_data(gen_ld_data.keys())
+        accounts_data = self._get_accounts_data(gen_ld_data.keys(), company_id)
         taxes_data = self._get_taxes_data(list(taxes_ids))
         tags_data = self._get_tags_data(list(tags_ids))
         rec_after_date_to_ids = self._get_reconciled_after_date_to_ids(

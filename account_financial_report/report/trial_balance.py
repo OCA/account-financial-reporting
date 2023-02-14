@@ -452,7 +452,7 @@ class TrialBalanceReport(models.AbstractModel):
                 if foreign_currency:
                     total_amount[unaffected_id]["initial_currency_balance"] = 0.0
                     total_amount[unaffected_id]["ending_currency_balance"] = 0.0
-        accounts_data = self._get_accounts_data(accounts_ids)
+        accounts_data = self._get_accounts_data(accounts_ids, company_id)
         (
             pl_initial_balance,
             pl_initial_currency_balance,

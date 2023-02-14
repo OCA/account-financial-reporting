@@ -214,7 +214,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                 date_at_object,
             )
         journals_data = self._get_journals_data(list(journals_ids))
-        accounts_data = self._get_accounts_data(ag_pb_data.keys())
+        accounts_data = self._get_accounts_data(ag_pb_data.keys(), company_id)
         return ag_pb_data, accounts_data, partners_data, journals_data
 
     @api.model

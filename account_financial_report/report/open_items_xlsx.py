@@ -192,6 +192,7 @@ class OpenItemsXslx(models.AbstractModel):
                     total_amount,
                     report_data,
                     account_id=account_id,
+                    foreign_currency_id=foreign_currency_id,
                 )
 
                 # 2 lines break
