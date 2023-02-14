@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-22 23:13+0000\n"
-"PO-Revision-Date: 2023-02-14 12:23+0000\n"
+"PO-Revision-Date: 2023-02-14 19:23+0000\n"
 "Last-Translator: Sergio Zanchetta <primes2h@gmail.com>\n"
 "Language-Team: Italian (https://www.transifex.com/oca/teams/23907/it/)\n"
 "Language: it\n"
@@ -23,14 +23,14 @@ msgstr ""
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
 #, python-format
 msgid "%sStatement between %s and %s in %s"
-msgstr "%sEstratto conto tra %s e %s in %s"
+msgstr "Estratto conto %s tra %s e %s in %s"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "%sStatement up to %s in %s"
-msgstr "%sEstratto conto fino al %s in %s"
+msgstr "Estratto conto %s fino al %s in %s"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
@@ -212,7 +212,7 @@ msgstr "Mostra tutte le operazioni estratti conto attività tra due date"
 #: model:ir.model.fields.selection,name:partner_statement.selection__res_config_settings__default_aging_type__days
 #: model:ir.model.fields.selection,name:partner_statement.selection__statement_common_wizard__aging_type__days
 msgid "Age by Days"
-msgstr "Scaduto in giorni"
+msgstr "Anzianità per giorni"
 
 #. module: partner_statement
 #: model:ir.model.fields.selection,name:partner_statement.selection__activity_statement_wizard__aging_type__months
@@ -221,7 +221,7 @@ msgstr "Scaduto in giorni"
 #: model:ir.model.fields.selection,name:partner_statement.selection__res_config_settings__default_aging_type__months
 #: model:ir.model.fields.selection,name:partner_statement.selection__statement_common_wizard__aging_type__months
 msgid "Age by Months"
-msgstr "Scaduto in mesi"
+msgstr "Anzianità per mesi"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__aging_type
@@ -230,19 +230,19 @@ msgstr "Scaduto in mesi"
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__default_aging_type
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__aging_type
 msgid "Aging Method"
-msgstr "Metodo Scaduto"
+msgstr "Metodo anzianità"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.aging_buckets
 msgid "Aging Report at"
-msgstr "Estratto conto al"
+msgstr "Resoconto anzianità al"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "Aging Report at %s in %s"
-msgstr "Estratto conto al %s in %s"
+msgstr "Resoconto anzianità al %s in %s"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -265,7 +265,7 @@ msgstr "Saldo"
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 #, python-format
 msgid "Balance Forward"
-msgstr "Saldo Iniziale"
+msgstr "Riporto"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
@@ -283,7 +283,7 @@ msgstr "Azienda"
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_res_config_settings
 msgid "Config Settings"
-msgstr "Configurazione"
+msgstr "Impostazioni di configurazione"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__create_uid
@@ -411,7 +411,7 @@ msgstr "Non visualizzare partner senza scadenze"
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 #, python-format
 msgid "Due Date"
-msgstr "Data Scadenza"
+msgstr "Scadenza"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__group_activity_statement
@@ -440,7 +440,7 @@ msgstr "Saldo finale"
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__default_filter_negative_balances
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__filter_negative_balances
 msgid "Exclude Negative Balances"
-msgstr "Escludi saldi negativi"
+msgstr "Escludere saldi negativi"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__default_filter_partners_non_due
@@ -524,13 +524,13 @@ msgstr "Nome"
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__number_partner_ids
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__number_partner_ids
 msgid "Number Partner"
-msgstr "Numero Partner"
+msgstr "Numero partner"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "Older"
-msgstr "Più vecchio"
+msgstr "Precedenti"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -585,19 +585,19 @@ msgstr "XLSX estratti conto in sospeso"
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
 msgid "Outstanding Statements show all transactions up to a date."
 msgstr ""
-"Mostra tutte le operazioni entro una certa data di estratti conto in sospeso"
+"Mostra tutte le operazioni fino a una certa data di estratti conto in sospeso"
 
 #. module: partner_statement
 #: model:ir.actions.act_window,name:partner_statement.activity_statement_wizard_action
 #: model:ir.model,name:partner_statement.model_report_partner_statement_activity_statement
 msgid "Partner Activity Statement"
-msgstr "Estratto Conto Partner"
+msgstr "Estratto conto attività partner"
 
 #. module: partner_statement
 #: model:ir.actions.act_window,name:partner_statement.detailed_activity_statement_wizard_action
 #: model:ir.model,name:partner_statement.model_report_partner_statement_detailed_activity_statement
 msgid "Partner Detailed Activity Statement"
-msgstr ""
+msgstr "Estratto conto attività dettagliato partner"
 
 #. module: partner_statement
 #: model:ir.actions.act_window,name:partner_statement.outstanding_statement_wizard_action
@@ -611,12 +611,12 @@ msgstr "Estratto conto in sospeso partner"
 #: model:ir.model.fields.selection,name:partner_statement.selection__outstanding_statement_wizard__account_type__payable
 #: model:ir.model.fields.selection,name:partner_statement.selection__statement_common_wizard__account_type__payable
 msgid "Payable"
-msgstr "Pagamenti"
+msgstr "Debito"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
 msgid "Please set defaults under Activity Statements."
-msgstr "Per favore imposta i default Estratto conto."
+msgstr "I valori predefiniti vanno impostati in estratti conto attività."
 
 #. module: partner_statement
 #: model:ir.model.fields.selection,name:partner_statement.selection__activity_statement_wizard__account_type__receivable
@@ -624,7 +624,7 @@ msgstr "Per favore imposta i default Estratto conto."
 #: model:ir.model.fields.selection,name:partner_statement.selection__outstanding_statement_wizard__account_type__receivable
 #: model:ir.model.fields.selection,name:partner_statement.selection__statement_common_wizard__account_type__receivable
 msgid "Receivable"
-msgstr "Incassi"
+msgstr "Credito"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -632,13 +632,13 @@ msgstr "Incassi"
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "Reference Number"
-msgstr ""
+msgstr "Numero riferimento"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 msgid "Reference number"
-msgstr "Riferimento"
+msgstr "Numero riferimento"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__show_aging_buckets
@@ -647,7 +647,7 @@ msgstr "Riferimento"
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__default_show_aging_buckets
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__show_aging_buckets
 msgid "Show Aging Buckets"
-msgstr "Mostra Riepilogo Dovuto"
+msgstr "Mostrare raggruppamenti per anzianità"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__show_balance
@@ -657,12 +657,12 @@ msgstr "Mostra colonna saldo"
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_statement_common
 msgid "Statement Reports Common"
-msgstr ""
+msgstr "Resoconti comuni estratto conto"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_statement_common_wizard
 msgid "Statement Reports Common Wizard"
-msgstr ""
+msgstr "Procedura per resoconti comuni estratto conto"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
@@ -675,14 +675,14 @@ msgstr "Estratto conto tra"
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "Statement from:"
-msgstr "Estratto conto da:"
+msgstr "Estratto conto dal:"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
 #: model_terms:ir.ui.view,arch_db:partner_statement.detailed_activity_statement_document
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
 msgid "Statement of Account"
-msgstr "Estratto conto"
+msgstr "Situazione contabile"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -690,7 +690,7 @@ msgstr "Estratto conto"
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "Statement of Account from %s"
-msgstr ""
+msgstr "Situazione contabile dal %s"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -698,7 +698,7 @@ msgstr ""
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "Statement to:"
-msgstr "Estratto conto a:"
+msgstr "Estratto conto al:"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
@@ -722,7 +722,7 @@ msgstr "Totale"
 #. module: partner_statement
 #: model:res.groups,name:partner_statement.group_activity_statement
 msgid "Use activity statements"
-msgstr ""
+msgstr "Utilizzare estratti conto attività"
 
 #. module: partner_statement
 #: model:res.groups,name:partner_statement.group_outstanding_statement
@@ -735,12 +735,12 @@ msgstr "Utilizzare estratti conto in sospeso"
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "VAT:"
-msgstr "IVA:"
+msgstr "Partita IVA:"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
 msgid "View"
-msgstr "Visualizza"
+msgstr "Vedi"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
