@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-22 23:13+0000\n"
-"PO-Revision-Date: 2023-02-13 13:23+0000\n"
+"PO-Revision-Date: 2023-02-14 12:23+0000\n"
 "Last-Translator: Sergio Zanchetta <primes2h@gmail.com>\n"
 "Language-Team: Italian (https://www.transifex.com/oca/teams/23907/it/)\n"
 "Language: it\n"
@@ -183,27 +183,27 @@ msgstr "Tipo conto"
 #: model:ir.actions.report,name:partner_statement.action_print_activity_statement_html
 #, python-format
 msgid "Activity Statement"
-msgstr "Estratto conto"
+msgstr "Estratto conto attività"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_activity_statement_wizard
 msgid "Activity Statement Wizard"
-msgstr "Procedura guidata estratto conto"
+msgstr "Procedura guidata estratto conto attività"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_report_p_s_report_activity_statement_xlsx
 msgid "Activity Statement XLSL Report"
-msgstr "Stampa XLSL estratto conto"
+msgstr "Stampa XLSL estratto conto attività"
 
 #. module: partner_statement
 #: model:ir.actions.report,name:partner_statement.action_print_activity_statement_xlsx
 msgid "Activity Statement XLSX"
-msgstr "XLSX Estratto conto"
+msgstr "XLSX estratto conto attività"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
 msgid "Activity Statements show all transactions between two dates."
-msgstr "Estratto conto mostra tutte le transazioni tra due date."
+msgstr "Mostra tutte le operazioni estratti conto attività tra due date"
 
 #. module: partner_statement
 #: model:ir.model.fields.selection,name:partner_statement.selection__activity_statement_wizard__aging_type__days
@@ -356,7 +356,7 @@ msgstr "Dettagliato"
 #: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
 #, python-format
 msgid "Detailed %sStatement between %s and %s in %s"
-msgstr "%sEstratto conto dettagliato tra %s e %s in %s"
+msgstr "Estratto conto %s dettagliato tra %s e %s in %s"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
@@ -364,22 +364,22 @@ msgstr "%sEstratto conto dettagliato tra %s e %s in %s"
 #: model:ir.actions.report,name:partner_statement.action_print_detailed_activity_statement_html
 #, python-format
 msgid "Detailed Activity Statement"
-msgstr "Estratto conto dettagliato"
+msgstr "Estratto conto attività dettagliato"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_detailed_activity_statement_wizard
 msgid "Detailed Activity Statement Wizard"
-msgstr "Procedura guidata estratto conto dettagliato"
+msgstr "Procedura guidata estratto conto attività dettagliato"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_report_p_s_report_detailed_activity_statement_xlsx
 msgid "Detailed Activity Statement XLSL Report"
-msgstr "Stampa XLSL estratto conto dettagliato"
+msgstr "Resoconto XLSL estratto conto attività dettagliato"
 
 #. module: partner_statement
 #: model:ir.actions.report,name:partner_statement.action_print_detailed_activity_statement_xlsx
 msgid "Detailed Activity Statement XLSX"
-msgstr "XLSX estratto conto dettagliato"
+msgstr "XLSX estratto conto attività dettagliato"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__display_name
@@ -416,12 +416,12 @@ msgstr "Data Scadenza"
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__group_activity_statement
 msgid "Enable OCA Activity & Detailed Activity Statements"
-msgstr "Abilita estratto conto ed estratto conto dettagliato OCA"
+msgstr "Abilitare estratto conto attività e attività dettagliato OCA"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__group_outstanding_statement
 msgid "Enable OCA Outstanding Statements"
-msgstr "Abilita Scaduto OCA"
+msgstr "Abilitare estratti conto in sospeso OCA"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -584,7 +584,8 @@ msgstr "XLSX estratti conto in sospeso"
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
 msgid "Outstanding Statements show all transactions up to a date."
-msgstr "Mostra tutte le partite aperte  aggiornate alla data."
+msgstr ""
+"Mostra tutte le operazioni entro una certa data di estratti conto in sospeso"
 
 #. module: partner_statement
 #: model:ir.actions.act_window,name:partner_statement.activity_statement_wizard_action
@@ -726,7 +727,7 @@ msgstr ""
 #. module: partner_statement
 #: model:res.groups,name:partner_statement.group_outstanding_statement
 msgid "Use outstanding statements"
-msgstr ""
+msgstr "Utilizzare estratti conto in sospeso"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
