@@ -614,6 +614,12 @@ msgid "Payable"
 msgstr "Plătibil"
 
 #. module: partner_statement
+#: code:addons/partner_statement/report/activity_statement.py:0
+#, python-format
+msgid "Payment"
+msgstr "Plată"
+
+#. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
 msgid "Please set defaults under Activity Statements."
 msgstr "Vă rugăm să setați valorile implicite în Extrasul de cont."
@@ -806,6 +812,3 @@ msgstr ""
 #~ "restante ale partenerului până la o anumită dată. Aceasta include toate "
 #~ "facturile neplătite, rambursările nerevendicate și plățile restante. "
 #~ "Lista este afișată în ordine cronologică și este împărțită pe monede."
-
-#~ msgid "Payment"
-#~ msgstr "Plată"

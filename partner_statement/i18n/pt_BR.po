@@ -610,6 +610,12 @@ msgid "Payable"
 msgstr "Pagável"
 
 #. module: partner_statement
+#: code:addons/partner_statement/report/activity_statement.py:0
+#, python-format
+msgid "Payment"
+msgstr "Pagamento"
+
+#. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
 msgid "Please set defaults under Activity Statements."
 msgstr "Defina padrões sobre Extratos de Atividade."
@@ -808,9 +814,6 @@ msgstr ""
 #~ "Isto inclui todas as faturas não pagas This includes all unpaid invoices, "
 #~ "não cobradas         reembolsos e pagamentos pendentes. A lista é exibida "
 #~ "em ordem cronológica e é         dividida por moedas."
-
-#~ msgid "Payment"
-#~ msgstr "Pagamento"
 
 #~ msgid "report.partner_statement.activity_statement"
 #~ msgstr "report.partner_statement.activity_statement"

@@ -643,6 +643,12 @@ msgid "Payable"
 msgstr "A payer"
 
 #. module: partner_statement
+#: code:addons/partner_statement/report/activity_statement.py:0
+#, python-format
+msgid "Payment"
+msgstr "Paiement"
+
+#. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
 msgid "Please set defaults under Activity Statements."
 msgstr "Merci d'indiquer les valeurs par défaut dans le relevé de compte."
@@ -838,9 +844,6 @@ msgstr "jusqu'au"
 #~ "débiteurs ou créanciers jusqu'à une date choisie. Ceci inclus toute "
 #~ "facture, note de crédit ou paiement échues. La liste est affichée par "
 #~ "ordre chronologique et divisée par devise."
-
-#~ msgid "Payment"
-#~ msgstr "Paiement"
 
 #~ msgid "report.partner_statement.activity_statement"
 #~ msgstr "report.customer_activity_statement.statement"

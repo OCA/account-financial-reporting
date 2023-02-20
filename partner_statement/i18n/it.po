@@ -649,6 +649,12 @@ msgid "Payable"
 msgstr "Debito"
 
 #. module: partner_statement
+#: code:addons/partner_statement/report/activity_statement.py:0
+#, python-format
+msgid "Payment"
+msgstr "Pagamento"
+
+#. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
 msgid "Please set defaults under Activity Statements."
 msgstr "I valori predefiniti vanno impostati in estratti conto attività."
@@ -816,9 +822,6 @@ msgstr "fino al"
 #~ "Dettaglio dello scaduto può essere stampato nel report, espresso "
 #~ "in          blocchi, così il partner può verificare quanto è aperto, in "
 #~ "scadenza, scaduto."
-
-#~ msgid "Payment"
-#~ msgstr "Pagamento"
 
 #~ msgid "report.partner_statement.activity_statement"
 #~ msgstr "report.partner_statement.activity_statement"
