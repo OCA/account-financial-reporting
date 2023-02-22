@@ -1475,7 +1475,7 @@ msgstr "Niveau"
 #: code:addons/account_financial_report_qweb/report/trial_balance_xlsx.py:119
 #, fuzzy, python-format
 msgid "Level %s"
-msgstr "Niveau"
+msgstr ""
 
 #. module: account_financial_report_qweb
 #: code:addons/account_financial_report_qweb/report/trial_balance_xlsx.py:118
