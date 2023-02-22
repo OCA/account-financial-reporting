@@ -25,6 +25,8 @@
     'version': '8.0.0.2.0',
     'license': 'AGPL-3',
     'author': "Noviat,Odoo Community Association (OCA)",
+    "website": "https://github.com/OCA/account-financial-reporting"
+               "12.0/account_journal_report_xls",
     'category': 'Accounting & Finance',
     'depends': [
         'account_voucher',

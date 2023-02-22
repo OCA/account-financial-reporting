@@ -7,7 +7,7 @@
     "summary": "Compute tax balances based on date range",
     "version": "10.0.1.1.2",
     "category": "Accounting & Finance",
-    "website": "https://www.agilebg.com/",
+    "website": "https://github.com/OCA/account-financial-reporting",
     "author": "Agile Business Group, Therp BV, Tecnativa, ACSONE SA/NV, "
               "Odoo Community Association (OCA)",
     "license": "AGPL-3",

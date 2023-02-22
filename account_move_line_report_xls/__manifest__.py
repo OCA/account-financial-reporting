@@ -7,6 +7,8 @@
     'version': '10.0.1.0.0',
     'license': 'AGPL-3',
     'author': "Noviat, Odoo Community Association (OCA)",
+    "website": "https://github.com/OCA/account-financial-reporting"
+               "12.0/account_move_line_report_xls",
     'category': 'Accounting & Finance',
     'summary': 'Journal Items Excel export',
     'depends': ['account', 'report_xlsx_helper'],

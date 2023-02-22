@@ -13,7 +13,7 @@
               'redCOR AG,'
               'ACSONE SA/NV,'
               'Odoo Community Association (OCA)',
-    "website": "https://odoo-community.org/",
+    "website": "https://github.com/OCA/account-financial-reporting",
     'depends': [
         'account',
         'account_group',    # account-financial-tools

@@ -40,7 +40,7 @@
     TODO: rearange wizard view with only one button to generate file plus
     define a selection list to select report type
     """,
-    'website': 'http://www.camptocamp.com',
+    'website': 'https://github.com/OCA/account-financial-reporting',
     'license': 'AGPL-3',
     'data': [
         'wizard/account_export_csv_view.xml',

@@ -26,7 +26,7 @@
     'version': '8.0.1.0.0',
     'category': 'Reports/pdf',
     'author': "Savoir-faire Linux,Odoo Community Association (OCA)",
-    'website': 'http://www.savoirfairelinux.com',
+    'website': 'https://github.com/OCA/account-financial-reporting',
     'license': 'AGPL-3',
     'depends': [
         'base',
