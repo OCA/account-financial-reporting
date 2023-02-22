@@ -1,23 +1,8 @@
 <odoo>
-    <template id="assets_backend" inherit_id="web.assets_backend">
-        <xpath expr="." position="inside">
-            <link
-                rel="stylesheet"
-                href="/mis_template_financial_report/static/src/css/mis_template_financial_report.css"
-            />
-        </xpath>
-    </template>
-    <template id="report_assets_common" inherit_id="web.report_assets_common">
-        <xpath expr="." position="inside">
-            <link
-                rel="stylesheet"
-                href="/mis_template_financial_report/static/src/css/report.css"
-            />
-        </xpath>
-    </template>
     <template
         id="report_mis_report_instance"
         inherit_id="mis_builder.report_mis_report_instance"
+        priority="9999"
     >
         <xpath expr="//div[hasclass('mis_table')]" position="attributes">
             <attribute name="t-if">not o.horizontal</attribute>
