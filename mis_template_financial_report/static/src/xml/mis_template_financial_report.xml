@@ -1,0 +1,22 @@
+<template>
+    <t t-extend="MisReportWidgetTemplate">
+        <t t-jquery="table.mis_builder">
+            var $full_table = jQuery(this);
+            var $wrapper = jQuery(
+                '<div />'
+            ).addClass('mis_builder_horizontal').insertAfter($full_table);
+            var $table = $full_table.clone().appendTo($wrapper);
+            $table.attr({
+                't-foreach': 'widget.mis_report_data.horizontal_matrices || []',
+                't-as': 'matrix',
+            });
+            $table.find('tr[t-foreach="widget.mis_report_data.header"]').attr(
+                't-foreach', 'matrix.header'
+            );
+            $table.find('tr[t-foreach="widget.mis_report_data.body"]').attr(
+                't-foreach', 'matrix.body'
+            );
+            $full_table.attr('t-if', '!widget.mis_report_data.horizontal_matrices');
+    </t>
+    </t>
+</template>
