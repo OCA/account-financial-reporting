@@ -32,24 +32,9 @@ msgid "Balance Sheet"
 msgstr "Bilan"
 
 #. module: mis_template_financial_report
-#: model:ir.model.fields,field_description:mis_template_financial_report.field_mis_report_instance__display_name
-msgid "Display Name"
-msgstr "Afficher un nom"
-
-#. module: mis_template_financial_report
 #: model:ir.model.fields,field_description:mis_template_financial_report.field_mis_report_instance__horizontal
 msgid "Horizontal"
 msgstr "Horizontal"
-
-#. module: mis_template_financial_report
-#: model:ir.model.fields,field_description:mis_template_financial_report.field_mis_report_instance__id
-msgid "ID"
-msgstr "ID"
-
-#. module: mis_template_financial_report
-#: model:ir.model.fields,field_description:mis_template_financial_report.field_mis_report_instance____last_update
-msgid "Last Modified on"
-msgstr "Dernière modification le"
 
 #. module: mis_template_financial_report
 #: model:mis.report.kpi,description:mis_template_financial_report.kpi_liability
@@ -90,3 +75,12 @@ msgstr "Profit / Perte"
 #: model:mis.report.kpi,description:mis_template_financial_report.kpi_pl_to_report
 msgid "Profit or loss to report"
 msgstr "Bénéfice ou perte à déclarer"
+
+#~ msgid "Display Name"
+#~ msgstr "Afficher un nom"
+
+#~ msgid "ID"
+#~ msgstr "ID"
+
+#~ msgid "Last Modified on"
+#~ msgstr "Dernière modification le"
