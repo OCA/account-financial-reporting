@@ -237,22 +237,6 @@ class AbstractReportXslx(models.AbstractModel):
         for col_pos, column in report_data["columns"].items():
             value = line_dict.get(column["field"], False)
             cell_type = column.get("type", "string")
-            # We will use a special cell type according to the currency of
-            # record and the company's currency:
-            # - If the currency is the same as the company's currency, we will leave
-            # the value empty.
-            # - If the currency is different from the company's currency, we will
-            # show the value.
-            if cell_type == "amount_different_company_currency":
-                if line_dict.get("currency_id") and line_dict.get(
-                    "company_currency_id"
-                ):
-                    if line_dict["currency_id"] == line_dict["company_currency_id"]:
-                        value = ""
-                        cell_type = "string"
-                    else:
-                        cell_type = "amount_currency"
-            # All conditions according to cell type.
             if cell_type == "string":
                 if line_dict.get("type", "") == "group_type":
                     report_data["sheet"].write_string(
