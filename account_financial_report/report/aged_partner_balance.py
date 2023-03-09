@@ -70,7 +70,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
 
     def _get_account_partial_reconciled(self, company_id, date_at_object):
         domain = [("max_date", ">", date_at_object), ("company_id", "=", company_id)]
-        fields = ["debit_move_id", "credit_move_id", "amount", "amount_currency"]
+        fields = ["debit_move_id", "credit_move_id", "amount"]
         accounts_partial_reconcile = self.env["account.partial.reconcile"].search_read(
             domain=domain, fields=fields
         )
@@ -85,7 +85,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                 debit_amount[debit_move_id] = 0.0
                 debit_amount_currency[debit_move_id] = 0.0
             debit_amount_currency[debit_move_id] += account_partial_reconcile_data[
-                "amount_currency"
+                "amount"
             ]
             debit_amount[debit_move_id] += account_partial_reconcile_data["amount"]
             if credit_move_id not in credit_amount.keys():
@@ -93,7 +93,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                 credit_amount_currency[credit_move_id] = 0.0
             credit_amount[credit_move_id] += account_partial_reconcile_data["amount"]
             credit_amount_currency[credit_move_id] += account_partial_reconcile_data[
-                "amount_currency"
+                "amount"
             ]
             account_partial_reconcile_data.update(
                 {"debit_move_id": debit_move_id, "credit_move_id": credit_move_id}
