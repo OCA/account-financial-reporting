@@ -460,7 +460,7 @@ class GeneralLedgerReport(models.AbstractModel):
             domain += extra_domain
         ml_fields = self._get_ml_fields()
         move_lines = self.env["account.move.line"].search_read(
-            domain=domain, fields=ml_fields
+            domain=domain, fields=ml_fields, order="date,move_name"
         )
         journal_ids = set()
         full_reconcile_ids = set()
