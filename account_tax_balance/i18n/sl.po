@@ -6,7 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2023-03-18 13:23+0000\n"
+"Last-Translator: Matjaz Mozetic <matjaz@luxim.si>\n"
 "Language-Team: none\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
@@ -14,78 +15,79 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
 "%100==4 ? 2 : 3;\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #. module: account_tax_balance
 #: code:addons/account_tax_balance/wizard/open_tax_balances.py:0
 #, python-format
 msgid "%(name)s: %(target)s from %(from)s to %(to)s"
-msgstr ""
+msgstr "%(name)s: %(target)s od %(from)s do %(to)s"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "Account Tax"
-msgstr ""
+msgstr "Davek konta"
 
 #. module: account_tax_balance
 #: model:ir.model.fields.selection,name:account_tax_balance.selection__wizard_open_tax_balances__target_move__all
 msgid "All Entries"
-msgstr ""
+msgstr "Vsi vnosi"
 
 #. module: account_tax_balance
 #: model:ir.model.fields.selection,name:account_tax_balance.selection__wizard_open_tax_balances__target_move__posted
 msgid "All Posted Entries"
-msgstr ""
+msgstr "Vsi vknjiženi vnosi"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__balance_regular
 msgid "Balance"
-msgstr ""
+msgstr "Stanje"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__balance_refund
 msgid "Balance Refund"
-msgstr ""
+msgstr "Saldo povračila"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__base_balance_regular
 msgid "Base Balance"
-msgstr ""
+msgstr "Saldo osnove"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__base_balance_refund
 msgid "Base Balance Refund"
-msgstr ""
+msgstr "Saldo osnove povračila"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "Base Total"
-msgstr ""
+msgstr "Osnova skupaj"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "Cancel"
-msgstr ""
+msgstr "Prekliči"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__company_ids
 msgid "Companies"
-msgstr ""
+msgstr "Družbe"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Ustvaril"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Ustvarjeno"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__date_range_id
 msgid "Date Range"
-msgstr ""
+msgstr "Časovni obseg"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_move__display_name
@@ -93,29 +95,29 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__display_name
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Prikazani naziv"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_bank_statement_line__financial_type
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_move__financial_type
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_payment__financial_type
 msgid "Financial Type"
-msgstr ""
+msgstr "Finančni tip"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__from_date
 msgid "From Date"
-msgstr ""
+msgstr "Od datuma"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
 msgid "Group By"
-msgstr ""
+msgstr "Združi po"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__has_moves
 msgid "Has balance in period"
-msgstr ""
+msgstr "Ima stanje v obdobju"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_move__id
@@ -123,17 +125,17 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__id
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_account_move
 msgid "Journal Entry"
-msgstr ""
+msgstr "Dnevniški vnos"
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_account_move_line
 msgid "Journal Item"
-msgstr ""
+msgstr "Dnevniška postavka"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_move____last_update
@@ -141,89 +143,89 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax____last_update
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Zadnjič spremenjeno"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Zadnji posodobil"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Zadnjič posodobljeno"
 
 #. module: account_tax_balance
 #: code:addons/account_tax_balance/models/account_move.py:0
 #, python-format
 msgid "Liquidity"
-msgstr ""
+msgstr "Likvidnost"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_account_move_filter
 msgid "Move type"
-msgstr ""
+msgstr "Tip premika"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "Open Taxes"
-msgstr ""
+msgstr "Odpri davke"
 
 #. module: account_tax_balance
 #: code:addons/account_tax_balance/models/account_move.py:0
 #, python-format
 msgid "Other"
-msgstr ""
+msgstr "Drugo"
 
 #. module: account_tax_balance
 #: code:addons/account_tax_balance/models/account_move.py:0
 #, python-format
 msgid "Payable"
-msgstr ""
+msgstr "Obveznost"
 
 #. module: account_tax_balance
 #: code:addons/account_tax_balance/models/account_move.py:0
 #, python-format
 msgid "Payable refund"
-msgstr ""
+msgstr "Vračilo obveznost"
 
 #. module: account_tax_balance
 #: code:addons/account_tax_balance/models/account_move.py:0
 #, python-format
 msgid "Receivable"
-msgstr ""
+msgstr "Terjatev"
 
 #. module: account_tax_balance
 #: code:addons/account_tax_balance/models/account_move.py:0
 #, python-format
 msgid "Receivable refund"
-msgstr ""
+msgstr "Vračilo terjatev"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "Short Name"
-msgstr ""
+msgstr "Kratki naziv"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__target_move
 msgid "Target Moves"
-msgstr ""
+msgstr "Ciljni premiki"
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_account_tax
 msgid "Tax"
-msgstr ""
+msgstr "Davek"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
 msgid "Tax Group"
-msgstr ""
+msgstr "Davčna skupina"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
 msgid "Tax Scope"
-msgstr ""
+msgstr "Področje uporabe davka"
 
 #. module: account_tax_balance
 #: model:ir.actions.act_window,name:account_tax_balance.action_open_tax_balances
@@ -232,70 +234,70 @@ msgstr ""
 #: model:ir.ui.menu,name:account_tax_balance.menu_tax_balances
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "Taxes Balance"
-msgstr ""
+msgstr "Davčna bilanca"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__to_date
 msgid "To Date"
-msgstr ""
+msgstr "Do zdaj"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "Total"
-msgstr ""
+msgstr "Skupaj"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__balance
 msgid "Total Balance"
-msgstr ""
+msgstr "Saldo skupaj"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__base_balance
 msgid "Total Base Balance"
-msgstr ""
+msgstr "Skupaj stanje osnov"
 
 #. module: account_tax_balance
 #: code:addons/account_tax_balance/models/account_tax.py:0
 #, python-format
 msgid "Unsupported search operator"
-msgstr ""
+msgstr "Nepodprt operator za iskanje"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "View base lines"
-msgstr ""
+msgstr "Prikaži postavke osnov"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "View base refund lines"
-msgstr ""
+msgstr "Prikaži postavke vračil osnov"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "View base regular lines"
-msgstr ""
+msgstr "Prikaži postavke običajnih osnov"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "View tax lines"
-msgstr ""
+msgstr "Prikaži postavke davkov"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "View tax refund lines"
-msgstr ""
+msgstr "Prikaži postavke vračil davkov"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "View tax regular lines"
-msgstr ""
+msgstr "Prikaži postavke običajnih davkov"
 
 #. module: account_tax_balance
 #: model:ir.model,name:account_tax_balance.model_wizard_open_tax_balances
 msgid "Wizard Open Tax Balances"
-msgstr ""
+msgstr "Čarovnik za odpiranje davčne bilance"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "or"
-msgstr ""
+msgstr "ali"
