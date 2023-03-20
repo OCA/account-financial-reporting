@@ -238,10 +238,7 @@ class AbstractReportXslx(models.AbstractModel):
             value = line_dict.get(column["field"], False)
             cell_type = column.get("type", "string")
             if cell_type == "string":
-                if (
-                    line_dict.get("account_group_id", False)
-                    and line_dict["account_group_id"]
-                ):
+                if line_dict.get("type", "") == "group_type":
                     report_data["sheet"].write_string(
                         report_data["row_pos"],
                         col_pos,
