@@ -88,7 +88,13 @@ class OpenItemsReport(models.AbstractModel):
             and not float_is_zero(
                 move_line["debit"] - move_line["credit"], precision_digits=2
             )
-            and not float_is_zero(move_line["amount_residual"], precision_digits=2)
+            and (
+                not float_is_zero(move_line["amount_residual"], precision_digits=2)
+                or move_line["currency_id"]
+                and not float_is_zero(
+                    move_line["amount_residual_currency"], precision_digits=2
+                )
+            )
         ]
 
         open_items_move_lines_data = {}
