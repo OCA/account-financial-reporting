@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2023-03-31 22:22+0000\n"
+"PO-Revision-Date: 2023-04-07 14:25+0000\n"
 "Last-Translator: Matjaz Mozetic <matjaz@luxim.si>\n"
 "Language-Team: none\n"
 "Language: sl\n"
@@ -35,55 +35,55 @@ msgstr "%sIzpis do %s v %s"
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "1 - 30 Days"
-msgstr "1 - 30 dni"
+msgstr "Zapadlo 1 - 30 dni"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "1 Month"
-msgstr "1 mesec"
+msgstr "Zapadlo 1 mesec"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "121 Days +"
-msgstr "121 dni +"
+msgstr "Zapadlo 121 dni +"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "2 Months"
-msgstr "2 meseca"
+msgstr "Zapadlo 2 meseca"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "3 Months"
-msgstr "3 meseci"
+msgstr "Zapadlo 3 mesece"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "31 - 60 Days"
-msgstr "31 - 60 dni"
+msgstr "Zapadlo 31 - 60 dni"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "4 Months"
-msgstr "4 meseci"
+msgstr "Zapadlo 4 mesece"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "61 - 90 Days"
-msgstr "61 - 90 dni"
+msgstr "Zapadlo 61 - 90 dni"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "91 - 120 Days"
-msgstr "91 - 120 dni"
+msgstr "Zapadlo 91 - 120 dni"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
@@ -327,7 +327,7 @@ msgstr "Ustvarjeno"
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "Current"
-msgstr "Tekoče"
+msgstr "Ne zapadlo"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
