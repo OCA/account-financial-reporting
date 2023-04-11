@@ -135,7 +135,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                         "name": account.name,
                         "hide_account": False,
                         "group_id": account.group_id.id,
-                        "currency_id": account.currency_id or False,
+                        "currency_id": account.currency_id.id,
                         "currency_name": account.currency_id.name,
                         "centralized": account.centralized,
                     }
