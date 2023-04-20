@@ -201,6 +201,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                     {
                         "line_rec": line_model.browse(move_line["id"]),
                         "date": move_line["date"],
+                        "invoice_date": move_line["invoice_date"],
                         "entry": move_line["move_id"][1],
                         "jnl_id": move_line["journal_id"][0],
                         "acc_id": acc_id,
@@ -395,4 +396,5 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             "amount_residual",
             "reconciled",
             "date_maturity",
+            "invoice_date",
         ]

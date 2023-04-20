@@ -152,6 +152,7 @@ class OpenItemsReport(models.AbstractModel):
             move_line.update(
                 {
                     "date": move_line["date"],
+                    "invoice_date": move_line["invoice_date"],
                     "date_maturity": move_line["date_maturity"]
                     and move_line["date_maturity"].strftime("%d/%m/%Y"),
                     "original": original,
@@ -292,4 +293,5 @@ class OpenItemsReport(models.AbstractModel):
             "amount_residual_currency",
             "debit",
             "amount_currency",
+            "invoice_date",
         ]

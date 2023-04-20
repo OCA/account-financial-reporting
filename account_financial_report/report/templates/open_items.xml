@@ -132,6 +132,11 @@
             <div class="act_as_row labels">
                 <!--## date-->
                 <div class="act_as_cell first_column" style="width: 5.51%;">Date</div>
+                <!--## invoice_date-->
+                <div
+                    class="act_as_cell first_column"
+                    style="width: 5.51%;"
+                >Invoice Date</div>
                 <!--## move-->
                 <div class="act_as_cell" style="width: 9.76%;">Entry</div>
                 <!--## journal-->
@@ -175,6 +180,12 @@
             <!--## date-->
             <div class="act_as_cell left">
                 <span t-raw="line['date'].strftime('%d/%m/%Y')" />
+            </div>
+            <!--## invoice date-->
+            <div class="act_as_cell left">
+                <span
+                    t-raw="line['invoice_date'] and line['invoice_date'].strftime('%d/%m/%Y')"
+                />
             </div>
             <!--## move-->
             <div class="act_as_cell left">

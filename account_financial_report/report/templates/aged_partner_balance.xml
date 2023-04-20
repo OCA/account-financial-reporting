@@ -196,6 +196,10 @@
                     <div class="act_as_cell first_column" style="width: 6.00%;">
                         Date
                     </div>
+                    <!--## invoice_date-->
+                    <div class="act_as_cell first_column" style="width: 6.00%;">
+                        Invoice Date
+                    </div>
                     <!--## move-->
                     <div class="act_as_cell" style="width: 7.00%;">Entry</div>
                     <!--## journal-->
@@ -255,6 +259,20 @@
                         >
                             <!--## We don't use t-field because it throws an error on click -->
                             <t t-esc="line['date']" t-options="{'widget': 'date'}" />
+                        </span>
+                    </div>
+                    <!--## invoice date-->
+                    <div class="act_as_cell left">
+                        <span
+                            t-att-res-id="line['line_rec'].id"
+                            res-model="account.move.line"
+                            view-type="form"
+                        >
+                            <!--## We don't use t-field because it throws an error on click -->
+                            <t
+                                t-esc="line['invoice_date']"
+                                t-options="{'widget': 'date'}"
+                            />
                         </span>
                     </div>
                     <!--## move-->
