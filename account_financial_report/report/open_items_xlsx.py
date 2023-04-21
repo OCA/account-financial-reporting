@@ -20,23 +20,30 @@ class OpenItemsXslx(models.AbstractModel):
             report_name = report_name + suffix
         return report_name
 
+    def _get_label_date_field(self, report):
+        if report.date_by == "date":
+            return _("Date")
+        elif report.date_by == "invoice_date":
+            return _("Invoice Date")
+        return _("Date")
+
     def _get_report_columns(self, report):
+        date_label = self._get_label_date_field(report)
         res = {
-            0: {"header": _("Date"), "field": "date", "width": 11},
-            1: {"header": _("Invoice Date"), "field": "invoice_date", "width": 11},
-            2: {"header": _("Entry"), "field": "move_name", "width": 18},
-            3: {"header": _("Journal"), "field": "journal", "width": 8},
-            4: {"header": _("Account"), "field": "account", "width": 9},
-            5: {"header": _("Partner"), "field": "partner_name", "width": 25},
-            6: {"header": _("Ref - Label"), "field": "ref_label", "width": 40},
-            7: {"header": _("Due date"), "field": "date_maturity", "width": 11},
-            8: {
+            0: {"header": date_label, "field": report.date_by, "width": 11},
+            1: {"header": _("Entry"), "field": "move_name", "width": 18},
+            2: {"header": _("Journal"), "field": "journal", "width": 8},
+            3: {"header": _("Account"), "field": "account", "width": 9},
+            4: {"header": _("Partner"), "field": "partner_name", "width": 25},
+            5: {"header": _("Ref - Label"), "field": "ref_label", "width": 40},
+            6: {"header": _("Due date"), "field": "date_maturity", "width": 11},
+            7: {
                 "header": _("Original"),
                 "field": "original",
                 "type": "amount",
                 "width": 14,
             },
-            9: {
+            8: {
                 "header": _("Residual"),
                 "field": "amount_residual",
                 "field_final_balance": "residual",
@@ -46,21 +53,21 @@ class OpenItemsXslx(models.AbstractModel):
         }
         if report.foreign_currency:
             foreign_currency = {
-                10: {
+                9: {
                     "header": _("Cur."),
                     "field": "currency_name",
                     "field_currency_balance": "currency_name",
                     "type": "currency_name",
                     "width": 7,
                 },
-                11: {
+                10: {
                     "header": _("Cur. Original"),
                     "field": "amount_currency",
                     "field_final_balance": "amount_currency",
                     "type": "amount_currency",
                     "width": 14,
                 },
-                12: {
+                11: {
                     "header": _("Cur. Residual"),
                     "field": "amount_residual_currency",
                     "field_final_balance": "amount_currency",
@@ -74,6 +81,13 @@ class OpenItemsXslx(models.AbstractModel):
     def _get_report_filters(self, report):
         return [
             [_("Date at filter"), report.date_at.strftime("%d/%m/%Y")],
+            [
+                _("Date By"),
+                report.date_by == "date"
+                and _("Accounting Date")
+                or report.date_by == "invoice_date"
+                and _("Invoice Date"),
+            ],
             [
                 _("Target moves filter"),
                 _("All posted entries")
@@ -97,10 +111,10 @@ class OpenItemsXslx(models.AbstractModel):
         return 2
 
     def _get_col_count_final_balance_name(self):
-        return 6
+        return 5
 
     def _get_col_pos_final_balance_label(self):
-        return 6
+        return 5
 
     def _generate_report_content(self, workbook, report, data, report_data):
         res_data = self.env[

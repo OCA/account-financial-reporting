@@ -108,12 +108,17 @@
         <div class="act_as_table data_table" style="width: 100%;">
             <div class="act_as_row labels">
                 <div class="act_as_cell">Date at filter</div>
+                <div class="act_as_cell">Date By</div>
                 <div class="act_as_cell">Target moves filter</div>
                 <div class="act_as_cell">Account balance at 0 filter</div>
             </div>
             <div class="act_as_row">
                 <div class="act_as_cell">
                     <span t-esc="date_at" />
+                </div>
+                <div class="act_as_cell">
+                    <t t-if="date_by == 'date'">Accounting Date</t>
+                    <t t-if="date_by == 'invoice_date'">Invoice Date</t>
                 </div>
                 <div class="act_as_cell">
                     <t t-if="target_move == 'posted'">All posted entries</t>
@@ -131,11 +136,16 @@
         <div class="act_as_thead">
             <div class="act_as_row labels">
                 <!--## date-->
-                <div class="act_as_cell first_column" style="width: 5.51%;">Date</div>
+                <div
+                    class="act_as_cell first_column"
+                    style="width: 5.51%;"
+                    t-if="date_by == 'date'"
+                >Date</div>
                 <!--## invoice_date-->
                 <div
                     class="act_as_cell first_column"
                     style="width: 5.51%;"
+                    t-if="date_by == 'invoice_date'"
                 >Invoice Date</div>
                 <!--## move-->
                 <div class="act_as_cell" style="width: 9.76%;">Entry</div>
@@ -178,11 +188,11 @@
         <!-- # lines or centralized lines -->
         <div class="act_as_row lines">
             <!--## date-->
-            <div class="act_as_cell left">
+            <div class="act_as_cell left" t-if="date_by == 'date'">
                 <span t-raw="line['date'].strftime('%d/%m/%Y')" />
             </div>
             <!--## invoice date-->
-            <div class="act_as_cell left">
+            <div class="act_as_cell left" t-if="date_by == 'invioce_date'">
                 <span
                     t-raw="line['invoice_date'] and line['invoice_date'].strftime('%d/%m/%Y')"
                 />

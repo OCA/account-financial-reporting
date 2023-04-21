@@ -63,6 +63,15 @@ class OpenItemsReportWizard(models.TransientModel):
         string="Account Code To",
         help="Ending account in a range",
     )
+    date_by = fields.Selection(
+        string="Filter Date by",
+        selection=[
+            ("date", "Accounting Date"),
+            ("invoice_date", "Invoice Date"),
+        ],
+        required=True,
+        default="date",
+    )
 
     @api.onchange("account_code_from", "account_code_to")
     def on_change_account_range(self):
@@ -158,6 +167,7 @@ class OpenItemsReportWizard(models.TransientModel):
             "wizard_id": self.id,
             "date_at": fields.Date.to_string(self.date_at),
             "date_from": self.date_from or False,
+            "date_by": self.date_by,
             "only_posted_moves": self.target_move == "posted",
             "hide_account_at_0": self.hide_account_at_0,
             "foreign_currency": self.foreign_currency,

@@ -93,11 +93,16 @@
         <div class="act_as_table data_table" style="width: 100%;">
             <div class="act_as_row labels">
                 <div class="act_as_cell">Date at filter</div>
+                <div class="act_as_cell">Date by</div>
                 <div class="act_as_cell">Target moves filter</div>
             </div>
             <div class="act_as_row">
                 <div class="act_as_cell">
                     <span t-esc="date_at" />
+                </div>
+                <div class="act_as_cell">
+                    <t t-if="date_by == 'date'">Accounting Date</t>
+                    <t t-if="date_by == 'invoice_date'">Invoice Date</t>
                 </div>
                 <div class="act_as_cell">
                     <t t-if="only_posted_moves">All posted entries</t>
@@ -193,11 +198,19 @@
             <div class="act_as_thead">
                 <div class="act_as_row labels">
                     <!--## date-->
-                    <div class="act_as_cell first_column" style="width: 6.00%;">
+                    <div
+                        class="act_as_cell first_column"
+                        style="width: 6.00%;"
+                        t-if="date_by == 'date'"
+                    >
                         Date
                     </div>
                     <!--## invoice_date-->
-                    <div class="act_as_cell first_column" style="width: 6.00%;">
+                    <div
+                        class="act_as_cell first_column"
+                        style="width: 6.00%;"
+                        t-if="date_by == 'invoice_date'"
+                    >
                         Invoice Date
                     </div>
                     <!--## move-->
@@ -251,7 +264,7 @@
                 <!-- # lines or centralized lines -->
                 <div class="act_as_row lines">
                     <!--## date-->
-                    <div class="act_as_cell left">
+                    <div class="act_as_cell left" t-if="date_by == 'date'">
                         <span
                             t-att-res-id="line['line_rec'].id"
                             res-model="account.move.line"
@@ -262,7 +275,7 @@
                         </span>
                     </div>
                     <!--## invoice date-->
-                    <div class="act_as_cell left">
+                    <div class="act_as_cell left" t-if="date_by == 'invoice_date'">
                         <span
                             t-att-res-id="line['line_rec'].id"
                             res-model="account.move.line"

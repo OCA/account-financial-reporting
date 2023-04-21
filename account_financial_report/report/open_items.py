@@ -66,6 +66,7 @@ class OpenItemsReport(models.AbstractModel):
         only_posted_moves,
         company_id,
         date_from,
+        date_by,
     ):
         domain = self._get_move_lines_domain_not_reconciled(
             company_id, account_ids, partner_ids, only_posted_moves, date_from
@@ -110,7 +111,7 @@ class OpenItemsReport(models.AbstractModel):
         move_lines = [
             move_line
             for move_line in move_lines
-            if move_line["date"] <= date_at_object
+            if (move_line[date_by] or move_line["date"]) <= date_at_object
             and not float_is_zero(move_line["amount_residual"], precision_digits=2)
         ]
 
@@ -241,6 +242,7 @@ class OpenItemsReport(models.AbstractModel):
         account_ids = data["account_ids"]
         partner_ids = data["partner_ids"]
         date_at = data["date_at"]
+        date_by = data["date_by"]
         date_at_object = datetime.strptime(date_at, "%Y-%m-%d").date()
         date_from = data["date_from"]
         only_posted_moves = data["only_posted_moves"]
@@ -259,6 +261,7 @@ class OpenItemsReport(models.AbstractModel):
             only_posted_moves,
             company_id,
             date_from,
+            date_by,
         )
 
         total_amount = self._calculate_amounts(open_items_move_lines_data)
@@ -274,6 +277,7 @@ class OpenItemsReport(models.AbstractModel):
             "company_name": company.display_name,
             "currency_name": company.currency_id.name,
             "date_at": date_at_object.strftime("%d/%m/%Y"),
+            "date_by": date_by,
             "hide_account_at_0": data["hide_account_at_0"],
             "target_move": data["target_move"],
             "journals_data": journals_data,

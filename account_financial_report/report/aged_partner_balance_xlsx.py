@@ -20,6 +20,13 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
             report_name = report_name + suffix
         return report_name
 
+    def _get_label_date_field(self, report):
+        if report.date_by == "date":
+            return _("Date")
+        elif report.date_by == "invoice_date":
+            return _("Invoice Date")
+        return _("Date")
+
     def _get_report_columns(self, report):
         if not report.show_move_line_details:
             return {
@@ -80,16 +87,16 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                     "width": 14,
                 },
             }
+        date_label = self._get_label_date_field(report)
         return {
-            0: {"header": _("Date"), "field": "date", "width": 11},
-            1: {"header": _("Invoice Date"), "field": "invoice_date", "width": 11},
-            2: {"header": _("Entry"), "field": "entry", "width": 18},
-            3: {"header": _("Journal"), "field": "journal", "width": 8},
-            4: {"header": _("Account"), "field": "account", "width": 9},
-            5: {"header": _("Partner"), "field": "partner", "width": 25},
-            6: {"header": _("Ref - Label"), "field": "ref_label", "width": 40},
-            7: {"header": _("Due date"), "field": "due_date", "width": 11},
-            8: {
+            0: {"header": date_label, "field": report.date_by, "width": 11},
+            1: {"header": _("Entry"), "field": "entry", "width": 18},
+            2: {"header": _("Journal"), "field": "journal", "width": 8},
+            3: {"header": _("Account"), "field": "account", "width": 9},
+            4: {"header": _("Partner"), "field": "partner", "width": 25},
+            5: {"header": _("Ref - Label"), "field": "ref_label", "width": 40},
+            6: {"header": _("Due date"), "field": "due_date", "width": 11},
+            7: {
                 "header": _("Residual"),
                 "field": "residual",
                 "field_footer_total": "residual",
@@ -97,7 +104,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                 "type": "amount",
                 "width": 14,
             },
-            9: {
+            8: {
                 "header": _("Current"),
                 "field": "current",
                 "field_footer_total": "current",
@@ -106,7 +113,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                 "type": "amount",
                 "width": 14,
             },
-            10: {
+            9: {
                 "header": _("Age ≤ 30 d."),
                 "field": "30_days",
                 "field_footer_total": "30_days",
@@ -115,7 +122,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                 "type": "amount",
                 "width": 14,
             },
-            11: {
+            10: {
                 "header": _("Age ≤ 60 d."),
                 "field": "60_days",
                 "field_footer_total": "60_days",
@@ -124,7 +131,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                 "type": "amount",
                 "width": 14,
             },
-            12: {
+            11: {
                 "header": _("Age ≤ 90 d."),
                 "field": "90_days",
                 "field_footer_total": "90_days",
@@ -133,7 +140,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                 "type": "amount",
                 "width": 14,
             },
-            13: {
+            12: {
                 "header": _("Age ≤ 120 d."),
                 "field": "120_days",
                 "field_footer_total": "120_days",
@@ -142,7 +149,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                 "type": "amount",
                 "width": 14,
             },
-            14: {
+            13: {
                 "header": _("Older"),
                 "field": "older",
                 "field_footer_total": "older",
@@ -156,6 +163,13 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
     def _get_report_filters(self, report):
         return [
             [_("Date at filter"), report.date_at.strftime("%d/%m/%Y")],
+            [
+                _("Date By"),
+                report.date_by == "date"
+                and _("Accounting Date")
+                or report.date_by == "invoice_date"
+                and _("Invoice Date"),
+            ],
             [
                 _("Target moves filter"),
                 _("All posted entries")
@@ -171,7 +185,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
         return 3
 
     def _get_col_pos_footer_label(self, report):
-        return 0 if not report.show_move_line_details else 6
+        return 0 if not report.show_move_line_details else 5
 
     def _get_col_count_final_balance_name(self):
         return 5
