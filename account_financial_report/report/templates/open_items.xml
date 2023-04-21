@@ -192,7 +192,7 @@
                 <span t-raw="line['date'].strftime('%d/%m/%Y')" />
             </div>
             <!--## invoice date-->
-            <div class="act_as_cell left" t-if="date_by == 'invioce_date'">
+            <div class="act_as_cell left" t-if="date_by == 'invoice_date'">
                 <span
                     t-raw="line['invoice_date'] and line['invoice_date'].strftime('%d/%m/%Y')"
                 />
