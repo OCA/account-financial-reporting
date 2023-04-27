@@ -307,6 +307,10 @@
                 </div>
                 <t t-if="foreign_currency">
                     <t t-if="account['currency_id']">
+                        <t
+                            t-set="account_currency"
+                            t-value="currency_model.browse(account['currency_id'])"
+                        />
                         <div class="act_as_cell amount" style="width: 3.63%;">
                             <t t-if="type == 'account_type'">
                                 <span
@@ -315,7 +319,7 @@
                                 >
                                     <t
                                         t-out="account_or_group_item_object['init_bal']['bal_curr']"
-                                        t-options="{'widget': 'monetary', 'display_currency': account['currency_id']}"
+                                        t-options="{'widget': 'monetary', 'display_currency': account_currency}"
                                     />
                                 </span>
                             </t>
@@ -326,7 +330,7 @@
                                 >
                                     <t
                                         t-out="account_or_group_item_object['init_bal']['bal_curr']"
-                                        t-options="{'widget': 'monetary', 'display_currency': account['currency_id']}"
+                                        t-options="{'widget': 'monetary', 'display_currency': account_currency}"
                                     />
                                 </span>
                             </t>
@@ -339,7 +343,7 @@
                                 >
                                     <t
                                         t-out="account_or_group_item_object['init_bal']['bal_curr']"
-                                        t-options="{'widget': 'monetary', 'display_currency': account['currency_id']}"
+                                        t-options="{'widget': 'monetary', 'display_currency': account_currency}"
                                     />
                                 </span>
                             </t>
@@ -350,7 +354,7 @@
                                 >
                                     <t
                                         t-out="account_or_group_item_object['init_bal']['bal_curr']"
-                                        t-options="{'widget': 'monetary', 'display_currency': account['currency_id']}"
+                                        t-options="{'widget': 'monetary', 'display_currency': account_currency}"
                                     />
                                 </span>
                             </t>
@@ -699,6 +703,10 @@
                 <t t-set="misc_grouped_domain" t-value="[]" t-else="" />
                 <t t-if="foreign_currency">
                     <t t-if="account['currency_id']">
+                        <t
+                            t-set="account_currency"
+                            t-value="currency_model.browse(account['currency_id'])"
+                        />
                         <div class="act_as_cell amount" style="width: 3.63%;">
                             <t t-if="type == 'account_type'">
                                 <span>
@@ -710,7 +718,7 @@
                                     >
                                         <t
                                             t-out="account_or_group_item_object['fin_bal']['bal_curr']"
-                                            t-options="{'widget': 'monetary', 'display_currency': account['currency_id']}"
+                                            t-options="{'widget': 'monetary', 'display_currency': account_currency}"
                                         />
                                     </a>
                                 </span>
@@ -725,7 +733,7 @@
                                     >
                                         <t
                                             t-out="account_or_group_item_object['fin_bal']['bal_curr']"
-                                            t-options="{'widget': 'monetary', 'display_currency': account['currency_id']}"
+                                            t-options="{'widget': 'monetary', 'display_currency': account_currency}"
                                         />
                                     </a>
                                 </span>
@@ -742,7 +750,7 @@
                                     >
                                         <t
                                             t-out="account_or_group_item_object['fin_bal']['bal_curr']"
-                                            t-options="{'widget': 'monetary', 'display_currency': account['currency_id']}"
+                                            t-options="{'widget': 'monetary', 'display_currency': account_currency}"
                                         />
                                     </a>
                                 </span>
@@ -757,7 +765,7 @@
                                     >
                                         <t
                                             t-out="account_or_group_item_object['fin_bal']['bal_curr']"
-                                            t-options="{'widget': 'monetary', 'display_currency': account['currency_id']}"
+                                            t-options="{'widget': 'monetary', 'display_currency': account_currency}"
                                         />
                                     </a>
                                 </span>
