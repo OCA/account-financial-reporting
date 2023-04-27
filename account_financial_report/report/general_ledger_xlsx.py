@@ -304,9 +304,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                     )
                     if foreign_currency and group_item["currency_id"]:
                         group_item.update(
-                            {
-                                "final_bal_curr": group_item["fin_bal"]["bal_curr"],
-                            }
+                            {"final_bal_curr": group_item["fin_bal"]["bal_curr"],}
                         )
                     self.write_ending_balance_from_dict(group_item)
 
@@ -323,9 +321,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                     )
                     if foreign_currency and account["currency_id"]:
                         account.update(
-                            {
-                                "final_bal_curr": account["fin_bal"]["bal_curr"],
-                            }
+                            {"final_bal_curr": account["fin_bal"]["bal_curr"],}
                         )
                     self.write_ending_balance_from_dict(account)
 
