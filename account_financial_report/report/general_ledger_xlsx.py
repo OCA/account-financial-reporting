@@ -237,6 +237,15 @@ class GeneralLedgerXslx(models.AbstractModel):
                     # Display array header for move lines
                     self.write_array_header(report_data)
 
+                    account.update(
+                        {
+                            "currency_id": accounts_data[account["id"]]["currency_id"],
+                            "currency_name": accounts_data[account["id"]][
+                                "currency_name"
+                            ],
+                        }
+                    )
+
                     # Display initial balance line for partner
                     group_item.update(
                         {
@@ -248,6 +257,9 @@ class GeneralLedgerXslx(models.AbstractModel):
                             if "grouped_by" in account
                             else "",
                             "currency_id": accounts_data[account["id"]]["currency_id"],
+                            "currency_name": accounts_data[account["id"]][
+                                "currency_name"
+                            ],
                         }
                     )
                     if foreign_currency:
@@ -315,8 +327,6 @@ class GeneralLedgerXslx(models.AbstractModel):
                         group_item.update(
                             {
                                 "final_bal_curr": group_item["fin_bal"]["bal_curr"],
-                                "currency_name": group_item["currency_id"].name,
-                                "currency_id": group_item["currency_id"].id,
                             }
                         )
                     self.write_ending_balance_from_dict(group_item, report_data)
@@ -336,8 +346,6 @@ class GeneralLedgerXslx(models.AbstractModel):
                         account.update(
                             {
                                 "final_bal_curr": account["fin_bal"]["bal_curr"],
-                                "currency_name": account["currency_id"].name,
-                                "currency_id": account["currency_id"].id,
                             }
                         )
                     self.write_ending_balance_from_dict(account, report_data)
