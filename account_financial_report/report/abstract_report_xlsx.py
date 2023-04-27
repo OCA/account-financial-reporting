@@ -531,7 +531,10 @@ class AbstractReportXslx(models.AbstractModel):
             format_amt = report_data["formats"]["format_amount"]
             field_prefix = "format_amount"
         if "currency_id" in line_object and line_object.get("currency_id", False):
-            currency = line_object["currency_id"]
+            if isinstance(line_object["currency_id"], int):
+                currency = self.env["res.currency"].browse(line_object["currency_id"])
+            else:
+                currency = line_object["currency_id"]
             field_name = "{}_{}".format(field_prefix, currency.name)
             if hasattr(self, field_name):
                 format_amt = getattr(self, field_name)
