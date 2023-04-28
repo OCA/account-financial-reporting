@@ -325,7 +325,7 @@
                                     res-model="account.move.line"
                                 >
                                     <t
-                                        t-raw="account_or_group_item_object['init_bal']['bal_curr']"
+                                        t-out="account_or_group_item_object['init_bal']['bal_curr']"
                                         t-options="{'widget': 'monetary', 'display_currency': account['currency_id']}"
                                     />
                                 </span>
@@ -338,7 +338,7 @@
                                     res-model="account.move.line"
                                 >
                                     <t
-                                        t-raw="account_or_group_item_object['init_bal']['bal_curr']"
+                                        t-out="account_or_group_item_object['init_bal']['bal_curr']"
                                         t-options="{'widget': 'monetary', 'display_currency': account['currency_id']}"
                                     />
                                 </span>
@@ -724,7 +724,7 @@
                                         style="color: black;"
                                     >
                                         <t
-                                            t-raw="account_or_group_item_object['fin_bal']['bal_curr']"
+                                            t-out="account_or_group_item_object['fin_bal']['bal_curr']"
                                             t-options="{'widget': 'monetary', 'display_currency': account['currency_id']}"
                                         />
                                     </a>
@@ -741,7 +741,7 @@
                                         style="color: black;"
                                     >
                                         <t
-                                            t-raw="account_or_group_item_object['fin_bal']['bal_curr']"
+                                            t-out="account_or_group_item_object['fin_bal']['bal_curr']"
                                             t-options="{'widget': 'monetary', 'display_currency': account['currency_id']}"
                                         />
                                     </a>
