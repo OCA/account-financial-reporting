@@ -1,6 +1,7 @@
 /** @odoo-module **/
 import {ReportAction} from "@web/webclient/actions/reports/report_action";
 import {patch} from "web.utils";
+import {useEnrichWithActionLinks} from "./report.esm";
 
 const MODULE_NAME = "account_financial_report";
 
@@ -10,6 +11,7 @@ patch(ReportAction.prototype, "account_financial_report.ReportAction", {
         this.isAccountFinancialReport = this.props.report_name.startsWith(
             `${MODULE_NAME}.`
         );
+        useEnrichWithActionLinks(this.iframe);
     },
 
     export() {
