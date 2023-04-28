@@ -15,9 +15,9 @@
         <!-- Defines global variables used by internal layout -->
         <t t-set="title">
             Open Items -
-            <t t-raw="company_name" />
+            <t t-out="company_name" />
             -
-            <t t-raw="currency_name" />
+            <t t-out="currency_name" />
         </t>
         <t t-set="company_name" t-value="Company_Name" />
         <div class="page">
@@ -174,7 +174,7 @@
         <div class="act_as_row lines">
             <!--## date-->
             <div class="act_as_cell left">
-                <span t-raw="line['date'].strftime('%d/%m/%Y')" />
+                <span t-out="line['date'].strftime('%d/%m/%Y')" />
             </div>
             <!--## move-->
             <div class="act_as_cell left">

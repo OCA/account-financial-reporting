@@ -17,9 +17,9 @@
         <t t-set="display_account_name" t-value="with_account_name" />
         <t t-set="title">
             Journal Ledger -
-            <t t-raw="company_name" />
+            <t t-out="company_name" />
             -
-            <t t-raw="currency_name" />
+            <t t-out="currency_name" />
         </t>
         <t t-set="company_name" t-value="Company_Name" />
         <div class="page">
