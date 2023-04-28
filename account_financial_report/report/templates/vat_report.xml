@@ -12,9 +12,9 @@
     <template id="account_financial_report.report_vat_report_base">
         <t t-set="title">
             VAT Report -
-            <t t-raw="company_name" />
+            <t t-out="company_name" />
             -
-            <t t-raw="currency_name" />
+            <t t-out="currency_name" />
         </t>
         <t t-set="company_name" t-value="company_name" />
         <div class="page">
@@ -55,7 +55,7 @@
                                 t-att-res-model="res_model"
                                 view-type="form"
                             >
-                                <t t-att-style="style" t-raw="tag_or_group['code']" />
+                                <t t-att-style="style" t-out="tag_or_group['code']" />
                             </span>
                         </div>
                         <div
@@ -67,20 +67,20 @@
                                 t-att-res-model="res_model"
                                 view-type="form"
                             >
-                                <t t-att-style="style" t-raw="tag_or_group['name']" />
+                                <t t-att-style="style" t-out="tag_or_group['name']" />
                             </span>
                         </div>
                         <div class="act_as_cell amount" style="width: 15%;">
                             <t
                                 t-att-style="style"
-                                t-raw="tag_or_group['net']"
+                                t-out="tag_or_group['net']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
                         </div>
                         <div class="act_as_cell amount" style="width: 15%;">
                             <t
                                 t-att-style="style"
-                                t-raw="tag_or_group['tax']"
+                                t-out="tag_or_group['tax']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
                         </div>
@@ -98,7 +98,7 @@
                                         t-att-res-model="res_model"
                                         view-type="form"
                                     >
-                                        <t t-att-style="style" t-raw="tax['name']" />
+                                        <t t-att-style="style" t-out="tax['name']" />
                                     </span>
                                 </div>
                                 <div class="act_as_cell amount" style="width: 15%;">
@@ -114,7 +114,7 @@
                                     >
                                         <t
                                             t-att-style="style"
-                                            t-raw="tax['net']"
+                                            t-out="tax['net']"
                                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                                         />
                                     </span>
@@ -132,7 +132,7 @@
                                     >
                                         <t
                                             t-att-style="style"
-                                            t-raw="tax['tax']"
+                                            t-out="tax['tax']"
                                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                                         />
                                     </span>
