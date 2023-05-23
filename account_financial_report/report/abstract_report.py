@@ -100,7 +100,6 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                 else:
                     move_line["amount_residual_currency"] = debit_amount_currency[ml_id]
             if ml_id in credit_ids:
-                move_line["amount_residual"] -= credit_amount[ml_id]
                 if move_line.get("amount_residual", False):
                     move_line["amount_residual"] -= credit_amount[ml_id]
                 else:
