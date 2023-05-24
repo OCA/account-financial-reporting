@@ -6,7 +6,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Account Financial Reports",
-    "version": "15.0.2.8.2",
+    "version": "15.0.2.8.3",
     "category": "Reporting",
     "summary": "OCA Financial Reports",
     "author": "Camptocamp SA,"
