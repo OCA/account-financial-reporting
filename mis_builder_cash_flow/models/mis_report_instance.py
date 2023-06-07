@@ -9,9 +9,6 @@ class MisReportInstancePeriod(models.Model):
     def _get_additional_move_line_filter(self):
         """Add the posted condition ."""
         domain = super()._get_additional_move_line_filter()
-        if (
-            self._get_aml_model_name() == "mis.cash_flow"
-            and self.report_instance_id.target_move == "posted"
-        ):
+        if self.report_instance_id.target_move == "posted":
             domain += [("state", "=", "posted")]
         return domain

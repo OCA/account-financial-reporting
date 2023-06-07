@@ -9,7 +9,7 @@
             <form string="MIS Cash Flow Forecast Line">
                 <sheet>
                     <group col="2">
-                        <field name="company_id" groups="base.group_multi_company" />
+                        <field name="company_id" />
                         <field name="date" />
                         <field name="partner_id" />
                         <field
@@ -33,7 +33,7 @@
                 <separator />
                 <field name="partner_id" />
                 <field name="account_id" />
-                <field name="company_id" groups="base.group_multi_company" />
+                <field name="company_id" />
                 <group>
                     <filter
                         string="Account"
@@ -54,7 +54,6 @@
                         string="Company"
                         name="group_by_company_id"
                         context="{'group_by':'company_id'}"
-                        groups="base.group_multi_company"
                     />
                 </group>
             </search>
@@ -65,13 +64,13 @@
         <field name="model">mis.cash_flow.forecast_line</field>
         <field name="arch" type="xml">
             <tree editable="top">
-                <field name="company_id" groups="base.group_multi_company" />
+                <field name="company_id" />
                 <field name="date" />
                 <field name="name" />
                 <field name="partner_id" />
                 <field
                     name="account_id"
-                    domain="[('company_id', '=', company_id), ('deprecated', '=', False), ('hide_in_cash_flow', '=', False), ('internal_type', '=', ['receivable', 'payable', 'liquidity'])]"
+                    domain="[('company_id', '=', company_id), ('deprecated', '=', False), ('hide_in_cash_flow', '=', False), ('account_type', 'in', ['asset_receivable', 'liability_payable'])]"
                 />
                 <field name="balance" />
             </tree>
