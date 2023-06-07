@@ -66,6 +66,14 @@ msgid "Account"
 msgstr "Conto"
 
 #. module: mis_builder_cash_flow
+#: model:ir.model.fields,help:mis_builder_cash_flow.field_mis_cash_flow__account_type
+msgid ""
+"Account Type is used for information purpose, to generate country-specific "
+"legal reports, and set the rules to close a fiscal year and generate opening "
+"entries."
+msgstr ""
+
+#. module: mis_builder_cash_flow
 #: model:mis.report.kpi,description:mis_builder_cash_flow.mis_kpi_balance
 msgid "BALANCE"
 msgstr "SALDO"
@@ -129,10 +137,8 @@ msgid "Debit"
 msgstr "Dare"
 
 #. module: mis_builder_cash_flow
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_account_account__display_name
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__display_name
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__display_name
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_report_instance_period__display_name
 msgid "Display Name"
 msgstr "Nome visualizzato"
 
@@ -148,10 +154,8 @@ msgid "Hide in Cash Flow?"
 msgstr "Nascondere in flusso di cassa?"
 
 #. module: mis_builder_cash_flow
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_account_account__id
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__id
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__id
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_report_instance_period__id
 msgid "ID"
 msgstr "ID"
 
@@ -188,10 +192,8 @@ msgid "LIQUIDITY"
 msgstr "LIQUIDITA'"
 
 #. module: mis_builder_cash_flow
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_account_account____last_update
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow____last_update
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line____last_update
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_report_instance_period____last_update
 msgid "Last Modified on"
 msgstr "Ultima modifica il"
 
@@ -219,14 +221,8 @@ msgstr "Flusso di cassa MIS"
 #. module: mis_builder_cash_flow
 #: model:ir.model,name:mis_builder_cash_flow.model_mis_cash_flow_forecast_line
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_forecast_line_view_form
-#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_forecast_line_view_tree
 msgid "MIS Cash Flow Forecast Line"
 msgstr "Riga previsione flusso di cassa MIS"
-
-#. module: mis_builder_cash_flow
-#: model:ir.model,name:mis_builder_cash_flow.model_mis_report_instance_period
-msgid "MIS Report Instance Period"
-msgstr "Periodo rendicontazione istanza MIS"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__full_reconcile_id
@@ -282,17 +278,7 @@ msgid "State"
 msgstr "Stato"
 
 #. module: mis_builder_cash_flow
-#: model:ir.model.fields,help:mis_builder_cash_flow.field_mis_cash_flow__account_internal_type
-msgid ""
-"The 'Internal Type' is used for features available on different types of "
-"accounts: liquidity type is for cash or bank accounts, payable/receivable is"
-" for vendor/customer accounts."
-msgstr ""
-"Il \"tipo interno\" è usato per funzionalità disponibili su diversi tipi di "
-"conti: il tipo liquidità è per cassa o conti bancari, fornitore/cliente è "
-"per conti fornitori o clienti."
-
-#. module: mis_builder_cash_flow
+#. odoo-python
 #: code:addons/mis_builder_cash_flow/models/mis_cash_flow_forecast_line.py:0
 #, python-format
 msgid "The Company and the Company of the Account must be the same."
@@ -310,7 +296,7 @@ msgid "Total"
 msgstr "Totale"
 
 #. module: mis_builder_cash_flow
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__account_internal_type
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__account_type
 msgid "Type"
 msgstr "Tipo"
 
@@ -328,3 +314,15 @@ msgstr "quarto mese"
 #: model:mis.report.instance.period,name:mis_builder_cash_flow.mis_period_plus_third_month
 msgid "third month"
 msgstr "terzo mese"
+
+#~ msgid "MIS Report Instance Period"
+#~ msgstr "Periodo rendicontazione istanza MIS"
+
+#~ msgid ""
+#~ "The 'Internal Type' is used for features available on different types of "
+#~ "accounts: liquidity type is for cash or bank accounts, payable/receivable "
+#~ "is for vendor/customer accounts."
+#~ msgstr ""
+#~ "Il \"tipo interno\" è usato per funzionalità disponibili su diversi tipi "
+#~ "di conti: il tipo liquidità è per cassa o conti bancari, fornitore/"
+#~ "cliente è per conti fornitori o clienti."

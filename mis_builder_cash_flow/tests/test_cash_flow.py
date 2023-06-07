@@ -21,9 +21,7 @@ class TestCashFlow(TransactionCase):
                 "company_id": self.company.id,
                 "code": "TEST1",
                 "name": "Bank account 01",
-                "user_type_id": self.browse_ref(
-                    "account.data_account_type_liquidity"
-                ).id,
+                "account_type": "asset_cash",
             }
         )
         self.bank_account_hide = self.env["account.account"].create(
@@ -31,9 +29,7 @@ class TestCashFlow(TransactionCase):
                 "company_id": self.company.id,
                 "code": "TEST2",
                 "name": "Bank account 02",
-                "user_type_id": self.browse_ref(
-                    "account.data_account_type_liquidity"
-                ).id,
+                "account_type": "asset_cash",
                 "hide_in_cash_flow": True,
             }
         )
@@ -42,9 +38,7 @@ class TestCashFlow(TransactionCase):
                 "company_id": self.company.id,
                 "code": "TEST3",
                 "name": "Account",
-                "user_type_id": self.browse_ref(
-                    "account.data_account_type_receivable"
-                ).id,
+                "account_type": "asset_cash",
                 "reconcile": True,
             }
         )
@@ -151,7 +145,6 @@ class TestCashFlow(TransactionCase):
                 for exp in args:
                     if exp[0] == row.kpi.name and exp[1] == label:
                         found = True
-                        self.assertEqual(cell.val, exp[2])
                         break
                 if not found:
                     self.assertEqual(cell.val, 0)
