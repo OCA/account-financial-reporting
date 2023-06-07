@@ -16,9 +16,7 @@ class MisCashFlow(models.Model):
         index=True,
         readonly=True,
     )
-    name = fields.Char(
-        readonly=True,
-    )
+    name = fields.Char(readonly=True)
     account_id = fields.Many2one(
         comodel_name="account.account",
         string="Account",
@@ -27,9 +25,7 @@ class MisCashFlow(models.Model):
         readonly=True,
     )
     partner_id = fields.Many2one(
-        comodel_name="res.partner",
-        string="Partner",
-        readonly=True,
+        comodel_name="res.partner", string="Partner", readonly=True
     )
     move_line_id = fields.Many2one(
         comodel_name="account.move.line",
@@ -44,31 +40,15 @@ class MisCashFlow(models.Model):
         readonly=True,
         index=True,
     )
-    credit = fields.Float(
-        readonly=True,
-    )
-    debit = fields.Float(
-        readonly=True,
-    )
-    date = fields.Date(
-        readonly=True,
-        index=True,
-    )
-    reconciled = fields.Boolean(
-        readonly=True,
-    )
+    credit = fields.Float(readonly=True)
+    debit = fields.Float(readonly=True)
+    date = fields.Date(readonly=True, index=True)
+    reconciled = fields.Boolean(readonly=True)
     full_reconcile_id = fields.Many2one(
-        "account.full.reconcile",
-        string="Matching Number",
-        readonly=True,
-        index=True,
+        "account.full.reconcile", string="Matching Number", readonly=True, index=True
     )
-    account_internal_type = fields.Selection(
-        related="account_id.user_type_id.type", readonly=True
-    )
-    state = fields.Selection(
-        selection="_selection_parent_state",
-    )
+    account_type = fields.Selection(related="account_id.account_type", readonly=True)
+    state = fields.Selection(selection="_selection_parent_state")
 
     def _selection_parent_state(self):
         return self.env["account.move"].fields_get(allfields=["state"])["state"][
