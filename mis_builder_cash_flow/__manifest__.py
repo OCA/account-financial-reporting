@@ -7,7 +7,7 @@
     'license': 'LGPL-3',
     'author': 'ADHOC SA, '
               'Odoo Community Association (OCA)',
-    'website': 'https://github.com/OCA/mis-builder',
+    'website': 'https://github.com/OCA/account-financial-reporting',
     'depends': [
         'mis_builder',
     ],
