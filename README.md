@@ -17,7 +17,15 @@ Report for accounting
 
 [//]: # (addons)
 
-This part will be replaced when running the oca-gen-addons-table script from OCA/maintainer-tools.
+Available addons
+----------------
+addon | version | maintainers | summary
+--- | --- | --- | ---
+[account_export_csv](account_export_csv/) | 12.0.1.2.0 |  | Adds accounting CSV export
+[account_financial_report](account_financial_report/) | 12.0.1.5.2 |  | OCA Financial Reports
+[account_tax_balance](account_tax_balance/) | 12.0.1.2.1 |  | Compute tax balances based on date range
+[mis_builder_cash_flow](mis_builder_cash_flow/) | 12.0.1.3.0 | [![jjscarafia](https://github.com/jjscarafia.png?size=30px)](https://github.com/jjscarafia) | MIS Builder Cash Flow
+[partner_statement](partner_statement/) | 12.0.1.0.5 |  | OCA Financial Reports
 
 [//]: # (end addons)
 
