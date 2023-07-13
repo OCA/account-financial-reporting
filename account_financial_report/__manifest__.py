@@ -12,7 +12,7 @@
               'redCOR AG,'
               'Eficent,'
               'Odoo Community Association (OCA)',
-    "website": "https://odoo-community.org/",
+    "website": "https://github.com/OCA/account-financial-reporting",
     'depends': [
         'account',
         'date_range',
