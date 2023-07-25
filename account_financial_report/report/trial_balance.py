@@ -755,4 +755,5 @@ class TrialBalanceReport(models.AbstractModel):
             "accounts_data": accounts_data,
             "partners_data": partners_data,
             "show_hierarchy_level": show_hierarchy_level,
+            "currency_model": self.env["res.currency"],
         }
