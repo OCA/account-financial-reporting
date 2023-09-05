@@ -1,0 +1,45 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* account_journal_ledger_by_entry_number
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-08-25 11:20+0000\n"
+"PO-Revision-Date: 2023-08-25 11:20+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: account_journal_ledger_by_entry_number
+#. odoo-python
+#: code:addons/account_journal_ledger_by_entry_number/wizard/journal_ledger_wizard.py:0
+#, python-format
+msgid "Date"
+msgstr "Fecha"
+
+#. module: account_journal_ledger_by_entry_number
+#. odoo-python
+#: code:addons/account_journal_ledger_by_entry_number/wizard/journal_ledger_wizard.py:0
+#, python-format
+msgid "Entry number"
+msgstr "Número de asiento"
+
+#. module: account_journal_ledger_by_entry_number
+#: model:ir.model,name:account_journal_ledger_by_entry_number.model_report_account_financial_report_journal_ledger
+msgid "Journal Ledger Report"
+msgstr "Informe Diario de contabilidad"
+
+#. module: account_journal_ledger_by_entry_number
+#: model:ir.model,name:account_journal_ledger_by_entry_number.model_journal_ledger_report_wizard
+msgid "Journal Ledger Report Wizard"
+msgstr "Asistente de informe de Libro Diario"
+
+#. module: account_journal_ledger_by_entry_number
+#: model:ir.model.fields,field_description:account_journal_ledger_by_entry_number.field_journal_ledger_report_wizard__sort_option
+msgid "Sort entries by"
+msgstr "Ordenar asientos por"
