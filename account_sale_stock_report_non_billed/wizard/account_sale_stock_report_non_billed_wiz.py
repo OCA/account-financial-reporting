@@ -75,8 +75,6 @@ class AccountSaleStockReportNonBilledWiz(models.TransientModel):
         # Get the moves after the threshold
         domain = self._get_search_domain()
         stock_moves = self.env["stock.move"].search(domain)
-        # Filter the moves with the domain
-        stock_moves = stock_moves.filtered_domain(self._get_search_domain())
         stock_moves = self.discart_kits_from_moves(stock_moves)
         stock_moves -= self._get_neutralized_moves(stock_moves)
         final_stock_move_ids = []
@@ -86,14 +84,15 @@ class AccountSaleStockReportNonBilledWiz(models.TransientModel):
             else False
         )
         for move in stock_moves:
-            invoices_not_cancel = move.invoice_line_ids.filtered(
+            inv_lines_not_cancel = move.invoice_line_ids.filtered(
                 lambda l: l.move_id.state != "cancel"
             )
-            moves_in_date = invoices_not_cancel.mapped("move_line_ids").filtered(
-                lambda m: m.date_done >= self.stock_move_non_billed_threshold
+            moves_in_date = inv_lines_not_cancel.move_line_ids.filtered(
+                lambda m: m.state == "done"
+                and m.date_done >= self.stock_move_non_billed_threshold
                 and m.date_done <= self.date_check
             )
-            inv_lines = moves_in_date.mapped("invoice_line_ids").filtered(
+            inv_lines = moves_in_date.invoice_line_ids.filtered(
                 lambda l: l.check_invoice_line_in_date(
                     self.date_check, date_start=date_start
                 )
