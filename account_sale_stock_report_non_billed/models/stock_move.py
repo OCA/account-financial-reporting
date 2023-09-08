@@ -108,26 +108,33 @@ class StockMove(models.Model):
         ) * self.sale_line_id.price_reduce
 
     @api.depends("sale_line_id")
-    @api.depends_context("non_billed_date")
+    @api.depends_context(
+        "non_billed_date", "non_billed_date_start", "non_billed_invoice_date_start",
+    )
     def _compute_not_invoiced_values(self):
         for move in self:
-            if not self.env.context.get("non_billed_date") or not self.env.context.get(
+            context = self.env.context
+            if not context.get("non_billed_date") or not context.get(
                 "non_billed_date_start"
             ):
                 move.quantity_not_invoiced = 0
                 move.price_not_invoiced = 0
                 continue
-            date_start = self.env.context["non_billed_date_start"]
-            date_end = self.env.context["non_billed_date"]
+            date_start = fields.Date.from_string(context["non_billed_date_start"])
+            date_end = fields.Date.from_string(context["non_billed_date"])
             invoices_not_cancel = move.invoice_line_ids.filtered(
                 lambda l: l.move_id.state != "cancel"
             )
             moves_in_date = invoices_not_cancel.mapped("move_line_ids").filtered(
-                lambda m: m.date_done >= date_start and m.date_done <= date_end
+                lambda m: m.state == "done"
+                and m.date_done >= date_start
+                and m.date_done <= date_end
             )
             invoice_date_start = False
-            if self.env.context.get("non_billed_invoice_date_start", False):
-                invoice_date_start = self.env.context["non_billed_invoice_date_start"]
+            if context.get("non_billed_invoice_date_start"):
+                invoice_date_start = fields.Date.from_string(
+                    context["non_billed_invoice_date_start"]
+                )
             inv_lines = moves_in_date.mapped("invoice_line_ids").filtered(
                 lambda l: l.check_invoice_line_in_date(
                     date_end, date_start=invoice_date_start,
