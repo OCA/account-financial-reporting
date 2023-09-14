@@ -216,6 +216,8 @@ class TrialBalanceReport(models.AbstractModel):
             total_amount[acc_id]["debit"] = tb["debit"]
             total_amount[acc_id]["balance"] = tb["balance"]
             total_amount[acc_id]["initial_balance"] = 0.0
+            if foreign_currency:
+                total_amount[acc_id]["initial_currency_balance"] = 0.0
         for tb in tb_initial_acc:
             acc_id = tb["account_id"]
             if acc_id not in total_amount.keys():
