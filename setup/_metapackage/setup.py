@@ -10,6 +10,7 @@ setuptools.setup(
     install_requires=[
         'odoo-addon-account_financial_report>=16.0dev,<16.1dev',
         'odoo-addon-account_tax_balance>=16.0dev,<16.1dev',
+        'odoo-addon-mis_builder_cash_flow>=16.0dev,<16.1dev',
     ],
     classifiers=[
         'Programming Language :: Python',
