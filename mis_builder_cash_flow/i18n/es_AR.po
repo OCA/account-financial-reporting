@@ -66,6 +66,14 @@ msgid "Account"
 msgstr "Cuenta"
 
 #. module: mis_builder_cash_flow
+#: model:ir.model.fields,help:mis_builder_cash_flow.field_mis_cash_flow__account_type
+msgid ""
+"Account Type is used for information purpose, to generate country-specific "
+"legal reports, and set the rules to close a fiscal year and generate opening "
+"entries."
+msgstr ""
+
+#. module: mis_builder_cash_flow
 #: model:mis.report.kpi,description:mis_builder_cash_flow.mis_kpi_balance
 msgid "BALANCE"
 msgstr "SALDO"
@@ -213,14 +221,8 @@ msgstr "Flujo de Efectivo MIS"
 #. module: mis_builder_cash_flow
 #: model:ir.model,name:mis_builder_cash_flow.model_mis_cash_flow_forecast_line
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_forecast_line_view_form
-#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_forecast_line_view_tree
 msgid "MIS Cash Flow Forecast Line"
 msgstr "Línea de Pronóstico del Flujo de Efectivo MIS"
-
-#. module: mis_builder_cash_flow
-#: model:ir.model,name:mis_builder_cash_flow.model_mis_report_instance_period
-msgid "MIS Report Instance Period"
-msgstr "MIS Período de Instancia de Reporte"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__full_reconcile_id
@@ -276,17 +278,7 @@ msgid "State"
 msgstr "Estado"
 
 #. module: mis_builder_cash_flow
-#: model:ir.model.fields,help:mis_builder_cash_flow.field_mis_cash_flow__account_internal_type
-msgid ""
-"The 'Internal Type' is used for features available on different types of "
-"accounts: liquidity type is for cash or bank accounts, payable/receivable is "
-"for vendor/customer accounts."
-msgstr ""
-"El 'Tipo Interno' se utiliza para las funciones disponibles en diferentes "
-"tipos de cuentas: el tipo de liquidez es para efectivo o cuentas bancarias, "
-"el de pagar / cobrar es para cuentas de proveedor / cliente."
-
-#. module: mis_builder_cash_flow
+#. odoo-python
 #: code:addons/mis_builder_cash_flow/models/mis_cash_flow_forecast_line.py:0
 #, python-format
 msgid "The Company and the Company of the Account must be the same."
@@ -304,7 +296,7 @@ msgid "Total"
 msgstr "Total"
 
 #. module: mis_builder_cash_flow
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__account_internal_type
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__account_type
 msgid "Type"
 msgstr "Tipo"
 
@@ -322,3 +314,15 @@ msgstr "cuarto mes"
 #: model:mis.report.instance.period,name:mis_builder_cash_flow.mis_period_plus_third_month
 msgid "third month"
 msgstr "tercer mes"
+
+#~ msgid "MIS Report Instance Period"
+#~ msgstr "MIS Período de Instancia de Reporte"
+
+#~ msgid ""
+#~ "The 'Internal Type' is used for features available on different types of "
+#~ "accounts: liquidity type is for cash or bank accounts, payable/receivable "
+#~ "is for vendor/customer accounts."
+#~ msgstr ""
+#~ "El 'Tipo Interno' se utiliza para las funciones disponibles en diferentes "
+#~ "tipos de cuentas: el tipo de liquidez es para efectivo o cuentas "
+#~ "bancarias, el de pagar / cobrar es para cuentas de proveedor / cliente."
