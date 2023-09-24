@@ -2,9 +2,7 @@
     <record id="kpi_loss" model="mis.report.kpi">
         <field name="name">loss</field>
         <field name="description">Loss</field>
-        <field
-            name="expression"
-        >balp[('internal_group', '=', 'expense')][]</field>
+        <field name="expression">balp[('internal_group', '=', 'expense')][]</field>
         <field name="auto_expand_accounts">true</field>
         <field name="auto_expand_accounts_style_id" ref="style_details" />
         <field name="style_id" ref="style_header" />
@@ -17,9 +15,7 @@
     <record id="kpi_profit" model="mis.report.kpi">
         <field name="name">profit</field>
         <field name="description">Profit</field>
-        <field
-            name="expression"
-        >-balp[('internal_group', '=', 'income')][]</field>
+        <field name="expression">-balp[('internal_group', '=', 'income')][]</field>
         <field name="auto_expand_accounts">true</field>
         <field name="auto_expand_accounts_style_id" ref="style_details" />
         <field name="style_id" ref="style_header" />
@@ -46,7 +42,7 @@
         <field name="id">8</field>
         <field name="name">liability_header</field>
         <field name="description">Liability</field>
-        <field name="expression">liability + subreport_pl.pl_to_report</field>
+        <field name="expression">liability + equity + subreport_pl.pl_to_report</field>
         <field name="auto_expand_accounts">false</field>
         <field name="style_id" ref="style_header" />
         <field name="type">num</field>
@@ -65,6 +61,20 @@
         <field name="type">num</field>
         <field name="compare_method">pct</field>
         <field name="accumulation_method">sum</field>
+        <field name="sequence">103</field>
+        <field name="report_id" ref="report_bs" />
+    </record>
+    <record id="kpi_equity" model="mis.report.kpi">
+        <field name="id">6</field>
+        <field name="name">equity</field>
+        <field name="description">Equity</field>
+        <field name="expression">-bale[('internal_group', '=', 'equity')][]</field>
+        <field name="auto_expand_accounts">true</field>
+        <field name="auto_expand_accounts_style_id" ref="style_details_double_indent" />
+        <field name="style_id" ref="style_header_indent" />
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">sum</field>
         <field name="sequence">102</field>
         <field name="report_id" ref="report_bs" />
     </record>
@@ -72,9 +82,7 @@
         <field name="id">5</field>
         <field name="name">liability</field>
         <field name="description">Liabilities</field>
-        <field
-            name="expression"
-        >-bale[('internal_group', '=', 'liability')][]</field>
+        <field name="expression">-bale[('internal_group', '=', 'liability')][]</field>
         <field name="auto_expand_accounts">true</field>
         <field name="auto_expand_accounts_style_id" ref="style_details_double_indent" />
         <field name="style_id" ref="style_header_indent" />
@@ -88,9 +96,7 @@
         <field name="id">4</field>
         <field name="name">assets</field>
         <field name="description">Assets</field>
-        <field
-            name="expression"
-        >bale[('internal_group', 'in', ('asset', 'equity'))][]</field>
+        <field name="expression">bale[('internal_group', '=', 'asset')][]</field>
         <field name="auto_expand_accounts">true</field>
         <field name="auto_expand_accounts_style_id" ref="style_details" />
         <field name="style_id" ref="style_header" />
