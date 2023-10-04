@@ -1,10 +1,14 @@
+<!--
+  ~ Copyright 2023 Simone Rubino - Aion Tech
+  ~ License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+  -->
 <odoo>
     <record id="kpi_loss" model="mis.report.kpi">
         <field name="name">loss</field>
         <field name="description">Loss</field>
         <field
             name="expression"
-        >balp[('user_type_id', 'in', (ref('account.data_account_type_depreciation').id, ref('account.data_account_type_direct_costs').id, ref('account.data_account_type_expenses').id))][]</field>
+        >balp[('account_type', 'in', ('expense_depreciation', 'expense_direct_cost', 'expense'))][]</field>
         <field name="auto_expand_accounts">true</field>
         <field name="auto_expand_accounts_style_id" ref="style_details" />
         <field name="style_id" ref="style_header" />
@@ -19,7 +23,7 @@
         <field name="description">Profit</field>
         <field
             name="expression"
-        >-balp[('user_type_id', 'in', (ref('account.data_account_type_other_income').id, ref('account.data_account_type_revenue').id,))][]</field>
+        >-balp[('account_type', 'in', ('income_other', 'income',))][]</field>
         <field name="auto_expand_accounts">true</field>
         <field name="auto_expand_accounts_style_id" ref="style_details" />
         <field name="style_id" ref="style_header" />
@@ -74,7 +78,7 @@
         <field name="description">Liabilities</field>
         <field
             name="expression"
-        >-bale[('user_type_id', 'in', (ref('account.data_account_type_current_liabilities').id, ref('account.data_account_type_equity').id, ref('account.data_account_type_non_current_liabilities').id, ref('account.data_account_type_payable').id))][]</field>
+        >-bale[('account_type', 'in', ('liability_current', 'equity', 'liability_non_current', 'liability_payable'))][]</field>
         <field name="auto_expand_accounts">true</field>
         <field name="auto_expand_accounts_style_id" ref="style_details_double_indent" />
         <field name="style_id" ref="style_header_indent" />
@@ -90,7 +94,7 @@
         <field name="description">Assets</field>
         <field
             name="expression"
-        >bale[('user_type_id', 'in', (ref('account.data_account_type_credit_card').id, ref('account.data_account_type_prepayments').id, ref('account.data_account_type_current_assets').id, ref('account.data_account_type_fixed_assets').id, ref('account.data_account_type_liquidity').id, ref('account.data_account_type_non_current_assets').id, ref('account.data_account_type_receivable').id))][]</field>
+        >bale[('account_type', 'in', ('liability_credit_card', 'asset_prepayments', 'asset_current', 'asset_fixed', 'asset_cash', 'asset_non_current', 'asset_receivable'))][]</field>
         <field name="auto_expand_accounts">true</field>
         <field name="auto_expand_accounts_style_id" ref="style_details" />
         <field name="style_id" ref="style_header" />
