@@ -34,7 +34,6 @@ msgstr "<span>Informe</span>"
 
 #. module: account_bank_reconciliation_summary_xlsx
 #: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:0
-#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:0
 #, python-format
 msgid "Amount"
 msgstr "Import"
@@ -107,7 +106,6 @@ msgstr "Creat el"
 
 #. module: account_bank_reconciliation_summary_xlsx
 #: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:0
-#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:0
 #: model:ir.model.fields,field_description:account_bank_reconciliation_summary_xlsx.field_bank_reconciliation_report_wizard__date
 #, python-format
 msgid "Date"
@@ -156,7 +154,6 @@ msgstr ""
 
 #. module: account_bank_reconciliation_summary_xlsx
 #: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:0
-#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:0
 #, python-format
 msgid "Label"
 msgstr "Etiqueta"
@@ -185,7 +182,6 @@ msgstr "Número de moviment"
 
 #. module: account_bank_reconciliation_summary_xlsx
 #: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:0
-#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:0
 #, python-format
 msgid "NONE"
 msgstr "Cap"
@@ -206,13 +202,11 @@ msgstr ""
 
 #. module: account_bank_reconciliation_summary_xlsx
 #: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:0
-#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:0
 #, python-format
 msgid "Partner"
 msgstr "Partner"
 
 #. module: account_bank_reconciliation_summary_xlsx
-#: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:0
 #: code:addons/account_bank_reconciliation_summary_xlsx/report/bank_reconciliation_xlsx.py:0
 #, python-format
 msgid "Ref."
