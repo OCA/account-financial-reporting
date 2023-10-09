@@ -129,10 +129,8 @@ msgid "Debit"
 msgstr "Dare"
 
 #. module: mis_builder_cash_flow
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_account_account__display_name
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__display_name
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__display_name
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_report_instance_period__display_name
 msgid "Display Name"
 msgstr "Nome visualizzato"
 
@@ -148,10 +146,8 @@ msgid "Hide in Cash Flow?"
 msgstr "Nascondere in flusso di cassa?"
 
 #. module: mis_builder_cash_flow
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_account_account__id
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__id
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__id
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_report_instance_period__id
 msgid "ID"
 msgstr "ID"
 
@@ -188,10 +184,8 @@ msgid "LIQUIDITY"
 msgstr "LIQUIDITA'"
 
 #. module: mis_builder_cash_flow
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_account_account____last_update
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow____last_update
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line____last_update
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_report_instance_period____last_update
 msgid "Last Modified on"
 msgstr "Ultima modifica il"
 
@@ -219,7 +213,6 @@ msgstr "Flusso di cassa MIS"
 #. module: mis_builder_cash_flow
 #: model:ir.model,name:mis_builder_cash_flow.model_mis_cash_flow_forecast_line
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_forecast_line_view_form
-#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_forecast_line_view_tree
 msgid "MIS Cash Flow Forecast Line"
 msgstr "Riga previsione flusso di cassa MIS"
 
@@ -285,8 +278,8 @@ msgstr "Stato"
 #: model:ir.model.fields,help:mis_builder_cash_flow.field_mis_cash_flow__account_internal_type
 msgid ""
 "The 'Internal Type' is used for features available on different types of "
-"accounts: liquidity type is for cash or bank accounts, payable/receivable is"
-" for vendor/customer accounts."
+"accounts: liquidity type is for cash or bank accounts, payable/receivable is "
+"for vendor/customer accounts."
 msgstr ""
 "Il \"tipo interno\" è usato per funzionalità disponibili su diversi tipi di "
 "conti: il tipo liquidità è per cassa o conti bancari, fornitore/cliente è "
