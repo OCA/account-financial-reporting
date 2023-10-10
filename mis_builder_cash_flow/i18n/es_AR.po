@@ -129,8 +129,10 @@ msgid "Debit"
 msgstr "Débito"
 
 #. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_account_account__display_name
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__display_name
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__display_name
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_report_instance_period__display_name
 msgid "Display Name"
 msgstr "Mostrar Nombre"
 
@@ -146,8 +148,10 @@ msgid "Hide in Cash Flow?"
 msgstr "¿Ocultar en Flujo de Efectivo?"
 
 #. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_account_account__id
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__id
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__id
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_report_instance_period__id
 msgid "ID"
 msgstr "ID"
 
@@ -184,8 +188,10 @@ msgid "LIQUIDITY"
 msgstr "LIQUIDEZ"
 
 #. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_account_account____last_update
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow____last_update
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line____last_update
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_report_instance_period____last_update
 msgid "Last Modified on"
 msgstr "Última modificación en"
 
