@@ -27,7 +27,6 @@ msgstr "%(name)s: %(target)s de %(from)s até %(to)s"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
-#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "Account Tax"
 msgstr "Conta de Imposto"
 
@@ -92,9 +91,6 @@ msgid "Date Range"
 msgstr "Período"
 
 #. module: account_tax_balance
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_move__display_name
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_move_line__display_name
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__display_name
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__display_name
 msgid "Display Name"
 msgstr "Exibir nome"
@@ -122,9 +118,6 @@ msgid "Has balance in period"
 msgstr "Como o saldo do período"
 
 #. module: account_tax_balance
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_move__id
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_move_line__id
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__id
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__id
 msgid "ID"
 msgstr "ID"
@@ -140,9 +133,6 @@ msgid "Journal Item"
 msgstr "Item de Diário"
 
 #. module: account_tax_balance
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_move____last_update
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_move_line____last_update
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax____last_update
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances____last_update
 msgid "Last Modified on"
 msgstr "Última modificação em"

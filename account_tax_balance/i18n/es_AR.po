@@ -24,7 +24,6 @@ msgstr "%(name)s: %(target)s desde %(from)s hasta %(to)s"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
-#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "Account Tax"
 msgstr "Cuenta de Impuesto"
 
@@ -89,9 +88,6 @@ msgid "Date Range"
 msgstr "Rango de Fecha"
 
 #. module: account_tax_balance
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_move__display_name
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_move_line__display_name
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__display_name
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__display_name
 msgid "Display Name"
 msgstr "Mostrar Nombre"
@@ -119,9 +115,6 @@ msgid "Has balance in period"
 msgstr "Tiene saldo en periodo"
 
 #. module: account_tax_balance
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_move__id
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_move_line__id
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__id
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__id
 msgid "ID"
 msgstr "ID"
@@ -137,9 +130,6 @@ msgid "Journal Item"
 msgstr "Asiento Contable"
 
 #. module: account_tax_balance
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_move____last_update
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_move_line____last_update
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_tax____last_update
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances____last_update
 msgid "Last Modified on"
 msgstr "Última modificación en"
