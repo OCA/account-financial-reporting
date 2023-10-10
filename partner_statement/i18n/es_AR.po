@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* partner_statement
+# 	* partner_statement
 #
 msgid ""
 msgstr ""
@@ -141,7 +141,9 @@ msgstr "Informe de antigüedad a"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
-msgid "Aging details can be shown in the report, expressed in aging         buckets, so the partner can review how much is open, due or overdue."
+msgid ""
+"Aging details can be shown in the report, expressed in aging         "
+"buckets, so the partner can review how much is open, due or overdue."
 msgstr ""
 "Los detalles de antigüedad pueden mostrarse en el informe en forma de "
 "rangos         de antigüedad, de tal forma que el cliente pueda revisar "
@@ -438,7 +440,14 @@ msgstr "Proveedor"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_wizard_view
-msgid "The activity statement provides details of all activity on                     a partner's receivables and payables between two selected dates. This includes all invoices,                     refunds and payments. Any outstanding balance dated prior to the chosen statement                     period will appear as a forward balance at the top of the statement. The list is                     displayed in chronological order and is split by currencies."
+msgid ""
+"The activity statement provides details of all activity "
+"on                     a partner's receivables and payables between two "
+"selected dates. This includes all invoices,                     refunds and "
+"payments. Any outstanding balance dated prior to the chosen "
+"statement                     period will appear as a forward balance at the "
+"top of the statement. The list is                     displayed in "
+"chronological order and is split by currencies."
 msgstr ""
 "El estado de la cuenta proporciona detalles de toda la actividad "
 "en                     las cuentas por cobrar y por pagar del cliente entre "
@@ -451,7 +460,12 @@ msgstr ""
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_wizard_view
-msgid "The outstanding statement provides details of all partner's outstanding         receivables and payables up to a particular date. This includes all unpaid invoices, unclaimed         refunds and outstanding payments. The list is displayed in chronological order and is         split by currencies."
+msgid ""
+"The outstanding statement provides details of all partner's "
+"outstanding         receivables and payables up to a particular date. This "
+"includes all unpaid invoices, unclaimed         refunds and outstanding "
+"payments. The list is displayed in chronological order and is         split "
+"by currencies."
 msgstr ""
 "El pendiente del estado de cuenta proporciona detalles de todas las cuentas "
 "pendientes         por cobrar y por pagar hasta una fecha en particular. "
