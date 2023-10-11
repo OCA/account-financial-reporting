@@ -19,7 +19,16 @@ from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 class TestAccountTaxBalance(HttpCase):
     def setUp(self):
         super().setUp()
-
+        self.env = self.env(
+            context=dict(
+                self.env.context,
+                mail_create_nolog=True,
+                mail_create_nosubscribe=True,
+                mail_notrack=True,
+                no_reset_password=True,
+                tracking_disable=True,
+            )
+        )
         self.company = self.env.user.company_id
         self.range_type = self.env["date.range.type"].create(
             {"name": "Fiscal year", "allow_overlap": False}
