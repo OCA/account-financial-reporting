@@ -13,6 +13,16 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
     @classmethod
     def setUpClass(cls, chart_template_ref=None):
         super().setUpClass(chart_template_ref=chart_template_ref)
+        cls.env = cls.env(
+            context=dict(
+                cls.env.context,
+                mail_create_nolog=True,
+                mail_create_nosubscribe=True,
+                mail_notrack=True,
+                no_reset_password=True,
+                tracking_disable=True,
+            )
+        )
         # Remove previous account groups and related invoices to avoid conflicts
         group_obj = cls.env["account.group"]
         cls.group1 = group_obj.create({"code_prefix_start": "1", "name": "Group 1"})
