@@ -19,7 +19,14 @@ class AccountMoveLine(models.Model):
                 record.update(
                     {
                         "analytic_account_ids": [
-                            (6, 0, [int(k) for k in record.analytic_distribution])
+                            (
+                                6,
+                                0,
+                                self.env["account.analytic.account"]
+                                .browse([int(k) for k in record.analytic_distribution])
+                                .exists()
+                                .ids,
+                            )
                         ]
                     }
                 )
