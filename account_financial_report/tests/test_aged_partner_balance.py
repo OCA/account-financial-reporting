@@ -6,9 +6,20 @@ from odoo.tools import DEFAULT_SERVER_DATE_FORMAT, test_reports
 
 
 class TestAgedPartnerBalance(TransactionCase):
-    def setUp(self):
-        super().setUp()
-        self.wizard_model = self.env["aged.partner.balance.report.wizard"]
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.env = cls.env(
+            context=dict(
+                cls.env.context,
+                mail_create_nolog=True,
+                mail_create_nosubscribe=True,
+                mail_notrack=True,
+                no_reset_password=True,
+                tracking_disable=True,
+            )
+        )
+        cls.wizard_model = cls.env["aged.partner.balance.report.wizard"]
 
     def test_report(self):
         """Check that report is produced correctly."""
