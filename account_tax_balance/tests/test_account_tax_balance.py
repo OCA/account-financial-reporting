@@ -17,28 +17,39 @@ from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 @odoo.tests.tagged("post_install", "-at_install")
 class TestAccountTaxBalance(HttpCase):
-    def setUp(self):
-        super().setUp()
-        self.env.user.groups_id = [(4, self.env.ref("account.group_account_user").id)]
-        self.company = self.env.user.company_id
-        self.range_type = self.env["date.range.type"].create(
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.env = cls.env(
+            context=dict(
+                cls.env.context,
+                mail_create_nolog=True,
+                mail_create_nosubscribe=True,
+                mail_notrack=True,
+                no_reset_password=True,
+                tracking_disable=True,
+            )
+        )
+        cls.env.user.groups_id = [(4, cls.env.ref("account.group_account_user").id)]
+        cls.company = cls.env.user.company_id
+        cls.range_type = cls.env["date.range.type"].create(
             {"name": "Fiscal year", "allow_overlap": False}
         )
-        self.range_generator = self.env["date.range.generator"]
-        self.current_year = datetime.now().year
-        self.current_month = datetime.now().month
-        range_generator = self.range_generator.create(
+        cls.range_generator = cls.env["date.range.generator"]
+        cls.current_year = datetime.now().year
+        cls.current_month = datetime.now().month
+        range_generator = cls.range_generator.create(
             {
-                "date_start": "%s-01-01" % self.current_year,
-                "name_prefix": "%s-" % self.current_year,
-                "type_id": self.range_type.id,
+                "date_start": "%s-01-01" % cls.current_year,
+                "name_prefix": "%s-" % cls.current_year,
+                "type_id": cls.range_type.id,
                 "duration_count": 1,
                 "unit_of_time": str(MONTHLY),
                 "count": 12,
             }
         )
         range_generator.action_apply()
-        self.range = self.env["date.range"]
+        cls.range = cls.env["date.range"]
 
     def test_tax_balance(self):
         previous_taxes_ids = (
