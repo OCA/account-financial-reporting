@@ -12,6 +12,7 @@ class AccountMoveLine(models.Model):
 
     @api.depends("analytic_distribution")
     def _compute_analytic_account_ids(self):
+        aa_model = self.env["account.analytic.account"]
         for record in self:
             if not record.analytic_distribution:
                 record.analytic_account_ids = False
@@ -19,7 +20,10 @@ class AccountMoveLine(models.Model):
                 record.update(
                     {
                         "analytic_account_ids": [
-                            (6, 0, [int(k) for k in record.analytic_distribution])
+                            (6, 0, [
+                                int(k) for k in record.analytic_distribution 
+                                if aa_model.browse(int(k)).exists()
+                            ])
                         ]
                     }
                 )
