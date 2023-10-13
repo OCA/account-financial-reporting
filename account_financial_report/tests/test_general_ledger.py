@@ -17,6 +17,16 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
     @classmethod
     def setUpClass(cls, chart_template_ref=None):
         super().setUpClass(chart_template_ref=chart_template_ref)
+        cls.env = cls.env(
+            context=dict(
+                cls.env.context,
+                mail_create_nolog=True,
+                mail_create_nosubscribe=True,
+                mail_notrack=True,
+                no_reset_password=True,
+                tracking_disable=True,
+            )
+        )
         cls.before_previous_fy_year = fields.Date.from_string("2014-05-05")
         cls.previous_fy_date_start = fields.Date.from_string("2015-01-01")
         cls.previous_fy_date_end = fields.Date.from_string("2015-12-31")
