@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="account_liquidity_forecast_planning_group_view_form" model="ir.ui.view">
+        <field name="name">Liquidity Forecast Planning Group Form</field>
+        <field name="model">account.liquidity.forecast.planning.group</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet string="Liquidity Forecast Planning Group">
+                    <label for="name" />
+                    <h1>
+                        <field name="name" />
+                    </h1>
+                    <group>
+                        <group name="company">
+                            <field
+                                name="company_id"
+                                groups="base.group_multi_company"
+                                options="{'no_create': True}"
+                            />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="account_liquidity_forecast_planning_group_view_tree" model="ir.ui.view">
+        <field name="name">Liquidity Forecast Planning Group List</field>
+        <field name="model">account.liquidity.forecast.planning.group</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="name" />
+                <field name="company_id" groups="base.group_multi_company" />
+            </tree>
+        </field>
+    </record>
+
+    <record
+        id='account_liquidity_forecast_planning_group_action'
+        model='ir.actions.act_window'
+    >
+        <field name="name">Liquidity Forecast Planning Groups</field>
+        <field name="res_model">account.liquidity.forecast.planning.group</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>
