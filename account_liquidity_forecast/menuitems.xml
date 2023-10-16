@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <menuitem
+        parent="account.menu_finance_reports"
+        id="menu_liquidity_forecast"
+        action="action_liquidity_forecast_wizard"
+        name="Liquidity Forecast"
+        groups="account.group_account_user"
+    />
+
+    <menuitem
+        name="Liquidity Forecast Planning Groups"
+        id="account_liquidity_forecast_planning_group_menu"
+        parent="account.account_account_menu"
+        action="account_liquidity_forecast_planning_group_action"
+        groups="account.group_account_manager"
+    />
+    <menuitem
+        name="Liquidity Forecast Planning Items"
+        id="account_liquidity_forecast_planning_item_menu"
+        parent="account.menu_finance_entries_management"
+        action="account_liquidity_forecast_planning_item_action"
+        groups="account.group_account_user"
+    />
+
+</odoo>
