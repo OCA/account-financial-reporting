@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-06-03 12:07+0000\n"
-"PO-Revision-Date: 2023-10-13 13:38+0000\n"
+"PO-Revision-Date: 2023-10-17 19:39+0000\n"
 "Last-Translator: Francesco Foresti <francesco.foresti@ooops404.com>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -68,9 +68,8 @@ msgstr "Report astratto"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_financial_report_abstract_wizard
-#, fuzzy
 msgid "Abstract Wizard"
-msgstr "Report astratto"
+msgstr "Procedura guidata astratta"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_abstract_report_xlsx
@@ -98,18 +97,16 @@ msgstr "Conto"
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__account_code_from
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__account_code_from
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__account_code_from
-#, fuzzy
 msgid "Account Code From"
-msgstr "Codice conto"
+msgstr "Codice conto da"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__account_code_to
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__account_code_to
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__account_code_to
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__account_code_to
-#, fuzzy
 msgid "Account Code To"
-msgstr "Codice conto"
+msgstr "Codice conto a"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_group
@@ -164,9 +161,9 @@ msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
-#, fuzzy, python-format
+#, python-format
 msgid "Age ≤ 120 d."
-msgstr "Età â¤ 120 g."
+msgstr "Età ≤ 120 g."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -179,9 +176,9 @@ msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
-#, fuzzy, python-format
+#, python-format
 msgid "Age ≤ 30 d."
-msgstr "Età â¤ 30 g."
+msgstr "Età ≤ 30 g."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -194,9 +191,9 @@ msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
-#, fuzzy, python-format
+#, python-format
 msgid "Age ≤ 60 d."
-msgstr "Età â¤ 60 g."
+msgstr "Età ≤ 60 g."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -209,9 +206,9 @@ msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
-#, fuzzy, python-format
+#, python-format
 msgid "Age ≤ 90 d."
-msgstr "Età â¤ 90 g."
+msgstr "Età ≤ 90 g."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -501,7 +498,7 @@ msgstr "Valuta"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 #, python-format
 msgid "Current"
-msgstr ""
+msgstr "Attuale"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -659,13 +656,12 @@ msgstr ""
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
-#, fuzzy
 msgid ""
 "Due\n"
 "                    date"
 msgstr ""
 "Data\n"
-"                        scadenza"
+"                    scadenza"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -725,7 +721,7 @@ msgstr ""
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 #, python-format
 msgid "Entries sorted by"
-msgstr ""
+msgstr "Registrazioni ordinate per"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -751,7 +747,7 @@ msgstr "Numero registrazione"
 #: code:addons/account_financial_report/static/src/xml/report.xml:0
 #, python-format
 msgid "Export"
-msgstr ""
+msgstr "Esportazione"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
@@ -784,9 +780,8 @@ msgstr "Filtro conti"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
-#, fuzzy
 msgid "Filter analytic accounts"
-msgstr "Filtro tag analitici"
+msgstr "Filtra conti analitici"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__analytic_tag_ids
@@ -797,12 +792,12 @@ msgstr "Filtro tag analitici"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__cost_center_ids
 msgid "Filter cost centers"
-msgstr ""
+msgstr "Filtra centri di costo"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__account_journal_ids
 msgid "Filter journals"
-msgstr ""
+msgstr "Filtra registri"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__partner_ids
@@ -823,15 +818,14 @@ msgstr "Valuta estera"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.open_items_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
-#, fuzzy
 msgid "From Code"
-msgstr "Codice"
+msgstr "Da codice"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 msgid "From:"
-msgstr ""
+msgstr "Da:"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
@@ -843,21 +837,19 @@ msgstr "Da: %s A: %s"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__complete_code
-#, fuzzy
 msgid "Full Code"
-msgstr "Codice"
+msgstr "Codice completo"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__complete_name
-#, fuzzy
 msgid "Full Name"
-msgstr "Nome"
+msgstr "Nome completo"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__fy_start_date
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__fy_start_date
 msgid "Fy Start Date"
-msgstr ""
+msgstr "Data inizio anno fiscale"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
@@ -912,7 +904,7 @@ msgstr "Raggruppa registrazioni per"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__grouped_by
 msgid "Grouped by"
-msgstr ""
+msgstr "Raggruppato per"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
@@ -968,7 +960,7 @@ msgstr "Livelli da mostrare"
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__id
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_account_account__centralized
@@ -979,13 +971,12 @@ msgstr ""
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
-#, fuzzy
 msgid ""
 "Initial\n"
 "                        balance cur."
 msgstr ""
 "Saldo\n"
-"                        finale"
+"                        iniziale corr."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
@@ -993,6 +984,8 @@ msgid ""
 "Initial\n"
 "                    balance"
 msgstr ""
+"Saldo\n"
+"                    iniziale"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
@@ -1128,7 +1121,7 @@ msgstr "Livello"
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
 #, python-format
 msgid "Level %s"
-msgstr ""
+msgstr "Livello %s"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
@@ -1172,25 +1165,25 @@ msgstr "Netto"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 #, python-format
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
 #, python-format
 msgid "No group"
-msgstr ""
+msgstr "Nessun gruppo"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 #, python-format
 msgid "No limit"
-msgstr ""
+msgstr "Nessun limite"
 
 #. module: account_financial_report
 #: model:ir.model.fields.selection,name:account_financial_report.selection__general_ledger_report_wizard__grouped_by__
 msgid "None"
-msgstr ""
+msgstr "Nessuno"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
@@ -1289,7 +1282,7 @@ msgstr "Originale"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
 #, python-format
 msgid "Partner"
-msgstr ""
+msgstr "Partner"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_partner_ending_cumul
@@ -1325,12 +1318,12 @@ msgstr "Partner - Saldo finale"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 msgid "Partner initial balance"
-msgstr ""
+msgstr "Saldo iniziale partner"
 
 #. module: account_financial_report
 #: model:ir.model.fields.selection,name:account_financial_report.selection__general_ledger_report_wizard__grouped_by__partners
 msgid "Partners"
-msgstr ""
+msgstr "Partner"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__payable_accounts_only
@@ -1368,7 +1361,7 @@ msgstr "Confermate"
 #: code:addons/account_financial_report/static/src/xml/report.xml:0
 #, python-format
 msgid "Print"
-msgstr ""
+msgstr "Stampa"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
@@ -1397,13 +1390,12 @@ msgstr ""
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
-#, fuzzy
 msgid ""
 "Ref -\n"
 "                    Label"
 msgstr ""
 "Rif -\n"
-"                        Etichetta"
+"                    Etichetta"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -1418,7 +1410,7 @@ msgstr "Rif - Etichetta"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_ir_actions_report
 msgid "Report Action"
-msgstr ""
+msgstr "Azione resoconto"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -1450,9 +1442,8 @@ msgstr "Vedi"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__show_cost_center
-#, fuzzy
 msgid "Show Analytic Account"
-msgstr "Mostrare tag analitici"
+msgstr "Mostra conto analitico"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__with_auto_sequence
