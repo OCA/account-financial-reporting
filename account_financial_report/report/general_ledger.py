@@ -274,8 +274,6 @@ class GeneralLedgerReport(models.AbstractModel):
             base_domain += [("move_id.state", "=", "posted")]
         else:
             base_domain += [("move_id.state", "in", ["posted", "draft"])]
-        if cost_center_ids:
-            base_domain += [("analytic_account_ids", "in", cost_center_ids)]
         if extra_domain:
             base_domain += extra_domain
         gl_initial_acc = self._get_gl_initial_acc(
@@ -377,9 +375,6 @@ class GeneralLedgerReport(models.AbstractModel):
             domain += [("move_id.state", "=", "posted")]
         else:
             domain += [("move_id.state", "in", ["posted", "draft"])]
-
-        if cost_center_ids:
-            domain += [("analytic_account_ids", "in", cost_center_ids)]
         return domain
 
     def _initialize_data(self, foreign_currency):
