@@ -31,6 +31,8 @@
                         widget="many2many_tags"
                         options="{'no_create': True}"
                     />
+                    <label for="age_partner_config_id" />
+                    <field name="age_partner_config_id" nolabel="1" />
                 </group>
                 <group name="account_filter" col="4">
                     <label for="account_ids" colspan="4" />

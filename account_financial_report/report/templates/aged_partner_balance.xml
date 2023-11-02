@@ -108,7 +108,7 @@
     </template>
     <template id="report_aged_partner_balance_lines_header">
         <!-- Display table headers for lines -->
-        <div class="act_as_thead">
+        <div class="act_as_thead" t-if="not age_partner_config">
             <div class="act_as_row labels">
                 <!--## partner-->
                 <div class="act_as_cell" style="width: 32.52%;">Partner</div>
@@ -128,10 +128,22 @@
                 <div class="act_as_cell" style="width: 9.64%;">> 120 d.</div>
             </div>
         </div>
+        <div class="act_as_thead" t-if="age_partner_config">
+            <div class="act_as_row labels">
+                <!--## partner-->
+                <div class="act_as_cell" style="width: 32.52%;">Partner</div>
+                <!--## amount_residual-->
+                <div class="act_as_cell" style="width: 9.64%;">Residual</div>
+                <!--## dynamic columns-->
+                <t t-foreach="age_partner_config.line_ids" t-as="column_dynamic">
+                    <div class="act_as_cell"><span t-out="column_dynamic.name" /></div>
+                </t>
+            </div>
+        </div>
     </template>
     <template id="report_aged_partner_balance_lines">
         <!-- Display each partner lines -->
-        <div class="act_as_row lines">
+        <div class="act_as_row lines" t-if="not age_partner_config">
             <!--## partner-->
             <div class="act_as_cell left">
                 <span t-esc="partner['name']" />
@@ -186,9 +198,35 @@
                 />
             </div>
         </div>
+        <!-- Display each partner lines -->
+        <div class="act_as_row lines" t-if="age_partner_config">
+            <!--## partner-->
+            <div class="act_as_cell left">
+                <span t-out="partner['name']" />
+            </div>
+            <!--## amount_residual-->
+            <div class="act_as_cell amount">
+                <span
+                    t-out="partner['residual']"
+                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                />
+            </div>
+            <t t-foreach="age_partner_config.line_ids" t-as="column_dynamic">
+                <div class="act_as_cell amount">
+                    <span
+                        t-out="partner[column_dynamic.code]"
+                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                    />
+                </div>
+            </t>
+        </div>
     </template>
     <template id="report_aged_partner_balance_move_lines">
-        <div class="act_as_table data_table" style="width: 100%;">
+        <div
+            class="act_as_table data_table"
+            style="width: 100%;"
+            t-if="not age_partner_config"
+        >
             <!-- Display table headers for move lines -->
             <div class="act_as_thead">
                 <div class="act_as_row labels">
@@ -456,10 +494,169 @@
                 </div>
             </t>
         </div>
+        <div
+            class="act_as_table data_table"
+            style="width: 100%;"
+            t-if="age_partner_config"
+        >
+            <!-- Display table headers for move lines -->
+            <div class="act_as_thead">
+                <div class="act_as_row labels">
+                    <!--## date-->
+                    <div class="act_as_cell first_column" style="width: 6.00%;">
+                        Date
+                    </div>
+                    <!--## move-->
+                    <div class="act_as_cell" style="width: 7.00%;">Entry</div>
+                    <!--## journal-->
+                    <div class="act_as_cell" style="width: 5.00%;">Journal</div>
+                    <!--## account code-->
+                    <div class="act_as_cell" style="width: 6.00%;">Account</div>
+                    <!--## partner-->
+                    <div class="act_as_cell" style="width: 10.50%;">Partner</div>
+                    <!--## ref - label-->
+                    <div class="act_as_cell" style="width: 18.00%;">
+                        Ref -
+                        Label
+                    </div>
+                    <!--## date_due-->
+                    <div class="act_as_cell" style="width: 6.00%;">
+                        Due
+                        date
+                    </div>
+                    <!--## amount_residual-->
+                    <div class="act_as_cell" style="width: 6.00%;">Residual</div>
+                    <!--## current-->
+                    <t t-foreach="age_partner_config.line_ids" t-as="column_dynamic">
+                        <div class="act_as_cell">
+                            <span t-esc="column_dynamic.name" />
+                        </div>
+                    </t>
+                </div>
+            </div>
+
+            <t t-foreach="partner['move_lines']" t-as="line">
+                <!-- # lines or centralized lines -->
+                <div class="act_as_row lines">
+                    <!--## date-->
+                    <div class="act_as_cell left">
+                        <span
+                            t-att-res-id="line['line_rec'].id"
+                            res-model="account.move.line"
+                            view-type="form"
+                        >
+                            <!--## We don't use t-field because it throws an error on click -->
+                            <t t-esc="line['date']" t-options="{'widget': 'date'}" />
+                        </span>
+                    </div>
+                    <!--## move-->
+                    <div class="act_as_cell left">
+                        <span
+                            t-att-res-id="line['line_rec'].move_id.id"
+                            res-model="account.move"
+                            view-type="form"
+                        >
+                            <t t-out="line['entry']" />
+                        </span>
+                    </div>
+                    <!--## journal-->
+                    <div class="act_as_cell left">
+                        <span
+                            t-att-res-id="line['line_rec'].move_id.journal_id.id"
+                            res-model="account.journal"
+                            view-type="form"
+                        >
+                            <t t-out="line['journal']" />
+                        </span>
+                    </div>
+                    <!--## account code-->
+                    <div class="act_as_cell left">
+                        <span
+                            t-att-res-id="line['line_rec'].account_id.id"
+                            res-model="account.account"
+                            view-type="form"
+                        >
+                            <t t-out="line['account']" />
+                        </span>
+                    </div>
+                    <!--## partner-->
+                    <div class="act_as_cell left">
+                        <span
+                            t-att-res-id="line['line_rec'].partner_id.id"
+                            res-model="res.partner"
+                            view-type="form"
+                        >
+                            <t t-out="line['partner']" />
+                        </span>
+                    </div>
+                    <!--## ref - label-->
+                    <div class="act_as_cell left">
+                        <span
+                            t-att-res-id="line['line_rec'].id"
+                            res-model="account.move.line"
+                            view-type="form"
+                        >
+                            <t t-out="line['ref_label']" />
+                        </span>
+                    </div>
+                    <!--## date_due-->
+                    <div class="act_as_cell left">
+                        <span
+                            t-att-res-id="line['line_rec'].id"
+                            res-model="account.move.line"
+                            view-type="form"
+                        >
+                            <!--## We don't use t-field because it throws an error on click -->
+                            <t
+                                t-esc="line['due_date']"
+                                t-options="{'widget': 'date'}"
+                            />
+                        </span>
+                    </div>
+                    <!--## amount_residual-->
+                    <div class="act_as_cell amount">
+                        <span
+                            domain="[('id', 'in', (line['line_rec'] | line['line_rec'].matched_debit_ids.mapped('debit_move_id') | line['line_rec'].matched_credit_ids.mapped('credit_move_id')).ids)]"
+                            res-model="account.move.line"
+                        >
+                            <t
+                                t-out="line['residual']"
+                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            />
+                        </span>
+                    </div>
+                    <t t-foreach="age_partner_config.line_ids" t-as="column_dynamic">
+                        <div class="act_as_cell amount">
+                            <t t-if="line[column_dynamic.code] == 0">
+                                <span
+                                    t-esc="line[column_dynamic.code]"
+                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                />
+                            </t>
+                            <t t-else="">
+                                <span
+                                    domain="[('id', 'in', (line['line_rec'] | line['line_rec'].matched_debit_ids.mapped('debit_move_id') | line['line_rec'].matched_credit_ids.mapped('credit_move_id')).ids)]"
+                                    res-model="account.move.line"
+                                >
+                                    <t
+                                        t-out="line[column_dynamic.code]"
+                                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                    />
+                                </span>
+                            </t>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </div>
     </template>
     <template id="report_aged_partner_balance_partner_ending_cumul">
         <!-- Display ending balance line for partner -->
-        <div class="act_as_table list_table" style="width: 100%;">
+        <div
+            class="act_as_table list_table"
+            style="width: 100%;"
+            t-if="not age_partner_config"
+        >
             <div class="act_as_row lines" style="font-weight: bold;">
                 <!--## date-->
                 <div class="act_as_cell right" style="width: 52.00%;">
@@ -519,10 +716,46 @@
                 </div>
             </div>
         </div>
+
+        <!-- Display ending balance line for partner -->
+        <div
+            class="act_as_table list_table"
+            style="width: 100%;"
+            t-if="age_partner_config"
+        >
+            <div class="act_as_row lines" style="font-weight: bold;">
+                <!--## date-->
+                <div class="act_as_cell right" style="width: 52.00%;">
+                    Partner
+                    cumul aged balance
+                </div>
+                <!--## date_due-->
+                <div class="act_as_cell" style="width: 6.00%;" />
+                <!--## amount_residual-->
+                <div class="act_as_cell amount" style="width: 6.00%;">
+                    <span
+                        t-esc="partner_cumul_line['residual']"
+                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                    />
+                </div>
+                <t t-foreach="age_partner_config.line_ids" t-as="column_dynamic">
+                    <div class="act_as_cell amount">
+                        <span
+                            t-esc="partner_cumul_line[column_dynamic.code]"
+                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        />
+                    </div>
+                </t>
+            </div>
+        </div>
     </template>
     <template id="report_aged_partner_balance_account_ending_cumul">
         <!-- Display ending balance line for account -->
-        <div class="act_as_table list_table" style="width: 100%;">
+        <div
+            class="act_as_table list_table"
+            style="width: 100%;"
+            t-if="not age_partner_config"
+        >
             <div class="act_as_row lines" style="font-weight: bold;">
                 <t t-if="not show_move_line_details">
                     <!--## total-->
@@ -705,6 +938,62 @@
                     <!--## older-->
                     <div class="act_as_cell amount" style="width: 6.00%">
                         <span t-esc="account['percent_older']" />
+                        %
+                    </div>
+                </t>
+            </div>
+        </div>
+        <div
+            class="act_as_table list_table"
+            style="width: 100%;"
+            t-if="age_partner_config"
+        >
+            <div class="act_as_row lines" style="font-weight: bold;">
+                <!--## total-->
+                <div
+                    class="act_as_cell right"
+                    t-att-style="not show_move_line_details and 'width: 32.52%;' or 'width: 52.00%;'"
+                >Total</div>
+                <!--## amount_residual-->
+                <div
+                    t-if="show_move_line_details"
+                    class="act_as_cell"
+                    t-att-style="not show_move_line_details and 'display: none' or 'width: 6.00%;'"
+                />
+                <div
+                    class="act_as_cell amount"
+                    t-att-style="not show_move_line_details and 'width: 9.64%;' or 'width: 6.00%;'"
+                >
+                    <span
+                        t-esc="account['residual']"
+                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                    />
+                </div>
+                <t t-foreach="age_partner_config.line_ids" t-as="column_dynamic">
+                    <div class="act_as_cell amount">
+                        <span
+                            t-esc="account[column_dynamic.code]"
+                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        />
+                    </div>
+                </t>
+
+            </div>
+            <div class="act_as_row" style="font-weight: bold; font-style: italic;">
+                <!--## total-->
+                <div
+                    class="act_as_cell right"
+                    t-att-style="not show_move_line_details and 'width: 32.52%;' or 'width: 52.00%;'"
+                >Percents</div>
+                <!--## amount_residual-->
+                <div
+                    class="act_as_cell amount"
+                    t-att-style="not show_move_line_details and 'width: 9.64%;' or 'width: 6.00%;'"
+                />
+                <!--## current-->
+                <t t-foreach="age_partner_config.line_ids" t-as="column_dynamic">
+                    <div class="act_as_cell amount">
+                        <span t-esc="account['percent_'+column_dynamic.code]" />
                         %
                     </div>
                 </t>

@@ -21,8 +21,10 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
         return report_name
 
     def _get_report_columns(self, report):
+        column_index = 2 if not report.show_move_line_details else 8
+        report_columns = {}
         if not report.show_move_line_details:
-            return {
+            report_columns = {
                 0: {"header": _("Partner"), "field": "name", "width": 70},
                 1: {
                     "header": _("Residual"),
@@ -31,56 +33,74 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                     "type": "amount",
                     "width": 14,
                 },
-                2: {
-                    "header": _("Current"),
-                    "field": "current",
-                    "field_footer_total": "current",
-                    "field_footer_percent": "percent_current",
-                    "type": "amount",
-                    "width": 14,
-                },
-                3: {
-                    "header": _("Age ≤ 30 d."),
-                    "field": "30_days",
-                    "field_footer_total": "30_days",
-                    "field_footer_percent": "percent_30_days",
-                    "type": "amount",
-                    "width": 14,
-                },
-                4: {
-                    "header": _("Age ≤ 60 d."),
-                    "field": "60_days",
-                    "field_footer_total": "60_days",
-                    "field_footer_percent": "percent_60_days",
-                    "type": "amount",
-                    "width": 14,
-                },
-                5: {
-                    "header": _("Age ≤ 90 d."),
-                    "field": "90_days",
-                    "field_footer_total": "90_days",
-                    "field_footer_percent": "percent_90_days",
-                    "type": "amount",
-                    "width": 14,
-                },
-                6: {
-                    "header": _("Age ≤ 120 d."),
-                    "field": "120_days",
-                    "field_footer_total": "120_days",
-                    "field_footer_percent": "percent_120_days",
-                    "type": "amount",
-                    "width": 14,
-                },
-                7: {
-                    "header": _("Older"),
-                    "field": "older",
-                    "field_footer_total": "older",
-                    "field_footer_percent": "percent_older",
-                    "type": "amount",
-                    "width": 14,
-                },
             }
-        return {
+            if report.age_partner_config_id:
+                for interval in report.age_partner_config_id.line_ids:
+                    report_columns[column_index] = {
+                        "header": interval.name,
+                        "field": interval.code,
+                        "field_footer_total": interval.code,
+                        "field_footer_percent": f"percent_{interval.code}",
+                        "type": "amount",
+                        "width": 14,
+                    }
+                    column_index += 1
+            else:
+                report_columns.update(
+                    {
+                        2: {
+                            "header": _("Current"),
+                            "field": "current",
+                            "field_footer_total": "current",
+                            "field_footer_percent": "percent_current",
+                            "type": "amount",
+                            "width": 14,
+                        },
+                        3: {
+                            "header": _("Age ≤ 30 d."),
+                            "field": "30_days",
+                            "field_footer_total": "30_days",
+                            "field_footer_percent": "percent_30_days",
+                            "type": "amount",
+                            "width": 14,
+                        },
+                        4: {
+                            "header": _("Age ≤ 60 d."),
+                            "field": "60_days",
+                            "field_footer_total": "60_days",
+                            "field_footer_percent": "percent_60_days",
+                            "type": "amount",
+                            "width": 14,
+                        },
+                        5: {
+                            "header": _("Age ≤ 90 d."),
+                            "field": "90_days",
+                            "field_footer_total": "90_days",
+                            "field_footer_percent": "percent_90_days",
+                            "type": "amount",
+                            "width": 14,
+                        },
+                        6: {
+                            "header": _("Age ≤ 120 d."),
+                            "field": "120_days",
+                            "field_footer_total": "120_days",
+                            "field_footer_percent": "percent_120_days",
+                            "type": "amount",
+                            "width": 14,
+                        },
+                        7: {
+                            "header": _("Older"),
+                            "field": "older",
+                            "field_footer_total": "older",
+                            "field_footer_percent": "percent_older",
+                            "type": "amount",
+                            "width": 14,
+                        },
+                    }
+                )
+            return report_columns
+
+        report_columns = {
             0: {"header": _("Date"), "field": "date", "width": 11},
             1: {"header": _("Entry"), "field": "entry", "width": 18},
             2: {"header": _("Journal"), "field": "journal", "width": 8},
@@ -96,61 +116,78 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                 "type": "amount",
                 "width": 14,
             },
-            8: {
-                "header": _("Current"),
-                "field": "current",
-                "field_footer_total": "current",
-                "field_footer_percent": "percent_current",
-                "field_final_balance": "current",
-                "type": "amount",
-                "width": 14,
-            },
-            9: {
-                "header": _("Age ≤ 30 d."),
-                "field": "30_days",
-                "field_footer_total": "30_days",
-                "field_footer_percent": "percent_30_days",
-                "field_final_balance": "30_days",
-                "type": "amount",
-                "width": 14,
-            },
-            10: {
-                "header": _("Age ≤ 60 d."),
-                "field": "60_days",
-                "field_footer_total": "60_days",
-                "field_footer_percent": "percent_60_days",
-                "field_final_balance": "60_days",
-                "type": "amount",
-                "width": 14,
-            },
-            11: {
-                "header": _("Age ≤ 90 d."),
-                "field": "90_days",
-                "field_footer_total": "90_days",
-                "field_footer_percent": "percent_90_days",
-                "field_final_balance": "90_days",
-                "type": "amount",
-                "width": 14,
-            },
-            12: {
-                "header": _("Age ≤ 120 d."),
-                "field": "120_days",
-                "field_footer_total": "120_days",
-                "field_footer_percent": "percent_120_days",
-                "field_final_balance": "120_days",
-                "type": "amount",
-                "width": 14,
-            },
-            13: {
-                "header": _("Older"),
-                "field": "older",
-                "field_footer_total": "older",
-                "field_footer_percent": "percent_older",
-                "field_final_balance": "older",
-                "type": "amount",
-                "width": 14,
-            },
         }
+        if report.age_partner_config_id:
+            for interval in report.age_partner_config_id.line_ids:
+                report_columns[column_index] = {
+                    "header": interval.name,
+                    "field": interval.code,
+                    "field_footer_total": interval.code,
+                    "field_footer_percent": f"percent_{interval.code}",
+                    "type": "amount",
+                    "width": 14,
+                }
+                column_index += 1
+        else:
+            report_columns.update(
+                {
+                    8: {
+                        "header": _("Current"),
+                        "field": "current",
+                        "field_footer_total": "current",
+                        "field_footer_percent": "percent_current",
+                        "field_final_balance": "current",
+                        "type": "amount",
+                        "width": 14,
+                    },
+                    9: {
+                        "header": _("Age ≤ 30 d."),
+                        "field": "30_days",
+                        "field_footer_total": "30_days",
+                        "field_footer_percent": "percent_30_days",
+                        "field_final_balance": "30_days",
+                        "type": "amount",
+                        "width": 14,
+                    },
+                    10: {
+                        "header": _("Age ≤ 60 d."),
+                        "field": "60_days",
+                        "field_footer_total": "60_days",
+                        "field_footer_percent": "percent_60_days",
+                        "field_final_balance": "60_days",
+                        "type": "amount",
+                        "width": 14,
+                    },
+                    11: {
+                        "header": _("Age ≤ 90 d."),
+                        "field": "90_days",
+                        "field_footer_total": "90_days",
+                        "field_footer_percent": "percent_90_days",
+                        "field_final_balance": "90_days",
+                        "type": "amount",
+                        "width": 14,
+                    },
+                    12: {
+                        "header": _("Age ≤ 120 d."),
+                        "field": "120_days",
+                        "field_footer_total": "120_days",
+                        "field_footer_percent": "percent_120_days",
+                        "field_final_balance": "120_days",
+                        "type": "amount",
+                        "width": 14,
+                    },
+                    13: {
+                        "header": _("Older"),
+                        "field": "older",
+                        "field_footer_total": "older",
+                        "field_footer_percent": "percent_older",
+                        "field_final_balance": "older",
+                        "type": "amount",
+                        "width": 14,
+                    },
+                }
+            )
+        return report_columns
 
     def _get_report_filters(self, report):
         return [

@@ -18,6 +18,7 @@
     "depends": ["account", "date_range", "report_xlsx"],
     "data": [
         "security/ir.model.access.csv",
+        "security/security.xml",
         "wizard/aged_partner_balance_wizard_view.xml",
         "wizard/general_ledger_wizard_view.xml",
         "wizard/journal_ledger_wizard_view.xml",
@@ -34,6 +35,7 @@
         "report/templates/trial_balance.xml",
         "report/templates/vat_report.xml",
         "view/account_view.xml",
+        "view/account_age_report_configuration_views.xml",
         "view/report_general_ledger.xml",
         "view/report_journal_ledger.xml",
         "view/report_trial_balance.xml",
