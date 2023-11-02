@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2023-10-09 08:01+0000\n"
-"Last-Translator: Antônio Neto <netosjb@yahoo.com.br>\n"
+"PO-Revision-Date: 2023-11-02 15:36+0000\n"
+"Last-Translator: Adriano Prado <adrianojprado@gmail.com>\n"
 "Language-Team: none\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -72,9 +72,9 @@ msgid ""
 "legal reports, and set the rules to close a fiscal year and generate opening "
 "entries."
 msgstr ""
-"O Tipo de conta é usado para fins informativos, para gerar relatórios "
-"jurídicos específicos do país e definir as regras para encerrar um ano "
-"fiscal e gerar lançamentos de abertura."
+"O Tipo de conta é usado para fins informativos, para gerar relatórios legais "
+"específicos do país e definir as regras para encerrar um ano fiscal e gerar "
+"lançamentos de abertura."
 
 #. module: mis_builder_cash_flow
 #: model:mis.report.kpi,description:mis_builder_cash_flow.mis_kpi_balance
@@ -96,7 +96,7 @@ msgstr "Fluxo de Caixa"
 #: model:ir.actions.act_window,name:mis_builder_cash_flow.action_mis_cash_flow_forecast_line
 #: model:ir.ui.menu,name:mis_builder_cash_flow.menu_mis_cash_flow_forecast_line
 msgid "Cash Flow Forecast Line"
-msgstr "Linha de Previsão de Fluxo de Caixa"
+msgstr "Linha de Previsão do Fluxo de Caixa"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__company_id
@@ -214,18 +214,18 @@ msgstr "Última Atualização em"
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__line_type
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_search_view
 msgid "Line Type"
-msgstr "Tipo da LInha"
+msgstr "Tipo da Linha"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model,name:mis_builder_cash_flow.model_mis_cash_flow
 msgid "MIS Cash Flow"
-msgstr "MIS Fluxo de Caixa"
+msgstr "Fluxo de Caixa SIG"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model,name:mis_builder_cash_flow.model_mis_cash_flow_forecast_line
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_forecast_line_view_form
 msgid "MIS Cash Flow Forecast Line"
-msgstr "Linha de Previsão do MIS Fluxo de Caixa"
+msgstr "Linha de Previsão do Fluxo de Caixa SIG"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__full_reconcile_id
@@ -246,7 +246,7 @@ msgstr "SAÍDA TOTAL"
 #. module: mis_builder_cash_flow
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_tree_view
 msgid "Open Journal Item / Forecast Line"
-msgstr "Item de Diário Aberto / Linha de Previsão"
+msgstr "Abrir Item do Diário / Linha de Previsão"
 
 #. module: mis_builder_cash_flow
 #: model:mis.report.kpi,description:mis_builder_cash_flow.mis_kpi_out_forecast
