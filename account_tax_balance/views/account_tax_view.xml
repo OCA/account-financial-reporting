@@ -8,7 +8,7 @@
         <field name="model">account.tax</field>
         <field eval="100" name="priority" />
         <field name="arch" type="xml">
-            <tree string="Account Tax" create="false" delete="false">
+            <tree create="false" delete="false">
                 <field name="name" />
                 <field name="description" string="Short Name" />
                 <field name="balance_regular" sum="Total" />
