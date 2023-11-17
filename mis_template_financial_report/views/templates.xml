@@ -18,6 +18,7 @@
     <template
         id="report_mis_report_instance"
         inherit_id="mis_builder.report_mis_report_instance"
+        priority="99"
     >
         <xpath expr="//div[hasclass('mis_table')]" position="attributes">
             <attribute name="t-if">not o.horizontal</attribute>
