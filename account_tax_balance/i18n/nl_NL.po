@@ -28,7 +28,6 @@ msgstr ""
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
-#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "Account Tax"
 msgstr "BTW-grootboekrekening"
 
