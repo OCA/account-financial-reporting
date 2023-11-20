@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2023-11-13 16:38+0000\n"
+"PO-Revision-Date: 2023-11-20 23:39+0000\n"
 "Last-Translator: Asta Kasinskaite <kas.asta@gmail.com>\n"
 "Language-Team: none\n"
 "Language: lt_LT\n"
@@ -225,7 +225,7 @@ msgstr "Skolų suderinimo akto vedlys"
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_report_p_s_report_activity_statement_xlsx
 msgid "Activity Statement XLSL Report"
-msgstr "kolų suderinimo akto XLSX ataskaita"
+msgstr "Skolų suderinimo akto XLSX ataskaita"
 
 #. module: partner_statement
 #: model:ir.actions.report,name:partner_statement.action_print_activity_statement_xlsx
