@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2023-11-14 20:38+0000\n"
+"PO-Revision-Date: 2023-11-20 23:39+0000\n"
 "Last-Translator: Asta Kasinskaite <kas.asta@gmail.com>\n"
 "Language-Team: none\n"
 "Language: lt\n"
@@ -42,49 +42,49 @@ msgstr "1 - 30 dienų"
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "1 Month"
-msgstr ""
+msgstr "1 mėnuo"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "121 Days +"
-msgstr ""
+msgstr "121 diena +"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "2 Months"
-msgstr ""
+msgstr "2 mėnesiai"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "3 Months"
-msgstr ""
+msgstr "3 mėnesiai"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "31 - 60 Days"
-msgstr ""
+msgstr "31 - 60 dienų"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "4 Months"
-msgstr ""
+msgstr "4 mėnesiai"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "61 - 90 Days"
-msgstr ""
+msgstr "61 - 90 dienų"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "91 - 120 Days"
-msgstr ""
+msgstr "91 - 120 dienų"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
@@ -93,6 +93,11 @@ msgid ""
 "        buckets, so the partner can review how much is open, due or overdue.\n"
 "                    </span>"
 msgstr ""
+"<span class=\"o_form_label\">Skolų informacija gali būti rodoma ataskaitoje "
+"kaip skolų\n"
+"        intervalai, tam, kad kontrahentas galėtų peržiūrėti kiek yra "
+"neapmokėta, mokėtina ar pradelsta.\n"
+"                    </span>"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_wizard_view
@@ -106,6 +111,18 @@ msgid ""
 "                <br/>\n"
 "                <br/>"
 msgstr ""
+"<span class=\"o_form_label\">Skolų suderinimo akte pateikiama informacija "
+"apie visas kontrahento\n"
+"                    gautinų ir mokėtinų sumų detales tarp dviejų pasirinktų "
+"datų. Tai apima visas sąskaitas faktūras,\n"
+"                    grąžinimus ir mokėjimus. Bet koks neapmokėtas likutis, "
+"buvęs prieš pasirinktą ataskaitos\n"
+"                    laikotarpį, bus rodomas kaip išankstinis likutis "
+"ataskaitos viršuje. Sąrašas rodomas\n"
+"                    chronologine tvarka ir suskirstytas pagal valiutas.\n"
+"                </span>\n"
+"                <br/>\n"
+"                <br/>"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.detailed_activity_statement_wizard_view
@@ -116,6 +133,12 @@ msgid ""
 "                <br/>\n"
 "                <br/>"
 msgstr ""
+"<span class=\"o_form_label\">Detalus skolų suderinimo aktas pateikia "
+"oparecijas,\n"
+"įvykusias per laikotarpį, taip pat pradinį ir galutinį likučius.\n"
+"                </span>\n"
+"                <br/>\n"
+"                <br/>"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_wizard_view
@@ -128,34 +151,44 @@ msgid ""
 "                <br/>\n"
 "                <br/>"
 msgstr ""
+"<span class=\"o_form_label\">Neapmokėtų skolų ataskaitoje pateikiama "
+"informacija papie visas kontrahento\n"
+"        neapmokėtas gautinas ir mokėtinas sumas iki tam tikros datos. Tai "
+"apima visas neapmokėtas sąskaitas faktūras,\n"
+"        neapmokėtus grąžinimus ir neįvykdytus mokėjimus. Sąrašas rodomas "
+"chronologine tvarka ir \n"
+"                suskirstytas pagal valiutas.\n"
+"                </span>\n"
+"                <br/>\n"
+"                <br/>"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
 #: model_terms:ir.ui.view,arch_db:partner_statement.detailed_activity_statement_document
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
 msgid "<strong>Date:</strong>"
-msgstr ""
+msgstr "<strong>Data:</strong>"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
 #: model_terms:ir.ui.view,arch_db:partner_statement.detailed_activity_statement_document
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
 msgid "<strong>Partner Code:</strong>"
-msgstr ""
+msgstr "<strong>Kontrahento kodas:</strong>\""
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
 #: model_terms:ir.ui.view,arch_db:partner_statement.detailed_activity_statement_document
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
 msgid "<strong>Partner Name:</strong>"
-msgstr ""
+msgstr "<strong>Kontrahentas:</strong>"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
 #: model_terms:ir.ui.view,arch_db:partner_statement.detailed_activity_statement_document
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
 msgid "<strong>The partner doesn't have due entries.</strong>"
-msgstr ""
+msgstr "<strong>Kontrahentas neturi neapmokėtų skolų</strong>"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__account_type
@@ -163,7 +196,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__account_type
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__account_type
 msgid "Account type"
-msgstr ""
+msgstr "Buhalterinės sąskaitos tipas"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -172,27 +205,27 @@ msgstr ""
 #: model:ir.actions.report,name:partner_statement.action_print_activity_statement_html
 #, python-format
 msgid "Activity Statement"
-msgstr ""
+msgstr "Skolų suderinimo aktas"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_activity_statement_wizard
 msgid "Activity Statement Wizard"
-msgstr ""
+msgstr "Skolų suderinimo akto vedlys"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_report_p_s_report_activity_statement_xlsx
 msgid "Activity Statement XLSL Report"
-msgstr ""
+msgstr "Skolų suderinimo akto XLSX ataskaita"
 
 #. module: partner_statement
 #: model:ir.actions.report,name:partner_statement.action_print_activity_statement_xlsx
 msgid "Activity Statement XLSX"
-msgstr ""
+msgstr "Skolų suderinimo akto XLSX"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
 msgid "Activity Statements show all transactions between two dates."
-msgstr ""
+msgstr "Skolų suderinimo akte atvaizduojami visi DK įrašai tarp 2-jų datų."
 
 #. module: partner_statement
 #: model:ir.model.fields.selection,name:partner_statement.selection__activity_statement_wizard__aging_type__days
@@ -201,7 +234,7 @@ msgstr ""
 #: model:ir.model.fields.selection,name:partner_statement.selection__res_config_settings__default_aging_type__days
 #: model:ir.model.fields.selection,name:partner_statement.selection__statement_common_wizard__aging_type__days
 msgid "Age by Days"
-msgstr ""
+msgstr "Skola dienomis"
 
 #. module: partner_statement
 #: model:ir.model.fields.selection,name:partner_statement.selection__activity_statement_wizard__aging_type__months
@@ -210,7 +243,7 @@ msgstr ""
 #: model:ir.model.fields.selection,name:partner_statement.selection__res_config_settings__default_aging_type__months
 #: model:ir.model.fields.selection,name:partner_statement.selection__statement_common_wizard__aging_type__months
 msgid "Age by Months"
-msgstr ""
+msgstr "Skola mėnesiais"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__aging_type
@@ -219,19 +252,19 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__default_aging_type
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__aging_type
 msgid "Aging Method"
-msgstr ""
+msgstr "Skolų intervalai"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.aging_buckets
 msgid "Aging Report at"
-msgstr ""
+msgstr "Skolų intervalai datai"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "Aging Report at %s in %s"
-msgstr ""
+msgstr "Skolų intervalai datai %s %s"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -239,7 +272,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 #, python-format
 msgid "Applied Amount"
-msgstr ""
+msgstr "Pritaikyta suma"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
@@ -248,19 +281,19 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 #, python-format
 msgid "Balance"
-msgstr ""
+msgstr "Balansas"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 #, python-format
 msgid "Balance Forward"
-msgstr ""
+msgstr "Išankstinis likutis"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
 msgid "Cancel"
-msgstr ""
+msgstr "Atšaukti"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__company_id
@@ -268,33 +301,33 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__company_id
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__company_id
 msgid "Company"
-msgstr ""
+msgstr "Įmonė"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "Nustatymai"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__create_uid
 #: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__create_uid
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Nustatymai"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__create_date
 #: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__create_date
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Sukurta"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "Current"
-msgstr ""
+msgstr "Dabar"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -306,7 +339,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 #, python-format
 msgid "Date"
-msgstr ""
+msgstr "Data"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__date_end
@@ -314,13 +347,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__date_end
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__date_end
 msgid "Date End"
-msgstr ""
+msgstr "Pabaigos data"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__date_start
 #: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__date_start
 msgid "Date Start"
-msgstr ""
+msgstr "Pradžios data"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -328,7 +361,7 @@ msgstr ""
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "Date:"
-msgstr ""
+msgstr "Data:"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -340,18 +373,18 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 #, python-format
 msgid "Description"
-msgstr ""
+msgstr "Aprašymas"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 msgid "Detailed"
-msgstr ""
+msgstr "Detalus"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
 #, python-format
 msgid "Detailed %sStatement between %s and %s in %s"
-msgstr ""
+msgstr "Detalus %s skolų suderinimo aktas tarp %s ir %s %s"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
@@ -360,22 +393,22 @@ msgstr ""
 #: model:ir.actions.report,name:partner_statement.action_print_detailed_activity_statement_html
 #, python-format
 msgid "Detailed Activity Statement"
-msgstr ""
+msgstr "Detalus skolų suderinimo aktas"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_detailed_activity_statement_wizard
 msgid "Detailed Activity Statement Wizard"
-msgstr ""
+msgstr "Detalaus skolų suderinimo akto vedlys"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_report_p_s_report_detailed_activity_statement_xlsx
 msgid "Detailed Activity Statement XLSL Report"
-msgstr ""
+msgstr "Detalaus skolų suderinimo akto XLSX ataskaita"
 
 #. module: partner_statement
 #: model:ir.actions.report,name:partner_statement.action_print_detailed_activity_statement_xlsx
 msgid "Detailed Activity Statement XLSX"
-msgstr ""
+msgstr "Detalaus skolų suderinimo akto XLSX"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__display_name
@@ -391,7 +424,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common__display_name
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Rodomas pavadinimas"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__filter_partners_non_due
@@ -399,7 +432,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__filter_partners_non_due
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__filter_partners_non_due
 msgid "Don't show partners with no due entries"
-msgstr ""
+msgstr "Nerodyti kontrahentų be pradelstų skolų"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
@@ -408,17 +441,17 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 #, python-format
 msgid "Due Date"
-msgstr ""
+msgstr "Apmokėjimo terminas"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__group_activity_statement
 msgid "Enable OCA Activity & Detailed Activity Statements"
-msgstr ""
+msgstr "Aktyvuoti Neapmokėtų skolų ir Detalų skolų suderinimo aktus"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__group_outstanding_statement
 msgid "Enable OCA Outstanding Statements"
-msgstr ""
+msgstr "Aktyvuoti Neapmokėtų skolų aktą"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -430,7 +463,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 #, python-format
 msgid "Ending Balance"
-msgstr ""
+msgstr "Balansas periodo pabaigoje"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__filter_negative_balances
@@ -439,22 +472,22 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__default_filter_negative_balances
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__filter_negative_balances
 msgid "Exclude Negative Balances"
-msgstr ""
+msgstr "Neatvaizduoti kontrahentų su neigiamu balansu"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__default_filter_partners_non_due
 msgid "Exclude partners with no due entries"
-msgstr ""
+msgstr "Neatvaizduoti kontrahentų be pradelstų skolų"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
 msgid "Export PDF"
-msgstr ""
+msgstr "Kurti PDF"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
 msgid "Export XLSX"
-msgstr ""
+msgstr "Kurti XLSX"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__id
@@ -470,14 +503,14 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common__id
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 #, python-format
 msgid "Initial Balance"
-msgstr ""
+msgstr "Pradinis balansas"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard____last_update
@@ -493,21 +526,21 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common____last_update
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Paskutinį kartą keista"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__write_uid
 #: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__write_uid
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Paskutinį kartą atnaujino"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__write_date
 #: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__write_date
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Paskutinį kartą atnaujinta"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__name
@@ -515,7 +548,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__name
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__name
 msgid "Name"
-msgstr ""
+msgstr "Pavadinimas"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__number_partner_ids
@@ -523,13 +556,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__number_partner_ids
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__number_partner_ids
 msgid "Number Partner"
-msgstr ""
+msgstr "Pasirinktų įrašų skaičius"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "Older"
-msgstr ""
+msgstr "Senesni"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -541,7 +574,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 #, python-format
 msgid "Open Amount"
-msgstr ""
+msgstr "Suma"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
@@ -550,7 +583,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 #, python-format
 msgid "Original"
-msgstr ""
+msgstr "Pradinis"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -558,7 +591,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 #, python-format
 msgid "Original Amount"
-msgstr ""
+msgstr "Pradinė suma"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
@@ -567,45 +600,46 @@ msgstr ""
 #: model:ir.actions.report,name:partner_statement.action_print_outstanding_statement_html
 #, python-format
 msgid "Outstanding Statement"
-msgstr ""
+msgstr "Neapmokėtų skolų aktas"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_outstanding_statement_wizard
 msgid "Outstanding Statement Wizard"
-msgstr ""
+msgstr "Neapmokėtų skolų akto vedlys"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_report_p_s_report_outstanding_statement_xlsx
 msgid "Outstanding Statement XLSL Report"
-msgstr ""
+msgstr "Neapmokėtų skolų akto XLSX ataskaita"
 
 #. module: partner_statement
 #: model:ir.actions.report,name:partner_statement.action_print_outstanding_statement_xlsx
 msgid "Outstanding Statement XLSX"
-msgstr ""
+msgstr "Neapmokėtų skolų aktas XLSX"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
 msgid "Outstanding Statements show all transactions up to a date."
 msgstr ""
+"Neapmokėtų skolų aktas atvaizduoja neapmokėtas skolas iki pasirinktos datos."
 
 #. module: partner_statement
 #: model:ir.actions.act_window,name:partner_statement.activity_statement_wizard_action
 #: model:ir.model,name:partner_statement.model_report_partner_statement_activity_statement
 msgid "Partner Activity Statement"
-msgstr ""
+msgstr "Kontrahento skolų suderinimo aktas"
 
 #. module: partner_statement
 #: model:ir.actions.act_window,name:partner_statement.detailed_activity_statement_wizard_action
 #: model:ir.model,name:partner_statement.model_report_partner_statement_detailed_activity_statement
 msgid "Partner Detailed Activity Statement"
-msgstr ""
+msgstr "Kontrahento detalus skolų suderinimo aktas"
 
 #. module: partner_statement
 #: model:ir.actions.act_window,name:partner_statement.outstanding_statement_wizard_action
 #: model:ir.model,name:partner_statement.model_report_partner_statement_outstanding_statement
 msgid "Partner Outstanding Statement"
-msgstr ""
+msgstr "Kontrahento neapmokėtų skolų aktas"
 
 #. module: partner_statement
 #: model:ir.model.fields.selection,name:partner_statement.selection__activity_statement_wizard__account_type__payable
@@ -613,18 +647,18 @@ msgstr ""
 #: model:ir.model.fields.selection,name:partner_statement.selection__outstanding_statement_wizard__account_type__payable
 #: model:ir.model.fields.selection,name:partner_statement.selection__statement_common_wizard__account_type__payable
 msgid "Payable"
-msgstr ""
+msgstr "Mokėtina"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement.py:0
 #, python-format
 msgid "Payment"
-msgstr ""
+msgstr "Mokestis"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
 msgid "Please set defaults under Activity Statements."
-msgstr ""
+msgstr "Prašome nustatyti numatytas reikšmes Skolų suderinimo akto skiltyje."
 
 #. module: partner_statement
 #: model:ir.model.fields.selection,name:partner_statement.selection__activity_statement_wizard__account_type__receivable
@@ -632,7 +666,7 @@ msgstr ""
 #: model:ir.model.fields.selection,name:partner_statement.selection__outstanding_statement_wizard__account_type__receivable
 #: model:ir.model.fields.selection,name:partner_statement.selection__statement_common_wizard__account_type__receivable
 msgid "Receivable"
-msgstr ""
+msgstr "Gautina"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -642,13 +676,13 @@ msgstr ""
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "Reference Number"
-msgstr ""
+msgstr "Susijusio dokumento numeris"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 msgid "Reference number"
-msgstr ""
+msgstr "Susijusio dokumento numeris"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__show_aging_buckets
@@ -657,27 +691,27 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__default_show_aging_buckets
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__show_aging_buckets
 msgid "Show Aging Buckets"
-msgstr ""
+msgstr "Atvaizduoti pradelsimų intervalus"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__show_balance
 msgid "Show Balance column"
-msgstr ""
+msgstr "Atvaizduoti balanso stulpelį"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_statement_common
 msgid "Statement Reports Common"
-msgstr ""
+msgstr "Bendros suderinimo ataskaitos"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_statement_common_wizard
 msgid "Statement Reports Common Wizard"
-msgstr ""
+msgstr "Bendrų suderinimo ataskaitų vedlys"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 msgid "Statement between"
-msgstr ""
+msgstr "Suderinimo aktas tarp"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -685,14 +719,14 @@ msgstr ""
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "Statement from:"
-msgstr ""
+msgstr "Suderinimo aktas tarp:"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
 #: model_terms:ir.ui.view,arch_db:partner_statement.detailed_activity_statement_document
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
 msgid "Statement of Account"
-msgstr ""
+msgstr "Skolų suderinimo aktas"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -700,7 +734,7 @@ msgstr ""
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "Statement of Account from %s"
-msgstr ""
+msgstr "Skolų suderinimo aktas nuo %s"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -708,12 +742,12 @@ msgstr ""
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "Statement to:"
-msgstr ""
+msgstr "Suderinimo aktas iki:"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 msgid "Supplier"
-msgstr ""
+msgstr "Tiekėjo"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -723,24 +757,24 @@ msgstr ""
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "Supplier "
-msgstr ""
+msgstr "Tiekėjo "
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "Total"
-msgstr ""
+msgstr "Viso"
 
 #. module: partner_statement
 #: model:res.groups,name:partner_statement.group_activity_statement
 msgid "Use activity statements"
-msgstr ""
+msgstr "Suderinimo akto naudojimas"
 
 #. module: partner_statement
 #: model:res.groups,name:partner_statement.group_outstanding_statement
 msgid "Use outstanding statements"
-msgstr ""
+msgstr "Neapmokėtų skolų akto naudojimas"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -751,31 +785,31 @@ msgstr ""
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "VAT:"
-msgstr ""
+msgstr "PVM:"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
 msgid "View"
-msgstr ""
+msgstr "Peržiūrėti"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 msgid "and"
-msgstr ""
+msgstr "ir"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 #: model_terms:ir.ui.view,arch_db:partner_statement.aging_buckets
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 msgid "in"
-msgstr ""
+msgstr "valiutai"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
 msgid "or"
-msgstr ""
+msgstr "arba"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 msgid "up to"
-msgstr ""
+msgstr "iki"
