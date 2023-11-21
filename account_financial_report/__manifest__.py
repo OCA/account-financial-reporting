@@ -25,6 +25,7 @@
         "wizard/open_items_wizard_view.xml",
         "wizard/trial_balance_wizard_view.xml",
         "wizard/vat_report_wizard_view.xml",
+        "view/account_age_report_configuration_views.xml",
         "menuitems.xml",
         "reports.xml",
         "report/templates/layouts.xml",
@@ -35,13 +36,13 @@
         "report/templates/trial_balance.xml",
         "report/templates/vat_report.xml",
         "view/account_view.xml",
-        "view/account_age_report_configuration_views.xml",
         "view/report_general_ledger.xml",
         "view/report_journal_ledger.xml",
         "view/report_trial_balance.xml",
         "view/report_open_items.xml",
         "view/report_aged_partner_balance.xml",
         "view/report_vat_report.xml",
+        "view/res_config_settings_views.xml",
     ],
     "assets": {
         "web.assets_backend": [

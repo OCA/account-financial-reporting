@@ -54,6 +54,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
                 "user_type_id": cls.env.ref(
                     "account.data_account_type_other_income"
                 ).id,
+                "company_id": cls.env.user.company_id.id,
             }
         )
 
@@ -743,7 +744,10 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
 
     def test_all_accounts_loaded(self):
         # Tests if all accounts are loaded when the account_code_ fields changed
-        all_accounts = self.env["account.account"].search([], order="code")
+        all_accounts = self.env["account.account"].search(
+            [],
+            order="code",
+        )
         general_ledger = self.env["general.ledger.report.wizard"].create(
             {
                 "date_from": self.fy_date_start,

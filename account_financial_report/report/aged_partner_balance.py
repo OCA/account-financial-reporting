@@ -26,7 +26,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         ag_pb_data[acc_id]["120_days"] = 0.0
         ag_pb_data[acc_id]["older"] = 0.0
         for interval_line in self.env.context["age_partner_config"].line_ids:
-            ag_pb_data[acc_id][interval_line.code] = 0.0
+            ag_pb_data[acc_id][interval_line] = 0.0
         return ag_pb_data
 
     @api.model
@@ -42,7 +42,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         ag_pb_data[acc_id][prt_id]["older"] = 0.0
         ag_pb_data[acc_id][prt_id]["move_lines"] = []
         for interval_line in self.env.context["age_partner_config"].line_ids:
-            ag_pb_data[acc_id][prt_id][interval_line.code] = 0.0
+            ag_pb_data[acc_id][prt_id][interval_line] = 0.0
         return ag_pb_data
 
     @api.model
@@ -71,15 +71,24 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         else:
             ag_pb_data[acc_id]["older"] += residual
             ag_pb_data[acc_id][prt_id]["older"] += residual
-        for line in interval_lines.sorted("superior_limit"):
-            if today >= due_date + timedelta(
-                days=line.lower_limit
-            ) and today <= due_date + timedelta(days=line.superior_limit):
-                ag_pb_data[acc_id][line.code] += residual
-                ag_pb_data[acc_id][prt_id][line.code] += residual
-            else:
-                ag_pb_data[acc_id][line.code] += 0
-                ag_pb_data[acc_id][prt_id][line.code] += 0
+        for index, line in enumerate(interval_lines):
+            next_line = (
+                interval_lines[index + 1] if index + 1 < len(interval_lines) else None
+            )
+            lower_limit = 0 if not index else line.inferior_limit
+            if (
+                due_date
+                and next_line
+                and today > due_date
+                and today >= due_date + timedelta(days=lower_limit)
+                and today < due_date + timedelta(days=next_line.inferior_limit)
+            ):
+                ag_pb_data[acc_id][line] += residual
+                ag_pb_data[acc_id][prt_id][line] += residual
+            if not next_line and due_date:
+                if today >= due_date + timedelta(days=line.inferior_limit):
+                    ag_pb_data[acc_id][line] += residual
+                    ag_pb_data[acc_id][prt_id][line] += residual
         return ag_pb_data
 
     def _get_account_partial_reconciled(self, company_id, date_at_object):
@@ -251,7 +260,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         )
         interval_lines = self.env.context["age_partner_config"].line_ids
         for interval_line in interval_lines:
-            ml[interval_line.code] = 0.0
+            ml[interval_line] = 0.0
         due_date = ml["due_date"]
         amount = ml["residual"]
         today = date_at_object
@@ -267,12 +276,27 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             ml["120_days"] += amount
         else:
             ml["older"] += amount
-        match_interval = interval_lines.filtered(
-            lambda line: today >= due_date + timedelta(days=line.lower_limit)
-            and today <= due_date + timedelta(days=line.superior_limit)
-        )
-        if match_interval:
-            ml[match_interval.code] += amount
+
+        for index, interval_line in enumerate(interval_lines):
+            next_line = (
+                interval_lines[index + 1] if index + 1 < len(interval_lines) else None
+            )
+            upper_limit = next_line.inferior_limit if next_line else None
+
+            if (
+                due_date
+                and (
+                    next_line
+                    and today > due_date
+                    and today >= due_date + timedelta(days=interval_line.inferior_limit)
+                    and today < due_date + timedelta(days=upper_limit)
+                )
+                or (
+                    not next_line
+                    and today >= due_date + timedelta(days=interval_line.inferior_limit)
+                )
+            ):
+                ml[interval_line] += amount
 
     def _create_account_list(
         self,
@@ -300,7 +324,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                 }
             )
             for interval_line in interval_lines:
-                account[interval_line.code] = ag_pb_data[acc_id][interval_line.code]
+                account[interval_line] = ag_pb_data[acc_id][interval_line]
             for prt_id in ag_pb_data[acc_id]:
                 if isinstance(prt_id, int):
                     partner = {
@@ -314,8 +338,8 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                         "older": ag_pb_data[acc_id][prt_id]["older"],
                     }
                     for interval_line in interval_lines:
-                        partner[interval_line.code] = ag_pb_data[acc_id][prt_id][
-                            interval_line.code
+                        partner[interval_line] = ag_pb_data[acc_id][prt_id][
+                            interval_line
                         ]
                     if show_move_line_details:
                         move_lines = []
@@ -363,8 +387,8 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                     }
                 )
                 for interval_line in interval_lines:
-                    account[f"percent_{interval_line.code}"] = abs(
-                        round((account[interval_line.code] / total) * 100, 2)
+                    account[f"percent_{interval_line.id}"] = abs(
+                        round((account[interval_line] / total) * 100, 2)
                     )
             else:
                 account.update(
@@ -378,7 +402,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                     }
                 )
                 for interval_line in interval_lines:
-                    account[f"percent_{interval_line.code}"] = 0.0
+                    account[f"percent_{interval_line.id}"] = 0.0
         return aged_partner_data
 
     def _get_report_values(self, docids, data):
