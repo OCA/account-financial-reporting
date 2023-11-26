@@ -107,7 +107,7 @@ class TestAccountTaxBalance(HttpCase):
                 (
                     "date_start",
                     "=",
-                    "{}-{}-01".format(self.current_year, self.current_month),
+                    f"{self.current_year}-{self.current_month}-01",
                 )
             ]
         )
