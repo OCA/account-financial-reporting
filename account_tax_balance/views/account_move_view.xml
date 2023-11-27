@@ -20,7 +20,7 @@
             <field name="ref" position="after">
                  <field
                     name="financial_type"
-                    attrs="{'invisible': [('move_type', 'in', ['out_invoice','in_invoice','out_refund','in_refund'])]}"
+                    invisible="move_type in ['out_invoice','in_invoice','out_refund','in_refund']"
                 />
             </field>
         </field>

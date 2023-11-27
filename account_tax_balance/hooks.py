@@ -6,7 +6,7 @@ import logging
 from psycopg2 import sql
 
 
-def pre_init_hook(cr):
+def pre_init_hook(env):
     """Precreate financial_type and fill with appropriate values to prevent
     a MemoryError when the ORM attempts to call its compute method on a large
     amount of preexisting moves. Note that the order of the mapping is
@@ -14,7 +14,7 @@ def pre_init_hook(cr):
     and the move type is set in the order of precedence."""
     logger = logging.getLogger(__name__)
     logger.info("Add account_move.financial_type column if it does not yet exist")
-    cr.execute(
+    env.cr.execute(
         "ALTER TABLE account_move ADD COLUMN IF NOT EXISTS financial_type VARCHAR"
     )
     MAPPING = [
@@ -43,5 +43,5 @@ def pre_init_hook(cr):
             query += sql.SQL("WHERE am.financial_type IS NULL")
         if extra_where:
             query += sql.SQL(extra_where)
-        cr.execute(query, tuple(args))
-        logger.info("%s move set to type %s", financial_type, cr.rowcount)
+        env.cr.execute(query, tuple(args))
+        logger.info("%s move set to type %s", financial_type, env.cr.rowcount)
