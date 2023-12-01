@@ -37,6 +37,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         domain_ids = action["domain"][0][2]
         for move in picking.move_lines:
             self.assertIn(move.id, domain_ids)
+            self.assertEqual(move.currency_id, move.purchase_line_id.currency_id)
 
     def test_02_report_move_full_invoiced(self):
         picking = self.get_picking_done_po()
