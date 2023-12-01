@@ -9,11 +9,14 @@ class StockMove(models.Model):
 
     @api.depends("purchase_line_id")
     def _compute_currency_id(self):
+        non_purchase_move = self.env["stock.move"]
         for move in self:
             if move.purchase_line_id:
                 move.currency_id = move.purchase_line_id.currency_id
             else:
-                return super(StockMove, move)._compute_currency_id()
+                non_purchase_move |= move
+        if non_purchase_move:
+            return super(StockMove, non_purchase_move)._compute_currency_id()
 
     def get_quantity_invoiced(self, invoice_lines):
         if self.purchase_line_id:
