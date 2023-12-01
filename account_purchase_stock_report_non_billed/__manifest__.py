@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     "name": "Account Purchase Stock Report Non Billed",
-    "version": "15.0.1.0.0",
+    "version": "15.0.1.1.0",
     "license": "AGPL-3",
     "author": "Tecnativa, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/account-financial-reporting",
