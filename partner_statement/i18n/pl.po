@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2023-07-27 07:15+0000\n"
+"PO-Revision-Date: 2023-12-04 12:14+0000\n"
 "Last-Translator: Andrzej Gerasimuk <a.gerasimuk@archimedes.pl>\n"
 "Language-Team: none\n"
 "Language: pl\n"
@@ -292,7 +292,7 @@ msgstr "Zastosowana kwota"
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 #, python-format
 msgid "Balance"
-msgstr "Saldo"
+msgstr "Saldo narastająco"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
