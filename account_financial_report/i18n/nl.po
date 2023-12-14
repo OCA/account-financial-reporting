@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-16 08:14+0000\n"
-"PO-Revision-Date: 2021-04-27 13:47+0000\n"
-"Last-Translator: Bosd <c5e2fd43-d292-4c90-9d1f-74ff3436329a@anonaddy.me>\n"
+"PO-Revision-Date: 2023-11-21 14:34+0000\n"
+"Last-Translator: Yung-Wa <yw.ng@onestein.nl>\n"
 "Language-Team: Dutch (https://www.transifex.com/oca/teams/23907/nl/)\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.2\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
@@ -65,19 +65,18 @@ msgstr "<span class=\"oe_inline\">tot</span>"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_abstract_report
-#, fuzzy
 msgid "Abstract Report"
-msgstr "BTW rapport"
+msgstr "Abstract rapport"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_financial_report_abstract_wizard
 msgid "Abstract Wizard"
-msgstr ""
+msgstr "Abstract Wizard"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_abstract_report_xlsx
 msgid "Abstract XLSX Account Financial Report"
-msgstr ""
+msgstr "Abstract XLSX Account Financial Report"
 
 #. module: account_financial_report
 #. odoo-python
@@ -101,18 +100,16 @@ msgstr "Rekening"
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__account_code_from
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__account_code_from
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__account_code_from
-#, fuzzy
 msgid "Account Code From"
-msgstr "Rekening code"
+msgstr "Rekening code vanaf"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__account_code_to
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__account_code_to
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__account_code_to
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__account_code_to
-#, fuzzy
 msgid "Account Code To"
-msgstr "Rekening code"
+msgstr "Rekening code tot"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_group
@@ -130,9 +127,9 @@ msgstr "Rekening naam"
 #. odoo-python
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
-#, fuzzy, python-format
+#, python-format
 msgid "Account at 0 filter"
-msgstr "Rekening balans met 0 filter."
+msgstr "Rekening balans met 0 filter"
 
 #. module: account_financial_report
 #. odoo-python
@@ -142,7 +139,7 @@ msgstr "Rekening balans met 0 filter."
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_filters
 #, python-format
 msgid "Account balance at 0 filter"
-msgstr "Rekening balans met 0 filter."
+msgstr "Rekening balans met 0 filter"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__account_ids
@@ -236,13 +233,11 @@ msgstr "Ouderdomsanalyse"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_base
-#, fuzzy
 msgid "Aged Partner Balance -"
-msgstr "Ouderdomsanalyse"
+msgstr "Ouderdomsanalyse -"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_aged_partner_balance
-#, fuzzy
 msgid "Aged Partner Balance Report"
 msgstr "Ouderdomsanalyse"
 
@@ -253,7 +248,6 @@ msgstr "Ouderdomsanalyse Wizard"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_aged_partner_balance_xlsx
-#, fuzzy
 msgid "Aged Partner Balance XLSL Report"
 msgstr "Ouderdomsanalyse XLSX"
 
@@ -337,9 +331,8 @@ msgstr "Valutabedrag."
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_move_line__analytic_account_ids
-#, fuzzy
 msgid "Analytic Account"
-msgstr "Filter Rekening"
+msgstr "Analytische Rekening"
 
 #. module: account_financial_report
 #. odoo-python
@@ -347,7 +340,7 @@ msgstr "Filter Rekening"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #, python-format
 msgid "Analytic Distribution"
-msgstr ""
+msgstr "Analytische verdeling"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
@@ -449,9 +442,8 @@ msgstr "Bedrijf"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__compute_account_ids
-#, fuzzy
 msgid "Compute accounts"
-msgstr "Berekende rekeningen"
+msgstr "Bereken rekeningen"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__create_uid
@@ -491,9 +483,9 @@ msgstr "Credit"
 #. odoo-python
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
-#, python-format
+#, fuzzy, python-format
 msgid "Cumul cur."
-msgstr ""
+msgstr "Cumul cur."
 
 #. module: account_financial_report
 #. odoo-python
@@ -690,7 +682,6 @@ msgstr ""
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
-#, fuzzy
 msgid ""
 "Due\n"
 "                    date"
@@ -731,7 +722,7 @@ msgstr ""
 #: model:ir.model.fields,help:account_financial_report.field_open_items_report_wizard__account_code_to
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__account_code_to
 msgid "Ending account in a range"
-msgstr ""
+msgstr "Laatste rekening in een bereik"
 
 #. module: account_financial_report
 #. odoo-python
@@ -746,13 +737,12 @@ msgstr "Eindbalans"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
-#, fuzzy
 msgid ""
 "Ending balance\n"
 "                        cur."
 msgstr ""
 "Eind\n"
-"                        balans"
+"                        balans."
 
 #. module: account_financial_report
 #. odoo-python
@@ -852,9 +842,8 @@ msgstr "Buitenlandse valuta"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.open_items_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
-#, fuzzy
 msgid "From Code"
-msgstr "Code"
+msgstr "Code Vanaf"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
@@ -869,19 +858,17 @@ msgstr "Van:"
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
 #, python-format
 msgid "From: %(date_from)s To: %(date_to)s"
-msgstr ""
+msgstr "Van: %(date_from)s Tot: %(date_to)s"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__complete_code
-#, fuzzy
 msgid "Full Code"
-msgstr "Code"
+msgstr "Volledige Code"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__complete_name
-#, fuzzy
 msgid "Full Name"
-msgstr "Naam"
+msgstr "Volledige Naam"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__fy_start_date
@@ -903,15 +890,13 @@ msgstr "Grootboek"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_base
-#, fuzzy
 msgid "General Ledger -"
-msgstr "Grootboek"
+msgstr "Grootboek -"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_general_ledger
-#, fuzzy
 msgid "General Ledger Report"
-msgstr "Grootboekbalans rapport wizard"
+msgstr "Grootboekbalans Rapport"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_general_ledger_report_wizard
@@ -920,9 +905,8 @@ msgstr "Grootboekbalans rapport wizard"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_general_ledger_xlsx
-#, fuzzy
 msgid "General Ledger XLSL Report"
-msgstr "Grootboek XLSX"
+msgstr "Grootboekbalans XLSX"
 
 #. module: account_financial_report
 #: model:ir.actions.report,name:account_financial_report.action_report_general_ledger_xlsx
@@ -935,6 +919,8 @@ msgid ""
 "General Ledger can be computed only if selected company have\n"
 "                        only one unaffected earnings account."
 msgstr ""
+"Grootboek kan alleen worden berekend als het geselecteerde bedrijf\n"
+"                        slechts één niet-beïnvloede winstrekening heeft."
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__group_option
@@ -944,7 +930,7 @@ msgstr "Groepeer boekingen per"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__grouped_by
 msgid "Grouped By"
-msgstr ""
+msgstr "Gegroepeerd op"
 
 #. module: account_financial_report
 #. odoo-python
@@ -966,9 +952,8 @@ msgstr "Verberg rekeningen eindigend met balans 0"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__hide_account_at_0
-#, fuzzy
 msgid "Hide accounts at 0"
-msgstr "Verberg rekeningen met balans 0"
+msgstr "Verberg rekeningen met 0 balans"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__show_hierarchy_level
@@ -996,13 +981,12 @@ msgstr ""
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
-#, fuzzy
 msgid ""
 "Initial\n"
 "                        balance cur."
 msgstr ""
 "Begin\n"
-"                    balans"
+"                    balans."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
@@ -1038,14 +1022,13 @@ msgstr "Dagboek"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_move_line
-#, fuzzy
 msgid "Journal Item"
-msgstr "Dagboek"
+msgstr "Boekingsregel"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__domain
 msgid "Journal Items Domain"
-msgstr ""
+msgstr "Boekingsregels Domein"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1059,15 +1042,13 @@ msgstr "Grootboekbalans"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_base
-#, fuzzy
 msgid "Journal Ledger -"
-msgstr "Grootboekbalans"
+msgstr "Grootboekbalans -"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_journal_ledger
-#, fuzzy
 msgid "Journal Ledger Report"
-msgstr "Grootboekbalans Rapport Wizard"
+msgstr "Grootboekbalans Rapport"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_journal_ledger_report_wizard
@@ -1081,7 +1062,6 @@ msgstr "Grootboekbalans XLSX"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_journal_ledger_xlsx
-#, fuzzy
 msgid "Journal Ledger XLSX Report"
 msgstr "Grootboekbalans XLSX"
 
@@ -1203,13 +1183,13 @@ msgstr "geen limiet"
 #. module: account_financial_report
 #: model:ir.model.fields.selection,name:account_financial_report.selection__general_ledger_report_wizard__grouped_by__
 msgid "None"
-msgstr ""
+msgstr "Geen"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__not_only_one_unaffected_earnings_account
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__not_only_one_unaffected_earnings_account
 msgid "Not Only One Unaffected Earnings Account"
-msgstr ""
+msgstr "Niet slechts één winstrekening"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1249,21 +1229,18 @@ msgstr "Openstaande posten"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_base
-#, fuzzy
 msgid "Open Items -"
-msgstr "Openstaande posten"
+msgstr "Openstaande posten -"
 
 #. module: account_financial_report
 #: model:ir.actions.act_window,name:account_financial_report.act_action_open_items_wizard_partner_relation
-#, fuzzy
 msgid "Open Items Partner"
-msgstr "Openstaande posten"
+msgstr "Openstaande Posten Partner"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_open_items
-#, fuzzy
 msgid "Open Items Report"
-msgstr "Openstaande posten lijst wizard"
+msgstr "Openstaande Posten Rapport"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_open_items_report_wizard
@@ -1277,7 +1254,6 @@ msgstr "Openstaande posten XLSX"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_open_items_xlsx
-#, fuzzy
 msgid "Open Items XLSX Report"
 msgstr "Openstaande posten XLSX"
 
@@ -1347,12 +1323,12 @@ msgstr "Partner eindbalans"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 msgid "Partner initial balance"
-msgstr ""
+msgstr "Beginbalans partner"
 
 #. module: account_financial_report
 #: model:ir.model.fields.selection,name:account_financial_report.selection__general_ledger_report_wizard__grouped_by__partners
 msgid "Partners"
-msgstr ""
+msgstr "Partners"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__payable_accounts_only
@@ -1371,9 +1347,9 @@ msgstr "Percentage"
 #. odoo-python
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
-#, fuzzy, python-format
+#, python-format
 msgid "Period balance"
-msgstr "Partner eindbalans"
+msgstr "Periode Balans"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.journal_ledger_wizard
@@ -1415,7 +1391,6 @@ msgstr ""
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
-#, fuzzy
 msgid ""
 "Ref -\n"
 "                    Label"
@@ -1437,7 +1412,7 @@ msgstr "Ref - Label"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_ir_actions_report
 msgid "Report Action"
-msgstr ""
+msgstr "Report Actie"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1478,7 +1453,7 @@ msgstr "Toon kostenplaats"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__with_auto_sequence
 msgid "Show Auto Sequence"
-msgstr ""
+msgstr "Auto Sequentie Tonen"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__show_move_line_details
@@ -1506,7 +1481,7 @@ msgstr "Toon buitenlandse valuta"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__show_hierarchy
 msgid "Show hierarchy"
-msgstr ""
+msgstr "Hiërarchie tonen"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__sort_option
@@ -1528,13 +1503,12 @@ msgstr "Startdatum"
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__account_code_from
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__account_code_from
 msgid "Starting account in a range"
-msgstr ""
+msgstr "Start rekening in een bereik"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
-#, fuzzy
 msgid "Tags"
-msgstr "Belasting label"
+msgstr "Labels"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__target_move
@@ -1608,7 +1582,7 @@ msgstr "Belasting groep"
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #, python-format
 msgid "Tax Initial balance"
-msgstr ""
+msgstr "Belasting beginsaldo"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1624,12 +1598,12 @@ msgstr "Belasting label"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_ending_cumul
 #, python-format
 msgid "Tax ending balance"
-msgstr ""
+msgstr "Belasting eindsaldo"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 msgid "Tax initial balance"
-msgstr ""
+msgstr "Belasting beginsaldo"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1650,6 +1624,8 @@ msgid ""
 "The Company in the General Ledger Report Wizard and in Date Range must be "
 "the same."
 msgstr ""
+"Het Bedrijf in de Wizard Grootboekrapport en in Datumbereik moeten hetzelfde "
+"zijn."
 
 #. module: account_financial_report
 #. odoo-python
@@ -1659,6 +1635,8 @@ msgid ""
 "The Company in the Trial Balance Report Wizard and in Date Range must be the "
 "same."
 msgstr ""
+"Het bedrijf in de Proefbalans Rapport Wizard en in Datumbereik moeten "
+"hetzelfde zijn."
 
 #. module: account_financial_report
 #. odoo-python
@@ -1667,6 +1645,7 @@ msgstr ""
 msgid ""
 "The Company in the Vat Report Wizard and in Date Range must be the same."
 msgstr ""
+"Het bedrijf in de BTW Rapport Wizard en in Datumbereik moeten hetzelfde zijn."
 
 #. module: account_financial_report
 #. odoo-python
@@ -1674,17 +1653,19 @@ msgstr ""
 #, python-format
 msgid "The hierarchy level to filter on must be greater than 0."
 msgstr ""
+"Het hiërarchieniveau waarop gefilterd moet worden, moet groter zijn dan 0."
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__domain
 msgid "This domain will be used to select specific domain for Journal Items"
 msgstr ""
+"Dit domein wordt gebruikt om een specifiek domein te selecteren voor "
+"Boekingsregels"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
-#, fuzzy
 msgid "To"
-msgstr "Naar:"
+msgstr "Naar"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
@@ -1709,15 +1690,13 @@ msgstr "Proefbalans"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_base
-#, fuzzy
 msgid "Trial Balance -"
-msgstr "Proefbalans"
+msgstr "Proefbalans -"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_trial_balance
-#, fuzzy
 msgid "Trial Balance Report"
-msgstr "Proefbalans Rapport Wizard"
+msgstr "Proefbalans Rapport"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_trial_balance_report_wizard
@@ -1731,7 +1710,6 @@ msgstr "Proefbalans XLSX"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_trial_balance_xlsx
-#, fuzzy
 msgid "Trial Balance XLSX Report"
 msgstr "Proefbalans XLSX"
 
@@ -1741,6 +1719,9 @@ msgid ""
 "Trial Balance can be computed only if selected company have only\n"
 "                        one unaffected earnings account."
 msgstr ""
+"Proefbalans kan alleen worden berekend als het geselecteerde bedrijf "
+"slechts\n"
+"                        één winstrekening heeft."
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__unaffected_earnings_account
@@ -1763,7 +1744,7 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__show_hierarchy
 msgid "Use when your account groups are hierarchical"
-msgstr ""
+msgstr "Gebruik dit als je rekeninggroepen hiërarchisch zijn"
 
 #. module: account_financial_report
 #: model:ir.actions.act_window,name:account_financial_report.action_vat_report_wizard
@@ -1775,9 +1756,8 @@ msgstr "BTW rapport"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_vat_report_base
-#, fuzzy
 msgid "VAT Report -"
-msgstr "BTW rapport"
+msgstr "BTW rapport -"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.vat_report_wizard
@@ -1786,9 +1766,8 @@ msgstr "BTW rapport opties"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_vat_report_wizard
-#, fuzzy
 msgid "VAT Report Wizard"
-msgstr "BTW rapport"
+msgstr "BTW rapport Wizard"
 
 #. module: account_financial_report
 #: model:ir.actions.report,name:account_financial_report.action_report_vat_report_xlsx
@@ -1798,19 +1777,17 @@ msgstr "BTW rapport XLSX"
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/vat_report_xlsx.py:0
-#, fuzzy, python-format
+#, python-format
 msgid "Vat Report"
-msgstr "BTW rapport"
+msgstr "BTW Rapport"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_vat_report
-#, fuzzy
 msgid "Vat Report Report"
-msgstr "BTW rapport opties"
+msgstr "BTW Rapport"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_vat_report_xlsx
-#, fuzzy
 msgid "Vat Report XLSX Report"
 msgstr "BTW rapport XLSX"
 
@@ -1830,6 +1807,8 @@ msgid ""
 "When this option is enabled, the trial balance will not display accounts "
 "that have initial balance = debit = credit = end balance = 0"
 msgstr ""
+"Als deze optie is ingeschakeld, worden rekeningen met beginsaldo = "
+"debetsaldo = creditsaldo = eindsaldo = 0 niet weergegeven in de proefbalans."
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__with_account_name
@@ -1866,7 +1845,7 @@ msgstr "of"
 #. module: account_financial_report
 #: model:ir.actions.report,name:account_financial_report.action_print_journal_ledger_wizard_qweb
 msgid "ournal Ledger"
-msgstr ""
+msgstr "Grootboekbalans"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal
@@ -1876,7 +1855,7 @@ msgstr "tot"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 16.21%;"
-msgstr ""
+msgstr "breedte: 16,21%;"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
@@ -1885,24 +1864,21 @@ msgstr "breedte: 23.24%;"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
-#, fuzzy
 msgid "width: 23.78%;"
 msgstr "breedte: 23.78%;"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 31.35%;"
-msgstr ""
+msgstr "breedte: 31,35%;"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
-#, fuzzy
 msgid "width: 38.92%;"
 msgstr "breedte: 38.92%;"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
-#, fuzzy
 msgid "width: 8.11%;"
 msgstr "breedte: 8.11%;"
 
