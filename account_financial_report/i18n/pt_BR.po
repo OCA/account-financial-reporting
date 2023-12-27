@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2023-10-29 00:25+0000\n"
+"PO-Revision-Date: 2023-12-27 13:37+0000\n"
 "Last-Translator: Adriano Prado <adrianojprado@gmail.com>\n"
 "Language-Team: none\n"
 "Language: pt_BR\n"
@@ -73,7 +73,7 @@ msgstr "Assistente de Resumo"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_abstract_report_xlsx
 msgid "Abstract XLSX Account Financial Report"
-msgstr ""
+msgstr "Relatório Financeiro abstrato da conta XLSX"
 
 #. module: account_financial_report
 #. odoo-python
@@ -111,7 +111,7 @@ msgstr "Código de Conta Final"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_group
 msgid "Account Group"
-msgstr "Grupo de contas"
+msgstr "Grupo de Contas"
 
 #. module: account_financial_report
 #. odoo-python
