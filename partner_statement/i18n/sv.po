@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-01-22 11:39+0000\n"
+"PO-Revision-Date: 2024-01-22 15:36+0000\n"
 "Last-Translator: jakobkrabbe <jakob@syscare.se>\n"
 "Language-Team: none\n"
 "Language: sv\n"
@@ -34,7 +34,7 @@ msgstr "%sSats upp till %s i %s"
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "1 - 30 Days"
-msgstr ""
+msgstr "1 - 30 dagar"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
@@ -52,37 +52,37 @@ msgstr ""
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "2 Months"
-msgstr ""
+msgstr "2 månader"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "3 Months"
-msgstr ""
+msgstr "3 månader"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "31 - 60 Days"
-msgstr ""
+msgstr "31 - 60 dagar"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "4 Months"
-msgstr ""
+msgstr "4 månader"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "61 - 90 Days"
-msgstr ""
+msgstr "61 - 90 dagar"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "91 - 120 Days"
-msgstr ""
+msgstr "91 - 120 dagar"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
@@ -161,7 +161,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__account_type
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__account_type
 msgid "Account type"
-msgstr ""
+msgstr "Kundfordringstyp"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -246,7 +246,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 #, python-format
 msgid "Balance"
-msgstr ""
+msgstr "Balans"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -292,7 +292,7 @@ msgstr ""
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "Current"
-msgstr ""
+msgstr "Nuvarande"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -304,7 +304,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 #, python-format
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__date_end
@@ -312,13 +312,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__date_end
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__date_end
 msgid "Date End"
-msgstr ""
+msgstr "Slutdatum"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__date_start
 #: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__date_start
 msgid "Date Start"
-msgstr ""
+msgstr "Startdatum"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -326,7 +326,7 @@ msgstr ""
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "Date:"
-msgstr ""
+msgstr "Datum:"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
@@ -338,18 +338,18 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 #, python-format
 msgid "Description"
-msgstr ""
+msgstr "Beskrivning"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 msgid "Detailed"
-msgstr ""
+msgstr "Detaljerad"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
 #, python-format
 msgid "Detailed %sStatement between %s and %s in %s"
-msgstr ""
+msgstr "Detaljerad %sStatus mellan %s och %s i %s"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
@@ -358,22 +358,22 @@ msgstr ""
 #: model:ir.actions.report,name:partner_statement.action_print_detailed_activity_statement_html
 #, python-format
 msgid "Detailed Activity Statement"
-msgstr ""
+msgstr "Detaljerad aktivitetsbeskrivning"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_detailed_activity_statement_wizard
 msgid "Detailed Activity Statement Wizard"
-msgstr ""
+msgstr "Detaljerad aktivitetsbeskrivningsguide"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_report_p_s_report_detailed_activity_statement_xlsx
 msgid "Detailed Activity Statement XLSL Report"
-msgstr ""
+msgstr "Detaljerad aktivitetsbeskrivning XLSL Rapport"
 
 #. module: partner_statement
 #: model:ir.actions.report,name:partner_statement.action_print_detailed_activity_statement_xlsx
 msgid "Detailed Activity Statement XLSX"
-msgstr ""
+msgstr "Detaljerad aktivitetsbeskrivning XLSX"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__display_name
@@ -389,7 +389,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common__display_name
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Visningsnamn"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__filter_partners_non_due
@@ -397,7 +397,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__filter_partners_non_due
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__filter_partners_non_due
 msgid "Don't show partners with no due entries"
-msgstr ""
+msgstr "Visa inte partners utan förfallna verifikat"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
@@ -406,12 +406,12 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 #, python-format
 msgid "Due Date"
-msgstr ""
+msgstr "Förfallodatum"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__group_activity_statement
 msgid "Enable OCA Activity & Detailed Activity Statements"
-msgstr ""
+msgstr "Aktivera OCA Aktivitet & Detaljerade aktivitetsförklaringar"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__group_outstanding_statement
