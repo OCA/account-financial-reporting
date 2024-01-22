@@ -31,6 +31,15 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
         )
         cls.group2 = group_obj.create({"code_prefix_start": "2", "name": "Group 2"})
         # Set accounts
+        cls.account001 = cls._create_account_account(
+            cls,
+            {
+                "code": "001",
+                "name": "Account 001",
+                "group_id": cls.group2.id,
+                "account_type": "income_other",
+            },
+        )
         cls.account100 = cls.company_data["default_account_receivable"]
         cls.account100.group_id = cls.group1.id
         cls.account110 = cls.env["account.account"].search(
@@ -675,3 +684,33 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
         self.assertEqual(total_initial_balance, 0)
         self.assertEqual(total_final_balance, 0)
         self.assertEqual(total_debit, total_credit)
+
+    def test_05_all_accounts_loaded(self):
+        # Tests if all accounts are loaded when the account_code_ fields changed
+        all_accounts = self.env["account.account"].search([], order="code")
+        company = self.env.user.company_id
+        trial_balance = self.env["trial.balance.report.wizard"].create(
+            {
+                "date_from": self.date_start,
+                "date_to": self.date_end,
+                "target_move": "posted",
+                "hide_account_at_0": False,
+                "show_hierarchy": False,
+                "company_id": company.id,
+                "fy_start_date": self.fy_date_start,
+                "account_code_from": self.account001.id,
+                "account_code_to": all_accounts[-1].id,
+            }
+        )
+        trial_balance.on_change_account_range()
+        # sets are needed because some codes are duplicated and
+        # thus the length of all_accounts would be higher
+        all_accounts_code_set = set()
+        trial_balance_code_set = set()
+        [all_accounts_code_set.add(account.code) for account in all_accounts]
+        [
+            trial_balance_code_set.add(account.code)
+            for account in trial_balance.account_ids
+        ]
+        self.assertEqual(len(trial_balance_code_set), len(all_accounts_code_set))
+        self.assertTrue(trial_balance_code_set == all_accounts_code_set)
