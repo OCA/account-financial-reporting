@@ -72,6 +72,28 @@ class TrialBalanceXslx(models.AbstractModel):
                         "width": 14,
                     },
                 }
+                if report.show_currency_name:
+                    foreign_currency = {
+                        7: {
+                            "header": _("Cur."),
+                            "field": "currency_name",
+                            "field_currency_balance": "currency_name",
+                            "type": "currency_name",
+                            "width": 7,
+                        },
+                        8: {
+                            "header": _("Initial balance"),
+                            "field": "initial_currency_balance",
+                            "type": "amount_currency",
+                            "width": 14,
+                        },
+                        9: {
+                            "header": _("Ending balance"),
+                            "field": "ending_currency_balance",
+                            "type": "amount_currency",
+                            "width": 14,
+                        },
+                    }
                 res = {**res, **foreign_currency}
             return res
         else:
@@ -123,6 +145,28 @@ class TrialBalanceXslx(models.AbstractModel):
                         "width": 14,
                     },
                 }
+                if report.show_currency_name:
+                    foreign_currency = {
+                        6: {
+                            "header": _("Cur."),
+                            "field": "currency_name",
+                            "field_currency_balance": "currency_name",
+                            "type": "currency_name",
+                            "width": 7,
+                        },
+                        7: {
+                            "header": _("Initial balance"),
+                            "field": "initial_currency_balance",
+                            "type": "amount_currency",
+                            "width": 14,
+                        },
+                        9: {
+                            "header": _("Ending balance"),
+                            "field": "ending_currency_balance",
+                            "type": "amount_currency",
+                            "width": 14,
+                        },
+                    }
                 res = {**res, **foreign_currency}
             return res
 

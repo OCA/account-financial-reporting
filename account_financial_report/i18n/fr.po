@@ -497,7 +497,10 @@ msgstr "Cumul bal."
 
 #. module: account_financial_report
 #. odoo-python
+#: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
 #, python-format
@@ -1466,6 +1469,13 @@ msgstr "Afficher le détail des écritures"
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__show_partner_details
 msgid "Show Partner Details"
 msgstr "Afficher le détail du partenaire"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__show_currency_name
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__show_currency_name
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__show_currency_name
+msgid "Show currency name"
+msgstr "Afficher le nom de la devise"
 
 #. module: account_financial_report
 #. odoo-python
