@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2023-10-28 10:25+0000\n"
+"PO-Revision-Date: 2024-01-23 12:35+0000\n"
 "Last-Translator: jakobkrabbe <jakob@syscare.se>\n"
 "Language-Team: none\n"
 "Language: sv\n"
@@ -155,75 +155,71 @@ msgstr "Ytterligare filtrering"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-#, fuzzy
 msgid ""
 "Age ≤ 120\n"
 "                        d."
 msgstr ""
-"Age ≤ 120\n"
+"Ålder ≤ 120\n"
 "                        d."
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
-#, fuzzy, python-format
+#, python-format
 msgid "Age ≤ 120 d."
-msgstr "Age ≤ 120 d."
+msgstr "Ålder ≤ 120 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-#, fuzzy
 msgid ""
 "Age ≤ 30\n"
 "                        d."
 msgstr ""
-"Age ≤ 30\n"
+"Ålder ≤ 30\n"
 "                        d."
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
-#, fuzzy, python-format
+#, python-format
 msgid "Age ≤ 30 d."
-msgstr "Age ≤ 30 d."
+msgstr "Ålder ≤ 30 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-#, fuzzy
 msgid ""
 "Age ≤ 60\n"
 "                        d."
 msgstr ""
-"Age ≤ 60\n"
+"Ålder ≤ 60\n"
 "                        d."
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
-#, fuzzy, python-format
+#, python-format
 msgid "Age ≤ 60 d."
-msgstr "Age ≤ 60 d."
+msgstr "Ålder ≤ 60 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
-#, fuzzy
 msgid ""
 "Age ≤ 90\n"
 "                        d."
 msgstr ""
-"Age ≤ 90\n"
+"Ålder ≤ 90\n"
 "                        d."
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
-#, fuzzy, python-format
+#, python-format
 msgid "Age ≤ 90 d."
-msgstr "Age ≤ 90 d."
+msgstr "Ålder ≤ 90 d."
 
 #. module: account_financial_report
 #. odoo-python
@@ -234,32 +230,32 @@ msgstr "Age ≤ 90 d."
 #: model:ir.ui.menu,name:account_financial_report.menu_aged_partner_balance_wizard
 #, python-format
 msgid "Aged Partner Balance"
-msgstr "Åldrande Partner balans"
+msgstr "Äldre kontakter balans"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_base
 msgid "Aged Partner Balance -"
-msgstr "Åldrande Partner balans"
+msgstr "Äldre kontakter balans -"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_aged_partner_balance
 msgid "Aged Partner Balance Report"
-msgstr "Åldrande Partner balans report"
+msgstr "Äldre kontakt balansrapport"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_aged_partner_balance_report_wizard
 msgid "Aged Partner Balance Wizard"
-msgstr "Åldrande Partner balans guide"
+msgstr "Äldre kontakt balans guide"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_aged_partner_balance_xlsx
 msgid "Aged Partner Balance XLSL Report"
-msgstr "Åldrande Partner balans XLSL report"
+msgstr "Äldre kontakt balans XLSL rapport"
 
 #. module: account_financial_report
 #: model:ir.actions.report,name:account_financial_report.action_report_aged_partner_balance_xlsx
 msgid "Aged Partner Balance XLSX"
-msgstr "Åldrande Partner balans XLSX"
+msgstr "Äldre kontakt balans XLSX"
 
 #. module: account_financial_report
 #. odoo-python
@@ -275,7 +271,7 @@ msgstr "Alla"
 #: model:ir.model.fields.selection,name:account_financial_report.selection__trial_balance_report_wizard__target_move__all
 #: model:ir.model.fields.selection,name:account_financial_report.selection__vat_report_wizard__target_move__all
 msgid "All Entries"
-msgstr "Alla poster"
+msgstr "Alla verifikat"
 
 #. module: account_financial_report
 #: model:ir.model.fields.selection,name:account_financial_report.selection__aged_partner_balance_report_wizard__target_move__posted
@@ -284,7 +280,7 @@ msgstr "Alla poster"
 #: model:ir.model.fields.selection,name:account_financial_report.selection__trial_balance_report_wizard__target_move__posted
 #: model:ir.model.fields.selection,name:account_financial_report.selection__vat_report_wizard__target_move__posted
 msgid "All Posted Entries"
-msgstr "Alla fakturerade poster"
+msgstr "Alla bokförda verifikat"
 
 #. module: account_financial_report
 #. odoo-python
@@ -298,7 +294,7 @@ msgstr "Alla fakturerade poster"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 #, python-format
 msgid "All entries"
-msgstr "Alla poster"
+msgstr "Alla verifikat"
 
 #. module: account_financial_report
 #. odoo-python
@@ -312,13 +308,12 @@ msgstr "Alla poster"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 #, python-format
 msgid "All posted entries"
-msgstr "Alla fakturerade poster"
+msgstr "Alla bokförda verifikat"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
-#, fuzzy
 msgid "Amount Cur."
-msgstr "Belopp valuta"
+msgstr "Belopp val."
 
 #. module: account_financial_report
 #. odoo-python
@@ -331,14 +326,14 @@ msgstr "Belopp valuta"
 #. odoo-python
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
-#, fuzzy, python-format
+#, python-format
 msgid "Amount cur."
-msgstr "Belopp valuta"
+msgstr "Belopp val."
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_move_line__analytic_account_ids
 msgid "Analytic Account"
-msgstr "Analytisk konto"
+msgstr "Objekt konto"
 
 #. module: account_financial_report
 #. odoo-python
@@ -420,7 +415,7 @@ msgstr "Centralisera"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__group_child_ids
 msgid "Child Groups"
-msgstr "Barngrupper"
+msgstr "Undergrupper"
 
 #. module: account_financial_report
 #. odoo-python
@@ -943,7 +938,7 @@ msgstr "Gruppinlägg efter"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__grouped_by
 msgid "Grouped By"
-msgstr ""
+msgstr "Grupperad efter"
 
 #. module: account_financial_report
 #. odoo-python
