@@ -2,7 +2,7 @@
 Users willing to access to this report should have proper Accounting & Finance rights:
 
 #. Go to *Settings / Users* and edit your user to add the corresponding access rights as follows.
-#. In *Application / Accounting & Finance*, select *Billing* or *Billing Manager*
+#. In *Access Rights/ Accounting / Invoicing*, select *Billing* or *Billing Administrator*
 
 To configure this module, you need to:
 

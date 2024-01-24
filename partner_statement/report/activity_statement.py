@@ -30,7 +30,6 @@ class ActivityStatement(models.AbstractModel):
                 END AS open_amount_currency
             FROM account_move_line l
             JOIN account_account aa ON (aa.id = l.account_id)
-            JOIN account_account_type at ON (at.id = aa.user_type_id)
             JOIN account_move m ON (l.move_id = m.id)
             LEFT JOIN (SELECT pr.*
                 FROM account_partial_reconcile pr
@@ -45,7 +44,7 @@ class ActivityStatement(models.AbstractModel):
                 WHERE l2.date < %(date_start)s
             ) as pc ON pc.credit_move_id = l.id
             WHERE l.partner_id IN %(partners)s
-                AND at.type = %(account_type)s
+                AND aa.account_type = %(account_type)s
                 AND l.date < %(date_start)s AND not l.blocked
                 AND m.state IN ('posted')
                 AND (
@@ -150,11 +149,10 @@ class ActivityStatement(models.AbstractModel):
                 END as date_maturity
             FROM account_move_line l
             JOIN account_account aa ON (aa.id = l.account_id)
-            JOIN account_account_type at ON (at.id = aa.user_type_id)
             JOIN account_move m ON (l.move_id = m.id)
             JOIN account_journal aj ON (l.journal_id = aj.id)
             WHERE l.partner_id IN %(partners)s
-                AND at.type = %(account_type)s
+                AND aa.account_type = %(account_type)s
                 AND %(date_start)s <= l.date
                 AND l.date <= %(date_end)s
                 AND m.state IN ('posted')

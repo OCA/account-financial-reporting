@@ -41,7 +41,7 @@ class DetailedActivityStatementXslx(models.AbstractModel):
         statement_header = _(
             "Detailed %(payable)sStatement between %(start)s and %(end)s in %(currency)s"
         ) % {
-            "payable": account_type == "payable" and _("Supplier ") or "",
+            "payable": account_type == "liability_payable" and _("Supplier ") or "",
             "start": partner_data.get("start"),
             "end": partner_data.get("end"),
             "currency": currency.display_name,
@@ -179,7 +179,7 @@ class DetailedActivityStatementXslx(models.AbstractModel):
         statement_header = _(
             "%(payable)sStatement up to %(prior_day)s in %(currency)s"
         ) % {
-            "payable": account_type == "payable" and _("Supplier ") or "",
+            "payable": account_type == "liability_payable" and _("Supplier ") or "",
             "prior_day": partner_data.get("prior_day"),
             "currency": currency.display_name,
         }
@@ -284,7 +284,7 @@ class DetailedActivityStatementXslx(models.AbstractModel):
         account_type = data.get("account_type", False)
         row_pos += 2
         statement_header = _("%(payable)sStatement up to %(end)s in %(currency)s") % {
-            "payable": account_type == "payable" and _("Supplier ") or "",
+            "payable": account_type == "liability_payable" and _("Supplier ") or "",
             "end": partner_data.get("end"),
             "currency": currency.display_name,
         }
