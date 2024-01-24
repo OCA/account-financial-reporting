@@ -16,7 +16,7 @@ class OpenItemsXslx(models.AbstractModel):
         report_name = _("Open Items")
         if company_id:
             company = self.env["res.company"].browse(company_id)
-            suffix = " - {} - {}".format(company.name, company.currency_id.name)
+            suffix = f" - {company.name} - {company.currency_id.name}"
             report_name = report_name + suffix
         return report_name
 
