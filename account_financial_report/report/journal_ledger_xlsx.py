@@ -17,7 +17,7 @@ class JournalLedgerXslx(models.AbstractModel):
         report_name = _("Journal Ledger")
         if company_id:
             company = self.env["res.company"].browse(company_id)
-            suffix = " - {} - {}".format(company.name, company.currency_id.name)
+            suffix = f" - {company.name} - {company.currency_id.name}"
             report_name = report_name + suffix
         return report_name
 
@@ -149,7 +149,7 @@ class JournalLedgerXslx(models.AbstractModel):
                 _("Journals"),
                 ", ".join(
                     [
-                        "{} - {}".format(report_journal.code, report_journal.name)
+                        f"{report_journal.code} - {report_journal.name}"
                         for report_journal in report.journal_ids
                     ]
                 ),
@@ -184,7 +184,7 @@ class JournalLedgerXslx(models.AbstractModel):
             and journal.currency_id.name
             or journal.company_id.currency_id.name
         )
-        sheet_name = "{} ({}) - {}".format(journal.code, currency_name, journal.name)
+        sheet_name = f"{journal.code} ({currency_name}) - {journal.name}"
         self._generate_moves_content(
             workbook, sheet_name, report, res_data, ledger["report_moves"], report_data
         )
@@ -202,9 +202,7 @@ class JournalLedgerXslx(models.AbstractModel):
             and journal.currency_id.name
             or journal.company_id.currency_id.name
         )
-        sheet_name = "Tax - {} ({}) - {}".format(
-            journal.code, currency_name, journal.name
-        )
+        sheet_name = f"Tax - {journal.code} ({currency_name}) - {journal.name}"
         self._generate_taxes_summary(
             workbook, sheet_name, ledger["tax_lines"], report_data
         )

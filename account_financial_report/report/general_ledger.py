@@ -347,7 +347,7 @@ class GeneralLedgerReport(models.AbstractModel):
         elif move_line_data["name"] == "":
             ref_label = move_line_data["ref"]
         else:
-            ref_label = move_line_data["ref"] + str(" - ") + move_line_data["name"]
+            ref_label = move_line_data["ref"] + " - " + move_line_data["name"]
         move_line_data.update({"ref_label": ref_label})
         return move_line_data
 

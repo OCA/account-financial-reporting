@@ -196,7 +196,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                 elif not move_line["name"]:
                     ref_label = move_line["ref"]
                 else:
-                    ref_label = move_line["ref"] + str(" - ") + move_line["name"]
+                    ref_label = move_line["ref"] + " - " + move_line["name"]
                 move_line_data.update(
                     {
                         "line_rec": line_model.browse(move_line["id"]),
