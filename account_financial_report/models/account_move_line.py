@@ -1,35 +1,10 @@
 # Copyright 2019 ACSONE SA/NV (<http://acsone.eu>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).-
-from odoo import api, fields, models
+from odoo import api, models
 
 
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
-
-    analytic_account_ids = fields.Many2many(
-        "account.analytic.account", compute="_compute_analytic_account_ids", store=True
-    )
-
-    @api.depends("analytic_distribution")
-    def _compute_analytic_account_ids(self):
-        for record in self:
-            if not record.analytic_distribution:
-                record.analytic_account_ids = False
-            else:
-                record.update(
-                    {
-                        "analytic_account_ids": [
-                            (
-                                6,
-                                0,
-                                self.env["account.analytic.account"]
-                                .browse([int(k) for k in record.analytic_distribution])
-                                .exists()
-                                .ids,
-                            )
-                        ]
-                    }
-                )
 
     def init(self):
         """

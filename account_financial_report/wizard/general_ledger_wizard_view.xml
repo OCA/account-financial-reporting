@@ -64,23 +64,30 @@
                             </group>
                         </page>
                         <page string="Filter partners">
-                            <field
-                                name="partner_ids"
-                                nolabel="1"
-                                widget="many2many_tags"
-                                options="{'no_create': True}"
-                            />
+                            <group>
+                                <group>
+                                    <field
+                                        name="partner_ids"
+                                        widget="many2many_tags"
+                                        options="{'no_create': True}"
+                                    />
+                                </group>
+                            </group>
                         </page>
                         <page
                             string="Filter analytic accounts"
                             groups="analytic.group_analytic_accounting"
                         >
-                            <field
-                                name="cost_center_ids"
-                                nolabel="1"
-                                widget="many2many_tags"
-                                options="{'no_create': True}"
-                            />
+                        <group>
+                            <group>
+                                <field
+                                        name="cost_center_ids"
+                                        widget="many2many_tags"
+                                        options="{'no_create': True}"
+                                    />
+                            </group>
+                        </group>
+
                         </page>
                         <page string="Additional Filtering">
                             <style>
