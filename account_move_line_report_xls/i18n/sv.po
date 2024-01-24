@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-01-23 17:35+0000\n"
+"PO-Revision-Date: 2024-01-24 08:37+0000\n"
 "Last-Translator: jakobkrabbe <jakob@syscare.se>\n"
 "Language-Team: none\n"
 "Language: sv\n"
@@ -26,7 +26,7 @@ msgstr "Konto"
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
 #, python-format
 msgid "Am. Currency"
-msgstr ""
+msgstr "Am. valuta"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
@@ -80,42 +80,42 @@ msgstr "Visningsnamn"
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
 #, python-format
 msgid "Effective Date"
-msgstr ""
+msgstr "Ikraftträdande datum"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
 #, python-format
 msgid "Entry"
-msgstr ""
+msgstr "Verifikat"
 
 #. module: account_move_line_report_xls
 #: model:ir.actions.report,name:account_move_line_report_xls.action_account_move_line_xlsx
 msgid "Export Selected Lines"
-msgstr ""
+msgstr "Exportera valda rader"
 
 #. module: account_move_line_report_xls
 #: model:ir.model.fields,field_description:account_move_line_report_xls.field_account_move_line__id
 #: model:ir.model.fields,field_description:account_move_line_report_xls.field_report_account_move_line_report_xls_account_move_line_xlsx__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
 #, python-format
 msgid "Id"
-msgstr ""
+msgstr "Id"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
 #, python-format
 msgid "Invoice"
-msgstr ""
+msgstr "Faktura"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
 #, python-format
 msgid "Journal"
-msgstr ""
+msgstr "Journal"
 
 #. module: account_move_line_report_xls
 #: model:ir.model,name:account_move_line_report_xls.model_account_move_line
@@ -132,7 +132,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_move_line_report_xls.field_account_move_line____last_update
 #: model:ir.model.fields,field_description:account_move_line_report_xls.field_report_account_move_line_report_xls_account_move_line_xlsx____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Senast ändrad den"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
@@ -144,79 +144,79 @@ msgstr ""
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
 #, python-format
 msgid "Matched Credits"
-msgstr ""
+msgstr "Matchade krediter"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
 #, python-format
 msgid "Matched Debits"
-msgstr ""
+msgstr "Matchade debiteringar"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
 #, python-format
 msgid "Maturity Date"
-msgstr ""
+msgstr "Förfallodatum"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
 #, python-format
 msgid "Name"
-msgstr ""
+msgstr "Namn"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
 #, python-format
 msgid "Notes"
-msgstr ""
+msgstr "Anteckningar"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
 #, python-format
 msgid "Partner"
-msgstr ""
+msgstr "Kontakt"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
 #, python-format
 msgid "Partner Reference"
-msgstr ""
+msgstr "Kontaktreferens"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
 #, python-format
 msgid "Product"
-msgstr ""
+msgstr "Produkt"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
 #, python-format
 msgid "Product Reference"
-msgstr ""
+msgstr "Produktreferens"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
 #, python-format
 msgid "Qty"
-msgstr ""
+msgstr "Antal"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
 #, python-format
 msgid "Rec."
-msgstr ""
+msgstr "Rec."
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
 #, python-format
 msgid "Reconcile Amount"
-msgstr ""
+msgstr "Avstämningsbelopp"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
 #, python-format
 msgid "Reference"
-msgstr ""
+msgstr "Referens"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
@@ -228,21 +228,21 @@ msgstr ""
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
 #, python-format
 msgid "Residual Amount"
-msgstr ""
+msgstr "Restbelopp"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
 #, python-format
 msgid "Statement"
-msgstr ""
+msgstr "Påstående"
 
 #. module: account_move_line_report_xls
 #: code:addons/account_move_line_report_xls/report/account_move_line_xlsx.py:0
 #, python-format
 msgid "Unit of Measure"
-msgstr ""
+msgstr "Måttenhet"
 
 #. module: account_move_line_report_xls
 #: model:ir.model,name:account_move_line_report_xls.model_report_account_move_line_report_xls_account_move_line_xlsx
 msgid "XLSX report for account move lines."
-msgstr ""
+msgstr "XLSX-rapport för kontotransaktioner."
