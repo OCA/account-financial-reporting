@@ -536,7 +536,7 @@ class AbstractReportXslx(models.AbstractModel):
                 currency = self.env["res.currency"].browse(line_object["currency_id"])
             else:
                 currency = line_object["currency_id"]
-            field_name = "{}_{}".format(field_prefix, currency.name)
+            field_name = f"{field_prefix}_{currency.name}"
             if hasattr(self, field_name):
                 format_amt = getattr(self, field_name)
             else:
@@ -558,7 +558,7 @@ class AbstractReportXslx(models.AbstractModel):
                 currency = self.env["res.currency"].browse(line_dict["currency_id"])
             else:
                 currency = line_dict["currency_id"]
-            field_name = "{}_{}".format(field_prefix, currency.name)
+            field_name = f"{field_prefix}_{currency.name}"
             if hasattr(self, field_name):
                 format_amt = getattr(self, field_name)
             else:
