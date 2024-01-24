@@ -209,7 +209,6 @@ class GeneralLedgerReport(models.AbstractModel):
                 else:
                     prt_id = gl["partner_id"][0]
                     prt_name = gl["partner_id"][1]
-                    prt_name = prt_name._value
                 acc_id = gl["account_id"][0]
                 data[acc_id][prt_id] = self._prepare_gen_ld_data_item(gl)
                 data[acc_id][prt_id]["id"] = prt_id
@@ -236,7 +235,6 @@ class GeneralLedgerReport(models.AbstractModel):
                 if "tax_line_id" in gl and gl["tax_line_id"]:
                     tax_id = gl["tax_line_id"][0]
                     tax_name = gl["tax_line_id"][1]
-                    tax_name = tax_name._value
                 else:
                     tax_id = 0
                     tax_name = "Missing Tax"

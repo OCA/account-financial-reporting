@@ -4,7 +4,6 @@
         t-name="info.ReportAction"
         t-inherit="web.ReportAction"
         t-inherit-mode="extension"
-        owl="1"
     >
         <xpath expr="//button" position="after">
             <button

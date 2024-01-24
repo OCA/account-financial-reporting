@@ -257,7 +257,7 @@ class TrialBalanceXslx(models.AbstractModel):
             line_object.currency_id = line_object.report_account_id.currency_id
         elif type_object == "account":
             line_object.currency_id = line_object.currency_id
-        return super(TrialBalanceXslx, self).write_line(line_object, report_data)
+        return super().write_line(line_object, report_data)
 
     def write_account_footer(self, account, name_value, report_data):
         """Specific function to write account footer for Trial Balance"""
