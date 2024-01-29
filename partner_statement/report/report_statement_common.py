@@ -507,7 +507,7 @@ class ReportStatementCommon(models.AbstractModel):
                                 )
                             )
                 if is_activity:
-                    line["open_amount"] = line["amount"] + line["applied_amount"]
+                    line["open_amount"] = line["amount"]
                     line_currency["amount_due"] += line["open_amount"]
 
             if is_detailed:
