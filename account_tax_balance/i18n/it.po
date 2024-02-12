@@ -134,11 +134,6 @@ msgid "Journal Item"
 msgstr "Movimento contabile"
 
 #. module: account_tax_balance
-#: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances____last_update
-msgid "Last Modified on"
-msgstr "Ultima modifica il"
-
-#. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__write_uid
 msgid "Last Updated by"
 msgstr "Ultimo aggiornamento di"
@@ -308,6 +303,9 @@ msgstr "wizard.open.tax.balances"
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "or"
 msgstr "o"
+
+#~ msgid "Last Modified on"
+#~ msgstr "Ultima modifica il"
 
 #~ msgid "Journal Entries"
 #~ msgstr "Registrazioni contabili"

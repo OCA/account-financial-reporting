@@ -138,11 +138,6 @@ msgid "Journal Item"
 msgstr "Boeking"
 
 #. module: account_tax_balance
-#: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances____last_update
-msgid "Last Modified on"
-msgstr "Laatst gewijzigd op"
-
-#. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__write_uid
 msgid "Last Updated by"
 msgstr "Laatst gewijzigd door"
@@ -305,6 +300,9 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "or"
 msgstr ""
+
+#~ msgid "Last Modified on"
+#~ msgstr "Laatst gewijzigd op"
 
 #, fuzzy
 #~ msgid "Journal Entries"

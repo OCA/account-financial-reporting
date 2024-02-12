@@ -131,11 +131,6 @@ msgid "Journal Item"
 msgstr "Item Diário"
 
 #. module: account_tax_balance
-#: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances____last_update
-msgid "Last Modified on"
-msgstr "Última Modificação em"
-
-#. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__write_uid
 msgid "Last Updated by"
 msgstr "Última Atualização por"
@@ -298,3 +293,6 @@ msgstr "Assistente de Saldos Fiscais Abertos"
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "or"
 msgstr "ou"
+
+#~ msgid "Last Modified on"
+#~ msgstr "Última Modificação em"
