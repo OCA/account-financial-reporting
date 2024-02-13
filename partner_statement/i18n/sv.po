@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-02-13 12:33+0000\n"
+"PO-Revision-Date: 2024-02-13 18:35+0000\n"
 "Last-Translator: jakobkrabbe <jakob@syscare.se>\n"
 "Language-Team: none\n"
 "Language: sv\n"
@@ -257,7 +257,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 #, python-format
 msgid "Applied Amount"
-msgstr ""
+msgstr "Tillämpat belopp"
 
 #. module: partner_statement
 #. odoo-python
@@ -267,7 +267,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 #, python-format
 msgid "Balance"
-msgstr ""
+msgstr "Balans"
 
 #. module: partner_statement
 #. odoo-python
@@ -275,12 +275,12 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 #, python-format
 msgid "Balance Forward"
-msgstr ""
+msgstr "Saldo vidarebefordras"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
 msgid "Cancel"
-msgstr ""
+msgstr "Avbryt"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__company_id
@@ -288,26 +288,26 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__company_id
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__company_id
 msgid "Company"
-msgstr ""
+msgstr "Bolag"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "Konfig. inställningar"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__create_uid
 #: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__create_uid
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Skapad av"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__create_date
 #: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__create_date
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Skapad den"
 
 #. module: partner_statement
 #. odoo-python
@@ -315,7 +315,7 @@ msgstr ""
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "Current"
-msgstr ""
+msgstr "Nuvarande"
 
 #. module: partner_statement
 #. odoo-python
@@ -328,7 +328,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 #, python-format
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__date_end
@@ -336,13 +336,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__date_end
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__date_end
 msgid "Date End"
-msgstr ""
+msgstr "Slutdatum"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__date_start
 #: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__date_start
 msgid "Date Start"
-msgstr ""
+msgstr "Startdatum"
 
 #. module: partner_statement
 #. odoo-python
@@ -351,7 +351,7 @@ msgstr ""
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "Date:"
-msgstr ""
+msgstr "Datum:"
 
 #. module: partner_statement
 #. odoo-python
@@ -364,12 +364,12 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 #, python-format
 msgid "Description"
-msgstr ""
+msgstr "Beskrivning"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 msgid "Detailed"
-msgstr ""
+msgstr "Detaljerad"
 
 #. module: partner_statement
 #. odoo-python
@@ -378,6 +378,7 @@ msgstr ""
 msgid ""
 "Detailed %(payable)sStatement between %(start)s and %(end)s in %(currency)s"
 msgstr ""
+"Detaljerad %(payable)s uppgift mellan %(start)s och %(end)s i %(currency)s"
 
 #. module: partner_statement
 #. odoo-python
@@ -392,24 +393,24 @@ msgstr ""
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_detailed_activity_statement_wizard
 msgid "Detailed Activity Statement Wizard"
-msgstr ""
+msgstr "Detaljerad aktivitetsbeskrivningsguide"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_report_p_s_report_detailed_activity_statement_xlsx
 msgid "Detailed Activity Statement XLSL Report"
-msgstr ""
+msgstr "Detaljerad aktivitetsbeskrivnings XLSL rapport"
 
 #. module: partner_statement
 #: model:ir.actions.report,name:partner_statement.action_print_detailed_activity_statement_xlsx
 msgid "Detailed Activity Statement XLSX"
-msgstr ""
+msgstr "Detaljerad aktivitetsbeskrivning XLSX"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__display_name
 #: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__display_name
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Visningsnamn"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__filter_partners_non_due
@@ -417,7 +418,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__filter_partners_non_due
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__filter_partners_non_due
 msgid "Don't show partners with no due entries"
-msgstr ""
+msgstr "Visa inte kunder utan förfallna verifikat"
 
 #. module: partner_statement
 #. odoo-python
@@ -427,17 +428,17 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 #, python-format
 msgid "Due Date"
-msgstr ""
+msgstr "Förfallodatum"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__group_activity_statement
 msgid "Enable OCA Activity & Detailed Activity Statements"
-msgstr ""
+msgstr "Aktivera OCA Aktivitet & Detaljerade aktivitetsförklaringar"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__group_outstanding_statement
 msgid "Enable OCA Outstanding Statements"
-msgstr ""
+msgstr "Aktivera OCA Enastående Förklaringar"
 
 #. module: partner_statement
 #. odoo-python
@@ -450,7 +451,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 #, python-format
 msgid "Ending Balance"
-msgstr ""
+msgstr "Utgående balans"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__filter_negative_balances
@@ -459,29 +460,29 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__default_filter_negative_balances
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__filter_negative_balances
 msgid "Exclude Negative Balances"
-msgstr ""
+msgstr "Uteslut negativa saldon"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__default_filter_partners_non_due
 msgid "Exclude partners with no due entries"
-msgstr ""
+msgstr "Uteslut kunder utan förfallna verifikat"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
 msgid "Export PDF"
-msgstr ""
+msgstr "Exportera PDF"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
 msgid "Export XLSX"
-msgstr ""
+msgstr "Exportera XLSX"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__id
 #: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__id
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: partner_statement
 #. odoo-python
@@ -489,28 +490,28 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 #, python-format
 msgid "Initial Balance"
-msgstr ""
+msgstr "Initial balans"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard____last_update
 #: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard____last_update
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Senast ändrad den"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__write_uid
 #: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__write_uid
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Senast uppdaterad av"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__write_date
 #: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__write_date
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Senast uppdaterad den"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__name
@@ -518,7 +519,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__name
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__name
 msgid "Name"
-msgstr ""
+msgstr "Namn"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__number_partner_ids
@@ -526,14 +527,14 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__number_partner_ids
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__number_partner_ids
 msgid "Number Partner"
-msgstr ""
+msgstr "Kundnummer"
 
 #. module: partner_statement
 #. odoo-python
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "Older"
-msgstr ""
+msgstr "Äldre"
 
 #. module: partner_statement
 #. odoo-python
@@ -546,7 +547,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 #, python-format
 msgid "Open Amount"
-msgstr ""
+msgstr "Öppet belopp"
 
 #. module: partner_statement
 #. odoo-python
@@ -556,7 +557,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 #, python-format
 msgid "Original"
-msgstr ""
+msgstr "Original"
 
 #. module: partner_statement
 #. odoo-python
@@ -565,7 +566,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 #, python-format
 msgid "Original Amount"
-msgstr ""
+msgstr "Ursprungligt belopp"
 
 #. module: partner_statement
 #. odoo-python
@@ -626,14 +627,14 @@ msgstr ""
 #: model:ir.model.fields.selection,name:partner_statement.selection__outstanding_statement_wizard__account_type__liability_payable
 #: model:ir.model.fields.selection,name:partner_statement.selection__statement_common_wizard__account_type__liability_payable
 msgid "Payable"
-msgstr ""
+msgstr "Betalbar"
 
 #. module: partner_statement
 #. odoo-python
 #: code:addons/partner_statement/report/activity_statement.py:0
 #, python-format
 msgid "Payment"
-msgstr ""
+msgstr "Betalning"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
@@ -672,12 +673,12 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__default_show_aging_buckets
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__show_aging_buckets
 msgid "Show Aging Buckets"
-msgstr ""
+msgstr "Visa surdegar"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__show_balance
 msgid "Show Balance column"
-msgstr ""
+msgstr "Visa saldokolumnen"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_statement_common
@@ -731,7 +732,7 @@ msgstr ""
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 msgid "Supplier"
-msgstr ""
+msgstr "Leverantör"
 
 #. module: partner_statement
 #. odoo-python
@@ -742,7 +743,7 @@ msgstr ""
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "Supplier "
-msgstr ""
+msgstr "Leverantör "
 
 #. module: partner_statement
 #. odoo-python
@@ -750,7 +751,7 @@ msgstr ""
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
 #. module: partner_statement
 #: model:res.groups,name:partner_statement.group_activity_statement
@@ -772,31 +773,31 @@ msgstr ""
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "VAT:"
-msgstr ""
+msgstr "Moms:"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
 msgid "View"
-msgstr ""
+msgstr "Visa"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 msgid "and"
-msgstr ""
+msgstr "och"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 #: model_terms:ir.ui.view,arch_db:partner_statement.aging_buckets
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 msgid "in"
-msgstr ""
+msgstr "i"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
 msgid "or"
-msgstr ""
+msgstr "eller"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 msgid "up to"
-msgstr ""
+msgstr "upp till"
