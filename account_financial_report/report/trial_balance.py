@@ -4,7 +4,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 
-from odoo import api, models
+from odoo import _, api, models
 from odoo.tools.float_utils import float_is_zero
 
 
@@ -280,31 +280,33 @@ class TrialBalanceReport(models.AbstractModel):
         partners_data = {}
         for tb in tb_period_prt:
             acc_id = tb["account_id"][0]
-            if tb["partner_id"]:
-                prt_id = tb["partner_id"][0]
-                if tb["partner_id"] not in partners_ids:
-                    partners_data.update(
-                        {prt_id: {"id": prt_id, "name": tb["partner_id"][1]}}
-                    )
-                total_amount[acc_id][prt_id] = self._prepare_total_amount(
-                    tb, foreign_currency
+            if tb["partner_id"] is False:
+                tb["partner_id"] = (0, _("Missing Partner"))
+            prt_id = tb["partner_id"][0]
+            if tb["partner_id"] not in partners_ids:
+                partners_data.update(
+                    {prt_id: {"id": prt_id, "name": tb["partner_id"][1]}}
                 )
-                total_amount[acc_id][prt_id]["credit"] = tb["credit"]
-                total_amount[acc_id][prt_id]["debit"] = tb["debit"]
-                total_amount[acc_id][prt_id]["balance"] = tb["balance"]
-                total_amount[acc_id][prt_id]["initial_balance"] = 0.0
-                partners_ids.add(tb["partner_id"])
+            total_amount[acc_id][prt_id] = self._prepare_total_amount(
+                tb, foreign_currency
+            )
+            total_amount[acc_id][prt_id]["credit"] = tb["credit"]
+            total_amount[acc_id][prt_id]["debit"] = tb["debit"]
+            total_amount[acc_id][prt_id]["balance"] = tb["balance"]
+            total_amount[acc_id][prt_id]["initial_balance"] = 0.0
+            partners_ids.add(tb["partner_id"])
         for tb in tb_initial_prt:
+            if tb["partner_id"] is False:
+                tb["partner_id"] = (0, _("Missing Partner"))
             acc_id = tb["account_id"][0]
-            if tb["partner_id"]:
-                prt_id = tb["partner_id"][0]
-                if tb["partner_id"] not in partners_ids:
-                    partners_data.update(
-                        {prt_id: {"id": prt_id, "name": tb["partner_id"][1]}}
-                    )
-                total_amount = self._compute_acc_prt_amount(
-                    total_amount, tb, acc_id, prt_id, foreign_currency
+            prt_id = tb["partner_id"][0]
+            if tb["partner_id"] not in partners_ids:
+                partners_data.update(
+                    {prt_id: {"id": prt_id, "name": tb["partner_id"][1]}}
                 )
+            total_amount = self._compute_acc_prt_amount(
+                total_amount, tb, acc_id, prt_id, foreign_currency
+            )
         return total_amount, partners_data
 
     def _remove_accounts_at_cero(self, total_amount, show_partner_details, company):
