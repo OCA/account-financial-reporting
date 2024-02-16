@@ -205,7 +205,7 @@ class GeneralLedgerReport(models.AbstractModel):
             for gl in gl_initial_acc_prt:
                 if not gl["partner_id"]:
                     prt_id = 0
-                    prt_name = "Missing Partner"
+                    prt_name = _("Missing Partner")
                 else:
                     prt_id = gl["partner_id"][0]
                     prt_name = gl["partner_id"][1]
@@ -415,7 +415,7 @@ class GeneralLedgerReport(models.AbstractModel):
             item_name = (
                 move_line["partner_id"][1]
                 if move_line["partner_id"]
-                else "Missing Partner"
+                else _("Missing Partner")
             )
             res.append({"id": item_id, "name": item_name})
         elif grouped_by == "taxes":
