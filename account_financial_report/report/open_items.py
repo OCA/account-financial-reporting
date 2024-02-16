@@ -5,7 +5,7 @@
 import operator
 from datetime import date, datetime
 
-from odoo import api, models
+from odoo import _, api, models
 from odoo.tools import float_is_zero
 
 
@@ -124,7 +124,7 @@ class OpenItemsReport(models.AbstractModel):
                 prt_name = move_line["partner_id"][1]
             else:
                 prt_id = 0
-                prt_name = "Missing Partner"
+                prt_name = _("Missing Partner")
             if prt_id not in partners_ids:
                 partners_data.update({prt_id: {"id": prt_id, "name": prt_name}})
                 partners_ids.add(prt_id)
