@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-02-13 18:35+0000\n"
+"PO-Revision-Date: 2024-02-23 10:33+0000\n"
 "Last-Translator: jakobkrabbe <jakob@syscare.se>\n"
 "Language-Team: none\n"
 "Language: sv\n"
@@ -108,6 +108,11 @@ msgid ""
 "        buckets, so the partner can review how much is open, due or overdue.\n"
 "                    </span>"
 msgstr ""
+"<span class=\"o_form_label\">Detaljer om åldrande kan visas i rapporten, "
+"uttryckt i\n"
+"        så att partnern kan granska hur mycket som är öppet, förfallet eller "
+"försenat.\n"
+"                    </span>."
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_wizard_view
@@ -121,6 +126,17 @@ msgid ""
 "                <br/>\n"
 "                <br/>"
 msgstr ""
+"<span class=\"o_form_label\">I aktivitetsrapporten finns information om all "
+"aktivitet\n"
+"                    en partners fordringar och skulder mellan två utvalda "
+"datum. Detta inkluderar alla fakturor,\n"
+"                    återbetalningar och betalningar. Eventuella utestående "
+"saldon som är daterade före den valda\n"
+"                    period visas som en saldobalans längst upp i "
+"kontoutdraget. Listan visas i\n"
+"                    visas i kronologisk ordning och är uppdelad efter "
+"valutor.\n"
+"                </span> </span"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.detailed_activity_statement_wizard_view
@@ -131,6 +147,13 @@ msgid ""
 "                <br/>\n"
 "                <br/>"
 msgstr ""
+"<span class=\"o_form_label\">Den detaljerade aktivitetsrapporten är en "
+"förlängning av aktivitetsrapporten och syftar till att förklara de "
+"transaktioner\n"
+"som har skett under perioden, och innehåller även en sektion för tidigare "
+"balans och en sektion för utgående balans.\n"
+"                </span>.\n"
+"                <br/> </span"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_wizard_view
@@ -143,6 +166,14 @@ msgid ""
 "                <br/>\n"
 "                <br/>"
 msgstr ""
+"<span class=\"o_form_label\">Redovisningen av utestående fordringar "
+"innehåller information om alla\n"
+"        fordringar och skulder fram till ett visst datum. Detta inkluderar "
+"alla obetalda fakturor, ej utkrävda\n"
+"        återbetalningar och utestående betalningar. Listan visas i "
+"kronologisk ordning och är uppdelad\n"
+"        uppdelad efter valutor.\n"
+"                </span> </span"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
@@ -248,7 +279,7 @@ msgstr "Åldringsrapport av"
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "Aging Report at %(end)s in %(currency)s"
-msgstr ""
+msgstr "Åldersrapport vid %(slut)s i %(valuta)s"
 
 #. module: partner_statement
 #. odoo-python
@@ -388,7 +419,7 @@ msgstr ""
 #: model:ir.actions.report,name:partner_statement.action_print_detailed_activity_statement_html
 #, python-format
 msgid "Detailed Activity Statement"
-msgstr ""
+msgstr "Detaljerad verksamhetsberättelse"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_detailed_activity_statement_wizard
@@ -576,50 +607,51 @@ msgstr "Ursprungligt belopp"
 #: model:ir.actions.report,name:partner_statement.action_print_outstanding_statement_html
 #, python-format
 msgid "Outstanding Statement"
-msgstr ""
+msgstr "Utestående uttalande"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_outstanding_statement_wizard
 msgid "Outstanding Statement Wizard"
-msgstr ""
+msgstr "Outstanding Statement Wizard"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_report_p_s_report_outstanding_statement_xlsx
 msgid "Outstanding Statement XLSL Report"
-msgstr ""
+msgstr "Utestående deklaration XLSL-rapport"
 
 #. module: partner_statement
 #: model:ir.actions.report,name:partner_statement.action_print_outstanding_statement_xlsx
 msgid "Outstanding Statement XLSX"
-msgstr ""
+msgstr "Utestående redovisning XLSX"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
 msgid "Outstanding Statements show all transactions up to a date."
 msgstr ""
+"Utestående transaktioner visar alla transaktioner fram till ett visst datum."
 
 #. module: partner_statement
 #: model:ir.actions.act_window,name:partner_statement.activity_statement_wizard_action
 #: model:ir.model,name:partner_statement.model_report_partner_statement_activity_statement
 msgid "Partner Activity Statement"
-msgstr ""
+msgstr "Verksamhetsberättelse för partner"
 
 #. module: partner_statement
 #: model:ir.actions.act_window,name:partner_statement.detailed_activity_statement_wizard_action
 #: model:ir.model,name:partner_statement.model_report_partner_statement_detailed_activity_statement
 msgid "Partner Detailed Activity Statement"
-msgstr ""
+msgstr "Detaljerad verksamhetsberättelse för partner"
 
 #. module: partner_statement
 #: model:ir.actions.act_window,name:partner_statement.outstanding_statement_wizard_action
 #: model:ir.model,name:partner_statement.model_report_partner_statement_outstanding_statement
 msgid "Partner Outstanding Statement"
-msgstr ""
+msgstr "Partner Utestående uttalande"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
 msgid "Partner Statements"
-msgstr ""
+msgstr "Partneruttalanden"
 
 #. module: partner_statement
 #: model:ir.model.fields.selection,name:partner_statement.selection__activity_statement_wizard__account_type__liability_payable
@@ -639,7 +671,7 @@ msgstr "Betalning"
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
 msgid "Please set defaults under Activity Statements."
-msgstr ""
+msgstr "Ange standardvärden under Aktivitetsförklaringar."
 
 #. module: partner_statement
 #: model:ir.model.fields.selection,name:partner_statement.selection__activity_statement_wizard__account_type__asset_receivable
@@ -647,7 +679,7 @@ msgstr ""
 #: model:ir.model.fields.selection,name:partner_statement.selection__outstanding_statement_wizard__account_type__asset_receivable
 #: model:ir.model.fields.selection,name:partner_statement.selection__statement_common_wizard__account_type__asset_receivable
 msgid "Receivable"
-msgstr ""
+msgstr "Fordringar"
 
 #. module: partner_statement
 #. odoo-python
@@ -658,13 +690,13 @@ msgstr ""
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "Reference Number"
-msgstr ""
+msgstr "Referensnummer"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
 msgid "Reference number"
-msgstr ""
+msgstr "Referensnummer"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__show_aging_buckets
@@ -683,17 +715,17 @@ msgstr "Visa saldokolumnen"
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_statement_common
 msgid "Statement Reports Common"
-msgstr ""
+msgstr "Uttalande Rapporter Gemensamma"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_statement_common_wizard
 msgid "Statement Reports Common Wizard"
-msgstr ""
+msgstr "Utskriftsrapporter Gemensam guide"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 msgid "Statement between"
-msgstr ""
+msgstr "Förklaring mellan"
 
 #. module: partner_statement
 #. odoo-python
@@ -702,14 +734,14 @@ msgstr ""
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "Statement from:"
-msgstr ""
+msgstr "Uttalande från:"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
 #: model_terms:ir.ui.view,arch_db:partner_statement.detailed_activity_statement_document
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
 msgid "Statement of Account"
-msgstr ""
+msgstr "Kontoutdrag"
 
 #. module: partner_statement
 #. odoo-python
@@ -718,7 +750,7 @@ msgstr ""
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "Statement of Account from %s"
-msgstr ""
+msgstr "Kontoutdrag från %s"
 
 #. module: partner_statement
 #. odoo-python
@@ -727,7 +759,7 @@ msgstr ""
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "Statement to:"
-msgstr ""
+msgstr "Uttalande till:"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
@@ -756,12 +788,12 @@ msgstr "Total"
 #. module: partner_statement
 #: model:res.groups,name:partner_statement.group_activity_statement
 msgid "Use activity statements"
-msgstr ""
+msgstr "Använda aktivitetsrapporter"
 
 #. module: partner_statement
 #: model:res.groups,name:partner_statement.group_outstanding_statement
 msgid "Use outstanding statements"
-msgstr ""
+msgstr "Använda utestående uttalanden"
 
 #. module: partner_statement
 #. odoo-python
