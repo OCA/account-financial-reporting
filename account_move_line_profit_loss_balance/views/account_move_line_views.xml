@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="account_move_line_view_pivot_profit_loss" model="ir.ui.view">
+        <field name="name">account.move.line.view.pivot.profit.loss</field>
+        <field name="model">account.move.line</field>
+        <field name="priority" eval="20" />
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="balance_pl" type="measure" />
+            </pivot>
+        </field>
+    </record>
+    <record id="account_move_line_view_pivot_balance" model="ir.ui.view">
+        <field name="name">account.move.line.view.pivot.balance</field>
+        <field name="model">account.move.line</field>
+        <field name="priority" eval="20" />
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="balance" type="measure" />
+            </pivot>
+        </field>
+    </record>
+    <record id="account_move_line_view_search" model="ir.ui.view">
+        <field name="name">account.move.line.view.search</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="account.view_account_move_line_filter" />
+        <field name="priority" eval="20" />
+        <field name="arch" type="xml">
+            <search position="inside">
+                <field name="date" string="Until (year-month-date)" operator="&lt;=" />
+            </search>
+            <filter name="pl_accounts" position="after">
+                <filter
+                    string="Balance"
+                    name="balance_accounts"
+                    domain="[('account_id.internal_group', 'not in', ('income', 'expense'))]"
+                />
+            </filter>
+        </field>
+    </record>
+    <record id="account_move_line_action_profit_loss" model="ir.actions.act_window">
+        <field name="name">Profit / Loss</field>
+        <field name="res_model">account.move.line</field>
+        <field name="view_mode">pivot,tree,form</field>
+        <field name="view_id" ref="account_move_line_view_pivot_profit_loss" />
+        <field name="context">
+            {"search_default_pl_accounts": True, "search_default_posted": True}
+        </field>
+    </record>
+    <menuitem
+        id="account_move_line_menu_profit_loss"
+        name="Profit / Loss"
+        parent="account.account_reports_management_menu"
+        action="account_move_line_action_profit_loss"
+        groups="account.group_account_manager"
+    />
+    <record id="account_move_line_action_balance" model="ir.actions.act_window">
+        <field name="name">Balance</field>
+        <field name="res_model">account.move.line</field>
+        <field name="view_mode">pivot,tree,form</field>
+        <field name="view_id" ref="account_move_line_view_pivot_balance" />
+        <field name="context">
+            {"search_default_balance_accounts": True, "search_default_posted": True}
+        </field>
+    </record>
+    <menuitem
+        id="account_move_line_menu_balance"
+        name="Balance"
+        parent="account.account_reports_management_menu"
+        action="account_move_line_action_balance"
+        groups="account.group_account_manager"
+    />
+</odoo>
