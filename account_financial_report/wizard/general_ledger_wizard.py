@@ -295,7 +295,10 @@ class GeneralLedgerReportWizard(models.TransientModel):
 
     def _prepare_report_general_ledger(self):
         self.ensure_one()
-        return {"wizard_id": self.id}
+        return {
+            "wizard_id": self.id,
+            "account_financial_report_lang": self.env.lang,
+        }
 
     def _export(self, report_type):
         """Default export is PDF."""
