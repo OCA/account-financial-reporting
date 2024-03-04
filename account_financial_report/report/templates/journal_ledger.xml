@@ -302,7 +302,9 @@
         <t t-if="display_currency">
             <div class="act_as_cell" name="currency_name">
                 <t t-if="move_line['currency_id']">
-                    <span t-esc="currency_ids_data.get(move_line['currency_id'], '')" />
+                    <span
+                        t-esc="currency_ids_data.get(move_line['currency_id'], '').get('name', '')"
+                    />
                 </t>
             </div>
             <div class="act_as_cell amount" name="amount_currency">
