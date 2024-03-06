@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-02-07 15:36+0000\n"
+"PO-Revision-Date: 2024-03-06 14:33+0000\n"
 "Last-Translator: jakobkrabbe <jakob@syscare.se>\n"
 "Language-Team: none\n"
 "Language: sv\n"
@@ -1135,7 +1135,7 @@ msgstr "Begränsa hierarkinivåer"
 #: code:addons/account_financial_report/report/trial_balance.py:0
 #, python-format
 msgid "Missing Partner"
-msgstr ""
+msgstr "Saknad kontakt"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__move_target
