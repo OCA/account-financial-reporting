@@ -99,8 +99,8 @@ class GeneralLedgerReportWizard(models.TransientModel):
             and self.account_code_to
             and self.account_code_to.code.isdigit()
         ):
-            start_range = int(self.account_code_from.code)
-            end_range = int(self.account_code_to.code)
+            start_range = self.account_code_from.code
+            end_range = self.account_code_to.code
             self.account_ids = self.env["account.account"].search(
                 [("code", ">=", start_range), ("code", "<=", end_range)]
             )
