@@ -28,6 +28,7 @@ class TestAgedPartnerBalance(TransactionCase):
                     "account.data_account_type_other_income"
                 ).id,
                 "reconcile": True,
+                "company_id": cls.env.user.company_id.id,
             }
         )
 
@@ -57,7 +58,11 @@ class TestAgedPartnerBalance(TransactionCase):
     def test_all_accounts_loaded(self):
         # Tests if all accounts are loaded when the account_code_ fields changed
         all_accounts = self.env["account.account"].search(
-            [("reconcile", "=", True)], order="code"
+            [
+                ("reconcile", "=", True),
+                ("company_id", "=", self.env.user.company_id.id),
+            ],
+            order="code",
         )
         aged_partner_balance = self.wizard_model.create(
             {
