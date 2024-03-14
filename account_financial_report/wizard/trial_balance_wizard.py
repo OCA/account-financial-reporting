@@ -84,21 +84,15 @@ class TrialBalanceReportWizard(models.TransientModel):
 
     @api.onchange("account_code_from", "account_code_to")
     def on_change_account_range(self):
-        if (
-            self.account_code_from
-            and self.account_code_from.code.isdigit()
-            and self.account_code_to
-            and self.account_code_to.code.isdigit()
-        ):
-            start_range = int(self.account_code_from.code)
-            end_range = int(self.account_code_to.code)
-            self.account_ids = self.env["account.account"].search(
-                [("code", ">=", start_range), ("code", "<=", end_range)]
-            )
-            if self.company_id:
-                self.account_ids = self.account_ids.filtered(
-                    lambda a: a.company_id == self.company_id
-                )
+        if self.account_code_from and self.account_code_to:
+            if self.account_code_from and self.account_code_to:
+                domain = [
+                    ("code", ">=", self.account_code_from.code),
+                    ("code", "<=", self.account_code_to.code),
+                ]
+                if self.company_id:
+                    domain.append(("company_id", "=", self.company_id.id))
+                self.account_ids = self.env["account.account"].search(domain)
 
     @api.constrains("hierarchy_on", "show_hierarchy_level")
     def _check_show_hierarchy_level(self):

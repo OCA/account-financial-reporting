@@ -17,6 +17,15 @@ class TestTrialBalanceReport(common.TransactionCase):
             {"code_prefix": "11", "name": "Group 11", "parent_id": self.group1.id}
         )
         self.group2 = group_obj.create({"code_prefix": "2", "name": "Group 2"})
+        self.account001 = acc_obj.create(
+            {
+                "code": "001",
+                "name": "Account 001",
+                "user_type_id": self.env.ref(
+                    "account.data_account_type_other_income"
+                ).id,
+            },
+        )
         self.account100 = acc_obj.create(
             {
                 "code": "100",
@@ -64,6 +73,15 @@ class TestTrialBalanceReport(common.TransactionCase):
                     "account.data_account_type_other_income"
                 ).id,
             }
+        )
+        self.accountCEX001 = acc_obj.create(
+            {
+                "code": "CEX001",
+                "name": "Account CEX001",
+                "user_type_id": self.env.ref(
+                    "account.data_account_type_other_income"
+                ).id,
+            },
         )
         self.previous_fy_date_start = "2015-01-01"
         self.previous_fy_date_end = "2015-12-31"
@@ -836,3 +854,32 @@ class TestTrialBalanceReport(common.TransactionCase):
         self.assertEqual(total_initial_balance, 0)
         self.assertEqual(total_final_balance, 0)
         self.assertEqual(total_debit, total_credit)
+
+    def test_05_all_accounts_loaded(self):
+        # Tests if all accounts are loaded when the account_code_ fields changed
+        all_accounts = self.env["account.account"].search([], order="code")
+        company = self.env.ref("base.main_company")
+        trial_balance = self.env["trial.balance.report.wizard"].create(
+            {
+                "date_from": self.date_start,
+                "date_to": self.date_end,
+                "target_move": "posted",
+                "hide_account_at_0": False,
+                "company_id": company.id,
+                "fy_start_date": self.fy_date_start,
+                "account_code_from": self.account001.id,
+                "account_code_to": all_accounts[-1].id,
+            }
+        )
+        trial_balance.on_change_account_range()
+        # sets are needed because some codes are duplicated and
+        # thus the length of all_accounts would be higher
+        all_accounts_code_set = set()
+        trial_balance_code_set = set()
+        [all_accounts_code_set.add(account.code) for account in all_accounts]
+        [
+            trial_balance_code_set.add(account.code)
+            for account in trial_balance.account_ids
+        ]
+        self.assertEqual(len(trial_balance_code_set), len(all_accounts_code_set))
+        self.assertTrue(trial_balance_code_set == all_accounts_code_set)
