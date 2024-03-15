@@ -42,7 +42,7 @@
                             <field
                                 name="account_code_from"
                                 class="oe_inline"
-                                options="{'no_create': True}"
+                                options="{'no_create': True, 'no_open': True}"
                             />
                             <span class="oe_inline">
                                 To
@@ -50,7 +50,7 @@
                             <field
                                 name="account_code_to"
                                 class="oe_inline"
-                                options="{'no_create': True}"
+                                options="{'no_create': True, 'no_open': True}"
                             />
                         </div>
                     </div>
