@@ -2,7 +2,7 @@
 # Copyright 2016 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo.tests.common import TransactionCase
+from odoo.tests import Form, TransactionCase
 
 
 class TestOpenItems(TransactionCase):
@@ -22,3 +22,22 @@ class TestOpenItems(TransactionCase):
 
         wizard = self.env["open.items.report.wizard"].with_context(context)
         self.assertEqual(wizard._default_partners(), expected_list)
+
+    def test_account_range_filter(self):
+        account_cex001 = self.env["account.account"].create(
+            {
+                "code": "CEX001",
+                "name": "Account CEX001",
+                "user_type_id": self.env.ref(
+                    "account.data_account_type_other_income"
+                ).id,
+                "reconcile": True,
+            },
+        )
+        with Form(self.env["open.items.report.wizard"]) as wizard_form:
+            wizard_form.account_code_from = account_cex001
+            self.assertEqual([a for a in wizard_form.account_ids], [])
+            wizard_form.account_code_to = account_cex001
+            self.assertEqual(
+                [a.id for a in wizard_form.account_ids], account_cex001.ids
+            )

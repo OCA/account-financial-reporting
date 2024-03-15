@@ -7,7 +7,7 @@ import time
 from datetime import date
 
 from odoo import api, fields
-from odoo.tests import common
+from odoo.tests import Form, common
 
 
 class TestGeneralLedgerReport(common.TransactionCase):
@@ -718,3 +718,21 @@ class TestGeneralLedgerReport(common.TransactionCase):
         wizard.onchange_date_range_id()
         self.assertEqual(wizard.date_from, date(2018, 1, 1))
         self.assertEqual(wizard.date_to, date(2018, 12, 31))
+
+    def test_account_range_filter(self):
+        account_cex001 = self.env["account.account"].create(
+            {
+                "code": "CEX001",
+                "name": "Account CEX001",
+                "user_type_id": self.env.ref(
+                    "account.data_account_type_other_income"
+                ).id,
+            },
+        )
+        with Form(self.env["general.ledger.report.wizard"]) as wizard_form:
+            wizard_form.account_code_from = account_cex001
+            self.assertEqual([a for a in wizard_form.account_ids], [])
+            wizard_form.account_code_to = account_cex001
+            self.assertEqual(
+                [a.id for a in wizard_form.account_ids], account_cex001.ids
+            )
