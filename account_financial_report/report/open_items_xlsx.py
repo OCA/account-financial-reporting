@@ -46,20 +46,13 @@ class OpenItemsXslx(models.AbstractModel):
         if report.foreign_currency:
             foreign_currency = {
                 9: {
-                    "header": _("Cur."),
-                    "field": "currency_name",
-                    "field_currency_balance": "currency_name",
-                    "type": "currency_name",
-                    "width": 7,
-                },
-                10: {
                     "header": _("Cur. Original"),
                     "field": "amount_currency",
                     "field_final_balance": "amount_currency",
                     "type": "amount_currency",
                     "width": 14,
                 },
-                11: {
+                10: {
                     "header": _("Cur. Residual"),
                     "field": "amount_residual_currency",
                     "field_final_balance": "amount_currency",
@@ -67,6 +60,30 @@ class OpenItemsXslx(models.AbstractModel):
                     "width": 14,
                 },
             }
+            if report.show_currency_name:
+                foreign_currency = {
+                    9: {
+                        "header": _("Cur."),
+                        "field": "currency_name",
+                        "field_currency_balance": "currency_name",
+                        "type": "currency_name",
+                        "width": 7,
+                    },
+                    10: {
+                        "header": _("Cur. Original"),
+                        "field": "amount_currency",
+                        "field_final_balance": "amount_currency",
+                        "type": "amount_currency",
+                        "width": 14,
+                    },
+                    11: {
+                        "header": _("Cur. Residual"),
+                        "field": "amount_residual_currency",
+                        "field_final_balance": "amount_currency",
+                        "type": "amount_currency",
+                        "width": 14,
+                    },
+                }
             res = {**res, **foreign_currency}
         return res
 

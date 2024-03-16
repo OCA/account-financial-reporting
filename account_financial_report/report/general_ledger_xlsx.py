@@ -67,6 +67,16 @@ class GeneralLedgerXslx(models.AbstractModel):
                 "width": 14,
             },
         ]
+        if report.foreign_currency and report.show_currency_name:
+            res += [
+                {
+                    "header": _("Cur."),
+                    "field": "currency_name",
+                    "field_currency_balance": "currency_name",
+                    "type": "currency_name",
+                    "width": 7,
+                },
+            ]
         if report.foreign_currency:
             res += [
                 {
