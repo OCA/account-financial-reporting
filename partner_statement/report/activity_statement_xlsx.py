@@ -2,7 +2,7 @@
 # Copyright 2021 ForgeFlow S.L.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import _, fields, models
+from odoo import _, models
 
 
 class ActivityStatementXslx(models.AbstractModel):
@@ -34,7 +34,7 @@ class ActivityStatementXslx(models.AbstractModel):
             )
         )
         sheet.merge_range(
-            row_pos, 0, row_pos, 6, statement_header, self.format_right_bold
+            row_pos, 0, row_pos, 6, statement_header, self.format_left_bold
         )
         row_pos += 1
         sheet.write(
@@ -44,10 +44,12 @@ class ActivityStatementXslx(models.AbstractModel):
         sheet.merge_range(
             row_pos, 2, row_pos, 4, _("Description"), self.format_theader_yellow_center
         )
-        sheet.write(row_pos, 5, _("Open Amount"), self.format_theader_yellow_center)
+        sheet.write(row_pos, 5, _("Original Amount"), self.format_theader_yellow_center)
         sheet.write(row_pos, 6, _("Balance"), self.format_theader_yellow_center)
         row_pos += 1
-        sheet.write(row_pos, 1, partner_data.get("start"), self.format_tcell_date_left)
+        sheet.write(
+            row_pos, 1, partner_data.get("prior_day"), self.format_tcell_date_left
+        )
         sheet.merge_range(
             row_pos, 2, row_pos, 4, _("Balance Forward"), self.format_tcell_left
         )
@@ -59,7 +61,7 @@ class ActivityStatementXslx(models.AbstractModel):
             name_to_show = (
                 line.get("name", "") == "/" or not line.get("name", "")
             ) and line.get("ref", "")
-            if line.get("name", "") != "/":
+            if line.get("name", "") and line.get("name", "") != "/":
                 if not line.get("ref", ""):
                     name_to_show = line.get("name", "")
                 else:
@@ -166,7 +168,7 @@ class ActivityStatementXslx(models.AbstractModel):
         sheet.write(
             row_pos,
             2,
-            fields.Date.from_string(data.get("date_end")),
+            data.get("data", {}).get(partners.ids[0], {}).get("today"),
             self.format_date_left,
         )
         self._size_columns(sheet)

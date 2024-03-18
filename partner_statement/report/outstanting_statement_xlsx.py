@@ -2,7 +2,7 @@
 # Copyright 2021 ForgeFlow S.L.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import _, fields, models
+from odoo import _, models
 
 
 class OutstandingStatementXslx(models.AbstractModel):
@@ -33,7 +33,7 @@ class OutstandingStatementXslx(models.AbstractModel):
             )
         )
         sheet.merge_range(
-            row_pos, 0, row_pos, 6, statement_header, self.format_right_bold
+            row_pos, 0, row_pos, 6, statement_header, self.format_left_bold
         )
         row_pos += 1
         sheet.write(
@@ -50,7 +50,7 @@ class OutstandingStatementXslx(models.AbstractModel):
             name_to_show = (
                 line.get("name", "") == "/" or not line.get("name", "")
             ) and line.get("ref", "")
-            if line.get("name", "") != "/":
+            if line.get("name", "") and line.get("name", "") != "/":
                 if not line.get("ref", ""):
                     name_to_show = line.get("name", "")
                 else:
@@ -161,7 +161,7 @@ class OutstandingStatementXslx(models.AbstractModel):
         sheet.write(
             row_pos,
             2,
-            fields.Date.from_string(data.get("date_end")),
+            data.get("data", {}).get(partners.ids[0], {}).get("today"),
             self.format_date_left,
         )
         self._size_columns(sheet)

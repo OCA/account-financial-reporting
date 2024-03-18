@@ -50,7 +50,7 @@
                                     <th>Reference number</th>
                                     <th>Date</th>
                                     <th>Description</th>
-                                    <th class="amount">Amount</th>
+                                    <th class="amount">Original Amount</th>
                                     <th class="amount">Balance</th>
                                 </tr>
                             </thead>
@@ -58,7 +58,7 @@
                                 <tr>
                                     <td />
                                     <td>
-                                        <span t-esc="d['start']" />
+                                        <span t-esc="d['prior_day']" />
                                     </td>
                                     <td>
                                             Balance Forward
