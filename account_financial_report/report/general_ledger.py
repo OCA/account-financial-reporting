@@ -54,10 +54,11 @@ class GeneralLedgerReport(models.AbstractModel):
         return ["receivable", "payable"] if grouped_by != "taxes" else ["other"]
 
     def _get_acc_prt_accounts_ids(self, company_id, grouped_by):
-        accounts_domain = [
-            ("company_id", "=", company_id),
-            ("internal_type", "in", self._get_account_internal_types(grouped_by)),
-        ]
+        accounts_domain = [("company_id", "=", company_id)]
+        if grouped_by:
+            accounts_domain += [
+                ("internal_type", "in", self._get_account_internal_types(grouped_by))
+            ]
         acc_prt_accounts = self.env["account.account"].search(accounts_domain)
         return acc_prt_accounts.ids
 
@@ -75,7 +76,7 @@ class GeneralLedgerReport(models.AbstractModel):
         domain += [("date", "<", date_from)]
         accounts = self.env["account.account"].search(accounts_domain)
         domain += [("account_id", "in", accounts.ids)]
-        if acc_prt:
+        if acc_prt and grouped_by:
             internal_types = self._get_account_internal_types(grouped_by)
             domain += [("account_id.internal_type", "in", internal_types)]
         return domain
