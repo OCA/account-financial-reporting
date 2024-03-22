@@ -100,11 +100,11 @@ class ActivityStatementXslx(models.AbstractModel):
                 if not line.get("ref", ""):
                     name_to_show = line.get("name", "")
                 else:
-                    if (line.get("name", "") in line.get("ref", "")) or (
+                    if (line.get("ref", "") in line.get("name", "")) or (
                         line.get("name", "") == line.get("ref", "")
                     ):
                         name_to_show = line.get("name", "")
-                    elif line.get("ref", "") not in line.get("name", ""):
+                    else:
                         name_to_show = line.get("ref", "")
             sheet.write(row_pos, 0, line.get("move_id", ""), format_tcell_left)
             sheet.write(row_pos, 1, line.get("date", ""), format_tcell_date_left)
