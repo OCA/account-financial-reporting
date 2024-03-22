@@ -1,0 +1,31 @@
+<odoo>
+    <record id="style_default" model="mis.report.style">
+        <field name="name">PL/BS default</field>
+        <field name="dp_inherit">false</field>
+        <field name="dp">2</field>
+        <field name="hide_empty_inherit">false</field>
+        <field name="hide_empty">true</field>
+    </record>
+    <record id="style_header" model="mis.report.style">
+        <field name="name">PL/BS header</field>
+        <field name="font_weight_inherit">false</field>
+        <field name="font_weight">bold</field>
+    </record>
+    <record id="style_details_double_indent" model="mis.report.style">
+        <field name="name">PL/BS double indented details</field>
+        <field name="indent_level_inherit">false</field>
+        <field name="indent_level">2</field>
+    </record>
+    <record id="style_header_indent" model="mis.report.style">
+        <field name="name">PL/BS indented header</field>
+        <field name="font_weight_inherit">false</field>
+        <field name="font_weight">bold</field>
+        <field name="indent_level_inherit">false</field>
+        <field name="indent_level">1</field>
+    </record>
+    <record id="style_details" model="mis.report.style">
+        <field name="name">PL/BS details</field>
+        <field name="indent_level_inherit">false</field>
+        <field name="indent_level">1</field>
+    </record>
+</odoo>

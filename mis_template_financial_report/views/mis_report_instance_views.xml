@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="mis_report_instance_view_form">
+        <field name="name">Add horizontal option to MIS report instance form</field>
+        <field name="model">mis.report.instance</field>
+        <field name="inherit_id" ref="mis_builder.mis_report_instance_view_form" />
+        <field name="arch" type="xml">
+            <group name="layout" position="inside">
+                <field name="allow_horizontal" invisible="1" />
+                <field
+                    name="horizontal"
+                    attrs="{'invisible': [('allow_horizontal', '=', False)]}"
+                />
+            </group>
+        </field>
+    </record>
+</odoo>

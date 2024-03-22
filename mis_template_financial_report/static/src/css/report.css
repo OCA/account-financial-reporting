@@ -1,0 +1,11 @@
+div.mis_builder_horizontal {
+    display: table;
+    width: 100%;
+}
+div.mis_builder_horizontal > div {
+    display: table-row;
+}
+div.mis_builder_horizontal > div > div {
+    display: table-cell;
+    padding: 2px;
+}
