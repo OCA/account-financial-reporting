@@ -86,9 +86,14 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
             2: {"header": _("Journal"), "field": "journal", "width": 8},
             3: {"header": _("Account"), "field": "account", "width": 9},
             4: {"header": _("Partner"), "field": "partner", "width": 25},
-            5: {"header": _("Ref - Label"), "field": "ref_label", "width": 40},
-            6: {"header": _("Due date"), "field": "due_date", "width": 11},
-            7: {
+            5: {
+                "header": _("Analytic Account"),
+                "field": "analytic_account_id",
+                "width": 25,
+            },
+            6: {"header": _("Ref - Label"), "field": "ref_label", "width": 40},
+            7: {"header": _("Due date"), "field": "due_date", "width": 11},
+            8: {
                 "header": _("Residual"),
                 "field": "residual",
                 "field_footer_total": "residual",
@@ -96,7 +101,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                 "type": "amount",
                 "width": 14,
             },
-            8: {
+            9: {
                 "header": _("Current"),
                 "field": "current",
                 "field_footer_total": "current",
@@ -105,7 +110,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                 "type": "amount",
                 "width": 14,
             },
-            9: {
+            10: {
                 "header": _("Age ≤ 30 d."),
                 "field": "30_days",
                 "field_footer_total": "30_days",
@@ -114,7 +119,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                 "type": "amount",
                 "width": 14,
             },
-            10: {
+            11: {
                 "header": _("Age ≤ 60 d."),
                 "field": "60_days",
                 "field_footer_total": "60_days",
@@ -123,7 +128,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                 "type": "amount",
                 "width": 14,
             },
-            11: {
+            12: {
                 "header": _("Age ≤ 90 d."),
                 "field": "90_days",
                 "field_footer_total": "90_days",
@@ -132,7 +137,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                 "type": "amount",
                 "width": 14,
             },
-            12: {
+            13: {
                 "header": _("Age ≤ 120 d."),
                 "field": "120_days",
                 "field_footer_total": "120_days",
@@ -141,7 +146,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                 "type": "amount",
                 "width": 14,
             },
-            13: {
+            14: {
                 "header": _("Older"),
                 "field": "older",
                 "field_footer_total": "older",
