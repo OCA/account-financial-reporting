@@ -104,9 +104,14 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
             2: {"header": _("Journal"), "field": "journal", "width": 8},
             3: {"header": _("Account"), "field": "account", "width": 9},
             4: {"header": _("Partner"), "field": "partner", "width": 25},
-            5: {"header": _("Ref - Label"), "field": "ref_label", "width": 40},
-            6: {"header": _("Due date"), "field": "due_date", "width": 11},
-            7: {
+            5: {
+                "header": _("Analytic Account"),
+                "field": "analytic_account_id",
+                "width": 25,
+            },
+            6: {"header": _("Ref - Label"), "field": "ref_label", "width": 40},
+            7: {"header": _("Due date"), "field": "due_date", "width": 11},
+            8: {
                 "header": _("Residual"),
                 "field": "residual",
                 "field_footer_total": "residual",
@@ -114,7 +119,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                 "type": "amount",
                 "width": 14,
             },
-            8: {
+            9: {
                 "header": _("Current"),
                 "field": "current",
                 "field_footer_total": "current",

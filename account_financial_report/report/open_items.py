@@ -7,6 +7,7 @@ import operator
 from datetime import date, datetime
 
 from odoo import _, api, models
+from odoo.osv import expression
 from odoo.tools import float_is_zero
 
 
@@ -68,10 +69,14 @@ class OpenItemsReport(models.AbstractModel):
         company_id,
         date_from,
         grouped_by,
+        analytic_account_ids,
+        no_analytic,
     ):
         domain = self._get_move_lines_domain_not_reconciled(
             company_id, account_ids, partner_ids, only_posted_moves, date_from
         )
+        # moved out to avoid too complex method error
+        domain = self.get_analytic_domain(domain, analytic_account_ids, no_analytic)
         ml_fields = self._get_ml_fields()
         move_lines = self.env["account.move.line"].search_read(
             domain=domain, fields=ml_fields
@@ -148,7 +153,10 @@ class OpenItemsReport(models.AbstractModel):
                 ref_label = move_line["ref"]
             else:
                 ref_label = move_line["ref"] + str(" - ") + move_line["name"]
-
+            if analytic_account_ids and move_line["analytic_account_id"]:
+                analytic_account_id = move_line["analytic_account_id"][1]
+            else:
+                analytic_account_id = False
             move_line.update(
                 {
                     "date": move_line["date"],
@@ -167,6 +175,7 @@ class OpenItemsReport(models.AbstractModel):
                     "currency_name": move_line["currency_id"][1]
                     if move_line["currency_id"]
                     else False,
+                    "analytic_account_id": analytic_account_id,
                 }
             )
 
@@ -247,6 +256,9 @@ class OpenItemsReport(models.AbstractModel):
         only_posted_moves = data["only_posted_moves"]
         show_partner_details = data["show_partner_details"]
         grouped_by = data["grouped_by"]
+        analytic_account_ids = data["analytic_account_ids"]
+        no_analytic = data["no_analytic"]
+
         (
             move_lines_data,
             partners_data,
@@ -261,6 +273,8 @@ class OpenItemsReport(models.AbstractModel):
             company_id,
             date_from,
             grouped_by,
+            analytic_account_ids,
+            no_analytic,
         )
 
         total_amount = self._calculate_amounts(open_items_move_lines_data)
@@ -288,6 +302,7 @@ class OpenItemsReport(models.AbstractModel):
 
     def _get_ml_fields(self):
         return self.COMMON_ML_FIELDS + [
+            "analytic_account_id",
             "amount_residual",
             "reconciled",
             "currency_id",
@@ -297,3 +312,32 @@ class OpenItemsReport(models.AbstractModel):
             "debit",
             "amount_currency",
         ]
+
+    def get_analytic_domain(self, domain, analytic_account_ids, no_analytic):
+        if no_analytic:
+            domain = expression.AND(
+                [
+                    domain,
+                    [
+                        (
+                            "analytic_account_id",
+                            "=",
+                            False,
+                        )
+                    ],
+                ]
+            )
+        elif analytic_account_ids:
+            domain = expression.AND(
+                [
+                    domain,
+                    [
+                        (
+                            "analytic_account_id",
+                            "in",
+                            analytic_account_ids,
+                        )
+                    ],
+                ]
+            )
+        return domain

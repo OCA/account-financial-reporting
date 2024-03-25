@@ -245,13 +245,30 @@
                 <div class="act_as_cell" style="width: 4.78%;">Journal</div>
                 <!--## account code-->
                 <div class="act_as_cell" style="width: 5.38%;">Account</div>
-                <!--## partner-->
-                <div class="act_as_cell" style="width: 15.07%;">Partner</div>
-                <!--## ref - label-->
-                <div class="act_as_cell" style="width: 24.5%;">
-                    Ref -
-                    Label
-                </div>
+
+                <t t-if="analytic_account_ids">
+                    <!--## partner-->
+                    <div class="act_as_cell" style="width: 13.19%;">Partner</div>
+                    <!--## analytic_account-->
+                    <div
+                        class="act_as_cell"
+                        style="width: 13.19%;"
+                    >Analytic Account</div>
+                    <!--## ref - label-->
+                    <div class="act_as_cell" style="width: 13.19%;">
+                        Ref -
+                        Label
+                    </div>
+                </t>
+                <t t-else="">
+                    <!--## partner-->
+                    <div class="act_as_cell" style="width: 15.07%;">Partner</div>
+                    <!--## ref - label-->
+                    <div class="act_as_cell" style="width: 24.5%;">
+                        Ref -
+                        Label
+                    </div>
+                </t>
                 <!--## date_due-->
                 <div class="act_as_cell" style="width: 6.47%;">
                     Due
@@ -324,6 +341,20 @@
                     <t t-esc="line['partner_name']" />
                 </span>
             </div>
+            <!--## cost_center-->
+            <t t-if="analytic_account_ids">
+                <div class="act_as_cell left">
+                    <t t-if="line['analytic_account_id']">
+                        <span
+                            t-att-res-id="line['analytic_account_id']"
+                            res-model="account.analytic.account"
+                            view-type="form"
+                        >
+                            <t t-raw="line['analytic_account_id']" />
+                        </span>
+                    </t>
+                </div>
+            </t>
             <!--## ref - label-->
             <div class="act_as_cell left">
                 <span t-esc="line['ref_label']" />

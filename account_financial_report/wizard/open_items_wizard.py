@@ -63,6 +63,10 @@ class OpenItemsReportWizard(models.TransientModel):
         selection=[("partners", "Partners"), ("salesperson", "Partner Salesperson")],
         default="partners",
     )
+    analytic_account_ids = fields.Many2many(
+        comodel_name="account.analytic.account", string="Filter analytic accounts"
+    )
+    no_analytic = fields.Boolean("Only no analytic items")
 
     @api.onchange("account_code_from", "account_code_to")
     def on_change_account_range(self):
@@ -109,12 +113,17 @@ class OpenItemsReportWizard(models.TransientModel):
                 self.account_ids = self.account_ids.filtered(
                     lambda a: a.company_id == self.company_id
                 )
-        res = {"domain": {"account_ids": [], "partner_ids": []}}
+        res = {
+            "domain": {"account_ids": [], "partner_ids": [], "analytic_account_ids": []}
+        }
         if not self.company_id:
             return res
         else:
             res["domain"]["account_ids"] += [("company_id", "=", self.company_id.id)]
             res["domain"]["partner_ids"] += self._get_partner_ids_domain()
+            res["domain"]["analytic_account_ids"] += [
+                ("company_id", "=", self.company_id.id)
+            ]
         return res
 
     @api.onchange("account_ids")
@@ -179,8 +188,10 @@ class OpenItemsReportWizard(models.TransientModel):
             "target_move": self.target_move,
             "account_ids": self.account_ids.ids,
             "partner_ids": self.partner_ids.ids or [],
+            "analytic_account_ids": self.analytic_account_ids.ids or [],
             "account_financial_report_lang": self.env.lang,
             "grouped_by": self.grouped_by,
+            "no_analytic": self.no_analytic,
         }
 
     def _export(self, report_type):
