@@ -62,6 +62,18 @@
                         colspan="4"
                     />
                 </group>
+                <group
+                    name="Filter analytic accounts"
+                    groups="analytic.group_analytic_accounting"
+                >
+                    <field
+                        name="analytic_account_ids"
+                        widget="many2many_tags"
+                        options="{'no_create': True}"
+                    />
+                    <field name="no_analytic" />
+                    <field name="all_analytic" />
+                </group>
                 <footer>
                     <button
                         name="button_export_html"
