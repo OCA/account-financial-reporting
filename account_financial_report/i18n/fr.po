@@ -662,9 +662,9 @@ msgid ""
 "setup through chart of accounts will display initial and final balance in "
 "that currency."
 msgstr ""
-"Afficher les devises ??trang??res pour les ??critures comptables, ?? moins que "
-"la devise du compte comptable ne soit pas d??finie dans le plan comptable "
-"affichera les balances initiale et finale dans cette monnaie."
+"Afficher les devises ??trang??res pour les ??critures comptables, ?? moins "
+"que la devise du compte comptable ne soit pas d??finie dans le plan "
+"comptable affichera les balances initiale et finale dans cette monnaie."
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__hide_parent_hierarchy_level
@@ -920,8 +920,8 @@ msgid ""
 "                        only one unaffected earnings account."
 msgstr ""
 "Le grand livre ne peut ??tre g??n??r?? que si la soci??t?? s??lectionn??e a\n"
-"                                  un seul compte de type b??n??fice de l'ann??e "
-"en cours."
+"                                  un seul compte de type b??n??fice de "
+"l'ann??e en cours."
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__group_option
@@ -1076,16 +1076,6 @@ msgid "Journals"
 msgstr "Journaux"
 
 #. module: account_financial_report
-#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard____last_update
-msgid "Last Modified on"
-msgstr "Derni??re modification le"
-
-#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__write_uid
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__write_uid
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__write_uid
@@ -1126,6 +1116,15 @@ msgstr "Niveau %s"
 #, python-format
 msgid "Limit hierarchy levels"
 msgstr "Limiter les niveaux de hi??rarchie"
+
+#. module: account_financial_report
+#. odoo-python
+#: code:addons/account_financial_report/report/general_ledger.py:0
+#: code:addons/account_financial_report/report/open_items.py:0
+#: code:addons/account_financial_report/report/trial_balance.py:0
+#, python-format
+msgid "Missing Partner"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__move_target
@@ -1187,12 +1186,6 @@ msgid "None"
 msgstr "Aucun"
 
 #. module: account_financial_report
-#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__not_only_one_unaffected_earnings_account
-#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__not_only_one_unaffected_earnings_account
-msgid "Not Only One Unaffected Earnings Account"
-msgstr "Pas uniquement un compte de type b??n??fice de l'ann??e en cours"
-
-#. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
 #, python-format
@@ -1216,6 +1209,12 @@ msgstr "Rapports comptables OCA"
 #, python-format
 msgid "Older"
 msgstr "Plus ancien"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__only_one_unaffected_earnings_account
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__only_one_unaffected_earnings_account
+msgid "Only One Unaffected Earnings Account"
+msgstr ""
 
 #. module: account_financial_report
 #. odoo-python
@@ -1625,7 +1624,8 @@ msgid ""
 "The Company in the General Ledger Report Wizard and in Date Range must be "
 "the same."
 msgstr ""
-"La soci??t?? dans le grand livre et dans la plage de dates doit ??tre la m??me."
+"La soci??t?? dans le grand livre et dans la plage de dates doit ??tre la m??"
+"me."
 
 #. module: account_financial_report
 #. odoo-python
@@ -1635,8 +1635,8 @@ msgid ""
 "The Company in the Trial Balance Report Wizard and in Date Range must be the "
 "same."
 msgstr ""
-"La soci??t?? dans la balance g??n??rale et dans la plage de dates doit ??tre l "
-"m??me."
+"La soci??t?? dans la balance g??n??rale et dans la plage de dates doit ??tre "
+"l m??me."
 
 #. module: account_financial_report
 #. odoo-python
@@ -1645,8 +1645,8 @@ msgstr ""
 msgid ""
 "The Company in the Vat Report Wizard and in Date Range must be the same."
 msgstr ""
-"La soci??t?? dans le rapport des taxes et dans la plage de dates doit ??tre la "
-"m??me."
+"La soci??t?? dans le rapport des taxes et dans la plage de dates doit ??tre "
+"la m??me."
 
 #. module: account_financial_report
 #. odoo-python
@@ -1717,8 +1717,8 @@ msgid ""
 "Trial Balance can be computed only if selected company have only\n"
 "                        one unaffected earnings account."
 msgstr ""
-"La balance g??n??rale ne peut ??tre g??n??r??e que si la soci??t?? s??lectionn??e a un "
-"seul\n"
+"La balance g??n??rale ne peut ??tre g??n??r??e que si la soci??t?? s??"
+"lectionn??e a un seul\n"
 "                                    compte de type b??n??fice de l'ann??e en "
 "cours."
 
@@ -1737,8 +1737,8 @@ msgid ""
 "balance."
 msgstr ""
 "Utiliser ce filtre pour masquer un compte ou un partenaire avec un solde "
-"final ?? 0. Si un ou plusieurs partenaires sont filtr??s, les totaux des "
-"d??bits et cr??dits ne correspondront pas ?? la balance g??n??rale."
+"final ?? 0. Si un ou plusieurs partenaires sont filtr??s, les totaux des d??"
+"bits et cr??dits ne correspondront pas ?? la balance g??n??rale."
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__show_hierarchy
@@ -1881,6 +1881,12 @@ msgstr "largeur : 38,92% ;"
 msgid "width: 8.11%;"
 msgstr "largeur : 8.11% ;"
 
+#~ msgid "Last Modified on"
+#~ msgstr "Derni??re modification le"
+
+#~ msgid "Not Only One Unaffected Earnings Account"
+#~ msgstr "Pas uniquement un compte de type b??n??fice de l'ann??e en cours"
+
 #~ msgid "Filter analytic tags"
 #~ msgstr "Filtrer les ??tiquettes analytiques"
 
@@ -1955,15 +1961,15 @@ msgstr "largeur : 8.11% ;"
 #~ "General Ledger can be computed only if selected company have only one "
 #~ "unaffected earnings account."
 #~ msgstr ""
-#~ "Le Grand Livre ne peut ??tre calcul?? que si l'entreprise s??lectionn??e a un "
-#~ "seul compte de r??sultat non affect??."
+#~ "Le Grand Livre ne peut ??tre calcul?? que si l'entreprise s??lectionn??e "
+#~ "a un seul compte de r??sultat non affect??."
 
 #~ msgid ""
 #~ "Trial Balance can be computed only if selected company have only one "
 #~ "unaffected earnings account."
 #~ msgstr ""
-#~ "La balance g??n??rale peut ??tre calcul??e uniquement si la soci??t?? "
-#~ "s??lectionn??e n'a qu'un seul compte de b??n??fices/pertes ?? reporter."
+#~ "La balance g??n??rale peut ??tre calcul??e uniquement si la soci??t?? s??"
+#~ "lectionn??e n'a qu'un seul compte de b??n??fices/pertes ?? reporter."
 
 #~ msgid ""
 #~ "Cost\n"
