@@ -50,9 +50,10 @@ class TrialBalanceReportWizard(models.TransientModel):
     show_partner_details = fields.Boolean()
     partner_ids = fields.Many2many(comodel_name="res.partner", string="Filter partners")
     journal_ids = fields.Many2many(comodel_name="account.journal")
-
-    not_only_one_unaffected_earnings_account = fields.Boolean(readonly=True)
-
+    only_one_unaffected_earnings_account = fields.Boolean(
+        readonly=True,
+        default=lambda self: self._only_one_unaffected_earnings_account(),
+    )
     foreign_currency = fields.Boolean(
         string="Show foreign currency",
         help="Display foreign currency for move lines, unless "
@@ -107,16 +108,21 @@ class TrialBalanceReportWizard(models.TransientModel):
             else:
                 wiz.fy_start_date = False
 
-    @api.onchange("company_id")
-    def onchange_company_id(self):
-        """Handle company change."""
+    def _only_one_unaffected_earnings_account(self):
         count = self.env["account.account"].search_count(
             [
                 ("account_type", "=", "equity_unaffected"),
-                ("company_id", "=", self.company_id.id),
+                ("company_id", "=", self.company_id.id or self.env.company.id),
             ]
         )
-        self.not_only_one_unaffected_earnings_account = count != 1
+        return count == 1
+
+    @api.onchange("company_id")
+    def onchange_company_id(self):
+        """Handle company change."""
+        self.only_one_unaffected_earnings_account = (
+            self._only_one_unaffected_earnings_account()
+        )
         if (
             self.company_id
             and self.date_range_id.company_id
