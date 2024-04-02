@@ -33,6 +33,8 @@
                     />
                 </group>
                 <group name="account_filter" col="4">
+                    <label for="age_partner_config_id" />
+                    <field name="age_partner_config_id" nolabel="1" />
                     <label for="account_ids" colspan="4" />
                     <field name="receivable_accounts_only" />
                     <field name="payable_accounts_only" />
@@ -68,19 +70,16 @@
                         default_focus="1"
                         class="oe_highlight"
                     />
-                    or
                     <button
                         name="button_export_pdf"
                         string="Export PDF"
                         type="object"
                     />
-                    or
                     <button
                         name="button_export_xlsx"
                         string="Export XLSX"
                         type="object"
                     />
-                    or
                     <button string="Cancel" class="oe_link" special="cancel" />
                 </footer>
             </form>

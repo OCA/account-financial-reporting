@@ -24,6 +24,7 @@
   * João Marques
   * Alexandre D. Díaz
   * Víctor Martínez
+  * Carolina Fernandez
 
 * `Sygel <https://www.sygel.es>`__:
 
