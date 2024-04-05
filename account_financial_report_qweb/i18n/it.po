@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-23 15:26+0000\n"
-"PO-Revision-Date: 2024-03-08 14:37+0000\n"
+"PO-Revision-Date: 2024-04-05 12:37+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: Italian (https://www.transifex.com/oca/teams/23907/it/)\n"
 "Language: it\n"
@@ -981,7 +981,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_general_ledger_report_wizard_cost_center_ids
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.general_ledger_wizard
 msgid "Filter cost centers"
-msgstr "Filtro conti analitici"
+msgstr "Filtra centri di costo"
 
 #. module: account_financial_report_qweb
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_report_general_ledger_qweb_filter_journal_ids
@@ -1240,8 +1240,8 @@ msgid ""
 "If flagged, no details will be displayed in the General Ledger report (the "
 "webkit one only), only centralized amounts per period."
 msgstr ""
-"If flagged, no details will be displayed in the General Ledger report (the "
-"webkit one only), only centralized amounts per period."
+"Se selezionata, nessun dettaglio verrà visualizzato nel resoconto libro "
+"mastro (solo il webkit), solo conti centralizzati per periodo."
 
 #. module: account_financial_report_qweb
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_trial_balance_qweb_lines_header
@@ -1597,7 +1597,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_general_ledger_report_wizard_not_only_one_unaffected_earnings_account
 #: model:ir.model.fields,field_description:account_financial_report_qweb.field_trial_balance_report_wizard_not_only_one_unaffected_earnings_account
 msgid "Not only one unaffected earnings account"
-msgstr "Un solo conto definito come \"ricavo anno corrente\"."
+msgstr "Conto ricavi anno corrente non unico"
 
 #. module: account_financial_report_qweb
 #: model:ir.ui.menu,name:account_financial_report_qweb.menu_oca_reports
@@ -2151,7 +2151,7 @@ msgstr "Bilancino"
 #. module: account_financial_report_qweb
 #: model:ir.ui.view,arch_db:account_financial_report_qweb.report_trial_balance_base
 msgid "Trial Balance -"
-msgstr "Bilancio di verifica"
+msgstr "Bilancio di verifica -"
 
 #. module: account_financial_report_qweb
 #: model:ir.model,name:account_financial_report_qweb.model_trial_balance_report_wizard
@@ -2185,9 +2185,9 @@ msgid ""
 "If partners are filtered, debits and credits totals will not match the trial "
 "balance."
 msgstr ""
-"Usare questo filtro per nascondere i conti o i partner con bilancio fnale a "
-"0. Se i partner sono filtrati, il totale dei crediti e debiti non "
-"corrisponde al Bilancino."
+"Usare questo filtro per nascondere un conto o un partner con un saldo finale "
+"a 0. Se i partner sono filtrati, i totali in dare e in avere non "
+"corrisponderanno al bilancio di verifica."
 
 #. module: account_financial_report_qweb
 #: model:ir.actions.client,name:account_financial_report_qweb.action_report_vat_report
