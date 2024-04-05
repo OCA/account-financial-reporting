@@ -154,7 +154,12 @@ class VATReport(models.AbstractModel):
         tags = self.env["account.account.tag"].browse(tags_ids)
         tags_data = {}
         for tag in tags:
-            tags_data.update({tag.id: {"code": "", "name": tag.name}})
+            sign = ""
+            name = tag.name
+            if tag.name[0] in ("+", "-"):
+                name = tag.name[1:]
+                sign = tag.name[0]
+            tags_data.update({tag.id: {"code": "", "name": name, "sign": sign}})
         return tags_data
 
     def _get_vat_report_tag_data(self, vat_report_data, tax_data, tax_detail):
@@ -185,8 +190,10 @@ class VATReport(models.AbstractModel):
                         vat_report[tag_id]["tax"] += tax_move_line["tax"]
         tags_data = self._get_tags_data(vat_report.keys())
         vat_report_list = []
-        for tag_id in vat_report.keys():
-            vat_report[tag_id]["name"] = tags_data[tag_id]["name"]
+        for tag_id in sorted(
+            vat_report.keys(), key=lambda t: "{code}{name}{sign}".format(**tags_data[t])
+        ):
+            vat_report[tag_id]["name"] = "{sign}{name}".format(**tags_data[tag_id])
             vat_report[tag_id]["code"] = tags_data[tag_id]["code"]
             if tax_detail:
                 vat_report[tag_id]["taxes"] = []
