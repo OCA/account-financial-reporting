@@ -83,6 +83,7 @@ class TestVATReport(AccountTestInvoicingCommon):
             {
                 "name": "Tag 01",
                 "applicability": "taxes",
+                "tax_negate": False,
                 "country_id": cls.company.country_id.id,
             }
         )
@@ -90,6 +91,7 @@ class TestVATReport(AccountTestInvoicingCommon):
             {
                 "name": "Tag 02",
                 "applicability": "taxes",
+                "tax_negate": True,
                 "country_id": cls.company.country_id.id,
             }
         )
@@ -97,6 +99,7 @@ class TestVATReport(AccountTestInvoicingCommon):
             {
                 "name": "Tag 03",
                 "applicability": "taxes",
+                "tax_negate": False,
                 "country_id": cls.company.country_id.id,
             }
         )
@@ -297,15 +300,15 @@ class TestVATReport(AccountTestInvoicingCommon):
         tax_10_net, tax_10_tax = self._get_tax_line(self.tax_10.name, vat_report)
         tax_20_net, tax_20_tax = self._get_tax_line(self.tax_20.name, vat_report)
 
-        self.assertEqual(tag_01_net, -100)
+        self.assertEqual(tag_01_net, 0)
         self.assertEqual(tag_01_tax, -10)
-        self.assertEqual(tag_02_net, -350)
-        self.assertEqual(tag_02_tax, -60)
-        self.assertEqual(tag_03_net, -250)
+        self.assertEqual(tag_02_net, 0)
+        self.assertEqual(tag_02_tax, 60)
+        self.assertEqual(tag_03_net, 0)
         self.assertEqual(tag_03_tax, -50)
-        self.assertEqual(tax_10_net, -100)
+        self.assertEqual(tax_10_net, 0)
         self.assertEqual(tax_10_tax, -10)
-        self.assertEqual(tax_20_net, -250)
+        self.assertEqual(tax_20_net, 0)
         self.assertEqual(tax_20_tax, -50)
 
         # Check report based on taxgroups

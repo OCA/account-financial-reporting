@@ -80,6 +80,8 @@ class VATReport(models.AbstractModel):
                     "net": 0.0,
                     "tax": tax_move_line["balance"],
                     "tax_line_id": tax_move_line["tax_line_id"][0],
+                    "tax_tag_ids": tax_move_line["tax_tag_ids"],
+                    "tax_tag_invert": tax_move_line["tax_tag_invert"],
                 }
             )
         for taxed_move_line in taxed_move_lines:
@@ -89,6 +91,8 @@ class VATReport(models.AbstractModel):
                         "net": taxed_move_line["balance"],
                         "tax": 0.0,
                         "tax_line_id": tax_id,
+                        "tax_tag_ids": taxed_move_line["tax_tag_ids"],
+                        "tax_tag_invert": taxed_move_line["tax_tag_invert"],
                     }
                 )
         tax_ids = list(map(operator.itemgetter("tax_line_id"), vat_data))
@@ -161,12 +165,11 @@ class VATReport(models.AbstractModel):
         vat_report = {}
         for tax_move_line in vat_report_data:
             tax_id = tax_move_line["tax_line_id"]
-            tags_ids = tax_data[tax_id]["tags_ids"]
             if tax_data[tax_id]["amount_type"] == "group":
                 continue
             else:
-                if tags_ids:
-                    for tag_id in tags_ids:
+                if tax_move_line["tax_tag_ids"]:
+                    for tag_id in tax_move_line["tax_tag_ids"]:
                         if tag_id not in vat_report.keys():
                             vat_report[tag_id] = {}
                             vat_report[tag_id]["net"] = 0.0
@@ -179,10 +182,19 @@ class VATReport(models.AbstractModel):
                                 vat_report[tag_id][tax_id].update(
                                     {"net": 0.0, "tax": 0.0}
                                 )
-                        vat_report[tag_id][tax_id]["net"] += tax_move_line["net"]
-                        vat_report[tag_id][tax_id]["tax"] += tax_move_line["tax"]
-                        vat_report[tag_id]["net"] += tax_move_line["net"]
-                        vat_report[tag_id]["tax"] += tax_move_line["tax"]
+                        invert_factor = -1 if tax_move_line["tax_tag_invert"] else 1
+                        vat_report[tag_id][tax_id]["net"] += (
+                            tax_move_line["net"] * invert_factor
+                        )
+                        vat_report[tag_id][tax_id]["tax"] += (
+                            tax_move_line["tax"] * invert_factor
+                        )
+                        vat_report[tag_id]["net"] += (
+                            tax_move_line["net"] * invert_factor
+                        )
+                        vat_report[tag_id]["tax"] += (
+                            tax_move_line["tax"] * invert_factor
+                        )
         tags_data = self._get_tags_data(vat_report.keys())
         vat_report_list = []
         for tag_id in vat_report.keys():
@@ -237,4 +249,6 @@ class VATReport(models.AbstractModel):
             "tax_line_id",
             "tax_ids",
             "analytic_tag_ids",
+            "tax_tag_ids",
+            "tax_tag_invert",
         ]
