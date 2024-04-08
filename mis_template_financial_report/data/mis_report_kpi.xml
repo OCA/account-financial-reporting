@@ -24,6 +24,7 @@
         <field name="accumulation_method">sum</field>
         <field name="sequence">0</field>
         <field name="report_id" ref="report_pl" />
+        <field name="split_after" eval="True" />
     </record>
     <record id="kpi_pl_to_report" model="mis.report.kpi">
         <field name="id">3</field>
@@ -93,5 +94,6 @@
         <field name="accumulation_method">sum</field>
         <field name="sequence">0</field>
         <field name="report_id" ref="report_bs" />
+        <field name="split_after" eval="True" />
     </record>
 </odoo>
