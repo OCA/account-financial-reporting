@@ -16,12 +16,9 @@ class MisReportInstance(models.Model):
     def _compute_allow_horizontal(self):
         """Indicate that the instance supports horizontal rendering."""
         for instance in self:
-            instance.allow_horizontal = set(
-                instance.report_id.get_external_id().values()
-            ) & {
-                "mis_template_financial_report.report_bs",
-                "mis_template_financial_report.report_pl",
-            }
+            instance.allow_horizontal = any(
+                instance.mapped("report_id.kpi_ids.split_after")
+            )
 
     def compute(self):
         if not self.horizontal:
@@ -29,55 +26,28 @@ class MisReportInstance(models.Model):
 
         full_matrix = self._compute_matrix()
 
-        matrices = self._compute_horizontal_matrices(full_matrix)
+        matrices = self._split_matrix(full_matrix)
 
         result = full_matrix.as_dict()
-        result["horizontal_matrices"] = [
-            extra_matrix.as_dict() for extra_matrix in matrices
-        ]
+        result["split_matrices"] = [extra_matrix.as_dict() for extra_matrix in matrices]
 
         return result
 
-    def _compute_horizontal_matrices(self, matrix=None):
-        """Compute the matrix (if not passed) and return the split versions"""
-        return self._split_matrix(
-            matrix or self._compute_matrix(),
-            [
-                (
-                    self.env.ref("mis_template_financial_report.kpi_profit"),
-                    self.env.ref("mis_template_financial_report.kpi_pl_to_report"),
-                    self.env.ref("mis_template_financial_report.kpi_assets"),
-                )
-            ],
-        )
-
-    def _split_matrix(self, original_matrix, kpi_defs=None, keep_remaining=True):
-        """Split a matrix by duplicating it as shallowly as possible and removing
-        rows according to kpi_defs
-
-        KPIs not listed there will end up together in the last matrix if
-        `keep_remaining` is set.
-
-        :param kpi_defs: [(kpi_first_matrix1, ...), (kpi_second_matrix1, ...)]
-        :return: list of KpiMatrix
-        """
+    def _split_matrix(self, original_matrix):
+        """Split a matrix according to the split_after flag in the kpis used"""
         result = []
-        remaining_rows = original_matrix._kpi_rows.copy()
 
-        for kpis in kpi_defs:
-            matrix = copy.copy(original_matrix)
-            matrix._kpi_rows = OrderedDict(
-                [
-                    (kpi, remaining_rows.pop(kpi))
-                    for kpi in kpis
-                    if kpi in remaining_rows
-                ]
-            )
-            result.append(matrix)
+        def clone_matrix():
+            clone = copy.copy(original_matrix)
+            clone._kpi_rows = OrderedDict()
+            result.append(clone)
+            return clone
 
-        if remaining_rows and keep_remaining:
-            matrix = copy.copy(original_matrix)
-            matrix._kpi_rows = remaining_rows
-            result.append(matrix)
+        current = clone_matrix()
+
+        for kpi in original_matrix._kpi_rows:
+            current._kpi_rows[kpi] = original_matrix._kpi_rows[kpi]
+            if kpi.split_after:
+                current = clone_matrix()
 
         return result

@@ -15,4 +15,4 @@ class TestMisTemplateFinancialReport(TestMisReportInstance):
         self.assertTrue(instance.allow_horizontal)
         instance.horizontal = True
         result_dict = instance.compute()
-        self.assertEqual(len(result_dict.get("horizontal_matrices", [])), 2)
+        self.assertEqual(len(result_dict.get("split_matrices", [])), 2)
