@@ -15,16 +15,17 @@
         "data/mis_report_kpi.xml",
         "data/mis_report_subreport.xml",
         "views/mis_report_instance_views.xml",
+        "views/mis_report_kpi_views.xml",
         "views/templates.xml",
     ],
     "assets": {
         "web.assets_backend": [
-            "mis_template_financial_report/static/src/css/mis_template_financial_report.css",
+            "mis_template_financial_report/static/src/components/mis_report_widget.xml",
+            "mis_template_financial_report/static/src/components/mis_report_widget.css",
         ],
         "web.report_assets_common": [
             "mis_template_financial_report/static/src/css/report.css"
         ],
     },
-    "qweb": ["static/src/xml/mis_template_financial_report.xml"],
     "maintainers": ["hbrunn"],
 }
