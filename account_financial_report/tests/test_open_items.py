@@ -53,7 +53,10 @@ class TestOpenItems(AccountTestInvoicingCommon):
     def test_all_accounts_loaded(self):
         # Tests if all accounts are loaded when the account_code_ fields changed
         all_accounts = self.env["account.account"].search(
-            [("reconcile", "=", True)], order="code"
+            [
+                ("reconcile", "=", True),
+            ],
+            order="code",
         )
         open_items = self.env["open.items.report.wizard"].create(
             {

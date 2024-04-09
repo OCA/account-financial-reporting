@@ -33,6 +33,8 @@
                     />
                 </group>
                 <group name="account_filter" col="4">
+                    <label for="age_partner_config_id" />
+                    <field name="age_partner_config_id" nolabel="1" />
                     <label for="account_ids" colspan="4" />
                     <field name="receivable_accounts_only" />
                     <field name="payable_accounts_only" />
