@@ -182,10 +182,8 @@ msgstr "Tiempo ≤ 120 d."
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid ""
 "Age ≤ 30\n"
-"                        d."
+"                            d."
 msgstr ""
-"Tiempo ≤ 30\n"
-"                        d."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -197,10 +195,8 @@ msgstr "Tiempo ≤ 30 d."
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid ""
 "Age ≤ 60\n"
-"                        d."
+"                            d."
 msgstr ""
-"Tiempo ≤ 60\n"
-"                        d."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -212,10 +208,8 @@ msgstr "Tiempo ≤ 60 d."
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid ""
 "Age ≤ 90\n"
-"                        d."
+"                            d."
 msgstr ""
-"Tiempo ≤ 90\n"
-"                        d."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -410,18 +404,6 @@ msgstr "Grupos Hijos"
 #, python-format
 msgid "Code"
 msgstr "Código"
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/models/account_age_report_configuration.py:0
-#: model:ir.model.constraint,message:account_financial_report.constraint_account_age_report_configuration_line_unique_name_config_combination
-#, python-format
-msgid "Name must be unique per report configuration"
-msgstr "El nombre debe ser único por cada configuración del informe"
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_res_company
-msgid "Companies"
-msgstr "Compañías"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
@@ -656,11 +638,13 @@ msgstr "Nombre mostrado"
 #: model:ir.model.fields,help:account_financial_report.field_open_items_report_wizard__foreign_currency
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__foreign_currency
 msgid ""
-"Display foreign currency for move lines, unless account currency is not setup through chart of accounts "
-"will display initial and final balance in that currency."
+"Display foreign currency for move lines, unless account currency is not "
+"setup through chart of accounts will display initial and final balance in "
+"that currency."
 msgstr ""
-"Mostrar moneda extranjera para líneas de movimiento contable, a menos que la moneda de la cuenta no esté "
-"configurada a través del plan de cuentas mostrará el saldo inicial y final en esa moneda."
+"Mostrar moneda extranjera para líneas de movimiento contable, a menos que la "
+"moneda de la cuenta no esté configurada a través del plan de cuentas "
+"mostrará el saldo inicial y final en esa moneda."
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__hide_parent_hierarchy_level
@@ -915,7 +899,8 @@ msgid ""
 "                        only one unaffected earnings account."
 msgstr ""
 "El Libro mayor solo se puede calcular si la empresa seleccionada tiene \n"
-"                                                                solo una cuenta de resultados no afectados."
+"                                                                solo una "
+"cuenta de resultados no afectados."
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__group_option
@@ -928,11 +913,12 @@ msgid "Grouped By"
 msgstr "Agrupado por"
 
 #. module: account_financial_report
-#: model:ir.model.fields,help:account_financial_report.field_res_company__age_partner_config_id
-#: model:ir.model.fields,help:account_financial_report.field_res_config_settings__default_age_partner_config_id
 #: model_terms:ir.ui.view,arch_db:account_financial_report.res_config_settings_view_form
-msgid "Here you can set the intervals that will appear on the Aged Partner Balance."
-msgstr "Aquí puede configurar los intervalos que aparecerán en el informe de Calidad de la deuda."
+msgid ""
+"Here you can set the intervals that will appear on the Aged Partner Balance."
+msgstr ""
+"Aquí puede configurar los intervalos que aparecerán en el informe de Calidad "
+"de la deuda."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
@@ -976,11 +962,22 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_account_account__centralized
 msgid ""
-"If flagged, no details will be displayed in the General Ledger report (the webkit one only), only "
-"centralized amounts per period."
+"If flagged, no details will be displayed in the General Ledger report (the "
+"webkit one only), only centralized amounts per period."
 msgstr ""
-"Si se marca, no se mostrarán detalles en el informe del libro mayor (solo el webkit), solo importes "
-"centralizados por período."
+"Si se marca, no se mostrarán detalles en el informe del libro mayor (solo el "
+"webkit), solo importes centralizados por período."
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration_line__inferior_limit
+msgid "Inferior Limit"
+msgstr "Límite inferior"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/models/account_age_report_configuration.py:0
+#, python-format
+msgid "Inferior Limit must be greather than zero"
+msgstr "El límite inferior debe ser mayor que cero"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
@@ -1010,7 +1007,6 @@ msgstr "Saldo inicial"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__age_partner_config_id
-#: model:ir.model.fields,field_description:account_financial_report.field_res_company__age_partner_config_id
 #: model:ir.model.fields,field_description:account_financial_report.field_res_config_settings__default_age_partner_config_id
 msgid "Intervals configuration"
 msgstr "Configuración de intervalos"
@@ -1142,25 +1138,26 @@ msgid "Line"
 msgstr "Línea"
 
 #. module: account_financial_report
-#: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration_line__inferior_limit
-msgid "Inferior Limit"
-msgstr "Límite inferior"
-
-#. module: account_financial_report
-#: code:addons/account_financial_report/models/account_age_report_configuration.py:0
+#: code:addons/account_financial_report/report/general_ledger.py:0
+#: code:addons/account_financial_report/report/open_items.py:0
+#: code:addons/account_financial_report/report/trial_balance.py:0
 #, python-format
-msgid "Inferior Limit must be greather than zero"
-msgstr "El límite inferior debe ser mayor que cero"
+msgid "Missing Partner"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_age_report_configuration_line
 msgid "Model to set interval lines for Age partner balance report"
-msgstr "Modelo para establecer líneas de intervalo para el informe de Calidad de deuda"
+msgstr ""
+"Modelo para establecer líneas de intervalo para el informe de Calidad de "
+"deuda"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_age_report_configuration
 msgid "Model to set intervals for Age partner balance report"
-msgstr "Modelo para establecer intervalos en el informe de Calidad de deudaFalta el Socio"
+msgstr ""
+"Modelo para establecer intervalos en el informe de Calidad de deudaFalta el "
+"Socio"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__move_target
@@ -1189,6 +1186,13 @@ msgstr "Debe completar las líneas de configuración"
 #, python-format
 msgid "Name"
 msgstr "Nombre"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/models/account_age_report_configuration.py:0
+#: model:ir.model.constraint,message:account_financial_report.constraint_account_age_report_configuration_line_unique_name_config_combination
+#, python-format
+msgid "Name must be unique per report configuration"
+msgstr "El nombre debe ser único por cada configuración del informe"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/vat_report_xlsx.py:0
@@ -1658,22 +1662,31 @@ msgstr "Impuestos"
 #. module: account_financial_report
 #: code:addons/account_financial_report/wizard/general_ledger_wizard.py:0
 #, python-format
-msgid "The Company in the General Ledger Report Wizard and in Date Range must be the same."
+msgid ""
+"The Company in the General Ledger Report Wizard and in Date Range must be "
+"the same."
 msgstr ""
-"La empresa en el Asistente de informe de Contabilidad General y de rango de fechas debe ser la misma."
+"La empresa en el Asistente de informe de Contabilidad General y de rango de "
+"fechas debe ser la misma."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/wizard/trial_balance_wizard.py:0
 #, python-format
-msgid "The Company in the Trial Balance Report Wizard and in Date Range must be the same."
+msgid ""
+"The Company in the Trial Balance Report Wizard and in Date Range must be the "
+"same."
 msgstr ""
-"La empresa en el Asistente de informe de Balance de comprobación y en rango de fechas debe ser la misma."
+"La empresa en el Asistente de informe de Balance de comprobación y en rango "
+"de fechas debe ser la misma."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/wizard/vat_report_wizard.py:0
 #, python-format
-msgid "The Company in the Vat Report Wizard and in Date Range must be the same."
-msgstr "La empresa en el Asistente para informes de IVA y en rango de fechas debe ser la misma."
+msgid ""
+"The Company in the Vat Report Wizard and in Date Range must be the same."
+msgstr ""
+"La empresa en el Asistente para informes de IVA y en rango de fechas debe "
+"ser la misma."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/wizard/trial_balance_wizard.py:0
@@ -1684,7 +1697,9 @@ msgstr "El nivel de jerarquía a filtrar debe ser mayor que 0."
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__domain
 msgid "This domain will be used to select specific domain for Journal Items"
-msgstr "Este dominio se usará para seleccionar dominios específicos para Apuntes Contables"
+msgstr ""
+"Este dominio se usará para seleccionar dominios específicos para Apuntes "
+"Contables"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
@@ -1742,8 +1757,10 @@ msgid ""
 "Trial Balance can be computed only if selected company have only\n"
 "                        one unaffected earnings account."
 msgstr ""
-"El balance de sumas y saldos solo puede calcularse si la compañía seleccionada tiene una y solo \n"
-"                                                          una cuenta de ganancias."
+"El balance de sumas y saldos solo puede calcularse si la compañía "
+"seleccionada tiene una y solo \n"
+"                                                          una cuenta de "
+"ganancias."
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__unaffected_earnings_account
@@ -1755,11 +1772,13 @@ msgstr "Cuenta de Ganancias No Afectadas"
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__hide_account_at_0
 #: model:ir.model.fields,help:account_financial_report.field_open_items_report_wizard__hide_account_at_0
 msgid ""
-"Use this filter to hide an account or a partner with an ending balance at 0. If partners are filtered, "
-"debits and credits totals will not match the trial balance."
+"Use this filter to hide an account or a partner with an ending balance at 0. "
+"If partners are filtered, debits and credits totals will not match the trial "
+"balance."
 msgstr ""
-"Use este filtro para ocultar las cuentas o empresas con saldo final 0. Si las empresas se filtran, los "
-"debe y haber totales no coincidirán con el balance de sumas y saldos."
+"Use este filtro para ocultar las cuentas o empresas con saldo final 0. Si "
+"las empresas se filtran, los debe y haber totales no coincidirán con el "
+"balance de sumas y saldos."
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__show_hierarchy
@@ -1823,11 +1842,11 @@ msgstr "Ver"
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__hide_account_at_0
 msgid ""
-"When this option is enabled, the trial balance will not display accounts that have initial balance = debit "
-"= credit = end balance = 0"
+"When this option is enabled, the trial balance will not display accounts "
+"that have initial balance = debit = credit = end balance = 0"
 msgstr ""
-"Cuando habilite esta opción el balance de sumas y saldos no va a mostrar cuentas que tengan saldo inicial "
-"= débito = crédito = saldo final = 0"
+"Cuando habilite esta opción el balance de sumas y saldos no va a mostrar "
+"cuentas que tengan saldo inicial = débito = crédito = saldo final = 0"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__with_account_name
@@ -1898,3 +1917,27 @@ msgstr "ancho: 38.92%;"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 8.11%;"
 msgstr "ancho: 8.11%;"
+
+#~ msgid ""
+#~ "Age ≤ 30\n"
+#~ "                        d."
+#~ msgstr ""
+#~ "Tiempo ≤ 30\n"
+#~ "                        d."
+
+#~ msgid ""
+#~ "Age ≤ 60\n"
+#~ "                        d."
+#~ msgstr ""
+#~ "Tiempo ≤ 60\n"
+#~ "                        d."
+
+#~ msgid ""
+#~ "Age ≤ 90\n"
+#~ "                        d."
+#~ msgstr ""
+#~ "Tiempo ≤ 90\n"
+#~ "                        d."
+
+#~ msgid "Companies"
+#~ msgstr "Compañías"
