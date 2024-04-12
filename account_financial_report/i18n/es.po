@@ -660,8 +660,8 @@ msgid ""
 "setup through chart of accounts will display initial and final balance in "
 "that currency."
 msgstr ""
-"Mostrar moneda extranjera para l??neas de movimiento contable, a menos que la "
-"moneda de la cuenta no est?? configurada a trav??s del plan de cuentas "
+"Mostrar moneda extranjera para l??neas de movimiento contable, a menos que "
+"la moneda de la cuenta no est?? configurada a trav??s del plan de cuentas "
 "mostrar?? el saldo inicial y final en esa moneda."
 
 #. module: account_financial_report
@@ -975,8 +975,8 @@ msgid ""
 "If flagged, no details will be displayed in the General Ledger report (the "
 "webkit one only), only centralized amounts per period."
 msgstr ""
-"Si se marca, no se mostrar??n detalles en el informe del libro mayor (solo el "
-"webkit), solo importes centralizados por per??odo."
+"Si se marca, no se mostrar??n detalles en el informe del libro mayor (solo "
+"el webkit), solo importes centralizados por per??odo."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
@@ -1074,16 +1074,6 @@ msgid "Journals"
 msgstr "Diarios"
 
 #. module: account_financial_report
-#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard____last_update
-msgid "Last Modified on"
-msgstr "??ltima modificaci??n en"
-
-#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__write_uid
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__write_uid
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__write_uid
@@ -1124,6 +1114,15 @@ msgstr "Nivel %s"
 #, python-format
 msgid "Limit hierarchy levels"
 msgstr "Limitar niveles de jerarqu??a"
+
+#. module: account_financial_report
+#. odoo-python
+#: code:addons/account_financial_report/report/general_ledger.py:0
+#: code:addons/account_financial_report/report/open_items.py:0
+#: code:addons/account_financial_report/report/trial_balance.py:0
+#, python-format
+msgid "Missing Partner"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__move_target
@@ -1185,12 +1184,6 @@ msgid "None"
 msgstr "Ninguna"
 
 #. module: account_financial_report
-#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__not_only_one_unaffected_earnings_account
-#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__not_only_one_unaffected_earnings_account
-msgid "Not Only One Unaffected Earnings Account"
-msgstr "No solo una cuenta de ganancias no afectadas"
-
-#. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
 #, python-format
@@ -1214,6 +1207,12 @@ msgstr "Informes de contabilidad OCA"
 #, python-format
 msgid "Older"
 msgstr "Mayor"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__only_one_unaffected_earnings_account
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__only_one_unaffected_earnings_account
+msgid "Only One Unaffected Earnings Account"
+msgstr ""
 
 #. module: account_financial_report
 #. odoo-python
@@ -1882,6 +1881,12 @@ msgstr "ancho: 38.92%;"
 msgid "width: 8.11%;"
 msgstr "ancho: 8.11%;"
 
+#~ msgid "Last Modified on"
+#~ msgstr "??ltima modificaci??n en"
+
+#~ msgid "Not Only One Unaffected Earnings Account"
+#~ msgstr "No solo una cuenta de ganancias no afectadas"
+
 #~ msgid "Filter analytic tags"
 #~ msgstr "Filtrar por etiquetas anal??ticas"
 
@@ -1915,8 +1920,8 @@ msgstr "ancho: 8.11%;"
 #~ "Cuentas Calculadas:  Usar cuando el grupo de cuentas tiene c??digos \n"
 #~ "        que representan prefijos de las cuentas reales.\n"
 #~ "\n"
-#~ "        Cuentas Hijas: Usar cuando los grupos de cuentas son "
-#~ "jer??rquicos.\n"
+#~ "        Cuentas Hijas: Usar cuando los grupos de cuentas son jer??"
+#~ "rquicos.\n"
 #~ "\n"
 #~ "        Sin jerarqu??a: Usar para mostrar s??lo las cuentas, sin ninguna "
 #~ "agrupaci??n.\n"

@@ -664,9 +664,9 @@ msgid ""
 "setup through chart of accounts will display initial and final balance in "
 "that currency."
 msgstr ""
-"Afi??a??i moneda str??in?? pentru liniile de mutare, cu excep??ia cazului ??n care "
-"moneda contului nu este configurat?? prin planul de conturi, va afi??a soldul "
-"ini??ial ??i final ??n moneda respectiv??."
+"Afi??a??i moneda str??in?? pentru liniile de mutare, cu excep??ia cazului ??"
+"n care moneda contului nu este configurat?? prin planul de conturi, va afi??"
+"a soldul ini??ial ??i final ??n moneda respectiv??."
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__hide_parent_hierarchy_level
@@ -1072,16 +1072,6 @@ msgid "Journals"
 msgstr "Jurnale"
 
 #. module: account_financial_report
-#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard____last_update
-msgid "Last Modified on"
-msgstr "Ultima modificare pe"
-
-#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__write_uid
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__write_uid
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__write_uid
@@ -1122,6 +1112,15 @@ msgstr "Nivel %s"
 #, python-format
 msgid "Limit hierarchy levels"
 msgstr "Limita??i nivelurile de ierarhie"
+
+#. module: account_financial_report
+#. odoo-python
+#: code:addons/account_financial_report/report/general_ledger.py:0
+#: code:addons/account_financial_report/report/open_items.py:0
+#: code:addons/account_financial_report/report/trial_balance.py:0
+#, python-format
+msgid "Missing Partner"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__move_target
@@ -1183,12 +1182,6 @@ msgid "None"
 msgstr ""
 
 #. module: account_financial_report
-#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__not_only_one_unaffected_earnings_account
-#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__not_only_one_unaffected_earnings_account
-msgid "Not Only One Unaffected Earnings Account"
-msgstr ""
-
-#. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
 #, python-format
@@ -1212,6 +1205,12 @@ msgstr "Rapoarte contabilitate"
 #, python-format
 msgid "Older"
 msgstr "Mai vechi"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__only_one_unaffected_earnings_account
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__only_one_unaffected_earnings_account
+msgid "Only One Unaffected Earnings Account"
+msgstr ""
 
 #. module: account_financial_report
 #. odoo-python
@@ -1793,8 +1792,8 @@ msgid ""
 "When this option is enabled, the trial balance will not display accounts "
 "that have initial balance = debit = credit = end balance = 0"
 msgstr ""
-"C??nd aceast?? op??iune este activat??, soldul de prob?? nu va afi??a conturi care "
-"au sold ini??ial = debit = credit = sold final = 0"
+"C??nd aceast?? op??iune este activat??, soldul de prob?? nu va afi??a "
+"conturi care au sold ini??ial = debit = credit = sold final = 0"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__with_account_name
@@ -1867,6 +1866,9 @@ msgstr "l????ime: 38,92%;"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 8.11%;"
 msgstr "l????ime: 8,11%;"
+
+#~ msgid "Last Modified on"
+#~ msgstr "Ultima modificare pe"
 
 #~ msgid "Filter analytic tags"
 #~ msgstr "Filtreaz?? etichetele analitice"
