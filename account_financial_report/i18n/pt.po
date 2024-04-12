@@ -960,8 +960,8 @@ msgid ""
 "If flagged, no details will be displayed in the General Ledger report (the "
 "webkit one only), only centralized amounts per period."
 msgstr ""
-"Se marcado, n??o ser??o exibidos os detalhes no relat??rio do Raz??o , apenas "
-"montantes centralizados por per??odo."
+"Se marcado, n??o ser??o exibidos os detalhes no relat??rio do Raz??o , "
+"apenas montantes centralizados por per??odo."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
@@ -1057,16 +1057,6 @@ msgid "Journals"
 msgstr "Di??rios"
 
 #. module: account_financial_report
-#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard____last_update
-msgid "Last Modified on"
-msgstr "??ltima modifica????o em"
-
-#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__write_uid
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__write_uid
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__write_uid
@@ -1107,6 +1097,15 @@ msgstr "N??vel %s"
 #, python-format
 msgid "Limit hierarchy levels"
 msgstr "Limite dos n??veis hier??rquicos"
+
+#. module: account_financial_report
+#. odoo-python
+#: code:addons/account_financial_report/report/general_ledger.py:0
+#: code:addons/account_financial_report/report/open_items.py:0
+#: code:addons/account_financial_report/report/trial_balance.py:0
+#, python-format
+msgid "Missing Partner"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__move_target
@@ -1168,12 +1167,6 @@ msgid "None"
 msgstr ""
 
 #. module: account_financial_report
-#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__not_only_one_unaffected_earnings_account
-#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__not_only_one_unaffected_earnings_account
-msgid "Not Only One Unaffected Earnings Account"
-msgstr ""
-
-#. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
 #, python-format
@@ -1197,6 +1190,12 @@ msgstr "Relat??rios de contabilidade OCA"
 #, python-format
 msgid "Older"
 msgstr "Mais Antigo"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__only_one_unaffected_earnings_account
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__only_one_unaffected_earnings_account
+msgid "Only One Unaffected Earnings Account"
+msgstr ""
 
 #. module: account_financial_report
 #. odoo-python
@@ -1604,7 +1603,8 @@ msgid ""
 "The Company in the General Ledger Report Wizard and in Date Range must be "
 "the same."
 msgstr ""
-"A Empresa no Assistente de Relat??rio do Raz??o e em Per??odo deve ser a mesma."
+"A Empresa no Assistente de Relat??rio do Raz??o e em Per??odo deve ser a "
+"mesma."
 
 #. module: account_financial_report
 #. odoo-python
@@ -1637,8 +1637,8 @@ msgstr "O n??vel hier??rquico a filtrar deve ser superior a 0."
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__domain
 msgid "This domain will be used to select specific domain for Journal Items"
 msgstr ""
-"Este dom??nio ser?? usado para selecionar um dom??nio espec??fico para Itens de "
-"Di??rio"
+"Este dom??nio ser?? usado para selecionar um dom??nio espec??fico para Itens "
+"de Di??rio"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
@@ -1715,8 +1715,8 @@ msgid ""
 "balance."
 msgstr ""
 "Usar este filtro para esconder uma conta ou um parceiro com saldo final 0. "
-"Se filtrarem parceiros, os totais do d??bito e cr??dito n??o ser??o iguais aos "
-"do balancete."
+"Se filtrarem parceiros, os totais do d??bito e cr??dito n??o ser??o iguais "
+"aos do balancete."
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__show_hierarchy
@@ -1784,8 +1784,8 @@ msgid ""
 "When this option is enabled, the trial balance will not display accounts "
 "that have initial balance = debit = credit = end balance = 0"
 msgstr ""
-"Quando esta op????o for selecionada, o balancete n??o exibir?? contas que t??m "
-"saldo inicial = d??bito = cr??dito = saldo final = 0"
+"Quando esta op????o for selecionada, o balancete n??o exibir?? contas que t??"
+"m saldo inicial = d??bito = cr??dito = saldo final = 0"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__with_account_name
@@ -1858,6 +1858,9 @@ msgstr "largura: 38.92%;"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 8.11%;"
 msgstr "largura: 8.11%;"
+
+#~ msgid "Last Modified on"
+#~ msgstr "??ltima modifica????o em"
 
 #~ msgid "Filter analytic tags"
 #~ msgstr "Filtrar etiquetas anal??ticas"

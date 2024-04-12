@@ -656,9 +656,9 @@ msgid ""
 "setup through chart of accounts will display initial and final balance in "
 "that currency."
 msgstr ""
-"Afficher les devises ??trang??res pour les ??critures comptables, ?? moins que "
-"la monnaie du compte comptable ne soit pas d??finie dans le plan comptable "
-"affichera les balances initiale et finale dans cette monnaie."
+"Afficher les devises ??trang??res pour les ??critures comptables, ?? moins "
+"que la monnaie du compte comptable ne soit pas d??finie dans le plan "
+"comptable affichera les balances initiale et finale dans cette monnaie."
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__hide_parent_hierarchy_level
@@ -1078,16 +1078,6 @@ msgid "Journals"
 msgstr "Journaux"
 
 #. module: account_financial_report
-#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard____last_update
-msgid "Last Modified on"
-msgstr "Derni??re modification le"
-
-#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__write_uid
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__write_uid
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__write_uid
@@ -1128,6 +1118,15 @@ msgstr "Niveau %s"
 #, python-format
 msgid "Limit hierarchy levels"
 msgstr "Limiter les niveaux de hi??rarchie"
+
+#. module: account_financial_report
+#. odoo-python
+#: code:addons/account_financial_report/report/general_ledger.py:0
+#: code:addons/account_financial_report/report/open_items.py:0
+#: code:addons/account_financial_report/report/trial_balance.py:0
+#, python-format
+msgid "Missing Partner"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__move_target
@@ -1189,12 +1188,6 @@ msgid "None"
 msgstr ""
 
 #. module: account_financial_report
-#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__not_only_one_unaffected_earnings_account
-#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__not_only_one_unaffected_earnings_account
-msgid "Not Only One Unaffected Earnings Account"
-msgstr ""
-
-#. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
 #, python-format
@@ -1218,6 +1211,12 @@ msgstr "Rapports de comptabilit?? OCA"
 #, python-format
 msgid "Older"
 msgstr "Plus ancien"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__only_one_unaffected_earnings_account
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__only_one_unaffected_earnings_account
+msgid "Only One Unaffected Earnings Account"
+msgstr ""
 
 #. module: account_financial_report
 #. odoo-python
@@ -1814,8 +1813,9 @@ msgid ""
 "When this option is enabled, the trial balance will not display accounts "
 "that have initial balance = debit = credit = end balance = 0"
 msgstr ""
-"Lorsque cette options est activ??e, la balance g??n??rale n'affichera pas les "
-"comptes qui ont balance initiale = d??bit = cr??dit = solde de cl??ture = 0"
+"Lorsque cette options est activ??e, la balance g??n??rale n'affichera pas "
+"les comptes qui ont balance initiale = d??bit = cr??dit = solde de cl??ture "
+"= 0"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__with_account_name
@@ -1889,6 +1889,9 @@ msgstr ""
 msgid "width: 8.11%;"
 msgstr ""
 
+#~ msgid "Last Modified on"
+#~ msgstr "Derni??re modification le"
+
 #~ msgid "Filter analytic tags"
 #~ msgstr "Filtrer les ??tiquettes analytiques"
 
@@ -1952,8 +1955,8 @@ msgstr ""
 #~ "Trial Balance can be computed only if selected company have only one "
 #~ "unaffected earnings account."
 #~ msgstr ""
-#~ "La balance g??n??rale peut ??tre calcul??e uniquement si la soci??t?? "
-#~ "s??lectionn??e n'a qu'un seul compte de b??n??fices/pertes ?? reporter."
+#~ "La balance g??n??rale peut ??tre calcul??e uniquement si la soci??t?? s??"
+#~ "lectionn??e n'a qu'un seul compte de b??n??fices/pertes ?? reporter."
 
 #~ msgid ""
 #~ "Cost\n"

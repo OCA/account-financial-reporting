@@ -673,8 +673,8 @@ msgid ""
 "setup through chart of accounts will display initial and final balance in "
 "that currency."
 msgstr ""
-"Zeige eine Fremdw??hrung f??r die Buchungen an. Solang noch keine eigene "
-"W??hrung ??ber einen konfigurierten Kontenplan spezifiziert wurde, werden die "
+"Zeige eine Fremdw??hrung f??r die Buchungen an. Solang noch keine eigene W??"
+"hrung ??ber einen konfigurierten Kontenplan spezifiziert wurde, werden die "
 "Anfangs- und Endsalden in dieser W??hrung angezeigt."
 
 #. module: account_financial_report
@@ -1088,16 +1088,6 @@ msgid "Journals"
 msgstr "Journale"
 
 #. module: account_financial_report
-#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard____last_update
-#: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard____last_update
-msgid "Last Modified on"
-msgstr "Ge??ndert am"
-
-#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__write_uid
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__write_uid
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__write_uid
@@ -1138,6 +1128,15 @@ msgstr "Ebene %s"
 #, python-format
 msgid "Limit hierarchy levels"
 msgstr "Ebenen festlegen"
+
+#. module: account_financial_report
+#. odoo-python
+#: code:addons/account_financial_report/report/general_ledger.py:0
+#: code:addons/account_financial_report/report/open_items.py:0
+#: code:addons/account_financial_report/report/trial_balance.py:0
+#, python-format
+msgid "Missing Partner"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__move_target
@@ -1199,12 +1198,6 @@ msgid "None"
 msgstr ""
 
 #. module: account_financial_report
-#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__not_only_one_unaffected_earnings_account
-#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__not_only_one_unaffected_earnings_account
-msgid "Not Only One Unaffected Earnings Account"
-msgstr ""
-
-#. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
 #, python-format
@@ -1228,6 +1221,12 @@ msgstr "OCA Finanzberichte"
 #, python-format
 msgid "Older"
 msgstr "??lter"
+
+#. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__only_one_unaffected_earnings_account
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__only_one_unaffected_earnings_account
+msgid "Only One Unaffected Earnings Account"
+msgstr ""
 
 #. module: account_financial_report
 #. odoo-python
@@ -1655,8 +1654,8 @@ msgid ""
 "The Company in the Trial Balance Report Wizard and in Date Range must be the "
 "same."
 msgstr ""
-"F??r den Stichtagsbilanz Berichtsassistenten und den Datumsbereich sollte das "
-"Unternehmen identisch sein."
+"F??r den Stichtagsbilanz Berichtsassistenten und den Datumsbereich sollte "
+"das Unternehmen identisch sein."
 
 #. module: account_financial_report
 #. odoo-python
@@ -1904,6 +1903,9 @@ msgstr "Breite: 38.92%;"
 msgid "width: 8.11%;"
 msgstr "Breite: 8,11%;"
 
+#~ msgid "Last Modified on"
+#~ msgstr "Ge??ndert am"
+
 #~ msgid "Filter analytic tags"
 #~ msgstr "Kostenstellen-Stichw??rter filtern"
 
@@ -1946,8 +1948,8 @@ msgstr "Breite: 8,11%;"
 #~ "Trial Balance can be computed only if selected company have only one "
 #~ "unaffected earnings account."
 #~ msgstr ""
-#~ "Der Stichtagssaldo kann nur korrekt ermittelt werden, wenn f??r das "
-#~ "gew??hlte Unternehmen nur ein unber??hrtes ??berschusskonto existiert."
+#~ "Der Stichtagssaldo kann nur korrekt ermittelt werden, wenn f??r das gew??"
+#~ "hlte Unternehmen nur ein unber??hrtes ??berschusskonto existiert."
 
 #~ msgid ""
 #~ "Cost\n"
