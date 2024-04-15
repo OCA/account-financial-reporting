@@ -25,6 +25,8 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         ag_pb_data[acc_id]["90_days"] = 0.0
         ag_pb_data[acc_id]["120_days"] = 0.0
         ag_pb_data[acc_id]["older"] = 0.0
+        for interval_line in self.env.context["age_partner_config"].line_ids:
+            ag_pb_data[acc_id][interval_line] = 0.0
         return ag_pb_data
 
     @api.model
@@ -39,6 +41,8 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         ag_pb_data[acc_id][prt_id]["120_days"] = 0.0
         ag_pb_data[acc_id][prt_id]["older"] = 0.0
         ag_pb_data[acc_id][prt_id]["move_lines"] = []
+        for interval_line in self.env.context["age_partner_config"].line_ids:
+            ag_pb_data[acc_id][prt_id][interval_line] = 0.0
         return ag_pb_data
 
     @api.model
@@ -47,6 +51,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
     ):
         ag_pb_data[acc_id]["residual"] += residual
         ag_pb_data[acc_id][prt_id]["residual"] += residual
+        interval_lines = self.env.context["age_partner_config"].line_ids
         today = date_at_object
         if not due_date or today <= due_date:
             ag_pb_data[acc_id]["current"] += residual
@@ -66,7 +71,33 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         else:
             ag_pb_data[acc_id]["older"] += residual
             ag_pb_data[acc_id][prt_id]["older"] += residual
+        if due_date:
+            days_difference = abs((today - due_date).days)
+            for index, line in enumerate(interval_lines):
+                lower_limit = (
+                    0 if not index else interval_lines[index - 1].inferior_limit
+                )
+                next_line = (
+                    interval_lines[index] if index < len(interval_lines) else None
+                )
+                interval_range = self._get_values_for_range_intervals(
+                    lower_limit, next_line.inferior_limit
+                )
+                if (
+                    days_difference in interval_range
+                    or days_difference == line.inferior_limit
+                ):
+                    ag_pb_data[acc_id][line] += residual
+                    ag_pb_data[acc_id][prt_id][line] += residual
+                    break
         return ag_pb_data
+
+    def _get_values_for_range_intervals(self, num1, num2):
+        min_num = min(num1, num2)
+        max_num = max(num1, num2)
+        if abs(num2 - num1) == 1:
+            return [max_num]
+        return list(range(min_num + 1, max_num))
 
     def _get_account_partial_reconciled(self, company_id, date_at_object):
         domain = [("max_date", ">", date_at_object), ("company_id", "=", company_id)]
@@ -235,6 +266,9 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                 "older": 0.0,
             }
         )
+        interval_lines = self.env.context["age_partner_config"].line_ids
+        for interval_line in interval_lines:
+            ml[interval_line] = 0.0
         due_date = ml["due_date"]
         amount = ml["residual"]
         today = date_at_object
@@ -250,6 +284,24 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             ml["120_days"] += amount
         else:
             ml["older"] += amount
+        if due_date:
+            days_difference = abs((today - due_date).days)
+            for index, interval_line in enumerate(interval_lines):
+                lower_limit = (
+                    0 if not index else interval_lines[index - 1].inferior_limit
+                )
+                next_line = (
+                    interval_lines[index] if index < len(interval_lines) else None
+                )
+                interval_range = self._get_values_for_range_intervals(
+                    lower_limit, next_line.inferior_limit
+                )
+                if (
+                    days_difference in interval_range
+                    or days_difference == interval_line.inferior_limit
+                ):
+                    ml[interval_line] += amount
+                    break
 
     def _create_account_list(
         self,
@@ -261,6 +313,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         date_at_oject,
     ):
         aged_partner_data = []
+        interval_lines = self.env.context["age_partner_config"].line_ids
         for account in accounts_data.values():
             acc_id = account["id"]
             account.update(
@@ -275,6 +328,8 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                     "partners": [],
                 }
             )
+            for interval_line in interval_lines:
+                account[interval_line] = ag_pb_data[acc_id][interval_line]
             for prt_id in ag_pb_data[acc_id]:
                 if isinstance(prt_id, int):
                     partner = {
@@ -287,6 +342,10 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                         "120_days": ag_pb_data[acc_id][prt_id]["120_days"],
                         "older": ag_pb_data[acc_id][prt_id]["older"],
                     }
+                    for interval_line in interval_lines:
+                        partner[interval_line] = ag_pb_data[acc_id][prt_id][
+                            interval_line
+                        ]
                     if show_move_line_details:
                         move_lines = []
                         for ml in ag_pb_data[acc_id][prt_id]["move_lines"]:
@@ -306,6 +365,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
 
     @api.model
     def _calculate_percent(self, aged_partner_data):
+        interval_lines = self.env.context["age_partner_config"].line_ids
         for account in aged_partner_data:
             if abs(account["residual"]) > 0.01:
                 total = account["residual"]
@@ -331,6 +391,10 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                         ),
                     }
                 )
+                for interval_line in interval_lines:
+                    account[f"percent_{interval_line.id}"] = abs(
+                        round((account[interval_line] / total) * 100, 2)
+                    )
             else:
                 account.update(
                     {
@@ -342,6 +406,8 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                         "percent_older": 0.0,
                     }
                 )
+                for interval_line in interval_lines:
+                    account[f"percent_{interval_line.id}"] = 0.0
         return aged_partner_data
 
     def _get_report_values(self, docids, data):
@@ -355,12 +421,17 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         date_from = data["date_from"]
         only_posted_moves = data["only_posted_moves"]
         show_move_line_details = data["show_move_line_details"]
+        aged_partner_configuration = self.env[
+            "account.age.report.configuration"
+        ].browse(data["age_partner_config_id"])
         (
             ag_pb_data,
             accounts_data,
             partners_data,
             journals_data,
-        ) = self._get_move_lines_data(
+        ) = self.with_context(
+            age_partner_config=aged_partner_configuration
+        )._get_move_lines_data(
             company_id,
             account_ids,
             partner_ids,
@@ -369,7 +440,9 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             only_posted_moves,
             show_move_line_details,
         )
-        aged_partner_data = self._create_account_list(
+        aged_partner_data = self.with_context(
+            age_partner_config=aged_partner_configuration
+        )._create_account_list(
             ag_pb_data,
             accounts_data,
             partners_data,
@@ -377,7 +450,9 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             show_move_line_details,
             date_at_object,
         )
-        aged_partner_data = self._calculate_percent(aged_partner_data)
+        aged_partner_data = self.with_context(
+            age_partner_config=aged_partner_configuration
+        )._calculate_percent(aged_partner_data)
         return {
             "doc_ids": [wizard_id],
             "doc_model": "open.items.report.wizard",
@@ -388,6 +463,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             "only_posted_moves": only_posted_moves,
             "aged_partner_balance": aged_partner_data,
             "show_move_lines_details": show_move_line_details,
+            "age_partner_config": aged_partner_configuration,
         }
 
     def _get_ml_fields(self):
