@@ -40,6 +40,9 @@ class AgedPartnerBalanceWizard(models.TransientModel):
         comodel_name="account.account",
         help="Ending account in a range",
     )
+    age_partner_config_id = fields.Many2one(
+        "account.age.report.configuration", string="Intervals configuration"
+    )
 
     @api.onchange("account_code_from", "account_code_to")
     def on_change_account_range(self):
@@ -140,6 +143,7 @@ class AgedPartnerBalanceWizard(models.TransientModel):
             "partner_ids": self.partner_ids.ids,
             "show_move_line_details": self.show_move_line_details,
             "account_financial_report_lang": self.env.lang,
+            "age_partner_config_id": self.age_partner_config_id.id,
         }
 
     def _export(self, report_type):
