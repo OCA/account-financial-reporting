@@ -15,7 +15,9 @@
     <record id="kpi_profit" model="mis.report.kpi">
         <field name="name">profit</field>
         <field name="description">Profit</field>
-        <field name="expression">-balp[('account_type', 'like', 'income%')][]</field>
+        <field
+            name="expression"
+        >-balp['|', ('account_type', 'like', 'income%'), ('account_type', 'like', 'equity_unaffected')][]</field>
         <field name="auto_expand_accounts">true</field>
         <field name="auto_expand_accounts_style_id" ref="style_details" />
         <field name="style_id" ref="style_header" />
@@ -71,7 +73,7 @@
         <field name="description">Liabilities</field>
         <field
             name="expression"
-        >-bale['|', ('account_type', 'like', 'liability%'), ('account_type', 'like', 'equity%')][]</field>
+        >-bale['|', ('account_type', 'like', 'liability%'), ('account_type', '=', 'equity')][]</field>
         <field name="auto_expand_accounts">true</field>
         <field name="auto_expand_accounts_style_id" ref="style_details_double_indent" />
         <field name="style_id" ref="style_header_indent" />
