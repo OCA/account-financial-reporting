@@ -23,6 +23,7 @@
   - Jo??o Marques
   - Alexandre D. D??az
   - V??ctor Mart??nez
+  - Carolina Fernandez
 - [Sygel](https://www.sygel.es):
   - Harald Panten
   - Valentin Vinagre

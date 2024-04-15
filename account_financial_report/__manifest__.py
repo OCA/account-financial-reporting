@@ -6,7 +6,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Account Financial Reports",
-    "version": "17.0.1.0.0",
+    "version": "17.0.1.1.0",
     "category": "Reporting",
     "summary": "OCA Financial Reports",
     "author": "Camptocamp SA,"
@@ -18,12 +18,14 @@
     "depends": ["account", "date_range", "report_xlsx"],
     "data": [
         "security/ir.model.access.csv",
+        "security/security.xml",
         "wizard/aged_partner_balance_wizard_view.xml",
         "wizard/general_ledger_wizard_view.xml",
         "wizard/journal_ledger_wizard_view.xml",
         "wizard/open_items_wizard_view.xml",
         "wizard/trial_balance_wizard_view.xml",
         "wizard/vat_report_wizard_view.xml",
+        "view/account_age_report_configuration_views.xml",
         "menuitems.xml",
         "reports.xml",
         "report/templates/layouts.xml",
@@ -40,6 +42,7 @@
         "view/report_open_items.xml",
         "view/report_aged_partner_balance.xml",
         "view/report_vat_report.xml",
+        "view/res_config_settings_views.xml",
     ],
     "assets": {
         "web.assets_backend": [
