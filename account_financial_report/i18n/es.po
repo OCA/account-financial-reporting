@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-21 15:05+0000\n"
-"PO-Revision-Date: 2024-03-21 20:35+0000\n"
+"PO-Revision-Date: 2024-04-17 18:37+0000\n"
 "Last-Translator: Ivorra78 <informatica@totmaterial.es>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -171,6 +171,8 @@ msgid ""
 "Age ≤ 120\n"
 "                            d."
 msgstr ""
+"Edad ≤ 120\n"
+"                            d."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -184,6 +186,8 @@ msgid ""
 "Age ≤ 30\n"
 "                            d."
 msgstr ""
+"Edad ≤ 30\n"
+"                            d."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -197,6 +201,8 @@ msgid ""
 "Age ≤ 60\n"
 "                            d."
 msgstr ""
+"Edad ≤ 60\n"
+"                            d."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -210,6 +216,8 @@ msgid ""
 "Age ≤ 90\n"
 "                            d."
 msgstr ""
+"Edad ≤ 90\n"
+"                            d."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -957,7 +965,7 @@ msgstr "Niveles de Jerarquía a mostrar"
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__id
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_account_account__centralized
@@ -1143,7 +1151,7 @@ msgstr "Línea"
 #: code:addons/account_financial_report/report/trial_balance.py:0
 #, python-format
 msgid "Missing Partner"
-msgstr ""
+msgstr "Falta el Socio"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_age_report_configuration_line
@@ -1714,7 +1722,7 @@ msgstr "A:"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_account_ending_cumul
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
