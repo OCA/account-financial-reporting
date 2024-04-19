@@ -72,6 +72,7 @@
                         options="{'no_create': True}"
                     />
                     <field name="no_analytic" />
+                    <field name="all_analytic" />
                 </group>
                 <footer>
                     <button

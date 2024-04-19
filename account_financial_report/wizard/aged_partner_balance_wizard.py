@@ -47,6 +47,16 @@ class AgedPartnerBalanceWizard(models.TransientModel):
         comodel_name="account.analytic.account", string="Filter analytic accounts"
     )
     no_analytic = fields.Boolean("Only no analytic items")
+    all_analytic = fields.Boolean("All analytic items")
+
+    @api.onchange("all_analytic", "no_analytic")
+    def on_change_all_analytic(self):
+        if self.all_analytic:
+            all_aa = self.env["account.analytic.account"].search([])
+            self.analytic_account_ids = all_aa
+            self.no_analytic = False
+        else:
+            self.analytic_account_ids = False
 
     @api.onchange("account_code_from", "account_code_to")
     def on_change_account_range(self):
