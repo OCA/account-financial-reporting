@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-06-03 12:07+0000\n"
-"PO-Revision-Date: 2024-04-05 12:35+0000\n"
+"PO-Revision-Date: 2024-04-19 13:34+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -69,7 +69,7 @@ msgstr "Report astratto"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_financial_report_abstract_wizard
 msgid "Abstract Wizard"
-msgstr "Procedura guidata astratta"
+msgstr "Procedura guidata sintesi"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_abstract_report_xlsx
@@ -810,7 +810,7 @@ msgstr "Filtro conti"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
 msgid "Filter analytic accounts"
-msgstr "Filtro conti analitici"
+msgstr "Filtra conti analitici"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__cost_center_ids
@@ -857,7 +857,7 @@ msgstr "Da:"
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
 #, python-format
 msgid "From: %(date_from)s To: %(date_to)s"
-msgstr "Da: %(date_from)s A: %(date_to)s"
+msgstr "Dal: %(date_from)s Al: %(date_to)s"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__complete_code
@@ -929,7 +929,7 @@ msgstr "Raggruppa registrazioni per"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__grouped_by
 msgid "Grouped By"
-msgstr "Raggruppa per"
+msgstr "Raggruppato per"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1048,12 +1048,12 @@ msgstr "Libro Mastro -"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_journal_ledger
 msgid "Journal Ledger Report"
-msgstr "Resoconto libro registri"
+msgstr "Resoconto libro mastro"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_journal_ledger_report_wizard
 msgid "Journal Ledger Report Wizard"
-msgstr "Procedura guidata resoconto libro registri"
+msgstr "Procedura guidata resoconto libro mastro"
 
 #. module: account_financial_report
 #: model:ir.actions.report,name:account_financial_report.action_report_journal_ledger_xlsx
@@ -1063,7 +1063,7 @@ msgstr "Libro mastro XLSX"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_journal_ledger_xlsx
 msgid "Journal Ledger XLSX Report"
-msgstr "Resoconto XLSX libro registri"
+msgstr "Resoconto XLSX libro mastro"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1737,7 +1737,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__unaffected_earnings_account
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__unaffected_earnings_account
 msgid "Unaffected Earnings Account"
-msgstr "Conto di ricavi anno corrente"
+msgstr "Conto ricavi inalterato"
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__hide_account_at_0
@@ -1875,22 +1875,22 @@ msgstr "larghezza: 23.24%;"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 23.78%;"
-msgstr "larghezza: 23.78%;"
+msgstr "larghezza: 23,78%;"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 31.35%;"
-msgstr "larghezza: 31.35%;"
+msgstr "larghezza: 31,35%;"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 38.92%;"
-msgstr "larghezza: 38.92%;"
+msgstr "larghezza: 38,92%;"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 8.11%;"
-msgstr "larghezza: 8.11%;"
+msgstr "larghezza: 8,11%;"
 
 #~ msgid "Filter analytic tags"
 #~ msgstr "Filtro tag analitici"
