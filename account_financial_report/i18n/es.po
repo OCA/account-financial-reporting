@@ -173,10 +173,8 @@ msgstr "Configuración Calidad de deuda"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid ""
 "Age ≤ 120\n"
-"                        d."
+"                            d."
 msgstr ""
-"Tiempo ≤ 120\n"
-"· · · · · · · · · · · · · · · · · · · · · · · ·d."
 
 #. module: account_financial_report
 #. odoo-python
@@ -189,10 +187,8 @@ msgstr "Tiempo ≤ 120 d."
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid ""
 "Age ≤ 30\n"
-"                        d."
+"                            d."
 msgstr ""
-"Tiempo ≤ 30\n"
-"· · · · · · · · · · · · · · · · · · · · · · · ·d."
 
 #. module: account_financial_report
 #. odoo-python
@@ -205,10 +201,8 @@ msgstr "Tiempo ≤ 30 d."
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid ""
 "Age ≤ 60\n"
-"                        d."
+"                            d."
 msgstr ""
-"Tiempo ≤ 60\n"
-"· · · · · · · · · · · · · · · · · · · · · · · ·d."
 
 #. module: account_financial_report
 #. odoo-python
@@ -221,10 +215,8 @@ msgstr "Tiempo ≤ 60 d."
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid ""
 "Age ≤ 90\n"
-"                        d."
+"                            d."
 msgstr ""
-"Tiempo ≤ 90\n"
-"· · · · · · · · · · · · · · · · · · · · · · · ·d."
 
 #. module: account_financial_report
 #. odoo-python
@@ -440,20 +432,9 @@ msgid "Code"
 msgstr "Código"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/models/account_age_report_configuration.py:0
-#: model:ir.model.constraint,message:account_financial_report.constraint_account_age_report_configuration_line_unique_name_config_combination
-#, python-format
-msgid "Name must be unique per report configuration"
-msgstr "El nombre debe ser único por cada configuración del informe"
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_res_company
-msgid "Companies"
-msgstr "Compañías"
-
-#. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
+#: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration__company_id
 #: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract_wizard__company_id
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__company_id
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__company_id
@@ -975,11 +956,12 @@ msgid "Grouped By"
 msgstr "Agrupado por"
 
 #. module: account_financial_report
-#: model:ir.model.fields,help:account_financial_report.field_res_company__age_partner_config_id
-#: model:ir.model.fields,help:account_financial_report.field_res_config_settings__default_age_partner_config_id
 #: model_terms:ir.ui.view,arch_db:account_financial_report.res_config_settings_view_form
-msgid "Here you can set the intervals that will appear on the Aged Partner Balance."
-msgstr "Aquí puede configurar los intervalos que aparecerán en el informe de Calidad de la deuda."
+msgid ""
+"Here you can set the intervals that will appear on the Aged Partner Balance."
+msgstr ""
+"Aquí puede configurar los intervalos que aparecerán en el informe de Calidad "
+"de la deuda."
 
 #. module: account_financial_report
 #. odoo-python
@@ -1031,6 +1013,18 @@ msgstr ""
 "webkit), solo importes centralizados por período."
 
 #. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration_line__inferior_limit
+msgid "Inferior Limit"
+msgstr "Límite inferior"
+
+#. module: account_financial_report
+#. odoo-python
+#: code:addons/account_financial_report/models/account_age_report_configuration.py:0
+#, python-format
+msgid "Inferior Limit must be greather than zero"
+msgstr "El límite inferior debe ser mayor que cero"
+
+#. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
 msgid ""
 "Initial\n"
@@ -1059,7 +1053,6 @@ msgstr "Saldo inicial"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__age_partner_config_id
-#: model:ir.model.fields,field_description:account_financial_report.field_res_company__age_partner_config_id
 #: model:ir.model.fields,field_description:account_financial_report.field_res_config_settings__default_age_partner_config_id
 msgid "Intervals configuration"
 msgstr "Configuración de intervalos"
@@ -1157,6 +1150,8 @@ msgid "Last Updated by"
 msgstr "Última actualización por"
 
 #. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration__write_date
+#: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration_line__write_date
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__write_date
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__write_date
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__write_date
@@ -1194,22 +1189,6 @@ msgid "Line"
 msgstr "Línea"
 
 #. module: account_financial_report
-#: code:addons/account_financial_report/models/account_age_report_configuration.py:0
-#, python-format
-msgid "Inferior Limit must be greather than zero"
-msgstr "El límite inferior debe ser mayor que cero"
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_account_age_report_configuration_line
-msgid "Model to set interval lines for Age partner balance report"
-msgstr "Modelo para establecer líneas de intervalo para el informe de Calidad de deuda"
-
-#. module: account_financial_report
-#: model:ir.model,name:account_financial_report.model_account_age_report_configuration
-msgid "Model to set intervals for Age partner balance report"
-msgstr "Modelo para establecer intervalos en el informe de Calidad de deudaFalta el Socio"
-
-#. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/general_ledger.py:0
 #: code:addons/account_financial_report/report/open_items.py:0
@@ -1217,6 +1196,20 @@ msgstr "Modelo para establecer intervalos en el informe de Calidad de deudaFalta
 #, python-format
 msgid "Missing Partner"
 msgstr "Falta el Socio"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_account_age_report_configuration_line
+msgid "Model to set interval lines for Age partner balance report"
+msgstr ""
+"Modelo para establecer líneas de intervalo para el informe de Calidad de "
+"deuda"
+
+#. module: account_financial_report
+#: model:ir.model,name:account_financial_report.model_account_age_report_configuration
+msgid "Model to set intervals for Age partner balance report"
+msgstr ""
+"Modelo para establecer intervalos en el informe de Calidad de deudaFalta el "
+"Socio"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__move_target
@@ -1229,6 +1222,7 @@ msgid "Moves"
 msgstr "Asientos"
 
 #. module: account_financial_report
+#. odoo-python
 #: code:addons/account_financial_report/models/account_age_report_configuration.py:0
 #, python-format
 msgid "Must complete Configuration Lines"
@@ -1238,7 +1232,6 @@ msgstr "Debe completar las líneas de configuración"
 #. odoo-python
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 #: code:addons/account_financial_report/report/vat_report_xlsx.py:0
-
 #: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration__name
 #: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration_line__name
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
@@ -1247,6 +1240,14 @@ msgstr "Debe completar las líneas de configuración"
 #, python-format
 msgid "Name"
 msgstr "Nombre"
+
+#. module: account_financial_report
+#. odoo-python
+#: code:addons/account_financial_report/models/account_age_report_configuration.py:0
+#: model:ir.model.constraint,message:account_financial_report.constraint_account_age_report_configuration_line_unique_name_config_combination
+#, python-format
+msgid "Name must be unique per report configuration"
+msgstr "El nombre debe ser único por cada configuración del informe"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1612,11 +1613,6 @@ msgid "Starting account in a range"
 msgstr "Cuenta inicial en un rango"
 
 #. module: account_financial_report
-#: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration_line__inferior_limit
-msgid "Inferior Limit"
-msgstr "Límite inferior"
-
-#. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 msgid "Tags"
 msgstr "Etiquetas"
@@ -1945,7 +1941,6 @@ msgid "future"
 msgstr "futuro"
 
 #. module: account_financial_report
-#: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.journal_ledger_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.open_items_wizard
@@ -1993,6 +1988,37 @@ msgstr "ancho: 38.92%;"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 8.11%;"
 msgstr "ancho: 8.11%;"
+
+#~ msgid ""
+#~ "Age ≤ 120\n"
+#~ "                        d."
+#~ msgstr ""
+#~ "Tiempo ≤ 120\n"
+#~ "· · · · · · · · · · · · · · · · · · · · · · · ·d."
+
+#~ msgid ""
+#~ "Age ≤ 30\n"
+#~ "                        d."
+#~ msgstr ""
+#~ "Tiempo ≤ 30\n"
+#~ "· · · · · · · · · · · · · · · · · · · · · · · ·d."
+
+#~ msgid ""
+#~ "Age ≤ 60\n"
+#~ "                        d."
+#~ msgstr ""
+#~ "Tiempo ≤ 60\n"
+#~ "· · · · · · · · · · · · · · · · · · · · · · · ·d."
+
+#~ msgid ""
+#~ "Age ≤ 90\n"
+#~ "                        d."
+#~ msgstr ""
+#~ "Tiempo ≤ 90\n"
+#~ "· · · · · · · · · · · · · · · · · · · · · · · ·d."
+
+#~ msgid "Companies"
+#~ msgstr "Compañías"
 
 #~ msgid "Filter analytic tags"
 #~ msgstr "Filtrar por etiquetas analíticas"
