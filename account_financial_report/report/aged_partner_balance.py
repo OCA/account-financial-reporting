@@ -71,25 +71,28 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         else:
             ag_pb_data[acc_id]["older"] += residual
             ag_pb_data[acc_id][prt_id]["older"] += residual
+        days_difference = abs((today - due_date).days)
         for index, line in enumerate(interval_lines):
-            next_line = (
-                interval_lines[index + 1] if index + 1 < len(interval_lines) else None
+            lower_limit = 0 if not index else interval_lines[index - 1].inferior_limit
+            next_line = interval_lines[index] if index < len(interval_lines) else None
+            interval_range = self._get_values_for_range_intervals(
+                lower_limit, next_line.inferior_limit
             )
-            lower_limit = 0 if not index else line.inferior_limit
             if (
-                due_date
-                and next_line
-                and today > due_date
-                and today >= due_date + timedelta(days=lower_limit)
-                and today < due_date + timedelta(days=next_line.inferior_limit)
+                days_difference in interval_range
+                or days_difference == line.inferior_limit
             ):
                 ag_pb_data[acc_id][line] += residual
                 ag_pb_data[acc_id][prt_id][line] += residual
-            if not next_line and due_date:
-                if today >= due_date + timedelta(days=line.inferior_limit):
-                    ag_pb_data[acc_id][line] += residual
-                    ag_pb_data[acc_id][prt_id][line] += residual
+                break
         return ag_pb_data
+
+    def _get_values_for_range_intervals(self, num1, num2):
+        min_num = min(num1, num2)
+        max_num = max(num1, num2)
+        if abs(num2 - num1) == 1:
+            return [max_num]
+        return list(range(min_num + 1, max_num))
 
     def _get_account_partial_reconciled(self, company_id, date_at_object):
         domain = [("max_date", ">", date_at_object), ("company_id", "=", company_id)]
@@ -276,27 +279,19 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             ml["120_days"] += amount
         else:
             ml["older"] += amount
-
+        days_difference = abs((today - due_date).days)
         for index, interval_line in enumerate(interval_lines):
-            next_line = (
-                interval_lines[index + 1] if index + 1 < len(interval_lines) else None
+            lower_limit = 0 if not index else interval_lines[index - 1].inferior_limit
+            next_line = interval_lines[index] if index < len(interval_lines) else None
+            interval_range = self._get_values_for_range_intervals(
+                lower_limit, next_line.inferior_limit
             )
-            upper_limit = next_line.inferior_limit if next_line else None
-
             if (
-                due_date
-                and (
-                    next_line
-                    and today > due_date
-                    and today >= due_date + timedelta(days=interval_line.inferior_limit)
-                    and today < due_date + timedelta(days=upper_limit)
-                )
-                or (
-                    not next_line
-                    and today >= due_date + timedelta(days=interval_line.inferior_limit)
-                )
+                days_difference in interval_range
+                or days_difference == interval_line.inferior_limit
             ):
                 ml[interval_line] += amount
+                break
 
     def _create_account_list(
         self,
