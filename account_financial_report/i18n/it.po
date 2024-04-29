@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-06-03 12:07+0000\n"
-"PO-Revision-Date: 2024-04-19 13:38+0000\n"
+"PO-Revision-Date: 2024-04-29 16:37+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -56,7 +56,7 @@ msgstr "<b>Riepilogo imposte</b>"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.res_config_settings_view_form
 msgid "<span class=\"o_form_label\">Intervals configuration</span>"
-msgstr ""
+msgstr "<span class=\"o_form_label\">Configurazione intervalli</span>"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
@@ -101,7 +101,7 @@ msgstr "Conto"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration_line__account_age_report_config_id
 msgid "Account Age Report Config"
-msgstr ""
+msgstr "Configurazione resoconto età conto"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__account_code_from
@@ -167,7 +167,7 @@ msgstr "Filtri aggiuntivi"
 #. module: account_financial_report
 #: model:ir.actions.act_window,name:account_financial_report.action_aged_partner_report_configuration
 msgid "Age Partner Report Configuration"
-msgstr ""
+msgstr "Configurazione resoconto età partner"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -175,13 +175,15 @@ msgid ""
 "Age ≤ 120\n"
 "                            d."
 msgstr ""
+"Età ≤ 120\n"
+"                            g."
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 #, python-format
 msgid "Age ≤ 120 d."
-msgstr ""
+msgstr "Età ≤ 120 g."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -189,13 +191,15 @@ msgid ""
 "Age ≤ 30\n"
 "                            d."
 msgstr ""
+"Età ≤ 30\n"
+"                            g."
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 #, python-format
 msgid "Age ≤ 30 d."
-msgstr ""
+msgstr "Età ≤ 30 g."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -203,13 +207,15 @@ msgid ""
 "Age ≤ 60\n"
 "                            d."
 msgstr ""
+"Età ≤ 60\n"
+"                            g."
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 #, python-format
 msgid "Age ≤ 60 d."
-msgstr ""
+msgstr "Età ≤ 60 g."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -217,13 +223,15 @@ msgid ""
 "Age ≤ 90\n"
 "                            d."
 msgstr ""
+"Età ≤ 90\n"
+"                            g."
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 #, python-format
 msgid "Age ≤ 90 d."
-msgstr ""
+msgstr "Età ≤ 90 g."
 
 #. module: account_financial_report
 #. odoo-python
@@ -454,12 +462,12 @@ msgstr "Calcolare conti"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "Impostazioni configurazione"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.res_config_settings_view_form
 msgid "Configurations"
-msgstr ""
+msgstr "Configurazioni"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration__create_uid
@@ -764,8 +772,8 @@ msgid ""
 "Ending balance\n"
 "                        cur."
 msgstr ""
-"Saldo\n"
-"                        finale"
+"Abilita bilancio\n"
+"                        corrente"
 
 #. module: account_financial_report
 #. odoo-python
@@ -960,6 +968,8 @@ msgstr "Raggruppato per"
 msgid ""
 "Here you can set the intervals that will appear on the Aged Partner Balance."
 msgstr ""
+"Qui si possono impostare gli intervalli che appariranno nel bilancio partner "
+"storici."
 
 #. module: account_financial_report
 #. odoo-python
@@ -1013,24 +1023,23 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration_line__inferior_limit
 msgid "Inferior Limit"
-msgstr ""
+msgstr "Limite inferiore"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/models/account_age_report_configuration.py:0
 #, python-format
 msgid "Inferior Limit must be greather than zero"
-msgstr ""
+msgstr "Il limite inferiore deve essere maggiore di zero"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
-#, fuzzy
 msgid ""
 "Initial\n"
 "                        balance cur."
 msgstr ""
 "Saldo\n"
-"                        finale"
+"                        iniziale corrente"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
@@ -1054,7 +1063,7 @@ msgstr "Saldo iniziale"
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__age_partner_config_id
 #: model:ir.model.fields,field_description:account_financial_report.field_res_config_settings__default_age_partner_config_id
 msgid "Intervals configuration"
-msgstr ""
+msgstr "Configurazione intervalli"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1187,12 +1196,12 @@ msgstr "Partner mancante"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_age_report_configuration_line
 msgid "Model to set interval lines for Age partner balance report"
-msgstr ""
+msgstr "Modello per impostare righe intervalli per il resoconto partner storici"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_age_report_configuration
 msgid "Model to set intervals for Age partner balance report"
-msgstr ""
+msgstr "Modello per impostare gli intervalli per il resoconto partner storici"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__move_target
@@ -1209,7 +1218,7 @@ msgstr "Registrazioni"
 #: code:addons/account_financial_report/models/account_age_report_configuration.py:0
 #, python-format
 msgid "Must complete Configuration Lines"
-msgstr ""
+msgstr "Serve completare le righe di configurazione"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1230,7 +1239,7 @@ msgstr "Nome"
 #: model:ir.model.constraint,message:account_financial_report.constraint_account_age_report_configuration_line_unique_name_config_combination
 #, python-format
 msgid "Name must be unique per report configuration"
-msgstr ""
+msgstr "Il nome deve essere univoco per configurazione resoconto"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1285,7 +1294,7 @@ msgstr "Non dovuto"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.res_config_settings_view_form
 msgid "OCA Aged Report Configuration"
-msgstr ""
+msgstr "Configurazione resoconto storico OCA"
 
 #. module: account_financial_report
 #: model:ir.ui.menu,name:account_financial_report.menu_oca_reports
@@ -1379,13 +1388,12 @@ msgstr "Partner"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_partner_ending_cumul
-#, fuzzy
 msgid ""
 "Partner\n"
 "                    cumul aged balance"
 msgstr ""
-"Saldo\n"
-"                        finale"
+"Bilancio storico\n"
+"                        cumulato partner"
 
 #. module: account_financial_report
 #. odoo-python
