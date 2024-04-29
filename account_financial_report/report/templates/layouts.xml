@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
+    <template id="account_financial_report.html_container">
+        <link
+            href="/account_financial_report/static/src/css/report_html.css"
+            rel="stylesheet"
+        />
+        <t t-set="body_classname" t-value="'container'" />
+        <t t-call="web.report_layout">
+            <t t-out="0" />
+        </t>
+    </template>
     <template id="account_financial_report.internal_layout">
         <div class="article o_account_financial_reports_page">
             <link
