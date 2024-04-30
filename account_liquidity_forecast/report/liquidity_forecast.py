@@ -6,6 +6,7 @@ import datetime
 from dateutil.relativedelta import relativedelta
 
 from odoo import _, fields, models
+from odoo.tools.float_utils import float_is_zero
 
 
 class LiquidityForecastReport(models.AbstractModel):
@@ -128,14 +129,28 @@ class LiquidityForecastReport(models.AbstractModel):
     def _prepare_cash_flow_lines(
         self, data, liquidity_forecast_lines, period, periods, accounts, date_type
     ):
+        company_id = data.get("company_id", self.env.user.company_id.id)
+        company = self.env["res.company"].browse(company_id)
         open_items = accounts._get_open_items_at_date(
             period["date_to"], data["only_posted_moves"]
         )
         period_open_items = []
+        rounding = company.currency_id.rounding
         for open_item in open_items:
             if (
-                period["date_to"] >= open_item[date_type] >= period["date_from"]
-                and open_item["open_amount"]
+                (
+                    (
+                        period["sequence"] == 0
+                        and period["date_to"] >= open_item[date_type]
+                    )
+                    or not open_item[date_type]
+                )
+                or (
+                    period["sequence"] > 0
+                    and period["date_to"] >= open_item[date_type] >= period["date_from"]
+                )
+            ) and not float_is_zero(
+                open_item["open_amount"], precision_rounding=rounding
             ):
                 period_open_items.append(open_item)
         in_flows = {}
