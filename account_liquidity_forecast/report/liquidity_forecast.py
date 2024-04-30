@@ -125,87 +125,119 @@ class LiquidityForecastReport(models.AbstractModel):
             cash_flow += cash_flow_line["periods"][period["sequence"]]["amount"]
         line["periods"][period["sequence"]]["amount"] = cash_flow
 
-    def _prepare_cash_flow_lines_move_line(
-        self, data, liquidity_forecast_lines, period, periods, direction="in"
+    def _prepare_cash_flow_lines(
+        self, data, liquidity_forecast_lines, period, periods, accounts, date_type
     ):
-        domain = [
-            (
-                "account_id.account_type",
-                "in",
-                ["asset_receivable", "liability_payable"],
-            ),
-            ("move_id.payment_id", "=", False),
-            ("company_id", "=", data["company_id"]),
-            ("date_maturity", "<=", period["date_to"]),
-        ]
-        if direction == "in":
-            domain += [("amount_residual", ">", 0.0)]
-        else:
-            domain += [("amount_residual", "<", 0.0)]
-        if period["sequence"] > 0:
-            domain += [("date_maturity", ">=", period["date_from"])]
-        if data["only_posted_moves"]:
-            domain += [("move_id.state", "=", "posted")]
-        else:
-            domain += [("move_id.state", "in", ["posted", "draft"])]
-        balances = self.env["account.move.line"].read_group(
-            domain=domain,
-            fields=["amount_residual:sum"],
-            groupby=["account_id"],
+        open_items = accounts._get_open_items_at_date(
+            period["date_to"], data["only_posted_moves"]
         )
-        for balance in balances:
-            account = self.env["account.account"].browse(balance["account_id"][0])
-            cash_flow_lines = list(
+        period_open_items = []
+        for open_item in open_items:
+            if (
+                period["date_to"] >= open_item[date_type] >= period["date_from"]
+                and open_item["open_amount"]
+            ):
+                period_open_items.append(open_item)
+        in_flows = {}
+        out_flows = {}
+        for open_item in period_open_items:
+            account_id = open_item["account_id"]
+            account = self.env["account.account"].browse(account_id)
+            open_item_amount = open_item["open_amount"]
+            if open_item_amount > 0 and account not in in_flows.keys():
+                in_flows[account] = {"amount": 0.0, "move_line_ids": []}
+            if open_item_amount < 0 and account not in out_flows.keys():
+                out_flows[account] = {"amount": 0.0, "move_line_ids": []}
+            if open_item_amount > 0:
+                in_flows[account]["amount"] += open_item_amount
+                in_flows[account]["move_line_ids"].append(open_item["line_id"])
+            else:
+                out_flows[account]["amount"] += open_item_amount
+                out_flows[account]["move_line_ids"].append(open_item["line_id"])
+        for account in in_flows.keys():
+            in_cash_flow_lines = list(
                 filter(
-                    lambda d: "cash_flow_line_%s_account_%s" % (direction, account.code)
+                    lambda d: "cash_flow_line_%s_account_%s" % ("in", account.code)
                     in d["code"],
                     liquidity_forecast_lines,
                 )
             )
-            if not cash_flow_lines:
-                cash_flow_line = {
-                    "code": "cash_flow_line_%s_account_%s" % (direction, account.code),
+            if not in_cash_flow_lines:
+                in_cash_flow_line = {
+                    "code": "cash_flow_line_%s_account_%s" % ("in", account.code),
                     "type": "amount",
                     "level": "detail",
                     "model": "account.move.line",
                     "title": account.display_name,
                     "periods": {},
+                    "sequence": 1100,
                 }
-                if direction == "in":
-                    cash_flow_line["sequence"] = 1100
-                else:
-                    cash_flow_line["sequence"] = 3100
                 for p in periods:
-                    cash_flow_line["periods"][p["sequence"]] = {
+                    in_cash_flow_line["periods"][p["sequence"]] = {
                         "amount": 0.0,
                         "domain": "",
                     }
-                liquidity_forecast_lines.append(cash_flow_line)
+                liquidity_forecast_lines.append(in_cash_flow_line)
             else:
-                cash_flow_line = cash_flow_lines[0]
-            cash_flow_line["periods"][period["sequence"]]["amount"] += balance[
-                "amount_residual"
+                in_cash_flow_line = in_cash_flow_lines[0]
+            in_cash_flow_line["periods"][period["sequence"]]["amount"] += in_flows[
+                account
+            ]["amount"]
+            in_cash_flow_line["periods"][period["sequence"]]["domain"] = [
+                ("id", "in", in_flows[account]["move_line_ids"])
             ]
-            cash_flow_line["periods"][period["sequence"]]["domain"] = balance[
-                "__domain"
+        for account in out_flows.keys():
+            out_cash_flow_lines = list(
+                filter(
+                    lambda d: "cash_flow_line_%s_account_%s" % ("out", account.code)
+                    in d["code"],
+                    liquidity_forecast_lines,
+                )
+            )
+            if not out_cash_flow_lines:
+                out_cash_flow_line = {
+                    "code": "cash_flow_line_%s_account_%s" % ("out", account.code),
+                    "type": "amount",
+                    "level": "detail",
+                    "model": "account.move.line",
+                    "title": account.display_name,
+                    "periods": {},
+                    "sequence": 3100,
+                }
+                for p in periods:
+                    out_cash_flow_line["periods"][p["sequence"]] = {
+                        "amount": 0.0,
+                        "domain": "",
+                    }
+                liquidity_forecast_lines.append(out_cash_flow_line)
+            else:
+                out_cash_flow_line = out_cash_flow_lines[0]
+            out_cash_flow_line["periods"][period["sequence"]]["amount"] += out_flows[
+                account
+            ]["amount"]
+            out_cash_flow_line["periods"][period["sequence"]]["domain"] = [
+                ("id", "in", out_flows[account]["move_line_ids"])
             ]
 
-    def _prepare_cash_flow_lines_move_line_in(
-        self, data, liquidity_forecast_lines, period, periods
+    def _prepare_cash_flow_lines_move_line(
+        self,
+        data,
+        liquidity_forecast_lines,
+        period,
+        periods,
     ):
-        self._prepare_cash_flow_lines_move_line(
-            data, liquidity_forecast_lines, period, periods, direction="in"
+        accounts = self.env["account.account"].search(
+            [
+                ("account_type", "in", ["asset_receivable", "liability_payable"]),
+                ("company_id", "=", data["company_id"]),
+            ]
         )
-
-    def _prepare_cash_flow_lines_move_line_out(
-        self, data, liquidity_forecast_lines, period, periods
-    ):
-        self._prepare_cash_flow_lines_move_line(
-            data, liquidity_forecast_lines, period, periods, direction="out"
+        self._prepare_cash_flow_lines(
+            data, liquidity_forecast_lines, period, periods, accounts, "date_maturity"
         )
 
     def _prepare_cash_flow_lines_payment(
-        self, data, liquidity_forecast_lines, period, periods, direction="in"
+        self, data, liquidity_forecast_lines, period, periods
     ):
         company_id = data.get("company_id", self.env.user.company_id.id)
         company = self.env["res.company"].browse(company_id)
@@ -214,86 +246,14 @@ class LiquidityForecastReport(models.AbstractModel):
                 ("company_id", "=", company.id),
             ]
         )
-        payment_accounts = self.env["account.account"]
-        if direction == "in":
-            for bank_journal in bank_journals:
-                payment_accounts += (
-                    bank_journal._get_journal_inbound_outstanding_payment_accounts()
-                )
-        else:
-            for bank_journal in bank_journals:
-                payment_accounts += (
-                    bank_journal._get_journal_outbound_outstanding_payment_accounts()
-                )
-        domain = [
-            ("account_id", "=", payment_accounts.ids),
-            ("company_id", "=", company_id),
-            ("date", "<=", period["date_to"]),
-        ]
-        if direction == "in":
-            domain += [("amount_residual", ">", 0.0)]
-        else:
-            domain += [("amount_residual", "<", 0.0)]
-        if period["sequence"] > 0:
-            domain += [("date", ">=", period["date_from"])]
-        if data["only_posted_moves"]:
-            domain += [("move_id.state", "=", "posted")]
-        else:
-            domain += [("move_id.state", "in", ["posted", "draft"])]
-        balances = self.env["account.move.line"].read_group(
-            domain=domain,
-            fields=["amount_residual:sum"],
-            groupby=["account_id"],
-        )
-        for balance in balances:
-            account = self.env["account.account"].browse(balance["account_id"][0])
-            cash_flow_lines = list(
-                filter(
-                    lambda d: "cash_flow_line_%s_account_%s" % (direction, account.code)
-                    in d["code"],
-                    liquidity_forecast_lines,
-                )
+        accounts = self.env["account.account"]
+        for bank_journal in bank_journals:
+            accounts += bank_journal._get_journal_inbound_outstanding_payment_accounts()
+            accounts += (
+                bank_journal._get_journal_outbound_outstanding_payment_accounts()
             )
-            if not cash_flow_lines:
-                cash_flow_line = {
-                    "code": "cash_flow_line_%s_account_%s" % (direction, account.code),
-                    "type": "amount",
-                    "level": "detail",
-                    "model": "account.move.line",
-                    "title": account.display_name,
-                    "periods": {},
-                }
-                if direction == "in":
-                    cash_flow_line["sequence"] = 1100
-                else:
-                    cash_flow_line["sequence"] = 3100
-                for p in periods:
-                    cash_flow_line["periods"][p["sequence"]] = {
-                        "amount": 0.0,
-                        "domain": "",
-                    }
-                liquidity_forecast_lines.append(cash_flow_line)
-            else:
-                cash_flow_line = cash_flow_lines[0]
-            cash_flow_line["periods"][period["sequence"]]["amount"] += balance[
-                "amount_residual"
-            ]
-            cash_flow_line["periods"][period["sequence"]]["domain"] = balance[
-                "__domain"
-            ]
-
-    def _prepare_cash_flow_lines_payment_in(
-        self, data, liquidity_forecast_lines, period, periods
-    ):
-        self._prepare_cash_flow_lines_payment(
-            data, liquidity_forecast_lines, period, periods, direction="in"
-        )
-
-    def _prepare_cash_flow_lines_payment_out(
-        self, data, liquidity_forecast_lines, period, periods
-    ):
-        self._prepare_cash_flow_lines_payment(
-            data, liquidity_forecast_lines, period, periods, direction="out"
+        self._prepare_cash_flow_lines(
+            data, liquidity_forecast_lines, period, periods, accounts, "date"
         )
 
     def _prepare_cash_flow_lines_payment_planning_item(
@@ -424,16 +384,10 @@ class LiquidityForecastReport(models.AbstractModel):
         self, data, liquidity_forecast_lines, period, periods
     ):
         """Extend with your own methods"""
-        self._prepare_cash_flow_lines_move_line_in(
+        self._prepare_cash_flow_lines_move_line(
             data, liquidity_forecast_lines, period, periods
         )
-        self._prepare_cash_flow_lines_move_line_out(
-            data, liquidity_forecast_lines, period, periods
-        )
-        self._prepare_cash_flow_lines_payment_in(
-            data, liquidity_forecast_lines, period, periods
-        )
-        self._prepare_cash_flow_lines_payment_out(
+        self._prepare_cash_flow_lines_payment(
             data, liquidity_forecast_lines, period, periods
         )
         self._prepare_cash_flow_lines_payment_planning_item_in(
