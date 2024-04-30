@@ -243,6 +243,7 @@ class LiquidityForecastReport(models.AbstractModel):
         company = self.env["res.company"].browse(company_id)
         bank_journals = self.env["account.journal"].search(
             [
+                ("type", "=", "bank"),
                 ("company_id", "=", company.id),
             ]
         )
