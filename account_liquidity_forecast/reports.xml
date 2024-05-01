@@ -32,5 +32,11 @@
         <field name="report_name">account_liquidity_forecast.liquidity_forecast</field>
         <field name="report_file">account_liquidity_forecast.liquidity_forecast</field>
     </record>
-
+    <record id="report_liquidity_forecast_xlsx" model="ir.actions.report">
+        <field name="name">Liquidity Forecast</field>
+        <field name="model">account.liquidity.forecast.report.wizard</field>
+        <field name="report_name">report_liquidity_forecast_xlsx</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_file">report_liquidity_forecast</field>
+    </record>
 </odoo>
