@@ -92,15 +92,15 @@
         />
         <div t-att-class="line_class">
             <!--## Items-->
-            <div class="act_as_cell" t-att-style="style">
+            <div class="act_as_cell left" t-att-style="style">
                 <t t-esc="line['title']" />
             </div>
             <!--## Period-->
             <t t-foreach="periods" t-as="period">
                 <t t-if="line['type'] == 'amount'">
-                    <div class="act_as_cell" t-att-style="style">
+                    <div class="act_as_cell right" t-att-style="style">
                         <t t-if="line['periods'][period['sequence']]['domain']">
-                             <t
+                            <t
                                 t-set="domain"
                                 t-value="line['periods'][period['sequence']]['domain']"
                             />
