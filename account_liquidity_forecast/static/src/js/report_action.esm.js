@@ -34,7 +34,6 @@ patch(ReportAction.prototype, "account_liquidity_forecast.ReportAction", {
         if (!_.isString(str)) {
             return str;
         }
-        const parts = str.split(".");
-        return `a_f_r.report_${parts[parts.length - 1]}_xlsx`;
+        return `report_liquidity_forecast_xlsx`;
     },
 });
