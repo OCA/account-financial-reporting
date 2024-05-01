@@ -12,7 +12,7 @@ class AccountAccount(models.Model):
             return []
         move_states = ["posted"]
         if not only_posted_moves:
-            move_states.append(["draft"])
+            move_states.append("draft")
         query = """
         SELECT
         L.ID AS LINE_ID,
