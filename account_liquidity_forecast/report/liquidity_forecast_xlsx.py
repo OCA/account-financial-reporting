@@ -33,9 +33,22 @@ class LiquidityForecastXslx(models.AbstractModel):
             report_name = report_name + suffix
         return report_name
 
+    def excel_column_name(self, column_number):
+        alphabet = ""
+        while column_number > 0:
+            remainder = (column_number - 1) % 26
+            alphabet = chr(65 + remainder) + alphabet
+            column_number = (column_number - 1) // 26
+        return alphabet
+
     def _size_columns(self, sheet, total_col_count, data):
         for i in range(total_col_count + 1):
-            sheet.set_column(0, i, 15)
+            if i == 0:
+                sheet.set_column("A:A", 30)
+            else:
+                sheet.set_column(
+                    "%(col)s:%(col)s" % ({"col": self.excel_column_name(i + 1)}), 15
+                )
 
     def generate_xlsx_report(self, workbook, data, objects):
         self._define_formats(workbook)
@@ -59,11 +72,9 @@ class LiquidityForecastXslx(models.AbstractModel):
             money_string = "[${}]".format(currency.symbol) + " #,##0.%s" % (
                 "0" * currency.decimal_places
             )
-        FORMATS["money_format"] = workbook.add_format(
-            {"align": "center", "num_format": money_string}
-        )
+        FORMATS["money_format"] = workbook.add_format({"num_format": money_string})
         FORMATS["money_format_bold"] = workbook.add_format(
-            {"align": "center", "num_format": money_string, "bold": True}
+            {"num_format": money_string, "bold": True}
         )
         FORMATS["format_center_bold"].text_wrap = 1
         FORMATS["format_center"].text_wrap = 1
@@ -76,7 +87,7 @@ class LiquidityForecastXslx(models.AbstractModel):
             row_pos,
             0,
             row_pos,
-            total_col_count,
+            4,
             _("Liquidity Forecast - %(company_name)s - %(currency_name)s")
             % (
                 {
@@ -91,15 +102,15 @@ class LiquidityForecastXslx(models.AbstractModel):
             row_pos,
             0,
             row_pos,
-            int(total_col_count / 2) + 1,
+            2,
             _("Date range filter"),
             FORMATS["format_theader_yellow_center"],
         )
         sheet.merge_range(
             row_pos,
-            int(total_col_count / 2) + 2,
+            3,
             row_pos,
-            total_col_count,
+            4,
             _("Target moves filter"),
             FORMATS["format_theader_yellow_center"],
         )
@@ -108,15 +119,15 @@ class LiquidityForecastXslx(models.AbstractModel):
             row_pos,
             0,
             row_pos,
-            int(total_col_count / 2) + 1,
+            2,
             "From %s To %s" % (report_data["date_from"], report_data["date_to"]),
             FORMATS["format_center"],
         )
         sheet.merge_range(
             row_pos,
-            int(total_col_count / 2) + 2,
+            3,
             row_pos,
-            total_col_count,
+            4,
             "All posted entries" if report_data["only_posted_moves"] else "All entries",
             FORMATS["format_center"],
         )
@@ -143,9 +154,9 @@ class LiquidityForecastXslx(models.AbstractModel):
                 0,
                 line["title"],
                 (
-                    FORMATS["format_center_bold"]
+                    FORMATS["format_left_bold"]
                     if line.get("level") == "heading"
-                    else FORMATS["format_center"]
+                    else FORMATS["format_left"]
                 ),
             )
             col = 1
