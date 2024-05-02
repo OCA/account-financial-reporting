@@ -28,7 +28,7 @@
             <div class="row">
                 <h4
                     class="mt0"
-                    t-esc="title or 'Odoo Report'"
+                    t-out="title or 'Odoo Report'"
                     style="text-align: center;"
                 />
             </div>
@@ -139,9 +139,9 @@
             <div class="act_as_row">
                 <div class="act_as_cell">
                     From:
-                    <span t-esc="date_from" t-options="{'widget': 'date'}" />
+                    <span t-out="date_from" t-options="{'widget': 'date'}" />
                     To
-                    <span t-esc="date_to" t-options="{'widget': 'date'}" />
+                    <span t-out="date_to" t-options="{'widget': 'date'}" />
                 </div>
                 <div class="act_as_cell">
                     <t t-if="only_posted_moves">All posted entries</t>
@@ -154,7 +154,7 @@
                 <div class="act_as_cell">
                     <t t-if="limit_hierarchy_level">
                         Level
-                        <span t-esc="show_hierarchy_level" />
+                        <span t-out="show_hierarchy_level" />
                     </t>
                     <t t-if="not limit_hierarchy_level">No limit</t>
                 </div>
@@ -220,7 +220,7 @@
                             res-model="account.account"
                             view-type="form"
                         >
-                            <t t-esc="balance['code']" />
+                            <t t-out="balance['code']" />
                         </span>
                     </div>
                     <!--            ## Account/Partner-->
@@ -230,7 +230,7 @@
                             res-model="account.account"
                             view-type="form"
                         >
-                            <t t-esc="balance['name']" />
+                            <t t-out="balance['name']" />
                         </span>
                     </div>
                 </t>
@@ -252,7 +252,7 @@
                             res-model="account.group"
                             view-type="form"
                         >
-                            <t t-esc="balance['name']" />
+                            <t t-out="balance['name']" />
                         </span>
                     </div>
                 </t>
@@ -265,7 +265,7 @@
                         res-model="res.partner"
                         view-type="form"
                     >
-                        <t t-esc="partners_data[partner_id]['name']" />
+                        <t t-out="partners_data[partner_id]['name']" />
                     </span>
                 </div>
             </t>
@@ -283,7 +283,7 @@
                             res-model="account.move.line"
                         >
                             <t
-                                t-esc="balance['initial_balance']"
+                                t-out="balance['initial_balance']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
                         </span>
@@ -339,7 +339,7 @@
                             res-model="account.move.line"
                         >
                             <t
-                                t-esc="balance['debit']"
+                                t-out="balance['debit']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
                         </span>
@@ -399,7 +399,7 @@
                             res-model="account.move.line"
                         >
                             <t
-                                t-esc="balance['credit']"
+                                t-out="balance['credit']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
                         </span>
@@ -459,7 +459,7 @@
                             res-model="account.move.line"
                         >
                             <t
-                                t-esc="balance['balance']"
+                                t-out="balance['balance']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
                         </span>
@@ -516,7 +516,7 @@
                             res-model="account.move.line"
                         >
                             <t
-                                t-esc="balance['ending_balance']"
+                                t-out="balance['ending_balance']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
                         </span>
@@ -549,7 +549,7 @@
                         res-model="account.move.line"
                     >
                         <t
-                            t-esc="total_amount[account_id][partner_id]['ending_balance']"
+                            t-out="total_amount[account_id][partner_id]['ending_balance']"
                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                         />
                     </span>
@@ -574,7 +574,7 @@
                                     res-model="account.move.line"
                                 >
                                     <t
-                                        t-esc="balance['initial_currency_balance']"
+                                        t-out="balance['initial_currency_balance']"
                                         t-options="{'widget': 'monetary', 'display_currency': balance_currency}"
                                     />
                                 </span>
@@ -835,42 +835,42 @@
             <div class="act_as_row labels" style="font-weight: bold;">
                 <!--## date-->
                 <div class="act_as_cell first_column" style="width: 33%;">
-                    <span t-esc="accounts_data[account_id]['code']" />
+                    <span t-out="accounts_data[account_id]['code']" />
                     -
-                    <span t-esc="accounts_data[account_id]['name']" />
+                    <span t-out="accounts_data[account_id]['name']" />
                 </div>
                 <!--## Initial Balance-->
                 <div class="act_as_cell amount" style="width: 9%;">
                     <span
-                        t-esc="total_amount[account_id]['initial_balance']"
+                        t-out="total_amount[account_id]['initial_balance']"
                         t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                     />
                 </div>
                 <!--## Debit-->
                 <div class="act_as_cell amount" style="width: 9%;">
                     <span
-                        t-esc="total_amount[account_id]['debit']"
+                        t-out="total_amount[account_id]['debit']"
                         t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                     />
                 </div>
                 <!--## Credit-->
                 <div class="act_as_cell amount" style="width: 9%;">
                     <span
-                        t-esc="total_amount[account_id]['credit']"
+                        t-out="total_amount[account_id]['credit']"
                         t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                     />
                 </div>
                 <!--## Period balance-->
                 <div class="act_as_cell amount" style="width: 9%;">
                     <span
-                        t-esc="total_amount[account_id]['balance']"
+                        t-out="total_amount[account_id]['balance']"
                         t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                     />
                 </div>
                 <!--## Ending balance-->
                 <div class="act_as_cell amount" style="width: 9%;">
                     <span
-                        t-esc="total_amount[account_id]['ending_balance']"
+                        t-out="total_amount[account_id]['ending_balance']"
                         t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                     />
                 </div>
