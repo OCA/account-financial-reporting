@@ -56,6 +56,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         if not due_date or today <= due_date:
             ag_pb_data[acc_id]["current"] += residual
             ag_pb_data[acc_id][prt_id]["current"] += residual
+            due_date = today
         elif today <= due_date + timedelta(days=30):
             ag_pb_data[acc_id]["30_days"] += residual
             ag_pb_data[acc_id][prt_id]["30_days"] += residual
