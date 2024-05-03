@@ -153,10 +153,10 @@
             </div>
             <div class="act_as_row">
                 <div class="act_as_cell">
-                    <span t-esc="date_from" />
+                    <span t-esc="date_from" t-options="{'widget': 'date'}" />
                 </div>
                 <div class="act_as_cell">
-                    <span t-esc="date_to" />
+                    <span t-esc="date_to" t-options="{'widget': 'date'}" />
                 </div>
                 <div class="act_as_cell">
                     <span t-esc="based_on" />
