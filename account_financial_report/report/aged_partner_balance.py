@@ -275,6 +275,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         today = date_at_object
         if not due_date or today <= due_date:
             ml["current"] += amount
+            due_date = today
         elif today <= due_date + timedelta(days=30):
             ml["30_days"] += amount
         elif today <= due_date + timedelta(days=60):
