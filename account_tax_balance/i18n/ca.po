@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-28 10:11+0000\n"
-"PO-Revision-Date: 2019-05-27 13:19+0000\n"
-"Last-Translator: Jaume Planas <jplanas@itberga.com>\n"
+"PO-Revision-Date: 2024-05-08 16:35+0000\n"
+"Last-Translator: Jesarregui <jesarreguisan@gmail.com>\n"
 "Language-Team: Catalan (https://www.transifex.com/oca/teams/23907/ca/)\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.6.1\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: account_tax_balance
 #. odoo-python
@@ -29,7 +29,7 @@ msgstr ""
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_search_balance
 msgid "Account Tax"
-msgstr ""
+msgstr "Compte d'impost"
 
 #. module: account_tax_balance
 #: model:ir.model.fields.selection,name:account_tax_balance.selection__wizard_open_tax_balances__target_move__all
@@ -44,59 +44,57 @@ msgstr "Tots els apunts tancats"
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__balance_regular
 msgid "Balance"
-msgstr "Balanç "
+msgstr "Balanç"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__balance_refund
 msgid "Balance Refund"
-msgstr ""
+msgstr "Quota devolucions"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__base_balance_regular
 msgid "Base Balance"
-msgstr ""
+msgstr "Base imposable"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_tax__base_balance_refund
 msgid "Base Balance Refund"
-msgstr ""
+msgstr "Basi devolucions"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.view_tax_tree_balance
 msgid "Base Total"
-msgstr "Total base"
+msgstr "Base total"
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
 msgid "Cancel"
-msgstr "Cancel·lar "
+msgstr "Cancel·lar"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__company_ids
-#, fuzzy
 msgid "Companies"
-msgstr "Empresa "
+msgstr "Companyies"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__create_uid
 msgid "Created by"
-msgstr "Creat per "
+msgstr "Creat per"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__create_date
 msgid "Created on"
-msgstr "Creat a "
+msgstr "Creat en"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__date_range_id
-#, fuzzy
 msgid "Date Range"
-msgstr "Interval de dates"
+msgstr "Període"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__display_name
 msgid "Display Name"
-msgstr "Nom a mostrar "
+msgstr "Nom a mostrar"
 
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_bank_statement_line__financial_type
