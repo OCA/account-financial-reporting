@@ -360,6 +360,7 @@ class ReportStatementCommon(models.AbstractModel):
 
         res = {}
         # get base data
+        prior_day = date_start - timedelta(days=1) if date_start else None
         lines = self._get_account_display_lines(
             company_id, partner_ids, date_start, date_end, account_type
         )
@@ -375,7 +376,7 @@ class ReportStatementCommon(models.AbstractModel):
         else:
             bucket_labels = {}
 
-        # organise and format for report
+        # organize and format for report
         format_date = self._format_date_to_partner_lang
         partners_to_remove = set()
         for partner_id in partner_ids:
@@ -385,6 +386,9 @@ class ReportStatementCommon(models.AbstractModel):
                     date_start, date_formats.get(partner_id, default_fmt)
                 ),
                 "end": format_date(date_end, date_formats.get(partner_id, default_fmt)),
+                "prior_day": format_date(
+                    prior_day, date_formats.get(partner_id, default_fmt)
+                ),
                 "currencies": {},
             }
             currency_dict = res[partner_id]["currencies"]
