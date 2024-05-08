@@ -48,6 +48,10 @@ class GeneralLedgerReportWizard(models.TransientModel):
     )
     receivable_accounts_only = fields.Boolean()
     payable_accounts_only = fields.Boolean()
+    account_type_ids = fields.Many2many(
+        comodel_name="account.account.type",
+        string="Account Types",
+    )
     partner_ids = fields.Many2many(
         comodel_name="res.partner",
         string="Filter partners",
@@ -120,6 +124,18 @@ class GeneralLedgerReportWizard(models.TransientModel):
                     lambda a: a.company_id == self.company_id
                 )
 
+    @api.onchange("account_type_ids")
+    def _onchange_account_type_ids(self):
+        if self.account_type_ids:
+            self.account_ids = self.env["account.account"].search(
+                [
+                    ("company_id", "=", self.company_id.id),
+                    ("user_type_id", "in", self.account_type_ids.ids),
+                ]
+            )
+        else:
+            self.account_ids = None
+
     def _init_date_from(self):
         """set start date to begin of current year if fiscal year running"""
         today = fields.Date.context_today(self)
@@ -184,6 +200,8 @@ class GeneralLedgerReportWizard(models.TransientModel):
                 self.account_ids = self.account_ids.filtered(
                     lambda a: a.company_id == self.company_id
                 )
+        if self.company_id and self.account_type_ids:
+            self._onchange_account_type_ids()
         if self.company_id and self.cost_center_ids:
             self.cost_center_ids = self.cost_center_ids.filtered(
                 lambda c: c.company_id == self.company_id
