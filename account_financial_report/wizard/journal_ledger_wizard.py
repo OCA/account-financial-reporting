@@ -9,7 +9,7 @@ class JournalLedgerReportWizard(models.TransientModel):
 
     _name = "journal.ledger.report.wizard"
     _description = "Journal Ledger Report Wizard"
-    _inherit = "account_financial_report_abstract_wizard"
+    _inherit = "report.account_financial_report.abstract_wizard"
 
     date_range_id = fields.Many2one(comodel_name="date.range", string="Date range")
     date_from = fields.Date(string="Start date", required=True)
