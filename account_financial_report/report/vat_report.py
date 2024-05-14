@@ -226,7 +226,11 @@ class VATReport(models.AbstractModel):
             "currency_name": company.currency_id.name,
             "date_from": date_from,
             "date_to": date_to,
-            "based_on": data["based_on"],
+            "based_on": dict(
+                self.env["vat.report.wizard"]
+                ._fields["based_on"]
+                ._description_selection(self.env)
+            ).get(data["based_on"]),
             "tax_detail": data["tax_detail"],
             "vat_report": vat_report,
         }
