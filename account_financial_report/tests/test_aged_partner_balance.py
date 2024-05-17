@@ -21,6 +21,7 @@ class TestAgedPartnerBalance(TransactionCase):
             )
         )
         cls.wizard_model = cls.env["aged.partner.balance.report.wizard"]
+        cls.company = cls.env.company
         # Check that report is produced correctly
         cls.wizard_with_line_details = cls.wizard_model.create(
             {
@@ -98,7 +99,8 @@ class TestAgedPartnerBalance(TransactionCase):
     def test_all_accounts_loaded(self):
         # Tests if all accounts are loaded when the account_code_ fields changed
         all_accounts = self.env["account.account"].search(
-            [("reconcile", "=", True)], order="code"
+            [("reconcile", "=", True), ("company_id", "=", self.company.id)],
+            order="code",
         )
         aged_partner_balance = self.wizard_model.create(
             {
