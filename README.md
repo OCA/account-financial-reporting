@@ -26,7 +26,7 @@ addon | version | maintainers | summary
 [account_tax_balance](account_tax_balance/) | 14.0.1.2.7 | [![pedrobaeza](https://github.com/pedrobaeza.png?size=30px)](https://github.com/pedrobaeza) | Compute tax balances based on date range
 [mis_builder_cash_flow](mis_builder_cash_flow/) | 14.0.1.0.3 | [![jjscarafia](https://github.com/jjscarafia.png?size=30px)](https://github.com/jjscarafia) | MIS Builder Cash Flow
 [mis_template_financial_report](mis_template_financial_report/) | 14.0.1.1.1 | [![hbrunn](https://github.com/hbrunn.png?size=30px)](https://github.com/hbrunn) | Profit & Loss / Balance sheet MIS templates
-[partner_statement](partner_statement/) | 14.0.1.4.5 | [![MiquelRForgeFlow](https://github.com/MiquelRForgeFlow.png?size=30px)](https://github.com/MiquelRForgeFlow) | OCA Financial Reports
+[partner_statement](partner_statement/) | 14.0.1.4.6 | [![MiquelRForgeFlow](https://github.com/MiquelRForgeFlow.png?size=30px)](https://github.com/MiquelRForgeFlow) | OCA Financial Reports
 
 [//]: # (end addons)
 
