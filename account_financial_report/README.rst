@@ -49,6 +49,9 @@ Invoicing / Settings / Invoicing / OCA Aged Report Configuration you will be abl
 dynamic intervals that will appear on the Aged Partner Balance.
 For further information, check CONFIGURE.rst
 
+Add new grouped by field to export Open items report grouped by partner salesperson.
+If grouped by is empty or selected partner option it will grouped by Open items by partner.
+
 **Table of contents**
 
 .. contents::
