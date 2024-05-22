@@ -59,6 +59,10 @@ class OpenItemsReportWizard(models.TransientModel):
         comodel_name="account.account",
         help="Ending account in a range",
     )
+    grouped_by = fields.Selection(
+        selection=[("partners", "Partners"), ("salesperson", "Partner Salesperson")],
+        default="partners",
+    )
 
     @api.onchange("account_code_from", "account_code_to")
     def on_change_account_range(self):
@@ -134,6 +138,19 @@ class OpenItemsReportWizard(models.TransientModel):
         else:
             self.account_ids = None
 
+    def _calculate_amounts_by_partner(self, account_id, open_items_move_lines_data):
+        total_amount = {}
+        for line in open_items_move_lines_data:
+            partner_id_key = line["partner_id"]
+            if account_id not in total_amount:
+                total_amount[account_id] = {}
+            if partner_id_key not in total_amount[account_id]:
+                total_amount[account_id][partner_id_key] = {"residual": 0.0}
+            total_amount[account_id][partner_id_key]["residual"] += line[
+                "amount_residual"
+            ]
+        return total_amount
+
     def _print_report(self, report_type):
         self.ensure_one()
         data = self._prepare_report_open_items()
@@ -165,6 +182,7 @@ class OpenItemsReportWizard(models.TransientModel):
             "account_ids": self.account_ids.ids,
             "partner_ids": self.partner_ids.ids or [],
             "account_financial_report_lang": self.env.lang,
+            "grouped_by": self.grouped_by,
         }
 
     def _export(self, report_type):
