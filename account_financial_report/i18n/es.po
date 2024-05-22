@@ -960,6 +960,7 @@ msgstr "Agrupar por"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__grouped_by
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__grouped_by
 msgid "Grouped By"
 msgstr "Agrupado por"
 
@@ -1191,7 +1192,13 @@ msgstr "Línea"
 #: code:addons/account_financial_report/report/trial_balance.py:0
 #, python-format
 msgid "Missing Partner"
-msgstr "Falta el Socio"
+msgstr "Falta la empresa"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/open_items.py:0
+#, python-format
+msgid "Missing Salesperson"
+msgstr "Sin comercial"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_age_report_configuration_line
@@ -1406,6 +1413,12 @@ msgstr "Saldo Inicial de empresa"
 
 #. module: account_financial_report
 #. odoo-python
+#: model:ir.model.fields.selection,name:account_financial_report.selection__open_items_report_wizard__grouped_by__salesperson
+msgid "Partner Salesperson"
+msgstr "Comercial de la empresa"
+
+#. module: account_financial_report
+#. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 #, python-format
 msgid "Partner cumul aged balance"
@@ -1428,6 +1441,7 @@ msgstr "Saldo inicial de empresa"
 
 #. module: account_financial_report
 #: model:ir.model.fields.selection,name:account_financial_report.selection__general_ledger_report_wizard__grouped_by__partners
+#: model:ir.model.fields.selection,name:account_financial_report.selection__open_items_report_wizard__grouped_by__partners
 msgid "Partners"
 msgstr "Empresas"
 
