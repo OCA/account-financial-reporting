@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<odoo>
+  <record id="mis_kpi_aliquidity" model="mis.report.kpi">
+    <field
+            name="expression"
+        >bal[][('account_type', '=', 'asset_cash'), ('line_type', '=', 'move_line'), ('account_id.hide_in_cash_flow', '=', False)]</field>
+  </record>
+  <record id="mis_kpi_balance" model="mis.report.kpi">
+    <field
+            name="expression"
+        >bale[][('account_id.hide_in_cash_flow', '=', False), '|', ('line_type', '=', 'forecast_line'), ('line_type', '=', 'move_line'), '|', ('account_type', '=', 'asset_cash'), ('account_type', 'in', ('asset_receivable', 'liability_payable')), ('full_reconcile_id', '=', False)]</field>
+  </record>
+  <record id="mis_kpi_in_receivable" model="mis.report.kpi">
+    <field
+            name="expression"
+        >bal[][ ('account_type', '=', 'asset_receivable'), ('full_reconcile_id', '=', False), ('line_type', '=', 'move_line'), ('account_id.hide_in_cash_flow', '=', False)]</field>
+  </record>
+  <record id="mis_kpi_out_payable" model="mis.report.kpi">
+    <field
+            name="expression"
+        >bal[][ ('account_type', '=', 'liability_payable'), ('full_reconcile_id', '=', False), ('line_type', '=', 'move_line'), ('account_id.hide_in_cash_flow', '=', False)]</field>
+  </record>
+</odoo>
