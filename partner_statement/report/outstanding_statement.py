@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo import api, models
+from odoo.tools.float_utils import float_is_zero
 
 
 class OutstandingStatement(models.AbstractModel):
@@ -99,10 +100,10 @@ class OutstandingStatement(models.AbstractModel):
                 SELECT Q1.partner_id, Q1.currency_id, Q1.move_id,
                     Q1.date, Q1.date_maturity, Q1.debit, Q1.credit,
                     Q1.name, Q1.ref, Q1.blocked, Q1.company_id,
-                CASE WHEN Q1.currency_id is not null
-                    THEN Q1.open_amount_currency
-                    ELSE Q1.open_amount
-                END as open_amount
+                    CASE WHEN Q1.currency_id is not null
+                        THEN Q1.open_amount_currency
+                        ELSE Q1.open_amount
+                    END as open_amount, Q1.id
                 FROM Q1
                 """,
                 locals(),
@@ -115,10 +116,10 @@ class OutstandingStatement(models.AbstractModel):
             self._cr.mogrify(
                 """
             SELECT Q2.partner_id, Q2.move_id, Q2.date, Q2.date_maturity,
-              Q2.name, Q2.ref, Q2.debit, Q2.credit,
-              Q2.debit-Q2.credit AS amount, blocked,
-              COALESCE(Q2.currency_id, c.currency_id) AS currency_id,
-              Q2.open_amount
+                Q2.name, Q2.ref, Q2.debit, Q2.credit,
+                Q2.debit-Q2.credit AS amount, blocked,
+                COALESCE(Q2.currency_id, c.currency_id) AS currency_id,
+                Q2.open_amount, Q2.id
             FROM Q2
             JOIN res_company c ON (c.id = Q2.company_id)
             JOIN res_currency cur ON cur.id = COALESCE(Q2.currency_id, c.currency_id)
@@ -142,7 +143,8 @@ class OutstandingStatement(models.AbstractModel):
              Q2 AS (%s),
              Q3 AS (%s)
         SELECT partner_id, currency_id, move_id, date, date_maturity, debit,
-                            credit, amount, open_amount, name, ref, blocked
+            credit, amount, open_amount, COALESCE(name, '') as name,
+            COALESCE(ref, '') as ref, blocked, id
         FROM Q3
         ORDER BY date, date_maturity, move_id"""
             % (
@@ -154,6 +156,11 @@ class OutstandingStatement(models.AbstractModel):
         for row in self.env.cr.dictfetchall():
             res[row.pop("partner_id")].append(row)
         return res
+
+    def _add_currency_line(self, line, currency):
+        if float_is_zero(line["open_amount"], precision_rounding=currency.rounding):
+            return []
+        return [line]
 
     @api.model
     def _get_report_values(self, docids, data=None):

@@ -24,16 +24,13 @@ class OutstandingStatementXslx(models.AbstractModel):
         currency_data = partner_data.get("currencies", {}).get(currency.id)
         account_type = data.get("account_type", False)
         row_pos += 2
-        statement_header = _(
-            "%sStatement up to %s in %s"
-            % (
-                account_type == "payable" and _("Supplier ") or "",
-                partner_data.get("end"),
-                currency.display_name,
-            )
+        statement_header = _("%sStatement up to %s in %s") % (
+            account_type == "payable" and _("Supplier ") or "",
+            partner_data.get("end"),
+            currency.display_name,
         )
         sheet.merge_range(
-            row_pos, 0, row_pos, 6, statement_header, self.format_right_bold
+            row_pos, 0, row_pos, 6, statement_header, self.format_left_bold
         )
         row_pos += 1
         sheet.write(
@@ -50,15 +47,15 @@ class OutstandingStatementXslx(models.AbstractModel):
             name_to_show = (
                 line.get("name", "") == "/" or not line.get("name", "")
             ) and line.get("ref", "")
-            if line.get("name", "") != "/":
+            if line.get("name", "") and line.get("name", "") != "/":
                 if not line.get("ref", ""):
                     name_to_show = line.get("name", "")
                 else:
-                    if (line.get("name", "") in line.get("ref", "")) or (
+                    if (line.get("ref", "") in line.get("name", "")) or (
                         line.get("name", "") == line.get("ref", "")
                     ):
                         name_to_show = line.get("name", "")
-                    elif line.get("ref", "") not in line.get("name", ""):
+                    else:
                         name_to_show = line.get("ref", "")
             sheet.write(row_pos, 0, line.get("move_id", ""), self.format_tcell_left)
             sheet.write(row_pos, 1, line.get("date", ""), self.format_tcell_date_left)
@@ -135,6 +132,8 @@ class OutstandingStatementXslx(models.AbstractModel):
             sheet.set_column(0, i, 20)
 
     def generate_xlsx_report(self, workbook, data, objects):
+        lang = objects.lang or self.env.user.partner_id.lang
+        self = self.with_context(lang=lang)
         report_model = self.env["report.partner_statement.outstanding_statement"]
         self._define_formats(workbook)
         self.format_distributed = workbook.add_format({"align": "vdistributed"})
@@ -153,7 +152,7 @@ class OutstandingStatementXslx(models.AbstractModel):
             0,
             row_pos,
             6,
-            _("Statement of Account from %s" % (company.display_name)),
+            _("Statement of Account from %s") % company.display_name,
             self.format_ws_title,
         )
         row_pos += 1
