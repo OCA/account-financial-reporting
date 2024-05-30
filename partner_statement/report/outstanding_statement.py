@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo import api, models
+from odoo.tools.float_utils import float_is_zero
 
 
 class OutstandingStatement(models.AbstractModel):
@@ -14,8 +15,9 @@ class OutstandingStatement(models.AbstractModel):
     def _display_lines_sql_q1(self, partners, date_end, account_type):
         partners = tuple(partners)
         return str(self._cr.mogrify("""
-            SELECT m.name AS move_id, l.partner_id, l.date, l.name,
-                            l.ref, l.blocked, l.currency_id, l.company_id,
+            SELECT l.id, m.name AS move_id, l.partner_id, l.date, l.name,
+            l.blocked, l.currency_id, l.company_id,
+            CASE WHEN l.ref IS NOT NULL THEN l.ref ELSE m.ref END as ref,
             CASE WHEN (l.currency_id is not null AND l.amount_currency > 0.0)
                 THEN avg(l.amount_currency)
                 ELSE avg(l.debit)
@@ -59,9 +61,9 @@ class OutstandingStatement(models.AbstractModel):
                                       pc.max_date <= %(date_end)s) OR
                                   (pd.id IS NULL AND pc.id IS NULL)
                                 ) AND l.date <= %(date_end)s AND m.state IN ('posted')
-            GROUP BY l.partner_id, m.name, l.date, l.date_maturity, l.name,
-                                l.ref, l.blocked, l.currency_id,
-                                l.balance, l.amount_currency, l.company_id
+            GROUP BY l.id, l.partner_id, m.name, l.date, l.date_maturity, l.name,
+                CASE WHEN l.ref IS NOT NULL THEN l.ref ELSE m.ref END,
+                l.blocked, l.currency_id, l.balance, l.amount_currency, l.company_id
             """, locals()), "utf-8"
         )
 
@@ -71,10 +73,10 @@ class OutstandingStatement(models.AbstractModel):
                 SELECT Q1.partner_id, Q1.currency_id, Q1.move_id,
                     Q1.date, Q1.date_maturity, Q1.debit, Q1.credit,
                     Q1.name, Q1.ref, Q1.blocked, Q1.company_id,
-                CASE WHEN Q1.currency_id is not null
-                    THEN Q1.open_amount_currency
-                    ELSE Q1.open_amount
-                END as open_amount
+                    CASE WHEN Q1.currency_id is not null
+                        THEN Q1.open_amount_currency
+                        ELSE Q1.open_amount
+                    END as open_amount, Q1.id
                 FROM Q1
                 """, locals()
             ),
@@ -84,10 +86,10 @@ class OutstandingStatement(models.AbstractModel):
     def _display_lines_sql_q3(self, company_id):
         return str(self._cr.mogrify("""
             SELECT Q2.partner_id, Q2.move_id, Q2.date, Q2.date_maturity,
-              Q2.name, Q2.ref, Q2.debit, Q2.credit,
-              Q2.debit-Q2.credit AS amount, blocked,
-              COALESCE(Q2.currency_id, c.currency_id) AS currency_id,
-              Q2.open_amount
+                Q2.name, Q2.ref, Q2.debit, Q2.credit,
+                Q2.debit-Q2.credit AS amount, blocked,
+                COALESCE(Q2.currency_id, c.currency_id) AS currency_id,
+                Q2.open_amount, Q2.id
             FROM Q2
             JOIN res_company c ON (c.id = Q2.company_id)
             WHERE c.id = %(company_id)s AND Q2.open_amount != 0.0
@@ -104,7 +106,8 @@ class OutstandingStatement(models.AbstractModel):
              Q2 AS (%s),
              Q3 AS (%s)
         SELECT partner_id, currency_id, move_id, date, date_maturity, debit,
-                            credit, amount, open_amount, name, ref, blocked
+            credit, amount, open_amount, COALESCE(name, '') as name,
+            COALESCE(ref, '') as ref, blocked, id
         FROM Q3
         ORDER BY date, date_maturity, move_id""" % (
             self._display_lines_sql_q1(partners, date_end, account_type),
@@ -114,8 +117,13 @@ class OutstandingStatement(models.AbstractModel):
             res[row.pop('partner_id')].append(row)
         return res
 
-    @api.multi
-    def _get_report_values(self, docids, data):
+    def _add_currency_line(self, line, currency):
+        if float_is_zero(line["open_amount"], precision_rounding=currency.rounding):
+            return []
+        return [line]
+
+    @api.model
+    def _get_report_values(self, docids, data=None):
         if not data:
             data = {}
         if 'company_id' not in data:
