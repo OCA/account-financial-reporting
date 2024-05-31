@@ -24,7 +24,7 @@ addon | version | maintainers | summary
 [account_financial_report](account_financial_report/) | 16.0.1.7.0 |  | OCA Financial Reports
 [account_tax_balance](account_tax_balance/) | 16.0.1.1.2 |  | Compute tax balances based on date range
 [mis_builder_cash_flow](mis_builder_cash_flow/) | 16.0.1.0.0 | [![jjscarafia](https://github.com/jjscarafia.png?size=30px)](https://github.com/jjscarafia) | MIS Builder Cash Flow
-[partner_statement](partner_statement/) | 16.0.1.0.2 | [![MiquelRForgeFlow](https://github.com/MiquelRForgeFlow.png?size=30px)](https://github.com/MiquelRForgeFlow) | OCA Financial Reports
+[partner_statement](partner_statement/) | 16.0.1.0.3 | [![MiquelRForgeFlow](https://github.com/MiquelRForgeFlow.png?size=30px)](https://github.com/MiquelRForgeFlow) | OCA Financial Reports
 
 [//]: # (end addons)
 
