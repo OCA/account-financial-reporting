@@ -24,7 +24,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         self.po.button_confirm()
         picking = self.po.picking_ids[0]
         picking.action_confirm()
-        picking.move_lines.quantity_done = 1.0
+        picking.move_ids.quantity_done = 1.0
         picking.button_validate()
         return picking
 
@@ -35,7 +35,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
-        for move in picking.move_lines:
+        for move in picking.move_ids:
             self.assertIn(move.id, domain_ids)
             self.assertEqual(move.currency_id, move.purchase_line_id.currency_id)
 
@@ -50,7 +50,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
-        for move in picking.move_lines:
+        for move in picking.move_ids:
             self.assertNotIn(move.id, domain_ids)
 
     def test_03_report_move_partially_invoiced(self):
@@ -58,7 +58,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         self.po.button_confirm()
         picking = self.po.picking_ids[0]
         picking.action_confirm()
-        move_done = picking.move_lines[0]
+        move_done = picking.move_ids[0]
         move_done.quantity_done = 1.0
         picking.button_validate()
         inv_action = self.po.action_create_invoice()
@@ -68,9 +68,9 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         # Done other moves to appear at report
         picking_ret = self.po.picking_ids.filtered(lambda p: p.state == "assigned")
         picking_ret.action_confirm()
-        picking_ret.move_lines.quantity_done = 1.0
+        picking_ret.move_ids.quantity_done = 1.0
         picking_ret.button_validate()
-        moves_not_done = picking_ret.move_lines
+        moves_not_done = picking_ret.move_ids
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
             {"date_check": fields.Date.today()}
         )
@@ -86,7 +86,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         picking = self.po.picking_ids[0]
         # Process pickings
         picking.action_confirm()
-        picking.move_lines.quantity_done = 1.0
+        picking.move_ids.quantity_done = 1.0
         picking.button_validate()
         # Create invoice
         inv_action = self.po.action_create_invoice()
@@ -98,7 +98,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
-        for move in picking.move_lines:
+        for move in picking.move_ids:
             self.assertNotIn(move.id, domain_ids)
         # Refund invoice
         wiz_invoice_refund = (
@@ -115,7 +115,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         wiz_invoice_refund.reverse_moves()
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
-        for move in picking.move_lines:
+        for move in picking.move_ids:
             self.assertIn(move.id, domain_ids)
         # Create invoice again
         inv_action = self.po.action_create_invoice()
@@ -124,7 +124,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         new_invoice.action_post()
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
-        for move in picking.move_lines:
+        for move in picking.move_ids:
             self.assertNotIn(move.id, domain_ids)
 
     def test_05_report_move_partial_pickings_full_invoice(self):
@@ -132,17 +132,17 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         self.po.button_confirm()
         picking = self.po.picking_ids[0]
         picking.action_confirm()
-        picking.move_lines.quantity_done = 3.0
+        picking.move_ids.quantity_done = 3.0
         res_dict = picking.button_validate()
-        move_lines = picking.move_lines
+        move_lines = picking.move_ids
         self.env["stock.backorder.confirmation"].with_context(
             **res_dict["context"]
         ).process()
         picking = self.po.picking_ids.filtered(lambda p: p.state != "done")
         picking.action_confirm()
-        picking.move_lines.quantity_done = 2.0
+        picking.move_ids.quantity_done = 2.0
         picking.button_validate()
-        move_lines += picking.move_lines
+        move_lines += picking.move_ids
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
             {"date_check": fields.Date.today()}
         )
@@ -164,9 +164,9 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         self.po.button_confirm()
         picking = self.po.picking_ids[0]
         picking.action_confirm()
-        picking.move_lines.quantity_done = 3.0
+        picking.move_ids.quantity_done = 3.0
         res_dict = picking.button_validate()
-        move_lines = picking.move_lines
+        move_lines = picking.move_ids
         self.env["stock.backorder.confirmation"].with_context(
             **res_dict["context"]
         ).process()
@@ -176,7 +176,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         invoice.action_post()
         picking = self.po.picking_ids.filtered(lambda p: p.state != "done")
         picking.action_confirm()
-        picking.move_lines.quantity_done = 2.0
+        picking.move_ids.quantity_done = 2.0
         picking.button_validate()
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
             {"date_check": fields.Date.today()}
@@ -185,7 +185,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         domain_ids = action["domain"][0][2]
         for move in move_lines:
             self.assertNotIn(move.id, domain_ids)
-        for move in picking.move_lines:
+        for move in picking.move_ids:
             self.assertIn(move.id, domain_ids)
         inv_action = self.po.action_create_invoice()
         invoice = self.env["account.move"].browse([(inv_action["res_id"])])
@@ -193,7 +193,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         invoice.action_post()
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
-        for move in move_lines + picking.move_lines:
+        for move in move_lines + picking.move_ids:
             self.assertNotIn(move.id, domain_ids)
 
     def test_07_report_move_full_invoice_return_without_update(self):
@@ -202,7 +202,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         picking = self.po.picking_ids[0]
         # Process pickings
         picking.action_confirm()
-        picking.move_lines.quantity_done = 1.0
+        picking.move_ids.quantity_done = 1.0
         picking.button_validate()
         # Create invoice
         inv_action = self.po.action_create_invoice()
@@ -214,7 +214,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
-        for move in picking.move_lines:
+        for move in picking.move_ids:
             self.assertNotIn(move.id, domain_ids)
         # Return move
         wiz_return_form = Form(
@@ -228,7 +228,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         picking_return = self.env["stock.picking"].browse(return_id)
         picking_return.move_line_ids.write({"qty_done": 1})
         picking_return.button_validate()
-        for move in picking_return.move_lines:
+        for move in picking_return.move_ids:
             self.assertNotIn(move.id, domain_ids)
 
     def test_08_move_return_return_full_invoiced(self):
@@ -237,7 +237,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         picking = self.po.picking_ids[0]
         # Process pickings
         picking.action_confirm()
-        picking.move_lines.quantity_done = 1.0
+        picking.move_ids.quantity_done = 1.0
         picking.button_validate()
         wiz_return_form = Form(
             self.env["stock.return.picking"].with_context(
@@ -268,11 +268,11 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
-        for move in picking.move_lines:
+        for move in picking.move_ids:
             self.assertNotIn(move.id, domain_ids)
-        for move in picking_return.move_lines:
+        for move in picking_return.move_ids:
             self.assertNotIn(move.id, domain_ids)
-        for move in picking_return_return.move_lines:
+        for move in picking_return_return.move_ids:
             self.assertNotIn(move.id, domain_ids)
 
     def test_09_move_return_return_non_invoiced(self):
@@ -281,7 +281,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         picking = self.po.picking_ids[0]
         # Process pickings
         picking.action_confirm()
-        picking.move_lines.quantity_done = 1.0
+        picking.move_ids.quantity_done = 1.0
         picking.button_validate()
         wiz_return_form = Form(
             self.env["stock.return.picking"].with_context(
@@ -308,11 +308,11 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
-        for move in picking.move_lines:
+        for move in picking.move_ids:
             self.assertNotIn(move.id, domain_ids)
-        for move in picking_return.move_lines:
+        for move in picking_return.move_ids:
             self.assertNotIn(move.id, domain_ids)
-        for move in picking_return_return.move_lines:
+        for move in picking_return_return.move_ids:
             self.assertIn(move.id, domain_ids)
 
     def test_10_move_invoice_return_without_update_qty(self):
@@ -321,7 +321,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         picking = self.po.picking_ids[0]
         # Process pickings
         picking.action_confirm()
-        picking.move_lines.quantity_done = 1.0
+        picking.move_ids.quantity_done = 1.0
         picking.button_validate()
         inv_action = self.po.action_create_invoice()
         invoice = self.env["account.move"].browse([(inv_action["res_id"])])
@@ -354,11 +354,11 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
-        for move in picking.move_lines:
+        for move in picking.move_ids:
             self.assertNotIn(move.id, domain_ids)
-        for move in picking_return.move_lines:
+        for move in picking_return.move_ids:
             self.assertNotIn(move.id, domain_ids)
-        for move in picking_return_return.move_lines:
+        for move in picking_return_return.move_ids:
             self.assertNotIn(move.id, domain_ids)
 
     def test_11_report_move_full_invoiced_out_of_date(self):
@@ -367,7 +367,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         picking = self.po.picking_ids[0]
         # Process pickings
         picking.action_confirm()
-        picking.move_lines.quantity_done = 1.0
+        picking.move_ids.quantity_done = 1.0
         picking.button_validate()
         # Emulate prepaying invoice
         inv_action = self.po.action_create_invoice()
@@ -379,5 +379,5 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
-        for move in picking.move_lines:
+        for move in picking.move_ids:
             self.assertIn(move.id, domain_ids)
