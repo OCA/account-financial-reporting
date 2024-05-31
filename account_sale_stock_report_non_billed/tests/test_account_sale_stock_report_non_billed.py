@@ -32,7 +32,7 @@ class TestAccountSaleStrockReportNonBilled(TestStockPickingInvoiceLink):
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
-        for move in pick_1.move_lines:
+        for move in pick_1.move_ids:
             self.assertIn(move.id, domain_ids)
 
     def test_02_report_move_full_invoiced(self):
@@ -44,7 +44,7 @@ class TestAccountSaleStrockReportNonBilled(TestStockPickingInvoiceLink):
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
-        for move in pick_1.move_lines:
+        for move in pick_1.move_ids:
             self.assertNotIn(move.id, domain_ids)
 
     def test_03_report_move_partially_invoiced(self):
@@ -53,8 +53,8 @@ class TestAccountSaleStrockReportNonBilled(TestStockPickingInvoiceLink):
             lambda x: x.picking_type_code == "outgoing"
             and x.state in ("confirmed", "assigned", "partially_available")
         )
-        move_done = picking.move_lines[0]
-        moves_not_done = picking.move_lines[1:]
+        move_done = picking.move_ids[0]
+        moves_not_done = picking.move_ids[1:]
         move_done.move_line_ids.write({"qty_done": 2})
         backorder_wiz = picking.button_validate()
         backorder_wiz = Form(
@@ -99,7 +99,7 @@ class TestAccountSaleStrockReportNonBilled(TestStockPickingInvoiceLink):
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
-        for move in pick_1.move_lines:
+        for move in pick_1.move_ids:
             self.assertIn(move.id, domain_ids)
 
     def test_05_report_move_full_return_no_invoiced(self):
@@ -119,9 +119,9 @@ class TestAccountSaleStrockReportNonBilled(TestStockPickingInvoiceLink):
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
-        for move in picking.move_lines:
+        for move in picking.move_ids:
             self.assertNotIn(move.id, domain_ids)
-        for move in picking_return.move_lines:
+        for move in picking_return.move_ids:
             self.assertNotIn(move.id, domain_ids)
 
     def test_06_report_move_full_return_invoiced(self):
@@ -143,15 +143,15 @@ class TestAccountSaleStrockReportNonBilled(TestStockPickingInvoiceLink):
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
-        for move in picking.move_lines:
+        for move in picking.move_ids:
             self.assertNotIn(move.id, domain_ids)
-        for move in picking_return.move_lines:
+        for move in picking_return.move_ids:
             self.assertIn(move.id, domain_ids)
         inv = self.so._create_invoices(final=True)
         inv.action_post()
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
-        for move in picking_return.move_lines:
+        for move in picking_return.move_ids:
             self.assertNotIn(move.id, domain_ids)
 
     def test_07_move_return_return_full_invoiced(self):
@@ -182,11 +182,11 @@ class TestAccountSaleStrockReportNonBilled(TestStockPickingInvoiceLink):
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
-        for move in picking.move_lines:
+        for move in picking.move_ids:
             self.assertNotIn(move.id, domain_ids)
-        for move in picking_return.move_lines:
+        for move in picking_return.move_ids:
             self.assertNotIn(move.id, domain_ids)
-        for move in picking_return_return.move_lines:
+        for move in picking_return_return.move_ids:
             self.assertNotIn(move.id, domain_ids)
 
     def test_08_move_return_return_non_invoiced(self):
@@ -216,11 +216,11 @@ class TestAccountSaleStrockReportNonBilled(TestStockPickingInvoiceLink):
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
-        for move in picking.move_lines:
+        for move in picking.move_ids:
             self.assertNotIn(move.id, domain_ids)
-        for move in picking_return.move_lines:
+        for move in picking_return.move_ids:
             self.assertNotIn(move.id, domain_ids)
-        for move in picking_return_return.move_lines:
+        for move in picking_return_return.move_ids:
             self.assertIn(move.id, domain_ids)
 
     def test_09_move_invoice_return_without_update_qty(self):
@@ -255,11 +255,11 @@ class TestAccountSaleStrockReportNonBilled(TestStockPickingInvoiceLink):
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
-        for move in picking.move_lines:
+        for move in picking.move_ids:
             self.assertNotIn(move.id, domain_ids)
-        for move in picking_return.move_lines:
+        for move in picking_return.move_ids:
             self.assertNotIn(move.id, domain_ids)
-        for move in picking_return_return.move_lines:
+        for move in picking_return_return.move_ids:
             self.assertNotIn(move.id, domain_ids)
 
     def test_10_report_move_full_invoiced_out_of_date(self):
@@ -277,5 +277,5 @@ class TestAccountSaleStrockReportNonBilled(TestStockPickingInvoiceLink):
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
-        for move in picking.move_lines:
+        for move in picking.move_ids:
             self.assertIn(move.id, domain_ids)
