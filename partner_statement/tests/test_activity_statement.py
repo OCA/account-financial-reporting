@@ -3,11 +3,14 @@
 
 from datetime import date
 
+from freezegun import freeze_time
+
 from odoo import fields
 from odoo.tests import new_test_user
 from odoo.tests.common import TransactionCase
 
 
+@freeze_time("2024-05-01", tick=True)
 class TestActivityStatement(TransactionCase):
     """Tests for Activity Statement."""
 
