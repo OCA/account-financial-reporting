@@ -125,5 +125,5 @@ class TestActivityStatement(TransactionCase):
 
         wiz_id.aging_type = "days"
         wiz_id.onchange_aging_type()
-        self.assertEqual((wiz_id.date_end - wiz_id.date_start).days, 30)
+        self.assertEqual((wiz_id.date_end - wiz_id.date_start).months, 1)
         self.assertTrue(wiz_id.date_end == self.today)
