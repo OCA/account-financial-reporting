@@ -11,6 +11,11 @@ class OutstandingStatementWizard(models.TransientModel):
     _inherit = "statement.common.wizard"
     _description = "Outstanding Statement Wizard"
 
+    def _prepare_statement(self):
+        res = super()._prepare_statement()
+        res.update({"is_outstanding": True})
+        return res
+
     def _print_report(self, report_type):
         self.ensure_one()
         data = self._prepare_statement()
