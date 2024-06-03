@@ -553,6 +553,13 @@ msgid "Supplier"
 msgstr ""
 
 #. module: partner_statement
+#: code:addons/partner_statement/report/activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
+#, python-format
+msgid "Supplier "
+msgstr ""
+
+#. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_wizard_view
 msgid ""
 "The activity statement provides details of all activity "
