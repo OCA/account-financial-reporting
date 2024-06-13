@@ -8,7 +8,7 @@
     'version': '10.0.3.1.3',
     'category': 'Reporting',
     'summary': 'OCA Financial Reports',
-    'author': 'Camptocamp SA,'
+    'author': 'Camptocamp,'
               'initOS GmbH,'
               'redCOR AG,'
               'ACSONE SA/NV,'
