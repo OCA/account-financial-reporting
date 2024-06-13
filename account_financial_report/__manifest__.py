@@ -9,7 +9,7 @@
     "version": "15.0.2.10.4",
     "category": "Reporting",
     "summary": "OCA Financial Reports",
-    "author": "Camptocamp SA,"
+    "author": "Camptocamp,"
     "initOS GmbH,"
     "redCOR AG,"
     "ForgeFlow,"
