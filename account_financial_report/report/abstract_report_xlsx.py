@@ -95,7 +95,7 @@ class AbstractReportXslx(models.AbstractModel):
             company = self.env["res.company"].browse(company_id)
             currency = company.currency_id
         else:
-            currency = self.env["res.company"]._get_user_currency()
+            currency = self.env.company.currency_id
         self.format_header_amount.set_num_format(
             "#,##0." + "0" * currency.decimal_places
         )
