@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-02-23 10:33+0000\n"
+"PO-Revision-Date: 2024-06-18 15:36+0000\n"
 "Last-Translator: jakobkrabbe <jakob@syscare.se>\n"
 "Language-Team: none\n"
 "Language: sv\n"
@@ -55,7 +55,7 @@ msgstr "<b>Skatter sammanfattning</b>"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.res_config_settings_view_form
 msgid "<span class=\"o_form_label\">Intervals configuration</span>"
-msgstr ""
+msgstr "<span class=\"o_form_label\">Intervallkonfiguration</span>"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
@@ -100,7 +100,7 @@ msgstr "Konto"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration_line__account_age_report_config_id
 msgid "Account Age Report Config"
-msgstr ""
+msgstr "Kontons åldersrapport Konfig"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__account_code_from
@@ -166,7 +166,7 @@ msgstr "Ytterligare filtrering"
 #. module: account_financial_report
 #: model:ir.actions.act_window,name:account_financial_report.action_aged_partner_report_configuration
 msgid "Age Partner Report Configuration"
-msgstr ""
+msgstr "Konfiguration av ålderskontaktsrapport"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -174,6 +174,8 @@ msgid ""
 "Age ≤ 120\n"
 "                            d."
 msgstr ""
+"Age ≤ 120\n"
+"                            d."
 
 #. module: account_financial_report
 #. odoo-python
@@ -188,6 +190,8 @@ msgid ""
 "Age ≤ 30\n"
 "                            d."
 msgstr ""
+"Age ≤ 30\n"
+"                            d."
 
 #. module: account_financial_report
 #. odoo-python
@@ -202,6 +206,8 @@ msgid ""
 "Age ≤ 60\n"
 "                            d."
 msgstr ""
+"Age ≤ 60\n"
+"                            d."
 
 #. module: account_financial_report
 #. odoo-python
@@ -216,6 +222,8 @@ msgid ""
 "Age ≤ 90\n"
 "                            d."
 msgstr ""
+"Age ≤ 90\n"
+"                            d."
 
 #. module: account_financial_report
 #. odoo-python
@@ -344,7 +352,7 @@ msgstr "Objekt konto"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #, python-format
 msgid "Analytic Distribution"
-msgstr "Analytisk distribution"
+msgstr "Objekt distribution"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
@@ -453,12 +461,12 @@ msgstr "Beräkna redovisningar"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "Konfigurationsinställningar"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.res_config_settings_view_form
 msgid "Configurations"
-msgstr ""
+msgstr "Konfigurationer"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration__create_uid
@@ -957,7 +965,7 @@ msgstr "Grupperad efter"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.res_config_settings_view_form
 msgid ""
 "Here you can set the intervals that will appear on the Aged Partner Balance."
-msgstr ""
+msgstr "Här kan du ställa in intervallen som ska visas på Åldrig kundsaldo."
 
 #. module: account_financial_report
 #. odoo-python
@@ -1011,14 +1019,14 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration_line__inferior_limit
 msgid "Inferior Limit"
-msgstr ""
+msgstr "Underlägsen gräns"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/models/account_age_report_configuration.py:0
 #, python-format
 msgid "Inferior Limit must be greather than zero"
-msgstr ""
+msgstr "Inferior Limit måste vara större än noll"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
@@ -1051,7 +1059,7 @@ msgstr "Initial balans"
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__age_partner_config_id
 #: model:ir.model.fields,field_description:account_financial_report.field_res_config_settings__default_age_partner_config_id
 msgid "Intervals configuration"
-msgstr ""
+msgstr "Intervallkonfiguration"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1182,7 +1190,7 @@ msgstr "Begränsa hierarkinivåer"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration__line_ids
 msgid "Line"
-msgstr ""
+msgstr "Rad"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1191,17 +1199,19 @@ msgstr ""
 #: code:addons/account_financial_report/report/trial_balance.py:0
 #, python-format
 msgid "Missing Partner"
-msgstr ""
+msgstr "Saknad kontakt"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_age_report_configuration_line
 msgid "Model to set interval lines for Age partner balance report"
 msgstr ""
+"Modell för att ställa in intervallrader för balansrapport för ålderskontakter"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_age_report_configuration
 msgid "Model to set intervals for Age partner balance report"
 msgstr ""
+"Modell för att ställa in intervaller för balansrapport för ålderskontakt"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__move_target
@@ -1218,7 +1228,7 @@ msgstr "Rörelser"
 #: code:addons/account_financial_report/models/account_age_report_configuration.py:0
 #, python-format
 msgid "Must complete Configuration Lines"
-msgstr ""
+msgstr "Måste fylla i Configurationsrader"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1239,7 +1249,7 @@ msgstr "Namn"
 #: model:ir.model.constraint,message:account_financial_report.constraint_account_age_report_configuration_line_unique_name_config_combination
 #, python-format
 msgid "Name must be unique per report configuration"
-msgstr ""
+msgstr "Namnet måste vara unikt per rapportkonfiguration"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1300,7 +1310,7 @@ msgstr "Ej förfallen"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.res_config_settings_view_form
 msgid "OCA Aged Report Configuration"
-msgstr ""
+msgstr "OCA åldrande Rapportkonfiguration"
 
 #. module: account_financial_report
 #: model:ir.ui.menu,name:account_financial_report.menu_oca_reports
@@ -1547,7 +1557,7 @@ msgstr "Visa"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__show_cost_center
 msgid "Show Analytic Account"
-msgstr "Visa analytiskt konto"
+msgstr "Visa objektkonto"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__with_auto_sequence
@@ -1616,7 +1626,7 @@ msgstr "Taggar"
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__target_move
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__target_move
 msgid "Target Moves"
-msgstr "Mål rör sig"
+msgstr "Typ av verifikat"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1631,7 +1641,7 @@ msgstr "Mål rör sig"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 #, python-format
 msgid "Target moves filter"
-msgstr "Mål flyttar filter"
+msgstr "Filter verifikat"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1758,7 +1768,7 @@ msgstr "Hierarkinivån att filtrera på måste vara större än 0."
 msgid "This domain will be used to select specific domain for Journal Items"
 msgstr ""
 "Den här domänen kommer att användas för att välja specifik domän för "
-"journalföremål"
+"verifikat"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
@@ -1941,7 +1951,7 @@ msgstr "eller"
 #. module: account_financial_report
 #: model:ir.actions.report,name:account_financial_report.action_print_journal_ledger_wizard_qweb
 msgid "ournal Ledger"
-msgstr "ournal Huvudbok"
+msgstr "Huvudbok"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal
