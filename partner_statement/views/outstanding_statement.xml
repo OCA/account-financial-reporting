@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2018 ForgeFlow, S.L. (https://www.forgeflow.com)
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <template id="outstanding_balance">
+        <p>
+            <span
+                t-out="'' if  account_type == 'asset_receivable' else 'Supplier '"
+            /><span t-out="title_name" /> up to <span t-out="ending_date" /> in <span
+                t-out="display_currency.name"
+            />
+        </p>
+        <table class="table table-sm table-statement">
+            <thead>
+                <tr>
+                    <th>Reference number</th>
+                    <th>Date</th>
+                    <th>Due Date</th>
+                    <th>Description</th>
+                    <th class="amount">Original</th>
+                    <th class="amount">Open Amount</th>
+                    <th class="amount">Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    t-foreach="currency[line_type]"
+                    t-as="line"
+                    t-att-class="'statement-blocked' if line['blocked'] else ''"
+                >
+                    <td>
+                        <span t-out="line['move_id']" />
+                    </td>
+                    <td>
+                        <span t-out="line['date']" />
+                    </td>
+                    <td>
+                        <span t-out="line['date_maturity']" />
+                    </td>
+                    <td>
+                        <t t-if="line['name'] != '/'">
+                            <t t-if="not line['ref']">
+                                <span t-out="line['name']" />
+                            </t>
+                            <t t-if="line['ref'] and not line['name']">
+                                <span t-out="line['ref']" />
+                            </t>
+                            <t t-if="line['ref'] and line['name']">
+                                <t
+                                    t-if="line['name'] not in line['ref'] or line['name'] == line['ref']"
+                                >
+                                    <span t-out="line['name']" />
+                                </t>
+                                <t t-if="line['ref'] not in line['name']">
+                                    <span t-out="line['ref']" />
+                                </t>
+                            </t>
+                        </t>
+                        <t t-if="line['name'] == '/'">
+                            <span t-out="line['ref']" />
+                        </t>
+                    </td>
+                    <td class="amount">
+                        <span
+                            t-out="line['amount']"
+                            t-options="{'widget': 'monetary', 'display_currency': display_currency}"
+                        />
+                    </td>
+                    <td class="amount">
+                        <span
+                            t-out="line['open_amount']"
+                            t-options="{'widget': 'monetary', 'display_currency': display_currency}"
+                        />
+                    </td>
+                    <td class="amount">
+                        <span
+                            t-out="line['balance']"
+                            t-options="{'widget': 'monetary', 'display_currency': display_currency}"
+                        />
+                    </td>
+                </tr>
+                <tr>
+                    <td />
+                    <td>
+                        <span t-out="ending_date" />
+                    </td>
+                    <td>
+                            Ending Balance
+                        </td>
+                    <td />
+                    <td />
+                    <td />
+                    <td class="amount">
+                        <span
+                            t-out="ending_amount"
+                            t-options="{'widget': 'monetary', 'display_currency': display_currency}"
+                        />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </template>
+    <template id="partner_statement.outstanding_statement_document">
+        <t t-call="web.external_layout">
+            <t t-set="o" t-value="o.with_context({'lang': lang})" />
+            <t t-set="address">
+                <address
+                    t-out="get_inv_addr(o)"
+                    t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'
+                />
+                <div t-if="o.vat" class="mt16"><t
+                        t-out="company.country_id.vat_label or 'Tax ID'"
+                    />: <span t-field="o.vat" /></div>
+            </t>
+            <div class="page">
+                <div class="oe_structure" />
+                <h2>Statement of Account</h2>
+                <div id="informations" class="row mt32 mb32">
+                    <div class="col-3 bm-2">
+                        <strong>Date:</strong>
+                        <p t-out="d['today']" class="m-0" />
+                    </div>
+                    <div class="col-3 bm-2">
+                        <strong>Partner Name:</strong>
+                        <p t-field="o.name" class="m-0" />
+                    </div>
+                    <div t-if="o.ref" class="col-3 bm-2">
+                        <strong>Partner Code:</strong>
+                        <p t-field="o.ref" class="m-0" />
+                    </div>
+                </div>
+                <t t-if="d['currencies']">
+                    <br />
+                    <t t-foreach="d['currencies'].items()" t-as="currency">
+                        <t t-set="display_currency" t-value="Currencies[currency[0]]" />
+                        <t t-set="currency" t-value="currency[1]" />
+                        <t t-set="line_type" t-value="'lines'" />
+                        <t t-set="title_name" t-value="'Statement'" />
+                        <t t-set="ending_amount" t-value="currency['amount_due']" />
+                        <t t-set="ending_date" t-value="d['end']" />
+                        <t
+                            t-call="partner_statement.outstanding_balance"
+                            name="outstanding"
+                        />
+                        <t
+                            t-call="partner_statement.aging_buckets"
+                            t-if="currency['buckets']"
+                        />
+                    </t>
+                </t>
+                <p t-if="d.get('no_entries')">
+                    <strong>The partner doesn't have due entries.</strong>
+                </p>
+            </div>
+        </t>
+    </template>
+    <template id="outstanding_statement">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="d" t-value="data.get(o.id)" />
+                <t
+                    t-call="partner_statement.outstanding_statement_document"
+                    t-lang="o.lang"
+                />
+            </t>
+        </t>
+    </template>
+    <record id="action_print_outstanding_statement" model="ir.actions.report">
+        <field name="name">Outstanding Statement</field>
+        <field name="model">res.partner</field>
+        <field name="report_name">partner_statement.outstanding_statement</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_file">partner_statement.outstanding_statement</field>
+    </record>
+    <record id="action_print_outstanding_statement_html" model="ir.actions.report">
+        <field name="name">Outstanding Statement</field>
+        <field name="model">res.partner</field>
+        <field name="report_name">partner_statement.outstanding_statement</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_file">partner_statement.outstanding_statement</field>
+    </record>
+    <record id="action_print_outstanding_statement_xlsx" model="ir.actions.report">
+        <field name="name">Outstanding Statement XLSX</field>
+        <field name="model">res.partner</field>
+        <field name="type">ir.actions.report</field>
+        <field name="report_name">p_s.report_outstanding_statement_xlsx</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_file">report_outstanding_statement</field>
+    </record>
+</odoo>
