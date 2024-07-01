@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-06-03 12:07+0000\n"
-"PO-Revision-Date: 2024-06-15 22:40+0000\n"
+"PO-Revision-Date: 2024-07-01 11:47+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -513,7 +513,7 @@ msgstr "Avere"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #, python-format
 msgid "Cumul cur."
-msgstr ""
+msgstr "Valuta acc."
 
 #. module: account_financial_report
 #. odoo-python
@@ -538,7 +538,7 @@ msgstr "Val."
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
 #, python-format
 msgid "Cur. Original"
-msgstr "Originale val."
+msgstr "Valuta originale"
 
 #. module: account_financial_report
 #. odoo-python
@@ -546,7 +546,7 @@ msgstr "Originale val."
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
 #, python-format
 msgid "Cur. Residual"
-msgstr "Residuo val."
+msgstr "Residuo valuta"
 
 #. module: account_financial_report
 #. odoo-python
@@ -767,13 +767,12 @@ msgstr "Saldo finale"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
-#, fuzzy
 msgid ""
 "Ending balance\n"
 "                        cur."
 msgstr ""
 "Saldo finale\n"
-"                        attuale"
+"                        valuta"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1034,13 +1033,12 @@ msgstr "Il limite inferiore deve essere maggiore di zero"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
-#, fuzzy
 msgid ""
 "Initial\n"
 "                        balance cur."
 msgstr ""
 "Saldo\n"
-"                        iniziale attuale"
+"                        iniziale valuta"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
@@ -1401,7 +1399,6 @@ msgstr "Partner"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_partner_ending_cumul
-#, fuzzy
 msgid ""
 "Partner\n"
 "                    cumul aged balance"
