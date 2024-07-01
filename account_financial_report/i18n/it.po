@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-06-03 12:07+0000\n"
-"PO-Revision-Date: 2024-05-17 10:39+0000\n"
+"PO-Revision-Date: 2024-07-01 11:47+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -712,14 +712,14 @@ msgstr "Val."
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines
 #, python-format
 msgid "Cur. Original"
-msgstr "Originale val."
+msgstr "Valuta originale"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/open_items_xlsx.py:46
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines
 #, python-format
 msgid "Cur. Residual"
-msgstr "Residuo val."
+msgstr "Residuo valuta"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:76
