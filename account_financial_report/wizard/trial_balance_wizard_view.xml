@@ -25,11 +25,18 @@
                         </group>
                         <group name="other_filters">
                             <field name="target_move" widget="radio" />
+                            <field
+                                name="grouped_by"
+                                groups="analytic.group_analytic_accounting"
+                            />
                             <field name="hide_account_at_0" />
-                            <field name="show_partner_details" />
+                            <field
+                                name="show_partner_details"
+                                attrs="{'invisible':[('grouped_by','!=',False)]}"
+                            />
                             <field
                                 name="show_hierarchy"
-                                attrs="{'invisible':[('show_partner_details','=',True)]}"
+                                attrs="{'invisible':['|', ('show_partner_details','=',True),('grouped_by','!=',False)]}"
                             />
                             <field
                                 name="limit_hierarchy_level"
