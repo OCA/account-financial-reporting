@@ -36,43 +36,94 @@
             <t t-call="account_financial_report.report_trial_balance_filters" />
             <div class="act_as_table list_table" style="margin-top: 10px;" />
             <!-- Display account lines -->
+            <t t-set="aml_domain_extra" t-value="[]" />
             <t t-if="not show_partner_details">
-                <div class="act_as_table data_table" style="width: 100%;">
-                    <!-- Display account header -->
-                    <t
-                        t-call="account_financial_report.report_trial_balance_lines_header"
-                    />
-                    <!-- Display each lines -->
-                    <t t-foreach="trial_balance" t-as="balance">
-                        <!-- Adapt -->
-                        <t t-set="style" t-value="'font-size:12px;'" />
-                            <!-- Different style for account group -->
-                        <t t-if="show_hierarchy">
-                                                    <t
-                                t-if="balance['type'] == 'group_type'"
-                            >
+                <t t-if="trial_balance_grouped">
+                    <t t-foreach="trial_balance_grouped" t-as="grouped_item">
+                        <div class="act_as_table data_table" style="width: 100%;">
+                            <div class="act_as_thead">
+                                <div class="act_as_row labels">
+                                    <div class="act_as_cell" style="width: 100%;">
+                                        <t t-esc="grouped_item['name']" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <t
+                            t-set="aml_domain_extra"
+                            t-if="grouped_item['id'] > 0"
+                            t-value="[('analytic_account_id', '=', grouped_item['id'])]"
+                        />
+                        <t
+                            t-set="aml_domain_extra"
+                            t-else=""
+                            t-value="[('analytic_account_id', '=', False)]"
+                        />
+                        <div class="act_as_table data_table" style="width: 100%;">
+                            <t
+                                t-call="account_financial_report.report_trial_balance_lines_header"
+                            />
+                            <!-- Display each lines -->
+                            <t t-foreach="grouped_item['account_data']" t-as="balance">
+                                <!-- Adapt -->
+                                <t t-set="style" t-value="'font-size:12px;'" />
                                 <t
-                                    t-set="style"
-                                    t-value="style + 'font-weight: bold; color: blue;'"
+                                    t-call="account_financial_report.report_trial_balance_line"
                                 />
                             </t>
-                        </t>
-                        <t t-if="show_hierarchy and limit_hierarchy_level">
-                            <t
-                                t-if="show_hierarchy_level > balance['level'] and (not hide_parent_hierarchy_level or (show_hierarchy_level - 1) == balance['level'])"
-                            >
+                        </div>
+                        <!-- Display footer with totals !-->
+                        <t t-set="balance" t-value="grouped_item" />
+                        <t
+                            t-call="account_financial_report.report_trial_balance_account_footer"
+                        />
+                    </t>
+                    <!-- TOTAL !-->
+                    <t t-if="grouped_by">
+                        <t t-set="balance" t-value="total_amount_grouped" />
+                        <t
+                            t-call="account_financial_report.report_trial_balance_account_footer"
+                        />
+                    </t>
+                </t>
+                <t t-else="">
+                    <div class="act_as_table data_table" style="width: 100%;">
+                        <!-- Display account header -->
+                        <t
+                            t-call="account_financial_report.report_trial_balance_lines_header"
+                        />
+                        <!-- Display each lines -->
+                        <t t-foreach="trial_balance" t-as="balance">
+                            <!-- Adapt -->
+                            <t t-set="style" t-value="'font-size:12px;'" />
+                            <!-- Different style for account group -->
+                            <t t-if="show_hierarchy">
+                                                        <t
+                                    t-if="balance['type'] == 'group_type'"
+                                >
+                                    <t
+                                        t-set="style"
+                                        t-value="style + 'font-weight: bold; color: blue;'"
+                                    />
+                                </t>
+                            </t>
+                            <t t-if="show_hierarchy and limit_hierarchy_level">
+                                <t
+                                    t-if="show_hierarchy_level > balance['level'] and (not hide_parent_hierarchy_level or (show_hierarchy_level - 1) == balance['level'])"
+                                >
+                                    <t
+                                        t-call="account_financial_report.report_trial_balance_line"
+                                    />
+                                </t>
+                            </t>
+                            <t t-else="">
                                 <t
                                     t-call="account_financial_report.report_trial_balance_line"
                                 />
                             </t>
                         </t>
-                        <t t-else="">
-                            <t
-                                t-call="account_financial_report.report_trial_balance_line"
-                            />
-                        </t>
-                    </t>
-                </div>
+                    </div>
+                </t>
             </t>
             <!-- Display partner lines -->
             <t t-if="show_partner_details">
@@ -279,7 +330,7 @@
                                ('date', '&lt;', date_from)]"
                         />
                         <span
-                            t-att-domain="domain+aml_domain_common"
+                            t-att-domain="domain+aml_domain_common+aml_domain_extra"
                             res-model="account.move.line"
                         >
                             <t
@@ -335,7 +386,7 @@
                                          ('debit', '&lt;&gt;', 0)]"
                         />
                         <span
-                            t-att-domain="domain+aml_domain_common"
+                            t-att-domain="domain+aml_domain_common+aml_domain_extra"
                             res-model="account.move.line"
                         >
                             <t
@@ -395,7 +446,7 @@
                                          ('credit', '&lt;&gt;', 0)]"
                         />
                         <span
-                            t-att-domain="domain+aml_domain_common"
+                            t-att-domain="domain+aml_domain_common+aml_domain_extra"
                             res-model="account.move.line"
                         >
                             <t
@@ -455,7 +506,7 @@
                                     ('balance', '&lt;&gt;', 0)]"
                         />
                         <span
-                            t-att-domain="domain+aml_domain_common"
+                            t-att-domain="domain+aml_domain_common+aml_domain_extra"
                             res-model="account.move.line"
                         >
                             <t
@@ -512,7 +563,7 @@
                                          ('date', '&lt;=', date_to)]"
                         />
                         <span
-                            t-att-domain="domain+aml_domain_common"
+                            t-att-domain="domain+aml_domain_common+aml_domain_extra"
                             res-model="account.move.line"
                         >
                             <t
@@ -570,7 +621,7 @@
                                     t-value="[('account_id', '=', balance['id'])]"
                                 />
                                 <span
-                                    t-att-domain="domain+aml_domain_common"
+                                    t-att-domain="domain+aml_domain_common+aml_domain_extra"
                                     res-model="account.move.line"
                                 >
                                     <t
@@ -629,7 +680,7 @@
                                     t-value="[('account_id', '=', balance['id'])]"
                                 />
                                 <span
-                                    t-att-domain="domain+aml_domain_common"
+                                    t-att-domain="domain+aml_domain_common+aml_domain_extra"
                                     res-model="account.move.line"
                                 >
                                     <t
@@ -835,44 +886,101 @@
             <div class="act_as_row labels" style="font-weight: bold;">
                 <!--## date-->
                 <div class="act_as_cell first_column" style="width: 33%;">
-                    <span t-out="accounts_data[account_id]['code']" />
-                    -
-                    <span t-out="accounts_data[account_id]['name']" />
+                    <t
+                        t-if="grouped_by and balance['type'] in ('analytic_account_type', 'total')"
+                    >
+                        <span t-out="balance['name']" />
+                    </t>
+                    <t t-else="">
+                        <span t-out="accounts_data[account_id]['code']" />
+                        -
+                        <span t-out="accounts_data[account_id]['name']" />
+                    </t>
                 </div>
                 <!--## Initial Balance-->
                 <div class="act_as_cell amount" style="width: 9%;">
-                    <span
-                        t-out="total_amount[account_id]['initial_balance']"
-                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                    />
+                    <t
+                        t-if="grouped_by and balance['type'] in ('analytic_account_type', 'total')"
+                    >
+                        <span
+                            t-out="balance['initial_balance']"
+                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        />
+                    </t>
+                    <t t-else="">
+                        <span
+                            t-out="total_amount[account_id]['initial_balance']"
+                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        />
+                    </t>
                 </div>
                 <!--## Debit-->
                 <div class="act_as_cell amount" style="width: 9%;">
-                    <span
-                        t-out="total_amount[account_id]['debit']"
-                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                    />
+                    <t
+                        t-if="grouped_by and balance['type'] in ('analytic_account_type', 'total')"
+                    >
+                        <span
+                            t-out="balance['debit']"
+                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        />
+                    </t>
+                    <t t-else="">
+                        <span
+                            t-out="total_amount[account_id]['debit']"
+                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        />
+                    </t>
                 </div>
                 <!--## Credit-->
                 <div class="act_as_cell amount" style="width: 9%;">
-                    <span
-                        t-out="total_amount[account_id]['credit']"
-                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                    />
+                    <t
+                        t-if="grouped_by and balance['type'] in ('analytic_account_type', 'total')"
+                    >
+                        <span
+                            t-out="balance['credit']"
+                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        />
+                    </t>
+                    <t t-else="">
+                        <span
+                            t-out="total_amount[account_id]['credit']"
+                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        />
+                    </t>
                 </div>
                 <!--## Period balance-->
                 <div class="act_as_cell amount" style="width: 9%;">
-                    <span
-                        t-out="total_amount[account_id]['balance']"
-                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                    />
+                    <t
+                        t-if="grouped_by and balance['type'] in ('analytic_account_type', 'total')"
+                    >
+                        <span
+                            t-out="balance['balance']"
+                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        />
+                    </t>
+                    <t t-else="">
+                        <span
+                            t-out="total_amount[account_id]['balance']"
+                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        />
+                    </t>
                 </div>
                 <!--## Ending balance-->
                 <div class="act_as_cell amount" style="width: 9%;">
-                    <span
-                        t-out="total_amount[account_id]['ending_balance']"
-                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                    />
+                    <t
+                        t-if="grouped_by and balance['type'] in ('analytic_account_type', 'total')"
+                    >
+                        <span
+                            t-out="balance['ending_balance']"
+                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        />
+                    </t>
+                    <t t-else="">
+                        <span
+                            t-out="total_amount[account_id]['ending_balance']"
+                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        />
+                    </t>
                 </div>
                 <t t-if="foreign_currency">
                     <!--## amount_total_due_currency-->

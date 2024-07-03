@@ -6,6 +6,14 @@
         <field name="model">trial.balance.report.wizard</field>
         <field name="arch" type="xml">
             <form>
+                <div
+                    class="alert alert-warning"
+                    role="alert"
+                    invisible="grouped_by!='analytic_account'"
+                >
+                    <i class="fa fa-exclamation-triangle mr-3" />
+                    Duplicate amounts may be shown because more than one analytical account may be defined in the journal items.
+                </div>
                 <group name="main_info">
                     <field
                         name="company_id"
@@ -23,11 +31,16 @@
                         </group>
                         <group name="other_filters">
                             <field name="target_move" widget="radio" />
+                            <field name="grouped_by" invisible="1" />
+                            <field
+                                name="grouped_by"
+                                groups="analytic.group_analytic_accounting"
+                            />
                             <field name="hide_account_at_0" />
-                            <field name="show_partner_details" />
+                            <field name="show_partner_details" invisible="grouped_by" />
                             <field
                                 name="show_hierarchy"
-                                invisible="show_partner_details == True"
+                                invisible="show_partner_details == True or grouped_by"
                             />
                             <field
                                 name="limit_hierarchy_level"
