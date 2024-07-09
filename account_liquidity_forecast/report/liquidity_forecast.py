@@ -131,44 +131,41 @@ class LiquidityForecastReport(models.AbstractModel):
     ):
         company_id = data.get("company_id", self.env.user.company_id.id)
         company = self.env["res.company"].browse(company_id)
-        open_items = accounts._get_open_items_at_date(
+        open_amls = accounts._get_open_items_at_date(
             period["date_to"], data["only_posted_moves"]
         )
-        period_open_items = []
+        period_open_amls = self.env["account.move.line"]
         rounding = company.currency_id.rounding
-        for open_item in open_items:
+        for open_aml in open_amls:
+            date_due = open_aml[date_type] or open_aml["date"]
             if (
                 (
-                    (
-                        period["sequence"] == 0
-                        and period["date_to"] >= open_item[date_type]
-                    )
-                    or not open_item[date_type]
+                    (period["sequence"] == 0 and period["date_to"] >= date_due)
+                    or not date_due
                 )
                 or (
                     period["sequence"] > 0
-                    and period["date_to"] >= open_item[date_type] >= period["date_from"]
+                    and period["date_to"] >= date_due >= period["date_from"]
                 )
             ) and not float_is_zero(
-                open_item["open_amount"], precision_rounding=rounding
+                open_aml.amount_residual, precision_rounding=rounding
             ):
-                period_open_items.append(open_item)
+                period_open_amls |= open_aml
         in_flows = {}
         out_flows = {}
-        for open_item in period_open_items:
-            account_id = open_item["account_id"]
-            account = self.env["account.account"].browse(account_id)
-            open_item_amount = open_item["open_amount"]
+        for open_aml in period_open_amls:
+            account = open_aml.account_id
+            open_item_amount = open_aml.amount_residual
             if open_item_amount > 0 and account not in in_flows.keys():
                 in_flows[account] = {"amount": 0.0, "move_line_ids": []}
             if open_item_amount < 0 and account not in out_flows.keys():
                 out_flows[account] = {"amount": 0.0, "move_line_ids": []}
             if open_item_amount > 0:
                 in_flows[account]["amount"] += open_item_amount
-                in_flows[account]["move_line_ids"].append(open_item["line_id"])
+                in_flows[account]["move_line_ids"].append(open_aml.id)
             else:
                 out_flows[account]["amount"] += open_item_amount
-                out_flows[account]["move_line_ids"].append(open_item["line_id"])
+                out_flows[account]["move_line_ids"].append(open_aml.id)
         for account in in_flows.keys():
             in_cash_flow_lines = list(
                 filter(
