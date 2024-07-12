@@ -60,7 +60,11 @@ class OpenItemsReportWizard(models.TransientModel):
         help="Ending account in a range",
     )
     grouped_by = fields.Selection(
-        selection=[("partners", "Partners"), ("salesperson", "Partner Salesperson")],
+        selection=[
+            ("partners", "Partners"),
+            ("salesperson", "Partner Salesperson"),
+            ("partner_shipping", "Delivery Address"),
+        ],
         default="partners",
     )
 
