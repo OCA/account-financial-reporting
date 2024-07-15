@@ -218,13 +218,29 @@
                     <div class="act_as_cell" style="width: 5.00%;">Journal</div>
                     <!--## account code-->
                     <div class="act_as_cell" style="width: 6.00%;">Account</div>
-                    <!--## partner-->
-                    <div class="act_as_cell" style="width: 10.50%;">Partner</div>
-                    <!--## ref - label-->
-                    <div class="act_as_cell" style="width: 18.00%;">
-                        Ref -
-                        Label
-                    </div>
+                    <t t-if="analytic_account_ids">
+                        <!--## partner-->
+                        <div class="act_as_cell" style="width: 9.50%;">Partner</div>
+                        <!--## analytic account -->
+                        <div
+                            class="act_as_cell"
+                            style="width: 9.50%;"
+                        >Analytic Account</div>
+                        <!--## ref - label-->
+                        <div class="act_as_cell" style="width: 9.50%;">
+                            Ref -
+                            Label
+                        </div>
+                    </t>
+                    <t t-else="">
+                        <!--## partner-->
+                        <div class="act_as_cell" style="width: 10.50%;">Partner</div>
+                        <!--## ref - label-->
+                        <div class="act_as_cell" style="width: 18.00%;">
+                            Ref -
+                            Label
+                        </div>
+                    </t>
                     <!--## date_due-->
                     <div class="act_as_cell" style="width: 6.00%;">
                         Due
@@ -311,26 +327,60 @@
                             <t t-out="line['account']" />
                         </span>
                     </div>
-                    <!--## partner-->
-                    <div class="act_as_cell left">
-                        <span
-                            t-att-res-id="line['line_rec'].partner_id.id"
-                            res-model="res.partner"
-                            view-type="form"
-                        >
-                            <t t-out="line['partner']" />
-                        </span>
-                    </div>
-                    <!--## ref - label-->
-                    <div class="act_as_cell left">
-                        <span
-                            t-att-res-id="line['line_rec'].id"
-                            res-model="account.move.line"
-                            view-type="form"
-                        >
-                            <t t-out="line['ref_label']" />
-                        </span>
-                    </div>
+                    <t t-if="analytic_account_ids">
+                        <!--## partner-->
+                        <div class="act_as_cell left">
+                            <span
+                                t-att-res-id="line['line_rec'].partner_id.id"
+                                res-model="res.partner"
+                                view-type="form"
+                            >
+                                <t t-out="line['partner']" />
+                            </span>
+                        </div>
+                        <!-- ANAL -->
+                        <div class="act_as_cell left">
+                            <span
+                                t-att-res-id="line['line_rec'].analytic_account_id.id"
+                                res-model="analytic_account_id"
+                                view-type="form"
+                            >
+                                <t t-out="line['analytic_account_id']" />
+                            </span>
+                        </div>
+                        <!--## ref - label-->
+                        <div class="act_as_cell left">
+                            <span
+                                t-att-res-id="line['line_rec'].id"
+                                res-model="account.move.line"
+                                view-type="form"
+                            >
+                                <t t-out="line['ref_label']" />
+                            </span>
+                        </div>
+                    </t>
+                    <t t-else="">
+                        <!--## partner-->
+                        <div class="act_as_cell left">
+                            <span
+                                t-att-res-id="line['line_rec'].partner_id.id"
+                                res-model="res.partner"
+                                view-type="form"
+                            >
+                                <t t-out="line['partner']" />
+                            </span>
+                        </div>
+                        <!--## ref - label-->
+                        <div class="act_as_cell left">
+                            <span
+                                t-att-res-id="line['line_rec'].id"
+                                res-model="account.move.line"
+                                view-type="form"
+                            >
+                                <t t-out="line['ref_label']" />
+                            </span>
+                        </div>
+                    </t>
                     <!--## date_due-->
                     <div class="act_as_cell left">
                         <span

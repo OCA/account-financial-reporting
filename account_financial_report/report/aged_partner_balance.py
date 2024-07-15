@@ -6,6 +6,7 @@ import operator
 from datetime import date, datetime, timedelta
 
 from odoo import api, models
+from odoo.osv import expression
 from odoo.tools import float_is_zero
 
 
@@ -148,10 +149,38 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         date_from,
         only_posted_moves,
         show_move_line_details,
+        analytic_account_ids,
+        no_analytic,
     ):
         domain = self._get_move_lines_domain_not_reconciled(
             company_id, account_ids, partner_ids, only_posted_moves, date_from
         )
+        if no_analytic:
+            domain = expression.AND(
+                [
+                    domain,
+                    [
+                        (
+                            "analytic_account_id",
+                            "=",
+                            False,
+                        )
+                    ],
+                ]
+            )
+        elif analytic_account_ids:
+            domain = expression.AND(
+                [
+                    domain,
+                    [
+                        (
+                            "analytic_account_id",
+                            "in",
+                            analytic_account_ids,
+                        )
+                    ],
+                ]
+            )
         ml_fields = self._get_ml_fields()
         line_model = self.env["account.move.line"]
         move_lines = line_model.search_read(domain=domain, fields=ml_fields)
@@ -224,6 +253,10 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                     ref_label = move_line["ref"]
                 else:
                     ref_label = move_line["ref"] + str(" - ") + move_line["name"]
+                if move_line["analytic_account_id"]:
+                    analytic = move_line["analytic_account_id"][1]
+                else:
+                    analytic = False
                 move_line_data.update(
                     {
                         "line_rec": line_model.browse(move_line["id"]),
@@ -235,6 +268,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                         "ref_label": ref_label,
                         "due_date": move_line["date_maturity"],
                         "residual": move_line["amount_residual"],
+                        "analytic_account_id": analytic,
                     }
                 )
                 ag_pb_data[acc_id][prt_id]["move_lines"].append(move_line_data)
@@ -416,6 +450,8 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         aged_partner_configuration = self.env[
             "account.age.report.configuration"
         ].browse(data["age_partner_config_id"])
+        analytic_account_ids = data["analytic_account_ids"]
+        no_analytic = data["no_analytic"]
         (ag_pb_data, accounts_data, partners_data, journals_data,) = self.with_context(
             age_partner_config=aged_partner_configuration
         )._get_move_lines_data(
@@ -426,6 +462,8 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             date_from,
             only_posted_moves,
             show_move_line_details,
+            analytic_account_ids,
+            no_analytic,
         )
         aged_partner_data = self.with_context(
             age_partner_config=aged_partner_configuration
@@ -458,4 +496,5 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             "amount_residual",
             "reconciled",
             "date_maturity",
+            "analytic_account_id",
         ]

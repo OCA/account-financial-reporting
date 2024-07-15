@@ -43,6 +43,20 @@ class AgedPartnerBalanceWizard(models.TransientModel):
     age_partner_config_id = fields.Many2one(
         "account.age.report.configuration", string="Intervals configuration"
     )
+    analytic_account_ids = fields.Many2many(
+        comodel_name="account.analytic.account", string="Filter analytic accounts"
+    )
+    no_analytic = fields.Boolean("Only no analytic items")
+    all_analytic = fields.Boolean("All analytic items")
+
+    @api.onchange("all_analytic", "no_analytic")
+    def on_change_all_analytic(self):
+        if self.all_analytic:
+            all_aa = self.env["account.analytic.account"].search([])
+            self.analytic_account_ids = all_aa
+            self.no_analytic = False
+        else:
+            self.analytic_account_ids = False
 
     @api.onchange("account_code_from", "account_code_to")
     def on_change_account_range(self):
@@ -86,17 +100,27 @@ class AgedPartnerBalanceWizard(models.TransientModel):
                 self.account_ids = self.account_ids.filtered(
                     lambda a: a.company_id == self.company_id
                 )
-        res = {"domain": {"account_ids": [], "partner_ids": []}}
+        res = {
+            "domain": {"account_ids": [], "partner_ids": [], "analytic_account_ids": []}
+        }
         if not self.company_id:
             return res
         else:
             res["domain"]["account_ids"] += [("company_id", "=", self.company_id.id)]
             res["domain"]["partner_ids"] += self._get_partner_ids_domain()
+            res["domain"]["analytic_account_ids"] += [
+                ("company_id", "=", self.company_id.id)
+            ]
         return res
 
     @api.onchange("account_ids")
     def onchange_account_ids(self):
-        return {"domain": {"account_ids": [("reconcile", "=", True)]}}
+        return {
+            "domain": {
+                "account_ids": [("reconcile", "=", True)],
+                "analytic_account_ids": [],
+            }
+        }
 
     @api.onchange("receivable_accounts_only", "payable_accounts_only")
     def onchange_type_accounts_only(self):
@@ -142,6 +166,8 @@ class AgedPartnerBalanceWizard(models.TransientModel):
             "show_move_line_details": self.show_move_line_details,
             "account_financial_report_lang": self.env.lang,
             "age_partner_config_id": self.age_partner_config_id.id,
+            "analytic_account_ids": self.analytic_account_ids.ids or [],
+            "no_analytic": self.no_analytic,
         }
 
     def _export(self, report_type):
