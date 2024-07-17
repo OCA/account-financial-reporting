@@ -26,9 +26,7 @@ class TestOpenItems(AccountTestInvoicingCommon):
             {
                 "code": "001",
                 "name": "Account 001",
-                "user_type_id": cls.env.ref(
-                    "account.data_account_type_other_income"
-                ).id,
+                "account_type": "income_other",
                 "reconcile": True,
             }
         )
