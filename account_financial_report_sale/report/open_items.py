@@ -16,8 +16,6 @@ class OpenItemsReport(models.AbstractModel):
         company_id,
         date_from,
         grouped_by,
-        analytic_account_ids,
-        no_analytic,
     ):
         (
             move_lines,
@@ -33,8 +31,6 @@ class OpenItemsReport(models.AbstractModel):
             company_id,
             date_from,
             grouped_by,
-            analytic_account_ids,
-            no_analytic,
         )
         if grouped_by == "partner_shipping":
             for move_line in move_lines:
