@@ -11,6 +11,9 @@ class AccountMoveLine(models.Model):
     analytic_account_ids = fields.Many2many(
         "account.analytic.account", compute="_compute_analytic_account_ids", store=True
     )
+    analytic_plan_ids = fields.Many2many(
+        "account.analytic.plan", compute="_compute_analytic_account_ids", store=True
+    )
 
     @api.depends("analytic_distribution")
     def _compute_analytic_account_ids(self):
@@ -34,6 +37,8 @@ class AccountMoveLine(models.Model):
             self.browse(record_ids).analytic_account_ids = [
                 fields.Command.link(account_id)
             ]
+            plan_id = self.env["account.analytic.account"].browse(account_id).plan_id.id
+            self.browse(record_ids).analytic_plan_ids = [fields.Command.link(plan_id)]
 
     def init(self):
         """
