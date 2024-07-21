@@ -6,39 +6,13 @@ from odoo import api, fields, models
 
 
 class AccountMoveLine(models.Model):
-    _inherit = "account.move.line"
+    _name = "account.move.line"
+    _inherit = ["account.move.line", "analytic.mixin"]
 
-    analytic_account_ids = fields.Many2many(
-        "account.analytic.account", compute="_compute_analytic_account_ids", store=True
-    )
-    analytic_plan_ids = fields.Many2many(
-        "account.analytic.plan", compute="_compute_analytic_account_ids", store=True
-    )
-
-    @api.depends("analytic_distribution")
-    def _compute_analytic_account_ids(self):
-        # Prefetch all involved analytic accounts
-        with_distribution = self.filtered("analytic_distribution")
-        batch_by_analytic_account = defaultdict(list)
-        for record in with_distribution:
-            for account_id in map(int, record.analytic_distribution):
-                batch_by_analytic_account[account_id].append(record.id)
-        existing_account_ids = set(
-            self.env["account.analytic.account"]
-            .browse(map(int, batch_by_analytic_account))
-            .exists()
-            .ids
-        )
-        # Store them
-        self.analytic_account_ids = False
-        for account_id, record_ids in batch_by_analytic_account.items():
-            if account_id not in existing_account_ids:
-                continue
-            self.browse(record_ids).analytic_account_ids = [
-                fields.Command.link(account_id)
-            ]
-            plan_id = self.env["account.analytic.account"].browse(account_id).plan_id.id
-            self.browse(record_ids).analytic_plan_ids = [fields.Command.link(plan_id)]
+    analytic_account_ids = fields.Many2many(store=True)
+    analytic_account_names = fields.Char(store=True)
+    analytic_plan_ids = fields.Many2many(store=True)
+    analytic_plan_names = fields.Char(store=True)
 
     def init(self):
         """
