@@ -50,7 +50,6 @@ class CurrentStatement(models.AbstractModel):
             END current_month
             FROM account_move_line l
             JOIN account_account aa ON (aa.id = l.account_id)
-            JOIN account_account_type at ON (at.id = aa.user_type_id)
             JOIN account_move m ON (l.move_id = m.id)
             LEFT JOIN (SELECT pr.*
                 FROM account_partial_reconcile pr
@@ -64,7 +63,7 @@ class CurrentStatement(models.AbstractModel):
                 ON pr.debit_move_id = l2.id
                 WHERE l2.date <= %(date_end)s
             ) as pc ON pc.credit_move_id = l.id
-            WHERE l.partner_id IN %(partners)s AND at.type = %(account_type)s
+            WHERE l.partner_id IN %(partners)s AND aa.account_type = %(account_type)s
                                 AND (
                                   (pd.id IS NOT NULL AND
                                       pd.max_date <= %(date_end)s) OR
