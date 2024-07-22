@@ -4,7 +4,7 @@
 
 import operator
 
-from odoo import api, models
+from odoo import api, fields, models
 
 
 class VATReport(models.AbstractModel):
@@ -200,8 +200,8 @@ class VATReport(models.AbstractModel):
         wizard_id = data["wizard_id"]
         company = self.env["res.company"].browse(data["company_id"])
         company_id = data["company_id"]
-        date_from = data["date_from"]
-        date_to = data["date_to"]
+        date_from = fields.Date.from_string(data["date_from"])
+        date_to = fields.Date.from_string(data["date_to"])
         based_on = data["based_on"]
         tax_detail = data["tax_detail"]
         only_posted_moves = data["only_posted_moves"]
@@ -222,9 +222,13 @@ class VATReport(models.AbstractModel):
             "docs": self.env["open.items.report.wizard"].browse(wizard_id),
             "company_name": company.display_name,
             "currency_name": company.currency_id.name,
-            "date_to": data["date_to"],
-            "date_from": data["date_from"],
-            "based_on": data["based_on"],
+            "date_from": date_from,
+            "date_to": date_to,
+            "based_on": dict(
+                self.env["vat.report.wizard"]
+                ._fields["based_on"]
+                ._description_selection(self.env)
+            ).get(data["based_on"]),
             "tax_detail": data["tax_detail"],
             "vat_report": vat_report,
         }
