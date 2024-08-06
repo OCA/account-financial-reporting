@@ -25,6 +25,11 @@ class StockMove(models.Model):
     date_done = fields.Date(
         string="Effective Date", compute="_compute_date_done", store=True
     )
+    picking_partner_id = fields.Many2one(
+        comodel_name="res.partner",
+        string="Destination Address",
+        related="picking_id.partner_id",
+    )
 
     @api.depends("picking_id.date_done")
     def _compute_date_done(self):
