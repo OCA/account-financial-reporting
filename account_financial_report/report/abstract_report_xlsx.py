@@ -589,6 +589,10 @@ class AbstractReportXslx(models.AbstractModel):
         """Return amount header format for each currency."""
         format_amt = report_data["formats"]["format_header_amount"]
         if line_object["currency_id"]:
+            if isinstance(line_object["currency_id"], int):
+                currency = self.env["res.currency"].browse(line_object["currency_id"])
+            else:
+                currency = line_object["currency_id"]
             field_name = "format_header_amount_%s" % line_object["currency_name"]
             if hasattr(self, field_name):
                 format_amt = getattr(self, field_name)
