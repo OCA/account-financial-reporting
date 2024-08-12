@@ -31,7 +31,7 @@ patch(ReportAction.prototype, {
      * @returns {String}
      */
     _get_xlsx_name(str) {
-        if (!_.isString(str)) {
+        if (typeof str !== "string") {
             return str;
         }
         const parts = str.split(".");
