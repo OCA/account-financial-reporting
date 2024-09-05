@@ -7,7 +7,7 @@ import calendar
 import datetime
 import operator
 
-from odoo import _, api, models
+from odoo import _, api, models, sql_db
 from odoo.tools import float_is_zero
 
 
@@ -433,41 +433,19 @@ class GeneralLedgerReport(models.AbstractModel):
             res.append({"id": 0, "name": ""})
         return res
 
-    def _get_period_ml_data(
+    def process_ml_data(
         self,
-        account_ids,
-        partner_ids,
-        company_id,
-        foreign_currency,
-        only_posted_moves,
-        date_from,
-        date_to,
+        move_lines,
+        journal_ids,
+        taxes_ids,
+        analytic_ids,
+        full_reconcile_ids,
+        full_reconcile_data,
         gen_ld_data,
-        cost_center_ids,
-        extra_domain,
+        foreign_currency,
         grouped_by,
+        acc_prt_account_ids,
     ):
-        domain = self._get_period_domain(
-            account_ids,
-            partner_ids,
-            company_id,
-            only_posted_moves,
-            date_to,
-            date_from,
-            cost_center_ids,
-        )
-        if extra_domain:
-            domain += extra_domain
-        ml_fields = self._get_ml_fields()
-        move_lines = self.env["account.move.line"].search_read(
-            domain=domain, fields=ml_fields, order="date,move_name"
-        )
-        journal_ids = set()
-        full_reconcile_ids = set()
-        taxes_ids = set()
-        analytic_ids = set()
-        full_reconcile_data = {}
-        acc_prt_account_ids = self._get_acc_prt_accounts_ids(company_id, grouped_by)
         for move_line in move_lines:
             journal_ids.add(move_line["journal_id"][0])
             for tax_id in move_line["tax_ids"]:
@@ -531,6 +509,74 @@ class GeneralLedgerReport(models.AbstractModel):
                 gen_ld_data[acc_id]["fin_bal"]["bal_curr"] += move_line[
                     "amount_currency"
                 ]
+
+    def _get_period_ml_data(
+        self,
+        account_ids,
+        partner_ids,
+        company_id,
+        foreign_currency,
+        only_posted_moves,
+        date_from,
+        date_to,
+        gen_ld_data,
+        cost_center_ids,
+        extra_domain,
+        grouped_by,
+    ):
+        domain = self._get_period_domain(
+            account_ids,
+            partner_ids,
+            company_id,
+            only_posted_moves,
+            date_to,
+            date_from,
+            cost_center_ids,
+        )
+        if extra_domain:
+            domain += extra_domain
+        ml_fields = self._get_ml_fields()
+        journal_ids = set()
+        full_reconcile_ids = set()
+        taxes_ids = set()
+        analytic_ids = set()
+        full_reconcile_data = {}
+        acc_prt_account_ids = self._get_acc_prt_accounts_ids(company_id, grouped_by)
+        batch_size = 25000
+        offset = 0
+        while True:
+            if not self.env.context.get("test_enable", False):
+                new_cr = sql_db.db_connect(self.env.cr.dbname).cursor()
+                new_env = api.Environment(new_cr, self.env.uid, self.env.context.copy())
+            else:
+                new_cr = self.env.cr
+                new_env = self.env
+            move_lines = new_env["account.move.line"].search_read(
+                domain=domain,
+                fields=ml_fields,
+                order="date,move_name",
+                limit=batch_size,
+                offset=offset,
+            )
+            if not move_lines:
+                if not self.env.context.get("test_enable", False):
+                    new_cr.close()
+                break
+            self.with_env(new_env).process_ml_data(
+                move_lines,
+                journal_ids,
+                taxes_ids,
+                analytic_ids,
+                full_reconcile_ids,
+                full_reconcile_data,
+                gen_ld_data,
+                foreign_currency,
+                grouped_by,
+                acc_prt_account_ids,
+            )
+            if not self.env.context.get("test_enable", False):
+                new_cr.close()
+            offset += batch_size
         journals_data = self._get_journals_data(list(journal_ids))
         accounts_data = self._get_accounts_data(gen_ld_data.keys())
         taxes_data = self._get_taxes_data(list(taxes_ids))

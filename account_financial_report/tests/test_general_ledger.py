@@ -126,9 +126,13 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
             }
         )
         data = general_ledger._prepare_report_general_ledger()
-        res_data = self.env[
-            "report.account_financial_report.general_ledger"
-        ]._get_report_values(general_ledger, data)
+        ctx = self.env.context.copy()
+        ctx.update({"test_enable": True})
+        res_data = (
+            self.env["report.account_financial_report.general_ledger"]
+            .with_context(**ctx)
+            ._get_report_values(general_ledger, data)
+        )
         return res_data
 
     @api.model
