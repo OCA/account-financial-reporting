@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template
+        id="report_general_ledger_lines"
+        inherit_id="account_financial_report.report_general_ledger_lines"
+    >
+        <xpath expr="//div[@class='act_as_row labels']/div[8]" position="after">
+            <!--## start_date-->
+            <div class="act_as_cell amount" style="width: 3.51%;">Start date</div>
+            <!--## end_date-->
+            <div class="act_as_cell amount" style="width: 3.51%;">End date</div>
+        </xpath>
+
+        <xpath expr="//div[@class='act_as_row lines']/div[8]" position="after">
+            <!--## start_date-->
+            <div class="act_as_cell" />
+            <!--## end_date-->
+            <div class="act_as_cell" />
+        </xpath>
+
+        <xpath
+            expr="//t[@t-foreach=&quot;account_or_group_item_object['move_lines']&quot;]/div/div[8]"
+            position="after"
+        >
+            <!--## start_date-->
+            <div class="act_as_cell left">
+                <t t-if="line['id']">
+                    <span
+                        t-att-res-id="line['id']"
+                        res-model="account.move.line"
+                        view-type="form"
+                    >
+                        <t t-esc="line['start_date']" t-options="{'widget': 'date'}" />
+                    </span>
+                </t>
+                <t t-else="">
+                    <span>
+                        <t t-esc="line['start_date']" t-options="{'widget': 'date'}" />
+                    </span>
+                </t>
+            </div>
+            <!--## end_date-->
+            <div class="act_as_cell left">
+                <t t-if="line['id']">
+                    <span
+                        t-att-res-id="line['id']"
+                        res-model="account.move.line"
+                        view-type="form"
+                    >
+                        <t t-esc="line['end_date']" t-options="{'widget': 'date'}" />
+                    </span>
+                </t>
+                <t t-else="">
+                    <span>
+                        <t t-esc="line['end_date']" t-options="{'widget': 'date'}" />
+                    </span>
+                </t>
+            </div>
+        </xpath>
+    </template>
+</odoo>
