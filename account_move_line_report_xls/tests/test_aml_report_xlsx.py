@@ -7,13 +7,14 @@ from odoo.tests.common import TransactionCase
 class TestAmlReportXlsx(TransactionCase):
     def setUp(self):
         super(TestAmlReportXlsx, self).setUp()
+        self.report_ref = "account_move_line_report_xls.action_account_move_line_xlsx"
         self.report = self.env.ref(
             "account_move_line_report_xls.action_account_move_line_xlsx"
         )
         sale_journal = self.env["account.journal"].search([("type", "=", "sale")])[0]
-        ar = self.env["account.account"].search([("internal_type", "=", "receivable")])[
-            0
-        ]
+        ar = self.env["account.account"].search(
+            [("account_type", "=", "asset_receivable")]
+        )[0]
         aml_vals = [
             {"name": "debit", "debit": 100, "account_id": ar.id},
             {"name": "credit", "credit": 100, "account_id": ar.id},
@@ -28,5 +29,5 @@ class TestAmlReportXlsx(TransactionCase):
         self.amls = am.line_ids
 
     def test_aml_report_xlsx(self):
-        report_xls = self.report._render_xlsx(self.amls.ids, None)
+        report_xls = self.report._render_xlsx(self.report_ref, self.amls.ids, None)
         self.assertEqual(report_xls[1], "xlsx")

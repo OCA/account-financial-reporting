@@ -29,7 +29,6 @@ class AccountMoveLine(models.Model):
             "balance",
             "full_reconcile",
             "reconcile_amount",
-            # 'analytic_account_name', 'analytic_account',
             # 'ref', 'partner_ref',
             # 'amount_residual', 'amount_currency', 'currency_name',
             # 'company_currency', 'amount_residual_currency',
