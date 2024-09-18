@@ -15,7 +15,6 @@ class AccountMoveLineXlsx(models.AbstractModel):
     _description = "XLSX report for account move lines."
 
     def _get_ws_params(self, workbook, data, amls):
-
         # XLSX Template
         col_specs = {
             "move": {
@@ -316,7 +315,6 @@ class AccountMoveLineXlsx(models.AbstractModel):
         ]
 
     def _amls_export(self, workbook, ws, ws_params, data, amls):
-
         ws.set_landscape()
         ws.fit_to_pages(1, 0)
         ws.set_header(XLS_HEADERS["xls_headers"]["standard"])
@@ -354,10 +352,10 @@ class AccountMoveLineXlsx(models.AbstractModel):
         aml_cnt = len(amls)
         debit_start = self._rowcol_to_cell(row_pos - aml_cnt, debit_pos)
         debit_stop = self._rowcol_to_cell(row_pos - 1, debit_pos)
-        debit_formula = "SUM({}:{})".format(debit_start, debit_stop)
+        debit_formula = f"SUM({debit_start}:{debit_stop})"
         credit_start = self._rowcol_to_cell(row_pos - aml_cnt, credit_pos)
         credit_stop = self._rowcol_to_cell(row_pos - 1, credit_pos)
-        credit_formula = "SUM({}:{})".format(credit_start, credit_stop)
+        credit_formula = f"SUM({credit_start}:{credit_stop})"
         debit_cell = self._rowcol_to_cell(row_pos, debit_pos)
         credit_cell = self._rowcol_to_cell(row_pos, credit_pos)
         bal_formula = debit_cell + "-" + credit_cell
