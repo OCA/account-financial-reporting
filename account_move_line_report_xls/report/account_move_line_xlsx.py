@@ -122,7 +122,7 @@ class AccountMoveLineXlsx(models.AbstractModel):
                 },
                 "lines": {
                     "value": self._render(
-                        "line.full_reconcile_id " "and line.full_reconcile_id.name"
+                        "line.full_reconcile_id and str(line.full_reconcile_id.id)"
                     ),
                     "format": FORMATS["format_tcell_center"],
                 },
@@ -211,7 +211,7 @@ class AccountMoveLineXlsx(models.AbstractModel):
                 "header": {"value": _("Product Reference")},
                 "lines": {
                     "value": self._render(
-                        "line.product_id and line.product_id.default_code " "or ''"
+                        "line.product_id and line.product_id.default_code or ''"
                     )
                 },
                 "width": 36,
