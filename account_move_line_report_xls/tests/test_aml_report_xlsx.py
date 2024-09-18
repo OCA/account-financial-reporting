@@ -6,7 +6,7 @@ from odoo.tests.common import TransactionCase
 
 class TestAmlReportXlsx(TransactionCase):
     def setUp(self):
-        super(TestAmlReportXlsx, self).setUp()
+        super().setUp()
         self.report_ref = "account_move_line_report_xls.action_account_move_line_xlsx"
         self.report = self.env.ref(
             "account_move_line_report_xls.action_account_move_line_xlsx"
