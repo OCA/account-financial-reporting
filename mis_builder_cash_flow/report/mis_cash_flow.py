@@ -6,7 +6,6 @@ from odoo import fields, models, tools
 
 
 class MisCashFlow(models.Model):
-
     _name = "mis.cash_flow"
     _description = "MIS Cash Flow"
     _auto = False
