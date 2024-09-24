@@ -9,7 +9,7 @@
                 <field name="account_type" invisible="1" />
                 <field
                     name="hide_in_cash_flow"
-                    attrs="{'invisible': [('account_type', 'not in', ['asset_receivable', 'liability_payable'])]}"
+                    invisible="account_type not in ('asset_receivable', 'liability_payable')"
                 />
             </field>
         </field>
