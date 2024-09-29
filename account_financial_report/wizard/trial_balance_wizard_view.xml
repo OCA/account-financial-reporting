@@ -44,6 +44,10 @@
                                 attrs="{'invisible':[('limit_hierarchy_level','=', False)]}"
                             />
                             <field name="foreign_currency" />
+                            <field
+                                name="show_currency_name"
+                                attrs="{'invisible': [('foreign_currency', '=', False)]}"
+                            />
                         </group>
                     </group>
                     <group

@@ -59,6 +59,10 @@ class TrialBalanceReportWizard(models.TransientModel):
         "account currency is not setup through chart of accounts "
         "will display initial and final balance in that currency.",
     )
+    show_currency_name = fields.Boolean(
+        string="Show currency name",
+        help="Display foreign currency  name for move lines",
+    )
     account_code_from = fields.Many2one(
         comodel_name="account.account",
         help="Starting account in a range",

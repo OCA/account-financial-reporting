@@ -24,6 +24,10 @@
                         <field name="grouped_by" />
                         <field name="hide_account_at_0" />
                         <field name="foreign_currency" />
+                        <field
+                            name="show_currency_name"
+                            attrs="{'invisible': [('foreign_currency', '=', False)]}"
+                        />
                     </group>
                 </group>
                 <group name="partner_filter" col="1">
