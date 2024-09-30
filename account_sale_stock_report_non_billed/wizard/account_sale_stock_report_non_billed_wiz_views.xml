@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2022 Tecnativa - Carlos Roca
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="account_sale_stock_report_non_billed_wiz_form" model="ir.ui.view">
+        <field name="model">account.sale.stock.report.non.billed.wiz</field>
+        <field name="arch" type="xml">
+            <form string="Non Billed Stock Moves">
+                <sheet>
+                    <group>
+                        <field name="stock_move_non_billed_threshold" />
+                        <field name="date_check" />
+                        <field name="interval_restrict_invoices" />
+                    </group>
+                    <footer>
+                        <button
+                            name="open_at_date"
+                            string="Confirm"
+                            type="object"
+                            class="btn-primary"
+                        />
+                        <button
+                            string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"
+                        />
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="action_open_non_billed_stock_move">
+        <field name="name">Non Billed Stock Moves</field>
+        <field name="res_model">account.sale.stock.report.non.billed.wiz</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem
+        id="menu_non_billed_stock_move"
+        parent="account.menu_finance_reports"
+        action="action_open_non_billed_stock_move"
+        sequence="150"
+    />
+</odoo>
