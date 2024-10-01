@@ -195,12 +195,6 @@ msgid "LIQUIDITY"
 msgstr "LIQUIDITA'"
 
 #. module: mis_builder_cash_flow
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow____last_update
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line____last_update
-msgid "Last Modified on"
-msgstr "Ultima modifica il"
-
-#. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__write_uid
 msgid "Last Updated by"
 msgstr "Ultimo aggiornamento di"
@@ -317,6 +311,9 @@ msgstr "quarto mese"
 #: model:mis.report.instance.period,name:mis_builder_cash_flow.mis_period_plus_third_month
 msgid "third month"
 msgstr "terzo mese"
+
+#~ msgid "Last Modified on"
+#~ msgstr "Ultima modifica il"
 
 #~ msgid "MIS Report Instance Period"
 #~ msgstr "Periodo rendicontazione istanza MIS"
