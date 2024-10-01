@@ -190,12 +190,6 @@ msgid "LIQUIDITY"
 msgstr ""
 
 #. module: mis_builder_cash_flow
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow____last_update
-#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line____last_update
-msgid "Last Modified on"
-msgstr ""
-
-#. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__write_uid
 msgid "Last Updated by"
 msgstr ""
