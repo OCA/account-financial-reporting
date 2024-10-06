@@ -1,10 +1,10 @@
 # Copyright 2020 Hunki Enterprises BV
 # Copyright 2021 Opener B.V. <stefan@opener.am>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
-from odoo.addons.mis_builder.tests.test_mis_report_instance import TestMisReportInstance
+from odoo.tests.common import TransactionCase
 
 
-class TestMisTemplateFinancialReport(TestMisReportInstance):
+class TestMisTemplateFinancialReport(TransactionCase):
     def test_mis_template_financial_report(self):
         instance = self.env["mis.report.instance"].create(
             {
