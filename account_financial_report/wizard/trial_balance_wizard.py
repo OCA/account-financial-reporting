@@ -14,7 +14,7 @@ class TrialBalanceReportWizard(models.TransientModel):
 
     _name = "trial.balance.report.wizard"
     _description = "Trial Balance Report Wizard"
-    _inherit = "account_financial_report_abstract_wizard"
+    _inherit = "report.account_financial_report.abstract_wizard"
 
     date_range_id = fields.Many2one(comodel_name="date.range", string="Date range")
     date_from = fields.Date(required=True)

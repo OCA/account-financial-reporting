@@ -11,7 +11,7 @@ class AgedPartnerBalanceWizard(models.TransientModel):
 
     _name = "aged.partner.balance.report.wizard"
     _description = "Aged Partner Balance Wizard"
-    _inherit = "account_financial_report_abstract_wizard"
+    _inherit = "report.account_financial_report.abstract_wizard"
 
     date_at = fields.Date(required=True, default=fields.Date.context_today)
     date_from = fields.Date()

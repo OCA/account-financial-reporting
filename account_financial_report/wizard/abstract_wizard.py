@@ -5,7 +5,7 @@ from odoo import fields, models
 
 
 class AbstractWizard(models.AbstractModel):
-    _name = "account_financial_report_abstract_wizard"
+    _name = "report.account_financial_report.abstract_wizard"
     _description = "Abstract Wizard"
 
     def _get_partner_ids_domain(self):

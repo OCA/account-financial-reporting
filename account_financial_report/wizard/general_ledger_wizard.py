@@ -20,7 +20,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
 
     _name = "general.ledger.report.wizard"
     _description = "General Ledger Report Wizard"
-    _inherit = "account_financial_report_abstract_wizard"
+    _inherit = "report.account_financial_report.abstract_wizard"
 
     date_range_id = fields.Many2one(comodel_name="date.range", string="Date range")
     date_from = fields.Date(required=True, default=lambda self: self._init_date_from())
