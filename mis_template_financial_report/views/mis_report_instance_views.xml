@@ -7,10 +7,7 @@
         <field name="arch" type="xml">
             <group name="layout" position="inside">
                 <field name="allow_horizontal" invisible="1" />
-                <field
-                    name="horizontal"
-                    attrs="{'invisible': [('allow_horizontal', '=', False)]}"
-                />
+                <field name="horizontal" invisible="not allow_horizontal" />
             </group>
         </field>
     </record>
