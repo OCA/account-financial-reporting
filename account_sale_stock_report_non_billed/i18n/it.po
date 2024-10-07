@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-03 17:06+0000\n"
+"PO-Revision-Date: 2024-10-07 10:06+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -109,7 +109,7 @@ msgstr "Ultimo aggiornamento di"
 #. module: account_sale_stock_report_non_billed
 #: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_account_sale_stock_report_non_billed_wiz__write_date
 msgid "Last Updated on"
-msgstr "Ultimo"
+msgstr "Ultimo aggiornamento il"
 
 #. module: account_sale_stock_report_non_billed
 #: model:ir.actions.act_window,name:account_sale_stock_report_non_billed.action_open_non_billed_stock_move
