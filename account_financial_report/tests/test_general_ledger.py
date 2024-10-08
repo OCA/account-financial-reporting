@@ -742,3 +742,21 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         wizard.account_type_ids = False
         wizard._onchange_account_type_ids()
         self.assertEqual(wizard.account_ids, account_model)
+
+    def test_validate_account_range(self):
+        accounts = self.env["account.account"].search([])
+        wizard = self.env["general.ledger.report.wizard"].create(
+            {
+                "company_id": False,
+                "account_code_from": accounts[0].id,
+                "account_code_to": accounts[9].id,
+            }
+        )
+        wizard.on_change_account_range()
+        self.assertEqual(wizard.account_ids, accounts[0:10])
+
+        company_id = self.env.user.company_id
+        company_accounts = accounts[0:10].filtered(lambda a: a.company_id == company_id)
+        wizard.company_id = company_id
+        wizard.on_change_account_range()
+        self.assertEqual(wizard.account_ids, company_accounts)
