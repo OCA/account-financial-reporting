@@ -371,7 +371,16 @@
                 t-set="total_bal_curr"
                 t-value="account_or_group_item_object['init_bal'].get('bal_curr', 0)"
             />
-            <t t-foreach="account_or_group_item_object['move_lines']" t-as="line">
+            <!-- If field hide_rows_at_0, do not show lines with both credit and debit == 0 -->
+            <t t-if="hide_rows_at_0">
+                <t t-if="account_or_group_item_object and account_or_group_item_object['move_lines']">
+                    <t t-set="account_or_group_item_move_lines" t-value="o.filter_move_lines(account_or_group_item_object['move_lines'])"/>
+                </t>
+            </t>
+            <t t-else="">
+                <t t-set="account_or_group_item_move_lines" t-value="account_or_group_item_object['move_lines']"/>
+            </t>
+            <t t-foreach="account_or_group_item_move_lines" t-as="line">
                 <!-- # lines or centralized lines -->
                 <div class="act_as_row lines">
                     <!--## date-->
@@ -381,6 +390,19 @@
                             <span
                                 t-att-res-id="line['id']"
                                 res-model="account.move.line"
+                                view-type="form"
+                            >
+                                <t
+                                    t-esc="line['date']"
+                                    t-options="{'widget': 'date'}"
+                                />
+                            </span>
+                        </t>
+                        <t t-elif="line['entry_id']">
+                            <!--## We don't use t-field because it throws an error on click -->
+                            <span
+                                t-att-res-id="line['entry_id']"
+                                res-model="account.move"
                                 view-type="form"
                             >
                                 <t
@@ -469,6 +491,15 @@
                                 <t t-out="line['ref_label']" />
                             </span>
                         </t>
+                        <t t-elif="line['entry_id']">
+                            <span
+                                t-att-res-id="line['entry_id']"
+                                res-model="account.move"
+                                view-type="form"
+                            >
+                                <t t-out="line['ref_label']" />
+                            </span>
+                        </t>
                         <t t-else="">
                             <span>
                                 <t t-out="line['ref_label']" />
@@ -541,6 +572,18 @@
                                 />
                             </span>
                         </t>
+                        <t t-elif="line['entry_id']">
+                            <span
+                                t-att-res-id="line['entry_id']"
+                                res-model="account.move"
+                                view-type="form"
+                            >
+                                <t
+                                    t-out="line['debit']"
+                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                />
+                            </span>
+                        </t>
                         <t t-else="">
                             <span>
                                 <t
@@ -564,6 +607,18 @@
                                 />
                             </span>
                         </t>
+                        <t t-elif="line['entry_id']">
+                            <span
+                                t-att-res-id="line['entry_id']"
+                                res-model="account.move"
+                                view-type="form"
+                            >
+                                <t
+                                    t-out="line['credit']"
+                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                />
+                            </span>
+                        </t>
                         <t t-else="">
                             <span>
                                 <t
@@ -579,6 +634,18 @@
                             <span
                                 t-att-res-id="line['id']"
                                 res-model="account.move.line"
+                                view-type="form"
+                            >
+                                <t
+                                    t-out="line['balance']"
+                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                />
+                            </span>
+                        </t>
+                        <t t-elif="line['entry_id']">
+                            <span
+                                t-att-res-id="line['entry_id']"
+                                res-model="account.move"
                                 view-type="form"
                             >
                                 <t
