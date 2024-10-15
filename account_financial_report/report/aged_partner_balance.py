@@ -72,20 +72,25 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         else:
             ag_pb_data[acc_id]["older"] += residual
             ag_pb_data[acc_id][prt_id]["older"] += residual
-        days_difference = abs((today - due_date).days)
-        for index, line in enumerate(interval_lines):
-            lower_limit = 0 if not index else interval_lines[index - 1].inferior_limit
-            next_line = interval_lines[index] if index < len(interval_lines) else None
-            interval_range = self._get_values_for_range_intervals(
-                lower_limit, next_line.inferior_limit
-            )
-            if (
-                days_difference in interval_range
-                or days_difference == line.inferior_limit
-            ):
-                ag_pb_data[acc_id][line] += residual
-                ag_pb_data[acc_id][prt_id][line] += residual
-                break
+        if due_date:
+            days_difference = abs((today - due_date).days)
+            for index, line in enumerate(interval_lines):
+                lower_limit = (
+                    0 if not index else interval_lines[index - 1].inferior_limit
+                )
+                next_line = (
+                    interval_lines[index] if index < len(interval_lines) else None
+                )
+                interval_range = self._get_values_for_range_intervals(
+                    lower_limit, next_line.inferior_limit
+                )
+                if (
+                    days_difference in interval_range
+                    or days_difference == line.inferior_limit
+                ):
+                    ag_pb_data[acc_id][line] += residual
+                    ag_pb_data[acc_id][prt_id][line] += residual
+                    break
         return ag_pb_data
 
     def _get_values_for_range_intervals(self, num1, num2):
