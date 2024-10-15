@@ -211,6 +211,10 @@ class GeneralLedgerReport(models.AbstractModel):
                     prt_name = gl["partner_id"][1]
                     prt_name = prt_name._value
                 acc_id = gl["account_id"][0]
+                if acc_id not in data:
+                    data.update({acc_id: dict()})
+                if prt_id not in data[acc_id]:
+                    data[acc_id].update({prt_id: dict()})
                 data[acc_id][prt_id] = self._prepare_gen_ld_data_item(gl)
                 data[acc_id][prt_id]["id"] = prt_id
                 data[acc_id][prt_id]["name"] = prt_name

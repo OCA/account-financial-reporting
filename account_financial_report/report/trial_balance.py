@@ -210,14 +210,15 @@ class TrialBalanceReport(models.AbstractModel):
         self, total_amount, tb_initial_acc, tb_period_acc, foreign_currency
     ):
         for tb in tb_period_acc:
-            acc_id = tb["account_id"][0]
-            total_amount[acc_id] = self._prepare_total_amount(tb, foreign_currency)
-            total_amount[acc_id]["credit"] = tb["credit"]
-            total_amount[acc_id]["debit"] = tb["debit"]
-            total_amount[acc_id]["balance"] = tb["balance"]
-            total_amount[acc_id]["initial_balance"] = 0.0
-            if foreign_currency:
-                total_amount[acc_id]["initial_currency_balance"] = 0.0
+            if tb["account_id"]:
+                acc_id = tb["account_id"][0]
+                total_amount[acc_id] = self._prepare_total_amount(tb, foreign_currency)
+                total_amount[acc_id]["credit"] = tb["credit"]
+                total_amount[acc_id]["debit"] = tb["debit"]
+                total_amount[acc_id]["balance"] = tb["balance"]
+                total_amount[acc_id]["initial_balance"] = 0.0
+                if foreign_currency:
+                    total_amount[acc_id]["initial_currency_balance"] = 0.0
         for tb in tb_initial_acc:
             acc_id = tb["account_id"]
             if acc_id not in total_amount.keys():
