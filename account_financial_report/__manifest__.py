@@ -15,7 +15,12 @@
     "ForgeFlow,"
     "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/account-financial-reporting",
-    "depends": ["account", "date_range", "report_xlsx"],
+    "depends": [
+        "account",
+        "analytic_mixin_analytic_accounts_and_plans",
+        "date_range",
+        "report_xlsx",
+    ],
     "data": [
         "security/ir.model.access.csv",
         "security/security.xml",
