@@ -45,6 +45,9 @@ class GeneralLedgerReportWizard(models.TransientModel):
     )
     receivable_accounts_only = fields.Boolean()
     payable_accounts_only = fields.Boolean()
+    account_type = fields.Selection(
+        selection="_get_account_type_selection",
+    )
     partner_ids = fields.Many2many(
         comodel_name="res.partner",
         string="Filter partners",
@@ -93,6 +96,9 @@ class GeneralLedgerReportWizard(models.TransientModel):
         domain = literal_eval(self.domain) if self.domain else []
         return domain
 
+    def _get_account_type_selection(self):
+        return self.env["account.account"]._fields["account_type"].selection
+
     @api.onchange("account_code_from", "account_code_to")
     def on_change_account_range(self):
         if (
@@ -110,6 +116,18 @@ class GeneralLedgerReportWizard(models.TransientModel):
                 self.account_ids = self.account_ids.filtered(
                     lambda a: a.company_id == self.company_id
                 )
+
+    @api.onchange("account_type")
+    def _onchange_account_type(self):
+        if self.account_type:
+            self.account_ids = self.env["account.account"].search(
+                [
+                    ("company_id", "=", self.company_id.id),
+                    ("account_type", "=", self.account_type),
+                ]
+            )
+        else:
+            self.account_ids = None
 
     def _init_date_from(self):
         """set start date to begin of current year if fiscal year running"""
@@ -179,6 +197,8 @@ class GeneralLedgerReportWizard(models.TransientModel):
                 self.account_ids = self.account_ids.filtered(
                     lambda a: a.company_id == self.company_id
                 )
+        if self.company_id and self.account_type:
+            self._onchange_account_type()
         if self.company_id and self.cost_center_ids:
             self.cost_center_ids = self.cost_center_ids.filtered(
                 lambda c: c.company_id == self.company_id

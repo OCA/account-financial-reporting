@@ -52,6 +52,7 @@
                                         />
                                     </div>
                                 </div>
+                                <field name="account_type" widget="selection" />
                                 <field
                                     name="account_ids"
                                     nolabel="1"
