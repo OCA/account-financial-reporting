@@ -736,19 +736,19 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         company_id = self.env.user.company_id
         account_model = self.env["account.account"]
         account = account_model.search([], limit=1)
-        account_type = account.user_type_id
+        account_type = account.account_type
         accounts = account_model.search(
             [
                 ("company_id", "=", company_id.id),
-                ("user_type_id", "in", account_type.ids),
+                ("account_type", "=", account_type),
             ]
         )
         wizard = self.env["general.ledger.report.wizard"].create(
-            {"account_type_ids": account_type, "company_id": company_id.id}
+            {"account_type": account_type, "company_id": company_id.id}
         )
         wizard.onchange_company_id()
         self.assertEqual(wizard.account_ids, accounts)
 
-        wizard.account_type_ids = False
-        wizard._onchange_account_type_ids()
+        wizard.account_type = False
+        wizard._onchange_account_type()
         self.assertEqual(wizard.account_ids, account_model)

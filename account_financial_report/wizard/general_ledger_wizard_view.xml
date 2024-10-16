@@ -52,11 +52,7 @@
                                         />
                                     </div>
                                 </div>
-                                <field
-                                    name="account_type_ids"
-                                    widget="many2many_tags"
-                                    options="{'no_create': True}"
-                                />
+                                <field name="account_type" widget="selection" />
                                 <field
                                     name="account_ids"
                                     nolabel="1"
