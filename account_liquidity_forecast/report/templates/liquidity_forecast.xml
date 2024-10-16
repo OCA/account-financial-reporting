@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template id="liquidity_forecast">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="account_liquidity_forecast.internal_layout">
+                    <t
+                        t-call="account_liquidity_forecast.report_liquidity_forecast_base"
+                    />
+                </t>
+            </t>
+        </t>
+    </template>
+    <template id="report_liquidity_forecast_base">
+        <!-- Defines global variables used by internal layout -->
+        <t t-set="title">
+            Liquidity Forecast -
+            <t t-out="company_name" />
+            -
+            <t t-out="currency_name" />
+        </t>
+        <t t-set="company_name" t-value="Company_Name" />
+        <t class="page">
+            <div class="row">
+                <h4
+                    class="mt0"
+                    t-esc="title or 'Odoo Report'"
+                    style="text-align: center;"
+                />
+            </div>
+            <!-- Display filters -->
+            <t t-call="account_liquidity_forecast.report_liquidity_forecast_filters" />
+            <div class="act_as_table list_table" style="margin-top: 10px;" />
+            <!-- Display lines -->
+            <div class="act_as_table data_table" style="width: 100%;">
+                <!-- Display header -->
+                <t
+                    t-call="account_liquidity_forecast.report_liquidity_forecast_lines_header"
+                />
+                <!-- Display lines -->
+                <t t-foreach="liquidity_forecast_lines" t-as="line">
+                    <t t-set="style" t-value="'font-size:12px;'" />
+                    <t
+                        t-call="account_liquidity_forecast.report_liquidity_forecast_line"
+                    />
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <template id="account_liquidity_forecast.report_liquidity_forecast_filters">
+        <div class="act_as_table data_table" style="width: 100%;">
+            <div class="act_as_row labels">
+                <div class="act_as_cell">Date range filter</div>
+                <div class="act_as_cell">Target moves filter</div>
+            </div>
+            <div class="act_as_row">
+                <div class="act_as_cell">
+                    From:
+                    <span t-esc="date_from" t-options="{'widget': 'date'}" />
+                    To
+                    <span t-esc="date_to" t-options="{'widget': 'date'}" />
+                </div>
+                <div class="act_as_cell">
+                    <t t-if="only_posted_moves">All posted entries</t>
+                    <t t-if="not only_posted_moves">All entries</t>
+                </div>
+            </div>
+        </div>
+    </template>
+    <template id="account_liquidity_forecast.report_liquidity_forecast_lines_header">
+        <!-- Display table headers for lines -->
+        <div class="act_as_thead">
+            <div class="act_as_row labels">
+                <!--## Items-->
+                <div class="act_as_cell" style="width: 9%;">Items</div>
+                <t t-foreach="periods" t-as="period">
+                    <!--## Periods-->
+                    <div class="act_as_cell" style="width: 9%;">
+                        <t t-esc="period['name']" />
+                    </div>
+                </t>
+            </div>
+        </div>
+    </template>
+
+    <template id="account_liquidity_forecast.report_liquidity_forecast_line">
+        <!-- # line -->
+        <t
+            t-set="line_class"
+            t-value="'act_as_row labels' if line['level'] == 'heading' else 'act_as_row'"
+        />
+        <div t-att-class="line_class">
+            <!--## Items-->
+            <div class="act_as_cell left" t-att-style="style">
+                <t t-esc="line['title']" />
+            </div>
+            <!--## Period-->
+            <t t-foreach="periods" t-as="period">
+                <t t-if="line['type'] == 'amount'">
+                    <div class="act_as_cell right" t-att-style="style">
+                        <t t-if="line['periods'][period['sequence']]['domain']">
+                            <t
+                                t-set="domain"
+                                t-value="line['periods'][period['sequence']]['domain']"
+                            />
+                            <span t-att-domain="domain" t-att-res-model="line['model']">
+                                <t
+                                    t-esc="line['periods'][period['sequence']]['amount']"
+                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                />
+                            </span>
+                        </t>
+                        <t t-if="not line['periods'][period['sequence']]['domain']">
+                            <t
+                                t-esc="line['periods'][period['sequence']]['amount']"
+                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            />
+                        </t>
+                    </div>
+                </t>
+                <t t-if="line['type'] == 'text'">
+                    <div class="act_as_cell labels" t-att-style="style" />
+                </t>
+            </t>
+        </div>
+    </template>
+
+    <template id="account_liquidity_forecast.report_liquidity_forecast_footer">
+        <!-- Display totals -->
+        <div class="act_as_table list_table" style="width: 100%;">
+            <div class="act_as_row labels" style="font-weight: bold;">
+                <!--## Items-->
+                <div class="act_as_cell amount" style="width: 9%;">
+                    <span t-esc="end_value" />
+                </div>
+                <!--## Period-->
+                <div class="act_as_cell amount" style="width: 9%;">
+                    <span t-esc="period" />
+                </div>
+            </div>
+        </div>
+    </template>
+</odoo>
