@@ -357,10 +357,11 @@ class GeneralLedgerXslx(models.AbstractModel):
                             "final_balance": account["fin_bal"]["balance"],
                         }
                     )
-                    if foreign_currency and account["currency_id"]:
+                    if foreign_currency and account["fin_bal_currency_id"]:
                         account.update(
                             {
-                                "final_bal_curr": account["fin_bal"]["bal_curr"],
+                                "final_bal_curr": total_bal_curr,
+                                "currency_id": account["fin_bal_currency_id"],
                             }
                         )
                     self.write_ending_balance_from_dict(account, report_data)
