@@ -702,10 +702,10 @@
                 />
                 <t t-set="misc_grouped_domain" t-value="[]" t-else="" />
                 <t t-if="foreign_currency">
-                    <t t-if="account['currency_id']">
+                    <t t-if="account['fin_bal_currency_id']">
                         <t
                             t-set="account_currency"
-                            t-value="currency_model.browse(account['currency_id'])"
+                            t-value="currency_model.browse(account['fin_bal_currency_id'])"
                         />
                         <div class="act_as_cell amount" style="width: 3.63%;">
                             <t t-if="type == 'account_type'">
