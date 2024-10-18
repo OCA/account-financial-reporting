@@ -27,7 +27,7 @@ class AccountMoveLine(models.Model):
             .ids
         )
         # Store them
-        self.analytic_account_ids = False
+        self.with_context(active_test=False).analytic_account_ids = [(6, 0, [])]
         for account_id, record_ids in batch_by_analytic_account.items():
             if account_id not in existing_account_ids:
                 continue
