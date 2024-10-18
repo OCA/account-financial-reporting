@@ -28,6 +28,7 @@ class AccountMoveLine(models.Model):
         )
         # Store them
         self.analytic_account_ids = False
+        self._remove_lost_relations(tuple(self.ids))
         for account_id, record_ids in batch_by_analytic_account.items():
             if account_id not in existing_account_ids:
                 continue
@@ -67,3 +68,19 @@ class AccountMoveLine(models.Model):
         if self.env.context.get("skip_search_count"):
             return 0
         return super().search_count(domain, limit=limit)
+
+    def _remove_lost_relations(self, account_move_line_ids):
+        # When some linked analytic account is active=False,
+        # the relation in account_analytic_account_account_move_line_rel
+        # is not removed. This method is used to remove the relation in those cases.
+        inactive_analytic_account_ids = tuple(
+            self.env["account.analytic.account"].search([("active", "=", False)]).ids
+        )
+        if inactive_analytic_account_ids:
+            self._cr.execute(
+                "DELETE "
+                "FROM account_analytic_account_account_move_line_rel "
+                "WHERE account_move_line_id in %s "
+                "AND account_analytic_account_id in %s",
+                (account_move_line_ids, inactive_analytic_account_ids),
+            )
