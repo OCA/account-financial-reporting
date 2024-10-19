@@ -329,6 +329,7 @@ msgstr "Montant Devise"
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: code:addons/account_financial_report/report/open_items_xlsx.py:0
+#: model:ir.model.fields.selection,name:account_financial_report.selection__trial_balance_report_wizard__grouped_by__analytic_account
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
@@ -918,6 +919,7 @@ msgstr "Grouper les écritures par"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__grouped_by
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__grouped_by
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__grouped_by
 msgid "Grouped By"
 msgstr ""
 
@@ -1582,6 +1584,13 @@ msgid "Starting account in a range"
 msgstr "Compte de début dans une période"
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/trial_balance.py:0
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
+#, python-format
+msgid "TOTAL"
+msgstr ""
+
+#. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #, python-format
@@ -1736,7 +1745,9 @@ msgid "To:"
 msgstr "Au:"
 
 #. module: account_financial_report
+#: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_account_ending_cumul
+#, python-format
 msgid "Total"
 msgstr "Total"
 
@@ -1872,6 +1883,12 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__with_account_name
 msgid "With Account Name"
 msgstr "Avec le nom du compte"
+
+#. module: account_financial_report
+#: code:addons/account_financial_report/report/trial_balance.py:0
+#, python-format
+msgid "Without analytic account"
+msgstr ""
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
