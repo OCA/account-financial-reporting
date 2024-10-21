@@ -1,0 +1,101 @@
+<odoo>
+    <record id="kpi_loss" model="mis.report.kpi">
+        <field name="name">loss</field>
+        <field name="description">Loss</field>
+        <field name="expression">balp[('account_type', 'like', 'expense%')][]</field>
+        <field name="auto_expand_accounts">true</field>
+        <field name="auto_expand_accounts_style_id" ref="style_details" />
+        <field name="style_id" ref="style_header" />
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">sum</field>
+        <field name="sequence">100</field>
+        <field name="report_id" ref="report_pl" />
+    </record>
+    <record id="kpi_profit" model="mis.report.kpi">
+        <field name="name">profit</field>
+        <field name="description">Profit</field>
+        <field
+            name="expression"
+        >-balp['|', ('account_type', 'like', 'income%'), ('account_type', 'like', 'equity_unaffected')][]</field>
+        <field name="auto_expand_accounts">true</field>
+        <field name="auto_expand_accounts_style_id" ref="style_details" />
+        <field name="style_id" ref="style_header" />
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">sum</field>
+        <field name="sequence">0</field>
+        <field name="report_id" ref="report_pl" />
+        <field name="split_after" eval="True" />
+    </record>
+    <record id="kpi_pl_to_report" model="mis.report.kpi">
+        <field name="id">3</field>
+        <field name="name">pl_to_report</field>
+        <field name="description">Profit or loss to report</field>
+        <field name="expression">profit - loss</field>
+        <field name="auto_expand_accounts">false</field>
+        <field name="style_id" ref="style_header" />
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="sequence">101</field>
+        <field name="report_id" ref="report_pl" />
+    </record>
+    <record id="kpi_liability_total" model="mis.report.kpi">
+        <field name="id">8</field>
+        <field name="name">liability_header</field>
+        <field name="description">Liability</field>
+        <field name="expression">liability + subreport_pl.pl_to_report</field>
+        <field name="auto_expand_accounts">false</field>
+        <field name="style_id" ref="style_header" />
+        <field name="type">num</field>
+        <field name="compare_method">none</field>
+        <field name="accumulation_method">none</field>
+        <field name="sequence">100</field>
+        <field name="report_id" ref="report_bs" />
+    </record>
+    <record id="kpi_liability_pl_subreport" model="mis.report.kpi">
+        <field name="id">7</field>
+        <field name="name">pl</field>
+        <field name="description">Profit / Loss</field>
+        <field name="expression">subreport_pl.pl_to_report</field>
+        <field name="auto_expand_accounts">false</field>
+        <field name="style_id" ref="style_header_indent" />
+        <field name="type">num</field>
+        <field name="compare_method">pct</field>
+        <field name="accumulation_method">sum</field>
+        <field name="sequence">102</field>
+        <field name="report_id" ref="report_bs" />
+    </record>
+    <record id="kpi_liability" model="mis.report.kpi">
+        <field name="id">5</field>
+        <field name="name">liability</field>
+        <field name="description">Liabilities</field>
+        <field
+            name="expression"
+        >-bale['|', ('account_type', 'like', 'liability%'), ('account_type', '=', 'equity')][]</field>
+        <field name="auto_expand_accounts">true</field>
+        <field name="auto_expand_accounts_style_id" ref="style_details_double_indent" />
+        <field name="style_id" ref="style_header_indent" />
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">sum</field>
+        <field name="sequence">101</field>
+        <field name="report_id" ref="report_bs" />
+    </record>
+    <record id="kpi_assets" model="mis.report.kpi">
+        <field name="id">4</field>
+        <field name="name">assets</field>
+        <field name="description">Assets</field>
+        <field name="expression">bale[('account_type', 'like', 'asset%')][]</field>
+        <field name="auto_expand_accounts">true</field>
+        <field name="auto_expand_accounts_style_id" ref="style_details" />
+        <field name="style_id" ref="style_header" />
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">sum</field>
+        <field name="sequence">0</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="split_after" eval="True" />
+    </record>
+</odoo>
