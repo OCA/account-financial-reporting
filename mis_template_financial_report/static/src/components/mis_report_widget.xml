@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<templates>
+
+    <t t-inherit="mis_builder.MisReportWidget" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('oe_mis_builder_content')]" position="attributes">
+            <attribute
+                name="t-attf-class"
+            >{{state.mis_report_data.split_matrices and 'horizontal'}}</attribute>
+        </xpath>
+        <xpath expr="//table[hasclass('mis_builder')]/.." position="attributes">
+            <attribute
+                name="t-foreach"
+            >state.mis_report_data.split_matrices or [state.mis_report_data]</attribute>
+            <attribute name="t-as">matrix</attribute>
+            <attribute name="t-key">matrix_index</attribute>
+        </xpath>
+
+        <xpath
+            expr="//tr[@t-foreach='state.mis_report_data.header']"
+            position="attributes"
+        >
+            <attribute name="t-foreach">matrix.header</attribute>
+        </xpath>
+        <xpath
+            expr="//tr[@t-foreach='state.mis_report_data.body']"
+            position="attributes"
+        >
+            <attribute name="t-foreach">matrix.body</attribute>
+        </xpath>
+    </t>
+</templates>
