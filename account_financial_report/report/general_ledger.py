@@ -852,6 +852,41 @@ class GeneralLedgerReport(models.AbstractModel):
                         account[grouped_by] = False
                         del account["list_grouped"]
         general_ledger = sorted(general_ledger, key=lambda k: k["code"])
+        # Set the fin_bal_currency_id value if the account does not have it set
+        # and there are move lines in a currency different from that of
+        # the company (USD for example).
+        for gl_item in general_ledger:
+            fin_bal_currency_ids = []
+            fin_bal_currency_id = gl_item["currency_id"]
+            if not gl_item["currency_id"] and "move_lines" in gl_item:
+                gl_item["fin_bal"]["bal_curr"] = 0
+                for ml in gl_item["move_lines"]:
+                    ml_currency_id = (
+                        ml["currency_id"][0] if ml["currency_id"] else False
+                    )
+                    if ml_currency_id and ml_currency_id != company.currency_id.id:
+                        gl_item["fin_bal"]["bal_curr"] += ml["bal_curr"]
+                        if ml_currency_id not in fin_bal_currency_ids:
+                            fin_bal_currency_ids.append(ml_currency_id)
+            elif not gl_item["currency_id"] and "list_grouped" in gl_item:
+                fin_bal_currency_ids = []
+                for lg_item in gl_item["list_grouped"]:
+                    lg_item["fin_bal"]["bal_curr"] = lg_item["init_bal"]["bal_curr"]
+                    for ml in lg_item["move_lines"]:
+                        ml_currency_id = (
+                            ml["currency_id"][0] if ml["currency_id"] else False
+                        )
+                        if ml_currency_id and ml_currency_id != company.currency_id.id:
+                            lg_item["fin_bal"]["bal_curr"] += ml["bal_curr"]
+                            if ml_currency_id not in fin_bal_currency_ids:
+                                fin_bal_currency_ids.append(ml_currency_id)
+            # If there is only 1 currency, we set that one as fin_bal_currency_id
+            # The use of different move lines with different currencies (EUR + GBP)
+            # will be excluded. We use a different field to avoid showing the initial
+            # balance and/or distorting data.
+            if not gl_item["currency_id"] and len(fin_bal_currency_ids) == 1:
+                fin_bal_currency_id = fin_bal_currency_ids[0]
+            gl_item["fin_bal_currency_id"] = fin_bal_currency_id
         return {
             "doc_ids": [wizard_id],
             "doc_model": "general.ledger.report.wizard",
