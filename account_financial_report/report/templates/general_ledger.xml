@@ -318,7 +318,7 @@
                                     res-model="account.move.line"
                                 >
                                     <t
-                                        t-out="account_or_group_item_object['init_bal']['bal_curr']"
+                                        t-raw="account_or_group_item_object['init_bal']['bal_curr']"
                                         t-options="{'widget': 'monetary', 'display_currency': account_currency}"
                                     />
                                 </span>
@@ -329,7 +329,7 @@
                                     res-model="account.move.line"
                                 >
                                     <t
-                                        t-out="account_or_group_item_object['init_bal']['bal_curr']"
+                                        t-raw="account_or_group_item_object['init_bal']['bal_curr']"
                                         t-options="{'widget': 'monetary', 'display_currency': account_currency}"
                                     />
                                 </span>
@@ -342,7 +342,7 @@
                                     res-model="account.move.line"
                                 >
                                     <t
-                                        t-out="account_or_group_item_object['init_bal']['bal_curr']"
+                                        t-raw="account_or_group_item_object['init_bal']['bal_curr']"
                                         t-options="{'widget': 'monetary', 'display_currency': account_currency}"
                                     />
                                 </span>
@@ -353,7 +353,7 @@
                                     res-model="account.move.line"
                                 >
                                     <t
-                                        t-out="account_or_group_item_object['init_bal']['bal_curr']"
+                                        t-raw="account_or_group_item_object['init_bal']['bal_curr']"
                                         t-options="{'widget': 'monetary', 'display_currency': account_currency}"
                                     />
                                 </span>
@@ -717,7 +717,7 @@
                                         style="color: black;"
                                     >
                                         <t
-                                            t-out="account_or_group_item_object['fin_bal']['bal_curr']"
+                                            t-raw="account_or_group_item_object['fin_bal']['bal_curr']"
                                             t-options="{'widget': 'monetary', 'display_currency': account_currency}"
                                         />
                                     </a>
@@ -732,7 +732,7 @@
                                         style="color: black;"
                                     >
                                         <t
-                                            t-out="account_or_group_item_object['fin_bal']['bal_curr']"
+                                            t-raw="account_or_group_item_object['fin_bal']['bal_curr']"
                                             t-options="{'widget': 'monetary', 'display_currency': account_currency}"
                                         />
                                     </a>
@@ -749,7 +749,7 @@
                                         style="color: black;"
                                     >
                                         <t
-                                            t-out="account_or_group_item_object['fin_bal']['bal_curr']"
+                                            t-raw="account_or_group_item_object['fin_bal']['bal_curr']"
                                             t-options="{'widget': 'monetary', 'display_currency': account_currency}"
                                         />
                                     </a>
@@ -764,7 +764,7 @@
                                         style="color: black;"
                                     >
                                         <t
-                                            t-out="account_or_group_item_object['fin_bal']['bal_curr']"
+                                            t-raw="account_or_group_item_object['fin_bal']['bal_curr']"
                                             t-options="{'widget': 'monetary', 'display_currency': account_currency}"
                                         />
                                     </a>
