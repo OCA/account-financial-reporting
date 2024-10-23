@@ -29,6 +29,10 @@
                             <field name="centralize" />
                             <field name="hide_account_at_0" />
                             <field name="foreign_currency" />
+                            <field
+                                name="show_currency_name"
+                                attrs="{'invisible': [('foreign_currency', '=', False)]}"
+                            />
                             <field name="show_cost_center" />
                         </group>
                     </group>
