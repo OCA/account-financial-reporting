@@ -270,6 +270,9 @@ class TrialBalanceReport(models.AbstractModel):
                 total_amount[acc_id][prt_id]["ending_currency_balance"] += round(
                     tb["amount_currency"], 2
                 )
+        total_amount[acc_id][prt_id]["partner_name"] = (
+            tb["partner_id"][1] if tb["partner_id"] else _("Missing Partner")
+        )
         return total_amount
 
     @api.model
@@ -293,6 +296,7 @@ class TrialBalanceReport(models.AbstractModel):
             total_amount[acc_id][prt_id]["debit"] = tb["debit"]
             total_amount[acc_id][prt_id]["balance"] = tb["balance"]
             total_amount[acc_id][prt_id]["initial_balance"] = 0.0
+            total_amount[acc_id][prt_id]["partner_name"] = partners_data[prt_id]["name"]
             partners_ids.add(prt_id)
         for tb in tb_initial_prt:
             acc_id = tb["account_id"][0]
@@ -305,6 +309,18 @@ class TrialBalanceReport(models.AbstractModel):
             total_amount = self._compute_acc_prt_amount(
                 total_amount, tb, acc_id, prt_id, foreign_currency
             )
+        # sort on partner_name
+        for acc_id, total_data in total_amount.items():
+            tmp_list = sorted(
+                total_data.items(),
+                key=lambda x: isinstance(x[0], int)
+                and isinstance(x[1], dict)
+                and x[1]["partner_name"]
+                or x[0],
+            )
+            total_amount[acc_id] = {}
+            for key, value in tmp_list:
+                total_amount[acc_id][key] = value
         return total_amount, partners_data
 
     def _remove_accounts_at_cero(self, total_amount, show_partner_details, company):
