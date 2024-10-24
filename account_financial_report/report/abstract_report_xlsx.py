@@ -496,7 +496,7 @@ class AbstractReportXslx(models.AbstractModel):
                         report_data["formats"]["format_header_amount"],
                     )
                 elif cell_type == "amount_currency":
-                    if my_object["currency_id"] and value:
+                    if my_object["currency_id"]:
                         format_amt = self._get_currency_amt_format_dict(
                             my_object, report_data
                         )
