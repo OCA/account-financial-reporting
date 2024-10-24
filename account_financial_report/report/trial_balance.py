@@ -313,7 +313,10 @@ class TrialBalanceReport(models.AbstractModel):
         for acc_id, total_data in total_amount.items():
             tmp_list = sorted(
                 total_data.items(),
-                key=lambda x: isinstance(x[1], dict) and x[1]["partner_name"] or x[0],
+                key=lambda x: isinstance(x[0], int)
+                and isinstance(x[1], dict)
+                and x[1]["partner_name"]
+                or x[0],
             )
             total_amount[acc_id] = {}
             for key, value in tmp_list:
