@@ -108,17 +108,20 @@ class GeneralLedgerReportWizard(models.TransientModel):
 
     @api.onchange("account_code_from", "account_code_to")
     def on_change_account_range(self):
-        if (
-            self.account_code_from
-            and self.account_code_from.code.isdigit()
-            and self.account_code_to
-            and self.account_code_to.code.isdigit()
-        ):
-            start_range = int(self.account_code_from.code)
-            end_range = int(self.account_code_to.code)
-            self.account_ids = self.env["account.account"].search(
-                [("code", ">=", start_range), ("code", "<=", end_range)]
-            )
+        if self.account_code_from and self.account_code_to:
+            start_range = self.account_code_from.code
+            end_range = self.account_code_to.code
+
+            accounts = self.env["account.account"].search([])
+            account_codes = [account.code for account in accounts]
+
+            start_index = account_codes.index(start_range)
+            reverse_account_codes = account_codes[::-1]
+            reverse_end_index = reverse_account_codes.index(end_range)
+            end_index = len(account_codes) - 1 - reverse_end_index
+
+            self.account_ids = accounts[start_index : end_index + 1]
+
             if self.company_id:
                 self.account_ids = self.account_ids.filtered(
                     lambda a: a.company_id == self.company_id
