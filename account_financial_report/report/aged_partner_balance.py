@@ -457,8 +457,8 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         )._calculate_percent(aged_partner_data)
         return {
             "doc_ids": [wizard_id],
-            "doc_model": "open.items.report.wizard",
-            "docs": self.env["open.items.report.wizard"].browse(wizard_id),
+            "doc_model": "aged.partner.balance.report.wizard",
+            "docs": self.env["aged.partner.balance.report.wizard"].browse(wizard_id),
             "company_name": company.display_name,
             "currency_name": company.currency_id.name,
             "date_at": date_at,
