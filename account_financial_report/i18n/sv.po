@@ -1014,8 +1014,8 @@ msgid ""
 "If flagged, no details will be displayed in the General Ledger report (the "
 "webkit one only), only centralized amounts per period."
 msgstr ""
-"Om den är flaggad kommer inga detaljer att visas i huvudboksrapporten ("
-"endast webkit), endast centraliserade belopp per period."
+"Om den är flaggad kommer inga detaljer att visas i huvudboksrapporten "
+"(endast webkit), endast centraliserade belopp per period."
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration_line__inferior_limit
@@ -1740,7 +1740,8 @@ msgstr ""
 #, python-format
 msgid ""
 "The Company in the Vat Report Wizard and in Date Range must be the same."
-msgstr "Företaget i momsrapportsguiden och i datumintervallet måste vara samma."
+msgstr ""
+"Företaget i momsrapportsguiden och i datumintervallet måste vara samma."
 
 #. module: account_financial_report
 #. odoo-python
