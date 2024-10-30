@@ -24,7 +24,7 @@
             <div class="row">
                 <h4
                     class="mt0"
-                    t-esc="title or 'Odoo Report'"
+                    t-out="title or 'Odoo Report'"
                     style="text-align: center;"
                 />
             </div>
@@ -35,9 +35,9 @@
                     <!-- Display account header -->
                     <div class="act_as_table list_table" style="margin-top: 10px;" />
                     <div class="act_as_caption account_title" style="width: 100%">
-                        <span t-esc="account['code']" />
+                        <span t-out="account['code']" />
                         -
-                        <span t-esc="account['name']" />
+                        <span t-out="account['name']" />
                     </div>
                     <t t-if="'list_grouped' not in account">
                         <!-- Display account move lines without partner regroup -->
@@ -62,7 +62,7 @@
                             <div class="page_break">
                                 <!-- Display partner header -->
                                 <div class="act_as_caption account_title">
-                                    <span t-esc="group_item['name']" />
+                                    <span t-out="group_item['name']" />
                                 </div>
                                 <!-- Display partner move lines -->
                                 <t
@@ -113,9 +113,9 @@
             <div class="act_as_row">
                 <div class="act_as_cell">
                     From:
-                    <span t-esc="date_from" />
+                    <span t-out="date_from" />
                     To:
-                    <span t-esc="date_to" />
+                    <span t-out="date_to" />
                 </div>
                 <div class="act_as_cell">
                     <t t-if="only_posted_moves">All posted entries</t>
@@ -381,7 +381,7 @@
                                 view-type="form"
                             >
                                 <t
-                                    t-esc="line['date']"
+                                    t-out="line['date']"
                                     t-options="{'widget': 'date'}"
                                 />
                             </span>
@@ -390,7 +390,7 @@
                             <span>
                                 <!--## We don't use t-field because it throws an error on click -->
                                 <t
-                                    t-esc="line['date']"
+                                    t-out="line['date']"
                                     t-options="{'widget': 'date'}"
                                 />
                             </span>
@@ -435,12 +435,12 @@
                         <t t-if="taxes_data and line['tax_ids']">
                             <t t-foreach="line['tax_ids']" t-as="tax_id">
                                 <span
-                                    t-esc="o._get_atr_from_dict(tax_id, taxes_data, 'tax_name')"
+                                    t-out="o._get_atr_from_dict(tax_id, taxes_data, 'tax_name')"
                                 />
                             </t>
                         </t>
                         <t t-if="line['tax_line_id']">
-                            <span t-esc="line['tax_line_id'][1]" />
+                            <span t-out="line['tax_line_id'][1]" />
                         </t>
                     </div>
                     <!--## partner-->
@@ -486,13 +486,13 @@
                                         view-type="form"
                                     >
                                         <t
-                                            t-esc="o._get_atr_from_dict(int(analytic_id), analytic_data, 'name')"
+                                            t-out="o._get_atr_from_dict(int(analytic_id), analytic_data, 'name')"
                                         />
                                         <t
                                             t-if="int(line['analytic_distribution'][analytic_id]) &lt; 100"
                                         >
                                             <t
-                                                t-esc="int(line['analytic_distribution'][analytic_id])"
+                                                t-out="int(line['analytic_distribution'][analytic_id])"
                                             />%
                                         </t>
                                     </span>
@@ -506,7 +506,7 @@
                             <t t-if="line['tag_ids']">
                                 <t t-foreach="line['tag_ids']" t-as="tag_id">
                                     <span
-                                        t-esc="o._get_atr_from_dict(tag_id, tags_data, 'name')"
+                                        t-out="o._get_atr_from_dict(tag_id, tags_data, 'name')"
                                     />
                                 </t>
                             </t>
@@ -645,9 +645,9 @@
                 <!--## date-->
                 <t t-if='type == "account_type"'>
                     <div class="act_as_cell first_column" style="width: 41.32%;">
-                        <span t-esc="account['code']" />
+                        <span t-out="account['code']" />
                         -
-                        <span t-esc="account['name']" />
+                        <span t-out="account['name']" />
                     </div>
                     <div class="act_as_cell right" style="width: 16.9%;">Ending balance
                     </div>
@@ -672,21 +672,21 @@
                 <!--## debit-->
                 <div class="act_as_cell amount" style="width: 8.02%;">
                     <span
-                        t-esc="account_or_group_item_object['fin_bal']['debit']"
+                        t-out="account_or_group_item_object['fin_bal']['debit']"
                         t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                     />
                 </div>
                 <!--## credit-->
                 <div class="act_as_cell amount" style="width: 8.02%;">
                     <span
-                        t-esc="account_or_group_item_object['fin_bal']['credit']"
+                        t-out="account_or_group_item_object['fin_bal']['credit']"
                         t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                     />
                 </div>
                 <!--## balance cumulated-->
                 <div class="act_as_cell amount" style="width: 8.02%;">
                     <span
-                        t-esc="account_or_group_item_object['fin_bal']['balance']"
+                        t-out="account_or_group_item_object['fin_bal']['balance']"
                         t-options="{'widget': 'monetary', 'display_currency': company_currency}"
                     />
                 </div>
