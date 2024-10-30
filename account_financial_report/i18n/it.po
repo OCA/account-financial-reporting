@@ -1195,7 +1195,8 @@ msgstr "Partner mancante"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_age_report_configuration_line
 msgid "Model to set interval lines for Age partner balance report"
-msgstr "Modello per impostare righe intervalli per il resoconto partner storici"
+msgstr ""
+"Modello per impostare righe intervalli per il resoconto partner storici"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_age_report_configuration
