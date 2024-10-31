@@ -1024,7 +1024,7 @@ msgstr "Saldo inicial"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__age_partner_config_id
-#: model:ir.model.fields,field_description:account_financial_report.field_res_config_settings__default_age_partner_config_id
+#: model:ir.model.fields,field_description:account_financial_report.field_res_config_settings__age_partner_config_id
 msgid "Intervals configuration"
 msgstr "Configuración de intervalos"
 
