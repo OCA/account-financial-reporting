@@ -24,11 +24,11 @@
                             <div class="content-group">
                                 <div class="row mt16">
                                     <label
-                                        for="default_age_partner_config_id"
+                                        for="age_partner_config_id"
                                         class="col-lg-3 o_light_label"
                                     />
                                     <field
-                                        name="default_age_partner_config_id"
+                                        name="age_partner_config_id"
                                         options="{'no_create_edit': True, 'no_open': True}"
                                     />
                                 </div>
