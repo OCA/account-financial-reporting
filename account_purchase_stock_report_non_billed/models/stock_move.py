@@ -38,7 +38,8 @@ class StockMove(models.Model):
             date_end = self.env.context.get("moves_date_end")
             if date_start and date_end:
                 moves = moves.filtered(
-                    lambda ml: ml.date_done >= date_start and ml.date_done <= date_end
+                    lambda ml: ml.state == "done"
+                    and (ml.date_done >= date_start and ml.date_done <= date_end)
                 )
             total_qty = moves.get_total_devolution_moves()
             if qty_invoiced != total_qty:
