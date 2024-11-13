@@ -130,7 +130,9 @@
                 </t>
                 <!--## dynamic columns-->
                 <t t-foreach="age_partner_config.line_ids" t-as="column_dynamic">
-                    <div class="act_as_cell"><span t-out="column_dynamic.name" /></div>
+                    <div class="act_as_cell">
+                        <span t-out="column_dynamic.name" />
+                    </div>
                 </t>
             </div>
         </div>
@@ -149,9 +151,9 @@
                     t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                 />
             </div>
-                <!--## current-->
+            <!--## current-->
             <div class="act_as_cell amount">
-                    <span
+                <span
                     t-esc="partner['current']"
                     t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                 />
@@ -357,26 +359,26 @@
                             />
                         </span>
                     </div>
-                        <!--## current-->
-                        <div class="act_as_cell amount">
-                            <t t-if="line['current'] == 0">
-                                <span
+                    <!--## current-->
+                    <div class="act_as_cell amount">
+                        <t t-if="line['current'] == 0">
+                            <span
                                 t-esc="line['current']"
                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                             />
-                            </t>
-                            <t t-else="">
-                                <span
+                        </t>
+                        <t t-else="">
+                            <span
                                 domain="[('id', 'in', (line['line_rec'] | line['line_rec'].matched_debit_ids.mapped('debit_move_id') | line['line_rec'].matched_credit_ids.mapped('credit_move_id')).ids)]"
                                 res-model="account.move.line"
                             >
-                                    <t
+                                <t
                                     t-out="line['current']"
                                     t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                                 />
-                                </span>
-                            </t>
-                        </div>
+                            </span>
+                        </t>
+                    </div>
                     <t t-if="not age_partner_config">
                         <!--## age_30_days-->
                         <div class="act_as_cell amount">
@@ -522,13 +524,13 @@
                         t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                     />
                 </div>
-                    <!--## current-->
-                    <div class="act_as_cell amount" style="width: 6.00%;">
-                        <span
+                <!--## current-->
+                <div class="act_as_cell amount" style="width: 6.00%;">
+                    <span
                         t-esc="partner_cumul_line['current']"
                         t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                     />
-                    </div>
+                </div>
                 <t t-if="not age_partner_config">
                     <!--## age_30_days-->
                     <div class="act_as_cell amount" style="width: 6.00%;">
@@ -591,13 +593,13 @@
                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                         />
                     </div>
-                        <!--## current-->
-                        <div class="act_as_cell amount" style="width: 9.64%;">
-                            <span
+                    <!--## current-->
+                    <div class="act_as_cell amount" style="width: 9.64%;">
+                        <span
                             t-esc="account['current']"
                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                         />
-                        </div>
+                    </div>
                     <t t-if="not age_partner_config">
                         <!--## age_30_days-->
                         <div class="act_as_cell amount" style="width: 9.64%;">
@@ -656,13 +658,13 @@
                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                         />
                     </div>
-                        <!--## current-->
-                        <div class="act_as_cell amount" style="width: 6.00%">
-                            <span
+                    <!--## current-->
+                    <div class="act_as_cell amount" style="width: 6.00%">
+                        <span
                             t-esc="account['current']"
                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                         />
-                        </div>
+                    </div>
                     <t t-if="not age_partner_config">
                         <!--## age_30_days-->
                         <div class="act_as_cell amount" style="width: 6.00%">
@@ -802,7 +804,7 @@
                             %
                         </div>
                     </t>
-            </t>
+                </t>
             </div>
         </div>
     </template>

@@ -42,8 +42,8 @@ class AccountGroup(models.Model):
         """Forms complete code of location from parent location to child location."""
         for group in self:
             if group.parent_id.complete_code:
-                group.complete_code = "{}/{}".format(
-                    group.parent_id.complete_code, group.code_prefix_start
+                group.complete_code = (
+                    f"{group.parent_id.complete_code}/{group.code_prefix_start}"
                 )
             else:
                 group.complete_code = group.code_prefix_start

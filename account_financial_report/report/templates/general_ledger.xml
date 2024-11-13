@@ -492,8 +492,8 @@
                                             t-if="int(line['analytic_distribution'][analytic_id]) &lt; 100"
                                         >
                                             <t
-                                                t-out="int(line['analytic_distribution'][analytic_id])"
-                                            />%
+                                            t-out="int(line['analytic_distribution'][analytic_id])"
+                                        />%
                                         </t>
                                     </span>
                                 </div>

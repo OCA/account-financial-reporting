@@ -517,9 +517,9 @@ class GeneralLedgerReport(models.AbstractModel):
                         "balance"
                     ]
                     if foreign_currency:
-                        gen_ld_data[acc_id][item_id]["fin_bal"][
-                            "bal_curr"
-                        ] += move_line["amount_currency"]
+                        gen_ld_data[acc_id][item_id]["fin_bal"]["bal_curr"] += (
+                            move_line["amount_currency"]
+                        )
             else:
                 gen_ld_data[acc_id][ml_id] = self._get_move_line_data(move_line)
             gen_ld_data[acc_id]["fin_bal"]["credit"] += move_line["credit"]

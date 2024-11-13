@@ -98,9 +98,7 @@
                             <t t-set="style" t-value="'font-size:12px;'" />
                             <!-- Different style for account group -->
                             <t t-if="show_hierarchy">
-                                                        <t
-                                    t-if="balance['type'] == 'group_type'"
-                                >
+                                <t t-if="balance['type'] == 'group_type'">
                                     <t
                                         t-set="style"
                                         t-value="style + 'font-weight: bold; color: blue;'"
@@ -143,8 +141,8 @@
                                 view-type="form"
                             >
                                         <t
-                                    t-out="accounts_data[account_id]['code']"
-                                /> - <t t-out="accounts_data[account_id]['name']" />
+                                t-out="accounts_data[account_id]['code']"
+                            /> - <t t-out="accounts_data[account_id]['name']" />
                             </span>
                         </div>
                         <div class="act_as_table data_table" style="width: 100%;">
