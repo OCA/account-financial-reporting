@@ -473,7 +473,12 @@ class TrialBalanceReport(models.AbstractModel):
         tb_initial_acc = []
         for account in accounts:
             tb_initial_acc.append(
-                {"account_id": account.id, "balance": 0.0, "amount_currency": 0.0}
+                {
+                    "account_id": account.id,
+                    "balance": 0.0,
+                    "amount_currency": 0.0,
+                    "account_internal_group": account.internal_group,
+                }
             )
         groupby_fields = ["account_id"]
         if grouped_by:
