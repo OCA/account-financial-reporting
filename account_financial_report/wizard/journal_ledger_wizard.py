@@ -1,7 +1,7 @@
 # Copyright 2017 ACSONE SA/NV
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 
 
 class JournalLedgerReportWizard(models.TransientModel):
@@ -38,15 +38,19 @@ class JournalLedgerReportWizard(models.TransientModel):
 
     @api.model
     def _get_move_targets(self):
-        return [("all", _("All")), ("posted", _("Posted")), ("draft", _("Not Posted"))]
+        return [
+            ("all", self.env._("All")),
+            ("posted", self.env._("Posted")),
+            ("draft", self.env._("Not Posted")),
+        ]
 
     @api.model
     def _get_sort_options(self):
-        return [("move_name", _("Entry number")), ("date", _("Date"))]
+        return [("move_name", self.env._("Entry number")), ("date", self.env._("Date"))]
 
     @api.model
     def _get_group_options(self):
-        return [("journal", _("Journal")), ("none", _("No group"))]
+        return [("journal", self.env._("Journal")), ("none", self.env._("No group"))]
 
     @api.onchange("date_range_id")
     def onchange_date_range_id(self):

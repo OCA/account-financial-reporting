@@ -120,7 +120,7 @@ class OpenItemsReportWizard(models.TransientModel):
     @api.onchange("receivable_accounts_only", "payable_accounts_only")
     def onchange_type_accounts_only(self):
         """Handle receivable/payable accounts only change."""
-        domain = [("company_id", "=", self.company_id.id)]
+        domain = [("company_ids", "in", [self.company_id.id])]
         if self.receivable_accounts_only or self.payable_accounts_only:
             if self.receivable_accounts_only and self.payable_accounts_only:
                 domain += [

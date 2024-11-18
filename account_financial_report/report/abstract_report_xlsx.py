@@ -1,6 +1,6 @@
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA
-# Copyright 2021 Tecnativa - Jo??o Marques
+# Copyright 2021 Tecnativa - João Marques
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 from odoo import models
 
@@ -571,7 +571,7 @@ class AbstractReportXslx(models.AbstractModel):
         """Return amount header format for each currency."""
         format_amt = report_data["formats"]["format_header_amount"]
         if line_object.currency_id:
-            field_name = "format_header_amount_%s" % line_object.currency_id.name
+            field_name = f"format_header_amount_{line_object.currency_id.name}"
             if hasattr(self, field_name):
                 format_amt = getattr(self, field_name)
             else:
@@ -589,7 +589,7 @@ class AbstractReportXslx(models.AbstractModel):
         """Return amount header format for each currency."""
         format_amt = report_data["formats"]["format_header_amount"]
         if line_object["currency_id"]:
-            field_name = "format_header_amount_%s" % line_object["currency_name"]
+            field_name = f"format_header_amount_{line_object['currency_name']}"
             if hasattr(self, field_name):
                 format_amt = getattr(self, field_name)
             else:

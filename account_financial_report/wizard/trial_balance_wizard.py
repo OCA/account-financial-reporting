@@ -4,7 +4,7 @@
 # Copyright 2018 ForgeFlow, S.L.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import date_utils
 
@@ -93,7 +93,7 @@ class TrialBalanceReportWizard(models.TransientModel):
             )
             if self.company_id:
                 self.account_ids = self.account_ids.filtered(
-                    lambda a: a.company_id == self.company_id
+                    lambda a: self.company_id in a.company_ids
                 )
 
     @api.constrains("show_hierarchy", "show_hierarchy_level")
@@ -101,7 +101,9 @@ class TrialBalanceReportWizard(models.TransientModel):
         for rec in self:
             if rec.show_hierarchy and rec.show_hierarchy_level <= 0:
                 raise UserError(
-                    _("The hierarchy level to filter on must be greater than 0.")
+                    self.env._(
+                        "The hierarchy level to filter on must be greater than 0."
+                    )
                 )
 
     @api.depends("date_from")
@@ -121,7 +123,7 @@ class TrialBalanceReportWizard(models.TransientModel):
         count = self.env["account.account"].search_count(
             [
                 ("account_type", "=", "equity_unaffected"),
-                ("company_id", "=", self.company_id.id or self.env.company.id),
+                ("company_ids", "in", [self.company_id.id or self.env.company.id]),
             ]
         )
         return count == 1
@@ -151,7 +153,7 @@ class TrialBalanceReportWizard(models.TransientModel):
                 self.onchange_type_accounts_only()
             else:
                 self.account_ids = self.account_ids.filtered(
-                    lambda a: a.company_id == self.company_id
+                    lambda a: self.company_id in a.company_ids
                 )
         res = {
             "domain": {
@@ -189,7 +191,7 @@ class TrialBalanceReportWizard(models.TransientModel):
                 and rec.company_id != rec.date_range_id.company_id
             ):
                 raise ValidationError(
-                    _(
+                    self.env._(
                         "The Company in the Trial Balance Report Wizard and in "
                         "Date Range must be the same."
                     )
@@ -199,7 +201,7 @@ class TrialBalanceReportWizard(models.TransientModel):
     def onchange_type_accounts_only(self):
         """Handle receivable/payable accounts only change."""
         if self.receivable_accounts_only or self.payable_accounts_only:
-            domain = [("company_id", "=", self.company_id.id)]
+            domain = [("company_ids", "in", [self.company_id.id])]
             if self.receivable_accounts_only and self.payable_accounts_only:
                 domain += [
                     ("account_type", "in", ("asset_receivable", "liability_payable"))
@@ -227,7 +229,7 @@ class TrialBalanceReportWizard(models.TransientModel):
             record.unaffected_earnings_account = self.env["account.account"].search(
                 [
                     ("account_type", "=", "equity_unaffected"),
-                    ("company_id", "=", record.company_id.id),
+                    ("company_ids", "in", [record.company_id.id]),
                 ]
             )
 

@@ -1,4 +1,4 @@
-# ?? 2018 Forest and Biomass Romania SA
+# © 2018 Forest and Biomass Romania SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import api, fields, models

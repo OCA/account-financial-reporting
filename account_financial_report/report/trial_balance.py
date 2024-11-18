@@ -1,5 +1,5 @@
-# ?? 2016 Julien Coux (Camptocamp)
-# ?? 2018 Forest and Biomass Romania SA
+# © 2016 Julien Coux (Camptocamp)
+# © 2018 Forest and Biomass Romania SA
 # Copyright 2020 ForgeFlow S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
@@ -24,7 +24,7 @@ class TrialBalanceReport(models.AbstractModel):
         show_partner_details,
     ):
         accounts_domain = [
-            ("company_id", "=", company_id),
+            ("company_ids", "in", [company_id]),
             ("include_initial_balance", "=", True),
         ]
         if account_ids:
@@ -64,7 +64,7 @@ class TrialBalanceReport(models.AbstractModel):
         fy_start_date,
     ):
         accounts_domain = [
-            ("company_id", "=", company_id),
+            ("company_ids", "in", [company_id]),
             ("include_initial_balance", "=", False),
         ]
         if account_ids:
@@ -142,7 +142,7 @@ class TrialBalanceReport(models.AbstractModel):
         show_partner_details,
     ):
         accounts_domain = [
-            ("company_id", "=", company_id),
+            ("company_ids", "in", [company_id]),
             ("include_initial_balance", "=", False),
         ]
         if account_ids:
@@ -419,7 +419,7 @@ class TrialBalanceReport(models.AbstractModel):
         fy_start_date,
         grouped_by,
     ):
-        accounts_domain = [("company_id", "=", company_id)]
+        accounts_domain = [("company_ids", "in", [company_id])]
         if account_ids:
             accounts_domain += [("id", "in", account_ids)]
             # If explicit list of accounts is provided,
@@ -697,7 +697,6 @@ class TrialBalanceReport(models.AbstractModel):
                         "code": group.code_prefix_start,
                         "name": group.name,
                         "parent_id": group.parent_id.id,
-                        "parent_path": group.parent_path,
                         "complete_code": group.complete_code,
                         "account_ids": group.compute_account_ids.ids,
                         "type": "group_type",
@@ -751,7 +750,6 @@ class TrialBalanceReport(models.AbstractModel):
                         "code": group.code_prefix_start,
                         "name": group.name,
                         "parent_id": group.parent_id.id,
-                        "parent_path": group.parent_path,
                         "type": "group_type",
                         "complete_code": group.complete_code,
                         "account_ids": group.compute_account_ids.ids,
@@ -804,7 +802,6 @@ class TrialBalanceReport(models.AbstractModel):
                         "code": group.code_prefix_start,
                         "name": group.name,
                         "parent_id": group.parent_id.id,
-                        "parent_path": group.parent_path,
                         "type": "group_type",
                         "complete_code": group.complete_code,
                         "account_ids": group.compute_account_ids.ids,

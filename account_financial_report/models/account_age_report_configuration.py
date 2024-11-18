@@ -1,7 +1,7 @@
 # Copyright 2023 Ernesto García
 # Copyright 2023 Carolina Fernandez
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -21,7 +21,7 @@ class AccountAgeReportConfiguration(models.Model):
     def _check_line_ids(self):
         for rec in self:
             if not rec.line_ids:
-                raise ValidationError(_("Must complete Configuration Lines"))
+                raise ValidationError(self.env._("Must complete Configuration Lines"))
 
 
 class AccountAgeReportConfigurationLine(models.Model):
@@ -36,12 +36,14 @@ class AccountAgeReportConfigurationLine(models.Model):
     def _check_inferior_limit(self):
         for rec in self:
             if rec.inferior_limit <= 0:
-                raise ValidationError(_("Inferior Limit must be greather than zero"))
+                raise ValidationError(
+                    self.env._("Inferior Limit must be greather than zero")
+                )
 
     _sql_constraints = [
         (
             "unique_name_config_combination",
             "UNIQUE(name,account_age_report_config_id)",
-            _("Name must be unique per report configuration"),
+            "Name must be unique per report configuration",
         )
     ]

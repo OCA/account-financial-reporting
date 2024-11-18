@@ -1,7 +1,7 @@
 # Author: Damien Crier
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA
-# Copyright 2021 Tecnativa - Jo??o Marques
+# Copyright 2021 Tecnativa - João Marques
 # Copyright 2022 Tecnativa - V??ctor Mart??nez
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
@@ -203,7 +203,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                                 )
                             else:
                                 analytic_distribution += (
-                                    "%s " % analytic_data[int(account_id)]["name"]
+                                    f"{analytic_data[int(account_id)]['name']} "
                                 )
                         line.update(
                             {
@@ -313,7 +313,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                                     )
                                 else:
                                     analytic_distribution += (
-                                        "%s " % analytic_data[int(account_id)]["name"]
+                                        f"{analytic_data[int(account_id)]['name']} "
                                     )
                             line.update(
                                 {

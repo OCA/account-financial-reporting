@@ -1,9 +1,9 @@
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA
-# Copyright 2021 Tecnativa - Jo??o Marques
+# Copyright 2021 Tecnativa - João Marques
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import _, models
+from odoo import models
 
 
 class AgedPartnerBalanceXslx(models.AbstractModel):
@@ -13,7 +13,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
 
     def _get_report_name(self, report, data=False):
         company_id = data.get("company_id", False)
-        report_name = _("Aged Partner Balance")
+        report_name = self.env._("Aged Partner Balance")
         if company_id:
             company = self.env["res.company"].browse(company_id)
             suffix = f" - {company.name} - {company.currency_id.name}"
@@ -22,16 +22,16 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
 
     def _get_report_columns_without_move_line_details(self, report, column_index):
         report_columns = {
-            0: {"header": _("Partner"), "field": "name", "width": 70},
+            0: {"header": self.env._("Partner"), "field": "name", "width": 70},
             1: {
-                "header": _("Residual"),
+                "header": self.env._("Residual"),
                 "field": "residual",
                 "field_footer_total": "residual",
                 "type": "amount",
                 "width": 14,
             },
             2: {
-                "header": _("Current"),
+                "header": self.env._("Current"),
                 "field": "current",
                 "field_footer_total": "current",
                 "field_footer_percent": "percent_current",
@@ -43,7 +43,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
             report_columns.update(
                 {
                     3: {
-                        "header": _("Age ≤ 30 d."),
+                        "header": self.env._("Age ≤ 30 d."),
                         "field": "30_days",
                         "field_footer_total": "30_days",
                         "field_footer_percent": "percent_30_days",
@@ -51,7 +51,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                         "width": 14,
                     },
                     4: {
-                        "header": _("Age ≤ 60 d."),
+                        "header": self.env._("Age ≤ 60 d."),
                         "field": "60_days",
                         "field_footer_total": "60_days",
                         "field_footer_percent": "percent_60_days",
@@ -59,7 +59,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                         "width": 14,
                     },
                     5: {
-                        "header": _("Age ≤ 90 d."),
+                        "header": self.env._("Age ≤ 90 d."),
                         "field": "90_days",
                         "field_footer_total": "90_days",
                         "field_footer_percent": "percent_90_days",
@@ -67,7 +67,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                         "width": 14,
                     },
                     6: {
-                        "header": _("Age ≤ 120 d."),
+                        "header": self.env._("Age ≤ 120 d."),
                         "field": "120_days",
                         "field_footer_total": "120_days",
                         "field_footer_percent": "percent_120_days",
@@ -75,7 +75,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                         "width": 14,
                     },
                     7: {
-                        "header": _("Older"),
+                        "header": self.env._("Older"),
                         "field": "older",
                         "field_footer_total": "older",
                         "field_footer_percent": "percent_older",
@@ -98,15 +98,15 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
 
     def _get_report_columns_with_move_line_details(self, report, column_index):
         report_columns = {
-            0: {"header": _("Date"), "field": "date", "width": 11},
-            1: {"header": _("Entry"), "field": "entry", "width": 18},
-            2: {"header": _("Journal"), "field": "journal", "width": 8},
-            3: {"header": _("Account"), "field": "account", "width": 9},
-            4: {"header": _("Partner"), "field": "partner", "width": 25},
-            5: {"header": _("Ref - Label"), "field": "ref_label", "width": 40},
-            6: {"header": _("Due date"), "field": "due_date", "width": 11},
+            0: {"header": self.env._("Date"), "field": "date", "width": 11},
+            1: {"header": self.env._("Entry"), "field": "entry", "width": 18},
+            2: {"header": self.env._("Journal"), "field": "journal", "width": 8},
+            3: {"header": self.env._("Account"), "field": "account", "width": 9},
+            4: {"header": self.env._("Partner"), "field": "partner", "width": 25},
+            5: {"header": self.env._("Ref - Label"), "field": "ref_label", "width": 40},
+            6: {"header": self.env._("Due date"), "field": "due_date", "width": 11},
             7: {
-                "header": _("Residual"),
+                "header": self.env._("Residual"),
                 "field": "residual",
                 "field_footer_total": "residual",
                 "field_final_balance": "residual",
@@ -114,7 +114,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                 "width": 14,
             },
             8: {
-                "header": _("Current"),
+                "header": self.env._("Current"),
                 "field": "current",
                 "field_footer_total": "current",
                 "field_footer_percent": "percent_current",
@@ -127,7 +127,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
             report_columns.update(
                 {
                     9: {
-                        "header": _("Age ≤ 30 d."),
+                        "header": self.env._("Age ≤ 30 d."),
                         "field": "30_days",
                         "field_footer_total": "30_days",
                         "field_footer_percent": "percent_30_days",
@@ -136,7 +136,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                         "width": 14,
                     },
                     10: {
-                        "header": _("Age ≤ 60 d."),
+                        "header": self.env._("Age ≤ 60 d."),
                         "field": "60_days",
                         "field_footer_total": "60_days",
                         "field_footer_percent": "percent_60_days",
@@ -145,7 +145,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                         "width": 14,
                     },
                     11: {
-                        "header": _("Age ≤ 90 d."),
+                        "header": self.env._("Age ≤ 90 d."),
                         "field": "90_days",
                         "field_footer_total": "90_days",
                         "field_footer_percent": "percent_90_days",
@@ -154,7 +154,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                         "width": 14,
                     },
                     12: {
-                        "header": _("Age ≤ 120 d."),
+                        "header": self.env._("Age ≤ 120 d."),
                         "field": "120_days",
                         "field_footer_total": "120_days",
                         "field_footer_percent": "percent_120_days",
@@ -163,7 +163,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                         "width": 14,
                     },
                     13: {
-                        "header": _("Older"),
+                        "header": self.env._("Older"),
                         "field": "older",
                         "field_footer_total": "older",
                         "field_footer_percent": "percent_older",
@@ -194,12 +194,12 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
 
     def _get_report_filters(self, report):
         return [
-            [_("Date at filter"), report.date_at.strftime("%d/%m/%Y")],
+            [self.env._("Date at filter"), report.date_at.strftime("%d/%m/%Y")],
             [
-                _("Target moves filter"),
-                _("All posted entries")
+                self.env._("Target moves filter"),
+                self.env._("All posted entries")
                 if report.target_move == "posted"
-                else _("All entries"),
+                else self.env._("All entries"),
             ],
         ]
 
@@ -321,7 +321,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
         for Aged Partner Balance
         """
         name = None
-        label = _("Partner cumul aged balance")
+        label = self.env._("Partner cumul aged balance")
         return super().write_ending_balance_from_dict(
             my_object, name, label, report_data
         )
