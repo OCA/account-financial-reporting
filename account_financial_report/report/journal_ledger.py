@@ -264,7 +264,9 @@ class JournalLedgerReport(models.AbstractModel):
                 journal_id = ml_data["journal_id"]
                 if journal_id not in journals_taxes_data.keys():
                     journals_taxes_data[journal_id] = {}
-                taxes = self.env["account.tax"].browse(tax_ids)
+                taxes = self.env["account.tax"].search_fetch(
+                    [("id", "in", tax_ids)], ["name", "description"]
+                )
                 for tax in taxes:
                     if tax.id not in journals_taxes_data[journal_id]:
                         journals_taxes_data[journal_id][tax.id] = {

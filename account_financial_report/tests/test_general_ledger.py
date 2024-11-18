@@ -15,8 +15,8 @@ from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 @tagged("post_install", "-at_install")
 class TestGeneralLedgerReport(AccountTestInvoicingCommon):
     @classmethod
-    def setUpClass(cls, chart_template_ref=None):
-        super().setUpClass(chart_template_ref=chart_template_ref)
+    def setUpClass(cls):
+        super().setUpClass()
         cls.env = cls.env(
             context=dict(
                 cls.env.context,
@@ -42,7 +42,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
                     "=",
                     "equity_unaffected",
                 ),
-                ("company_id", "=", cls.env.user.company_id.id),
+                ("company_ids", "in", [cls.env.user.company_id.id]),
             ],
             limit=1,
         )

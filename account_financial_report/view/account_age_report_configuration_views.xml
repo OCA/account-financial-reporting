@@ -14,28 +14,28 @@
                         <field name="company_id" />
                     </group>
                     <field name="line_ids">
-                        <tree editable="bottom">
+                        <list editable="bottom">
                             <field name="name" />
                             <field name="inferior_limit" />
-                        </tree>
+                        </list>
                     </field>
                 </sheet>
             </form>
         </field>
     </record>
     <record id="aged_partner_report_configuration_tree" model="ir.ui.view">
-        <field name="name">Age partner report configuration tree</field>
+        <field name="name">Age partner report configuration list</field>
         <field name="model">account.age.report.configuration</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name" />
                 <field name="company_id" />
-            </tree>
+            </list>
         </field>
     </record>
     <record id="action_aged_partner_report_configuration" model="ir.actions.act_window">
         <field name="name">Age Partner Report Configuration</field>
         <field name="res_model">account.age.report.configuration</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 </odoo>

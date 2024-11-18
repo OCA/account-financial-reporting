@@ -75,7 +75,7 @@ Example of configuration inferior limit:
 It means the first interval is from 0 to 15, the second from 16 to 30,
 and the third is 61+.
 
-Go on 'Invoicing' -> 'Reports' -> 'OCA accounting reports' -> 'Aged
+Go on 'Invoicing' -> 'Reporting' -> 'OCA accounting reports' -> 'Aged
 Partner Balance'
 
 When wizard is open, you need to select your interval configuration and
@@ -167,7 +167,7 @@ Contributors
    -  Pedro M. Baeza
    -  Sergio Teruel
    -  Ernesto Tejeda
-   -  Jo??o Marques
+   -  João Marques
    -  Alexandre D. D??az
    -  V??ctor Mart??nez
    -  Carolina Fernandez
@@ -180,9 +180,16 @@ Contributors
 -  Lois Rilo <lois.rilo@forgeflow.com>
 -  Saran Lim. <saranl@ecosoft.co.th>
 -  Omar Casti??eira <omar@comunitea.com>
+-  Chau Le <chaulb@trobz.com>
 
 Much of the work in this module was done at a sprint in Sorrento, Italy
 in April 2016.
+
+Other credits
+-------------
+
+The migration of this module from 17.0 to 18.0 was financially supported
+by Camptocamp.
 
 Maintainers
 -----------

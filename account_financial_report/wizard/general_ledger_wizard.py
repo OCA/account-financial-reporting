@@ -10,7 +10,7 @@
 import time
 from ast import literal_eval
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 from odoo.tools import date_utils
 
@@ -147,7 +147,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
         count = self.env["account.account"].search_count(
             [
                 ("account_type", "=", "equity_unaffected"),
-                ("company_id", "=", self.company_id.id or self.env.company.id),
+                ("company_ids", "in", [self.company_id.id or self.env.company.id]),
             ]
         )
         return count == 1
@@ -226,7 +226,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
                 and rec.company_id != rec.date_range_id.company_id
             ):
                 raise ValidationError(
-                    _(
+                    self.env._(
                         "The Company in the General Ledger Report Wizard and in "
                         "Date Range must be the same."
                     )
@@ -236,7 +236,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
     def onchange_type_accounts_only(self):
         """Handle receivable/payable accounts only change."""
         if self.receivable_accounts_only or self.payable_accounts_only:
-            domain = [("company_id", "=", self.company_id.id)]
+            domain = [("company_ids", "in", [self.company_id.id])]
             if self.receivable_accounts_only and self.payable_accounts_only:
                 domain += [
                     ("account_type", "in", ("asset_receivable", "liability_payable"))
@@ -263,7 +263,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
             record.unaffected_earnings_account = self.env["account.account"].search(
                 [
                     ("account_type", "=", "equity_unaffected"),
-                    ("company_id", "=", record.company_id.id),
+                    ("company_ids", "in", [record.company_id.id]),
                 ]
             )
 

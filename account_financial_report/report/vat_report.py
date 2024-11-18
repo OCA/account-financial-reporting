@@ -97,7 +97,9 @@ class VATReport(models.AbstractModel):
         return vat_data, tax_data
 
     def _get_tax_group_data(self, tax_group_ids):
-        tax_groups = self.env["account.tax.group"].browse(tax_group_ids)
+        tax_groups = self.env["account.tax.group"].search_fetch(
+            [("id", "in", tax_group_ids)], ["name", "sequence"]
+        )
         tax_group_data = {}
         for tax_group in tax_groups:
             tax_group_data.update(
@@ -135,7 +137,7 @@ class VATReport(models.AbstractModel):
                 vat_report[tax_group_id]["tax"] += tax_move_line["tax"]
                 vat_report[tax_group_id][tax_id]["net"] += tax_move_line["net"]
                 vat_report[tax_group_id][tax_id]["tax"] += tax_move_line["tax"]
-        tax_group_data = self._get_tax_group_data(vat_report.keys())
+        tax_group_data = self._get_tax_group_data(list(vat_report.keys()))
         vat_report_list = []
         for tax_group_id in vat_report.keys():
             vat_report[tax_group_id]["name"] = tax_group_data[tax_group_id]["name"]
@@ -151,7 +153,9 @@ class VATReport(models.AbstractModel):
         return vat_report_list
 
     def _get_tags_data(self, tags_ids):
-        tags = self.env["account.account.tag"].browse(tags_ids)
+        tags = self.env["account.account.tag"].search_fetch(
+            [("id", "in", tags_ids)], ["name"]
+        )
         tags_data = {}
         for tag in tags:
             tags_data.update({tag.id: {"code": "", "name": tag.name}})
@@ -183,7 +187,7 @@ class VATReport(models.AbstractModel):
                         vat_report[tag_id][tax_id]["tax"] += tax_move_line["tax"]
                         vat_report[tag_id]["net"] += tax_move_line["net"]
                         vat_report[tag_id]["tax"] += tax_move_line["tax"]
-        tags_data = self._get_tags_data(vat_report.keys())
+        tags_data = self._get_tags_data(list(vat_report.keys()))
         vat_report_list = []
         for tag_id in vat_report.keys():
             vat_report[tag_id]["name"] = tags_data[tag_id]["name"]
