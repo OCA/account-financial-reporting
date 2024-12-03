@@ -861,6 +861,7 @@ class GeneralLedgerReport(models.AbstractModel):
             fin_bal_currency_ids = []
             fin_bal_currency_id = gl_item["currency_id"]
             if gl_item["currency_id"] or not foreign_currency:
+                gl_item["fin_bal_currency_id"] = fin_bal_currency_id
                 continue
             gl_item["fin_bal"]["bal_curr"] = gl_item["init_bal"]["bal_curr"]
             if "move_lines" in gl_item:
