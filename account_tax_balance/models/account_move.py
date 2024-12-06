@@ -1,7 +1,7 @@
 # Copyright 2016 Antonio Espinosa <antonio.espinosa@tecnativa.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 
 
 class AccountMove(models.Model):
@@ -10,12 +10,12 @@ class AccountMove(models.Model):
     @api.model
     def _selection_financial_type(self):
         return [
-            ("other", _("Other")),
-            ("liquidity", _("Liquidity")),
-            ("receivable", _("Receivable")),
-            ("receivable_refund", _("Receivable refund")),
-            ("payable", _("Payable")),
-            ("payable_refund", _("Payable refund")),
+            ("other", self.env._("Other")),
+            ("liquidity", self.env._("Liquidity")),
+            ("receivable", self.env._("Receivable")),
+            ("receivable_refund", self.env._("Receivable refund")),
+            ("payable", self.env._("Payable")),
+            ("payable_refund", self.env._("Payable refund")),
         ]
 
     financial_type = fields.Selection(

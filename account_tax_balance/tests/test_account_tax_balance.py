@@ -10,7 +10,7 @@ from dateutil.rrule import MONTHLY
 import odoo
 from odoo import fields
 from odoo.fields import Date
-from odoo.tests.common import Form, HttpCase
+from odoo.tests import Form, HttpCase
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
@@ -40,8 +40,8 @@ class TestAccountTaxBalance(HttpCase):
         cls.current_month = datetime.now().month
         range_generator = cls.range_generator.create(
             {
-                "date_start": "%s-01-01" % cls.current_year,
-                "name_prefix": "%s-" % cls.current_year,
+                "date_start": f"{cls.current_year}-01-01",
+                "name_prefix": f"{cls.current_year}-",
                 "type_id": cls.range_type.id,
                 "duration_count": 1,
                 "unit_of_time": str(MONTHLY),
@@ -188,7 +188,7 @@ class TestAccountTaxBalance(HttpCase):
         liquidity_account_id = self.env["account.account"].search(
             [
                 ("account_type", "in", ["asset_cash", "liability_credit_card"]),
-                ("company_id", "=", self.company.id),
+                ("company_ids", "in", self.company.id),
             ],
             limit=1,
         )

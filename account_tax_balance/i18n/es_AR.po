@@ -19,7 +19,6 @@ msgstr ""
 #. module: account_tax_balance
 #. odoo-python
 #: code:addons/account_tax_balance/wizard/open_tax_balances.py:0
-#, python-format
 msgid "%(name)s: %(target)s from %(from)s to %(to)s"
 msgstr "%(name)s: %(target)s desde %(from)s hasta %(to)s"
 
@@ -96,7 +95,6 @@ msgstr "Mostrar Nombre"
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_bank_statement_line__financial_type
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_move__financial_type
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_payment__financial_type
 msgid "Financial Type"
 msgstr "Tipo Financiero"
 
@@ -143,7 +141,6 @@ msgstr "Última actualización en"
 #. module: account_tax_balance
 #. odoo-python
 #: code:addons/account_tax_balance/models/account_move.py:0
-#, python-format
 msgid "Liquidity"
 msgstr "Liquidez"
 
@@ -160,35 +157,30 @@ msgstr "Ver Impuestos"
 #. module: account_tax_balance
 #. odoo-python
 #: code:addons/account_tax_balance/models/account_move.py:0
-#, python-format
 msgid "Other"
 msgstr "Otro"
 
 #. module: account_tax_balance
 #. odoo-python
 #: code:addons/account_tax_balance/models/account_move.py:0
-#, python-format
 msgid "Payable"
 msgstr "Pagadero"
 
 #. module: account_tax_balance
 #. odoo-python
 #: code:addons/account_tax_balance/models/account_move.py:0
-#, python-format
 msgid "Payable refund"
 msgstr "Reembolso a Pagar"
 
 #. module: account_tax_balance
 #. odoo-python
 #: code:addons/account_tax_balance/models/account_move.py:0
-#, python-format
 msgid "Receivable"
 msgstr "A Cobrar"
 
 #. module: account_tax_balance
 #. odoo-python
 #: code:addons/account_tax_balance/models/account_move.py:0
-#, python-format
 msgid "Receivable refund"
 msgstr "Reembolso a Cobrar"
 
@@ -250,7 +242,6 @@ msgstr "Total Base Imponible"
 #. module: account_tax_balance
 #. odoo-python
 #: code:addons/account_tax_balance/models/account_tax.py:0
-#, python-format
 msgid "Unsupported search operator"
 msgstr "Operador de búsqueda no soportado"
 

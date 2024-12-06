@@ -2,7 +2,7 @@
 # Copyright 2016 Antonio Espinosa <antonio.espinosa@tecnativa.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 
 
 class AccountTax(models.Model):
@@ -77,7 +77,7 @@ class AccountTax(models.Model):
     @api.model
     def _search_has_moves(self, operator, value):
         if self._is_unsupported_search_operator(operator) or not value:
-            raise ValueError(_("Unsupported search operator"))
+            raise ValueError(self.env._("Unsupported search operator"))
         ids_with_moves = self._account_tax_ids_with_moves()
         return [("id", "in", ids_with_moves)]
 

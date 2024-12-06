@@ -22,7 +22,6 @@ msgstr ""
 #. module: account_tax_balance
 #. odoo-python
 #: code:addons/account_tax_balance/wizard/open_tax_balances.py:0
-#, python-format
 msgid "%(name)s: %(target)s from %(from)s to %(to)s"
 msgstr ""
 
@@ -101,7 +100,6 @@ msgstr "Nom affiché"
 #. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_bank_statement_line__financial_type
 #: model:ir.model.fields,field_description:account_tax_balance.field_account_move__financial_type
-#: model:ir.model.fields,field_description:account_tax_balance.field_account_payment__financial_type
 msgid "Financial Type"
 msgstr ""
 
@@ -149,7 +147,6 @@ msgstr "Dernière mise à jour le"
 #. module: account_tax_balance
 #. odoo-python
 #: code:addons/account_tax_balance/models/account_move.py:0
-#, python-format
 msgid "Liquidity"
 msgstr ""
 
@@ -166,35 +163,30 @@ msgstr "Taxes Ouverts"
 #. module: account_tax_balance
 #. odoo-python
 #: code:addons/account_tax_balance/models/account_move.py:0
-#, python-format
 msgid "Other"
 msgstr ""
 
 #. module: account_tax_balance
 #. odoo-python
 #: code:addons/account_tax_balance/models/account_move.py:0
-#, python-format
 msgid "Payable"
 msgstr ""
 
 #. module: account_tax_balance
 #. odoo-python
 #: code:addons/account_tax_balance/models/account_move.py:0
-#, python-format
 msgid "Payable refund"
 msgstr ""
 
 #. module: account_tax_balance
 #. odoo-python
 #: code:addons/account_tax_balance/models/account_move.py:0
-#, python-format
 msgid "Receivable"
 msgstr ""
 
 #. module: account_tax_balance
 #. odoo-python
 #: code:addons/account_tax_balance/models/account_move.py:0
-#, python-format
 msgid "Receivable refund"
 msgstr ""
 
@@ -256,7 +248,6 @@ msgstr "Solde de Base Total"
 #. module: account_tax_balance
 #. odoo-python
 #: code:addons/account_tax_balance/models/account_tax.py:0
-#, python-format
 msgid "Unsupported search operator"
 msgstr "Gestionnaire de Recherche Non-appuye"
 
