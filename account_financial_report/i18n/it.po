@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-06-03 12:07+0000\n"
-"PO-Revision-Date: 2024-10-22 10:06+0000\n"
+"PO-Revision-Date: 2024-12-08 11:06+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -60,6 +60,10 @@ msgid ""
 "                    Duplicate amounts may be shown because more than one "
 "analytical account may be defined in the journal items."
 msgstr ""
+"<i class=\"fa fa-exclamation-triangle mr-3\"/>\n"
+"                    Si possono visualizzare valori duplicati perché può "
+"essere stato definito più di un conto analitico nelle registrazioni "
+"contabili."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.res_config_settings_view_form
@@ -1540,7 +1544,7 @@ msgstr "Inizio conto in un intervallo"
 #: code:addons/account_financial_report/report/trial_balance.py:0
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
 msgid "TOTAL"
-msgstr ""
+msgstr "TOTALE"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
@@ -1842,7 +1846,7 @@ msgstr "Con nome conto"
 #. odoo-python
 #: code:addons/account_financial_report/report/trial_balance.py:0
 msgid "Without analytic account"
-msgstr ""
+msgstr "Senza conto analitico"
 
 #. module: account_financial_report
 #. odoo-python
