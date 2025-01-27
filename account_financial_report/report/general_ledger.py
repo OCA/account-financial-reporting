@@ -853,6 +853,12 @@ class GeneralLedgerReport(models.AbstractModel):
                         account[grouped_by] = False
                         del account["list_grouped"]
         general_ledger = sorted(general_ledger, key=lambda k: k["code"])
+        for account in general_ledger:
+            if "list_grouped" in account.keys():
+                account["list_grouped"] = sorted(
+                    account["list_grouped"], key=lambda x: x["name"]
+                )
+
         return {
             "doc_ids": [wizard_id],
             "doc_model": "general.ledger.report.wizard",
