@@ -18,7 +18,7 @@ class OutstandingStatement(models.AbstractModel):
             self._cr.mogrify(
                 """
             SELECT l.id, m.name AS move_id, l.partner_id, l.date, l.name,
-                l.blocked, l.currency_id, l.company_id,
+                l.currency_id, l.company_id,
             CASE WHEN l.ref IS NOT NULL
                 THEN l.ref
                 ELSE m.ref
@@ -72,7 +72,7 @@ class OutstandingStatement(models.AbstractModel):
                     THEN l.ref
                     ELSE m.ref
                 END,
-                l.blocked, l.currency_id, l.balance, l.amount_currency, l.company_id
+                l.currency_id, l.balance, l.amount_currency, l.company_id
             """,
                 locals(),
             ),
@@ -85,7 +85,7 @@ class OutstandingStatement(models.AbstractModel):
                 f"""
                 SELECT {sub}.partner_id, {sub}.currency_id, {sub}.move_id,
                     {sub}.date, {sub}.date_maturity, {sub}.debit, {sub}.credit,
-                    {sub}.name, {sub}.ref, {sub}.blocked, {sub}.company_id,
+                    {sub}.name, {sub}.ref, {sub}.company_id,
                     CASE WHEN {sub}.currency_id is not null
                         THEN {sub}.open_amount_currency
                         ELSE {sub}.open_amount
@@ -105,7 +105,7 @@ class OutstandingStatement(models.AbstractModel):
                 {sub}.date_maturity, {sub}.name, {sub}.ref, {sub}.debit,
                 {sub}.credit, {sub}.debit-{sub}.credit AS amount,
                 COALESCE({sub}.currency_id, c.currency_id) AS currency_id,
-                {sub}.open_amount, {sub}.blocked, {sub}.id
+                {sub}.open_amount, {sub}.id
             FROM {sub}
             JOIN res_company c ON (c.id = {sub}.company_id)
             WHERE c.id = %(company_id)s AND {sub}.open_amount != 0.0
@@ -128,7 +128,7 @@ class OutstandingStatement(models.AbstractModel):
              Q3 AS ({})
         SELECT partner_id, currency_id, move_id, date, date_maturity, debit,
             credit, amount, open_amount, COALESCE(name, '') as name,
-            COALESCE(ref, '') as ref, blocked, id
+            COALESCE(ref, '') as ref, id
         FROM Q3
         ORDER BY date, date_maturity, move_id""".format(
                 self._display_outstanding_lines_sql_q1(

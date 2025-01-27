@@ -3,7 +3,7 @@
 
 from datetime import datetime, timedelta
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.tools.misc import DEFAULT_SERVER_DATE_FORMAT
 
 
@@ -88,7 +88,7 @@ class ReportStatementCommon(models.AbstractModel):
                                   (pc.id IS NOT NULL AND
                                       pc.max_date <= %(date_end)s) OR
                                   (pd.id IS NULL AND pc.id IS NULL)
-                                ) AND l.date <= %(date_end)s AND not l.blocked
+                                ) AND l.date <= %(date_end)s
                                   AND m.state IN ('posted')
                                 AND aa.account_type = %(account_type)s
             GROUP BY l.partner_id, l.currency_id, l.date, l.date_maturity,
@@ -267,24 +267,24 @@ class ReportStatementCommon(models.AbstractModel):
 
     def _get_bucket_labels_days(self, date_end):
         return [
-            _("Current"),
-            _("1 - 30 Days"),
-            _("31 - 60 Days"),
-            _("61 - 90 Days"),
-            _("91 - 120 Days"),
-            _("121 Days +"),
-            _("Total"),
+            self.env._("Current"),
+            self.env._("1 - 30 Days"),
+            self.env._("31 - 60 Days"),
+            self.env._("61 - 90 Days"),
+            self.env._("91 - 120 Days"),
+            self.env._("121 Days +"),
+            self.env._("Total"),
         ]
 
     def _get_bucket_labels_months(self, date_end):
         return [
-            _("Current"),
-            _("1 Month"),
-            _("2 Months"),
-            _("3 Months"),
-            _("4 Months"),
-            _("Older"),
-            _("Total"),
+            self.env._("Current"),
+            self.env._("1 Month"),
+            self.env._("2 Months"),
+            self.env._("3 Months"),
+            self.env._("4 Months"),
+            self.env._("Older"),
+            self.env._("Total"),
         ]
 
     def _get_line_currency_defaults(
