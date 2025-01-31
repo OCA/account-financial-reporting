@@ -27,7 +27,7 @@ class ResConfigSettings(models.TransientModel):
         res.update(
             age_partner_config_id=self.env["ir.default"]
             .sudo()
-            .get(
+            ._get(
                 "aged.partner.balance.report.wizard",
                 "age_partner_config_id",
                 company_id=self.env.company.id,
