@@ -56,7 +56,7 @@ class TestAgedPartnerBalance(TransactionCase):
         """Check that report is produced correctly."""
         wizard = self.wizard_with_line_details
         wizard.onchange_type_accounts_only()
-        data = wizard._prepare_report_aged_partner_balance()
+        data = wizard._prepare_report_data()
 
         # Simulate web client behavior:
         # default value is a datetime.date but web client sends back strings
@@ -71,7 +71,7 @@ class TestAgedPartnerBalance(TransactionCase):
         self.assertTrue(result)
         second_wizard = self.wizard_without_line_details
         second_wizard.onchange_type_accounts_only()
-        data = second_wizard._prepare_report_aged_partner_balance()
+        data = second_wizard._prepare_report_data()
 
         # Simulate web client behavior:
         # default value is a datetime.date but web client sends back strings
@@ -91,7 +91,7 @@ class TestAgedPartnerBalance(TransactionCase):
         wizard.age_partner_config_id = self.account_age_report_config.id
 
         wizard.onchange_type_accounts_only()
-        data = wizard._prepare_report_aged_partner_balance()
+        data = wizard._prepare_report_data()
 
         # Simulate web client behavior:
         # default value is a datetime.date but web client sends back strings
@@ -109,7 +109,7 @@ class TestAgedPartnerBalance(TransactionCase):
         second_wizard.age_partner_config_id = self.account_age_report_config.id
 
         second_wizard.onchange_type_accounts_only()
-        data = second_wizard._prepare_report_aged_partner_balance()
+        data = second_wizard._prepare_report_data()
 
         # Simulate web client behavior:
         # default value is a datetime.date but web client sends back strings

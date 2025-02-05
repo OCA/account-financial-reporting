@@ -159,7 +159,7 @@ class OpenItemsReport(models.AbstractModel):
                     "partner_name": partner.name or "",
                     "ref_label": ref_label,
                     "journal_id": move_line["journal_id"][0],
-                    "move_name": move_line["move_id"][1],
+                    "move_name": move_line["move_name"],
                     "entry_id": move_line["move_id"][0],
                     "currency_id": move_line["currency_id"][0]
                     if move_line["currency_id"]
@@ -243,6 +243,7 @@ class OpenItemsReport(models.AbstractModel):
         return new_open_items
 
     def _get_report_values(self, docids, data):
+        res = super()._get_report_values(docids, data)
         wizard_id = data["wizard_id"]
         company = self.env["res.company"].browse(data["company_id"])
         company_id = data["company_id"]
@@ -277,24 +278,27 @@ class OpenItemsReport(models.AbstractModel):
             partners_data,
             accounts_data,
         )
-        return {
-            "doc_ids": [wizard_id],
-            "doc_model": "open.items.report.wizard",
-            "docs": self.env["open.items.report.wizard"].browse(wizard_id),
-            "foreign_currency": data["foreign_currency"],
-            "show_partner_details": data["show_partner_details"],
-            "company_name": company.display_name,
-            "currency_name": company.currency_id.name,
-            "date_at": date_at_object.strftime("%d/%m/%Y"),
-            "hide_account_at_0": data["hide_account_at_0"],
-            "target_move": data["target_move"],
-            "journals_data": journals_data,
-            "partners_data": partners_data,
-            "accounts_data": accounts_data,
-            "total_amount": total_amount,
-            "Open_Items": open_items_move_lines_data,
-            "grouped_by": grouped_by,
-        }
+        res.update(
+            {
+                "doc_ids": [wizard_id],
+                "doc_model": "open.items.report.wizard",
+                "docs": self.env["open.items.report.wizard"].browse(wizard_id),
+                "foreign_currency": data["foreign_currency"],
+                "show_partner_details": data["show_partner_details"],
+                "company_name": company.display_name,
+                "currency_name": company.currency_id.name,
+                "date_at": date_at_object.strftime("%d/%m/%Y"),
+                "hide_account_at_0": data["hide_account_at_0"],
+                "target_move": data["target_move"],
+                "journals_data": journals_data,
+                "partners_data": partners_data,
+                "accounts_data": accounts_data,
+                "total_amount": total_amount,
+                "Open_Items": open_items_move_lines_data,
+                "grouped_by": grouped_by,
+            }
+        )
+        return res
 
     def _get_ml_fields(self):
         return self.COMMON_ML_FIELDS + [
@@ -306,4 +310,5 @@ class OpenItemsReport(models.AbstractModel):
             "amount_residual_currency",
             "debit",
             "amount_currency",
+            "move_name",
         ]

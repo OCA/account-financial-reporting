@@ -24,6 +24,7 @@
                         <field name="grouped_by" />
                         <field name="hide_account_at_0" />
                         <field name="foreign_currency" />
+                        <field name="label_text_limit" />
                     </group>
                 </group>
                 <group name="partner_filter" col="1">

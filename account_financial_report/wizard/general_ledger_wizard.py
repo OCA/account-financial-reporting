@@ -273,7 +273,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
 
     def _print_report(self, report_type):
         self.ensure_one()
-        data = self._prepare_report_general_ledger()
+        data = self._prepare_report_data()
         if report_type == "xlsx":
             report_name = "a_f_r.report_general_ledger_xlsx"
         else:
@@ -288,6 +288,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
         )
 
     def _prepare_report_general_ledger(self):
+        # TODO: Kept for compatibility - To be merged into _prepare_report_data in 19
         self.ensure_one()
         return {
             "wizard_id": self.id,
@@ -309,6 +310,11 @@ class GeneralLedgerReportWizard(models.TransientModel):
             "account_financial_report_lang": self.env.lang,
             "domain": self._get_account_move_lines_domain(),
         }
+
+    def _prepare_report_data(self):
+        res = super()._prepare_report_data()
+        res.update(self._prepare_report_general_ledger())
+        return res
 
     def _export(self, report_type):
         """Default export is PDF."""
