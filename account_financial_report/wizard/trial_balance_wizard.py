@@ -241,7 +241,7 @@ class TrialBalanceReportWizard(models.TransientModel):
 
     def _print_report(self, report_type):
         self.ensure_one()
-        data = self._prepare_report_trial_balance()
+        data = self._prepare_report_data()
         if report_type == "xlsx":
             report_name = "a_f_r.report_trial_balance_xlsx"
         else:
@@ -256,6 +256,7 @@ class TrialBalanceReportWizard(models.TransientModel):
         )
 
     def _prepare_report_trial_balance(self):
+        # TODO: Kept for compatibility - To be merged into _prepare_report_data in 19
         self.ensure_one()
         return {
             "wizard_id": self.id,
@@ -278,6 +279,11 @@ class TrialBalanceReportWizard(models.TransientModel):
             "account_financial_report_lang": self.env.lang,
             "grouped_by": self.grouped_by,
         }
+
+    def _prepare_report_data(self):
+        res = super()._prepare_report_data()
+        res.update(self._prepare_report_trial_balance())
+        return res
 
     def _export(self, report_type):
         """Default export is PDF."""

@@ -325,7 +325,7 @@
             </div>
             <!--## ref - label-->
             <div class="act_as_cell left">
-                <span t-esc="line['ref_label']" />
+                <span t-esc="limit_text(line['ref_label'], 'label_text_limit')" />
             </div>
             <!--## date_due-->
             <div class="act_as_cell left">

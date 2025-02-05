@@ -463,12 +463,16 @@
                                 res-model="account.move.line"
                                 view-type="form"
                             >
-                                <t t-out="line['ref_label']" />
+                                <t
+                                    t-out="limit_text(line['ref_label'], 'label_text_limit')"
+                                />
                             </span>
                         </t>
                         <t t-else="">
                             <span>
-                                <t t-out="line['ref_label']" />
+                                <t
+                                    t-out="limit_text(line['ref_label'], 'label_text_limit')"
+                                />
                             </span>
                         </t>
                     </div>

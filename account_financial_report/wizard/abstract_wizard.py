@@ -34,18 +34,41 @@ class AbstractWizard(models.AbstractModel):
         required=False,
         string="Company",
     )
+    label_text_limit = fields.Integer(default=40)
 
     def button_export_html(self):
         self.ensure_one()
+        self._set_default_wizard_values()
         report_type = "qweb-html"
         return self._export(report_type)
 
     def button_export_pdf(self):
         self.ensure_one()
+        self._set_default_wizard_values()
         report_type = "qweb-pdf"
         return self._export(report_type)
 
     def button_export_xlsx(self):
         self.ensure_one()
+        self._set_default_wizard_values()
         report_type = "xlsx"
         return self._export(report_type)
+
+    def _limit_text(self, value, limit_field="label_text_limit"):
+        limit = self[limit_field]
+        if value and limit and len(value) > limit:
+            value = value[:limit] + "..."
+        return value
+
+    def _prepare_report_data(self):
+        self.ensure_one()
+        return {"wizard_name": self._name, "wizard_id": self.id}
+
+    def _set_default_wizard_values(self):
+        self.env["ir.default"].set(
+            self._name,
+            "label_text_limit",
+            self.label_text_limit,
+            user_id=False,
+            company_id=True,
+        )

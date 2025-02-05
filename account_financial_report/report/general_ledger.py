@@ -385,7 +385,6 @@ class GeneralLedgerReport(models.AbstractModel):
             domain += [("move_id.state", "=", "posted")]
         else:
             domain += [("move_id.state", "in", ["posted", "draft"])]
-
         if cost_center_ids:
             domain += [("analytic_account_ids", "in", cost_center_ids)]
         return domain
@@ -761,6 +760,7 @@ class GeneralLedgerReport(models.AbstractModel):
 
     # flake8: noqa: C901
     def _get_report_values(self, docids, data):
+        res = super()._get_report_values(docids, data)
         wizard_id = data["wizard_id"]
         company = self.env["res.company"].browse(data["company_id"])
         company_id = data["company_id"]
@@ -890,29 +890,32 @@ class GeneralLedgerReport(models.AbstractModel):
             if not gl_item["currency_id"] and len(fin_bal_currency_ids) == 1:
                 fin_bal_currency_id = fin_bal_currency_ids[0]
             gl_item["fin_bal_currency_id"] = fin_bal_currency_id
-        return {
-            "doc_ids": [wizard_id],
-            "doc_model": "general.ledger.report.wizard",
-            "docs": self.env["general.ledger.report.wizard"].browse(wizard_id),
-            "foreign_currency": data["foreign_currency"],
-            "company_name": company.display_name,
-            "company_currency": company.currency_id,
-            "currency_name": company.currency_id.name,
-            "date_from": data["date_from"],
-            "date_to": data["date_to"],
-            "only_posted_moves": data["only_posted_moves"],
-            "hide_account_at_0": data["hide_account_at_0"],
-            "show_cost_center": data["show_cost_center"],
-            "general_ledger": general_ledger,
-            "accounts_data": accounts_data,
-            "journals_data": journals_data,
-            "full_reconcile_data": full_reconcile_data,
-            "taxes_data": taxes_data,
-            "centralize": centralize,
-            "analytic_data": analytic_data,
-            "filter_partner_ids": True if partner_ids else False,
-            "currency_model": self.env["res.currency"],
-        }
+        res.update(
+            {
+                "doc_ids": [wizard_id],
+                "doc_model": "general.ledger.report.wizard",
+                "docs": self.env["general.ledger.report.wizard"].browse(wizard_id),
+                "foreign_currency": data["foreign_currency"],
+                "company_name": company.display_name,
+                "company_currency": company.currency_id,
+                "currency_name": company.currency_id.name,
+                "date_from": data["date_from"],
+                "date_to": data["date_to"],
+                "only_posted_moves": data["only_posted_moves"],
+                "hide_account_at_0": data["hide_account_at_0"],
+                "show_cost_center": data["show_cost_center"],
+                "general_ledger": general_ledger,
+                "accounts_data": accounts_data,
+                "journals_data": journals_data,
+                "full_reconcile_data": full_reconcile_data,
+                "taxes_data": taxes_data,
+                "centralize": centralize,
+                "analytic_data": analytic_data,
+                "filter_partner_ids": True if partner_ids else False,
+                "currency_model": self.env["res.currency"],
+            }
+        )
+        return res
 
     def _get_ml_fields(self):
         return self.COMMON_ML_FIELDS + [

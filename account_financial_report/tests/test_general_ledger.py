@@ -118,7 +118,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
                 "centralize": centralize,
             }
         )
-        data = general_ledger._prepare_report_general_ledger()
+        data = general_ledger._prepare_report_data()
         res_data = self.env[
             "report.account_financial_report.general_ledger"
         ]._get_report_values(general_ledger, data)

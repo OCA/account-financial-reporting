@@ -162,3 +162,9 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             "debit",
             "amount_currency",
         ]
+
+    def _get_report_values(self, docids, data):
+        wizard = self.env[data["wizard_name"]].browse(data["wizard_id"])
+        return {
+            "limit_text": wizard._limit_text,
+        }

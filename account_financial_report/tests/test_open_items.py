@@ -67,5 +67,5 @@ class TestOpenItems(AccountTestInvoicingCommon):
             }
         )
         wizard.on_change_account_range()
-        res = wizard._prepare_report_open_items()
+        res = wizard._prepare_report_data()
         self.assertEqual(res["grouped_by"], wizard.grouped_by)

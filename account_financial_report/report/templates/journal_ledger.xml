@@ -263,7 +263,10 @@
             />
         </div>
         <div class="act_as_cell left" name="label">
-            <span t-if="move_line['label']" t-esc="move_line['label']" />
+            <span
+                t-if="move_line['label']"
+                t-esc="limit_text(move_line['label'], 'label_text_limit')"
+            />
             <span t-if="not move_line['label']">/</span>
         </div>
         <div class="act_as_cell left" name="taxes">
@@ -276,7 +279,7 @@
                 t-value="o._get_data_from_dict(move_line['move_line_id'], move_line_ids_taxes_data)"
             />
             <span
-                t-esc="o._get_ml_tax_description(move_line, tax_line_dat, move_line_ids_taxes_dat)"
+                t-esc="limit_text(o._get_ml_tax_description(move_line, tax_line_dat, move_line_ids_taxes_dat), 'label_text_limit')"
             />
         </div>
         <div class="act_as_cell amount" name="debit">

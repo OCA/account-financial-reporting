@@ -176,7 +176,7 @@ class TestJournalReport(AccountTestInvoicingCommon):
                 "move_target": "all",
             }
         )
-        data = wiz._prepare_report_journal_ledger()
+        data = wiz._prepare_report_data()
         res_data = self.JournalLedgerReport._get_report_values(wiz, data)
         self.check_report_journal_debit_credit(res_data, 100, 100)
 
@@ -185,7 +185,7 @@ class TestJournalReport(AccountTestInvoicingCommon):
         res_data = self.JournalLedgerReport._get_report_values(wiz, data)
         self.check_report_journal_debit_credit(res_data, 200, 200)
         wiz.move_target = "posted"
-        data = wiz._prepare_report_journal_ledger()
+        data = wiz._prepare_report_data()
         res_data = self.JournalLedgerReport._get_report_values(wiz, data)
         self.check_report_journal_debit_credit(res_data, 0, 0)
 
@@ -202,7 +202,7 @@ class TestJournalReport(AccountTestInvoicingCommon):
         self.check_report_journal_debit_credit(res_data, 200, 200)
 
         wiz.date_from = self.previous_fy_date_start
-        data = wiz._prepare_report_journal_ledger()
+        data = wiz._prepare_report_data()
         res_data = self.JournalLedgerReport._get_report_values(wiz, data)
         self.check_report_journal_debit_credit(res_data, 300, 300)
 
@@ -237,7 +237,7 @@ class TestJournalReport(AccountTestInvoicingCommon):
                 "move_target": "all",
             }
         )
-        data = wiz._prepare_report_journal_ledger()
+        data = wiz._prepare_report_data()
         res_data = self.JournalLedgerReport._get_report_values(wiz, data)
         self.check_report_journal_debit_credit(res_data, 250, 250)
         self.check_report_journal_debit_credit_taxes(res_data, 0, 300, 0, 50)
@@ -275,7 +275,7 @@ class TestJournalReport(AccountTestInvoicingCommon):
                 "move_target": "all",
             }
         )
-        data = wiz._prepare_report_journal_ledger()
+        data = wiz._prepare_report_data()
         res_data = self.JournalLedgerReport._get_report_values(wiz, data)
 
         self.check_report_journal_debit_credit(res_data, 250, 250)
