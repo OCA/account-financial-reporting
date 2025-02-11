@@ -98,14 +98,14 @@ class DetailedActivityStatementXslx(models.AbstractModel):
             FORMATS["current_money_format"],
         )
         for line in currency_data.get("lines"):
-            if line.get("blocked") and not line.get("reconciled_line"):
-                format_tcell_left = FORMATS["format_tcell_left_blocked"]
-                format_tcell_date_left = FORMATS["format_tcell_date_left_blocked"]
-                format_distributed = FORMATS["format_distributed_blocked"]
-                current_money_format = FORMATS["current_money_format_blocked"]
-            elif (
+            # if line.get("blocked") and not line.get("reconciled_line"):
+            #     format_tcell_left = FORMATS["format_tcell_left_blocked"]
+            #     format_tcell_date_left = FORMATS["format_tcell_date_left_blocked"]
+            #     format_distributed = FORMATS["format_distributed_blocked"]
+            #     current_money_format = FORMATS["current_money_format_blocked"]
+            if (
                 line.get("reconciled_line")
-                and not line.get("blocked")
+                # and not line.get("blocked")
                 and not line.get("outside-date-rank")
             ):
                 format_tcell_left = FORMATS["format_tcell_left_reconciled"]
@@ -113,9 +113,8 @@ class DetailedActivityStatementXslx(models.AbstractModel):
                 format_distributed = FORMATS["format_distributed_reconciled"]
                 current_money_format = FORMATS["current_money_format_reconciled"]
             elif (
-                line.get("blocked")
-                and line.get("reconciled_line")
-                and not line.get("outside-date-rank")
+                # line.get("blocked")
+                line.get("reconciled_line") and not line.get("outside-date-rank")
             ):
                 format_tcell_left = FORMATS["format_tcell_left_blocked_reconciled"]
                 format_tcell_date_left = FORMATS[
@@ -127,7 +126,7 @@ class DetailedActivityStatementXslx(models.AbstractModel):
                 ]
             elif (
                 line.get("reconciled_line")
-                and not line.get("blocked")
+                # and not line.get("blocked")
                 and line.get("outside-date-rank")
             ):
                 format_tcell_left = FORMATS[
@@ -142,23 +141,23 @@ class DetailedActivityStatementXslx(models.AbstractModel):
                 current_money_format = FORMATS[
                     "current_money_format_reconciled_outside-date-rank"
                 ]
-            elif (
-                line.get("blocked")
-                and line.get("reconciled_line")
-                and line.get("outside-date-rank")
-            ):
-                format_tcell_left = FORMATS[
-                    "format_tcell_left_blocked_reconciled_outside-date-rank"
-                ]
-                format_tcell_date_left = FORMATS[
-                    "format_tcell_date_left_blocked_reconciled_outside-date-rank"
-                ]
-                format_distributed = FORMATS[
-                    "format_distributed_blocked_reconciled_outside-date-rank"
-                ]
-                current_money_format = FORMATS[
-                    "current_money_format_blocked_reconciled_outside-date-rank"
-                ]
+            # elif (
+            #     line.get("blocked")
+            #     and line.get("reconciled_line")
+            #     and line.get("outside-date-rank")
+            # ):
+            #     format_tcell_left = FORMATS[
+            #         "format_tcell_left_blocked_reconciled_outside-date-rank"
+            #     ]
+            #     format_tcell_date_left = FORMATS[
+            #         "format_tcell_date_left_blocked_reconciled_outside-date-rank"
+            #     ]
+            #     format_distributed = FORMATS[
+            #         "format_distributed_blocked_reconciled_outside-date-rank"
+            #     ]
+            #     current_money_format = FORMATS[
+            #         "current_money_format_blocked_reconciled_outside-date-rank"
+            #     ]
             else:
                 format_tcell_left = FORMATS["format_tcell_left"]
                 format_tcell_date_left = FORMATS["format_tcell_date_left"]
@@ -258,25 +257,26 @@ class DetailedActivityStatementXslx(models.AbstractModel):
         format_distributed = FORMATS["format_distributed"]
         current_money_format = FORMATS["current_money_format"]
         for line in currency_data.get("prior_lines"):
-            if line.get("blocked") and not line.get("reconciled_line"):
-                format_tcell_left = FORMATS["format_tcell_left_blocked"]
-                format_tcell_date_left = FORMATS["format_tcell_date_left_blocked"]
-                format_distributed = FORMATS["format_distributed_blocked"]
-                current_money_format = FORMATS["current_money_format_blocked"]
-            elif line.get("reconciled_line") and not line.get("blocked"):
+            # if line.get("blocked") and not line.get("reconciled_line"):
+            #     format_tcell_left = FORMATS["format_tcell_left_blocked"]
+            #     format_tcell_date_left = FORMATS["format_tcell_date_left_blocked"]
+            #     format_distributed = FORMATS["format_distributed_blocked"]
+            #     current_money_format = FORMATS["current_money_format_blocked"]
+            if line.get("reconciled_line"):
                 format_tcell_left = FORMATS["format_tcell_left_reconciled"]
                 format_tcell_date_left = FORMATS["format_tcell_date_left_reconciled"]
                 format_distributed = FORMATS["format_distributed_reconciled"]
                 current_money_format = FORMATS["current_money_format_reconciled"]
-            elif line.get("blocked") and line.get("reconciled_line"):
-                format_tcell_left = FORMATS["format_tcell_left_blocked_reconciled"]
-                format_tcell_date_left = FORMATS[
-                    "format_tcell_date_left_blocked_reconciled"
-                ]
-                format_distributed = FORMATS["format_distributed_blocked_reconciled"]
-                current_money_format = FORMATS[
-                    "current_money_format_blocked_reconciled"
-                ]
+            # elif line.get("blocked") and line.get("reconciled_line"):
+            # elif line.get("reconciled_line"):
+            #     format_tcell_left = FORMATS["format_tcell_left_blocked_reconciled"]
+            #     format_tcell_date_left = FORMATS[
+            #         "format_tcell_date_left_blocked_reconciled"
+            #     ]
+            #     format_distributed = FORMATS["format_distributed_blocked_reconciled"]
+            #     current_money_format = FORMATS[
+            #         "current_money_format_blocked_reconciled"
+            #     ]
             row_pos += 1
             name_to_show = (
                 line.get("name", "") == "/" or not line.get("name", "")
@@ -363,25 +363,25 @@ class DetailedActivityStatementXslx(models.AbstractModel):
         format_distributed = FORMATS["format_distributed"]
         current_money_format = FORMATS["current_money_format"]
         for line in currency_data.get("ending_lines"):
-            if line.get("blocked") and not line.get("reconciled_line"):
-                format_tcell_left = FORMATS["format_tcell_left_blocked"]
-                format_tcell_date_left = FORMATS["format_tcell_date_left_blocked"]
-                format_distributed = FORMATS["format_distributed_blocked"]
-                current_money_format = FORMATS["current_money_format_blocked"]
-            elif line.get("reconciled_line") and not line.get("blocked"):
+            # if line.get("blocked") and not line.get("reconciled_line"):
+            #     format_tcell_left = FORMATS["format_tcell_left_blocked"]
+            #     format_tcell_date_left = FORMATS["format_tcell_date_left_blocked"]
+            #     format_distributed = FORMATS["format_distributed_blocked"]
+            #     current_money_format = FORMATS["current_money_format_blocked"]
+            if line.get("reconciled_line"):
                 format_tcell_left = FORMATS["format_tcell_left_reconciled"]
                 format_tcell_date_left = FORMATS["format_tcell_date_left_reconciled"]
                 format_distributed = FORMATS["format_distributed_reconciled"]
                 current_money_format = FORMATS["current_money_format_reconciled"]
-            elif line.get("blocked") and line.get("reconciled_line"):
-                format_tcell_left = FORMATS["format_tcell_left_blocked_reconciled"]
-                format_tcell_date_left = FORMATS[
-                    "format_tcell_date_left_blocked_reconciled"
-                ]
-                format_distributed = FORMATS["format_distributed_blocked_reconciled"]
-                current_money_format = FORMATS[
-                    "current_money_format_blocked_reconciled"
-                ]
+            # elif line.get("blocked") and line.get("reconciled_line"):
+            #     format_tcell_left = FORMATS["format_tcell_left_blocked_reconciled"]
+            #     format_tcell_date_left = FORMATS[
+            #         "format_tcell_date_left_blocked_reconciled"
+            #     ]
+            #     format_distributed = FORMATS["format_distributed_blocked_reconciled"]
+            #     current_money_format = FORMATS[
+            #         "current_money_format_blocked_reconciled"
+            #     ]
             row_pos += 1
             name_to_show = (
                 line.get("name", "") == "/" or not line.get("name", "")
