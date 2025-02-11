@@ -90,11 +90,6 @@ class ActivityStatementXslx(models.AbstractModel):
         format_distributed = FORMATS["format_distributed"]
         current_money_format = FORMATS["current_money_format"]
         for line in currency_data.get("lines"):
-            # if line.get("blocked"):
-            #     format_tcell_left = FORMATS["format_tcell_left_blocked"]
-            #     format_tcell_date_left = FORMATS["format_tcell_date_left_blocked"]
-            #     format_distributed = FORMATS["format_distributed_blocked"]
-            #     current_money_format = FORMATS["current_money_format_blocked"]
             row_pos += 1
             name_to_show = (
                 line.get("name", "") == "/" or not line.get("name", "")
