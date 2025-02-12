@@ -133,8 +133,6 @@ class GeneralLedgerReportWizard(models.TransientModel):
                     ("user_type_id", "in", self.account_type_ids.ids),
                 ]
             )
-        else:
-            self.account_ids = None
 
     def _init_date_from(self):
         """set start date to begin of current year if fiscal year running"""
@@ -193,7 +191,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
             self.partner_ids = self.partner_ids.filtered(
                 lambda p: p.company_id == self.company_id or not p.company_id
             )
-        if self.company_id and self.account_ids:
+        if self.company_id:
             if self.receivable_accounts_only or self.payable_accounts_only:
                 self.onchange_type_accounts_only()
             else:
