@@ -3,6 +3,7 @@
 
 import itertools
 import operator
+from collections import defaultdict
 
 from odoo import models
 
@@ -181,13 +182,23 @@ class JournalLedgerReport(models.AbstractModel):
         return {"move_line_ids": tuple(move_lines.ids)}
 
     def _get_move_lines(self, move_ids, wizard, journal_ids):
-        move_lines = self.env["account.move.line"].search(
-            self._get_move_lines_domain(move_ids, wizard, journal_ids),
-            order=self._get_move_lines_order(move_ids, wizard, journal_ids),
+        move_lines = (
+            self.env["account.move.line"]
+            .with_context(prefetch_fields=False)
+            .search(
+                self._get_move_lines_domain(move_ids, wizard, journal_ids),
+                order=self._get_move_lines_order(move_ids, wizard, journal_ids),
+            )
         )
-        move_lines_exigible = self.env["account.move.line"].search(
-            self._get_move_lines_domain(move_ids, wizard, journal_ids)
-            + self.env["account.move.line"]._get_tax_exigible_domain(),
+        # Get the exigible move lines ids instead of the recordset to increase
+        # performance with a large number of journal items
+        move_lines_exigible_ids = set(
+            self.env["account.move.line"]
+            .search(
+                self._get_move_lines_domain(move_ids, wizard, journal_ids)
+                + self.env["account.move.line"]._get_tax_exigible_domain(),
+            )
+            .ids
         )
         move_line_ids_taxes_data = {}
         if move_lines:
@@ -209,36 +220,24 @@ class JournalLedgerReport(models.AbstractModel):
                     "description": tax_description,
                 }
         Move_Lines = {}
-        accounts = self.env["account.account"]
-        partners = self.env["res.partner"]
-        currencies = self.env["res.currency"]
-        tax_lines = self.env["account.tax"]
         auto_sequence = len(move_ids)
+        Move_Lines = defaultdict(list)
         for ml in move_lines:
-            if ml.account_id not in accounts:
-                accounts |= ml.account_id
-            if ml.partner_id not in partners:
-                partners |= ml.partner_id
-            if ml.currency_id not in currencies:
-                currencies |= ml.currency_id
-            if ml.tax_line_id not in tax_lines:
-                tax_lines |= ml.tax_line_id
-            if ml.move_id.id not in Move_Lines.keys():
-                Move_Lines[ml.move_id.id] = []
+            move_id = ml.move_id.id
+            if move_id not in Move_Lines:
                 auto_sequence -= 1
-            taxes = (
-                ml.id in move_line_ids_taxes_data.keys()
-                and move_line_ids_taxes_data[ml.id]
-                or {}
-            )
-            exigible = ml in move_lines_exigible
-            Move_Lines[ml.move_id.id].append(
+            taxes = move_line_ids_taxes_data.get(ml.id, {})
+            # Check the exigibility of the move line by id
+            # this way we avoid the recreation of the recordset which affects to the
+            # performance in the case of a large number of journal items
+            exigible = ml.id in move_lines_exigible_ids
+            Move_Lines[move_id].append(
                 self._get_move_lines_data(ml, wizard, taxes, auto_sequence, exigible)
             )
-        account_ids_data = self._get_account_data(accounts)
-        partner_ids_data = self._get_partner_data(partners)
-        currency_ids_data = self._get_currency_data(currencies)
-        tax_line_ids_data = self._get_tax_line_data(tax_lines)
+        account_ids_data = self._get_account_data(move_lines.account_id)
+        partner_ids_data = self._get_partner_data(move_lines.partner_id)
+        currency_ids_data = self._get_currency_data(move_lines.currency_id)
+        tax_line_ids_data = self._get_tax_line_data(move_lines.tax_line_id)
         return (
             move_lines.ids,
             Move_Lines,
