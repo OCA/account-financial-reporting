@@ -227,6 +227,12 @@ class TrialBalanceXslx(models.AbstractModel):
                 for partner_id in total_amount[account_id]:
                     if isinstance(partner_id, int):
                         # Display partner lines
+                        total_amount[account_id][partner_id]["currency_id"] = accounts_data[account_id][
+                            "currency_id"
+                        ]
+                        total_amount[account_id][partner_id]["currency_name"] = accounts_data[
+                            account_id
+                        ]["currency_name"]
                         self.write_line_from_dict_order(
                             total_amount[account_id][partner_id],
                             partners_data[partner_id],

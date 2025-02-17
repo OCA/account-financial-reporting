@@ -597,8 +597,13 @@ class AbstractReportXslx(models.AbstractModel):
                     {"bold": True, "border": True, "bg_color": "#FFFFCC"}
                 )
                 report_data["field_name"] = format_amt
-                currency = self.env["res.currency"].browse(line_object["currency_id"])
-                format_amount = "#,##0." + ("0" * currency.decimal_places)
+                if isinstance(line_object["currency_id"], int):
+                    currency = self.env["res.currency"].browse(line_object["currency_id"])
+                else:
+                    currency = line_object["currency_id"]
+                format_amount = "#,##0." + (
+                    "0" * currency.decimal_places
+                )
                 format_amt.set_num_format(format_amount)
         return format_amt
 
