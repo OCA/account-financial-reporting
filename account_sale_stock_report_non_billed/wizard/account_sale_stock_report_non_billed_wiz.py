@@ -56,14 +56,13 @@ class AccountSaleStockReportNonBilledWiz(models.TransientModel):
                 else False
             )
             if float_is_zero(
-                move.quantity_done
-                - sum(move.returned_move_ids.mapped("quantity_done")),
+                move.quantity - sum(move.returned_move_ids.mapped("quantity")),
                 precision_digits=dp,
             ) and not (
                 move.invoice_line_ids
                 + move.returned_move_ids.mapped("invoice_line_ids")
             ).filtered(
-                lambda l: l.check_invoice_line_in_date(
+                lambda line, date_start=date_start: line.check_invoice_line_in_date(
                     self.date_check, date_start=date_start
                 )
             ):
@@ -85,7 +84,7 @@ class AccountSaleStockReportNonBilledWiz(models.TransientModel):
         )
         for move in stock_moves:
             inv_lines_not_cancel = move.invoice_line_ids.filtered(
-                lambda l: l.move_id.state != "cancel"
+                lambda line: line.move_id.state != "cancel"
             )
             moves_in_date = inv_lines_not_cancel.move_line_ids.filtered(
                 lambda m: m.state == "done"
@@ -93,14 +92,12 @@ class AccountSaleStockReportNonBilledWiz(models.TransientModel):
                 and m.date_done <= self.date_check
             )
             inv_lines = moves_in_date.invoice_line_ids.filtered(
-                lambda l: l.check_invoice_line_in_date(
+                lambda line: line.check_invoice_line_in_date(
                     self.date_check, date_start=date_start
                 )
             )
             qty_to_invoice = (
-                move.quantity_done
-                if not move.check_is_return()
-                else -move.quantity_done
+                move.quantity if not move.check_is_return() else -move.quantity
             )
             calculated_qty = move.with_context(
                 moves_date_start=self.stock_move_non_billed_threshold,
