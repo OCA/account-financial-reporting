@@ -5,23 +5,19 @@ from dateutil.relativedelta import relativedelta
 from odoo import fields
 from odoo.tests import Form, tagged
 
-from odoo.addons.stock_picking_invoice_link.tests.test_stock_picking_invoice_link import (
-    TestStockPickingInvoiceLink,
-)
+from odoo.addons.stock_picking_invoice_link.tests import test_stock_picking_invoice_link
 
 
-@tagged("post_install")
-class TestAccountSaleStrockReportNonBilled(TestStockPickingInvoiceLink):
-    def setUp(self):
-        super().setUp()
-        self.prod_order.invoice_policy = "delivery"
-
+@tagged("post_install", "-at_install")
+class TestAccountSaleStrockReportNonBilled(
+    test_stock_picking_invoice_link.TestStockPickingInvoiceLink
+):
     def get_picking_done_so(self):
         picking = self.so.picking_ids.filtered(
             lambda x: x.picking_type_code == "outgoing"
             and x.state in ("confirmed", "assigned", "partially_available")
         )
-        picking.move_line_ids.write({"qty_done": 2})
+        picking.move_line_ids.write({"quantity": 2})
         picking.button_validate()
         return picking
 
@@ -55,7 +51,7 @@ class TestAccountSaleStrockReportNonBilled(TestStockPickingInvoiceLink):
         )
         move_done = picking.move_ids[0]
         moves_not_done = picking.move_ids[1:]
-        move_done.move_line_ids.write({"qty_done": 2})
+        move_done.move_line_ids.write({"quantity": 2, "picked": True})
         backorder_wiz = picking.button_validate()
         backorder_wiz = Form(
             self.env[backorder_wiz["res_model"]].with_context(
@@ -87,7 +83,6 @@ class TestAccountSaleStrockReportNonBilled(TestStockPickingInvoiceLink):
             .with_context(active_model="account.move", active_ids=inv.ids)
             .create(
                 {
-                    "refund_method": "cancel",
                     "reason": "test",
                     "journal_id": inv.journal_id.id,
                 }
@@ -112,7 +107,7 @@ class TestAccountSaleStrockReportNonBilled(TestStockPickingInvoiceLink):
         wiz_return = wiz_return_form.save()
         return_id = wiz_return.create_returns()["res_id"]
         picking_return = self.env["stock.picking"].browse(return_id)
-        picking_return.move_line_ids.write({"qty_done": 2})
+        picking_return.move_line_ids.write({"quantity": 2})
         picking_return.button_validate()
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
             {"date_check": fields.Date.today()}
@@ -136,7 +131,7 @@ class TestAccountSaleStrockReportNonBilled(TestStockPickingInvoiceLink):
         wiz_return = wiz_return_form.save()
         return_id = wiz_return.create_returns()["res_id"]
         picking_return = self.env["stock.picking"].browse(return_id)
-        picking_return.move_line_ids.write({"qty_done": 2})
+        picking_return.move_line_ids.write({"quantity": 2})
         picking_return.button_validate()
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
             {"date_check": fields.Date.today()}
@@ -164,7 +159,7 @@ class TestAccountSaleStrockReportNonBilled(TestStockPickingInvoiceLink):
         wiz_return = wiz_return_form.save()
         return_id = wiz_return.create_returns()["res_id"]
         picking_return = self.env["stock.picking"].browse(return_id)
-        picking_return.move_line_ids.write({"qty_done": 2})
+        picking_return.move_line_ids.write({"quantity": 2})
         picking_return.button_validate()
         wiz_return_return_form = Form(
             self.env["stock.return.picking"].with_context(
@@ -174,7 +169,7 @@ class TestAccountSaleStrockReportNonBilled(TestStockPickingInvoiceLink):
         wiz_return_return = wiz_return_return_form.save()
         return_return_id = wiz_return_return.create_returns()["res_id"]
         picking_return_return = self.env["stock.picking"].browse(return_return_id)
-        picking_return_return.move_line_ids.write({"qty_done": 2})
+        picking_return_return.move_line_ids.write({"quantity": 2})
         picking_return_return.button_validate()
         self.so._create_invoices(final=True)
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
@@ -199,7 +194,7 @@ class TestAccountSaleStrockReportNonBilled(TestStockPickingInvoiceLink):
         wiz_return = wiz_return_form.save()
         return_id = wiz_return.create_returns()["res_id"]
         picking_return = self.env["stock.picking"].browse(return_id)
-        picking_return.move_line_ids.write({"qty_done": 2})
+        picking_return.move_line_ids.write({"quantity": 2})
         picking_return.button_validate()
         wiz_return_return_form = Form(
             self.env["stock.return.picking"].with_context(
@@ -209,7 +204,7 @@ class TestAccountSaleStrockReportNonBilled(TestStockPickingInvoiceLink):
         wiz_return_return = wiz_return_return_form.save()
         return_return_id = wiz_return_return.create_returns()["res_id"]
         picking_return_return = self.env["stock.picking"].browse(return_return_id)
-        picking_return_return.move_line_ids.write({"qty_done": 2})
+        picking_return_return.move_line_ids.write({"quantity": 2})
         picking_return_return.button_validate()
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
             {"date_check": fields.Date.today()}
@@ -236,7 +231,7 @@ class TestAccountSaleStrockReportNonBilled(TestStockPickingInvoiceLink):
         wiz_return = wiz_return_form.save()
         return_id = wiz_return.create_returns()["res_id"]
         picking_return = self.env["stock.picking"].browse(return_id)
-        picking_return.move_line_ids.write({"qty_done": 2})
+        picking_return.move_line_ids.write({"quantity": 2})
         picking_return.button_validate()
         wiz_return_return_form = Form(
             self.env["stock.return.picking"].with_context(
@@ -248,7 +243,7 @@ class TestAccountSaleStrockReportNonBilled(TestStockPickingInvoiceLink):
         wiz_return_return = wiz_return_return_form.save()
         return_return_id = wiz_return_return.create_returns()["res_id"]
         picking_return_return = self.env["stock.picking"].browse(return_return_id)
-        picking_return_return.move_line_ids.write({"qty_done": 2})
+        picking_return_return.move_line_ids.write({"quantity": 2})
         picking_return_return.button_validate()
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
             {"date_check": fields.Date.today()}
@@ -267,7 +262,7 @@ class TestAccountSaleStrockReportNonBilled(TestStockPickingInvoiceLink):
             lambda x: x.picking_type_code == "outgoing"
             and x.state in ("confirmed", "assigned", "partially_available")
         )
-        picking.move_line_ids.write({"qty_done": 2})
+        picking.move_line_ids.write({"quantity": 2})
         picking.button_validate()
         # Emulate prepaying invoice
         inv = self.so._create_invoices()

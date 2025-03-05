@@ -57,9 +57,9 @@ class StockMove(models.Model):
             if move.origin_returned_move_id and not move.to_refund:
                 continue
             if not move.check_is_return():
-                total_qty += move.quantity_done
+                total_qty += move.quantity
             else:
-                total_qty -= move.quantity_done
+                total_qty -= move.quantity
         return total_qty
 
     def get_quantity_invoiced(self, invoice_lines):
@@ -68,10 +68,10 @@ class StockMove(models.Model):
         total_invoiced = abs(
             sum(
                 invoice_lines.mapped(
-                    lambda l: l.quantity
-                    if (l.move_id.move_type == "out_invoice" and not self.to_refund)
-                    or (l.move_id.move_type == "out_refund" and self.to_refund)
-                    else -l.quantity
+                    lambda line: line.quantity
+                    if (line.move_id.move_type == "out_invoice" and not self.to_refund)
+                    or (line.move_id.move_type == "out_refund" and self.to_refund)
+                    else -line.quantity
                 )
             )
         )
@@ -88,8 +88,8 @@ class StockMove(models.Model):
             invoiced = 0.0
             for move in moves:
                 qty = (
-                    move.quantity_done
-                    if move.quantity_done <= (total_invoiced - invoiced)
+                    move.quantity
+                    if move.quantity <= (total_invoiced - invoiced)
                     else total_invoiced - invoiced
                 )
                 if move.check_is_return():
@@ -98,14 +98,14 @@ class StockMove(models.Model):
                     return qty
                 invoiced += qty
             return 0
-        return self.quantity_done if not self.check_is_return() else -self.quantity_done
+        return self.quantity if not self.check_is_return() else -self.quantity
 
     def _set_not_invoiced_values(self, qty_to_invoice, invoiced_qty):
         self.ensure_one()
         self.quantity_not_invoiced = qty_to_invoice - invoiced_qty
         self.price_not_invoiced = (
             qty_to_invoice - invoiced_qty
-        ) * self.sale_line_id.price_reduce
+        ) * self.sale_line_id.price_reduce_taxexcl
 
     @api.depends("sale_line_id")
     @api.depends_context(
@@ -123,10 +123,10 @@ class StockMove(models.Model):
             date_start = fields.Date.from_string(context["non_billed_date_start"])
             date_end = fields.Date.from_string(context["non_billed_date"])
             invoices_not_cancel = move.invoice_line_ids.filtered(
-                lambda l: l.move_id.state != "cancel"
+                lambda line: line.move_id.state != "cancel"
             )
             moves_in_date = invoices_not_cancel.mapped("move_line_ids").filtered(
-                lambda m: m.state == "done"
+                lambda m, date_start=date_start, date_end=date_end: m.state == "done"
                 and m.date_done >= date_start
                 and m.date_done <= date_end
             )
@@ -136,15 +136,15 @@ class StockMove(models.Model):
                     context["non_billed_invoice_date_start"]
                 )
             inv_lines = moves_in_date.mapped("invoice_line_ids").filtered(
-                lambda l: l.check_invoice_line_in_date(
+                lambda line,
+                date_end=date_end,
+                invoice_date_start=invoice_date_start: line.check_invoice_line_in_date(
                     date_end,
                     date_start=invoice_date_start,
                 )
             )
             qty_to_invoice = (
-                move.quantity_done
-                if not move.check_is_return()
-                else -move.quantity_done
+                move.quantity if not move.check_is_return() else -move.quantity
             )
             calculated_qty = move.with_context(
                 moves_date_start=date_start,
