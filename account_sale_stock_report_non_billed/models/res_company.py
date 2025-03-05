@@ -8,5 +8,5 @@ class ResCompany(models.Model):
     _inherit = "res.company"
 
     stock_move_non_billed_threshold = fields.Date(
-        string="Non Billed Threshold Date", default=fields.Date.today
+        string="Non Billed Threshold Date", default=fields.Date.context_today
     )
