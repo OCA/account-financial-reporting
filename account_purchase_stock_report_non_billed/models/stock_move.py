@@ -25,10 +25,13 @@ class StockMove(models.Model):
             qty_invoiced = abs(
                 sum(
                     invoice_lines.mapped(
-                        lambda l: l.quantity
-                        if (l.move_id.move_type == "in_invoice" and not self.to_refund)
-                        or (l.move_id.move_type == "in_refund" and self.to_refund)
-                        else -l.quantity
+                        lambda line: line.quantity
+                        if (
+                            line.move_id.move_type == "in_invoice"
+                            and not self.to_refund
+                        )
+                        or (line.move_id.move_type == "in_refund" and self.to_refund)
+                        else -line.quantity
                     )
                 )
             )
@@ -46,8 +49,8 @@ class StockMove(models.Model):
                 invoiced = 0.0
                 for move in moves:
                     qty = (
-                        move.quantity_done
-                        if move.quantity_done <= (qty_invoiced - invoiced)
+                        move.quantity
+                        if move.quantity <= (qty_invoiced - invoiced)
                         else qty_invoiced - invoiced
                     )
                     if move.check_is_return():
@@ -56,11 +59,7 @@ class StockMove(models.Model):
                         return qty
                     invoiced += qty
                 return 0
-            return (
-                self.quantity_done
-                if not self.check_is_return()
-                else -self.quantity_done
-            )
+            return self.quantity if not self.check_is_return() else -self.quantity
         return super().get_quantity_invoiced(invoice_lines)
 
     def _set_not_invoiced_values(self, qty_to_invoice, invoiced_qty):
