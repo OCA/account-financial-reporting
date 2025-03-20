@@ -4,6 +4,8 @@ from collections import defaultdict
 
 from odoo import api, fields, models
 from odoo.fields import Command
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class AccountMoveLine(models.Model):
@@ -15,6 +17,18 @@ class AccountMoveLine(models.Model):
 
     @api.depends("analytic_distribution")
     def _compute_analytic_account_ids(self):
+        # This is temporary to avoid computing the
+        # analytic account on the migration to 18.0
+        _logger.warning(
+            "The analytic_account_ids field is being computed. "
+            "This is a temporary measure to avoid performance issues "
+            "during the migration to 18.0. "
+            
+        )
+        for record in self:
+            record.analytic_account_ids = False
+        
+        return
         # Prefetch all involved analytic accounts
         batch_by_analytic_account = defaultdict(lambda: self.env["account.move.line"])
         for record in self.filtered("analytic_distribution"):
