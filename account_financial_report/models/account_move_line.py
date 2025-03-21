@@ -19,12 +19,6 @@ class AccountMoveLine(models.Model):
     def _compute_analytic_account_ids(self):
         # This is temporary to avoid computing the
         # analytic account on the migration to 18.0
-        _logger.warning(
-            "The analytic_account_ids field is being computed. "
-            "This is a temporary measure to avoid performance issues "
-            "during the migration to 18.0. "
-            
-        )
         for record in self:
             record.analytic_account_ids = False
         
