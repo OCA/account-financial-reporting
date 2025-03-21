@@ -12,7 +12,7 @@ class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
     analytic_account_ids = fields.Many2many(
-        "account.analytic.account", compute="_compute_analytic_account_ids", store=True
+        "account.analytic.account", compute="_compute_analytic_account_ids", store=False
     )
 
     @api.depends("analytic_distribution")
