@@ -21,7 +21,7 @@ class StatementCommon(models.AbstractModel):
     date_end = fields.Date(required=True, default=fields.Date.context_today)
     show_aging_buckets = fields.Boolean(default=True)
     number_partner_ids = fields.Integer(
-        default=lambda self: len(self._context["active_ids"])
+        default=lambda self: self._context.get("active_ids") and len(self._context.get("active_ids"))
     )
     filter_partners_non_due = fields.Boolean(
         string="Don't show partners with no due entries", default=True
