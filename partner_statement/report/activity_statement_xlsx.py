@@ -38,7 +38,7 @@ class ActivityStatementXslx(models.AbstractModel):
         currency_data = partner_data.get("currencies", {}).get(currency.id)
         account_type = data.get("account_type", False)
         row_pos += 2
-        statement_header = self.env.self.env._(
+        statement_header = self.env._(
             "%(payable)sStatement between %(start)s and %(end)s in %(currency)s"
         ) % {
             "payable": account_type == "liability_payable"
