@@ -3,3 +3,4 @@
 - Alberto Martín \<<alberto.martin@guadaltech.es>\>
 - [Tecnativa](https://www.tecnativa.com):
   - Pedro M. Baeza
+- [Nextev Srl](https://www.nextev.it) \<<odoo@nextev.it>\>
