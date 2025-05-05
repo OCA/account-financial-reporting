@@ -93,3 +93,59 @@ class TestOutstandingStatement(TransactionCase):
         self.assertIn(
             "bucket_labels", report, "There was an error while compiling the report."
         )
+
+    def test_exclude_accounts(self):
+        """Accounts can be excluded with a code selector."""
+        # Arrange
+        partners = self.partner1 | self.partner2
+        wizard = self.wiz.with_context(
+            active_ids=partners.ids,
+        ).create({})
+
+        # Edit one invoice
+        # including a new account
+        # that will be the only one not excluded
+        partner_invoice = self.env["account.move"].search(
+            [
+                ("partner_id", "in", partners.ids),
+                ("state", "=", "posted"),
+            ],
+            limit=1,
+        )
+        account = partner_invoice.line_ids.account_id.filtered(
+            lambda a: a.internal_type == wizard.account_type
+        )
+        copy_account = account.copy()
+        partner_invoice.line_ids.filtered(
+            lambda l: l.account_id == account
+        ).account_id = copy_account
+
+        wizard_accounts = self.env["account.account"].search(
+            [
+                ("id", "!=", copy_account.id),
+                ("internal_type", "=", wizard.account_type),
+            ],
+        )
+        wizard.excluded_accounts_selector = ", ".join(
+            [account.code for account in wizard_accounts]
+        )
+        # pre-condition
+        self.assertTrue(wizard.excluded_accounts_selector)
+
+        # Act
+        data = wizard._prepare_statement()
+        report = self.statement_model._get_report_values(partners.ids, data)
+
+        # Assert
+        # Only the new invoice is shown
+        invoice_partner = partner_invoice.partner_id
+        invoice_partner_data = report["data"][invoice_partner.id]["currencies"]
+        invoice_partner_move_lines = invoice_partner_data[
+            partner_invoice.currency_id.id
+        ]["lines"]
+        self.assertEqual(len(invoice_partner_move_lines), 1)
+        self.assertEqual(invoice_partner_move_lines[0]["name"], partner_invoice.name)
+
+        other_partner = partners - invoice_partner
+        other_partner_data = report["data"].get(other_partner.id)
+        self.assertFalse(other_partner_data)

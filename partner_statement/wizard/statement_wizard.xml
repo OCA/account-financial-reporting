@@ -62,6 +62,7 @@
                         />
                         <label for="account_type" />
                         <field name="account_type" nolabel="1" widget="radio" />
+                        <field name="excluded_accounts_selector" />
                     </group>
                     <group name="aging_report">
                         <field name="show_aging_buckets" />

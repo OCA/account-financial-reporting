@@ -14,6 +14,9 @@ class OutstandingStatement(models.AbstractModel):
 
     def _display_outstanding_lines_sql_q1(self, partners, date_end, account_type):
         partners = tuple(partners)
+        excluded_accounts_ids = tuple(
+            self.env.context.get("excluded_accounts_ids", [])
+        ) or (-1,)
         return str(
             self._cr.mogrify(
                 """
@@ -60,6 +63,7 @@ class OutstandingStatement(models.AbstractModel):
                 WHERE l2.date <= %(date_end)s
             ) as pc ON pc.credit_move_id = l.id
             WHERE l.partner_id IN %(partners)s AND at.type = %(account_type)s
+                AND aa.id not in %(excluded_accounts_ids)s
                 AND (
                     (pd.id IS NOT NULL AND
                         pd.max_date <= %(date_end)s) OR
