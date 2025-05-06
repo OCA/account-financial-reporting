@@ -658,9 +658,9 @@ msgid ""
 "setup through chart of accounts will display initial and final balance in "
 "that currency."
 msgstr ""
-"Afficher les devises étrangères pour les écritures comptables, à moins "
-"que la devise du compte comptable ne soit pas définie dans le plan "
-"comptable affichera les balances initiale et finale dans cette monnaie."
+"Afficher les devises étrangères pour les écritures comptables, à moins que "
+"la devise du compte comptable ne soit pas définie dans le plan comptable "
+"affichera les balances initiale et finale dans cette monnaie."
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__hide_parent_hierarchy_level
@@ -908,8 +908,8 @@ msgid ""
 "                        only one unaffected earnings account."
 msgstr ""
 "Le grand livre ne peut être généré que si la société sélectionnée a\n"
-"                                  un seul compte de type bénéfice de "
-"l'année en cours."
+"                                  un seul compte de type bénéfice de l'année "
+"en cours."
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__group_option
@@ -1642,8 +1642,7 @@ msgid ""
 "The Company in the General Ledger Report Wizard and in Date Range must be "
 "the same."
 msgstr ""
-"La société dans le grand livre et dans la plage de dates doit être la mê"
-"me."
+"La société dans le grand livre et dans la plage de dates doit être la même."
 
 #. module: account_financial_report
 #. odoo-python
@@ -1652,8 +1651,8 @@ msgid ""
 "The Company in the Trial Balance Report Wizard and in Date Range must be the "
 "same."
 msgstr ""
-"La société dans la balance générale et dans la plage de dates doit être "
-"l même."
+"La société dans la balance générale et dans la plage de dates doit être l "
+"même."
 
 #. module: account_financial_report
 #. odoo-python
@@ -1661,14 +1660,22 @@ msgstr ""
 msgid ""
 "The Company in the Vat Report Wizard and in Date Range must be the same."
 msgstr ""
-"La société dans le rapport des taxes et dans la plage de dates doit être "
-"la même."
+"La société dans le rapport des taxes et dans la plage de dates doit être la "
+"même."
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/wizard/trial_balance_wizard.py:0
 msgid "The hierarchy level to filter on must be greater than 0."
 msgstr "Le niveau de hiérarchie à filtrer doit être plus grand que 0."
+
+#. module: account_financial_report
+#. odoo-python
+#: code:addons/account_financial_report/report/trial_balance.py:0
+msgid ""
+"There is a problem in the structure of the account groups. You may need to "
+"create some child group of %s."
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__domain
@@ -1733,8 +1740,8 @@ msgid ""
 "Trial Balance can be computed only if selected company have only\n"
 "                        one unaffected earnings account."
 msgstr ""
-"La balance générale ne peut ếtre générée que si la société sé"
-"lectionnée a un seul\n"
+"La balance générale ne peut ếtre générée que si la société sélectionnée a un "
+"seul\n"
 "                                    compte de type bénéfice de l'année en "
 "cours."
 
@@ -1753,8 +1760,8 @@ msgid ""
 "balance."
 msgstr ""
 "Utiliser ce filtre pour masquer un compte ou un partenaire avec un solde "
-"final à 0. Si un ou plusieurs partenaires sont filtrés, les totaux des dé"
-"bits et crédits ne correspondront pas à la balance générale."
+"final à 0. Si un ou plusieurs partenaires sont filtrés, les totaux des "
+"débits et crédits ne correspondront pas à la balance générale."
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__show_hierarchy
