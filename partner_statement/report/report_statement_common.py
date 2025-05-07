@@ -3,7 +3,7 @@
 
 from datetime import datetime, timedelta
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.tools.misc import DEFAULT_SERVER_DATE_FORMAT
 
 
@@ -88,7 +88,7 @@ class ReportStatementCommon(models.AbstractModel):
                                   (pc.id IS NOT NULL AND
                                       pc.max_date <= %(date_end)s) OR
                                   (pd.id IS NULL AND pc.id IS NULL)
-                                ) AND l.date <= %(date_end)s AND not l.blocked
+                                ) AND l.date <= %(date_end)s
                                   AND m.state IN ('posted')
                                 AND aa.account_type = %(account_type)s
             GROUP BY l.partner_id, l.currency_id, l.date, l.date_maturity,
@@ -267,24 +267,24 @@ class ReportStatementCommon(models.AbstractModel):
 
     def _get_bucket_labels_days(self, date_end):
         return [
-            _("Current"),
-            _("1 - 30 Days"),
-            _("31 - 60 Days"),
-            _("61 - 90 Days"),
-            _("91 - 120 Days"),
-            _("121 Days +"),
-            _("Total"),
+            self.env._("Current"),
+            self.env._("1 - 30 Days"),
+            self.env._("31 - 60 Days"),
+            self.env._("61 - 90 Days"),
+            self.env._("91 - 120 Days"),
+            self.env._("121 Days +"),
+            self.env._("Total"),
         ]
 
     def _get_bucket_labels_months(self, date_end):
         return [
-            _("Current"),
-            _("1 Month"),
-            _("2 Months"),
-            _("3 Months"),
-            _("4 Months"),
-            _("Older"),
-            _("Total"),
+            self.env._("Current"),
+            self.env._("1 Month"),
+            self.env._("2 Months"),
+            self.env._("3 Months"),
+            self.env._("4 Months"),
+            self.env._("Older"),
+            self.env._("Total"),
         ]
 
     def _get_line_currency_defaults(
@@ -352,7 +352,7 @@ class ReportStatementCommon(models.AbstractModel):
         aging_type = data["aging_type"]
         is_activity = data.get("is_activity")
         is_detailed = data.get("is_detailed")
-        today = fields.Date.context_today(self)
+        today = fields.Date.today()
         amount_field = data.get("amount_field", "amount")
 
         # There should be relatively few of these, so to speed performance
@@ -445,8 +445,7 @@ class ReportStatementCommon(models.AbstractModel):
                         line["currency_id"], currencies, 0.0, 0.0
                     )
                 line_currency = currency_dict[line["currency_id"]]
-                if not line["blocked"]:
-                    line_currency["amount_due"] += line["open_amount"]
+                line_currency["amount_due"] += line["open_amount"]
                 line["balance"] = line_currency["amount_due"]
                 line["date"] = format_date(
                     line["date"], date_formats.get(partner_id, default_fmt)
@@ -468,12 +467,10 @@ class ReportStatementCommon(models.AbstractModel):
                     )
                 line_currency = currency_dict[line["currency_id"]]
                 if not is_activity:
-                    if not line["blocked"]:
-                        line_currency["amount_due"] += line[amount_field]
+                    line_currency["amount_due"] += line[amount_field]
                     line["balance"] = line_currency["amount_due"]
                 else:
-                    if not line["blocked"]:
-                        line_currency["ending_balance"] += line[amount_field]
+                    line_currency["ending_balance"] += line[amount_field]
                     line["balance"] = line_currency["ending_balance"]
                 line["outside-date-rank"] = False
                 line["date"] = format_date(
@@ -495,8 +492,7 @@ class ReportStatementCommon(models.AbstractModel):
                         line2["applied_amount"] = line2["open_amount"]
                         if line2["date"] >= date_start and line2["date"] <= date_end:
                             line2["outside-date-rank"] = False
-                            if not line2["blocked"]:
-                                line["applied_amount"] += line2["open_amount"]
+                            line["applied_amount"] += line2["open_amount"]
                         else:
                             line2["outside-date-rank"] = True
                         line2["date"] = format_date(
@@ -514,8 +510,7 @@ class ReportStatementCommon(models.AbstractModel):
                             )
                 if is_activity:
                     line["open_amount"] = line["amount"] + line["applied_amount"]
-                    if not line["blocked"]:
-                        line_currency["amount_due"] += line["open_amount"]
+                    line_currency["amount_due"] += line["open_amount"]
 
             if is_detailed:
                 for line_currency in currency_dict.values():
@@ -523,8 +518,7 @@ class ReportStatementCommon(models.AbstractModel):
 
             for line in ending_lines.get(partner_id, []):
                 line_currency = currency_dict[line["currency_id"]]
-                if not line["blocked"]:
-                    line_currency["amount_due"] += line["open_amount"]
+                line_currency["amount_due"] += line["open_amount"]
                 line["balance"] = line_currency["amount_due"]
                 line["date"] = format_date(
                     line["date"], date_formats.get(partner_id, default_fmt)

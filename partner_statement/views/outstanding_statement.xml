@@ -5,10 +5,10 @@
     <template id="outstanding_balance">
         <p>
             <span
-                t-out="'' if  account_type == 'asset_receivable' else 'Supplier '"
-            /><span t-out="title_name" /> up to <span t-out="ending_date" /> in <span
-                t-out="display_currency.name"
-            />
+            t-out="'' if  account_type == 'asset_receivable' else 'Supplier '"
+        /><span t-out="title_name" /> up to <span t-out="ending_date" /> in <span
+            t-out="display_currency.name"
+        />
         </p>
         <table class="table table-sm table-statement">
             <thead>
@@ -23,11 +23,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr
-                    t-foreach="currency[line_type]"
-                    t-as="line"
-                    t-att-class="'statement-blocked' if line['blocked'] else ''"
-                >
+                <tr t-foreach="currency[line_type]" t-as="line">
                     <td>
                         <span t-out="line['move_id']" />
                     </td>
@@ -109,11 +105,11 @@
                     t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'
                 />
                 <div t-if="o.vat" class="mt16"><t
-                        t-out="company.country_id.vat_label or 'Tax ID'"
-                    />: <span t-field="o.vat" /></div>
+                    t-out="company.country_id.vat_label or 'Tax ID'"
+                />: <span t-field="o.vat" /></div>
             </t>
             <div class="page">
-                <div class="oe_structure" />
+                <!--                <div class="oe_structure" />-->
                 <h2>Statement of Account</h2>
                 <div id="informations" class="row mt32 mb32">
                     <div class="col-3 bm-2">

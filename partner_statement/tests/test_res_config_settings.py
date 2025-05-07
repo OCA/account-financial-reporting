@@ -37,10 +37,10 @@ class TestResConfigSettings(TransactionCase):
         )
         conf.set_values()
         self.assertFalse(
-            self.user_obj._has_group("partner_statement.group_outstanding_statement")
+            self.env.user.has_group("partner_statement.group_outstanding_statement")
         )
         self.assertTrue(
-            self.user_obj._has_group("partner_statement.group_activity_statement")
+            self.env.user.has_group("partner_statement.group_activity_statement")
         )
         res = (
             self.env["activity.statement.wizard"]

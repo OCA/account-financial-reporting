@@ -14,13 +14,6 @@
     }
 }
 
-.statement-blocked {
-    background-color: $gray-500 !important;
-    td:last-child {
-        background-color: $gray-500 !important;
-    }
-}
-
 .statement-reconciled {
     font-size: smaller;
     font-style: italic !important;
