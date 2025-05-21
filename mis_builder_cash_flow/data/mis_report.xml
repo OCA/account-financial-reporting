@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2019 ADHOC SA
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo noupdate="True">
+    <record id="mis_report_cash_flow" model="mis.report">
+        <field name="name">Cash Flow</field>
+        <field name="style_id" ref="mis_style_cash_flow" />
+    </record>
+    <record id="mis_kpi_aliquidity" model="mis.report.kpi">
+        <field name="report_id" ref="mis_report_cash_flow" />
+        <field name="name">liquidity</field>
+        <field name="description">LIQUIDITY</field>
+        <field name="style_id" ref="mis_style_account_sub_total" />
+        <field name="auto_expand_accounts" eval="True" />
+        <field name="auto_expand_accounts_style_id" ref="mis_style_account_detail" />
+        <field name="sequence">20</field>
+        <field
+            name="expression"
+        >bal[][('account_type', '=', 'asset_cash'), ('line_type', '=', 'move_line'), ('account_id.hide_in_cash_flow', '=', False)]</field>
+    </record>
+    <record id="mis_kpi_in_total" model="mis.report.kpi">
+        <field name="report_id" ref="mis_report_cash_flow" />
+        <field name="name">in_total</field>
+        <field name="description">IN TOTAL</field>
+        <field name="style_id" ref="mis_style_account_sub_total" />
+        <field name="sequence">30</field>
+        <field name="expression">in_receivable + in_forecast</field>
+    </record>
+    <record id="mis_kpi_in_receivable" model="mis.report.kpi">
+        <field name="report_id" ref="mis_report_cash_flow" />
+        <field name="name">in_receivable</field>
+        <field name="description">In receivable</field>
+        <field name="style_id" ref="mis_style_account_line" />
+        <field name="auto_expand_accounts" eval="True" />
+        <field name="auto_expand_accounts_style_id" ref="mis_style_account_detail" />
+        <field name="sequence">50</field>
+        <field
+            name="expression"
+        >bal[][ ('account_type', '=', 'asset_receivable'), ('full_reconcile_id', '=', False), ('line_type', '=', 'move_line'), ('account_id.hide_in_cash_flow', '=', False)]</field>
+    </record>
+    <record id="mis_kpi_in_forecast" model="mis.report.kpi">
+        <field name="report_id" ref="mis_report_cash_flow" />
+        <field name="name">in_forecast</field>
+        <field name="description">In forecast</field>
+        <field name="style_id" ref="mis_style_account_line" />
+        <field name="auto_expand_accounts" eval="True" />
+        <field name="auto_expand_accounts_style_id" ref="mis_style_account_detail" />
+        <field name="sequence">70</field>
+        <field
+            name="expression"
+        >bal[][('line_type', '=', 'forecast_line'), ('debit', '!=', 0.0), ('account_id.hide_in_cash_flow', '=', False)]</field>
+    </record>
+    <record id="mis_kpi_out_total" model="mis.report.kpi">
+        <field name="report_id" ref="mis_report_cash_flow" />
+        <field name="name">out_total</field>
+        <field name="description">OUT TOTAL</field>
+        <field name="style_id" ref="mis_style_account_sub_total" />
+        <field name="sequence">80</field>
+        <field name="expression">out_payable + out_forecast</field>
+    </record>
+    <record id="mis_kpi_out_payable" model="mis.report.kpi">
+        <field name="report_id" ref="mis_report_cash_flow" />
+        <field name="name">out_payable</field>
+        <field name="description">Out payable</field>
+        <field name="style_id" ref="mis_style_account_line" />
+        <field name="auto_expand_accounts" eval="True" />
+        <field name="auto_expand_accounts_style_id" ref="mis_style_account_detail" />
+        <field name="sequence">100</field>
+        <field
+            name="expression"
+        >bal[][ ('account_type', '=', 'liability_payable'), ('full_reconcile_id', '=', False), ('line_type', '=', 'move_line'), ('account_id.hide_in_cash_flow', '=', False)]</field>
+    </record>
+    <record id="mis_kpi_out_forecast" model="mis.report.kpi">
+        <field name="report_id" ref="mis_report_cash_flow" />
+        <field name="name">out_forecast</field>
+        <field name="description">Out forecast</field>
+        <field name="style_id" ref="mis_style_account_line" />
+        <field name="auto_expand_accounts" eval="True" />
+        <field name="auto_expand_accounts_style_id" ref="mis_style_account_detail" />
+        <field name="sequence">120</field>
+        <field
+            name="expression"
+        >bal[][('line_type', '=', 'forecast_line'), ('credit', '!=', 0.0), ('account_id.hide_in_cash_flow', '=', False)]</field>
+    </record>
+    <record id="mis_kpi_period_balance" model="mis.report.kpi">
+        <field name="report_id" ref="mis_report_cash_flow" />
+        <field name="name">period_balance</field>
+        <field name="description">PERIOD BALANCE</field>
+        <field name="style_id" ref="mis_style_account_sub_total" />
+        <field name="sequence">130</field>
+        <field name="expression">in_total + out_total</field>
+        <field
+            name="style_expression"
+        >'Cash Flow - Good' if period_balance >= 0.0 else 'Cash Flow - Bad'</field>
+    </record>
+    <record id="mis_kpi_balance" model="mis.report.kpi">
+        <field name="report_id" ref="mis_report_cash_flow" />
+        <field name="name">balance</field>
+        <field name="description">BALANCE</field>
+        <field name="style_id" ref="mis_style_account_total" />
+        <field name="sequence">150</field>
+        <field
+            name="expression"
+        >bale[][('account_id.hide_in_cash_flow', '=', False), '|', ('line_type', '=', 'forecast_line'), ('line_type', '=', 'move_line'), '|', ('account_type', '=', 'asset_cash'), ('account_type', 'in', ('asset_receivable', 'liability_payable')), ('full_reconcile_id', '=', False)]</field>
+        <field
+            name="style_expression"
+        >'Cash Flow - Good' if balance >= 0.0 else 'Cash Flow - Bad'</field>
+    </record>
+</odoo>

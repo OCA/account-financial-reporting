@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2019 ADHOC SA
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo noupdate="True">
+    <record id="mis_style_cash_flow" model="mis.report.style">
+        <field name="name">Cash Flow</field>
+        <field name="hide_empty_inherit" eval="False" />
+        <field name="hide_empty" eval="True" />
+    </record>
+    <record id="mis_style_account_detail" model="mis.report.style">
+        <field name="name">Cash flow style account detail</field>
+        <field name="font_style_inherit" eval="False" />
+        <field name="font_style">italic</field>
+        <field name="indent_level_inherit" eval="False" />
+        <field name="indent_level">2</field>
+        <field name="font_size_inherit" eval="False" />
+        <field name="font_size">x-small</field>
+    </record>
+    <record id="mis_style_account_line" model="mis.report.style">
+        <field name="name">Cash flow line</field>
+        <field name="color_inherit" eval="False" />
+        <field name="color">#FFFFFF</field>
+        <field name="background_color_inherit" eval="False" />
+        <field name="background_color">#D4AFC4</field>
+        <field name="indent_level_inherit" eval="False" />
+        <field name="indent_level">1</field>
+    </record>
+    <record id="mis_style_account_sub_total" model="mis.report.style">
+        <field name="name">Cash flow style sub-total</field>
+        <field name="color_inherit" eval="False" />
+        <field name="color">#FFFFFF</field>
+        <field name="background_color_inherit" eval="False" />
+        <field name="background_color">#967C8B</field>
+        <field name="font_weight_inherit" eval="False" />
+        <field name="font_weight">bold</field>
+    </record>
+    <record id="mis_style_account_total" model="mis.report.style">
+        <field name="name">Cash flow style total</field>
+        <field name="color_inherit" eval="False" />
+        <field name="color">#FFFFFF</field>
+        <field name="background_color_inherit" eval="False" />
+        <field name="background_color">#7A6571</field>
+        <field name="font_weight_inherit" eval="False" />
+        <field name="font_weight">bold</field>
+    </record>
+    <record id="mis_style_hidden" model="mis.report.style">
+        <field name="name">Cash Flow - hidden</field>
+        <field name="hide_always_inherit" eval="False" />
+        <field name="hide_always" eval="True" />
+    </record>
+    <record id="mis_style_good" model="mis.report.style">
+        <field name="name">Cash Flow - Good</field>
+        <field name="color_inherit" eval="False" />
+        <field name="color">#005700</field>
+    </record>
+    <record id="mis_style_bad" model="mis.report.style">
+        <field name="name">Cash Flow - Bad</field>
+        <field name="color_inherit" eval="False" />
+        <field name="color">#7A0000</field>
+    </record>
+</odoo>
