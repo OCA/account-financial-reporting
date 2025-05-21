@@ -278,8 +278,8 @@ msgstr "Stato"
 #. odoo-python
 #: code:addons/mis_builder_cash_flow/models/mis_cash_flow_forecast_line.py:0
 #, python-format
-msgid "The Company and the Company of the Account must be the same."
-msgstr "L'azienda e l'azienda del conto devono coincidere."
+msgid "The forecast line company must be one of the account's companies."
+msgstr "L'azienda della linea di previsione deve essere una delle aziende del conto."
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,help:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__account_id

@@ -18,7 +18,7 @@ class TestCashFlow(TransactionCase):
         self.report.company_id = self.company
         self.bank_account = self.env["account.account"].create(
             {
-                "company_id": self.company.id,
+                "company_ids": [(6, 0, [self.company.id])],
                 "code": "TEST1",
                 "name": "Bank account 01",
                 "account_type": "asset_cash",
@@ -26,7 +26,7 @@ class TestCashFlow(TransactionCase):
         )
         self.bank_account_hide = self.env["account.account"].create(
             {
-                "company_id": self.company.id,
+                "company_ids": [(6, 0, [self.company.id])],
                 "code": "TEST2",
                 "name": "Bank account 02",
                 "account_type": "asset_cash",
@@ -35,7 +35,7 @@ class TestCashFlow(TransactionCase):
         )
         self.account = self.env["account.account"].create(
             {
-                "company_id": self.company.id,
+                "company_ids": [(6, 0, [self.company.id])],
                 "code": "TEST3",
                 "name": "Account",
                 "account_type": "asset_cash",
@@ -52,10 +52,31 @@ class TestCashFlow(TransactionCase):
         )
 
     def test_company_constrain(self):
+        # Create another company
+        other_company = self.env["res.company"].create({"name": "OTHER_COMPANY"})
+
+        # Try to create a forecast line with a company that is not in the
+        # account's companies
         with self.assertRaises(ValidationError):
             self.env["mis.cash_flow.forecast_line"].create(
-                {"account_id": self.account.id, "date": Date.today(), "balance": 1000}
+                {
+                    "account_id": self.account.id,  # Account belongs to self.company
+                    "date": Date.today(),
+                    "balance": 1000,
+                    "company_id": other_company.id,  # Different company
+                }
             )
+
+        # Test that it works when the company is in the account's companies
+        forecast_line = self.env["mis.cash_flow.forecast_line"].create(
+            {
+                "account_id": self.account.id,  # Account belongs to self.company
+                "date": Date.today(),
+                "balance": 1000,
+                "company_id": self.company.id,  # Same company
+            }
+        )
+        self.assertTrue(forecast_line.id)  # Should be created successfully
 
     def test_report_instance(self):
         self.check_matrix()

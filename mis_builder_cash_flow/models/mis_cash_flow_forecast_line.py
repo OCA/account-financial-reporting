@@ -28,7 +28,24 @@ class MisCashFlowForecastLine(models.Model):
 
     @api.constrains("company_id", "account_id")
     def _check_company_id_account_id(self):
-        if self.filtered(lambda x: x.company_id != x.account_id.company_id):
-            raise ValidationError(
-                _("The Company and the Company of the Account must be the same.")
-            )
+        for line in self:
+            # In Odoo 18, account.account uses company_ids (Many2many)
+            # Check if the forecast line's company is in the account's companies
+            if (
+                line.account_id.company_ids
+                and line.company_id not in line.account_id.company_ids
+            ):
+                raise ValidationError(
+                    _(
+                        "The forecast line company must be one of the "
+                        "account's companies."
+                    )
+                )
+
+    @api.onchange("company_id")
+    def _onchange_company_id(self):
+        """Filter accounts based on the selected company"""
+        if self.company_id:
+            return {
+                "domain": {"account_id": [("company_ids", "in", self.company_id.id)]}
+            }

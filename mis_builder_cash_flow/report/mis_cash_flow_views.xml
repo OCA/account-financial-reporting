@@ -6,7 +6,7 @@
         <field name="name">mis.cash_flow.tree</field>
         <field name="model">mis.cash_flow</field>
         <field name="arch" type="xml">
-            <tree create="false" edit="false" delete="false">
+            <list create="false" edit="false" delete="false">
                 <field name="company_id" groups="base.group_multi_company" />
                 <field name="line_type" />
                 <field name="date" />
@@ -21,7 +21,7 @@
                     icon="fa-external-link"
                     name="action_open_related_line"
                 />
-            </tree>
+            </list>
         </field>
     </record>
     <record model="ir.ui.view" id="mis_cash_flow_form_view">
