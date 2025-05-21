@@ -1,0 +1,1 @@
+odoo18-addon-mis_builder @ git+https://github.com/OCA/mis-builder@refs/pull/652/head#subdirectory=setup/mis_builder
