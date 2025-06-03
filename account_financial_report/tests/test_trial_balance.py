@@ -38,12 +38,10 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
             {
                 "code": "001",
                 "name": "Account 001",
-                "group_id": cls.group2.id,
                 "account_type": "income_other",
             },
         )
         cls.account100 = cls.company_data["default_account_receivable"]
-        cls.account100.group_id = cls.group1.id
         cls.account110 = cls.env["account.account"].search(
             [
                 (
@@ -59,7 +57,6 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
             {
                 "code": "200",
                 "name": "Account 200",
-                "group_id": cls.group2.id,
                 "account_type": "income_other",
             },
         )
@@ -76,7 +73,6 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
             {
                 "code": "201",
                 "name": "Account 201",
-                "group_id": cls.group2.id,
                 "account_type": "income_other",
             },
         )
@@ -100,8 +96,6 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
 
     def _create_account_account(self, vals):
         item = self.env["account.account"].create(vals)
-        if "group_id" in vals:
-            item.group_id = vals["group_id"]
         return item
 
     def _add_move(
