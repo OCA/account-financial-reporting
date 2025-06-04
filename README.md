@@ -29,11 +29,11 @@ addon | version | maintainers | summary
 --- | --- | --- | ---
 [account_bank_reconciliation_summary_xlsx](account_bank_reconciliation_summary_xlsx/) | 13.0.1.0.1 |  | XLSX report to help on bank reconciliation
 [account_financial_report](account_financial_report/) | 13.0.2.7.1 |  | OCA Financial Reports
-[account_purchase_stock_report_non_billed](account_purchase_stock_report_non_billed/) | 13.0.1.1.0 | [![CarlosRoca13](https://github.com/CarlosRoca13.png?size=30px)](https://github.com/CarlosRoca13) | Account Purchase Stock Report Non Billed
-[account_sale_stock_report_non_billed](account_sale_stock_report_non_billed/) | 13.0.1.1.2 | [![CarlosRoca13](https://github.com/CarlosRoca13.png?size=30px)](https://github.com/CarlosRoca13) | Account Sale Stock Report Non Billed
+[account_purchase_stock_report_non_billed](account_purchase_stock_report_non_billed/) | 13.0.1.1.0 | <a href='https://github.com/CarlosRoca13'><img src='https://github.com/CarlosRoca13.png' width='32' height='32' style='border-radius:50%;' alt='CarlosRoca13'/></a> | Account Purchase Stock Report Non Billed
+[account_sale_stock_report_non_billed](account_sale_stock_report_non_billed/) | 13.0.1.1.2 | <a href='https://github.com/CarlosRoca13'><img src='https://github.com/CarlosRoca13.png' width='32' height='32' style='border-radius:50%;' alt='CarlosRoca13'/></a> | Account Sale Stock Report Non Billed
 [account_tax_balance](account_tax_balance/) | 13.0.1.0.3 |  | Compute tax balances based on date range
-[mis_builder_cash_flow](mis_builder_cash_flow/) | 13.0.1.1.1 | [![jjscarafia](https://github.com/jjscarafia.png?size=30px)](https://github.com/jjscarafia) | MIS Builder Cash Flow
-[mis_template_financial_report](mis_template_financial_report/) | 13.0.1.0.0 | [![hbrunn](https://github.com/hbrunn.png?size=30px)](https://github.com/hbrunn) | Profit & Loss / Balance sheet MIS templates
+[mis_builder_cash_flow](mis_builder_cash_flow/) | 13.0.1.1.1 | <a href='https://github.com/jjscarafia'><img src='https://github.com/jjscarafia.png' width='32' height='32' style='border-radius:50%;' alt='jjscarafia'/></a> | MIS Builder Cash Flow
+[mis_template_financial_report](mis_template_financial_report/) | 13.0.1.0.0 | <a href='https://github.com/hbrunn'><img src='https://github.com/hbrunn.png' width='32' height='32' style='border-radius:50%;' alt='hbrunn'/></a> | Profit & Loss / Balance sheet MIS templates
 [partner_statement](partner_statement/) | 13.0.1.4.0 |  | OCA Financial Reports
 
 [//]: # (end addons)
