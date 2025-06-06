@@ -52,12 +52,12 @@
                         <t
                             t-set="aml_domain_extra"
                             t-if="grouped_item['id'] > 0"
-                            t-value="[('analytic_account_id', '=', grouped_item['id'])]"
+                            t-value="[('analytic_account_ids', '=', grouped_item['id'])]"
                         />
                         <t
                             t-set="aml_domain_extra"
                             t-else=""
-                            t-value="[('analytic_account_id', '=', False)]"
+                            t-value="[('analytic_account_ids', '=', False)]"
                         />
                         <div class="act_as_table data_table" style="width: 100%;">
                             <t

@@ -5,6 +5,7 @@
 
 
 from odoo import _, api, models
+from odoo.exceptions import UserError
 from odoo.tools.float_utils import float_is_zero
 
 
@@ -687,8 +688,26 @@ class TrialBalanceReport(models.AbstractModel):
         return trial_balance, total_amount_grouped
 
     def _get_hierarchy_groups(self, group_ids, groups_data, foreign_currency):
-        for group_id in group_ids:
+        processed_groups = []
+        # Sort groups so that parent groups are processed before child groups
+        groups = (
+            self.env["account.group"]
+            .browse(group_ids)
+            .sorted(key=lambda x: x.complete_code)
+        )
+        for group in groups:
+            group_id = group.id
             parent_id = groups_data[group_id]["parent_id"]
+            if group_id in processed_groups:
+                raise UserError(
+                    _(
+                        "There is a problem in the structure of the account groups. "
+                        "You may need to create some child group of %s."
+                    )
+                    % groups_data[group_id]["name"]
+                )
+            else:
+                processed_groups.append(parent_id)
             while parent_id:
                 if parent_id not in groups_data.keys():
                     group = self.env["account.group"].browse(parent_id)
