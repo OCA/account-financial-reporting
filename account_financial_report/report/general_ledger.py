@@ -108,12 +108,12 @@ class GeneralLedgerReport(models.AbstractModel):
     def _get_accounts_initial_balance(self, initial_domain_bs, initial_domain_pl):
         gl_initial_acc_bs = self.env["account.move.line"].read_group(
             domain=initial_domain_bs,
-            fields=["account_id", "debit", "credit", "balance", "amount_currency:sum"],
+            fields=["account_id", "debit", "credit", "balance", "amount_currency"],
             groupby=["account_id"],
         )
         gl_initial_acc_pl = self.env["account.move.line"].read_group(
             domain=initial_domain_pl,
-            fields=["account_id", "debit", "credit", "balance", "amount_currency:sum"],
+            fields=["account_id", "debit", "credit", "balance", "amount_currency"],
             groupby=["account_id"],
         )
         gl_initial_acc = gl_initial_acc_bs + gl_initial_acc_pl
@@ -143,7 +143,7 @@ class GeneralLedgerReport(models.AbstractModel):
         )
         initial_balances = self.env["account.move.line"].read_group(
             domain=domain,
-            fields=["account_id", "debit", "credit", "balance", "amount_currency:sum"],
+            fields=["account_id", "debit", "credit", "balance", "amount_currency"],
             groupby=["account_id"],
         )
         pl_initial_balance = {
@@ -207,7 +207,7 @@ class GeneralLedgerReport(models.AbstractModel):
                 "debit",
                 "credit",
                 "balance",
-                "amount_currency:sum",
+                "amount_currency",
             ],
             groupby=["account_id", "partner_id"],
             lazy=False,
@@ -235,7 +235,7 @@ class GeneralLedgerReport(models.AbstractModel):
                 "debit",
                 "credit",
                 "balance",
-                "amount_currency:sum",
+                "amount_currency",
                 "tax_line_id",
             ],
             groupby=["account_id"],

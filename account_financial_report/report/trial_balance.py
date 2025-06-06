@@ -193,7 +193,7 @@ class TrialBalanceReport(models.AbstractModel):
         )
         initial_balances = self.env["account.move.line"].read_group(
             domain=domain,
-            fields=["account_id", "balance", "amount_currency:sum"],
+            fields=["account_id", "balance", "amount_currency"],
             groupby=["account_id"],
         )
         pl_initial_balance = 0.0
@@ -229,7 +229,7 @@ class TrialBalanceReport(models.AbstractModel):
                         "debit",
                         "credit",
                         "balance",
-                        "amount_currency:sum",
+                        "amount_currency",
                     ],
                     groupby=[group_by],
                 )
@@ -446,7 +446,7 @@ class TrialBalanceReport(models.AbstractModel):
         )
         tb_initial_acc_bs = self.env["account.move.line"].read_group(
             domain=initial_domain_bs,
-            fields=["account_id", "balance", "amount_currency:sum"],
+            fields=["account_id", "balance", "amount_currency"],
             groupby=groupby_fields,
         )
         initial_domain_pl = self._get_initial_balances_pl_ml_domain(
@@ -461,7 +461,7 @@ class TrialBalanceReport(models.AbstractModel):
         )
         tb_initial_acc_pl = self.env["account.move.line"].read_group(
             domain=initial_domain_pl,
-            fields=["account_id", "balance", "amount_currency:sum"],
+            fields=["account_id", "balance", "amount_currency"],
             groupby=groupby_fields,
         )
         tb_initial_acc_rg = tb_initial_acc_bs + tb_initial_acc_pl
@@ -481,7 +481,7 @@ class TrialBalanceReport(models.AbstractModel):
                     gb_data = {}
                     account_rg_grouped = self.env["account.move.line"].read_group(
                         domain=account_rg["__domain"],
-                        fields=[group_by, "balance", "amount_currency:sum"],
+                        fields=[group_by, "balance", "amount_currency"],
                         groupby=[group_by],
                     )
                     for a_rg2 in account_rg_grouped:
@@ -507,20 +507,20 @@ class TrialBalanceReport(models.AbstractModel):
         )
         tb_period_acc = self.env["account.move.line"].read_group(
             domain=period_domain,
-            fields=["account_id", "debit", "credit", "balance", "amount_currency:sum"],
+            fields=["account_id", "debit", "credit", "balance", "amount_currency"],
             groupby=groupby_fields,
         )
 
         if show_partner_details:
             tb_initial_prt_bs = self.env["account.move.line"].read_group(
                 domain=initial_domain_bs,
-                fields=["account_id", "partner_id", "balance", "amount_currency:sum"],
+                fields=["account_id", "partner_id", "balance", "amount_currency"],
                 groupby=["account_id", "partner_id"],
                 lazy=False,
             )
             tb_initial_prt_pl = self.env["account.move.line"].read_group(
                 domain=initial_domain_pl,
-                fields=["account_id", "partner_id", "balance", "amount_currency:sum"],
+                fields=["account_id", "partner_id", "balance", "amount_currency"],
                 groupby=["account_id", "partner_id"],
             )
             tb_initial_prt = tb_initial_prt_bs + tb_initial_prt_pl
@@ -534,7 +534,7 @@ class TrialBalanceReport(models.AbstractModel):
                     "debit",
                     "credit",
                     "balance",
-                    "amount_currency:sum",
+                    "amount_currency",
                 ],
                 groupby=["account_id", "partner_id"],
                 lazy=False,
