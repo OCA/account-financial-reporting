@@ -125,6 +125,7 @@ class ActivityStatement(models.AbstractModel):
         excluded_accounts_ids = tuple(
             self.env.context.get("excluded_accounts_ids", [])
         ) or (-1,)
+        show_only_overdue = self.env.context.get("show_only_overdue", False)
         payment_ref = _("Payment")
         return str(
             self._cr.mogrify(
@@ -166,6 +167,11 @@ class ActivityStatement(models.AbstractModel):
                 AND %(date_start)s <= l.date
                 AND l.date <= %(date_end)s
                 AND m.state IN ('posted')
+                AND CASE
+                    WHEN %(show_only_overdue)s
+                    THEN COALESCE(l.date_maturity, l.date) <= %(date_end)s
+                    ELSE TRUE
+                END
             GROUP BY l.partner_id, m.name, l.date, l.date_maturity,
                 CASE WHEN (aj.type IN ('sale', 'purchase'))
                     THEN l.name

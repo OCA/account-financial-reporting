@@ -53,6 +53,7 @@ class ReportStatementCommon(models.AbstractModel):
         excluded_accounts_ids = tuple(
             self.env.context.get("excluded_accounts_ids", [])
         ) or (-1,)
+        show_only_overdue = self.env.context.get("show_only_overdue", False)
         return str(
             self._cr.mogrify(
                 """
@@ -95,6 +96,11 @@ class ReportStatementCommon(models.AbstractModel):
                                   (pd.id IS NULL AND pc.id IS NULL)
                                 ) AND l.date <= %(date_end)s AND not l.blocked
                                   AND m.state IN ('posted')
+                                AND CASE
+                                    WHEN %(show_only_overdue)s
+                                    THEN COALESCE(l.date_maturity, l.date) <= %(date_end)s
+                                    ELSE TRUE
+                                END
             GROUP BY l.partner_id, l.currency_id, l.date, l.date_maturity,
                                 l.amount_currency, l.balance, l.move_id,
                                 l.company_id, l.id
@@ -359,6 +365,11 @@ class ReportStatementCommon(models.AbstractModel):
             self = self.with_context(
                 excluded_accounts_ids=excluded_accounts_ids,
             )
+        show_only_overdue = data["show_only_overdue"]
+        if show_only_overdue:
+            self = self.with_context(
+                show_only_overdue=show_only_overdue,
+            )
         aging_type = data["aging_type"]
         is_activity = data.get("is_activity")
         is_detailed = data.get("is_detailed")
@@ -584,6 +595,7 @@ class ReportStatementCommon(models.AbstractModel):
             "Currencies": currencies,
             "account_type": account_type,
             "excluded_accounts_ids": excluded_accounts_ids,
+            "show_only_overdue": show_only_overdue,
             "is_detailed": is_detailed,
             "bucket_labels": bucket_labels,
             "get_inv_addr": self._get_invoice_address,

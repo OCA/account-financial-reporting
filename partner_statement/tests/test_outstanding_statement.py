@@ -1,8 +1,9 @@
 # Copyright 2018 ForgeFlow, S.L. (https://www.forgeflow.com)
+# Copyright 2025 Simone Rubino - PyTech
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo.tests import new_test_user
-from odoo.tests.common import TransactionCase
+from odoo import fields
+from odoo.tests.common import TransactionCase, new_test_user
 
 
 class TestOutstandingStatement(TransactionCase):
@@ -149,3 +150,48 @@ class TestOutstandingStatement(TransactionCase):
         other_partner = partners - invoice_partner
         other_partner_data = report["data"].get(other_partner.id)
         self.assertFalse(other_partner_data)
+
+    def test_show_only_overdue(self):
+        """If "Show Only Overdue" is enabled,
+        only overdue lines are shown.
+        """
+        # Arrange
+        partner = self.partner1
+        today = fields.Date.today()
+        overdue_invoice = self.env["account.move"].search(
+            [
+                ("partner_id", "=", partner.id),
+                ("state", "=", "posted"),
+                ("invoice_date_due", "<", today),
+            ],
+            limit=1,
+        )
+        due_invoice = self.env["account.move"].search(
+            [
+                ("partner_id", "=", partner.id),
+                ("state", "=", "posted"),
+                ("invoice_date_due", ">=", today),
+            ],
+            limit=1,
+        )
+        wizard = self.wiz.with_context(active_ids=partner.ids,).create(
+            {
+                "date_end": today,
+                "show_only_overdue": True,
+            }
+        )
+        # pre-condition
+        self.assertTrue(due_invoice)
+        self.assertTrue(overdue_invoice)
+
+        # Act
+        data = wizard._prepare_statement()
+        report = self.statement_model._get_report_values(partner.ids, data)
+
+        # Assert
+        # Only the overdue invoice is shown
+        partner_data = report["data"][partner.id]["currencies"]
+        partner_move_lines = partner_data[overdue_invoice.currency_id.id]["lines"]
+        moves_names = [line["name"] for line in partner_move_lines]
+        self.assertNotIn(due_invoice.name, moves_names)
+        self.assertIn(overdue_invoice.name, moves_names)

@@ -65,6 +65,7 @@
                         <field name="excluded_accounts_selector" />
                     </group>
                     <group name="aging_report">
+                        <field name="show_only_overdue" />
                         <field name="show_aging_buckets" />
                         <field name="aging_type" />
                     </group>

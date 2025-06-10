@@ -21,6 +21,9 @@ class StatementCommon(models.AbstractModel):
     )
     date_end = fields.Date(required=True, default=fields.Date.context_today)
     show_aging_buckets = fields.Boolean(default=True)
+    show_only_overdue = fields.Boolean(
+        help="Show only lines due before the selected date",
+    )
     number_partner_ids = fields.Integer(
         default=lambda self: len(self._context["active_ids"])
     )
@@ -95,6 +98,7 @@ class StatementCommon(models.AbstractModel):
             "company_id": self.company_id.id,
             "partner_ids": self._context["active_ids"],
             "show_aging_buckets": self.show_aging_buckets,
+            "show_only_overdue": self.show_only_overdue,
             "filter_non_due_partners": self.filter_partners_non_due,
             "account_type": self.account_type,
             "aging_type": self.aging_type,
