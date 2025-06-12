@@ -22,6 +22,7 @@ class AccountAccount(models.Model):
                 "&",
                 ("date_maturity", "=", False),
                 ("date", "<=", date),
+                ("parent_state", "in", move_states),
             ]
         )
         return amls
