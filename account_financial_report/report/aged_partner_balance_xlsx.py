@@ -44,6 +44,14 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
             report_columns.update(
                 {
                     3: {
+                        "header": _("Current"),
+                        "field": "current",
+                        "field_footer_total": "current",
+                        "field_footer_percent": "percent_current",
+                        "type": "amount",
+                        "width": 14,
+                    },
+                    4: {
                         "header": _("Age ≤ 30 d."),
                         "field": "30_days",
                         "field_footer_total": "30_days",
@@ -51,7 +59,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                         "type": "amount",
                         "width": 14,
                     },
-                    4: {
+                    5: {
                         "header": _("Age ≤ 60 d."),
                         "field": "60_days",
                         "field_footer_total": "60_days",
@@ -59,7 +67,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                         "type": "amount",
                         "width": 14,
                     },
-                    5: {
+                    6: {
                         "header": _("Age ≤ 90 d."),
                         "field": "90_days",
                         "field_footer_total": "90_days",
@@ -67,7 +75,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                         "type": "amount",
                         "width": 14,
                     },
-                    6: {
+                    7: {
                         "header": _("Age ≤ 120 d."),
                         "field": "120_days",
                         "field_footer_total": "120_days",
@@ -75,7 +83,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                         "type": "amount",
                         "width": 14,
                     },
-                    7: {
+                    8: {
                         "header": _("Older"),
                         "field": "older",
                         "field_footer_total": "older",
@@ -132,7 +140,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
         if not report.age_partner_config_id:
             report_columns.update(
                 {
-                    9: {
+                    10: {
                         "header": _("Age ≤ 30 d."),
                         "field": "30_days",
                         "field_footer_total": "30_days",
@@ -141,7 +149,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                         "type": "amount",
                         "width": 14,
                     },
-                    10: {
+                    11: {
                         "header": _("Age ≤ 60 d."),
                         "field": "60_days",
                         "field_footer_total": "60_days",
@@ -150,7 +158,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                         "type": "amount",
                         "width": 14,
                     },
-                    11: {
+                    12: {
                         "header": _("Age ≤ 90 d."),
                         "field": "90_days",
                         "field_footer_total": "90_days",
@@ -159,7 +167,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                         "type": "amount",
                         "width": 14,
                     },
-                    12: {
+                    13: {
                         "header": _("Age ≤ 120 d."),
                         "field": "120_days",
                         "field_footer_total": "120_days",
@@ -168,7 +176,7 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
                         "type": "amount",
                         "width": 14,
                     },
-                    13: {
+                    14: {
                         "header": _("Older"),
                         "field": "older",
                         "field_footer_total": "older",
