@@ -3,10 +3,9 @@
 import calendar
 import datetime
 
-from dateutil.relativedelta import relativedelta
-
 from odoo import _, fields, models
 from odoo.tools.float_utils import float_is_zero
+from odoo.tools.misc import format_date
 
 
 class LiquidityForecastReport(models.AbstractModel):
@@ -353,44 +352,44 @@ class LiquidityForecastReport(models.AbstractModel):
         periods = []
         current_date = date_from
         sequence = 0
-        period_name = {
-            "days": _("Day"),
-            "weeks": _("Week"),
-            "months": _("Month"),
-        }
+
         while current_date <= date_to:
-            # Define the period as a dictionary with sequence and name
-            if sequence == 0:
-                name = "%s %s" % (_("Current"), period_name[period_length])
-            else:
-                name = "%s %s" % (period_name[period_length], sequence)
-            period = {
-                "sequence": sequence,
-                "name": name,
-                "date_from": current_date,
-            }
-            # Move to the next week
             if period_length == "days":
-                current_date += relativedelta(days=1)
+                name = format_date(self.env, current_date)
+                period_end = current_date
+
             elif period_length == "weeks":
-                weekday = current_date.weekday()
-                days_until_end_of_week = 6 - weekday
-                end_of_week = current_date + datetime.timedelta(
-                    days=days_until_end_of_week
-                )
-                current_date = end_of_week
+                monday = current_date - datetime.timedelta(days=current_date.weekday())
+                sunday = monday + datetime.timedelta(days=6)
+                period_end = sunday
+                name = _("From %(date_start)s to %(date_end)s") % {
+                    "date_start": format_date(self.env, monday),
+                    "date_end": format_date(self.env, sunday),
+                }
+                current_date = monday
+
             elif period_length == "months":
                 _x, last_day = calendar.monthrange(
                     current_date.year, current_date.month
                 )
-                end_of_month = datetime.date(
+                period_end = datetime.date(
                     current_date.year, current_date.month, last_day
                 )
-                current_date = end_of_month
-            period["date_to"] = current_date
+                name = format_date(self.env, current_date, date_format="MMMM yyyy")
+
+            if sequence == 0:
+                name = _("Current %s") % name
+
+            period = {
+                "sequence": sequence,
+                "name": name,
+                "date_from": current_date,
+                "date_to": min(period_end, date_to),
+            }
             periods.append(period)
             sequence += 1
-            current_date += datetime.timedelta(days=1)
+            current_date = period["date_to"] + datetime.timedelta(days=1)
+
         return periods
 
     def _prepare_liquidity_forecast_lines_period(
