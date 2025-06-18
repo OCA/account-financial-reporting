@@ -359,14 +359,24 @@ class LiquidityForecastReport(models.AbstractModel):
                 period_end = current_date
 
             elif period_length == "weeks":
-                monday = current_date - datetime.timedelta(days=current_date.weekday())
-                sunday = monday + datetime.timedelta(days=6)
-                period_end = sunday
-                name = _("From %(date_start)s to %(date_end)s") % {
-                    "date_start": format_date(self.env, monday),
-                    "date_end": format_date(self.env, sunday),
-                }
-                current_date = monday
+                lang = self.env.company.partner_id.lang
+                lang_obj = self.env["res.lang"].search([("code", "=", lang)], limit=1)
+                week_start_day = int(lang_obj.week_start or "7")
+
+                days_from_week_start = (current_date.weekday() - week_start_day) % 7
+                week_start = current_date - datetime.timedelta(
+                    days=days_from_week_start
+                )
+                week_end = week_start + datetime.timedelta(days=6)
+
+                period_end = week_end
+                current_date = week_start
+                week_number = week_start.isocalendar()[1]
+
+                name = (
+                    f"Week {week_number} ({format_date(self.env, week_start)} -"
+                    f" {format_date(self.env, week_end)})"
+                )
 
             elif period_length == "months":
                 _x, last_day = calendar.monthrange(
