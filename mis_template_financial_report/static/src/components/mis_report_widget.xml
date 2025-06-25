@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <templates>
-
     <t t-inherit="mis_builder.MisReportWidget" t-inherit-mode="extension">
         <xpath expr="//div[hasclass('oe_mis_builder_content')]" position="attributes">
             <attribute
