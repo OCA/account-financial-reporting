@@ -480,22 +480,27 @@
                                 t-as="analytic_id"
                             >
                                 <div>
-                                    <span
-                                        t-att-res-id="analytic_id"
-                                        res-model="account.analytic.account"
-                                        view-type="form"
+                                    <t
+                                        t-foreach="analytic_id.split(',')"
+                                        t-as="analytic_account_id"
                                     >
-                                        <t
-                                            t-out="o._get_atr_from_dict(int(analytic_id), analytic_data, 'name')"
-                                        />
-                                        <t
-                                            t-if="int(line['analytic_distribution'][analytic_id]) &lt; 100"
+                                        <span
+                                            t-att-res-id="analytic_account_id"
+                                            res-model="account.analytic.account"
+                                            view-type="form"
                                         >
                                             <t
-                                            t-out="int(line['analytic_distribution'][analytic_id])"
-                                        />%
-                                        </t>
-                                    </span>
+                                                t-out="o._get_atr_from_dict(int(analytic_account_id), analytic_data, 'name')"
+                                            />
+                                            <t
+                                                t-if="int(line['analytic_distribution'][analytic_id]) &lt; 100"
+                                            >
+                                                <t
+                                                t-out="int(line['analytic_distribution'][analytic_id])"
+                                            />%
+                                            </t>
+                                        </span>
+                                    </t>
                                 </div>
                             </t>
                         </div>

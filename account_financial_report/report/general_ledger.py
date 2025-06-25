@@ -484,7 +484,8 @@ class GeneralLedgerReport(models.AbstractModel):
             for tax_id in move_line["tax_ids"]:
                 taxes_ids.add(tax_id)
             for analytic_account in move_line["analytic_distribution"] or {}:
-                analytic_ids.add(int(analytic_account))
+                for analytic_account_id in analytic_account.split(","):
+                    analytic_ids.add(int(analytic_account_id))
             if move_line["full_reconcile_id"]:
                 rec_id = move_line["full_reconcile_id"][0]
                 if rec_id not in full_reconcile_ids:
