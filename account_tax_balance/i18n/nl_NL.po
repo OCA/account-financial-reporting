@@ -105,6 +105,11 @@ msgid "Financial Type"
 msgstr ""
 
 #. module: account_tax_balance
+#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_account_move_filter
+msgid "Financial type"
+msgstr ""
+
+#. module: account_tax_balance
 #: model:ir.model.fields,field_description:account_tax_balance.field_wizard_open_tax_balances__from_date
 #, fuzzy
 msgid "From Date"
@@ -150,11 +155,6 @@ msgstr "Laatst bijgewerkt door"
 #: code:addons/account_tax_balance/models/account_move.py:0
 msgid "Liquidity"
 msgstr "Liquiditeit"
-
-#. module: account_tax_balance
-#: model_terms:ir.ui.view,arch_db:account_tax_balance.view_account_move_filter
-msgid "Move type"
-msgstr ""
 
 #. module: account_tax_balance
 #: model_terms:ir.ui.view,arch_db:account_tax_balance.wizard_open_tax_balances
