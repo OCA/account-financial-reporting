@@ -5,7 +5,6 @@ from odoo import fields, models
 
 
 class LiquidityForecastReportWizard(models.TransientModel):
-
     _name = "account.liquidity.forecast.report.wizard"
     _description = "Liquidity Forecast Report Wizard"
 

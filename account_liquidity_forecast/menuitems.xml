@@ -22,5 +22,4 @@
         action="account_liquidity_forecast_planning_item_action"
         groups="account.group_account_user"
     />
-
 </odoo>
