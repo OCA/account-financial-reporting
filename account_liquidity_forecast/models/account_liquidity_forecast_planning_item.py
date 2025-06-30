@@ -25,7 +25,6 @@ class AccountLiquidityForecastPlanningItem(models.Model):
         related="company_id.currency_id",
         readonly=True,
         store=True,
-        precompute=True,
     )
     amount = fields.Monetary(currency_field="company_currency_id")
     direction = fields.Selection(

@@ -1,7 +1,7 @@
 # Copyright 2023 ForgeFlow S.L. (https://www.forgeflow.com)
 {
     "name": "Account Liquidity Forecast",
-    "version": "16.0.1.0.0",
+    "version": "15.0.1.0.0",
     "category": "Reporting",
     "summary": "Account Liquidity Forecast",
     "author": "ForgeFlow," "Odoo Community Association (OCA)",

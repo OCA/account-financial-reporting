@@ -13,15 +13,13 @@ class IrActionsReport(models.Model):
         return dict(self.env.context or {}, lang=lang) if lang else False
 
     @api.model
-    def _render_qweb_html(self, report_ref, docids, data=None):
+    def _render_qweb_html(self, docids, data=None):
         context = self._prepare_liquidity_forecast_report_context(data)
         obj = self.with_context(**context) if context else self
-        return super(IrActionsReport, obj)._render_qweb_html(
-            report_ref, docids, data=data
-        )
+        return super(IrActionsReport, obj)._render_qweb_html(docids, data)
 
     @api.model
-    def _render_xlsx(self, report_ref, docids, data=None):
+    def _render_xlsx(self, docids, data=None):
         context = self._prepare_liquidity_forecast_report_context(data)
         obj = self.with_context(**context) if context else self
-        return super(IrActionsReport, obj)._render_xlsx(report_ref, docids, data=data)
+        return super(IrActionsReport, obj)._render_xlsx(docids, data=data)

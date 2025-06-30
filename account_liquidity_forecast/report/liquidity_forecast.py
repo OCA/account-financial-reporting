@@ -52,7 +52,7 @@ class LiquidityForecastReport(models.AbstractModel):
     def _complete_beginning_balance(self, data, liquidity_forecast_lines, line, period):
         if period["sequence"] == 0:
             domain = [
-                ("account_id.account_type", "=", "asset_cash"),
+                ("account_id.user_type_id.type", "=", "liquidity"),
                 ("company_id", "=", data["company_id"]),
             ]
             if data["only_posted_moves"]:
@@ -239,7 +239,7 @@ class LiquidityForecastReport(models.AbstractModel):
     ):
         accounts = self.env["account.account"].search(
             [
-                ("account_type", "in", ["asset_receivable", "liability_payable"]),
+                ("user_type_id.type", "in", ["receivable", "payable"]),
                 ("company_id", "=", data["company_id"]),
             ]
         )
