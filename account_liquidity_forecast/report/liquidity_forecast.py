@@ -168,14 +168,13 @@ class LiquidityForecastReport(models.AbstractModel):
         for account in in_flows.keys():
             in_cash_flow_lines = list(
                 filter(
-                    lambda d: "cash_flow_line_%s_account_%s" % ("in", account.code)
-                    in d["code"],
+                    lambda d: f"cash_flow_line_in_account_{account.code}" in d["code"],
                     liquidity_forecast_lines,
                 )
             )
             if not in_cash_flow_lines:
                 in_cash_flow_line = {
-                    "code": "cash_flow_line_%s_account_%s" % ("in", account.code),
+                    "code": f"cash_flow_line_in_account_{account.code}",
                     "type": "amount",
                     "level": "detail",
                     "model": "account.move.line",
@@ -200,14 +199,13 @@ class LiquidityForecastReport(models.AbstractModel):
         for account in out_flows.keys():
             out_cash_flow_lines = list(
                 filter(
-                    lambda d: "cash_flow_line_%s_account_%s" % ("out", account.code)
-                    in d["code"],
+                    lambda d: f"cash_flow_line_out_account_{account.code}" in d["code"],
                     liquidity_forecast_lines,
                 )
             )
             if not out_cash_flow_lines:
                 out_cash_flow_line = {
-                    "code": "cash_flow_line_%s_account_%s" % ("out", account.code),
+                    "code": f"cash_flow_line_out_account_{account.code}",
                     "type": "amount",
                     "level": "detail",
                     "model": "account.move.line",
@@ -295,9 +293,9 @@ class LiquidityForecastReport(models.AbstractModel):
                 )
                 group_name = group and group.name or ""
             title = group_name or _("Forecast Planning Items")
-            code = "cash_flow_line_%s_planned_item" % direction
+            code = f"cash_flow_line_{direction}_planned_item"
             if group:
-                code = "%s_%s" % (code, group_name)
+                code = f"{code}_{group_name}"
             cash_flow_lines = list(
                 filter(
                     lambda d: code in d["code"],

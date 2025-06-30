@@ -29,7 +29,7 @@ class LiquidityForecastXslx(models.AbstractModel):
         report_name = _("Liquidity Forecast")
         if company_id:
             company = self.env["res.company"].browse(company_id)
-            suffix = " - {} - {}".format(company.name, company.currency_id.name)
+            suffix = f" - {company.name} - {company.currency_id.name}"
             report_name = report_name + suffix
         return report_name
 
@@ -47,7 +47,8 @@ class LiquidityForecastXslx(models.AbstractModel):
                 sheet.set_column("A:A", 30)
             else:
                 sheet.set_column(
-                    "%(col)s:%(col)s" % ({"col": self.excel_column_name(i + 1)}), 15
+                    f"{self.excel_column_name(i + 1)}:{self.excel_column_name(i + 1)}",
+                    15,
                 )
 
     def generate_xlsx_report(self, workbook, data, objects):
@@ -65,11 +66,9 @@ class LiquidityForecastXslx(models.AbstractModel):
             company = self.env.user.company_id
         currency = report_data["company_currency"]
         if currency.position == "after":
-            money_string = "#,##0.%s " % (
-                "0" * currency.decimal_places
-            ) + "[${}]".format(currency.symbol)
+            money_string = f" #,##0.{ '0' * currency.decimal_places }"
         elif currency.position == "before":
-            money_string = "[${}]".format(currency.symbol) + " #,##0.%s" % (
+            money_string = f"[${currency.symbol}]" + " #,##0.%s" % (
                 "0" * currency.decimal_places
             )
         FORMATS["money_format"] = workbook.add_format({"num_format": money_string})
@@ -88,12 +87,8 @@ class LiquidityForecastXslx(models.AbstractModel):
             0,
             row_pos,
             4,
-            _("Liquidity Forecast - %(company_name)s - %(currency_name)s")
-            % (
-                {
-                    "company_name": company.display_name,
-                    "currency_name": report_data["currency_name"],
-                }
+            _("Liquidity Forecast - {} - {}").format(
+                company.display_name, report_data["currency_name"]
             ),
             FORMATS["format_ws_title_center"],
         )
@@ -120,7 +115,7 @@ class LiquidityForecastXslx(models.AbstractModel):
             0,
             row_pos,
             2,
-            "From %s To %s" % (report_data["date_from"], report_data["date_to"]),
+            f"From {report_data['date_from']} To {report_data['date_to']}",
             FORMATS["format_center"],
         )
         sheet.merge_range(

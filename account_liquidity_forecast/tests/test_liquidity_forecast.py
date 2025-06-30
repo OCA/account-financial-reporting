@@ -119,7 +119,8 @@ class TestLiquidityForecastReport(TransactionCase):
         self.assertEqual(periods[1]["date_from"].year, 2024)
 
     def test_complete_beginning_balance_initial(self):
-        """Test beginning balance computed and set as float for initial empty periods."""
+        """Test beginning balance computed and set as float for initial empty
+        periods."""
         periods = self.report._generate_periods(self.data)
         period = periods[0]
         period_seq = period["sequence"]
