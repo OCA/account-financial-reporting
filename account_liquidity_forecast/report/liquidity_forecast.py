@@ -3,7 +3,7 @@
 import calendar
 import datetime
 
-from odoo import _, fields, models
+from odoo import fields, models
 from odoo.tools.float_utils import float_is_zero
 from odoo.tools.misc import format_date
 
@@ -238,7 +238,7 @@ class LiquidityForecastReport(models.AbstractModel):
         accounts = self.env["account.account"].search(
             [
                 ("account_type", "in", ["asset_receivable", "liability_payable"]),
-                ("company_id", "=", data["company_id"]),
+                ("company_ids", "in", data["company_id"]),
             ]
         )
         self._prepare_cash_flow_lines(
@@ -292,7 +292,7 @@ class LiquidityForecastReport(models.AbstractModel):
                     group_id
                 )
                 group_name = group and group.name or ""
-            title = group_name or _("Forecast Planning Items")
+            title = group_name or self.env._("Forecast Planning Items")
             code = f"cash_flow_line_{direction}_planned_item"
             if group:
                 code = f"{code}_{group_name}"
@@ -386,7 +386,7 @@ class LiquidityForecastReport(models.AbstractModel):
                 name = format_date(self.env, current_date, date_format="MMMM yyyy")
 
             if sequence == 0:
-                name = _("Current %s") % name
+                name = self.env._("Current %s") % name
 
             period = {
                 "sequence": sequence,
@@ -426,7 +426,7 @@ class LiquidityForecastReport(models.AbstractModel):
                 "type": "amount",
                 "level": "heading",
                 "model": "",
-                "title": _("BEGINNING BALANCE"),
+                "title": self.env._("BEGINNING BALANCE"),
                 "sequence": 10,
                 "periods": {},
             },
@@ -435,7 +435,7 @@ class LiquidityForecastReport(models.AbstractModel):
                 "type": "text",
                 "level": "heading",
                 "model": "",
-                "title": _("CASH INFLOWS"),
+                "title": self.env._("CASH INFLOWS"),
                 "sequence": 1000,
                 "periods": {},
             },
@@ -444,7 +444,7 @@ class LiquidityForecastReport(models.AbstractModel):
                 "type": "amount",
                 "level": "heading",
                 "model": "",
-                "title": _("Total Cash Inflows"),
+                "title": self.env._("Total Cash Inflows"),
                 "sequence": 2000,
                 "periods": {},
             },
@@ -453,7 +453,7 @@ class LiquidityForecastReport(models.AbstractModel):
                 "type": "text",
                 "level": "heading",
                 "model": "",
-                "title": _("CASH OUTFLOWS"),
+                "title": self.env._("CASH OUTFLOWS"),
                 "sequence": 3000,
                 "periods": {},
             },
@@ -463,7 +463,7 @@ class LiquidityForecastReport(models.AbstractModel):
                 "level": "heading",
                 "domain": "",
                 "model": "",
-                "title": _("Total Cash Outflows"),
+                "title": self.env._("Total Cash Outflows"),
                 "sequence": 4000,
                 "periods": {},
             },
@@ -473,7 +473,7 @@ class LiquidityForecastReport(models.AbstractModel):
                 "level": "heading",
                 "domain": "",
                 "model": "",
-                "title": _("NET CASH FLOW"),
+                "title": self.env._("NET CASH FLOW"),
                 "sequence": 5000,
                 "periods": {},
             },
@@ -483,7 +483,7 @@ class LiquidityForecastReport(models.AbstractModel):
                 "level": "heading",
                 "domain": "",
                 "model": "",
-                "title": _("ENDING BALANCE"),
+                "title": self.env._("ENDING BALANCE"),
                 "sequence": 6000,
                 "periods": {},
             },

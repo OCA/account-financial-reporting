@@ -1,7 +1,9 @@
 /** @odoo-module */
 /* eslint-disable no-undef */
+
 import {useComponent, useEffect} from "@odoo/owl";
 
+// Utility function to convert string to title case
 function toTitleCase(str) {
     return str
         .replaceAll(".", " ")
@@ -11,29 +13,26 @@ function toTitleCase(str) {
         );
 }
 
+// Function to enrich DOM elements with action links
 function enrich(component, targetElement, selector, isIFrame = false) {
     let doc = window.document;
     let contentDocument = targetElement;
 
-    // If we are in an iframe, we need to take the right document
-    // both for the element and the doc
+    // Handle iframe case
     if (isIFrame) {
         contentDocument = targetElement.contentDocument;
         doc = contentDocument;
     }
 
-    // If there are selector, we may have multiple blocks of code to enrich
-    const targets = [];
-    if (selector) {
-        targets.push(...contentDocument.querySelectorAll(selector));
-    } else {
-        targets.push(contentDocument);
-    }
+    // Collect targets based on selector
+    const targets = selector
+        ? [...contentDocument.querySelectorAll(selector)]
+        : [contentDocument];
 
-    // Search the elements with the selector, update them and bind an action.
+    // Add action links to elements with res-model and domain attributes
     for (const currentTarget of targets) {
         const elementsToWrap = currentTarget.querySelectorAll("[res-model][domain]");
-        for (const element of elementsToWrap.values()) {
+        for (const element of elementsToWrap) {
             const wrapper = doc.createElement("a");
             wrapper.setAttribute("href", "#");
             wrapper.addEventListener("click", (ev) => {
@@ -55,11 +54,11 @@ function enrich(component, targetElement, selector, isIFrame = false) {
     }
 }
 
+// Hook to enrich elements with action links
 export function useEnrichWithActionLinks(ref, selector = null) {
     const comp = useComponent();
     useEffect(
         (element) => {
-            // If we get an iframe, we need to wait until everything is loaded
             if (element.matches("iframe")) {
                 element.addEventListener("load", () =>
                     enrich(comp, element, selector, true)

@@ -70,82 +70,92 @@
     </template>
     <template id="account_liquidity_forecast.report_liquidity_forecast_lines_header">
         <!-- Calculate column width based on number of periods -->
-        <t t-set="period_count" t-value="len(periods)" />
-        <t t-set="items_width" t-value="15" />
-        <t t-set="period_width" t-value="(100 - items_width) / period_count" />
+        <t t-if="periods">
+            <t t-set="period_count" t-value="len(periods)" />
+            <t t-set="items_width" t-value="15" />
+            <t t-set="period_width" t-value="(100 - items_width) / period_count" />
 
-        <!-- Display table headers for lines -->
-        <div class="act_as_thead">
-            <div class="act_as_row labels">
-                <!--## Items-->
-                <div
-                    class="act_as_cell"
-                    t-attf-style="width: #{items_width}%;"
-                >Items</div>
-                <t t-foreach="periods" t-as="period">
-                    <!--## Periods-->
-                    <div class="act_as_cell" t-attf-style="width: #{period_width}%;">
-                        <t t-esc="period['name']" />
-                    </div>
-                </t>
+            <!-- Display table headers for lines -->
+            <div class="act_as_thead">
+                <div class="act_as_row labels">
+                    <!--## Items-->
+                    <div
+                        class="act_as_cell"
+                        t-attf-style="width: #{items_width}%;"
+                    >Items</div>
+                    <t t-foreach="periods" t-as="period">
+                        <!--## Periods-->
+                        <div
+                            class="act_as_cell"
+                            t-attf-style="width: #{period_width}%;"
+                        >
+                            <t t-esc="period['name']" />
+                        </div>
+                    </t>
+                </div>
             </div>
-        </div>
+        </t>
     </template>
 
     <template id="account_liquidity_forecast.report_liquidity_forecast_line">
         <!-- Calculate column width based on number of periods -->
-        <t t-set="period_count" t-value="len(periods)" />
-        <t t-set="items_width" t-value="15" />
-        <t t-set="period_width" t-value="(100 - items_width) / period_count" />
+        <t t-if="periods">
+            <t t-set="period_count" t-value="len(periods)" />
+            <t t-set="items_width" t-value="15" />
+            <t t-set="period_width" t-value="(100 - items_width) / period_count" />
 
-        <!-- # line -->
-        <t
-            t-set="line_class"
-            t-value="'act_as_row labels' if line['level'] == 'heading' else 'act_as_row'"
-        />
-        <div t-att-class="line_class">
-            <!--## Items-->
-            <div
-                class="act_as_cell left"
-                t-attf-style="#{style} width: #{items_width}%;"
-            >
-                <t t-esc="line['title']" />
-            </div>
-            <!--## Period-->
-            <t t-foreach="periods" t-as="period">
-                <t t-if="line['type'] == 'amount'">
-                    <div
-                        class="act_as_cell right"
-                        t-attf-style="#{style} width: #{period_width}%;"
-                    >
-                        <t t-if="line['periods'][period['sequence']]['domain']">
-                            <t
-                                t-set="domain"
-                                t-value="line['periods'][period['sequence']]['domain']"
-                            />
-                            <span t-att-domain="domain" t-att-res-model="line['model']">
+            <!-- # line -->
+            <t
+                t-set="line_class"
+                t-value="'act_as_row labels' if line['level'] == 'heading' else 'act_as_row'"
+            />
+            <div t-att-class="line_class">
+                <!--## Items-->
+                <div
+                    class="act_as_cell left"
+                    t-attf-style="#{style} width: #{items_width}%;"
+                >
+                    <t t-esc="line['title']" />
+                </div>
+                <!--## Period-->
+                <t t-foreach="periods" t-as="period">
+                    <t t-if="line['type'] == 'amount'">
+                        <div
+                            class="act_as_cell right"
+                            t-attf-style="#{style} width: #{period_width}%;"
+                        >
+                            <t t-if="line['periods'][period['sequence']]['domain']">
+                                <t
+                                    t-set="domain"
+                                    t-value="line['periods'][period['sequence']]['domain']"
+                                />
+                                <span
+                                    t-att-domain="domain"
+                                    t-att-res-model="line['model']"
+                                >
+                                    <t
+                                        t-esc="line['periods'][period['sequence']]['amount']"
+                                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                    />
+                                </span>
+                            </t>
+                            <t t-if="not line['periods'][period['sequence']]['domain']">
                                 <t
                                     t-esc="line['periods'][period['sequence']]['amount']"
                                     t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                                 />
-                            </span>
-                        </t>
-                        <t t-if="not line['periods'][period['sequence']]['domain']">
-                            <t
-                                t-esc="line['periods'][period['sequence']]['amount']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                            />
-                        </t>
-                    </div>
+                            </t>
+                        </div>
+                    </t>
+                    <t t-if="line['type'] == 'text'">
+                        <div
+                            class="act_as_cell labels"
+                            t-attf-style="#{style} width: #{period_width}%;"
+                        />
+                    </t>
                 </t>
-                <t t-if="line['type'] == 'text'">
-                    <div
-                        class="act_as_cell labels"
-                        t-attf-style="#{style} width: #{period_width}%;"
-                    />
-                </t>
-            </t>
-        </div>
+            </div>
+        </t>
     </template>
 
     <template id="account_liquidity_forecast.report_liquidity_forecast_footer">
