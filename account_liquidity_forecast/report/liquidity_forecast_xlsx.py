@@ -2,7 +2,7 @@
 # Copyright 2023 ForgeFlow S.L.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import _, models
+from odoo import models
 
 from odoo.addons.report_xlsx_helper.report.report_xlsx_format import FORMATS
 
@@ -26,7 +26,7 @@ class LiquidityForecastXslx(models.AbstractModel):
 
     def _get_report_name(self, report, data=False):
         company_id = data.get("company_id", False)
-        report_name = _("Liquidity Forecast")
+        report_name = self.env._("Liquidity Forecast")
         if company_id:
             company = self.env["res.company"].browse(company_id)
             suffix = f" - {company.name} - {company.currency_id.name}"
@@ -77,7 +77,7 @@ class LiquidityForecastXslx(models.AbstractModel):
         )
         FORMATS["format_center_bold"].text_wrap = 1
         FORMATS["format_center"].text_wrap = 1
-        sheet = workbook.add_worksheet(_("Liquidity Forecast"))
+        sheet = workbook.add_worksheet(self.env._("Liquidity Forecast"))
         sheet.set_landscape()
         total_col_count = len(report_data["periods"])
         self._size_columns(sheet, total_col_count, data)
@@ -87,7 +87,7 @@ class LiquidityForecastXslx(models.AbstractModel):
             0,
             row_pos,
             4,
-            _("Liquidity Forecast - {} - {}").format(
+            self.env._("Liquidity Forecast - {} - {}").format(
                 company.display_name, report_data["currency_name"]
             ),
             FORMATS["format_ws_title_center"],
@@ -98,7 +98,7 @@ class LiquidityForecastXslx(models.AbstractModel):
             0,
             row_pos,
             2,
-            _("Date range filter"),
+            self.env._("Date range filter"),
             FORMATS["format_theader_yellow_center"],
         )
         sheet.merge_range(
@@ -106,7 +106,7 @@ class LiquidityForecastXslx(models.AbstractModel):
             3,
             row_pos,
             4,
-            _("Target moves filter"),
+            self.env._("Target moves filter"),
             FORMATS["format_theader_yellow_center"],
         )
         row_pos += 1

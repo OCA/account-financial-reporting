@@ -18,7 +18,7 @@
     <menuitem
         name="Liquidity Forecast Planning Items"
         id="account_liquidity_forecast_planning_item_menu"
-        parent="account.menu_finance_entries_management"
+        parent="account.menu_finance_entries"
         action="account_liquidity_forecast_planning_item_action"
         groups="account.group_account_user"
     />
