@@ -2,8 +2,10 @@
 # Copyright 2025 Simone Rubino - PyTech
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
+from dateutil.relativedelta import relativedelta
+
 from odoo import fields
-from odoo.tests.common import TransactionCase, new_test_user
+from odoo.tests.common import Form, TransactionCase, new_test_user
 
 
 class TestOutstandingStatement(TransactionCase):
@@ -95,6 +97,20 @@ class TestOutstandingStatement(TransactionCase):
             "bucket_labels", report, "There was an error while compiling the report."
         )
 
+    def init_invoice(self, move_type, partner, invoice_date=None, post=True):
+        move_form = Form(
+            self.env["account.move"].with_context(default_move_type=move_type)
+        )
+        move_form.partner_id = partner
+        move_form.invoice_date = invoice_date or fields.Date.from_string("2019-01-01")
+        with move_form.invoice_line_ids.new() as line:
+            line.name = "Test line"
+            line.price_unit = 100
+        move = move_form.save()
+        if post:
+            move.action_post()
+        return move
+
     def test_exclude_accounts(self):
         """Accounts can be excluded with a code selector."""
         # Arrange
@@ -106,13 +122,8 @@ class TestOutstandingStatement(TransactionCase):
         # Edit one invoice
         # including a new account
         # that will be the only one not excluded
-        partner_invoice = self.env["account.move"].search(
-            [
-                ("partner_id", "in", partners.ids),
-                ("state", "=", "posted"),
-            ],
-            limit=1,
-        )
+        partner_invoice = self.init_invoice("out_invoice", partners[0])
+
         account = partner_invoice.line_ids.account_id.filtered(
             lambda a: a.internal_type == wizard.account_type
         )
@@ -158,22 +169,13 @@ class TestOutstandingStatement(TransactionCase):
         # Arrange
         partner = self.partner1
         today = fields.Date.today()
-        overdue_invoice = self.env["account.move"].search(
-            [
-                ("partner_id", "=", partner.id),
-                ("state", "=", "posted"),
-                ("invoice_date_due", "<", today),
-            ],
-            limit=1,
+        overdue_invoice = self.init_invoice(
+            "out_invoice", partner, invoice_date=today - relativedelta(months=1)
         )
-        due_invoice = self.env["account.move"].search(
-            [
-                ("partner_id", "=", partner.id),
-                ("state", "=", "posted"),
-                ("invoice_date_due", ">=", today),
-            ],
-            limit=1,
+        due_invoice = self.init_invoice(
+            "out_invoice", partner, invoice_date=today + relativedelta(months=1)
         )
+
         wizard = self.wiz.with_context(active_ids=partner.ids,).create(
             {
                 "date_end": today,
