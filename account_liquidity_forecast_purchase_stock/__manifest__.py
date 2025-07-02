@@ -1,7 +1,7 @@
 # Copyright 2025 ForgeFlow S.L. (https://www.forgeflow.com)
 {
     "name": "Account Liquidity Forecast Purchase Stock",
-    "version": "16.0.1.0.0",
+    "version": "15.0.1.0.0",
     "category": "Reporting",
     "summary": "Account Liquidity Forecast Purchase Stock",
     "author": "ForgeFlow," "Odoo Community Association (OCA)",
