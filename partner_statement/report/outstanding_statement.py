@@ -1,7 +1,7 @@
 # Copyright 2018 ForgeFlow, S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, models
+from odoo import _, api, models
 from odoo.tools.float_utils import float_is_zero
 
 
@@ -11,6 +11,18 @@ class OutstandingStatement(models.AbstractModel):
     _inherit = "statement.common"
     _name = "report.partner_statement.outstanding_statement"
     _description = "Partner Outstanding Statement"
+
+    def _get_title(self, partner, **kwargs):
+        kwargs["context"] = {
+            "lang": partner.lang,
+        }
+        if kwargs.get("account_type") == "receivable":
+            title = _("Statement up to %(ending_date)s in %(currency)s", **kwargs)
+        else:
+            title = _(
+                "Supplier Statement up to %(ending_date)s in %(currency)s", **kwargs
+            )
+        return title
 
     def _display_outstanding_lines_sql_q1(self, partners, date_end, account_type):
         partners = tuple(partners)

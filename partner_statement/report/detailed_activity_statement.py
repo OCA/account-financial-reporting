@@ -1,7 +1,7 @@
 # Copyright 2022 ForgeFlow, S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import models
+from odoo import _, models
 
 from .outstanding_statement import OutstandingStatement
 
@@ -12,6 +12,34 @@ class DetailedActivityStatement(models.AbstractModel):
     _inherit = "report.partner_statement.activity_statement"
     _name = "report.partner_statement.detailed_activity_statement"
     _description = "Partner Detailed Activity Statement"
+
+    def _get_title(self, partner, **kwargs):
+        kwargs["context"] = {
+            "lang": partner.lang,
+        }
+        if kwargs.get("line_type") == "prior_lines":
+            if kwargs.get("account_type") == "receivable":
+                title = _(
+                    "Prior Balance up to %(ending_date)s in %(currency)s", **kwargs
+                )
+            else:
+                title = _(
+                    "Supplier Prior Balance up to %(ending_date)s in %(currency)s",
+                    **kwargs
+                )
+        elif kwargs.get("line_type") == "ending_lines":
+            if kwargs.get("account_type") == "receivable":
+                title = _(
+                    "Ending Balance up to %(ending_date)s in %(currency)s", **kwargs
+                )
+            else:
+                title = _(
+                    "Supplier Ending Balance up to %(ending_date)s in %(currency)s",
+                    **kwargs
+                )
+        else:
+            title = super()._get_title(partner, **kwargs)
+        return title
 
     def _get_account_display_prior_lines(
         self, company_id, partner_ids, date_start, date_end, account_type

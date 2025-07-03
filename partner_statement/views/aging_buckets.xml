@@ -4,9 +4,9 @@
 <odoo>
     <template id="aging_buckets">
         <p>
-            Aging Report at <span t-esc="d['end']" /> in <span
-                t-esc="display_currency.name"
-            />:
+            <span
+                t-esc="get_aging_buckets_title(o, ending_date=d['end'], currency=display_currency.name)"
+            />
         </p>
         <table class="table table-sm table-statement">
             <thead>

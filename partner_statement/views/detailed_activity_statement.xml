@@ -36,7 +36,6 @@
                         <t t-set="display_currency" t-value="Currencies[currency[0]]" />
                         <t t-set="currency" t-value="currency[1]" />
                         <t t-set="line_type" t-value="'prior_lines'" />
-                        <t t-set="title_name" t-value="'Prior Balance'" />
                         <t
                             t-set="ending_amount"
                             t-value="currency['balance_forward']"
@@ -51,7 +50,6 @@
                             name="detailed_activity"
                         />
                         <t t-set="line_type" t-value="'ending_lines'" />
-                        <t t-set="title_name" t-value="'Ending Balance'" />
                         <t t-set="ending_amount" t-value="currency['amount_due']" />
                         <t t-set="ending_date" t-value="d['end']" />
                         <t

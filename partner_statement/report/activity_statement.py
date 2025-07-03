@@ -15,6 +15,40 @@ class ActivityStatement(models.AbstractModel):
     _name = "report.partner_statement.activity_statement"
     _description = "Partner Activity Statement"
 
+    def _get_title(self, partner, **kwargs):
+        kwargs["context"] = {
+            "lang": partner.lang,
+        }
+        if kwargs.get("is_detailed"):
+            if kwargs.get("account_type") == "receivable":
+                title = _(
+                    "Detailed Statement "
+                    "between %(starting_date)s and %(ending_date)s "
+                    "in %(currency)s",
+                    **kwargs,
+                )
+            else:
+                title = _(
+                    "Detailed Supplier Statement "
+                    "between %(starting_date)s and %(ending_date)s "
+                    "in %(currency)s",
+                    **kwargs,
+                )
+        else:
+            if kwargs.get("account_type") == "receivable":
+                title = _(
+                    "Statement between %(starting_date)s and %(ending_date)s in %(currency)s",
+                    **kwargs,
+                )
+            else:
+                title = _(
+                    "Supplier Statement "
+                    "between %(starting_date)s and %(ending_date)s "
+                    "in %(currency)s",
+                    **kwargs,
+                )
+        return title
+
     def _initial_balance_sql_q1(self, partners, date_start, account_type):
         excluded_accounts_ids = tuple(
             self.env.context.get("excluded_accounts_ids", [])
