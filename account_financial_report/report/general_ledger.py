@@ -440,6 +440,37 @@ class GeneralLedgerReport(models.AbstractModel):
             res.append({"id": 0, "name": ""})
         return res
 
+    def _get_aggregation_key(self, move_line):
+        return (
+            move_line["move_id"][0],
+            move_line["account_internal_type"],
+        )
+
+    def _aggregate_move_lines(self, aggregated_ml, move_line):
+        aggregated_ml["credit"] += move_line["credit"]
+        aggregated_ml["debit"] += move_line["debit"]
+        aggregated_ml["balance"] += move_line["balance"]
+        aggregated_ml["amount_currency"] += move_line["amount_currency"]
+        aggregated_ml["aggregated_ml_ids"].append(move_line["id"])
+        return aggregated_ml
+
+    def _get_aggregated_move_lines(self, move_lines):
+        payment_term_line_internal_type = ("receivable", "payable")
+        aggregated_move_lines = dict()
+        for move_line in move_lines:
+            move_line_id = move_line["id"]
+            if move_line["account_internal_type"] in payment_term_line_internal_type:
+                aggregation_key = self._get_aggregation_key(move_line)
+                aggregated_ml = aggregated_move_lines.get(aggregation_key)
+                if aggregated_ml is None:
+                    aggregated_ml = aggregated_move_lines[aggregation_key] = move_line
+                    aggregated_ml["aggregated_ml_ids"] = [move_line_id]
+                else:
+                    aggregated_ml = self._aggregate_move_lines(aggregated_ml, move_line)
+            else:
+                aggregated_move_lines[move_line_id] = move_line
+        return list(aggregated_move_lines.values())
+
     def _get_period_ml_data(
         self,
         account_ids,
@@ -454,6 +485,7 @@ class GeneralLedgerReport(models.AbstractModel):
         cost_center_ids,
         extra_domain,
         grouped_by,
+        aggregated_payment_term_lines,
     ):
         domain = self._get_period_domain(
             account_ids,
@@ -471,6 +503,8 @@ class GeneralLedgerReport(models.AbstractModel):
         move_lines = self.env["account.move.line"].search_read(
             domain=domain, fields=ml_fields, order="date,move_name"
         )
+        if aggregated_payment_term_lines:
+            move_lines = self._get_aggregated_move_lines(move_lines)
         journal_ids = set()
         full_reconcile_ids = set()
         taxes_ids = set()
@@ -788,6 +822,7 @@ class GeneralLedgerReport(models.AbstractModel):
         analytic_tag_ids = wizard.analytic_tag_ids.ids
         cost_center_ids = wizard.cost_center_ids.ids
         grouped_by = wizard.grouped_by
+        aggregated_payment_term_lines = wizard.aggregated_payment_term_lines
         hide_account_at_0 = wizard.hide_account_at_0
         foreign_currency = wizard.foreign_currency
         only_posted_moves = wizard.target_move == "posted"
@@ -830,6 +865,7 @@ class GeneralLedgerReport(models.AbstractModel):
             cost_center_ids,
             extra_domain,
             grouped_by,
+            aggregated_payment_term_lines,
         )
         general_ledger = self._create_general_ledger(
             gen_ld_data,
@@ -951,4 +987,5 @@ class GeneralLedgerReport(models.AbstractModel):
             "balance",
             "tax_ids",
             "move_name",
+            "account_internal_type",
         ]

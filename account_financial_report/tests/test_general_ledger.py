@@ -6,8 +6,10 @@
 import time
 from datetime import date
 
+from dateutil.relativedelta import relativedelta
+
 from odoo import api, fields
-from odoo.tests import tagged
+from odoo.tests import Form, tagged
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
@@ -766,3 +768,51 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         ]
         self.assertEqual(len(general_ledger_code_set), len(all_accounts_code_set))
         self.assertTrue(general_ledger_code_set == all_accounts_code_set)
+
+    def test_aggregate_payment_term_lines(self):
+        """If the report is configured to aggregate payment term lines,
+        invoices having multiple maturity dates only show one line.
+        """
+        # Arrange
+        day = relativedelta(days=1)
+        invoice = self.init_invoice(
+            "out_invoice",
+            amounts=[100],
+        )
+        payment_term = self.env.ref("account.account_payment_term_advance_60days")
+        with Form(invoice) as invoice_form:
+            invoice_form.invoice_payment_term_id = payment_term
+        invoice.action_post()
+        receivable_lines = invoice.line_ids.filtered(
+            lambda l: l.account_internal_type == "receivable"
+        )
+        wizard = self.env["general.ledger.report.wizard"].create(
+            {
+                "date_from": invoice.date - day,
+                "date_to": invoice.date + day,
+                "aggregated_payment_term_lines": True,
+            }
+        )
+        wizard_data = wizard._prepare_report_data()
+        # pre-condition
+        self.assertGreater(len(payment_term.line_ids), 1)
+        self.assertGreater(len(receivable_lines), 1)
+        self.assertTrue(wizard.aggregated_payment_term_lines)
+
+        # Act
+        report_data = self.env[
+            "report.account_financial_report.general_ledger"
+        ]._get_report_values(wizard, wizard_data)
+
+        # Assert
+        found_move_line = None
+        for account_data in report_data["general_ledger"]:
+            for grouped_data in account_data.get("list_grouped", []):
+                for move_line in grouped_data["move_lines"]:
+                    if move_line["id"] in receivable_lines.ids:
+                        if not found_move_line:
+                            found_move_line = move_line
+                        else:
+                            self.fail("Invoice showing multiple lines")
+
+        self.assertEqual(found_move_line["balance"], invoice.amount_total)
