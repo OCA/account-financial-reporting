@@ -1,7 +1,7 @@
 # Copyright 2009-2020 Noviat
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import _, models
+from odoo import models
 
 from odoo.addons.report_xlsx_helper.report.report_xlsx_format import (
     FORMATS,
@@ -18,22 +18,22 @@ class AccountMoveLineXlsx(models.AbstractModel):
         # XLSX Template
         col_specs = {
             "move": {
-                "header": {"value": _("Entry")},
+                "header": {"value": self.env._("Entry")},
                 "lines": {"value": self._render("line.move_id.name")},
                 "width": 20,
             },
             "name": {
-                "header": {"value": _("Name")},
+                "header": {"value": self.env._("Name")},
                 "lines": {"value": self._render("line.name")},
                 "width": 42,
             },
             "ref": {
-                "header": {"value": _("Reference")},
+                "header": {"value": self.env._("Reference")},
                 "lines": {"value": self._render("line.ref")},
                 "width": 42,
             },
             "date": {
-                "header": {"value": _("Effective Date")},
+                "header": {"value": self.env._("Effective Date")},
                 "lines": {
                     "value": self._render("line.date"),
                     "format": FORMATS["format_tcell_date_left"],
@@ -41,26 +41,26 @@ class AccountMoveLineXlsx(models.AbstractModel):
                 "width": 13,
             },
             "partner": {
-                "header": {"value": _("Partner")},
+                "header": {"value": self.env._("Partner")},
                 "lines": {
                     "value": self._render("line.partner_id and line.partner_id.name")
                 },
                 "width": 36,
             },
             "partner_ref": {
-                "header": {"value": _("Partner Reference")},
+                "header": {"value": self.env._("Partner Reference")},
                 "lines": {
                     "value": self._render("line.partner_id and line.partner_id.ref")
                 },
                 "width": 36,
             },
             "account": {
-                "header": {"value": _("Account")},
+                "header": {"value": self.env._("Account")},
                 "lines": {"value": self._render("line.account_id.code")},
                 "width": 12,
             },
             "date_maturity": {
-                "header": {"value": _("Maturity Date")},
+                "header": {"value": self.env._("Maturity Date")},
                 "lines": {
                     "value": self._render("line.date_maturity"),
                     "format": FORMATS["format_tcell_date_left"],
@@ -69,7 +69,7 @@ class AccountMoveLineXlsx(models.AbstractModel):
             },
             "debit": {
                 "header": {
-                    "value": _("Debit"),
+                    "value": self.env._("Debit"),
                     "format": FORMATS["format_theader_yellow_right"],
                 },
                 "lines": {
@@ -85,7 +85,7 @@ class AccountMoveLineXlsx(models.AbstractModel):
             },
             "credit": {
                 "header": {
-                    "value": _("Credit"),
+                    "value": self.env._("Credit"),
                     "format": FORMATS["format_theader_yellow_right"],
                 },
                 "lines": {
@@ -101,7 +101,7 @@ class AccountMoveLineXlsx(models.AbstractModel):
             },
             "balance": {
                 "header": {
-                    "value": _("Balance"),
+                    "value": self.env._("Balance"),
                     "format": FORMATS["format_theader_yellow_right"],
                 },
                 "lines": {
@@ -117,7 +117,7 @@ class AccountMoveLineXlsx(models.AbstractModel):
             },
             "full_reconcile": {
                 "header": {
-                    "value": _("Rec."),
+                    "value": self.env._("Rec."),
                     "format": FORMATS["format_theader_yellow_center"],
                 },
                 "lines": {
@@ -129,7 +129,7 @@ class AccountMoveLineXlsx(models.AbstractModel):
                 "width": 12,
             },
             "reconcile_amount": {
-                "header": {"value": _("Reconcile Amount")},
+                "header": {"value": self.env._("Reconcile Amount")},
                 "lines": {
                     "value": self._render(
                         "line.full_reconcile_id and line.balance or "
@@ -141,7 +141,7 @@ class AccountMoveLineXlsx(models.AbstractModel):
                 "width": 12,
             },
             "matched_debit_ids": {
-                "header": {"value": _("Matched Debits")},
+                "header": {"value": self.env._("Matched Debits")},
                 "lines": {
                     "value": self._render(
                         "line.matched_debit_ids "
@@ -152,7 +152,7 @@ class AccountMoveLineXlsx(models.AbstractModel):
                 "width": 20,
             },
             "matched_credit_ids": {
-                "header": {"value": _("Matched Credits")},
+                "header": {"value": self.env._("Matched Credits")},
                 "lines": {
                     "value": self._render(
                         "line.matched_credit_ids "
@@ -164,7 +164,7 @@ class AccountMoveLineXlsx(models.AbstractModel):
             },
             "amount_currency": {
                 "header": {
-                    "value": _("Am. Currency"),
+                    "value": self.env._("Am. Currency"),
                     "format": FORMATS["format_theader_yellow_right"],
                 },
                 "lines": {
@@ -175,7 +175,7 @@ class AccountMoveLineXlsx(models.AbstractModel):
             },
             "currency_name": {
                 "header": {
-                    "value": _("Curr."),
+                    "value": self.env._("Curr."),
                     "format": FORMATS["format_theader_yellow_center"],
                 },
                 "lines": {
@@ -185,13 +185,13 @@ class AccountMoveLineXlsx(models.AbstractModel):
                 "width": 6,
             },
             "journal": {
-                "header": {"value": _("Journal")},
+                "header": {"value": self.env._("Journal")},
                 "lines": {"value": self._render("line.journal_id.code")},
                 "width": 12,
             },
             "company_currency": {
                 "header": {
-                    "value": _("Comp. Curr."),
+                    "value": self.env._("Comp. Curr."),
                     "format": FORMATS["format_theader_yellow_center"],
                 },
                 "lines": {
@@ -201,14 +201,14 @@ class AccountMoveLineXlsx(models.AbstractModel):
                 "width": 10,
             },
             "product": {
-                "header": {"value": _("Product")},
+                "header": {"value": self.env._("Product")},
                 "lines": {
                     "value": self._render("line.product_id and line.product_id.name")
                 },
                 "width": 36,
             },
             "product_ref": {
-                "header": {"value": _("Product Reference")},
+                "header": {"value": self.env._("Product Reference")},
                 "lines": {
                     "value": self._render(
                         "line.product_id and line.product_id.default_code or ''"
@@ -217,7 +217,7 @@ class AccountMoveLineXlsx(models.AbstractModel):
                 "width": 36,
             },
             "product_uom": {
-                "header": {"value": _("Unit of Measure")},
+                "header": {"value": self.env._("Unit of Measure")},
                 "lines": {
                     "value": self._render(
                         "line.product_uom_id and line.product_uom_id.name"
@@ -227,7 +227,7 @@ class AccountMoveLineXlsx(models.AbstractModel):
             },
             "quantity": {
                 "header": {
-                    "value": _("Qty"),
+                    "value": self.env._("Qty"),
                     "format": FORMATS["format_theader_yellow_right"],
                 },
                 "lines": {
@@ -237,7 +237,7 @@ class AccountMoveLineXlsx(models.AbstractModel):
                 "width": 8,
             },
             "statement": {
-                "header": {"value": _("Statement")},
+                "header": {"value": self.env._("Statement")},
                 "lines": {
                     "value": self._render(
                         "line.statement_id and line.statement_id.name"
@@ -246,13 +246,13 @@ class AccountMoveLineXlsx(models.AbstractModel):
                 "width": 20,
             },
             "invoice": {
-                "header": {"value": _("Invoice")},
+                "header": {"value": self.env._("Invoice")},
                 "lines": {"value": self._render("line.move_id and line.move_id.name")},
                 "width": 20,
             },
             "amount_residual": {
                 "header": {
-                    "value": _("Residual Amount"),
+                    "value": self.env._("Residual Amount"),
                     "format": FORMATS["format_theader_yellow_right"],
                 },
                 "lines": {
@@ -263,7 +263,7 @@ class AccountMoveLineXlsx(models.AbstractModel):
             },
             "amount_residual_currency": {
                 "header": {
-                    "value": _("Res. Am. in Curr."),
+                    "value": self.env._("Res. Am. in Curr."),
                     "format": FORMATS["format_theader_yellow_right"],
                 },
                 "lines": {
@@ -273,13 +273,13 @@ class AccountMoveLineXlsx(models.AbstractModel):
                 "width": 18,
             },
             "narration": {
-                "header": {"value": _("Notes")},
+                "header": {"value": self.env._("Notes")},
                 "lines": {"value": self._render("line.move_id.narration or ''")},
                 "width": 42,
             },
             "blocked": {
                 "header": {
-                    "value": _("Lit."),
+                    "value": self.env._("Lit."),
                     "format": FORMATS["format_theader_yellow_center"],
                 },
                 "lines": {
@@ -290,7 +290,7 @@ class AccountMoveLineXlsx(models.AbstractModel):
             },
             "id": {
                 "header": {
-                    "value": _("Id"),
+                    "value": self.env._("Id"),
                     "format": FORMATS["format_theader_yellow_right"],
                 },
                 "lines": {
@@ -302,7 +302,7 @@ class AccountMoveLineXlsx(models.AbstractModel):
         }
         col_specs.update(self.env["account.move.line"]._report_xlsx_template())
         wanted_list = self.env["account.move.line"]._report_xlsx_fields()
-        title = _("Journal Items")
+        title = self.env._("Journal Items")
 
         return [
             {
