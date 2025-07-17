@@ -3,7 +3,7 @@
 
 {
     "name": "Partner Statement",
-    "version": "15.0.1.1.4",
+    "version": "15.0.1.2.0",
     "category": "Accounting & Finance",
     "summary": "OCA Financial Reports",
     "author": "ForgeFlow, Odoo Community Association (OCA)",
