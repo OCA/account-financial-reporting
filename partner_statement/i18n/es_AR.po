@@ -209,6 +209,14 @@ msgid "Account Type"
 msgstr ""
 
 #. module: partner_statement
+#: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__excluded_accounts_selector
+#: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__excluded_accounts_selector
+#: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__excluded_accounts_selector
+#: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__excluded_accounts_selector
+msgid "Accounts to exclude"
+msgstr ""
+
+#. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
 #: model:ir.actions.report,name:partner_statement.action_print_activity_statement
 #: model:ir.actions.report,name:partner_statement.action_print_activity_statement_html
@@ -277,7 +285,6 @@ msgstr ""
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
-#: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 #, python-format
 msgid "Applied Amount"
@@ -557,7 +564,6 @@ msgstr "Inicial"
 
 #. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
-#: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 #, python-format
 msgid "Original Amount"
@@ -657,6 +663,16 @@ msgid "Reference number"
 msgstr "Número de Referencia"
 
 #. module: partner_statement
+#: model:ir.model.fields,help:partner_statement.field_activity_statement_wizard__excluded_accounts_selector
+#: model:ir.model.fields,help:partner_statement.field_detailed_activity_statement_wizard__excluded_accounts_selector
+#: model:ir.model.fields,help:partner_statement.field_outstanding_statement_wizard__excluded_accounts_selector
+#: model:ir.model.fields,help:partner_statement.field_statement_common_wizard__excluded_accounts_selector
+msgid ""
+"Select account codes to be excluded with a comma-separated list of "
+"expressions like 70%."
+msgstr ""
+
+#. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__show_aging_buckets
 #: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__show_aging_buckets
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__show_aging_buckets
@@ -668,6 +684,22 @@ msgstr "Mostrar rangos antigüedad"
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__show_balance
 msgid "Show Balance column"
+msgstr ""
+
+#. module: partner_statement
+#: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__show_only_overdue
+#: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__show_only_overdue
+#: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__show_only_overdue
+#: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__show_only_overdue
+msgid "Show Only Overdue"
+msgstr ""
+
+#. module: partner_statement
+#: model:ir.model.fields,help:partner_statement.field_activity_statement_wizard__show_only_overdue
+#: model:ir.model.fields,help:partner_statement.field_detailed_activity_statement_wizard__show_only_overdue
+#: model:ir.model.fields,help:partner_statement.field_outstanding_statement_wizard__show_only_overdue
+#: model:ir.model.fields,help:partner_statement.field_statement_common_wizard__show_only_overdue
+msgid "Show only lines due before the selected date"
 msgstr ""
 
 #. module: partner_statement
