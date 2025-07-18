@@ -4,12 +4,9 @@
 <odoo>
     <template id="activity_balance">
         <p>
-            <span t-if="is_detailed">Detailed </span>
             <span
-                t-if="account_type == 'payable'"
-            >Supplier </span>Statement between <span t-esc="d['start']" /> and <span
-                t-esc="d['end']"
-            /> in <span t-esc="display_currency.name" />
+                t-esc="get_title(o, is_detailed=is_detailed, account_type=account_type, starting_date=d['start'], ending_date=d['end'], currency=display_currency.name)"
+            />
         </p>
         <table class="table table-condensed table-statement">
             <thead>

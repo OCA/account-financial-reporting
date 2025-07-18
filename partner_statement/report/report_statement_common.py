@@ -17,6 +17,15 @@ class ReportStatementCommon(models.AbstractModel):
         inv_addr_id = part.address_get(["invoice"]).get("invoice", part.id)
         return self.env["res.partner"].browse(inv_addr_id)
 
+    def _get_title(self, partner, **kwargs):
+        raise NotImplementedError
+
+    def _get_aging_buckets_title(self, partner, **kwargs):
+        kwargs["context"] = {
+            "lang": partner.lang,
+        }
+        return _("Aging Report at %(ending_date)s in %(currency)s", **kwargs)
+
     def _format_date_to_partner_lang(
         self, date, date_format=DEFAULT_SERVER_DATE_FORMAT
     ):
@@ -599,4 +608,6 @@ class ReportStatementCommon(models.AbstractModel):
             "is_detailed": is_detailed,
             "bucket_labels": bucket_labels,
             "get_inv_addr": self._get_invoice_address,
+            "get_title": self._get_title,
+            "get_aging_buckets_title": self._get_aging_buckets_title,
         }
