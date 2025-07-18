@@ -21,25 +21,6 @@ msgstr ""
 "X-Generator: Weblate 3.10\n"
 
 #. module: partner_statement
-#: code:addons/partner_statement/report/activity_statement_xlsx.py:0
-#, python-format
-msgid "%(payable)sStatement between %(start)s and %(end)s in %(currency)s"
-msgstr ""
-
-#. module: partner_statement
-#: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
-#: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
-#, python-format
-msgid "%(payable)sStatement up to %(end)s in %(currency)s"
-msgstr ""
-
-#. module: partner_statement
-#: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
-#, python-format
-msgid "%(payable)sStatement up to %(prior_day)s in %(currency)s"
-msgstr ""
-
-#. module: partner_statement
 #: code:addons/partner_statement/report/report_statement_common.py:0
 #, python-format
 msgid "1 - 30 Days"
@@ -248,15 +229,16 @@ msgid "Aging Method"
 msgstr "Periodă"
 
 #. module: partner_statement
-#: model_terms:ir.ui.view,arch_db:partner_statement.aging_buckets
-msgid "Aging Report at"
-msgstr "Raport pe perioade la"
-
-#. module: partner_statement
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
 #: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
 #, python-format
 msgid "Aging Report at %(end)s in %(currency)s"
+msgstr ""
+
+#. module: partner_statement
+#: code:addons/partner_statement/report/report_statement_common.py:0
+#, python-format
+msgid "Aging Report at %(ending_date)s in %(currency)s"
 msgstr ""
 
 #. module: partner_statement
@@ -362,18 +344,6 @@ msgid "Description"
 msgstr "Descriere"
 
 #. module: partner_statement
-#: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
-msgid "Detailed"
-msgstr ""
-
-#. module: partner_statement
-#: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
-#, python-format
-msgid ""
-"Detailed %(payable)sStatement between %(start)s and %(end)s in %(currency)s"
-msgstr ""
-
-#. module: partner_statement
 #: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
 #: model:ir.actions.report,name:partner_statement.action_print_detailed_activity_statement
 #: model:ir.actions.report,name:partner_statement.action_print_detailed_activity_statement_html
@@ -394,6 +364,22 @@ msgstr ""
 #. module: partner_statement
 #: model:ir.actions.report,name:partner_statement.action_print_detailed_activity_statement_xlsx
 msgid "Detailed Activity Statement XLSX"
+msgstr ""
+
+#. module: partner_statement
+#: code:addons/partner_statement/report/activity_statement.py:0
+#, python-format
+msgid ""
+"Detailed Statement between %(starting_date)s and %(ending_date)s in "
+"%(currency)s"
+msgstr ""
+
+#. module: partner_statement
+#: code:addons/partner_statement/report/activity_statement.py:0
+#, python-format
+msgid ""
+"Detailed Supplier Statement between %(starting_date)s and %(ending_date)s in "
+"%(currency)s"
 msgstr ""
 
 #. module: partner_statement
@@ -438,6 +424,12 @@ msgstr "Activați Solduri Restante OCA"
 #, python-format
 msgid "Ending Balance"
 msgstr "Sold final"
+
+#. module: partner_statement
+#: code:addons/partner_statement/report/detailed_activity_statement.py:0
+#, python-format
+msgid "Ending Balance up to %(ending_date)s in %(currency)s"
+msgstr ""
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__filter_negative_balances
@@ -616,6 +608,12 @@ msgid "Please set defaults under Activity Statements."
 msgstr "Vă rugăm să setați valorile implicite în Extrasul de cont."
 
 #. module: partner_statement
+#: code:addons/partner_statement/report/detailed_activity_statement.py:0
+#, python-format
+msgid "Prior Balance up to %(ending_date)s in %(currency)s"
+msgstr ""
+
+#. module: partner_statement
 #: model:ir.model.fields.selection,name:partner_statement.selection__activity_statement_wizard__account_type__receivable
 #: model:ir.model.fields.selection,name:partner_statement.selection__detailed_activity_statement_wizard__account_type__receivable
 #: model:ir.model.fields.selection,name:partner_statement.selection__outstanding_statement_wizard__account_type__receivable
@@ -688,8 +686,9 @@ msgid "Statement Reports Common Wizard"
 msgstr ""
 
 #. module: partner_statement
-#: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
-msgid "Statement between"
+#: code:addons/partner_statement/report/activity_statement.py:0
+#, python-format
+msgid "Statement between %(starting_date)s and %(ending_date)s in %(currency)s"
 msgstr ""
 
 #. module: partner_statement
@@ -724,16 +723,35 @@ msgid "Statement to:"
 msgstr ""
 
 #. module: partner_statement
-#: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
-msgid "Supplier"
-msgstr "Furnizor"
+#: code:addons/partner_statement/report/outstanding_statement.py:0
+#, python-format
+msgid "Statement up to %(ending_date)s in %(currency)s"
+msgstr ""
 
 #. module: partner_statement
-#: code:addons/partner_statement/report/activity_statement_xlsx.py:0
-#: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
-#: code:addons/partner_statement/report/outstanting_statement_xlsx.py:0
+#: code:addons/partner_statement/report/detailed_activity_statement.py:0
 #, python-format
-msgid "Supplier "
+msgid "Supplier Ending Balance up to %(ending_date)s in %(currency)s"
+msgstr ""
+
+#. module: partner_statement
+#: code:addons/partner_statement/report/detailed_activity_statement.py:0
+#, python-format
+msgid "Supplier Prior Balance up to %(ending_date)s in %(currency)s"
+msgstr ""
+
+#. module: partner_statement
+#: code:addons/partner_statement/report/activity_statement.py:0
+#, python-format
+msgid ""
+"Supplier Statement between %(starting_date)s and %(ending_date)s in "
+"%(currency)s"
+msgstr ""
+
+#. module: partner_statement
+#: code:addons/partner_statement/report/outstanding_statement.py:0
+#, python-format
+msgid "Supplier Statement up to %(ending_date)s in %(currency)s"
 msgstr ""
 
 #. module: partner_statement
@@ -766,26 +784,21 @@ msgid "View"
 msgstr ""
 
 #. module: partner_statement
-#: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
-msgid "and"
-msgstr "și"
-
-#. module: partner_statement
-#: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
-#: model_terms:ir.ui.view,arch_db:partner_statement.aging_buckets
-#: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
-msgid "in"
-msgstr "în"
-
-#. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
 msgid "or"
 msgstr "sau"
 
-#. module: partner_statement
-#: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
-msgid "up to"
-msgstr ""
+#~ msgid "Aging Report at"
+#~ msgstr "Raport pe perioade la"
+
+#~ msgid "Supplier"
+#~ msgstr "Furnizor"
+
+#~ msgid "and"
+#~ msgstr "și"
+
+#~ msgid "in"
+#~ msgstr "în"
 
 #~ msgid "Account type"
 #~ msgstr "Tip de cont"
