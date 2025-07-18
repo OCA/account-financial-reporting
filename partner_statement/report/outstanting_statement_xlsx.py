@@ -64,7 +64,6 @@ class OutstandingStatementXslx(models.AbstractModel):
             format_tcell_date_left = FORMATS["format_tcell_date_left"]
             format_distributed = FORMATS["format_distributed"]
             current_money_format = FORMATS["current_money_format"]
-
         name_to_show = (
             line.get("name", "") == "/" or not line.get("name", "")
         ) and line.get("ref", "")
@@ -78,7 +77,6 @@ class OutstandingStatementXslx(models.AbstractModel):
                     name_to_show = line.get("name", "")
                 else:
                     name_to_show = line.get("ref", "")
-
         return [
             {
                 "col_pos": col_pos,
@@ -133,7 +131,6 @@ class OutstandingStatementXslx(models.AbstractModel):
                 span = cell_data.get("span")
                 if span:
                     args = row_pos, col_pos + span, *args
-
                 sheet_func(row_pos, col_pos, *args)
 
     def _write_currency_header(self, row_pos, sheet, partner, currency, data):
@@ -161,7 +158,6 @@ class OutstandingStatementXslx(models.AbstractModel):
             "end": partner_data.get("end"),
             "currency": currency.display_name,
         }
-
         sheet.merge_range(
             row_pos, 0, row_pos, 6, statement_header, FORMATS["format_left_bold"]
         )
@@ -172,7 +168,6 @@ class OutstandingStatementXslx(models.AbstractModel):
             row_pos = self._write_currency_line(
                 row_pos, sheet, partner, currency, data, line
             )
-
         row_pos += 1
         row_pos = self._write_currency_footer(row_pos, sheet, partner, currency, data)
         return row_pos
@@ -187,7 +182,6 @@ class OutstandingStatementXslx(models.AbstractModel):
                 "end": partner_data.get("end"),
                 "currency": currency.display_name,
             }
-
             sheet.merge_range(
                 row_pos, 0, row_pos, 6, buckets_header, FORMATS["format_right_bold"]
             )

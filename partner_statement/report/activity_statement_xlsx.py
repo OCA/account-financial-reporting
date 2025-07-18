@@ -33,6 +33,197 @@ class ActivityStatementXslx(models.AbstractModel):
             report_name = report_name + suffix
         return report_name
 
+    def _get_currency_header_row_data(self, partner, currency, data):
+        return (
+            [
+                {
+                    "col_pos": col_pos,
+                    "sheet_func": "write",
+                    "args": args,
+                }
+                for col_pos, args in enumerate(
+                    [
+                        (
+                            _("Reference Number"),
+                            FORMATS["format_theader_yellow_center"],
+                        ),
+                        (_("Date"), FORMATS["format_theader_yellow_center"]),
+                    ]
+                )
+            ]
+            + [
+                {
+                    "col_pos": 2,
+                    "sheet_func": "merge_range",
+                    "span": 1,
+                    "args": (_("Description"), FORMATS["format_theader_yellow_center"]),
+                },
+            ]
+            + [
+                {
+                    "col_pos": col_pos,
+                    "sheet_func": "write",
+                    "args": args,
+                }
+                for col_pos, args in enumerate(
+                    [
+                        (_("Original Amount"), FORMATS["format_theader_yellow_center"]),
+                        (_("Applied Amount"), FORMATS["format_theader_yellow_center"]),
+                        (_("Open Amount"), FORMATS["format_theader_yellow_center"]),
+                    ],
+                    4,
+                )
+            ]
+        )
+
+    def _get_currency_subheader_row_data(self, partner, currency, data):
+        partner_data = data.get("data", {}).get(partner.id, {})
+        currency_data = partner_data.get("currencies", {}).get(currency.id)
+        return [
+            {
+                "col_pos": 1,
+                "sheet_func": "write",
+                "args": (
+                    partner_data.get("prior_day"),
+                    FORMATS["format_tcell_date_left"],
+                ),
+            },
+            {
+                "col_pos": 2,
+                "sheet_func": "merge_range",
+                "span": 3,
+                "args": (_("Balance Forward"), FORMATS["format_tcell_left"]),
+            },
+            {
+                "col_pos": 6,
+                "sheet_func": "write",
+                "args": (
+                    currency_data.get("balance_forward"),
+                    FORMATS["current_money_format"],
+                ),
+            },
+        ]
+
+    def _get_currency_line_row_data(self, partner, currency, data, line):
+        if line.get("blocked"):
+            format_tcell_left = FORMATS["format_tcell_left_blocked"]
+            format_tcell_date_left = FORMATS["format_tcell_date_left_blocked"]
+            format_distributed = FORMATS["format_distributed_blocked"]
+            current_money_format = FORMATS["current_money_format_blocked"]
+        else:
+            format_tcell_left = FORMATS["format_tcell_left"]
+            format_tcell_date_left = FORMATS["format_tcell_date_left"]
+            format_distributed = FORMATS["format_distributed"]
+            current_money_format = FORMATS["current_money_format"]
+        name_to_show = (
+            line.get("name", "") == "/" or not line.get("name", "")
+        ) and line.get("ref", "")
+        if line.get("name", "") and line.get("name", "") != "/":
+            if not line.get("ref", ""):
+                name_to_show = line.get("name", "")
+            else:
+                if (line.get("name", "") in line.get("ref", "")) or (
+                    line.get("name", "") == line.get("ref", "")
+                ):
+                    name_to_show = line.get("name", "")
+                elif line.get("ref", "") not in line.get("name", ""):
+                    name_to_show = line.get("ref", "")
+        return (
+            [
+                {
+                    "col_pos": col_pos,
+                    "sheet_func": "write",
+                    "args": args,
+                }
+                for col_pos, args in enumerate(
+                    [
+                        (line.get("move_id", ""), format_tcell_left),
+                        (line.get("date", ""), format_tcell_date_left),
+                    ]
+                )
+            ]
+            + [
+                {
+                    "col_pos": 2,
+                    "sheet_func": "merge_range",
+                    "span": 1,
+                    "args": (name_to_show, format_distributed),
+                },
+            ]
+            + [
+                {
+                    "col_pos": col_pos,
+                    "sheet_func": "write",
+                    "args": args,
+                }
+                for col_pos, args in enumerate(
+                    [
+                        (line.get("amount", ""), current_money_format),
+                        (line.get("applied_amount", ""), current_money_format),
+                        (line.get("open_amount", ""), current_money_format),
+                    ],
+                    4,
+                )
+            ]
+        )
+
+    def _get_currency_footer_row_data(self, partner, currency, data):
+        partner_data = data.get("data", {}).get(partner.id, {})
+        currency_data = partner_data.get("currencies", {}).get(currency.id)
+        return [
+            {
+                "col_pos": 1,
+                "sheet_func": "write",
+                "args": (partner_data.get("end"), FORMATS["format_tcell_date_left"]),
+            },
+            {
+                "col_pos": 2,
+                "sheet_func": "merge_range",
+                "span": 3,
+                "args": (_("Ending Balance"), FORMATS["format_tcell_left"]),
+            },
+            {
+                "col_pos": 6,
+                "sheet_func": "write",
+                "args": (
+                    currency_data.get("amount_due"),
+                    FORMATS["current_money_format"],
+                ),
+            },
+        ]
+
+    def _write_row_data(self, sheet, row_pos, row_data):
+        for cell_data in row_data:
+            sheet_func_name = cell_data.get("sheet_func", "")
+            sheet_func = getattr(sheet, sheet_func_name, None)
+            if callable(sheet_func):
+                col_pos = cell_data["col_pos"]
+                args = cell_data["args"]
+                span = cell_data.get("span")
+                if span:
+                    args = row_pos, col_pos + span, *args
+                sheet_func(row_pos, col_pos, *args)
+
+    def _write_currency_header(self, row_pos, sheet, partner, currency, data):
+        row_data = self._get_currency_header_row_data(partner, currency, data)
+        self._write_row_data(sheet, row_pos, row_data)
+        return row_pos
+
+    def _write_currency_subheader(self, row_pos, sheet, partner, currency, data):
+        row_data = self._get_currency_subheader_row_data(partner, currency, data)
+        self._write_row_data(sheet, row_pos, row_data)
+        return row_pos
+
+    def _write_currency_line(self, row_pos, sheet, partner, currency, data, line):
+        row_data = self._get_currency_line_row_data(partner, currency, data, line)
+        self._write_row_data(sheet, row_pos, row_data)
+        return row_pos
+
+    def _write_currency_footer(self, row_pos, sheet, partner, currency, data):
+        row_data = self._get_currency_footer_row_data(partner, currency, data)
+        self._write_row_data(sheet, row_pos, row_data)
+        return row_pos
+
     def _write_currency_lines(self, row_pos, sheet, partner, currency, data):
         partner_data = data.get("data", {}).get(partner.id, {})
         currency_data = partner_data.get("currencies", {}).get(currency.id)
@@ -46,90 +237,22 @@ class ActivityStatementXslx(models.AbstractModel):
             "end": partner_data.get("end"),
             "currency": currency.display_name,
         }
-
         sheet.merge_range(
             row_pos, 0, row_pos, 6, statement_header, FORMATS["format_left_bold"]
         )
         row_pos += 1
-        sheet.write(
-            row_pos, 0, _("Reference Number"), FORMATS["format_theader_yellow_center"]
-        )
-        sheet.write(row_pos, 1, _("Date"), FORMATS["format_theader_yellow_center"])
-        sheet.merge_range(
-            row_pos,
-            2,
-            row_pos,
-            3,
-            _("Description"),
-            FORMATS["format_theader_yellow_center"],
-        )
-        sheet.write(
-            row_pos, 4, _("Original Amount"), FORMATS["format_theader_yellow_center"]
-        )
-        sheet.write(
-            row_pos, 5, _("Applied Amount"), FORMATS["format_theader_yellow_center"]
-        )
-        sheet.write(
-            row_pos, 6, _("Open Amount"), FORMATS["format_theader_yellow_center"]
-        )
+        row_pos = self._write_currency_header(row_pos, sheet, partner, currency, data)
         row_pos += 1
-        sheet.write(
-            row_pos, 1, partner_data.get("prior_day"), FORMATS["format_tcell_date_left"]
+        row_pos = self._write_currency_subheader(
+            row_pos, sheet, partner, currency, data
         )
-        sheet.merge_range(
-            row_pos, 2, row_pos, 5, _("Balance Forward"), FORMATS["format_tcell_left"]
-        )
-        sheet.write(
-            row_pos,
-            6,
-            currency_data.get("balance_forward"),
-            FORMATS["current_money_format"],
-        )
-        format_tcell_left = FORMATS["format_tcell_left"]
-        format_tcell_date_left = FORMATS["format_tcell_date_left"]
-        format_distributed = FORMATS["format_distributed"]
-        current_money_format = FORMATS["current_money_format"]
         for line in currency_data.get("lines"):
-            if line.get("blocked"):
-                format_tcell_left = FORMATS["format_tcell_left_blocked"]
-                format_tcell_date_left = FORMATS["format_tcell_date_left_blocked"]
-                format_distributed = FORMATS["format_distributed_blocked"]
-                current_money_format = FORMATS["current_money_format_blocked"]
             row_pos += 1
-            name_to_show = (
-                line.get("name", "") == "/" or not line.get("name", "")
-            ) and line.get("ref", "")
-            if line.get("name", "") and line.get("name", "") != "/":
-                if not line.get("ref", ""):
-                    name_to_show = line.get("name", "")
-                else:
-                    if (line.get("name", "") in line.get("ref", "")) or (
-                        line.get("name", "") == line.get("ref", "")
-                    ):
-                        name_to_show = line.get("name", "")
-                    elif line.get("ref", "") not in line.get("name", ""):
-                        name_to_show = line.get("ref", "")
-            sheet.write(row_pos, 0, line.get("move_id", ""), format_tcell_left)
-            sheet.write(row_pos, 1, line.get("date", ""), format_tcell_date_left)
-            sheet.merge_range(row_pos, 2, row_pos, 3, name_to_show, format_distributed)
-            sheet.write(row_pos, 4, line.get("amount", ""), current_money_format)
-            sheet.write(
-                row_pos, 5, line.get("applied_amount", ""), current_money_format
+            row_pos = self._write_currency_line(
+                row_pos, sheet, partner, currency, data, line
             )
-            sheet.write(row_pos, 6, line.get("open_amount", ""), current_money_format)
         row_pos += 1
-        sheet.write(
-            row_pos, 1, partner_data.get("end"), FORMATS["format_tcell_date_left"]
-        )
-        sheet.merge_range(
-            row_pos, 2, row_pos, 5, _("Ending Balance"), FORMATS["format_tcell_left"]
-        )
-        sheet.write(
-            row_pos,
-            6,
-            currency_data.get("amount_due"),
-            FORMATS["current_money_format"],
-        )
+        row_pos = self._write_currency_footer(row_pos, sheet, partner, currency, data)
         return row_pos
 
     def _write_currency_buckets(self, row_pos, sheet, partner, currency, data):
