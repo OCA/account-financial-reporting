@@ -164,11 +164,10 @@ class OutstandingStatementXslx(models.AbstractModel):
         )
         row_pos += 1
         row_pos = self._write_currency_header(row_pos, sheet, partner, currency, data)
-        for line in currency_data.get("lines"):
-            row_pos += 1
-            row_pos = self._write_currency_line(
-                row_pos, sheet, partner, currency, data, line
-            )
+        if not data['hide_detailed']:
+            for line in currency_data.get("lines"):
+                row_pos += 1
+                row_pos = self._write_currency_line(row_pos, sheet, partner, currency, data, line)
         row_pos += 1
         row_pos = self._write_currency_footer(row_pos, sheet, partner, currency, data)
         return row_pos

@@ -174,9 +174,7 @@ class OutstandingStatement(models.AbstractModel):
         if not data:
             data = {}
         if "company_id" not in data:
-            wiz = self.env["outstanding.statement.wizard"].with_context(
-                active_ids=docids, model="res.partner"
-            )
+            wiz = self.env["outstanding.statement.wizard"].with_context(active_ids=docids, model="res.partner")
             data.update(wiz.create({})._prepare_statement())
         data["amount_field"] = "open_amount"
         return super()._get_report_values(docids, data)

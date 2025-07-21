@@ -48,14 +48,7 @@ class ActivityStatementWizard(models.TransientModel):
         else:
             report_name = "partner_statement.activity_statement"
         partners = self.env["res.partner"].browse(data["partner_ids"])
-        return (
-            self.env["ir.actions.report"]
-            .search(
-                [("report_name", "=", report_name), ("report_type", "=", report_type)],
-                limit=1,
-            )
-            .report_action(partners, data=data)
-        )
+        return (self.env["ir.actions.report"].search([("report_name", "=", report_name), ("report_type", "=", report_type)],limit=1,).report_action(partners, data=data))
 
     def _export(self, report_type):
         """Default export is PDF."""

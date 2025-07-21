@@ -23,9 +23,7 @@ class StatementCommon(models.AbstractModel):
     show_only_overdue = fields.Boolean(
         help="Show only lines due before the selected date",
     )
-    number_partner_ids = fields.Integer(
-        default=lambda self: len(self._context["active_ids"])
-    )
+    number_partner_ids = fields.Integer(default=lambda self: len(self._context.get("active_ids", [])))
     filter_partners_non_due = fields.Boolean(
         string="Don't show partners with no due entries", default=True
     )
@@ -47,6 +45,7 @@ class StatementCommon(models.AbstractModel):
         help="Select account codes to be excluded "
         "with a comma-separated list of expressions like 70%.",
     )
+    hide_detailed = fields.Boolean(default=False, string="No mostrar detalles")
 
     @api.model
     def _get_excluded_accounts_domain(self, selector):
@@ -95,7 +94,7 @@ class StatementCommon(models.AbstractModel):
         return {
             "date_end": self.date_end,
             "company_id": self.company_id.id,
-            "partner_ids": self._context["active_ids"],
+            "partner_ids": self._context.get("active_ids", []),
             "show_aging_buckets": self.show_aging_buckets,
             "show_only_overdue": self.show_only_overdue,
             "filter_non_due_partners": self.filter_partners_non_due,
@@ -103,6 +102,7 @@ class StatementCommon(models.AbstractModel):
             "aging_type": self.aging_type,
             "filter_negative_balances": self.filter_negative_balances,
             "excluded_accounts_ids": self._get_excluded_accounts().ids,
+            "hide_detailed": self.hide_detailed,
         }
 
     def button_export_html(self):

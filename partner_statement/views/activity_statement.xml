@@ -108,6 +108,7 @@
             </tbody>
         </table>
     </template>
+
     <template id="partner_statement.activity_statement_document">
         <t t-call="web.external_layout">
             <t t-set="o" t-value="o.with_context({'lang': lang})" />
@@ -141,14 +142,8 @@
                     <t t-foreach="d['currencies'].items()" t-as="currency">
                         <t t-set="display_currency" t-value="Currencies[currency[0]]" />
                         <t t-set="currency" t-value="currency[1]" />
-                        <t
-                            t-call="partner_statement.activity_balance"
-                            name="activity"
-                        />
-                        <t
-                            t-call="partner_statement.aging_buckets"
-                            t-if="currency['buckets']"
-                        />
+                        <t t-call="partner_statement.activity_balance" name="activity"/>
+                        <t t-call="partner_statement.aging_buckets" t-if="currency['buckets']"/>
                     </t>
                 </t>
                 <p t-if="d.get('no_entries')">

@@ -21,31 +21,22 @@ class ReportStatementCommon(models.AbstractModel):
         raise NotImplementedError
 
     def _get_aging_buckets_title(self, partner, **kwargs):
-        kwargs["context"] = {
-            "lang": partner.lang,
-        }
+        kwargs["context"] = {"lang": partner.lang,}
         return _("Aging Report at %(ending_date)s in %(currency)s", **kwargs)
 
     def _format_date_to_partner_lang(
-        self, date, date_format=DEFAULT_SERVER_DATE_FORMAT
-    ):
+        self, date, date_format=DEFAULT_SERVER_DATE_FORMAT):
         if isinstance(date, str):
             date = datetime.strptime(date, DEFAULT_SERVER_DATE_FORMAT)
         return date.strftime(date_format) if date else ""
 
-    def _get_account_display_lines(
-        self, company_id, partner_ids, date_start, date_end, account_type
-    ):
+    def _get_account_display_lines(self, company_id, partner_ids, date_start, date_end, account_type):
         raise NotImplementedError
 
-    def _get_account_initial_balance(
-        self, company_id, partner_ids, date_start, account_type
-    ):
+    def _get_account_initial_balance(self, company_id, partner_ids, date_start, account_type):
         return {}
 
-    def _get_account_display_prior_lines(
-        self, company_id, partner_ids, date_start, date_end, account_type
-    ):
+    def _get_account_display_prior_lines(self, company_id, partner_ids, date_start, date_end, account_type):
         return {}
 
     def _get_account_display_reconciled_lines(
@@ -241,9 +232,7 @@ class ReportStatementCommon(models.AbstractModel):
             d = d.replace(day=1) - timedelta(days=1)
         return res
 
-    def _get_account_show_buckets(
-        self, company_id, partner_ids, date_end, account_type, aging_type
-    ):
+    def _get_account_show_buckets(self, company_id, partner_ids, date_end, account_type, aging_type):
         buckets = dict(map(lambda x: (x, []), partner_ids))
         partners = tuple(partner_ids)
         full_dates = self._get_bucket_dates(date_end, aging_type)
@@ -305,9 +294,7 @@ class ReportStatementCommon(models.AbstractModel):
             _("Total"),
         ]
 
-    def _get_line_currency_defaults(
-        self, currency_id, currencies, balance_forward, amount_due
-    ):
+    def _get_line_currency_defaults(self, currency_id, currencies, balance_forward, amount_due):
         if currency_id not in currencies:
             # This will only happen if currency is inactive
             currencies[currency_id] = self.env["res.currency"].browse(currency_id)
@@ -360,23 +347,17 @@ class ReportStatementCommon(models.AbstractModel):
         partner_ids = data["partner_ids"]
         date_start = data.get("date_start")
         if date_start and isinstance(date_start, str):
-            date_start = datetime.strptime(
-                date_start, DEFAULT_SERVER_DATE_FORMAT
-            ).date()
+            date_start = datetime.strptime(date_start, DEFAULT_SERVER_DATE_FORMAT).date()
         date_end = data["date_end"]
         if isinstance(date_end, str):
             date_end = datetime.strptime(date_end, DEFAULT_SERVER_DATE_FORMAT).date()
         account_type = data["account_type"]
         excluded_accounts_ids = data["excluded_accounts_ids"]
         if excluded_accounts_ids:
-            self = self.with_context(
-                excluded_accounts_ids=excluded_accounts_ids,
-            )
+            self = self.with_context(excluded_accounts_ids=excluded_accounts_ids,)
         show_only_overdue = data["show_only_overdue"]
         if show_only_overdue:
-            self = self.with_context(
-                show_only_overdue=show_only_overdue,
-            )
+            self = self.with_context(show_only_overdue=show_only_overdue,)
         aging_type = data["aging_type"]
         is_activity = data.get("is_activity")
         is_detailed = data.get("is_detailed")
@@ -396,42 +377,17 @@ class ReportStatementCommon(models.AbstractModel):
         date_formats = {r[0]: r[1] for r in self._cr.fetchall()}
         default_fmt = self.env["res.lang"]._lang_get(self.env.user.lang).date_format
         currencies = {x.id: x for x in self.env["res.currency"].search([])}
-
         res = {}
         # get base data
         prior_day = date_start - timedelta(days=1) if date_start else None
-        prior_lines = (
-            self._get_account_display_prior_lines(
-                company_id, partner_ids, prior_day, prior_day, account_type
-            )
-            if is_detailed
-            else {}
-        )
-        lines = self._get_account_display_lines(
-            company_id, partner_ids, date_start, date_end, account_type
-        )
-        ending_lines = (
-            self._get_account_display_ending_lines(
-                company_id, partner_ids, date_start, date_end, account_type
-            )
-            if is_detailed
-            else {}
-        )
-        reconciled_lines = (
-            self._get_account_display_reconciled_lines(
-                company_id, partner_ids, date_start, date_end, account_type
-            )
-            if is_activity
-            else {}
-        )
-        balances_forward = self._get_account_initial_balance(
-            company_id, partner_ids, date_start, account_type
-        )
+        prior_lines = (self._get_account_display_prior_lines(company_id, partner_ids, prior_day, prior_day, account_type) if is_detailed else {})
+        lines = self._get_account_display_lines(company_id, partner_ids, date_start, date_end, account_type)
+        ending_lines = (self._get_account_display_ending_lines(company_id, partner_ids, date_start, date_end, account_type) if is_detailed else {})
+        reconciled_lines = (self._get_account_display_reconciled_lines(company_id, partner_ids, date_start, date_end, account_type) if is_activity else {})
+        balances_forward = self._get_account_initial_balance(company_id, partner_ids, date_start, account_type)
 
         if data["show_aging_buckets"]:
-            buckets = self._get_account_show_buckets(
-                company_id, partner_ids, date_end, account_type, aging_type
-            )
+            buckets = self._get_account_show_buckets(company_id, partner_ids, date_end, account_type, aging_type)
             bucket_labels = self._get_bucket_labels(date_end, aging_type)
         else:
             bucket_labels = {}
@@ -442,49 +398,26 @@ class ReportStatementCommon(models.AbstractModel):
         for partner_id in partner_ids:
             res[partner_id] = {
                 "today": format_date(today, date_formats.get(partner_id, default_fmt)),
-                "start": format_date(
-                    date_start, date_formats.get(partner_id, default_fmt)
-                ),
+                "start": format_date(date_start, date_formats.get(partner_id, default_fmt)),
                 "end": format_date(date_end, date_formats.get(partner_id, default_fmt)),
-                "prior_day": format_date(
-                    prior_day, date_formats.get(partner_id, default_fmt)
-                ),
+                "prior_day": format_date(prior_day, date_formats.get(partner_id, default_fmt)),
                 "currencies": {},
             }
             currency_dict = res[partner_id]["currencies"]
 
             for line in balances_forward.get(partner_id, []):
-                (
-                    currency_dict[line["currency_id"]],
-                    currencies,
-                ) = self._get_line_currency_defaults(
-                    line["currency_id"],
-                    currencies,
-                    line["balance"],
-                    0.0 if is_detailed else line["balance"],
-                )
+                (currency_dict[line["currency_id"]],currencies,) = self._get_line_currency_defaults(line["currency_id"],currencies,line["balance"],0.0 if is_detailed else line["balance"],)
 
             for line in prior_lines.get(partner_id, []):
                 if line["currency_id"] not in currency_dict:
-                    (
-                        currency_dict[line["currency_id"]],
-                        currencies,
-                    ) = self._get_line_currency_defaults(
-                        line["currency_id"], currencies, 0.0, 0.0
-                    )
+                    (currency_dict[line["currency_id"]],currencies,) = self._get_line_currency_defaults(line["currency_id"], currencies, 0.0, 0.0)
                 line_currency = currency_dict[line["currency_id"]]
                 if not line["blocked"]:
                     line_currency["amount_due"] += line["open_amount"]
                 line["balance"] = line_currency["amount_due"]
-                line["date"] = format_date(
-                    line["date"], date_formats.get(partner_id, default_fmt)
-                )
-                line["date_maturity"] = format_date(
-                    line["date_maturity"], date_formats.get(partner_id, default_fmt)
-                )
-                line_currency["prior_lines"].extend(
-                    self._add_currency_prior_line(line, currencies[line["currency_id"]])
-                )
+                line["date"] = format_date(line["date"], date_formats.get(partner_id, default_fmt))
+                line["date_maturity"] = format_date(line["date_maturity"], date_formats.get(partner_id, default_fmt))
+                line_currency["prior_lines"].extend(self._add_currency_prior_line(line, currencies[line["currency_id"]]))
 
             for line in lines[partner_id]:
                 if line["currency_id"] not in currency_dict:
@@ -594,7 +527,7 @@ class ReportStatementCommon(models.AbstractModel):
             del res[partner]
             partner_ids.remove(partner)
 
-        return {
+        res_data = {
             "doc_ids": partner_ids,
             "doc_model": "res.partner",
             "docs": self.env["res.partner"].browse(partner_ids),
@@ -609,4 +542,7 @@ class ReportStatementCommon(models.AbstractModel):
             "get_inv_addr": self._get_invoice_address,
             "get_title": self._get_title,
             "get_aging_buckets_title": self._get_aging_buckets_title,
+            "hide_detailed": data['hide_detailed'],
         }
+
+        return res_data

@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo import models
+from datetime import date
 
 
 class OutstandingStatementWizard(models.TransientModel):
@@ -18,6 +19,18 @@ class OutstandingStatementWizard(models.TransientModel):
                 "is_outstanding": True,
             }
         )
+        ctx = self.env.context.copy()
+        if ctx.get("from_menu", False):
+            import ipdb;ipdb.set_trace()
+
+            partner_domain = [('invoice_date_due', '<', date.today().isoformat()),('state', '=', 'posted'),('payment_state', 'in', ('not_paid', 'partial')),]
+            if self.account_type == 'asset_receivable':
+                partner_domain.append(('move_type', 'in', ('out_invoice', 'out_refund')))
+            if self.account_type == 'liability_payable':
+                partner_domain.append(('move_type', 'in', ('in_invoice', 'in_refund')))
+            partners = self.env['account.move'].search(partner_domain, limit=3).mapped('partner_id')
+            res["partner_ids"] = partners.ids
+
         return res
 
     def _print_report(self, report_type):

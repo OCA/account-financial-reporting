@@ -157,12 +157,8 @@ class ActivityStatement(models.AbstractModel):
             balance_start[row.pop("partner_id")].append(row)
         return balance_start
 
-    def _display_activity_lines_sql_q1(
-        self, partners, date_start, date_end, account_type
-    ):
-        excluded_accounts_ids = tuple(
-            self.env.context.get("excluded_accounts_ids", [])
-        ) or (-1,)
+    def _display_activity_lines_sql_q1(self, partners, date_start, date_end, account_type):
+        excluded_accounts_ids = tuple(self.env.context.get("excluded_accounts_ids", [])) or (-1,)
         show_only_overdue = self.env.context.get("show_only_overdue", False)
         payment_ref = _("Payment")
         return str(
@@ -237,12 +233,9 @@ class ActivityStatement(models.AbstractModel):
             "utf-8",
         )
 
-    def _get_account_display_lines(
-        self, company_id, partner_ids, date_start, date_end, account_type
-    ):
+    def _get_account_display_lines(self, company_id, partner_ids, date_start, date_end, account_type):
         res = dict(map(lambda x: (x, []), partner_ids))
         partners = tuple(partner_ids)
-
         # pylint: disable=E8103
         self.env.cr.execute(
             """
@@ -259,7 +252,17 @@ class ActivityStatement(models.AbstractModel):
                 self._display_activity_lines_sql_q2("Q1", company_id),
             )
         )
-        for row in self.env.cr.dictfetchall():
+
+        result = self.env.cr.dictfetchall()
+        aml_obj = self.env["account.move.line"].sudo()
+        exchange_diff_journal = self.env.company.currency_exchange_journal_id.id
+        for row in result:
+            aml_line = aml_obj.browse(row.get("ids", []))
+
+            if aml_line.journal_id.id == exchange_diff_journal:
+                print(f'ignoramos las lineas de diferencia de cambio {aml_line.name}')
+                continue
+
             res[row.pop("partner_id")].append(row)
         return res
 
