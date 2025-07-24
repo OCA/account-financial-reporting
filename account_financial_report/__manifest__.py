@@ -6,7 +6,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Account Financial Reports",
-    "version": "18.0.1.2.2",
+    "version": "18.0.1.2.3",
     "category": "Reporting",
     "summary": "OCA Financial Reports",
     "author": "Camptocamp,"
@@ -47,7 +47,6 @@
     "assets": {
         "web.assets_backend": [
             "account_financial_report/static/src/js/*",
-            "account_financial_report/static/src/scss/*",
             "account_financial_report/static/src/xml/**/*",
         ],
     },
