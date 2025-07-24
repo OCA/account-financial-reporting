@@ -857,7 +857,7 @@ class GeneralLedgerReport(models.AbstractModel):
                 continue
             if (
                 not gl_item["currency_id"]
-                or gl_item["currency_id"] != company.currency_id
+                or gl_item["currency_id"] != company.currency_id.id
             ):
                 gl_item["fin_bal"]["bal_curr"] -= gl_item["init_bal"]["bal_curr"]
                 gl_item["init_bal"]["bal_curr"] = 0
