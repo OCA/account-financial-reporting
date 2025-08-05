@@ -19,13 +19,13 @@ class TrialBalanceReport(models.AbstractModel):
         account_ids,
         journal_ids,
         partner_ids,
-        company_id,
+        company_ids,
         date_from,
         only_posted_moves,
         show_partner_details,
     ):
         accounts_domain = [
-            ("company_id", "=", company_id),
+            ("company_id", "in", company_ids),
             ("include_initial_balance", "=", True),
         ]
         if account_ids:
@@ -33,8 +33,8 @@ class TrialBalanceReport(models.AbstractModel):
         domain = [("date", "<", date_from)]
         accounts = self.env["account.account"].search(accounts_domain)
         domain += [("account_id", "in", accounts.ids)]
-        if company_id:
-            domain += [("company_id", "=", company_id)]
+        if company_ids:
+            domain += [("company_id", "in", company_ids)]
         if journal_ids:
             domain += [("journal_id", "in", journal_ids)]
         if partner_ids:
@@ -58,14 +58,14 @@ class TrialBalanceReport(models.AbstractModel):
         account_ids,
         journal_ids,
         partner_ids,
-        company_id,
+        company_ids,
         date_from,
         only_posted_moves,
         show_partner_details,
         fy_start_date,
     ):
         accounts_domain = [
-            ("company_id", "=", company_id),
+            ("company_id", "in", company_ids),
             ("include_initial_balance", "=", False),
         ]
         if account_ids:
@@ -73,8 +73,8 @@ class TrialBalanceReport(models.AbstractModel):
         domain = [("date", "<", date_from), ("date", ">=", fy_start_date)]
         accounts = self.env["account.account"].search(accounts_domain)
         domain += [("account_id", "in", accounts.ids)]
-        if company_id:
-            domain += [("company_id", "=", company_id)]
+        if company_ids:
+            domain += [("company_id", "in", company_ids)]
         if journal_ids:
             domain += [("journal_id", "in", journal_ids)]
         if partner_ids:
@@ -99,7 +99,7 @@ class TrialBalanceReport(models.AbstractModel):
         account_ids,
         journal_ids,
         partner_ids,
-        company_id,
+        company_ids,
         date_to,
         date_from,
         only_posted_moves,
@@ -110,8 +110,8 @@ class TrialBalanceReport(models.AbstractModel):
             ("date", ">=", date_from),
             ("date", "<=", date_to),
         ]
-        if company_id:
-            domain += [("company_id", "=", company_id)]
+        if company_ids:
+            domain += [("company_id", "in", company_ids)]
         if account_ids:
             domain += [("account_id", "in", account_ids)]
         if journal_ids:
@@ -137,13 +137,13 @@ class TrialBalanceReport(models.AbstractModel):
         account_ids,
         journal_ids,
         partner_ids,
-        company_id,
+        company_ids,
         fy_start_date,
         only_posted_moves,
         show_partner_details,
     ):
         accounts_domain = [
-            ("company_id", "=", company_id),
+            ("company_id", "in", company_ids),
             ("include_initial_balance", "=", False),
         ]
         if account_ids:
@@ -151,8 +151,8 @@ class TrialBalanceReport(models.AbstractModel):
         domain = [("date", "<", fy_start_date)]
         accounts = self.env["account.account"].search(accounts_domain)
         domain += [("account_id", "in", accounts.ids)]
-        if company_id:
-            domain += [("company_id", "=", company_id)]
+        if company_ids:
+            domain += [("company_id", "in", company_ids)]
         if journal_ids:
             domain += [("journal_id", "in", journal_ids)]
         if partner_ids:
@@ -176,7 +176,7 @@ class TrialBalanceReport(models.AbstractModel):
         account_ids,
         journal_ids,
         partner_ids,
-        company_id,
+        company_ids,
         fy_start_date,
         only_posted_moves,
         show_partner_details,
@@ -186,7 +186,7 @@ class TrialBalanceReport(models.AbstractModel):
             account_ids,
             journal_ids,
             partner_ids,
-            company_id,
+            company_ids,
             fy_start_date,
             only_posted_moves,
             show_partner_details,
@@ -420,7 +420,11 @@ class TrialBalanceReport(models.AbstractModel):
         fy_start_date,
         grouped_by,
     ):
-        accounts_domain = [("company_id", "=", company_id)]
+
+        # include branch companies
+        company_ids = self.env['res.company'].browse(company_id).all_child_ids.ids + [company_id]
+
+        accounts_domain = [("company_id", "in", company_ids)]
         if account_ids:
             accounts_domain += [("id", "in", account_ids)]
             # If explicit list of accounts is provided,
@@ -439,7 +443,7 @@ class TrialBalanceReport(models.AbstractModel):
             account_ids,
             journal_ids,
             partner_ids,
-            company_id,
+            company_ids,
             date_from,
             only_posted_moves,
             show_partner_details,
@@ -453,7 +457,7 @@ class TrialBalanceReport(models.AbstractModel):
             account_ids,
             journal_ids,
             partner_ids,
-            company_id,
+            company_ids,
             date_from,
             only_posted_moves,
             show_partner_details,
@@ -499,7 +503,7 @@ class TrialBalanceReport(models.AbstractModel):
             account_ids,
             journal_ids,
             partner_ids,
-            company_id,
+            company_ids,
             date_to,
             date_from,
             only_posted_moves,
@@ -550,7 +554,7 @@ class TrialBalanceReport(models.AbstractModel):
             )
         # Remove accounts a 0 from collections
         if hide_account_at_0:
-            company = self.env["res.company"].browse(company_id)
+            company = self.env["res.company"].browse(company_ids)
             self._remove_accounts_at_cero(total_amount, show_partner_details, company)
 
         accounts_ids = list(total_amount.keys())
@@ -589,7 +593,7 @@ class TrialBalanceReport(models.AbstractModel):
             account_ids,
             journal_ids,
             partner_ids,
-            company_id,
+            company_ids,
             fy_start_date,
             only_posted_moves,
             show_partner_details,
@@ -864,7 +868,7 @@ class TrialBalanceReport(models.AbstractModel):
         show_partner_details = data["show_partner_details"]
         wizard_id = data["wizard_id"]
         company = self.env["res.company"].browse(data["company_id"])
-        company_id = data["company_id"]
+        company_ids = data["company_id"]
         partner_ids = data["partner_ids"]
         journal_ids = data["journal_ids"]
         account_ids = data["account_ids"]
@@ -882,7 +886,7 @@ class TrialBalanceReport(models.AbstractModel):
             account_ids,
             journal_ids,
             partner_ids,
-            company_id,
+            company_ids,
             date_to,
             date_from,
             foreign_currency,
