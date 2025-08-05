@@ -420,10 +420,11 @@ class TrialBalanceReport(models.AbstractModel):
         fy_start_date,
         grouped_by,
     ):
-
         # include branch companies
-        company_ids = self.env['res.company'].browse(company_id).all_child_ids.ids + [company_id]
-
+        company_ids = (
+            self.env['res.company'].browse(company_id).all_child_ids.ids
+            + [company_id]
+        )
         accounts_domain = [("company_id", "in", company_ids)]
         if account_ids:
             accounts_domain += [("id", "in", account_ids)]
