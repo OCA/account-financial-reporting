@@ -27,7 +27,7 @@ class JournalLedgerReport(models.AbstractModel):
     def _get_journal_ledgers_domain(self, wizard, journal_ids, company):
         domain = []
         if company:
-            domain += [("company_id", "=", company.id)]
+            domain += [("company_id", "in", company.all_child_ids.ids + [company.id])]
         if journal_ids:
             domain += [("id", "in", journal_ids)]
         return domain
@@ -373,3 +373,4 @@ class JournalLedgerReport(models.AbstractModel):
             "Journal_Ledgers": journal_ledgers_data,
             "Moves": moves_data,
         }
+
