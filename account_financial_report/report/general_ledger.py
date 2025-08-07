@@ -116,7 +116,13 @@ class GeneralLedgerReport(models.AbstractModel):
         return gl_initial_acc
 
     def _get_initial_balance_fy_pl_ml_domain(
-        self, account_ids, company_ids, fy_start_date, base_domain
+        self,
+        account_ids,
+        company_ids,
+        date_from,
+        base_domain,
+        grouped_by,
+        acc_prt=False,
     ):
         accounts_domain = [
             ("company_id", "in", company_ids),
@@ -156,7 +162,13 @@ class GeneralLedgerReport(models.AbstractModel):
         return pl_initial_balance
 
     def _get_gl_initial_acc(
-        self, account_ids, company_ids, date_from, fy_start_date, base_domain, grouped_by
+         self,
+        account_ids,
+        company_ids,
+        date_from,
+        fy_start_date,
+        base_domain,
+        grouped_by,
     ):
         initial_domain_bs = self._get_initial_balances_bs_ml_domain(
             account_ids, company_ids, date_from, base_domain, grouped_by
@@ -767,7 +779,9 @@ class GeneralLedgerReport(models.AbstractModel):
     def _get_report_values(self, docids, data):
         wizard_id = data["wizard_id"]
         company = self.env["res.company"].browse(data["company_id"])
-        company_ids = company.all_child_ids.ids + [company.id] # Include all child companies
+        company_ids = company.all_child_ids.ids + [
+            company.id
+        ]  # Include all child companies
         date_to = data["date_to"]
         date_from = data["date_from"]
         partner_ids = data["partner_ids"]
