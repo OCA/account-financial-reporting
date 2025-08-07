@@ -162,7 +162,7 @@ class GeneralLedgerReport(models.AbstractModel):
         return pl_initial_balance
 
     def _get_gl_initial_acc(
-         self,
+        self,
         account_ids,
         company_ids,
         date_from,
