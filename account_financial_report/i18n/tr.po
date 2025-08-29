@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2025-05-14 11:23+0000\n"
-"Last-Translator: Betül Öğmen <betulo@eska.biz>\n"
+"PO-Revision-Date: 2025-08-29 16:43+0000\n"
+"Last-Translator: Tamer Sezgin <tamer.sezgin@gmail.com>\n"
 "Language-Team: none\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -19,12 +19,12 @@ msgstr ""
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "&gt; 120 d."
-msgstr "&gt; 120 d."
+msgstr "&gt; 120 gün."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "1 - 30 d."
-msgstr "1 - 30 d."
+msgstr "1 - 30 gün."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
@@ -34,17 +34,17 @@ msgstr "10"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "31 - 60 d."
-msgstr ""
+msgstr "31 - 60 gün."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "61 - 90 d."
-msgstr ""
+msgstr "61 - 90 gün."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "91 - 120 d."
-msgstr ""
+msgstr "91 - 120 gün."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
@@ -181,12 +181,14 @@ msgid ""
 "Age ≤ 120\n"
 "                            d."
 msgstr ""
+"Yaş ≤ 120\n"
+"                            gün."
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 msgid "Age ≤ 120 d."
-msgstr ""
+msgstr "Yaş ≤ 120 gün."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -194,12 +196,14 @@ msgid ""
 "Age ≤ 30\n"
 "                            d."
 msgstr ""
+"Yaş ≤ 30\n"
+"                            gün."
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 msgid "Age ≤ 30 d."
-msgstr ""
+msgstr "Yaş ≤ 30 gün."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -207,12 +211,14 @@ msgid ""
 "Age ≤ 60\n"
 "                            d."
 msgstr ""
+"Yaş ≤ 60\n"
+"                            gün."
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 msgid "Age ≤ 60 d."
-msgstr ""
+msgstr "Yaş ≤ 60 gün."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -220,12 +226,14 @@ msgid ""
 "Age ≤ 90\n"
 "                            d."
 msgstr ""
+"Yaş ≤ 90\n"
+"                            gün."
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 msgid "Age ≤ 90 d."
-msgstr ""
+msgstr "Yaş ≤ 90 d."
 
 #. module: account_financial_report
 #. odoo-python
