@@ -143,7 +143,7 @@ class BankReconciliationXlsx(models.AbstractModel):
             regular_date = workbook.add_format(
                 {"num_format": xls_date_format, "font_size": 10, "align": "left"}
             )
-            cur_format = u"#,##0.00 %s" % (
+            cur_format = "#,##0.00 %s" % (
                 o.company_id.currency_id.symbol or o.company_id.currency_id.name
             )
             # It seems that Excel replaces automatically the decimal

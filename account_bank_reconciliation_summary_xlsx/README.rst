@@ -17,25 +17,33 @@ Bank Reconciliation Report
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Faccount--financial--reporting-lightgray.png?logo=github
-    :target: https://github.com/OCA/account-financial-reporting/tree/13.0/account_bank_reconciliation_summary_xlsx
+    :target: https://github.com/OCA/account-financial-reporting/tree/18.0/account_bank_reconciliation_summary_xlsx
     :alt: OCA/account-financial-reporting
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/account-financial-reporting-13-0/account-financial-reporting-13-0-account_bank_reconciliation_summary_xlsx
+    :target: https://translation.odoo-community.org/projects/account-financial-reporting-18-0/account-financial-reporting-18-0-account_bank_reconciliation_summary_xlsx
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/account-financial-reporting&target_branch=13.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/account-financial-reporting&target_branch=18.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
-This module adds a Bank Reconciliation Report in Odoo in XLSX format. For each bank journal, the report displays:
+This module adds a Bank Reconciliation Report in Odoo in XLSX format.
+For each bank journal, the report displays:
 
 1. The balance of the bank account in the accounting,
-2. The list of journal items of the bank account not linked to any bank statement lines,
-3. The list of draft bank statement lines not linked to any journal items,
+2. The list of journal items of the bank account not linked to any bank
+   statement lines,
+3. The list of draft bank statement lines not linked to any journal
+   items,
 4. The computed balance of the bank account at the bank.
 
-The last field (computed balance of the bank account at the bank) must be compared to the real bank account balance at the bank. If there is a difference, you need to find the error in the accounting. The field *Computed balance of the bank account at the bank* is a formula, so you can easily change its computation to try to find the difference with the real bank account balance at the bank.
+The last field (computed balance of the bank account at the bank) must
+be compared to the real bank account balance at the bank. If there is a
+difference, you need to find the error in the accounting. The field
+*Computed balance of the bank account at the bank* is a formula, so you
+can easily change its computation to try to find the difference with the
+real bank account balance at the bank.
 
 **Table of contents**
 
@@ -52,9 +60,12 @@ Usage
 
 You can launch the Bank Reconciliation Report wizard from:
 
-* the menu *Invoicing > Reporting > OCA accounting reports > Bank Reconciliation*,
-* the form view of a bank statement: click on the button *Bank Reconciliation Report*,
-* the invoicing dashboard: on a bank journal, click on the options, then select *Bank Reconciliation*.
+- the menu *Invoicing > Reporting > OCA accounting reports > Bank
+  Reconciliation*,
+- the form view of a bank statement: click on the button *Bank
+  Reconciliation Report*,
+- the invoicing dashboard: on a bank journal, click on the options, then
+  select *Bank Reconciliation*.
 
 Bug Tracker
 ===========
@@ -62,7 +73,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/account-financial-reporting/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/account-financial-reporting/issues/new?body=module:%20account_bank_reconciliation_summary_xlsx%0Aversion:%2013.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/account-financial-reporting/issues/new?body=module:%20account_bank_reconciliation_summary_xlsx%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -70,17 +81,17 @@ Credits
 =======
 
 Authors
-~~~~~~~
+-------
 
 * Akretion
 
 Contributors
-~~~~~~~~~~~~
+------------
 
-* Alexis de Lattre <alexis.delattre@akretion.com>
+- Alexis de Lattre <alexis.delattre@akretion.com>
 
 Maintainers
-~~~~~~~~~~~
+-----------
 
 This module is maintained by the OCA.
 
@@ -92,6 +103,6 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
-This module is part of the `OCA/account-financial-reporting <https://github.com/OCA/account-financial-reporting/tree/13.0/account_bank_reconciliation_summary_xlsx>`_ project on GitHub.
+This module is part of the `OCA/account-financial-reporting <https://github.com/OCA/account-financial-reporting/tree/18.0/account_bank_reconciliation_summary_xlsx>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.
