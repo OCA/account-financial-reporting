@@ -13,16 +13,18 @@
         <field name="model">account.journal</field>
         <field name="inherit_id" ref="account.account_journal_dashboard_kanban_view" />
         <field name="arch" type="xml">
-            <xpath expr="//div[@name='bank_cash_commands']/.." position="after">
+            <xpath expr="//div[@id='action_card_statements']/.." position="after">
                 <div class="col-4 o_kanban_card_manage_section o_kanban_manage_new">
                     <div class="o_kanban_card_manage_title">
-                        <span>Report</span>
+                        <strong>
+                            <span>Report</span>
+                        </strong>
                     </div>
                     <div name="bank_reconciliation_report">
                         <a
                             name="%(bank_reconciliation_report_wizard_action)d"
                             type="action"
-                            context="{'default_journal_ids': [active_id]}"
+                            context="{'default_journal_ids': [id]}"
                         >Bank Reconciliation</a>
                     </div>
                 </div>

@@ -2,7 +2,7 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import _, fields, models
+from odoo import fields, models
 
 
 class BankReconciliationXlsx(models.AbstractModel):
@@ -11,12 +11,12 @@ class BankReconciliationXlsx(models.AbstractModel):
     _inherit = "report.report_xlsx.abstract"
 
     def _compute_account_balance(self, journal, date):
-        bank_account = journal.default_debit_account_id
+        bank_account = journal.default_account_id
         # TODO: add support for bank accounts in foreign currency
         # if not o.currency_id else 'amount_currency'
         query = """
             SELECT sum(balance) FROM account_move_line
-            WHERE account_id=%s AND date <= %s"""
+            WHERE account_id=%s AND date <= %s AND parent_state = 'posted'"""
         self.env.cr.execute(query, (bank_account.id, date))
         query_results = self.env.cr.dictfetchall()
         if query_results:
@@ -26,12 +26,13 @@ class BankReconciliationXlsx(models.AbstractModel):
         return account_bal
 
     def _prepare_move_lines(self, journal, date):
-        bank_account = journal.default_debit_account_id
+        bank_account = journal.default_account_id
         mlines = self.env["account.move.line"].search(
             [
                 ("account_id", "=", bank_account.id),
                 ("journal_id", "=", journal.id),  # to avoid initial line
                 ("date", "<=", date),
+                ("move_id.state", "=", "posted"),
                 "|",
                 ("statement_line_date", "=", False),
                 ("statement_line_date", ">", date),
@@ -65,7 +66,7 @@ class BankReconciliationXlsx(models.AbstractModel):
     def _prepare_draft_statement_lines(self, journal, date):
         blines = self.env["account.bank.statement.line"].search(
             [
-                ("journal_entry_ids", "=", False),
+                ("is_reconciled", "=", False),
                 ("journal_id", "=", journal.id),
                 ("date", "<=", date),
             ]
@@ -79,7 +80,7 @@ class BankReconciliationXlsx(models.AbstractModel):
                     "ref": bline.ref or "",
                     "partner": bline.partner_id.display_name or "",
                     "amount": bline.amount,
-                    "statement_ref": bline.statement_id.display_name,
+                    "statement_ref": bline.statement_id.display_name or "",
                 }
             )
         return res
@@ -161,7 +162,7 @@ class BankReconciliationXlsx(models.AbstractModel):
             sheet.write(
                 0,
                 0,
-                _("%s - %s - Bank Reconciliation")
+                self.env._("%s - %s - Bank Reconciliation")
                 % (o.company_id.name, o.display_name),
                 doc_title,
             )
@@ -176,14 +177,16 @@ class BankReconciliationXlsx(models.AbstractModel):
             sheet.set_column(6, 6, 14)
             sheet.set_column(7, 7, 14)
             row = 2
-            sheet.write(row, 0, _("Date:"), title_right)
+            sheet.write(row, 0, self.env._("Date:"), title_right)
             sheet.write(row, 1, date_dt, title_date)
             # 1) Show accounting balance of bank account
             row += 2
-            bank_account = o.default_debit_account_id
+            bank_account = o.default_account_id
             for col in range(3):
                 sheet.write(row, col, "", title_right)
-            sheet.write(row, 3, _("Balance %s:") % bank_account.code, title_right)
+            sheet.write(
+                row, 3, self.env._("Balance %s:") % bank_account.code, title_right
+            )
             account_bal = self._compute_account_balance(o, date)
 
             sheet.write(row, 4, account_bal, regular_currency_bg)
@@ -195,24 +198,27 @@ class BankReconciliationXlsx(models.AbstractModel):
             sheet.write(
                 row,
                 0,
-                _("Journal items of account %s not linked to a bank " "statement line:")
+                self.env._(
+                    "Journal items of account %s not linked to a bank "
+                    "statement line:"
+                )
                 % bank_account.code,
                 label_bold,
             )
             mlines = self._prepare_move_lines(o, date)
             if not mlines:
-                sheet.write(row, 4, _("NONE"), none)
+                sheet.write(row, 4, self.env._("NONE"), none)
             else:
                 row += 1
                 col_labels = [
-                    _("Date"),
-                    _("Label"),
-                    _("Ref."),
-                    _("Partner"),
-                    _("Amount"),
-                    _("Statement Line Date"),
-                    _("Move Number"),
-                    _("Counter-part"),
+                    self.env._("Date"),
+                    self.env._("Label"),
+                    self.env._("Ref."),
+                    self.env._("Partner"),
+                    self.env._("Amount"),
+                    self.env._("Statement Line Date"),
+                    self.env._("Move Number"),
+                    self.env._("Counter-part"),
                 ]
                 col = 0
                 for col_label in col_labels:
@@ -236,19 +242,19 @@ class BankReconciliationXlsx(models.AbstractModel):
 
             # 3) Add draft bank statement lines
             row += 2  # skip 1 line
-            sheet.write(row, 0, _("Draft bank statement lines:"), label_bold)
+            sheet.write(row, 0, self.env._("Draft bank statement lines:"), label_bold)
             blines = self._prepare_draft_statement_lines(o, date)
             if not blines:
-                sheet.write(row, 4, _("NONE"), none)
+                sheet.write(row, 4, self.env._("NONE"), none)
             else:
                 row += 1
                 col_labels = [
-                    _("Date"),
-                    _("Label"),
-                    _("Ref."),
-                    _("Partner"),
-                    _("Amount"),
-                    _("Statement Ref."),
+                    self.env._("Date"),
+                    self.env._("Label"),
+                    self.env._("Ref."),
+                    self.env._("Partner"),
+                    self.env._("Amount"),
+                    self.env._("Statement Ref."),
                     "",
                     "",
                 ]
@@ -274,11 +280,14 @@ class BankReconciliationXlsx(models.AbstractModel):
             for col in range(3):
                 sheet.write(row, col, "", title_right)
             sheet.write(
-                row, 3, _("Computed Bank Account Balance at the Bank:"), title_right
+                row,
+                3,
+                self.env._("Computed Bank Account Balance at the Bank:"),
+                title_right,
             )
             sheet.write_formula(row, 4, formula, regular_currency_bg, bank_bal)
         if no_bank_journal:
-            sheet = workbook.add_worksheet(_("No Bank Journal"))
+            sheet = workbook.add_worksheet(self.env._("No Bank Journal"))
             sheet.set_row(0, 30)
             warn_msg = workbook.add_format(
                 {"bold": True, "font_size": 16, "font_color": "#003b6f"}
@@ -286,7 +295,7 @@ class BankReconciliationXlsx(models.AbstractModel):
             sheet.write(
                 0,
                 0,
-                _(
+                self.env._(
                     "No bank journal selected. "
                     "This report is only for bank journals."
                 ),

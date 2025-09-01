@@ -8,16 +8,21 @@
     <record id="view_bank_statement_form" model="ir.ui.view">
         <field name="name">bank_rec_summary.account.bank.statement.form</field>
         <field name="model">account.bank.statement</field>
-        <field name="inherit_id" ref="account.view_bank_statement_form" />
+        <field
+            name="inherit_id"
+            ref="account_statement_base.view_bank_statement_form"
+        />
         <field name="arch" type="xml">
-            <button name="check_confirm_bank" position="after">
+            <div name="button_box" position="inside">
                 <button
                     name="%(bank_reconciliation_report_wizard_action)d"
                     type="action"
                     string="Bank Reconciliation Report"
                     context="{'default_journal_ids': [journal_id]}"
+                    class="oe_stat_button"
+                    icon="fa-file-excel-o"
                 />
-            </button>
+            </div>
         </field>
     </record>
 </odoo>

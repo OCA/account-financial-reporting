@@ -5,14 +5,12 @@
   License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 -->
 <odoo>
-    <report
-        id="bank_reconciliation_xlsx"
-        model="bank.reconciliation.report.wizard"
-        string="Bank Reconciliation XLSX"
-        report_type="xlsx"
-        name="bank.reconciliation.xlsx"
-        file="bank.reconciliation.xlsx"
-        print_report_name="'bank_reconciliation-%s' % (object.date)"
-    />
-    <!-- print_report_name doesn't work here... -->
+    <record id="bank_reconciliation_xlsx" model="ir.actions.report">
+        <field name="name">Bank Reconciliation XLSX</field>
+        <field name="model">bank.reconciliation.report.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">bank.reconciliation.xlsx</field>
+        <field name="report_file">bank.reconciliation.xlsx</field>
+        <field name="print_report_name">'bank_reconciliation-%s' % (object.date)</field>
+    </record>
 </odoo>
