@@ -32,6 +32,16 @@ msgid "Balance Sheet"
 msgstr "Stato patrimoniale"
 
 #. module: mis_template_financial_report
+#: model:mis.report.kpi,description:mis_template_financial_report.kpi_current_unallocated
+msgid "Current Year Unallocated Earnings"
+msgstr ""
+
+#. module: mis_template_financial_report
+#: model:mis.report.kpi,description:mis_template_financial_report.kpi_equity
+msgid "Equity"
+msgstr ""
+
+#. module: mis_template_financial_report
 #: model:ir.model.fields,field_description:mis_template_financial_report.field_mis_report_instance__horizontal
 msgid "Horizontal"
 msgstr "Orizzontale"
@@ -43,8 +53,8 @@ msgstr "Passività"
 
 #. module: mis_template_financial_report
 #: model:mis.report.kpi,description:mis_template_financial_report.kpi_liability_total
-msgid "Liability"
-msgstr "Passivo"
+msgid "Liability + Equity"
+msgstr ""
 
 #. module: mis_template_financial_report
 #: model:mis.report.kpi,description:mis_template_financial_report.kpi_loss
@@ -60,6 +70,11 @@ msgstr "Istanza MIS Report"
 #: model:ir.model,name:mis_template_financial_report.model_mis_report_kpi
 msgid "MIS Report KPI"
 msgstr "KPI MIS Report"
+
+#. module: mis_template_financial_report
+#: model:mis.report.kpi,description:mis_template_financial_report.kpi_previous_unallocated
+msgid "Previous Year Unallocated Earnings"
+msgstr ""
 
 #. module: mis_template_financial_report
 #: model:mis.report.kpi,description:mis_template_financial_report.kpi_profit
@@ -99,3 +114,11 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:mis_template_financial_report.mis_report_view_kpi_form
 msgid "Splitting"
 msgstr "Divisione"
+
+#. module: mis_template_financial_report
+#: model:mis.report.kpi,description:mis_template_financial_report.kpi_unallocated_total
+msgid "Unallocated Earnings"
+msgstr ""
+
+#~ msgid "Liability"
+#~ msgstr "Passivo"
