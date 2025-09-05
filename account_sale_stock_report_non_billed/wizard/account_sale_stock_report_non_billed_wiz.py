@@ -126,8 +126,8 @@ class AccountSaleStockReportNonBilledWiz(models.TransientModel):
             )
         action = {
             "type": "ir.actions.act_window",
-            "views": [(tree_view_id, "tree"), (pivot_view_id, "pivot")],
-            "view_mode": "tree,pivot",
+            "views": [(tree_view_id, "list"), (pivot_view_id, "pivot")],
+            "view_mode": "list,pivot",
             "search_view_id": search_view_id,
             "name": _("Non billed moves (%(from)s -> %(to)s)")
             % {"from": self.stock_move_non_billed_threshold, "to": self.date_check},

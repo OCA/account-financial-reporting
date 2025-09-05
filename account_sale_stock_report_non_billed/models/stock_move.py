@@ -152,6 +152,13 @@ class StockMove(models.Model):
             ).get_quantity_invoiced(inv_lines)
             move._set_not_invoiced_values(qty_to_invoice, calculated_qty)
 
+    def _read_group_select(self, aggregate_spec, query):
+        """Override this method to flag 'quantity_not_invoiced' and
+        'price_not_invoiced' as aggregatable fields."""
+        if aggregate_spec in ("quantity_not_invoiced:sum", "price_not_invoiced:sum"):
+            return super()._read_group_select("id:recordset", query)
+        return super()._read_group_select(aggregate_spec, query)
+
     @api.model
     def read_group(
         self, domain, fields, groupby, offset=0, limit=None, orderby=False, lazy=True
