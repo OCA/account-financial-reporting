@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-06-15 22:41+0000\n"
+"PO-Revision-Date: 2025-09-08 10:43+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #. module: mis_template_financial_report
 #: model:ir.model.fields,field_description:mis_template_financial_report.field_mis_report_instance__allow_horizontal
@@ -34,12 +34,12 @@ msgstr "Stato patrimoniale"
 #. module: mis_template_financial_report
 #: model:mis.report.kpi,description:mis_template_financial_report.kpi_current_unallocated
 msgid "Current Year Unallocated Earnings"
-msgstr ""
+msgstr "Ricavi non allocati anno attuale"
 
 #. module: mis_template_financial_report
 #: model:mis.report.kpi,description:mis_template_financial_report.kpi_equity
 msgid "Equity"
-msgstr ""
+msgstr "Capitale"
 
 #. module: mis_template_financial_report
 #: model:ir.model.fields,field_description:mis_template_financial_report.field_mis_report_instance__horizontal
@@ -54,7 +54,7 @@ msgstr "Passività"
 #. module: mis_template_financial_report
 #: model:mis.report.kpi,description:mis_template_financial_report.kpi_liability_total
 msgid "Liability + Equity"
-msgstr ""
+msgstr "Passività + capitale"
 
 #. module: mis_template_financial_report
 #: model:mis.report.kpi,description:mis_template_financial_report.kpi_loss
@@ -74,7 +74,7 @@ msgstr "KPI MIS Report"
 #. module: mis_template_financial_report
 #: model:mis.report.kpi,description:mis_template_financial_report.kpi_previous_unallocated
 msgid "Previous Year Unallocated Earnings"
-msgstr ""
+msgstr "Utili non allocati anno precedente"
 
 #. module: mis_template_financial_report
 #: model:mis.report.kpi,description:mis_template_financial_report.kpi_profit
@@ -118,7 +118,7 @@ msgstr "Divisione"
 #. module: mis_template_financial_report
 #: model:mis.report.kpi,description:mis_template_financial_report.kpi_unallocated_total
 msgid "Unallocated Earnings"
-msgstr ""
+msgstr "Utili non allocati"
 
 #~ msgid "Liability"
 #~ msgstr "Passivo"
