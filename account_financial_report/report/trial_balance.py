@@ -194,7 +194,7 @@ class TrialBalanceReport(models.AbstractModel):
         initial_balances = self.env["account.move.line"].read_group(
             domain=domain,
             fields=["account_id", "balance", "amount_currency:sum"],
-            groupby=["account_id"],
+            groupby=["account_id", "currency_id"],
         )
         pl_initial_balance = 0.0
         pl_initial_currency_balance = 0.0
@@ -432,7 +432,7 @@ class TrialBalanceReport(models.AbstractModel):
             tb_initial_acc.append(
                 {"account_id": account.id, "balance": 0.0, "amount_currency": 0.0}
             )
-        groupby_fields = ["account_id"]
+        groupby_fields = ["account_id", "currency_id"]
         if grouped_by:
             groupby_fields.append("analytic_account_ids")
         initial_domain_bs = self._get_initial_balances_bs_ml_domain(
@@ -515,13 +515,13 @@ class TrialBalanceReport(models.AbstractModel):
             tb_initial_prt_bs = self.env["account.move.line"].read_group(
                 domain=initial_domain_bs,
                 fields=["account_id", "partner_id", "balance", "amount_currency:sum"],
-                groupby=["account_id", "partner_id"],
+                groupby=["account_id", "partner_id", "currency_id"],
                 lazy=False,
             )
             tb_initial_prt_pl = self.env["account.move.line"].read_group(
                 domain=initial_domain_pl,
                 fields=["account_id", "partner_id", "balance", "amount_currency:sum"],
-                groupby=["account_id", "partner_id"],
+                groupby=["account_id", "partner_id", "currency_id"],
             )
             tb_initial_prt = tb_initial_prt_bs + tb_initial_prt_pl
             if hide_account_at_0:
@@ -536,7 +536,7 @@ class TrialBalanceReport(models.AbstractModel):
                     "balance",
                     "amount_currency:sum",
                 ],
-                groupby=["account_id", "partner_id"],
+                groupby=["account_id", "currency_id", "partner_id"],
                 lazy=False,
             )
         total_amount = {}
