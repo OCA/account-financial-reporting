@@ -146,14 +146,14 @@
             <div class="act_as_cell amount">
                 <span
                     t-esc="partner['residual']"
-                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                    t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                 />
             </div>
                 <!--## current-->
             <div class="act_as_cell amount">
                     <span
                     t-esc="partner['current']"
-                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                    t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                 />
             </div>
             <t t-if="not age_partner_config">
@@ -161,35 +161,35 @@
                 <div class="act_as_cell amount">
                     <span
                         t-esc="partner['30_days']"
-                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                     />
                 </div>
                 <!--## age_60_days-->
                 <div class="act_as_cell amount">
                     <span
                         t-esc="partner['60_days']"
-                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                     />
                 </div>
                 <!--## age_90_days-->
                 <div class="act_as_cell amount">
                     <span
                         t-esc="partner['90_days']"
-                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                     />
                 </div>
                 <!--## age_120_days-->
                 <div class="act_as_cell amount">
                     <span
                         t-esc="partner['120_days']"
-                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                     />
                 </div>
                 <!--## older-->
                 <div class="act_as_cell amount">
                     <span
                         t-esc="partner['older']"
-                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                     />
                 </div>
             </t>
@@ -197,7 +197,7 @@
                 <div class="act_as_cell amount">
                     <span
                         t-out="partner[column_dynamic]"
-                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                     />
                 </div>
             </t>
@@ -353,7 +353,7 @@
                         >
                             <t
                                 t-out="line['residual']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                             />
                         </span>
                     </div>
@@ -362,7 +362,7 @@
                             <t t-if="line['current'] == 0">
                                 <span
                                 t-esc="line['current']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                             />
                             </t>
                             <t t-else="">
@@ -372,7 +372,7 @@
                             >
                                     <t
                                     t-out="line['current']"
-                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                    t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                                 />
                                 </span>
                             </t>
@@ -383,7 +383,7 @@
                             <t t-if="line['30_days'] == 0">
                                 <span
                                     t-esc="line['30_days']"
-                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                    t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                                 />
                             </t>
                             <t t-else="">
@@ -393,7 +393,7 @@
                                 >
                                     <t
                                         t-out="line['30_days']"
-                                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                        t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                                     />
                                 </span>
                             </t>
@@ -403,7 +403,7 @@
                             <t t-if="line['60_days'] == 0">
                                 <span
                                     t-esc="line['60_days']"
-                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                    t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                                 />
                             </t>
                             <t t-else="">
@@ -413,7 +413,7 @@
                                 >
                                     <t
                                         t-out="line['60_days']"
-                                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                        t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                                     />
                                 </span>
                             </t>
@@ -423,7 +423,7 @@
                             <t t-if="line['90_days'] == 0">
                                 <span
                                     t-esc="line['90_days']"
-                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                    t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                                 />
                             </t>
                             <t t-else="">
@@ -433,7 +433,7 @@
                                 >
                                     <t
                                         t-out="line['90_days']"
-                                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                        t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                                     />
                                 </span>
                             </t>
@@ -443,7 +443,7 @@
                             <t t-if="line['120_days'] == 0">
                                 <span
                                     t-esc="line['120_days']"
-                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                    t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                                 />
                             </t>
                             <t t-else="">
@@ -453,7 +453,7 @@
                                 >
                                     <t
                                         t-out="line['120_days']"
-                                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                        t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                                     />
                                 </span>
                             </t>
@@ -463,7 +463,7 @@
                             <t t-if="line['older'] == 0">
                                 <span
                                     t-esc="line['older']"
-                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                    t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                                 />
                             </t>
                             <t t-else="">
@@ -473,7 +473,7 @@
                                 >
                                     <t
                                         t-out="line['older']"
-                                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                        t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                                     />
                                 </span>
                             </t>
@@ -484,7 +484,7 @@
                             <t t-if="line[column_dynamic] == 0">
                                 <span
                                     t-esc="line[column_dynamic]"
-                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                    t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                                 />
                             </t>
                             <t t-else="">
@@ -494,7 +494,7 @@
                                 >
                                     <t
                                         t-out="line[column_dynamic]"
-                                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                        t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                                     />
                                 </span>
                             </t>
@@ -519,14 +519,14 @@
                 <div class="act_as_cell amount" style="width: 6.00%;">
                     <span
                         t-esc="partner_cumul_line['residual']"
-                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                     />
                 </div>
                     <!--## current-->
                     <div class="act_as_cell amount" style="width: 6.00%;">
                         <span
                         t-esc="partner_cumul_line['current']"
-                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                        t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                     />
                     </div>
                 <t t-if="not age_partner_config">
@@ -534,35 +534,35 @@
                     <div class="act_as_cell amount" style="width: 6.00%;">
                         <span
                             t-esc="partner_cumul_line['30_days']"
-                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                         />
                     </div>
                     <!--## age_60_days-->
                     <div class="act_as_cell amount" style="width: 6.00%;">
                         <span
                             t-esc="partner_cumul_line['60_days']"
-                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                         />
                     </div>
                     <!--## age_90_days-->
                     <div class="act_as_cell amount" style="width: 6.00%;">
                         <span
                             t-esc="partner_cumul_line['90_days']"
-                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                         />
                     </div>
                     <!--## age_120_days-->
                     <div class="act_as_cell amount" style="width: 6.00%;">
                         <span
                             t-esc="partner_cumul_line['120_days']"
-                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                         />
                     </div>
                     <!--## older-->
                     <div class="act_as_cell amount" style="width: 6.00%;">
                         <span
                             t-esc="partner_cumul_line['older']"
-                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                         />
                     </div>
                 </t>
@@ -570,7 +570,7 @@
                     <div class="act_as_cell amount">
                         <span
                             t-esc="partner_cumul_line[column_dynamic]"
-                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                         />
                     </div>
                 </t>
@@ -588,14 +588,14 @@
                     <div class="act_as_cell amount" style="width: 9.64%;">
                         <span
                             t-esc="account['residual']"
-                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                         />
                     </div>
                         <!--## current-->
                         <div class="act_as_cell amount" style="width: 9.64%;">
                             <span
                             t-esc="account['current']"
-                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                         />
                         </div>
                     <t t-if="not age_partner_config">
@@ -603,35 +603,35 @@
                         <div class="act_as_cell amount" style="width: 9.64%;">
                             <span
                                 t-esc="account['30_days']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                             />
                         </div>
                         <!--## age_60_days-->
                         <div class="act_as_cell amount" style="width: 9.64%;">
                             <span
                                 t-esc="account['60_days']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                             />
                         </div>
                         <!--## age_90_days-->
                         <div class="act_as_cell amount" style="width: 9.64%;">
                             <span
                                 t-esc="account['90_days']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                             />
                         </div>
                         <!--## age_120_days-->
                         <div class="act_as_cell amount" style="width: 9.64%;">
                             <span
                                 t-esc="account['120_days']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                             />
                         </div>
                         <!--## older-->
                         <div class="act_as_cell amount" style="width: 9.64%;">
                             <span
                                 t-esc="account['older']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                             />
                         </div>
                     </t>
@@ -639,7 +639,7 @@
                         <div class="act_as_cell amount">
                             <span
                                 t-esc="account[column_dynamic]"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                             />
                         </div>
                     </t>
@@ -653,14 +653,14 @@
                     <div class="act_as_cell amount" style="width: 6.00%">
                         <span
                             t-esc="account['residual']"
-                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                         />
                     </div>
                         <!--## current-->
                         <div class="act_as_cell amount" style="width: 6.00%">
                             <span
                             t-esc="account['current']"
-                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                            t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                         />
                         </div>
                     <t t-if="not age_partner_config">
@@ -668,35 +668,35 @@
                         <div class="act_as_cell amount" style="width: 6.00%">
                             <span
                                 t-esc="account['30_days']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                             />
                         </div>
                         <!--## age_60_days-->
                         <div class="act_as_cell amount" style="width: 6.00%">
                             <span
                                 t-esc="account['60_days']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                             />
                         </div>
                         <!--## age_90_days-->
                         <div class="act_as_cell amount" style="width: 6.00%">
                             <span
                                 t-esc="account['90_days']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                             />
                         </div>
                         <!--## age_120_days-->
                         <div class="act_as_cell amount" style="width: 6.00%">
                             <span
                                 t-esc="account['120_days']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                             />
                         </div>
                         <!--## older-->
                         <div class="act_as_cell amount" style="width: 6.00%">
                             <span
                                 t-esc="account['older']"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                             />
                         </div>
                     </t>
@@ -704,7 +704,7 @@
                         <div class="act_as_cell amount">
                             <span
                                 t-esc="account[column_dynamic]"
-                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"
                             />
                         </div>
                     </t>
