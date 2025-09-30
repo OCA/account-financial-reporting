@@ -5,7 +5,6 @@ from odoo import fields, models
 
 
 class OpenItemsReportWizard(models.TransientModel):
-
     _inherit = "open.items.report.wizard"
 
     grouped_by = fields.Selection(

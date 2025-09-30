@@ -17,19 +17,20 @@ Account Financial Reports Sale
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Faccount--financial--reporting-lightgray.png?logo=github
-    :target: https://github.com/OCA/account-financial-reporting/tree/16.0/account_financial_report_sale
+    :target: https://github.com/OCA/account-financial-reporting/tree/18.0/account_financial_report_sale
     :alt: OCA/account-financial-reporting
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/account-financial-reporting-16-0/account-financial-reporting-16-0-account_financial_report_sale
+    :target: https://translation.odoo-community.org/projects/account-financial-reporting-18-0/account-financial-reporting-18-0-account_financial_report_sale
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/account-financial-reporting&target_branch=16.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/account-financial-reporting&target_branch=18.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
-This module extends financial reports when needed to have dependency on sales. They are accessible under
-Invoicing / Reporting / OCA accounting reports.
+This module extends financial reports when needed to have dependency on
+sales. They are accessible under Invoicing / Reporting / OCA accounting
+reports.
 
 Add the posibility on Open Items to group by partner delivery address.
 
@@ -41,9 +42,11 @@ Add the posibility on Open Items to group by partner delivery address.
 Usage
 =====
 
-Go on 'Invoicing' -> 'Reports' -> 'OCA accounting reports' -> 'Open Items'
+Go on 'Invoicing' -> 'Reports' -> 'OCA accounting reports' -> 'Open
+Items'
 
-When wizard is open, you need to select option grouped by Delivery Address
+When wizard is open, you need to select option grouped by Delivery
+Address
 
 Bug Tracker
 ===========
@@ -51,7 +54,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/account-financial-reporting/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/account-financial-reporting/issues/new?body=module:%20account_financial_report_sale%0Aversion:%2016.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/account-financial-reporting/issues/new?body=module:%20account_financial_report_sale%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -59,19 +62,19 @@ Credits
 =======
 
 Authors
-~~~~~~~
+-------
 
 * Tecnativa
 
 Contributors
-~~~~~~~~~~~~
+------------
 
-* `Tecnativa <https://www.tecnativa.com>`__:
+-  `Tecnativa <https://www.tecnativa.com>`__:
 
-  * Carolina Fernandez
+   -  Carolina Fernandez
 
 Maintainers
-~~~~~~~~~~~
+-----------
 
 This module is maintained by the OCA.
 
@@ -83,6 +86,6 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
-This module is part of the `OCA/account-financial-reporting <https://github.com/OCA/account-financial-reporting/tree/16.0/account_financial_report_sale>`_ project on GitHub.
+This module is part of the `OCA/account-financial-reporting <https://github.com/OCA/account-financial-reporting/tree/18.0/account_financial_report_sale>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.
