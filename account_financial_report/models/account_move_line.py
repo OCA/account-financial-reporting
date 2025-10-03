@@ -12,6 +12,15 @@ class AccountMoveLine(models.Model):
         "account.analytic.account", compute="_compute_analytic_account_ids", store=True
     )
 
+    analytic_plan_ids = fields.Many2many(
+        "account.analytic.plan", compute="_compute_analytic_plan_ids", store=True
+    )
+
+    @api.depends("analytic_account_ids")
+    def _compute_analytic_plan_ids(self):
+        for line in self:
+            line.analytic_plan_ids = line.analytic_account_ids.plan_id
+
     @api.depends("analytic_distribution")
     def _compute_analytic_account_ids(self):
         # Prefetch all involved analytic accounts
