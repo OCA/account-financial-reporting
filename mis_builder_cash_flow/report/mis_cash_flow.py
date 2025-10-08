@@ -84,7 +84,7 @@ class MisCashFlow(models.Model):
             WHERE aml.parent_state != 'cancel'
             UNION ALL
             SELECT
-                fl.id + 1000000 as id,
+                fl.id as id,
                 'forecast_line' as line_type,
                 NULL as move_line_id,
                 fl.account_id as account_id,

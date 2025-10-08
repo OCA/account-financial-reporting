@@ -14,7 +14,7 @@
                         <field name="partner_id" />
                         <field
                             name="account_id"
-                            domain="[('company_ids', 'in', company_id)]"
+                            domain="[('company_ids', 'in', company_id), ('deprecated', '=', False), ('hide_in_cash_flow', '=', False), ('account_type', 'in', ['asset_receivable', 'liability_payable'])]"
                         />
                         <field name="name" />
                         <field name="balance" />
