@@ -196,12 +196,17 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             if move_line["date"] <= date_at_object
             and not float_is_zero(move_line["amount_residual"], precision_digits=2)
         ]
+        Partner = self.env["res.partner"]
         for move_line in move_lines:
             journals_ids.add(move_line["journal_id"][0])
             acc_id = move_line["account_id"][0]
             if move_line["partner_id"]:
                 prt_id = move_line["partner_id"][0]
+                partner = Partner.browse(prt_id)
                 prt_name = move_line["partner_id"][1]
+                partner_ref = partner.ref
+                if partner_ref:
+                    prt_name = f"{prt_name} ({partner_ref})"
             else:
                 prt_id = 0
                 prt_name = ""
