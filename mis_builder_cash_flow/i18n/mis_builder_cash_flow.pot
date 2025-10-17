@@ -269,15 +269,14 @@ msgid "State"
 msgstr ""
 
 #. module: mis_builder_cash_flow
-#. odoo-python
-#: code:addons/mis_builder_cash_flow/models/mis_cash_flow_forecast_line.py:0
-#, python-format
-msgid "The forecast line company must be one of the account's companies."
+#: model:ir.model.fields,help:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__account_id
+msgid "The account of the forecast line is only for informative purpose"
 msgstr ""
 
 #. module: mis_builder_cash_flow
-#: model:ir.model.fields,help:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__account_id
-msgid "The account of the forecast line is only for informative purpose"
+#. odoo-python
+#: code:addons/mis_builder_cash_flow/models/mis_cash_flow_forecast_line.py:0
+msgid "The forecast line company must be one of the account's companies."
 msgstr ""
 
 #. module: mis_builder_cash_flow
