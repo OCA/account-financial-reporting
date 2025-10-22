@@ -16,7 +16,7 @@
         <field name="sequence">20</field>
         <field
             name="expression"
-        >bal[][('account_type', '=', 'asset_cash'), ('line_type', '=', 'move_line'), ('account_id.hide_in_cash_flow', '=', False)]</field>
+        >bal[][('account_type', 'in', ('asset_cash', 'liability_credit_card')), ('line_type', '=', 'move_line'), ('account_id.hide_in_cash_flow', '=', False)]</field>
     </record>
     <record id="mis_kpi_in_total" model="mis.report.kpi">
         <field name="report_id" ref="mis_report_cash_flow" />
@@ -101,7 +101,7 @@
         <field name="sequence">150</field>
         <field
             name="expression"
-        >bale[][('account_id.hide_in_cash_flow', '=', False), '|', ('line_type', '=', 'forecast_line'), ('line_type', '=', 'move_line'), '|', ('account_type', '=', 'asset_cash'), ('account_type', 'in', ('asset_receivable', 'liability_payable')), ('full_reconcile_id', '=', False)]</field>
+        >bale[][('account_id.hide_in_cash_flow', '=', False), '|', ('line_type', '=', 'forecast_line'), ('line_type', '=', 'move_line'), '|', ('account_type', 'in', ('asset_cash', 'liability_credit_card')), ('account_type', 'in', ('asset_receivable', 'liability_payable')), ('full_reconcile_id', '=', False)]</field>
         <field
             name="style_expression"
         >'Cash Flow - Good' if balance >= 0.0 else 'Cash Flow - Bad'</field>
