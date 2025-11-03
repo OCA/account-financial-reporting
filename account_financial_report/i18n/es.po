@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-21 15:05+0000\n"
-"PO-Revision-Date: 2024-06-14 14:42+0000\n"
+"POT-Creation-Date: 2025-06-20 23:20+0000\n"
+"PO-Revision-Date: 2025-06-21 01:20+0200\n"
 "Last-Translator: Víctor Martínez <victor.martinez@tecnativa.com>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
@@ -150,12 +150,12 @@ msgstr "Balance de Cuenta en filtro 0"
 #: model:account.financial.report.column,name:account_financial_report.journal_ledger_report_wizard_column_account_code
 #: model:account.financial.report.column,name:account_financial_report.open_items_report_wizard_column_account_code
 msgid "Account code"
-msgstr ""
+msgstr "Código cuenta"
 
 #. module: account_financial_report
 #: model:account.financial.report.column,name:account_financial_report.journal_ledger_report_wizard_column_account_name
 msgid "Account name"
-msgstr ""
+msgstr "Nombre cuenta"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__account_ids
@@ -300,7 +300,7 @@ msgstr "Todos los asientos publicados"
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__all_analytic
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__all_analytic
 msgid "All analytic items"
-msgstr ""
+msgstr "Todos los apuntes analíticos"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
@@ -361,12 +361,12 @@ msgstr "Cuenta Analítica"
 #. module: account_financial_report
 #: model:account.financial.report.column,name:account_financial_report.general_ledger_report_wizard_column_cost_center
 msgid "Analytic account"
-msgstr ""
+msgstr "Cuenta analítica"
 
 #. module: account_financial_report
 #: model:account.financial.report.column,name:account_financial_report.general_ledger_report_wizard_column_analytic_tags
 msgid "Analytic tags"
-msgstr ""
+msgstr "Etiquetas analíticas"
 
 #. module: account_financial_report
 #: model:account.financial.report.column,name:account_financial_report.general_ledger_report_wizard_column_balance
@@ -456,14 +456,14 @@ msgstr "Código"
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__column_ids
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__column_ids
 msgid "Column"
-msgstr ""
+msgstr "Columna"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.journal_ledger_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.open_items_wizard
 msgid "Columns"
-msgstr ""
+msgstr "Columnas"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
@@ -635,7 +635,7 @@ msgstr "Filtro Fecha"
 #. module: account_financial_report
 #: model:account.financial.report.column,name:account_financial_report.open_items_report_wizard_column_date_due
 msgid "Date due"
-msgstr ""
+msgstr "Fecha vencimiento"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/vat_report_xlsx.py:0
@@ -860,7 +860,7 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_column__field_type
 msgid "Field Type"
-msgstr ""
+msgstr "Tipo de campo"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__account_ids
@@ -907,7 +907,7 @@ msgstr "Filtrar empresa"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.journal_ledger_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.open_items_wizard
 msgid "Filters"
-msgstr ""
+msgstr "Filtros"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__foreign_currency
@@ -919,7 +919,7 @@ msgstr "Moneda Extranjera"
 #: model:account.financial.report.column,name:account_financial_report.journal_ledger_report_wizard_column_foreign_currency
 #: model:account.financial.report.column,name:account_financial_report.open_items_report_wizard_column_foreign_currency
 msgid "Foreign currency"
-msgstr ""
+msgstr "Moneda extranjera"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
@@ -941,7 +941,7 @@ msgstr "Desde:"
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
 #, python-format
 msgid "From: %(date_from)s To: %(date_to)s"
-msgstr "desde: %(date_from)s hasta: %(date_to)s"
+msgstr "Desde: %(date_from)s hasta: %(date_to)s"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__complete_code
@@ -1146,6 +1146,7 @@ msgstr "Dominio Apuntes Contables"
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 #: model:ir.actions.act_window,name:account_financial_report.action_journal_ledger_wizard
 #: model:ir.actions.report,name:account_financial_report.action_print_journal_ledger_wizard_html
+#: model:ir.actions.report,name:account_financial_report.action_print_journal_ledger_wizard_qweb
 #: model:ir.ui.menu,name:account_financial_report.menu_journal_ledger_wizard
 #, python-format
 msgid "Journal Ledger"
@@ -1187,7 +1188,7 @@ msgstr "Diarios"
 #. module: account_financial_report
 #: model:account.financial.report.column,name:account_financial_report.journal_ledger_report_wizard_column_ref_label
 msgid "Label"
-msgstr ""
+msgstr "Etiqueta"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration____last_update
@@ -1243,7 +1244,7 @@ msgstr "Nivel %s"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_column__limit
 msgid "Limit"
-msgstr ""
+msgstr "Límite"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
@@ -1261,7 +1262,7 @@ msgstr "Línea"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_financial_report_column
 msgid "Manage column options in financial reports"
-msgstr ""
+msgstr "Gestionar opciones de columna en informes financieros"
 
 #. module: account_financial_report
 #: model:account.financial.report.column,name:account_financial_report.general_ledger_report_wizard_column_matching_number
@@ -1303,6 +1304,7 @@ msgid "Move Target"
 msgstr "Asiento Objetivo"
 
 #. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal
 msgid "Moves"
 msgstr "Asientos"
@@ -1829,6 +1831,7 @@ msgstr "Saldo inicial de impuesto"
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 #: model:account.financial.report.column,name:account_financial_report.general_ledger_report_wizard_column_taxes
+#: model:account.financial.report.column,name:account_financial_report.journal_ledger_report_wizard_column_taxes
 #: model:ir.model.fields.selection,name:account_financial_report.selection__general_ledger_report_wizard__grouped_by__taxes
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
@@ -2071,72 +2074,7 @@ msgid "or"
 msgstr "o"
 
 #. module: account_financial_report
-#: model:ir.actions.report,name:account_financial_report.action_print_journal_ledger_wizard_qweb
-msgid "ournal Ledger"
-msgstr "Nuestro diario"
-
-#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal
 msgid "to"
 msgstr "a"
-
-#. module: account_financial_report
-#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
-msgid "width: 16.21%;"
-msgstr "ancho: 16,21%;"
-
-#. module: account_financial_report
-#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
-msgid "width: 23.24%;"
-msgstr "ancho: 23.24%;"
-
-#. module: account_financial_report
-#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
-msgid "width: 23.78%;"
-msgstr "ancho: 23.78%;"
-
-#. module: account_financial_report
-#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
-msgid "width: 31.35%;"
-msgstr "ancho: 31,35%;"
-
-#. module: account_financial_report
-#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
-msgid "width: 38.92%;"
-msgstr "ancho: 38.92%;"
-
-#. module: account_financial_report
-#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
-msgid "width: 8.11%;"
-msgstr "ancho: 8.11%;"
-
-#~ msgid ""
-#~ "Ref -\n"
-#~ "                    Label"
-#~ msgstr ""
-#~ "Ref -\n"
-#~ "                    Etiqueta"
-
-#~ msgid ""
-#~ "Age ≤ 30\n"
-#~ "                        d."
-#~ msgstr ""
-#~ "Tiempo ≤ 30\n"
-#~ "                        d."
-
-#~ msgid ""
-#~ "Age ≤ 60\n"
-#~ "                        d."
-#~ msgstr ""
-#~ "Tiempo ≤ 60\n"
-#~ "                        d."
-
-#~ msgid ""
-#~ "Age ≤ 90\n"
-#~ "                        d."
-#~ msgstr ""
-#~ "Tiempo ≤ 90\n"
-#~ "                        d."
-
-#~ msgid "Companies"
-#~ msgstr "Compañías"

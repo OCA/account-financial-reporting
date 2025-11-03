@@ -36,7 +36,7 @@
     </record>
     <!-- Journal Ledger -->
     <record id="action_print_journal_ledger_wizard_qweb" model="ir.actions.report">
-        <field name="name">ournal Ledger</field>
+        <field name="name">Journal Ledger</field>
         <field name="model">journal.ledger.report.wizard</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">account_financial_report.journal_ledger</field>

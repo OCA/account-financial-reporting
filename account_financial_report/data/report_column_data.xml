@@ -325,6 +325,18 @@
         <field name="limit">40</field>
     </record>
     <record
+        id="journal_ledger_report_wizard_column_taxes"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">journal.ledger.report.wizard</field>
+        <field name="sequence">65</field>
+        <field name="name">Taxes</field>
+        <field name="expression_label">taxes</field>
+        <field name="is_visible" eval="False" />
+        <field name="field_type">string</field>
+        <field name="limit">20</field>
+    </record>
+    <record
         id="journal_ledger_report_wizard_column_debit"
         model="account.financial.report.column"
     >

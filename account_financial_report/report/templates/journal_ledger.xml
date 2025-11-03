@@ -55,6 +55,14 @@
     </template>
     <template id="account_financial_report.report_journal_all">
         <div class="act_as_table list_table" style="margin-top: 10px;" />
+        <div class="act_as_caption account_title" style="width: 100%;">
+            <span t-esc="date_from" t-options="{'widget': 'date'}" />
+            to
+            <span t-esc="date_to" t-options="{'widget': 'date'}" />
+            -
+            <span t-esc="move_target" />
+            Moves
+        </div>
         <div class="act_as_table data_table" style="width: 100%;">
             <t
                 t-call="account_financial_report.report_journal_ledger_journal_table_header"
@@ -92,30 +100,30 @@
     </template>
     <template id="account_financial_report.report_journal_ledger_journal_table_header">
         <t t-if="not display_account_name">
-            <t t-set="account_column_style">width: 8.11%;</t>
+            <t t-set="account_column_style" t-translation="off">width: 8.11%;</t>
             <t t-if="not with_auto_sequence">
-                <t t-set="label_column_style">
+                <t t-set="label_column_style" t-translation="off">
                     width: 38.92%;
                 </t>
             </t>
             <t t-else="">
-                <t t-set="label_column_style">
+                <t t-set="label_column_style" t-translation="off">
                     width: 31.35%;
                 </t>
             </t>
         </t>
         <t t-else="">
            <t t-if="not with_auto_sequence">
-                <t t-set="account_column_style">
+                <t t-set="account_column_style" t-translation="off">
                     width: 23.78%;
                 </t>
             </t>
             <t t-else="">
-                <t t-set="account_column_style">
+                <t t-set="account_column_style" t-translation="off">
                     width: 16.21%;
                 </t>
             </t>
-            <t t-set="label_column_style">width: 23.24%;</t>
+            <t t-set="label_column_style" t-translation="off">width: 23.24%;</t>
         </t>
         <div class="act_as_thead">
             <div class="act_as_row labels">
@@ -328,7 +336,7 @@
                 t-value="o._get_data_from_dict(move_line['move_line_id'], move_line_ids_taxes_data)"
             />
             <span
-                t-esc="o._get_ml_tax_description(move_line, tax_line_dat, move_line_ids_taxes_dat)"
+                t-esc="limit_text(o._get_ml_tax_description(move_line, tax_line_dat, move_line_ids_taxes_dat), taxes_limit)"
             />
         </div>
         <div t-if="debit_visible" class="act_as_cell amount" name="debit">
