@@ -21,7 +21,7 @@ Available addons
 ----------------
 addon | version | maintainers | summary
 --- | --- | --- | ---
-[account_financial_report](account_financial_report/) | 15.0.3.3.2 |  | OCA Financial Reports
+[account_financial_report](account_financial_report/) | 15.0.3.3.3 |  | OCA Financial Reports
 [account_financial_report_sale](account_financial_report_sale/) | 15.0.1.1.0 |  | OCA Financial Reports Sale
 [account_move_line_report_xls](account_move_line_report_xls/) | 15.0.1.0.0 |  | Journal Items Excel export
 [account_purchase_stock_report_non_billed](account_purchase_stock_report_non_billed/) | 15.0.1.1.1 | <a href='https://github.com/CarlosRoca13'><img src='https://github.com/CarlosRoca13.png' width='32' height='32' style='border-radius:50%;' alt='CarlosRoca13'/></a> | Account Purchase Stock Report Non Billed
