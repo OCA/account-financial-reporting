@@ -1144,6 +1144,7 @@ msgstr "Dominio de los Apuntes Contables"
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 #: model:ir.actions.act_window,name:account_financial_report.action_journal_ledger_wizard
 #: model:ir.actions.report,name:account_financial_report.action_print_journal_ledger_wizard_html
+#: model:ir.actions.report,name:account_financial_report.action_print_journal_ledger_wizard_qweb
 #: model:ir.ui.menu,name:account_financial_report.menu_journal_ledger_wizard
 #, python-format
 msgid "Journal Ledger"
@@ -1301,6 +1302,7 @@ msgid "Move Target"
 msgstr "Asiento Objetivo"
 
 #. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal
 msgid "Moves"
 msgstr "Asientos"
@@ -1827,6 +1829,7 @@ msgstr "Impuesto de saldo inicial"
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 #: model:account.financial.report.column,name:account_financial_report.general_ledger_report_wizard_column_taxes
+#: model:account.financial.report.column,name:account_financial_report.journal_ledger_report_wizard_column_taxes
 #: model:ir.model.fields.selection,name:account_financial_report.selection__general_ledger_report_wizard__grouped_by__taxes
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
@@ -2068,44 +2071,31 @@ msgid "or"
 msgstr "o"
 
 #. module: account_financial_report
-#: model:ir.actions.report,name:account_financial_report.action_print_journal_ledger_wizard_qweb
-msgid "ournal Ledger"
-msgstr "Libro Mayor del Diario"
-
-#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal
 msgid "to"
 msgstr "a"
 
-#. module: account_financial_report
-#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
-msgid "width: 16.21%;"
-msgstr "ancho: 16.21%;"
+#~ msgid "ournal Ledger"
+#~ msgstr "Libro Mayor del Diario"
 
-#. module: account_financial_report
-#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
-msgid "width: 23.24%;"
-msgstr "ancho: 23.24%;"
+#~ msgid "width: 16.21%;"
+#~ msgstr "ancho: 16.21%;"
 
-#. module: account_financial_report
-#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
-msgid "width: 23.78%;"
-msgstr "ancho: 23.78%;"
+#~ msgid "width: 23.24%;"
+#~ msgstr "ancho: 23.24%;"
 
-#. module: account_financial_report
-#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
-msgid "width: 31.35%;"
-msgstr "ancho: 31.35%;"
+#~ msgid "width: 23.78%;"
+#~ msgstr "ancho: 23.78%;"
 
-#. module: account_financial_report
-#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
-msgid "width: 38.92%;"
-msgstr "ancho: 38.92%;"
+#~ msgid "width: 31.35%;"
+#~ msgstr "ancho: 31.35%;"
 
-#. module: account_financial_report
-#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
-msgid "width: 8.11%;"
-msgstr "ancho: 8.11%;"
+#~ msgid "width: 38.92%;"
+#~ msgstr "ancho: 38.92%;"
+
+#~ msgid "width: 8.11%;"
+#~ msgstr "ancho: 8.11%;"
 
 #~ msgid ""
 #~ "Ref -\n"
