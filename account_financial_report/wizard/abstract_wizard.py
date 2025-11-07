@@ -65,7 +65,7 @@ class AbstractWizard(models.AbstractModel):
         return {"wizard_name": self._name, "wizard_id": self.id}
 
     def _set_default_wizard_values(self):
-        self.env["ir.default"].set(
+        self.env["ir.default"].sudo().set(
             self._name,
             "label_text_limit",
             self.label_text_limit,
