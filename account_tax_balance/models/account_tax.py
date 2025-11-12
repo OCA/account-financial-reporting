@@ -77,7 +77,7 @@ class AccountTax(models.Model):
 
     @api.model
     def _is_unsupported_search_operator(self, operator):
-        return operator != "="
+        return operator != "=" and operator != "in"
 
     @api.model
     def _search_has_moves(self, operator, value):
@@ -140,10 +140,11 @@ class AccountTax(models.Model):
         # balance is debit - credit whereas on tax return you want to see what
         # vat has to be paid so:
         # VAT on sales (credit) - VAT on purchases (debit).
-
-        balance = self.env["account.move.line"].read_group(domain, ["balance"], [])[0][
-            "balance"
-        ]
+        balance = self.env["account.move.line"]._read_group(
+            domain=domain, aggregates=["balance:sum"], groupby=[]
+        )
+        if balance:
+            balance = balance[0][0]
         return balance and -balance or 0
 
     def get_balance_domain(self, state_list, type_list):

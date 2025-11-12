@@ -65,20 +65,18 @@
                 <field name="name" />
                 <field name="description" string="Short Name" />
                 <field name="type_tax_use" />
-                <group expand="0" string="Group By">
-                    <filter
-                        name="tax_group"
-                        string="Tax Group"
-                        domain="[]"
-                        context="{'group_by':'tax_group_id'}"
-                    />
-                    <filter
-                        name="tax_scope"
-                        string="Tax Scope"
-                        domain="[]"
-                        context="{'group_by':'type_tax_use'}"
-                    />
-                </group>
+                <filter
+                    name="tax_group"
+                    string="Tax Group"
+                    domain="[]"
+                    context="{'group_by':'tax_group_id'}"
+                />
+                <filter
+                    name="tax_scope"
+                    string="Tax Scope"
+                    domain="[]"
+                    context="{'group_by':'type_tax_use'}"
+                />
             </search>
         </field>
     </record>

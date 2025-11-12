@@ -30,7 +30,7 @@ class TestAccountTaxBalance(HttpCase):
                 tracking_disable=True,
             )
         )
-        cls.env.user.groups_id = [(4, cls.env.ref("account.group_account_user").id)]
+        cls.env.user.group_ids = [(4, cls.env.ref("account.group_account_user").id)]
         cls.company = cls.env.user.company_id
         cls.range_type = cls.env["date.range.type"].create(
             {"name": "Fiscal year", "allow_overlap": False}
@@ -72,13 +72,19 @@ class TestAccountTaxBalance(HttpCase):
                 "name": "Test expense account",
             }
         )
-        product = self.env.ref("product.product_product_4")
+        product = self.env["product.product"].create(
+            {
+                "name": "test product",
+                "standard_price": 500.0,
+            }
+        )
         invoice_form = Form(
             self.env["account.move"].with_context(
                 default_move_type="out_invoice",
             )
         )
-        invoice_form.partner_id = self.env.ref("base.res_partner_2")
+        partner = self.env["res.partner"].create({"name": "Customer Test"})
+        invoice_form.partner_id = partner
         with invoice_form.invoice_line_ids.new() as line:
             line.product_id = product
             line.quantity = 1.0
@@ -150,11 +156,18 @@ class TestAccountTaxBalance(HttpCase):
         state_list = tax.get_target_state_list(target_move="whatever")
         self.assertEqual(state_list, [])
 
-        product = self.env.ref("product.product_product_2")
+        product = self.env["product.product"].create(
+            {
+                "name": "test product 2",
+                "standard_price": 25.5,
+                "list_price": 38.25,
+                "type": "service",
+            }
+        )
         with Form(
             self.env["account.move"].with_context(default_move_type="out_refund")
         ) as refund_form:
-            refund_form.partner_id = self.env.ref("base.res_partner_2")
+            refund_form.partner_id = partner
             with refund_form.invoice_line_ids.new() as line:
                 line.product_id = product
                 line.quantity = 1.0

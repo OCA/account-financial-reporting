@@ -9,14 +9,14 @@ class AccountMoveLine(models.Model):
 
     def init(self):
         res = super().init()
-        self._cr.execute(
+        self.env.cr.execute(
             """
             SELECT indexname FROM pg_indexes
             WHERE indexname = 'account_move_line_date_tax_line_id_idx'
         """
         )
-        if not self._cr.fetchone():
-            self._cr.execute(
+        if not self.env.cr.fetchone():
+            self.env.cr.execute(
                 """
                 CREATE INDEX account_move_line_date_tax_line_id_idx
                 ON account_move_line (date, tax_line_id)

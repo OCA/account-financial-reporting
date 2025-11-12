@@ -30,14 +30,14 @@
         <field name="model">account.move</field>
         <field name="inherit_id" ref="account.view_account_move_filter" />
         <field name="arch" type="xml">
-            <group expand="0" position="inside">
+            <xpath expr="//filter[@name='by_company']" position="inside">
                 <filter
                     name="financial_type"
                     string="Financial type"
                     domain="[]"
                     context="{'group_by':'financial_type'}"
                 />
-            </group>
+            </xpath>
         </field>
     </record>
 </odoo>
