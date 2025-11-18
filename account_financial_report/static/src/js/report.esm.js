@@ -10,7 +10,7 @@ function toTitleCase(str) {
 }
 
 function enrich(component, targetElement, selector, isIFrame = false) {
-    // eslint-disable-next-line no-undef
+
     let doc = window.document;
     let contentDocument = targetElement;
 
