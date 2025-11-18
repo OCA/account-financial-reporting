@@ -34,10 +34,10 @@ class TestOpenItems(AccountTestInvoicingCommon):
         )
 
     def test_partner_filter(self):
-        partner_1 = self.env.ref("base.res_partner_1")
-        partner_2 = self.env.ref("base.res_partner_2")
-        partner_3 = self.env.ref("base.res_partner_3")
-        partner_4 = self.env.ref("base.res_partner_4")
+        partner_1 = self.partner_a
+        partner_2 = self.partner_a.copy()
+        partner_3 = self.partner_b
+        partner_4 = self.partner_b.copy({"name": "Other partner"})
         partner_1.write({"is_company": False, "parent_id": partner_2.id})
         partner_3.write({"is_company": False})
 

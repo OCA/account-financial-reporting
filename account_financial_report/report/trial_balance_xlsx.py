@@ -4,7 +4,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 
-from odoo import _, models
+from odoo import models
 
 
 class TrialBalanceXslx(models.AbstractModel):
@@ -14,7 +14,7 @@ class TrialBalanceXslx(models.AbstractModel):
 
     def _get_report_name(self, report, data=False):
         company_id = data.get("company_id", False)
-        report_name = _("Trial Balance")
+        report_name = self.env._("Trial Balance")
         if company_id:
             company = self.env["res.company"].browse(company_id)
             suffix = f" - {company.name} - {company.currency_id.name}"
@@ -24,34 +24,34 @@ class TrialBalanceXslx(models.AbstractModel):
     def _get_report_columns(self, report):
         if not report.show_partner_details:
             res = {
-                0: {"header": _("Code"), "field": "code", "width": 10},
-                1: {"header": _("Account"), "field": "name", "width": 60},
+                0: {"header": self.env._("Code"), "field": "code", "width": 10},
+                1: {"header": self.env._("Account"), "field": "name", "width": 60},
                 2: {
-                    "header": _("Initial balance"),
+                    "header": self.env._("Initial balance"),
                     "field": "initial_balance",
                     "type": "amount",
                     "width": 14,
                 },
                 3: {
-                    "header": _("Debit"),
+                    "header": self.env._("Debit"),
                     "field": "debit",
                     "type": "amount",
                     "width": 14,
                 },
                 4: {
-                    "header": _("Credit"),
+                    "header": self.env._("Credit"),
                     "field": "credit",
                     "type": "amount",
                     "width": 14,
                 },
                 5: {
-                    "header": _("Period balance"),
+                    "header": self.env._("Period balance"),
                     "field": "balance",
                     "type": "amount",
                     "width": 14,
                 },
                 6: {
-                    "header": _("Ending balance"),
+                    "header": self.env._("Ending balance"),
                     "field": "ending_balance",
                     "type": "amount",
                     "width": 14,
@@ -60,13 +60,13 @@ class TrialBalanceXslx(models.AbstractModel):
             if report.foreign_currency:
                 foreign_currency = {
                     7: {
-                        "header": _("Initial balance"),
+                        "header": self.env._("Initial balance"),
                         "field": "initial_currency_balance",
                         "type": "amount_currency",
                         "width": 14,
                     },
                     8: {
-                        "header": _("Ending balance"),
+                        "header": self.env._("Ending balance"),
                         "field": "ending_currency_balance",
                         "type": "amount_currency",
                         "width": 14,
@@ -76,33 +76,33 @@ class TrialBalanceXslx(models.AbstractModel):
             return res
         else:
             res = {
-                0: {"header": _("Partner"), "field": "name", "width": 70},
+                0: {"header": self.env._("Partner"), "field": "name", "width": 70},
                 1: {
-                    "header": _("Initial balance"),
+                    "header": self.env._("Initial balance"),
                     "field": "initial_balance",
                     "type": "amount",
                     "width": 14,
                 },
                 2: {
-                    "header": _("Debit"),
+                    "header": self.env._("Debit"),
                     "field": "debit",
                     "type": "amount",
                     "width": 14,
                 },
                 3: {
-                    "header": _("Credit"),
+                    "header": self.env._("Credit"),
                     "field": "credit",
                     "type": "amount",
                     "width": 14,
                 },
                 4: {
-                    "header": _("Period balance"),
+                    "header": self.env._("Period balance"),
                     "field": "balance",
                     "type": "amount",
                     "width": 14,
                 },
                 5: {
-                    "header": _("Ending balance"),
+                    "header": self.env._("Ending balance"),
                     "field": "ending_balance",
                     "type": "amount",
                     "width": 14,
@@ -111,13 +111,13 @@ class TrialBalanceXslx(models.AbstractModel):
             if report.foreign_currency:
                 foreign_currency = {
                     6: {
-                        "header": _("Initial balance"),
+                        "header": self.env._("Initial balance"),
                         "field": "initial_currency_balance",
                         "type": "amount_currency",
                         "width": 14,
                     },
                     7: {
-                        "header": _("Ending balance"),
+                        "header": self.env._("Ending balance"),
                         "field": "ending_currency_balance",
                         "type": "amount_currency",
                         "width": 14,
@@ -129,29 +129,32 @@ class TrialBalanceXslx(models.AbstractModel):
     def _get_report_filters(self, report):
         return [
             [
-                _("Date range filter"),
-                _("From: %(date_from)s To: %(date_to)s")
-                % ({"date_from": report.date_from, "date_to": report.date_to}),
+                self.env._("Date range filter"),
+                self.env._(
+                    "From: %(date_from)s To: %(date_to)s",
+                    date_from=report.date_from,
+                    date_to=report.date_to,
+                ),
             ],
             [
-                _("Target moves filter"),
-                _("All posted entries")
+                self.env._("Target moves filter"),
+                self.env._("All posted entries")
                 if report.target_move == "posted"
-                else _("All entries"),
+                else self.env._("All entries"),
             ],
             [
-                _("Account at 0 filter"),
-                _("Hide") if report.hide_account_at_0 else _("Show"),
+                self.env._("Account at 0 filter"),
+                self.env._("Hide") if report.hide_account_at_0 else self.env._("Show"),
             ],
             [
-                _("Show foreign currency"),
-                _("Yes") if report.foreign_currency else _("No"),
+                self.env._("Show foreign currency"),
+                self.env._("Yes") if report.foreign_currency else self.env._("No"),
             ],
             [
-                _("Limit hierarchy levels"),
-                _("Level %s") % (report.show_hierarchy_level)
+                self.env._("Limit hierarchy levels"),
+                self.env._("Level %(level)s", level=report.show_hierarchy_level)
                 if report.limit_hierarchy_level
-                else _("No limit"),
+                else self.env._("No limit"),
             ],
         ]
 
@@ -191,12 +194,16 @@ class TrialBalanceXslx(models.AbstractModel):
                     # Footer with totals
                     grouped_item["code"] = ""
                     grouped_item["currency_id"] = False
-                    self.write_account_footer(grouped_item, _("Total"), report_data)
+                    self.write_account_footer(
+                        grouped_item, self.env._("Total"), report_data
+                    )
                     report_data["row_pos"] += 1
                 # Last line with totals
                 total_amount_grouped["currency_id"] = False
                 total_amount_grouped["code"] = ""
-                self.write_account_footer(total_amount_grouped, _("TOTAL"), report_data)
+                self.write_account_footer(
+                    total_amount_grouped, self.env._("TOTAL"), report_data
+                )
             else:
                 # Display array header for account lines
                 self.write_array_header(report_data)

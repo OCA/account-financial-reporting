@@ -10,7 +10,6 @@ function toTitleCase(str) {
 }
 
 function enrich(component, targetElement, selector, isIFrame = false) {
-
     let doc = window.document;
     let contentDocument = targetElement;
 

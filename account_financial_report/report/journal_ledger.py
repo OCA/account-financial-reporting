@@ -1,11 +1,11 @@
 # Copyright 2019-20 ForgeFlow S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-import itertools
 import operator
 from collections import defaultdict
 
 from odoo import models
+from odoo.tools import groupby
 
 
 class JournalLedgerReport(models.AbstractModel):
@@ -309,9 +309,7 @@ class JournalLedgerReport(models.AbstractModel):
         journal_ledgers_data = self._get_journal_ledgers(wizard, journal_ids, company)
         move_ids, moves_data, move_ids_data = self._get_moves(wizard, journal_ids)
         journal_moves_data = {}
-        for key, items in itertools.groupby(
-            moves_data, operator.itemgetter("journal_id")
-        ):
+        for key, items in groupby(moves_data, operator.itemgetter("journal_id")):
             if key not in journal_moves_data.keys():
                 journal_moves_data[key] = []
             journal_moves_data[key] += list(items)

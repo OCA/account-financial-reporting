@@ -83,7 +83,7 @@ class TestJournalReport(AccountTestInvoicingCommon):
                 "type_tax_use": "purchase",
             }
         )
-        cls.partner_2 = cls.env.ref("base.res_partner_2")
+        cls.partner_2 = cls.partner_b
 
     def _add_move(
         self,
@@ -208,10 +208,11 @@ class TestJournalReport(AccountTestInvoicingCommon):
 
     def test_02_test_taxes_out_invoice(self):
         move_form = Form(
-            self.env["account.move"].with_context(default_move_type="out_invoice")
+            self.env["account.move"].with_context(
+                default_move_type="out_invoice", default_journal_id=self.journal_sale.id
+            )
         )
         move_form.partner_id = self.partner_2
-        move_form.journal_id = self.journal_sale
         with move_form.invoice_line_ids.new() as line_form:
             line_form.name = "test"
             line_form.quantity = 1.0
@@ -244,10 +245,12 @@ class TestJournalReport(AccountTestInvoicingCommon):
 
     def test_03_test_taxes_in_invoice(self):
         move_form = Form(
-            self.env["account.move"].with_context(default_move_type="in_invoice")
+            self.env["account.move"].with_context(
+                default_move_type="in_invoice",
+                default_journal_id=self.journal_purchase.id,
+            )
         )
         move_form.partner_id = self.partner_2
-        move_form.journal_id = self.journal_purchase
         move_form.invoice_date = Date.today()
         with move_form.invoice_line_ids.new() as line_form:
             line_form.name = "test"

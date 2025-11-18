@@ -3,7 +3,7 @@
 # Copyright 2021 Tecnativa - João Marques
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import _, models
+from odoo import models
 
 
 class OpenItemsXslx(models.AbstractModel):
@@ -13,7 +13,7 @@ class OpenItemsXslx(models.AbstractModel):
 
     def _get_report_name(self, report, data=False):
         company_id = data.get("company_id", False)
-        report_name = _("Open Items")
+        report_name = self.env._("Open Items")
         if company_id:
             company = self.env["res.company"].browse(company_id)
             suffix = f" - {company.name} - {company.currency_id.name}"
@@ -22,21 +22,25 @@ class OpenItemsXslx(models.AbstractModel):
 
     def _get_report_columns(self, report):
         res = {
-            0: {"header": _("Date"), "field": "date", "width": 11},
-            1: {"header": _("Entry"), "field": "move_name", "width": 18},
-            2: {"header": _("Journal"), "field": "journal", "width": 8},
-            3: {"header": _("Account"), "field": "account", "width": 9},
-            4: {"header": _("Partner"), "field": "partner_name", "width": 25},
-            5: {"header": _("Ref - Label"), "field": "ref_label", "width": 40},
-            6: {"header": _("Due date"), "field": "date_maturity", "width": 11},
+            0: {"header": self.env._("Date"), "field": "date", "width": 11},
+            1: {"header": self.env._("Entry"), "field": "move_name", "width": 18},
+            2: {"header": self.env._("Journal"), "field": "journal", "width": 8},
+            3: {"header": self.env._("Account"), "field": "account", "width": 9},
+            4: {"header": self.env._("Partner"), "field": "partner_name", "width": 25},
+            5: {"header": self.env._("Ref - Label"), "field": "ref_label", "width": 40},
+            6: {
+                "header": self.env._("Due date"),
+                "field": "date_maturity",
+                "width": 11,
+            },
             7: {
-                "header": _("Original"),
+                "header": self.env._("Original"),
                 "field": "original",
                 "type": "amount",
                 "width": 14,
             },
             8: {
-                "header": _("Residual"),
+                "header": self.env._("Residual"),
                 "field": "amount_residual",
                 "field_final_balance": "residual",
                 "type": "amount",
@@ -46,21 +50,21 @@ class OpenItemsXslx(models.AbstractModel):
         if report.foreign_currency:
             foreign_currency = {
                 9: {
-                    "header": _("Cur."),
+                    "header": self.env._("Cur."),
                     "field": "currency_name",
                     "field_currency_balance": "currency_name",
                     "type": "currency_name",
                     "width": 7,
                 },
                 10: {
-                    "header": _("Cur. Original"),
+                    "header": self.env._("Cur. Original"),
                     "field": "amount_currency",
                     "field_final_balance": "amount_currency",
                     "type": "amount_currency",
                     "width": 14,
                 },
                 11: {
-                    "header": _("Cur. Residual"),
+                    "header": self.env._("Cur. Residual"),
                     "field": "amount_residual_currency",
                     "field_final_balance": "amount_currency",
                     "type": "amount_currency",
@@ -72,20 +76,20 @@ class OpenItemsXslx(models.AbstractModel):
 
     def _get_report_filters(self, report):
         return [
-            [_("Date at filter"), report.date_at.strftime("%d/%m/%Y")],
+            [self.env._("Date at filter"), report.date_at.strftime("%d/%m/%Y")],
             [
-                _("Target moves filter"),
-                _("All posted entries")
+                self.env._("Target moves filter"),
+                self.env._("All posted entries")
                 if report.target_move == "posted"
-                else _("All entries"),
+                else self.env._("All entries"),
             ],
             [
-                _("Account balance at 0 filter"),
-                _("Hide") if report.hide_account_at_0 else _("Show"),
+                self.env._("Account balance at 0 filter"),
+                self.env._("Hide") if report.hide_account_at_0 else self.env._("Show"),
             ],
             [
-                _("Show foreign currency"),
-                _("Yes") if report.foreign_currency else _("No"),
+                self.env._("Show foreign currency"),
+                self.env._("Yes") if report.foreign_currency else self.env._("No"),
             ],
         ]
 
@@ -180,7 +184,7 @@ class OpenItemsXslx(models.AbstractModel):
                                     "id": partner_id_key,
                                     "name": partner.name
                                     if partner
-                                    else _("Missing Partner"),
+                                    else self.env._("Missing Partner"),
                                     "currency_id": accounts_data[account_id][
                                         "currency_id"
                                     ],
@@ -335,15 +339,15 @@ class OpenItemsXslx(models.AbstractModel):
         if type_object == "partner":
             name = my_object["name"]
             my_object["residual"] = total_amount[account_id][partner_id]["residual"]
-            label = _("Partner ending balance")
+            label = self.env._("Partner ending balance")
         elif type_object == "account":
             name = my_object["code"] + " - " + my_object["name"]
             my_object["residual"] = total_amount[account_id]["residual"]
-            label = _("Ending balance")
+            label = self.env._("Ending balance")
         elif type_object == "partner_subtotal":
             name = my_object["name"]
             my_object["residual"] = total_amount[account_id][partner_id]["residual"]
-            label = _("Ending balance")
+            label = self.env._("Ending balance")
         return super().write_ending_balance_from_dict(
             my_object, name, label, report_data
         )

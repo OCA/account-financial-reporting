@@ -6,7 +6,7 @@
 import operator
 from datetime import date, datetime
 
-from odoo import _, api, models
+from odoo import api, models
 from odoo.tools import float_is_zero
 
 
@@ -127,10 +127,10 @@ class OpenItemsReport(models.AbstractModel):
             if grouped_by == "salesperson":
                 user = partner.user_id
                 group_id = user.id or 0
-                group_name = user.name or _("Missing Salesperson")
+                group_name = user.name or self.env._("Missing Salesperson")
             else:
                 group_id = partner.id or 0
-                group_name = partner.name or _("Missing Partner")
+                group_name = partner.name or self.env._("Missing Partner")
             if group_id not in group_ids:
                 partners_data.update({group_id: {"id": group_id, "name": group_name}})
                 group_ids.add(group_id)

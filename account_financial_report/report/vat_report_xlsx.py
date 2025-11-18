@@ -2,7 +2,7 @@
 # Copyright 2021 Tecnativa - João Marques
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import _, models
+from odoo import models
 
 
 class VATReportXslx(models.AbstractModel):
@@ -12,7 +12,7 @@ class VATReportXslx(models.AbstractModel):
 
     def _get_report_name(self, report, data):
         company_id = data.get("company_id", False)
-        report_name = _("Vat Report")
+        report_name = self.env._("Vat Report")
         if company_id:
             company = self.env["res.company"].browse(company_id)
             suffix = f" - {company.name} - {company.currency_id.name}"
@@ -21,19 +21,31 @@ class VATReportXslx(models.AbstractModel):
 
     def _get_report_columns(self, report):
         return {
-            0: {"header": _("Code"), "field": "code", "width": 5},
-            1: {"header": _("Name"), "field": "name", "width": 100},
-            2: {"header": _("Net"), "field": "net", "type": "amount", "width": 14},
-            3: {"header": _("Tax"), "field": "tax", "type": "amount", "width": 14},
+            0: {"header": self.env._("Code"), "field": "code", "width": 5},
+            1: {"header": self.env._("Name"), "field": "name", "width": 100},
+            2: {
+                "header": self.env._("Net"),
+                "field": "net",
+                "type": "amount",
+                "width": 14,
+            },
+            3: {
+                "header": self.env._("Tax"),
+                "field": "tax",
+                "type": "amount",
+                "width": 14,
+            },
         }
 
     def _get_report_filters(self, report):
         return [
-            [_("Date from"), report.date_from.strftime("%d/%m/%Y")],
-            [_("Date to"), report.date_to.strftime("%d/%m/%Y")],
+            [self.env._("Date from"), report.date_from.strftime("%d/%m/%Y")],
+            [self.env._("Date to"), report.date_to.strftime("%d/%m/%Y")],
             [
-                _("Based on"),
-                _("Tax Tags") if report.based_on == "taxtags" else _("Tax Groups"),
+                self.env._("Based on"),
+                self.env._("Tax Tags")
+                if report.based_on == "taxtags"
+                else self.env._("Tax Groups"),
             ],
         ]
 

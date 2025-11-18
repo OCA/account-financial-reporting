@@ -5,7 +5,7 @@
 # Copyright 2022 Tecnativa - V??ctor Mart??nez
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import _, models
+from odoo import models
 
 
 class GeneralLedgerXslx(models.AbstractModel):
@@ -15,7 +15,7 @@ class GeneralLedgerXslx(models.AbstractModel):
 
     def _get_report_name(self, report, data=False):
         company_id = data.get("company_id", False)
-        report_name = _("General Ledger")
+        report_name = self.env._("General Ledger")
         if company_id:
             company = self.env["res.company"].browse(company_id)
             suffix = f" - {company.name} - {company.currency_id.name}"
@@ -24,26 +24,26 @@ class GeneralLedgerXslx(models.AbstractModel):
 
     def _get_report_columns(self, report):
         res = [
-            {"header": _("Date"), "field": "date", "width": 11},
-            {"header": _("Entry"), "field": "entry", "width": 18},
-            {"header": _("Journal"), "field": "journal", "width": 8},
-            {"header": _("Account"), "field": "account", "width": 9},
-            {"header": _("Taxes"), "field": "taxes_description", "width": 15},
-            {"header": _("Partner"), "field": "partner_name", "width": 25},
-            {"header": _("Ref - Label"), "field": "ref_label", "width": 40},
+            {"header": self.env._("Date"), "field": "date", "width": 11},
+            {"header": self.env._("Entry"), "field": "entry", "width": 18},
+            {"header": self.env._("Journal"), "field": "journal", "width": 8},
+            {"header": self.env._("Account"), "field": "account", "width": 9},
+            {"header": self.env._("Taxes"), "field": "taxes_description", "width": 15},
+            {"header": self.env._("Partner"), "field": "partner_name", "width": 25},
+            {"header": self.env._("Ref - Label"), "field": "ref_label", "width": 40},
         ]
         if report.show_cost_center:
             res += [
                 {
-                    "header": _("Analytic Distribution"),
+                    "header": self.env._("Analytic Distribution"),
                     "field": "analytic_distribution",
                     "width": 20,
                 },
             ]
         res += [
-            {"header": _("Rec."), "field": "rec_name", "width": 15},
+            {"header": self.env._("Rec."), "field": "rec_name", "width": 15},
             {
-                "header": _("Debit"),
+                "header": self.env._("Debit"),
                 "field": "debit",
                 "field_initial_balance": "initial_debit",
                 "field_final_balance": "final_debit",
@@ -51,7 +51,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                 "width": 14,
             },
             {
-                "header": _("Credit"),
+                "header": self.env._("Credit"),
                 "field": "credit",
                 "field_initial_balance": "initial_credit",
                 "field_final_balance": "final_credit",
@@ -59,7 +59,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                 "width": 14,
             },
             {
-                "header": _("Cumul. Bal."),
+                "header": self.env._("Cumul. Bal."),
                 "field": "balance",
                 "field_initial_balance": "initial_balance",
                 "field_final_balance": "final_balance",
@@ -70,7 +70,7 @@ class GeneralLedgerXslx(models.AbstractModel):
         if report.foreign_currency:
             res += [
                 {
-                    "header": _("Amount cur."),
+                    "header": self.env._("Amount cur."),
                     "field": "bal_curr",
                     "field_initial_balance": "initial_bal_curr",
                     "field_final_balance": "final_bal_curr",
@@ -78,7 +78,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                     "width": 10,
                 },
                 {
-                    "header": _("Cumul cur."),
+                    "header": self.env._("Cumul cur."),
                     "field": "total_bal_curr",
                     "field_initial_balance": "initial_bal_curr",
                     "field_final_balance": "final_bal_curr",
@@ -94,24 +94,30 @@ class GeneralLedgerXslx(models.AbstractModel):
     def _get_report_filters(self, report):
         return [
             [
-                _("Date range filter"),
-                _("From: %(date_from)s To: %(date_to)s")
-                % ({"date_from": report.date_from, "date_to": report.date_to}),
+                self.env._("Date range filter"),
+                self.env._(
+                    "From: %(date_from)s To: %(date_to)s",
+                    date_from=report.date_from,
+                    date_to=report.date_to,
+                ),
             ],
             [
-                _("Target moves filter"),
-                _("All posted entries")
+                self.env._("Target moves filter"),
+                self.env._("All posted entries")
                 if report.target_move == "posted"
-                else _("All entries"),
+                else self.env._("All entries"),
             ],
             [
-                _("Account balance at 0 filter"),
-                _("Hide") if report.hide_account_at_0 else _("Show"),
+                self.env._("Account balance at 0 filter"),
+                self.env._("Hide") if report.hide_account_at_0 else self.env._("Show"),
             ],
-            [_("Centralize filter"), _("Yes") if report.centralize else _("No")],
             [
-                _("Show foreign currency"),
-                _("Yes") if report.foreign_currency else _("No"),
+                self.env._("Centralize filter"),
+                self.env._("Yes") if report.centralize else self.env._("No"),
+            ],
+            [
+                self.env._("Show foreign currency"),
+                self.env._("Yes") if report.foreign_currency else self.env._("No"),
             ],
         ]
 
@@ -197,15 +203,11 @@ class GeneralLedgerXslx(models.AbstractModel):
                             taxes_description += line["tax_line_id"][1]
                         for account_ids, value in line["analytic_distribution"].items():
                             for account_id in account_ids.split(","):
+                                analytic_distribution += (
+                                    f"{analytic_data[int(account_id)]['name']} "
+                                )
                                 if value < 100:
-                                    analytic_distribution += "%s %d%% " % (
-                                        analytic_data[int(account_id)]["name"],
-                                        value,
-                                    )
-                                else:
-                                    analytic_distribution += (
-                                        f"{analytic_data[int(account_id)]['name']} "
-                                    )
+                                    analytic_distribution += f"{value:d}%"
                         line.update(
                             {
                                 "taxes_description": taxes_description,
@@ -308,15 +310,11 @@ class GeneralLedgerXslx(models.AbstractModel):
                                 "analytic_distribution"
                             ].items():
                                 for account_id in account_ids.split(","):
+                                    analytic_distribution += (
+                                        f"{analytic_data[int(account_id)]['name']} "
+                                    )
                                     if value < 100:
-                                        analytic_distribution += "%s %d%% " % (
-                                            analytic_data[int(account_id)]["name"],
-                                            value,
-                                        )
-                                    else:
-                                        analytic_distribution += (
-                                            f"{analytic_data[int(account_id)]['name']} "
-                                        )
+                                        analytic_distribution += f"{value:d}% "
                             line.update(
                                 {
                                     "taxes_description": taxes_description,
@@ -376,10 +374,10 @@ class GeneralLedgerXslx(models.AbstractModel):
         label = False
         if "account" not in my_object["type"] and "grouped_by" in my_object:
             if my_object["grouped_by"] == "partners":
-                label = _("Partner Initial balance")
+                label = self.env._("Partner Initial balance")
             elif my_object["grouped_by"] == "taxes":
-                label = _("Tax Initial balance")
-        label = label if label else _("Initial balance")
+                label = self.env._("Tax Initial balance")
+        label = label if label else self.env._("Initial balance")
         return super().write_initial_balance_from_dict(my_object, label, report_data)
 
     def write_ending_balance_from_dict(self, my_object, report_data):
@@ -390,10 +388,10 @@ class GeneralLedgerXslx(models.AbstractModel):
         elif "grouped_by" in my_object:
             name = my_object["name"]
             if my_object["grouped_by"] == "partners":
-                label = _("Partner ending balance")
+                label = self.env._("Partner ending balance")
             elif my_object["grouped_by"] == "taxes":
-                label = _("Tax ending balance")
-        label = label if label else _("Ending balance")
+                label = self.env._("Tax ending balance")
+        label = label if label else self.env._("Ending balance")
         return super().write_ending_balance_from_dict(
             my_object, name, label, report_data
         )

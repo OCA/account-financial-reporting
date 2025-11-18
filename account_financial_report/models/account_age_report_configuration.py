@@ -40,10 +40,7 @@ class AccountAgeReportConfigurationLine(models.Model):
                     self.env._("Inferior Limit must be greather than zero")
                 )
 
-    _sql_constraints = [
-        (
-            "unique_name_config_combination",
-            "UNIQUE(name,account_age_report_config_id)",
-            "Name must be unique per report configuration",
-        )
+    _unique_name_config_combination = [
+        "UNIQUE(name,account_age_report_config_id)",
+        "Name must be unique per report configuration",
     ]

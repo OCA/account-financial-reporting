@@ -25,7 +25,7 @@
             <div class="row">
                 <h4
                     class="mt0"
-                    t-esc="title or 'Odoo Report'"
+                    t-out="title or 'Odoo Report'"
                     style="text-align: center;"
                 />
             </div>
@@ -33,7 +33,7 @@
                 <t t-foreach="partners_data.keys()" t-as="partner_id">
                     <t t-call="account_financial_report.report_open_items_filters" />
                     <div class="act_as_caption account_title">
-                        <span t-esc="partners_data[partner_id]['name']" />
+                        <span t-out="partners_data[partner_id]['name']" />
                     </div>
                     <t t-foreach="Open_Items.keys()" t-as="account_id">
                         <t t-if="partner_id in Open_Items[account_id]">
@@ -42,9 +42,9 @@
                                 style="margin-top: 10px;"
                             />
                             <div class="account_title" style="width: 100%;">
-                                <span t-esc="accounts_data[account_id]['code']" />
+                                <span t-out="accounts_data[account_id]['code']" />
                                 -
-                                <span t-esc="accounts_data[account_id]['name']" />
+                                <span t-out="accounts_data[account_id]['name']" />
                             </div>
 
                             <t t-if="Open_Items[account_id]">
@@ -135,9 +135,9 @@
                     <!-- Display account header -->
                     <div class="act_as_table list_table" style="margin-top: 10px;" />
                     <div class="account_title" style="width: 100%;">
-                        <span t-esc="accounts_data[account_id]['code']" />
+                        <span t-out="accounts_data[account_id]['code']" />
                         -
-                        <span t-esc="accounts_data[account_id]['name']" />
+                        <span t-out="accounts_data[account_id]['name']" />
                     </div>
                     <t t-if="not show_partner_details">
                         <div class="act_as_table data_table" style="width: 100%;">
@@ -157,7 +157,7 @@
                             <!-- Display account partners -->
                             <t t-foreach="Open_Items[account_id]" t-as="partner_id">
                                 <div class="act_as_caption account_title">
-                                    <span t-esc="partners_data[partner_id]['name']" />
+                                    <span t-out="partners_data[partner_id]['name']" />
                                 </div>
                                 <div
                                     class="act_as_table data_table"
@@ -219,7 +219,7 @@
             </div>
             <div class="act_as_row">
                 <div class="act_as_cell">
-                    <span t-esc="date_at" />
+                    <span t-out="date_at" />
                 </div>
                 <div class="act_as_cell">
                     <t t-if="target_move == 'posted'">All posted entries</t>
@@ -289,7 +289,7 @@
                     res-model="account.move"
                     view-type="form"
                 >
-                    <t t-esc="line['move_name']" />
+                    <t t-out="line['move_name']" />
                 </span>
             </div>
             <!--## journal-->
@@ -299,7 +299,7 @@
                     res-model="account.journal"
                     view-type="form"
                 >
-                    <t t-esc="journals_data[line['journal_id']]['code']" />
+                    <t t-out="journals_data[line['journal_id']]['code']" />
                 </span>
             </div>
             <!--## account code-->
@@ -309,7 +309,7 @@
                     res-model="account.account"
                     view-type="form"
                 >
-                    <t t-esc="accounts_data[account_id]['code']" />
+                    <t t-out="accounts_data[account_id]['code']" />
                 </span>
             </div>
             <!--## partner-->
@@ -320,29 +320,29 @@
                     res-model="res.partner"
                     view-type="form"
                 >
-                    <t t-esc="line['partner_name']" />
+                    <t t-out="line['partner_name']" />
                 </span>
             </div>
             <!--## ref - label-->
             <div class="act_as_cell left">
-                <span t-esc="limit_text(line['ref_label'], 'label_text_limit')" />
+                <span t-out="limit_text(line['ref_label'], 'label_text_limit')" />
             </div>
             <!--## date_due-->
             <div class="act_as_cell left">
-                <span t-esc="line['date_maturity']" />
+                <span t-out="line['date_maturity']" />
             </div>
             <!--## amount_total_due-->
             <div class="act_as_cell amount">
                 <span
                     t-if="line.get('original', False)"
-                    t-esc="line['original']"
+                    t-out="line['original']"
                     t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                 />
             </div>
             <!--## amount_residual-->
             <div class="act_as_cell amount">
                 <span
-                    t-esc="line['amount_residual']"
+                    t-out="line['amount_residual']"
                     t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                 />
             </div>
@@ -350,19 +350,19 @@
                 <t t-if="line['currency_id']">
                     <!--## currency_name-->
                     <div class="act_as_cell amount">
-                        <span t-esc="line['currency_name']" />
+                        <span t-out="line['currency_name']" />
                     </div>
                     <!--## amount_total_due_currency-->
                     <div class="act_as_cell amount">
                         <span
-                            t-esc="line['amount_currency']"
+                            t-out="line['amount_currency']"
                             t-options="{'widget': 'monetary', 'display_currency': env['res.currency'].browse(line['currency_id'])}"
                         />
                     </div>
                     <!--## amount_residual_currency-->
                     <div class="act_as_cell amount">
                         <span
-                            t-esc="line['amount_residual_currency']"
+                            t-out="line['amount_residual_currency']"
                             t-options="{'widget': 'monetary', 'display_currency': env['res.currency'].browse(line['currency_id'])}"
                         />
                     </div>
@@ -385,9 +385,9 @@
                 <!--## date-->
                 <t t-if='type == "account_type"'>
                     <div class="act_as_cell first_column" style="width: 36.34%;">
-                        <span t-esc="accounts_data[account_id]['code']" />
+                        <span t-out="accounts_data[account_id]['code']" />
                         -
-                        <span t-esc="accounts_data[account_id]['name']" />
+                        <span t-out="accounts_data[account_id]['name']" />
                     </div>
                     <div class="act_as_cell right" style="width: 28.66%;">
                         Ending
@@ -407,7 +407,7 @@
                         t-value="env['res.partner'].browse(partner_id_key)"
                     />
                     <t t-if="partner">
-                        <span t-esc="partner.name" />
+                        <span t-out="partner.name" />
                     </t>
                     <div class="act_as_cell right" style="width: 28.66%;">
                         Ending
@@ -422,19 +422,19 @@
                 <div class="act_as_cell amount" style="width: 6.57%;">
                     <t t-if='type == "account_type"'>
                         <span
-                            t-esc="total_amount[account_id]['residual']"
+                            t-out="total_amount[account_id]['residual']"
                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                         />
                     </t>
                     <t t-if='type == "partner_type"'>
                         <span
-                            t-esc="total_amount[account_id][partner_id]['residual']"
+                            t-out="total_amount[account_id][partner_id]['residual']"
                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                         />
                     </t>
                     <t t-if='type == "partner_subtotal_type"'>
                         <span
-                            t-esc="partner_totals[account_id][partner_id_key]['residual']"
+                            t-out="partner_totals[account_id][partner_id_key]['residual']"
                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                         />
                     </t>

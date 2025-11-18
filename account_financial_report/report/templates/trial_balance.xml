@@ -44,7 +44,7 @@
                             <div class="act_as_thead">
                                 <div class="act_as_row labels">
                                     <div class="act_as_cell" style="width: 100%;">
-                                        <t t-esc="grouped_item['name']" />
+                                        <t t-out="grouped_item['name']" />
                                     </div>
                                 </div>
                             </div>

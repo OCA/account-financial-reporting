@@ -7,7 +7,7 @@ import calendar
 import datetime
 import operator
 
-from odoo import _, api, models
+from odoo import api, models
 from odoo.tools import float_is_zero
 
 
@@ -106,14 +106,24 @@ class GeneralLedgerReport(models.AbstractModel):
         return domain
 
     def _get_accounts_initial_balance(self, initial_domain_bs, initial_domain_pl):
-        gl_initial_acc_bs = self.env["account.move.line"].read_group(
+        gl_initial_acc_bs = self.env["account.move.line"].formatted_read_group(
             domain=initial_domain_bs,
-            fields=["account_id", "debit", "credit", "balance", "amount_currency:sum"],
+            aggregates=[
+                "debit:sum",
+                "credit:sum",
+                "balance:sum",
+                "amount_currency:sum",
+            ],
             groupby=["account_id"],
         )
-        gl_initial_acc_pl = self.env["account.move.line"].read_group(
+        gl_initial_acc_pl = self.env["account.move.line"].formatted_read_group(
             domain=initial_domain_pl,
-            fields=["account_id", "debit", "credit", "balance", "amount_currency:sum"],
+            aggregates=[
+                "debit:sum",
+                "credit:sum",
+                "balance:sum",
+                "amount_currency:sum",
+            ],
             groupby=["account_id"],
         )
         gl_initial_acc = gl_initial_acc_bs + gl_initial_acc_pl
@@ -141,9 +151,14 @@ class GeneralLedgerReport(models.AbstractModel):
         domain = self._get_initial_balance_fy_pl_ml_domain(
             account_ids, company_id, fy_start_date, base_domain
         )
-        initial_balances = self.env["account.move.line"].read_group(
+        initial_balances = self.env["account.move.line"].formatted_read_group(
             domain=domain,
-            fields=["account_id", "debit", "credit", "balance", "amount_currency:sum"],
+            aggregates=[
+                "debit:sum",
+                "credit:sum",
+                "balance:sum",
+                "amount_currency:sum",
+            ],
             groupby=["account_id"],
         )
         pl_initial_balance = {
@@ -153,10 +168,10 @@ class GeneralLedgerReport(models.AbstractModel):
             "bal_curr": 0.0,
         }
         for initial_balance in initial_balances:
-            pl_initial_balance["debit"] += initial_balance["debit"]
-            pl_initial_balance["credit"] += initial_balance["credit"]
-            pl_initial_balance["balance"] += initial_balance["balance"]
-            pl_initial_balance["bal_curr"] += initial_balance["amount_currency"]
+            pl_initial_balance["debit"] += initial_balance["debit:sum"]
+            pl_initial_balance["credit"] += initial_balance["credit:sum"]
+            pl_initial_balance["balance"] += initial_balance["balance:sum"]
+            pl_initial_balance["bal_curr"] += initial_balance["amount_currency:sum"]
         return pl_initial_balance
 
     def _get_gl_initial_acc(
@@ -182,7 +197,9 @@ class GeneralLedgerReport(models.AbstractModel):
             res[key_bal] = {}
             for key_field in ["credit", "debit", "balance", "bal_curr"]:
                 field_name = key_field if key_field != "bal_curr" else "amount_currency"
-                res[key_bal][key_field] = gl[field_name]
+                res[key_bal][key_field] = (
+                    gl[field_name] if field_name in gl else gl[f"{field_name}:sum"]
+                )
         return res
 
     def _prepare_gen_ld_data(self, gl_initial_acc, domain, grouped_by):
@@ -198,24 +215,21 @@ class GeneralLedgerReport(models.AbstractModel):
         return getattr(self, method)(data, domain, grouped_by)
 
     def _prepare_gen_ld_data_group_partners(self, data, domain, grouped_by):
-        gl_initial_acc_prt = self.env["account.move.line"].read_group(
+        gl_initial_acc_prt = self.env["account.move.line"].formatted_read_group(
             domain=domain,
-            fields=[
-                "account_id",
-                "partner_id",
-                "debit",
-                "credit",
-                "balance",
+            aggregates=[
+                "debit:sum",
+                "credit:sum",
+                "balance:sum",
                 "amount_currency:sum",
             ],
             groupby=["account_id", "partner_id"],
-            lazy=False,
         )
         if gl_initial_acc_prt:
             for gl in gl_initial_acc_prt:
                 if not gl["partner_id"]:
                     prt_id = 0
-                    prt_name = _("Missing Partner")
+                    prt_name = self.env._("Missing Partner")
                 else:
                     prt_id = gl["partner_id"][0]
                     prt_name = gl["partner_id"][1]
@@ -227,18 +241,15 @@ class GeneralLedgerReport(models.AbstractModel):
         return data
 
     def _prepare_gen_ld_data_group_taxes(self, data, domain, grouped_by):
-        gl_initial_acc_prt = self.env["account.move.line"].read_group(
+        gl_initial_acc_prt = self.env["account.move.line"].formatted_read_group(
             domain=domain,
-            fields=[
-                "account_id",
-                "debit",
-                "credit",
-                "balance",
+            aggregates=[
+                "debit:sum",
+                "credit:sum",
+                "balance:sum",
                 "amount_currency:sum",
-                "tax_line_id",
             ],
-            groupby=["account_id"],
-            lazy=False,
+            groupby=["account_id", "tax_line_id"],
         )
         if gl_initial_acc_prt:
             for gl in gl_initial_acc_prt:
@@ -422,7 +433,7 @@ class GeneralLedgerReport(models.AbstractModel):
             item_name = (
                 move_line["partner_id"][1]
                 if move_line["partner_id"]
-                else _("Missing Partner")
+                else self.env._("Missing Partner")
             )
             res.append({"id": item_id, "name": item_name})
         elif grouped_by == "taxes":
@@ -564,7 +575,9 @@ class GeneralLedgerReport(models.AbstractModel):
             move_line["balance"] += last_cumul_balance
             last_cumul_balance = move_line["balance"]
             if move_line["rec_id"] in rec_after_date_to_ids:
-                move_line["rec_name"] = "(" + _("future") + ") " + move_line["rec_name"]
+                move_line["rec_name"] = (
+                    "(" + self.env._("future") + ") " + move_line["rec_name"]
+                )
         return move_lines
 
     def _create_account(self, account, acc_id, gen_led_data, rec_after_date_to_ids):
