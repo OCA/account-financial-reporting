@@ -4,7 +4,7 @@
 # Copyright 2021 Tecnativa - João Marques
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import _, models
+from odoo import models
 
 
 class JournalLedgerXslx(models.AbstractModel):
@@ -14,7 +14,7 @@ class JournalLedgerXslx(models.AbstractModel):
 
     def _get_report_name(self, report, data=False):
         company_id = data.get("company_id", False)
-        report_name = _("Journal Ledger")
+        report_name = self.env._("Journal Ledger")
         if company_id:
             company = self.env["res.company"].browse(company_id)
             suffix = f" - {company.name} - {company.currency_id.name}"
@@ -23,39 +23,58 @@ class JournalLedgerXslx(models.AbstractModel):
 
     def _get_report_columns(self, report):
         columns = [
-            {"header": _("Entry"), "field": "entry", "width": 18},
-            {"header": _("Date"), "field": "date", "width": 11},
-            {"header": _("Account"), "field": "account_code", "width": 9},
+            {"header": self.env._("Entry"), "field": "entry", "width": 18},
+            {"header": self.env._("Date"), "field": "date", "width": 11},
+            {"header": self.env._("Account"), "field": "account_code", "width": 9},
         ]
 
         if report.with_auto_sequence:
             columns.insert(
-                0, {"header": _("Sequence"), "field": "auto_sequence", "width": 10}
+                0,
+                {
+                    "header": self.env._("Sequence"),
+                    "field": "auto_sequence",
+                    "width": 10,
+                },
             )
 
         if report.with_account_name:
             columns.append(
-                {"header": _("Account Name"), "field": "account_name", "width": 15}
+                {
+                    "header": self.env._("Account Name"),
+                    "field": "account_name",
+                    "width": 15,
+                }
             )
 
         columns += [
-            {"header": _("Partner"), "field": "partner", "width": 25},
-            {"header": _("Ref - Label"), "field": "label", "width": 40},
-            {"header": _("Taxes"), "field": "taxes_description", "width": 11},
-            {"header": _("Debit"), "field": "debit", "type": "amount", "width": 14},
-            {"header": _("Credit"), "field": "credit", "type": "amount", "width": 14},
+            {"header": self.env._("Partner"), "field": "partner", "width": 25},
+            {"header": self.env._("Ref - Label"), "field": "label", "width": 40},
+            {"header": self.env._("Taxes"), "field": "taxes_description", "width": 11},
+            {
+                "header": self.env._("Debit"),
+                "field": "debit",
+                "type": "amount",
+                "width": 14,
+            },
+            {
+                "header": self.env._("Credit"),
+                "field": "credit",
+                "type": "amount",
+                "width": 14,
+            },
         ]
 
         if report.foreign_currency:
             columns += [
                 {
-                    "header": _("Currency"),
+                    "header": self.env._("Currency"),
                     "field": "currency_name",
                     "width": 14,
                     "type": "currency_name",
                 },
                 {
-                    "header": _("Amount Currency"),
+                    "header": self.env._("Amount Currency"),
                     "field": "amount_currency",
                     "type": "amount",
                     "width": 18,
@@ -69,40 +88,40 @@ class JournalLedgerXslx(models.AbstractModel):
 
     def _get_journal_tax_columns(self, report):
         return {
-            0: {"header": _("Name"), "field": "tax_name", "width": 35},
-            1: {"header": _("Description"), "field": "tax_code", "width": 18},
+            0: {"header": self.env._("Name"), "field": "tax_name", "width": 35},
+            1: {"header": self.env._("Description"), "field": "tax_code", "width": 18},
             2: {
-                "header": _("Base Debit"),
+                "header": self.env._("Base Debit"),
                 "field": "base_debit",
                 "type": "amount",
                 "width": 14,
             },
             3: {
-                "header": _("Base Credit"),
+                "header": self.env._("Base Credit"),
                 "field": "base_credit",
                 "type": "amount",
                 "width": 14,
             },
             4: {
-                "header": _("Base Balance"),
+                "header": self.env._("Base Balance"),
                 "field": "base_balance",
                 "type": "amount",
                 "width": 14,
             },
             5: {
-                "header": _("Tax Debit"),
+                "header": self.env._("Tax Debit"),
                 "field": "tax_debit",
                 "type": "amount",
                 "width": 14,
             },
             6: {
-                "header": _("Tax Credit"),
+                "header": self.env._("Tax Credit"),
                 "field": "tax_credit",
                 "type": "amount",
                 "width": 14,
             },
             7: {
-                "header": _("Tax Balance"),
+                "header": self.env._("Tax Balance"),
                 "field": "tax_balance",
                 "type": "amount",
                 "width": 14,
@@ -131,22 +150,31 @@ class JournalLedgerXslx(models.AbstractModel):
         }
 
         return [
-            [_("Company"), report.company_id.name],
+            [self.env._("Company"), report.company_id.name],
             [
-                _("Date range filter"),
-                _("From: %(date_from)s To: %(date_to)s")
-                % ({"date_from": report.date_from, "date_to": report.date_to}),
+                self.env._("Date range filter"),
+                self.env._(
+                    "From: %(date_from)s To: %(date_to)s",
+                    date_from=report.date_from,
+                    date_to=report.date_to,
+                ),
             ],
             [
-                _("Target moves filter"),
-                _("%s") % target_label_by_value[report.move_target],
+                self.env._("Target moves filter"),
+                self.env._(
+                    "%(target_move_filter)s",
+                    target_move_filter=target_label_by_value[report.move_target],
+                ),
             ],
             [
-                _("Entries sorted by"),
-                _("%s") % sort_option_label_by_value[report.sort_option],
+                self.env._("Entries sorted by"),
+                self.env._(
+                    "%(entries_sorted_by)s",
+                    entries_sorted_by=sort_option_label_by_value[report.sort_option],
+                ),
             ],
             [
-                _("Journals"),
+                self.env._("Journals"),
                 ", ".join(
                     [
                         f"{report_journal.code} - {report_journal.name}"

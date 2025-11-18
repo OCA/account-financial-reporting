@@ -50,12 +50,12 @@ class AccountMoveLine(models.Model):
             By adding the following index, performances are strongly increased.
         :return:
         """
-        self._cr.execute(
+        self.env.cr.execute(
             "SELECT indexname FROM pg_indexes WHERE indexname = %s",
             ("account_move_line_account_id_partner_id_index",),
         )
-        if not self._cr.fetchone():
-            self._cr.execute(
+        if not self.env.cr.fetchone():
+            self.env.cr.execute(
                 """
             CREATE INDEX account_move_line_account_id_partner_id_index
             ON account_move_line (account_id, partner_id)"""

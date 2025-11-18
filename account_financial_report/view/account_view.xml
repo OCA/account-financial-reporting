@@ -6,7 +6,7 @@
         <field name="model">account.account</field>
         <field name="type">form</field>
         <field name="arch" type="xml">
-            <field name="deprecated" position="after">
+            <field name="active" position="after">
                 <field name="centralized" />
             </field>
         </field>

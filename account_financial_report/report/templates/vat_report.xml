@@ -21,7 +21,7 @@
             <div class="row">
                 <h4
                     class="mt0"
-                    t-esc="title or 'Odoo Report'"
+                    t-out="title or 'Odoo Report'"
                     style="text-align: center;"
                 />
             </div>
@@ -153,13 +153,13 @@
             </div>
             <div class="act_as_row">
                 <div class="act_as_cell">
-                    <span t-esc="date_from" />
+                    <span t-out="date_from" />
                 </div>
                 <div class="act_as_cell">
-                    <span t-esc="date_to" />
+                    <span t-out="date_to" />
                 </div>
                 <div class="act_as_cell">
-                    <span t-esc="based_on" />
+                    <span t-out="based_on" />
                 </div>
             </div>
         </div>

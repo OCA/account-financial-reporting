@@ -82,7 +82,7 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
         cls.fy_date_end = "2016-12-31"
         cls.date_start = "2016-01-01"
         cls.date_end = "2016-12-31"
-        cls.partner = cls.env.ref("base.res_partner_12")
+        cls.partner = cls.partner_a
         cls.unaffected_account = cls.env["account.account"].search(
             [
                 (
@@ -111,7 +111,7 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
         journal = self.env["account.journal"].search(
             [("company_id", "=", self.env.user.company_id.id)], limit=1
         )
-        partner = self.env.ref("base.res_partner_12")
+        partner = self.partner_a
         move_vals = {
             "journal_id": journal.id,
             "date": date,
