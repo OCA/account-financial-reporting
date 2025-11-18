@@ -87,7 +87,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
     domain = fields.Char(
         string="Journal Items Domain",
         default=[],
-        help="This domain will be used to select specific domain for Journal " "Items",
+        help="This domain will be used to select specific domain for Journal Items",
     )
 
     def _get_account_move_lines_domain(self):

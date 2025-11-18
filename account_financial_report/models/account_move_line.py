@@ -51,7 +51,7 @@ class AccountMoveLine(models.Model):
         :return:
         """
         self._cr.execute(
-            "SELECT indexname FROM pg_indexes WHERE indexname = " "%s",
+            "SELECT indexname FROM pg_indexes WHERE indexname = %s",
             ("account_move_line_account_id_partner_id_index",),
         )
         if not self._cr.fetchone():
