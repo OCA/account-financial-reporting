@@ -123,7 +123,11 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         return move_lines
 
     def _get_accounts_data(self, accounts_ids):
-        accounts = self.env["account.account"].browse(accounts_ids)
+        accounts = (
+            self.env["account.account"]
+            .with_context(active_test=False)
+            .browse(accounts_ids)
+        )
         accounts_data = {}
         for account in accounts:
             accounts_data.update(

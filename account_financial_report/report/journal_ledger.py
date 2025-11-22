@@ -34,9 +34,13 @@ class JournalLedgerReport(models.AbstractModel):
         return domain
 
     def _get_journal_ledgers(self, wizard, journal_ids, company):
-        journals = self.env["account.journal"].search(
-            self._get_journal_ledgers_domain(wizard, journal_ids, company),
-            order="name asc",
+        journals = (
+            self.env["account.journal"]
+            .with_context(active_test=False)
+            .search(
+                self._get_journal_ledgers_domain(wizard, journal_ids, company),
+                order="name asc",
+            )
         )
         journal_ledgers_data = []
         for journal in journals:
@@ -264,8 +268,10 @@ class JournalLedgerReport(models.AbstractModel):
                 journal_id = ml_data["journal_id"]
                 if journal_id not in journals_taxes_data.keys():
                     journals_taxes_data[journal_id] = {}
-                taxes = self.env["account.tax"].search_fetch(
-                    [("id", "in", tax_ids)], ["name", "description"]
+                taxes = (
+                    self.env["account.tax"]
+                    .with_context(active_test=False)
+                    .search_fetch([("id", "in", tax_ids)], ["name", "description"])
                 )
                 for tax in taxes:
                     if tax.id not in journals_taxes_data[journal_id]:
