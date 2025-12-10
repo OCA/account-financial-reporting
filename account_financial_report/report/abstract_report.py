@@ -143,8 +143,10 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         return accounts_data
 
     def _get_journals_data(self, journals_ids):
-        journals = self.env["account.journal"].search_fetch(
-            [("id", "in", journals_ids)], ["code"]
+        journals = (
+            self.env["account.journal"]
+            .with_context(active_test=False)
+            .search_fetch([("id", "in", journals_ids)], ["code"])
         )
         journals_data = {}
         for journal in journals:
