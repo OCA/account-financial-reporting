@@ -391,13 +391,16 @@ class TrialBalanceReport(models.AbstractModel):
                 total_amount, tb, acc_id, prt_id, foreign_currency
             )
         # sort on partner_name
+        # total_amount is a dictionary by account id that contains direct totalized
+        # values for that account (credit, debit, balance...), but also other integer
+        # keys that represents partner ids with the detail of each of them, and one
+        # of the partner id keys is 0 for those with no partner
         for acc_id, total_data in total_amount.items():
             tmp_list = sorted(
                 total_data.items(),
-                key=lambda x: isinstance(x[0], int)
-                and isinstance(x[1], dict)
-                and x[1]["partner_name"]
-                or x[0],
+                key=lambda x: ("\xff" if not x[0] else x[1]["partner_name"])
+                if isinstance(x[0], int)
+                else "!",  # ~ is the last ASCII printable char, and ! the first
             )
             total_amount[acc_id] = {}
             for key, value in tmp_list:
