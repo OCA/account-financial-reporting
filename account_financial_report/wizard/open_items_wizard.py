@@ -80,7 +80,7 @@ class OpenItemsReportWizard(models.TransientModel):
                 ("reconcile", "=", True),
             ]
             if self.company_id:
-                domain.append(("company_ids", "in", [self.company_id.id]))
+                domain.append(("company_ids", "=", self.company_id.id))
             self.account_ids = self.env["account.account"].search(domain)
         return {
             "domain": {

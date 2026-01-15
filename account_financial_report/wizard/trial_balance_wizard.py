@@ -90,7 +90,7 @@ class TrialBalanceReportWizard(models.TransientModel):
             end_range = self.account_code_to.code
             domain = [("code", ">=", start_range), ("code", "<=", end_range)]
             if self.company_id:
-                domain.append(("company_ids", "in", [self.company_id.id]))
+                domain.append(("company_ids", "=", self.company_id.id))
             self.account_ids = self.env["account.account"].search(domain)
 
     @api.constrains("show_hierarchy", "show_hierarchy_level")
