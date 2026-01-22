@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-01-18 19:50+0000\n"
+"PO-Revision-Date: 2026-01-22 19:50+0000\n"
 "Last-Translator: Matjaz Mozetic <matjaz@luxim.si>\n"
 "Language-Team: none\n"
 "Language: sl\n"
@@ -220,94 +220,94 @@ msgstr "MIS denarni tok"
 #: model:ir.model,name:mis_builder_cash_flow.model_mis_cash_flow_forecast_line
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_forecast_line_view_form
 msgid "MIS Cash Flow Forecast Line"
-msgstr ""
+msgstr "MIS postavka napovedi denarnega toka"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__full_reconcile_id
 msgid "Matching Number"
-msgstr ""
+msgstr "Številka uskladitve"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__name
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__name
 msgid "Name"
-msgstr ""
+msgstr "Naziv"
 
 #. module: mis_builder_cash_flow
 #: model:mis.report.kpi,description:mis_builder_cash_flow.mis_kpi_out_total
 msgid "OUT TOTAL"
-msgstr ""
+msgstr "IZHOD SKUPAJ"
 
 #. module: mis_builder_cash_flow
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_tree_view
 msgid "Open Journal Item / Forecast Line"
-msgstr ""
+msgstr "Odpri dnevniško postavko / postavko napovedi"
 
 #. module: mis_builder_cash_flow
 #: model:mis.report.kpi,description:mis_builder_cash_flow.mis_kpi_out_forecast
 msgid "Out forecast"
-msgstr ""
+msgstr "Izhod napoved"
 
 #. module: mis_builder_cash_flow
 #: model:mis.report.kpi,description:mis_builder_cash_flow.mis_kpi_out_payable
 msgid "Out payable"
-msgstr ""
+msgstr "Izhod obveznost"
 
 #. module: mis_builder_cash_flow
 #: model:mis.report.kpi,description:mis_builder_cash_flow.mis_kpi_period_balance
 msgid "PERIOD BALANCE"
-msgstr ""
+msgstr "BILANCA OBDOBJA"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__parent_state
 msgid "Parent State"
-msgstr ""
+msgstr "Nadrejeno stanje"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__partner_id
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__partner_id
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_forecast_line_view_search
 msgid "Partner"
-msgstr ""
+msgstr "Partner"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__reconciled
 msgid "Reconciled"
-msgstr ""
+msgstr "Usklajeno"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,help:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__account_id
 msgid "The account of the forecast line is only for informative purpose"
-msgstr ""
+msgstr "Konto postavke napovedi je zgolj informativne narave"
 
 #. module: mis_builder_cash_flow
 #. odoo-python
 #: code:addons/mis_builder_cash_flow/models/mis_cash_flow_forecast_line.py:0
 msgid "The forecast line company must be one of the account's companies."
-msgstr ""
+msgstr "Družba na postavki napovedi mora ustrezati družbi na kontu."
 
 #. module: mis_builder_cash_flow
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_form_view
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_tree_view
 msgid "Total"
-msgstr ""
+msgstr "Skupaj"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__account_type
 msgid "Type"
-msgstr ""
+msgstr "Tip"
 
 #. module: mis_builder_cash_flow
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_search_view
 msgid "Unreconciled"
-msgstr ""
+msgstr "Neusklajeno"
 
 #. module: mis_builder_cash_flow
 #: model:mis.report.instance.period,name:mis_builder_cash_flow.mis_period_plus_fourth_month
 msgid "fourth month"
-msgstr ""
+msgstr "četrti mesec"
 
 #. module: mis_builder_cash_flow
 #: model:mis.report.instance.period,name:mis_builder_cash_flow.mis_period_plus_third_month
 msgid "third month"
-msgstr ""
+msgstr "tretji mesec"
