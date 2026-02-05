@@ -178,7 +178,11 @@ class JournalLedgerXslx(models.AbstractModel):
     def _generate_journal_content(
         self, workbook, report, res_data, ledger, report_data
     ):
-        journal = self.env["account.journal"].browse(ledger["id"])
+        journal = (
+            self.env["account.journal"]
+            .with_context(active_test=False)
+            .browse(ledger["id"])
+        )
         currency_name = (
             journal.currency_id
             and journal.currency_id.name
@@ -196,7 +200,11 @@ class JournalLedgerXslx(models.AbstractModel):
         )
 
     def _generate_journal_taxes_summary(self, workbook, ledger, report_data):
-        journal = self.env["account.journal"].browse(ledger["id"])
+        journal = (
+            self.env["account.journal"]
+            .with_context(active_test=False)
+            .browse(ledger["id"])
+        )
         currency_name = (
             journal.currency_id
             and journal.currency_id.name

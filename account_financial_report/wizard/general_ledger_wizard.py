@@ -76,8 +76,9 @@ class GeneralLedgerReportWizard(models.TransientModel):
         help="Ending account in a range",
     )
     grouped_by = fields.Selection(
-        selection=[("", "None"), ("partners", "Partners"), ("taxes", "Taxes")],
+        selection=[("none", "None"), ("partners", "Partners"), ("taxes", "Taxes")],
         default="partners",
+        required=True,
     )
     show_cost_center = fields.Boolean(
         string="Show Analytic Account",
@@ -103,13 +104,10 @@ class GeneralLedgerReportWizard(models.TransientModel):
         ):
             start_range = int(self.account_code_from.code)
             end_range = int(self.account_code_to.code)
-            self.account_ids = self.env["account.account"].search(
-                [("code", ">=", start_range), ("code", "<=", end_range)]
-            )
+            domain = [("code", ">=", start_range), ("code", "<=", end_range)]
             if self.company_id:
-                self.account_ids = self.account_ids.filtered(
-                    lambda a: a.company_id == self.company_id
-                )
+                domain.append(("company_ids", "in", self.company_id.ids))
+            self.account_ids = self.env["account.account"].search(domain)
 
     def _init_date_from(self):
         """set start date to begin of current year if fiscal year running"""
@@ -177,7 +175,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
                 self.onchange_type_accounts_only()
             else:
                 self.account_ids = self.account_ids.filtered(
-                    lambda a: a.company_id == self.company_id
+                    lambda a: self.company_id in a.company_ids
                 )
         if self.company_id and self.cost_center_ids:
             self.cost_center_ids = self.cost_center_ids.filtered(
@@ -195,7 +193,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
         if not self.company_id:
             return res
         else:
-            res["domain"]["account_ids"] += [("company_id", "=", self.company_id.id)]
+            res["domain"]["account_ids"] += [("company_ids", "in", self.company_id.ids)]
             res["domain"]["account_journal_ids"] += [
                 ("company_id", "=", self.company_id.id)
             ]
@@ -275,7 +273,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
 
     def _print_report(self, report_type):
         self.ensure_one()
-        data = self._prepare_report_general_ledger()
+        data = self._prepare_report_data()
         if report_type == "xlsx":
             report_name = "a_f_r.report_general_ledger_xlsx"
         else:
@@ -290,6 +288,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
         )
 
     def _prepare_report_general_ledger(self):
+        # TODO: Kept for compatibility - To be merged into _prepare_report_data in 19
         self.ensure_one()
         return {
             "wizard_id": self.id,
@@ -311,6 +310,11 @@ class GeneralLedgerReportWizard(models.TransientModel):
             "account_financial_report_lang": self.env.lang,
             "domain": self._get_account_move_lines_domain(),
         }
+
+    def _prepare_report_data(self):
+        res = super()._prepare_report_data()
+        res.update(self._prepare_report_general_ledger())
+        return res
 
     def _export(self, report_type):
         """Default export is PDF."""

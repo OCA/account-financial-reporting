@@ -825,6 +825,11 @@ msgid "Foreign Currency"
 msgstr "Moeda Estrangeira"
 
 #. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
+msgid "Format"
+msgstr ""
+
+#. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.open_items_wizard
@@ -914,6 +919,7 @@ msgstr "Agrupar lan??amentos por"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__grouped_by
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__grouped_by
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__grouped_by
 msgid "Grouped By"
 msgstr "Agrupado Por"
@@ -1081,6 +1087,17 @@ msgid "Journals"
 msgstr "Di??rios"
 
 #. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract_wizard__label_text_limit
+#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__label_text_limit
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__label_text_limit
+#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__label_text_limit
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__label_text_limit
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__label_text_limit
+#: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__label_text_limit
+msgid "Label Text Limit"
+msgstr ""
+
+#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration__write_uid
 #: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration_line__write_uid
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__write_uid
@@ -1133,8 +1150,15 @@ msgstr "Linha"
 #. odoo-python
 #: code:addons/account_financial_report/report/general_ledger.py:0
 #: code:addons/account_financial_report/report/open_items.py:0
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
 #: code:addons/account_financial_report/report/trial_balance.py:0
 msgid "Missing Partner"
+msgstr ""
+
+#. module: account_financial_report
+#. odoo-python
+#: code:addons/account_financial_report/report/open_items.py:0
+msgid "Missing Salesperson"
 msgstr ""
 
 #. module: account_financial_report
@@ -1210,7 +1234,7 @@ msgid "No limit"
 msgstr "Sem limite"
 
 #. module: account_financial_report
-#: model:ir.model.fields.selection,name:account_financial_report.selection__general_ledger_report_wizard__grouped_by__
+#: model:ir.model.fields.selection,name:account_financial_report.selection__general_ledger_report_wizard__grouped_by__none
 msgid "None"
 msgstr "N??o"
 
@@ -1332,6 +1356,11 @@ msgid "Partner Initial balance"
 msgstr "Saldo inicial do parceiro"
 
 #. module: account_financial_report
+#: model:ir.model.fields.selection,name:account_financial_report.selection__open_items_report_wizard__grouped_by__salesperson
+msgid "Partner Salesperson"
+msgstr ""
+
+#. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 msgid "Partner cumul aged balance"
@@ -1353,6 +1382,7 @@ msgstr "Saldo inicial do Parceiro"
 
 #. module: account_financial_report
 #: model:ir.model.fields.selection,name:account_financial_report.selection__general_ledger_report_wizard__grouped_by__partners
+#: model:ir.model.fields.selection,name:account_financial_report.selection__open_items_report_wizard__grouped_by__partners
 msgid "Partners"
 msgstr "Parceiros"
 
@@ -1665,6 +1695,14 @@ msgstr ""
 #: code:addons/account_financial_report/wizard/trial_balance_wizard.py:0
 msgid "The hierarchy level to filter on must be greater than 0."
 msgstr "O filtro de n??vel hier??rquico deve ser maior que zero."
+
+#. module: account_financial_report
+#. odoo-python
+#: code:addons/account_financial_report/report/trial_balance.py:0
+msgid ""
+"There is a problem in the structure of the account groups. You may need to "
+"create some child group of %s."
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__domain

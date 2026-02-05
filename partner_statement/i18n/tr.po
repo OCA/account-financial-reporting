@@ -1,0 +1,833 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* partner_statement
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2025-12-24 11:42+0000\n"
+"Last-Translator: Ediz Duman <neps1192@gmail.com>\n"
+"Language-Team: none\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.10.4\n"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/report_statement_common.py:0
+msgid "1 - 30 Days"
+msgstr "1 - 30 Gün"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/report_statement_common.py:0
+msgid "1 Month"
+msgstr "1 Ay"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/report_statement_common.py:0
+msgid "121 Days +"
+msgstr "121 Gün +"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/report_statement_common.py:0
+msgid "2 Months"
+msgstr "2 Ay"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/report_statement_common.py:0
+msgid "3 Months"
+msgstr "3 Ay"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/report_statement_common.py:0
+msgid "31 - 60 Days"
+msgstr "31 - 60 Gün"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/report_statement_common.py:0
+msgid "4 Months"
+msgstr "4 Ay"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/report_statement_common.py:0
+msgid "61 - 90 Days"
+msgstr "61 - 90 Gün"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/report_statement_common.py:0
+msgid "91 - 120 Days"
+msgstr "91 - 120 Gün"
+
+#. module: partner_statement
+#: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
+msgid ""
+"<span class=\"o_form_label\">Aging details can be shown in the report, expressed in\n"
+"                        aging\n"
+"                        buckets, so the partner can review how much is open, due or overdue.\n"
+"                    </span>"
+msgstr ""
+"<span class=\"o_form_label\">Vade detayları raporda, vade kovaları olarak\n"
+"                        gösterilebilir, böylece carinin ne kadar açık, "
+"vadeli veya gecikmiş\n"
+"                        bakiyesi olduğunu gözden geçirebilir.\n"
+"                    </span>"
+
+#. module: partner_statement
+#: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_wizard_view
+msgid ""
+"<span class=\"o_form_label\">The activity statement provides details of all activity on\n"
+"                    a partner's receivables and payables between two selected dates. This includes\n"
+"                    all invoices,\n"
+"                    refunds and payments. Any outstanding balance dated prior to the chosen\n"
+"                    statement\n"
+"                    period will appear as a forward balance at the top of the statement. The list is\n"
+"                    displayed in chronological order and is split by currencies.\n"
+"                </span>\n"
+"                <br/>\n"
+"                <br/>"
+msgstr ""
+"<span class=\"o_form_label\">Hareket ekstresi, seçilen iki tarih arasında "
+"bir carinin alacak ve borçlarındaki\n"
+"                    tüm hareketlerin detaylarını sağlar. Bu, tüm faturaları,"
+"\n"
+"                    iadeleri ve ödemeleri içerir. Seçilen ekstre döneminden "
+"önceki herhangi bir ödenmemiş bakiye,\n"
+"                    ekstrenin üst kısmında devreden bakiye olarak görünür. "
+"Liste\n"
+"                    kronolojik sırayla gösterilir ve dövizlere göre ayrılır."
+"\n"
+"                </span>\n"
+"                <br/>\n"
+"                <br/>"
+
+#. module: partner_statement
+#: model_terms:ir.ui.view,arch_db:partner_statement.detailed_activity_statement_wizard_view
+msgid ""
+"<span class=\"o_form_label\">The detailed activity statement is an extension of the\n"
+"                    activity statement, and intends to explain the transactions\n"
+"                    that have happened during the period, also providing with a Prior Balance\n"
+"                    section and an Ending Balance section.\n"
+"                </span>\n"
+"                <br/>\n"
+"                <br/>"
+msgstr ""
+"<span class=\"o_form_label\">Detaylı hareket ekstresi, hareket ekstresinin "
+"bir uzantısıdır ve dönem içinde gerçekleşen\n"
+"                    işlemleri açıklamayı amaçlar, ayrıca Önceki Bakiye\n"
+"                    ve Kapanış Bakiyesi bölümlerini de sağlar.\n"
+"                </span>\n"
+"                <br/>\n"
+"                <br/>"
+
+#. module: partner_statement
+#: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_wizard_view
+msgid ""
+"<span class=\"o_form_label\">The outstanding statement provides details of all partner's\n"
+"                    outstanding\n"
+"                    receivables and payables up to a particular date. This includes all unpaid\n"
+"                    invoices, unclaimed\n"
+"                    refunds and outstanding payments. The list is displayed in chronological order\n"
+"                    and is\n"
+"                    split by currencies.\n"
+"                </span>\n"
+"                <br/>\n"
+"                <br/>"
+msgstr ""
+"<span class=\"o_form_label\">Ödenmemiş ekstre, belirli bir tarihe kadar "
+"carinin tüm\n"
+"                    ödenmemiş\n"
+"                    alacak ve borçlarının detaylarını sağlar. Bu, ödenmemiş "
+"tüm faturaları,\n"
+"                    talep edilmemiş iadeleri ve ödenmemiş ödemeleri içerir. "
+"Liste\n"
+"                    kronolojik sırayla gösterilir ve dövizlere göre ayrılır."
+"\n"
+"                </span>\n"
+"                <br/>\n"
+"                <br/>"
+
+#. module: partner_statement
+#: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
+#: model_terms:ir.ui.view,arch_db:partner_statement.detailed_activity_statement_document
+#: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
+msgid "<strong>Date:</strong>"
+msgstr "<strong>Tarih:</strong>"
+
+#. module: partner_statement
+#: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
+#: model_terms:ir.ui.view,arch_db:partner_statement.detailed_activity_statement_document
+#: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
+msgid "<strong>Partner Code:</strong>"
+msgstr "<strong>Cari Kodu:</strong>"
+
+#. module: partner_statement
+#: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
+#: model_terms:ir.ui.view,arch_db:partner_statement.detailed_activity_statement_document
+#: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
+msgid "<strong>Partner Name:</strong>"
+msgstr "<strong>Cari Adı:</strong>"
+
+#. module: partner_statement
+#: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
+#: model_terms:ir.ui.view,arch_db:partner_statement.detailed_activity_statement_document
+#: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
+msgid "<strong>The partner doesn't have due entries.</strong>"
+msgstr "<strong>Cari hesabın vadesi gelen kaydı yok.</strong>"
+
+#. module: partner_statement
+#: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__account_type
+#: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__account_type
+#: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__account_type
+#: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__account_type
+msgid "Account Type"
+msgstr "Hesap Türü"
+
+#. module: partner_statement
+#: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__excluded_accounts_selector
+#: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__excluded_accounts_selector
+#: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__excluded_accounts_selector
+#: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__excluded_accounts_selector
+msgid "Accounts to exclude"
+msgstr "Hariç tutulacak hesaplar"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/activity_statement_xlsx.py:0
+#: model:ir.actions.report,name:partner_statement.action_print_activity_statement
+#: model:ir.actions.report,name:partner_statement.action_print_activity_statement_html
+msgid "Activity Statement"
+msgstr "Hareket Ekstresi"
+
+#. module: partner_statement
+#: model:ir.model,name:partner_statement.model_activity_statement_wizard
+msgid "Activity Statement Wizard"
+msgstr "Hareket Ekstresi Sihirbazı"
+
+#. module: partner_statement
+#: model:ir.model,name:partner_statement.model_report_p_s_report_activity_statement_xlsx
+msgid "Activity Statement XLSL Report"
+msgstr "Hareket Ekstresi XLSL Raporu"
+
+#. module: partner_statement
+#: model:ir.actions.report,name:partner_statement.action_print_activity_statement_xlsx
+msgid "Activity Statement XLSX"
+msgstr "Hareket Ekstresi XLSX"
+
+#. module: partner_statement
+#: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
+msgid "Activity Statements"
+msgstr "Hareket Ekstreleri"
+
+#. module: partner_statement
+#: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
+msgid "Activity Statements show all transactions between two dates."
+msgstr "Hareket ekstreleri iki tarih arasındaki tüm işlemleri gösterir."
+
+#. module: partner_statement
+#: model:ir.model.fields.selection,name:partner_statement.selection__activity_statement_wizard__aging_type__days
+#: model:ir.model.fields.selection,name:partner_statement.selection__detailed_activity_statement_wizard__aging_type__days
+#: model:ir.model.fields.selection,name:partner_statement.selection__outstanding_statement_wizard__aging_type__days
+#: model:ir.model.fields.selection,name:partner_statement.selection__res_config_settings__default_aging_type__days
+#: model:ir.model.fields.selection,name:partner_statement.selection__statement_common_wizard__aging_type__days
+msgid "Age by Days"
+msgstr "Güne Göre Yaşlandırma"
+
+#. module: partner_statement
+#: model:ir.model.fields.selection,name:partner_statement.selection__activity_statement_wizard__aging_type__months
+#: model:ir.model.fields.selection,name:partner_statement.selection__detailed_activity_statement_wizard__aging_type__months
+#: model:ir.model.fields.selection,name:partner_statement.selection__outstanding_statement_wizard__aging_type__months
+#: model:ir.model.fields.selection,name:partner_statement.selection__res_config_settings__default_aging_type__months
+#: model:ir.model.fields.selection,name:partner_statement.selection__statement_common_wizard__aging_type__months
+msgid "Age by Months"
+msgstr "Aya Göre Yaşlandırma"
+
+#. module: partner_statement
+#: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__aging_type
+#: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__aging_type
+#: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__aging_type
+#: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__default_aging_type
+#: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__aging_type
+msgid "Aging Method"
+msgstr "Yaşlandırma Yöntemi"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/outstanding_statement_xlsx.py:0
+msgid "Aging Report at %(end)s in %(currency)s"
+msgstr "%(end)s tarihinde %(currency)s cinsinden Yaşlandırma Raporu"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/report_statement_common.py:0
+msgid "Aging Report at %(ending_date)s in %(currency)s"
+msgstr "%(ending_date)s tarihinde %(currency)s cinsinden Yaşlandırma Raporu"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/activity_statement_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
+msgid "Applied Amount"
+msgstr "Uygulanan Tutar"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/outstanding_statement_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
+msgid "Balance"
+msgstr "Bakiye"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/activity_statement_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
+msgid "Balance Forward"
+msgstr "Devreden Bakiye"
+
+#. module: partner_statement
+#: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
+msgid "Cancel"
+msgstr "İptal"
+
+#. module: partner_statement
+#: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__company_id
+#: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__company_id
+#: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__company_id
+#: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__company_id
+msgid "Company"
+msgstr "Şirket"
+
+#. module: partner_statement
+#: model:ir.model,name:partner_statement.model_res_config_settings
+msgid "Config Settings"
+msgstr "Yapılandırma Ayarları"
+
+#. module: partner_statement
+#: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__create_uid
+#: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__create_uid
+#: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__create_uid
+msgid "Created by"
+msgstr "Oluşturan"
+
+#. module: partner_statement
+#: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__create_date
+#: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__create_date
+#: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__create_date
+msgid "Created on"
+msgstr "Oluşturulma Tarihi"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/report_statement_common.py:0
+msgid "Current"
+msgstr "Güncel"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/outstanding_statement_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
+#: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
+msgid "Date"
+msgstr "Tarih"
+
+#. module: partner_statement
+#: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__date_end
+#: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__date_end
+#: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__date_end
+#: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__date_end
+msgid "Date End"
+msgstr "Bitiş Tarihi"
+
+#. module: partner_statement
+#: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__date_start
+#: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__date_start
+msgid "Date Start"
+msgstr "Başlangıç Tarihi"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/outstanding_statement_xlsx.py:0
+msgid "Date:"
+msgstr "Tarih:"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/outstanding_statement_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
+#: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
+msgid "Description"
+msgstr "Açıklama"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
+#: model:ir.actions.report,name:partner_statement.action_print_detailed_activity_statement
+#: model:ir.actions.report,name:partner_statement.action_print_detailed_activity_statement_html
+msgid "Detailed Activity Statement"
+msgstr "Detaylı Hareket Ekstresi"
+
+#. module: partner_statement
+#: model:ir.model,name:partner_statement.model_detailed_activity_statement_wizard
+msgid "Detailed Activity Statement Wizard"
+msgstr "Detaylı Hareket Ekstresi Sihirbazı"
+
+#. module: partner_statement
+#: model:ir.model,name:partner_statement.model_report_p_s_report_detailed_activity_statement_xlsx
+msgid "Detailed Activity Statement XLSL Report"
+msgstr "Detaylı Hareket Ekstresi XLSL Raporu"
+
+#. module: partner_statement
+#: model:ir.actions.report,name:partner_statement.action_print_detailed_activity_statement_xlsx
+msgid "Detailed Activity Statement XLSX"
+msgstr "Detaylı Hareket Ekstresi XLSX"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/activity_statement.py:0
+msgid ""
+"Detailed Statement between %(starting_date)s and %(ending_date)s in "
+"%(currency)s"
+msgstr ""
+"%(starting_date)s ve %(ending_date)s tarihleri arasındaki %(currency)s "
+"cinsinden Detaylı Ekstre"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/activity_statement.py:0
+msgid ""
+"Detailed Supplier Statement between %(starting_date)s and %(ending_date)s in"
+" %(currency)s"
+msgstr ""
+"%(starting_date)s ve %(ending_date)s tarihleri arasındaki %(currency)s "
+"cinsinden Detaylı Tedarikçi Ekstresi"
+
+#. module: partner_statement
+#: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__display_name
+#: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__display_name
+#: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__display_name
+msgid "Display Name"
+msgstr "Görünür Ad"
+
+#. module: partner_statement
+#: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__filter_partners_non_due
+#: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__filter_partners_non_due
+#: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__filter_partners_non_due
+#: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__filter_partners_non_due
+msgid "Don't show partners with no due entries"
+msgstr "Vadesi gelen kaydı olmayan carileri gösterme"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/outstanding_statement_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
+msgid "Due Date"
+msgstr "Vade Tarihi"
+
+#. module: partner_statement
+#: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__group_activity_statement
+msgid "Enable OCA Activity & Detailed Activity Statements"
+msgstr "OCA Hareket ve Detaylı Hareket Ekstrelerini Etkinleştir"
+
+#. module: partner_statement
+#: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__group_outstanding_statement
+msgid "Enable OCA Outstanding Statements"
+msgstr "OCA Ödenmemiş Ekstrelerini Etkinleştir"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/outstanding_statement_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
+#: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
+msgid "Ending Balance"
+msgstr "Kapanış Bakiyesi"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/detailed_activity_statement.py:0
+msgid "Ending Balance up to %(ending_date)s in %(currency)s"
+msgstr "%(ending_date)s tarihine kadar %(currency)s cinsinden Kapanış Bakiyesi"
+
+#. module: partner_statement
+#: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__filter_negative_balances
+#: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__filter_negative_balances
+#: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__filter_negative_balances
+#: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__default_filter_negative_balances
+#: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__filter_negative_balances
+msgid "Exclude Negative Balances"
+msgstr "Negatif Bakiyeleri Hariç Tut"
+
+#. module: partner_statement
+#: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__default_filter_partners_non_due
+msgid "Exclude partners with no due entries"
+msgstr "Vadesi gelen kaydı olmayan carileri hariç tut"
+
+#. module: partner_statement
+#: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
+msgid "Export PDF"
+msgstr "PDF Dışa Aktar"
+
+#. module: partner_statement
+#: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
+msgid "Export XLSX"
+msgstr "XLSX Dışa Aktar"
+
+#. module: partner_statement
+#: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__id
+#: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__id
+#: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__id
+msgid "ID"
+msgstr "ID"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
+msgid "Initial Balance"
+msgstr "Başlangıç Bakiyesi"
+
+#. module: partner_statement
+#: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__write_uid
+#: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__write_uid
+#: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Son Güncelleyen"
+
+#. module: partner_statement
+#: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__write_date
+#: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__write_date
+#: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__write_date
+msgid "Last Updated on"
+msgstr "Son Güncellenme Tarihi"
+
+#. module: partner_statement
+#: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__name
+#: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__name
+#: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__name
+#: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__name
+msgid "Name"
+msgstr "Ad"
+
+#. module: partner_statement
+#: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__number_partner_ids
+#: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__number_partner_ids
+#: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__number_partner_ids
+#: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__number_partner_ids
+msgid "Number Partner"
+msgstr "Cari Numarası"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/report_statement_common.py:0
+msgid "Older"
+msgstr "Daha Eski"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/outstanding_statement_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
+#: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
+msgid "Open Amount"
+msgstr "Açık Tutar"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/outstanding_statement_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
+msgid "Original"
+msgstr "Orijinal"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/activity_statement_xlsx.py:0
+#: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
+msgid "Original Amount"
+msgstr "Orijinal Tutar"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/outstanding_statement_xlsx.py:0
+#: model:ir.actions.report,name:partner_statement.action_print_outstanding_statement
+#: model:ir.actions.report,name:partner_statement.action_print_outstanding_statement_html
+#: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
+msgid "Outstanding Statement"
+msgstr "Ödenmemiş Ekstre"
+
+#. module: partner_statement
+#: model:ir.model,name:partner_statement.model_outstanding_statement_wizard
+msgid "Outstanding Statement Wizard"
+msgstr "Ödenmemiş Ekstre Sihirbazı"
+
+#. module: partner_statement
+#: model:ir.model,name:partner_statement.model_report_p_s_report_outstanding_statement_xlsx
+msgid "Outstanding Statement XLSL Report"
+msgstr "Ödenmemiş Ekstre XLSL Raporu"
+
+#. module: partner_statement
+#: model:ir.actions.report,name:partner_statement.action_print_outstanding_statement_xlsx
+msgid "Outstanding Statement XLSX"
+msgstr "Ödenmemiş Ekstre XLSX"
+
+#. module: partner_statement
+#: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
+msgid "Outstanding Statements show all transactions up to a date."
+msgstr "Ödenmemiş ekstreler bir tarihe kadarki tüm işlemleri gösterir."
+
+#. module: partner_statement
+#: model:ir.actions.act_window,name:partner_statement.activity_statement_wizard_action
+#: model:ir.model,name:partner_statement.model_report_partner_statement_activity_statement
+msgid "Partner Activity Statement"
+msgstr "Cari Hareket Ekstresi"
+
+#. module: partner_statement
+#: model:ir.actions.act_window,name:partner_statement.detailed_activity_statement_wizard_action
+#: model:ir.model,name:partner_statement.model_report_partner_statement_detailed_activity_statement
+msgid "Partner Detailed Activity Statement"
+msgstr "Cari Detaylı Hareket Ekstresi"
+
+#. module: partner_statement
+#: model:ir.actions.act_window,name:partner_statement.outstanding_statement_wizard_action
+#: model:ir.model,name:partner_statement.model_report_partner_statement_outstanding_statement
+msgid "Partner Outstanding Statement"
+msgstr "Cari Ödenmemiş Ekstre"
+
+#. module: partner_statement
+#: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
+msgid "Partner Statements"
+msgstr "Cari Ekstreleri"
+
+#. module: partner_statement
+#: model:ir.model.fields.selection,name:partner_statement.selection__activity_statement_wizard__account_type__liability_payable
+#: model:ir.model.fields.selection,name:partner_statement.selection__detailed_activity_statement_wizard__account_type__liability_payable
+#: model:ir.model.fields.selection,name:partner_statement.selection__outstanding_statement_wizard__account_type__liability_payable
+#: model:ir.model.fields.selection,name:partner_statement.selection__statement_common_wizard__account_type__liability_payable
+msgid "Payable"
+msgstr "Borç"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/activity_statement.py:0
+msgid "Payment"
+msgstr "Ödeme"
+
+#. module: partner_statement
+#: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
+msgid "Please set defaults under Activity Statements."
+msgstr "Lütfen Hareket Ekstreleri altındaki varsayılanları ayarlayın."
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/detailed_activity_statement.py:0
+msgid "Prior Balance up to %(ending_date)s in %(currency)s"
+msgstr "%(ending_date)s tarihine kadar %(currency)s cinsinden Önceki Bakiye"
+
+#. module: partner_statement
+#: model:ir.model.fields.selection,name:partner_statement.selection__activity_statement_wizard__account_type__asset_receivable
+#: model:ir.model.fields.selection,name:partner_statement.selection__detailed_activity_statement_wizard__account_type__asset_receivable
+#: model:ir.model.fields.selection,name:partner_statement.selection__outstanding_statement_wizard__account_type__asset_receivable
+#: model:ir.model.fields.selection,name:partner_statement.selection__statement_common_wizard__account_type__asset_receivable
+msgid "Receivable"
+msgstr "Alacak"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/outstanding_statement_xlsx.py:0
+msgid "Reference Number"
+msgstr "Referans Numarası"
+
+#. module: partner_statement
+#: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
+#: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_balance
+msgid "Reference number"
+msgstr "Referans numarası"
+
+#. module: partner_statement
+#: model:ir.model.fields,help:partner_statement.field_activity_statement_wizard__excluded_accounts_selector
+#: model:ir.model.fields,help:partner_statement.field_detailed_activity_statement_wizard__excluded_accounts_selector
+#: model:ir.model.fields,help:partner_statement.field_outstanding_statement_wizard__excluded_accounts_selector
+#: model:ir.model.fields,help:partner_statement.field_statement_common_wizard__excluded_accounts_selector
+msgid ""
+"Select account codes to be excluded with a comma-separated list of "
+"expressions like 70%."
+msgstr ""
+"70% gibi ifadelerin virgülle ayrılmış bir listesiyle hariç tutulacak hesap "
+"kodlarını seçin."
+
+#. module: partner_statement
+#: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__show_aging_buckets
+#: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__show_aging_buckets
+#: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__show_aging_buckets
+#: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__default_show_aging_buckets
+#: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__show_aging_buckets
+msgid "Show Aging Buckets"
+msgstr "Vade Gruplarını Göster"
+
+#. module: partner_statement
+#: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__show_balance
+msgid "Show Balance column"
+msgstr "Bakiye Sütununu Göster"
+
+#. module: partner_statement
+#: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__show_only_overdue
+#: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__show_only_overdue
+#: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__show_only_overdue
+#: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__show_only_overdue
+msgid "Show Only Overdue"
+msgstr "Sadece Vadesi Geçenleri Göster"
+
+#. module: partner_statement
+#: model:ir.model.fields,help:partner_statement.field_activity_statement_wizard__show_only_overdue
+#: model:ir.model.fields,help:partner_statement.field_detailed_activity_statement_wizard__show_only_overdue
+#: model:ir.model.fields,help:partner_statement.field_outstanding_statement_wizard__show_only_overdue
+#: model:ir.model.fields,help:partner_statement.field_statement_common_wizard__show_only_overdue
+msgid "Show only lines due before the selected date"
+msgstr "Seçilen tarihten önce vadesi gelen satırları göster"
+
+#. module: partner_statement
+#: model:ir.model,name:partner_statement.model_statement_common
+msgid "Statement Reports Common"
+msgstr "Ekstre Raporları Ortak"
+
+#. module: partner_statement
+#: model:ir.model,name:partner_statement.model_statement_common_wizard
+msgid "Statement Reports Common Wizard"
+msgstr "Ekstre Raporları Ortak Sihirbazı"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/activity_statement.py:0
+msgid ""
+"Statement between %(starting_date)s and %(ending_date)s in %(currency)s"
+msgstr ""
+"%(starting_date)s ve %(ending_date)s tarihleri arasındaki %(currency)s "
+"cinsinden Ekstre"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/outstanding_statement_xlsx.py:0
+msgid "Statement from:"
+msgstr "Ekstre Tarihi:"
+
+#. module: partner_statement
+#: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
+#: model_terms:ir.ui.view,arch_db:partner_statement.detailed_activity_statement_document
+#: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_document
+msgid "Statement of Account"
+msgstr "Cari Ekstre"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/outstanding_statement_xlsx.py:0
+msgid "Statement of Account from %s"
+msgstr "%s Tarihli Cari Ekstre"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/outstanding_statement_xlsx.py:0
+msgid "Statement to:"
+msgstr "Bitiş Tarihi:"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/outstanding_statement.py:0
+msgid "Statement up to %(ending_date)s in %(currency)s"
+msgstr "%(ending_date)s tarihine kadar %(currency)s cinsinden Ekstre"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/detailed_activity_statement.py:0
+msgid "Supplier Ending Balance up to %(ending_date)s in %(currency)s"
+msgstr ""
+"%(ending_date)s tarihine kadar %(currency)s cinsinden Tedarikçi Kapanış "
+"Bakiyesi"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/detailed_activity_statement.py:0
+msgid "Supplier Prior Balance up to %(ending_date)s in %(currency)s"
+msgstr ""
+"%(ending_date)s tarihine kadar %(currency)s cinsinden Tedarikçi Önceki "
+"Bakiyesi"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/activity_statement.py:0
+msgid ""
+"Supplier Statement between %(starting_date)s and %(ending_date)s in "
+"%(currency)s"
+msgstr ""
+"%(starting_date)s ve %(ending_date)s tarihleri arasındaki %(currency)s "
+"cinsinden Tedarikçi Ekstresi"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/outstanding_statement.py:0
+msgid "Supplier Statement up to %(ending_date)s in %(currency)s"
+msgstr ""
+"%(ending_date)s tarihine kadar %(currency)s cinsinden Tedarikçi Ekstresi"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/report_statement_common.py:0
+msgid "Total"
+msgstr "Toplam"
+
+#. module: partner_statement
+#: model:res.groups,name:partner_statement.group_activity_statement
+msgid "Use activity statements"
+msgstr "Hareket ekstrelerini kullan"
+
+#. module: partner_statement
+#: model:res.groups,name:partner_statement.group_outstanding_statement
+msgid "Use outstanding statements"
+msgstr "Ödenmemiş ekstreleri kullan"
+
+#. module: partner_statement
+#. odoo-python
+#: code:addons/partner_statement/report/activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
+#: code:addons/partner_statement/report/outstanding_statement_xlsx.py:0
+msgid "VAT:"
+msgstr "VKN:"
+
+#. module: partner_statement
+#: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
+msgid "View"
+msgstr "Görüntüle"
+
+#. module: partner_statement
+#: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
+msgid "or"
+msgstr "veya"

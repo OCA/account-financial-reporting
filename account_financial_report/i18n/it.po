@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-06-03 12:07+0000\n"
-"PO-Revision-Date: 2024-12-08 11:06+0000\n"
+"PO-Revision-Date: 2025-11-05 09:42+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
@@ -838,6 +838,11 @@ msgid "Foreign Currency"
 msgstr "Valuta estera"
 
 #. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
+msgid "Format"
+msgstr "Formato"
+
+#. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.open_items_wizard
@@ -927,6 +932,7 @@ msgstr "Raggruppa registrazioni per"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__grouped_by
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__grouped_by
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__grouped_by
 msgid "Grouped By"
 msgstr "Raggruppato per"
@@ -1096,6 +1102,17 @@ msgid "Journals"
 msgstr "Sezionali"
 
 #. module: account_financial_report
+#: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_abstract_wizard__label_text_limit
+#: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__label_text_limit
+#: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__label_text_limit
+#: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__label_text_limit
+#: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__label_text_limit
+#: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__label_text_limit
+#: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__label_text_limit
+msgid "Label Text Limit"
+msgstr "Limite testo etichetta"
+
+#. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration__write_uid
 #: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration_line__write_uid
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__write_uid
@@ -1148,9 +1165,16 @@ msgstr "Riga"
 #. odoo-python
 #: code:addons/account_financial_report/report/general_ledger.py:0
 #: code:addons/account_financial_report/report/open_items.py:0
+#: code:addons/account_financial_report/report/open_items_xlsx.py:0
 #: code:addons/account_financial_report/report/trial_balance.py:0
 msgid "Missing Partner"
 msgstr "Partner mancante"
+
+#. module: account_financial_report
+#. odoo-python
+#: code:addons/account_financial_report/report/open_items.py:0
+msgid "Missing Salesperson"
+msgstr "Addetto vendite non trovato"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_age_report_configuration_line
@@ -1226,7 +1250,7 @@ msgid "No limit"
 msgstr "Nessun limite"
 
 #. module: account_financial_report
-#: model:ir.model.fields.selection,name:account_financial_report.selection__general_ledger_report_wizard__grouped_by__
+#: model:ir.model.fields.selection,name:account_financial_report.selection__general_ledger_report_wizard__grouped_by__none
 msgid "None"
 msgstr "Nessuna"
 
@@ -1348,6 +1372,11 @@ msgid "Partner Initial balance"
 msgstr "Partner - Saldo iniziale"
 
 #. module: account_financial_report
+#: model:ir.model.fields.selection,name:account_financial_report.selection__open_items_report_wizard__grouped_by__salesperson
+msgid "Partner Salesperson"
+msgstr "Addetto vendite partner"
+
+#. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 msgid "Partner cumul aged balance"
@@ -1369,6 +1398,7 @@ msgstr "Saldo iniziale partner"
 
 #. module: account_financial_report
 #: model:ir.model.fields.selection,name:account_financial_report.selection__general_ledger_report_wizard__grouped_by__partners
+#: model:ir.model.fields.selection,name:account_financial_report.selection__open_items_report_wizard__grouped_by__partners
 msgid "Partners"
 msgstr "Partner"
 
@@ -1572,7 +1602,7 @@ msgstr "Movimenti obiettivo"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_filters
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 msgid "Target moves filter"
-msgstr "Filtro registrazioni"
+msgstr "Filtro movimenti obiettivo"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1681,6 +1711,16 @@ msgstr ""
 #: code:addons/account_financial_report/wizard/trial_balance_wizard.py:0
 msgid "The hierarchy level to filter on must be greater than 0."
 msgstr "Il livello gerarchico da filtrare deve essere maggiore di 0."
+
+#. module: account_financial_report
+#. odoo-python
+#: code:addons/account_financial_report/report/trial_balance.py:0
+msgid ""
+"There is a problem in the structure of the account groups. You may need to "
+"create some child group of %s."
+msgstr ""
+"C'è un problema nella struttura dei gruppi contabilità. Serve creare alcuni "
+"figli del gruppo %s."
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__domain

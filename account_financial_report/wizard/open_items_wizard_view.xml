@@ -21,8 +21,10 @@
                     <group name="other_filters">
                         <field name="target_move" widget="radio" />
                         <field name="show_partner_details" />
+                        <field name="grouped_by" />
                         <field name="hide_account_at_0" />
                         <field name="foreign_currency" />
+                        <field name="label_text_limit" />
                     </group>
                 </group>
                 <group name="partner_filter" col="1">

@@ -68,7 +68,7 @@ class VATReportWizard(models.TransientModel):
 
     def _print_report(self, report_type):
         self.ensure_one()
-        data = self._prepare_vat_report()
+        data = self._prepare_report_data()
         if report_type == "xlsx":
             report_name = "a_f_r.report_vat_report_xlsx"
         else:
@@ -83,6 +83,7 @@ class VATReportWizard(models.TransientModel):
         )
 
     def _prepare_vat_report(self):
+        # TODO: Kept for compatibility - To be merged into _prepare_report_data in 19
         self.ensure_one()
         return {
             "wizard_id": self.id,
@@ -94,6 +95,11 @@ class VATReportWizard(models.TransientModel):
             "tax_detail": self.tax_detail,
             "account_financial_report_lang": self.env.lang,
         }
+
+    def _prepare_report_data(self):
+        res = super()._prepare_report_data()
+        res.update(self._prepare_vat_report())
+        return res
 
     def _export(self, report_type):
         """Default export is PDF."""

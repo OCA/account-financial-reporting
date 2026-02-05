@@ -2,6 +2,10 @@
 <odoo>
     <template id="account_financial_report.html_container">
         <t t-call-assets="web.assets_backend" />
+        <link
+            href="/account_financial_report/static/src/css/report_html.css"
+            rel="stylesheet"
+        />
         <t t-set="body_classname" t-value="'container'" />
         <t t-call="web.report_layout">
             <t t-out="0" />
@@ -9,7 +13,10 @@
     </template>
     <template id="account_financial_report.internal_layout">
         <div class="article o_account_financial_reports_page">
-            <t t-call-assets="web.assets_backend" />
+            <link
+                href="/account_financial_report/static/src/css/report.css"
+                rel="stylesheet"
+            />
             <t t-out="0" />
         </div>
         <div class="footer">

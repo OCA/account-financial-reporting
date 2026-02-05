@@ -91,10 +91,18 @@ class TrialBalanceReportWizard(models.TransientModel):
             self.account_ids = self.env["account.account"].search(
                 [("code", ">=", start_range), ("code", "<=", end_range)]
             )
-            if self.company_id:
-                self.account_ids = self.account_ids.filtered(
-                    lambda a: self.company_id in a.company_ids
-                )
+            if isinstance(self.account_ids[0].id, models.NewId):
+                real_ids = self.account_ids.ids
+                account_ids = self.env["account.account"].browse(real_ids)
+                if self.company_id:
+                    self.account_ids = account_ids.filtered(
+                        lambda a: self.company_id in a.company_ids
+                    )
+            else:
+                if self.company_id:
+                    self.account_ids = self.account_ids.filtered(
+                        lambda a: self.company_id in a.company_ids
+                    )
 
     @api.constrains("show_hierarchy", "show_hierarchy_level")
     def _check_show_hierarchy_level(self):
@@ -166,7 +174,7 @@ class TrialBalanceReportWizard(models.TransientModel):
         if not self.company_id:
             return res
         else:
-            res["domain"]["account_ids"] += [("company_id", "=", self.company_id.id)]
+            res["domain"]["account_ids"] += [("company_ids", "in", self.company_id.ids)]
             res["domain"]["partner_ids"] += self._get_partner_ids_domain()
             res["domain"]["date_range_id"] += [
                 "|",
@@ -241,7 +249,7 @@ class TrialBalanceReportWizard(models.TransientModel):
 
     def _print_report(self, report_type):
         self.ensure_one()
-        data = self._prepare_report_trial_balance()
+        data = self._prepare_report_data()
         if report_type == "xlsx":
             report_name = "a_f_r.report_trial_balance_xlsx"
         else:
@@ -256,6 +264,7 @@ class TrialBalanceReportWizard(models.TransientModel):
         )
 
     def _prepare_report_trial_balance(self):
+        # TODO: Kept for compatibility - To be merged into _prepare_report_data in 19
         self.ensure_one()
         return {
             "wizard_id": self.id,
@@ -278,6 +287,11 @@ class TrialBalanceReportWizard(models.TransientModel):
             "account_financial_report_lang": self.env.lang,
             "grouped_by": self.grouped_by,
         }
+
+    def _prepare_report_data(self):
+        res = super()._prepare_report_data()
+        res.update(self._prepare_report_trial_balance())
+        return res
 
     def _export(self, report_type):
         """Default export is PDF."""

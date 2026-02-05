@@ -217,7 +217,7 @@ class TestVATReport(AccountTestInvoicingCommon):
                 "tax_detail": True,
             }
         )
-        data = vat_report._prepare_vat_report()
+        data = vat_report._prepare_report_data()
         res_data = self.env[
             "report.account_financial_report.vat_report"
         ]._get_report_values(vat_report, data)

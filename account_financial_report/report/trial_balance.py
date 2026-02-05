@@ -5,6 +5,7 @@
 
 
 from odoo import _, api, models
+from odoo.exceptions import UserError
 from odoo.tools.float_utils import float_is_zero
 
 
@@ -30,7 +31,11 @@ class TrialBalanceReport(models.AbstractModel):
         if account_ids:
             accounts_domain += [("id", "in", account_ids)]
         domain = [("date", "<", date_from)]
-        accounts = self.env["account.account"].search(accounts_domain)
+        accounts = (
+            self.env["account.account"]
+            .with_context(active_test=False)
+            .search(accounts_domain)
+        )
         domain += [("account_id", "in", accounts.ids)]
         if company_id:
             domain += [("company_id", "=", company_id)]
@@ -70,7 +75,11 @@ class TrialBalanceReport(models.AbstractModel):
         if account_ids:
             accounts_domain += [("id", "in", account_ids)]
         domain = [("date", "<", date_from), ("date", ">=", fy_start_date)]
-        accounts = self.env["account.account"].search(accounts_domain)
+        accounts = (
+            self.env["account.account"]
+            .with_context(active_test=False)
+            .search(accounts_domain)
+        )
         domain += [("account_id", "in", accounts.ids)]
         if company_id:
             domain += [("company_id", "=", company_id)]
@@ -148,7 +157,11 @@ class TrialBalanceReport(models.AbstractModel):
         if account_ids:
             accounts_domain += [("id", "in", account_ids)]
         domain = [("date", "<", fy_start_date)]
-        accounts = self.env["account.account"].search(accounts_domain)
+        accounts = (
+            self.env["account.account"]
+            .with_context(active_test=False)
+            .search(accounts_domain)
+        )
         domain += [("account_id", "in", accounts.ids)]
         if company_id:
             domain += [("company_id", "=", company_id)]
@@ -193,7 +206,7 @@ class TrialBalanceReport(models.AbstractModel):
         initial_balances = self.env["account.move.line"].read_group(
             domain=domain,
             fields=["account_id", "balance", "amount_currency:sum"],
-            groupby=["account_id"],
+            groupby=["account_id", "currency_id"],
         )
         pl_initial_balance = 0.0
         pl_initial_currency_balance = 0.0
@@ -425,13 +438,17 @@ class TrialBalanceReport(models.AbstractModel):
             # If explicit list of accounts is provided,
             # don't include unaffected earnings account
             unaffected_earnings_account = False
-        accounts = self.env["account.account"].search(accounts_domain)
+        accounts = (
+            self.env["account.account"]
+            .with_context(active_test=False)
+            .search(accounts_domain)
+        )
         tb_initial_acc = []
         for account in accounts:
             tb_initial_acc.append(
                 {"account_id": account.id, "balance": 0.0, "amount_currency": 0.0}
             )
-        groupby_fields = ["account_id"]
+        groupby_fields = ["account_id", "currency_id"]
         if grouped_by:
             groupby_fields.append("analytic_account_ids")
         initial_domain_bs = self._get_initial_balances_bs_ml_domain(
@@ -514,13 +531,13 @@ class TrialBalanceReport(models.AbstractModel):
             tb_initial_prt_bs = self.env["account.move.line"].read_group(
                 domain=initial_domain_bs,
                 fields=["account_id", "partner_id", "balance", "amount_currency:sum"],
-                groupby=["account_id", "partner_id"],
+                groupby=["account_id", "partner_id", "currency_id"],
                 lazy=False,
             )
             tb_initial_prt_pl = self.env["account.move.line"].read_group(
                 domain=initial_domain_pl,
                 fields=["account_id", "partner_id", "balance", "amount_currency:sum"],
-                groupby=["account_id", "partner_id"],
+                groupby=["account_id", "partner_id", "currency_id"],
             )
             tb_initial_prt = tb_initial_prt_bs + tb_initial_prt_pl
             if hide_account_at_0:
@@ -535,7 +552,7 @@ class TrialBalanceReport(models.AbstractModel):
                     "balance",
                     "amount_currency:sum",
                 ],
-                groupby=["account_id", "partner_id"],
+                groupby=["account_id", "currency_id", "partner_id"],
                 lazy=False,
             )
         total_amount = {}
@@ -687,8 +704,26 @@ class TrialBalanceReport(models.AbstractModel):
         return trial_balance, total_amount_grouped
 
     def _get_hierarchy_groups(self, group_ids, groups_data, foreign_currency):
-        for group_id in group_ids:
+        processed_groups = []
+        # Sort groups so that parent groups are processed before child groups
+        groups = (
+            self.env["account.group"]
+            .browse(group_ids)
+            .sorted(key=lambda x: x.complete_code)
+        )
+        for group in groups:
+            group_id = group.id
             parent_id = groups_data[group_id]["parent_id"]
+            if group_id in processed_groups:
+                raise UserError(
+                    _(
+                        "There is a problem in the structure of the account groups. "
+                        "You may need to create some child group of %s."
+                    )
+                    % groups_data[group_id]["name"]
+                )
+            else:
+                processed_groups.append(parent_id)
             while parent_id:
                 if parent_id not in groups_data.keys():
                     group = self.env["account.group"].browse(parent_id)
@@ -727,7 +762,11 @@ class TrialBalanceReport(models.AbstractModel):
 
     def _get_groups_data(self, accounts_data, total_amount, foreign_currency):
         accounts_ids = list(accounts_data.keys())
-        accounts = self.env["account.account"].browse(accounts_ids)
+        accounts = (
+            self.env["account.account"]
+            .with_context(active_test=False)
+            .browse(accounts_ids)
+        )
         account_group_relation = {}
         for account in accounts:
             accounts_data[account.id]["complete_code"] = (
@@ -839,6 +878,7 @@ class TrialBalanceReport(models.AbstractModel):
         return groups_data
 
     def _get_report_values(self, docids, data):
+        res = super()._get_report_values(docids, data)
         show_partner_details = data["show_partner_details"]
         wizard_id = data["wizard_id"]
         company = self.env["res.company"].browse(data["company_id"])
@@ -933,29 +973,32 @@ class TrialBalanceReport(models.AbstractModel):
                     total_amount[account_id]["currency_name"] = accounts_data[
                         account_id
                     ]["currency_name"]
-        return {
-            "doc_ids": [wizard_id],
-            "doc_model": "trial.balance.report.wizard",
-            "docs": self.env["trial.balance.report.wizard"].browse(wizard_id),
-            "foreign_currency": data["foreign_currency"],
-            "company_name": company.display_name,
-            "company_currency": company.currency_id,
-            "currency_name": company.currency_id.name,
-            "date_from": data["date_from"],
-            "date_to": data["date_to"],
-            "only_posted_moves": data["only_posted_moves"],
-            "hide_account_at_0": data["hide_account_at_0"],
-            "show_partner_details": data["show_partner_details"],
-            "limit_hierarchy_level": data["limit_hierarchy_level"],
-            "show_hierarchy": show_hierarchy,
-            "hide_parent_hierarchy_level": data["hide_parent_hierarchy_level"],
-            "trial_balance": trial_balance,
-            "trial_balance_grouped": trial_balance_grouped,
-            "total_amount": total_amount,
-            "total_amount_grouped": total_amount_grouped,
-            "accounts_data": accounts_data,
-            "partners_data": partners_data,
-            "show_hierarchy_level": show_hierarchy_level,
-            "currency_model": self.env["res.currency"],
-            "grouped_by": grouped_by,
-        }
+        res.update(
+            {
+                "doc_ids": [wizard_id],
+                "doc_model": "trial.balance.report.wizard",
+                "docs": self.env["trial.balance.report.wizard"].browse(wizard_id),
+                "foreign_currency": data["foreign_currency"],
+                "company_name": company.display_name,
+                "company_currency": company.currency_id,
+                "currency_name": company.currency_id.name,
+                "date_from": data["date_from"],
+                "date_to": data["date_to"],
+                "only_posted_moves": data["only_posted_moves"],
+                "hide_account_at_0": data["hide_account_at_0"],
+                "show_partner_details": data["show_partner_details"],
+                "limit_hierarchy_level": data["limit_hierarchy_level"],
+                "show_hierarchy": show_hierarchy,
+                "hide_parent_hierarchy_level": data["hide_parent_hierarchy_level"],
+                "trial_balance": trial_balance,
+                "trial_balance_grouped": trial_balance_grouped,
+                "total_amount": total_amount,
+                "total_amount_grouped": total_amount_grouped,
+                "accounts_data": accounts_data,
+                "partners_data": partners_data,
+                "show_hierarchy_level": show_hierarchy_level,
+                "currency_model": self.env["res.currency"],
+                "grouped_by": grouped_by,
+            }
+        )
+        return res

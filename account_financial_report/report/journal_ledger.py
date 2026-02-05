@@ -9,6 +9,7 @@ from odoo import models
 
 
 class JournalLedgerReport(models.AbstractModel):
+    _inherit = "report.account_financial_report.abstract_report"
     _name = "report.account_financial_report.journal_ledger"
     _description = "Journal Ledger Report"
 
@@ -33,9 +34,13 @@ class JournalLedgerReport(models.AbstractModel):
         return domain
 
     def _get_journal_ledgers(self, wizard, journal_ids, company):
-        journals = self.env["account.journal"].search(
-            self._get_journal_ledgers_domain(wizard, journal_ids, company),
-            order="name asc",
+        journals = (
+            self.env["account.journal"]
+            .with_context(active_test=False)
+            .search(
+                self._get_journal_ledgers_domain(wizard, journal_ids, company),
+                order="name asc",
+            )
         )
         journal_ledgers_data = []
         for journal in journals:
@@ -263,8 +268,10 @@ class JournalLedgerReport(models.AbstractModel):
                 journal_id = ml_data["journal_id"]
                 if journal_id not in journals_taxes_data.keys():
                     journals_taxes_data[journal_id] = {}
-                taxes = self.env["account.tax"].search_fetch(
-                    [("id", "in", tax_ids)], ["name", "description"]
+                taxes = (
+                    self.env["account.tax"]
+                    .with_context(active_test=False)
+                    .search_fetch([("id", "in", tax_ids)], ["name", "description"])
                 )
                 for tax in taxes:
                     if tax.id not in journals_taxes_data[journal_id]:
@@ -300,6 +307,7 @@ class JournalLedgerReport(models.AbstractModel):
         return journals_taxes_data_2
 
     def _get_report_values(self, docids, data):
+        res = super()._get_report_values(docids, data)
         wizard_id = data["wizard_id"]
         wizard = self.env["journal.ledger.report.wizard"].browse(wizard_id)
         company = self.env["res.company"].browse(data["company_id"])
@@ -351,25 +359,28 @@ class JournalLedgerReport(models.AbstractModel):
             if journal_id in journal_totals.keys():
                 for item in ["debit", "credit"]:
                     journal_ledger_data[item] += journal_totals[journal_id][item]
-        return {
-            "doc_ids": [wizard_id],
-            "doc_model": "journal.ledger.report.wizard",
-            "docs": self.env["journal.ledger.report.wizard"].browse(wizard_id),
-            "group_option": data["group_option"],
-            "foreign_currency": data["foreign_currency"],
-            "with_account_name": data["with_account_name"],
-            "company_name": company.display_name,
-            "currency_name": company.currency_id.name,
-            "date_from": data["date_from"],
-            "date_to": data["date_to"],
-            "move_target": data["move_target"],
-            "with_auto_sequence": data["with_auto_sequence"],
-            "account_ids_data": account_ids_data,
-            "partner_ids_data": partner_ids_data,
-            "currency_ids_data": currency_ids_data,
-            "move_ids_data": move_ids_data,
-            "tax_line_data": tax_line_ids_data,
-            "move_line_ids_taxes_data": move_line_ids_taxes_data,
-            "Journal_Ledgers": journal_ledgers_data,
-            "Moves": moves_data,
-        }
+        res.update(
+            {
+                "doc_ids": [wizard_id],
+                "doc_model": "journal.ledger.report.wizard",
+                "docs": self.env["journal.ledger.report.wizard"].browse(wizard_id),
+                "group_option": data["group_option"],
+                "foreign_currency": data["foreign_currency"],
+                "with_account_name": data["with_account_name"],
+                "company_name": company.display_name,
+                "currency_name": company.currency_id.name,
+                "date_from": data["date_from"],
+                "date_to": data["date_to"],
+                "move_target": data["move_target"],
+                "with_auto_sequence": data["with_auto_sequence"],
+                "account_ids_data": account_ids_data,
+                "partner_ids_data": partner_ids_data,
+                "currency_ids_data": currency_ids_data,
+                "move_ids_data": move_ids_data,
+                "tax_line_data": tax_line_ids_data,
+                "move_line_ids_taxes_data": move_line_ids_taxes_data,
+                "Journal_Ledgers": journal_ledgers_data,
+                "Moves": moves_data,
+            }
+        )
+        return res

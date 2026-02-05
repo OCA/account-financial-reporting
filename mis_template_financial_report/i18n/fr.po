@@ -1,0 +1,108 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mis_template_financial_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2022-02-11 15:16+0000\n"
+"Last-Translator: Abdourahmane Wone <abdourahmanewone@gmail.com>\n"
+"Language-Team: none\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.3.2\n"
+
+#. module: mis_template_financial_report
+#: model:ir.model.fields,field_description:mis_template_financial_report.field_mis_report_instance__allow_horizontal
+msgid "Allow Horizontal"
+msgstr "Autoriser l'horizontale"
+
+#. module: mis_template_financial_report
+#: model:mis.report.kpi,description:mis_template_financial_report.kpi_assets
+msgid "Assets"
+msgstr "Actifs"
+
+#. module: mis_template_financial_report
+#: model:mis.report,name:mis_template_financial_report.report_bs
+msgid "Balance Sheet"
+msgstr "Bilan"
+
+#. module: mis_template_financial_report
+#: model:ir.model.fields,field_description:mis_template_financial_report.field_mis_report_instance__horizontal
+msgid "Horizontal"
+msgstr "Horizontal"
+
+#. module: mis_template_financial_report
+#: model:mis.report.kpi,description:mis_template_financial_report.kpi_liability
+msgid "Liabilities"
+msgstr "Passifs"
+
+#. module: mis_template_financial_report
+#: model:mis.report.kpi,description:mis_template_financial_report.kpi_liability_total
+msgid "Liability"
+msgstr "Passif"
+
+#. module: mis_template_financial_report
+#: model:mis.report.kpi,description:mis_template_financial_report.kpi_loss
+msgid "Loss"
+msgstr "Perte"
+
+#. module: mis_template_financial_report
+#: model:ir.model,name:mis_template_financial_report.model_mis_report_instance
+msgid "MIS Report Instance"
+msgstr "Instance de rapport SIG"
+
+#. module: mis_template_financial_report
+#: model:ir.model,name:mis_template_financial_report.model_mis_report_kpi
+msgid "MIS Report KPI"
+msgstr ""
+
+#. module: mis_template_financial_report
+#: model:mis.report.kpi,description:mis_template_financial_report.kpi_profit
+msgid "Profit"
+msgstr "Profit"
+
+#. module: mis_template_financial_report
+#: model:mis.report,name:mis_template_financial_report.report_pl
+msgid "Profit & Loss"
+msgstr "Perte & profit"
+
+#. module: mis_template_financial_report
+#: model:mis.report.kpi,description:mis_template_financial_report.kpi_liability_pl_subreport
+msgid "Profit / Loss"
+msgstr "Profit / Perte"
+
+#. module: mis_template_financial_report
+#: model:mis.report.kpi,description:mis_template_financial_report.kpi_pl_to_report
+msgid "Profit or loss to report"
+msgstr "Bénéfice ou perte à déclarer"
+
+#. module: mis_template_financial_report
+#: model:ir.model.fields,field_description:mis_template_financial_report.field_mis_report_kpi__split_after
+msgid "Split After"
+msgstr ""
+
+#. module: mis_template_financial_report
+#: model:ir.model.fields,help:mis_template_financial_report.field_mis_report_kpi__split_after
+msgid ""
+"Split the table after this KPI. This allows displaying KPIs next to each "
+"other in non-comparison mode"
+msgstr ""
+
+#. module: mis_template_financial_report
+#: model_terms:ir.ui.view,arch_db:mis_template_financial_report.mis_report_view_kpi_form
+msgid "Splitting"
+msgstr ""
+
+#~ msgid "Display Name"
+#~ msgstr "Afficher un nom"
+
+#~ msgid "ID"
+#~ msgstr "ID"
+
+#~ msgid "Last Modified on"
+#~ msgstr "Dernière modification le"

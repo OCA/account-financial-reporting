@@ -91,6 +91,11 @@
                                 context="{'skip_search_count': 1}"
                             />
                         </page>
+                        <page name="format" string="Format">
+                            <group>
+                                <field name="label_text_limit" />
+                            </group>
+                        </page>
                     </notebook>
                 </div>
                 <div invisible="only_one_unaffected_earnings_account">

@@ -409,6 +409,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         return aged_partner_data
 
     def _get_report_values(self, docids, data):
+        res = super()._get_report_values(docids, data)
         wizard_id = data["wizard_id"]
         company = self.env["res.company"].browse(data["company_id"])
         company_id = data["company_id"]
@@ -451,18 +452,23 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         aged_partner_data = self.with_context(
             age_partner_config=aged_partner_configuration
         )._calculate_percent(aged_partner_data)
-        return {
-            "doc_ids": [wizard_id],
-            "doc_model": "aged.partner.balance.report.wizard",
-            "docs": self.env["aged.partner.balance.report.wizard"].browse(wizard_id),
-            "company_name": company.display_name,
-            "currency_name": company.currency_id.name,
-            "date_at": date_at,
-            "only_posted_moves": only_posted_moves,
-            "aged_partner_balance": aged_partner_data,
-            "show_move_lines_details": show_move_line_details,
-            "age_partner_config": aged_partner_configuration,
-        }
+        res.update(
+            {
+                "doc_ids": [wizard_id],
+                "doc_model": "aged.partner.balance.report.wizard",
+                "docs": self.env["aged.partner.balance.report.wizard"].browse(
+                    wizard_id
+                ),
+                "company_name": company.display_name,
+                "currency_name": company.currency_id.name,
+                "date_at": date_at,
+                "only_posted_moves": only_posted_moves,
+                "aged_partner_balance": aged_partner_data,
+                "show_move_lines_details": show_move_line_details,
+                "age_partner_config": aged_partner_configuration,
+            }
+        )
+        return res
 
     def _get_ml_fields(self):
         return self.COMMON_ML_FIELDS + [

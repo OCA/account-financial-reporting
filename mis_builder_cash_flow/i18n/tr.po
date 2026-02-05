@@ -1,0 +1,312 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mis_builder_cash_flow
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-01-21 21:15+0000\n"
+"Last-Translator: Ediz Duman <neps1192@gmail.com>\n"
+"Language-Team: none\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
+
+#. module: mis_builder_cash_flow
+#: model:mis.report.instance.period,name:mis_builder_cash_flow.mis_period_plus_1w
+msgid "+1w"
+msgstr "+1 Hafta"
+
+#. module: mis_builder_cash_flow
+#: model:mis.report.instance.period,name:mis_builder_cash_flow.mis_period_plus_2w
+msgid "+2w"
+msgstr "+2 Hafta"
+
+#. module: mis_builder_cash_flow
+#: model:mis.report.instance.period,name:mis_builder_cash_flow.mis_period_plus_3w
+msgid "+3w"
+msgstr "+3 Hafta"
+
+#. module: mis_builder_cash_flow
+#: model:mis.report.instance.period,name:mis_builder_cash_flow.mis_period_plus_4w
+msgid "+4w"
+msgstr "+4 Hafta"
+
+#. module: mis_builder_cash_flow
+#: model:mis.report.instance.period,name:mis_builder_cash_flow.mis_period_plus_5w
+msgid "+5w"
+msgstr "+5 Hafta"
+
+#. module: mis_builder_cash_flow
+#: model:mis.report.instance.period,name:mis_builder_cash_flow.mis_period_plus_6w
+msgid "+6w"
+msgstr "+6 Hafta"
+
+#. module: mis_builder_cash_flow
+#: model:mis.report.instance.period,name:mis_builder_cash_flow.mis_period_plus_7w
+msgid "+7w"
+msgstr "+7 Hafta"
+
+#. module: mis_builder_cash_flow
+#: model:mis.report.instance.period,name:mis_builder_cash_flow.mis_period_plus_8w
+msgid "+8w"
+msgstr "+8 Hafta"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model,name:mis_builder_cash_flow.model_account_account
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__account_id
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__account_id
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_forecast_line_view_search
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_search_view
+msgid "Account"
+msgstr "Hesap"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model.fields,help:mis_builder_cash_flow.field_mis_cash_flow__account_type
+msgid ""
+"Account Type is used for information purpose, to generate country-specific "
+"legal reports, and set the rules to close a fiscal year and generate opening"
+" entries."
+msgstr ""
+"Hesap Türü, bilgi amaçlı kullanılır, ülkeye özel yasal raporları oluşturmak "
+"için kullanılır ve bir mali yılı kapatma ve açılış kayıtlarını oluşturma "
+"kurallarını belirler."
+
+#. module: mis_builder_cash_flow
+#: model:mis.report.kpi,description:mis_builder_cash_flow.mis_kpi_balance
+msgid "BALANCE"
+msgstr "BAKİYE"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__balance
+msgid "Balance"
+msgstr "Bakiye"
+
+#. module: mis_builder_cash_flow
+#: model:mis.report,name:mis_builder_cash_flow.mis_report_cash_flow
+#: model:mis.report.instance,name:mis_builder_cash_flow.mis_instance_cash_flow
+msgid "Cash Flow"
+msgstr "Nakit Akışı"
+
+#. module: mis_builder_cash_flow
+#: model:ir.actions.act_window,name:mis_builder_cash_flow.action_mis_cash_flow_forecast_line
+#: model:ir.ui.menu,name:mis_builder_cash_flow.menu_mis_cash_flow_forecast_line
+msgid "Cash Flow Forecast Line"
+msgstr "Nakit Akışı Tahmin Satırı"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__company_id
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__company_id
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_forecast_line_view_search
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_search_view
+msgid "Company"
+msgstr "Şirket"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__create_uid
+msgid "Created by"
+msgstr "Oluşturan"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__create_date
+msgid "Created on"
+msgstr "Oluşturulma"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__credit
+msgid "Credit"
+msgstr "Alacak"
+
+#. module: mis_builder_cash_flow
+#: model:mis.report.instance.period,name:mis_builder_cash_flow.mis_period_current
+msgid "Current"
+msgstr "Güncel"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__date
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__date
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_forecast_line_view_search
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_search_view
+msgid "Date"
+msgstr "Tarih"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__debit
+msgid "Debit"
+msgstr "Borç"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__display_name
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__display_name
+msgid "Display Name"
+msgstr "Görünüm Adı"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model.fields.selection,name:mis_builder_cash_flow.selection__mis_cash_flow__line_type__forecast_line
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_search_view
+msgid "Forecast Line"
+msgstr "Tahmin Satırı"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_account_account__hide_in_cash_flow
+msgid "Hide in Cash Flow?"
+msgstr "Nakit Akışında Gizlensin mi?"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__id
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__id
+msgid "ID"
+msgstr "ID"
+
+#. module: mis_builder_cash_flow
+#: model:mis.report.kpi,description:mis_builder_cash_flow.mis_kpi_in_total
+msgid "IN TOTAL"
+msgstr "TOPLAM GİRİŞ"
+
+#. module: mis_builder_cash_flow
+#: model:mis.report.kpi,description:mis_builder_cash_flow.mis_kpi_in_forecast
+msgid "In forecast"
+msgstr "Tahmin içinde"
+
+#. module: mis_builder_cash_flow
+#: model:mis.report.kpi,description:mis_builder_cash_flow.mis_kpi_in_receivable
+msgid "In receivable"
+msgstr "Alacaklar içinde"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__move_line_id
+#: model:ir.model.fields.selection,name:mis_builder_cash_flow.selection__mis_cash_flow__line_type__move_line
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_search_view
+msgid "Journal Item"
+msgstr "Yevmiye Kaydı"
+
+#. module: mis_builder_cash_flow
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_search_view
+msgid "Journal items where matching number isn't set"
+msgstr "Eşleşme numarası atanmamış yevmiye kayıtları"
+
+#. module: mis_builder_cash_flow
+#: model:mis.report.kpi,description:mis_builder_cash_flow.mis_kpi_aliquidity
+msgid "LIQUIDITY"
+msgstr "NAKİT AKIŞKANLIĞI"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__write_uid
+msgid "Last Updated by"
+msgstr "Son Güncelleyen"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__write_date
+msgid "Last Updated on"
+msgstr "Son Güncelleme"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__line_type
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_search_view
+msgid "Line Type"
+msgstr "Satır Tipi"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model,name:mis_builder_cash_flow.model_mis_cash_flow
+msgid "MIS Cash Flow"
+msgstr "MIS Nakit Akışı"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model,name:mis_builder_cash_flow.model_mis_cash_flow_forecast_line
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_forecast_line_view_form
+msgid "MIS Cash Flow Forecast Line"
+msgstr "MIS Nakit Akışı Tahmin Satırı"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__full_reconcile_id
+msgid "Matching Number"
+msgstr "Eşleşme Numarası"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__name
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__name
+msgid "Name"
+msgstr "Adı"
+
+#. module: mis_builder_cash_flow
+#: model:mis.report.kpi,description:mis_builder_cash_flow.mis_kpi_out_total
+msgid "OUT TOTAL"
+msgstr "TOPLAM ÇIKIŞ"
+
+#. module: mis_builder_cash_flow
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_tree_view
+msgid "Open Journal Item / Forecast Line"
+msgstr "Açık Yevmiye Kaydı / Tahmin Satırı"
+
+#. module: mis_builder_cash_flow
+#: model:mis.report.kpi,description:mis_builder_cash_flow.mis_kpi_out_forecast
+msgid "Out forecast"
+msgstr "Çıkış tahmini"
+
+#. module: mis_builder_cash_flow
+#: model:mis.report.kpi,description:mis_builder_cash_flow.mis_kpi_out_payable
+msgid "Out payable"
+msgstr "Borçlar içinde"
+
+#. module: mis_builder_cash_flow
+#: model:mis.report.kpi,description:mis_builder_cash_flow.mis_kpi_period_balance
+msgid "PERIOD BALANCE"
+msgstr "DÖNEM BAKİYESİ"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__parent_state
+msgid "Parent State"
+msgstr "Üst Durum"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__partner_id
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__partner_id
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_forecast_line_view_search
+msgid "Partner"
+msgstr "İş Ortağı"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__reconciled
+msgid "Reconciled"
+msgstr "Uzlaştırıldı"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model.fields,help:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__account_id
+msgid "The account of the forecast line is only for informative purpose"
+msgstr "Tahmin satırının hesabı sadece bilgilendirme amaçlıdır"
+
+#. module: mis_builder_cash_flow
+#. odoo-python
+#: code:addons/mis_builder_cash_flow/models/mis_cash_flow_forecast_line.py:0
+msgid "The forecast line company must be one of the account's companies."
+msgstr "Tahmin satırı şirketi, hesabın şirketlerinden biri olmalıdır."
+
+#. module: mis_builder_cash_flow
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_form_view
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_tree_view
+msgid "Total"
+msgstr "Toplam"
+
+#. module: mis_builder_cash_flow
+#: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__account_type
+msgid "Type"
+msgstr "Tür"
+
+#. module: mis_builder_cash_flow
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_search_view
+msgid "Unreconciled"
+msgstr "Uzlaştırılmamış"
+
+#. module: mis_builder_cash_flow
+#: model:mis.report.instance.period,name:mis_builder_cash_flow.mis_period_plus_fourth_month
+msgid "fourth month"
+msgstr "dördüncü ay"
+
+#. module: mis_builder_cash_flow
+#: model:mis.report.instance.period,name:mis_builder_cash_flow.mis_period_plus_third_month
+msgid "third month"
+msgstr "üçüncü ay"

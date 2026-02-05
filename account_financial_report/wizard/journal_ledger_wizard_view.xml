@@ -32,6 +32,7 @@
                         <field name="foreign_currency" />
                         <field name="with_account_name" />
                         <field name="with_auto_sequence" />
+                        <field name="label_text_limit" />
                     </group>
                     <group />
                 </group>
