@@ -179,7 +179,9 @@ class OpenItemsReport(models.AbstractModel):
                 else:
                     open_items_move_lines_data[acc_id][group_id].append(move_line)
         journals_data = self._get_journals_data(list(journals_ids))
-        accounts_data = self._get_accounts_data(open_items_move_lines_data.keys())
+        accounts_data = self._get_accounts_data(
+            open_items_move_lines_data.keys(), company_id
+        )
         return (
             move_lines,
             partners_data,
@@ -189,19 +191,48 @@ class OpenItemsReport(models.AbstractModel):
         )
 
     @api.model
-    def _calculate_amounts(self, open_items_move_lines_data):
+    def _calculate_amounts(self, open_items_move_lines_data, company_id):
         total_amount = {}
+        company = self.env["res.company"].browse(company_id)
         for account_id in open_items_move_lines_data.keys():
             total_amount[account_id] = {}
             total_amount[account_id]["residual"] = 0.0
+            total_amount[account_id]["residual_currency"] = 0.0
             for partner_id in open_items_move_lines_data[account_id].keys():
                 total_amount[account_id][partner_id] = {}
                 total_amount[account_id][partner_id]["residual"] = 0.0
-                for move_line in open_items_move_lines_data[account_id][partner_id]:
+                total_amount[account_id][partner_id]["residual_currency"] = 0.0
+                move_lines_by_partner = open_items_move_lines_data[account_id][
+                    partner_id
+                ]
+                move_currency_id = (
+                    move_lines_by_partner
+                    and move_lines_by_partner[0]["currency_id"]
+                    or False
+                )
+                move_lines_have_same_currency = all(
+                    element["currency_id"] == move_lines_by_partner[0]["currency_id"]
+                    for element in move_lines_by_partner
+                )
+                foreign_currency_id = (
+                    move_currency_id
+                    if move_currency_id
+                    and move_lines_have_same_currency
+                    and move_currency_id != company.currency_id.id
+                    else False
+                )
+                for move_line in move_lines_by_partner:
                     total_amount[account_id][partner_id]["residual"] += move_line[
                         "amount_residual"
                     ]
+                    total_amount[account_id][partner_id]["residual_currency"] += (
+                        move_line["amount_residual_currency"]
+                    )
                     total_amount[account_id]["residual"] += move_line["amount_residual"]
+                total_amount[account_id][partner_id]["foreign_currency_id"] = (
+                    foreign_currency_id
+                )
+
         return total_amount
 
     @api.model
@@ -271,7 +302,7 @@ class OpenItemsReport(models.AbstractModel):
             grouped_by,
         )
 
-        total_amount = self._calculate_amounts(open_items_move_lines_data)
+        total_amount = self._calculate_amounts(open_items_move_lines_data, company_id)
         open_items_move_lines_data = self._order_open_items_by_date(
             open_items_move_lines_data,
             show_partner_details,
