@@ -145,9 +145,14 @@ class OpenItemsReportWizard(models.TransientModel):
             if account_id not in total_amount:
                 total_amount[account_id] = {}
             if partner_id_key not in total_amount[account_id]:
-                total_amount[account_id][partner_id_key] = {"residual": 0.0}
+                total_amount[account_id][partner_id_key] = {}
+                total_amount[account_id][partner_id_key]["residual"] = 0.0
+                total_amount[account_id][partner_id_key]["residual_currency"] = 0.0
             total_amount[account_id][partner_id_key]["residual"] += line[
                 "amount_residual"
+            ]
+            total_amount[account_id][partner_id_key]["residual_currency"] += line[
+                "amount_residual_currency"
             ]
         return total_amount
 

@@ -357,6 +357,10 @@ class OpenItemsXslx(models.AbstractModel):
         elif type_object == "partner_subtotal":
             name = my_object["name"]
             my_object["residual"] = total_amount[account_id][partner_id]["residual"]
+            if foreign_currency_id:
+                my_object["residual_currency"] = total_amount[account_id][partner_id][
+                    "residual_currency"
+                ]
             label = _("Ending balance")
         return super().write_ending_balance_from_dict(
             my_object, name, label, report_data

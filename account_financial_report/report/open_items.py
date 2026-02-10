@@ -229,6 +229,9 @@ class OpenItemsReport(models.AbstractModel):
                         move_line["amount_residual_currency"]
                     )
                     total_amount[account_id]["residual"] += move_line["amount_residual"]
+                    total_amount[account_id]["residual_currency"] += move_line[
+                        "amount_residual_currency"
+                    ]
                 total_amount[account_id][partner_id]["foreign_currency_id"] = (
                     foreign_currency_id
                 )
