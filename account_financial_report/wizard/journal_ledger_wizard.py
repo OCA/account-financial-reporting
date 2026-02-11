@@ -94,8 +94,10 @@ class JournalLedgerReportWizard(models.TransientModel):
         journals = self.journal_ids
         if not journals:
             # Not selecting a journal means that we'll display all journals
-            journals = self.env["account.journal"].search(
-                [("company_id", "=", self.company_id.id)]
+            journals = (
+                self.env["account.journal"]
+                .with_context(active_test=False)
+                .search([("company_id", "=", self.company_id.id)])
             )
         res.update(
             {

@@ -33,9 +33,13 @@ class JournalLedgerReport(models.AbstractModel):
         return domain
 
     def _get_journal_ledgers(self, wizard, journal_ids, company):
-        journals = self.env["account.journal"].search(
-            self._get_journal_ledgers_domain(wizard, journal_ids, company),
-            order="name asc",
+        journals = (
+            self.env["account.journal"]
+            .with_context(active_test=False)
+            .search(
+                self._get_journal_ledgers_domain(wizard, journal_ids, company),
+                order="name asc",
+            )
         )
         journal_ledgers_data = []
         for journal in journals:
