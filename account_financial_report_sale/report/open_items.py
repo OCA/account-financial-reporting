@@ -1,7 +1,7 @@
 # Copyright 2024 Tecnativa - Carolina Fernandez
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import _, models
+from odoo import models
 
 
 class OpenItemsReport(models.AbstractModel):
@@ -37,7 +37,9 @@ class OpenItemsReport(models.AbstractModel):
                 move = self.env["account.move"].browse(move_line["move_id"][0])
                 partner = move.partner_shipping_id
                 group_id = partner.id or 0
-                group_name = partner.display_name or _("Missing Delivery Address")
+                group_name = partner.display_name or self.env._(
+                    "Missing Delivery Address"
+                )
                 if group_id not in partners_data:
                     partners_data[group_id] = {"id": group_id, "name": group_name}
                 # Update move_line with partner_shipping

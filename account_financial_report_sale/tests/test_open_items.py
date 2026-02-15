@@ -1,7 +1,7 @@
 # Copyright 2024 Tecnativa - Carolina Fernandez
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo.fields import Date
+from odoo.fields import Date, Domain
 from odoo.tests import tagged
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
@@ -24,9 +24,7 @@ class TestOpenItems(AccountTestInvoicingCommon):
     def test_open_items_grouped_by_partner_shipping(self):
         open_item_wizard = self.env["open.items.report.wizard"]
         all_accounts = self.env["account.account"].search(
-            [
-                ("reconcile", "=", True),
-            ],
+            Domain([("reconcile", "=", True)]),
             order="code",
         )
         wizard = open_item_wizard.create(
