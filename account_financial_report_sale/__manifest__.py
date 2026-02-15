@@ -5,7 +5,7 @@
     "version": "18.0.1.0.0",
     "category": "Reporting",
     "summary": "OCA Financial Reports Sale",
-    "author": "Tecnativa," "Odoo Community Association (OCA)",
+    "author": "Tecnativa,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/account-financial-reporting",
     "depends": ["account_financial_report", "sale"],
     "data": [],
