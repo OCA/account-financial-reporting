@@ -66,7 +66,7 @@ class LiquidityForecastXslx(models.AbstractModel):
             company = self.env.user.company_id
         currency = report_data["company_currency"]
         if currency.position == "after":
-            money_string = f" #,##0.{ '0' * currency.decimal_places }"
+            money_string = f" #,##0.{'0' * currency.decimal_places}"
         elif currency.position == "before":
             money_string = f"[${currency.symbol}]" + " #,##0.%s" % (
                 "0" * currency.decimal_places

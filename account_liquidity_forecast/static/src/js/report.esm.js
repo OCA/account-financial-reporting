@@ -1,5 +1,5 @@
 /** @odoo-module */
-/* eslint-disable no-undef */
+
 
 import {useComponent, useEffect} from "@odoo/owl";
 

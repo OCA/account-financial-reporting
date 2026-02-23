@@ -4,7 +4,7 @@
     "version": "18.0.1.0.0",
     "category": "Reporting",
     "summary": "Account Liquidity Forecast",
-    "author": "ForgeFlow," "Odoo Community Association (OCA)",
+    "author": "ForgeFlow,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/account-financial-reporting",
     "depends": ["account", "report_xlsx", "report_xlsx_helper"],
     "data": [
