@@ -87,8 +87,10 @@ class LiquidityForecastXslx(models.AbstractModel):
             0,
             row_pos,
             4,
-            self.env._("Liquidity Forecast - {} - {}").format(
-                company.display_name, report_data["currency_name"]
+            self.env._(
+                "Liquidity Forecast - %(company_name)s - %(currency_name)s",
+                company_name=company.display_name,
+                currency_name=report_data["currency_name"],
             ),
             FORMATS["format_ws_title_center"],
         )

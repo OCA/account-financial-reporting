@@ -4,16 +4,17 @@ from odoo.tests.common import TransactionCase
 
 
 class TestLiquidityForecastReport(TransactionCase):
-    def setUp(self):
-        super().setUp()
-        self.report = self.env["report.account_liquidity_forecast.liquidity_forecast"]
-        self.company = self.env.user.company_id
-        self.today = date.today()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.report = cls.env["report.account_liquidity_forecast.liquidity_forecast"]
+        cls.company = cls.env.user.company_id
+        cls.today = date.today()
 
-        self.data = {
-            "company_id": self.company.id,
-            "date_from": (self.today - timedelta(days=30)).strftime("%Y-%m-%d"),
-            "date_to": self.today.strftime("%Y-%m-%d"),
+        cls.data = {
+            "company_id": cls.company.id,
+            "date_from": (cls.today - timedelta(days=30)).strftime("%Y-%m-%d"),
+            "date_to": cls.today.strftime("%Y-%m-%d"),
             "period_length": "days",
             "only_posted_moves": True,
         }

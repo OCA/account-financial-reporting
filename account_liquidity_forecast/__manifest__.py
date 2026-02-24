@@ -1,7 +1,7 @@
 # Copyright 2023 ForgeFlow S.L. (https://www.forgeflow.com)
 {
     "name": "Account Liquidity Forecast",
-    "version": "18.0.1.0.0",
+    "version": "19.0.1.0.0",
     "category": "Reporting",
     "summary": "Account Liquidity Forecast",
     "author": "ForgeFlow,Odoo Community Association (OCA)",
@@ -21,8 +21,8 @@
     ],
     "assets": {
         "web.assets_backend": [
-            "account_liquidity_forecast/static/src/js/report.esm.js",
-            "account_liquidity_forecast/static/src/js/report_action.esm.js",
+            "account_liquidity_forecast/static/src/js/*.js",
+            "account_liquidity_forecast/static/src/xml/*.xml",
         ],
     },
     "installable": True,

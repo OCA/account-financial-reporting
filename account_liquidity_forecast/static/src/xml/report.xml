@@ -1,0 +1,18 @@
+<template>
+    <!-- Buttons of the Control Panel -->
+    <t
+        t-name="account_liquidity_forecast.ReportAction"
+        t-inherit="web.ReportAction"
+        t-inherit-mode="extension"
+    >
+        <xpath expr="//button" position="after">
+            <button
+                t-if="isAccountLiquidityFinancialReport"
+                t-on-click="export_liquidity_forecast_report"
+                type="button"
+                class="btn btn-secondary"
+                title="Export"
+            >Export</button>
+        </xpath>
+    </t>
+</template>

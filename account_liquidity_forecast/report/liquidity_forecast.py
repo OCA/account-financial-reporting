@@ -4,6 +4,7 @@ import calendar
 import datetime
 
 from odoo import fields, models
+from odoo.fields import Domain
 from odoo.tools.float_utils import float_is_zero
 from odoo.tools.misc import format_date
 
@@ -60,15 +61,18 @@ class LiquidityForecastReport(models.AbstractModel):
             else:
                 domain += [("move_id.state", "in", ["posted", "draft"])]
 
-            initial_balances = self.env["account.move.line"].read_group(
-                domain=domain,
-                fields=["balance:sum"],
+            initial_balances = self.env["account.move.line"]._read_group(
+                domain,
                 groupby=["company_id"],
+                aggregates=["balance:sum"],
             )
             initial_balance_amount = 0.0
-            if initial_balances:
-                initial_balance = initial_balances[0]
-                initial_balance_amount = initial_balance["balance"]
+            # find entry matching the requested company id
+            for bal in initial_balances:
+                comp = bal[0]
+                if comp and comp.id == data.get("company_id"):
+                    initial_balance_amount = bal[1]
+                    break
             line["periods"][period["sequence"]]["amount"] = initial_balance_amount
         else:
             ending_balance_line = list(
@@ -278,10 +282,12 @@ class LiquidityForecastReport(models.AbstractModel):
         ]
         if period["sequence"] > 0:
             domain += [("date", ">=", period["date_from"])]
-        totals = self.env["account.liquidity.forecast.planning.item"].read_group(
-            domain=domain,
-            fields=["amount:sum"],
+        totals = self.env[
+            "account.liquidity.forecast.planning.item"
+        ].formatted_read_group(
+            domain,
             groupby=["group_id"],
+            aggregates=["amount:sum"],
         )
         for total in totals:
             group_id = total["group_id"] and total["group_id"][0] or False
@@ -292,6 +298,7 @@ class LiquidityForecastReport(models.AbstractModel):
                     group_id
                 )
                 group_name = group and group.name or ""
+            group_domain = Domain(domain) & Domain(total["__extra_domain"])
             title = group_name or self.env._("Forecast Planning Items")
             code = f"cash_flow_line_{direction}_planned_item"
             if group:
@@ -325,9 +332,9 @@ class LiquidityForecastReport(models.AbstractModel):
                 cash_flow_line = cash_flow_lines[0]
             sign = direction == "in" and 1 or -1
             cash_flow_line["periods"][period["sequence"]]["amount"] += (
-                total["amount"] * sign
+                total["amount:sum"] * sign
             )
-            cash_flow_line["periods"][period["sequence"]]["domain"] = total["__domain"]
+            cash_flow_line["periods"][period["sequence"]]["domain"] = group_domain
 
     def _prepare_cash_flow_lines_payment_planning_item_in(
         self, data, liquidity_forecast_lines, period, periods
@@ -386,7 +393,7 @@ class LiquidityForecastReport(models.AbstractModel):
                 name = format_date(self.env, current_date, date_format="MMMM yyyy")
 
             if sequence == 0:
-                name = self.env._("Current %s") % name
+                name = self.env._("Current %s", name)
 
             period = {
                 "sequence": sequence,

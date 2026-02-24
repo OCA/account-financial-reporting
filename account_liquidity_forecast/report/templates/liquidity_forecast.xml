@@ -24,7 +24,7 @@
             <div class="row">
                 <h4
                     class="mt0"
-                    t-esc="title or 'Odoo Report'"
+                    t-out="title or 'Odoo Report'"
                     style="text-align: center;"
                 />
             </div>
@@ -57,9 +57,9 @@
             <div class="act_as_row">
                 <div class="act_as_cell">
                     From:
-                    <span t-esc="date_from" t-options="{'widget': 'date'}" />
+                    <span t-out="date_from" t-options="{'widget': 'date'}" />
                     To
-                    <span t-esc="date_to" t-options="{'widget': 'date'}" />
+                    <span t-out="date_to" t-options="{'widget': 'date'}" />
                 </div>
                 <div class="act_as_cell">
                     <t t-if="only_posted_moves">All posted entries</t>
@@ -89,7 +89,7 @@
                             class="act_as_cell"
                             t-attf-style="width: #{period_width}%;"
                         >
-                            <t t-esc="period['name']" />
+                            <t t-out="period['name']" />
                         </div>
                     </t>
                 </div>
@@ -115,7 +115,7 @@
                     class="act_as_cell left"
                     t-attf-style="#{style} width: #{items_width}%;"
                 >
-                    <t t-esc="line['title']" />
+                    <t t-out="line['title']" />
                 </div>
                 <!--## Period-->
                 <t t-foreach="periods" t-as="period">
@@ -134,14 +134,14 @@
                                     t-att-res-model="line['model']"
                                 >
                                     <t
-                                        t-esc="line['periods'][period['sequence']]['amount']"
+                                        t-out="line['periods'][period['sequence']]['amount']"
                                         t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                                     />
                                 </span>
                             </t>
                             <t t-if="not line['periods'][period['sequence']]['domain']">
                                 <t
-                                    t-esc="line['periods'][period['sequence']]['amount']"
+                                    t-out="line['periods'][period['sequence']]['amount']"
                                     t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                                 />
                             </t>
@@ -169,11 +169,11 @@
             <div class="act_as_row labels" style="font-weight: bold;">
                 <!--## Items-->
                 <div class="act_as_cell amount" t-attf-style="width: #{items_width}%;">
-                    <span t-esc="end_value" />
+                    <span t-out="end_value" />
                 </div>
                 <!--## Period-->
                 <div class="act_as_cell amount" t-attf-style="width: #{period_width}%;">
-                    <span t-esc="period" />
+                    <span t-out="period" />
                 </div>
             </div>
         </div>

@@ -1,6 +1,5 @@
 /** @odoo-module */
 
-
 import {useComponent, useEffect} from "@odoo/owl";
 
 // Utility function to convert string to title case
@@ -25,14 +24,17 @@ function enrich(component, targetElement, selector, isIFrame = false) {
     }
 
     // Collect targets based on selector
-    const targets = selector
-        ? [...contentDocument.querySelectorAll(selector)]
-        : [contentDocument];
+    const targets = [];
+    if (selector) {
+        targets.push(...contentDocument.querySelectorAll(selector));
+    } else {
+        targets.push(contentDocument);
+    }
 
     // Add action links to elements with res-model and domain attributes
     for (const currentTarget of targets) {
         const elementsToWrap = currentTarget.querySelectorAll("[res-model][domain]");
-        for (const element of elementsToWrap) {
+        for (const element of elementsToWrap.values()) {
             const wrapper = doc.createElement("a");
             wrapper.setAttribute("href", "#");
             wrapper.addEventListener("click", (ev) => {
