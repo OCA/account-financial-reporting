@@ -98,16 +98,19 @@ class GeneralLedgerReportWizard(models.TransientModel):
     def on_change_account_range(self):
         if (
             self.account_code_from
-            and self.account_code_from.code.isdigit()
+            and self.account_code_from.code
             and self.account_code_to
-            and self.account_code_to.code.isdigit()
+            and self.account_code_to.code
         ):
-            start_range = int(self.account_code_from.code)
-            end_range = int(self.account_code_to.code)
-            domain = [("code", ">=", start_range), ("code", "<=", end_range)]
+            start_range = str(self.account_code_from.code)
+            end_range = str(self.account_code_to.code)
+            domain = [
+                ("code_store", ">=", start_range),
+                ("code_store", "<=", end_range),
+            ]
             if self.company_id:
                 domain.append(("company_ids", "in", self.company_id.ids))
-            self.account_ids = self.env["account.account"].search(domain)
+            self.account_ids = [(6, 0, self.env["account.account"].search(domain).ids)]
 
     def _init_date_from(self):
         """set start date to begin of current year if fiscal year running"""
