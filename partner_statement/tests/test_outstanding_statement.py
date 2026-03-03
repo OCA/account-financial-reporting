@@ -1,8 +1,8 @@
 # Copyright 2018 ForgeFlow, S.L. (https://www.forgeflow.com)
 # Copyright 2025 Simone Rubino - PyTech
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-
 from dateutil.relativedelta import relativedelta
+from freezegun import freeze_time
 
 from odoo import fields
 from odoo.tests.common import Form, TransactionCase, new_test_user
@@ -162,6 +162,7 @@ class TestOutstandingStatement(TransactionCase):
         other_partner_data = report["data"].get(other_partner.id)
         self.assertFalse(other_partner_data)
 
+    @freeze_time("2026-01-01 08:00")
     def test_show_only_overdue(self):
         """If "Show Only Overdue" is enabled,
         only overdue lines are shown.
