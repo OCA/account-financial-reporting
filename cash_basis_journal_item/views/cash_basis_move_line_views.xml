@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_cash_basis_move_line_tree" model="ir.ui.view">
+        <field name="name">cash.basis.move.line.tree</field>
+        <field name="model">cash.basis.move.line</field>
+        <field name="arch" type="xml">
+            <tree create="false" edit="false" delete="false">
+                <field name="date" />
+                <field name="move_id" />
+                <field name="name" />
+                <field name="ref" optional="show" />
+                <field name="partner_id" />
+                <field name="account_id" />
+                <field name="journal_id" />
+                <field name="debit" sum="Total Debit" />
+                <field name="credit" sum="Total Credit" />
+                <field name="balance" sum="Total Balance" />
+                <field name="amount_currency" optional="hide" />
+                <field name="currency_id" optional="hide" />
+                <field name="analytic_account_id" optional="show" />
+                <field name="tax_line_id" optional="hide" />
+                <field name="reconcile_percentage" optional="hide" />
+                <field name="company_id" groups="base.group_multi_company" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_cash_basis_move_line_search" model="ir.ui.view">
+        <field name="name">cash.basis.move.line.search</field>
+        <field name="model">cash.basis.move.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="move_id" />
+                <field name="name" />
+                <field name="ref" />
+                <field name="date" />
+                <field name="partner_id" />
+                <field name="account_id" />
+                <field name="journal_id" />
+                <field name="product_id" />
+                <field name="analytic_account_id" />
+                <separator />
+                <filter
+                    name="filter_date_this_month"
+                    string="This Month"
+                    domain="[('date', '&gt;=', (context_today() - relativedelta(day=1)).strftime('%Y-%m-%d')),
+                             ('date', '&lt;=', (context_today() + relativedelta(day=31)).strftime('%Y-%m-%d'))]"
+                />
+                <filter
+                    name="filter_date_this_year"
+                    string="This Year"
+                    domain="[('date', '&gt;=', (context_today() - relativedelta(month=1, day=1)).strftime('%Y-%m-%d')),
+                             ('date', '&lt;=', (context_today() + relativedelta(month=12, day=31)).strftime('%Y-%m-%d'))]"
+                />
+                <separator />
+                <filter
+                    name="filter_direct_copy"
+                    string="Direct Copy"
+                    domain="[('partial_reconcile_id', '=', False)]"
+                />
+                <filter
+                    name="filter_reconciliation"
+                    string="From Reconciliation"
+                    domain="[('partial_reconcile_id', '!=', False)]"
+                />
+                <separator />
+                <group expand="0" string="Group By">
+                    <filter
+                        name="group_by_date"
+                        string="Date"
+                        context="{'group_by': 'date'}"
+                    />
+                    <filter
+                        name="group_by_partner"
+                        string="Partner"
+                        context="{'group_by': 'partner_id'}"
+                    />
+                    <filter
+                        name="group_by_account"
+                        string="Account"
+                        context="{'group_by': 'account_id'}"
+                    />
+                    <filter
+                        name="group_by_journal"
+                        string="Journal"
+                        context="{'group_by': 'journal_id'}"
+                    />
+                    <filter
+                        name="group_by_analytic"
+                        string="Analytic Account"
+                        context="{'group_by': 'analytic_account_id'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_cash_basis_move_line_pivot" model="ir.ui.view">
+        <field name="name">cash.basis.move.line.pivot</field>
+        <field name="model">cash.basis.move.line</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="date" type="col" />
+                <field name="account_id" type="row" />
+                <field name="debit" type="measure" />
+                <field name="credit" type="measure" />
+                <field name="balance" type="measure" />
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_cash_basis_move_line" model="ir.actions.act_window">
+        <field name="name">Cash Basis Journal Items</field>
+        <field name="res_model">cash.basis.move.line</field>
+        <field name="view_mode">tree,pivot</field>
+        <field name="context">{'create': False, 'edit': False, 'delete': False}</field>
+    </record>
+
+    <menuitem
+        id="menu_cash_basis_move_line"
+        name="Cash Basis Journal Items"
+        parent="account.menu_finance_reports"
+        action="action_cash_basis_move_line"
+        sequence="100"
+    />
+
+</odoo>
