@@ -1,6 +1,6 @@
 # Copyright 2019 ADHOC SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -36,7 +36,7 @@ class MisCashFlowForecastLine(models.Model):
                 and line.company_id not in line.account_id.company_ids
             ):
                 raise ValidationError(
-                    _(
+                    self.env._(
                         "The forecast line company must be one of the "
                         "account's companies."
                     )

@@ -5,7 +5,7 @@
         <field name="name">account.account.form</field>
         <field name="inherit_id" ref="account.view_account_form" />
         <field name="arch" type="xml">
-            <field name="deprecated" position="after">
+            <field name="active" position="after">
                 <field name="account_type" invisible="1" />
                 <field
                     name="hide_in_cash_flow"

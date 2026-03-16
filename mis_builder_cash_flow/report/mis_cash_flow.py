@@ -19,7 +19,7 @@ class MisCashFlow(models.Model):
     account_id = fields.Many2one(
         comodel_name="account.account",
         string="Account",
-        auto_join=True,
+        bypass_search_access=True,
         index=True,
         readonly=True,
     )
@@ -29,13 +29,13 @@ class MisCashFlow(models.Model):
     move_line_id = fields.Many2one(
         comodel_name="account.move.line",
         string="Journal Item",
-        auto_join=True,
+        bypass_search_access=True,
         readonly=True,
     )
     company_id = fields.Many2one(
         comodel_name="res.company",
         string="Company",
-        auto_join=True,
+        bypass_search_access=True,
         readonly=True,
         index=True,
     )
@@ -108,7 +108,7 @@ class MisCashFlow(models.Model):
             FROM mis_cash_flow_forecast_line as fl
         """
         tools.drop_view_if_exists(self.env.cr, self._table)
-        self._cr.execute(
+        self.env.cr.execute(
             "CREATE OR REPLACE VIEW %s AS (%s)", (AsIs(self._table), AsIs(query))
         )
 
