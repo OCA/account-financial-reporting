@@ -6,7 +6,7 @@
     "name": "MIS Builder Cash Flow",
     "version": "18.0.1.0.1",
     "license": "AGPL-3",
-    "author": "ADHOC SA, " "Odoo Community Association (OCA)",
+    "author": "ADHOC SA, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/account-financial-reporting",
     "depends": ["mis_builder"],
     "data": [
