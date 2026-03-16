@@ -61,13 +61,16 @@ class GeneralLedgerReport(models.AbstractModel):
             )
         return taxes_data
 
-    def _get_account_type_domain(self, grouped_by):
+    def _get_account_type_domain(self, grouped_by, model_name="account.move.line"):
         """To avoid set all possible types, set in or not in as operator of the types
         we are interested in. In v15 we used the internal_type field (type of
         account.account.type)."""
-        at_op = "in" if grouped_by != "taxes" else "not in"
+        at_op = "=" if grouped_by != "taxes" else "!="
+        fname = "is_account_reconcile"
+        if model_name == "account.account":
+            fname = "reconcile"
         return [
-            ("account_type", at_op, ["asset_receivable", "liability_payable"]),
+            (fname, at_op, True),
         ]
 
     def _get_acc_prt_accounts_ids(self, company_id, grouped_by):
@@ -76,7 +79,7 @@ class GeneralLedgerReport(models.AbstractModel):
             return []
         accounts_domain = [
             ("company_ids", "in", [company_id]),
-        ] + self._get_account_type_domain(grouped_by)
+        ] + self._get_account_type_domain(grouped_by, "account.account")
         acc_prt_accounts = self.env["account.account"].search(accounts_domain)
         return acc_prt_accounts.ids
 
@@ -94,8 +97,8 @@ class GeneralLedgerReport(models.AbstractModel):
         domain += [("date", "<", date_from)]
         accounts = self.env["account.account"].search(accounts_domain)
         domain += [("account_id", "in", accounts.ids)]
-        if acc_prt and grouped_by != "none":
-            domain += self._get_account_type_domain(grouped_by)
+        if acc_prt:
+            domain += self._get_account_type_domain(grouped_by, "account.move.line")
         return domain
 
     def _get_initial_balances_pl_ml_domain(
