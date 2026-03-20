@@ -43,6 +43,8 @@ class AgedPartnerBalanceWizard(models.TransientModel):
     age_partner_config_id = fields.Many2one(
         "account.age.report.configuration", string="Intervals configuration"
     )
+    current_asset_accounts_only = fields.Boolean()
+    current_liabilities_accounts_only = fields.Boolean()
 
     @api.onchange("account_code_from", "account_code_to")
     def on_change_account_range(self):
@@ -80,7 +82,12 @@ class AgedPartnerBalanceWizard(models.TransientModel):
                 lambda p: p.company_id == self.company_id or not p.company_id
             )
         if self.company_id and self.account_ids:
-            if self.receivable_accounts_only or self.payable_accounts_only:
+            if (
+                self.receivable_accounts_only
+                or self.payable_accounts_only
+                or self.current_asset_accounts_only
+                or self.current_liabilities_accounts_only
+            ):
                 self.onchange_type_accounts_only()
             else:
                 self.account_ids = self.account_ids.filtered(
@@ -100,19 +107,33 @@ class AgedPartnerBalanceWizard(models.TransientModel):
     def onchange_account_ids(self):
         return {"domain": {"account_ids": [("reconcile", "=", True)]}}
 
-    @api.onchange("receivable_accounts_only", "payable_accounts_only")
+    @api.onchange(
+        "receivable_accounts_only",
+        "payable_accounts_only",
+        "current_asset_accounts_only",
+        "current_liabilities_accounts_only",
+    )
     def onchange_type_accounts_only(self):
-        """Handle receivable/payable accounts only change."""
+        """Handle type accounts only change."""
         domain = [("company_ids", "in", [self.company_id.id])]
-        if self.receivable_accounts_only or self.payable_accounts_only:
-            if self.receivable_accounts_only and self.payable_accounts_only:
-                domain += [
-                    ("account_type", "in", ("asset_receivable", "liability_payable"))
-                ]
-            elif self.receivable_accounts_only:
-                domain += [("account_type", "=", "asset_receivable")]
-            elif self.payable_accounts_only:
-                domain += [("account_type", "=", "liability_payable")]
+        account_types = []
+
+        if self.receivable_accounts_only:
+            account_types.append("asset_receivable")
+        if self.payable_accounts_only:
+            account_types.append("liability_payable")
+        if self.current_asset_accounts_only:
+            account_types.append("asset_current")
+        if self.current_liabilities_accounts_only:
+            account_types.append("liability_current")
+
+        if (
+            self.receivable_accounts_only
+            or self.payable_accounts_only
+            or self.current_asset_accounts_only
+            or self.current_liabilities_accounts_only
+        ):
+            domain += [("account_type", "in", account_types)]
             self.account_ids = self.env["account.account"].search(domain)
         else:
             self.account_ids = None
