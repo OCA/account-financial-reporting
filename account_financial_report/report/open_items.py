@@ -179,7 +179,9 @@ class OpenItemsReport(models.AbstractModel):
                 else:
                     open_items_move_lines_data[acc_id][group_id].append(move_line)
         journals_data = self._get_journals_data(list(journals_ids))
-        accounts_data = self._get_accounts_data(open_items_move_lines_data.keys(), company_id=company_id)
+        accounts_data = self._get_accounts_data(
+            open_items_move_lines_data.keys(), company_id=company_id
+        )
         return (
             move_lines,
             partners_data,
