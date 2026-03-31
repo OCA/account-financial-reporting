@@ -46,38 +46,44 @@ class AccountGroup(models.Model):
         """Retrieves every account from `self`.
         In Odoo 18 the group_id on account is not stored so it raises
         an error the one2many account_ids with inverse name group_id."""
-        group_ids = self.ids
         self.account_ids = self.env["account.account"]
-        if not group_ids:
+        if not self.ids:
             return
-        group_ids = SQL(",".join(map(str, group_ids)))
+        root_company_id = self.env.company.root_id.id
         results = self.env.execute_query(
             SQL(
                 """
-        SELECT
-        agroup.id AS group_id,
-        STRING_AGG(DISTINCT account.id::text, ', ') as account_ids
-        FROM  account_group agroup
-        inner join account_account account
-        ON agroup.code_prefix_start <= LEFT(%(code_store)s->>agroup.company_id::text,
-        char_length(agroup.code_prefix_start))
-        AND agroup.code_prefix_end >= LEFT(%(code_store)s->>agroup.company_id::text,
-        char_length(agroup.code_prefix_end))
-        WHERE agroup.id IN (%(group_ids)s)
-        GROUP BY agroup.id
-            """,
-                code_store=SQL.identifier("account", "code_store"),
-                group_ids=group_ids,
+                    SELECT
+                        account_groups.group_id,
+                        ARRAY_AGG(account_groups.account_id)
+                    FROM (
+                        SELECT DISTINCT ON (a.id)
+                            a.id AS account_id,
+                            g.id AS group_id
+                        FROM account_account a
+                        JOIN account_group g ON
+                            g.code_prefix_start <=
+                            LEFT(a.code_store->>%(root_company_id)s,
+                            char_length(g.code_prefix_start))
+                            AND g.code_prefix_end >=
+                            LEFT(a.code_store->>%(root_company_id)s,
+                            char_length(g.code_prefix_end))
+                            AND g.company_id = %(root_company_id_int)s
+                        ORDER BY a.id, char_length(g.code_prefix_start) DESC
+                    ) account_groups
+                    WHERE account_groups.group_id IN %(group_ids)s
+                    GROUP BY account_groups.group_id
+                """,
+                root_company_id=str(root_company_id),
+                root_company_id_int=root_company_id,
+                group_ids=tuple(self.ids),
             )
         )
         group_by_code = dict(results)
         if not group_by_code:
             return
         for record in self:
-            if group_by_code.get(record.id, ""):
-                record.account_ids = list(
-                    map(int, group_by_code.get(record.id, "").split(", "))
-                )
+            record.account_ids = group_by_code.get(record.id, [])
 
     @api.depends("code_prefix_start", "parent_id.complete_code")
     def _compute_complete_code(self):
