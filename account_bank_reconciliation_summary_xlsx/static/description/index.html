@@ -370,54 +370,99 @@ ul.auto-toc {
 !! source digest: sha256:7846a94ef99eba8950b247c0c5046fe84ed0023fa2bfbee2cd9d0948134fbf27
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 <p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/licence-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/account-financial-reporting/tree/18.0/account_bank_reconciliation_summary_xlsx"><img alt="OCA/account-financial-reporting" src="https://img.shields.io/badge/github-OCA%2Faccount--financial--reporting-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/account-financial-reporting-18-0/account-financial-reporting-18-0-account_bank_reconciliation_summary_xlsx"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/account-financial-reporting&amp;target_branch=18.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
-<p>This module adds a Bank Reconciliation Report in Odoo in XLSX format.
-For each bank journal, the report displays:</p>
-<ol class="arabic simple">
-<li>The balance of the bank account in the accounting,</li>
+<div class="section" id="bank-reconciliation-report-xlsx">
+<h1>Bank Reconciliation Report (XLSX)</h1>
+<p>This module adds a Bank Reconciliation Report in Odoo in XLSX format.</p>
+<p>For each bank journal, the report displays:</p>
+<ul class="simple">
+<li>The balance of the bank account in the accounting</li>
 <li>The list of journal items of the bank account not linked to any bank
-statement lines,</li>
-<li>The list of draft bank statement lines not linked to any journal
-items,</li>
-<li>The computed balance of the bank account at the bank.</li>
-</ol>
+statement lines</li>
+<li>The list of draft bank statement lines not linked to any journal items</li>
+<li>The computed balance of the bank account at the bank</li>
+</ul>
 <p>The last field (computed balance of the bank account at the bank) must
 be compared to the real bank account balance at the bank. If there is a
-difference, you need to find the error in the accounting. The field
-<em>Computed balance of the bank account at the bank</em> is a formula, so you
-can easily change its computation to try to find the difference with the
-real bank account balance at the bank.</p>
-<p><strong>Table of contents</strong></p>
-<div class="contents local topic" id="contents">
+difference, you need to find the error in the accounting.</p>
+<p>The field <strong>Computed balance of the bank account at the bank</strong> is a
+formula, so you can easily change its computation to try to find the
+difference with the real bank account balance at the bank.</p>
+<div class="section" id="date-selection-options">
+<h2>Date Selection Options</h2>
+<p>A <strong>Bank Journal</strong> field is available in the wizard. The report will be
+generated for the selected bank journal.</p>
+<p>An <strong>End Date</strong> field and a <strong>Date Range</strong> (<tt class="docutils literal">date_range_id</tt>) field are
+added in the wizard.</p>
+<p>Users can generate the Bank Reconciliation Report using the following
+options:</p>
 <ul class="simple">
-<li><a class="reference internal" href="#configuration" id="toc-entry-1">Configuration</a></li>
-<li><a class="reference internal" href="#usage" id="toc-entry-2">Usage</a></li>
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-3">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-4">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-5">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="toc-entry-6">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-7">Maintainers</a></li>
+<li><strong>Using Date Range</strong><ul>
+<li>Select a Date Range, which automatically sets the From Date and To
+Date</li>
+<li>The report is generated based on the selected range</li>
+</ul>
+</li>
+<li><strong>Using Manual Dates</strong><ul>
+<li>Users can define both From Date and End Date, or</li>
+<li>If only the End Date is provided, the report is generated from the
+beginning up to the selected end date</li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="section" id="configuration">
-<h1><a class="toc-backref" href="#toc-entry-1">Configuration</a></h1>
-<p>This module doesn’t require any configuration.</p>
+<h2>Configuration</h2>
+<p>To use the Date Range feature, configure it from:</p>
+<p><strong>Accounting → Configuration → Date Ranges → Date Ranges</strong></p>
+<p>Users must create:</p>
+<ul class="simple">
+<li>A <strong>Date Range Type</strong></li>
+<li>Corresponding <strong>Date Ranges</strong></li>
+</ul>
+<p>These will then be available in the wizard.</p>
+<p><strong>Table of contents</strong></p>
+</div>
+</div>
+<div class="section" id="configuration-1">
+<h1>Configuration</h1>
+<p>To use the <strong>Date Range</strong> feature in the Bank Reconciliation Report
+wizard:</p>
+<ul class="simple">
+<li>Go to <em>Accounting &gt; Configuration &gt; Date Ranges &gt; Date Ranges</em>.</li>
+<li>Create a <strong>Date Range Type</strong>.</li>
+<li>Create one or more <strong>Date Ranges</strong> under the defined type.</li>
+</ul>
+<p>These date ranges will then be available for selection in the report
+wizard.</p>
+<p>No additional configuration is required if you are using manual date
+selection.</p>
 </div>
 <div class="section" id="usage">
-<h1><a class="toc-backref" href="#toc-entry-2">Usage</a></h1>
+<h1>Usage</h1>
 <p>You can launch the Bank Reconciliation Report wizard from:</p>
 <ul class="simple">
-<li>the menu <em>Invoicing &gt; Reporting &gt; OCA accounting reports &gt; Bank
+<li>The menu <em>Invoicing &gt; Reporting &gt; OCA accounting reports &gt; Bank
 Reconciliation</em>,</li>
-<li>the form view of a bank statement: click on the button <em>Bank
+<li>The form view of a bank statement: click on the button <em>Bank
 Reconciliation Report</em>,</li>
-<li>the invoicing dashboard: on a bank journal, click on the options, then
+<li>The invoicing dashboard: on a bank journal, click on the options, then
 select <em>Bank Reconciliation</em>.</li>
+</ul>
+<p>In the wizard:</p>
+<ul class="simple">
+<li>Select a <strong>Bank Journal</strong> to generate the report.</li>
+<li>You can use a <strong>Date Range</strong> (<tt class="docutils literal">date_range_id</tt>) to automatically set
+the <strong>From Date</strong> and <strong>To Date</strong>.</li>
+<li>Alternatively, you can manually set:<ul>
+<li><strong>From Date</strong> and <strong>End Date</strong>, or</li>
+<li>only the <strong>End Date</strong> to generate the report from the beginning up
+to that date.</li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#toc-entry-3">Bug Tracker</a></h1>
+<h1>Bug Tracker</h1>
 <p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/account-financial-reporting/issues">GitHub Issues</a>.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
@@ -425,15 +470,15 @@ If you spotted it first, help us to smash it by providing a detailed and welcome
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#toc-entry-4">Credits</a></h1>
+<h1>Credits</h1>
 <div class="section" id="authors">
-<h2><a class="toc-backref" href="#toc-entry-5">Authors</a></h2>
+<h2>Authors</h2>
 <ul class="simple">
 <li>Akretion</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h2><a class="toc-backref" href="#toc-entry-6">Contributors</a></h2>
+<h2>Contributors</h2>
 <ul class="simple">
 <li>Alexis de Lattre &lt;<a class="reference external" href="mailto:alexis.delattre&#64;akretion.com">alexis.delattre&#64;akretion.com</a>&gt;</li>
 <li><a class="reference external" href="https://www.heliconia.io">Heliconia Solutions Pvt. Ltd.</a><ul>
@@ -443,7 +488,7 @@ If you spotted it first, help us to smash it by providing a detailed and welcome
 </ul>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#toc-entry-7">Maintainers</a></h2>
+<h2>Maintainers</h2>
 <p>This module is maintained by the OCA.</p>
 <a class="reference external image-reference" href="https://odoo-community.org">
 <img alt="Odoo Community Association" src="https://odoo-community.org/logo.png" />

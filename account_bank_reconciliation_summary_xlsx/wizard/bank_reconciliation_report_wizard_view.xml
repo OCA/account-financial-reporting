@@ -11,7 +11,9 @@
         <field name="arch" type="xml">
             <form string="Bank Reconciliation Report">
                 <group name="main">
-                    <field name="date" />
+                    <field name="date_range_id" />
+                    <field name="date_from" />
+                    <field name="date" string="Date To" />
                     <field name="journal_ids" widget="many2many_tags" />
                 </group>
                 <footer>

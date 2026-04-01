@@ -9,7 +9,12 @@
     "author": "Akretion,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/account-financial-reporting",
     "summary": "XLSX report to help on bank reconciliation",
-    "depends": ["account_financial_report", "report_xlsx", "account_statement_base"],
+    "depends": [
+        "account_financial_report",
+        "report_xlsx",
+        "account_statement_base",
+        "date_range",
+    ],
     "data": [
         "security/ir.model.access.csv",
         "report/report.xml",
