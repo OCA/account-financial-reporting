@@ -91,32 +91,7 @@
         </div>
     </template>
     <template id="account_financial_report.report_journal_ledger_journal_table_header">
-        <t t-if="not display_account_name">
-            <t t-set="account_column_style">width: 8.11%;</t>
-            <t t-if="not with_auto_sequence">
-                <t t-set="label_column_style">
-                    width: 38.92%;
-                </t>
-            </t>
-            <t t-else="">
-                <t t-set="label_column_style">
-                    width: 31.35%;
-                </t>
-            </t>
-        </t>
-        <t t-else="">
-            <t t-if="not with_auto_sequence">
-                <t t-set="account_column_style">
-                    width: 23.78%;
-                </t>
-            </t>
-            <t t-else="">
-                <t t-set="account_column_style">
-                    width: 16.21%;
-                </t>
-            </t>
-            <t t-set="label_column_style">width: 23.24%;</t>
-        </t>
+        <!-- account_column_style and label_column_style are computed in _get_report_values -->
         <div class="act_as_thead">
             <div class="act_as_row labels">
                 <t t-if="with_auto_sequence">
@@ -151,6 +126,16 @@
                     Ref - Label
                 </div>
                 <div class="act_as_cell" name="taxes" style="width: 7.57%;">Taxes</div>
+                <!--## analytic distribution column, shown when wizard flag is set-->
+                <t t-if="show_analytic_distribution">
+                    <div
+                        class="act_as_cell"
+                        name="analytic_distribution"
+                        style="width: 6%;"
+                    >
+                        Analytic Distribution
+                    </div>
+                </t>
                 <div class="act_as_cell" name="debit" style="width: 8.65%;">Debit</div>
                 <div class="act_as_cell" name="credit" style="width: 8.65%;">
                     Credit
@@ -181,6 +166,9 @@
             <div class="act_as_cell" name="partner" />
             <div class="act_as_cell" name="label" />
             <div class="act_as_cell" name="taxes" />
+            <t t-if="show_analytic_distribution">
+                <div class="act_as_cell" name="analytic_distribution" />
+            </t>
             <div class="act_as_cell amount" name="debit">
                 <b>
                     <span
@@ -282,6 +270,15 @@
                 t-esc="limit_text(o._get_ml_tax_description(move_line, tax_line_dat, move_line_ids_taxes_dat), 'label_text_limit')"
             />
         </div>
+        <!--## analytic distribution: pre-formatted string built in Python-->
+        <t t-if="show_analytic_distribution">
+            <div class="act_as_cell left" name="analytic_distribution">
+                <span
+                    t-if="move_line.get('analytic_display')"
+                    t-esc="move_line['analytic_display']"
+                />
+            </div>
+        </t>
         <div class="act_as_cell amount" name="debit">
             <t t-if="move_line['debit']">
                 <span

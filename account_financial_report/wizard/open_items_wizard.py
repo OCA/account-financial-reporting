@@ -52,6 +52,9 @@ class OpenItemsReportWizard(models.TransientModel):
     show_partner_details = fields.Boolean(
         default=True,
     )
+    show_analytic_distribution = fields.Boolean(
+        default=True,
+    )
     account_code_from = fields.Many2one(
         comodel_name="account.account",
     )
@@ -184,6 +187,7 @@ class OpenItemsReportWizard(models.TransientModel):
             "partner_ids": self.partner_ids.ids or [],
             "account_financial_report_lang": self.env.lang,
             "grouped_by": self.grouped_by,
+            "show_analytic_distribution": self.show_analytic_distribution,
         }
 
     def _prepare_report_data(self):

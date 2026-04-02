@@ -196,6 +196,14 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             if move_line["date"] <= date_at_object
             and not float_is_zero(move_line["amount_residual"], precision_digits=2)
         ]
+        # Collect analytic IDs after filtering so lines added by
+        # _recalculate_move_lines are included in the lookup.
+        analytic_ids = set()
+        for ml in move_lines:
+            for key in (ml.get("analytic_distribution") or {}).keys():
+                for aid in key.split(","):
+                    analytic_ids.add(int(aid))
+        analytic_data = self._get_analytic_data(list(analytic_ids))
         for move_line in move_lines:
             journals_ids.add(move_line["journal_id"][0])
             acc_id = move_line["account_id"][0]
@@ -236,6 +244,10 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                         "ref_label": ref_label,
                         "due_date": move_line["date_maturity"],
                         "residual": move_line["amount_residual"],
+                        # Pre-formatted; template just outputs the string
+                        "analytic_display": self._build_analytic_str(
+                            move_line.get("analytic_distribution") or {}, analytic_data
+                        ),
                     }
                 )
                 ag_pb_data[acc_id][prt_id]["move_lines"].append(move_line_data)
@@ -249,7 +261,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             )
         journals_data = self._get_journals_data(list(journals_ids))
         accounts_data = self._get_accounts_data(ag_pb_data.keys())
-        return ag_pb_data, accounts_data, partners_data, journals_data
+        return ag_pb_data, accounts_data, partners_data, journals_data, analytic_data
 
     @api.model
     def _compute_maturity_date(self, ml, date_at_object):
@@ -428,6 +440,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             accounts_data,
             partners_data,
             journals_data,
+            analytic_data,
         ) = self.with_context(
             age_partner_config=aged_partner_configuration
         )._get_move_lines_data(
@@ -452,6 +465,13 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         aged_partner_data = self.with_context(
             age_partner_config=aged_partner_configuration
         )._calculate_percent(aged_partner_data)
+        # Each optional column deducts its own width from the Ref-Label budget.
+        # cumul_partner_label spans the same columns in the totals row.
+        ref_label_budget = 18.0
+        cumul_partner_label = 52.0
+        if data.get("show_analytic_distribution") and show_move_line_details:
+            ref_label_budget -= 6.0
+            cumul_partner_label -= 6.0
         res.update(
             {
                 "doc_ids": [wizard_id],
@@ -466,6 +486,12 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                 "aged_partner_balance": aged_partner_data,
                 "show_move_lines_details": show_move_line_details,
                 "age_partner_config": aged_partner_configuration,
+                "show_analytic_distribution": data["show_analytic_distribution"],
+                "analytic_data": analytic_data,
+                "ref_label_style": f"width: {round(ref_label_budget, 2)}%;",
+                "ref_label_cumul_partner_style": (
+                    f"width: {round(cumul_partner_label, 2)}%;"
+                ),
             }
         )
         return res
@@ -475,4 +501,5 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             "amount_residual",
             "reconciled",
             "date_maturity",
+            "analytic_distribution",
         ]
