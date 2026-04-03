@@ -928,6 +928,10 @@ class GeneralLedgerReport(models.AbstractModel):
             if not gl_item["currency_id"] and len(fin_bal_currency_ids) == 1:
                 fin_bal_currency_id = fin_bal_currency_ids[0]
             gl_item["fin_bal_currency_id"] = fin_bal_currency_id
+        # Each optional column deducts its own width from the Ref-Label budget.
+        ref_label_budget = 16.9
+        if data.get("show_cost_center"):
+            ref_label_budget -= 8.03
         res.update(
             {
                 "doc_ids": [wizard_id],
@@ -951,6 +955,7 @@ class GeneralLedgerReport(models.AbstractModel):
                 "analytic_data": analytic_data,
                 "filter_partner_ids": True if partner_ids else False,
                 "currency_model": self.env["res.currency"],
+                "ref_label_style": f"width: {round(ref_label_budget, 2)}%;",
             }
         )
         return res
