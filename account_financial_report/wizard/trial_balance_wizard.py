@@ -223,11 +223,8 @@ class TrialBalanceReportWizard(models.TransientModel):
     @api.depends("company_id")
     def _compute_unaffected_earnings_account(self):
         for record in self:
-            record.unaffected_earnings_account = self.env["account.account"].search(
-                [
-                    ("account_type", "=", "equity_unaffected"),
-                    ("company_ids", "in", [record.company_id.id]),
-                ]
+            record.unaffected_earnings_account = (
+                record.company_id.get_unaffected_earnings_account()
             )
 
     unaffected_earnings_account = fields.Many2one(
