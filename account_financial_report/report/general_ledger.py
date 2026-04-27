@@ -60,6 +60,8 @@ class GeneralLedgerReport(models.AbstractModel):
         ]
 
     def _get_acc_prt_accounts_ids(self, company_id, grouped_by):
+        if grouped_by == "none":
+            return []
         accounts_domain = [
             ("company_id", "=", company_id),
         ] + self._get_account_type_domain(grouped_by)
