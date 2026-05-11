@@ -36,11 +36,6 @@ msgid "1 - 30 d."
 msgstr ""
 
 #. module: account_financial_report
-#: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
-msgid "10"
-msgstr ""
-
-#. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
 msgid "31 - 60 d."
 msgstr ""
