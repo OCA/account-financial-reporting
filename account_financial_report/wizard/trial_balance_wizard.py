@@ -96,12 +96,12 @@ class TrialBalanceReportWizard(models.TransientModel):
                 account_ids = self.env["account.account"].browse(real_ids)
                 if self.company_id:
                     self.account_ids = account_ids.filtered(
-                        lambda a: self.company_id in a.company_ids
+                        lambda a: a.company_ids & self.company_id.parent_ids
                     )
             else:
                 if self.company_id:
                     self.account_ids = self.account_ids.filtered(
-                        lambda a: self.company_id in a.company_ids
+                        lambda a: a.company_ids & self.company_id.parent_ids
                     )
 
     @api.constrains("show_hierarchy", "show_hierarchy_level")
@@ -131,7 +131,11 @@ class TrialBalanceReportWizard(models.TransientModel):
         count = self.env["account.account"].search_count(
             [
                 ("account_type", "=", "equity_unaffected"),
-                ("company_ids", "in", [self.company_id.id or self.env.company.id]),
+                (
+                    "company_ids",
+                    "parent_of",
+                    [self.company_id.id or self.env.company.id],
+                ),
             ]
         )
         return count == 1
@@ -161,7 +165,7 @@ class TrialBalanceReportWizard(models.TransientModel):
                 self.onchange_type_accounts_only()
             else:
                 self.account_ids = self.account_ids.filtered(
-                    lambda a: self.company_id in a.company_ids
+                    lambda a: a.company_ids & self.company_id.parent_ids
                 )
         res = {
             "domain": {
@@ -174,7 +178,9 @@ class TrialBalanceReportWizard(models.TransientModel):
         if not self.company_id:
             return res
         else:
-            res["domain"]["account_ids"] += [("company_ids", "in", self.company_id.ids)]
+            res["domain"]["account_ids"] += [
+                ("company_ids", "parent_of", self.company_id.ids)
+            ]
             res["domain"]["partner_ids"] += self._get_partner_ids_domain()
             res["domain"]["date_range_id"] += [
                 "|",
@@ -209,7 +215,7 @@ class TrialBalanceReportWizard(models.TransientModel):
     def onchange_type_accounts_only(self):
         """Handle receivable/payable accounts only change."""
         if self.receivable_accounts_only or self.payable_accounts_only:
-            domain = [("company_ids", "in", [self.company_id.id])]
+            domain = [("company_ids", "parent_of", self.company_id.ids)]
             if self.receivable_accounts_only and self.payable_accounts_only:
                 domain += [
                     ("account_type", "in", ("asset_receivable", "liability_payable"))
@@ -237,7 +243,7 @@ class TrialBalanceReportWizard(models.TransientModel):
             record.unaffected_earnings_account = self.env["account.account"].search(
                 [
                     ("account_type", "=", "equity_unaffected"),
-                    ("company_ids", "in", [record.company_id.id]),
+                    ("company_ids", "parent_of", record.company_id.ids),
                 ]
             )
 

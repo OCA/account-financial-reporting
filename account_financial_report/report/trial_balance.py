@@ -25,7 +25,7 @@ class TrialBalanceReport(models.AbstractModel):
         show_partner_details,
     ):
         accounts_domain = [
-            ("company_ids", "in", [company_id]),
+            ("company_ids", "parent_of", [company_id]),
             ("include_initial_balance", "=", True),
         ]
         if account_ids:
@@ -69,7 +69,7 @@ class TrialBalanceReport(models.AbstractModel):
         fy_start_date,
     ):
         accounts_domain = [
-            ("company_ids", "in", [company_id]),
+            ("company_ids", "parent_of", [company_id]),
             ("include_initial_balance", "=", False),
         ]
         if account_ids:
@@ -151,7 +151,7 @@ class TrialBalanceReport(models.AbstractModel):
         show_partner_details,
     ):
         accounts_domain = [
-            ("company_ids", "in", [company_id]),
+            ("company_ids", "parent_of", [company_id]),
             ("include_initial_balance", "=", False),
         ]
         if account_ids:
@@ -438,7 +438,7 @@ class TrialBalanceReport(models.AbstractModel):
         fy_start_date,
         grouped_by,
     ):
-        accounts_domain = [("company_ids", "in", [company_id])]
+        accounts_domain = [("company_ids", "parent_of", [company_id])]
         if account_ids:
             accounts_domain += [("id", "in", account_ids)]
             # If explicit list of accounts is provided,

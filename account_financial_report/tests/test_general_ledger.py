@@ -731,3 +731,29 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         wizard.onchange_date_range_id()
         self.assertEqual(wizard.date_from, date(2018, 1, 1))
         self.assertEqual(wizard.date_to, date(2018, 12, 31))
+
+    def test_branch_company(self):
+        """General ledger for a branch must include parent company accounts."""
+        parent = self.env.user.company_id
+        branch = self.env["res.company"].create(
+            {"name": "General Ledger Branch", "parent_id": parent.id}
+        )
+        self.assertIn(parent, self.receivable_account.company_ids)
+        self.assertNotIn(branch, self.receivable_account.company_ids)
+        wizard = self.env["general.ledger.report.wizard"].create(
+            {
+                "date_from": self.fy_date_start,
+                "date_to": self.fy_date_end,
+                "target_move": "posted",
+                "hide_account_at_0": False,
+                "company_id": branch.id,
+                "fy_start_date": self.fy_date_start,
+                "centralize": True,
+            }
+        )
+        res = wizard.onchange_company_id()
+        accounts_in_domain = self.env["account.account"].search(
+            res["domain"]["account_ids"]
+        )
+        self.assertIn(self.receivable_account, accounts_in_domain)
+        self.assertIn(self.income_account, accounts_in_domain)
