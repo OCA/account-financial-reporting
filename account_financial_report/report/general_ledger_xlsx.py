@@ -207,7 +207,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                                     f"{analytic_data[int(account_id)]['name']} "
                                 )
                                 if value < 100:
-                                    analytic_distribution += f"{value:d}%"
+                                    analytic_distribution += f"{value:g}%"
                         line.update(
                             {
                                 "taxes_description": taxes_description,
@@ -314,7 +314,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                                         f"{analytic_data[int(account_id)]['name']} "
                                     )
                                     if value < 100:
-                                        analytic_distribution += f"{value:d}% "
+                                        analytic_distribution += f"{value:g}% "
                             line.update(
                                 {
                                     "taxes_description": taxes_description,
