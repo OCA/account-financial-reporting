@@ -6,9 +6,9 @@
 import time
 from datetime import date
 
+from odoo import api, fields
 from odoo.tests import tagged
 
-from odoo import api, fields
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
