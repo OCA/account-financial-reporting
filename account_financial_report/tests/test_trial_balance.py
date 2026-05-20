@@ -5,6 +5,7 @@
 
 import re
 
+from odoo.fields import Command
 from odoo.tests import tagged
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
@@ -715,3 +716,60 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
         ]
         self.assertEqual(len(trial_balance_code_set), len(all_accounts_code_set))
         self.assertTrue(trial_balance_code_set == all_accounts_code_set)
+
+    def test_06_line_subsection_excluded(self):
+        """A posted move that contains a `line_subsection` display row must
+        not break the Trial Balance.
+
+        Odoo 19 introduced the `line_subsection` value in
+        `account.move.line.display_type`. Such rows carry no `account_id`,
+        so they reach `formatted_read_group` as a `False` group and the
+        downstream `_compute_account_amount` raises
+        `TypeError: 'bool' object is not subscriptable`.
+        """
+        journal = self.env["account.journal"].search(
+            [("company_id", "=", self.env.user.company_id.id)], limit=1
+        )
+        move = self.env["account.move"].create(
+            {
+                "journal_id": journal.id,
+                "date": self.date_start,
+                "line_ids": [
+                    Command.create(
+                        {
+                            "debit": 100.0,
+                            "credit": 0.0,
+                            "account_id": self.account200.id,
+                            "partner_id": self.partner_a.id,
+                        }
+                    ),
+                    Command.create(
+                        {
+                            "debit": 0.0,
+                            "credit": 100.0,
+                            "account_id": self.account100.id,
+                            "partner_id": self.partner_a.id,
+                        }
+                    ),
+                    Command.create(
+                        {
+                            "display_type": "line_subsection",
+                            "name": "Subsection label",
+                        }
+                    ),
+                ],
+            }
+        )
+        move.action_post()
+        self.assertIn(
+            "line_subsection",
+            move.line_ids.mapped("display_type"),
+            "Move was not created with a line_subsection row",
+        )
+        res_data = self._get_report_lines()
+        self.assertIn("trial_balance", res_data)
+        for entry in res_data["trial_balance"]:
+            self.assertTrue(
+                entry.get("id"),
+                f"Report contains a line with falsy id: {entry}",
+            )

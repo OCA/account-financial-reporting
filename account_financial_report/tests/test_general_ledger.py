@@ -7,6 +7,7 @@ import time
 from datetime import date
 
 from odoo import api, fields
+from odoo.fields import Command
 from odoo.tests import tagged
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
@@ -783,3 +784,50 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
             wizard.account_ids,
             "Accounts out of the range should NOT be in the filter.",
         )
+
+    def test_06_line_subsection_excluded(self):
+        """A posted move with a `line_subsection` row must not break the
+        General Ledger. See the Trial Balance counterpart for the root cause.
+        """
+        journal = self.env["account.journal"].search(
+            [("company_id", "=", self.env.user.company_id.id)], limit=1
+        )
+        move = self.env["account.move"].create(
+            {
+                "journal_id": journal.id,
+                "date": self.fy_date_start,
+                "line_ids": [
+                    Command.create(
+                        {
+                            "debit": 50.0,
+                            "credit": 0.0,
+                            "account_id": self.receivable_account.id,
+                            "partner_id": self.partner.id,
+                        }
+                    ),
+                    Command.create(
+                        {
+                            "debit": 0.0,
+                            "credit": 50.0,
+                            "account_id": self.income_account.id,
+                            "partner_id": self.partner.id,
+                        }
+                    ),
+                    Command.create(
+                        {
+                            "display_type": "line_subsection",
+                            "name": "Subsection label",
+                        }
+                    ),
+                ],
+            }
+        )
+        move.action_post()
+        self.assertIn("line_subsection", move.line_ids.mapped("display_type"))
+        res_data = self._get_report_lines()
+        self.assertIn("general_ledger", res_data)
+        for entry in res_data["general_ledger"]:
+            self.assertTrue(
+                entry.get("id"),
+                f"Report contains a line with falsy id: {entry}",
+            )
