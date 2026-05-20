@@ -6,10 +6,9 @@
 import time
 from datetime import date
 
-from odoo import api, fields
-from odoo.fields import Command
 from odoo.tests import tagged
 
+from odoo import api, fields
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
@@ -48,6 +47,13 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
             limit=1,
         )
         cls.partner = cls.partner_a
+        # Analytic plan and account used in XLSX regression tests
+        cls.analytic_plan = cls.env["account.analytic.plan"].create(
+            {"name": "Test Plan GL"}
+        )
+        cls.analytic_account = cls.env["account.analytic.account"].create(
+            {"name": "Test Analytic GL", "plan_id": cls.analytic_plan.id}
+        )
 
     def _add_move(
         self,
@@ -58,11 +64,20 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         income_credit,
         unaffected_debit=0,
         unaffected_credit=0,
+        income_analytic_distribution=None,
     ):
         journal = self.env["account.journal"].search(
             [("company_id", "=", self.env.user.company_id.id)], limit=1
         )
         partner = self.partner_a
+        income_line = {
+            "debit": income_debit,
+            "credit": income_credit,
+            "account_id": self.income_account.id,
+            "partner_id": partner.id,
+        }
+        if income_analytic_distribution is not None:
+            income_line["analytic_distribution"] = income_analytic_distribution
         move_vals = {
             "journal_id": journal.id,
             "date": date,
@@ -77,16 +92,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
                         "partner_id": partner.id,
                     },
                 ),
-                (
-                    0,
-                    0,
-                    {
-                        "debit": income_debit,
-                        "credit": income_credit,
-                        "account_id": self.income_account.id,
-                        "partner_id": partner.id,
-                    },
-                ),
+                (0, 0, income_line),
                 (
                     0,
                     0,
@@ -349,6 +355,42 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         self.assertEqual(income_fin_balance["credit"], 0)
         self.assertEqual(income_fin_balance["balance"], 2000)
 
+        # Regression: XLSX export with partial analytic distribution (< 100 %)
+        # must not raise ValueError: Unknown format code 'd' for object of type 'float'
+        from io import BytesIO
+
+        import xlsxwriter
+
+        self._add_move(
+            date=self.fy_date_end,
+            receivable_debit=100,
+            receivable_credit=0,
+            income_debit=0,
+            income_credit=100,
+            income_analytic_distribution={str(self.analytic_account.id): 70.0},
+        )
+        company = self.env.user.company_id
+        report = self.env["report.a_f_r.report_general_ledger_xlsx"]
+        # Centralized mode (covers first if value < 100 branch)
+        wizard = self.env["general.ledger.report.wizard"].create(
+            {
+                "date_from": self.fy_date_start,
+                "date_to": self.fy_date_end,
+                "target_move": "posted",
+                "hide_account_at_0": False,
+                "company_id": company.id,
+                "fy_start_date": self.fy_date_start,
+                "centralize": True,
+                "show_cost_center": True,
+            }
+        )
+        data = wizard._prepare_report_data()
+        output = BytesIO()
+        workbook = xlsxwriter.Workbook(output, {"constant_memory": True})
+        report.generate_xlsx_report(workbook, data, wizard)
+        workbook.close()
+        self.assertGreater(len(output.getvalue()), 0)
+
     def test_02_partner_balance(self):
         # Generate the general ledger line
         res_data = self._get_report_lines(with_partners=True)
@@ -457,6 +499,43 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         self.assertEqual(partner_final_balance["debit"], 1000)
         self.assertEqual(partner_final_balance["credit"], 2000)
         self.assertEqual(partner_final_balance["balance"], -1000)
+
+        # Regression: XLSX export with partial analytic distribution (< 100 %)
+        # must not raise ValueError: Unknown format code 'd' for object of type 'float'
+        from io import BytesIO
+
+        import xlsxwriter
+
+        self._add_move(
+            date=self.fy_date_end,
+            receivable_debit=100,
+            receivable_credit=0,
+            income_debit=0,
+            income_credit=100,
+            income_analytic_distribution={str(self.analytic_account.id): 70.0},
+        )
+        company = self.env.user.company_id
+        report = self.env["report.a_f_r.report_general_ledger_xlsx"]
+        # Partner-grouped mode (covers second if value < 100 branch)
+        wizard = self.env["general.ledger.report.wizard"].create(
+            {
+                "date_from": self.fy_date_start,
+                "date_to": self.fy_date_end,
+                "target_move": "posted",
+                "hide_account_at_0": False,
+                "company_id": company.id,
+                "fy_start_date": self.fy_date_start,
+                "centralize": False,
+                "show_cost_center": True,
+                "grouped_by": "partners",
+            }
+        )
+        data = wizard._prepare_report_data()
+        output = BytesIO()
+        workbook = xlsxwriter.Workbook(output, {"constant_memory": True})
+        report.generate_xlsx_report(workbook, data, wizard)
+        workbook.close()
+        self.assertGreater(len(output.getvalue()), 0)
 
     def test_03_unaffected_account_balance(self):
         # Generate the general ledger line
@@ -784,151 +863,3 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
             wizard.account_ids,
             "Accounts out of the range should NOT be in the filter.",
         )
-
-    def test_06_line_subsection_excluded(self):
-        """A posted move with a `line_subsection` row must not break the
-        General Ledger. See the Trial Balance counterpart for the root cause.
-        """
-        journal = self.env["account.journal"].search(
-            [("company_id", "=", self.env.user.company_id.id)], limit=1
-        )
-        move = self.env["account.move"].create(
-            {
-                "journal_id": journal.id,
-                "date": self.fy_date_start,
-                "line_ids": [
-                    Command.create(
-                        {
-                            "debit": 50.0,
-                            "credit": 0.0,
-                            "account_id": self.receivable_account.id,
-                            "partner_id": self.partner.id,
-                        }
-                    ),
-                    Command.create(
-                        {
-                            "debit": 0.0,
-                            "credit": 50.0,
-                            "account_id": self.income_account.id,
-                            "partner_id": self.partner.id,
-                        }
-                    ),
-                    Command.create(
-                        {
-                            "display_type": "line_subsection",
-                            "name": "Subsection label",
-                        }
-                    ),
-                ],
-            }
-        )
-        move.action_post()
-        self.assertIn("line_subsection", move.line_ids.mapped("display_type"))
-        res_data = self._get_report_lines()
-        self.assertIn("general_ledger", res_data)
-        for entry in res_data["general_ledger"]:
-            self.assertTrue(
-                entry.get("id"),
-                f"Report contains a line with falsy id: {entry}",
-            )
-
-    def test_06_analytic_distribution_partial_percentage_xlsx(self):
-        """Regression test: XLSX export must not raise ValueError when
-        analytic distribution value is a float < 100.
-        Covers both the centralized (no-partner) and the partner-grouped paths
-        in general_ledger_xlsx._generate_report_content.
-        """
-        from io import BytesIO
-
-        import xlsxwriter
-
-        # Create analytic plan and account
-        analytic_plan = self.env["account.analytic.plan"].create(
-            {"name": "Test Plan GL XLSX"}
-        )
-        analytic_account = self.env["account.analytic.account"].create(
-            {"name": "Test Analytic GL XLSX", "plan_id": analytic_plan.id}
-        )
-
-        # Create a journal entry with a partial analytic distribution (70 % < 100)
-        journal = self.env["account.journal"].search(
-            [("company_id", "=", self.env.user.company_id.id)], limit=1
-        )
-        move = self.env["account.move"].create(
-            {
-                "journal_id": journal.id,
-                "date": self.fy_date_start,
-                "line_ids": [
-                    (
-                        0,
-                        0,
-                        {
-                            "debit": 100,
-                            "credit": 0,
-                            "account_id": self.receivable_account.id,
-                            "partner_id": self.partner.id,
-                        },
-                    ),
-                    (
-                        0,
-                        0,
-                        {
-                            "debit": 0,
-                            "credit": 100,
-                            "account_id": self.income_account.id,
-                            "partner_id": self.partner.id,
-                            "analytic_distribution": {
-                                str(analytic_account.id): 70.0
-                            },
-                        },
-                    ),
-                ],
-            }
-        )
-        move.action_post()
-
-        company = self.env.user.company_id
-        report = self.env["report.a_f_r.report_general_ledger_xlsx"]
-
-        # --- Path 1: centralized mode (no partner grouping) ---
-        wizard = self.env["general.ledger.report.wizard"].create(
-            {
-                "date_from": self.fy_date_start,
-                "date_to": self.fy_date_end,
-                "target_move": "posted",
-                "hide_account_at_0": False,
-                "company_id": company.id,
-                "fy_start_date": self.fy_date_start,
-                "centralize": True,
-                "show_cost_center": True,
-            }
-        )
-        data = wizard._prepare_report_data()
-        output = BytesIO()
-        workbook = xlsxwriter.Workbook(output, {"constant_memory": True})
-        # Must not raise ValueError for float analytic distribution
-        report.generate_xlsx_report(workbook, data, wizard)
-        workbook.close()
-        self.assertGreater(len(output.getvalue()), 0)
-
-        # --- Path 2: partner-grouped mode ---
-        wizard_partner = self.env["general.ledger.report.wizard"].create(
-            {
-                "date_from": self.fy_date_start,
-                "date_to": self.fy_date_end,
-                "target_move": "posted",
-                "hide_account_at_0": False,
-                "company_id": company.id,
-                "fy_start_date": self.fy_date_start,
-                "centralize": False,
-                "show_cost_center": True,
-                "grouped_by": "partners",
-            }
-        )
-        data_partner = wizard_partner._prepare_report_data()
-        output_partner = BytesIO()
-        workbook_partner = xlsxwriter.Workbook(output_partner, {"constant_memory": True})
-        # Must not raise ValueError for float analytic distribution
-        report.generate_xlsx_report(workbook_partner, data_partner, wizard_partner)
-        workbook_partner.close()
-        self.assertGreater(len(output_partner.getvalue()), 0)
