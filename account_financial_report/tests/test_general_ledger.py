@@ -831,3 +831,104 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
                 entry.get("id"),
                 f"Report contains a line with falsy id: {entry}",
             )
+
+    def test_06_analytic_distribution_partial_percentage_xlsx(self):
+        """Regression test: XLSX export must not raise ValueError when
+        analytic distribution value is a float < 100.
+        Covers both the centralized (no-partner) and the partner-grouped paths
+        in general_ledger_xlsx._generate_report_content.
+        """
+        from io import BytesIO
+
+        import xlsxwriter
+
+        # Create analytic plan and account
+        analytic_plan = self.env["account.analytic.plan"].create(
+            {"name": "Test Plan GL XLSX"}
+        )
+        analytic_account = self.env["account.analytic.account"].create(
+            {"name": "Test Analytic GL XLSX", "plan_id": analytic_plan.id}
+        )
+
+        # Create a journal entry with a partial analytic distribution (70 % < 100)
+        journal = self.env["account.journal"].search(
+            [("company_id", "=", self.env.user.company_id.id)], limit=1
+        )
+        move = self.env["account.move"].create(
+            {
+                "journal_id": journal.id,
+                "date": self.fy_date_start,
+                "line_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "debit": 100,
+                            "credit": 0,
+                            "account_id": self.receivable_account.id,
+                            "partner_id": self.partner.id,
+                        },
+                    ),
+                    (
+                        0,
+                        0,
+                        {
+                            "debit": 0,
+                            "credit": 100,
+                            "account_id": self.income_account.id,
+                            "partner_id": self.partner.id,
+                            "analytic_distribution": {
+                                str(analytic_account.id): 70.0
+                            },
+                        },
+                    ),
+                ],
+            }
+        )
+        move.action_post()
+
+        company = self.env.user.company_id
+        report = self.env["report.a_f_r.report_general_ledger_xlsx"]
+
+        # --- Path 1: centralized mode (no partner grouping) ---
+        wizard = self.env["general.ledger.report.wizard"].create(
+            {
+                "date_from": self.fy_date_start,
+                "date_to": self.fy_date_end,
+                "target_move": "posted",
+                "hide_account_at_0": False,
+                "company_id": company.id,
+                "fy_start_date": self.fy_date_start,
+                "centralize": True,
+                "show_cost_center": True,
+            }
+        )
+        data = wizard._prepare_report_data()
+        output = BytesIO()
+        workbook = xlsxwriter.Workbook(output, {"constant_memory": True})
+        # Must not raise ValueError for float analytic distribution
+        report.generate_xlsx_report(workbook, data, wizard)
+        workbook.close()
+        self.assertGreater(len(output.getvalue()), 0)
+
+        # --- Path 2: partner-grouped mode ---
+        wizard_partner = self.env["general.ledger.report.wizard"].create(
+            {
+                "date_from": self.fy_date_start,
+                "date_to": self.fy_date_end,
+                "target_move": "posted",
+                "hide_account_at_0": False,
+                "company_id": company.id,
+                "fy_start_date": self.fy_date_start,
+                "centralize": False,
+                "show_cost_center": True,
+                "grouped_by": "partners",
+            }
+        )
+        data_partner = wizard_partner._prepare_report_data()
+        output_partner = BytesIO()
+        workbook_partner = xlsxwriter.Workbook(output_partner, {"constant_memory": True})
+        # Must not raise ValueError for float analytic distribution
+        report.generate_xlsx_report(workbook_partner, data_partner, wizard_partner)
+        workbook_partner.close()
+        self.assertGreater(len(output_partner.getvalue()), 0)
