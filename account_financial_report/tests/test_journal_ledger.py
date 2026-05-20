@@ -6,7 +6,7 @@ from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
 
-from odoo.fields import Date
+from odoo.fields import Command, Date
 from odoo.tests import Form, tagged
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
@@ -283,3 +283,52 @@ class TestJournalReport(AccountTestInvoicingCommon):
 
         self.check_report_journal_debit_credit(res_data, 250, 250)
         self.check_report_journal_debit_credit_taxes(res_data, 300, 0, 50, 0)
+
+    def test_04_line_subsection_excluded(self):
+        """A posted move with a `line_subsection` row must not break the
+        Journal Ledger. See the Trial Balance counterpart for the root cause.
+        """
+        move = self.MoveObj.create(
+            {
+                "journal_id": self.journal_sale.id,
+                "date": self.fy_date_start,
+                "line_ids": [
+                    Command.create(
+                        {
+                            "name": "move",
+                            "debit": 100.0,
+                            "credit": 0.0,
+                            "account_id": self.income_account.id,
+                        }
+                    ),
+                    Command.create(
+                        {
+                            "name": "move",
+                            "debit": 0.0,
+                            "credit": 100.0,
+                            "account_id": self.receivable_account.id,
+                        }
+                    ),
+                    Command.create(
+                        {
+                            "display_type": "line_subsection",
+                            "name": "Subsection label",
+                        }
+                    ),
+                ],
+            }
+        )
+        move.action_post()
+        self.assertIn("line_subsection", move.line_ids.mapped("display_type"))
+        wiz = self.JournalLedgerReportWizard.create(
+            {
+                "date_from": self.fy_date_start,
+                "date_to": self.fy_date_end,
+                "company_id": self.company.id,
+                "journal_ids": [Command.set(self.journal_sale.ids)],
+                "move_target": "posted",
+            }
+        )
+        data = wiz._prepare_report_data()
+        res_data = self.JournalLedgerReport._get_report_values(wiz, data)
+        self.assertIn("Journal_Ledgers", res_data)

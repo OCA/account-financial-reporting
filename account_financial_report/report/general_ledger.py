@@ -415,7 +415,11 @@ class GeneralLedgerReport(models.AbstractModel):
         cost_center_ids,
     ):
         domain = [
-            ("display_type", "not in", ["line_note", "line_section"]),
+            (
+                "display_type",
+                "not in",
+                ["line_note", "line_section", "line_subsection"],
+            ),
             ("date", ">=", date_from),
             ("date", "<=", date_to),
         ]

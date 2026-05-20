@@ -88,7 +88,11 @@ class JournalLedgerReport(models.AbstractModel):
 
     def _get_move_lines_domain(self, move_ids, wizard, journal_ids):
         return [
-            ("display_type", "not in", ["line_note", "line_section"]),
+            (
+                "display_type",
+                "not in",
+                ["line_note", "line_section", "line_subsection"],
+            ),
             ("move_id", "in", move_ids),
         ]
 
