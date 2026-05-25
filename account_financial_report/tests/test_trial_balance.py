@@ -5,6 +5,7 @@
 
 import re
 
+from odoo import fields
 from odoo.tests import tagged
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
@@ -24,6 +25,9 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
                 no_reset_password=True,
                 tracking_disable=True,
             )
+        )
+        cls.env.company.external_report_layout_id = cls.env.ref(
+            "web.external_layout_standard"
         )
         # Remove previous account groups and related invoices to avoid conflicts
         group_obj = cls.env["account.group"]
@@ -83,6 +87,12 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
         cls.date_start = "2016-01-01"
         cls.date_end = "2016-12-31"
         cls.partner = cls.env.ref("base.res_partner_12")
+        cls.currency_eur = cls.setup_other_currency(
+            "EUR", rates=[("2015-12-31", 2.0), ("2016-01-01", 2.0)]
+        )
+        cls.currency_cad = cls.setup_other_currency(
+            "CAD", rates=[("2015-12-31", 4.0), ("2016-01-01", 4.0)]
+        )
         cls.unaffected_account = cls.env["account.account"].search(
             [
                 (
@@ -172,7 +182,11 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
         move.action_post()
 
     def _get_report_lines(
-        self, with_partners=False, account_ids=False, show_hierarchy=False
+        self,
+        with_partners=False,
+        account_ids=False,
+        show_hierarchy=False,
+        foreign_currency=False,
     ):
         company = self.env.user.company_id
         trial_balance = self.env["trial.balance.report.wizard"].create(
@@ -186,6 +200,7 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
                 "account_ids": account_ids,
                 "fy_start_date": self.fy_date_start,
                 "show_partner_details": with_partners,
+                "foreign_currency": foreign_currency,
             }
         )
         data = trial_balance._prepare_report_data()
@@ -193,6 +208,53 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
             "report.account_financial_report.trial_balance"
         ]._get_report_values(trial_balance, data)
         return res_data
+
+    def _create_foreign_currency_move(
+        self, date_value, currency, amount_currency, partner=None
+    ):
+        journal = self.env["account.journal"].search(
+            [("company_id", "=", self.env.user.company_id.id)], limit=1
+        )
+        balance = currency._convert(
+            amount_currency,
+            self.env.company.currency_id,
+            self.env.company,
+            fields.Date.to_date(date_value),
+        )
+        move = self.env["account.move"].create(
+            {
+                "journal_id": journal.id,
+                "date": date_value,
+                "line_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "account_id": self.account100.id,
+                            "partner_id": (partner or self.partner).id,
+                            "currency_id": currency.id,
+                            "amount_currency": amount_currency,
+                            "debit": balance,
+                            "credit": 0.0,
+                        },
+                    ),
+                    (
+                        0,
+                        0,
+                        {
+                            "account_id": self.account200.id,
+                            "partner_id": (partner or self.partner).id,
+                            "currency_id": currency.id,
+                            "amount_currency": -amount_currency,
+                            "debit": 0.0,
+                            "credit": balance,
+                        },
+                    ),
+                ],
+            }
+        )
+        move.action_post()
+        return move
 
     def check_account_in_report(self, account_id, trial_balance):
         account_in_report = False
@@ -748,3 +810,104 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
         ]
         self.assertEqual(len(trial_balance_code_set), len(all_accounts_code_set))
         self.assertTrue(trial_balance_code_set == all_accounts_code_set)
+
+    def test_07_partner_details_multicurrency_grouping(self):
+        self._create_foreign_currency_move("2015-12-31", self.currency_eur, 100.0)
+        self._create_foreign_currency_move("2015-12-31", self.currency_cad, 50.0)
+        self._create_foreign_currency_move("2016-01-01", self.currency_eur, 30.0)
+        self._create_foreign_currency_move("2016-01-01", self.currency_cad, 10.0)
+
+        res_data = self._get_report_lines(with_partners=True, foreign_currency=False)
+        total_amount = res_data["total_amount"]
+        partner_lines = self._get_partner_lines(
+            self.account100.id, self.partner.id, total_amount
+        )
+        receivable_lines = self.env["account.move.line"].search(
+            [
+                ("account_id", "=", self.account100.id),
+                ("partner_id", "=", self.partner.id),
+                ("date", ">=", self.previous_fy_date_end),
+                ("date", "<=", self.date_end),
+                ("move_id.state", "=", "posted"),
+            ]
+        )
+        initial_lines = receivable_lines.filtered(
+            lambda line: line.date < fields.Date.to_date(self.date_start)
+        )
+        period_lines = receivable_lines - initial_lines
+
+        partner_keys = [
+            key for key in total_amount[self.account100.id] if isinstance(key, int)
+        ]
+        self.assertEqual(partner_keys, [self.partner.id])
+        self.assertEqual(
+            partner_lines["initial_balance"], sum(initial_lines.mapped("balance"))
+        )
+        self.assertEqual(partner_lines["debit"], sum(period_lines.mapped("debit")))
+        self.assertEqual(partner_lines["credit"], sum(period_lines.mapped("credit")))
+        self.assertEqual(
+            total_amount[self.account100.id]["balance"],
+            partner_lines["debit"] - partner_lines["credit"],
+        )
+        self.assertEqual(
+            partner_lines["final_balance"],
+            partner_lines["initial_balance"]
+            + partner_lines["debit"]
+            - partner_lines["credit"],
+        )
+        self.assertEqual(
+            total_amount[self.account100.id]["initial_balance"],
+            partner_lines["initial_balance"],
+        )
+        self.assertEqual(
+            total_amount[self.account100.id]["debit"], partner_lines["debit"]
+        )
+        self.assertEqual(
+            total_amount[self.account100.id]["credit"], partner_lines["credit"]
+        )
+        self.assertEqual(
+            total_amount[self.account100.id]["ending_balance"],
+            partner_lines["final_balance"],
+        )
+
+        res_data_fc = self._get_report_lines(with_partners=True, foreign_currency=True)
+        total_amount_fc = res_data_fc["total_amount"]
+        partner_lines_fc = total_amount_fc[self.account100.id][self.partner.id]
+        self.assertEqual(
+            partner_lines_fc["initial_balance"], partner_lines["initial_balance"]
+        )
+        self.assertEqual(partner_lines_fc["debit"], partner_lines["debit"])
+        self.assertEqual(partner_lines_fc["credit"], partner_lines["credit"])
+        self.assertEqual(
+            partner_lines_fc["initial_currency_balance"],
+            sum(initial_lines.mapped("amount_currency")),
+        )
+        self.assertEqual(
+            partner_lines_fc["ending_currency_balance"],
+            sum(receivable_lines.mapped("amount_currency")),
+        )
+
+        wizard = self.env["trial.balance.report.wizard"].create(
+            {
+                "date_from": self.date_start,
+                "date_to": self.date_end,
+                "target_move": "posted",
+                "hide_account_at_0": True,
+                "show_hierarchy": False,
+                "company_id": self.env.company.id,
+                "fy_start_date": self.fy_date_start,
+                "show_partner_details": True,
+            }
+        )
+        export_action = wizard.button_export_xlsx()
+        self.assertDictEqual(
+            export_action,
+            {
+                **{
+                    "type": "ir.actions.report",
+                    "report_name": "a_f_r.report_trial_balance_xlsx",
+                    "report_type": "xlsx",
+                },
+                **export_action,
+            },
+        )
