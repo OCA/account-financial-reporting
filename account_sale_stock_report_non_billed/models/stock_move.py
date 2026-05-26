@@ -25,6 +25,19 @@ class StockMove(models.Model):
     date_done = fields.Date(
         string="Effective Date", compute="_compute_date_done", store=True
     )
+    # Stored auxiliary fields for pivot views
+    quantity_not_invoiced_stored = fields.Float(
+        string="Non Billed Quantity",
+        digits="Product Unit of Measure",
+        store=True,
+        readonly=True,
+    )
+    price_not_invoiced_stored = fields.Float(
+        string="Non Billed Amount",
+        digits="Product Price",
+        store=True,
+        readonly=True,
+    )
 
     @api.depends("picking_id.date_done")
     def _compute_date_done(self):
@@ -102,10 +115,13 @@ class StockMove(models.Model):
 
     def _set_not_invoiced_values(self, qty_to_invoice, invoiced_qty):
         self.ensure_one()
-        self.quantity_not_invoiced = qty_to_invoice - invoiced_qty
-        self.price_not_invoiced = (
-            qty_to_invoice - invoiced_qty
-        ) * self.sale_line_id.price_reduce_taxexcl
+        qty_value = qty_to_invoice - invoiced_qty
+        price_value = qty_value * self.sale_line_id.price_reduce_taxexcl
+        # Set both computed and stored fields to same values
+        self.quantity_not_invoiced = qty_value
+        self.price_not_invoiced = price_value
+        self.quantity_not_invoiced_stored = qty_value
+        self.price_not_invoiced_stored = price_value
 
     @api.depends("sale_line_id")
     @api.depends_context(

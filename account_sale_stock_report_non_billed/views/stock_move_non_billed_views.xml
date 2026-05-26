@@ -56,8 +56,8 @@
         <field name="arch" type="xml">
             <pivot string="Stock Moves Analysis">
                 <field name="picking_id" type="row" />
-                <field name="quantity_not_invoiced" type="measure" />
-                <field name="price_not_invoiced" type="measure" />
+                <field name="quantity_not_invoiced_stored" type="measure" />
+                <field name="price_not_invoiced_stored" type="measure" />
             </pivot>
         </field>
     </record>

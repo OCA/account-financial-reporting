@@ -2,11 +2,11 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     "name": "Account Sale Stock Report Non Billed",
-    "version": "17.0.1.0.0",
+    "version": "18.0.1.0.0",
     "license": "AGPL-3",
     "author": "Tecnativa, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/account-financial-reporting",
-    "depends": ["stock_picking_invoice_link"],
+    "depends": ["sale_stock", "sale_stock_picking_invoice_link"],
     "data": [
         "views/res_config_settings_views.xml",
         "views/stock_move_non_billed_views.xml",
