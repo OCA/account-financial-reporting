@@ -10,6 +10,20 @@ class AbstractReportXslx(models.AbstractModel):
     _description = "Abstract XLSX Account Financial Report"
     _inherit = "report.report_xlsx.abstract"
 
+    def _get_currency_from_company(self):
+        model = self.env.context.get("active_model")
+        active_id = self.env.context.get("active_id")
+        wizard = self.env[model].browse(active_id)
+        return wizard.company_id.currency_id
+
+    def _round_value_by_currency(self, value, currency=None):
+        if isinstance(currency, tuple):
+            currency = currency[0]
+        if currency:
+            return self.env["res.currency"].browse(currency).round(value)
+        else:
+            return self._get_currency_from_company().round(value)
+
     def get_workbook_options(self):
         vals = super().get_workbook_options()
         vals.update({"constant_memory": True})
@@ -54,7 +68,7 @@ class AbstractReportXslx(models.AbstractModel):
          * format_amount
          * format_percent_bold_italic
         """
-        currency_id = self.env["res.company"]._default_currency_id()
+        currency_id = self._get_currency_from_company()
         report_data["formats"] = {
             "format_bold": workbook.add_format({"bold": True}),
             "format_right": workbook.add_format({"align": "right"}),
@@ -217,7 +231,10 @@ class AbstractReportXslx(models.AbstractModel):
                 else:
                     cell_format = report_data["formats"]["format_amount"]
                 report_data["sheet"].write_number(
-                    report_data["row_pos"], col_pos, float(value), cell_format
+                    report_data["row_pos"],
+                    col_pos,
+                    self._round_value_by_currency(value),
+                    cell_format,
                 )
             elif cell_type == "amount_currency":
                 if line_dict.get("currency_name", False):
@@ -225,7 +242,12 @@ class AbstractReportXslx(models.AbstractModel):
                         line_dict, report_data
                     )
                     report_data["sheet"].write_number(
-                        report_data["row_pos"], col_pos, float(value), format_amt
+                        report_data["row_pos"],
+                        col_pos,
+                        self._round_value_by_currency(
+                            value, line_dict.get("currency_id")
+                        ),
+                        format_amt,
                     )
             elif cell_type == "currency_name":
                 report_data["sheet"].write_string(
@@ -262,16 +284,21 @@ class AbstractReportXslx(models.AbstractModel):
                     report_data["sheet"].write_number(
                         report_data["row_pos"],
                         col_pos,
-                        float(value),
+                        self._round_value_by_currency(value),
                         report_data["formats"]["format_amount"],
                     )
                 elif cell_type == "amount_currency":
                     if my_object["currency_id"]:
-                        format_amt = self._get_currency_amt_format_dict()(
+                        format_amt = self._get_currency_amt_format_dict(
                             my_object, report_data
                         )
                         report_data["sheet"].write_number(
-                            report_data["row_pos"], col_pos, float(value), format_amt
+                            report_data["row_pos"],
+                            col_pos,
+                            self._round_value_by_currency(
+                                value, my_object.get("currency_id")
+                            ),
+                            format_amt,
                         )
             elif column.get("field_currency_balance"):
                 value = my_object.get(column["field_currency_balance"], False)
@@ -329,7 +356,7 @@ class AbstractReportXslx(models.AbstractModel):
                     report_data["sheet"].write_number(
                         report_data["row_pos"],
                         col_pos,
-                        float(value),
+                        self._round_value_by_currency(value),
                         report_data["formats"]["format_header_amount"],
                     )
                 elif cell_type == "amount_currency":
@@ -338,7 +365,12 @@ class AbstractReportXslx(models.AbstractModel):
                             my_object, report_data
                         )
                         report_data["sheet"].write_number(
-                            report_data["row_pos"], col_pos, float(value), format_amt
+                            report_data["row_pos"],
+                            col_pos,
+                            self._round_value_by_currency(
+                                value, my_object.get("currency_id")
+                            ),
+                            format_amt,
                         )
             elif column.get("field_currency_balance"):
                 value = my_object.get(column["field_currency_balance"], False)
