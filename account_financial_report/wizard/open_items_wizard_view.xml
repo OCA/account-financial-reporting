@@ -58,6 +58,7 @@
                     <field
                         name="account_ids"
                         nolabel="1"
+                        placeholder="Filtered accounts (empty for all)"
                         widget="many2many_tags"
                         options="{'no_create': True}"
                         colspan="4"
