@@ -34,6 +34,15 @@ class AccountMove(models.Model):
                 ).mapped("balance")
             )
 
+        mapping = {
+            "entry": "other",
+            "out_invoice": "receivable",
+            "out_receipt": "receivable",
+            "out_refund": "receivable_refund",
+            "in_invoice": "payable",
+            "in_receipt": "payable",
+            "in_refund": "payable_refund",
+        }
         for move in self:
             account_types = move.line_ids.mapped("account_id.account_type")
             if (
@@ -43,11 +52,17 @@ class AccountMove(models.Model):
                 move.financial_type = "liquidity"
             elif "liability_payable" in account_types:
                 balance = _balance_get(move.line_ids, "liability_payable")
-                move.financial_type = "payable" if balance < 0 else "payable_refund"
+                if move.company_currency_id.is_zero(balance):
+                    move.financial_type = mapping.get(move.move_type) or "other"
+                else:
+                    move.financial_type = "payable" if balance < 0 else "payable_refund"
             elif "asset_receivable" in account_types:
                 balance = _balance_get(move.line_ids, "asset_receivable")
-                move.financial_type = (
-                    "receivable" if balance > 0 else "receivable_refund"
-                )
+                if move.company_currency_id.is_zero(balance):
+                    move.financial_type = mapping.get(move.move_type) or "other"
+                else:
+                    move.financial_type = (
+                        "receivable" if balance > 0 else "receivable_refund"
+                    )
             else:
                 move.financial_type = "other"

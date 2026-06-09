@@ -296,3 +296,25 @@ class TestInvoicingBalance(AccountTestInvoicingCommon):
             to_date=date,
         )
         self.assertEqual(tax.balance, balance)
+
+    def test_financial_type_with_amount(self):
+        """Check that financial_type are computed correctly."""
+        in_invoice = self.init_invoice("in_invoice", post=True, amounts=[100])
+        self.assertEqual(in_invoice.financial_type, "payable")
+        in_refund = self._reverse_invoice(in_invoice, post=True)
+        self.assertEqual(in_refund.financial_type, "payable_refund")
+        out_invoice = self.init_invoice("out_invoice", post=True, amounts=[100])
+        self.assertEqual(out_invoice.financial_type, "receivable")
+        out_refund = self._reverse_invoice(out_invoice, post=True)
+        self.assertEqual(out_refund.financial_type, "receivable_refund")
+
+    def test_financial_type_with_zero_amount(self):
+        """Check that financial_type are computed correctly when the total is zero."""
+        in_invoice = self.init_invoice("in_invoice", post=True, amounts=[100, -100])
+        self.assertEqual(in_invoice.financial_type, "payable")
+        in_refund = self._reverse_invoice(in_invoice, post=True)
+        self.assertEqual(in_refund.financial_type, "payable_refund")
+        out_invoice = self.init_invoice("out_invoice", post=True, amounts=[100, -100])
+        self.assertEqual(out_invoice.financial_type, "receivable")
+        out_refund = self._reverse_invoice(out_invoice, post=True)
+        self.assertEqual(out_refund.financial_type, "receivable_refund")
