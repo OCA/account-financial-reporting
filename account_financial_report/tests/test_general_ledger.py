@@ -705,6 +705,96 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         wizard = self.env["general.ledger.report.wizard"].with_context(**context)
         self.assertEqual(wizard._default_partners(), expected_list)
 
+    def test_analytic_distribution_xlsx(self):
+        """
+        Render the XLSX report when a journal item is distributed among
+        several analytic accounts.
+
+        In that case ``analytic_distribution`` keys are several analytic
+        account ids joined by commas (e.g. ``"337,357"``), so the report must
+        not try to cast the whole key with ``int()``.
+        """
+        company = self.env.user.company_id
+        # Two analytic accounts in different plans so they can be combined in a
+        # single distribution key.
+        plan_1 = self.env["account.analytic.plan"].create({"name": "Plan 1"})
+        plan_2 = self.env["account.analytic.plan"].create({"name": "Plan 2"})
+        analytic_account_1 = self.env["account.analytic.account"].create(
+            {"name": "Analytic 1", "plan_id": plan_1.id}
+        )
+        analytic_account_2 = self.env["account.analytic.account"].create(
+            {"name": "Analytic 2", "plan_id": plan_2.id}
+        )
+        journal = self.env["account.journal"].search(
+            [("company_id", "=", company.id)], limit=1
+        )
+        move = self.env["account.move"].create(
+            {
+                "journal_id": journal.id,
+                "date": self.fy_date_start,
+                "line_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "debit": 1000,
+                            "credit": 0,
+                            "account_id": self.receivable_account.id,
+                            "partner_id": self.partner.id,
+                            # The receivable account is grouped by partner, so
+                            # this line exercises the buggy report branch.
+                            "analytic_distribution": {
+                                f"{analytic_account_1.id},{analytic_account_2.id}": 100,
+                            },
+                        },
+                    ),
+                    (
+                        0,
+                        0,
+                        {
+                            "debit": 0,
+                            "credit": 1000,
+                            "account_id": self.income_account.id,
+                            "partner_id": self.partner.id,
+                        },
+                    ),
+                ],
+            }
+        )
+        move.action_post()
+        wizard = self.env["general.ledger.report.wizard"].create(
+            {
+                "date_from": self.fy_date_start,
+                "date_to": self.fy_date_end,
+                "target_move": "posted",
+                "hide_account_at_0": False,
+                "company_id": company.id,
+                "fy_start_date": self.fy_date_start,
+                # Lines must not be centralized so the analytic distribution is
+                # rendered per move line.
+                "centralize": False,
+                "show_cost_center": True,
+            }
+        )
+        data = wizard._prepare_report_data()
+        # Mimic the context the wizard's report action provides at render time,
+        # so the report can resolve the company currency from the active wizard.
+        content, content_type = (
+            self.env["ir.actions.report"]
+            .with_context(
+                active_model=wizard._name,
+                active_id=wizard.id,
+                active_ids=wizard.ids,
+            )
+            ._render_xlsx(
+                "account_financial_report.action_report_general_ledger_xlsx",
+                wizard.ids,
+                data,
+            )
+        )
+        self.assertTrue(content)
+        self.assertEqual(content_type, "xlsx")
+
     def test_validate_date(self):
         company_id = self.env.user.company_id
         company_id.write({"fiscalyear_last_day": 31, "fiscalyear_last_month": "12"})
