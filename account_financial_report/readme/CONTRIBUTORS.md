@@ -24,6 +24,7 @@
   - Alexandre D. D??az
   - V??ctor Mart??nez
   - Carolina Fernandez
+  - Eduardo Ezerouali
 - [Sygel](https://www.sygel.es):
   - Harald Panten
   - Valentin Vinagre
