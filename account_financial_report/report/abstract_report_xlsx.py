@@ -10,19 +10,23 @@ class AbstractReportXslx(models.AbstractModel):
     _description = "Abstract XLSX Account Financial Report"
     _inherit = "report.report_xlsx.abstract"
 
-    def _get_currency_from_company(self):
+    def _get_currency_from_company(self, data=None):
+        if data and data.get("company_id"):
+            return self.env["res.company"].browse(data["company_id"]).currency_id
         model = self.env.context.get("active_model")
         active_id = self.env.context.get("active_id")
-        wizard = self.env[model].browse(active_id)
-        return wizard.company_id.currency_id
+        wizard = (
+            self.env[model].browse(active_id).exists() if model and active_id else False
+        )
+        return wizard.company_id.currency_id if wizard else self.env.company.currency_id
 
-    def _round_value_by_currency(self, value, currency=None):
+    def _round_value_by_currency(self, value, currency=None, data=None):
         if isinstance(currency, tuple):
             currency = currency[0]
         if currency:
             return self.env["res.currency"].browse(currency).round(value)
         else:
-            return self._get_currency_from_company().round(value)
+            return self._get_currency_from_company(data=data).round(value)
 
     def get_workbook_options(self):
         vals = super().get_workbook_options()
@@ -38,7 +42,7 @@ class AbstractReportXslx(models.AbstractModel):
             "row_pos": None,  # row_pos must be incremented at each writing lines
             "formats": None,
         }
-        self._define_formats(workbook, report_data)
+        self._define_formats(workbook, report_data, data=data)
         # Get report data
         report_name = self._get_report_name(objects, data=data)
         report_footer = self._get_report_footer()
@@ -54,7 +58,7 @@ class AbstractReportXslx(models.AbstractModel):
         self._generate_report_content(workbook, objects, data, report_data)
         self._write_report_footer(report_footer, report_data)
 
-    def _define_formats(self, workbook, report_data):
+    def _define_formats(self, workbook, report_data, data=None):
         """Add cell formats to current workbook.
         Those formats can be used on all cell.
         Available formats are :
@@ -68,7 +72,7 @@ class AbstractReportXslx(models.AbstractModel):
          * format_amount
          * format_percent_bold_italic
         """
-        currency_id = self._get_currency_from_company()
+        currency_id = self._get_currency_from_company(data=data)
         report_data["formats"] = {
             "format_bold": workbook.add_format({"bold": True}),
             "format_right": workbook.add_format({"align": "right"}),
