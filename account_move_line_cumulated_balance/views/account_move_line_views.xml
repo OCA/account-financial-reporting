@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_move_line_tree_cumulated_balance" model="ir.ui.view">
+        <field name="name">account.move.line.list.cumulated.balance</field>
+        <field name="model">account.move.line</field>
+        <field name="mode">primary</field>
+        <field name="inherit_id" ref="account.view_move_line_tree" />
+        <field name="arch" type="xml">
+            <field name="balance" position="after">
+                <field name="cumulated_balance" optional="show" readonly="1" />
+            </field>
+        </field>
+    </record>
+
+    <record id="action_account_moves_cumulated_balance" model="ir.actions.act_window">
+        <field name="name">Journal Items Cumulated Balance</field>
+        <field name="res_model">account.move.line</field>
+        <field
+            name="domain"
+        >[('display_type', 'not in', ('line_section', 'line_note')), ('parent_state', '!=', 'cancel')]</field>
+        <field
+            name="context"
+        >{'journal_type': 'general', 'search_default_posted': 1, 'search_default_group_by_account': 1, 'account_move_line_cumulated_balance_guard': 1}</field>
+        <field name="view_id" eval="False" />
+        <field
+            name="view_ids"
+            eval="[(5, 0, 0),
+                   (0, 0, {'sequence': 1, 'view_mode': 'tree', 'view_id': ref('view_move_line_tree_cumulated_balance')}),
+                   (0, 0, {'sequence': 2, 'view_mode': 'pivot'}),
+                   (0, 0, {'sequence': 3, 'view_mode': 'graph'}),
+                   (0, 0, {'sequence': 4, 'view_mode': 'kanban'})]"
+        />
+        <field name="search_view_id" ref="account.view_account_move_line_filter" />
+        <field name="view_mode">tree,pivot,graph,kanban</field>
+    </record>
+
+    <menuitem
+        id="menu_action_account_moves_cumulated_balance"
+        action="action_account_moves_cumulated_balance"
+        parent="account.menu_finance_entries_accounting_miscellaneous"
+        groups="account.group_account_readonly"
+        sequence="11"
+    />
+</odoo>
