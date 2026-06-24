@@ -725,3 +725,29 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
         ]
         self.assertEqual(len(trial_balance_code_set), len(all_accounts_code_set))
         self.assertTrue(trial_balance_code_set == all_accounts_code_set)
+
+    def test_07_branch_company(self):
+        """Trial balance for a branch must include parent company accounts."""
+        parent = self.env.user.company_id
+        branch = self.env["res.company"].create(
+            {"name": "Trial Balance Branch", "parent_id": parent.id}
+        )
+        self.assertIn(parent, self.account100.company_ids)
+        self.assertNotIn(branch, self.account100.company_ids)
+        wizard = self.env["trial.balance.report.wizard"].create(
+            {
+                "date_from": self.date_start,
+                "date_to": self.date_end,
+                "target_move": "posted",
+                "hide_account_at_0": False,
+                "show_hierarchy": False,
+                "company_id": branch.id,
+                "fy_start_date": self.fy_date_start,
+            }
+        )
+        res = wizard.onchange_company_id()
+        accounts_in_domain = self.env["account.account"].search(
+            res["domain"]["account_ids"]
+        )
+        self.assertIn(self.account100, accounts_in_domain)
+        self.assertIn(self.account200, accounts_in_domain)

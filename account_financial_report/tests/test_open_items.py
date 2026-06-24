@@ -69,3 +69,24 @@ class TestOpenItems(AccountTestInvoicingCommon):
         wizard.on_change_account_range()
         res = wizard._prepare_report_data()
         self.assertEqual(res["grouped_by"], wizard.grouped_by)
+
+    def test_branch_company(self):
+        """Open items for a branch must include parent company accounts."""
+        parent = self.env.company
+        branch = self.env["res.company"].create(
+            {"name": "Open Items Branch", "parent_id": parent.id}
+        )
+        parent_account = self.env["account.account"].search(
+            [("company_ids", "in", [parent.id]), ("reconcile", "=", True)],
+            limit=1,
+        )
+        self.assertTrue(parent_account)
+        self.assertNotIn(branch, parent_account.company_ids)
+        wizard = self.env["open.items.report.wizard"].create(
+            {"date_at": Date.today(), "company_id": branch.id}
+        )
+        res = wizard.onchange_company_id()
+        accounts_in_domain = self.env["account.account"].search(
+            res["domain"]["account_ids"]
+        )
+        self.assertIn(parent_account, accounts_in_domain)

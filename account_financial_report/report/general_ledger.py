@@ -75,7 +75,7 @@ class GeneralLedgerReport(models.AbstractModel):
         if grouped_by == "none":
             return []
         accounts_domain = [
-            ("company_ids", "in", [company_id]),
+            ("company_ids", "parent_of", [company_id]),
         ] + self._get_account_type_domain(grouped_by)
         acc_prt_accounts = self.env["account.account"].search(accounts_domain)
         return acc_prt_accounts.ids
@@ -84,7 +84,7 @@ class GeneralLedgerReport(models.AbstractModel):
         self, account_ids, company_id, date_from, base_domain, grouped_by, acc_prt=False
     ):
         accounts_domain = [
-            ("company_ids", "in", [company_id]),
+            ("company_ids", "parent_of", [company_id]),
             ("include_initial_balance", "=", True),
         ]
         if account_ids:
@@ -102,7 +102,7 @@ class GeneralLedgerReport(models.AbstractModel):
         self, account_ids, company_id, date_from, fy_start_date, base_domain
     ):
         accounts_domain = [
-            ("company_ids", "in", [company_id]),
+            ("company_ids", "parent_of", [company_id]),
             ("include_initial_balance", "=", False),
         ]
         if account_ids:
@@ -132,7 +132,7 @@ class GeneralLedgerReport(models.AbstractModel):
         self, account_ids, company_id, fy_start_date, base_domain
     ):
         accounts_domain = [
-            ("company_ids", "in", [company_id]),
+            ("company_ids", "parent_of", [company_id]),
             ("include_initial_balance", "=", False),
         ]
         if account_ids:
