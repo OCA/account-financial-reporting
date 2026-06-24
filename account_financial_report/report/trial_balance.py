@@ -228,13 +228,30 @@ class TrialBalanceReport(models.AbstractModel):
     ):
         for tb in tb_period_acc:
             acc_id = tb["account_id"][0]
-            total_amount[acc_id] = self._prepare_total_amount(tb, foreign_currency)
-            total_amount[acc_id]["credit"] = tb["credit:sum"]
-            total_amount[acc_id]["debit"] = tb["debit:sum"]
-            total_amount[acc_id]["balance"] = tb["balance:sum"]
-            total_amount[acc_id]["initial_balance"] = 0.0
-            if foreign_currency:
-                total_amount[acc_id]["initial_currency_balance"] = 0.0
+            # ``tb_period_acc`` is grouped by account *and* currency, so an
+            # account holding move lines in several currencies produces one
+            # row per currency here. Those rows must be accumulated, not
+            # overwritten, otherwise the account only keeps the figures of its
+            # last currency sub-group (wrong debit/credit/balance, and the
+            # "Target Moves" filter looks ineffective when the dropped
+            # currencies carry the only unposted entries).
+            if acc_id not in total_amount:
+                total_amount[acc_id] = self._prepare_total_amount(tb, foreign_currency)
+                total_amount[acc_id]["credit"] = tb["credit:sum"]
+                total_amount[acc_id]["debit"] = tb["debit:sum"]
+                total_amount[acc_id]["balance"] = tb["balance:sum"]
+                total_amount[acc_id]["initial_balance"] = 0.0
+                if foreign_currency:
+                    total_amount[acc_id]["initial_currency_balance"] = 0.0
+            else:
+                total_amount[acc_id]["credit"] += tb["credit:sum"]
+                total_amount[acc_id]["debit"] += tb["debit:sum"]
+                total_amount[acc_id]["balance"] += tb["balance:sum"]
+                total_amount[acc_id]["ending_balance"] += tb["balance:sum"]
+                if foreign_currency:
+                    total_amount[acc_id]["ending_currency_balance"] += round(
+                        tb["amount_currency:sum"], 2
+                    )
             if "__context" in tb and "group_by" in tb["__context"]:
                 group_by = tb["__context"]["group_by"][0]
                 gb_data = {}
