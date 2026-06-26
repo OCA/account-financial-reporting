@@ -28,8 +28,12 @@ class AccountMoveLine(models.Model):
         lazy=True,
     ):
         fields = list(fields or [])
-        with_cumulated_balance = any(
-            self._read_group_field_is_cumulated_balance(field) for field in fields
+        hide_zero_cumulated_balance = (
+            self.env.context.get("hide_zero_cumulated_balance") and groupby
+        )
+        with_cumulated_balance = (
+            any(self._read_group_field_is_cumulated_balance(field) for field in fields)
+            or hide_zero_cumulated_balance
         )
         if with_cumulated_balance:
             fields = [
@@ -37,17 +41,25 @@ class AccountMoveLine(models.Model):
                 for field in fields
                 if not self._read_group_field_is_cumulated_balance(field)
             ]
+        read_group_offset = 0 if hide_zero_cumulated_balance else offset
+        read_group_limit = None if hide_zero_cumulated_balance else limit
         groups = super().read_group(
             domain,
             fields,
             groupby,
-            offset=offset,
-            limit=limit,
+            offset=read_group_offset,
+            limit=read_group_limit,
             orderby=orderby,
             lazy=lazy,
         )
         if with_cumulated_balance:
             self._read_group_set_cumulated_balance(groups, groupby)
+        if hide_zero_cumulated_balance:
+            groups = [group for group in groups if group.get("cumulated_balance")]
+            if offset:
+                groups = groups[offset:]
+            if limit is not None:
+                groups = groups[:limit]
         return groups
 
     @api.model
@@ -151,22 +163,23 @@ class AccountMoveLine(models.Model):
             SQL.identifier(query.table, field_name)
             for field_name in self._cumulated_balance_initial_groupby_fields()
         )
-        self.env.cr.execute(
-            query.select(
-                SQL.identifier(query.table, "id"),
-                SQL(
-                    "SUM(%s) OVER ("
-                    "PARTITION BY %s "
-                    "ORDER BY %s "
-                    "ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW"
-                    ")",
-                    SQL.identifier(query.table, "balance"),
-                    sql_partition,
-                    sql_order,
-                ),
+        result = dict(
+            self.env.execute_query(
+                query.select(
+                    SQL.identifier(query.table, "id"),
+                    SQL(
+                        "SUM(%s) OVER ("
+                        "PARTITION BY %s "
+                        "ORDER BY %s "
+                        "ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW"
+                        ")",
+                        SQL.identifier(query.table, "balance"),
+                        sql_partition,
+                        sql_order,
+                    ),
+                )
             )
         )
-        result = dict(self.env.cr.fetchall())
         for line in self:
             line.cumulated_balance = result[line.id]
 
@@ -262,7 +275,7 @@ class AccountMoveLine(models.Model):
                     ],
                 ]
             )
-            groups = self.read_group(
+            groups = self.with_context(hide_zero_cumulated_balance=False).read_group(
                 company_domain,
                 ["balance:sum"],
                 groupby_fields,

@@ -15,7 +15,7 @@ class TestAccountMoveLineCumulatedBalance(AccountTestInvoicingCommon):
         cls.account = cls.company_data["default_account_assets"]
         cls.counterpart_account = cls.company_data["default_account_revenue"]
 
-    def _create_move(self, date, balance, partner=None):
+    def _create_move(self, date, balance, partner=None, account=None):
         move = self.env["account.move"].create(
             {
                 "move_type": "entry",
@@ -23,7 +23,7 @@ class TestAccountMoveLineCumulatedBalance(AccountTestInvoicingCommon):
                 "line_ids": [
                     Command.create(
                         {
-                            "account_id": self.account.id,
+                            "account_id": (account or self.account).id,
                             "balance": balance,
                             "partner_id": partner.id if partner else False,
                         }
@@ -152,6 +152,67 @@ class TestAccountMoveLineCumulatedBalance(AccountTestInvoicingCommon):
 
         self.assertEqual(len(groups), 1)
         self.assertEqual(groups[0]["cumulated_balance"], 130)
+
+    def test_cumulated_balance_read_group_hide_zero_cumulated_balance(self):
+        other_account = self.company_data["default_account_expense"]
+        self._create_move("2024-01-15", 50)
+        self._create_move("2024-02-15", -50)
+        self._create_move("2024-01-15", 10, account=other_account)
+
+        groups = (
+            self.env["account.move.line"]
+            .with_context(
+                account_move_line_cumulated_balance_guard=True,
+                hide_zero_cumulated_balance=True,
+            )
+            .read_group(
+                domain=[
+                    ("account_id", "in", (self.account | other_account).ids),
+                    ("date", ">=", "2024-01-01"),
+                    ("date", "<=", "2024-12-31"),
+                    ("parent_state", "=", "posted"),
+                ],
+                fields=["cumulated_balance:max"],
+                groupby=["account_id"],
+            )
+        )
+
+        self.assertEqual(len(groups), 1)
+        self.assertEqual(groups[0]["account_id"][0], other_account.id)
+        self.assertEqual(groups[0]["cumulated_balance"], 10)
+
+    def test_cumulated_balance_read_group_hide_zero_cumulated_balance_with_limit(self):
+        other_account = self.company_data["default_account_expense"]
+        self._create_move("2024-01-15", 50)
+        self._create_move("2024-02-15", -50)
+        self._create_move("2024-01-15", 10, account=other_account)
+        orderby = "account_id"
+        if self.account.id > other_account.id:
+            orderby = "account_id desc"
+
+        groups = (
+            self.env["account.move.line"]
+            .with_context(
+                account_move_line_cumulated_balance_guard=True,
+                hide_zero_cumulated_balance=True,
+            )
+            .read_group(
+                domain=[
+                    ("account_id", "in", (self.account | other_account).ids),
+                    ("date", ">=", "2024-01-01"),
+                    ("date", "<=", "2024-12-31"),
+                    ("parent_state", "=", "posted"),
+                ],
+                fields=["cumulated_balance:max"],
+                groupby=["account_id"],
+                limit=1,
+                orderby=orderby,
+            )
+        )
+
+        self.assertEqual(len(groups), 1)
+        self.assertEqual(groups[0]["account_id"][0], other_account.id)
+        self.assertEqual(groups[0]["cumulated_balance"], 10)
 
     def test_cumulated_balance_respects_partner_groupby(self):
         partner_a = self.env["res.partner"].create({"name": "Partner A"})
