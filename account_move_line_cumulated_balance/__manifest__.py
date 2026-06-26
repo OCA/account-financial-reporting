@@ -4,7 +4,7 @@
 {
     "name": "Account Move Line Cumulated Balance",
     "summary": "Show the cumulated balance on journal items",
-    "version": "17.0.1.0.0",
+    "version": "18.0.1.0.0",
     "development_status": "Beta",
     "category": "Accounting & Finance",
     "website": "https://github.com/OCA/account-financial-reporting",

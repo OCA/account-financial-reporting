@@ -1,7 +1,7 @@
 # Copyright 2026 Tecnativa - Carlos Dauden
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import fields, models
+from odoo import api, fields, models
 from odoo.osv import expression
 from odoo.tools import SQL
 
@@ -9,13 +9,14 @@ from odoo.tools import SQL
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
-    cumulated_balance = fields.Monetary(group_operator="max")
+    cumulated_balance = fields.Monetary(aggregator="max")
 
     def _read_group_select(self, aggregate_spec, query):
         if aggregate_spec == "cumulated_balance:max":
-            return SQL("MAX(%s)", SQL.identifier(query.table, "balance")), ["balance"]
+            return SQL("MAX(%s)", SQL.identifier(query.table, "balance"))
         return super()._read_group_select(aggregate_spec, query)
 
+    @api.model
     def read_group(
         self,
         domain,
@@ -49,9 +50,11 @@ class AccountMoveLine(models.Model):
             self._read_group_set_cumulated_balance(groups, groupby)
         return groups
 
+    @api.model
     def _read_group_field_is_cumulated_balance(self, field):
         return field == "cumulated_balance" or field.startswith("cumulated_balance:")
 
+    @api.model
     def _read_group_set_cumulated_balance(self, groups, groupby):
         order = self.env.context.get("order_cumulated_balance") or self._order
         groupby = [groupby] if isinstance(groupby, str) else groupby
@@ -71,21 +74,25 @@ class AccountMoveLine(models.Model):
                 order_cumulated_balance=order,
             ).cumulated_balance
 
+    @api.model
     def _cumulated_balance_to_tuple(self, value):
         if isinstance(value, list | tuple):
             return tuple(self._cumulated_balance_to_tuple(item) for item in value)
         return value
 
+    @api.model
     def _cumulated_balance_grouped_by_account(self):
         return any(
             groupby.split(":", 1)[0] == "account_id"
             for groupby in self._cumulated_balance_context_groupby()
         )
 
+    @api.model
     def _cumulated_balance_filtered_by_account(self):
         domain = self.env.context.get("domain_cumulated_balance") or ()
         return self._domain_has_account_filter(domain)
 
+    @api.model
     def _domain_has_account_filter(self, domain):
         for item in domain:
             if not isinstance(item, list | tuple):
@@ -96,6 +103,12 @@ class AccountMoveLine(models.Model):
                 return True
         return False
 
+    @api.depends_context(
+        "account_move_line_cumulated_balance_guard",
+        "domain_cumulated_balance",
+        "group_by",
+        "order_cumulated_balance",
+    )
     def _compute_cumulated_balance(self):
         if (
             self.env.context.get("account_move_line_cumulated_balance_guard")
@@ -157,6 +170,7 @@ class AccountMoveLine(models.Model):
         for line in self:
             line.cumulated_balance = result[line.id]
 
+    @api.model
     def _cumulated_balance_order_needs_reverse(self, order):
         for order_item in order.split(","):
             order_parts = order_item.strip().lower().split()
@@ -166,6 +180,7 @@ class AccountMoveLine(models.Model):
                 return "desc" in order_parts
         return True
 
+    @api.model
     def _cumulated_balance_initial_date_domain(self, domain):
         initial_bound = self._cumulated_balance_initial_bound(domain)
         if not initial_bound:
@@ -175,6 +190,7 @@ class AccountMoveLine(models.Model):
             return [("date", "<=", date_from)]
         return [("date", "<", date_from)]
 
+    @api.model
     def _cumulated_balance_initial_bound(self, domain):
         if not domain:
             return None
@@ -183,6 +199,7 @@ class AccountMoveLine(models.Model):
         )
         return initial_bound
 
+    @api.model
     def _initial_bound_from_normalized_domain(self, domain, index):
         token = domain[index]
         if expression.is_leaf(token):
@@ -197,11 +214,13 @@ class AccountMoveLine(models.Model):
             return self._combine_initial_bounds_and(left, right), index
         return self._combine_initial_bounds_or(left, right), index
 
+    @api.model
     def _initial_bound_from_leaf(self, leaf):
         if leaf[0] != "date" or leaf[1] not in (">", ">=", "=") or not leaf[2]:
             return None
         return fields.Date.to_date(leaf[2]), leaf[1] == ">"
 
+    @api.model
     def _combine_initial_bounds_and(self, left, right):
         if not left or not right:
             return left or right
@@ -209,6 +228,7 @@ class AccountMoveLine(models.Model):
             return max(left, right, key=lambda item: item[0])
         return left[0], left[1] or right[1]
 
+    @api.model
     def _combine_initial_bounds_or(self, left, right):
         if not left or not right:
             return None
@@ -256,6 +276,7 @@ class AccountMoveLine(models.Model):
                 ] = group["balance"]
         return initial_balances
 
+    @api.model
     def _cumulated_balance_initial_groupby_fields(self):
         groupby_fields = ["account_id", "company_id"]
         for groupby in self._cumulated_balance_context_groupby():
@@ -272,18 +293,21 @@ class AccountMoveLine(models.Model):
             groupby_fields.append(field_name)
         return groupby_fields
 
+    @api.model
     def _cumulated_balance_context_groupby(self):
         group_by = self.env.context.get("group_by") or ()
         if isinstance(group_by, str):
             return [groupby.strip() for groupby in group_by.split(",") if groupby]
         return group_by
 
+    @api.model
     def _cumulated_balance_initial_group_key_from_record(self, record):
         return tuple(
             self._cumulated_balance_initial_group_value_from_record(record, field_name)
             for field_name in self._cumulated_balance_initial_groupby_fields()
         )
 
+    @api.model
     def _cumulated_balance_initial_group_value_from_record(self, record, field_name):
         value = record[field_name]
         field = self._fields[field_name]
@@ -291,12 +315,14 @@ class AccountMoveLine(models.Model):
             return value.id or False
         return value
 
+    @api.model
     def _cumulated_balance_initial_group_key_from_group(self, group, groupby_fields):
         return tuple(
             self._cumulated_balance_initial_group_value_from_group(group, field_name)
             for field_name in groupby_fields
         )
 
+    @api.model
     def _cumulated_balance_initial_group_value_from_group(self, group, field_name):
         value = group[field_name]
         field = self._fields[field_name]
@@ -304,11 +330,13 @@ class AccountMoveLine(models.Model):
             return value and value[0]
         return value
 
+    @api.model
     def _cumulated_balance_domain_without_date(self, domain):
         normalized_domain = expression.normalize_domain(domain)
         domain_without_date, _index = self._remove_date_leaves(normalized_domain, 0)
         return domain_without_date or []
 
+    @api.model
     def _remove_date_leaves(self, domain, index):
         token = domain[index]
         if expression.is_leaf(token):
@@ -324,11 +352,13 @@ class AccountMoveLine(models.Model):
             return None, index
         return [token] + left + right, index
 
+    @api.model
     def _combine_domain_operator(self, operator, left, right):
         if left and right:
             return [operator] + left + right
         return left or right
 
+    @api.model
     def _domain_leaves(self, domain):
         for token in expression.normalize_domain(domain):
             if expression.is_leaf(token):
