@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record
+        id="view_mis_builder_cash_flow_forecast_line_view_tree_inherit"
+        model="ir.ui.view"
+    >
+        <field name="name">mis.cash_flow.forecast_line.tree.inherit</field>
+        <field name="model">mis.cash_flow.forecast_line</field>
+        <field
+            name="inherit_id"
+            ref="mis_builder_cash_flow.mis_cash_flow_forecast_line_view_tree"
+        />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="category_id" options="{'no_create': True}" />
+                <field name="cash_flow_plan_id" optional="hide" readonly="1" />
+            </xpath>
+        </field>
+    </record>
+
+    <record
+        id="view_mis_builder_cash_flow_forecast_line_view_form_inherit"
+        model="ir.ui.view"
+    >
+        <field name="name">mis.cash_flow.forecast_line.form.inherit</field>
+        <field name="model">mis.cash_flow.forecast_line</field>
+        <field
+            name="inherit_id"
+            ref="mis_builder_cash_flow.mis_cash_flow_forecast_line_view_form"
+        />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='balance']" position="after">
+                <field name="category_id" options="{'no_create': True}" />
+                <field name="cash_flow_plan_id" readonly="1" />
+            </xpath>
+        </field>
+    </record>
+
+    <record
+        id="view_mis_builder_cash_flow_forecast_line_view_search_inherit"
+        model="ir.ui.view"
+    >
+        <field name="name">mis.cash_flow.forecast_line.search.inherit</field>
+        <field name="model">mis.cash_flow.forecast_line</field>
+        <field
+            name="inherit_id"
+            ref="mis_builder_cash_flow.mis_cash_flow_forecast_line_view_search"
+        />
+        <field name="arch" type="xml">
+            <xpath expr="//search/group" position="before">
+                <field name="category_id" />
+                <field name="cash_flow_plan_id" />
+                <separator />
+            </xpath>
+            <xpath expr="//search/group" position="inside">
+                <filter
+                    string="Category"
+                    name="group_by_category"
+                    context="{'group_by': 'category_id'}"
+                />
+                <filter
+                    string="Origin Plan"
+                    name="group_by_plan"
+                    context="{'group_by': 'cash_flow_plan_id'}"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

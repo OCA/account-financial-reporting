@@ -1,0 +1,341 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mis_builder_cash_flow_forecast_plan
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-06 06:12+0000\n"
+"PO-Revision-Date: 2026-07-06 06:12+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_plan__account_id
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow_forecast_plan.mis_cash_flow_plan_view_search
+msgid "Account"
+msgstr "Cuenta"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_plan__balance
+msgid "Balance / Amount"
+msgstr "Saldo / Importe"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow_forecast_plan.mis_cash_flow_plan_view_form
+msgid "Base Data"
+msgstr "Datos Base"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model,name:mis_builder_cash_flow_forecast_plan.model_mis_cash_flow_forecast_category
+msgid "Cash Flow Forecast Line Category"
+msgstr "Categoría de Línea de Previsión de Flujo de Caja"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow_forecast_plan.mis_cash_flow_plan_view_form
+msgid "Cash Flow Forecast Plan"
+msgstr "Plan de Previsión de Flujo de Caja"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model,name:mis_builder_cash_flow_forecast_plan.model_mis_cash_flow_plan
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow_forecast_plan.res_config_settings_view_form
+msgid "Cash Flow Plan"
+msgstr "Plan de Flujo de Caja"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_res_company__cash_flow_plan_max_forecast_lines
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_res_config_settings__cash_flow_plan_max_forecast_lines
+msgid "Cash Flow Plan Max Forecast Lines"
+msgstr "Máximo de Líneas de Previsión del Plan de Flujo de Caja"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_forecast_line__category_id
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_plan__category_id
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow_forecast_plan.mis_cash_flow_plan_view_search
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow_forecast_plan.view_mis_builder_cash_flow_forecast_line_view_search_inherit
+msgid "Category"
+msgstr "Categoría"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_forecast_category__child_ids
+msgid "Child Categories"
+msgstr "Categorías Hijas"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:mis.cash.flow.forecast.category,name:mis_builder_cash_flow_forecast_plan.mis_cash_flow_category_client_contracts
+msgid "Client contracts"
+msgstr "Contratos de clientes"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model,name:mis_builder_cash_flow_forecast_plan.model_res_company
+msgid "Companies"
+msgstr "Compañías"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_plan__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_forecast_category__complete_name
+msgid "Complete Name"
+msgstr "Nombre Completo"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model,name:mis_builder_cash_flow_forecast_plan.model_res_config_settings
+msgid "Config Settings"
+msgstr "Ajustes de configuración"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_forecast_category__create_uid
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_plan__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_forecast_category__create_date
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_plan__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_plan__date_end
+msgid "Date End"
+msgstr "Fecha de Fin"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_plan__date_start
+msgid "Date Start"
+msgstr "Fecha de Inicio"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_forecast_category__display_name
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_plan__display_name
+msgid "Display Name"
+msgstr "Nombre Mostrado"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow_forecast_plan.mis_cash_flow_plan_view_form
+msgid "E.g. Recurring Office Rent"
+msgstr "Ej. Alquiler de Oficina Recurrente"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#. odoo-python
+#: code:addons/mis_builder_cash_flow_forecast_plan/models/mis_cash_flow_plan.py:0
+#, python-format
+msgid "End Date cannot be earlier than Start Date."
+msgstr "La fecha de fin no puede ser anterior a la fecha de inicio."
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields.selection,name:mis_builder_cash_flow_forecast_plan.selection__mis_cash_flow_plan__periodicity__days
+msgid "Every X Days"
+msgstr "Cada X Días"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow_forecast_plan.mis_cash_flow_plan_view_form
+msgid ""
+"Existing forecast lines will be permanently deleted and regenerated. Are you"
+" sure?"
+msgstr ""
+"Las líneas de previsión existentes se eliminarán permanentemente y se "
+"regenerarán. ¿Está seguro?"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.actions.act_window,name:mis_builder_cash_flow_forecast_plan.action_cash_flow_category
+#: model:ir.ui.menu,name:mis_builder_cash_flow_forecast_plan.menu_cash_flow_category_root
+msgid "Forecast Line Categories"
+msgstr "Categorías de Línea de Previsión"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow_forecast_plan.view_cash_flow_category_form
+msgid "Forecast Line Category"
+msgstr "Categoría de Línea de Previsión"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_plan__forecast_line_count
+msgid "Forecast Line Count"
+msgstr "Número de Líneas de Previsión"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow_forecast_plan.mis_cash_flow_plan_view_form
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow_forecast_plan.mis_cash_flow_plan_view_tree
+msgid "Forecast Lines"
+msgstr "Líneas de Previsión"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#. odoo-python
+#: code:addons/mis_builder_cash_flow_forecast_plan/models/mis_cash_flow_plan.py:0
+#, python-format
+msgid "Forecast Lines for Plan: %s"
+msgstr "Líneas de Previsión del Plan: %s"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.actions.act_window,name:mis_builder_cash_flow_forecast_plan.action_mis_cash_flow_plan
+#: model:ir.ui.menu,name:mis_builder_cash_flow_forecast_plan.menu_mis_cash_flow_plan_root
+msgid "Forecast Planner"
+msgstr "Planificador de Previsión"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow_forecast_plan.mis_cash_flow_plan_view_form
+msgid "Generate Forecast Lines"
+msgstr "Generar Líneas de Previsión"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_plan__forecast_line_ids
+msgid "Generated Forecast Lines"
+msgstr "Líneas de Previsión Generadas"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#. odoo-python
+#: code:addons/mis_builder_cash_flow_forecast_plan/models/mis_cash_flow_plan.py:0
+#, python-format
+msgid "Generation limit reached"
+msgstr "Límite de generación alcanzado"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow_forecast_plan.mis_cash_flow_plan_view_search
+msgid "Has Forecast Lines Asociated"
+msgstr "Tiene Líneas de Previsión Asociadas"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_forecast_category__id
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_plan__id
+msgid "ID"
+msgstr "ID"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow_forecast_plan.mis_cash_flow_plan_view_search
+msgid "In Progress"
+msgstr "En Curso"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_plan__every_x_days
+msgid "Interval (Days)"
+msgstr "Intervalo (Días)"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_forecast_category__write_uid
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_plan__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_forecast_category__write_date
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_plan__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model,name:mis_builder_cash_flow_forecast_plan.model_mis_cash_flow_forecast_line
+msgid "MIS Cash Flow Forecast Line"
+msgstr "Línea de previsión de flujo de caja MIS"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow_forecast_plan.res_config_settings_view_form
+msgid "Max Forecast Lines"
+msgstr "Máximo de Líneas de Previsión"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,help:mis_builder_cash_flow_forecast_plan.field_res_company__cash_flow_plan_max_forecast_lines
+#: model:ir.model.fields,help:mis_builder_cash_flow_forecast_plan.field_res_config_settings__cash_flow_plan_max_forecast_lines
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow_forecast_plan.res_config_settings_view_form
+msgid ""
+"Maximum number of forecast lines a Cash Flow Plan can generate at once when "
+"using 'Generate Forecast Lines'."
+msgstr ""
+"Número máximo de líneas de previsión que un Plan de Flujo de Caja puede "
+"generar de una vez al usar 'Generar Líneas de Previsión'."
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow_forecast_plan.mis_cash_flow_plan_view_search
+msgid "Mis Cash Flow Plan Search"
+msgstr "Búsqueda de Plan de Flujo de Caja MIS"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields.selection,name:mis_builder_cash_flow_forecast_plan.selection__mis_cash_flow_plan__periodicity__months
+msgid "Monthly"
+msgstr "Mensual"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_forecast_category__name
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_plan__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#. odoo-python
+#: code:addons/mis_builder_cash_flow_forecast_plan/models/mis_cash_flow_plan.py:0
+#, python-format
+msgid ""
+"Only %(limit)d forecast lines were created. Reduce the date range or "
+"increase the interval to generate all lines."
+msgstr ""
+"Solo se crearon %(limit)d líneas de previsión. Reduzca el rango de fechas o "
+"aumente el intervalo para generar todas las líneas."
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_forecast_line__cash_flow_plan_id
+msgid "Origin Cash Flow Plan"
+msgstr "Plan de Flujo de Caja de Origen"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow_forecast_plan.view_mis_builder_cash_flow_forecast_line_view_search_inherit
+msgid "Origin Plan"
+msgstr "Plan de Origen"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_forecast_category__parent_id
+msgid "Parent Category"
+msgstr "Categoría Padre"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_forecast_category__parent_path
+msgid "Parent Path"
+msgstr "Ruta Padre"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_plan__partner_id
+msgid "Partner"
+msgstr "Contacto"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:mis.cash.flow.forecast.category,name:mis_builder_cash_flow_forecast_plan.mis_cash_flow_category_payroll
+msgid "Payroll"
+msgstr "Nómina"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields,field_description:mis_builder_cash_flow_forecast_plan.field_mis_cash_flow_plan__periodicity
+msgid "Periodicity"
+msgstr "Periodicidad"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow_forecast_plan.mis_cash_flow_plan_view_form
+msgid "Recurrence Strategy"
+msgstr "Estrategia de Recurrencia"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:mis.cash.flow.forecast.category,name:mis_builder_cash_flow_forecast_plan.mis_cash_flow_category_rents
+msgid "Rents"
+msgstr "Alquileres"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:mis.cash.flow.forecast.category,name:mis_builder_cash_flow_forecast_plan.mis_cash_flow_category_supplier_contracts
+msgid "Supplier contracts"
+msgstr "Contratos de proveedores"
+
+#. module: mis_builder_cash_flow_forecast_plan
+#. odoo-python
+#: code:addons/mis_builder_cash_flow_forecast_plan/models/mis_cash_flow_plan.py:0
+#, python-format
+msgid "The day interval must be greater than zero."
+msgstr "El intervalo de días debe ser mayor que cero."
+
+#. module: mis_builder_cash_flow_forecast_plan
+#: model:ir.model.fields.selection,name:mis_builder_cash_flow_forecast_plan.selection__mis_cash_flow_plan__periodicity__weeks
+msgid "Weekly"
+msgstr "Semanal"

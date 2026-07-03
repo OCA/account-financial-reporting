@@ -1,0 +1,12 @@
+<odoo>
+
+    <record id="cash_flow_plan_company_rule" model="ir.rule">
+        <field name="name">Cash Flow Plan: multi-company</field>
+        <field name="model_id" ref="model_mis_cash_flow_plan" />
+        <field name="global" eval="True" />
+        <field
+            name="domain_force"
+        >['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+</odoo>
