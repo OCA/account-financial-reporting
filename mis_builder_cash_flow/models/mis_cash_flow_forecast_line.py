@@ -25,6 +25,12 @@ class MisCashFlowForecastLine(models.Model):
         default=lambda self: self.env.company,
         index=True,
     )
+    cash_flow_plan_id = fields.Many2one(
+        "mis.cash.flow.plan",
+        string="Origin Cash Flow Plan",
+        ondelete="cascade",
+        index=True,
+    )
 
     @api.constrains("company_id", "account_id")
     def _check_company_id_account_id(self):

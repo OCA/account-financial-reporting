@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="True">
+    <record id="mis_cash_flow_account_office_rent" model="account.account">
+        <field name="name">Office Rent</field>
+        <field name="code">CF001</field>
+        <field name="account_type">expense</field>
+        <field name="company_id" ref="base.main_company" />
+    </record>
+
+    <record id="mis_cash_flow_plan_office_rent" model="mis.cash.flow.plan">
+        <field name="name">Office Rent</field>
+        <field name="account_id" ref="mis_cash_flow_account_office_rent" />
+        <field name="balance">-1200.0</field>
+        <field name="company_id" ref="base.main_company" />
+        <field
+            name="date_start"
+            eval="(DateTime.today() - relativedelta(months=2)).strftime('%Y-%m-01')"
+        />
+        <field
+            name="date_end"
+            eval="(DateTime.today() + relativedelta(months=5)).strftime('%Y-%m-01')"
+        />
+        <field name="periodicity">months</field>
+    </record>
+
+    <function
+        model="mis.cash.flow.plan"
+        name="action_generate_forecast_lines"
+        eval="[[ref('mis_cash_flow_plan_office_rent')]]"
+    />
+</odoo>
