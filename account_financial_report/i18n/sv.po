@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2025-09-19 08:42+0000\n"
-"Last-Translator: jakobkrabbe <jakob@syscare.se>\n"
+"PO-Revision-Date: 2026-07-06 15:46+0000\n"
+"Last-Translator: Laura V <laura.valls@forgeflow.com>\n"
 "Language-Team: none\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.4\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: account_financial_report
 #. odoo-python
@@ -863,7 +863,7 @@ msgstr "Filtrera partners"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.open_items_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
 msgid "Filtered accounts (empty for all)"
-msgstr ""
+msgstr "Filtrerade konton (tomt för alla)"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__foreign_currency
@@ -873,7 +873,7 @@ msgstr "Utländsk valuta"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
 msgid "Format"
-msgstr ""
+msgstr "Format"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
@@ -1162,7 +1162,7 @@ msgstr "Journaler"
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__label_text_limit
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__label_text_limit
 msgid "Label Text Limit"
-msgstr ""
+msgstr "Gräns för etiketttext"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration__write_uid
@@ -1198,7 +1198,7 @@ msgstr "Nivå"
 #. odoo-python
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
 msgid "Level %(level)s"
-msgstr ""
+msgstr "Nivå %(level)s"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1226,7 +1226,7 @@ msgstr "Saknad partner"
 #. odoo-python
 #: code:addons/account_financial_report/report/open_items.py:0
 msgid "Missing Salesperson"
-msgstr ""
+msgstr "Saknar säljare"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_age_report_configuration_line
@@ -1420,7 +1420,7 @@ msgstr "Kund initial balans"
 #. module: account_financial_report
 #: model:ir.model.fields.selection,name:account_financial_report.selection__open_items_report_wizard__grouped_by__salesperson
 msgid "Partner Salesperson"
-msgstr ""
+msgstr "Kontaktens säljare"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1764,6 +1764,8 @@ msgid ""
 "There is a problem in the structure of the account groups. You may need to "
 "create some child group of %(name)s."
 msgstr ""
+"Det finns ett problem med strukturen för kontogrupperna. Du kan behöva skapa "
+"en undergrupp till %(name)s."
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__domain
@@ -1943,13 +1945,13 @@ msgstr "Ja"
 #. odoo-python
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
 msgid "date"
-msgstr ""
+msgstr "datum"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
 msgid "draft"
-msgstr ""
+msgstr "utkast"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1961,7 +1963,7 @@ msgstr "framtid"
 #. odoo-python
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
 msgid "none"
-msgstr ""
+msgstr "ingen"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
@@ -1981,7 +1983,7 @@ msgstr "ournal Huvudbok"
 #. odoo-python
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
 msgid "posted"
-msgstr ""
+msgstr "bokförd"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal
