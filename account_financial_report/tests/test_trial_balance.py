@@ -94,6 +94,9 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
             ],
             limit=1,
         )
+        cls.foreign_currency = cls.setup_other_currency(
+            "EUR", rates=[("1900-01-01", 2.0)]
+        )
 
     def _create_account_account(self, vals):
         item = self.env["account.account"].create(vals)
@@ -172,8 +175,45 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
         move = self.env["account.move"].create(move_vals)
         move.action_post()
 
+    def _add_currency_move(self, date, debit, credit, amount_currency):
+        journal = self.env["account.journal"].search(
+            [("company_id", "=", self.env.user.company_id.id)], limit=1
+        )
+        move = self.env["account.move"].create(
+            {
+                "journal_id": journal.id,
+                "date": date,
+                "line_ids": [
+                    Command.create(
+                        {
+                            "debit": debit,
+                            "credit": credit,
+                            "partner_id": self.partner_a.id,
+                            "account_id": self.account100.id,
+                            "currency_id": self.foreign_currency.id,
+                            "amount_currency": amount_currency,
+                        }
+                    ),
+                    Command.create(
+                        {
+                            "debit": credit,
+                            "credit": debit,
+                            "partner_id": self.partner_a.id,
+                            "account_id": self.account200.id,
+                        }
+                    ),
+                ],
+            }
+        )
+        move.action_post()
+        return move
+
     def _get_report_lines(
-        self, with_partners=False, account_ids=False, show_hierarchy=False
+        self,
+        with_partners=False,
+        account_ids=False,
+        show_hierarchy=False,
+        foreign_currency=False,
     ):
         company = self.env.user.company_id
         trial_balance = self.env["trial.balance.report.wizard"].create(
@@ -187,6 +227,7 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
                 "account_ids": account_ids,
                 "fy_start_date": self.fy_date_start,
                 "show_partner_details": with_partners,
+                "foreign_currency": foreign_currency,
             }
         )
         data = trial_balance._prepare_report_data()
@@ -773,3 +814,30 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
                 entry.get("id"),
                 f"Report contains a line with falsy id: {entry}",
             )
+
+    def test_07_foreign_currency_initial_balance(self):
+        # GIVEN an initial balance in foreign currency (before the period)
+        self._add_currency_move(
+            date=self.previous_fy_date_end,
+            debit=1000,
+            credit=0,
+            amount_currency=2000,
+        )
+        self._add_currency_move(
+            date=self.date_start,
+            debit=500,
+            credit=0,
+            amount_currency=1000,
+        )
+
+        # WHEN
+        res_data = self._get_report_lines(foreign_currency=True)
+        # THEN
+        self.assertTrue(res_data["foreign_currency"])
+        account_lines = self._get_account_lines(
+            self.account100.id, res_data["trial_balance"]
+        )
+        self.assertTrue(account_lines)
+        total = res_data["total_amount"][self.account100.id]
+        self.assertEqual(total["initial_currency_balance"], 2000)
+        self.assertEqual(total["ending_currency_balance"], 3000)
