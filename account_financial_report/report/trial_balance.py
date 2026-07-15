@@ -275,11 +275,16 @@ class TrialBalanceReport(models.AbstractModel):
                     tb["balance"] if "balance" in tb else tb["balance:sum"]
                 )
                 if foreign_currency:
+                    amount_currency = (
+                        tb["amount_currency"]
+                        if "amount_currency" in tb
+                        else tb["amount_currency:sum"]
+                    )
                     total_amount[acc_id]["initial_currency_balance"] += round(
-                        tb["amount_currency:sum"], 2
+                        amount_currency, 2
                     )
                     total_amount[acc_id]["ending_currency_balance"] += round(
-                        tb["amount_currency:sum"], 2
+                        amount_currency, 2
                     )
                 if "group_by_data" in tb:
                     for gb_key in list(tb["group_by_data"]):
@@ -315,8 +320,13 @@ class TrialBalanceReport(models.AbstractModel):
             "ending_balance": tb["balance"] if "balance" in tb else tb["balance:sum"],
         }
         if foreign_currency:
-            res["initial_currency_balance"] = round(tb["amount_currency:sum"], 2)
-            res["ending_currency_balance"] = round(tb["amount_currency:sum"], 2)
+            amount_currency = (
+                tb["amount_currency"]
+                if "amount_currency" in tb
+                else tb["amount_currency:sum"]
+            )
+            res["initial_currency_balance"] = round(amount_currency, 2)
+            res["ending_currency_balance"] = round(amount_currency, 2)
         return res
 
     @api.model
@@ -339,11 +349,16 @@ class TrialBalanceReport(models.AbstractModel):
                 tb["balance"] if "balance" in tb else tb["balance:sum"]
             )
             if foreign_currency:
+                amount_currency = (
+                    tb["amount_currency"]
+                    if "amount_currency" in tb
+                    else tb["amount_currency:sum"]
+                )
                 total_amount[acc_id][prt_id]["initial_currency_balance"] += round(
-                    tb["amount_currency:sum"], 2
+                    amount_currency, 2
                 )
                 total_amount[acc_id][prt_id]["ending_currency_balance"] += round(
-                    tb["amount_currency:sum"], 2
+                    amount_currency, 2
                 )
         total_amount[acc_id][prt_id]["partner_name"] = (
             tb["partner_id"][1] if tb["partner_id"] else self.env._("Missing Partner")
