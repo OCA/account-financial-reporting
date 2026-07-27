@@ -6,6 +6,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import models
+from odoo.tools.float_utils import float_compare
 
 
 class GeneralLedgerXslx(models.AbstractModel):
@@ -201,13 +202,19 @@ class GeneralLedgerXslx(models.AbstractModel):
                             taxes_description += taxes_data[tax_id]["tax_name"] + " "
                         if line["tax_line_id"]:
                             taxes_description += line["tax_line_id"][1]
-                        for account_ids, value in line["analytic_distribution"].items():
-                            for account_id in account_ids.split(","):
-                                analytic_distribution += (
-                                    f"{analytic_data[int(account_id)]['name']} "
-                                )
-                                if value < 100:
-                                    analytic_distribution += f"{value:d}%"
+                        if report.show_cost_center:
+                            for account_ids, value in line[
+                                "analytic_distribution"
+                            ].items():
+                                for account_id in account_ids.split(","):
+                                    analytic_distribution += (
+                                        f"{analytic_data[int(account_id)]['name']} "
+                                    )
+                                    if (
+                                        float_compare(value, 100, precision_digits=2)
+                                        < 0
+                                    ):
+                                        analytic_distribution += f"{value:g}%"
                         line.update(
                             {
                                 "taxes_description": taxes_description,
@@ -306,23 +313,21 @@ class GeneralLedgerXslx(models.AbstractModel):
                                 taxes_description += (
                                     taxes_data[tax_id]["tax_name"] + " "
                                 )
-                            for account_ids, value in line[
-                                "analytic_distribution"
-                            ].items():
-                                names = " ".join(
-                                    analytic_data[int(account_id.strip())]["name"]
-                                    for account_id in account_ids.split(",")
-                                )
-                                if value < 100:
-                                    analytic_distribution += (
-                                        "%s %d%% ",
-                                        (
-                                            names,
-                                            value,
-                                        ),
+                            if report.show_cost_center:
+                                for account_ids, value in line[
+                                    "analytic_distribution"
+                                ].items():
+                                    names = " ".join(
+                                        analytic_data[int(account_id.strip())]["name"]
+                                        for account_id in account_ids.split(",")
                                     )
-                                else:
-                                    analytic_distribution += f"{names} "
+                                    if (
+                                        float_compare(value, 100, precision_digits=2)
+                                        < 0
+                                    ):
+                                        analytic_distribution += f"{names} {value:g}% "
+                                    else:
+                                        analytic_distribution += f"{names} "
                             line.update(
                                 {
                                     "taxes_description": taxes_description,
