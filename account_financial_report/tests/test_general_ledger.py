@@ -719,12 +719,27 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         # single distribution key.
         plan_1 = self.env["account.analytic.plan"].create({"name": "Plan 1"})
         plan_2 = self.env["account.analytic.plan"].create({"name": "Plan 2"})
+        plan_3 = self.env["account.analytic.plan"].create({"name": "Plan 3"})
         analytic_account_1 = self.env["account.analytic.account"].create(
             {"name": "Analytic 1", "plan_id": plan_1.id}
         )
         analytic_account_2 = self.env["account.analytic.account"].create(
             {"name": "Analytic 2", "plan_id": plan_2.id}
         )
+        analytic_account_3 = self.env["account.analytic.account"].create(
+            {"name": "Analytic 3", "plan_id": plan_1.id}
+        )
+        analytic_account_4 = self.env["account.analytic.account"].create(
+            {"name": "Analytic 4", "plan_id": plan_2.id}
+        )
+        analytic_account_5 = self.env["account.analytic.account"].create(
+            {"name": "Analytic 5", "plan_id": plan_3.id}
+        )
+        analytic_distribution = {
+            f"{analytic_account_1.id},{analytic_account_2.id}": 65.36,
+            f"{analytic_account_3.id},{analytic_account_4.id}": 34.64,
+            str(analytic_account_5.id): 99.999999999993,
+        }
         journal = self.env["account.journal"].search(
             [("company_id", "=", company.id)], limit=1
         )
@@ -743,9 +758,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
                             "partner_id": self.partner.id,
                             # The receivable account is grouped by partner, so
                             # this line exercises the buggy report branch.
-                            "analytic_distribution": {
-                                f"{analytic_account_1.id},{analytic_account_2.id}": 100,
-                            },
+                            "analytic_distribution": analytic_distribution,
                         },
                     ),
                     (
@@ -756,6 +769,9 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
                             "credit": 1000,
                             "account_id": self.income_account.id,
                             "partner_id": self.partner.id,
+                            # The income account is not grouped, so this line
+                            # also exercises the standard report branch.
+                            "analytic_distribution": analytic_distribution,
                         },
                     ),
                 ],
