@@ -6,13 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2026-08-03 11:46+0000\n"
+"Last-Translator: difbit <timo.kekalainen@hotmail.com>\n"
 "Language-Team: none\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: mis_template_financial_report
 #: model:ir.model.fields,field_description:mis_template_financial_report.field_mis_report_instance__allow_horizontal
@@ -62,27 +64,27 @@ msgstr ""
 #. module: mis_template_financial_report
 #: model:mis.report.kpi,description:mis_template_financial_report.kpi_profit
 msgid "Profit"
-msgstr ""
+msgstr "Tulos"
 
 #. module: mis_template_financial_report
 #: model:mis.report,name:mis_template_financial_report.report_pl
 msgid "Profit & Loss"
-msgstr ""
+msgstr "Tulos & tappio"
 
 #. module: mis_template_financial_report
 #: model:mis.report.kpi,description:mis_template_financial_report.kpi_liability_pl_subreport
 msgid "Profit / Loss"
-msgstr ""
+msgstr "Tulos / Tappio"
 
 #. module: mis_template_financial_report
 #: model:mis.report.kpi,description:mis_template_financial_report.kpi_pl_to_report
 msgid "Profit or loss to report"
-msgstr ""
+msgstr "Raportoitava tulos tai tappio"
 
 #. module: mis_template_financial_report
 #: model:ir.model.fields,field_description:mis_template_financial_report.field_mis_report_kpi__split_after
 msgid "Split After"
-msgstr ""
+msgstr "Jaa jälkeen"
 
 #. module: mis_template_financial_report
 #: model:ir.model.fields,help:mis_template_financial_report.field_mis_report_kpi__split_after
@@ -94,4 +96,4 @@ msgstr ""
 #. module: mis_template_financial_report
 #: model_terms:ir.ui.view,arch_db:mis_template_financial_report.mis_report_view_kpi_form
 msgid "Splitting"
-msgstr ""
+msgstr "Jako"
