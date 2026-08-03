@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2022-08-16 13:07+0000\n"
-"Last-Translator: Jarmo Kortetjärvi <jarmo.kortetjarvi@gmail.com>\n"
+"PO-Revision-Date: 2026-08-03 11:46+0000\n"
+"Last-Translator: difbit <timo.kekalainen@hotmail.com>\n"
 "Language-Team: none\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.2\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
@@ -485,14 +485,14 @@ msgstr "Kumul. saldo"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
 #, python-format
 msgid "Cur."
-msgstr ""
+msgstr "Val."
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/open_items_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
 #, python-format
 msgid "Cur. Original"
-msgstr ""
+msgstr "Alkup. valuutta"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/open_items_xlsx.py:0
@@ -532,7 +532,7 @@ msgstr "Päivä"
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__date_at
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__date_at
 msgid "Date At"
-msgstr ""
+msgstr "Päiväys"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__date_from
@@ -907,7 +907,7 @@ msgstr "Ryhmittele merkinnät"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__grouped_by
 msgid "Grouped by"
-msgstr ""
+msgstr "Ryhmiteltynä"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
@@ -1239,7 +1239,7 @@ msgstr "OCA kirjanpitoraportit"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 #, python-format
 msgid "Older"
-msgstr ""
+msgstr "Vanhempi"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/open_items_xlsx.py:0
@@ -1254,7 +1254,7 @@ msgstr "Avoimet kirjaukset"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_base
 msgid "Open Items -"
-msgstr ""
+msgstr "Avoimet kirjaukset -"
 
 #. module: account_financial_report
 #: model:ir.actions.act_window,name:account_financial_report.act_action_open_items_wizard_partner_relation
@@ -1274,7 +1274,7 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.actions.report,name:account_financial_report.action_report_open_items_xlsx
 msgid "Open Items XLSX"
-msgstr ""
+msgstr "Avoimet kirjaukset XLSX"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_open_items_xlsx
@@ -1598,7 +1598,7 @@ msgstr "Veroryhmät"
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #, python-format
 msgid "Tax Initial balance"
-msgstr ""
+msgstr "Verojen alkusaldo"
 
 #. module: account_financial_report
 #: code:addons/account_financial_report/report/vat_report_xlsx.py:0
