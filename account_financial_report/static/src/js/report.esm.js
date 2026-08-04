@@ -21,6 +21,13 @@ function enrich(component, targetElement, selector, isIFrame = false) {
         doc = contentDocument;
     }
 
+    // The iframe may be detached, or its document not yet accessible, when the
+    // load event fires. contentDocument is then null and every call below
+    // throws "Cannot read properties of null (reading 'querySelectorAll')".
+    if (!contentDocument) {
+        return;
+    }
+
     // If there are selector, we may have multiple blocks of code to enrich
     const targets = [];
     if (selector) {
