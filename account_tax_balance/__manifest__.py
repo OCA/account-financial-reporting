@@ -6,7 +6,7 @@
 {
     "name": "Tax Balance",
     "summary": "Compute tax balances based on date range",
-    "version": "19.0.1.0.2",
+    "version": "19.0.1.0.3",
     "development_status": "Mature",
     "category": "Invoices & Payments",
     "website": "https://github.com/OCA/account-financial-reporting",
