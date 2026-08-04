@@ -6,27 +6,27 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2022-09-26 05:07+0000\n"
-"Last-Translator: Ignacio Buioli <ibuioli@gmail.com>\n"
+"PO-Revision-Date: 2026-08-04 05:46+0000\n"
+"Last-Translator: Fede Vara <fvara@raptiv.io>\n"
 "Language-Team: none\n"
 "Language: es_AR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.2\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 msgid "%(entries_sorted_by)s"
-msgstr ""
+msgstr "%(entries_sorted_by)s"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 msgid "%(target_move_filter)s"
-msgstr ""
+msgstr "%(target_move_filter)s"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
@@ -70,7 +70,7 @@ msgstr ""
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.res_config_settings_view_form
 msgid "<span class=\"o_form_label\">Intervals configuration</span>"
-msgstr ""
+msgstr "<span class=\"o_form_label\">Configuración de intervalos</span>"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
@@ -114,7 +114,7 @@ msgstr "Cuenta"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration_line__account_age_report_config_id
 msgid "Account Age Report Config"
-msgstr ""
+msgstr "Configuración del informe de antigüedad de deuda"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__account_code_from
@@ -177,7 +177,7 @@ msgstr "Filtros Adicionales"
 #. module: account_financial_report
 #: model:ir.actions.act_window,name:account_financial_report.action_aged_partner_report_configuration
 msgid "Age Partner Report Configuration"
-msgstr ""
+msgstr "Configuración del informe de antigüedad de deuda por socio comercial"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -185,12 +185,14 @@ msgid ""
 "Age ≤ 120\n"
 "                            d."
 msgstr ""
+"Edad ≤ 120\n"
+"                            d."
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 msgid "Age ≤ 120 d."
-msgstr ""
+msgstr "Antigüedad ≤ 120 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -198,12 +200,14 @@ msgid ""
 "Age ≤ 30\n"
 "                            d."
 msgstr ""
+"Antigüedad ≤ 30\n"
+"                            d."
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 msgid "Age ≤ 30 d."
-msgstr ""
+msgstr "Antigüedad ≤ 30 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -211,12 +215,14 @@ msgid ""
 "Age ≤ 60\n"
 "                            d."
 msgstr ""
+"Antigüedad ≤ 60\n"
+"                            d."
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 msgid "Age ≤ 60 d."
-msgstr ""
+msgstr "Antigüedad ≤ 60 d."
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -224,12 +230,14 @@ msgid ""
 "Age ≤ 90\n"
 "                            d."
 msgstr ""
+"Antigüedad ≤ 90\n"
+"                            d."
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 msgid "Age ≤ 90 d."
-msgstr ""
+msgstr "Antigüedad ≤ 90 d."
 
 #. module: account_financial_report
 #. odoo-python
@@ -345,7 +353,7 @@ msgstr "Cuenta Anal??tica"
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 msgid "Analytic Distribution"
-msgstr ""
+msgstr "Distribución Analítica"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_all_taxes
@@ -447,12 +455,12 @@ msgstr "Cuentas calculadas"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "Ajustes"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.res_config_settings_view_form
 msgid "Configurations"
-msgstr ""
+msgstr "Configuraciones"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration__create_uid
