@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-08-03 11:46+0000\n"
+"PO-Revision-Date: 2026-08-05 13:35+0000\n"
 "Last-Translator: difbit <timo.kekalainen@hotmail.com>\n"
 "Language-Team: none\n"
 "Language: fi\n"
@@ -1119,32 +1119,32 @@ msgstr "Päiväkirjan kirjausten alue"
 #: model:ir.ui.menu,name:account_financial_report.menu_journal_ledger_wizard
 #, python-format
 msgid "Journal Ledger"
-msgstr "Pääkirja"
+msgstr "Päiväkirja"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_base
 msgid "Journal Ledger -"
-msgstr "Pääkirja -"
+msgstr "Päiväkirja -"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_journal_ledger
 msgid "Journal Ledger Report"
-msgstr "Pääkirjaraportti"
+msgstr "Päiväkirjaraportti"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_journal_ledger_report_wizard
 msgid "Journal Ledger Report Wizard"
-msgstr "Pääkirjaraportin ohjattu toiminto"
+msgstr "Päiväkirjaraportin ohjattu toiminto"
 
 #. module: account_financial_report
 #: model:ir.actions.report,name:account_financial_report.action_report_journal_ledger_xlsx
 msgid "Journal Ledger XLSX"
-msgstr "Pääkirja XLSX"
+msgstr "Päiväkirja XLSX"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_journal_ledger_xlsx
 msgid "Journal Ledger XLSX Report"
-msgstr "Pääkirja XLSX raportti"
+msgstr "Päiväkirja XLSX raportti"
 
 #. module: account_financial_report
 #. odoo-python
