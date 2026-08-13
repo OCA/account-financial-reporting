@@ -1,0 +1,187 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* analytic_cash_basis_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0-20260525\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-02 16:29+0000\n"
+"PO-Revision-Date: 2026-07-02 16:29+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: analytic_cash_basis_report
+#: model:ir.model.fields.selection,name:analytic_cash_basis_report.selection__analytic_cash_basis_line__regime__accrual
+#: model_terms:ir.ui.view,arch_db:analytic_cash_basis_report.analytic_cash_basis_line_view_search
+msgid "Accrual"
+msgstr "Competência"
+
+#. module: analytic_cash_basis_report
+#: model:ir.model.fields,field_description:analytic_cash_basis_report.field_analytic_cash_basis_line__amount
+msgid "Amount"
+msgstr "Valor"
+
+#. module: analytic_cash_basis_report
+#: model:ir.model.fields,field_description:analytic_cash_basis_report.field_analytic_cash_basis_line__analytic_account_id
+#: model_terms:ir.ui.view,arch_db:analytic_cash_basis_report.analytic_cash_basis_line_view_search
+msgid "Analytic Account"
+msgstr "Conta Analítica"
+
+#. module: analytic_cash_basis_report
+#: model:ir.model,name:analytic_cash_basis_report.model_analytic_cash_basis_line
+msgid "Analytic Cash Basis vs Accrual Line"
+msgstr "Linha Analítica Caixa × Competência"
+
+#. module: analytic_cash_basis_report
+#: model:ir.model.fields,field_description:analytic_cash_basis_report.field_analytic_cash_basis_line__analytic_line_id
+msgid "Analytic Line"
+msgstr "Linha Analítica"
+
+#. module: analytic_cash_basis_report
+#: model:ir.model.fields,field_description:analytic_cash_basis_report.field_analytic_cash_basis_line__plan_id
+#: model_terms:ir.ui.view,arch_db:analytic_cash_basis_report.analytic_cash_basis_line_view_search
+msgid "Analytic Plan"
+msgstr "Plano Analítico"
+
+#. module: analytic_cash_basis_report
+#: model:ir.actions.act_window,name:analytic_cash_basis_report.analytic_cash_basis_line_action
+#: model:ir.ui.menu,name:analytic_cash_basis_report.analytic_cash_basis_line_menu
+#: model_terms:ir.ui.view,arch_db:analytic_cash_basis_report.analytic_cash_basis_line_view_graph
+#: model_terms:ir.ui.view,arch_db:analytic_cash_basis_report.analytic_cash_basis_line_view_pivot
+#: model_terms:ir.ui.view,arch_db:analytic_cash_basis_report.analytic_cash_basis_line_view_search
+#: model_terms:ir.ui.view,arch_db:analytic_cash_basis_report.analytic_cash_basis_line_view_tree
+msgid "Analytic: Cash vs Accrual"
+msgstr "Analítico: Caixa × Competência"
+
+#. module: analytic_cash_basis_report
+#: model:ir.model.fields.selection,name:analytic_cash_basis_report.selection__analytic_cash_basis_line__regime__cash
+#: model_terms:ir.ui.view,arch_db:analytic_cash_basis_report.analytic_cash_basis_line_view_search
+msgid "Cash"
+msgstr "Caixa"
+
+#. module: analytic_cash_basis_report
+#: model:ir.model.fields,field_description:analytic_cash_basis_report.field_analytic_cash_basis_line__company_id
+msgid "Company"
+msgstr "Empresa"
+
+#. module: analytic_cash_basis_report
+#: model_terms:ir.actions.act_window,help:analytic_cash_basis_report.analytic_cash_basis_line_action
+msgid ""
+"Compare analytic amounts under the accrual regime (invoice\n"
+"                dates) and the cash regime (payment dates, prorated per\n"
+"                installment)."
+msgstr "Compare os valores analíticos no regime de competência (data da fatura) e no regime de caixa (data do pagamento, rateado por parcela)."
+
+#. module: analytic_cash_basis_report
+#: model:ir.model.fields.selection,name:analytic_cash_basis_report.selection__analytic_cash_basis_line__kind__cost
+msgid "Costs"
+msgstr "Custos"
+
+#. module: analytic_cash_basis_report
+#: model:ir.model.fields,field_description:analytic_cash_basis_report.field_analytic_cash_basis_line__currency_id
+msgid "Currency"
+msgstr "Moeda"
+
+#. module: analytic_cash_basis_report
+#: model:ir.model.fields,field_description:analytic_cash_basis_report.field_analytic_cash_basis_line__date
+#: model_terms:ir.ui.view,arch_db:analytic_cash_basis_report.analytic_cash_basis_line_view_search
+msgid "Date"
+msgstr "Data"
+
+#. module: analytic_cash_basis_report
+#: model:ir.model.fields.selection,name:analytic_cash_basis_report.selection__analytic_cash_basis_line__bucket__direct
+msgid "Direct Bank/Cash"
+msgstr "Banco/Caixa Direto"
+
+#. module: analytic_cash_basis_report
+#: model:ir.model.fields,field_description:analytic_cash_basis_report.field_analytic_cash_basis_line__display_name
+msgid "Display Name"
+msgstr "Nome Exibido"
+
+#. module: analytic_cash_basis_report
+#: model:ir.model.fields,field_description:analytic_cash_basis_report.field_analytic_cash_basis_line__account_id
+msgid "Financial Account"
+msgstr "Conta Contábil"
+
+#. module: analytic_cash_basis_report
+#: model_terms:ir.ui.view,arch_db:analytic_cash_basis_report.analytic_cash_basis_line_view_search
+msgid "Group By"
+msgstr "Agrupar Por"
+
+#. module: analytic_cash_basis_report
+#: model:ir.model.fields,field_description:analytic_cash_basis_report.field_analytic_cash_basis_line__id
+msgid "ID"
+msgstr "ID"
+
+#. module: analytic_cash_basis_report
+#: model:ir.model.fields.selection,name:analytic_cash_basis_report.selection__analytic_cash_basis_line__bucket__invoice
+msgid "Invoice"
+msgstr "Fatura"
+
+#. module: analytic_cash_basis_report
+#: model:ir.model.fields,field_description:analytic_cash_basis_report.field_analytic_cash_basis_line__move_id
+msgid "Journal Entry"
+msgstr "Lançamento de Diário"
+
+#. module: analytic_cash_basis_report
+#: model:ir.model.fields,field_description:analytic_cash_basis_report.field_analytic_cash_basis_line____last_update
+msgid "Last Modified on"
+msgstr "Última Modificação em"
+
+#. module: analytic_cash_basis_report
+#: model_terms:ir.ui.view,arch_db:analytic_cash_basis_report.analytic_cash_basis_line_view_search
+msgid "Month"
+msgstr "Mês"
+
+#. module: analytic_cash_basis_report
+#: model:ir.model.fields,field_description:analytic_cash_basis_report.field_analytic_cash_basis_line__kind
+msgid "Nature"
+msgstr "Natureza"
+
+#. module: analytic_cash_basis_report
+#: model:ir.model.fields.selection,name:analytic_cash_basis_report.selection__analytic_cash_basis_line__bucket__no_cash_event
+#: model_terms:ir.ui.view,arch_db:analytic_cash_basis_report.analytic_cash_basis_line_view_search
+msgid "No Cash Event"
+msgstr "Sem Evento de Caixa"
+
+#. module: analytic_cash_basis_report
+#: model_terms:ir.actions.act_window,help:analytic_cash_basis_report.analytic_cash_basis_line_action
+msgid "No analytic data yet"
+msgstr "Ainda não há dados analíticos"
+
+#. module: analytic_cash_basis_report
+#: model:ir.model.fields,field_description:analytic_cash_basis_report.field_analytic_cash_basis_line__partner_id
+#: model_terms:ir.ui.view,arch_db:analytic_cash_basis_report.analytic_cash_basis_line_view_search
+msgid "Partner"
+msgstr "Parceiro"
+
+#. module: analytic_cash_basis_report
+#: model:ir.model.fields.selection,name:analytic_cash_basis_report.selection__analytic_cash_basis_line__bucket__settlement
+msgid "Payment of Invoice"
+msgstr "Pagamento de Fatura"
+
+#. module: analytic_cash_basis_report
+#: model:ir.model.fields,field_description:analytic_cash_basis_report.field_analytic_cash_basis_line__regime
+#: model_terms:ir.ui.view,arch_db:analytic_cash_basis_report.analytic_cash_basis_line_view_search
+msgid "Regime"
+msgstr "Regime"
+
+#. module: analytic_cash_basis_report
+#: model:ir.model.fields.selection,name:analytic_cash_basis_report.selection__analytic_cash_basis_line__kind__revenue
+msgid "Revenue"
+msgstr "Recebimentos"
+
+#. module: analytic_cash_basis_report
+#: model:ir.model.fields,field_description:analytic_cash_basis_report.field_analytic_cash_basis_line__bucket
+msgid "Source"
+msgstr "Origem"
+
+#. module: analytic_cash_basis_report
+#: model_terms:ir.ui.view,arch_db:analytic_cash_basis_report.analytic_cash_basis_line_view_tree
+msgid "Total"
+msgstr "Total"
