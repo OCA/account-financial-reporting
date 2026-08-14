@@ -1,7 +1,7 @@
 # Copyright 2022 Tecnativa - Carlos Roca
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html).
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.tools import float_is_zero
 
 
@@ -15,7 +15,7 @@ class AccountSaleStockReportNonBilledWiz(models.TransientModel):
     stock_move_non_billed_threshold = fields.Date(
         default=lambda self: self._default_stock_move_non_billed_threshold()
     )
-    date_check = fields.Date(string="Date", default=fields.Date.today)
+    date_check = fields.Date(string="Date", default=fields.Date.context_today)
     interval_restrict_invoices = fields.Boolean(
         string="Restrict invoices using the date interval"
     )
@@ -26,7 +26,7 @@ class AccountSaleStockReportNonBilledWiz(models.TransientModel):
             ("date_done", "<=", self.date_check),
             ("sale_line_id", "!=", False),
             ("state", "=", "done"),
-            ("scrapped", "=", False),
+            ("scrap_id", "=", False),
             "|",
             ("location_dest_id.usage", "=", "customer"),
             "&",
@@ -43,7 +43,12 @@ class AccountSaleStockReportNonBilledWiz(models.TransientModel):
     @api.model
     def _get_neutralized_moves(self, stock_moves):
         neutralized_moves = self.env["stock.move"]
-        for move in stock_moves.sorted("origin_returned_move_id"):
+        # Each move has to be processed before its own returns, so that a move fully
+        # returned and not invoiced neutralizes its return, while a return of a return
+        # (which is a new delivery) is still reported.
+        for move in stock_moves.sorted(
+            lambda move: (move.origin_returned_move_id.id or 0, move.id)
+        ):
             # Not show returns that not update qty on stock
             if move.origin_returned_move_id and not move.to_refund:
                 neutralized_moves |= move
@@ -105,7 +110,7 @@ class AccountSaleStockReportNonBilledWiz(models.TransientModel):
             ).get_quantity_invoiced(inv_lines)
             if not float_is_zero(qty_to_invoice - calculated_qty, precision_digits=dp):
                 final_stock_move_ids.append(move.id)
-        tree_view_id = self.env.ref(
+        list_view_id = self.env.ref(
             "account_sale_stock_report_non_billed.view_move_tree"
         ).id
         pivot_view_id = self.env.ref(
@@ -126,11 +131,14 @@ class AccountSaleStockReportNonBilledWiz(models.TransientModel):
             )
         action = {
             "type": "ir.actions.act_window",
-            "views": [(tree_view_id, "tree"), (pivot_view_id, "pivot")],
-            "view_mode": "tree,pivot",
+            "views": [(list_view_id, "list"), (pivot_view_id, "pivot")],
+            "view_mode": "list,pivot",
             "search_view_id": search_view_id,
-            "name": _("Non billed moves (%(from)s -> %(to)s)")
-            % {"from": self.stock_move_non_billed_threshold, "to": self.date_check},
+            "name": self.env._(
+                "Non billed moves (%(date_from)s -> %(date_to)s)",
+                date_from=self.stock_move_non_billed_threshold,
+                date_to=self.date_check,
+            ),
             "res_model": "stock.move",
             "domain": [("id", "in", final_stock_move_ids)],
             "context": context,

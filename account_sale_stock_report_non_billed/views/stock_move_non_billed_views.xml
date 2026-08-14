@@ -26,6 +26,16 @@
             <xpath expr="//field[@name='reference']" position="attributes">
                 <attribute name="column_invisible">1</attribute>
             </xpath>
+            <!-- Stock valuation fields don't add any value in this report -->
+            <xpath expr="//field[@name='value']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='remaining_qty']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='remaining_value']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
             <xpath expr="//field[@name='date']" position="after">
                 <field name="date_done" />
             </xpath>
@@ -35,18 +45,19 @@
                 <field name="origin" nolabel="1" />
                 <button
                     name="open_origin_document"
-                    string="Open document"
+                    title="Open document"
                     type="object"
                     icon="fa-angle-double-right"
                 />
             </xpath>
             <xpath expr="//field[@name='product_uom_qty']" position="after">
                 <field name="currency_id" column_invisible="1" />
-                <field name="quantity_not_invoiced" />
+                <field name="quantity_not_invoiced" sum="Qty. to invoice" />
                 <field
                     name="price_not_invoiced"
                     widget='monetary'
                     options="{'currency_field': 'currency_id'}"
+                    sum="Amount to invoice"
                 />
             </xpath>
         </field>

@@ -2,6 +2,11 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html).
 
 from odoo import api, fields, models
+from odoo.fields import Domain
+
+# Fields that can't be aggregated by the ORM (they are computed in Python and depend on
+# the context), so they need the special treatment done in the read group overrides.
+NON_BILLED_AGGREGATE_FIELDS = ("quantity_not_invoiced", "price_not_invoiced")
 
 
 class StockMove(models.Model):
@@ -22,8 +27,12 @@ class StockMove(models.Model):
     currency_id = fields.Many2one(
         comodel_name="res.currency", compute="_compute_currency_id", compute_sudo=True
     )
+    # The report works with dates, not with datetimes, so we need the validation day
+    # expressed in the user time zone to be able to filter and group by it. It's stored
+    # for being usable in domains and group bys. It's pre-computed in SQL on install by
+    # the module pre_init_hook to avoid a massive recomputation on big databases.
     date_done = fields.Date(
-        string="Effective Date", compute="_compute_date_done", store=True
+        string="Effective Date", compute="_compute_date_done", store=True, index=True
     )
 
     @api.depends("picking_id.date_done")
@@ -31,7 +40,11 @@ class StockMove(models.Model):
         self.date_done = False
         for move in self:
             if move.picking_id.date_done:
-                move.date_done = move.picking_id.date_done.date()
+                # Convert to the user time zone, as the raw datetime is stored in UTC
+                # and the day could be shifted otherwise.
+                move.date_done = fields.Datetime.context_timestamp(
+                    move, move.picking_id.date_done
+                ).date()
 
     @api.depends("sale_line_id")
     def _compute_currency_id(self):
@@ -153,44 +166,85 @@ class StockMove(models.Model):
             move._set_not_invoiced_values(qty_to_invoice, calculated_qty)
 
     @api.model
-    def read_group(
-        self, domain, fields, groupby, offset=0, limit=None, orderby=False, lazy=True
-    ):
-        """Method to add the computed values 'quantity_not_invoiced' and
-        'price_not_invoiced' to the result. Without doing it we get an error when trying
-        to get the info on a pivot view.
-        As the fields are not stored, before call super() method we had to remove
-        the keys from 'fields' argument to avoid errors.
+    def fields_get(self, allfields=None, attributes=None):
+        """Advertise a 'sum' aggregator for our non stored fields.
+
+        The ORM can't build any SQL aggregate for them, so it reports no aggregator at
+        all and both the list and the pivot views would refuse to use them as measures.
+        The aggregation itself is done in Python in the read group overrides below.
         """
-        aux_fields = []
-        if "quantity_not_invoiced:sum" in fields:
-            aux_fields.append("quantity_not_invoiced:sum")
-            fields.remove("quantity_not_invoiced:sum")
-        if "price_not_invoiced:sum" in fields:
-            aux_fields.append("price_not_invoiced:sum")
-            fields.remove("price_not_invoiced:sum")
-        res = super().read_group(
+        res = super().fields_get(allfields=allfields, attributes=attributes)
+        if attributes is not None and "aggregator" not in attributes:
+            return res
+        for fname in NON_BILLED_AGGREGATE_FIELDS:
+            if fname in res:
+                res[fname]["aggregator"] = "sum"
+        return res
+
+    @api.model
+    def _split_non_billed_aggregates(self, aggregates):
+        """Split the requested aggregates into the ones the ORM can handle and the ones
+        we have to compute in Python.
+        """
+        sql_aggregates = []
+        python_aggregates = []
+        for spec in aggregates:
+            if spec.split(":")[0] in NON_BILLED_AGGREGATE_FIELDS:
+                python_aggregates.append(spec)
+            else:
+                sql_aggregates.append(spec)
+        return sql_aggregates, python_aggregates
+
+    def _apply_non_billed_aggregates(self, domain, groups, aggregates):
+        """Add the sum of the given non stored aggregates to each formatted group."""
+        if not aggregates:
+            return
+        for group in groups:
+            moves = self.search(Domain.AND([domain, group["__extra_domain"]]))
+            for spec in aggregates:
+                group[spec] = sum(moves.mapped(spec.split(":")[0]))
+
+    @api.model
+    def formatted_read_group(
+        self,
+        domain,
+        groupby=(),
+        aggregates=(),
+        having=(),
+        offset=0,
+        limit=None,
+        order=None,
+    ):
+        """Feed the grouped list view with the values computed in Python."""
+        sql_aggregates, python_aggregates = self._split_non_billed_aggregates(
+            aggregates
+        )
+        groups = super().formatted_read_group(
             domain,
-            fields,
             groupby,
+            sql_aggregates,
+            having=having,
             offset=offset,
             limit=limit,
-            orderby=orderby,
-            lazy=lazy,
+            order=order,
         )
-        qty_not_inv = "quantity_not_invoiced:sum" in aux_fields
-        price_not_inv = "price_not_invoiced:sum" in aux_fields
-        if qty_not_inv or price_not_inv:
-            for line in res:
-                quantity = 0.0
-                price = 0.0
-                moves = self.search(line.get("__domain", domain))
-                for move in moves:
-                    quantity += move.quantity_not_invoiced if qty_not_inv else 0.0
-                    price += move.price_not_invoiced if price_not_inv else 0.0
-                line["quantity_not_invoiced"] = quantity
-                line["price_not_invoiced"] = price
-        return res
+        self._apply_non_billed_aggregates(domain, groups, python_aggregates)
+        return groups
+
+    @api.model
+    def formatted_read_grouping_sets(
+        self, domain, grouping_sets, aggregates=(), *, order=None
+    ):
+        """Feed the pivot view with the values computed in Python."""
+        sql_aggregates, python_aggregates = self._split_non_billed_aggregates(
+            aggregates
+        )
+        groups_list = super().formatted_read_grouping_sets(
+            domain, grouping_sets, sql_aggregates, order=order
+        )
+        for groups in groups_list:
+            self._apply_non_billed_aggregates(domain, groups, python_aggregates)
+        return groups_list
 
     def _get_model_id_origin_document(self):
         if not self.sale_line_id:

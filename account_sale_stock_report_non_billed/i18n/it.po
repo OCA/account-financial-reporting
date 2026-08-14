@@ -114,7 +114,6 @@ msgstr "Ultimo aggiornamento il"
 #. module: account_sale_stock_report_non_billed
 #: model:ir.actions.act_window,name:account_sale_stock_report_non_billed.action_open_non_billed_stock_move
 #: model:ir.ui.menu,name:account_sale_stock_report_non_billed.menu_non_billed_stock_move
-#: model_terms:ir.ui.view,arch_db:account_sale_stock_report_non_billed.account_sale_stock_report_non_billed_wiz_form
 msgid "Non Billed Stock Moves"
 msgstr "Movimenti di magazzino non fatturati"
 
@@ -128,8 +127,8 @@ msgstr "Data limite non fatturato"
 #. odoo-python
 #: code:addons/account_sale_stock_report_non_billed/wizard/account_sale_stock_report_non_billed_wiz.py:0
 #, python-format
-msgid "Non billed moves (%(from)s -> %(to)s)"
-msgstr "Movimenti non fatturati (%(from)s -> %(to)s)"
+msgid "Non billed moves (%(date_from)s -> %(date_to)s)"
+msgstr "Movimenti non fatturati (%(date_from)s -> %(date_to)s)"
 
 #. module: account_sale_stock_report_non_billed
 #: model_terms:ir.ui.view,arch_db:account_sale_stock_report_non_billed.view_move_tree

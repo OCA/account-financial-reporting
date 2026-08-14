@@ -5,7 +5,9 @@ from dateutil.relativedelta import relativedelta
 from odoo import fields
 from odoo.tests import Form, tagged
 
-from odoo.addons.stock_picking_invoice_link.tests import test_stock_picking_invoice_link
+from odoo.addons.sale_stock_picking_invoice_link.tests import (
+    test_stock_picking_invoice_link,
+)
 
 
 @tagged("post_install", "-at_install")
@@ -105,7 +107,7 @@ class TestAccountSaleStrockReportNonBilled(
             )
         )
         wiz_return = wiz_return_form.save()
-        return_id = wiz_return.create_returns()["res_id"]
+        return_id = wiz_return.action_create_returns_all()["res_id"]
         picking_return = self.env["stock.picking"].browse(return_id)
         picking_return.move_line_ids.write({"quantity": 2})
         picking_return.button_validate()
@@ -129,7 +131,7 @@ class TestAccountSaleStrockReportNonBilled(
             )
         )
         wiz_return = wiz_return_form.save()
-        return_id = wiz_return.create_returns()["res_id"]
+        return_id = wiz_return.action_create_returns_all()["res_id"]
         picking_return = self.env["stock.picking"].browse(return_id)
         picking_return.move_line_ids.write({"quantity": 2})
         picking_return.button_validate()
@@ -157,7 +159,7 @@ class TestAccountSaleStrockReportNonBilled(
             )
         )
         wiz_return = wiz_return_form.save()
-        return_id = wiz_return.create_returns()["res_id"]
+        return_id = wiz_return.action_create_returns_all()["res_id"]
         picking_return = self.env["stock.picking"].browse(return_id)
         picking_return.move_line_ids.write({"quantity": 2})
         picking_return.button_validate()
@@ -167,7 +169,7 @@ class TestAccountSaleStrockReportNonBilled(
             )
         )
         wiz_return_return = wiz_return_return_form.save()
-        return_return_id = wiz_return_return.create_returns()["res_id"]
+        return_return_id = wiz_return_return.action_create_returns_all()["res_id"]
         picking_return_return = self.env["stock.picking"].browse(return_return_id)
         picking_return_return.move_line_ids.write({"quantity": 2})
         picking_return_return.button_validate()
@@ -192,7 +194,7 @@ class TestAccountSaleStrockReportNonBilled(
             )
         )
         wiz_return = wiz_return_form.save()
-        return_id = wiz_return.create_returns()["res_id"]
+        return_id = wiz_return.action_create_returns_all()["res_id"]
         picking_return = self.env["stock.picking"].browse(return_id)
         picking_return.move_line_ids.write({"quantity": 2})
         picking_return.button_validate()
@@ -202,7 +204,7 @@ class TestAccountSaleStrockReportNonBilled(
             )
         )
         wiz_return_return = wiz_return_return_form.save()
-        return_return_id = wiz_return_return.create_returns()["res_id"]
+        return_return_id = wiz_return_return.action_create_returns_all()["res_id"]
         picking_return_return = self.env["stock.picking"].browse(return_return_id)
         picking_return_return.move_line_ids.write({"quantity": 2})
         picking_return_return.button_validate()
@@ -229,7 +231,7 @@ class TestAccountSaleStrockReportNonBilled(
             )
         )
         wiz_return = wiz_return_form.save()
-        return_id = wiz_return.create_returns()["res_id"]
+        return_id = wiz_return.action_create_returns_all()["res_id"]
         picking_return = self.env["stock.picking"].browse(return_id)
         picking_return.move_line_ids.write({"quantity": 2})
         picking_return.button_validate()
@@ -241,7 +243,7 @@ class TestAccountSaleStrockReportNonBilled(
             )
         )
         wiz_return_return = wiz_return_return_form.save()
-        return_return_id = wiz_return_return.create_returns()["res_id"]
+        return_return_id = wiz_return_return.action_create_returns_all()["res_id"]
         picking_return_return = self.env["stock.picking"].browse(return_return_id)
         picking_return_return.move_line_ids.write({"quantity": 2})
         picking_return_return.button_validate()
