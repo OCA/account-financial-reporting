@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-08-17 10:52+0000\n"
+"PO-Revision-Date: 2026-08-17 13:46+0000\n"
 "Last-Translator: sobhan hasanzade <sobhanhsnzde4579@gmail.com>\n"
 "Language-Team: none\n"
 "Language: fa\n"
@@ -1868,23 +1868,23 @@ msgstr "ویزارد گزارش مالیات بر ارزش افزوده"
 #. module: account_financial_report
 #: model:ir.actions.report,name:account_financial_report.action_report_vat_report_xlsx
 msgid "VAT Report XLSX"
-msgstr ""
+msgstr "گزارش مالیات بر ارزش افزوده XLSX"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/vat_report_xlsx.py:0
 msgid "Vat Report"
-msgstr ""
+msgstr "گزارش مالیات بر ارزش افزوده"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_vat_report
 msgid "Vat Report Report"
-msgstr ""
+msgstr "گزارش مالیات بر ارزش افزوده"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_vat_report_xlsx
 msgid "Vat Report XLSX Report"
-msgstr ""
+msgstr "گزارش XLSX مالیات بر ارزش افزوده"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
@@ -1894,7 +1894,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.vat_report_wizard
 msgid "View"
-msgstr ""
+msgstr "نمایش"
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__hide_account_at_0
@@ -1902,17 +1902,19 @@ msgid ""
 "When this option is enabled, the trial balance will not display accounts "
 "that have initial balance = debit = credit = end balance = 0"
 msgstr ""
+"هنگامی که این گزینه فعال باشد، تراز آزمایشی حساب‌هایی را که مانده‌ی ابتدای دوره"
+"، بدهکار، بستانکار و مانده‌ی پایان دوره‌ی آنها صفر است، نمایش نمی‌دهد"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__with_account_name
 msgid "With Account Name"
-msgstr ""
+msgstr "همراه با نام حساب"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/trial_balance.py:0
 msgid "Without analytic account"
-msgstr ""
+msgstr "بدون حساب تحلیلی"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1921,31 +1923,31 @@ msgstr ""
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 msgid "Yes"
-msgstr ""
+msgstr "بله"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
 msgid "date"
-msgstr ""
+msgstr "تاریخ"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
 msgid "draft"
-msgstr ""
+msgstr "پیش‌نویس"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/general_ledger.py:0
 msgid "future"
-msgstr ""
+msgstr "آینده"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
 msgid "none"
-msgstr ""
+msgstr "هیچ‌کدام"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
@@ -1954,7 +1956,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.vat_report_wizard
 msgid "or"
-msgstr ""
+msgstr "یا"
 
 #. module: account_financial_report
 #: model:ir.actions.report,name:account_financial_report.action_print_journal_ledger_wizard_qweb
@@ -1965,39 +1967,39 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
 msgid "posted"
-msgstr ""
+msgstr "ثبت‌نهایی‌شده"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal
 msgid "to"
-msgstr ""
+msgstr "تا"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 16.21%;"
-msgstr ""
+msgstr "عرض: 16.21%;"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 23.24%;"
-msgstr ""
+msgstr "عرض: 23.24%;"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 23.78%;"
-msgstr ""
+msgstr "عرض: 23.78%;"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 31.35%;"
-msgstr ""
+msgstr "عرض: 31.35%;"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 38.92%;"
-msgstr ""
+msgstr "عرض: 38.92%;"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "width: 8.11%;"
-msgstr ""
+msgstr "عرض: 8.11%;"
