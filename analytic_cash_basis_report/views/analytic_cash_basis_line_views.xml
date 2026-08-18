@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 PopSolutions
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="analytic_cash_basis_line_view_pivot" model="ir.ui.view">
+        <field name="name">analytic.cash.basis.line.pivot</field>
+        <field name="model">analytic.cash.basis.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Analytic: Cash vs Accrual" sample="1">
+                <field name="analytic_account_id" type="row" />
+                <field name="date" interval="month" type="col" />
+                <field name="regime" type="col" />
+                <field name="amount" type="measure" />
+            </pivot>
+        </field>
+    </record>
+
+    <record id="analytic_cash_basis_line_view_tree" model="ir.ui.view">
+        <field name="name">analytic.cash.basis.line.tree</field>
+        <field name="model">analytic.cash.basis.line</field>
+        <field name="arch" type="xml">
+            <tree create="0" edit="0" delete="0">
+                <field name="date" />
+                <field name="regime" />
+                <field name="analytic_account_id" />
+                <field name="plan_id" optional="hide" />
+                <field name="partner_id" optional="show" />
+                <field name="move_id" />
+                <field name="bucket" optional="show" />
+                <field name="amount" sum="Total" />
+                <field name="currency_id" invisible="1" />
+                <field name="company_id" groups="base.group_multi_company" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="analytic_cash_basis_line_view_graph" model="ir.ui.view">
+        <field name="name">analytic.cash.basis.line.graph</field>
+        <field name="model">analytic.cash.basis.line</field>
+        <field name="arch" type="xml">
+            <graph string="Analytic: Cash vs Accrual" type="bar" sample="1">
+                <field name="date" interval="month" />
+                <field name="regime" />
+                <field name="amount" type="measure" />
+            </graph>
+        </field>
+    </record>
+
+    <record id="analytic_cash_basis_line_view_search" model="ir.ui.view">
+        <field name="name">analytic.cash.basis.line.search</field>
+        <field name="model">analytic.cash.basis.line</field>
+        <field name="arch" type="xml">
+            <search string="Analytic: Cash vs Accrual">
+                <field name="analytic_account_id" />
+                <field name="plan_id" />
+                <field name="partner_id" />
+                <field name="move_id" />
+                <filter
+                    string="Accrual"
+                    name="regime_accrual"
+                    domain="[('regime', '=', 'accrual')]"
+                />
+                <filter
+                    string="Cash"
+                    name="regime_cash"
+                    domain="[('regime', '=', 'cash')]"
+                />
+                <separator />
+                <filter
+                    string="No Cash Event"
+                    name="no_cash_event"
+                    domain="[('bucket', '=', 'no_cash_event')]"
+                />
+                <filter string="Date" name="filter_date" date="date" />
+                <group expand="0" string="Group By">
+                    <filter
+                        string="Analytic Plan"
+                        name="group_plan"
+                        context="{'group_by': 'plan_id'}"
+                    />
+                    <filter
+                        string="Analytic Account"
+                        name="group_analytic_account"
+                        context="{'group_by': 'analytic_account_id'}"
+                    />
+                    <filter
+                        string="Partner"
+                        name="group_partner"
+                        context="{'group_by': 'partner_id'}"
+                    />
+                    <filter
+                        string="Regime"
+                        name="group_regime"
+                        context="{'group_by': 'regime'}"
+                    />
+                    <filter
+                        string="Month"
+                        name="group_month"
+                        context="{'group_by': 'date:month'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="analytic_cash_basis_line_action" model="ir.actions.act_window">
+        <field name="name">Analytic: Cash vs Accrual</field>
+        <field name="res_model">analytic.cash.basis.line</field>
+        <field name="view_mode">pivot,graph,tree</field>
+        <field name="search_view_id" ref="analytic_cash_basis_line_view_search" />
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No analytic data yet
+            </p>
+            <p>
+                Compare analytic amounts under the accrual regime (invoice
+                dates) and the cash regime (payment dates, prorated per
+                installment).
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="analytic_cash_basis_line_menu"
+        name="Analytic: Cash vs Accrual"
+        parent="account.menu_finance_reports"
+        action="analytic_cash_basis_line_action"
+        sequence="35"
+    />
+</odoo>
