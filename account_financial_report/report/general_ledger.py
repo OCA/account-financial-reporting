@@ -208,23 +208,6 @@ class GeneralLedgerReport(models.AbstractModel):
         gl_initial_acc = self._get_accounts_initial_balance(
             initial_domain_bs, initial_domain_pl
         )
-        if grouped_by != "none":
-            return gl_initial_acc
-        # If grouped_by none we add balance
-        domain = list(base_domain) + [("date", "<", date_from)]
-        if account_ids:
-            domain += [("account_id", "in", account_ids)]
-        rows = self.env["account.move.line"].read_group(
-            domain=domain,
-            fields=["account_id", "debit", "credit", "balance", "amount_currency:sum"],
-            groupby=["account_id"],
-        )
-        covered_ids = {
-            row["account_id"][0] for row in gl_initial_acc if row.get("account_id")
-        }
-        for row in rows:
-            if row.get("account_id") and row["account_id"][0] not in covered_ids:
-                gl_initial_acc.append(row)
         return gl_initial_acc
 
     def _prepare_gen_ld_data_item(self, gl):
