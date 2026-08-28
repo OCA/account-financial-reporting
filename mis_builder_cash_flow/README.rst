@@ -1,7 +1,3 @@
-.. image:: https://odoo-community.org/readme-banner-image
-   :target: https://odoo-community.org/get-involved?utm_source=readme
-   :alt: Odoo Community Association
-
 =====================
 MIS Builder Cash Flow
 =====================
@@ -17,7 +13,7 @@ MIS Builder Cash Flow
 .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
     :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Faccount--financial--reporting-lightgray.png?logo=github
@@ -35,9 +31,18 @@ MIS Builder Cash Flow
 This module allows you to have a cash flow forecast. The forecast is
 based on two types of date:
 
-- Accounting entries: Due date field instead of Date
-- Forecast lines: manual lines created that forecast in/out cashflow
+- Accounting entries: uses the Due Date field instead of the accounting
+  Date.
+- Forecast lines: manual lines created that forecast in/out cash flow
   moves.
+
+It also adds:
+
+- Cash flow plans: a recurring template that generates a whole series of
+  forecast lines with a single click.
+- A per-company, configurable limit on the number of forecast lines a
+  single plan can generate at once, to avoid runaway series over very
+  long date ranges.
 
 **Table of contents**
 
@@ -58,6 +63,23 @@ To use this module, you need to:
    forecast lines.
 4. Selecting "All Entries", draft invoices/entries are also included.
 5. In any case, cancelled invoices/entries are not included.
+
+To create a recurring cash flow plan, you need to:
+
+1. Go to Accounting > Reporting > MIS Reporting > Forecast Planner.
+2. Create a new plan and set the periodicity (every X days, weekly or
+   monthly).
+3. Click on Generate Forecast Lines. The plan creates one cash flow
+   forecast line per period between the start and end dates.
+4. Use the Forecast Lines smart button on the plan to see the generated
+   lines.
+
+To limit how many lines a single plan can generate at once, you need to:
+
+1. Go to Accounting > Configuration > Settings, section Cash Flow Plan.
+2. Set the Max Forecast Lines value.
+3. If generating a plan would exceed this limit, only the first lines up
+   to the limit are created and a warning is shown.
 
 Known issues / Roadmap
 ======================
@@ -95,6 +117,10 @@ Contributors
 - `Tecnativa <https://www.tecnativa.com>`__:
 
   - Pedro M. Baeza
+
+- `Solvos <https://www.solvos.es>`__:
+
+  - Carlos García carlos.garcia@solvos.es
 
 Maintainers
 -----------

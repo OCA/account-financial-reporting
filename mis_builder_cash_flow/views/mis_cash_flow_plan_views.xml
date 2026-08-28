@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="mis_cash_flow_plan_view_tree" model="ir.ui.view">
+        <field name="name">mis.cash.flow.plan.tree</field>
+        <field name="model">mis.cash.flow.plan</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="account_id" />
+                <field name="balance" />
+                <field name="periodicity" />
+                <field name="date_start" />
+                <field name="date_end" />
+                <field name="forecast_line_count" string="Forecast Lines" />
+                <field
+                    name="company_id"
+                    groups="!base.group_multi_company"
+                    column_invisible="True"
+                />
+                <field
+                    name="company_id"
+                    groups="base.group_multi_company"
+                    optional="hide"
+                />
+            </tree>
+        </field>
+    </record>
+
+    <record id="mis_cash_flow_plan_view_form" model="ir.ui.view">
+        <field name="name">mis.cash.flow.plan.form</field>
+        <field name="model">mis.cash.flow.plan</field>
+        <field name="arch" type="xml">
+            <form string="Cash Flow Forecast Plan">
+                <header>
+                    <field name="forecast_line_ids" invisible="1" />
+                    <button
+                        name="action_generate_forecast_lines"
+                        string="Generate Forecast Lines"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="forecast_line_ids"
+                    />
+                    <button
+                        name="action_generate_forecast_lines"
+                        string="Generate Forecast Lines"
+                        type="object"
+                        class="oe_highlight"
+                        confirm="Existing forecast lines will be permanently deleted and regenerated. Are you sure?"
+                        invisible="not forecast_line_ids"
+                    />
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="action_view_generated_forecast_lines"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-list-alt"
+                        >
+                            <field
+                                name="forecast_line_count"
+                                widget="statinfo"
+                                string="Forecast Lines"
+                            />
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" />
+                        <h1><field
+                                name="name"
+                                placeholder="E.g. Recurring Office Rent"
+                            /></h1>
+                    </div>
+                    <group>
+                        <group string="Base Data">
+                            <field name="partner_id" options="{'no_create': True}" />
+                            <field
+                                name="account_id"
+                                domain="[('company_id', '=', company_id)]"
+                                options="{'no_create': True}"
+                            />
+                            <field name="balance" />
+                            <field
+                                name="company_id"
+                                groups="!base.group_multi_company"
+                                invisible="1"
+                            />
+                            <field
+                                name="company_id"
+                                groups="base.group_multi_company"
+                                options="{'no_create': True}"
+                            />
+                        </group>
+                        <group string="Recurrence Strategy">
+                            <field name="date_start" />
+                            <field name="date_end" />
+                            <field name="periodicity" />
+                            <field
+                                name="every_x_days"
+                                invisible="periodicity != 'days'"
+                                required="periodicity == 'days'"
+                            />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="mis_cash_flow_plan_view_search" model="ir.ui.view">
+        <field name="name">mis.cash.flow.plan.search</field>
+        <field name="model">mis.cash.flow.plan</field>
+        <field name="arch" type="xml">
+            <search string="Mis Cash Flow Plan Search">
+                <field name="name" />
+                <field name="account_id" />
+                <field name="balance" />
+
+                <filter
+                    string="In Progress"
+                    name="in_progress"
+                    domain="[('date_start', '&lt;=', context_today()),
+                            ('date_end', '&gt;=', context_today())]"
+                />
+                <filter
+                    string="Has Forecast Lines Asociated"
+                    name="forecast_lines"
+                    domain="[('forecast_line_count', '&gt;', 0)]"
+                />
+
+                <filter
+                    string="Account"
+                    name="group_by_account"
+                    context="{'group_by':'account_id'}"
+                />
+            </search>
+        </field>
+    </record>
+
+    <record id="action_mis_cash_flow_plan" model="ir.actions.act_window">
+        <field name="name">Forecast Planner</field>
+        <field name="res_model">mis.cash.flow.plan</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="menu_mis_cash_flow_plan_root"
+        name="Forecast Planner"
+        parent="mis_builder.mis_report_finance_menu"
+        action="action_mis_cash_flow_plan"
+        sequence="24"
+    />
+</odoo>

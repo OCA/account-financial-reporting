@@ -20,6 +20,7 @@
                         />
                         <field name="name" />
                         <field name="balance" />
+                        <field name="cash_flow_plan_id" readonly="1" />
                     </group>
                 </sheet>
             </form>
@@ -36,6 +37,8 @@
                 <field name="partner_id" />
                 <field name="account_id" />
                 <field name="company_id" groups="base.group_multi_company" />
+                <separator />
+                <field name="cash_flow_plan_id" />
                 <group>
                     <filter
                         string="Account"
@@ -58,6 +61,11 @@
                         context="{'group_by':'company_id'}"
                         groups="base.group_multi_company"
                     />
+                    <filter
+                        string="Origin Plan"
+                        name="group_by_plan"
+                        context="{'group_by': 'cash_flow_plan_id'}"
+                    />
                 </group>
             </search>
         </field>
@@ -72,6 +80,7 @@
                 <field name="company_id" invisible="1" />
                 <field name="date" />
                 <field name="name" />
+                <field name="cash_flow_plan_id" optional="hide" readonly="1" />
                 <field name="partner_id" />
                 <field
                     name="account_id"
