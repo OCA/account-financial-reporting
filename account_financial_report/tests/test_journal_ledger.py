@@ -280,3 +280,87 @@ class TestJournalReport(AccountTestInvoicingCommon):
 
         self.check_report_journal_debit_credit(res_data, 250, 250)
         self.check_report_journal_debit_credit_taxes(res_data, 300, 0, 50, 0)
+
+    def test_show_analytic_distribution(self):
+        """Check that analytic distribution appears in report data when enabled."""
+        today_date = Date.today()
+        analytic_account = self.env["account.analytic.account"].create(
+            {
+                "name": "Test Analytic",
+                "code": "TA01",
+                "plan_id": self.env["account.analytic.plan"].search([], limit=1).id,
+            }
+        )
+        move_vals = {
+            "journal_id": self.journal_sale.id,
+            "date": today_date,
+            "line_ids": [
+                (
+                    0,
+                    0,
+                    {
+                        "name": "line with analytic",
+                        "debit": 200,
+                        "credit": 0,
+                        "account_id": self.receivable_account.id,
+                        "analytic_distribution": {str(analytic_account.id): 100},
+                    },
+                ),
+                (
+                    0,
+                    0,
+                    {
+                        "name": "counter line",
+                        "debit": 0,
+                        "credit": 200,
+                        "account_id": self.income_account.id,
+                    },
+                ),
+            ],
+        }
+        move = self.MoveObj.create(move_vals)
+        move.action_post()
+
+        wiz = self.JournalLedgerReportWizard.create(
+            {
+                "date_from": self.fy_date_start,
+                "date_to": self.fy_date_end,
+                "company_id": self.company.id,
+                "journal_ids": [(6, 0, self.journal_sale.ids)],
+                "move_target": "posted",
+                "show_analytic_distribution": True,
+            }
+        )
+        data = wiz._prepare_report_data()
+        self.assertTrue(data["show_analytic_distribution"])
+
+        res_data = self.JournalLedgerReport._get_report_values(wiz, data)
+        self.assertIn("analytic_data", res_data)
+        self.assertIn("show_analytic_distribution", res_data)
+        self.assertTrue(res_data["show_analytic_distribution"])
+
+        # Column style keys must be present and the label column should be narrower
+        # than its base width because the analytic column is taking 6% from it.
+        self.assertIn("label_column_style", res_data)
+        self.assertIn("account_column_style", res_data)
+        label_style_with = res_data["label_column_style"]
+
+        # Find the move line with analytic distribution and verify display string
+        analytic_line = None
+        for move_data in res_data["Moves"]:
+            for line in move_data["report_move_lines"]:
+                if line["analytic_distribution"]:
+                    analytic_line = line
+                    break
+        self.assertIsNotNone(
+            analytic_line, "Expected a line with analytic_distribution"
+        )
+        self.assertIn(analytic_account.id, res_data["analytic_data"])
+        self.assertTrue(analytic_line.get("analytic_display"))
+
+        # Disabling the flag should restore the label column to its full base width.
+        wiz.show_analytic_distribution = False
+        data = wiz._prepare_report_data()
+        self.assertFalse(data["show_analytic_distribution"])
+        res_data_off = self.JournalLedgerReport._get_report_values(wiz, data)
+        self.assertNotEqual(res_data_off["label_column_style"], label_style_with)

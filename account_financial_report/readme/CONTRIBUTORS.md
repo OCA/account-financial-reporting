@@ -34,6 +34,9 @@
 - Chau Le \<<chaulb@trobz.com>\>
 - [Stesi Consulting](https://www.stesi.consulting):
   - Michele Di Croce \<<dicroce.m@stesi.consulting>\>
-  
+- [Heliconia Solutions Pvt. Ltd.](https://www.heliconia.io)
+  - Bhavesh Heliconia
+
+
 Much of the work in this module was done at a sprint in Sorrento, Italy
 in April 2016.

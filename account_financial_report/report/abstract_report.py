@@ -169,6 +169,41 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             "amount_currency",
         ]
 
+    def _get_analytic_data(self, account_ids):
+        """Return {id: {name}} for the given analytic account IDs."""
+        if not account_ids:
+            return {}
+        analytic_accounts = (
+            self.env["account.analytic.account"]
+            .with_context(active_test=False)
+            .search_fetch([("id", "in", account_ids)], ["name", "code"])
+        )
+        analytic_data = {}
+        for account in analytic_accounts:
+            name = f"[{account.code}] {account.name}" if account.code else account.name
+            analytic_data[account.id] = {"name": name}
+        return analytic_data
+
+    def _build_analytic_str(self, analytic_distribution, analytic_data):
+        """Format analytic_distribution into a human-readable string.
+
+        Keys in analytic_distribution may be comma-separated account IDs
+        (multi-plan); percentages equal to 100 are omitted for brevity.
+        """
+        if not analytic_distribution or not analytic_data:
+            return ""
+        parts = []
+        for account_keys, percentage in analytic_distribution.items():
+            for account_id in account_keys.split(","):
+                name = analytic_data.get(int(account_id), {}).get("name", "")
+                if not name:
+                    continue
+                if percentage < 100:
+                    parts.append(f"{name} {int(percentage)}%")
+                else:
+                    parts.append(name)
+        return ", ".join(parts)
+
     def _get_report_values(self, docids, data):
         wizard = self.env[data["wizard_name"]].browse(data["wizard_id"])
         return {

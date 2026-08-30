@@ -131,6 +131,7 @@ class JournalLedgerReport(models.AbstractModel):
             "base_balance": base_balance,
             "tax_balance": tax_balance,
             "auto_sequence": str(auto_sequence).zfill(6),
+            "analytic_distribution": ml.analytic_distribution or {},
         }
 
     def _get_account_data(self, accounts):
@@ -243,6 +244,21 @@ class JournalLedgerReport(models.AbstractModel):
         partner_ids_data = self._get_partner_data(move_lines.partner_id)
         currency_ids_data = self._get_currency_data(move_lines.currency_id)
         tax_line_ids_data = self._get_tax_line_data(move_lines.tax_line_id)
+
+        analytic_ids = set()
+        for lines_list in Move_Lines.values():
+            for line in lines_list:
+                for key in line["analytic_distribution"].keys():
+                    for aid in key.split(","):
+                        analytic_ids.add(int(aid))
+        analytic_data = self._get_analytic_data(list(analytic_ids))
+        # Build display strings now that analytic_data is available.
+        for lines_list in Move_Lines.values():
+            for line in lines_list:
+                line["analytic_display"] = self._build_analytic_str(
+                    line["analytic_distribution"], analytic_data
+                )
+
         return (
             move_lines.ids,
             Move_Lines,
@@ -251,6 +267,7 @@ class JournalLedgerReport(models.AbstractModel):
             currency_ids_data,
             tax_line_ids_data,
             move_line_ids_taxes_data,
+            analytic_data,
         )
 
     def _get_journal_tax_lines(self, wizard, moves_data):
@@ -306,6 +323,23 @@ class JournalLedgerReport(models.AbstractModel):
                 ]
         return journals_taxes_data_2
 
+    def _get_column_styles(self, data):
+        # Each optional column deducts its own width from the Ref-Label budget.
+        # Base widths vary with the two layout toggles (account name / auto-sequence).
+        with_account_name = data["with_account_name"]
+        with_auto_sequence = data["with_auto_sequence"]
+        if not with_account_name:
+            account_column_style = "width: 8.11%;"
+            label_base_width = 38.92 if not with_auto_sequence else 31.35
+        else:
+            account_col_w = 23.78 if not with_auto_sequence else 16.21
+            account_column_style = f"width: {account_col_w}%;"
+            label_base_width = 23.24
+        if data.get("show_analytic_distribution"):
+            label_base_width -= 6.0
+        label_column_style = f"width: {round(label_base_width, 2)}%;"
+        return account_column_style, label_column_style
+
     def _get_report_values(self, docids, data):
         res = super()._get_report_values(docids, data)
         wizard_id = data["wizard_id"]
@@ -324,6 +358,7 @@ class JournalLedgerReport(models.AbstractModel):
         move_lines_data = account_ids_data = partner_ids_data = currency_ids_data = (
             tax_line_ids_data
         ) = move_line_ids_taxes_data = {}
+        analytic_data = {}
         if move_ids:
             move_lines = self._get_move_lines(move_ids, wizard, journal_ids)
             move_lines_data = move_lines[1]
@@ -331,6 +366,7 @@ class JournalLedgerReport(models.AbstractModel):
             partner_ids_data = move_lines[3]
             currency_ids_data = move_lines[4]
             tax_line_ids_data = move_lines[5]
+            analytic_data = move_lines[7]
         for move_data in moves_data:
             move_id = move_data["move_id"]
             move_data["report_move_lines"] = []
@@ -359,6 +395,7 @@ class JournalLedgerReport(models.AbstractModel):
             if journal_id in journal_totals.keys():
                 for item in ["debit", "credit"]:
                     journal_ledger_data[item] += journal_totals[journal_id][item]
+        account_column_style, label_column_style = self._get_column_styles(data)
         res.update(
             {
                 "doc_ids": [wizard_id],
@@ -381,6 +418,10 @@ class JournalLedgerReport(models.AbstractModel):
                 "move_line_ids_taxes_data": move_line_ids_taxes_data,
                 "Journal_Ledgers": journal_ledgers_data,
                 "Moves": moves_data,
+                "show_analytic_distribution": data["show_analytic_distribution"],
+                "analytic_data": analytic_data,
+                "account_column_style": account_column_style,
+                "label_column_style": label_column_style,
             }
         )
         return res
