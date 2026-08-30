@@ -603,7 +603,7 @@ class TrialBalanceReport(models.AbstractModel):
                     total_amount[unaffected_id], foreign_currency
                 )
                 total_amount[unaffected_id]["group_by_data"][0] = group_by_data_item
-        accounts_data = self._get_accounts_data(accounts_ids)
+        accounts_data = self._get_accounts_data(accounts_ids, company_id=company_id)
         (
             pl_initial_balance,
             pl_initial_currency_balance,
@@ -776,7 +776,7 @@ class TrialBalanceReport(models.AbstractModel):
         account_group_relation = {}
         for account in accounts:
             accounts_data[account.id]["complete_code"] = (
-                account.group_id.complete_code + " / " + account.code
+                account.group_id.complete_code + " / " + (account.code or "")
                 if account.group_id.id
                 else ""
             )
@@ -862,7 +862,7 @@ class TrialBalanceReport(models.AbstractModel):
                 groups_data[group.id]["initial_currency_balance"] = 0.0
                 groups_data[group.id]["ending_currency_balance"] = 0.0
             for account in accounts_data.values():
-                if group.code_prefix_start == account["code"][:len_group_code]:
+                if group.code_prefix_start == (account["code"] or "")[:len_group_code]:
                     acc_id = account["id"]
                     group_id = group.id
                     groups_data[group_id]["initial_balance"] += total_amount[acc_id][
