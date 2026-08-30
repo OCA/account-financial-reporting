@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2024 Odoo Community Association (OCA)
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <template
+        id="report_aged_partner_balance_move_lines_header_analytic_tag"
+        inherit_id="account_financial_report.report_aged_partner_balance_move_lines"
+    >
+        <!-- ===== Inner table column header row ===== -->
+        <xpath
+            expr="//div[hasclass('act_as_thead')]//t[@t-if='show_analytic_distribution']"
+            position="after"
+        >
+            <t t-if="show_analytic_tags">
+                <div class="act_as_cell" style="width: 4.75%;">
+                    Analytic Tags
+                </div>
+            </t>
+        </xpath>
+
+        <!-- ===== Individual move line row ===== -->
+        <xpath
+            expr="//t[contains(@t-foreach, 'move_lines')]//t[@t-if='show_analytic_distribution']"
+            position="after"
+        >
+            <t t-if="show_analytic_tags">
+                <div class="act_as_cell left">
+                    <span t-if="line.get('tag_display')" t-esc="line['tag_display']" />
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- ===== Partner-level ending cumul (placeholder only) ===== -->
+    <template
+        id="report_aged_partner_balance_partner_ending_cumul_analytic_tag"
+        inherit_id="account_financial_report.report_aged_partner_balance_partner_ending_cumul"
+    >
+        <xpath expr="//t[@t-if='show_analytic_distribution']" position="after">
+            <t t-if="show_analytic_tags">
+                <div class="act_as_cell" style="width: 4.75%;" />
+            </t>
+        </xpath>
+    </template>
+
+    <template
+        id="report_aged_partner_balance_account_ending_cumul_total_analytic_tag"
+        inherit_id="account_financial_report.report_aged_partner_balance_account_ending_cumul"
+    >
+        <!-- ===== Account-level ending cumul — Total row ===== -->
+        <xpath
+            expr="//t[@t-if='show_move_line_details'][div[@t-att-style='ref_label_cumul_partner_style'][normalize-space()='Total']]//t[@t-if='show_analytic_distribution']"
+            position="after"
+        >
+            <t t-if="show_analytic_tags">
+                <div class="act_as_cell" style="width: 4.75%;" />
+            </t>
+        </xpath>
+
+        <!-- ===== Account-level ending cumul — Percents row ===== -->
+        <xpath
+            expr="//t[@t-if='show_move_line_details'][div[@t-att-style='ref_label_cumul_partner_style'][normalize-space()='Percents']]//t[@t-if='show_analytic_distribution']"
+            position="after"
+        >
+            <t t-if="show_analytic_tags">
+                <div class="act_as_cell" style="width: 4.75%;" />
+            </t>
+        </xpath>
+    </template>
+</odoo>

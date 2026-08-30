@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2024 Odoo Community Association (OCA)
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <!-- ===== Journal Ledger: table header row ===== -->
+    <template
+        id="report_journal_ledger_journal_table_header_analytic_tag"
+        inherit_id="account_financial_report.report_journal_ledger_journal_table_header"
+    >
+        <xpath expr="//t[@t-if='show_analytic_distribution']" position="after">
+            <t t-if="show_analytic_tags">
+                <div class="act_as_cell" name="analytic_tags" style="width: 4.75%;">
+                    Analytic Tags
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- ===== Journal Ledger: totals / first-line row (placeholders) ===== -->
+    <template
+        id="report_journal_ledger_journal_first_line_analytic_tag"
+        inherit_id="account_financial_report.report_journal_ledger_journal_first_line"
+    >
+        <xpath expr="//t[@t-if='show_analytic_distribution']" position="after">
+            <t t-if="show_analytic_tags">
+                <div class="act_as_cell" name="analytic_tags" />
+            </t>
+        </xpath>
+    </template>
+
+    <!-- ===== Journal Ledger: individual move line row ===== -->
+    <template
+        id="report_journal_move_line_analytic_tag"
+        inherit_id="account_financial_report.report_journal_move_line"
+    >
+        <xpath expr="//t[@t-if='show_analytic_distribution']" position="after">
+            <t t-if="show_analytic_tags">
+                <div class="act_as_cell left" name="analytic_tags">
+                    <span
+                        t-if="move_line.get('tag_display')"
+                        t-esc="move_line['tag_display']"
+                    />
+                </div>
+            </t>
+        </xpath>
+    </template>
+</odoo>

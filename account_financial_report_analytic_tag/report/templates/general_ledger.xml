@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2024 Odoo Community Association (OCA)
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <!-- ===== General Ledger: header, initial-balance, and move-line rows ===== -->
+    <template
+        id="report_general_ledger_lines_analytic_tag"
+        inherit_id="account_financial_report.report_general_ledger_lines"
+    >
+        <!-- Column header: after the Analytic Distribution cell in the thead -->
+        <xpath
+            expr="//div[hasclass('act_as_thead')]//t[@t-if='show_cost_center']"
+            position="after"
+        >
+            <t t-if="show_analytic_tags">
+                <!--## analytic tags-->
+                <div class="act_as_cell" style="width: 4.75%;">Tags</div>
+            </t>
+        </xpath>
+
+        <!--
+            Initial-balance row: the show_cost_center whose immediate following
+            sibling is the t-set="misc_domain" node — unique in this template.
+        -->
+        <xpath
+            expr="//t[@t-if='show_cost_center'][following-sibling::t[@t-set='misc_domain']]"
+            position="after"
+        >
+            <t t-if="show_analytic_tags">
+                <!--## analytic tags-->
+                <div class="act_as_cell" />
+            </t>
+        </xpath>
+
+        <!-- Move-line row: the show_cost_center inside the move-line forEach loop -->
+        <xpath expr="//t[@t-foreach]//t[@t-if='show_cost_center']" position="after">
+            <t t-if="show_analytic_tags">
+                <div class="act_as_cell left" name="analytic_tags">
+                    <span t-if="line.get('tag_display')" t-esc="line['tag_display']" />
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- ===== General Ledger: ending-cumul row ===== -->
+    <template
+        id="report_general_ledger_ending_cumul_analytic_tag"
+        inherit_id="account_financial_report.report_general_ledger_ending_cumul"
+    >
+        <!-- Only one show_cost_center in this template; no disambiguation needed -->
+        <xpath expr="//t[@t-if='show_cost_center']" position="after">
+            <t t-if="show_analytic_tags">
+                <!--## analytic tags-->
+                <div class="act_as_cell" style="width: 4.75%;" />
+            </t>
+        </xpath>
+    </template>
+</odoo>
