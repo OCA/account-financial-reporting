@@ -8,6 +8,9 @@ based on two types of date:
 
 It also adds:
 
+- Forecast categories: a classification that can be assigned to any
+  cash flow forecast line, so forecast lines can be grouped and
+  filtered (e.g. by rent).
 - Cash flow plans: a recurring template that generates a whole series
   of forecast lines with a single click.
 - A per-company, configurable limit on the number of forecast lines a

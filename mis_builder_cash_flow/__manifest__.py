@@ -14,6 +14,7 @@
         "report/mis_cash_flow_views.xml",
         "views/mis_cash_flow_forecast_line_views.xml",
         "views/account_account_views.xml",
+        "views/mis_cash_flow_category_views.xml",
         "views/mis_cash_flow_plan_views.xml",
         "views/res_config_settings_views.xml",
         "data/mis_report_style.xml",
@@ -21,6 +22,7 @@
         "data/mis_report_instance.xml",
     ],
     "demo": [
+        "demo/mis_cash_flow_category.xml",
         "demo/mis_cash_flow_plan.xml",
     ],
     "installable": True,

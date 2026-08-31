@@ -1,7 +1,3 @@
-.. image:: https://odoo-community.org/readme-banner-image
-   :target: https://odoo-community.org/get-involved?utm_source=readme
-   :alt: Odoo Community Association
-
 =====================
 MIS Builder Cash Flow
 =====================
@@ -17,7 +13,7 @@ MIS Builder Cash Flow
 .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
     :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Faccount--financial--reporting-lightgray.png?logo=github
@@ -42,6 +38,9 @@ based on two types of date:
 
 It also adds:
 
+- Forecast categories: a classification that can be assigned to any cash
+  flow forecast line, so forecast lines can be grouped and filtered
+  (e.g. by rent).
 - Cash flow plans: a recurring template that generates a whole series of
   forecast lines with a single click.
 - A per-company, configurable limit on the number of forecast lines a
@@ -67,6 +66,12 @@ To use this module, you need to:
    forecast lines.
 4. Selecting "All Entries", draft invoices/entries are also included.
 5. In any case, cancelled invoices/entries are not included.
+
+To manage forecast categories, you need to:
+
+1. Go to Accounting > Configuration > MIS Reporting > Forecast Line
+   Categories.
+2. Create a category and, optionally, assign it a parent category.
 
 To create a recurring cash flow plan, you need to:
 
