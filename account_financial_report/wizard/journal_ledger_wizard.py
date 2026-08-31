@@ -135,12 +135,14 @@ class JournalLedgerReportWizard(models.TransientModel):
     ):
         taxes_description = ""
         if move_line_data["tax_line_id"]:
-            taxes_description = tax_line_data["description"] or tax_line_data["name"]
+            taxes_description = self._plain_label(
+                tax_line_data["description"] or tax_line_data["name"]
+            )
         elif move_line_taxes_data:
             tax_names = []
             for tax_key in move_line_taxes_data:
                 tax = move_line_taxes_data[tax_key]
-                tax_names.append(tax["description"] or tax["name"])
+                tax_names.append(self._plain_label(tax["description"] or tax["name"]))
             taxes_description = ",".join(tax_names)
         return taxes_description
 

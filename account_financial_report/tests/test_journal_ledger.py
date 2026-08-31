@@ -280,3 +280,25 @@ class TestJournalReport(AccountTestInvoicingCommon):
 
         self.check_report_journal_debit_credit(res_data, 250, 250)
         self.check_report_journal_debit_credit_taxes(res_data, 300, 0, 50, 0)
+
+    def test_04_tax_description_html_is_plain_text(self):
+        html_desc = '<div data-oe-version="1.1">IGIC 7%</div>'
+        wiz = self.JournalLedgerReportWizard.create(
+            {
+                "date_from": self.fy_date_start,
+                "date_to": self.fy_date_end,
+                "company_id": self.company.id,
+                "journal_ids": [(6, 0, self.journal_sale.ids)],
+                "label_text_limit": 4,
+            }
+        )
+        desc = wiz._get_ml_tax_description(
+            {"tax_line_id": 1},
+            {"description": html_desc, "name": "Tax 7%"},
+            {},
+        )
+        self.assertEqual(desc, "IGIC 7%")
+        self.assertNotIn("<", desc)
+        limited = wiz._limit_text(html_desc)
+        self.assertEqual(limited, "IGIC...")
+        self.assertNotIn("<", limited)
