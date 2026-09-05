@@ -17,6 +17,9 @@ function enrich(component, targetElement, selector, isIFrame = false) {
     // both for the element and the doc
     if (isIFrame) {
         contentDocument = targetElement.contentDocument;
+        if (!contentDocument) {
+            return;
+        }
         doc = contentDocument;
     }
 
