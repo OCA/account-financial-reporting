@@ -10,7 +10,9 @@ patch(ReportAction.prototype, {
         this.isAccountFinancialReport = this.props.report_name.startsWith(
             `${MODULE_NAME}.`
         );
-        useEnrichWithActionLinks(this.iframe);
+        if (this.isAccountFinancialReport) {
+            useEnrichWithActionLinks(this.iframe);
+        }
     },
 
     export() {
