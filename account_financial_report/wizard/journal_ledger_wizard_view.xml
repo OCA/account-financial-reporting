@@ -14,8 +14,12 @@
                 <group>
                     <group>
                         <field name="date_range_id" />
-                        <field name="date_from" />
-                        <field name="date_to" />
+                        <field
+                            name="date_from"
+                            widget="daterange"
+                            options="{'end_date_field': 'date_to'}"
+                        />
+                        <field name="date_to" invisible="1" />
                     </group>
                     <group />
                 </group>
