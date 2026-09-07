@@ -84,12 +84,17 @@
                     />
                     <group invisible="show_partner_details == True" />
                     <div />
-                    <group name="account_filter" col="4">
-                        <label for="account_ids" colspan="4" />
-                        <field name="receivable_accounts_only" />
-                        <field name="payable_accounts_only" />
-                        <label for="account_code_from" string="From Code" />
-                        <div>
+                    <group name="account_filter_prefix">
+                        <field colspan="2" name="account_prefix" />
+                    </group>
+                    <group name="account_filter">
+                        <group>
+                            <label for="account_ids" />
+                            <field name="receivable_accounts_only" />
+                            <field name="payable_accounts_only" />
+                        </group>
+                        <group>
+                            <label for="account_code_from" string="From Code" />
                             <div class="o_row">
                                 <field
                                     name="account_code_from"
@@ -103,7 +108,9 @@
                                     options="{'no_create': True}"
                                 />
                             </div>
-                        </div>
+                        </group>
+                    </group>
+                    <group>
                         <field
                             name="account_ids"
                             nolabel="1"

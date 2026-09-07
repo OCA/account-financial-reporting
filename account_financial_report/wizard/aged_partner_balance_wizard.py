@@ -1,9 +1,12 @@
 # Author: Damien Crier, Andrea Stirpe, Kevin Graveman, Dennis Sluijk
 # Author: Julien Coux
 # Copyright 2016 Camptocamp SA, Onestein B.V.
+# Copyright 2026 Tecnativa - Adasat Torres
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models
+from re import compile as re_compile
+
+from odoo import Command, api, fields, models
 
 
 class AgedPartnerBalanceWizard(models.TransientModel):
@@ -43,6 +46,7 @@ class AgedPartnerBalanceWizard(models.TransientModel):
     age_partner_config_id = fields.Many2one(
         "account.age.report.configuration", string="Intervals configuration"
     )
+    account_prefix = fields.Char()
 
     @api.onchange("account_code_from", "account_code_to")
     def on_change_account_range(self):
@@ -154,3 +158,22 @@ class AgedPartnerBalanceWizard(models.TransientModel):
     def _export(self, report_type):
         """Default export is PDF."""
         return self._print_report(report_type)
+
+    @api.onchange("account_prefix")
+    def onchange_account_prefix(self):
+        delimiter_pattern = re_compile(r"[;,]\s*")
+        if self.account_prefix:
+            domain = fields.Domain.OR(
+                [
+                    [("code", "=like", f"{prefix}%")]
+                    for prefix in delimiter_pattern.split(self.account_prefix)
+                ]
+            )
+            if self.company_id:
+                domain = fields.Domain.AND(
+                    [domain, [("company_ids", "in", self.company_id.ids)]]
+                )
+                account_ids = self.env["account.account"].search(domain).ids
+            self.account_ids = [Command.set(account_ids)]
+        else:
+            self.account_ids = [Command.clear()]
