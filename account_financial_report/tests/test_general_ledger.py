@@ -3,10 +3,11 @@
 # Copyright 2020 ForgeFlow S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+import re
 import time
 from datetime import date
 
-from odoo import api, fields
+from odoo import Command, api, fields
 from odoo.tests import tagged
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
@@ -805,6 +806,102 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         )
         self.assertTrue(content)
         self.assertEqual(content_type, "xlsx")
+
+    def _render_html_report(self, wizard):
+        html = self.env["ir.actions.report"]._render_qweb_html(
+            "account_financial_report.action_print_report_general_ledger_html",
+            wizard.ids,
+            wizard._prepare_report_data(),
+        )[0]
+        return html.decode() if isinstance(html, bytes) else html
+
+    @staticmethod
+    def _header_labels(html):
+        """Return the labels of the move lines header row of the report.
+
+        Only the lines header is wrapped in an ``act_as_thead``, so it
+        discriminates it from the filters block above, which uses the same
+        ``act_as_row labels`` class.
+        """
+        match = re.search(r"act_as_thead.*?(?=act_as_row lines)", html, re.DOTALL)
+        return [
+            label.strip()
+            for label in re.findall(
+                r'class="act_as_cell[^"]*"[^>]*>([^<]*)<', match.group(0)
+            )
+            if label.strip()
+        ]
+
+    def test_column_visibility(self):
+        """Hiding a column in the wizard removes it from the printed report.
+
+        The column configuration is global per report, so the wizard's inline
+        list writes on the ``account.financial.report.column`` records
+        themselves. This checks the whole round trip: the wizard offers the
+        configured columns, unchecking one persists on the configuration
+        record, and the rendered report drops exactly that column.
+        """
+        self._add_move(self.fy_date_start, 1000, 0, 0, 1000)
+        wizard = self.env["general.ledger.report.wizard"].create(
+            {
+                "date_from": self.fy_date_start,
+                "date_to": self.fy_date_end,
+                "target_move": "posted",
+                "hide_account_at_0": False,
+                "company_id": self.env.user.company_id.id,
+                "fy_start_date": self.fy_date_start,
+                "centralize": False,
+            }
+        )
+        columns = self.env["account.financial.report.column"].search(
+            [("res_model", "=", wizard._name)]
+        )
+        self.assertTrue(columns)
+        self.assertEqual(wizard.column_ids, columns)
+
+        labels = self._header_labels(self._render_html_report(wizard))
+        self.assertIn("Journal", labels)
+        self.assertIn("Date", labels)
+
+        journal_column = columns.filtered(
+            lambda column: column.expression_label == "journal"
+        )
+        # Same command the inline list posts when unchecking the "Show" box.
+        wizard.write(
+            {"column_ids": [Command.update(journal_column.id, {"is_visible": False})]}
+        )
+        self.assertFalse(journal_column.is_visible)
+
+        # A report is rendered from a fresh request, so the wizard must resolve
+        # its columns again instead of relying on the cache filled above.
+        self.env.invalidate_all()
+        labels = self._header_labels(self._render_html_report(wizard.browse(wizard.id)))
+        self.assertNotIn("Journal", labels)
+        self.assertIn("Date", labels)
+
+    def test_column_text_limit(self):
+        """The per-column limit truncates the text of that column only."""
+        wizard = self.env["general.ledger.report.wizard"].create(
+            {
+                "date_from": self.fy_date_start,
+                "date_to": self.fy_date_end,
+                "company_id": self.env.user.company_id.id,
+                "fy_start_date": self.fy_date_start,
+            }
+        )
+        ref_label = wizard.column_ids.filtered(
+            lambda column: column.expression_label == "ref_label"
+        )
+        self.assertEqual(ref_label.field_type, "string")
+        values = self.env[
+            "report.account_financial_report.abstract_report"
+        ]._get_report_values([], wizard._prepare_report_data())
+        self.assertEqual(values["ref_label_limit"], ref_label.limit)
+        # Columns that are not text based get no limit entry at all.
+        self.assertNotIn("debit_limit", values)
+        limit_text = values["limit_text"]
+        self.assertEqual(limit_text("a" * 10, 4), "aaaa...")
+        self.assertEqual(limit_text("a" * 10, 0), "a" * 10)
 
     def test_validate_date(self):
         company_id = self.env.user.company_id
