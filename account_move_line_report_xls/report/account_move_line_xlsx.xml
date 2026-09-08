@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="action_account_move_line_xlsx" model="ir.actions.report">
+        <field name="name">Export Selected Lines</field>
+        <field name="model">account.move.line</field>
+        <field name="type">ir.actions.report</field>
+        <field name="binding_type">action</field>
+        <field name="binding_model_id" ref="account.model_account_move_line" />
+        <field
+            name="report_name"
+        >account_move_line_report_xls.account_move_line_xlsx</field>
+        <field name="report_file">account_move_line</field>
+        <field name="report_type">xlsx</field>
+    </record>
+</odoo>
