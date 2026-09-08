@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2023-09-21 16:44+0000\n"
-"Last-Translator: Ivorra78 <informatica@totmaterial.es>\n"
+"PO-Revision-Date: 2026-09-08 18:46+0000\n"
+"Last-Translator: \"David Alonso (Solvos)\" <david.alonso@solvos.es>\n"
 "Language-Team: none\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: mis_builder_cash_flow
 #: model:mis.report.instance.period,name:mis_builder_cash_flow.mis_period_plus_1w
@@ -91,12 +91,12 @@ msgstr "Balance"
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_plan__balance
 msgid "Balance / Amount"
-msgstr ""
+msgstr "Balance / Importe"
 
 #. module: mis_builder_cash_flow
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_plan_view_form
 msgid "Base Data"
-msgstr ""
+msgstr "Datos base"
 
 #. module: mis_builder_cash_flow
 #: model:mis.report,name:mis_builder_cash_flow.mis_report_cash_flow
@@ -113,24 +113,24 @@ msgstr "Línea de previsión de flujo de caja"
 #. module: mis_builder_cash_flow
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_plan_view_form
 msgid "Cash Flow Forecast Plan"
-msgstr ""
+msgstr "Plan de previsión de flujo de caja"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model,name:mis_builder_cash_flow.model_mis_cash_flow_plan
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.res_config_settings_view_form
 msgid "Cash Flow Plan"
-msgstr ""
+msgstr "Plan de flujo de caja"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_res_company__cash_flow_plan_max_forecast_lines
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_res_config_settings__cash_flow_plan_max_forecast_lines
 msgid "Cash Flow Plan Max Forecast Lines"
-msgstr ""
+msgstr "Nº máximo de líneas de planificación de los planes de flujo de caja"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model,name:mis_builder_cash_flow.model_res_company
 msgid "Companies"
-msgstr ""
+msgstr "Compañías"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__company_id
@@ -144,7 +144,7 @@ msgstr "Compañía"
 #. module: mis_builder_cash_flow
 #: model:ir.model,name:mis_builder_cash_flow.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "Ajustes"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__create_uid
@@ -179,12 +179,12 @@ msgstr "Fecha"
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_plan__date_end
 msgid "Date End"
-msgstr ""
+msgstr "Fecha fin"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_plan__date_start
 msgid "Date Start"
-msgstr ""
+msgstr "Fecha de inicio"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__debit
@@ -201,19 +201,19 @@ msgstr "Nombre mostrado"
 #. module: mis_builder_cash_flow
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_plan_view_form
 msgid "E.g. Recurring Office Rent"
-msgstr ""
+msgstr "P.ej. Alquiler recurrente de oficina"
 
 #. module: mis_builder_cash_flow
 #. odoo-python
 #: code:addons/mis_builder_cash_flow/models/mis_cash_flow_plan.py:0
 #, python-format
 msgid "End Date cannot be earlier than Start Date."
-msgstr ""
+msgstr "La fecha fin no puede ser anterior a la fecha de inicio."
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields.selection,name:mis_builder_cash_flow.selection__mis_cash_flow_plan__periodicity__days
 msgid "Every X Days"
-msgstr ""
+msgstr "Cada X días"
 
 #. module: mis_builder_cash_flow
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_plan_view_form
@@ -221,6 +221,7 @@ msgid ""
 "Existing forecast lines will be permanently deleted and regenerated. Are you "
 "sure?"
 msgstr ""
+"Se borrarán y regenerarán las líneas de previsión existentes. ¿Está seguro?"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields.selection,name:mis_builder_cash_flow.selection__mis_cash_flow__line_type__forecast_line
@@ -231,48 +232,48 @@ msgstr "Línea de previsión"
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_plan__forecast_line_count
 msgid "Forecast Line Count"
-msgstr ""
+msgstr "Nº de líneas de previsión"
 
 #. module: mis_builder_cash_flow
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_plan_view_form
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_plan_view_tree
 msgid "Forecast Lines"
-msgstr ""
+msgstr "Líneas de previsión"
 
 #. module: mis_builder_cash_flow
 #. odoo-python
 #: code:addons/mis_builder_cash_flow/models/mis_cash_flow_plan.py:0
 #, python-format
 msgid "Forecast Lines for Plan: %s"
-msgstr ""
+msgstr "Líneas de previsión para el plan: %s"
 
 #. module: mis_builder_cash_flow
 #: model:ir.actions.act_window,name:mis_builder_cash_flow.action_mis_cash_flow_plan
 #: model:ir.ui.menu,name:mis_builder_cash_flow.menu_mis_cash_flow_plan_root
 msgid "Forecast Planner"
-msgstr ""
+msgstr "Planificador de previsiones"
 
 #. module: mis_builder_cash_flow
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_plan_view_form
 msgid "Generate Forecast Lines"
-msgstr ""
+msgstr "Generar líneas de previsión"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_plan__forecast_line_ids
 msgid "Generated Forecast Lines"
-msgstr ""
+msgstr "Líneas de previsión generadas"
 
 #. module: mis_builder_cash_flow
 #. odoo-python
 #: code:addons/mis_builder_cash_flow/models/mis_cash_flow_plan.py:0
 #, python-format
 msgid "Generation limit reached"
-msgstr ""
+msgstr "Alcanzado límite de generación"
 
 #. module: mis_builder_cash_flow
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_plan_view_search
 msgid "Has Forecast Lines Asociated"
-msgstr ""
+msgstr "Tiene líneas de previsión asociadas"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_account_account__hide_in_cash_flow
@@ -294,7 +295,7 @@ msgstr "EN TOTAL"
 #. module: mis_builder_cash_flow
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_plan_view_search
 msgid "In Progress"
-msgstr ""
+msgstr "En progreso"
 
 #. module: mis_builder_cash_flow
 #: model:mis.report.kpi,description:mis_builder_cash_flow.mis_kpi_in_forecast
@@ -309,7 +310,7 @@ msgstr "En cuenta por cobrar"
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_plan__every_x_days
 msgid "Interval (Days)"
-msgstr ""
+msgstr "Intervalo (días)"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__move_line_id
@@ -366,7 +367,7 @@ msgstr "Asiento de conciliación"
 #. module: mis_builder_cash_flow
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.res_config_settings_view_form
 msgid "Max Forecast Lines"
-msgstr ""
+msgstr "Nº máximo de líneas de previsión"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,help:mis_builder_cash_flow.field_res_company__cash_flow_plan_max_forecast_lines
@@ -376,16 +377,18 @@ msgid ""
 "Maximum number of forecast lines a Cash Flow Plan can generate at once when "
 "using 'Generate Forecast Lines'."
 msgstr ""
+"Nº máximo de líneas de previsión que un plan de flujo de caja puede generar "
+"a la vez usando \"Generar líneas de previsión\"."
 
 #. module: mis_builder_cash_flow
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_plan_view_search
 msgid "Mis Cash Flow Plan Search"
-msgstr ""
+msgstr "Búsqueda de plan de previsión de tesorería MIS"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields.selection,name:mis_builder_cash_flow.selection__mis_cash_flow_plan__periodicity__months
 msgid "Monthly"
-msgstr ""
+msgstr "Mensual"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__name
@@ -402,7 +405,7 @@ msgstr "TOTAL SALIDAS"
 #. module: mis_builder_cash_flow
 #: model:account.account,name:mis_builder_cash_flow.mis_cash_flow_account_office_rent
 msgid "Office Rent"
-msgstr ""
+msgstr "Alquiler de oficina"
 
 #. module: mis_builder_cash_flow
 #. odoo-python
@@ -412,6 +415,8 @@ msgid ""
 "Only %(limit)d forecast lines were created. Reduce the date range or "
 "increase the interval to generate all lines."
 msgstr ""
+"Solo se se han creado %(limit)d líneas de tesorería. Reduzca el rango de "
+"fechas o incremente el intervalo para generar todas las líneas."
 
 #. module: mis_builder_cash_flow
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_tree_view
@@ -421,12 +426,12 @@ msgstr "Apunte Contable Abierto / Línea previsión"
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_forecast_line__cash_flow_plan_id
 msgid "Origin Cash Flow Plan"
-msgstr ""
+msgstr "Plan de tesorería origen"
 
 #. module: mis_builder_cash_flow
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_forecast_line_view_search
 msgid "Origin Plan"
-msgstr ""
+msgstr "Plan origen"
 
 #. module: mis_builder_cash_flow
 #: model:mis.report.kpi,description:mis_builder_cash_flow.mis_kpi_out_forecast
@@ -446,7 +451,7 @@ msgstr "BALANCE PERIODO"
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__parent_state
 msgid "Parent State"
-msgstr ""
+msgstr "Estado padre"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__partner_id
@@ -459,7 +464,7 @@ msgstr "Empresa"
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow_plan__periodicity
 msgid "Periodicity"
-msgstr ""
+msgstr "Periodicidad"
 
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields,field_description:mis_builder_cash_flow.field_mis_cash_flow__reconciled
@@ -469,7 +474,7 @@ msgstr "Conciliado"
 #. module: mis_builder_cash_flow
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_plan_view_form
 msgid "Recurrence Strategy"
-msgstr ""
+msgstr "Estrategia recurrente"
 
 #. module: mis_builder_cash_flow
 #. odoo-python
@@ -488,7 +493,7 @@ msgstr "La cuenta de la línea de previsión es solo informativa"
 #: code:addons/mis_builder_cash_flow/models/mis_cash_flow_plan.py:0
 #, python-format
 msgid "The day interval must be greater than zero."
-msgstr ""
+msgstr "El día del intervalo tiene que ser mayor que cero."
 
 #. module: mis_builder_cash_flow
 #: model_terms:ir.ui.view,arch_db:mis_builder_cash_flow.mis_cash_flow_form_view
@@ -509,7 +514,7 @@ msgstr "No Conciliado"
 #. module: mis_builder_cash_flow
 #: model:ir.model.fields.selection,name:mis_builder_cash_flow.selection__mis_cash_flow_plan__periodicity__weeks
 msgid "Weekly"
-msgstr ""
+msgstr "Semanal"
 
 #. module: mis_builder_cash_flow
 #: model:mis.report.instance.period,name:mis_builder_cash_flow.mis_period_plus_fourth_month
