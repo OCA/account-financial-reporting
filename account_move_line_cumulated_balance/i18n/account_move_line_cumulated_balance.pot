@@ -30,6 +30,11 @@ msgid "Journal Item"
 msgstr ""
 
 #. module: account_move_line_cumulated_balance
+#: model_terms:ir.ui.view,arch_db:account_move_line_cumulated_balance.view_move_line_pivot_cumulated_balance
+msgid "Journal Items"
+msgstr ""
+
+#. module: account_move_line_cumulated_balance
 #: model:ir.actions.act_window,name:account_move_line_cumulated_balance.action_account_moves_cumulated_balance
 #: model:ir.ui.menu,name:account_move_line_cumulated_balance.menu_action_account_moves_cumulated_balance
 msgid "Journal Items Cumulated Balance"
