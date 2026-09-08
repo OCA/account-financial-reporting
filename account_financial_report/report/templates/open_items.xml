@@ -237,30 +237,58 @@
         <div class="act_as_thead">
             <div class="act_as_row labels">
                 <!--## date-->
-                <div class="act_as_cell first_column" style="width: 5.51%;">Date</div>
+                <div
+                    t-if="date_visible"
+                    class="act_as_cell first_column"
+                    style="width: 5.51%;"
+                >Date</div>
                 <!--## move-->
-                <div class="act_as_cell" style="width: 9.76%;">Entry</div>
+                <div
+                    t-if="entry_visible"
+                    class="act_as_cell"
+                    style="width: 9.76%;"
+                >Entry</div>
                 <!--## journal-->
-                <div class="act_as_cell" style="width: 4.78%;">Journal</div>
+                <div
+                    t-if="journal_visible"
+                    class="act_as_cell"
+                    style="width: 4.78%;"
+                >Journal</div>
                 <!--## account code-->
-                <div class="act_as_cell" style="width: 5.38%;">Account</div>
+                <div
+                    t-if="account_code_visible"
+                    class="act_as_cell"
+                    style="width: 5.38%;"
+                >Account</div>
                 <!--## partner-->
-                <div class="act_as_cell" style="width: 15.07%;">Partner</div>
+                <div
+                    t-if="partner_visible"
+                    class="act_as_cell"
+                    style="width: 15.07%;"
+                >Partner</div>
                 <!--## ref - label-->
-                <div class="act_as_cell" style="width: 24.5%;">
+                <div t-if="ref_label_visible" class="act_as_cell" style="width: 24.5%;">
                     Ref -
                     Label
                 </div>
                 <!--## date_due-->
-                <div class="act_as_cell" style="width: 6.47%;">
+                <div t-if="date_due_visible" class="act_as_cell" style="width: 6.47%;">
                     Due
                     date
                 </div>
                 <!--## amount_total_due-->
-                <div class="act_as_cell" style="width: 6.57%;">Original</div>
+                <div
+                    t-if="original_visible"
+                    class="act_as_cell"
+                    style="width: 6.57%;"
+                >Original</div>
                 <!--## amount_residual-->
-                <div class="act_as_cell" style="width: 6.57%;">Residual</div>
-                <t t-if="foreign_currency">
+                <div
+                    t-if="residual_visible"
+                    class="act_as_cell"
+                    style="width: 6.57%;"
+                >Residual</div>
+                <t t-if="foreign_currency and foreign_currency_visible">
                     <!--## currency_name-->
                     <div class="act_as_cell" style="width: 2.25%;">Cur.</div>
                     <!--## amount_total_due_currency-->
@@ -279,11 +307,11 @@
         <!-- # lines or centralized lines -->
         <div class="act_as_row lines">
             <!--## date-->
-            <div class="act_as_cell left">
+            <div t-if="date_visible" class="act_as_cell left">
                 <span t-out="line['date'].strftime('%d/%m/%Y')" />
             </div>
             <!--## move-->
-            <div class="act_as_cell left">
+            <div t-if="entry_visible" class="act_as_cell left">
                 <span
                     t-att-res-id="line['entry_id']"
                     res-model="account.move"
@@ -293,7 +321,7 @@
                 </span>
             </div>
             <!--## journal-->
-            <div class="act_as_cell left">
+            <div t-if="journal_visible" class="act_as_cell left">
                 <span
                     t-att-res-id="journals_data[line['journal_id']]['id']"
                     res-model="account.journal"
@@ -303,7 +331,7 @@
                 </span>
             </div>
             <!--## account code-->
-            <div class="act_as_cell left">
+            <div t-if="account_code_visible" class="act_as_cell left">
                 <span
                     t-att-res-id="accounts_data[account_id]['id']"
                     res-model="account.account"
@@ -313,7 +341,7 @@
                 </span>
             </div>
             <!--## partner-->
-            <div class="act_as_cell left">
+            <div t-if="partner_visible" class="act_as_cell left">
                 <span
                     t-if="line.get('partner_id', False)"
                     t-att-res-id="line['partner_id']"
@@ -324,15 +352,15 @@
                 </span>
             </div>
             <!--## ref - label-->
-            <div class="act_as_cell left">
-                <span t-esc="limit_text(line['ref_label'], 'label_text_limit')" />
+            <div t-if="ref_label_visible" class="act_as_cell left">
+                <span t-esc="limit_text(line['ref_label'], ref_label_limit)" />
             </div>
             <!--## date_due-->
-            <div class="act_as_cell left">
+            <div t-if="date_due_visible" class="act_as_cell left">
                 <span t-esc="line['date_maturity']" />
             </div>
             <!--## amount_total_due-->
-            <div class="act_as_cell amount">
+            <div t-if="original_visible" class="act_as_cell amount">
                 <span
                     t-if="line.get('original', False)"
                     t-esc="line['original']"
@@ -340,13 +368,13 @@
                 />
             </div>
             <!--## amount_residual-->
-            <div class="act_as_cell amount">
+            <div t-if="residual_visible" class="act_as_cell amount">
                 <span
                     t-esc="line['amount_residual']"
                     t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                 />
             </div>
-            <t t-if="foreign_currency">
+            <t t-if="foreign_currency and foreign_currency_visible">
                 <t t-if="line['currency_id']">
                     <!--## currency_name-->
                     <div class="act_as_cell amount">
@@ -440,7 +468,7 @@
                     </t>
                 </div>
                 <!--## amount_total_due_currency + amount_residual_currency -->
-                <t t-if="foreign_currency">
+                <t t-if="foreign_currency and foreign_currency_visible">
                     <!--## currency_name-->
                     <div class="act_as_cell" />
                     <!--## amount_total_due_currency-->
