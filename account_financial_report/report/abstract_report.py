@@ -1,4 +1,5 @@
 # Copyright 2020 ForgeFlow S.L. (https://www.forgeflow.com)
+# Copyright 2025 Tecnativa - Carlos Dauden
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import api, models
@@ -171,6 +172,14 @@ class AgedPartnerBalanceReport(models.AbstractModel):
 
     def _get_report_values(self, docids, data):
         wizard = self.env[data["wizard_name"]].browse(data["wizard_id"])
-        return {
-            "limit_text": wizard._limit_text,
-        }
+        res = {f"{c.expression_label}_visible": c.is_visible for c in wizard.column_ids}
+        res.update(
+            {
+                f"{c.expression_label}_limit": c.limit
+                for c in wizard.column_ids
+                if c.field_type == "string"
+            }
+        )
+        # Pass function to be called in report
+        res["limit_text"] = wizard._limit_text
+        return res
