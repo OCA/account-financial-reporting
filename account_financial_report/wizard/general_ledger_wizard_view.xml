@@ -92,10 +92,8 @@
                                 context="{'skip_search_count': 1}"
                             />
                         </page>
-                        <page name="format" string="Format">
-                            <group>
-                                <field name="label_text_limit" />
-                            </group>
+                        <page name="columns" string="Columns">
+                            <field name="column_ids" />
                         </page>
                     </notebook>
                 </div>

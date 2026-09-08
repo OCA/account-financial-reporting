@@ -1,4 +1,5 @@
 from . import account_age_report_configuration
+from . import account_financial_report_column
 from . import account_group
 from . import account
 from . import account_move_line
