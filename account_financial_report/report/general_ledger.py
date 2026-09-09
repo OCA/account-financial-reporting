@@ -8,7 +8,7 @@ import datetime
 import operator
 
 from odoo import _, api, models
-from odoo.tools import float_is_zero
+from odoo.tools import float_is_zero, format_date
 
 
 class GeneralLedgerReport(models.AbstractModel):
@@ -776,34 +776,23 @@ class GeneralLedgerReport(models.AbstractModel):
     def _get_report_values(self, docids, data):
         res = super()._get_report_values(docids, data)
         wizard_id = data["wizard_id"]
-        company = self.env["res.company"].browse(data["company_id"])
-        company_id = data["company_id"]
-        date_to = data["date_to"]
-        date_from = data["date_from"]
-        partner_ids = data["partner_ids"]
-        account_ids = data["account_ids"]
-        cost_center_ids = data["cost_center_ids"]
-        grouped_by = data["grouped_by"]
-        hide_account_at_0 = data["hide_account_at_0"]
-        foreign_currency = data["foreign_currency"]
-        only_posted_moves = data["only_posted_moves"]
-        unaffected_earnings_account = data["unaffected_earnings_account"]
-        fy_start_date = data["fy_start_date"]
-        extra_domain = data["domain"]
+        wizard = self.env["general.ledger.report.wizard"].browse(wizard_id)
+        company = wizard.company_id
+        only_posted_moves = wizard.target_move == "posted"
+        extra_domain = wizard._get_account_move_lines_domain()
         gen_ld_data = self._get_initial_balance_data(
-            account_ids,
-            partner_ids,
-            company_id,
-            date_from,
-            foreign_currency,
+            wizard.account_ids.ids,
+            wizard.partner_ids.ids,
+            wizard.company_id.id,
+            wizard.date_from,
+            wizard.foreign_currency,
             only_posted_moves,
-            unaffected_earnings_account,
-            fy_start_date,
-            cost_center_ids,
+            wizard.unaffected_earnings_account.id,
+            wizard.fy_start_date,
+            wizard.cost_center_ids,
             extra_domain,
-            grouped_by,
+            wizard.grouped_by,
         )
-        centralize = data["centralize"]
         (
             gen_ld_data,
             accounts_data,
@@ -813,26 +802,28 @@ class GeneralLedgerReport(models.AbstractModel):
             analytic_data,
             rec_after_date_to_ids,
         ) = self._get_period_ml_data(
-            account_ids,
-            partner_ids,
-            company_id,
-            foreign_currency,
-            only_posted_moves,
-            date_from,
-            date_to,
+            wizard.account_ids.ids,
+            wizard.partner_ids.ids,
+            wizard.company_id.id,
+            wizard.foreign_currency,
+            wizard.target_move == "posted",
+            wizard.date_from,
+            wizard.date_to,
             gen_ld_data,
-            cost_center_ids,
+            wizard.cost_center_ids,
             extra_domain,
-            grouped_by,
+            wizard.grouped_by,
         )
         general_ledger = self._create_general_ledger(
             gen_ld_data,
             accounts_data,
-            grouped_by,
+            wizard.grouped_by,
             rec_after_date_to_ids,
-            hide_account_at_0,
+            wizard.hide_account_at_0,
         )
-        if centralize:
+        if wizard.centralize:
+            date_to = wizard.date_to
+            grouped_by = wizard.grouped_by
             for account in general_ledger:
                 if account["centralized"]:
                     centralized_ml = self._get_centralized_ml(
@@ -851,7 +842,7 @@ class GeneralLedgerReport(models.AbstractModel):
         # Set the bal_curr of the initial balance to 0 if it does not correspond
         # (reducing the corresponding of the bal_curr of the initial balance).
         for gl_item in general_ledger:
-            if not foreign_currency:
+            if not wizard.foreign_currency:
                 continue
             if not gl_item["currency_id"] or (
                 gl_item["currency_id"] != company.currency_id.id
@@ -870,7 +861,7 @@ class GeneralLedgerReport(models.AbstractModel):
         for gl_item in general_ledger:
             fin_bal_currency_ids = []
             fin_bal_currency_id = gl_item["currency_id"]
-            if gl_item["currency_id"] or not foreign_currency:
+            if gl_item["currency_id"] or not wizard.foreign_currency:
                 gl_item["fin_bal_currency_id"] = fin_bal_currency_id
                 continue
             gl_item["fin_bal"]["bal_curr"] = gl_item["init_bal"]["bal_curr"]
@@ -907,24 +898,24 @@ class GeneralLedgerReport(models.AbstractModel):
             {
                 "doc_ids": [wizard_id],
                 "doc_model": "general.ledger.report.wizard",
-                "docs": self.env["general.ledger.report.wizard"].browse(wizard_id),
-                "foreign_currency": data["foreign_currency"],
+                "docs": wizard,
+                "foreign_currency": wizard.foreign_currency,
                 "company_name": company.display_name,
                 "company_currency": company.currency_id,
                 "currency_name": company.currency_id.name,
-                "date_from": data["date_from"],
-                "date_to": data["date_to"],
-                "only_posted_moves": data["only_posted_moves"],
-                "hide_account_at_0": data["hide_account_at_0"],
-                "show_cost_center": data["show_cost_center"],
+                "date_from": format_date(self.env, wizard.date_from),
+                "date_to": format_date(self.env, wizard.date_to),
+                "only_posted_moves": only_posted_moves,
+                "hide_account_at_0": wizard.hide_account_at_0,
+                "show_cost_center": wizard.show_cost_center,
                 "general_ledger": general_ledger,
                 "accounts_data": accounts_data,
                 "journals_data": journals_data,
                 "full_reconcile_data": full_reconcile_data,
                 "taxes_data": taxes_data,
-                "centralize": centralize,
+                "centralize": wizard.centralize,
                 "analytic_data": analytic_data,
-                "filter_partner_ids": True if partner_ids else False,
+                "filter_partner_ids": bool(wizard.partner_ids),
                 "currency_model": self.env["res.currency"],
             }
         )

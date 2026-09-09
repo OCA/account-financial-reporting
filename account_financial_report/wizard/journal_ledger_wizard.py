@@ -89,33 +89,6 @@ class JournalLedgerReportWizard(models.TransientModel):
             .report_action(self, data=data)
         )
 
-    def _prepare_report_data(self):
-        res = super()._prepare_report_data()
-        journals = self.journal_ids
-        if not journals:
-            # Not selecting a journal means that we'll display all journals
-            journals = (
-                self.env["account.journal"]
-                .with_context(active_test=False)
-                .search([("company_id", "=", self.company_id.id)])
-            )
-        res.update(
-            {
-                "date_from": self.date_from,
-                "date_to": self.date_to,
-                "move_target": self.move_target,
-                "foreign_currency": self.foreign_currency,
-                "company_id": self.company_id.id,
-                "journal_ids": journals.ids,
-                "sort_option": self.sort_option,
-                "group_option": self.group_option,
-                "with_account_name": self.with_account_name,
-                "account_financial_report_lang": self.env.lang,
-                "with_auto_sequence": self.with_auto_sequence,
-            }
-        )
-        return res
-
     def _export(self, report_type):
         """Default export is PDF."""
         self.ensure_one()
