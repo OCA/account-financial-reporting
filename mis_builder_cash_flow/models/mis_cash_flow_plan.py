@@ -17,6 +17,7 @@ class MisCashFlowPlan(models.Model):
     partner_id = fields.Many2one("res.partner", string="Partner")
     account_id = fields.Many2one("account.account", string="Account", required=True)
     balance = fields.Float(string="Balance / Amount", required=True)
+    category_id = fields.Many2one("mis.cash.flow.forecast.category", string="Category")
     date_start = fields.Date(required=True, default=fields.Date.context_today)
     date_end = fields.Date(required=True)
     periodicity = fields.Selection(
@@ -66,6 +67,7 @@ class MisCashFlowPlan(models.Model):
             "partner_id": self.partner_id.id,
             "account_id": self.account_id.id,
             "balance": self.balance,
+            "category_id": self.category_id.id,
             "date": line_date,
             "cash_flow_plan_id": self.id,
             "company_id": self.company_id.id,
