@@ -283,32 +283,6 @@ class GeneralLedgerReportWizard(models.TransientModel):
             .report_action(self, data=data)
         )
 
-    def _prepare_report_data(self):
-        res = super()._prepare_report_data()
-        res.update(
-            {
-                "wizard_id": self.id,
-                "date_from": self.date_from,
-                "date_to": self.date_to,
-                "only_posted_moves": self.target_move == "posted",
-                "hide_account_at_0": self.hide_account_at_0,
-                "foreign_currency": self.foreign_currency,
-                "company_id": self.company_id.id,
-                "account_ids": self.account_ids.ids,
-                "partner_ids": self.partner_ids.ids,
-                "grouped_by": self.grouped_by,
-                "cost_center_ids": self.cost_center_ids.ids,
-                "show_cost_center": self.show_cost_center,
-                "journal_ids": self.account_journal_ids.ids,
-                "centralize": self.centralize,
-                "fy_start_date": self.fy_start_date,
-                "unaffected_earnings_account": self.unaffected_earnings_account.id,
-                "account_financial_report_lang": self.env.lang,
-                "domain": self._get_account_move_lines_domain(),
-            }
-        )
-        return res
-
     def _export(self, report_type):
         """Default export is PDF."""
         return self._print_report(report_type)

@@ -3,7 +3,7 @@
 #  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo.tests import TransactionCase
-from odoo.tools import DEFAULT_SERVER_DATE_FORMAT, test_reports
+from odoo.tools import test_reports
 
 
 class TestAgedPartnerBalance(TransactionCase):
@@ -69,8 +69,6 @@ class TestAgedPartnerBalance(TransactionCase):
         data = wizard._prepare_report_data()
 
         # Simulate web client behavior:
-        # default value is a datetime.date but web client sends back strings
-        data.update({"date_at": data["date_at"].strftime(DEFAULT_SERVER_DATE_FORMAT)})
         result = test_reports.try_report(
             self.env.cr,
             self.env.uid,
@@ -85,8 +83,6 @@ class TestAgedPartnerBalance(TransactionCase):
         data = second_wizard._prepare_report_data()
 
         # Simulate web client behavior:
-        # default value is a datetime.date but web client sends back strings
-        data.update({"date_at": data["date_at"].strftime(DEFAULT_SERVER_DATE_FORMAT)})
         result = test_reports.try_report(
             self.env.cr,
             self.env.uid,
@@ -128,8 +124,6 @@ class TestAgedPartnerBalance(TransactionCase):
         data = wizard._prepare_report_data()
 
         # Simulate web client behavior:
-        # default value is a datetime.date but web client sends back strings
-        data.update({"date_at": data["date_at"].strftime(DEFAULT_SERVER_DATE_FORMAT)})
         result = test_reports.try_report(
             self.env.cr,
             self.env.uid,
@@ -146,8 +140,6 @@ class TestAgedPartnerBalance(TransactionCase):
         data = second_wizard._prepare_report_data()
 
         # Simulate web client behavior:
-        # default value is a datetime.date but web client sends back strings
-        data.update({"date_at": data["date_at"].strftime(DEFAULT_SERVER_DATE_FORMAT)})
         result = test_reports.try_report(
             self.env.cr,
             self.env.uid,

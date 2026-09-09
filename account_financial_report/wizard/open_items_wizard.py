@@ -167,25 +167,5 @@ class OpenItemsReportWizard(models.TransientModel):
             .report_action(self, data=data)
         )
 
-    def _prepare_report_data(self):
-        res = super()._prepare_report_data()
-        res.update(
-            {
-                "date_at": fields.Date.to_string(self.date_at),
-                "date_from": self.date_from or False,
-                "only_posted_moves": self.target_move == "posted",
-                "hide_account_at_0": self.hide_account_at_0,
-                "foreign_currency": self.foreign_currency,
-                "show_partner_details": self.show_partner_details,
-                "company_id": self.company_id.id,
-                "target_move": self.target_move,
-                "account_ids": self.account_ids.ids,
-                "partner_ids": self.partner_ids.ids or [],
-                "account_financial_report_lang": self.env.lang,
-                "grouped_by": self.grouped_by,
-            }
-        )
-        return res
-
     def _export(self, report_type):
         return self._print_report(report_type)
