@@ -3,6 +3,7 @@
 # Copyright 2016 Camptocamp SA
 # Copyright 2020 ForgeFlow S.L. (https://www.forgeflow.com)
 # Copyright 2021 Tecnativa - João Marques
+# Copyright 2025 Tecnativa - Carlos Dauden
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Account Financial Reports",
@@ -13,10 +14,12 @@
     "initOS GmbH,"
     "redCOR AG,"
     "ForgeFlow,"
+    "Tecnativa,"
     "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/account-financial-reporting",
     "depends": ["account", "date_range", "report_xlsx"],
     "data": [
+        "data/report_column_data.xml",
         "security/ir.model.access.csv",
         "security/security.xml",
         "wizard/aged_partner_balance_wizard_view.xml",
@@ -36,6 +39,7 @@
         "report/templates/trial_balance.xml",
         "report/templates/vat_report.xml",
         "view/account_view.xml",
+        "view/account_financial_report_column_view.xml",
         "view/report_general_ledger.xml",
         "view/report_journal_ledger.xml",
         "view/report_trial_balance.xml",

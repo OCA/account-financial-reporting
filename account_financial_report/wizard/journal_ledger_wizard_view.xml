@@ -7,39 +7,48 @@
         <field name="model">journal.ledger.report.wizard</field>
         <field name="arch" type="xml">
             <form>
-                <group>
-                    <field name="company_id" groups="base.group_multi_company" />
-                </group>
-                <separator string="Periods" />
-                <group>
-                    <group>
-                        <field name="date_range_id" />
-                        <field name="date_from" />
-                        <field name="date_to" />
-                    </group>
-                    <group />
-                </group>
-                <separator string="Options" />
-                <group name="options">
-                    <group>
-                        <field
-                            name="move_target"
-                            widget="radio"
-                            options="{'horizontal': true}"
-                        />
-                        <field name="sort_option" />
-                        <field name="group_option" />
-                        <field name="foreign_currency" />
-                        <field name="with_account_name" />
-                        <field name="with_auto_sequence" />
-                        <field name="label_text_limit" />
-                    </group>
-                    <group />
-                </group>
-                <separator string="Journals" />
-                <group>
-                    <field name="journal_ids" widget="many2many_tags" />
-                </group>
+                <notebook>
+                    <page name="filters" string="Filters">
+                        <group>
+                            <field
+                                name="company_id"
+                                groups="base.group_multi_company"
+                            />
+                        </group>
+                        <separator string="Periods" />
+                        <group>
+                            <group>
+                                <field name="date_range_id" />
+                                <field name="date_from" />
+                                <field name="date_to" />
+                            </group>
+                            <group />
+                        </group>
+                        <separator string="Options" />
+                        <group name="options">
+                            <group>
+                                <field
+                                    name="move_target"
+                                    widget="radio"
+                                    options="{'horizontal': true}"
+                                />
+                                <field name="sort_option" />
+                                <field name="group_option" />
+                                <field name="foreign_currency" />
+                                <field name="with_account_name" />
+                                <field name="with_auto_sequence" />
+                            </group>
+                            <group />
+                        </group>
+                        <separator string="Journals" />
+                        <group>
+                            <field name="journal_ids" widget="many2many_tags" />
+                        </group>
+                    </page>
+                    <page name="columns" string="Columns">
+                        <field name="column_ids" />
+                    </page>
+                </notebook>
                 <footer>
                     <button
                     name="button_export_html"

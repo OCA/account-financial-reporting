@@ -1,7 +1,3 @@
-.. image:: https://odoo-community.org/readme-banner-image
-   :target: https://odoo-community.org/get-involved?utm_source=readme
-   :alt: Odoo Community Association
-
 =========================
 Account Financial Reports
 =========================
@@ -17,7 +13,7 @@ Account Financial Reports
 .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
     :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Faccount--financial--reporting-lightgray.png?logo=github
@@ -41,6 +37,9 @@ Invoicing / Reporting / OCA accounting reports.
 - Aged Partner Balance
 - VAT Report
 - Journal Ledger
+
+It is possible to select the columns to show and limit the size of some
+of them from the columns page.
 
 Currently General ledger, Trial Balance and Open Items are fully
 compatible with a foreign currency set up in account in order to display
@@ -100,9 +99,20 @@ Known issues / Roadmap
 - It would be nice to have in reports a column indicating the state of
   the entries when the option "All Entries" is selected in "Target
   Moves" field in a wizard
+- Adapt reports so that the order of the columns displayed is dynamic
+- Remove duplicated options to show columns (it has not been made in a
+  stable version so as not to generate confusion in users)
 
 Changelog
 =========
+
+18.0.1.5.0 (2026-09-08)
+-----------------------
+
+- Added the option to select the columns to display and the ability to
+  limit the width of the text. It replaces the single
+  ``label_text_limit`` wizard option, whose value is now configured per
+  column.
 
 11.0.2.5.0 (2019-04-26)
 -----------------------
@@ -144,6 +154,7 @@ Authors
 * initOS GmbH
 * redCOR AG
 * ForgeFlow
+* Tecnativa
 
 Contributors
 ------------
@@ -176,6 +187,7 @@ Contributors
   - V??ctor Mart??nez
   - Carolina Fernandez
   - Eduardo Ezerouali
+  - Carlos Dauden
 
 - `Sygel <https://www.sygel.es>`__:
 
