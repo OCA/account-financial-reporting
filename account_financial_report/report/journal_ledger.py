@@ -222,6 +222,17 @@ class JournalLedgerReport(models.AbstractModel):
                 tax_description,
                 tax_name,
             ) in self.env.cr.fetchall():
+                # SQL returns translation dictionaries for translated tax fields.
+                if isinstance(tax_description, dict):
+                    tax_description = (
+                        tax_description.get(self.env.lang)
+                        or tax_description.get("en_US")
+                        or ""
+                    )
+                if isinstance(tax_name, dict):
+                    tax_name = (
+                        tax_name.get(self.env.lang) or tax_name.get("en_US") or ""
+                    )
                 if move_line_id not in move_line_ids_taxes_data.keys():
                     move_line_ids_taxes_data[move_line_id] = {}
                 move_line_ids_taxes_data[move_line_id][account_tax_id] = {
@@ -280,6 +291,7 @@ class JournalLedgerReport(models.AbstractModel):
                 for tax in taxes:
                     if tax.id not in journals_taxes_data[journal_id]:
                         journals_taxes_data[journal_id][tax.id] = {
+                            "tax_id": tax.id,
                             "base_debit": 0.0,
                             "base_credit": 0.0,
                             "base_balance": 0.0,
@@ -333,6 +345,7 @@ class JournalLedgerReport(models.AbstractModel):
             partner_ids_data = move_lines[3]
             currency_ids_data = move_lines[4]
             tax_line_ids_data = move_lines[5]
+            move_line_ids_taxes_data = move_lines[6]
         for move_data in moves_data:
             move_id = move_data["move_id"]
             move_data["report_move_lines"] = []
@@ -371,6 +384,7 @@ class JournalLedgerReport(models.AbstractModel):
                 "with_account_name": data["with_account_name"],
                 "company_name": company.display_name,
                 "currency_name": company.currency_id.name,
+                "company_currency_id": company.currency_id.id,
                 "date_from": data["date_from"],
                 "date_to": data["date_to"],
                 "move_target": data["move_target"],
