@@ -339,6 +339,45 @@ class TestVATReport(AccountTestInvoicingCommon):
         self.assertEqual(tax_20_net, -250)
         self.assertEqual(tax_20_tax, -50)
 
+    def test_report_date_boundaries(self):
+        report = self.env["report.account_financial_report.vat_report"]
+        for based_on in ("taxgroups", "taxtags"):
+            with self.subTest(based_on=based_on):
+                wizard = self.env["vat.report.wizard"].create(
+                    {
+                        "company_id": self.company.id,
+                        "date_from": time.strftime("%Y-%m-03"),
+                        "date_to": time.strftime("%Y-%m-03"),
+                        "based_on": based_on,
+                        "target_move": "posted",
+                        "tax_detail": True,
+                    }
+                )
+                action = wizard.button_export_html()
+                data = action["params"]["data"]
+                self.assertEqual(data["date_from"], wizard.date_from)
+                self.assertEqual(data["date_to"], wizard.date_to)
+                values = report.get_report_values([wizard.id], data)
+                self.assertEqual(
+                    self._get_tax_line(self.tax_10.name, values["vat_report"]),
+                    (-100, -10),
+                )
+                self.assertFalse(
+                    self.check_tax_in_report(self.tax_20.name, values["vat_report"])
+                )
+                wizard.date_to = time.strftime("%Y-%m-04")
+                values = report.get_report_values(
+                    [wizard.id], wizard._prepare_report_data()
+                )
+                self.assertEqual(
+                    self._get_tax_line(self.tax_10.name, values["vat_report"]),
+                    (-100, -10),
+                )
+                self.assertEqual(
+                    self._get_tax_line(self.tax_20.name, values["vat_report"]),
+                    (-250, -50),
+                )
+
     def test_wizard_date_range(self):
         vat_wizard = self.env["vat.report.wizard"]
         date_range = self.env["date.range"]

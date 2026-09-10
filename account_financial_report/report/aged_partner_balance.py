@@ -470,6 +470,32 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         )
         return res
 
+    @api.model
+    def get_report_values(self, docids, data):
+        """Convert record keys before transporting report data to the web client."""
+        values = super().get_report_values(docids, data)
+        interval_keys = {
+            line: str(line.id) for line in values["age_partner_config"].line_ids
+        }
+
+        def serialize(value):
+            if isinstance(value, list):
+                return [serialize(item) for item in value]
+            if isinstance(value, dict):
+                return {
+                    interval_keys.get(key, key): serialize(item)
+                    for key, item in value.items()
+                }
+            return value
+
+        return {
+            **values,
+            "aged_partner_balance": serialize(values["aged_partner_balance"]),
+            "age_partner_config_lines": values["age_partner_config"].line_ids.read(
+                ["name"]
+            ),
+        }
+
     def _get_ml_fields(self):
         return self.COMMON_ML_FIELDS + [
             "amount_residual",

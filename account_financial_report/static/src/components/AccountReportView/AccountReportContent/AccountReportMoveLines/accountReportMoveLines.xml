@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="account_financial_report.AccountReportMoveLines">
+        <div class="table-responsive m-1">
+            <table class="table table-sm table-striped caption-top  my-1">
+                <caption class="pt-0 pb-2 mb-1 text-dark">
+                    <div
+                        class="d-flex align-items-center justify-content-between gap-2"
+                    >
+                        <span class="fw-bold">
+                            <t t-out="title" />
+                        </span>
+                        <Pager
+                            offset="pagination.offset"
+                            limit="pagination.limit"
+                            total="totalRecords"
+                            onUpdate.bind="onPagerUpdate"
+                        />
+                    </div>
+                </caption>
+                <thead class="table-light">
+                    <tr>
+                        <th>Date</th>
+                        <th>Journal</th>
+                        <th>Account</th>
+                        <th>Name</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <t t-foreach="filteredRecords" t-as="record" t-key="record.id">
+                        <tr>
+                            <td>
+                                <t t-out="formatDate(record.date)" />
+                            </td>
+                            <td>
+                                <t t-out="record.journal_id[1]" />
+                            </td>
+                            <td>
+                                <t t-out="record.account_id[1]" />
+                            </td>
+                            <td>
+                                <t t-out="record.name or ''" />
+                            </td>
+                            <td>
+                                <t t-out="formatMonetary(record.debit, currencyId)" />
+                            </td>
+                            <td>
+                                <t t-out="formatMonetary(record.credit, currencyId)" />
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+                <tfoot class="table-light">
+                    <tr>
+                        <td colspan="4" class="text-end fw-bold">Total</td>
+                        <td class="fw-bold">
+                            <t t-out="formatMonetary(totalDebit, currencyId)" />
+                        </td>
+                        <td class="fw-bold">
+                            <t t-out="formatMonetary(totalCredit, currencyId)" />
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </t>
+</templates>
