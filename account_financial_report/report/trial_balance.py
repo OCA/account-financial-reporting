@@ -508,7 +508,11 @@ class TrialBalanceReport(models.AbstractModel):
         tb_initial_acc = []
         for account in accounts:
             tb_initial_acc.append(
-                {"account_id": account.id, "balance": 0.0, "amount_currency": 0.0}
+                {
+                    "account_id": account.id,
+                    "balance": 0.0,
+                    "amount_currency": 0.0,
+                }
             )
         groupby_fields = ["account_id", "currency_id"]
         if grouped_by:
@@ -1064,6 +1068,11 @@ class TrialBalanceReport(models.AbstractModel):
                 "show_hierarchy_level": show_hierarchy_level,
                 "currency_model": self.env["res.currency"],
                 "grouped_by": grouped_by,
+                "fy_start_date": fy_start_date,
+                "unaffected_earnings_account": unaffected_earnings_account,
+                "company_id": company_id,
+                "journal_ids": journal_ids,
+                "partner_ids": partner_ids,
             }
         )
         return res
