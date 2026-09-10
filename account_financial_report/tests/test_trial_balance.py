@@ -841,3 +841,107 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
         total = res_data["total_amount"][self.account100.id]
         self.assertEqual(total["initial_currency_balance"], 2000)
         self.assertEqual(total["ending_currency_balance"], 3000)
+
+    def test_08_account_multicurrency_period(self):
+        """Period totals must sum every currency, not only the last one.
+
+        Regression test: an account with period move lines in more than one
+        currency used to keep only its last currency sub-group, returning a
+        wrong debit/credit/balance.
+        """
+        other_currency = self.setup_other_currency("EUR")
+        company_currency = self.env.company.currency_id
+        account = self._create_account_account(
+            {
+                "code": "510",
+                "name": "Multi-currency asset",
+                "account_type": "asset_current",
+            }
+        )
+        journal = self.env["account.journal"].search(
+            [("company_id", "=", self.env.company.id)], limit=1
+        )
+        # Move 1: 100 in company currency.
+        self.env["account.move"].create(
+            {
+                "journal_id": journal.id,
+                "date": self.date_start,
+                "line_ids": [
+                    Command.create(
+                        {
+                            "account_id": account.id,
+                            "debit": 100.0,
+                            "credit": 0.0,
+                            "currency_id": company_currency.id,
+                            "amount_currency": 100.0,
+                        }
+                    ),
+                    Command.create(
+                        {
+                            "account_id": self.account200.id,
+                            "debit": 0.0,
+                            "credit": 100.0,
+                            "currency_id": company_currency.id,
+                            "amount_currency": -100.0,
+                        }
+                    ),
+                ],
+            }
+        ).action_post()
+        # Move 2: 60 in company currency == 180 in the foreign currency (rate 3).
+        self.env["account.move"].create(
+            {
+                "journal_id": journal.id,
+                "date": self.date_start,
+                "line_ids": [
+                    Command.create(
+                        {
+                            "account_id": account.id,
+                            "debit": 60.0,
+                            "credit": 0.0,
+                            "currency_id": other_currency.id,
+                            "amount_currency": 180.0,
+                        }
+                    ),
+                    Command.create(
+                        {
+                            "account_id": self.account200.id,
+                            "debit": 0.0,
+                            "credit": 60.0,
+                            "currency_id": other_currency.id,
+                            "amount_currency": -180.0,
+                        }
+                    ),
+                ],
+            }
+        ).action_post()
+
+        res_data = self._get_report_lines()
+        lines = self._get_account_lines(account.id, res_data["trial_balance"])
+        self.assertTrue(lines, "Multi-currency account missing from the report")
+        # 100 (company currency) + 60 (foreign currency) must both be counted.
+        self.assertEqual(lines["initial_balance"], 0.0)
+        self.assertEqual(lines["debit"], 160.0)
+        self.assertEqual(lines["credit"], 0.0)
+        self.assertEqual(lines["final_balance"], 160.0)
+
+        # Same account with "Show foreign currency" on: the company-currency
+        # totals must still add up across both currency sub-groups.
+        wizard = self.env["trial.balance.report.wizard"].create(
+            {
+                "date_from": self.date_start,
+                "date_to": self.date_end,
+                "target_move": "posted",
+                "hide_account_at_0": True,
+                "company_id": self.env.company.id,
+                "fy_start_date": self.fy_date_start,
+                "foreign_currency": True,
+            }
+        )
+        res_fc = self.env[
+            "report.account_financial_report.trial_balance"
+        ]._get_report_values(wizard, wizard._prepare_report_data())
+        lines_fc = self._get_account_lines(account.id, res_fc["trial_balance"])
+        self.assertTrue(lines_fc, "Multi-currency account missing (foreign currency)")
+        self.assertEqual(lines_fc["debit"], 160.0)
+        self.assertEqual(lines_fc["final_balance"], 160.0)
