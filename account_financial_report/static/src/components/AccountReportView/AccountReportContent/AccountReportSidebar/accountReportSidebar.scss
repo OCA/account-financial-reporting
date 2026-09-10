@@ -1,0 +1,21 @@
+.o_account_report_sidebar {
+    .o_account_sidebar_link {
+        color: var(--body-color, #212529);
+        overflow-wrap: anywhere;
+        transition: background-color 0.15s ease;
+
+        &:hover {
+            background-color: rgba($o-brand-primary, 0.06);
+        }
+
+        &.o_selected {
+            color: $o-brand-primary;
+            background-color: rgba($o-brand-primary, 0.12);
+        }
+
+        &:focus-visible {
+            outline: 2px solid $o-brand-primary;
+            outline-offset: -2px;
+        }
+    }
+}
