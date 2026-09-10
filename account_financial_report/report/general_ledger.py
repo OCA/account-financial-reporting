@@ -678,6 +678,9 @@ class GeneralLedgerReport(models.AbstractModel):
                     "currency_id": accounts_data[acc_id]["currency_id"],
                     "centralized": accounts_data[acc_id]["centralized"],
                     "grouped_by": grouped_by,
+                    "include_initial_balance": accounts_data[acc_id][
+                        "include_initial_balance"
+                    ],
                 }
             )
             if not gen_led_data[acc_id][grouped_by]:
