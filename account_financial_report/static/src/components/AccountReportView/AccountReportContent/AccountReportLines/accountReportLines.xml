@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+ <t t-name="account_financial_report.AccountReportLines">
+        <t t-foreach="columns" t-as="column" t-key="column.key">
+            <t
+                t-set="cell"
+                t-value="row.values.find((val) => (val.key === column.key))"
+            />
+            <td
+                t-if="column.show and cell"
+                t-att-style="column.key === 'account' and row.level !== undefined
+                ? 'padding-left: ' + (12 + row.level * 16) + 'px;'
+                : ''"
+            >
+                <Dropdown t-if="cell.clickable">
+                    <button type="button" class="btn btn-link p-0 border-0">
+                        <t
+                            t-out="formatValue(cell.value, column.type, row.currencyId)"
+                        />
+                    </button>
+
+                    <t t-set-slot="content">
+                        <AccountReportMoveLines
+                            row="row"
+                            key="column.key"
+                            title="column.label"
+                        />
+                    </t>
+                </Dropdown>
+                <span
+                    t-else=""
+                    t-out="formatValue(cell.value, column.type, row.currencyId)"
+                />
+            </td>
+        </t>
+    </t>
+</templates>

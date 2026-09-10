@@ -1067,3 +1067,7 @@ class TrialBalanceReport(models.AbstractModel):
             }
         )
         return res
+
+    @api.model
+    def get_report_values(self, docids, data):
+        return self._get_report_values(docids, data)

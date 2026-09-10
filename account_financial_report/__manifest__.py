@@ -48,6 +48,7 @@
         "web.assets_backend": [
             "account_financial_report/static/src/js/*",
             "account_financial_report/static/src/xml/**/*",
+            "account_financial_report/static/src/components/**/*",
         ],
     },
     "installable": True,
