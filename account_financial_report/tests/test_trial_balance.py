@@ -4,6 +4,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import re
+from unittest.mock import patch
 
 from odoo.fields import Command
 from odoo.tests import tagged
@@ -841,3 +842,52 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
         total = res_data["total_amount"][self.account100.id]
         self.assertEqual(total["initial_currency_balance"], 2000)
         self.assertEqual(total["ending_currency_balance"], 3000)
+
+    def test_08_compute_account_amount_accumulates_currency_groups(self):
+        report = self.env["report.account_financial_report.trial_balance"]
+        account_id = self.account100.id
+        period_data = [
+            {
+                "account_id": (account_id, self.account100.display_name),
+                "credit:sum": 0.0,
+                "debit:sum": 100.0,
+                "balance:sum": 100.0,
+                "amount_currency:sum": 100.0,
+                "__context": {"group_by": ["currency_id"]},
+                "__domain": [],
+            },
+            {
+                "account_id": (account_id, self.account100.display_name),
+                "credit:sum": 0.0,
+                "debit:sum": 200.0,
+                "balance:sum": 200.0,
+                "amount_currency:sum": 250.0,
+                "__context": {"group_by": ["currency_id"]},
+                "__domain": [],
+            },
+        ]
+        grouped_data = [
+            {
+                "currency_id": (1, "Test Currency"),
+                "credit:sum": 0.0,
+                "debit:sum": 50.0,
+                "balance:sum": 50.0,
+                "amount_currency:sum": 75.0,
+            }
+        ]
+
+        with patch.object(
+            type(self.env["account.move.line"]),
+            "formatted_read_group",
+            return_value=grouped_data,
+        ):
+            result = report._compute_account_amount({}, [], period_data, True)
+
+        self.assertEqual(result[account_id]["debit"], 300.0)
+        self.assertEqual(result[account_id]["credit"], 0.0)
+        self.assertEqual(result[account_id]["balance"], 300.0)
+        self.assertEqual(result[account_id]["ending_balance"], 300.0)
+        self.assertEqual(result[account_id]["ending_currency_balance"], 350.0)
+        currency_data = result[account_id]["group_by_data"][1]
+        self.assertEqual(currency_data["debit"], 100.0)
+        self.assertEqual(currency_data["ending_currency_balance"], 150.0)
