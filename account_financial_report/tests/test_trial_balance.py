@@ -175,7 +175,7 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
         move = self.env["account.move"].create(move_vals)
         move.action_post()
 
-    def _add_currency_move(self, date, debit, credit, amount_currency):
+    def _add_currency_move(self, date, debit, credit, amount_currency, currency=None):
         journal = self.env["account.journal"].search(
             [("company_id", "=", self.env.user.company_id.id)], limit=1
         )
@@ -190,7 +190,7 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
                             "credit": credit,
                             "partner_id": self.partner_a.id,
                             "account_id": self.account100.id,
-                            "currency_id": self.foreign_currency.id,
+                            "currency_id": (currency or self.foreign_currency).id,
                             "amount_currency": amount_currency,
                         }
                     ),
@@ -841,3 +841,38 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
         total = res_data["total_amount"][self.account100.id]
         self.assertEqual(total["initial_currency_balance"], 2000)
         self.assertEqual(total["ending_currency_balance"], 3000)
+
+    def test_08_account_multicurrency_period_totals(self):
+        """Period totals must include every currency group of an account."""
+        company_currency = self.env.company.currency_id
+        self._add_currency_move(
+            date=self.date_start,
+            debit=100.0,
+            credit=0.0,
+            amount_currency=100.0,
+            currency=company_currency,
+        )
+        self._add_currency_move(
+            date=self.date_start,
+            debit=60.0,
+            credit=0.0,
+            amount_currency=120.0,
+        )
+        result = self._get_report_lines()
+        account_lines = self._get_account_lines(
+            self.account100.id, result["trial_balance"]
+        )
+        self.assertTrue(account_lines)
+        self.assertEqual(account_lines["initial_balance"], 0.0)
+        self.assertEqual(account_lines["debit"], 160.0)
+        self.assertEqual(account_lines["credit"], 0.0)
+        self.assertEqual(account_lines["final_balance"], 160.0)
+        result_foreign_currency = self._get_report_lines(foreign_currency=True)
+        account_lines = self._get_account_lines(
+            self.account100.id, result_foreign_currency["trial_balance"]
+        )
+        self.assertTrue(account_lines)
+        self.assertEqual(account_lines["debit"], 160.0)
+        self.assertEqual(account_lines["final_balance"], 160.0)
+        total = result_foreign_currency["total_amount"][self.account100.id]
+        self.assertEqual(total["ending_currency_balance"], 220.0)
