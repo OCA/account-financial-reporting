@@ -228,16 +228,16 @@ class TrialBalanceReport(models.AbstractModel):
     ):
         for tb in tb_period_acc:
             acc_id = tb["account_id"][0]
-            total_amount[acc_id] = self._prepare_total_amount(tb, foreign_currency)
-            total_amount[acc_id]["credit"] = tb["credit:sum"]
-            total_amount[acc_id]["debit"] = tb["debit:sum"]
-            total_amount[acc_id]["balance"] = tb["balance:sum"]
-            total_amount[acc_id]["initial_balance"] = 0.0
-            if foreign_currency:
-                total_amount[acc_id]["initial_currency_balance"] = 0.0
+            total_amount[acc_id] = self._prepare_total_amount(
+                tb,
+                foreign_currency,
+                total_amount.get(acc_id),
+                initial=False,
+            )
             if "__context" in tb and "group_by" in tb["__context"]:
                 group_by = tb["__context"]["group_by"][0]
-                gb_data = {}
+                total_amount[acc_id]["group_by"] = group_by
+                gb_data = total_amount[acc_id].setdefault("group_by_data", {})
                 tb_grouped = self.env["account.move.line"].formatted_read_group(
                     domain=tb["__domain"],
                     aggregates=[
@@ -250,15 +250,12 @@ class TrialBalanceReport(models.AbstractModel):
                 )
                 for tb2 in tb_grouped:
                     gb_id = tb2[group_by][0] if tb2[group_by] else 0
-                    gb_data[gb_id] = self._prepare_total_amount(tb2, foreign_currency)
-                    gb_data[gb_id]["credit"] = tb2["credit:sum"]
-                    gb_data[gb_id]["debit"] = tb2["debit:sum"]
-                    gb_data[gb_id]["balance"] = tb2["balance:sum"]
-                    gb_data[gb_id]["initial_balance"] = 0.0
-                    if foreign_currency:
-                        gb_data[gb_id]["initial_currency_balance"] = 0.0
-                total_amount[acc_id]["group_by"] = group_by
-                total_amount[acc_id]["group_by_data"] = gb_data
+                    gb_data[gb_id] = self._prepare_total_amount(
+                        tb2,
+                        foreign_currency,
+                        gb_data.get(gb_id),
+                        initial=False,
+                    )
         for tb in tb_initial_acc:
             acc_id = tb["account_id"]
             if acc_id not in total_amount.keys():
@@ -311,23 +308,47 @@ class TrialBalanceReport(models.AbstractModel):
         return total_amount
 
     @api.model
-    def _prepare_total_amount(self, tb, foreign_currency):
-        res = {
-            "credit": 0.0,
-            "debit": 0.0,
-            "balance": 0.0,
-            "initial_balance": tb["balance"] if "balance" in tb else tb["balance:sum"],
-            "ending_balance": tb["balance"] if "balance" in tb else tb["balance:sum"],
-        }
+    def _prepare_total_amount(
+        self, tb, foreign_currency, total_amount=None, initial=True
+    ):
+        balance = tb["balance"] if "balance" in tb else tb["balance:sum"]
         if foreign_currency:
             amount_currency = (
                 tb["amount_currency"]
                 if "amount_currency" in tb
                 else tb["amount_currency:sum"]
             )
-            res["initial_currency_balance"] = round(amount_currency, 2)
-            res["ending_currency_balance"] = round(amount_currency, 2)
-        return res
+        if total_amount is None:
+            total_amount = {
+                "credit": 0.0,
+                "debit": 0.0,
+                "balance": 0.0,
+                "initial_balance": balance if initial else 0.0,
+                "ending_balance": balance if initial else 0.0,
+            }
+            if foreign_currency:
+                total_amount["initial_currency_balance"] = (
+                    round(amount_currency, 2) if initial else 0.0
+                )
+                total_amount["ending_currency_balance"] = (
+                    round(amount_currency, 2) if initial else 0.0
+                )
+        elif initial:
+            total_amount["initial_balance"] += balance
+            total_amount["ending_balance"] += balance
+            if foreign_currency:
+                total_amount["initial_currency_balance"] += round(amount_currency, 2)
+                total_amount["ending_currency_balance"] += round(amount_currency, 2)
+        if not initial:
+            total_amount["credit"] += (
+                tb["credit"] if "credit" in tb else tb["credit:sum"]
+            )
+            total_amount["debit"] += tb["debit"] if "debit" in tb else tb["debit:sum"]
+            total_amount["balance"] += balance
+            total_amount["ending_balance"] += balance
+            if foreign_currency:
+                total_amount["ending_currency_balance"] += round(amount_currency, 2)
+        return total_amount
 
     @api.model
     def _compute_acc_prt_amount(
