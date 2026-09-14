@@ -190,7 +190,7 @@
                 </div>
             </div>
             <!-- Display first line with initial balance -->
-            <div class="act_as_row lines">
+            <div class="act_as_row lines" t-if="account['include_initial_balance']">
                 <!--## date-->
                 <div class="act_as_cell" />
                 <!--## move-->
