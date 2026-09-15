@@ -1869,7 +1869,7 @@ msgstr "KDV Raporu -"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.vat_report_wizard
 msgid "VAT Report Options"
-msgstr "KDV Raporu Se??enekleri"
+msgstr "KDV Raporu Seçenekleri"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_vat_report_wizard
@@ -2032,4 +2032,4 @@ msgstr "genişlik: 8.11%;"
 #~ "oluşturmanız gerekebilir."
 
 #~ msgid "Last Modified on"
-#~ msgstr "Son D??zenleme"
+#~ msgstr "Son Düzenleme"
