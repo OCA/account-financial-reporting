@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="mis_report_view_kpi_form">
+        <field name="model">mis.report.kpi</field>
+        <field name="inherit_id" ref="mis_builder.mis_report_view_kpi_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='auto_expand_accounts']/.." position="after">
+                <group name="split" string="Splitting">
+                    <field name="split_after" />
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

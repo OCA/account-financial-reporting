@@ -1,0 +1,26 @@
+<odoo>
+    <template
+        id="report_mis_report_instance"
+        inherit_id="mis_builder.report_mis_report_instance"
+    >
+        <xpath expr="//div[hasclass('mis_table')]" position="before">
+            <div class="mis_builder_horizontal_container">
+                <div class="mis_builder_horizontal_row">
+                    <div
+                        class="mis_builder_horizontal_cell"
+                        t-foreach="o.horizontal and o._split_matrix(matrix) or [matrix]"
+                        t-as="matrix"
+                    />
+                </div>
+            </div>
+        </xpath>
+        <xpath expr="//div[hasclass('mis_builder_horizontal_cell')]" position="inside">
+            <xpath expr="//div[hasclass('mis_table')]" position="move" />
+        </xpath>
+        <xpath expr="//div[hasclass('mis_table')]" position="attributes">
+            <attribute
+                name="t-attf-class"
+            >mis_table {{o.horizontal and 'horizontal'}}</attribute>
+        </xpath>
+    </template>
+</odoo>
