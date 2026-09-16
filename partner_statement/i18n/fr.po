@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-28 10:11+0000\n"
-"PO-Revision-Date: 2026-09-15 10:46+0000\n"
+"PO-Revision-Date: 2026-09-16 09:46+0000\n"
 "Last-Translator: Quentin Mondot <quentin.mondot@elabore.coop>\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "Language: fr\n"
@@ -561,7 +561,7 @@ msgstr "Original"
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 msgid "Original Amount"
-msgstr "Montant original"
+msgstr "Montant initial"
 
 #. module: partner_statement
 #. odoo-python
@@ -733,7 +733,7 @@ msgstr "Relevé entre le %(starting_date)s et le %(ending_date)s en %(currency)s
 #. odoo-python
 #: code:addons/partner_statement/report/report_statement_common_xlsx.py:0
 msgid "Statement from:"
-msgstr "Relevé du :"
+msgstr "Relevé de compte :"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
@@ -746,13 +746,13 @@ msgstr "Export du relevé de compte"
 #. odoo-python
 #: code:addons/partner_statement/report/report_statement_common_xlsx.py:0
 msgid "Statement of Account from %s"
-msgstr "Relevé du compte depuis %s"
+msgstr "Relevé de compte de %s"
 
 #. module: partner_statement
 #. odoo-python
 #: code:addons/partner_statement/report/report_statement_common_xlsx.py:0
 msgid "Statement to:"
-msgstr "Relevé jusqu'au :"
+msgstr "Débiteur :"
 
 #. module: partner_statement
 #. odoo-python
@@ -780,7 +780,7 @@ msgid ""
 "Supplier Statement between %(starting_date)s and %(ending_date)s in %"
 "(currency)s"
 msgstr ""
-"Relevé fournisseur entre %(starting_date)s et %(ending_date)s en %(currency)s"
+"Relevé de compte du %(starting_date)s au %(ending_date)s en %(currency)s"
 
 #. module: partner_statement
 #. odoo-python
