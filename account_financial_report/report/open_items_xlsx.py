@@ -22,18 +22,54 @@ class OpenItemsXslx(models.AbstractModel):
 
     def _get_report_columns(self, report):
         res = {
-            0: {"header": _("Date"), "field": "date", "width": 11},
-            1: {"header": _("Entry"), "field": "move_name", "width": 18},
-            2: {"header": _("Journal"), "field": "journal", "width": 8},
-            3: {"header": _("Account"), "field": "account", "width": 9},
-            4: {"header": _("Partner"), "field": "partner_name", "width": 25},
-            5: {"header": _("Ref - Label"), "field": "ref_label", "width": 40},
-            6: {"header": _("Due date"), "field": "date_maturity", "width": 11},
+            0: {
+                "header": _("Date"),
+                "field": "date",
+                "width": 11,
+                "expression_label": "date",
+            },
+            1: {
+                "header": _("Entry"),
+                "field": "move_name",
+                "width": 18,
+                "expression_label": "entry",
+            },
+            2: {
+                "header": _("Journal"),
+                "field": "journal",
+                "width": 8,
+                "expression_label": "journal",
+            },
+            3: {
+                "header": _("Account"),
+                "field": "account",
+                "width": 9,
+                "expression_label": "account_code",
+            },
+            4: {
+                "header": _("Partner"),
+                "field": "partner_name",
+                "width": 25,
+                "expression_label": "partner",
+            },
+            5: {
+                "header": _("Ref - Label"),
+                "field": "ref_label",
+                "width": 40,
+                "expression_label": "ref_label",
+            },
+            6: {
+                "header": _("Due date"),
+                "field": "date_maturity",
+                "width": 11,
+                "expression_label": "date_due",
+            },
             7: {
                 "header": _("Original"),
                 "field": "original",
                 "type": "amount",
                 "width": 14,
+                "expression_label": "original",
             },
             8: {
                 "header": _("Residual"),
@@ -41,6 +77,7 @@ class OpenItemsXslx(models.AbstractModel):
                 "field_final_balance": "residual",
                 "type": "amount",
                 "width": 14,
+                "expression_label": "residual",
             },
         }
         if report.foreign_currency:
@@ -51,6 +88,7 @@ class OpenItemsXslx(models.AbstractModel):
                     "field_currency_balance": "currency_name",
                     "type": "currency_name",
                     "width": 7,
+                    "expression_label": "foreign_currency",
                 },
                 10: {
                     "header": _("Cur. Original"),
@@ -58,6 +96,7 @@ class OpenItemsXslx(models.AbstractModel):
                     "field_final_balance": "amount_currency",
                     "type": "amount_currency",
                     "width": 14,
+                    "expression_label": "foreign_currency",
                 },
                 11: {
                     "header": _("Cur. Residual"),
@@ -65,6 +104,7 @@ class OpenItemsXslx(models.AbstractModel):
                     "field_final_balance": "amount_currency",
                     "type": "amount_currency",
                     "width": 14,
+                    "expression_label": "foreign_currency",
                 },
             }
             res = {**res, **foreign_currency}
