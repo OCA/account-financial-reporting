@@ -280,3 +280,13 @@ class TestJournalReport(AccountTestInvoicingCommon):
 
         self.check_report_journal_debit_credit(res_data, 250, 250)
         self.check_report_journal_debit_credit_taxes(res_data, 300, 0, 50, 0)
+
+        move_line_ids_taxes_data = res_data["move_line_ids_taxes_data"]
+        self.assertEqual(len(invoice.invoice_line_ids), 2)
+        for ml in invoice.invoice_line_ids:
+            taxes_description = wiz._get_ml_tax_description(
+                {"tax_line_id": False},
+                False,
+                move_line_ids_taxes_data.get(ml.id),
+            )
+            self.assertTrue(taxes_description)
