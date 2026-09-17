@@ -10,15 +10,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-28 10:11+0000\n"
-"PO-Revision-Date: 2025-10-22 19:54+0000\n"
-"Last-Translator: np-oerp <np@oerp.ca>\n"
+"PO-Revision-Date: 2026-09-16 09:46+0000\n"
+"Last-Translator: Quentin Mondot <quentin.mondot@elabore.coop>\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10.4\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: partner_statement
 #. odoo-python
@@ -191,7 +191,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__account_type
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__account_type
 msgid "Account Type"
-msgstr ""
+msgstr "Type de compte"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__excluded_accounts_selector
@@ -199,7 +199,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__excluded_accounts_selector
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__excluded_accounts_selector
 msgid "Accounts to exclude"
-msgstr ""
+msgstr "Comptes à exclure"
 
 #. module: partner_statement
 #. odoo-python
@@ -217,17 +217,17 @@ msgstr "Assistant d'édition de relevé de compte"
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_report_p_s_report_activity_statement_xlsx
 msgid "Activity Statement XLSL Report"
-msgstr ""
+msgstr "Rapport XLSX de relevé de compte"
 
 #. module: partner_statement
 #: model:ir.actions.report,name:partner_statement.action_print_activity_statement_xlsx
 msgid "Activity Statement XLSX"
-msgstr ""
+msgstr "Relevé de compte XLSX"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
 msgid "Activity Statements"
-msgstr ""
+msgstr "Relevés de compte"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
@@ -265,20 +265,20 @@ msgstr "Méthode"
 #. odoo-python
 #: code:addons/partner_statement/report/report_statement_common_xlsx.py:0
 msgid "Aging Report at %(end)s in %(currency)s"
-msgstr ""
+msgstr "Relevé des arriérés au %(end)s en %(currency)s"
 
 #. module: partner_statement
 #. odoo-python
 #: code:addons/partner_statement/report/report_statement_common.py:0
 msgid "Aging Report at %(ending_date)s in %(currency)s"
-msgstr ""
+msgstr "Relevé des arriérés au %(ending_date)s en %(currency)s"
 
 #. module: partner_statement
 #. odoo-python
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 msgid "Applied Amount"
-msgstr ""
+msgstr "Montant appliqué"
 
 #. module: partner_statement
 #. odoo-python
@@ -379,22 +379,22 @@ msgstr "Description"
 #: model:ir.actions.report,name:partner_statement.action_print_detailed_activity_statement
 #: model:ir.actions.report,name:partner_statement.action_print_detailed_activity_statement_html
 msgid "Detailed Activity Statement"
-msgstr ""
+msgstr "Relevé de compte détaillé"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_detailed_activity_statement_wizard
 msgid "Detailed Activity Statement Wizard"
-msgstr ""
+msgstr "Wizard pour le Relevé de compte détaillé"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_report_p_s_report_detailed_activity_statement_xlsx
 msgid "Detailed Activity Statement XLSL Report"
-msgstr ""
+msgstr "Rapport XLSX de Relevé de compte détaillé"
 
 #. module: partner_statement
 #: model:ir.actions.report,name:partner_statement.action_print_detailed_activity_statement_xlsx
 msgid "Detailed Activity Statement XLSX"
-msgstr ""
+msgstr "Relevé de compte détaillé XLSX"
 
 #. module: partner_statement
 #. odoo-python
@@ -403,6 +403,8 @@ msgid ""
 "Detailed Statement between %(starting_date)s and %(ending_date)s in %"
 "(currency)s"
 msgstr ""
+"Relevé détaillé entre le %(starting_date)s et le %(ending_date)s en %"
+"(currency)s"
 
 #. module: partner_statement
 #. odoo-python
@@ -411,6 +413,8 @@ msgid ""
 "Detailed Supplier Statement between %(starting_date)s and %(ending_date)s in "
 "%(currency)s"
 msgstr ""
+"Relevé fournisseur détaillé entre le %(starting_date)s et le %(ending_date)s "
+"en %(currency)s"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__display_name
@@ -438,7 +442,7 @@ msgstr "Date d'échéance"
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__group_activity_statement
 msgid "Enable OCA Activity & Detailed Activity Statements"
-msgstr ""
+msgstr "Activer les relevés d'activité & activité détaillée d'OCA"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_res_config_settings__group_outstanding_statement
@@ -458,7 +462,7 @@ msgstr "Solde final"
 #. odoo-python
 #: code:addons/partner_statement/report/detailed_activity_statement.py:0
 msgid "Ending Balance up to %(ending_date)s in %(currency)s"
-msgstr ""
+msgstr "Solde final au %(ending_date)s en %(currency)s"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__filter_negative_balances
@@ -482,7 +486,7 @@ msgstr "Exporter en PDF"
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
 msgid "Export XLSX"
-msgstr ""
+msgstr "Export XLSX"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__id
@@ -496,7 +500,7 @@ msgstr "ID"
 #: code:addons/partner_statement/report/detailed_activity_statement_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 msgid "Initial Balance"
-msgstr ""
+msgstr "Solde initial"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__write_uid
@@ -557,7 +561,7 @@ msgstr "Original"
 #: code:addons/partner_statement/report/activity_statement_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_balance
 msgid "Original Amount"
-msgstr ""
+msgstr "Montant initial"
 
 #. module: partner_statement
 #. odoo-python
@@ -576,12 +580,12 @@ msgstr "Assistant d'édition de relevé des arriérés"
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_report_p_s_report_outstanding_statement_xlsx
 msgid "Outstanding Statement XLSL Report"
-msgstr ""
+msgstr "Rapport XLSX du Relevé des arriérés"
 
 #. module: partner_statement
 #: model:ir.actions.report,name:partner_statement.action_print_outstanding_statement_xlsx
 msgid "Outstanding Statement XLSX"
-msgstr ""
+msgstr "Relevé des arriérés XLSX"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
@@ -599,7 +603,7 @@ msgstr "Relevé de compte des partenaires"
 #: model:ir.actions.act_window,name:partner_statement.detailed_activity_statement_wizard_action
 #: model:ir.model,name:partner_statement.model_report_partner_statement_detailed_activity_statement
 msgid "Partner Detailed Activity Statement"
-msgstr ""
+msgstr "Relevé de compte détaillé pour un contact"
 
 #. module: partner_statement
 #: model:ir.actions.act_window,name:partner_statement.outstanding_statement_wizard_action
@@ -610,7 +614,7 @@ msgstr "Relevé des arriérés du partenaire"
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
 msgid "Partner Statements"
-msgstr ""
+msgstr "Relevés du contact"
 
 #. module: partner_statement
 #: model:ir.model.fields.selection,name:partner_statement.selection__activity_statement_wizard__account_type__liability_payable
@@ -634,8 +638,9 @@ msgstr "Merci d'indiquer les valeurs par défaut dans le relevé de compte"
 #. module: partner_statement
 #. odoo-python
 #: code:addons/partner_statement/report/detailed_activity_statement.py:0
+#, fuzzy
 msgid "Prior Balance up to %(ending_date)s in %(currency)s"
-msgstr ""
+msgstr "Solde avant le %(ending_date)s en %(currency)s"
 
 #. module: partner_statement
 #: model:ir.model.fields.selection,name:partner_statement.selection__activity_statement_wizard__account_type__asset_receivable
@@ -664,10 +669,13 @@ msgstr "Numéro de référence"
 #: model:ir.model.fields,help:partner_statement.field_detailed_activity_statement_wizard__excluded_accounts_selector
 #: model:ir.model.fields,help:partner_statement.field_outstanding_statement_wizard__excluded_accounts_selector
 #: model:ir.model.fields,help:partner_statement.field_statement_common_wizard__excluded_accounts_selector
+#, fuzzy
 msgid ""
 "Select account codes to be excluded with a comma-separated list of "
 "expressions like 70%."
 msgstr ""
+"Sélectionnez les codes des comptes à exclure avec une liste d'expressions "
+"comme 70% séparées par un virgule."
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__show_aging_buckets
@@ -681,7 +689,7 @@ msgstr "Afficher les arriérés par tranche"
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_detailed_activity_statement_wizard__show_balance
 msgid "Show Balance column"
-msgstr ""
+msgstr "Afficher la colonne Solde"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__show_only_overdue
@@ -689,7 +697,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__show_only_overdue
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__show_only_overdue
 msgid "Show Only Overdue"
-msgstr ""
+msgstr "Afficher seulement les En retard"
 
 #. module: partner_statement
 #: model:ir.model.fields,help:partner_statement.field_activity_statement_wizard__show_only_overdue
@@ -697,12 +705,13 @@ msgstr ""
 #: model:ir.model.fields,help:partner_statement.field_outstanding_statement_wizard__show_only_overdue
 #: model:ir.model.fields,help:partner_statement.field_statement_common_wizard__show_only_overdue
 msgid "Show only lines due before the selected date"
-msgstr ""
+msgstr "Afficher seulement les lignes dû avant la date sélectionnée"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_report_p_s_report_statement_common_xlsx
+#, fuzzy
 msgid "Statement Common XLSX Report"
-msgstr ""
+msgstr "Rapport XLSX du relevé commun"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_statement_common
@@ -718,13 +727,13 @@ msgstr "Assistant rapport commun des relevés"
 #. odoo-python
 #: code:addons/partner_statement/report/activity_statement.py:0
 msgid "Statement between %(starting_date)s and %(ending_date)s in %(currency)s"
-msgstr ""
+msgstr "Relevé entre le %(starting_date)s et le %(ending_date)s en %(currency)s"
 
 #. module: partner_statement
 #. odoo-python
 #: code:addons/partner_statement/report/report_statement_common_xlsx.py:0
 msgid "Statement from:"
-msgstr ""
+msgstr "Relevé de compte :"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
@@ -737,13 +746,13 @@ msgstr "Export du relevé de compte"
 #. odoo-python
 #: code:addons/partner_statement/report/report_statement_common_xlsx.py:0
 msgid "Statement of Account from %s"
-msgstr ""
+msgstr "Relevé de compte de %s"
 
 #. module: partner_statement
 #. odoo-python
 #: code:addons/partner_statement/report/report_statement_common_xlsx.py:0
 msgid "Statement to:"
-msgstr ""
+msgstr "Débiteur :"
 
 #. module: partner_statement
 #. odoo-python
@@ -755,13 +764,14 @@ msgstr "Montant déclaré jusqu'au %(ending_date)s in %(currency)s"
 #. odoo-python
 #: code:addons/partner_statement/report/detailed_activity_statement.py:0
 msgid "Supplier Ending Balance up to %(ending_date)s in %(currency)s"
-msgstr ""
+msgstr "Solde final fournisseur au %(ending_date)s en %(currency)s"
 
 #. module: partner_statement
 #. odoo-python
 #: code:addons/partner_statement/report/detailed_activity_statement.py:0
+#, fuzzy
 msgid "Supplier Prior Balance up to %(ending_date)s in %(currency)s"
-msgstr ""
+msgstr "Solde précédent fournisseur au %(ending_date)s en %(currency)s"
 
 #. module: partner_statement
 #. odoo-python
@@ -770,12 +780,13 @@ msgid ""
 "Supplier Statement between %(starting_date)s and %(ending_date)s in %"
 "(currency)s"
 msgstr ""
+"Relevé de compte du %(starting_date)s au %(ending_date)s en %(currency)s"
 
 #. module: partner_statement
 #. odoo-python
 #: code:addons/partner_statement/report/outstanding_statement.py:0
 msgid "Supplier Statement up to %(ending_date)s in %(currency)s"
-msgstr ""
+msgstr "Relevé fournisseur au %(ending_date)s en %(currency)s"
 
 #. module: partner_statement
 #. odoo-python
@@ -797,12 +808,12 @@ msgstr "Utiliser le relevé des arriérés"
 #. odoo-python
 #: code:addons/partner_statement/report/report_statement_common_xlsx.py:0
 msgid "VAT:"
-msgstr ""
+msgstr "TVA :"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
 msgid "View"
-msgstr ""
+msgstr "Vue"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.statement_common_view
