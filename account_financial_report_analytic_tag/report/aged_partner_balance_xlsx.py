@@ -1,0 +1,32 @@
+# Copyright 2024 Odoo Community Association (OCA)
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+
+from odoo import _, models
+
+
+class AgedPartnerBalanceXlsx(models.AbstractModel):
+    _inherit = "report.a_f_r.report_aged_partner_balance_xlsx"
+
+    def _get_report_columns_with_move_line_details(self, report, column_index):
+        columns = super()._get_report_columns_with_move_line_details(
+            report, column_index
+        )
+        if not report.show_analytic_tags:
+            return columns
+        # Place the tags column after analytic distribution when present,
+        # otherwise after ref_label.
+        col_list = list(columns.values())
+        ref_col = next(
+            (i for i, c in enumerate(col_list) if c.get("field") == "analytic_display"),
+            None,
+        )
+        if ref_col is None:
+            ref_col = next(
+                (i for i, c in enumerate(col_list) if c.get("field") == "ref_label"),
+                len(col_list) - 1,
+            )
+        col_list.insert(
+            ref_col + 1,
+            {"header": _("Analytic Tags"), "field": "tag_display", "width": 20},
+        )
+        return {i: col for i, col in enumerate(col_list)}
