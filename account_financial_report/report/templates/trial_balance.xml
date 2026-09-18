@@ -93,9 +93,44 @@
                             t-call="account_financial_report.report_trial_balance_lines_header"
                         />
                         <!-- Display each lines -->
+                        <!-- Initial Balance -->
+                        <t t-set="total_initial_balance" t-value="0" />
+                        <!-- Debit -->
+                        <t t-set="total_debit" t-value="0" />
+                        <!-- Credit -->
+                        <t t-set="total_credit" t-value="0" />
+                        <!-- Period Balance -->
+                        <t t-set="total_period_balance" t-value="0" />
+                        <!-- Ending Balance -->
+                        <t t-set="total_ending_balance" t-value="0" />
                         <t t-foreach="trial_balance" t-as="balance">
                             <!-- Adapt -->
                             <t t-set="style" t-value="'font-size:12px;'" />
+                            <!-- Initial Balance -->
+                            <t
+                                t-set="total_initial_balance"
+                                t-value="total_initial_balance + balance['initial_balance']"
+                            />
+                            <!-- Debit -->
+                            <t
+                                t-set="total_debit"
+                                t-value="total_debit + balance['debit']"
+                            />
+                            <!-- Credit -->
+                            <t
+                                t-set="total_credit"
+                                t-value="total_credit + balance['credit']"
+                            />
+                            <!-- Period Balance -->
+                            <t
+                                t-set="total_period_balance"
+                                t-value="total_period_balance + balance['balance']"
+                            />
+                            <!-- Ending Balance -->
+                            <t
+                                t-set="total_ending_balance"
+                                t-value="total_ending_balance + balance['ending_balance']"
+                            />
                             <!-- Different style for account group -->
                             <t t-if="show_hierarchy">
                                 <t t-if="balance['type'] == 'group_type'">
@@ -120,6 +155,57 @@
                                 />
                             </t>
                         </t>
+                    </div>
+
+                    <div class="act_as_table list_table" style="width: 100%;">
+                        <t t-out="trial_balance_grouped" />
+                        <t t-out="grouped_by" />
+                        <div class="act_as_row labels" style="font-weight: bold;">
+                            <div class="act_as_cell first_column" style="width: 33%;">
+                            TOTAL
+                        </div>
+                            <!-- Total Initial Balance -->
+                            <div class="act_as_cell amount" style="width: 9%;">
+                                <span
+                                    t-out="total_initial_balance"
+                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                />
+                            </div>
+                            <!-- Total Debit -->
+                            <div class="act_as_cell amount" style="width: 9%;">
+                                <span
+                                    t-out="total_debit"
+                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                />
+                            </div>
+                            <!-- Total Credit -->
+                            <div class="act_as_cell amount" style="width: 9%;">
+                                <span
+                                    t-out="total_credit"
+                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                />
+                            </div>
+                            <!-- Total Period Balance -->
+                            <div class="act_as_cell amount" style="width: 9%;">
+                                <span
+                                    t-out="total_period_balance"
+                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                />
+                            </div>
+                            <!-- Total Ending Balance -->
+                            <div class="act_as_cell amount" style="width: 9%;">
+                                <span
+                                    t-out="total_ending_balance"
+                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                />
+                            </div>
+                            <t t-if="foreign_currency">
+                                <!--## amount_total_due_currency-->
+                                <div class="act_as_cell" style="width: 11%;" />
+                                <!--## amount_residual_currency-->
+                                <div class="act_as_cell" style="width: 11%;" />
+                            </t>
+                        </div>
                     </div>
                 </t>
             </t>
