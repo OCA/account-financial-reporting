@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Copyright 2017-2020 Akretion France (http://www.akretion.com/)
+  @author: Alexis de Lattre <alexis.delattre@akretion.com>
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="bank_reconciliation_xlsx" model="ir.actions.report">
+        <field name="name">Bank Reconciliation XLSX</field>
+        <field name="model">bank.reconciliation.report.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">bank.reconciliation.xlsx</field>
+        <field name="report_file">bank.reconciliation.xlsx</field>
+        <field name="print_report_name">'bank_reconciliation-%s' % (object.date)</field>
+    </record>
+</odoo>
