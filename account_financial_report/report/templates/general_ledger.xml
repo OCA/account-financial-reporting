@@ -152,7 +152,7 @@
                     <!--## partner-->
                     <div class="act_as_cell" style="width: 12.01%;">Partner</div>
                     <!--## ref - label-->
-                    <div class="act_as_cell" style="width: 16.9%;">
+                    <div class="act_as_cell" t-att-style="ref_label_style">
                         Ref -
                         Label
                     </div>
@@ -161,10 +161,6 @@
                         <div class="act_as_cell" style="width: 8.03%;">
                             Analytic Distribution
                         </div>
-                    </t>
-                    <t t-if="show_analytic_tags">
-                        <!--## analytic tags-->
-                        <div class="act_as_cell" style="width: 4.75%;">Tags</div>
                     </t>
                     <!--## matching_number-->
                     <div class="act_as_cell" style="width: 2.41%;">Rec.</div>
@@ -213,10 +209,6 @@
                 </div>
                 <t t-if="show_cost_center">
                     <!--## cost_center-->
-                    <div class="act_as_cell" />
-                </t>
-                <t t-if="show_analytic_tags">
-                    <!--## analytic tags-->
                     <div class="act_as_cell" />
                 </t>
                 <!--## matching_number-->
@@ -509,18 +501,6 @@
                             </t>
                         </div>
                     </t>
-                    <t t-if="show_analytic_tags">
-                        <!--## analytic tags-->
-                        <div class="act_as_cell left">
-                            <t t-if="line['tag_ids']">
-                                <t t-foreach="line['tag_ids']" t-as="tag_id">
-                                    <span
-                                        t-out="o._get_atr_from_dict(tag_id, tags_data, 'name')"
-                                    />
-                                </t>
-                            </t>
-                        </div>
-                    </t>
                     <!--## matching_number-->
                     <div class="act_as_cell">
                         <t t-if="line['rec_id']">
@@ -658,12 +638,15 @@
                         -
                         <span t-out="account['name']" />
                     </div>
-                    <div class="act_as_cell right" style="width: 16.9%;">Ending balance
+                    <div
+                        class="act_as_cell right"
+                        t-att-style="ref_label_style"
+                    >Ending balance
                     </div>
                 </t>
                 <t t-if='type == "grouped_type"'>
                     <div class="act_as_cell first_column" style="width: 41.32%;" />
-                    <div class="act_as_cell right" style="width: 16.9%;">
+                    <div class="act_as_cell right" t-att-style="ref_label_style">
                         <t t-if="'partners' in account">Partner ending balance</t>
                         <t t-if="'taxes' in account">Tax ending balance</t>
                     </div>
@@ -671,10 +654,6 @@
                 <t t-if="show_cost_center">
                     <!--## cost_center-->
                     <div class="act_as_cell" style="width: 8.03%" />
-                </t>
-                <t t-if="show_analytic_tags">
-                    <!--## analytic tags-->
-                    <div class="act_as_cell" style="width: 4.75%;" />
                 </t>
                 <!--## matching_number-->
                 <div class="act_as_cell" style="width: 2.41%;" />
