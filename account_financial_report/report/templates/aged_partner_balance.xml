@@ -310,7 +310,7 @@
                             res-model="account.account"
                             view-type="form"
                         >
-                            <t t-out="line['account']" />
+                            <t t-out="line['line_rec'].account_id.display_name" />
                         </span>
                     </div>
                     <!--## partner-->
