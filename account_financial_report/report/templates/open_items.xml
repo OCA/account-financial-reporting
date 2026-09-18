@@ -233,6 +233,7 @@
         </div>
     </template>
     <template id="account_financial_report.report_open_items_lines_header">
+        <!-- ref_label_style is computed in _get_report_values and passed in context -->
         <!-- Display table headers for lines -->
         <div class="act_as_thead">
             <div class="act_as_row labels">
@@ -247,10 +248,16 @@
                 <!--## partner-->
                 <div class="act_as_cell" style="width: 15.07%;">Partner</div>
                 <!--## ref - label-->
-                <div class="act_as_cell" style="width: 24.5%;">
+                <div class="act_as_cell" t-att-style="ref_label_style">
                     Ref -
                     Label
                 </div>
+                <!--## analytic distribution, only when the wizard flag is enabled-->
+                <t t-if="show_analytic_distribution">
+                    <div class="act_as_cell" style="width: 6%;">
+                        Analytic Distribution
+                    </div>
+                </t>
                 <!--## date_due-->
                 <div class="act_as_cell" style="width: 6.47%;">
                     Due
@@ -327,6 +334,15 @@
             <div class="act_as_cell left">
                 <span t-esc="limit_text(line['ref_label'], 'label_text_limit')" />
             </div>
+            <!--## analytic distribution-->
+            <t t-if="show_analytic_distribution">
+                <div class="act_as_cell left">
+                    <span
+                        t-if="line.get('analytic_display')"
+                        t-esc="line['analytic_display']"
+                    />
+                </div>
+            </t>
             <!--## date_due-->
             <div class="act_as_cell left">
                 <span t-esc="line['date_maturity']" />
@@ -389,14 +405,14 @@
                         -
                         <span t-esc="accounts_data[account_id]['name']" />
                     </div>
-                    <div class="act_as_cell right" style="width: 28.66%;">
+                    <div class="act_as_cell right" t-att-style="ref_label_cumul_style">
                         Ending
                         balance
                     </div>
                 </t>
                 <t t-if='type == "partner_type"'>
                     <div class="act_as_cell first_column" style="width: 36.34%;" />
-                    <div class="act_as_cell right" style="width: 28.66%;">
+                    <div class="act_as_cell right" t-att-style="ref_label_cumul_style">
                         Partner ending balance
                     </div>
                 </t>
@@ -409,10 +425,14 @@
                     <t t-if="partner">
                         <span t-esc="partner.name" />
                     </t>
-                    <div class="act_as_cell right" style="width: 28.66%;">
+                    <div class="act_as_cell right" t-att-style="ref_label_cumul_style">
                         Ending
                         balance
                     </div>
+                </t>
+                <!--## analytic distribution placeholder — explicit width keeps numeric columns aligned -->
+                <t t-if="show_analytic_distribution">
+                    <div class="act_as_cell" style="width: 6%;" />
                 </t>
                 <!--## date_due-->
                 <div class="act_as_cell" style="width: 6.47%;" />
