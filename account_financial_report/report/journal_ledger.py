@@ -142,7 +142,7 @@ class JournalLedgerReport(models.AbstractModel):
     def _get_account_id_data(self, account):
         return {
             "name": account.name,
-            "code": account.code,
+            "code": account.code or "",
             "account_type": account.account_type,
         }
 

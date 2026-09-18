@@ -122,12 +122,11 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                 move_line["amount_currency"] = 0
         return move_lines
 
-    def _get_accounts_data(self, accounts_ids):
-        accounts = (
-            self.env["account.account"]
-            .with_context(active_test=False)
-            .browse(accounts_ids)
-        )
+    def _get_accounts_data(self, accounts_ids, company_id=False):
+        AccountAccount = self.env["account.account"].with_context(active_test=False)
+        if company_id:
+            AccountAccount = AccountAccount.with_company(company_id)
+        accounts = AccountAccount.browse(accounts_ids)
         accounts_data = {}
         for account in accounts:
             accounts_data.update(

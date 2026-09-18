@@ -8,3 +8,4 @@ from . import test_open_items
 from . import test_trial_balance
 from . import test_vat_report
 from . import test_age_report_configuration
+from . import test_multicompany_reports
