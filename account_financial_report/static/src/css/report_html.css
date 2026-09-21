@@ -1,8 +1,6 @@
-// Styles of HTML report
-.account_title {
-    span {
-        font-size: 1rem !important;
-    }
+/* Styles of HTML report */
+.account_title span {
+    font-size: 1rem !important;
 }
 
 .act_as_cell {
