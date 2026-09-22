@@ -14,8 +14,18 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: account_move_line_cumulated_balance
+#: model_terms:ir.ui.view,arch_db:account_move_line_cumulated_balance.account_move_line_graph_date_cumulated_balance
+msgid "Account Statistics"
+msgstr ""
+
+#. module: account_move_line_cumulated_balance
 #: model:ir.model.fields,field_description:account_move_line_cumulated_balance.field_account_move_line__cumulated_balance
 msgid "Cumulated Balance"
+msgstr ""
+
+#. module: account_move_line_cumulated_balance
+#: model_terms:ir.ui.view,arch_db:account_move_line_cumulated_balance.view_account_move_line_filter_cumulated_balance
+msgid "Cumulated Balance != 0"
 msgstr ""
 
 #. module: account_move_line_cumulated_balance
@@ -27,6 +37,11 @@ msgstr ""
 #. module: account_move_line_cumulated_balance
 #: model:ir.model,name:account_move_line_cumulated_balance.model_account_move_line
 msgid "Journal Item"
+msgstr ""
+
+#. module: account_move_line_cumulated_balance
+#: model_terms:ir.ui.view,arch_db:account_move_line_cumulated_balance.view_move_line_pivot_cumulated_balance
+msgid "Journal Items"
 msgstr ""
 
 #. module: account_move_line_cumulated_balance
