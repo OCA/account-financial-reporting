@@ -2,6 +2,12 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models
+from odoo.tools import html2plaintext
+
+
+def _plain_label(value):
+    """QWeb t-esc does not escape Markup; tax.description is Html in 18.0."""
+    return html2plaintext(str(value)).strip() if value else ""
 
 
 class JournalLedgerReportWizard(models.TransientModel):
@@ -135,14 +141,14 @@ class JournalLedgerReportWizard(models.TransientModel):
     ):
         taxes_description = ""
         if move_line_data["tax_line_id"]:
-            taxes_description = self._plain_label(
+            taxes_description = _plain_label(
                 tax_line_data["description"] or tax_line_data["name"]
             )
         elif move_line_taxes_data:
             tax_names = []
             for tax_key in move_line_taxes_data:
                 tax = move_line_taxes_data[tax_key]
-                tax_names.append(self._plain_label(tax["description"] or tax["name"]))
+                tax_names.append(_plain_label(tax["description"] or tax["name"]))
             taxes_description = ",".join(tax_names)
         return taxes_description
 

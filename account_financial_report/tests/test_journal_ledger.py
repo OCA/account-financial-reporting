@@ -299,6 +299,6 @@ class TestJournalReport(AccountTestInvoicingCommon):
         )
         self.assertEqual(desc, "IGIC 7%")
         self.assertNotIn("<", desc)
-        limited = wiz._limit_text(html_desc)
+        limited = wiz._limit_text(desc)
         self.assertEqual(limited, "IGIC...")
         self.assertNotIn("<", limited)

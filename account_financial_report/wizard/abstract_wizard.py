@@ -2,7 +2,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import fields, models
-from odoo.tools import html2plaintext
 
 
 class AbstractWizard(models.AbstractModel):
@@ -55,14 +54,7 @@ class AbstractWizard(models.AbstractModel):
         report_type = "xlsx"
         return self._export(report_type)
 
-    def _plain_label(self, value):
-        """QWeb t-esc does not escape Markup; tax.description is Html in 18.0."""
-        if not value:
-            return value or ""
-        return html2plaintext(str(value)).strip()
-
     def _limit_text(self, value, limit_field="label_text_limit"):
-        value = self._plain_label(value)
         limit = self[limit_field]
         if value and limit and len(value) > limit:
             value = value[:limit] + "..."
