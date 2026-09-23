@@ -64,7 +64,8 @@ msgstr "<b>خلاصه‌ی مالیات‌ها</b>"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
 msgid ""
 "<i class=\"fa fa-exclamation-triangle mr-3\"/>\n"
-"                    Duplicate amounts may be shown because more than one analytical account may be defined in the journal items."
+"                    Duplicate amounts may be shown because more than one "
+"analytical account may be defined in the journal items."
 msgstr ""
 "<i class=\"fa fa-exclamation-triangle mr-3\"/>\n"
 "                    ممکن است مبالغ تکراری نمایش داده شوند زیرا ممکن است بیش "
@@ -856,6 +857,19 @@ msgstr "فیلتر طرف حساب‌ها"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
 msgid "Filtered accounts (empty for all)"
 msgstr "حساب‌های فیلترشده (برای همه خالی بگذارید)"
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.journal_ledger_wizard
+msgid "Filtered journals (empty for all)"
+msgstr ""
+
+#. module: account_financial_report
+#: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.open_items_wizard
+#: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
+msgid "Filtered partners (empty for all)"
+msgstr ""
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__foreign_currency
@@ -1724,8 +1738,8 @@ msgstr "شرکت در ویزارد گزارش دفتر کل و در بازه‌�
 #. odoo-python
 #: code:addons/account_financial_report/wizard/trial_balance_wizard.py:0
 msgid ""
-"The Company in the Trial Balance Report Wizard and in Date Range must be the"
-" same."
+"The Company in the Trial Balance Report Wizard and in Date Range must be the "
+"same."
 msgstr "شرکت در ویزارد گزارش تراز آزمایشی و در بازه‌ی تاریخ باید یکسان باشد."
 
 #. module: account_financial_report
@@ -1829,9 +1843,9 @@ msgstr "حساب سود و زیان انباشته"
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__hide_account_at_0
 #: model:ir.model.fields,help:account_financial_report.field_open_items_report_wizard__hide_account_at_0
 msgid ""
-"Use this filter to hide an account or a partner with an ending balance at 0."
-" If partners are filtered, debits and credits totals will not match the "
-"trial balance."
+"Use this filter to hide an account or a partner with an ending balance at 0. "
+"If partners are filtered, debits and credits totals will not match the trial "
+"balance."
 msgstr ""
 "از این فیلتر برای پنهان‌کردن حسابی یا طرف‌حسابی با مانده‌ی پایان‌دوره‌ی صفر "
 "استفاده کنید. در صورت فیلتر شدن طرف‌حساب‌ها، مجموع بدهکار و بستانکار با تراز "
@@ -1902,8 +1916,8 @@ msgid ""
 "When this option is enabled, the trial balance will not display accounts "
 "that have initial balance = debit = credit = end balance = 0"
 msgstr ""
-"هنگامی که این گزینه فعال باشد، تراز آزمایشی حساب‌هایی را که مانده‌ی ابتدای دوره"
-"، بدهکار، بستانکار و مانده‌ی پایان دوره‌ی آنها صفر است، نمایش نمی‌دهد"
+"هنگامی که این گزینه فعال باشد، تراز آزمایشی حساب‌هایی را که مانده‌ی ابتدای "
+"دوره، بدهکار، بستانکار و مانده‌ی پایان دوره‌ی آنها صفر است، نمایش نمی‌دهد"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__with_account_name
