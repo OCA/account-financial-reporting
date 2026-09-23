@@ -38,7 +38,11 @@
                 </group>
                 <separator string="Journals" />
                 <group>
-                    <field name="journal_ids" widget="many2many_tags" />
+                    <field
+                        name="journal_ids"
+                        widget="many2many_tags"
+                        placeholder="Filtered journals (empty for all)"
+                    />
                 </group>
                 <footer>
                     <button
