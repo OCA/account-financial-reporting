@@ -30,6 +30,7 @@
                         nolabel="1"
                         widget="many2many_tags"
                         options="{'no_create': True}"
+                        placeholder="Filtered partners (empty for all)"
                     />
                 </group>
                 <group name="account_filter" col="4">

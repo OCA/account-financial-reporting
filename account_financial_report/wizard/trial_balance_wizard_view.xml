@@ -68,6 +68,7 @@
                             nolabel="1"
                             widget="many2many_tags"
                             options="{'no_create': True}"
+                            placeholder="Filtered partners (empty for all)"
                         />
                     </group>
                     <label for="journal_ids" />
