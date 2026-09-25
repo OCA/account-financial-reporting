@@ -104,75 +104,61 @@ class AgedPartnerBalanceXslx(models.AbstractModel):
             3: {"header": self.env._("Account"), "field": "account", "width": 9},
             4: {"header": self.env._("Partner"), "field": "partner", "width": 25},
             5: {"header": self.env._("Ref - Label"), "field": "ref_label", "width": 40},
-            6: {"header": self.env._("Due date"), "field": "due_date", "width": 11},
-            7: {
-                "header": self.env._("Residual"),
-                "field": "residual",
-                "field_footer_total": "residual",
-                "field_final_balance": "residual",
-                "type": "amount",
-                "width": 14,
-            },
-            8: {
-                "header": self.env._("Current"),
-                "field": "current",
-                "field_footer_total": "current",
-                "field_footer_percent": "percent_current",
-                "field_final_balance": "current",
-                "type": "amount",
-                "width": 14,
-            },
         }
+        # Analytic distribution sits next to the descriptive fields before amounts
+        next_col = 6
+        if report.show_analytic_distribution:
+            report_columns[next_col] = {
+                "header": self.env._("Analytic Distribution"),
+                "field": "analytic_display",
+                "width": 20,
+            }
+            next_col += 1
+        report_columns[next_col] = {
+            "header": self.env._("Due date"),
+            "field": "due_date",
+            "width": 11,
+        }
+        next_col += 1
+        report_columns[next_col] = {
+            "header": self.env._("Residual"),
+            "field": "residual",
+            "field_footer_total": "residual",
+            "field_final_balance": "residual",
+            "type": "amount",
+            "width": 14,
+        }
+        next_col += 1
+        report_columns[next_col] = {
+            "header": self.env._("Current"),
+            "field": "current",
+            "field_footer_total": "current",
+            "field_footer_percent": "percent_current",
+            "field_final_balance": "current",
+            "type": "amount",
+            "width": 14,
+        }
+        # column_index now accounts for the optional analytic distribution column
+        column_index = next_col + 1
         if not report.age_partner_config_id:
-            report_columns.update(
-                {
-                    9: {
-                        "header": self.env._("Age ≤ 30 d."),
-                        "field": "30_days",
-                        "field_footer_total": "30_days",
-                        "field_footer_percent": "percent_30_days",
-                        "field_final_balance": "30_days",
-                        "type": "amount",
-                        "width": 14,
-                    },
-                    10: {
-                        "header": self.env._("Age ≤ 60 d."),
-                        "field": "60_days",
-                        "field_footer_total": "60_days",
-                        "field_footer_percent": "percent_60_days",
-                        "field_final_balance": "60_days",
-                        "type": "amount",
-                        "width": 14,
-                    },
-                    11: {
-                        "header": self.env._("Age ≤ 90 d."),
-                        "field": "90_days",
-                        "field_footer_total": "90_days",
-                        "field_footer_percent": "percent_90_days",
-                        "field_final_balance": "90_days",
-                        "type": "amount",
-                        "width": 14,
-                    },
-                    12: {
-                        "header": self.env._("Age ≤ 120 d."),
-                        "field": "120_days",
-                        "field_footer_total": "120_days",
-                        "field_footer_percent": "percent_120_days",
-                        "field_final_balance": "120_days",
-                        "type": "amount",
-                        "width": 14,
-                    },
-                    13: {
-                        "header": self.env._("Older"),
-                        "field": "older",
-                        "field_footer_total": "older",
-                        "field_footer_percent": "percent_older",
-                        "field_final_balance": "older",
-                        "type": "amount",
-                        "width": 14,
-                    },
+            aging_cols = [
+                ("Age ≤ 30 d.", "30_days", "percent_30_days"),
+                ("Age ≤ 60 d.", "60_days", "percent_60_days"),
+                ("Age ≤ 90 d.", "90_days", "percent_90_days"),
+                ("Age ≤ 120 d.", "120_days", "percent_120_days"),
+                ("Older", "older", "percent_older"),
+            ]
+            for label, field_key, pct_key in aging_cols:
+                report_columns[column_index] = {
+                    "header": self.env._(label),
+                    "field": field_key,
+                    "field_footer_total": field_key,
+                    "field_footer_percent": pct_key,
+                    "field_final_balance": field_key,
+                    "type": "amount",
+                    "width": 14,
                 }
-            )
+                column_index += 1
         for interval in report.age_partner_config_id.line_ids:
             report_columns[column_index] = {
                 "header": interval.name,

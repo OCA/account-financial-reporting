@@ -206,6 +206,7 @@
         </div>
     </template>
     <template id="report_aged_partner_balance_move_lines">
+        <!-- ref_label_style is computed in _get_report_values and passed in context -->
         <div class="act_as_table data_table" style="width: 100%;">
             <!-- Display table headers for move lines -->
             <div class="act_as_thead">
@@ -223,10 +224,16 @@
                     <!--## partner-->
                     <div class="act_as_cell" style="width: 10.50%;">Partner</div>
                     <!--## ref - label-->
-                    <div class="act_as_cell" style="width: 18.00%;">
+                    <div class="act_as_cell" t-att-style="ref_label_style">
                         Ref -
                         Label
                     </div>
+                    <!--## analytic distribution, shown when wizard flag is set-->
+                    <t t-if="show_analytic_distribution">
+                        <div class="act_as_cell" style="width: 6%;">
+                            Analytic Distribution
+                        </div>
+                    </t>
                     <!--## date_due-->
                     <div class="act_as_cell" style="width: 6.00%;">
                         Due
@@ -333,6 +340,15 @@
                             <t t-out="line['ref_label']" />
                         </span>
                     </div>
+                    <!--## analytic distribution-->
+                    <t t-if="show_analytic_distribution">
+                        <div class="act_as_cell left">
+                            <span
+                                t-if="line.get('analytic_display')"
+                                t-esc="line['analytic_display']"
+                            />
+                        </div>
+                    </t>
                     <!--## date_due-->
                     <div class="act_as_cell left">
                         <span
@@ -510,11 +526,18 @@
         <!-- Display ending balance line for partner -->
         <div class="act_as_table list_table" style="width: 100%;">
             <div class="act_as_row lines" style="font-weight: bold;">
-                <!--## date-->
-                <div class="act_as_cell right" style="width: 52.00%;">
+                <!--## date through ref-label (spans all left columns)-->
+                <div
+                    class="act_as_cell right"
+                    t-att-style="ref_label_cumul_partner_style"
+                >
                     Partner
                     cumul aged balance
                 </div>
+                <!--## analytic distribution placeholder — explicit width keeps numeric columns aligned -->
+                <t t-if="show_analytic_distribution">
+                    <div class="act_as_cell" style="width: 6%;" />
+                </t>
                 <!--## date_due-->
                 <div class="act_as_cell" style="width: 6.00%;" />
                 <!--## amount_residual-->
@@ -648,7 +671,14 @@
                 </t>
                 <t t-if="show_move_line_details">
                     <!--## total-->
-                    <div class="act_as_cell right" style="width: 52.00%;">Total</div>
+                    <div
+                        class="act_as_cell right"
+                        t-att-style="ref_label_cumul_partner_style"
+                    >Total</div>
+                    <!--## analytic distribution placeholder — explicit width keeps numeric columns aligned -->
+                    <t t-if="show_analytic_distribution">
+                        <div class="act_as_cell" style="width: 6%;" />
+                    </t>
                     <!--## date_due-->
                     <div class="act_as_cell" style="width: 6.00%;" />
                     <!--## amount_residual-->
@@ -760,7 +790,14 @@
                 </t>
                 <t t-if="show_move_line_details">
                     <!--## total-->
-                    <div class="act_as_cell right" style="width: 52.00%;">Percents</div>
+                    <div
+                        class="act_as_cell right"
+                        t-att-style="ref_label_cumul_partner_style"
+                    >Percents</div>
+                    <!--## analytic distribution placeholder — explicit width keeps numeric columns aligned -->
+                    <t t-if="show_analytic_distribution">
+                        <div class="act_as_cell" style="width: 6%;" />
+                    </t>
                     <!--## date_due-->
                     <div class="act_as_cell" style="width: 6.00%;" />
                     <!--## amount_residual-->

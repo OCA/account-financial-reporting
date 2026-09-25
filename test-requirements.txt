@@ -1,0 +1,1 @@
+odoo-addon-account_financial_report_sale @ git+https://github.com/OCA/account-financial-reporting.git@refs/pull/1495/head#subdirectory=account_financial_report_sale
