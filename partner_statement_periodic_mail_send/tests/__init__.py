@@ -1,0 +1,1 @@
+from . import test_partner_statement_periodic_mail_send
