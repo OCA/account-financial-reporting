@@ -23,27 +23,80 @@ class JournalLedgerXslx(models.AbstractModel):
 
     def _get_report_columns(self, report):
         columns = [
-            {"header": _("Entry"), "field": "entry", "width": 18},
-            {"header": _("Date"), "field": "date", "width": 11},
-            {"header": _("Account"), "field": "account_code", "width": 9},
+            {
+                "header": _("Entry"),
+                "field": "entry",
+                "width": 18,
+                "expression_label": "entry",
+            },
+            {
+                "header": _("Date"),
+                "field": "date",
+                "width": 11,
+                "expression_label": "date",
+            },
+            {
+                "header": _("Account"),
+                "field": "account_code",
+                "width": 9,
+                "expression_label": "account_code",
+            },
         ]
 
         if report.with_auto_sequence:
             columns.insert(
-                0, {"header": _("Sequence"), "field": "auto_sequence", "width": 10}
+                0,
+                {
+                    "header": _("Sequence"),
+                    "field": "auto_sequence",
+                    "width": 10,
+                    "expression_label": "sequence",
+                },
             )
 
         if report.with_account_name:
             columns.append(
-                {"header": _("Account Name"), "field": "account_name", "width": 15}
+                {
+                    "header": _("Account Name"),
+                    "field": "account_name",
+                    "width": 15,
+                    "expression_label": "account_name",
+                }
             )
 
         columns += [
-            {"header": _("Partner"), "field": "partner", "width": 25},
-            {"header": _("Ref - Label"), "field": "label", "width": 40},
-            {"header": _("Taxes"), "field": "taxes_description", "width": 11},
-            {"header": _("Debit"), "field": "debit", "type": "amount", "width": 14},
-            {"header": _("Credit"), "field": "credit", "type": "amount", "width": 14},
+            {
+                "header": _("Partner"),
+                "field": "partner",
+                "width": 25,
+                "expression_label": "partner",
+            },
+            {
+                "header": _("Ref - Label"),
+                "field": "label",
+                "width": 40,
+                "expression_label": "label",
+            },
+            {
+                "header": _("Taxes"),
+                "field": "taxes_description",
+                "width": 11,
+                "expression_label": "taxes",
+            },
+            {
+                "header": _("Debit"),
+                "field": "debit",
+                "type": "amount",
+                "width": 14,
+                "expression_label": "debit",
+            },
+            {
+                "header": _("Credit"),
+                "field": "credit",
+                "type": "amount",
+                "width": 14,
+                "expression_label": "credit",
+            },
         ]
 
         if report.foreign_currency:
@@ -53,12 +106,14 @@ class JournalLedgerXslx(models.AbstractModel):
                     "field": "currency_name",
                     "width": 14,
                     "type": "currency_name",
+                    "expression_label": "foreign_currency",
                 },
                 {
                     "header": _("Amount Currency"),
                     "field": "amount_currency",
                     "type": "amount",
                     "width": 18,
+                    "expression_label": "foreign_currency",
                 },
             ]
 
