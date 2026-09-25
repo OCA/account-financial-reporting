@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2022 Tecnativa - Carlos Roca
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//block[@id='analytic']" position="inside">
+                <setting
+                    help="Date from which stock movements are to be taken into account for the non billed movements report."
+                >
+                    <field name="stock_move_non_billed_threshold" />
+                </setting>
+                <setting>
+                    <field name="default_interval_restrict_invoices" />
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>
