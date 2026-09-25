@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="general_ledger_wizard" model="ir.ui.view">
+        <field name="name">General Ledger</field>
+        <field name="model">general.ledger.report.wizard</field>
+        <field name="inherit_id" ref="account_financial_report.general_ledger_wizard" />
+        <field name="arch" type="xml">
+            <field name="company_id" position="after">
+                <field
+                    name="more_company_ids"
+                    widget="many2many_tags"
+                    options="{'no_create': True}"
+                    groups="base.group_multi_company"
+                    placeholder="More companies for excel report only"
+                />
+            </field>
+            <footer position="attributes">
+                <attribute name="invisible">more_company_ids</attribute>
+            </footer>
+            <footer position="after">
+                <footer name="footer_multi_company" invisible="not more_company_ids">
+                    <div invisible="not only_one_unaffected_earnings_account">
+                        <button
+                        name="button_export_xlsx"
+                        string="Export XLSX"
+                        type="object"
+                        class="oe_highlight"
+                    />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </div>
+                    <div invisible="only_one_unaffected_earnings_account">
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </div>
+                </footer>
+            </footer>
+        </field>
+    </record>
+</odoo>
