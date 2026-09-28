@@ -1,0 +1,175 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* account_sale_stock_report_non_billed
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2024-10-07 10:06+0000\n"
+"Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
+"Language-Team: none\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.6.2\n"
+
+#. module: account_sale_stock_report_non_billed
+#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_stock_move__price_not_invoiced
+msgid "Amount to invoice"
+msgstr "Importo da fatturare"
+
+#. module: account_sale_stock_report_non_billed
+#: model_terms:ir.ui.view,arch_db:account_sale_stock_report_non_billed.account_sale_stock_report_non_billed_wiz_form
+msgid "Cancel"
+msgstr "Annulla"
+
+#. module: account_sale_stock_report_non_billed
+#: model:ir.model,name:account_sale_stock_report_non_billed.model_res_company
+msgid "Companies"
+msgstr "Aziende"
+
+#. module: account_sale_stock_report_non_billed
+#: model:ir.model,name:account_sale_stock_report_non_billed.model_res_config_settings
+msgid "Config Settings"
+msgstr "Impostazioni configurazione"
+
+#. module: account_sale_stock_report_non_billed
+#: model_terms:ir.ui.view,arch_db:account_sale_stock_report_non_billed.account_sale_stock_report_non_billed_wiz_form
+msgid "Confirm"
+msgstr "Conferma"
+
+#. module: account_sale_stock_report_non_billed
+#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_account_sale_stock_report_non_billed_wiz__create_uid
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: account_sale_stock_report_non_billed
+#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_account_sale_stock_report_non_billed_wiz__create_date
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: account_sale_stock_report_non_billed
+#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_stock_move__currency_id
+msgid "Currency"
+msgstr "Valuta"
+
+#. module: account_sale_stock_report_non_billed
+#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_account_sale_stock_report_non_billed_wiz__date_check
+msgid "Date"
+msgstr "Data"
+
+#. module: account_sale_stock_report_non_billed
+#: model_terms:ir.ui.view,arch_db:account_sale_stock_report_non_billed.res_config_settings_view_form
+msgid ""
+"Date from which stock movements are to be taken into account\n"
+"                            for the non billed movements report."
+msgstr ""
+"Data a partire dalla quale i movimenti di magazzino devono essere\n"
+"                            presi in considerazione per il resoconto sui "
+"movimenti non fatturati."
+
+#. module: account_sale_stock_report_non_billed
+#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_account_sale_stock_report_non_billed_wiz__display_name
+msgid "Display Name"
+msgstr "Nome visualizzato"
+
+#. module: account_sale_stock_report_non_billed
+#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_stock_move__date_done
+msgid "Effective Date"
+msgstr "Data effettiva"
+
+#. module: account_sale_stock_report_non_billed
+#: model_terms:ir.ui.view,arch_db:account_sale_stock_report_non_billed.view_move_search
+msgid "Effective date"
+msgstr "Data effettiva"
+
+#. module: account_sale_stock_report_non_billed
+#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_account_sale_stock_report_non_billed_wiz__id
+msgid "ID"
+msgstr "ID"
+
+#. module: account_sale_stock_report_non_billed
+#: model:ir.model,name:account_sale_stock_report_non_billed.model_account_move_line
+msgid "Journal Item"
+msgstr "Movimento contabile"
+
+#. module: account_sale_stock_report_non_billed
+#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_account_sale_stock_report_non_billed_wiz____last_update
+msgid "Last Modified on"
+msgstr "Ultima modifica il"
+
+#. module: account_sale_stock_report_non_billed
+#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_account_sale_stock_report_non_billed_wiz__write_uid
+msgid "Last Updated by"
+msgstr "Ultimo aggiornamento di"
+
+#. module: account_sale_stock_report_non_billed
+#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_account_sale_stock_report_non_billed_wiz__write_date
+msgid "Last Updated on"
+msgstr "Ultimo aggiornamento il"
+
+#. module: account_sale_stock_report_non_billed
+#: model:ir.actions.act_window,name:account_sale_stock_report_non_billed.action_open_non_billed_stock_move
+#: model:ir.ui.menu,name:account_sale_stock_report_non_billed.menu_non_billed_stock_move
+#: model_terms:ir.ui.view,arch_db:account_sale_stock_report_non_billed.account_sale_stock_report_non_billed_wiz_form
+msgid "Non Billed Stock Moves"
+msgstr "Movimenti di magazzino non fatturati"
+
+#. module: account_sale_stock_report_non_billed
+#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_res_company__stock_move_non_billed_threshold
+#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_res_config_settings__stock_move_non_billed_threshold
+msgid "Non Billed Threshold Date"
+msgstr "Data limite non fatturato"
+
+#. module: account_sale_stock_report_non_billed
+#. odoo-python
+#: code:addons/account_sale_stock_report_non_billed/wizard/account_sale_stock_report_non_billed_wiz.py:0
+#, python-format
+msgid "Non billed moves (%(from)s -> %(to)s)"
+msgstr "Movimenti non fatturati (%(from)s -> %(to)s)"
+
+#. module: account_sale_stock_report_non_billed
+#: model_terms:ir.ui.view,arch_db:account_sale_stock_report_non_billed.view_move_tree
+msgid "Open document"
+msgstr "Apri documento"
+
+#. module: account_sale_stock_report_non_billed
+#: model_terms:ir.ui.view,arch_db:account_sale_stock_report_non_billed.view_move_tree
+msgid "Picking"
+msgstr "Prelievo"
+
+#. module: account_sale_stock_report_non_billed
+#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_stock_move__quantity_not_invoiced
+msgid "Qty. to invoice"
+msgstr "Q.tà da fatturare"
+
+#. module: account_sale_stock_report_non_billed
+#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_account_sale_stock_report_non_billed_wiz__interval_restrict_invoices
+#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_res_config_settings__default_interval_restrict_invoices
+msgid "Restrict invoices using the date interval"
+msgstr "Riduci fatture usando l'intervallo date"
+
+#. module: account_sale_stock_report_non_billed
+#: model:ir.model,name:account_sale_stock_report_non_billed.model_stock_move
+msgid "Stock Move"
+msgstr "Movimento di magazzino"
+
+#. module: account_sale_stock_report_non_billed
+#: model:ir.model.fields,field_description:account_sale_stock_report_non_billed.field_account_sale_stock_report_non_billed_wiz__stock_move_non_billed_threshold
+msgid "Stock Move Non Billed Threshold"
+msgstr "Soglia movimento di magazzino non fatturato"
+
+#. module: account_sale_stock_report_non_billed
+#: model_terms:ir.ui.view,arch_db:account_sale_stock_report_non_billed.view_move_pivot_no_invoiced
+msgid "Stock Moves Analysis"
+msgstr "Analisi movimenti di magazzino"
+
+#. module: account_sale_stock_report_non_billed
+#: model:ir.model,name:account_sale_stock_report_non_billed.model_account_sale_stock_report_non_billed_wiz
+msgid "Wizard to open stock moves that have not been invoiced at that time"
+msgstr ""
+"Procedura guidata per aprire movimenti di magazzino che non sono stati "
+"fatturati nello stesso momento"

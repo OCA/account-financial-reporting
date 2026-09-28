@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+account_sale_stock_report_non_billed.access_account_sale_stock_report_non_billed_wiz,access_account_sale_stock_report_non_billed_wiz,account_sale_stock_report_non_billed.model_account_sale_stock_report_non_billed_wiz,base.group_user,1,1,1,1
