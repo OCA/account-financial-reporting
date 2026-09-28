@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2024 Odoo Community Association (OCA)
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <!-- ===== Open Items: column header row ===== -->
+    <template
+        id="report_open_items_lines_header_analytic_tag"
+        inherit_id="account_financial_report.report_open_items_lines_header"
+    >
+        <xpath expr="//t[@t-if='show_analytic_distribution']" position="after">
+            <t t-if="show_analytic_tags">
+                <div class="act_as_cell" style="width: 4.75%;">
+                    Analytic Tags
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- ===== Open Items: individual move line row ===== -->
+    <template
+        id="report_open_items_lines_analytic_tag"
+        inherit_id="account_financial_report.report_open_items_lines"
+    >
+        <xpath expr="//t[@t-if='show_analytic_distribution']" position="after">
+            <t t-if="show_analytic_tags">
+                <div class="act_as_cell left">
+                    <span t-if="line.get('tag_display')" t-esc="line['tag_display']" />
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- ===== Open Items: ending cumul / totals row ===== -->
+    <template
+        id="report_open_items_ending_cumul_analytic_tag"
+        inherit_id="account_financial_report.report_open_items_ending_cumul"
+    >
+        <!--
+            The placeholder div after show_analytic_distribution keeps the
+            numeric columns aligned. We add an equivalent one for tags.
+        -->
+        <xpath expr="//t[@t-if='show_analytic_distribution']" position="after">
+            <t t-if="show_analytic_tags">
+                <div class="act_as_cell" style="width: 4.75%;" />
+            </t>
+        </xpath>
+    </template>
+</odoo>
