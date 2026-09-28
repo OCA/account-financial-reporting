@@ -23,6 +23,7 @@ class OpenItemsReport(models.AbstractModel):
             journals_data,
             accounts_data,
             open_items_move_lines_data,
+            analytic_data,
         ) = super()._get_data(
             account_ids,
             partner_ids,
@@ -62,4 +63,5 @@ class OpenItemsReport(models.AbstractModel):
             journals_data,
             accounts_data,
             open_items_move_lines_data,
+            analytic_data,
         )
