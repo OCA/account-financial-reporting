@@ -20,6 +20,24 @@
         <field name="perm_write" eval="1" />
         <field name="perm_unlink" eval="1" />
     </record>
+    <record model="ir.model.access" id="access_cash_flow_category">
+        <field name="name">access.mis.cash.flow.forecast.category</field>
+        <field name="model_id" ref="model_mis_cash_flow_forecast_category" />
+        <field name="group_id" ref="base.group_user" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_create" eval="0" />
+        <field name="perm_write" eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+    <record model="ir.model.access" id="manage_cash_flow_category">
+        <field name="name">manage.mis.cash.flow.forecast.category</field>
+        <field name="model_id" ref="model_mis_cash_flow_forecast_category" />
+        <field name="group_id" ref="account.group_account_manager" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
     <record model="ir.model.access" id="access_cash_flow_plan">
         <field name="name">mis.cash.flow.plan</field>
         <field name="model_id" ref="model_mis_cash_flow_plan" />
