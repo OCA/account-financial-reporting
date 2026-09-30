@@ -63,12 +63,15 @@
                             </group>
                         </page>
                         <page string="Filter partners">
-                            <field
-                                name="partner_ids"
-                                nolabel="1"
-                                widget="many2many_tags"
-                                options="{'no_create': True}"
-                            />
+                            <group name="partner_filter" col="4">
+                                <field
+                                    name="partner_ids"
+                                    placeholder="Filtered partners (empty for all)"
+                                    nolabel="1"
+                                    widget="many2many_tags"
+                                    options="{'no_create': True}"
+                                />
+                            </group>
                         </page>
                         <page
                             string="Filter analytic accounts"
