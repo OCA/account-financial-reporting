@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2025 Tecnativa - Carlos Dauden
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record model="ir.ui.view" id="view_account_financial_report_column_form">
+        <field name="name">account.financial.report.column.form</field>
+        <field name="model">account.financial.report.column</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="limit" invisible="field_type != 'string'" />
+                        <field name="is_visible" widget="boolean_toggle" />
+                    </group>
+                    <group>
+                        <field name="expression_label" />
+                        <field name="sequence" />
+                        <field name="field_type" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_account_financial_report_column_tree">
+        <field name="name">account.financial.report.column.list</field>
+        <field name="model">account.financial.report.column</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" create="false" delete="false">
+                <field name="sequence" widget="handle" />
+                <field name="name" readonly="1" />
+                <field name="expression_label" readonly="1" optional="hide" />
+                <field name="is_visible" widget="boolean_toggle" />
+                <field name="field_type" optional="hide" />
+                <field
+                    name="limit"
+                    invisible="field_type != 'string'"
+                    optional="show"
+                />
+            </list>
+        </field>
+    </record>
+</odoo>
