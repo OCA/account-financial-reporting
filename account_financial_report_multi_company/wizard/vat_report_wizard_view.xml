@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="vat_report_wizard" model="ir.ui.view">
+        <field name="name">VAT Report</field>
+        <field name="model">vat.report.wizard</field>
+        <field name="inherit_id" ref="account_financial_report.vat_report_wizard" />
+        <field name="arch" type="xml">
+            <field name="company_id" position="after">
+                <field
+                    name="more_company_ids"
+                    widget="many2many_tags"
+                    options="{'no_create': True}"
+                    groups="base.group_multi_company"
+                    placeholder="More companies for excel report only"
+                />
+            </field>
+            <footer position="attributes">
+                <attribute name="invisible">more_company_ids</attribute>
+            </footer>
+            <footer position="after">
+                <footer name="footer_multi_company" invisible="not more_company_ids">
+                    <button
+                    name="button_export_xlsx"
+                    string="Export XLSX"
+                    type="object"
+                    class="oe_highlight"
+                />
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </footer>
+        </field>
+    </record>
+</odoo>
