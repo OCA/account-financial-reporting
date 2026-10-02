@@ -2,9 +2,12 @@
 # Copyright 2016 Camptocamp SA
 # Copyright 2017 Akretion - Alexis de Lattre
 # Copyright 2018 ForgeFlow, S.L.
+# Copyright 2026 Tecnativa - Adasat Torres
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models
+from re import compile as re_compile
+
+from odoo import Command, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import date_utils
 
@@ -71,6 +74,8 @@ class TrialBalanceReportWizard(models.TransientModel):
     grouped_by = fields.Selection(
         selection=[("analytic_account", "Analytic Account")], default=False
     )
+    use_account_prefix = fields.Boolean()
+    account_prefix = fields.Char()
 
     @api.onchange("grouped_by")
     def onchange_grouped_by(self):
@@ -282,3 +287,22 @@ class TrialBalanceReportWizard(models.TransientModel):
     def _export(self, report_type):
         """Default export is PDF."""
         return self._print_report(report_type)
+
+    @api.onchange("account_prefix")
+    def onchange_account_prefix(self):
+        delimiter_pattern = re_compile(r"[;,]\s*")
+        if self.account_prefix:
+            domain = fields.Domain.OR(
+                [
+                    [("code", "=like", f"{prefix}%")]
+                    for prefix in delimiter_pattern.split(self.account_prefix)
+                ]
+            )
+            if self.company_id:
+                domain = fields.Domain.AND(
+                    [domain, [("company_ids", "in", self.company_id.ids)]]
+                )
+                account_ids = self.env["account.account"].search(domain).ids
+            self.account_ids = [Command.set(account_ids)]
+        else:
+            self.account_ids = [Command.clear()]
