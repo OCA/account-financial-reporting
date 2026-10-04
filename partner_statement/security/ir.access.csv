@@ -1,0 +1,4 @@
+id,name,model_id,group_id/id,operation,domain
+access_activity_statement_wizard,access_activity_statement_wizard,activity.statement.wizard,account.group_account_invoice,cru,
+access_outstanding_statement_wizard,access_outstanding_statement_wizard,outstanding.statement.wizard,account.group_account_invoice,cru,
+access_detailed_activity_statement_wizard,access_detailed_activity_statement_wizard,detailed.activity.statement.wizard,account.group_account_invoice,cru,

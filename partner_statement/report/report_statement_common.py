@@ -1,7 +1,7 @@
 # Copyright 2018 ForgeFlow, S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from odoo import api, fields, models
 from odoo.tools.misc import DEFAULT_SERVER_DATE_FORMAT
@@ -30,7 +30,7 @@ class ReportStatementCommon(models.AbstractModel):
         self, date, date_format=DEFAULT_SERVER_DATE_FORMAT
     ):
         if isinstance(date, str):
-            date = datetime.strptime(date, DEFAULT_SERVER_DATE_FORMAT)
+            date = fields.Date.to_date(date)
         return date.strftime(date_format) if date else ""
 
     def _get_account_display_lines(
@@ -244,7 +244,7 @@ class ReportStatementCommon(models.AbstractModel):
     def _get_account_show_buckets(
         self, company_id, partner_ids, date_end, account_type, aging_type
     ):
-        buckets = dict(map(lambda x: (x, []), partner_ids))
+        buckets = {x: [] for x in partner_ids}
         partners = tuple(partner_ids)
         full_dates = self._get_bucket_dates(date_end, aging_type)
         # pylint: disable=E8103
@@ -360,21 +360,19 @@ class ReportStatementCommon(models.AbstractModel):
         partner_ids = data["partner_ids"]
         date_start = data.get("date_start")
         if date_start and isinstance(date_start, str):
-            date_start = datetime.strptime(
-                date_start, DEFAULT_SERVER_DATE_FORMAT
-            ).date()
+            date_start = fields.Date.to_date(date_start)
         date_end = data["date_end"]
         if isinstance(date_end, str):
-            date_end = datetime.strptime(date_end, DEFAULT_SERVER_DATE_FORMAT).date()
+            date_end = fields.Date.to_date(date_end)
         account_type = data["account_type"]
         excluded_accounts_ids = data["excluded_accounts_ids"]
         if excluded_accounts_ids:
-            self = self.with_context(
+            self = self.with_context(  # noqa: PLW0642
                 excluded_accounts_ids=excluded_accounts_ids,
             )
         show_only_overdue = data["show_only_overdue"]
         if show_only_overdue:
-            self = self.with_context(
+            self = self.with_context(  # noqa: PLW0642
                 show_only_overdue=show_only_overdue,
             )
         aging_type = data["aging_type"]
@@ -574,15 +572,16 @@ class ReportStatementCommon(models.AbstractModel):
 
             if len(partner_ids) > 1:
                 values = currency_dict.values()
-                if not any([v["lines"] or v["balance_forward"] for v in values]):
+                if not any(v["lines"] or v["balance_forward"] for v in values):
                     if data["filter_non_due_partners"]:
                         partners_to_remove.add(partner_id)
                         continue
                     else:
                         res[partner_id]["no_entries"] = True
-                if data["filter_negative_balances"]:
-                    if not all([v["amount_due"] >= 0.0 for v in values]):
-                        partners_to_remove.add(partner_id)
+                if data["filter_negative_balances"] and not all(
+                    v["amount_due"] >= 0.0 for v in values
+                ):
+                    partners_to_remove.add(partner_id)
 
         for partner in partners_to_remove:
             del res[partner]

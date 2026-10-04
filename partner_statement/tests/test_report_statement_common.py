@@ -1,6 +1,6 @@
-from datetime import datetime
 from unittest.mock import patch
 
+from odoo import fields
 from odoo.tests.common import TransactionCase
 
 from ..report.report_statement_common import ReportStatementCommon
@@ -24,8 +24,8 @@ class TestReportStatementCommon(TransactionCase):
         cls.partner2 = cls.env["res.partner"].create({"name": "Partner 2"})
         cls.company = cls.env.company
         cls.statement = cls.env["statement.common"]
-        cls.date_start = datetime.strptime("2025-01-01", "%Y-%m-%d").date()
-        cls.date_end = datetime.strptime("2025-01-31", "%Y-%m-%d").date()
+        cls.date_start = fields.Date.to_date("2025-01-01")
+        cls.date_end = fields.Date.to_date("2025-01-31")
 
     def _mock_account_methods(self):
         """Patch abstract methods for _get_report_values with sample data."""

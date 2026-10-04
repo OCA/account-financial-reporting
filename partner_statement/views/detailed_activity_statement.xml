@@ -3,17 +3,17 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
     <template id="detailed_activity_statement_document">
-        <t t-call="web.external_layout">
-            <t t-set="o" t-value="o.with_context({'lang': lang})" />
-            <t t-set="address">
-                <address
-                    t-out="get_inv_addr(o)"
-                    t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'
-                />
-                <div t-if="o.vat" class="mt16"><t
-                    t-out="company.country_id.vat_label or 'Tax ID'"
-                />: <span t-field="o.vat" /></div>
-            </t>
+        <t t-set="o" t-value="o.with_context({'lang': lang})" />
+        <t t-set="address">
+            <address
+                t-out="get_inv_addr(o)"
+                t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'
+            />
+            <div t-if="o.vat" class="mt16"><t
+                t-out="company.country_id.vat_label or 'Tax ID'"
+            />: <span t-field="o.vat" /></div>
+        </t>
+        <t t-call="web.external_layout" address="address">
             <div class="page">
                 <h2>Statement of Account</h2>
                 <div id="informations" class="row mt32 mb32">
@@ -84,7 +84,6 @@
         <field name="model">res.partner</field>
         <field name="report_name">partner_statement.detailed_activity_statement</field>
         <field name="report_type">qweb-pdf</field>
-        <field name="report_file">partner_statement.detailed_activity_statement</field>
     </record>
     <record
         id="action_print_detailed_activity_statement_html"
@@ -94,7 +93,6 @@
         <field name="model">res.partner</field>
         <field name="report_name">partner_statement.detailed_activity_statement</field>
         <field name="report_type">qweb-html</field>
-        <field name="report_file">partner_statement.detailed_activity_statement</field>
     </record>
     <record
         id="action_print_detailed_activity_statement_xlsx"
@@ -105,6 +103,5 @@
         <field name="type">ir.actions.report</field>
         <field name="report_name">p_s.report_detailed_activity_statement_xlsx</field>
         <field name="report_type">xlsx</field>
-        <field name="report_file">report_detailed_activity_statement</field>
     </record>
 </odoo>

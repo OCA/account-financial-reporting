@@ -240,7 +240,7 @@ class ActivityStatement(models.AbstractModel):
     def _get_account_display_lines(
         self, company_id, partner_ids, date_start, date_end, account_type
     ):
-        res = dict(map(lambda x: (x, []), partner_ids))
+        res = {x: [] for x in partner_ids}
         partners = tuple(partner_ids)
 
         # pylint: disable=E8103

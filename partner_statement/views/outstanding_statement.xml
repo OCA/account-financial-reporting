@@ -90,17 +90,17 @@
         </table>
     </template>
     <template id="partner_statement.outstanding_statement_document">
-        <t t-call="web.external_layout">
-            <t t-set="o" t-value="o.with_context({'lang': lang})" />
-            <t t-set="address">
-                <address
-                    t-out="get_inv_addr(o)"
-                    t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'
-                />
-                <div t-if="o.vat" class="mt16"><t
-                    t-out="company.country_id.vat_label or 'Tax ID'"
-                />: <span t-field="o.vat" /></div>
-            </t>
+        <t t-set="o" t-value="o.with_context({'lang': lang})" />
+        <t t-set="address">
+            <address
+                t-out="get_inv_addr(o)"
+                t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'
+            />
+            <div t-if="o.vat" class="mt16"><t
+                t-out="company.country_id.vat_label or 'Tax ID'"
+            />: <span t-field="o.vat" /></div>
+        </t>
+        <t t-call="web.external_layout" address="address">
             <div class="page">
                 <div id="oe_structure" class="oe_structure" />
                 <h2>Statement of Account</h2>
@@ -158,14 +158,12 @@
         <field name="model">res.partner</field>
         <field name="report_name">partner_statement.outstanding_statement</field>
         <field name="report_type">qweb-pdf</field>
-        <field name="report_file">partner_statement.outstanding_statement</field>
     </record>
     <record id="action_print_outstanding_statement_html" model="ir.actions.report">
         <field name="name">Outstanding Statement</field>
         <field name="model">res.partner</field>
         <field name="report_name">partner_statement.outstanding_statement</field>
         <field name="report_type">qweb-html</field>
-        <field name="report_file">partner_statement.outstanding_statement</field>
     </record>
     <record id="action_print_outstanding_statement_xlsx" model="ir.actions.report">
         <field name="name">Outstanding Statement XLSX</field>
@@ -173,6 +171,5 @@
         <field name="type">ir.actions.report</field>
         <field name="report_name">p_s.report_outstanding_statement_xlsx</field>
         <field name="report_type">xlsx</field>
-        <field name="report_file">report_outstanding_statement</field>
     </record>
 </odoo>

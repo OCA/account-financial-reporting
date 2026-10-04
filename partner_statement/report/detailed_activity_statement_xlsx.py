@@ -576,7 +576,7 @@ class DetailedActivityStatementXslx(models.AbstractModel):
             if len(objects) == 1 and objects.lang
             else self.env.user.partner_id.lang
         )
-        self = self.with_context(lang=lang)
+        self = self.with_context(lang=lang)  # noqa: PLW0642
         report_model = self.env["report.partner_statement.detailed_activity_statement"]
         self._define_formats(workbook)
         FORMATS["format_distributed"] = workbook.add_format({"align": "vdistributed"})

@@ -38,7 +38,7 @@ class ResConfigSettings(models.TransientModel):
     )
 
     def set_values(self):
-        self = self.with_context(active_test=False)
+        self = self.with_context(active_test=False)  # noqa: PLW0642
         # default values fields
         IrDefault = self.env["ir.default"].sudo()
         for name, field in self._fields.items():

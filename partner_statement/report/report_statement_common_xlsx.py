@@ -363,7 +363,7 @@ class ReportStatementCommonXlsx(models.AbstractModel):
             if len(objects) == 1 and objects.lang
             else self.env.user.partner_id.lang
         )
-        self = self.with_context(lang=lang)
+        self = self.with_context(lang=lang)  # noqa: PLW0642
         report_model = self.env[self._get_report_model_name()]
         self._define_formats(workbook)
         FORMATS["format_distributed"] = workbook.add_format({"align": "vdistributed"})
