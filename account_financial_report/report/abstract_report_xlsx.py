@@ -322,7 +322,7 @@ class AbstractReportXslx(models.AbstractModel):
         using defined columns field_final_balance name.
         Columns are defined with `_get_report_columns` method.
         """
-        for i in range(0, len(report_data["columns"])):
+        for i in range(len(report_data["columns"])):
             report_data["sheet"].write(
                 report_data["row_pos"],
                 i,

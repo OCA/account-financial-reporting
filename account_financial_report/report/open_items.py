@@ -34,14 +34,14 @@ class OpenItemsReport(models.AbstractModel):
         for account_partial_reconcile_data in accounts_partial_reconcile:
             debit_move_id = account_partial_reconcile_data["debit_move_id"][0]
             credit_move_id = account_partial_reconcile_data["credit_move_id"][0]
-            if debit_move_id not in debit_amount.keys():
+            if debit_move_id not in debit_amount:
                 debit_amount[debit_move_id] = 0.0
                 debit_amount_currency[debit_move_id] = 0.0
             debit_amount[debit_move_id] += account_partial_reconcile_data["amount"]
             debit_amount_currency[debit_move_id] += account_partial_reconcile_data[
                 "debit_amount_currency"
             ]
-            if credit_move_id not in credit_amount.keys():
+            if credit_move_id not in credit_amount:
                 credit_amount[credit_move_id] = 0.0
                 credit_amount_currency[credit_move_id] = 0.0
             credit_amount[credit_move_id] += account_partial_reconcile_data["amount"]
@@ -174,7 +174,7 @@ class OpenItemsReport(models.AbstractModel):
             )
 
             # Open Items Move Lines Data
-            if acc_id not in open_items_move_lines_data.keys():
+            if acc_id not in open_items_move_lines_data:
                 open_items_move_lines_data[acc_id] = {group_id: [move_line]}
             else:
                 if group_id not in open_items_move_lines_data[acc_id].keys():
@@ -226,7 +226,7 @@ class OpenItemsReport(models.AbstractModel):
                 for prt_id in open_items_move_lines_data[acc_id]:
                     for move_line in open_items_move_lines_data[acc_id][prt_id]:
                         move_lines += [move_line]
-                move_lines = sorted(move_lines, key=lambda k: (k["date"]))
+                move_lines = sorted(move_lines, key=lambda k: k["date"])
                 new_open_items[acc_id] = move_lines
         else:
             for acc_id in account_ids_sorted:

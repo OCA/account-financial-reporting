@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!-- Copyright 2018 ForgeFlow S.L.
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
@@ -129,8 +129,8 @@
                     </div>
                 </t>
                 <div
-                    t-att-class="'act_as_cell' if with_auto_sequence else 'act_as_cell first_column'"
                     class="act_as_cell"
+                    t-att-class="'act_as_cell' if with_auto_sequence else 'act_as_cell first_column'"
                     name="entry"
                     style="width: 7.57%;"
                 >
@@ -222,7 +222,7 @@
         </t>
     </template>
     <template id="account_financial_report.report_journal_move_line">
-        <div class="act_as_cell left" name="auto_sequence" t-if="with_auto_sequence">
+        <div t-if="with_auto_sequence" class="act_as_cell left" name="auto_sequence">
             <span t-if="display_move_info" t-out="move_line['auto_sequence']" />
         </div>
         <div class="act_as_cell left" name="entry">

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <template id="general_ledger">
         <t t-call="account_financial_report.html_container">
@@ -190,7 +190,7 @@
                 </div>
             </div>
             <!-- Display first line with initial balance -->
-            <div class="act_as_row lines" t-if="account['include_initial_balance']">
+            <div t-if="account['include_initial_balance']" class="act_as_row lines">
                 <!--## date-->
                 <div class="act_as_cell" />
                 <!--## move-->
