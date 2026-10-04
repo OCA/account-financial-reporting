@@ -75,9 +75,8 @@
                                 <!-- Display partner footer -->
                                 <t
                                     t-call="account_financial_report.report_aged_partner_balance_partner_ending_cumul"
-                                >
-                                    <t t-set="partner_cumul_line" t-value="partner" />
-                                </t>
+                                    partner_cumul_line="partner"
+                                />
                             </div>
                         </t>
                         <!-- Display account footer -->
@@ -126,7 +125,7 @@
                     <!--## age_120_days-->
                     <div class="act_as_cell" style="width: 9.64%;">91 - 120 d.</div>
                     <!--## older-->
-                    <div class="act_as_cell" style="width: 9.64%;">> 120 d.</div>
+                    <div class="act_as_cell" style="width: 9.64%;">&gt; 120 d.</div>
                 </t>
                 <!--## dynamic columns-->
                 <t t-foreach="age_partner_config.line_ids" t-as="column_dynamic">

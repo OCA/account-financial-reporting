@@ -127,7 +127,7 @@ class OpenItemsXslx(models.AbstractModel):
         journals_data = res_data["journals_data"]
         total_amount = res_data["total_amount"]
 
-        for partner_id in partners_data.keys():
+        for partner_id in partners_data:
             # Create a new sheet for each partner
             partner_totals = {}
             partner_name = partners_data[partner_id]["name"]
@@ -135,7 +135,7 @@ class OpenItemsXslx(models.AbstractModel):
             report_data["sheet"] = new_sheet
             report_data["row_pos"] = 0
 
-            for account_id in Open_items.keys():
+            for account_id in Open_items:
                 if partner_id in Open_items[account_id]:
                     self.write_array_title(
                         accounts_data[account_id]["code"]
@@ -231,7 +231,7 @@ class OpenItemsXslx(models.AbstractModel):
         journals_data = res_data["journals_data"]
         total_amount = res_data["total_amount"]
         show_partner_details = res_data["show_partner_details"]
-        for account_id in Open_items.keys():
+        for account_id in Open_items:
             # Write account title
             self.write_array_title(
                 accounts_data[account_id]["code"]

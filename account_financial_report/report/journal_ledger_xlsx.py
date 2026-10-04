@@ -290,7 +290,7 @@ class JournalLedgerXslx(models.AbstractModel):
         report_data["row_pos"] += 2
 
     def _get_partner_name(self, partner_id, partner_data):
-        if partner_id in partner_data.keys():
+        if partner_id in partner_data:
             return partner_data[partner_id]["name"]
         else:
             return ""

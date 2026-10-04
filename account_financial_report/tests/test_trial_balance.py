@@ -26,13 +26,22 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
                 tracking_disable=True,
             )
         )
-        # Remove previous account groups and related invoices to avoid conflicts
-        group_obj = cls.env["account.group"]
-        cls.group1 = group_obj.create({"code_prefix_start": "1", "name": "Group 1"})
-        cls.group11 = group_obj.create(
-            {"code_prefix_start": "11", "name": "Group 11", "parent_id": cls.group1.id}
+        # Account hierarchy (parent accounts): 1 > 11, 2
+        account_obj = cls.env["account.account"]
+        cls.group1 = account_obj.create(
+            {"code": "1", "name": "Group 1", "account_type": "asset_current"}
         )
-        cls.group2 = group_obj.create({"code_prefix_start": "2", "name": "Group 2"})
+        cls.group11 = account_obj.create(
+            {
+                "code": "11",
+                "name": "Group 11",
+                "account_type": "asset_current",
+                "parent_id": cls.group1.id,
+            }
+        )
+        cls.group2 = account_obj.create(
+            {"code": "2", "name": "Group 2", "account_type": "income_other"}
+        )
         # Set accounts
         cls.account001 = cls._create_account_account(
             cls,
@@ -77,6 +86,8 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
                 "account_type": "income_other",
             },
         )
+        cls.account100.parent_id = cls.group1
+        (cls.account200 + cls.account201).parent_id = cls.group2
         cls.previous_fy_date_start = "2015-01-01"
         cls.previous_fy_date_end = "2015-12-31"
         cls.fy_date_start = "2016-01-01"
@@ -270,9 +281,8 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
 
     def check_partner_in_report(self, account_id, partner_id, total_amount):
         partner_in_report = False
-        if account_id in total_amount.keys():
-            if partner_id in total_amount[account_id]:
-                partner_in_report = True
+        if account_id in total_amount and partner_id in total_amount[account_id]:
+            partner_in_report = True
         return partner_in_report
 
     def _get_partner_lines(self, account_id, partner_id, total_amount):
@@ -290,14 +300,14 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
         total = 0.0
         for account in trial_balance:
             if account["type"] == "account_type":
-                for key in account.keys():
+                for key in account:
                     if key == feature:
                         total += account[key]
         return total
 
     def test_00_account_group(self):
-        self.assertTrue(self.account100 in self.group1.compute_account_ids)
-        self.assertTrue(self.account200 in self.group2.compute_account_ids)
+        self.assertIn(self.group1, self.account100.parent_ids)
+        self.assertIn(self.group2, self.account200.parent_ids)
 
     def test_02_account_balance_hierarchy(self):
         # Generate the general ledger line

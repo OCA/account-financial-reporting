@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<odoo>
-    <record id="account_age_report_configuration_rule" model="ir.rule">
-        <field name="name">Account age report configuration rule</field>
-        <field name="model_id" ref="model_account_age_report_configuration" />
-        <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
-    </record>
-</odoo>

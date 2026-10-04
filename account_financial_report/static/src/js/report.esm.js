@@ -1,4 +1,4 @@
-import {useComponent, useEffect} from "@odoo/owl";
+import {useComponent, useLayoutEffect} from "@web/owl2/utils";
 
 function toTitleCase(str) {
     return str
@@ -9,7 +9,12 @@ function toTitleCase(str) {
         );
 }
 
-function enrich(component, targetElement, selector, isIFrame = false) {
+export function enrichWithActionLinks(
+    component,
+    targetElement,
+    selector,
+    isIFrame = false
+) {
     let doc = window.document;
     let contentDocument = targetElement;
 
@@ -58,15 +63,15 @@ function enrich(component, targetElement, selector, isIFrame = false) {
 
 export function useEnrichWithActionLinks(ref, selector = null) {
     const comp = useComponent();
-    useEffect(
+    useLayoutEffect(
         (element) => {
             // If we get an iframe, we need to wait until everything is loaded
             if (element.matches("iframe")) {
                 element.addEventListener("load", () =>
-                    enrich(comp, element, selector, true)
+                    enrichWithActionLinks(comp, element, selector, true)
                 );
             } else {
-                enrich(comp, element, selector);
+                enrichWithActionLinks(comp, element, selector);
             }
         },
         () => [ref.el]

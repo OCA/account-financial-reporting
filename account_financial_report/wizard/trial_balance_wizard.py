@@ -28,7 +28,7 @@ class TrialBalanceReportWizard(models.TransientModel):
     )
     show_hierarchy = fields.Boolean(
         string="Show hierarchy",
-        help="Use when your account groups are hierarchical",
+        help="Use when your accounts are hierarchical (parent accounts)",
     )
     limit_hierarchy_level = fields.Boolean("Limit hierarchy levels")
     show_hierarchy_level = fields.Integer("Hierarchy Levels to display", default=1)
@@ -107,7 +107,7 @@ class TrialBalanceReportWizard(models.TransientModel):
     def _compute_fy_start_date(self):
         for wiz in self:
             if wiz.date_from:
-                date_from, date_to = date_utils.get_fiscal_year(
+                date_from, _date_to = date_utils.get_fiscal_year(
                     wiz.date_from,
                     day=self.company_id.fiscalyear_last_day,
                     month=int(self.company_id.fiscalyear_last_month),

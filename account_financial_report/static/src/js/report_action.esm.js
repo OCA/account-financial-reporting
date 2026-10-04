@@ -1,6 +1,6 @@
 import {ReportAction} from "@web/webclient/actions/reports/report_action";
+import {enrichWithActionLinks} from "./report.esm";
 import {patch} from "@web/core/utils/patch";
-import {useEnrichWithActionLinks} from "./report.esm";
 
 const MODULE_NAME = "account_financial_report";
 
@@ -10,8 +10,15 @@ patch(ReportAction.prototype, {
         this.isAccountFinancialReport = this.props.report_name.startsWith(
             `${MODULE_NAME}.`
         );
+    },
+
+    /**
+     * @param {Event & { currentTarget: HTMLIFrameElement }} ev
+     */
+    onIframeLoaded(ev) {
+        super.onIframeLoaded(ev);
         if (this.isAccountFinancialReport) {
-            useEnrichWithActionLinks(this.iframe);
+            enrichWithActionLinks(this, ev.currentTarget, null, true);
         }
     },
 
@@ -20,7 +27,6 @@ patch(ReportAction.prototype, {
             type: "ir.actions.report",
             report_type: "xlsx",
             report_name: this._get_xlsx_name(this.props.report_name),
-            report_file: this._get_xlsx_name(this.props.report_file),
             data: this.props.data || {},
             context: this.props.context || {},
             display_name: this.title,
